@@ -1,0 +1,42 @@
+{
+  "name": "@rsdoctor/test-helper",
+  "version": "0.0.1",
+  "description": "The vitest helpers of Rsdoctor.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/test-helper"
+  },
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "modern build",
+    "dev": "modern build --watch"
+  },
+  "dependencies": {
+    "@rspack/core": "0.3.14",
+    "@types/lodash": "^4.14.200",
+    "@types/node": "^16",
+    "lodash": "^4.17.21",
+    "memfs": "3.4.10",
+    "typescript": "^5.2.2",
+    "upath": "2.0.1",
+    "webpack": "^5.89.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/",
+    "types": "./dist/index.d.ts"
+  }
+}

@@ -1,6 +1,6 @@
-# Rsbuild Contribution Guide
+# Rsdoctor Contribution Guide
 
-Thanks for that you are interested in contributing to Rsbuild. Before starting your contribution, please take a moment to read the following guidelines.
+Thanks for that you are interested in contributing to Rsdoctor. Before starting your contribution, please take a moment to read the following guidelines.
 
 ---
 
@@ -145,7 +145,7 @@ pnpm run --filter @rsdoctor/some-package test
 
 ### Run E2E Tests
 
-In addition to the unit tests, the Rsbuild also includes end-to-end (E2E) tests, which checks the functionality of the application as a whole.
+In addition to the unit tests, the Rsdoctor also includes end-to-end (E2E) tests, which checks the functionality of the application as a whole.
 
 You can run the `test:e2e` command to run the E2E tests:
 
@@ -176,7 +176,7 @@ pnpm run lint
 
 ## Documentation
 
-Currently Rsbuild provides documentation in English and Chinese. If you can use Chinese, please update both documents at the same time. Otherwise, just update the English documentation.
+Currently Rsdoctor provides documentation in English and Chinese. If you can use Chinese, please update both documents at the same time. Otherwise, just update the English documentation.
 
 You can find all the documentation in the `packages/document` folder:
 
@@ -196,7 +196,7 @@ The source code of Rspress can be found in [this repo](https://github.com/web-in
 
 ### Add a Changeset
 
-Rsbuild is using [Changesets](https://github.com/changesets/changesets) to manage the versioning and changelogs.
+Rsdoctor is using [Changesets](https://github.com/changesets/changesets) to manage the versioning and changelogs.
 
 If you've changed some packages, you need add a new changeset for the changes. Please run `change` command to select the changed packages and add the changeset info.
 
