@@ -1,0 +1,5 @@
+packages:
+  - 'e2e/**'
+  - 'scripts/**'
+  - 'packages/**'
+  - 'examples/**'
