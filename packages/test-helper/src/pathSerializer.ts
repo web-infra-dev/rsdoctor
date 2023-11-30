@@ -50,7 +50,7 @@ export function applyMatcherReplacement(
   }, str);
 }
 
-export const createDefaultPathMatchers = (root: string) => {
+export const createDefaultPathMatchers = (_root: string) => {
   const ret: PathMatcher[] = [
     {
       match: /(?<=\/)(\.pnpm\/.+?\/node_modules)(?=\/)/,

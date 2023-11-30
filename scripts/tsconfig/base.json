@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": false,
+    "noUnusedParameters": true,
     "jsx": "preserve",
     "resolveJsonModule": true,
     "moduleResolution": "Bundler"
