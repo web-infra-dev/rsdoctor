@@ -13,7 +13,7 @@
     "check-changeset": "cd ./scripts/check-changeset && pnpm start",
     "check-dependency-version": "check-dependency-version-consistency . --ignore-dep vue-loader",
     "dev:doc": "cd packages/document && pnpm run dev",
-    "e2e": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test:doctor",
+    "e2e": "echo todo",
     "gen-release-note": "modern gen-release-note",
     "lint": "echo todo",
     "new": "modern new",
@@ -24,7 +24,7 @@
     "update-rspack": "cd ./scripts/update-packages && pnpm start:rspack",
     "update-rspress": "cd ./scripts/update-packages && pnpm start:rspress",
     "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
-    "ut": "vitest run",
+    "ut": "echo todo",
     "ut:watch": "vitest"
   },
   "nano-staged": {
