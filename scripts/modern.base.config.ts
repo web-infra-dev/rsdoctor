@@ -6,7 +6,7 @@ import {
 import path from 'path';
 
 const define = {
-  RSBUILD_VERSION: require('../packages/core/package.json').version,
+  RSDOCTOR_VERSION: require('../packages/core/package.json').version,
 };
 
 const BUILD_TARGET = 'es2020' as const;

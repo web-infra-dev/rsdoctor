@@ -1,0 +1,1 @@
+# @rsdoctor/rspack-plugin
