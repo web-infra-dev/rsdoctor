@@ -104,7 +104,7 @@ pnpm run build
 Alternatively, you can build the package from the root directory of the repository using the `--filter` option:
 
 ```sh
-pnpm run --filter @rsbuild/some-package build
+pnpm run --filter @rsdoctor/some-package build
 ```
 
 Build all packages:
@@ -140,7 +140,7 @@ pnpm run test
 Alternatively, you can run the unit tests of single package using the `--filter` option:
 
 ```sh
-pnpm run --filter @rsbuild/some-package test
+pnpm run --filter @rsdoctor/some-package test
 ```
 
 ### Run E2E Tests
@@ -226,7 +226,7 @@ feat(plugin-swc): Add `xxx` config
 
 ## Benchmarking
 
-You can input `!bench` in the comment area of ​​the PR to do benchmarking on `rsbuild` (you need to have Collaborator and above permissions).
+You can input `!bench` in the comment area of ​​the PR to do benchmarking on `rsdoctor` (you need to have Collaborator and above permissions).
 
 You can focus on metrics related to build time and bundle size based on the comparison table output by comments to assist you in making relevant performance judgments and decisions.
 

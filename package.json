@@ -37,10 +37,11 @@
   "devDependencies": {
     "@modern-js/module-tools": "^2.41.0",
     "@modern-js/monorepo-tools": "^2.41.0",
+    "@rsbuild/test-helper": "^0.1.5",
+    "@rsdoctor/tsconfig": "workspace:*",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "husky": "^8.0.3",
-    "is-ci": "^3.0.1",
     "nano-staged": "^0.8.0",
     "nx": "^17.0.1",
     "prettier": "^3.0.3",
