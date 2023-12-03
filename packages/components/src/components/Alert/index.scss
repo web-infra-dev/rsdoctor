@@ -1,0 +1,34 @@
+.file-inline-decoration {
+  // color: white !important
+  cursor: pointer;
+  text-decoration: underline;
+  // font-weight: bold
+  // font-style: italic
+  background: rgb(77, 112, 151);
+}
+.alert-space, .full-space {
+
+  width: 100%;
+  height: 100%;
+
+  > *:last-child {
+    flex-grow: 1;
+  }
+}
+.full-space {
+  flex-grow: 1;
+}
+
+.code-change-tag-list {
+  margin-left: 10px;
+}
+
+.tabs-space {
+  width: 100%;
+  height: 100%;
+
+  .ant-tabs-content, .ant-tabs-tabpane {
+    width: 100%;
+    height: 100%;
+  }
+}

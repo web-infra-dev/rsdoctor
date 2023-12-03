@@ -1,0 +1,72 @@
+$treePrefixCls: 'rc-tree';
+$treeNodePrefixCls: '#{$treePrefixCls}-treenode';
+
+.#{$treePrefixCls} {
+  margin: 0;
+  border: 1px solid transparent;
+
+  .#{$treeNodePrefixCls} {
+    margin: 0;
+    padding: 0;
+    line-height: 24px;
+    white-space: nowrap;
+    list-style: none;
+    outline: 0;
+
+    .#{$treePrefixCls}-node-content-wrapper {
+      position: relative;
+      display: inline-block;
+      height: 24px;
+      margin: 0;
+      padding: 0 4px;
+      box-sizing: border-box;
+      text-decoration: none;
+      vertical-align: top;
+      cursor: pointer;
+    }
+
+  &-child-tree {
+    display: none;
+    &-open {
+      display: block;
+    }
+  }
+
+  &-treenode-disabled 
+    > span:not(.#{$treePrefixCls}-switcher),
+    > a,
+    > a span {
+      color: #767676;
+      cursor: not-allowed;
+  }
+
+  &-treenode-selected {
+    background: rgba(5, 145, 255, 0.3);
+    border-radius: 4px;
+  // &-node-selected
+  }
+
+  &-title {
+    display: inline-block;
+  }
+
+  &-indent {
+    display: inline-block;
+    height: 0;
+    vertical-align: bottom;
+  }
+  &-indent-unit {
+    display: inline-block;
+    width: 14px;
+  }
+}
+}
+
+.file-tree-switcher-arrow {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+
+  &-expand {
+    transform: rotate(90deg);
+  }
+}
