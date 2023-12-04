@@ -1,4 +1,4 @@
-import { DoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
+import { DoctorWebpackSDK } from '@rsdoctor/sdk';
 
 let sdk: DoctorWebpackSDK;
 

@@ -2,7 +2,7 @@ import { DevToolError } from '@rsdoctor/utils/error';
 import { Common, Manifest, SDK } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
-import { ModuleGraph, ChunkGraph, PackageGraph } from '../../graph';
+import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/graph';
 import { debug } from '@rsdoctor/utils/logger';
 import { DoctorServer } from '../server';
 import { DoctorFakeServer } from '../server/fakeServer';

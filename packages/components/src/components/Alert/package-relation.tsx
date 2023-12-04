@@ -92,7 +92,6 @@ export const PackageRelationReasonsWithServer = withServerAPI({
 
 export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
   data,
-  cwd,
   getPackageRelationContentComponent,
 }) => {
   const { level, code, packages } = data;

@@ -1,13 +1,12 @@
-import { Utils as BuildUtils } from '@/build-utils/build';
-
+import type { Plugin as PluginType } from '@rsdoctor/types';
 import { Plugin } from '@rsdoctor/types';
+import { Utils as BuildUtils } from '@/build-utils/build';
+import type { ProxyLoaderOptions } from '@/types';
 import {
   getOriginLoaderModule,
   reportLoader,
   shouldSkipLoader,
 } from '../utils';
-import type { ProxyLoaderOptions } from '@/types';
-import type { Plugin as PluginType } from '@rsdoctor/types';
 
 const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, {}> = function (
   ...args

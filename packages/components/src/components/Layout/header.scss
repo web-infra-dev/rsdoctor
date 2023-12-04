@@ -1,0 +1,17 @@
+.header-switch {
+  .ant-switch-handle {
+    top: 1px !important;
+  }
+}
+
+.header-icon {
+  user-select: none;
+
+  &:hover {
+    color: #1668dc;
+  }
+  &:active {
+    color: #40a9ff;
+  }
+}
+

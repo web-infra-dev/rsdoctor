@@ -3,7 +3,7 @@ import path from 'path';
 
 import { createLogger } from '@rsdoctor/utils/logger';
 import { Plugin } from '@rsdoctor/types';
-import type { ModuleGraph } from '@rsdoctor/sdk/graph';
+import type { ModuleGraph } from '@rsdoctor/graph';
 import { ParseBundle } from '@/types';
 import { getModulesFromArray } from '../module-graph';
 

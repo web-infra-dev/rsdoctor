@@ -1,4 +1,4 @@
-import type { ChunkGraph } from '@rsdoctor/sdk/graph';
+import type { ChunkGraph } from '@rsdoctor/graph';
 import { Plugin } from '@rsdoctor/types';
 import { Chunks, ModuleGraph } from '..';
 

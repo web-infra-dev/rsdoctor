@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import { Typography } from 'antd';
 import path from 'path';
 import { startsWith } from 'lodash-es';

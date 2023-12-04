@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { ModuleGraph } from '@rsdoctor/sdk/graph';
+import { ModuleGraph } from '@rsdoctor/graph';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { ConfigContext } from '../config';
 import { Theme, ViewMode } from '../constants';

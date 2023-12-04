@@ -43,7 +43,7 @@ export function flattenDirectory(
   parent: DataNode,
   sep = '/',
   inlinedResourcePathKey: string,
-  dirTitle = (dir: DataNode, defaultTitle: string): JSX.Element | string => defaultTitle,
+  dirTitle = (_dir: DataNode, defaultTitle: string): JSX.Element | string => defaultTitle,
 ) {
   if (n.isLeaf) return;
   if (parent.children && parent.children.length === 1) {
@@ -71,11 +71,10 @@ export function flattenDirectory(
 
 export function createFileStructures({
   files,
-  cwd = '',
   sep = '/',
   inlinedResourcePathKey = '__RESOURCEPATH__',
-  fileTitle = (file: string, basename: string) => basename,
-  dirTitle = (dir: DataNode, defaultTitle: string) => defaultTitle,
+  fileTitle = (_file: string, basename: string) => basename,
+  dirTitle = (_dir: DataNode, defaultTitle: string) => defaultTitle,
 }: {
   files: string[];
   cwd?: string;

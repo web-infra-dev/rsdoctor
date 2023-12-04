@@ -13,7 +13,6 @@ export function sendMessageInWorker<T>(receivedMsg: NativeWorkerMessage, respons
 }
 
 export function handleMessageInWorker<T, R>({
-  workerName,
   handler,
 }: {
   workerName: string;

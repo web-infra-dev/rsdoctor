@@ -5,7 +5,7 @@ import {
   Module,
   Statement,
   ChunkGraph,
-} from '@rsdoctor/sdk/graph';
+} from '@rsdoctor/graph';
 import { isImportDependency, getImportKind } from './utils';
 import { getPositionByStatsLocation } from './compatible';
 

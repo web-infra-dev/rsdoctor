@@ -8,6 +8,6 @@ export default defineConfig({
       format: 'esm',
       target: 'es2019',
       outDir: './dist',
-      dts: false,
+      dts: {},
     },
 });

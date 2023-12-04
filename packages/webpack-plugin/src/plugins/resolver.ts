@@ -1,5 +1,5 @@
 import { InternalBasePlugin } from '@rsdoctor/core/plugins';
-import { DoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
+import { DoctorWebpackSDK } from '@rsdoctor/sdk';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Time } from '@rsdoctor/utils/common';
 import path from 'path';

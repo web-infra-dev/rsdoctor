@@ -10,13 +10,11 @@ export class RendererAPI extends BaseAPI {
 
   /** sdk manifest api */
   @Router.get(SDK.ServerAPI.API.EntryHtml)
-  public async entryHtml(
-    clientHtmlPath: string,
-  ): Promise<SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.EntryHtml>> {
-    // TODO: add clientHtmlPath argument
+  public async entryHtml(): Promise<SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.EntryHtml>> {
     const { server, res } = this.ctx;
     // dynamic serve client:
     // require.resolve will failed due to the dist will remove when execute "npm run build" of client.
+    const clientHtmlPath = require.resolve('@rsdoctor/client');
     if (!this.isClientServed) {
       this.isClientServed = true;
       const clientDistPath = path.resolve(clientHtmlPath, '../..');

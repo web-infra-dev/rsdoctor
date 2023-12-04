@@ -1,6 +1,6 @@
 import type { Hook } from 'tapable';
 import type { SDK } from '@rsdoctor/types';
-import type { DoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
+import type { DoctorWebpackSDK } from '@rsdoctor/sdk';
 import { DevToolError } from '@rsdoctor/utils/error';
 
 export function reportPluginData(

@@ -1,4 +1,4 @@
-import type { DoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
+import type { DoctorWebpackSDK } from '@rsdoctor/sdk';
 import type { Linter, Plugin } from '@rsdoctor/types';
 import {
   internalPluginTapPostOptions,

@@ -1,4 +1,4 @@
-import { DoctorSDKController } from '@rsdoctor/sdk/sdk';
+import { DoctorSDKController } from '@rsdoctor/sdk';
 import { Linter } from '@rsdoctor/types';
 import type { DoctorWebpackMultiplePluginOptions } from '@rsdoctor/core';
 

@@ -51,7 +51,7 @@ export function ConnectManifestData<
       Promise.all(keys.map(([key]) => loader.loadData(key)))
         .then((e) => {
           const p = e.reduce<Props>((t, val, i) => {
-            const [key, alias] = keys[i];
+            const [_key, alias] = keys[i];
             t[alias] = val as Props[keyof Props];
             return t;
           }, {} as Props);

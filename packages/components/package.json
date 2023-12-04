@@ -1,20 +1,51 @@
 {
   "name": "@rsdoctor/components",
   "version": "0.0.1",
-  "types": "./dist/types/index.d.ts",
-  "main": "./dist/lib/index.js",
-  "module": "./dist/es/index.js",
+  "main": "./dist/index.js",
+  "license": "MIT",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/components"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "dev": "modern dev",
     "build": "modern build",
-    "start": "npm run build -- -w"
+    "dev": "npm run start",
+    "start": "modern build -w",
+    "test": "vitest run"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,mjs,cjs}": [
-      "node --max_old_space_size=8192 ./node_modules/eslint/bin/eslint.js --fix --color --cache --quiet"
-    ]
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./elements": {
+      "types": "./dist/components/index.d.ts",
+      "default": "./dist/components/index.js"
+    },
+    "./pages": {
+      "types": "./dist/pages/index.d.ts",
+      "default": "./dist/pages/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "default": "./dist/utils/index.js"
+    },
+    "./i18n": {
+      "types": "./dist/utils/i18n/index.d.ts",
+      "default": "./dist/utils/i18n/index.js"
+    },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
+    }
   },
-  "type": "module",
+
   "eslintIgnore": [
     "node_modules/",
     "dist/"
@@ -22,7 +53,7 @@
   "devDependencies": {
     "@ant-design/icons": "4.8.0",
     "@monaco-editor/react": "4.4.6",
-    "@rsdoctor/sdk": "workspace:*",
+    "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@types/lodash-es": "4.17.6",
@@ -32,20 +63,19 @@
     "ansi-to-react": "6.1.6",
     "antd": "5.8.3",
     "axios": "^1.6.1",
-    "glob": "7.2.0",
     "i18next": "22.0.4",
+    "lodash-es": "4.17.21",
     "monaco-editor": "0.34.1",
-    "normalize.css": "8.0.1",
     "rc-dialog": "9.1.0",
     "rc-tree": "5.7.2",
     "react": "^18",
     "react-i18next": "12.0.0",
+    "react-json-view": "1.21.3",
     "react-router-dom": "6.4.3",
     "socket.io-client": "4.6.1",
     "typescript": "^5.2.2",
     "url-parse": "1.5.10"
   },
-  "sideEffects": [],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"

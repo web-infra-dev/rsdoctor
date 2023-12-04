@@ -19,8 +19,8 @@ import type {
   DoctorPluginOptionsNormalized,
   DoctorWebpackPluginOptions,
 } from '@rsdoctor/core/types';
-import { ChunkGraph, ModuleGraph } from '@rsdoctor/sdk/graph';
-import { DoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
+import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
+import { DoctorWebpackSDK } from '@rsdoctor/sdk';
 import { Constants, Linter, Manifest, Plugin } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils';
 import { debug } from '@rsdoctor/utils/logger';

@@ -26,7 +26,7 @@ export const defaultConfig: Config = {
   json: {} as Manifest.DoctorManifest,
   setTheme() {},
   setManifest() {},
-  setPageState(state: PageState) {},
+  setPageState(_state: PageState) {},
   setViewMode() {},
 };
 
