@@ -1,0 +1,19 @@
+.statistic-card {
+  border-radius: 8px;
+  text-align: center;
+  padding: 24px;
+
+  &-title {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  &-light {
+    // background: #87e8de
+    background: #fff;
+    border: 1px solid #eee;
+  }
+  &-dark {
+    background: rgb(20, 20, 20);
+  }
+}

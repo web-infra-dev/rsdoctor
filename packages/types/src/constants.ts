@@ -45,3 +45,5 @@ export const DoctorMonitorWebBId = 'Rsdoctor-Client';
 export const DoctorMonitorDocBId = 'Rsdoctor-Doc';
 
 export const DoctorProcessEnvDebugKey = 'RSDOCTOR_DEBUG';
+
+export const RsdoctorClientUrl = '' // TODO: rsdoctor client url
