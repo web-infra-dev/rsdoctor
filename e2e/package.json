@@ -29,6 +29,6 @@
     "@types/webpack": "5.28.0",
     "fast-glob": "^3.3.1",
     "playwright": "1.33.0",
-    "typescript": "^5.3.0"
+    "typescript": "^5.2.2"
   }
 }

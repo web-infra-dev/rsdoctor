@@ -3,7 +3,7 @@ import * as Webpack from 'webpack';
 import { File } from '@rsdoctor/utils';
 import { Node } from '@rsdoctor/utils/ruleUtils';
 import { Plugin } from '@rsdoctor/types';
-import { Module, ModuleGraph, PackageData } from '@rsdoctor/sdk/graph';
+import { Module, ModuleGraph, PackageData } from '@rsdoctor/graph';
 import {
   getAllModules,
   getDependencyPosition,

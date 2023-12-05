@@ -1,0 +1,42 @@
+{
+  "name": "@rsdoctor/graph",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/graph"
+  },
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/type/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "modern build",
+    "dev": "npm run start",
+    "start": "modern build -w",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@rsdoctor/utils": "workspace:*",
+    "lodash": "^4.17.21",
+    "socket.io": "4.7.2",
+    "source-map": "^0.7.4"
+  },
+  "devDependencies": {
+    "@rsdoctor/types": "workspace:*",
+    "@types/body-parser": "1.19.2",
+    "@types/estree": "1.0.0",
+    "@types/lodash": "^4.14.200",
+    "@types/node": "^16",
+    "tslib": "2.4.1",
+    "typescript": "^5.2.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  }
+}

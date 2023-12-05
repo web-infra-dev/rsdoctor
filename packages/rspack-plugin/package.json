@@ -21,18 +21,15 @@
   "dependencies": {
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
-    "@rsdoctor/utils": "workspace:*",
+    "@rsdoctor/graph": "workspace:*",
     "@rspack/core": "0.3.14",
-    "lodash": "^4.17.21",
-    "webpack": "^5.89.0"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@rsdoctor/test-helper": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@types/lodash": "^4.14.200",
     "@types/node": "^16",
     "@types/tapable": "2.2.2",
-    "@types/webpack": "5.28.0",
     "tslib": "2.4.1",
     "typescript": "^5.2.2"
   },

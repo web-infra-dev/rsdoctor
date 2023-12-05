@@ -3,7 +3,7 @@ import { Server } from '@rsdoctor/utils/build';
 import { Bundle } from '@rsdoctor/utils/common';
 import assert from 'assert';
 import bodyParser from 'body-parser';
-// import open from 'open';
+import open from 'open';
 import ip from 'ip';
 import cors from 'cors';
 import { PassThrough } from 'stream';
@@ -181,7 +181,7 @@ export class DoctorServer implements SDK.DoctorServerInstance {
     const url = this.getClientUrl(
       ...(args as Parameters<SDK.DoctorServerInstance['getClientUrl']>),
     );
-    // await open(url); // TODO: after add  rsdoctor client will open this, now will throw error.
+    await open(url);
     console.log(`Web Doctor analyze run at: ${url}`);
   }
 

@@ -1,4 +1,4 @@
-import { ChunkGraph } from '@rsdoctor/sdk/graph';
+import { ChunkGraph } from '@rsdoctor/graph';
 
 export function assetsContents(
   assetMap: Map<string, { content: string }>,

@@ -32,11 +32,12 @@
     "package.json": "pnpm run check-dependency-version"
   },
   "devDependencies": {
+    "@modern-js/app-tools": "^2.41.0",
     "@modern-js/module-tools": "^2.41.0",
     "@modern-js/monorepo-tools": "^2.41.0",
     "@rsbuild/test-helper": "0.1.5",
-    "@rsdoctor/tsconfig": "workspace:*",
     "@rsdoctor/test-helper": "workspace:*",
+    "@rsdoctor/tsconfig": "workspace:*",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "husky": "^8.0.3",

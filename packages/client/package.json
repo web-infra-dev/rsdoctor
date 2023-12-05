@@ -1,0 +1,50 @@
+{
+  "name": "@rsdoctor/client",
+  "version": "0.0.1",
+  "main": "dist/template/index.html",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/client"
+  },
+  "scripts": {
+    "dev": "modern dev",
+    "start:analysis": "ENABLE_DEVTOOLS_PLUGIN=true ENABLE_CLIENT_SERVER=true modern dev",
+    "build": "modern build",
+    "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true modern build"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "node --max_old_space_size=8192 ./node_modules/eslint/bin/eslint.js --fix --color --cache --quiet"
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "dist/"
+  ],
+  "devDependencies": {
+    "@modern-js/runtime": "^2.41.0",
+    "@rsdoctor/components": "workspace:*",
+    "@rsdoctor/types": "workspace:*",
+    "@types/node": "^16",
+    "@types/react": "^18",
+    "@types/serve-static": "1.15.0",
+    "@types/webpack": "5.28.0",
+    "antd": "5.8.3",
+    "glob": "7.2.0",
+    "ip": "1.1.8",
+    "node-polyfill-webpack-plugin": "^2.0.1",
+    "normalize.css": "8.0.1",
+    "react": "^18",
+    "react-dom": "18.2.0",
+    "react-error-boundary": "^4.0.11",
+    "react-router-dom": "6.4.3",
+    "serve-static": "1.15.0",
+    "typescript": "^5.2.2"
+  },
+  "sideEffects": [],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

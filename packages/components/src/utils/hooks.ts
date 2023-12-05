@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import parse from 'url-parse';
 
+import './i18n';
 import { Language } from '../constants';
 import { setLocaleToStorage } from './storage';
 

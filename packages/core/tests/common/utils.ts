@@ -1,4 +1,4 @@
-import { ModuleGraph } from '@rsdoctor/sdk/graph';
+import { ModuleGraph } from '@rsdoctor/graph';
 import { relative } from 'path';
 
 export function removeAbsModulePath(graph: ModuleGraph, root: string) {

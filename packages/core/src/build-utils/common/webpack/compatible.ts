@@ -4,7 +4,7 @@ import {
   ModuleGraph as SdkModuleGraph,
   Module as SdkModule,
   Statement,
-} from '@rsdoctor/sdk/graph';
+} from '@rsdoctor/graph';
 import {
   Compilation,
   Dependency,

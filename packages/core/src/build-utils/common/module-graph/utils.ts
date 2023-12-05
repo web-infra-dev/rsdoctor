@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import type { ModuleGraph } from '@rsdoctor/sdk/graph';
+import type { ModuleGraph } from '@rsdoctor/graph';
 
 interface DependencyData {
   type?: string;

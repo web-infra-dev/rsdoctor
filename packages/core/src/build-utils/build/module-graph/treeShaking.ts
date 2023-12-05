@@ -5,7 +5,7 @@ import {
   SideEffect,
   ModuleGraphModule,
   Statement,
-} from '@rsdoctor/sdk/graph';
+} from '@rsdoctor/graph';
 import type { SDK } from '@rsdoctor/types';
 import type {
   Compilation,

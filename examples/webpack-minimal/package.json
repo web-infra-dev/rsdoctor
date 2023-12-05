@@ -1,0 +1,35 @@
+{
+  "name": "@example/doctor-webpack-minimal",
+  "version": "0.0.1",
+  "description": "",
+  "files": [
+    "dist",
+    "src",
+    "package.json"
+  ],
+  "scripts": {
+    "compile": "node -r tsm ./node_modules/webpack/bin/webpack.js -c webpack.config.ts",
+    "build:analysis": "ENABLE_CLIENT_SERVER=true npm run compile"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/highlight": "7.18.6",
+    "chalk": "4.1.2",
+    "htmlparser2": "7.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "14.18.26",
+    "@rsdoctor/types": "workspace:*",
+    "@rsdoctor/webpack-plugin": "workspace:*",
+    "bundle-stats": "4.1.7",
+    "eslint": "8.22.0",
+    "ts-loader": "9.4.2",
+    "tslib": "2.4.1",
+    "tsm": "2.3.0",
+    "typescript": "^5.2.2",
+    "webpack": "5.89.0",
+    "webpack-cli": "5.0.0"
+  }
+}

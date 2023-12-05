@@ -3,7 +3,7 @@ import {
   Chunk,
   ChunkGraph,
   EntryPoint,
-} from '@rsdoctor/sdk/graph';
+} from '@rsdoctor/graph';
 import { forEach } from 'lodash';
 import { Plugin } from '@rsdoctor/types';
 

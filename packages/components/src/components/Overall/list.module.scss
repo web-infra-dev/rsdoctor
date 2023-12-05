@@ -1,0 +1,10 @@
+.root {
+  :global(.ant-descriptions-item-label),
+  :global(.ant-descriptions-item-content) {
+    font-size: 13px;
+  }
+
+  :global(.ant-descriptions-item) {
+    padding-bottom: 6px !important;
+  }
+}

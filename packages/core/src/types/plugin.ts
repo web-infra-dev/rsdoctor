@@ -4,8 +4,8 @@ import type {
   Plugin,
   SDK,
 } from '@rsdoctor/types';
-import type { DoctorSlaveSDK, DoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
-import { ModuleGraph } from '@rsdoctor/sdk/graph';
+import type { DoctorSlaveSDK, DoctorWebpackSDK } from '@rsdoctor/sdk';
+import { ModuleGraph } from '@rsdoctor/graph';
 // import { rules } from '@web-doctor/webpack-rules';
 
 // type InternalRules = Common.UnionToTuple<typeof rules[number]>;

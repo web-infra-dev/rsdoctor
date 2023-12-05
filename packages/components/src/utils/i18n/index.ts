@@ -1,12 +1,12 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { getLocaleFromStorage } from '../utils';
+
 
 import en from './en';
 import cn from './cn';
+import { getLocaleFromStorage } from '../storage';
 
-export default i18n
-  // .use(LanguageDetector)
+i18n
   .use(initReactI18next)
   .init({
     lng: getLocaleFromStorage(),
@@ -35,3 +35,5 @@ export default i18n
       escapeValue: false,
     },
   });
+  
+export default i18n

@@ -1,5 +1,5 @@
 import type { Compiler, NormalModule, Stats } from 'webpack';
-import { ModuleGraph } from '@rsdoctor/sdk/graph';
+import { ModuleGraph } from '@rsdoctor/graph';
 import { removeAbsModulePath } from '../common/utils';
 import { Chunks, ModuleGraph as ModuleGraphBuildUtils } from '../../src/build-utils/build';
 

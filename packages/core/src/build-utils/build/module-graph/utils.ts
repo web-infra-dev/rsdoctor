@@ -1,4 +1,4 @@
-import * as SDK from '@rsdoctor/sdk/graph';
+import * as SDK from '@rsdoctor/graph';
 import { isNumber } from 'lodash';
 import { parser, Node } from '@rsdoctor/utils/ruleUtils';
 

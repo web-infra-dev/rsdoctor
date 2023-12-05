@@ -1,7 +1,7 @@
 import { Compiler } from '@rspack/core';
 import fs from 'fs';
-import { ModuleGraph } from '@rsdoctor/sdk/graph';
-import { DoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
+import { ModuleGraph } from '@rsdoctor/graph';
+import { DoctorWebpackSDK } from '@rsdoctor/sdk';
 import { Chunks } from '@rsdoctor/core/build-utils';
 import {
   InternalLoaderPlugin,
