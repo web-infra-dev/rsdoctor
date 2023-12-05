@@ -1,8 +1,12 @@
 import { get, startsWith } from 'lodash-es';
 import { Common } from '@rsdoctor/types';
 import { message, UploadFile } from 'antd';
+import { FieldDataNode  } from 'rc-tree';
 
-export type DataNode = any; // TODO: types
+type DataNode = FieldDataNode<{
+  key: string | number;
+  title?: React.ReactNode | ((data: DataNode) => React.ReactNode);
+}> & { __BASENAME__?: any; __RESOURCEPATH__?: any; children?: DataNode[] };
 
 export const rootDirname = (file: string, sep = '/'): string | null => {
   const idx = file?.indexOf(sep);
@@ -42,7 +46,7 @@ export function flattenDirectory(
   n: DataNode,
   parent: DataNode,
   sep = '/',
-  inlinedResourcePathKey: string,
+  inlinedResourcePathKey: keyof DataNode,
   dirTitle = (_dir: DataNode, defaultTitle: string): JSX.Element | string => defaultTitle,
 ) {
   if (n.isLeaf) return;
@@ -55,7 +59,7 @@ export function flattenDirectory(
     parent.title = dirTitle(parent, defaultTitle);
 
     n.children &&
-      n.children.forEach((c: any) => {
+      n.children.forEach((c) => {
         flattenDirectory(c, parent, sep, inlinedResourcePathKey, dirTitle);
       });
   } else {
@@ -63,7 +67,7 @@ export function flattenDirectory(
     n.title = dirTitle(n, n[basenameKey]);
 
     n.children &&
-      n.children.forEach((c: any) => {
+      n.children.forEach((c) => {
         flattenDirectory(c, n, sep, inlinedResourcePathKey, dirTitle);
       });
   }
@@ -79,7 +83,7 @@ export function createFileStructures({
   files: string[];
   cwd?: string;
   sep?: string;
-  inlinedResourcePathKey?: string;
+  inlinedResourcePathKey?: keyof DataNode;
   dirTitle?(dir: DataNode, defaultTitle: string): JSX.Element | string;
   fileTitle?(file: string, basename: string): JSX.Element | string;
 }): DataNode[] {
@@ -93,8 +97,7 @@ export function createFileStructures({
 
       while (dir) {
         // find the match directory.
-        // eslint-disable-next-line no-loop-func
-        let exist = parent.children!.find((e: { title: string | null; }) => e.title === dir);
+        let exist = parent.children!.find((e) => e.title === dir) as DataNode;
         if (!exist) {
           const p = [parent[inlinedResourcePathKey], dir].filter(Boolean).join(sep);
           exist = {
@@ -114,7 +117,7 @@ export function createFileStructures({
       }
 
       // uniq
-      if (parent.children!.some((e: any) => get(e, inlinedResourcePathKey) === file)) return t;
+      if (parent.children!.some((e) => get(e, inlinedResourcePathKey) === file)) return t;
 
       parent.children!.push({
         title() {
@@ -125,21 +128,19 @@ export function createFileStructures({
         isLeaf: true,
         [inlinedResourcePathKey]: file,
         [basenameKey]: basename,
-      } as any);
+      });
 
       return t;
     },
     { key: '0', children: [] },
   ).children!;
 
-  res.forEach((e: { children: any[]; }) => {
+  res.forEach((e) => {
     e.children &&
-      e.children.forEach((item: any) => {
-        flattenDirectory(item, e, sep, inlinedResourcePathKey, dirTitle);
-      });
+      e.children.forEach((item) => flattenDirectory(item, e, sep, inlinedResourcePathKey, dirTitle));
   });
 
-  return res as DataNode[];
+  return res;
 }
 
 export function beautifyPath(path: string, cwd: string) {

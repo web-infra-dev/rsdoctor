@@ -25,10 +25,6 @@ export const CodeChangeDrawerContent: React.FC<CodeChangeAlertProps & FixedProps
   };
 
   const FixButton = () => {
-    if (process.env.NODE_ENV !== 'development') {
-      // TODO implement open codebase mr.
-      return null;
-    }
     return (
       <Popconfirm
         title={`Did you confirm to apply the change i the area below ?`}
