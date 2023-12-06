@@ -8,12 +8,11 @@ import React, { useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HashRouter as BrowserRouter } from 'react-router-dom';
 import Router from './router';
-import ReactDOM from 'react-dom/client';
 // import UploaderComponent from './pages/Resources/Uploader'; TODO: uploader components
 
 const { PageState, Theme } = Constants;
 
-const Index: React.FC = (): React.ReactElement => {
+const App: React.FC = (): React.ReactElement => {
   const ifCloudIdeEnv = useDetectIfCloudIdeEnv();
 
   const [state, setState] = useState<Constants.PageState>(PageState.Success);
@@ -145,7 +144,4 @@ const Index: React.FC = (): React.ReactElement => {
   );
 };
 
-const rootElement = document.getElementById('root');
-const root = ReactDOM.createRoot(rootElement!);
-
-root.render(<Index />);
+export default App;

@@ -11,7 +11,8 @@
     "dev": "rsbuild dev",
     "start:analysis": "ENABLE_DEVTOOLS_PLUGIN=true ENABLE_CLIENT_SERVER=true rsbuild dev",
     "build": "rsbuild build",
-    "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true rsbuild build"
+    "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true rsbuild build",
+    "preview": "rsbuild preview"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
@@ -42,7 +43,6 @@
     "serve-static": "1.15.0",
     "typescript": "^5.2.2"
   },
-  "sideEffects": [],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
