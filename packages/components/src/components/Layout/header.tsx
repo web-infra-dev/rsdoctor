@@ -49,7 +49,7 @@ export const Header: React.FC = () => {
         <Col style={{ height: Size.NavBarHeight, lineHeight: `${Size.NavBarHeight + 2}px` }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
             <img style={{ height: 30 }} src={icon} className="web-doctor-logo" alt="logo" />
-            <Typography.Text style={{ color: 'inherit', fontSize: 18, marginLeft: 4 }}>Web Doctor</Typography.Text>
+            <Typography.Text style={{ color: 'inherit', fontSize: 18, marginLeft: 4 }}>Rsdoctor</Typography.Text>
             <BuilderSelect />
           </div>
         </Col>

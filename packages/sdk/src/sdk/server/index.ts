@@ -182,7 +182,7 @@ export class DoctorServer implements SDK.DoctorServerInstance {
       ...(args as Parameters<SDK.DoctorServerInstance['getClientUrl']>),
     );
     await open(url);
-    console.log(`Web Doctor analyze run at: ${url}`);
+    console.log(`Rsdoctor analyze run at: ${url}`);
   }
 
   public sendAPIDataToClient<

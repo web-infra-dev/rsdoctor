@@ -25,7 +25,7 @@ type ServerAPIProviderProps<T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExten
 } & InferServerAPIBody<T>;
 
 /**
- * this component will request server api to the sdk of Web Doctor in local development.
+ * this component will request server api to the sdk of Rsdoctor in local development.
  * otherwise it will fallback to load full manifest for the data.
  *
  * @example usage
