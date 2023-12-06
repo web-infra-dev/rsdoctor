@@ -1,45 +1,49 @@
 import type { Compiler } from 'webpack';
-import { appTools, defineConfig } from '@modern-js/app-tools';
-import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import serve from 'serve-static';
 import path from 'path';
 import fs from 'fs';
-import glob from 'glob';
-import ip from 'ip';
 import {
   ClientEntry,
   DistPath,
   PortForCLI,
   PortForWeb,
-  RsdoctorWebpackPluginMain,
   WebpackDoctorDirPath,
   WebpackStatsFilePath,
 } from './config/constants';
 
-const { ENABLE_DEVTOOLS_PLUGIN, OFFICAL_PREVIEW_PUBLIC_PATH, OFFICAL_DEMO_MANIFEST_PATH, ENABLE_CLIENT_SERVER } =
-  process.env;
+const {
+  ENABLE_DEVTOOLS_PLUGIN,
+  OFFICAL_PREVIEW_PUBLIC_PATH,
+  OFFICAL_DEMO_MANIFEST_PATH,
+  ENABLE_CLIENT_SERVER,
+} = process.env;
 
-  
-export default defineConfig<'webpack'>((env) => {
+export default defineConfig((env) => {
   const IS_PRODUCTION = env.env === 'production';
 
   return {
+    plugins: [pluginReact(), pluginNodePolyfill()],
+
     source: {
-      entries: {
+      entry: {
         index: ClientEntry,
       },
-      disableDefaultEntries: true,
       define: {
         'process.env.NODE_DEBUG': JSON.stringify(false),
         'process.env.NODE_ENV': JSON.stringify(env.env),
-        'process.env.OFFICAL_DEMO_MANIFEST_PATH': JSON.stringify(OFFICAL_DEMO_MANIFEST_PATH),
+        'process.env.OFFICAL_DEMO_MANIFEST_PATH': JSON.stringify(
+          OFFICAL_DEMO_MANIFEST_PATH,
+        ),
         'process.env.LOCAL_CLI_PORT': JSON.stringify(PortForCLI),
       },
     },
+
     output: {
       distPath: {
         root: path.basename(DistPath),
-        html: 'template',
         js: 'resource/js',
         css: 'resource/css',
         svg: 'resource/svg',
@@ -57,6 +61,7 @@ export default defineConfig<'webpack'>((env) => {
       disableTsChecker: !IS_PRODUCTION,
       disableSourceMap: true,
     },
+
     performance: {
       chunkSplit: {
         strategy: 'custom',
@@ -67,13 +72,6 @@ export default defineConfig<'webpack'>((env) => {
               name: 'shadow',
               chunks: 'all',
             },
-            react: {
-              test: /node_modules\/react-*/,
-              name: 'react',
-              chunks: 'all',
-              maxSize: 1000000,
-              minSize: 200000,
-            },
             monaco: {
               test: /node_modules\/monaco-editor\/*/,
               name: 'monaco',
@@ -82,40 +80,44 @@ export default defineConfig<'webpack'>((env) => {
               minSize: 500000,
             },
           },
-        }
+        },
       },
     },
-    tools: {
-      tsChecker: IS_PRODUCTION ? {} : undefined,
-      webpackChain: (chainConfig) => {
-        chainConfig.resolve.mainFields.merge(['browser', 'module', 'main']);
-        chainConfig.plugin('NodePolyfillPlugin').use(NodePolyfillPlugin, [{ excludeAliases: ['console'] }]);
 
+    tools: {
+      bundlerChain: (chainConfig) => {
         if (ENABLE_DEVTOOLS_PLUGIN) {
-          const { RsdoctorWebpackPlugin } =
-            require(RsdoctorWebpackPluginMain) as typeof import('../webpack-plugin/dist');
+          const { RsdoctorRspackPlugin } =
+            require('../rspack-plugin/dist') as typeof import('../rspack-plugin/dist');
 
           class StatsWriter {
             apply(compiler: Compiler) {
-              compiler.hooks.done.tapPromise({ name: 'webpack-stats-json-writer', stage: 99999 }, async (stats) => {
-                const json = stats.toJson({
-                  all: false,
-                  assets: true,
-                  chunks: true,
-                  modules: true,
-                  builtAt: true,
-                  hash: true,
-                  ids: true,
-                  version: true,
-                  entrypoints: true,
-                });
-                await fs.promises.writeFile(WebpackStatsFilePath, JSON.stringify(json, null, 2), 'utf-8');
-              });
+              compiler.hooks.done.tapPromise(
+                { name: 'webpack-stats-json-writer', stage: 99999 },
+                async (stats) => {
+                  const json = stats.toJson({
+                    all: false,
+                    assets: true,
+                    chunks: true,
+                    modules: true,
+                    builtAt: true,
+                    hash: true,
+                    ids: true,
+                    version: true,
+                    entrypoints: true,
+                  });
+                  await fs.promises.writeFile(
+                    WebpackStatsFilePath,
+                    JSON.stringify(json, null, 2),
+                    'utf-8',
+                  );
+                },
+              );
             }
           }
 
           chainConfig.plugin('stats-writer').use(StatsWriter);
-          chainConfig.plugin('rsdoctor').use(RsdoctorWebpackPlugin, [
+          chainConfig.plugin('rsdoctor').use(RsdoctorRspackPlugin, [
             {
               disableClientServer: !ENABLE_CLIENT_SERVER,
               features: {
@@ -129,6 +131,7 @@ export default defineConfig<'webpack'>((env) => {
           ]);
         }
       },
+
       devServer: {
         historyApiFallback: true,
         setupMiddlewares: [
@@ -146,31 +149,15 @@ export default defineConfig<'webpack'>((env) => {
         ],
       },
     },
-    dev: {
-      startUrl: ENABLE_CLIENT_SERVER ? undefined : `http://${ip.address()}:${PortForWeb}`,
-      port: PortForWeb,
-    },
-    plugins: [
-      appTools({}),
-      {
-        // use to move html files to correct path, because of html dest path will match in TLB system.
-        name: 'MOVE_OUTPUT_HTML_FILES',
-        setup() {
-          return {
-            afterBuild() {
-              const dir = path.resolve(DistPath, './template');
-              const htmls = glob.sync('**/**.html', { cwd: dir });
 
-              htmls.forEach((html) => {
-                const prevPath = path.resolve(dir, html);
-                const prevDir = path.dirname(prevPath);
-                const curtPath = path.resolve(dir, path.basename(prevPath));
-                fs.copyFileSync(prevPath, curtPath);
-                // fs.rmSync(prevDir, { recursive: true });
-              });
-            },
-          };
-        },
-      },
-    ],
-}});
+    server: {
+      port: PortForWeb
+    },
+
+    dev: {
+      startUrl: ENABLE_CLIENT_SERVER
+        ? undefined
+        : true,
+    },
+  };
+});
