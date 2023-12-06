@@ -48,10 +48,7 @@ export default defineConfig<'webpack'>((env) => {
         media: 'resource/media',
       },
       assetPrefix: IS_PRODUCTION
-        ? // 此处不要修改！这里 production 的 publicPath 会和 sdk serve 的路径 以及 轻服务 部署的路径联动。
-          // OFFICAL_PREVIEW_PUBLIC_PATH 是提供给 轻服务 部署后域名关系
-          // "/" 是提供给 sdk 使用的
-          OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || '/'
+        ? OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || '/'
         : '/',
       cleanDistPath: IS_PRODUCTION,
       disableTsChecker: !IS_PRODUCTION,
@@ -62,11 +59,6 @@ export default defineConfig<'webpack'>((env) => {
         strategy: 'custom',
         splitChunks: {
           cacheGroups: {
-            shadow: {
-              test: /node_modules\/@byted-shadow\/*/,
-              name: 'shadow',
-              chunks: 'all',
-            },
             react: {
               test: /node_modules\/react-*/,
               name: 'react',

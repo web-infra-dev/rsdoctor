@@ -3,7 +3,7 @@ import { Common } from '@rsdoctor/types';
 import { message, UploadFile } from 'antd';
 import { FieldDataNode  } from 'rc-tree';
 
-type DataNode = FieldDataNode<{
+export type DataNode = FieldDataNode<{
   key: string | number;
   title?: React.ReactNode | ((data: DataNode) => React.ReactNode);
 }> & { __BASENAME__?: any; __RESOURCEPATH__?: any; children?: DataNode[] };
