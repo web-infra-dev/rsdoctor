@@ -65,10 +65,9 @@ const manifestUrlForDev = '/manifest.json';
 export function getManifestUrl(): string {
   let file: string | void;
 
-  if (window[Manifest.DoctorManifestClientConstant.WindowPropertyForManifestUrl as any]) {
+  if ((window as { [key: string]: any })[Manifest.DoctorManifestClientConstant.WindowPropertyForManifestUrl]) {
     // load from window property
-    // @ts-ignore
-    file = window[Manifest.DoctorManifestClientConstant.WindowPropertyForManifestUrl]; // TODO: types
+    file = (window as { [key: string]: any })[Manifest.DoctorManifestClientConstant.WindowPropertyForManifestUrl];
   } else {
     // load from url query
     file = getManifestUrlFromUrlQuery();
