@@ -64,11 +64,6 @@ export default defineConfig((env) => {
         strategy: 'custom',
         splitChunks: {
           cacheGroups: {
-            shadow: {
-              test: /node_modules\/@byted-shadow\/*/,
-              name: 'shadow',
-              chunks: 'all',
-            },
             monaco: {
               test: /node_modules\/monaco-editor\/*/,
               name: 'monaco',
