@@ -1,19 +1,19 @@
 import { CodepenOutlined, ColumnHeightOutlined, DeploymentUnitOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
-import { Button, Card, Col, Divider, Empty, Popover, Row, Space, Tag, Tooltip, Typography } from 'antd';
+import { Button, Card, Col, Divider, Drawer, Empty, Popover, Row, Space, Tag, Tooltip, Typography } from 'antd';
 import { sumBy } from 'lodash-es';
 import { dirname, relative } from 'path';
 import { Key } from 'rc-tree/lib/interface';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ServerAPIProvider } from '../../../components/Manifest';
-// import { ModuleAnalyzeComponent } from '../ModuleAnalyze'; // TODO: module analyze page
+import { ModuleAnalyzeComponent } from '../../ModuleAnalyze';
 import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
 import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
 import { TextDrawer } from '../../../components/TextDrawer';
-import { Size } from '../../../constants';
+import { Size, drawerWidth } from '../../../constants';
 import { DataNode, createFileStructures, formatSize, getOriginalLanguage, isJsDataUrl, useI18n } from '../../../utils';
 import { ModuleGraphListContext } from '../config';
 
@@ -119,22 +119,22 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) =
   );
 };
 
-// export const ModuleGraphViewer: React.FC<{
-//   id: number | string;
-//   show: boolean;
-//   setShow: (_show: boolean) => void;
-//   cwd: string;
-// }> = ({ id, show, setShow, cwd }) => {
-//   if (!id) return null;
+export const ModuleGraphViewer: React.FC<{
+  id: number | string;
+  show: boolean;
+  setShow: (_show: boolean) => void;
+  cwd: string;
+}> = ({ id, show, setShow, cwd }) => {
+  if (!id) return null;
 
-//   return (
-//     <Drawer open={show} maskClosable width={drawerWidth} onClose={() => setShow(false)}>
-//       <ServerAPIProvider api={SDK.ServerAPI.API.GetAllModuleGraph} body={{}}>
-//         {(modules) => <ModuleAnalyzeComponent cwd={cwd} moduleId={id} modules={modules} />}
-//       </ServerAPIProvider>
-//     </Drawer>
-//   );
-// };
+  return (
+    <Drawer open={show} maskClosable width={drawerWidth} onClose={() => setShow(false)}>
+      <ServerAPIProvider api={SDK.ServerAPI.API.GetAllModuleGraph} body={{}}>
+        {(modules) => <ModuleAnalyzeComponent cwd={cwd} moduleId={id} modules={modules} />}
+      </ServerAPIProvider>
+    </Drawer>
+  );
+};
 
 const inlinedResourcePathKey = '__RESOURCEPATH__';
 
@@ -237,12 +237,12 @@ export const AssetDetail: React.FC<{
   moduleSizeLimit?: number;
   height?: number;
   root: string;
-}> = ({ asset, chunks: includeChunks, modules: includeModules, moduleSizeLimit, height }) => {
+}> = ({ asset, chunks: includeChunks, modules: includeModules, moduleSizeLimit, height, root }) => {
   // const navigate = useNavigate();
   const [moduleKeyword, setModuleKeyword] = useState('');
   const [defaultExpandAll, setDefaultExpandAll] = useState(false);
   const [moduleJumpList, setModuleJumpList] = useState([] as number[]);
-  const [_show, setShow] = useState(false);
+  const [show, setShow] = useState(false);
 
   const filteredModules = useMemo(() => {
     let res = includeModules.slice();
@@ -448,12 +448,12 @@ export const AssetDetail: React.FC<{
           <Empty description={<Typography.Text strong>{`"${asset.path}" don't has any modules`}</Typography.Text>} />
         )}
 
-        {/* <ModuleGraphViewer
+        <ModuleGraphViewer
           id={moduleJumpList?.length ? moduleJumpList[moduleJumpList.length - 1] : ''}
           show={show}
           setShow={setShow}
           cwd={root}
-        /> */}
+        />
       </Card>
     </ModuleGraphListContext.Provider>
   );

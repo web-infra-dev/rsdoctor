@@ -8,7 +8,7 @@ export interface DoctorRspackPluginOptions {
    */
   disableClientServer?: boolean;
   /**
-   * the switch for the Web Doctor features.
+   * the switch for the Rsdoctor features.
    */
   features?: DoctorWebpackPluginOptions<[]>['features'];
   /**

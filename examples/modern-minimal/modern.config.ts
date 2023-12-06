@@ -1,7 +1,7 @@
 import appTools, { defineConfig } from '@modern-js/app-tools';
 import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
-const pluginName = 'Web Doctor';
+const pluginName = 'Rsdoctor';
 
 export default defineConfig({
   source: {

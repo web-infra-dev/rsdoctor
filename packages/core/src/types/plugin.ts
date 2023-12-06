@@ -17,7 +17,7 @@ export interface DoctorWebpackPluginOptions<
   /** Checker configuration */
   linter?: LinterType.Options<Rules, InternalRules>;
   /**
-   * the switch for the Web Doctor features.
+   * the switch for the Rsdoctor features.
    */
   features?:
     | Plugin.DoctorWebpackPluginFeatures
@@ -42,13 +42,13 @@ export interface DoctorWebpackPluginOptions<
    */
   sdkInstance?: DoctorWebpackSDK;
   /**
-   * control the web doctor reporter codes records.
+   * control the Rsdoctor reporter codes records.
    */
   reportCodeType?:
     | { noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }
     | undefined;
   /**
-   * control the web doctor upload data to TOS.
+   * control the Rsdoctor upload data to TOS.
    * @default false
    */
   disableTOSUpload?: boolean;

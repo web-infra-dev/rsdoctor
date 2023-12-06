@@ -314,6 +314,9 @@ importers:
       react:
         specifier: ^18
         version: 18.2.0
+      react-hyper-tree:
+        specifier: 0.3.12
+        version: 0.3.12(react-dom@17.0.2)(react@18.2.0)
       react-i18next:
         specifier: 12.0.0
         version: 12.0.0(i18next@22.0.4)(react-dom@17.0.2)(react@18.2.0)
@@ -9281,6 +9284,10 @@ packages:
       safe-buffer: 5.2.1
     dev: true
 
+  /hash-sum@2.0.0:
+    resolution: {integrity: sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==}
+    dev: true
+
   /hash.js@1.1.7:
     resolution: {integrity: sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==}
     dependencies:
@@ -12719,6 +12726,18 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       react: 18.2.0
+    dev: true
+
+  /react-hyper-tree@0.3.12(react-dom@17.0.2)(react@18.2.0):
+    resolution: {integrity: sha512-g3jtAPoU60P3ZYwO98QQmxaAzeE/BE2p12L7UXTAXytpu4CxnGSPgDFSepLrC1Wsb3iV0gxRB2pdWvksvGrI6A==}
+    engines: {node: '>=14', npm: '>=5'}
+    peerDependencies:
+      react: ^15.0.0 || ^16 || ^17 || ^18
+      react-dom: ^15.0.0 || ^16 || ^17 || ^18
+    dependencies:
+      hash-sum: 2.0.0
+      react: 18.2.0
+      react-dom: 17.0.2(react@18.2.0)
     dev: true
 
   /react-i18next@12.0.0(i18next@22.0.4)(react-dom@17.0.2)(react@18.2.0):

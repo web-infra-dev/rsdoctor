@@ -1,0 +1,107 @@
+$treePrefixCls: 'file-tree-com';
+$treeNodePrefixCls: '#{$treePrefixCls}-treenode';
+
+.#{$treePrefixCls} {
+  margin: 0;
+  .#{$treeNodePrefixCls} {
+    margin: 0;
+    padding: 0;
+    line-height: 24px;
+    white-space: nowrap;
+    list-style: none;
+    outline: 0;
+    .#{$treePrefixCls}-node-content-wrapper {
+      position: relative;
+      display: inline-block;
+      height: 24px;
+      margin: 0;
+      padding: 0 4px;
+      box-sizing: border-box;
+      text-decoration: none;
+      vertical-align: top;
+      cursor: pointer;
+    }
+    .#{$treePrefixCls}-arrow-icon {
+      transform: rotate(90deg);
+    }
+  }
+  &-child-tree {
+    display: none;
+    &-open {
+      display: block;
+    }
+  }
+  &-treenode-disabled 
+    > span:not(.#{$treePrefixCls}-switcher),
+    > a,
+    > a span {
+      color: #767676;
+      cursor: not-allowed;
+    }
+  &-treenode-selected {
+    background: rgba(5, 145, 255, 0.3);
+    border-radius: 4px;
+  }
+
+  &-title {
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  &-indent {
+    display: inline-block;
+    height: 0;
+    vertical-align: bottom;
+  }
+  &-indent-unit {
+    display: inline-block;
+    width: 14px;
+  }
+}
+.file-tree-switcher-arrow {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+
+
+  &-expand {
+    transform: rotate(90deg);
+  }
+}
+
+.rc-tree.rc-tree-show-line .rc-tree-treenode:not(:last-child) {
+  border-left: 1px solid #eee
+}
+.#{$treePrefixCls}-titles-box {
+  // margin: 3px
+.#{$treePrefixCls}-titles {
+  display: flex;
+  flex-direction: column;
+
+  .#{$treePrefixCls}-node-title {
+    display: flex;
+    cursor: pointer;
+    img {
+      cursor: pointer;
+    &-tag {
+      // margin-left: 10px
+      cursor: pointer;
+    }
+  }
+}
+
+  .#{$treePrefixCls}-node-title-selected {
+    background-color: yellow;
+  }
+  .#{$treePrefixCls}-node-title-tag {
+    margin-inline-end: 0;
+  }
+  .#{$treePrefixCls}-node-title-code 
+    &-tag {
+      // margin-right: 10px
+      cursor: pointer;
+      padding: 0 2px;
+    }
+  }
+}
+
+

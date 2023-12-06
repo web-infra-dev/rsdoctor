@@ -52,7 +52,7 @@ export class InternalLoaderPlugin<
     const wrapper =
       (callback: Function) =>
       (loaderContext: LoaderContext<unknown>, module: NormalModule) => {
-        // loaders which are already intercepted in afterPlugins hook by web doctor.
+        // loaders which are already intercepted in afterPlugins hook by Rsdoctor.
         const proxyLoaders = module.loaders || [];
 
         // return origin loaders not doctor internal loaders
