@@ -1,0 +1,26 @@
+$prefixCls: 'bundle-size';
+
+.monaco-hover .markdown-hover.hover-row hr {
+  margin: 2px;
+  background-color: gray;
+}
+
+.#{$prefixCls}-editor {
+  margin-left: 40px;
+  flex-grow: 1;
+  height: 700px;
+
+  .ant-card-body {
+    width: auto;
+    height: calc(100% - 48px);
+    padding: 0;
+  }
+}
+
+.#{$prefixCls}-module-bunton {
+  margin-left: 4em;
+}
+
+.ant-tabs-nav {
+  width: 100%;
+}

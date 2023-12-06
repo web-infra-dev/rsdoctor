@@ -34,7 +34,7 @@ const Component: React.FC<Props> = ({ project }) => {
   );
 };
 
-export default withServerAPI({
+export const Page =  withServerAPI({
   api: SDK.ServerAPI.API.GetProjectInfo,
   responsePropName: 'project',
   Component,
