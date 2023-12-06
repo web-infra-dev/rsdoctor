@@ -1,6 +1,7 @@
 import type { Compiler } from 'webpack';
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import serve from 'serve-static';
 import path from 'path';
@@ -25,7 +26,11 @@ export default defineConfig((env) => {
   const IS_PRODUCTION = env.env === 'production';
 
   return {
-    plugins: [pluginReact(), pluginNodePolyfill()],
+    plugins: [
+      pluginReact(),
+      pluginNodePolyfill(),
+      pluginTypeCheck({ enable: IS_PRODUCTION }),
+    ],
 
     source: {
       entry: {
