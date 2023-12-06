@@ -12,7 +12,7 @@ import Router from './router';
 
 const { PageState, Theme } = Constants;
 
-const Index: React.FC = (): React.ReactElement => {
+const App: React.FC = (): React.ReactElement => {
   const ifCloudIdeEnv = useDetectIfCloudIdeEnv();
 
   const [state, setState] = useState<Constants.PageState>(PageState.Success);
@@ -144,4 +144,4 @@ const Index: React.FC = (): React.ReactElement => {
   );
 };
 
-export default Index;
+export default App;

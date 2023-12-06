@@ -17,7 +17,7 @@ export class RendererAPI extends BaseAPI {
     const clientHtmlPath = require.resolve('@rsdoctor/client');
     if (!this.isClientServed) {
       this.isClientServed = true;
-      const clientDistPath = path.resolve(clientHtmlPath, '../..');
+      const clientDistPath = path.resolve(clientHtmlPath, '..');
       server.app.use(serve(clientDistPath));
     }
     const clientHtml = await File.fse.readFile(clientHtmlPath, 'utf-8');

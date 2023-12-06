@@ -32,7 +32,6 @@
     "package.json": "pnpm run check-dependency-version"
   },
   "devDependencies": {
-    "@modern-js/app-tools": "^2.41.0",
     "@modern-js/module-tools": "^2.41.0",
     "@modern-js/monorepo-tools": "^2.41.0",
     "@rsbuild/test-helper": "0.1.5",
