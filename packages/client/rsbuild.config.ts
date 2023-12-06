@@ -52,10 +52,7 @@ export default defineConfig((env) => {
         media: 'resource/media',
       },
       assetPrefix: IS_PRODUCTION
-        ? // 此处不要修改！这里 production 的 publicPath 会和 sdk serve 的路径 以及 轻服务 部署的路径联动。
-          // OFFICAL_PREVIEW_PUBLIC_PATH 是提供给 轻服务 部署后域名关系
-          // "/" 是提供给 sdk 使用的
-          OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || '/'
+        ? OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || '/'
         : '/',
       cleanDistPath: IS_PRODUCTION,
       disableTsChecker: !IS_PRODUCTION,
@@ -150,14 +147,16 @@ export default defineConfig((env) => {
       },
     },
 
+    html: {
+      title: 'Rsdoctor',
+    },
+
     server: {
-      port: PortForWeb
+      port: PortForWeb,
     },
 
     dev: {
-      startUrl: ENABLE_CLIENT_SERVER
-        ? undefined
-        : true,
+      startUrl: ENABLE_CLIENT_SERVER ? undefined : true,
     },
   };
 });

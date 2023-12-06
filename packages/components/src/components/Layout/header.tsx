@@ -1,10 +1,8 @@
 import { TranslationOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, Dropdown, Input, Layout, Row, Select, Switch, Typography } from 'antd';
+import { Avatar, Col, Dropdown, Layout, Row, Switch, Typography } from 'antd';
 import React from 'react';
-import { APILoaderMode4Dev, Language, Size, Theme } from '../../constants';
+import { Language, Size, Theme } from '../../constants';
 import {
-  getAPILoaderModeFromStorage,
-  setAPILoaderModeToStorage,
   useI18n,
   useTheme
 } from '../../utils';
@@ -63,28 +61,6 @@ export const Header: React.FC = () => {
             wrap={false}
             gutter={[Size.BasePadding / 3, 0]}
           >
-            {process.env.NODE_ENV === 'development' ? (
-              <Col>
-                <Input.Group compact>
-                  <Button size="small" style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}>
-                    <Typography.Text>API 加载行为</Typography.Text>
-                  </Button>
-                  <Select
-                    size="small"
-                    value={getAPILoaderModeFromStorage()}
-                    style={{ width: 90 }}
-                    onChange={(v) => {
-                      setAPILoaderModeToStorage(v as APILoaderMode4Dev);
-                      location.reload();
-                    }}
-                  >
-                    <Select.Option value={APILoaderMode4Dev.Local}>Local</Select.Option>
-                    <Select.Option value={APILoaderMode4Dev.Remote}>Remote</Select.Option>
-                    <Select.Option value={APILoaderMode4Dev.Default}>默认行为</Select.Option>
-                  </Select>
-                </Input.Group>
-              </Col>
-            ) : null}
             <Col>
               <OverlayAlertsWithButton />
             </Col>

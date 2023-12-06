@@ -1,5 +1,6 @@
 import {
   BarChartOutlined,
+  FolderViewOutlined,
   MenuOutlined
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
@@ -9,8 +10,9 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Size } from '../../constants';
 import * as OverallConstants from '../../pages/Overall/constants';
-import { useI18n } from '../../utils';
+import { useI18n, hasBundle } from '../../utils';
 import { withServerAPI } from '../Manifest';
+import { BundleSize } from 'src/pages';
 
 const BuilderSwitchName = 'builder-switcher';
 
@@ -21,8 +23,13 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { routes: enableRoutes } = props;
+
   const iconStyle: React.CSSProperties = {
     fontSize: 16,
+  };
+  const customIconStyle: React.CSSProperties = {
+    ...iconStyle,
+    transform: 'translateY(-2px)',
   };
 
   const items: MenuProps['items'] = [];
@@ -40,6 +47,27 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
       onTitleClick(e) {
         navigate(e.key);
       },
+    });
+  }
+
+  if (hasBundle(enableRoutes)) {
+    items.push({
+      label: t(BundleSize.name),
+      key: BundleSize.name,
+      icon: <span style={customIconStyle}>📦</span>,
+      children: [
+        includes(enableRoutes, Manifest.DoctorManifestClientRoutes.BundleSize) && {
+          label: t(BundleSize.name),
+          key: BundleSize.route,
+          icon: <FolderViewOutlined style={iconStyle} />,
+        },
+        // TODO: Tree shaking menu
+        // includes(enableRoutes, Manifest.DoctorManifestClientRoutes.TreeShaking) && {
+        //   label: t(TreeShakingConstants.name),
+        //   key: TreeShakingConstants.route,
+        //   icon: <ShakeOutlined style={iconStyle} />,
+        // },
+      ].filter((e) => Boolean(e)) as MenuProps['items'],
     });
   }
 

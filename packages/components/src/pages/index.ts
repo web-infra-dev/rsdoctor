@@ -1,1 +1,2 @@
-export * as OverallPage from './Overall';
+export * as Overall from './Overall';
+export * as BundleSize from './BundleSize';
