@@ -80,6 +80,7 @@ export class PackageGraph implements SDK.PackageGraphInstance {
       return pkg;
     }
 
+    // TODO: add test for this function.
     const readPackageJson = (
       file: string,
       readFile?: SDK.GetPackageFile,
@@ -97,8 +98,10 @@ export class PackageGraph implements SDK.PackageGraphInstance {
             readFile(join(current, 'package.json')) ||
             PackageUtil.getPackageMetaFromModulePath(file);
         }
-        if (!readFile || !result?.name) {
+        if (!readFile) {
           result = PackageUtil.getPackageMetaFromModulePath(file);
+        } else if (!result?.name) {
+          result = undefined;
         }
       }
 
