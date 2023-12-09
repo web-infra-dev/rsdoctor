@@ -2,7 +2,7 @@ import path from 'path';
 import { expect, describe, it } from 'vitest';
 import type { SDK } from '@rsdoctor/types';
 import { Module, ModuleGraph, PackageGraph } from '../src/graph';
-
+// TODO: simplyfy the module-graph-basic.json data size.
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, 'fixture', ...paths);
 };
@@ -73,7 +73,7 @@ describe('module graph', () => {
 
     const pkgGraph = PackageGraph.fromModuleGraph(moduleGraph, '.');
     const pkgData = pkgGraph.toData();
-    expect(pkgData.packages[0].root).toBeTruthy(); // TODO: test error
+    expect(pkgData.packages[0].root).toBeTruthy();
     pkgData.packages.forEach((pkg) => (pkg.root = ''));
     expect(pkgData).toMatchSnapshot();
   });
