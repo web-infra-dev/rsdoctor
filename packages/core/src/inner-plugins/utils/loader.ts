@@ -9,7 +9,7 @@ import { isString, omit } from 'lodash';
 import path from 'path';
 import { debug } from '@rsdoctor/utils/logger';
 import { Loader } from '@rsdoctor/utils/common';
-import { Time } from '@rsdoctor/utils';
+import { Time } from '@rsdoctor/utils/common';
 import { SDK, Plugin } from '@rsdoctor/types';
 import { DevToolError } from '@rsdoctor/utils/error';
 

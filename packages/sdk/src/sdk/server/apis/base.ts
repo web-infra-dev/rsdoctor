@@ -1,4 +1,4 @@
-import { Data } from '@rsdoctor/utils';
+import { Data } from '@rsdoctor/utils/common';
 import { Manifest, SDK } from '@rsdoctor/types';
 
 export class BaseAPI implements Manifest.ManifestDataLoader {

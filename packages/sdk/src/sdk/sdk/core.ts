@@ -1,6 +1,6 @@
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { File, Json, EnvInfo } from '@rsdoctor/utils/build';
-import { Algorithm } from '@rsdoctor/utils';
+import { Algorithm } from '@rsdoctor/utils/common';
 import path from 'path';
 import { createHash } from 'crypto';
 import process from 'process';

@@ -1,30 +1,29 @@
-import envinfo from 'envinfo';
+import { helpers, run } from 'envinfo';
 import { exec } from 'child_process';
 
 export const getCPUInfo = () =>
-  envinfo.helpers.getCPUInfo().then((res) => res[1]);
+  helpers.getCPUInfo().then((res) => res[1]);
 
 export const getOSInfo = () =>
-  envinfo.helpers.getOSInfo().then((res) => res[1]);
+  helpers.getOSInfo().then((res) => res[1]);
 
 export const getMemoryInfo = () =>
-  envinfo.helpers.getMemoryInfo().then((res) => res[1]);
+  helpers.getMemoryInfo().then((res) => res[1]);
 
 export const getNodeVersion = () =>
-  envinfo.helpers.getNodeInfo().then((res) => res[1]);
+  helpers.getNodeInfo().then((res) => res[1]);
 
 export const getYarnVersion = () =>
-  envinfo.helpers.getYarnInfo().then((res) => res[1]);
+  helpers.getYarnInfo().then((res) => res[1]);
 
 export const getNpmVersion = () =>
-  envinfo.helpers.getnpmInfo().then((res) => res[1]);
+  helpers.getnpmInfo().then((res) => res[1]);
 
 export function getNpmPackageVersion(pkg: string): Promise<string>;
 export function getNpmPackageVersion(pkgs: string[]): Promise<string[]>;
 export function getNpmPackageVersion(pkg: unknown): Promise<unknown> {
   const isArray = Array.isArray(pkg);
-  return envinfo
-    .run(
+  return run(
       {
         npmPackages: isArray ? pkg : [pkg],
       },
@@ -42,8 +41,7 @@ export function getGlobalNpmPackageVersion(pkg: string): Promise<string>;
 export function getGlobalNpmPackageVersion(pkgs: string[]): Promise<string[]>;
 export function getGlobalNpmPackageVersion(pkg: unknown): Promise<unknown> {
   const isArray = Array.isArray(pkg);
-  return envinfo
-    .run(
+  return run(
       {
         npmGlobalPackages: isArray ? pkg : [pkg],
       },

@@ -62,6 +62,7 @@ export default defineConfig((env) => {
       cleanDistPath: IS_PRODUCTION,
       disableTsChecker: !IS_PRODUCTION,
       disableSourceMap: true,
+      disableMinimize: !IS_PRODUCTION,
     },
 
     performance: {
