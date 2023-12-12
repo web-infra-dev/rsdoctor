@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import ip from 'ip';
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Manifest as ManifestShared } from '@rsdoctor/utils';
+import { Manifest as ManifestShared } from '@rsdoctor/utils/common';
 
 import { cwd, setupSDK } from '../../utils';
 

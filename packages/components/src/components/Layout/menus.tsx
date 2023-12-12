@@ -1,18 +1,24 @@
 import {
+  ApiOutlined,
   BarChartOutlined,
   FolderViewOutlined,
-  MenuOutlined
+  MenuOutlined,
+  MonitorOutlined,
+  NodeIndexOutlined,
+  ToolOutlined
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Col, Grid, Menu, MenuProps } from 'antd';
+import { Col, Grid, Menu, MenuProps, Typography } from 'antd';
 import { includes } from 'lodash-es';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import WebpackIcon from 'src/common/imgs/webpack.svg';
 import { Size } from '../../constants';
 import * as OverallConstants from '../../pages/Overall/constants';
-import { useI18n, hasBundle } from '../../utils';
+import { useI18n, hasBundle, hasCompile } from '../../utils';
 import { withServerAPI } from '../Manifest';
-import { BundleSize } from 'src/pages';
+import { BundleSize, LoaderFiles, PluginsAnalyze, ModuleResolve } from 'src/pages';
+import { CompileName } from './constants';
 
 const BuilderSwitchName = 'builder-switcher';
 
@@ -49,6 +55,44 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
       },
     });
   }
+  
+  if (hasCompile(enableRoutes)) {
+    items.push({
+      label: t(CompileName),
+      key: CompileName,
+      icon: <ToolOutlined style={iconStyle} />,
+      children: [
+        includes(enableRoutes, Manifest.DoctorManifestClientRoutes.WebpackLoaders) && {
+          label: <Typography.Text style={{ marginRight: 8 }}>{t(LoaderFiles.name)}</Typography.Text>,
+          key: LoaderFiles.route,
+          icon: <img src={WebpackIcon} alt="" style={{ ...iconStyle, width: 16 }} />,
+          children: [
+            // TODO: loader overall page
+            // {
+            //   label: t(WebpackLoadersOverallConstants.name),
+            //   key: WebpackLoadersOverallConstants.route,
+            //   icon: <BarChartOutlined style={iconStyle} />,
+            // },
+            {
+              label: t(LoaderFiles.name),
+              key: LoaderFiles.route,
+              icon: <MonitorOutlined style={iconStyle} />,
+            },
+          ],
+        },
+        includes(enableRoutes, Manifest.DoctorManifestClientRoutes.ModuleResolve) && {
+          label: t(ModuleResolve.name),
+          key: ModuleResolve.route,
+          icon: <NodeIndexOutlined style={iconStyle} />,
+        },
+        includes(enableRoutes, Manifest.DoctorManifestClientRoutes.WebpackPlugins) && {
+          label: t(PluginsAnalyze.name),
+          key: PluginsAnalyze.route,
+          icon: <ApiOutlined style={iconStyle} />,
+        },
+      ].filter((e) => Boolean(e)) as MenuProps['items'],
+    });
+  }
 
   if (hasBundle(enableRoutes)) {
     items.push({
@@ -83,7 +127,7 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
       }}
       overflowedIndicator={<MenuOutlined />}
       style={{ height: Size.NavBarHeight, lineHeight: `${Size.NavBarHeight}px`, ...props.style }}
-      // defaultSelectedKeys={[pathname === '/' ? OverallConstants.route : pathname]}
+
       selectedKeys={[pathname === '/' ? OverallConstants.route : pathname]}
     />
   );

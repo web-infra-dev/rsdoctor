@@ -7,7 +7,7 @@ import { PluginData } from './plugin';
 import { SummaryData } from './summary';
 import { ConfigData } from './config';
 import { RuleStoreData } from '../rule';
-import { EnvInfo } from './envinfo';
+import type { EnvInfo } from './envinfo';
 import { PackageGraphData, OtherReports } from './package';
 
 export type ErrorsData = RuleStoreData;

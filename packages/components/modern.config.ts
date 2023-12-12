@@ -6,7 +6,7 @@ export default defineConfig({
     {
       buildType: 'bundleless',
       format: 'esm',
-      target: 'es2019',
+      target: "es6",
       outDir: './dist',
       dts: {},
     },

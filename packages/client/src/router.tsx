@@ -1,14 +1,29 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Overall, BundleSize } from '@rsdoctor/components/pages';
+import { Overall, BundleSize, LoaderFiles, PluginsAnalyze, ModuleResolve } from '@rsdoctor/components/pages';
 
 
 export default function Router(): React.ReactElement {
   const routes = [
-    /** bundle routes */
     {
       path: BundleSize.route,
       element: <BundleSize.Page />,
+    },
+    {
+      path: LoaderFiles.route,
+      element: <LoaderFiles.Page />,
+    },
+    {
+      path: LoaderFiles.route,
+      element: <LoaderFiles.Page />,
+    },
+    {
+      path: PluginsAnalyze.route,
+      element: <PluginsAnalyze.Page />,
+    },
+    {
+      path: ModuleResolve.route,
+      element: <ModuleResolve.Page />,
     },
   ].filter((e) => Boolean(e)) as { path: string; element: JSX.Element }[];
 

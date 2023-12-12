@@ -39,7 +39,10 @@ const data: Configuration = {
     ids: true,
   },
   devtool: 'source-map',
-  plugins: [new RsdoctorWebpackPlugin({ disableClientServer: !process.env.ENABLE_CLIENT_SERVER })],
+  plugins: [new RsdoctorWebpackPlugin({
+    disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
+    features: ['bundle', 'resolver', 'loader', 'plugins']
+  })],
 };
 
 export default data;

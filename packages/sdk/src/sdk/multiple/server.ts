@@ -1,4 +1,4 @@
-import { Server } from '@rsdoctor/utils';
+import { Server } from '@rsdoctor/utils/build';
 import { DoctorServer } from '../server';
 import type { DoctorSlaveSDK } from './slave';
 

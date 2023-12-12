@@ -296,6 +296,9 @@ importers:
       axios:
         specifier: ^1.6.1
         version: 1.6.1
+      dayjs:
+        specifier: 1.11.6
+        version: 1.11.6
       i18next:
         specifier: 22.0.4
         version: 22.0.4
@@ -329,6 +332,9 @@ importers:
       socket.io-client:
         specifier: 4.6.1
         version: 4.6.1
+      terser:
+        specifier: ^5.26.0
+        version: 5.26.0
       typescript:
         specifier: ^5.2.2
         version: 5.3.2
@@ -3694,7 +3700,7 @@ packages:
       '@modern-js/utils': 2.41.0
       '@swc/helpers': 0.5.3
       acorn: 8.10.0
-      caniuse-lite: 1.0.30001559
+      caniuse-lite: 1.0.30001566
       css-minimizer-webpack-plugin: 5.0.1(esbuild@0.17.19)(webpack@5.89.0)
       cssnano: 6.0.1(postcss@8.4.31)
       fork-ts-checker-webpack-plugin: 8.0.0(typescript@4.9.4)(webpack@5.89.0)
@@ -7742,7 +7748,7 @@ packages:
       debug: 3.2.7
       eol: 0.9.1
       get-port: 3.2.0
-      glob: 7.2.3
+      glob: 7.2.0
       is-valid-domain: 0.1.6
       lodash: 4.17.21
       mkdirp: 0.5.6
@@ -9108,17 +9114,6 @@ packages:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
-
-  /glob@7.2.3:
-    resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    dependencies:
-      fs.realpath: 1.0.0
-      inflight: 1.0.6
-      inherits: 2.0.4
-      minimatch: 3.1.2
-      once: 1.4.0
-      path-is-absolute: 1.0.1
-    dev: false
 
   /glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
@@ -13953,6 +13948,17 @@ packages:
       acorn: 8.10.0
       commander: 2.20.3
       source-map-support: 0.5.21
+
+  /terser@5.26.0:
+    resolution: {integrity: sha512-dytTGoE2oHgbNV9nTzgBEPaqAWvcJNl66VZ0BkJqlvp71IjO8CxdBx/ykCNb47cLnCmCvRZ6ZR0tLkqvZCdVBQ==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      '@jridgewell/source-map': 0.3.5
+      acorn: 8.10.0
+      commander: 2.20.3
+      source-map-support: 0.5.21
+    dev: true
 
   /text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}

@@ -1,7 +1,7 @@
 import { getOptions } from 'loader-utils';
 import path from 'path';
 import { omit } from 'lodash';
-import { Loader } from '@rsdoctor/utils';
+import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule, SourceMapInput as WebpackSourceMapInput } from '../../../types';
 

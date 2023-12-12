@@ -22,7 +22,7 @@ import type {
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { DoctorWebpackSDK } from '@rsdoctor/sdk';
 import { Constants, Linter, Manifest, Plugin } from '@rsdoctor/types';
-import { Process } from '@rsdoctor/utils';
+import { Process } from '@rsdoctor/utils/build';
 import { debug } from '@rsdoctor/utils/logger';
 import type { Node } from '@rsdoctor/utils/ruleUtils';
 import fse from 'fs-extra';
