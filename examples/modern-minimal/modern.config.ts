@@ -18,6 +18,7 @@ export default defineConfig({
           chain.plugin(pluginName).use(RsdoctorWebpackPlugin, [
             {
               disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
+              features: ['bundle', 'plugins', 'loader', 'resolver']
             },
           ]);
         });

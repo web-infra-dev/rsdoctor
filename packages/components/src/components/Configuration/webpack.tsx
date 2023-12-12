@@ -26,9 +26,9 @@ export const WebpackConfigurationViewerBase: React.FC<WebpackConfigurationViewer
   const [selectKeys, setSelectKeys] = useState<string[]>(defaultKeys || keys);
 
   return (
-    <TextDrawer text="View Webpack Config">
+    <TextDrawer text="View Builder Config">
       <Row>
-        <Title text={`Webpack Config Viewer`} />
+        <Title text={`Builder Config Viewer`} />
         <Divider />
         <Space>
           <Typography.Text>Properties: </Typography.Text>

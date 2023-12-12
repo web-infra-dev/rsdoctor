@@ -2,10 +2,10 @@
 const en = {
   Overall: 'Overall',
   'Compile Analysis': 'Compile Analysis',
-  'Webpack Loaders': 'Webpack Loaders',
+  LoadersAnalysis: 'Loaders Analysis',
   'Loaders Overall': 'Loaders Overall',
   'Loaders Analysis': 'Loaders Analysis',
-  WebpackPlugins: 'Webpack Plugins',
+  PluginsAnalysis: 'Plugins Analysis',
   ModuleResolve: 'Module Resolve',
   'Bundle Analysis': 'Bundle Analysis',
   BundleSize: 'Bundle Size',
