@@ -3,10 +3,10 @@ import en from './en';
 const cn: typeof en = {
   Overall: '概览',
   'Compile Analysis': '编译分析',
-  'Webpack Loaders': 'Webpack Loaders 分析',
+  LoadersAnalysis: 'Loaders 分析',
   'Loaders Overall': 'Loaders 概览',
   'Loaders Analysis': 'Loaders 分析',
-  WebpackPlugins: 'Webpack Plugins 分析',
+  PluginsAnalysis: 'Plugins 分析',
   ModuleResolve: 'Module Resolve 分析',
   'Bundle Analysis': '产物分析',
   BundleSize: '产物体积分析',
