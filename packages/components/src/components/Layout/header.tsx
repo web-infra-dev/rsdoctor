@@ -1,5 +1,5 @@
-import { TranslationOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Col, Dropdown, Layout, Row, Typography } from 'antd';
+import { TranslationOutlined } from '@ant-design/icons';
+import { Col, Dropdown, Layout, Row, Typography } from 'antd';
 import React from 'react';
 import { Language, Size } from '../../constants';
 import {
