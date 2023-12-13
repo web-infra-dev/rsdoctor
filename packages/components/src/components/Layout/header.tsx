@@ -1,7 +1,7 @@
 import { TranslationOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Col, Dropdown, Layout, Row, Switch, Typography } from 'antd';
+import { Avatar, Col, Dropdown, Layout, Row, Typography } from 'antd';
 import React from 'react';
-import { Language, Size, Theme } from '../../constants';
+import { Language, Size } from '../../constants';
 import {
   useI18n,
   useTheme
@@ -16,7 +16,7 @@ import './header.sass';
 export const Header: React.FC = () => {
   const { i18n } = useI18n();
 
-  const { setTheme, isLight, isDark } = useTheme();
+  const { isLight } = useTheme();
   const iconStyle: React.CSSProperties = {
     display: 'inline-block',
     fontSize: 20,
@@ -65,7 +65,8 @@ export const Header: React.FC = () => {
               <OverlayAlertsWithButton />
             </Col>
             <Menus style={{ transition: 'none' }} />
-            <Col>
+
+            {/* <Col> TODO:  dark mode has some error need fix.
               <Switch
                 className="header-switch"
                 checkedChildren="🌛"
@@ -76,7 +77,7 @@ export const Header: React.FC = () => {
                 }}
                 style={{ border: `1px solid ${isLight ? '#ddd' : '#fff'}`, background: isLight ? '#eee' : '#141414' }}
               />
-            </Col>
+            </Col> */}
             <Col>
               <Dropdown
                 overlayStyle={{ zIndex: 1000 }}
@@ -94,7 +95,6 @@ export const Header: React.FC = () => {
                 <TranslationOutlined className="header-icon" style={iconStyle} />
               </Dropdown>
             </Col>
-            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
           </Row>
         </Col>
       </Row>
