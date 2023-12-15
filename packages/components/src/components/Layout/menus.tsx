@@ -17,7 +17,7 @@ import { Size } from '../../constants';
 import * as OverallConstants from '../../pages/Overall/constants';
 import { useI18n, hasBundle, hasCompile } from '../../utils';
 import { withServerAPI } from '../Manifest';
-import { BundleSize, LoaderFiles, PluginsAnalyze, ModuleResolve } from 'src/pages';
+import { BundleSize, LoaderFiles, PluginsAnalyze, ModuleResolve, LoaderTimeline } from 'src/pages';
 import { CompileName } from './constants';
 
 const BuilderSwitchName = 'builder-switcher';
@@ -67,12 +67,11 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
           key: LoaderFiles.route,
           icon: <img src={WebpackIcon} alt="" style={{ ...iconStyle, width: 16 }} />,
           children: [
-            // TODO: loader overall page
-            // {
-            //   label: t(WebpackLoadersOverallConstants.name),
-            //   key: WebpackLoadersOverallConstants.route,
-            //   icon: <BarChartOutlined style={iconStyle} />,
-            // },
+            {
+              label: t(LoaderTimeline.name),
+              key: LoaderTimeline.route,
+              icon: <BarChartOutlined style={iconStyle} />,
+            },
             {
               label: t(LoaderFiles.name),
               key: LoaderFiles.route,

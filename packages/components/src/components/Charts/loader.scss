@@ -1,0 +1,69 @@
+
+
+.loader-chart-container {
+
+  // loader 图表 x 轴文案的样式覆盖
+  .x-axis
+    .tick
+      text {
+        transform: translate(28px, 10px) rotate(0) !important;
+        font-size: 12px;
+        font-weight: 500;
+      
+      }
+      // x 轴第一个坐标文案
+      &:nth-child(2) 
+        text {
+          transform: translate(52px, 10px) rotate(0) !important;
+        }
+
+      // x 轴最后一个坐标文案
+      &:last-child
+        text {
+          transform: translate(5px, 10px) rotate(0) !important;
+        }
+
+  // loader 图表内容中的样式覆盖
+  .area {
+    // 图表内容中的轨道
+    .civ {
+      transform: translateY(5px);
+    
+
+
+      // 每一栏的 label 文案
+      .label-text {
+        font-weight: 500;
+        font-size: 12px !important;
+        transform: translate(8px, 0px);
+      }
+
+      // // 每一栏轨道的文案样式覆盖
+      // .text
+      //   display: none !important
+
+      // 轨道中，无数据的箭头样式覆盖
+      path[fill="#000000"] {
+        display: none;
+      }
+    }
+  }
+  // loader 图表 y 轴 label 样式覆盖
+  .pia-metrics-y-label {
+    display: none;
+
+    // 箭头样式覆盖
+    .triangle {
+      display: none;
+    }
+  }
+}
+// 暗黑模式下的样式覆盖
+.loader-chart-container_dark
+  .area
+    // 图表内容中的轨道
+    .civ
+      // 每一栏的 label 文案
+      .label-text {
+        fill: #fff !important;
+      }
