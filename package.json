@@ -17,6 +17,7 @@
     "gen-release-note": "modern gen-release-note",
     "lint": "echo todo",
     "new": "modern new",
+    "pre": "modern pre",
     "prepare": "pnpm run build && husky install",
     "release": "modern release",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm run ut",
