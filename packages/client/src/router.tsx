@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Overall, BundleSize, LoaderFiles, PluginsAnalyze, ModuleResolve } from '@rsdoctor/components/pages';
+import { Overall, BundleSize, LoaderFiles, PluginsAnalyze, ModuleResolve, LoaderTimeline } from '@rsdoctor/components/pages';
 
 
 export default function Router(): React.ReactElement {
@@ -24,6 +24,10 @@ export default function Router(): React.ReactElement {
     {
       path: ModuleResolve.route,
       element: <ModuleResolve.Page />,
+    },
+    {
+      path: LoaderTimeline.route,
+      element: <LoaderTimeline.Page />,
     },
   ].filter((e) => Boolean(e)) as { path: string; element: JSX.Element }[];
 

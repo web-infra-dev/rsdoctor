@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Select, Space, Typography } from 'antd';
 import { FileSearchOutlined, SelectOutlined } from '@ant-design/icons';
-import { Size } from '../../../constants';
-import { KeywordInput } from '../../Form/keyword';
+import { KeywordInput } from '../Form/keyword';
+import { Size } from 'src/constants';
 
 interface LoaderNamesSelectProps {
   style?: React.CSSProperties;
@@ -57,7 +57,7 @@ export const LoaderCommonSelect: React.FC<{
   }, [selectLoaders, filename]);
 
   return (
-    <Space style={{ marginTop: Size.BasePadding, marginBottom: Size.BasePadding }}>
+    <Space style={{ marginBottom: Size.BasePadding }}>
       <LoaderNamesSelect
         loaderNames={loaderNames}
         style={{ marginRight: Size.BasePadding - 8 }}

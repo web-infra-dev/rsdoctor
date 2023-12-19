@@ -1,12 +1,22 @@
-import appTools, { defineConfig } from '@modern-js/app-tools';
+import { appTools, defineConfig } from '@modern-js/app-tools';
 import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
 const pluginName = 'Rsdoctor';
 
 export default defineConfig({
-  source: {
-    entries: {
-      main: './src/index.ts',
+  runtime: {
+    router: true,
+    state: true,
+    intl: {
+      clientOptions: {
+        apiKey: 'foo',
+        namespace: 'ns-a',
+      },
+      intlOptions: {
+        fallbackLng: 'zh',
+        ns: ['ns-a'],
+        defaultNS: 'ns-a',
+      },
     },
   },
   plugins: [appTools()],
