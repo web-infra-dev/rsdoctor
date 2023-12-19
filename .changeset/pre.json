@@ -1,0 +1,27 @@
+{
+  "mode": "exit",
+  "tag": "beta",
+  "initialVersions": {
+    "@rsdoctor/client": "0.0.1",
+    "@rsdoctor/components": "0.0.1",
+    "@rsdoctor/core": "0.0.1",
+    "@rsdoctor/graph": "0.0.1",
+    "@rsdoctor/rspack-plugin": "0.0.1",
+    "@rsdoctor/sdk": "0.0.1",
+    "@rsdoctor/test-helper": "0.0.1",
+    "@rsdoctor/types": "0.0.1",
+    "@rsdoctor/utils": "0.0.1",
+    "@rsdoctor/webpack-plugin": "0.0.1"
+  },
+  "changesets": [
+    "dry-otters-worry",
+    "fluffy-islands-unite",
+    "grumpy-bikes-jump",
+    "lovely-bottles-remain",
+    "polite-olives-wave",
+    "quiet-rats-give",
+    "tender-trains-begin",
+    "three-bulldogs-drive",
+    "warm-bears-serve"
+  ]
+}
