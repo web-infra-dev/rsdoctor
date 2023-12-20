@@ -5,6 +5,7 @@ import { maxBy, minBy } from 'lodash-es';
 import { formatCosts } from 'src/utils';
 
 import './tooltips.scss';
+import { DurationMetric, ETraceEventPhase, ITraceEventData } from './types';
 
 export function getTooltipHtmlForLoader(
   loader: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData>[0],
@@ -97,4 +98,124 @@ export function replaceSlashWithNewline(input: string) {
     }
   }
   return result;
+}
+
+export function transformDurationMetric(
+  rawData: DurationMetric[]
+): ITraceEventData[] {
+  return rawData.reduce((acc, cur) => {
+    if (cur.c) {
+      const res = transformDurationMetric(cur.c);
+      acc.push(
+        {
+          name: cur.n,
+          ph: ETraceEventPhase.BEGIN,
+          pid: cur.p,
+          ts: cur.s,
+          args: cur,
+        },
+        ...res,
+        {
+          name: cur.n,
+          ph: ETraceEventPhase.END,
+          pid: cur.p,
+          ts: cur.e,
+          args: cur,
+        }
+      );
+    } else {
+      acc.push({
+        name: cur.n,
+        ph: ETraceEventPhase.BEGIN,
+        pid: cur.p,
+        ts: cur.s,
+        args: cur,
+      });
+      acc.push({
+        name: cur.n,
+        ph: ETraceEventPhase.END,
+        pid: cur.p,
+        ts: cur.e,
+        args: cur,
+      });
+    }
+    return acc;
+  }, [] as ITraceEventData[]);
+}
+
+// DFS 遍历，取每层的最后一个元素与目标元素进行比较，如果目标元素可以存放至当前层，就push；如果不能就放到下一层
+export function processTrans(rawData: DurationMetric[]) {
+  const processedData = rawData
+    .sort((a, b) => a.s - b.s)
+    .reduce((prev, cur) => {
+      const ca = prev[cur.p];
+      if (ca) {
+        loop(ca, cur);
+      } else {
+        prev[cur.p] = [cur];
+      }
+      return prev;
+    }, {} as Record<string, DurationMetric[]>);
+  const data = Object.entries(processedData).reduce((prev, [_key, val]) => {
+    // @ts-ignore
+    prev.push(...val);
+    return prev;
+  }, [] as DurationMetric[]);
+  return transformDurationMetric(data);
+}
+
+function loop(dur: DurationMetric[], target: DurationMetric) {
+  const queue = [dur];
+  while (queue.length > 0) {
+    const floor = queue.shift() || [];
+    if (floor.length === 0) return;
+    const curFloorLast = floor[floor.length - 1];
+    if (curFloorLast.e <= target.s) {
+      return floor.push(target);
+    }
+    let nextFloor: DurationMetric[];
+    for (let i = floor.length - 1; i >= 0; i--) {
+      const { c } = floor[i];
+      if (c) {
+        nextFloor = c;
+      }
+    }
+    // @ts-ignore
+    if (nextFloor) {
+      queue.push(nextFloor);
+    } else {
+      curFloorLast.c = [target];
+    }
+  }
+}
+
+export function formatterForPlugins(raw: { data: { ext: ITraceEventData }}) {
+
+  console.log('raw::::::111', raw);
+  const { ext } = raw.data;
+  return `
+  <div class="loader-tooltip-container">
+    <div class="loader-tooltip-title">[${ext.args.p}] ${ext.args.n}</div>
+    <li class="loader-tooltip-item">
+      <span>hook</span>
+      <span>${ext.args.p}</span>
+    </li>
+    <li class="loader-tooltip-item">
+      <span>tap name</span>
+      <span>${ext.args.n}</span>
+    </li>
+    <li class="loader-tooltip-item">
+      <span>start</span>
+      <span>${dayjs(ext.args.s).format('YYYY/MM/DD HH:mm:ss')}</span>
+    </li>
+    <li class="loader-tooltip-item">
+      <span>end</span>
+      <span>${dayjs(ext.args.e).format('YYYY/MM/DD HH:mm:ss')}</span>
+    </li>
+    <li class="loader-tooltip-item">
+      <span>duration</span>
+      <span>${formatCosts(ext.args.e - ext.args.s)}</span>
+    </li>
+  </div>
+      `.trim();
 }

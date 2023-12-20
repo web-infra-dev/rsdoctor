@@ -2,14 +2,12 @@ import React, { useMemo } from 'react';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts/core';
 import dayjs from 'dayjs';
-import { getTooltipHtmlForLoader, renderTotalLoadersTooltip } from '../utils';
-import { ChartProps, DurationMetric } from '../loader';
+import { ChartProps, DurationMetric, ITraceEventData } from '../types';
+import { groupBy } from 'lodash-es';
 
 interface CoordSysType { x: number; y: number; width: number; height: number; } 
 
-// const Height = 25;
-// TODO:: color optimize
-const types = [
+const ColorMap = [
   { color: '#DC2626' },
   { color: '#FFE382' },
   { color: '#7B66FF' },
@@ -21,21 +19,26 @@ const types = [
   { color: '#3876BF' },
 ];
 
-export const TimelineCom: React.FC<{ loaderData: DurationMetric[]; cwd: string; loaders: ChartProps['loaders'] }> = ({ loaderData, cwd, loaders }) => {
-  const data: { name: string; value: number[]; itemStyle: { normal: { color: string } }; ext?: typeof loaders[0] }[] = [];
-  const categories: string[] = [];
+type LoaderType = { name: string; value: number[]; itemStyle: { normal: { color: string } }; ext?: Record<string, any> };
+
+export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?: ITraceEventData[], formatterFn: Function, chartType?: string }> = ({ loaderData, pluginsData, formatterFn, chartType = 'normal' }) => {
+  const data: LoaderType[] = [];
+  let categories: string[] = [];
+
   useMemo(() => {
+    if (!loaderData) return;
+    const _categories: string[] = []
     loaderData.forEach(_l => {
-      categories.unshift(_l.n + ' total');
-      categories.unshift(_l.n);
+      _categories.unshift(_l.n + ' total');
+      _categories.unshift(_l.n);
     });
 
     // Generate mock data
     loaderData.forEach(function (_loaderData, _i) {
-      const typeItem = types[_i];
+      const typeItem = ColorMap[_i % 9];
       data.push({
         name: _loaderData.n + ' total',
-        value: [categories.indexOf(_loaderData.n + ' total'), _loaderData.s , _loaderData.e , _loaderData.e - _loaderData.s ],
+        value: [_categories.indexOf(_loaderData.n + ' total'), _loaderData.s , _loaderData.e , _loaderData.e - _loaderData.s ],
         itemStyle: {
           normal: {
             color: typeItem.color,
@@ -47,17 +50,50 @@ export const TimelineCom: React.FC<{ loaderData: DurationMetric[]; cwd: string; 
       for (let l = 0; l < _loaderData?.c?.length; l++) { 
         data.push({
           name: _loaderData.n,
-          value: [categories.indexOf(_loaderData.n), _loaderData.c[l].s , _loaderData.c[l].e , _loaderData.c[l].e  - _loaderData.c[l].s ],
+          value: [_categories.indexOf(_loaderData.n), _loaderData.c[l].s , _loaderData.c[l].e , _loaderData.c[l].e  - _loaderData.c[l].s ],
           itemStyle: {
             normal: {
-              color: types[Math.round(Math.random() * (types.length - 1))].color,
+              color: ColorMap[Math.round(Math.random() * (ColorMap.length - 1))].color,
             },
           },
-          ext: _loaderData.c[l].ext as typeof loaders[0]
+          ext: _loaderData.c[l].ext as ChartProps['loaders'][0]
         });
       }
     });
+
+    categories = _categories.map((val, i) => {
+      if (i % 2 !== 0) {
+        return val.replace(' total', '')
+      } else {
+        return ''
+      }
+    })
+
   }, [loaderData]);
+
+  useMemo(() => {
+    if (!pluginsData) return;
+
+    const _pluginsData = groupBy(pluginsData, (e: ITraceEventData) => e.pid)
+
+    Object.keys(_pluginsData).reverse().forEach(function (key, i) {
+      _pluginsData[key].forEach((_plugin) => {
+        data.push({
+          name: String(_plugin.pid),
+          value: [i, _plugin.args.s , _plugin.args.e , _plugin.args.e - _plugin.args.s],
+          itemStyle: {
+            normal: {
+              color: ColorMap[Math.round(Math.random() * (ColorMap.length - 1))].color,
+            },
+          },
+          ext: _plugin
+        });
+      })
+      categories.push(String(key.charAt(0).toUpperCase() + key.slice(1)));
+    })
+  }, [pluginsData])
+
+
 
   function renderItem(
     params: { coordSys: CoordSysType},
@@ -75,8 +111,8 @@ export const TimelineCom: React.FC<{ loaderData: DurationMetric[]; cwd: string; 
     const rectShape = echarts.graphic.clipRectByRect(
       {
         x: start[0],
-        y: start[1] - (categoryIndex % 2 !== 0 ? 0 : height),
-        width: end[0] - start[0],
+        y: chartType === 'loader' ? start[1] - (categoryIndex % 2 !== 0 ? 0 : height) : start[1],
+        width: end[0] - start[0] || 5,
         height: height,
       },
       {
@@ -102,16 +138,9 @@ export const TimelineCom: React.FC<{ loaderData: DurationMetric[]; cwd: string; 
 
   const option = {
     tooltip: {
-      formatter: (raw: any) => {
-        console.log('raw:::::::', raw)
-        const { name, data } = raw;
-        const loaderName = name.replace(' total', '');
-        if (data?.ext) {
-          return getTooltipHtmlForLoader(data.ext as typeof loaders[0]);
-        }
-
-        return renderTotalLoadersTooltip(loaderName, loaders, cwd);
-      }
+      formatter: (raw: any) => { 
+        return formatterFn(raw)
+      },
     },
     dataZoom: [
       {
@@ -131,7 +160,7 @@ export const TimelineCom: React.FC<{ loaderData: DurationMetric[]; cwd: string; 
       left: 0,
       bottom: 10,
       right: 0,
-      height:  loaderData?.length > 2 ? 'auto' : loaderData?.length * 150,
+      height: categories.length > 2 ? 'auto' : chartType === 'loader' ? categories.length * 150 : categories.length * 100,
       containLabel: true,
     },
     xAxis: {
@@ -152,16 +181,15 @@ export const TimelineCom: React.FC<{ loaderData: DurationMetric[]; cwd: string; 
     yAxis: {
       type: 'category',
       splitLine: {
-        interval: 1,
+        interval: chartType === 'loader' ? 1 : 0,
         show: true
       },
       axisLabel: {
         inside: true,
         lineHeight: 20,
         width: 100,
-        fontSize: 10,
+        fontSize: 12,
         color: '#000',
-        // overflow: 'break',
         verticalAlign: 'bottom'
       },
       axisLine: {
@@ -170,13 +198,7 @@ export const TimelineCom: React.FC<{ loaderData: DurationMetric[]; cwd: string; 
       axisTick: {
         show: false
       },
-      data: categories.map((val, i) => {
-        if (i % 2 !== 0) {
-          return val.replace(' total', '')
-        } else {
-          return ''
-        }
-      }),
+      data: categories,
     },
     series: [
       {
@@ -190,7 +212,7 @@ export const TimelineCom: React.FC<{ loaderData: DurationMetric[]; cwd: string; 
           y: 0,
         },
         data,
-      },
+      }
     ],
   };
 
