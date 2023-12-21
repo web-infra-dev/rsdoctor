@@ -31,9 +31,10 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          token: ${{ secrets.REPO_SCOPED_TOKEN }}
           ref: refs/pull/${{ github.event.issue.number }}/head
 
       - name: Install Pnpm
@@ -71,8 +72,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
+          token: ${{ secrets.REPO_SCOPED_TOKEN }}
           fetch-depth: 25
 
       - name: Install Pnpm
