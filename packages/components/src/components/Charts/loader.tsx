@@ -18,7 +18,6 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({ loaders, cwd }) =>
   const groupByLoader = useMemo(() => groupBy(loaders, (e) => e.loader), [loaders]);
   
   const formatterForLoader =  useCallback((raw: any) => {
-    console.log('loader raw:::::::', raw)
     const { name, data } = raw;
     const loaderName = name.replace(' total', '');
     if (data?.ext) {

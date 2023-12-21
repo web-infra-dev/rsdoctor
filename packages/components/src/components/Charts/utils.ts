@@ -190,8 +190,6 @@ function loop(dur: DurationMetric[], target: DurationMetric) {
 }
 
 export function formatterForPlugins(raw: { data: { ext: ITraceEventData }}) {
-
-  console.log('raw::::::111', raw);
   const { ext } = raw.data;
   return `
   <div class="loader-tooltip-container">
