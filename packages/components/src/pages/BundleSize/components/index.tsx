@@ -177,10 +177,9 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
         optionType="button"
       >
         <Radio.Button value="tree">Tree Graph</Radio.Button>
-        {/* <Radio.Button value="tile">Bundle Analyzer Graph</Radio.Button> */}
+        <Radio.Button value="tile">Bundle Analyzer Graph</Radio.Button>
       </Radio.Group>
-      {/* TODO: tile graph */}
-      {/* <Card
+      <Card
         hidden={graphType === 'tree'}
         title={
           <Space>
@@ -188,6 +187,7 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
           </Space>
         }
       >
+        {/* TODO: add loading icon. */}
         <ServerAPIProvider api={SDK.ServerAPI.API.GetTileReportHtml} body={{}}>
           {(data) => {
             if (data && graphType === 'tile') {
@@ -196,7 +196,7 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
             return <Empty />;
           }}
         </ServerAPIProvider>
-      </Card> */}
+      </Card>
 
       <Card
         hidden={graphType === 'tile'}
