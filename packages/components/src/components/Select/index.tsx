@@ -27,7 +27,7 @@ export const LoaderNamesSelect: React.FC<LoaderNamesSelectProps> = ({ style, onC
         defaultValue={selectLoaders}
         style={{ width: 350 }}
         dropdownMatchSelectWidth
-        placeholder={'select webpack loaders'}
+        placeholder={'select loaders'}
         onChange={(e) => {
           setSelectLoaders(e);
           onChange(e);
