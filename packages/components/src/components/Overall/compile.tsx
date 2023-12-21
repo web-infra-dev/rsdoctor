@@ -1,12 +1,14 @@
-import { Divider, Space, Typography, Progress } from 'antd';
-import React from 'react';
-import { Summary } from '@rsdoctor/utils/common';
 import { SDK } from '@rsdoctor/types';
+import { Summary } from '@rsdoctor/utils/common';
+import { Divider, Progress, Space, Typography } from 'antd';
+import React from 'react';
 import { formatCosts, useI18n } from '../../utils';
 import { Card } from '../Card';
-// import { BootstrapChartContainer, DoneChartContainer, MinifyChartContainer } from '../Charts'; TODO: Replace chart component library
-import styles from './compile.module.scss';
+import { BootstrapChartContainer } from '../Charts/bootstrap';
+import { DoneChartContainer } from '../Charts/done';
+import { MinifyChartContainer } from '../Charts/minify';
 import cardStyles from './card.module.scss';
+import styles from './compile.module.scss';
 
 const Stage: React.FC<
   React.PropsWithChildren<{
@@ -58,7 +60,7 @@ export const CompileOverall: React.FC<{ summary: SDK.SummaryData }> = ({ summary
             case Summary.SummaryCostsDataName.Bootstrap:
               return (
                 <Stage name="Bootstrap ~ BeforeCompile" key={name}>
-                  {/* <BootstrapChartContainer summary={summary} /> */}
+                  <BootstrapChartContainer summary={summary} />
                   {ProgressBar}
                 </Stage>
               );
@@ -71,14 +73,14 @@ export const CompileOverall: React.FC<{ summary: SDK.SummaryData }> = ({ summary
             case Summary.SummaryCostsDataName.Done:
               return (
                 <Stage name="AfterCompile ~ Done" key={name}>
-                  {/* <DoneChartContainer summary={summary} /> */}
+                  <DoneChartContainer summary={summary} />
                   {ProgressBar}
                 </Stage>
               );
             case Summary.SummaryCostsDataName.Minify:
               return (
                 <Stage name="Minify" key={name}>
-                  {/* <MinifyChartContainer summary={summary} /> */}
+                  <MinifyChartContainer summary={summary} />
                   {ProgressBar}
                 </Stage>
               );
