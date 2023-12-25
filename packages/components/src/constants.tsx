@@ -39,7 +39,7 @@ export enum Size {
 }
 
 export enum Color {
-  Red = 'rgb(207, 19, 34)',
+  Red = '#e17055',
   Green = '#52c41a',
   Yellow = '#faad14',
   Blue = '#1677ff',

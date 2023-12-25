@@ -1,9 +1,6 @@
 .file-inline-decoration {
-  // color: white !important
   cursor: pointer;
   text-decoration: underline;
-  // font-weight: bold
-  // font-style: italic
   background: rgb(77, 112, 151);
 }
 .alert-space, .full-space {
@@ -31,4 +28,8 @@
     width: 100%;
     height: 100%;
   }
+}
+
+.ant-alert-warning {
+  border: none;
 }

@@ -137,36 +137,49 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
             const parsedSizeStr = size.parsedSize ? formatSize(size.parsedSize) : null;
             const name = `${el.name}@${el.version}`;
             return (
-              <Space key={el.version} style={{ wordBreak: 'break-all' }} align="center">
-                <Typography.Text style={{ marginLeft: 4 }}>└</Typography.Text>
-                <Bdg label={el.name} value={`v${el.version}`} tooltip={name} />
-                <Divider type="vertical" />
-                <Bdg
-                  label={
-                    <div color={'rgb(255, 255, 255)'}>
-                      Source Size <InfoCircleOutlined />
-                    </div>
-                  }
-                  value={sizeStr}
-                  tooltip={`The bundle size of "${name}" is ${sizeStr}, this is source size.`}
-                  type="error"
-                />
-                <Bdg
-                  label="Bundled size"
-                  value={parsedSizeStr || 'CONCATENATED'}
-                  tooltip={`The bundle size of "${name}" is ${sizeStr}, this is after bundled, concatenated module cannot get bundled size. `}
-                  type="error"
-                />
-                <Divider type="vertical" />
-                <Typography.Paragraph
-                  style={{ marginBottom: 0 }}
-                  copyable={{ text: el.root }}
-                  ellipsis={{ rows: 2, expandable: true, symbol: <ExpandAltOutlined />, tooltip: el.root }}
-                  code
-                >
+              <Row>
+                <Col span={3}>
+                  <Space key={el.version} style={{ wordBreak: 'break-all' }} align="center">
+                    <Typography.Text style={{ marginLeft: 4 }}>└</Typography.Text>
+                    <Bdg label={el.name} value={`v${el.version}`} tooltip={name} />
+                    
+                  </Space>
+                </Col>
+                <Col span={6}>
+                  <Space key={`${el.version}-2`} style={{ wordBreak: 'break-all' }} align="center">
+                  <Divider type="vertical" />
+                    <Bdg
+                      label={
+                        <div color={'rgb(255, 255, 255)'}>
+                          Source Size <InfoCircleOutlined />
+                        </div>
+                      }
+                      value={sizeStr}
+                      tooltip={`The bundle size of "${name}" is ${sizeStr}, this is source size.`}
+                      type="error"
+                    />
+                    <Bdg
+                      label="Bundled size"
+                      value={parsedSizeStr || 'CONCATENATED'}
+                      tooltip={`The bundle size of "${name}" is ${sizeStr}, this is after bundled, concatenated module cannot get bundled size. `}
+                      type="error"
+                    />
+                  </Space>
+                </Col>
+                <Col span={13}>
+                  <Space key={`${el.version}-3`} style={{ wordBreak: 'break-all' }} align="center">
+                    <Divider type="vertical" />
+                    <Typography.Paragraph
+                      style={{ marginBottom: 0, width: '50rem' }}
+                      copyable={{ text: el.root }}
+                      ellipsis={{ rows: 1, expandable: true, symbol: <ExpandAltOutlined />, tooltip: el.root }}
+                      code
+                    >
                   {el.root}
-                </Typography.Paragraph>
-              </Space>
+                    </Typography.Paragraph>
+                  </Space>
+                </Col>
+                </Row>
             );
           })}
         </Space>
