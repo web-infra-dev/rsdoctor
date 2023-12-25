@@ -1,6 +1,5 @@
 import { Tooltip } from 'antd';
 import React from 'react';
-import { Color } from '../../constants';
 
 export enum BadgeType {
   Default = 'default',
@@ -10,10 +9,10 @@ export enum BadgeType {
 }
 
 export const BadgeColorMap = {
-  [BadgeType.Default]: 'linear-gradient(to bottom, #1182c2, #0273b4)',
-  [BadgeType.Success]: 'linear-gradient(to bottom, #4dc71f, #3fb911)',
-  [BadgeType.Warn]: 'linear-gradient(to bottom, #d9b32f, #c9a319)',
-  [BadgeType.Error]: `linear-gradient(to bottom, #da644e, ${Color.Red})`,
+  [BadgeType.Default]: 'linear-gradient(to bottom, #3ea2ff 0%, #0072db 100%)',
+  [BadgeType.Success]: 'linear-gradient(to bottom, #6cf42a 0%, #52C41A 100%)',
+  [BadgeType.Warn]: 'linear-gradient(to bottom, #ffc100 0%, #f59025 100%)',
+  [BadgeType.Error]: `linear-gradient(to bottom, rgb(250 127 22), #FF4D4F 100%)`,
 };
 
 interface BadgeProps {
@@ -63,7 +62,7 @@ export const Badge: React.FC<BadgeProps> = ({ label, value, type = 'default', to
           ...commonStyle,
           borderTopLeftRadius: borderRadius,
           borderBottomLeftRadius: borderRadius,
-          background: 'linear-gradient(to bottom, #5d5d5d, #4f4f4f)',
+          background: 'linear-gradient(to bottom, #525252a3 0%, #1F1F1F 100%)',
         }}
       >
         {label}

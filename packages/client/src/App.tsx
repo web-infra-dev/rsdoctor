@@ -8,7 +8,6 @@ import React, { useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HashRouter as BrowserRouter } from 'react-router-dom';
 import Router from './router';
-// import UploaderComponent from './pages/Resources/Uploader'; TODO: uploader components
 
 const { PageState, Theme } = Constants;
 
