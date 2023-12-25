@@ -155,13 +155,24 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
                         </div>
                       }
                       value={sizeStr}
-                      tooltip={`The bundle size of "${name}" is ${sizeStr}, this is source size.`}
+                      tooltip={`Source Size: The sum of the source size of the package used in this project.`}
                       type="error"
                     />
                     <Bdg
                       label="Bundled size"
                       value={parsedSizeStr || 'CONCATENATED'}
-                      tooltip={`The bundle size of "${name}" is ${sizeStr}, this is after bundled, concatenated module cannot get bundled size. `}
+                      tooltip={
+                        <div style={{ color: 'white' }}>
+                          <h3>Notice</h3>
+                          <Space direction="vertical">
+                            {
+                              parsedSizeStr
+                              ? <text> - Bundled Size: The sum of the final size in bundled artifacts of the package used by the project.</text> 
+                              : <text> - CONCATENATED: This package bundled size is 0. This package maybe packaged as an concatenated modules or shaken by tree.</text>
+                            }
+                          </Space>
+                        </div>
+                      }
                       type="error"
                     />
                   </Space>
