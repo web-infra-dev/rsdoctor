@@ -44,7 +44,7 @@ Please read the [Contributing Guide](https://github.com/web-infra-dev/rsdoctor/b
 
 ## 🧑‍💻 Community
 
-Come and chat with us on [Discord](https://discord.gg/mScJfeeT)! The Rsdoctor team and users are active there, and we're always looking for contributions.
+Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rsdoctor team and users are active there, and we're always looking for contributions.
 
 ## 🙌 Code of Conduct
 
