@@ -2,7 +2,7 @@ import '@rsdoctor/components/i18n';
 import App from './App';
 import ReactDOM from 'react-dom/client';
 import './common/styles/base.scss';
-import icon from './common/imgs/icon.svg';
+import icon from './common/imgs/rsdoctor.png';
 
 const rootElement = document.getElementById('root');
 const root = ReactDOM.createRoot(rootElement!);

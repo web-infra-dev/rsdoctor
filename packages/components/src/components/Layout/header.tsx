@@ -10,7 +10,7 @@ import { OverlayAlertsWithButton } from '../Alerts';
 import { BuilderSelect } from './builder-select';
 import { Menus } from './menus';
 
-import icon from '../../common/imgs/icon.svg';
+import icon from '../../common/imgs/rsdoctor.png';
 import './header.sass';
 
 export const Header: React.FC = () => {
@@ -49,7 +49,7 @@ export const Header: React.FC = () => {
         <Col style={{ height: Size.NavBarHeight, lineHeight: `${Size.NavBarHeight + 2}px` }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
             <img style={{ height: 30 }} src={icon} className="web-doctor-logo" alt="logo" />
-            <Typography.Text style={{ color: 'inherit', fontSize: 18, marginLeft: 4 }}>Rsdoctor</Typography.Text>
+            <Typography.Text style={{ color: 'inherit', fontSize: 18, marginLeft: 4, marginTop: 8 }}>Rsdoctor</Typography.Text>
             <BuilderSelect />
           </div>
         </Col>

@@ -1,3 +1,6 @@
+<picture>
+  <img alt="Rsdoctor Banner" width="100%" src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/5ceefce9-7df0-4e95-8245-e165eaa3a4a9">
+</picture>
 
 # Rsdoctor
 
