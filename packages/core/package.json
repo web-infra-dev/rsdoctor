@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@rsdoctor/graph": "workspace:*",
+    "@rsdoctor/types": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rspack/core": "0.3.14",
@@ -62,7 +63,6 @@
   },
   "devDependencies": {
     "@rsdoctor/test-helper": "workspace:*",
-    "@rsdoctor/types": "workspace:*",
     "@types/bytes": "3.1.1",
     "@types/loader-utils": "^2.0.5",
     "@types/lodash": "^4.14.200",

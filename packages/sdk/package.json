@@ -23,6 +23,7 @@
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/client": "workspace:*",
+    "@rsdoctor/types": "workspace:*",
     "body-parser": "1.20.1",
     "cors": "2.8.5",
     "dayjs": "1.11.6",
@@ -34,7 +35,6 @@
     "tapable": "2.2.1"
   },
   "devDependencies": {
-    "@rsdoctor/types": "workspace:*",
     "@types/body-parser": "1.19.2",
     "@types/cors": "2.8.13",
     "@types/ip": "1.1.0",
