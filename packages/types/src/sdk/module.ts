@@ -90,6 +90,8 @@ export enum ToDataType {
   Lite,
   /** Lite & No Assets Code mode */
   LiteAndNoAsset,
+  /** All Data, include module transformed data. */
+  All,
 }
 
 export interface ModuleInstance {

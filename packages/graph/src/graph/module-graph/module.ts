@@ -192,9 +192,14 @@ export class Module implements SDK.ModuleInstance {
           transformed: '',
           parsedSource: '',
         }
+      : type === SDK.ToDataType.All ? {
+        source: this.source.source,
+        transformed: this.source.transformed,
+        parsedSource: this.source.parsedSource,
+      }
       : {
           source: this.source.source,
-          transformed: this.source.transformed,
+          transformed: '',
           parsedSource: this.source.parsedSource,
         };
   }

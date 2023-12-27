@@ -13,7 +13,7 @@ export const FileTree: React.FC<Partial<TreeProps>> = (props) => {
   const { isDark } = useTheme();
 
   const { token } = useToken();
-  const color = isDark ? token.colorWhite : token.colorPrimaryText;
+  const color = isDark ? token.colorWhite : token.colorText;
   const style = { fontSize: token.fontSize };
   
   return (

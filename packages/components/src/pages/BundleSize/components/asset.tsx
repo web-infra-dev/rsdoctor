@@ -2,7 +2,7 @@ import { CodepenOutlined, ColumnHeightOutlined, DeploymentUnitOutlined, InfoCirc
 import Editor from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
 import { Button, Card, Col, Divider, Drawer, Empty, Popover, Row, Space, Tag, Tooltip, Typography } from 'antd';
-import { sumBy } from 'lodash-es';
+import { omitBy, sumBy } from 'lodash-es';
 import { dirname, relative } from 'path';
 import { Key } from 'rc-tree/lib/interface';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -20,8 +20,8 @@ import { ModuleGraphListContext } from '../config';
 let expanedModulesKeys: Key[] = [];
 const TAB_MAP = {
   source: 'source code',
-  transformed: 'transformed code (After compile)',
-  parsedSource: 'parsed code (After bundle and tree-shaking)',
+  transformed: 'Transformed Code (After compile)',
+  parsedSource: 'Bundled Code (After bundle and tree-shaking)',
 };
 
 export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) => {
@@ -29,9 +29,9 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) =
   const { t } = useI18n();
 
   const TAB_LAB_MAP: Record<string, string> = {
-    source: 'source code',
-    transformed: `transformed(${t('After Compile')})`,
-    parsedSource: `parsedSource(${t('After Bundle')})`,
+    source: 'Source Code',
+    transformed: `Transformed Code(${t('After Compile')})`,
+    parsedSource: `Bundled Code(${t('After Bundled')})`,
   };
   if (!data) return null;
 
@@ -51,70 +51,77 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) =
         title: `Code of "${path}"`,
       }}
     >
-      <Card
-        className="code-size-card"
-        style={{ width: '100%' }}
-        tabList={[{ tab: 'source' }, { tab: 'transformed' }, { tab: 'parsedSource' }].map((e) => ({
-          ...e,
-          tab: TAB_LAB_MAP[e.tab],
-          key: e.tab,
-        }))}
-        activeTabKey={tab}
-        onTabChange={(v) => setTab(v)}
-        tabBarExtraContent={
-          <Popover
-            placement="bottom"
-            title={<Typography.Title level={5}>Explain</Typography.Title>}
-            content={
-              <>
-                <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 30 }}>
-                  <div>
-                    <Typography.Text strong>source: </Typography.Text>
-                    <Typography.Text>{TAB_MAP.source}</Typography.Text>
-                  </div>
-                  <div>
-                    <Typography.Text strong>transformed: </Typography.Text>
-                    <Typography.Text>{TAB_MAP.transformed}</Typography.Text>
-                  </div>
-                  <div>
-                    <Typography.Text strong>parsedSource: </Typography.Text>
-                    <Typography.Text>{TAB_MAP.parsedSource}</Typography.Text>
-                  </div>
-                  <br />
-                  <Typography.Text strong>{'More'}</Typography.Text>
-                  <Typography.Text>{t('CodeModeExplain')}</Typography.Text>
-                </div>
-              </>
+      <ServerAPIProvider api={SDK.ServerAPI.API.GetModuleCodeByModuleId} body={{ moduleId: data.id }}>
+        {(source) => {
+          return (
+            <>
+            { !source['source'] && !source['parsedSource'] ?
+              <Empty description="No Code. Rspack builder not support code yet. And if you upload the stats.json to analysis, it's also no code to show." />
+              :
+              <Card
+                className="code-size-card"
+                style={{ width: '100%' }}
+                tabList={Object.keys(omitBy(source, (s) => !s)).map(k => ({ 'tab': k })).map((e) => ({
+                  ...e,
+                  tab: TAB_LAB_MAP[e.tab],
+                  key: e.tab,
+                  })
+                )}
+                activeTabKey={tab}
+                onTabChange={(v) => setTab(v)}
+                tabBarExtraContent={
+                  <Popover
+                    placement="bottom"
+                    title={<Typography.Title level={5}>Explain</Typography.Title>}
+                    content={
+                      <>
+                        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 30 }}>
+                          <div>
+                            <Typography.Text strong>source: </Typography.Text>
+                            <Typography.Text>{TAB_MAP.source}</Typography.Text>
+                          </div>
+                          <div>
+                            <Typography.Text strong>transformed: </Typography.Text>
+                            <Typography.Text>{TAB_MAP.transformed}</Typography.Text>
+                          </div>
+                          <div>
+                            <Typography.Text strong>parsedSource: </Typography.Text>
+                            <Typography.Text>{TAB_MAP.parsedSource}</Typography.Text>
+                          </div>
+                          <br />
+                          <Typography.Text strong>{'More'}</Typography.Text>
+                          <Typography.Text>{t('CodeModeExplain')}</Typography.Text>
+                        </div>
+                      </>
+                    }
+                    trigger={'hover'}
+                  >
+                    <a href="#">Explain</a>
+                  </Popover>
+                }
+              >     
+                <Editor
+                  theme="vs-dark"
+                  language={getOriginalLanguage(path)}
+                  // eslint-disable-next-line financial/no-float-calculation
+                  height={window.innerHeight / 1.5}
+                  value={source[tab]}
+                  options={{
+                    readOnly: true,
+                    domReadOnly: true,
+                    fontSize: 14,
+                    wordWrap: 'bounded',
+                    minimap: {
+                      enabled: false,
+                    },
+                  }}
+                />
+              </Card>
             }
-            trigger={'hover'}
-          >
-            <a href="#">Explain</a>
-          </Popover>
-        }
-      >
-        <ServerAPIProvider api={SDK.ServerAPI.API.GetModuleCodeByModuleId} body={{ moduleId: data.id }}>
-          {(source) => {
-            return (
-              <Editor
-                theme="vs-dark"
-                language={getOriginalLanguage(path)}
-                // eslint-disable-next-line financial/no-float-calculation
-                height={window.innerHeight / 1.5}
-                value={source[tab]}
-                options={{
-                  readOnly: true,
-                  domReadOnly: true,
-                  fontSize: 14,
-                  wordWrap: 'bounded',
-                  minimap: {
-                    enabled: false,
-                  },
-                }}
-              />
-            );
-          }}
-        </ServerAPIProvider>
-      </Card>
+            </>
+          );
+        }}
+      </ServerAPIProvider>
     </TextDrawer>
   );
 };
