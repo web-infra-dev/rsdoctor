@@ -1,5 +1,11 @@
 # @rsdoctor/components
 
+## 0.0.2-beta.1
+
+### Patch Changes
+
+- ca92633: Optimize(client): optimize ui client
+
 ## 0.0.2-beta.0
 
 ### Patch Changes
