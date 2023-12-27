@@ -62,7 +62,7 @@ export const CodeViewAlert: React.FC<CodeViewAlertProps> = ({ data, cwd }) => {
         </Space>
       }
       description={Description}
-      type={level === 'warn' ? 'warning' : level}
+      type={level === 'warn' ? 'info' : level}
       action={
         <Space>
           <TextDrawer text={'Show Source Code'} buttonProps={{ size: 'small' }}>

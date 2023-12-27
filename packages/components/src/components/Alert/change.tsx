@@ -100,7 +100,7 @@ export const CodeChangeAlert: React.FC<CodeChangeAlertProps> = ({ data, cwd }) =
         </Space>
       }
       description={Description}
-      type={isFixed ? 'success' : level === 'warn' ? 'warning' : level}
+      type={isFixed ? 'success' : level === 'warn' ? 'info' : level}
       action={
         <Space>
           <TextDrawer

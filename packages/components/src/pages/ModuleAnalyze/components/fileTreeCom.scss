@@ -25,12 +25,14 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
       transform: rotate(90deg);
     }
   }
+
   &-child-tree {
     display: none;
     &-open {
       display: block;
     }
   }
+
   &-treenode-disabled 
     > span:not(.#{$treePrefixCls}-switcher),
     > a,
@@ -38,6 +40,7 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
       color: #767676;
       cursor: not-allowed;
     }
+
   &-treenode-selected {
     background: rgba(5, 145, 255, 0.3);
     border-radius: 4px;
@@ -58,6 +61,7 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
     width: 14px;
   }
 }
+
 .file-tree-switcher-arrow {
   transform: rotate(0deg);
   transition: transform 0.3s ease;
@@ -69,10 +73,8 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
 }
 
 .rc-tree.rc-tree-show-line .rc-tree-treenode:not(:last-child) {
-  border-left: 1px solid #eee
-}
-.#{$treePrefixCls}-titles-box {
-  // margin: 3px
+  border-left: 1px solid #eee;
+
 .#{$treePrefixCls}-titles {
   display: flex;
   flex-direction: column;
@@ -83,11 +85,11 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
     img {
       cursor: pointer;
     &-tag {
-      // margin-left: 10px
       cursor: pointer;
     }
   }
-}
+  }
+} 
 
   .#{$treePrefixCls}-node-title-selected {
     background-color: yellow;
@@ -95,7 +97,7 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
   .#{$treePrefixCls}-node-title-tag {
     margin-inline-end: 0;
   }
-  .#{$treePrefixCls}-node-title-code 
+  .#{$treePrefixCls}-node-title-code {
     &-tag {
       // margin-right: 10px
       cursor: pointer;
@@ -104,4 +106,13 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
   }
 }
 
+.rc-tree-indent {
+  display: inline-block;
+  height: 0;
+  vertical-align: bottom;
+}
 
+.rc-tree-indent-unit {
+  display: inline-block;
+  width: 14px;
+}

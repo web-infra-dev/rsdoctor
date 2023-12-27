@@ -16,7 +16,8 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({ loaders, cwd }) =>
   const ref = useRef(null);
 
   const groupByLoader = useMemo(() => groupBy(loaders, (e) => e.loader), [loaders]);
-  
+  console.log('Loader Data:', groupByLoader);
+
   const formatterForLoader =  useCallback((raw: any) => {
     const { name, data } = raw;
     const loaderName = name.replace(' total', '');
@@ -30,16 +31,6 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({ loaders, cwd }) =>
   const data = useMemo(() => {
     return Object.keys(groupByLoader).map<DurationMetric>((loaderName) => {
       const list = groupByLoader[loaderName] || [];
-      if (list.length === 1) {
-        const { startAt, endAt } = list[0];
-        return {
-          p: loaderName,
-          n: loaderName,
-          s: startAt,
-          e: endAt,
-        };
-      }
-
       const { start, end } = findLoaderTotalTiming(list);
 
       return {
@@ -47,7 +38,7 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({ loaders, cwd }) =>
         n: loaderName,
         s: start,
         e: end,
-        c: list.map<any>((e) => {
+        c: list.map((e) => {
           return {
             p: loaderName,
             // n: loaderName,
@@ -60,6 +51,7 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({ loaders, cwd }) =>
       };
     });
   }, [groupByLoader]);
+  console.log('Loader Transformed Data:', data);
 
   if (!data.length) return <Empty />;
 
