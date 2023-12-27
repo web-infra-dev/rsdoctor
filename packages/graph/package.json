@@ -20,13 +20,13 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "lodash": "^4.17.21",
     "socket.io": "4.7.2",
     "source-map": "^0.7.4"
   },
   "devDependencies": {
-    "@rsdoctor/types": "workspace:*",
     "@types/body-parser": "1.19.2",
     "@types/estree": "1.0.0",
     "@types/lodash": "^4.14.200",

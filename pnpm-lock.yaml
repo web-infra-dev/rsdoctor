@@ -371,6 +371,9 @@ importers:
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
@@ -408,9 +411,6 @@ importers:
       '@rsdoctor/test-helper':
         specifier: workspace:*
         version: link:../test-helper
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@types/bytes':
         specifier: 3.1.1
         version: 3.1.1
@@ -459,6 +459,9 @@ importers:
 
   packages/graph:
     dependencies:
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
@@ -472,9 +475,6 @@ importers:
         specifier: ^0.7.4
         version: 0.7.4
     devDependencies:
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@types/body-parser':
         specifier: 1.19.2
         version: 1.19.2
@@ -539,6 +539,9 @@ importers:
       '@rsdoctor/graph':
         specifier: workspace:*
         version: link:../graph
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
@@ -570,9 +573,6 @@ importers:
         specifier: 2.2.1
         version: 2.2.1
     devDependencies:
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@types/body-parser':
         specifier: 1.19.2
         version: 1.19.2
@@ -661,6 +661,9 @@ importers:
       '@babel/code-frame':
         specifier: 7.18.6
         version: 7.18.6
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
       '@types/estree':
         specifier: 1.0.0
         version: 1.0.0
@@ -707,9 +710,6 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
     devDependencies:
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@types/babel__code-frame':
         specifier: 7.0.3
         version: 7.0.3
