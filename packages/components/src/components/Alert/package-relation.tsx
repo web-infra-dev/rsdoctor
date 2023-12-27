@@ -4,7 +4,7 @@ import { Space, Alert, Button, Typography, Divider, Tabs, Row, Col, Timeline, Ca
 import { sumBy } from 'lodash-es';
 import { Rule, SDK } from '@rsdoctor/types';
 import { ExpandAltOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { useRuleIndexNavigate, formatSize, useI18n } from '../../utils';
+import { useRuleIndexNavigate, formatSize, useI18n, useWindowWidth } from '../../utils';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 import { Size, Color } from '../../constants';
@@ -99,7 +99,7 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
   const navigate = useRuleIndexNavigate(code, data.link);
   const totalSize = sumBy(packages, (e) => e.targetSize.sourceSize);
   const totalSizeStr = formatSize(totalSize);
-
+  const windowWith = useWindowWidth();
   const { name } = packages.find((e) => !!e.target.name)!.target;
 
   const versions = packages.map((item) => item.target.version);
@@ -160,7 +160,7 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
 
                 <Divider type="vertical" />
                 <Typography.Paragraph
-                  style={{ marginBottom: 0, width: '40vw' }}
+                  style={{ marginBottom: 0, width: windowWith > 1500 ? '50vw' : windowWith > 1200 ? '40vw' : '30vw' }}
                   copyable={{ text: el.root }}
                   ellipsis={{ rows: 1, expandable: true, symbol: <ExpandAltOutlined />, tooltip: el.root }}
                   code
@@ -172,7 +172,7 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
           })}
         </Space>
       }
-      type={level === 'warn' ? 'warning' : level}
+      type={level === 'warn' ? 'info' : level}
       action={
         <React.Fragment>
           {packages && packages.length > 0 ? (

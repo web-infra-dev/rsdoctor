@@ -20,7 +20,7 @@ export const LinkRuleAlert: React.FC<LinkAlertProps> = ({ data }) => {
         </Space>
       }
       description={<div dangerouslySetInnerHTML={{ __html: description }} />}
-      type={level === 'warn' ? 'warning' : level}
+      type={level === 'warn' ? 'info' : level}
       action={
         <Button type="link" onClick={navigate} size="small">
           More

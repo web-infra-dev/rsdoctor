@@ -5,6 +5,7 @@ import { CommonAlertsContainer } from './common';
 import { withServerAPI } from '../Manifest';
 import { ViewMode } from '../../constants';
 import { PackageRelationReasonsWithServer } from '../Alert/package-relation';
+import { ConfigProvider } from 'antd';
 
 interface BundleAlertsProps {
   filter?(alert: Rule.RuleStoreDataItem): boolean;
@@ -30,19 +31,30 @@ export const BundleAlertsBase: React.FC<BundleAlertsProps> = ({ filter, project 
   }, []);
 
   return (
-    <CommonAlertsContainer
-      title="Bundle Alerts"
-      dataSource={dataSource}
-      extraData={{
-        cwd,
-        getPackageRelationContentComponent: (res) => (
-          <PackageRelationReasonsWithServer body={{ id: res.data.id, target: res.package.target }} cwd={cwd} />
-        ),
+    <ConfigProvider
+      theme={{
+        components: {
+          Alert: {
+            colorInfoBg: '#e6f4ff57',
+            colorInfoBorder: 'none',
+          }
+        }
       }}
-      viewMode={viewMode.bundleAlerts}
-      setViewMode={setBundleAlertsViewMode}
-      cwd={cwd}
-    />
+    >
+      <CommonAlertsContainer
+        title="Bundle Alerts"
+        dataSource={dataSource}
+        extraData={{
+          cwd,
+          getPackageRelationContentComponent: (res) => (
+            <PackageRelationReasonsWithServer body={{ id: res.data.id, target: res.package.target }} cwd={cwd} />
+          ),
+        }}
+        viewMode={viewMode.bundleAlerts}
+        setViewMode={setBundleAlertsViewMode}
+        cwd={cwd}
+      />
+    </ConfigProvider>
   );
 };
 

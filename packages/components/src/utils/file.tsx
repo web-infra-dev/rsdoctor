@@ -1,7 +1,7 @@
 import { get, startsWith } from 'lodash-es';
 import { Common } from '@rsdoctor/types';
 import { message, UploadFile } from 'antd';
-import { FieldDataNode  } from 'rc-tree';
+import { FieldDataNode } from 'rc-tree';
 
 export type DataNode = FieldDataNode<{
   key: string | number;

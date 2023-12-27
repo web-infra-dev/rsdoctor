@@ -1,7 +1,7 @@
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
 import { uniqBy, isArray, defaults } from 'lodash-es';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import parse from 'url-parse';
@@ -215,3 +215,18 @@ export function useDetectIfCloudIdeEnv() {
   }
   return false;
 }
+
+export function useWindowWidth() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
+  return windowWidth;
+}
+
