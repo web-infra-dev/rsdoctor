@@ -2,7 +2,10 @@
 import { extname } from 'path';
 import type { SDK } from '@rsdoctor/types';
 import type { Range as RangeClass } from 'monaco-editor';
+import { loader } from '@monaco-editor/react'
 import { isJsDataUrl } from './url';
+
+const monacoLoader = loader.init()
 
 export function getOriginalLanguage(filepath: string) {
   if (isJsDataUrl(filepath)) {
@@ -46,4 +49,29 @@ export function getSelectionRange(source: SDK.SourceRange, Range: typeof RangeCl
   const { start, end } = source;
   const { line = 1, column = 0 } = start;
   return new Range(line, column + 1, end?.line ?? line, (end?.column ?? 9999) + 1);
+}
+
+const initMonaco = (monacoRef: any) => {
+  return new Promise<void>((resolve, reject) => {
+    if (monacoRef.value) {
+      resolve()
+      return
+    }
+    monacoLoader
+      .then((monacoInstance: any) => {
+        monacoRef.value = monacoInstance
+      })
+      .catch((error: any) => {
+        if (error?.type !== 'cancelation') {
+          console.error('Monaco initialization error:', error)
+          reject()
+        }
+      })
+  })
+}
+
+export function useMonacoEditor() {
+  return {
+    initMonaco,
+  }
 }

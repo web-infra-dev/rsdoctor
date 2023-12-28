@@ -5,10 +5,11 @@ import React, { useState, CSSProperties } from 'react';
 export interface CardProps extends CProps {
   collapsable?: boolean;
   dividerStyle?: CSSProperties;
+  defaultCollapsed?: boolean;
 }
 
-export const Card: React.FC<CardProps> = ({ collapsable = false, children, title, dividerStyle, ...rest }) => {
-  const [collapsed, setCollapsed] = useState(false);
+export const Card: React.FC<CardProps> = ({ collapsable = false, children, title, dividerStyle, defaultCollapsed = false, ...rest }) => {
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
   if (title && collapsable) {
     return (

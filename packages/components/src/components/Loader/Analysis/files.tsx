@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { endsWith, get, sumBy } from 'lodash-es';
 import { Card, Col, Descriptions, Divider, Drawer, Row, Space, Table, Tooltip, Typography } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { Constants, SDK } from '@rsdoctor/types';
 import { ServerAPIProvider } from '../../Manifest';
 import { drawerWidth, Size } from '../../../constants';
-import { createFileStructures, formatCosts, mapFileKey, DataNode, filterLoader } from '../../../utils';
+import { createFileStructures, formatCosts, mapFileKey, DataNode, filterLoader, useMonacoEditor } from '../../../utils';
 import { LoaderExecutions } from '../executions';
 import { FileTree } from '../../FileTree';
 import { Keyword } from '../../Keyword';
@@ -23,6 +23,13 @@ export const LoaderFiles: React.FC<{
   const [loaderIndex, setLoaderIndex] = useState(0);
   const [selectedNode, setSelectedNode] = useState<DataNode | null>(null);
 
+  const monacoRef = useRef<HTMLElement>(null)
+  const { initMonaco } = useMonacoEditor()
+
+  const init = useCallback(async () => {
+    await initMonaco(monacoRef);
+  }, [])
+  
   const maxHeight = 700;
 
   const filteredFiles = useMemo(
@@ -111,6 +118,7 @@ export const LoaderFiles: React.FC<{
             treeData={files}
             key={`${props.loaders.join('|')}_${props.filename}`}
             onSelect={(_e, info) => {
+              init();
               if (!info.node.isLeaf) {
                 setSelectedNode(info.node);
               }
