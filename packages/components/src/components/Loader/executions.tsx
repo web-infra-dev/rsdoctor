@@ -1,17 +1,18 @@
 import { ClockCircleOutlined } from '@ant-design/icons';
-import { Row, Space, Badge, Col, Typography, Button, Divider, Timeline, Tooltip, Empty, Tag } from 'antd';
-import { PropsWithChildren, useState } from 'react';
-import type { TextProps } from 'antd/lib/typography/Text';
-import type { EllipsisConfig } from 'antd/lib/typography/Base';
-import { Constants, SDK } from '@rsdoctor/types';
 import Editor from '@monaco-editor/react';
+import { Constants, SDK } from '@rsdoctor/types';
+import { Badge, Button, Col, Divider, Empty, Row, Space, Tag, Timeline, Tooltip, Typography } from 'antd';
+import type { EllipsisConfig } from 'antd/lib/typography/Base';
+import type { TextProps } from 'antd/lib/typography/Text';
 import dayjs from 'dayjs';
 import { endsWith } from 'lodash-es';
-import { formatCosts, getModifiedLanguage, useTheme, beautifyPath } from '../../utils';
-import { Title } from '../Title';
+import { PropsWithChildren, useState } from 'react';
 import { Size } from '../../constants';
-import { CodeOpener } from '../Opener';
+import { beautifyPath, formatCosts, getModifiedLanguage, useTheme } from '../../utils';
+import { Card } from '../Card';
 import { DiffViewer } from '../CodeViewer';
+import { CodeOpener } from '../Opener';
+import { Title } from '../Title';
 import { JSIsEqualTag } from '../worker/jsequal/client';
 
 interface LoaderExecutionsProps {
@@ -55,16 +56,11 @@ const LoaderInfoItem = ({
 export const LoaderExecutions = ({ data, cwd, index }: PropsWithChildren<LoaderExecutionsProps>): JSX.Element => {
   const { loaders, resource } = data;
   const [currentIndex, setCurrentIndex] = useState(index || 0);
-
   const { theme } = useTheme();
   const isLight = theme === 'light';
-
   const loader = loaders[currentIndex];
-
   const before = loader.input || '';
-
   const leftSpan = 5;
-
   const hasError = loader.errors && loader.errors.length;
 
   return (
@@ -119,23 +115,22 @@ export const LoaderExecutions = ({ data, cwd, index }: PropsWithChildren<LoaderE
       </Col>
       <Col span={24 - leftSpan} style={{ height: '100%' }}>
         <Col span={24}>
+        <Card
+          title={"Loader Details"}
+          style={{ border: 'none' }}
+          collapsable
+          defaultCollapsed={true}
+          extra={
+            <Tag icon={<ClockCircleOutlined />} color="default">
+              {dayjs(loader.startAt).format('YYYY-MM-DD HH:mm:ss')}
+            </Tag>
+          }
+        >
+          {loader.isPitch ? <Typography.Text code>pitch</Typography.Text> : null}
+          {loader.isPitch || hasError || !endsWith(resource.path, Constants.JSExtension) ? null : (
+            <JSIsEqualTag input={before} output={loader.result || ''} />
+          )}
           <Space direction="vertical" style={{ padding: Size.BasePadding, wordBreak: 'break-all' }}>
-            <Row justify="space-between" align="middle" style={{ paddingBottom: Size.BasePadding / 2 }}>
-              <Col>
-                <Space>
-                  <Title text="Loader Details" />
-                  {loader.isPitch ? <Typography.Text code>pitch</Typography.Text> : null}
-                  {loader.isPitch || hasError || !endsWith(resource.path, Constants.JSExtension) ? null : (
-                    <JSIsEqualTag input={before} output={loader.result || ''} />
-                  )}
-                </Space>
-              </Col>
-              <Col>
-                <Tag icon={<ClockCircleOutlined />} color="default">
-                  {dayjs(loader.startAt).format('YYYY-MM-DD HH:mm:ss')}
-                </Tag>
-              </Col>
-            </Row>
             <LoaderInfoItem label="file path" value={beautifyPath(resource.path, cwd)} code />
             <LoaderInfoItem
               label="resource path"
@@ -157,6 +152,7 @@ export const LoaderExecutions = ({ data, cwd, index }: PropsWithChildren<LoaderE
               }}
             />
           </Space>
+        </Card>
         </Col>
         {hasError ? (
           <Col span={24} style={{ height: '53%', minHeight: 400 }}>
@@ -200,7 +196,13 @@ export const LoaderExecutions = ({ data, cwd, index }: PropsWithChildren<LoaderE
                 <div style={{ height: '90%' }}>
                   <Editor
                     theme="vs-dark"
-                    options={{ readOnly: true, domReadOnly: true, fontSize: 14 }}
+                    options={{
+                      readOnly: true,
+                      domReadOnly: true,
+                      fontSize: 14,
+                      formatOnType: true,
+                      formatOnPaste: true
+                    }}
                     value={loader.result}
                     language={getModifiedLanguage(resource.path)}
                   />
