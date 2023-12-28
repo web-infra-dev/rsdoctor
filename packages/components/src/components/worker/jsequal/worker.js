@@ -1,9 +1,9 @@
-import { minify as terserMinify } from 'terser';
-import { handleMessageInWorker } from '../../../utils/worker';
+const { minify: terserMinify } = require('terser');
+const { handleMessageInWorker } = require('../../../utils/worker');
 
-const cache = new Map<string, boolean>();
+const cache = new Map();
 
-function minify(code: string) {
+function minify(code) {
   return terserMinify(code, {
     module: true,
     compress: false,
@@ -12,11 +12,11 @@ function minify(code: string) {
   }).then((res) => res.code);
 }
 
-handleMessageInWorker<{ input: string; output: string }, boolean>({
+handleMessageInWorker({
   workerName: 'jsequal',
   handler: async ({ input = '', output = '' }) => {
     const key = input + output;
-    if (cache.has(key)) return cache.get(key)!;
+    if (cache.has(key)) return (cache.get(key) || '');
 
     const [inputMinified, outputMinified] = await Promise.all([minify(input), minify(output)]);
 
