@@ -1,27 +1,32 @@
 /* eslint-disable react/jsx-key */
 import React, { useState } from 'react';
-import { Col, Row, Segmented } from 'antd';
+import { Col, Row, Segmented, theme } from 'antd';
 import { Client, SDK } from '@rsdoctor/types';
-import { useDuplicatePackagesByErrors } from '../../../utils';
+import { useDuplicatePackagesByErrors, useWindowWidth } from '../../../utils';
 import { Size } from '../../../constants';
 import { StatisticCard } from '../../../components/Card/statistic';
 import { DuplicatePackageDrawerWithServer } from '../../../components/TextDrawer';
-import { SizeCard } from '../../../components/Card/size';
+import { SizeCard, bgColorType } from '../../../components/Card/size';
 
+const { useToken } = theme;
 const height = 100;
 
 interface CardProps {
   showProgress?: boolean;
   data: Client.DoctorClientAssetsSummary['all']['total'];
   total: number;
+  tagBgColor?: string;
 }
 
-const AssetCard: React.FC<CardProps> = ({ showProgress = false, data, total }) => {
-  return <SizeCard files={data.files} total={total} showProgress={showProgress} />;
+const AssetCard: React.FC<CardProps> = ({ showProgress = false, data, total, tagBgColor }) => {
+  const { token } = useToken();
+  const _tagBgColor = tagBgColor || token.colorPrimaryBorderHover;
+  return (<SizeCard files={data.files} total={total} showProgress={showProgress} tagBgColor={_tagBgColor } />);
 };
 
-const AssetCardContainer: React.FC<{ titles: string[]; datas: CardProps[] }> = ({ titles, datas }) => {
+const AssetCardContainer: React.FC<{ titles: string[]; datas: CardProps[]; bgColor?: bgColorType }> = ({ titles, datas, bgColor }) => {
   const [idx, setIdx] = useState(0);
+  const { token } = useToken();
 
   return (
     <StatisticCard
@@ -41,7 +46,10 @@ const AssetCardContainer: React.FC<{ titles: string[]; datas: CardProps[] }> = (
           titles[idx]
         )
       }
-      value={datas.map((e, i) => <AssetCard {...e} key={i} />)[idx]}
+      value={datas.map((e, i) => <AssetCard {...e} key={i}  tagBgColor={bgColor?.tagBgColor} />)[idx]}
+      boxProps={{
+        style: { backgroundColor: bgColor?.bgColor || token.colorPrimaryBg}
+      }}
     />
   );
 };
@@ -51,7 +59,9 @@ export const BundleCards: React.FC<{
   errors: SDK.ErrorsData;
   summary: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetAssetsSummary>;
 }> = ({ cwd, errors, summary }) => {
+  const windowWith = useWindowWidth();
   const duplicatePackages = useDuplicatePackagesByErrors(errors);
+  const { token } = useToken();
 
   const arr = [
     <AssetCardContainer
@@ -60,6 +70,7 @@ export const BundleCards: React.FC<{
         {
           data: summary.all.total,
           total: summary.all.total.size,
+          showProgress: true,
         },
       ]}
     />,
@@ -77,6 +88,10 @@ export const BundleCards: React.FC<{
           showProgress: true,
         },
       ]}
+      bgColor={{
+        bgColor: token.colorSuccessBg,
+        tagBgColor: token.colorSuccessBorderHover
+      }}
     />,
     <AssetCardContainer
       titles={['Total CSS', 'Initial CSS']}
@@ -90,8 +105,13 @@ export const BundleCards: React.FC<{
           data: summary.css.initial,
           total: summary.all.total.size,
           showProgress: true,
+
         },
       ]}
+      bgColor={{
+        bgColor: token.colorWarningBg,
+        tagBgColor: token.colorWarningBorderHover
+      }}
     />,
     <AssetCardContainer
       titles={['Images', 'Fonts', 'Media']}
@@ -122,19 +142,28 @@ export const BundleCards: React.FC<{
           showProgress: true,
         },
       ]}
+      bgColor={{
+        bgColor: token.colorSuccessBg,
+        tagBgColor: token.colorSuccessBorderHover
+      }}
     />,
     <StatisticCard
       title={'Duplicate Packages'}
       value={
         <DuplicatePackageDrawerWithServer buttonStyle={{ height }} duplicatePackages={duplicatePackages} cwd={cwd} />
       }
+      boxProps={{
+        style: {
+          backgroundColor: token.colorWarningBg 
+        }
+      }}
     />,
   ];
 
   return (
-    <Row gutter={[Size.BasePadding, Size.BasePadding]} wrap style={{ marginBottom: Size.BasePadding }}>
+    <Row gutter={ windowWith > 1200 && windowWith < 1400 ? [Size.BasePadding * 2, Size.BasePadding] : [Size.BasePadding, Size.BasePadding]} wrap style={{ marginBottom: Size.BasePadding }}>
       {arr.map((e, i) => (
-        <Col key={i} style={{ minWidth: 300 }}>
+        <Col key={i} span={windowWith > 1400 ? 4 : windowWith > 1200 ? 8 : 8}>
           {e}
         </Col>
       ))}

@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "rsbuild dev",
-    "start": "rsbuild dev",
+    "start": "rsbuild build -w",
     "build": "rsbuild build",
     "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true rsbuild build",
     "preview": "rsbuild preview"
