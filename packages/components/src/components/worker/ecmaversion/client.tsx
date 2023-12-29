@@ -3,7 +3,7 @@ import { BadgeColorMap, BadgeType } from '../../Badge';
 import { ECMAVersion } from '@rsdoctor/utils/ruleUtils';
 import { master } from 'src/utils/worker';
 
-const getECMAVersionDetectWorker = () => new Worker(new URL('./worker.ts', import.meta.url));
+const getECMAVersionDetectWorker = () => new Worker(new URL('./worker.js', import.meta.url));
 
 export function useECMAVersionDetectWorker(props: { code: string }) {
   const { code } = props;

@@ -3,7 +3,7 @@ import { Tag } from 'antd';
 import { master } from '../../../utils/worker';
 import { useI18n } from '../../../utils';
 
-const getJSEqualWorker = () => new Worker(new URL('./worker.ts', import.meta.url));
+const getJSEqualWorker = () => new Worker(new URL('./worker.js', import.meta.url));
 
 export function useJSEqualWorker(props: { input: string; output: string }) {
   const { input, output } = props;
