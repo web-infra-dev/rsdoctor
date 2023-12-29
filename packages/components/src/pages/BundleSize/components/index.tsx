@@ -65,7 +65,6 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
   const { t } = useI18n();
 
   const assets = summary.all.total.files;
-  const avgAssetSize = summary.all.total.size / assets.length;
 
   const handleChange = useCallback(
     (type: string) => (value: string) => {
@@ -142,9 +141,12 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
             }}
           >
             <Keyword text={basename} keyword={inputAssetName} />
-            <Bdg label={'size'} value={formatSize(size)} type={size >= avgAssetSize ? 'error' : 'default'} />
+            <Tag color={'success'} style={{ margin: 0 }}>
+              {formatSize(size)}
+            </Tag>
+
             {initial ? (
-              <Tag color="cyan" style={{ marginRight: 0 }}>
+              <Tag color="cyan" style={{ margin: 0 }}>
                 initial
               </Tag>
             ) : null}

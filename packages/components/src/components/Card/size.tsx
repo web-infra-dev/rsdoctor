@@ -1,5 +1,5 @@
 import { ExceptionOutlined } from '@ant-design/icons';
-import { Progress, Space, Tag, Tooltip, Typography } from 'antd';
+import { Empty, Progress, Space, Tag, Tooltip, Typography, theme } from 'antd';
 import { sumBy } from 'lodash-es';
 import React, { useMemo } from 'react';
 import { createFileStructures, formatSize } from 'src/utils';
@@ -7,6 +7,7 @@ import { FileTree } from '../FileTree';
 import { TextDrawer } from '../TextDrawer';
 
 const height = 100;
+const { useToken } = theme;
 
 export interface SizeCardProps {
   files: {
@@ -21,9 +22,15 @@ export interface SizeCardProps {
    * @default false
    */
   showProgress?: boolean;
+  tagBgColor: string;
+}
+export interface bgColorType {
+  bgColor: string;
+  tagBgColor: string;
 }
 
-export const SizeCard: React.FC<SizeCardProps> = ({ files, total, showProgress = false }) => {
+export const SizeCard: React.FC<SizeCardProps> = ({ files, total, showProgress = false, tagBgColor }) => {
+  const { token } = useToken()
   const sum = useMemo(() => {
     return sumBy(files, (e) => e.size);
   }, [files]);
@@ -46,7 +53,12 @@ export const SizeCard: React.FC<SizeCardProps> = ({ files, total, showProgress =
   if (fileStructures.length === 0) {
     return (
       <Space style={{ height, fontSize: 24 }} align="center">
-        0
+        <Tag bordered={false} color={tagBgColor}>
+          <Typography.Text style={{ fontSize: 14, color: token.colorWhite }}>
+              <Typography.Text style={{ color: token.colorWhite  }}> {0}</Typography.Text>
+              {` Files`}
+          </Typography.Text>
+        </Tag>
       </Space>
     );
   }
@@ -54,6 +66,9 @@ export const SizeCard: React.FC<SizeCardProps> = ({ files, total, showProgress =
   return (
     <Space style={{ height }} align="center">
       {showProgress ? (
+        sum === 0 ?
+        <Empty />
+        :
         <Progress
           type="dashboard"
           percent={+((sum / total) * 100).toFixed(2)}
@@ -66,10 +81,12 @@ export const SizeCard: React.FC<SizeCardProps> = ({ files, total, showProgress =
           <Tooltip title="Click to show the total files">
             <Space style={{ textAlign: showProgress ? 'left' : 'center' }} align="end">
               <Space direction="vertical">
-                <Typography.Text style={{ fontSize: 14 }}>
-                  Count:
-                  <Typography.Text strong> {files.length}</Typography.Text>
-                </Typography.Text>
+                <Tag bordered={false} color={tagBgColor}>
+                  <Typography.Text style={{ fontSize: 14, color: token.colorWhite }}>
+                      <Typography.Text style={{ color: token.colorWhite  }}> {files.length}</Typography.Text>
+                      {` Files`}
+                  </Typography.Text>
+                </Tag>
                 <Typography.Text style={{ fontSize: 20 }}>{formatSize(sum)}</Typography.Text>
               </Space>
               <ExceptionOutlined style={{ transform: 'translateY(-3.5px)' }} />
