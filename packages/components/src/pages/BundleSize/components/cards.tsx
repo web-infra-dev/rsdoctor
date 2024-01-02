@@ -26,7 +26,6 @@ const AssetCard: React.FC<CardProps> = ({ showProgress = false, data, total, tag
 
 const AssetCardContainer: React.FC<{ titles: string[]; datas: CardProps[]; bgColor?: bgColorType }> = ({ titles, datas, bgColor }) => {
   const [idx, setIdx] = useState(0);
-  const { token } = useToken();
 
   return (
     <StatisticCard
@@ -48,7 +47,7 @@ const AssetCardContainer: React.FC<{ titles: string[]; datas: CardProps[]; bgCol
       }
       value={datas.map((e, i) => <AssetCard {...e} key={i}  tagBgColor={bgColor?.tagBgColor} />)[idx]}
       boxProps={{
-        style: { backgroundColor: bgColor?.bgColor || token.colorPrimaryBg}
+        style: { background: bgColor?.bgColor }
       }}
     />
   );
@@ -61,7 +60,6 @@ export const BundleCards: React.FC<{
 }> = ({ cwd, errors, summary }) => {
   const windowWith = useWindowWidth();
   const duplicatePackages = useDuplicatePackagesByErrors(errors);
-  const { token } = useToken();
 
   const arr = [
     <AssetCardContainer
@@ -88,10 +86,6 @@ export const BundleCards: React.FC<{
           showProgress: true,
         },
       ]}
-      bgColor={{
-        bgColor: token.colorSuccessBg,
-        tagBgColor: token.colorSuccessBorderHover
-      }}
     />,
     <AssetCardContainer
       titles={['Total CSS', 'Initial CSS']}
@@ -108,10 +102,6 @@ export const BundleCards: React.FC<{
 
         },
       ]}
-      bgColor={{
-        bgColor: token.colorWarningBg,
-        tagBgColor: token.colorWarningBorderHover
-      }}
     />,
     <AssetCardContainer
       titles={['Images', 'Fonts', 'Media']}
@@ -142,21 +132,12 @@ export const BundleCards: React.FC<{
           showProgress: true,
         },
       ]}
-      bgColor={{
-        bgColor: token.colorSuccessBg,
-        tagBgColor: token.colorSuccessBorderHover
-      }}
     />,
     <StatisticCard
       title={'Duplicate Packages'}
       value={
         <DuplicatePackageDrawerWithServer buttonStyle={{ height }} duplicatePackages={duplicatePackages} cwd={cwd} />
       }
-      boxProps={{
-        style: {
-          backgroundColor: token.colorWarningBg 
-        }
-      }}
     />,
   ];
 

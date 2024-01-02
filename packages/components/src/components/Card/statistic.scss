@@ -9,9 +9,10 @@
   }
 
   &-light {
-    // background: #87e8de
-    background: #fff;
+    background: white;
+    // background: linear-gradient(135deg, rgb(255 255 255) 0%, rgb(228 243 255) 100%);
     border: 1px solid #eee;
+    // box-shadow: 0px 0px 50px 0px #dcf2f4;
   }
   &-dark {
     background: rgb(20, 20, 20);

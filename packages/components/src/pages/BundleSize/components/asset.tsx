@@ -24,6 +24,10 @@ const TAB_MAP = {
   parsedSource: 'Bundled Code (After bundle and tree-shaking)',
 };
 
+const tagStyle = {
+  'margin': 'none'
+};
+
 export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) => {
   const [tab, setTab] = useState('parsedSource');
   const { t } = useI18n();
@@ -265,7 +269,6 @@ export const AssetDetail: React.FC<{
     return res;
   }, [includeModules, moduleKeyword, moduleSizeLimit]);
 
-  const avgSize = sumBy(includeModules, (e) => e.size.parsedSize || 0) / includeModules.length;
 
   const fileStructures = useMemo(() => {
     const res = createFileStructures({
@@ -288,20 +291,21 @@ export const AssetDetail: React.FC<{
           <Space>
             <Keyword ellipsis style={{ maxWidth: 500 }} text={basename} keyword={moduleKeyword} />
             {parsedSize !== 0 ? (
-              <Bdg
-                label={'parsed size'}
-                value={formatSize(parsedSize)}
-                type={parsedSize >= avgSize ? 'error' : 'default'}
-                tooltip={
+              <Tooltip
+                title={
                   <Space direction="vertical">
-                    <Bdg label={'parsed size'} value={formatSize(parsedSize)} />
-                    <Bdg label={'source size'} value={formatSize(sourceSize)} />
-                  </Space>
+                  <Tag color={'orange'}>{'Parsed Size:' + formatSize(parsedSize)}</Tag>
+                  <Tag color={'volcano'}>{'Source Size:' + formatSize(sourceSize)}</Tag>
+                </Space>
                 }
-              />
+                color={'white'}
+              >
+
+                <Tag color={'purple'} style={tagStyle}>{'Parsed: ' + formatSize(parsedSize)}</Tag> 
+              </Tooltip>
             ) : sourceSize !== 0 ? (
               // fallback to display tag for source size
-              <Bdg label={'source size'} value={formatSize(sourceSize)} type={'default'} />
+              <Tag color={'geekblue'}>{'Source Size:' + formatSize(sourceSize)}</Tag>
             ) : null}
             {isConcatenation ? (
               <Tooltip
@@ -313,7 +317,7 @@ export const AssetDetail: React.FC<{
                   </Space>
                 }
               >
-                <Tag color="#46b5c8">concatenated</Tag>
+                <Tag color="green" style={tagStyle}>concatenated</Tag>
               </Tooltip>
             ) : null}
             {containedOtherModules && containedOtherModules.length ? (
@@ -356,7 +360,7 @@ export const AssetDetail: React.FC<{
                   </Space>
                 }
               >
-                <Tag color="#46b5c8">concatenated</Tag>
+                <Tag color="green">concatenated</Tag>
               </Tooltip>
             ) : null}
             <Button
@@ -366,9 +370,7 @@ export const AssetDetail: React.FC<{
                 setModuleJumpList([mod.id]);
                 setShow(true);
               }}
-            >
-              module explorer
-            </Button>
+            />
             <ModuleCodeViewer data={mod} />
           </Space>
         );
@@ -382,11 +384,7 @@ export const AssetDetail: React.FC<{
             <Space>
               <Typography.Text>{defaultTitle}</Typography.Text>
               {parsedSize > 0 ? (
-                <Bdg
-                  label={'parsed size'}
-                  value={formatSize(parsedSize)}
-                  type={parsedSize >= avgSize ? 'error' : 'default'}
-                />
+                <Tag color={'orange'}>{'Parsed:' + formatSize(parsedSize)}</Tag>
               ) : null}
             </Space>
           );
