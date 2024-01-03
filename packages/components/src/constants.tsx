@@ -57,3 +57,7 @@ export const TAG_PALLETE = {
   COLOR_E: '#2E7CBE',
   DARK_BLUE: '#1554ad',
 };
+
+// export const MAIN_BG = 'linear-gradient(307deg, rgb(255, 255, 255) 0%, rgba(228, 243, 255, 0.56) 100%)';
+export const MAIN_BG = ''
+export const ROOT_BG_COLOR = 'rgb(105, 177, 255)';

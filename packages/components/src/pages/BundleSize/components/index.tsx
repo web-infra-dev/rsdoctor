@@ -170,7 +170,6 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
   return (
     <React.Fragment>
       <BundleCards cwd={cwd} errors={errors} summary={summary} />
-
       <Radio.Group
         value={graphType}
         onChange={(e) => setGraphType(e.target.value)}
@@ -205,6 +204,12 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
         title={
           <Space>
             <Title text="Bundle Analysis" />
+            <Tooltip
+              title={t('filter the modules which size is greater than the input value')}
+              style={{ marginLeft: 3 }}
+            >
+              <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+            </Tooltip>
           </Space>
         }
         extra={
@@ -367,6 +372,7 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
         </Row>
       </Card>
     </React.Fragment>
+
   );
 };
 

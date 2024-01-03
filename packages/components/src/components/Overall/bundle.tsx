@@ -26,7 +26,7 @@ const getFilesWithDrawer = (data: Client.DoctorClientAssetsSummary['all']['total
             <Tag color="success" style={{ marginRight: 0 }}>
               {formatSize(size)}
             </Tag>
-            {initial ? <Tag color="cyan">initial</Tag> : null}
+            {initial ? <Tag color="cyan">Initial</Tag> : null}
           </Space>
         );
       },
