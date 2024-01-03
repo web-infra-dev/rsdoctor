@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { groupBy } from 'lodash-es';
 import { Empty } from 'antd';
 import './loader.scss';
@@ -14,9 +14,9 @@ import {  renderTotalLoadersTooltip, getTooltipHtmlForLoader } from './utils';
 export const LoaderExecutionsChart: React.FC<ChartProps> = ({ loaders, cwd }) => {
   const { isDark } = useTheme();
   const ref = useRef(null);
+  const [data, setData] = useState([] as DurationMetric[]);
 
   const groupByLoader = useMemo(() => groupBy(loaders, (e) => e.loader), [loaders]);
-  console.log('Loader Data:', groupByLoader);
 
   const formatterForLoader =  useCallback((raw: any) => {
     const { name, data } = raw;
@@ -28,8 +28,8 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({ loaders, cwd }) =>
     return renderTotalLoadersTooltip(loaderName, loaders, cwd);
   }, []);
   
-  const data = useMemo(() => {
-    return Object.keys(groupByLoader).map<DurationMetric>((loaderName) => {
+  useEffect(() => {
+    const _data = Object.keys(groupByLoader).map<DurationMetric>((loaderName) => {
       const list = groupByLoader[loaderName] || [];
       const { start, end } = findLoaderTotalTiming(list);
 
@@ -50,18 +50,21 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({ loaders, cwd }) =>
         }),
       };
     });
+    setData(_data);
   }, [groupByLoader]);
-  console.log('Loader Transformed Data:', data);
-
-  if (!data.length) return <Empty />;
 
   return (
-    <div
-      className={['loader-chart-container', isDark ? 'loader-chart-container_dark' : ''].join(' ').trim()}
-      ref={ref}
-      style={{ width: '100%', height: '600px' }}
-    >
-      <TimelineCom loaderData={data} formatterFn={formatterForLoader} chartType={'loader'} />
-    </div>
+    <>
+      {
+        data?.length ? 
+        <div
+        className={['loader-chart-container', isDark ? 'loader-chart-container_dark' : ''].join(' ').trim()}
+        ref={ref}
+        style={{ width: '100%', height: '600px' }}
+        >
+        <TimelineCom loaderData={data} formatterFn={formatterForLoader} chartType={'loader'} />
+        </div> : <Empty />
+      }
+    </>
   );
 };
