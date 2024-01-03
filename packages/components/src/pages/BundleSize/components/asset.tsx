@@ -1,4 +1,4 @@
-import { CodepenOutlined, ColumnHeightOutlined, DeploymentUnitOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { CodepenCircleOutlined, ColumnHeightOutlined, DeploymentUnitOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
 import { Button, Card, Col, Divider, Drawer, Empty, Popover, Row, Space, Tag, Tooltip, Typography } from 'antd';
@@ -25,7 +25,8 @@ const TAB_MAP = {
 };
 
 const tagStyle = {
-  'margin': 'none'
+  'margin': 'none',
+  'marginInlineEnd': 0,
 };
 
 export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) => {
@@ -46,7 +47,7 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) =
       text=""
       buttonProps={{
         size: 'small',
-        icon: <CodepenOutlined />,
+        icon: <CodepenCircleOutlined />,
         type: 'default',
       }}
       buttonStyle={{ padding: `0 4px` }}
@@ -384,7 +385,7 @@ export const AssetDetail: React.FC<{
             <Space>
               <Typography.Text>{defaultTitle}</Typography.Text>
               {parsedSize > 0 ? (
-                <Tag color={'orange'}>{'Parsed:' + formatSize(parsedSize)}</Tag>
+                <Tag style={tagStyle} color={'orange'}>{'Parsed:' + formatSize(parsedSize)}</Tag>
               ) : null}
             </Space>
           );

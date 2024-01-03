@@ -3,7 +3,7 @@ import React from 'react';
 import { SDK } from '@rsdoctor/types';
 import Editor, { OnMount } from '@monaco-editor/react';
 import { isNumber } from 'lodash-es';
-import { CodepenOutlined } from '@ant-design/icons';
+import { CodepenCircleOutlined } from '@ant-design/icons';
 import type { editor } from 'monaco-editor';
 import { getOriginalLanguage, getSelectionRange } from '../../utils';
 import { DefaultEditorConfig } from './config';
@@ -55,7 +55,7 @@ export const CodeViewerWithDrawer: React.FC<CodeViewerProps> = (props) => {
       text=""
       buttonProps={{
         size: 'small',
-        icon: <CodepenOutlined />,
+        icon: <CodepenCircleOutlined />,
         type: 'default',
       }}
       buttonStyle={{ padding: `0 4px` }}

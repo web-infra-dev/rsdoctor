@@ -1,4 +1,4 @@
-import { ColumnHeightOutlined, InfoCircleOutlined, VerticalAlignMiddleOutlined } from '@ant-design/icons';
+import { CodepenCircleOutlined, ColumnHeightOutlined, DeploymentUnitOutlined, InfoCircleOutlined, VerticalAlignMiddleOutlined } from '@ant-design/icons';
 import { Client, SDK } from '@rsdoctor/types';
 import {
   Button,
@@ -205,8 +205,62 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
           <Space>
             <Title text="Bundle Analysis" />
             <Tooltip
-              title={t('filter the modules which size is greater than the input value')}
-              style={{ marginLeft: 3 }}
+              color={'white'}
+              title={
+                <Space direction='vertical' color='white'>
+                  <Row>
+                    <Col>
+                      <Tag color="cyan" style={{ margin: 0 }}>
+                        initial
+                      </Tag>
+                      <Typography.Text>: Indignify whether the chunk is the initial chunk.</Typography.Text>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Tag color="green">concatenated</Tag>
+                      <Typography.Text>: Indignify whether the module is the concatenated module.  </Typography.Text>
+                      <br />
+                      <Typography.Text strong>Concatenated Module:</Typography.Text>
+                      <Typography.Text>A series module is to lift or series multiple modules into a closure when packaging. </Typography.Text>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Button
+                        size="small"
+                        icon={<CodepenCircleOutlined />}
+                      />
+                      <Typography.Text>: Open the code.</Typography.Text>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Button
+                        size="small"
+                        icon={<DeploymentUnitOutlined />}
+                      />
+                      <Typography.Text>: View the module dependency, that is, module reasons in stats.json.</Typography.Text>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Tag color={'purple'} >{'Parsed: 15.77 KB'}</Tag> 
+                      <Typography.Text strong>Parsed Size</Typography.Text>
+                      <Typography.Text>The size of the code which bundled. That is, after bundle and tree-shaking.</Typography.Text>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Tag color={'orange'} >{'Source: 15.77 KB'}</Tag> 
+                      <Typography.Text strong>Source Size</Typography.Text>
+                      <Typography.Text>The size of the code which before bundle and transform.</Typography.Text>
+                    </Col>
+                  </Row>
+                </Space>
+                
+              }
+              style={{ marginLeft: 3, }}
             >
               <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
             </Tooltip>
