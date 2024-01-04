@@ -1,6 +1,6 @@
 # @rsdoctor/e2e
 
-This folder contains the e2e test cases of Rsbuild.
+This folder contains the e2e test cases of Rsdoctor.
 
 ## Tech Stack
 

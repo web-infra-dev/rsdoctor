@@ -144,7 +144,7 @@ export const BundleCards: React.FC<{
   return (
     <Row gutter={ windowWith > 1200 && windowWith < 1400 ? [Size.BasePadding * 2, Size.BasePadding] : [Size.BasePadding, Size.BasePadding]} wrap style={{ marginBottom: Size.BasePadding }}>
       {arr.map((e, i) => (
-        <Col key={i} span={windowWith > 1400 ? 4 : windowWith > 1200 ? 8 : 8}>
+        <Col key={i} span={windowWith > 1500 ? 4 : windowWith > 1200 ? 8 : 8}>
           {e}
         </Col>
       ))}

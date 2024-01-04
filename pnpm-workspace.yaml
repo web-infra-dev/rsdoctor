@@ -3,3 +3,4 @@ packages:
   - 'scripts/**'
   - 'packages/**'
   - 'examples/**'
+  - 'document/**'
