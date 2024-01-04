@@ -1,0 +1,23 @@
+{
+  "name": "@rsdoctor/docs",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "rspress dev",
+    "build": "rspress build",
+    "preview": "rspress preview"
+  },
+  "devDependencies": {
+    "@types/node": "^16",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rspress": "^1.9.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

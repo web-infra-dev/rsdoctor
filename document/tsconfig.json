@@ -1,0 +1,13 @@
+{
+  "extends": "@rsdoctor/tsconfig/base",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "declaration": true,
+    "composite": true,
+    "outDir": "dist",
+  },
+  "include": ["src"],
+  "exclude": ["**/node_modules"]
+}
