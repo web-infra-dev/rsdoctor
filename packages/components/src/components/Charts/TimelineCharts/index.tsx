@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts/core';
 import dayjs from 'dayjs';
@@ -21,11 +21,12 @@ const ColorMap = [
 
 type LoaderType = { name: string; value: number[]; itemStyle: { normal: { color: string } }; ext?: Record<string, any> };
 
-export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?: ITraceEventData[], formatterFn: Function, chartType?: string }> = ({ loaderData, pluginsData, formatterFn, chartType = 'normal' }) => {
+export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?: ITraceEventData[], formatterFn: Function, chartType?: string }> = memo(({ loaderData, pluginsData, formatterFn, chartType = 'normal' }) => {
   const data: LoaderType[] = [];
   let categories: string[] = [];
+  const [optionsData, setOptinsData] = useState({})
 
-  useMemo(() => {
+  useEffect(() => {
     if (!loaderData) return;
     const _categories: string[] = []
     loaderData.forEach(_l => {
@@ -71,7 +72,7 @@ export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?
 
   }, [loaderData]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (!pluginsData) return;
 
     const _pluginsData = groupBy(pluginsData, (e: ITraceEventData) => e.pid)
@@ -94,127 +95,131 @@ export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?
   }, [pluginsData])
 
 
-
-  function renderItem(
-    params: { coordSys: CoordSysType},
-    api: {
-      value: (arg0: number) => number;
-      coord: (arg0: number[]) => any;
-      size: (arg0: number[]) => number[];
-      style: () => string;
-    },
-  ) {
-    const categoryIndex = api.value(0);
-    const start = api.coord([api.value(1), categoryIndex]);
-    const end = api.coord([api.value(2), categoryIndex]);
-    const height = api.size([0, 1])[1] * 0.4;
-    const rectShape = echarts.graphic.clipRectByRect(
-      {
-        x: start[0],
-        y: chartType === 'loader' ? start[1] - (categoryIndex % 2 !== 0 ? 0 : height) : start[1],
-        width: end[0] - start[0] || 5,
-        height: height,
+  useEffect(() => {
+    function renderItem(
+      params: { coordSys: CoordSysType},
+      api: {
+        value: (arg0: number) => number;
+        coord: (arg0: number[]) => any;
+        size: (arg0: number[]) => number[];
+        style: () => string;
       },
-      {
-        x: params.coordSys.x,
-        y: params.coordSys.y,
-        width: params.coordSys.width,
-        height: params.coordSys.height,
-      },
-    );
-    return (
-      rectShape && {
-        type: 'rect',
-        transition: ['shape'],
-        shape: rectShape,
-        style: api.style(),
-        enterFrom: {
-          style: { opacity: 0 },
-          x: 0
-      },
-      }
-    );
-  }
-
-  const option = {
-    tooltip: {
-      formatter: (raw: any) => { 
-        return formatterFn(raw)
-      },
-    },
-    dataZoom: [
-      {
-        type: 'slider',
-        filterMode: 'weakFilter',
-        showDataShadow: false,
-        top: -10,
-        labelFormatter: '',
-      },
-      {
-        type: 'inside',
-        filterMode: 'weakFilter',
-      },
-    ],
-    grid: {
-      top: 10,
-      left: 0,
-      bottom: 10,
-      right: 0,
-      height: categories.length > 2 ? 'auto' : chartType === 'loader' ? categories.length * 150 : categories.length * 100,
-      containLabel: true,
-    },
-    xAxis: {
-      position: 'top',
-      splitLine: {
-        show: false
-      },
-      scale: true,
-      axisLine: {
-        show: false
-      },
-      axisLabel: {
-        formatter(val: number) {
-          return dayjs(val as number).format('HH:mm:ss');
+    ) {
+      const categoryIndex = api.value(0);
+      const start = api.coord([api.value(1), categoryIndex]);
+      const end = api.coord([api.value(2), categoryIndex]);
+      const height = api.size([0, 1])[1] * 0.5;
+      const rectShape = echarts.graphic.clipRectByRect(
+        {
+          x: start[0],
+          y: chartType === 'loader' ? start[1] - (categoryIndex % 2 !== 0 ? 0 : height) : start[1],
+          width: end[0] - start[0] || 5,
+          height: height,
+        },
+        {
+          x: params.coordSys.x,
+          y: params.coordSys.y,
+          width: params.coordSys.width,
+          height: params.coordSys.height,
+        },
+      );
+      return (
+        rectShape && {
+          type: 'rect',
+          transition: ['shape'],
+          shape: rectShape,
+          style: api.style(),
+          enterFrom: {
+            style: { opacity: 0 },
+            x: 0
+        },
+        }
+      );
+    }
+  
+    const option = {
+      tooltip: {
+        formatter: (raw: any) => { 
+          return formatterFn(raw)
         },
       },
-    },
-    yAxis: {
-      type: 'category',
-      splitLine: {
-        interval: chartType === 'loader' ? 1 : 0,
-        show: true
-      },
-      axisLabel: {
-        inside: true,
-        lineHeight: 20,
-        width: 100,
-        fontSize: 12,
-        color: '#000',
-        verticalAlign: 'bottom'
-      },
-      axisLine: {
-        show: true
-      },
-      axisTick: {
-        show: false
-      },
-      data: categories,
-    },
-    series: [
-      {
-        type: 'custom',
-        renderItem,
-        itemStyle: {
-          opacity: 0.8,
+      dataZoom: [
+        {
+          type: 'slider',
+          filterMode: 'weakFilter',
+          showDataShadow: false,
+          top: -10,
+          labelFormatter: '',
         },
-        encode: {
-          x: [1, 2],
-          y: 0,
+        {
+          type: 'inside',
+          filterMode: 'weakFilter',
         },
-        data,
-      }
-    ],
-  };
+      ],
+      grid: {
+        top: 10,
+        left: 0,
+        bottom: 10,
+        right: 0,
+        height: categories.length > 2 ? 'auto' : chartType === 'loader' ? categories.length * 150 : categories.length * 100,
+        containLabel: true,
+      },
+      xAxis: {
+        position: 'top',
+        splitLine: {
+          show: false
+        },
+        scale: true,
+        axisLine: {
+          show: false
+        },
+        axisLabel: {
+          formatter(val: number) {
+            return dayjs(val as number).format('HH:mm:ss');
+          },
+        },
+      },
+      yAxis: {
+        type: 'category',
+        splitLine: {
+          interval: chartType === 'loader' ? 1 : 0,
+          show: true
+        },
+        axisLabel: {
+          inside: true,
+          lineHeight: 20,
+          width: 100,
+          fontSize: 12,
+          color: '#000',
+          verticalAlign: 'bottom'
+        },
+        axisLine: {
+          show: true
+        },
+        axisTick: {
+          show: false
+        },
+        data: categories,
+      },
+      series: [
+        {
+          type: 'custom',
+          renderItem,
+          itemStyle: {
+            opacity: 0.8,
+          },
+          encode: {
+            x: [1, 2],
+            y: 0,
+          },
+          data,
+        }
+      ],
+    };
+    setOptinsData(option)
+  }, [loaderData, pluginsData])
 
-  return (<ReactECharts option={option} echarts={echarts} style={{ width: '100%', minHeight: '400px' }} />)
-}
+
+  return (<ReactECharts option={optionsData} echarts={echarts} style={{ width: '100%', minHeight: '400px' }} />)
+})
+
