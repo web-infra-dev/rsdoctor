@@ -25,6 +25,7 @@ export default defineConfig({
     // exclude document fragments from routes
     exclude: ['**/zh/shared/**', '**/en/shared/**'],
   },
+  globalStyles: path.join(__dirname, 'theme', 'index.css'),
   themeConfig: {
     footer: {
       message: "Copyright © 2023 Bytedance",

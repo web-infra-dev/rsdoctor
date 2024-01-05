@@ -4,7 +4,7 @@ pageType: home
 hero:
   name: Rsdoctor
   text: Analyzer for Rspack and Webpack.
-  tagline: Let the build behavior be perspective to find the root cause of the problem.
+  tagline: Visualize building behavior
   actions:
     - theme: brand
       text: Introduction

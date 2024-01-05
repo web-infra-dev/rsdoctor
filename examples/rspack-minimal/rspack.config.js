@@ -53,7 +53,7 @@ module.exports = {
   },
   plugins: [
     new RsdoctorRspackPlugin({
-      disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
+      disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
       features: ['bundle', 'plugins', 'loader', 'resolver'],
     }),
     new rspack.DefinePlugin({
