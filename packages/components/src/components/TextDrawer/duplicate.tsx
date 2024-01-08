@@ -31,14 +31,6 @@ const DuplicatePackageDrawerContent: React.FC<DuplicatePackageDrawerContentProps
   children,
   ...props
 }) => {
-  if (!duplicatePackages.length) {
-    return (
-      <Space style={{ fontSize: 'inherit', ...props.buttonStyle }}>
-        <Typography.Text style={{ fontSize: 'inherit', ...props.textStyle }}>0</Typography.Text>
-      </Space>
-    );
-  }
-
   return (
     <TextDrawer
       {...props}
