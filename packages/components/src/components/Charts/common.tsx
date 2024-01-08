@@ -67,7 +67,7 @@ export const CommonExecutionEmptyTips: React.FC = () => {
               features.plugins
             </a>
           </Typography.Text> */}
-          <Typography.Text> in configuration for the Web Doctor plugin.</Typography.Text>
+          <Typography.Text> in configuration for the Rsdoctor plugin.</Typography.Text>
         </Typography.Text>
       }
       type="info"

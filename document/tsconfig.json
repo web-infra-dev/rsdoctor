@@ -7,6 +7,10 @@
     "declaration": true,
     "composite": true,
     "outDir": "dist",
+    "paths": {
+      "@zh/*": ["./docs/zh/*"],
+      "@en/*": ["./docs/en/*"],
+    }
   },
   "include": ["src", "theme"],
   "exclude": ["**/node_modules"]

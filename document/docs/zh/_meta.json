@@ -1,7 +1,12 @@
 [
   {
-    "text": "Guide",
+    "text": "指南",
     "link": "/guide/start/intro",
     "activeMatch": "/guide/"
+  },
+  {
+    "text": "配置",
+    "link": "/config/options",
+    "activeMatch": "/config/"
   }
 ]

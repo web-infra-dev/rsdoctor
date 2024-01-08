@@ -3,5 +3,10 @@
     "text": "Guide",
     "link": "/guide/start/intro",
     "activeMatch": "/guide/"
+  },
+  {
+    "text": "Config",
+    "link": "/config/options/",
+    "activeMatch": "/config/"
   }
 ]

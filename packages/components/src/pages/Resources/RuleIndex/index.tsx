@@ -71,7 +71,7 @@ export const Page: React.FC = () => {
             </Typography.Paragraph>
           </Card>
         ) : (
-          <Card title={'This page lists all the error codes emitted by the Web Doctor.'} bordered>
+          <Card title={'This page lists all the error codes emitted by the Rsdoctor.'} bordered>
             <Typography.Text>click the error code in left bar to show more details.</Typography.Text>
           </Card>
         )}
