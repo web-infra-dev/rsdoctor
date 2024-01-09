@@ -1,0 +1,137 @@
+# Options
+
+## RsdoctorRspackPlugin
+
+`RsdoctorRspackPlugin` class are exported by `@rsdoctor/rspack-plugin`, and the option is [RsdoctorRspackPluginOptions](#options-1).
+
+<Tabs>
+
+<Tab label="cjs">
+
+```js
+const { RsdoctorRspackPlugin } = require("@rsdoctor/rspack-plugin");
+
+new RsdoctorRspackPlugin({
+  /** RsdoctorRspackPluginOptions */
+});
+```
+
+</Tab>
+
+<Tab label="esm">
+
+```ts
+import { RsdoctorRspackPlugin } from "@rsdoctor/rspack-plugin";
+
+new RsdoctorRspackPlugin({
+  /** RsdoctorRspackPluginOptions */
+});
+```
+
+</Tab>
+
+</Tabs>
+
+## RsdoctorWebpackPlugin
+
+`RsdoctorWebpackPlugin` class are exported by `@rsdoctor/webpack-plugin`, and the option is [RsdoctorWebpackPluginOptions](#options-1).
+
+import { Tab, Tabs } from "@theme";
+
+<Tabs>
+
+<Tab label="cjs">
+
+```js
+const { RsdoctorWebpackPlugin } = require("@rsdoctor/webpack-plugin");
+
+new RsdoctorWebpackPlugin({
+  /** RsdoctorWebpackPluginOptions */
+});
+```
+
+</Tab>
+
+<Tab label="esm">
+
+```ts
+import { RsdoctorWebpackPlugin } from "@rsdoctor/webpack-plugin";
+
+new RsdoctorWebpackPlugin({
+  /** RsdoctorWebpackPluginOptions */
+});
+```
+
+</Tab>
+
+</Tabs>
+
+## Options
+
+**Type:** `Object`
+
+This is the options for the [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin) and [RsdoctorRspackPlugin](#rsdoctorrspackplugin). It contains these properties:
+
+- [disableClientServer](#disableclientserver)
+- [features](#features)
+
+### disableClientServer
+
+- **Type:** `boolean`
+- **Optional:** `true`
+- **Default:** `false`
+
+Whether to automatically open the Rsdoctor report page. If you do not need to view the analysis report provided by Rsdoctor in the browser, you can enable this configuration item.
+
+### features
+
+- **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **Optional:** `true`
+- **Default:** `['loader', 'plugins', 'bundle']`
+
+
+#### features values
+
+:::tip
+
+**If an "out of memory" error occurs, you can try the following:**
+1. Open the **lite** mode。
+2. Increase the node memory limit, for example: NODE_OPTIONS=--max-old-space-size=8096.
+
+- Reason: During the build process, source code information is cached, which exceeds memory. Therefore, enabling the **"lite" mode** can help alleviate the problem.
+- Difference: The difference between the "lite" mode and the normal mode is that source code information is no longer cached, only packaged code information is cached. Thus, the code analyzed on the page will also only be packaged.
+
+:::
+
+The `features` attribute is used to analyze the function switches, and the specific functional items are as follows:
+
+- **loader**: Analysis of Loader time consumption and code compilation changes, enabled by default.
+- **plugins**: Analysis of Plugins calls and time consumption, enabled by default.
+- **bundle**: Analysis of build artifacts, enabled by default.
+- **resolver**: resolver analysis, disabled by default.
+- **lite**: lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
+
+
+Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.
+
+#### features types
+
+- if the `features` is set as an `Array`, it will **open** the features which you define in this array **only**.
+- if the `features` is set as an `Object`, it will **close** the features which you set the value is `false`.
+
+
+#### RsdoctorWebpackPluginFeatures
+
+The types of `features` are as follows：
+
+import Features from '@zh/shared/features.md';
+
+<Features />
+
+#### RsdoctorRspackPluginFeatures
+
+The types of `features` are as follows：
+
+import FeaturesRspack from '@zh/shared/features-rspack.md';
+
+<FeaturesRspack />
