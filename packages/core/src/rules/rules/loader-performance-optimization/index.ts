@@ -27,8 +27,12 @@ export const rule = defineRule<typeof title, Config>(() => {
       if (extensions.length === 0) return;
 
       if (loader.length === 0) return;
+      
+      const { config } = configs.find((e) => e.name === 'webpack')! || { config: undefined } ;
 
-      const { config } = configs.find((e) => e.name === 'webpack')!;
+      if (!config) {
+        return
+      }
       const cwd = config.context || root;
 
       const nodeModulesPathRegexp = /\/node_modules\//;

@@ -1,21 +1,22 @@
-import { InternalBasePlugin } from '@rsdoctor/core/plugins';
-import { Linter } from '@rsdoctor/core/rules';
+import { InternalBasePlugin } from '../plugins';
+import { Linter } from '../../rules';
 import { DevToolError } from '@rsdoctor/utils/error';
 import { isArray, pull } from 'lodash';
-import type { Compilation, Compiler, Stats, WebpackError } from 'webpack';
+import { Plugin } from '@rsdoctor/types'
+import { WebpackError } from 'webpack';
 
-export class InternalRulesPlugin extends InternalBasePlugin<Compiler> {
+export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler> {
   public readonly name = 'rules';
 
-  public apply(compiler: Compiler) {
+  public apply(compiler: Plugin.BaseCompiler) {
     compiler.hooks.done.tapPromise(this.tapPreOptions, this.done);
   }
 
-  public done = async (stats: Stats): Promise<void> => {
+  public done = async (stats: Plugin.BaseStats): Promise<void> => {
     await this.lint(stats.compilation);
   };
 
-  protected async lint(compilation: Compilation) {
+  protected async lint(compilation: Plugin.BaseCompilation) {
     const options = this.options ?? {};
     const linter = new Linter(options.linter);
     const result = await linter.validate(this.sdk.getRuleContext({}));

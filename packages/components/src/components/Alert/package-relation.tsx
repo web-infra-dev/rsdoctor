@@ -44,9 +44,10 @@ export const PackageRelationReasons: React.FC<{
                 {data.map((e, i) => {
                   const { dependency, module, relativePath } = e!;
                   const { statements } = dependency;
-                  const { start } = module.isPreferSource
+                  const { start } = statements?.[0]?.position ? module.isPreferSource
                     ? statements[0].position.source!
-                    : statements[0].position.transformed;
+                    : statements[0].position.transformed
+                    : { start:{ line:0, column: 0 } };
                   const text = `${relativePath}:${start.line}:${start.column || 1}`;
 
                   return (

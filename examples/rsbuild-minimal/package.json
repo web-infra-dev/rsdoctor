@@ -16,14 +16,17 @@
   "license": "MIT",
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "semver6": "npm:semver@6.3.1",
+    "semver7": "npm:semver@7.5.4"
   },
   "devDependencies": {
     "@rsbuild/core": "0.2.15",
-    "@rsbuild/plugin-react":  "0.2.15",
+    "@rsbuild/plugin-react": "0.2.15",
     "@rsdoctor/rspack-plugin": "workspace:*",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/semver6": "npm:@types/semver@7.5.6",
     "typescript": "^5.3.0"
   }
 }

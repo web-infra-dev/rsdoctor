@@ -1,10 +1,11 @@
-import { Chunks } from '@rsdoctor/core/common-utils';
-import { InternalBasePlugin } from '@rsdoctor/core/plugins';
-import { Manifest } from '@rsdoctor/types';
-import type { Compilation, Compiler } from 'webpack';
+
+import { Manifest, Plugin } from '@rsdoctor/types';
+import { InternalBasePlugin } from './base';
+import { Chunks } from '@/build-utils/common';
+
 
 export class InternalBundlePlugin<
-  T extends Compiler,
+  T extends Plugin.BaseCompiler,
 > extends InternalBasePlugin<T> {
   public readonly name = 'bundle';
 
@@ -25,11 +26,11 @@ export class InternalBundlePlugin<
     return v;
   }
 
-  public thisCompilation = (compilation: Compilation) => {
+  public thisCompilation = (compilation: Plugin.BaseCompilation) => {
     // save asset content to map
     if (
       compilation.hooks.processAssets &&
-      compilation.hooks.afterOptimizeAssets
+      'afterOptimizeAssets' in compilation.hooks
     ) {
       compilation.hooks.afterOptimizeAssets.tap(
         this.tapPostOptions,
@@ -40,7 +41,18 @@ export class InternalBundlePlugin<
           });
         },
       );
-    } else {
+    } else if (compilation.hooks.processAssets)  { 
+      // This is for rspack hooks.
+      compilation.hooks.processAssets.tap( // TODO:: change to afterProcessAssets hook.
+        this.tapPostOptions,
+        () => {
+          Object.keys(compilation.assets).forEach((file) => {
+            const v = this.ensureAssetContent(file);
+            v.content = compilation.assets[file].source().toString();
+          });
+        },
+      );
+    } else if ('afterOptimizeChunkAssets' in compilation.hooks)  { 
       compilation.hooks.afterOptimizeChunkAssets.tap(
         this.tapPostOptions,
         (chunks) => {

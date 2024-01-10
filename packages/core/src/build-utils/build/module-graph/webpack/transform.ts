@@ -20,6 +20,7 @@ import {
   removeNoImportStyle,
 } from '@/build-utils/common/module-graph';
 import { hasSetEsModuleStatement } from '../parser';
+import { isFunction } from 'lodash';
 
 export interface TransformContext {
   astCache?: Map<Webpack.NormalModule, Node.Program>;
@@ -173,12 +174,12 @@ async function appendModuleData(
       ? ''
       : module.getSource().transformed.length > 0
       ? module.getSource().transformed
-      : origin.originalSource?.()?.source().toString() ?? '';
+      : isFunction(origin?.originalSource) ? origin.originalSource()?.source()?.toString() : '';
     const transformedSize = isExternalModule(origin)
       ? 0
       : module.getSize().transformedSize > 0
       ? module.getSize().transformedSize
-      : Buffer.from(transformed).byteLength;
+      : Buffer.from(transformed as string).byteLength; // TODO:: rspack
 
     module.setSource({
       transformed,
@@ -216,7 +217,7 @@ async function appendModuleData(
       origin.buildMeta?.strictHarmonyModule ?? false;
     module.meta.packageData = packageData;
 
-    if (!features?.lite) {
+    if (!features?.lite && origin?.dependencies) {
       // lite bundle Mode don't have dependency；
       // Record dependent data.
       Array.from(origin.dependencies)
@@ -244,13 +245,6 @@ export async function appendModuleGraphByCompilation(
   context?: TransformContext,
 ) {
   try {
-    // Rspack does not follow webpack graph logic, which affects tree-shaking analysis
-    if (
-      'rspackVersion' in compilation.compiler &&
-      compilation.compiler.rspackVersion
-    ) {
-      return graph;
-    }
 
     // Only webpack will execute the following logic.
     const { moduleGraph: webpackGraph, fileSystemInfo } =

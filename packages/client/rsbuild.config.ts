@@ -66,6 +66,7 @@ export default defineConfig((env) => {
     },
 
     performance: {
+      buildCache: false,
       chunkSplit: {
         strategy: 'custom',
         splitChunks: {

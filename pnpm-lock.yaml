@@ -215,6 +215,12 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      semver6:
+        specifier: npm:semver@6.3.1
+        version: /semver@6.3.1
+      semver7:
+        specifier: npm:semver@7.5.4
+        version: /semver@7.5.4
     devDependencies:
       '@rsbuild/core':
         specifier: 0.2.15
@@ -231,6 +237,9 @@ importers:
       '@types/react-dom':
         specifier: ^18
         version: 18.2.17
+      '@types/semver6':
+        specifier: npm:@types/semver@7.5.6
+        version: /@types/semver@7.5.6
       typescript:
         specifier: ^5.3.0
         version: 5.3.3
@@ -518,6 +527,9 @@ importers:
       enhanced-resolve:
         specifier: 5.12.0
         version: 5.12.0
+      fs-extra:
+        specifier: ^11.1.1
+        version: 11.2.0
       loader-utils:
         specifier: ^2.0.4
         version: 2.0.4
@@ -543,6 +555,9 @@ importers:
       '@types/bytes':
         specifier: 3.1.1
         version: 3.1.1
+      '@types/fs-extra':
+        specifier: ^11.0.2
+        version: 11.0.4
       '@types/loader-utils':
         specifier: ^2.0.5
         version: 2.0.6
@@ -6932,6 +6947,10 @@ packages:
     resolution: {integrity: sha512-MMzuxN3GdFwskAnb6fz0orFvhfqi752yjaXylr0Rp4oDg5H0Zn1IuyRhDVvYOwAXoJirx2xuS16I3WjxnAIHiQ==}
     dev: true
 
+  /@types/semver@7.5.6:
+    resolution: {integrity: sha512-dn1l8LaMea/IjDoHNd9J52uBbInB796CDffS6VdIxvqYCPSG0V0DzHp76GpaWnlhg88uYyPbXCDIowa86ybd5A==}
+    dev: true
+
   /@types/send@0.17.4:
     resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
     dependencies:
@@ -10798,6 +10817,7 @@ packages:
       graceful-fs: 4.2.11
       jsonfile: 6.1.0
       universalify: 2.0.0
+    dev: false
 
   /fs-extra@11.2.0:
     resolution: {integrity: sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==}
@@ -13875,7 +13895,7 @@ packages:
       enquirer: 2.3.6
       figures: 3.2.0
       flat: 5.0.2
-      fs-extra: 11.1.1
+      fs-extra: 11.2.0
       glob: 7.1.4
       ignore: 5.2.4
       jest-diff: 29.7.0

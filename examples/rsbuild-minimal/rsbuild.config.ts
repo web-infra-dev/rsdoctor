@@ -15,6 +15,7 @@ export default defineConfig({
     }
   },
   output: {
-    disableMinimize: false
+    disableFilenameHash: true,
+    disableMinimize: true
   }
 });
