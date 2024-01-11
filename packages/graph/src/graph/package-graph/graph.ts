@@ -193,7 +193,11 @@ export class PackageGraph implements SDK.PackageGraphInstance {
 
   getDuplicatePackages(): Package[][] {
     return unionBy(
-      Array.from(this._pkgNameMap.values()).filter((pkgs) => pkgs.length > 1),
+      Array.from(this._pkgNameMap.values())
+      .map(pkgs => {
+        return unionBy(pkgs, 'version')
+      })
+      .filter((pkgs) => pkgs.length > 1),
       (pkgs) => pkgs[0].name,
     );
   }
