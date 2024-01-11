@@ -41,9 +41,12 @@ export class InternalBundlePlugin<
           });
         },
       );
-    } else if (compilation.hooks.processAssets)  { 
+    } else if (
+      compilation.hooks.processAssets &&
+      'afterProcessAssets' in compilation.hooks
+    )  { 
       // This is for rspack hooks.
-      compilation.hooks.processAssets.tap( // TODO:: change to afterProcessAssets hook.
+      compilation.hooks.afterProcessAssets.tap(
         this.tapPostOptions,
         () => {
           Object.keys(compilation.assets).forEach((file) => {
