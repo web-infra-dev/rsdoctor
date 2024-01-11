@@ -81,8 +81,10 @@ const { RsdoctorRspackPlugin } = require("@rsdoctor/rspack-plugin");
 module.exports = {
   // ...
   plugins: [
-    process.env.ANALYZE && // It is recommended to execute the analysis plugin when ANALYZE is true, because the plugin may increase the build time.
-      new RsdoctorRspackPlugin(options),  // Details of the options are provided below. 
+    process.env.RSDOCTOR && // It is recommended to execute the analysis plugin when RSDOCTOR is true, because the plugin may increase the build time.
+      new RsdoctorRspackPlugin({
+        disableClientServer: !!process.env.DISABLE_CLIENT_SERVER,
+      }),  // Details of the plugin's options are provided below. 
   ].filter(Boolean),
 };
 ```
@@ -104,8 +106,10 @@ const { RsdoctorWebpackPlugin } = require("@rsdoctor/webpack-plugin");
 module.exports = {
   // ...
   plugins: [
-    process.env.ANALYZE && // It is recommended to execute the analysis plugin when ANALYZE is true, because the plugin may increase the build time.
-      new RsdoctorWebpackPlugin(options), // Details of the options are provided below. 
+    process.env.RSDOCTOR && // It is recommended to execute the analysis plugin when RSDOCTOR is true, because the plugin may increase the build time.
+      new RsdoctorWebpackPlugin({
+        disableClientServer: !!process.env.DISABLE_CLIENT_SERVER,
+      }), // Details of the plugin's options are provided below. 
   ].filter(Boolean),
 };
 ```
@@ -128,9 +132,11 @@ module.exports = {
   // ...
   tools: {
     bundlerChain: (chain) => {
-      if (process.env.ANALYZE) { // It is recommended to execute the analysis plugin when ANALYZE is true, because the plugin may increase the build time.
+      if (process.env.RSDOCTOR) { // It is recommended to execute the analysis plugin when RSDOCTOR is true, because the plugin may increase the build time.
         chain.plugin('rsdoctor').use(RsdoctorWebpackPlugin, [
-          options  // Details of the options are provided below. 
+          {
+            disableClientServer: !!process.env.DISABLE_CLIENT_SERVER
+          }  // Details of the plugin's options are provided below. 
         ]);
       }
     }
@@ -157,9 +163,11 @@ module.exports = {
   // ...
   tools: {
     bundlerChain: (chain) => {
-      if (process.env.ANALYZE) { // It is recommended to execute the analysis plugin when ANALYZE is true, because the plugin may increase the build time.
+      if (process.env.RSDOCTOR) { // It is recommended to execute the analysis plugin when RSDOCTOR is true, because the plugin may increase the build time.
         chain.plugin('rsdoctor').use(RsdoctorWebpackPlugin, [
-          options  // Details of the options are provided below. 
+            {
+              disableClientServer: !!process.env.DISABLE_CLIENT_SERVER
+            }  // Details of the plugin's options are provided below. 
         ]);
       }
     }

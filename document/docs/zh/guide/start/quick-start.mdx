@@ -82,8 +82,8 @@ const { RsdoctorRspackPlugin } = require("@rsdoctor/rspack-plugin");
 module.exports = {
   // ...
   plugins: [
-    process.env.ANALYZE && // 建议仅在 ANALYZE 为 true 时执行分析插件，因为插件会增加构建耗时
-      new RsdoctorRspackPlugin(options), // options 属性查看下方
+    process.env.RSDOCTOR && // 建议仅在 RSDOCTOR 为 true 时执行分析插件，因为插件会增加构建耗时
+      new RsdoctorRspackPlugin({ disableClientServer: !!process.env.DISABLE_CLIENT_SERVER }), // 插件的 options 属性查看下方
   ].filter(Boolean),
 };
 ```
@@ -104,8 +104,8 @@ const { RsdoctorWebpackPlugin } = require("@rsdoctor/webpack-plugin");
 module.exports = {
   // ...
   plugins: [
-    process.env.ANALYZE && // 建议仅在 ANALYZE 为 true 时执行分析插件，因为插件会增加构建耗时
-      new RsdoctorWebpackPlugin(options), // options 属性查看下方
+    process.env.RSDOCTOR && // 建议仅在 RSDOCTOR 为 true 时执行分析插件，因为插件会增加构建耗时
+      new RsdoctorWebpackPlugin({ disableClientServer: !!process.env.DISABLE_CLIENT_SERVER }),// 插件的 options 属性查看下方
   ].filter(Boolean),
 };
 ```
@@ -128,9 +128,11 @@ module.exports = {
   // ...
   tools: {
     bundlerChain: (chain) => {
-      if (process.env.ANALYZE) { // 建议仅在 ANALYZE 为 true 时执行分析插件，因为插件会增加构建耗时
+      if (process.env.RSDOCTOR) { // 建议仅在 RSDOCTOR 为 true 时执行分析插件，因为插件会增加构建耗时
         chain.plugin('rsdoctor').use(RsdoctorWebpackPlugin, [
-          options // options 属性查看下方
+          {
+              disableClientServer: !!process.env.DISABLE_CLIENT_SERVER, //  插件的 options 属性查看下方
+          }
         ]);
       }
     }
@@ -156,9 +158,11 @@ module.exports = {
   // ...
   tools: {
     bundlerChain: (chain) => {
-      if (process.env.ANALYZE) { // 建议仅在 ANALYZE 为 true 时执行分析插件，因为插件会增加构建耗时
+      if (process.env.RSDOCTOR) { // 建议仅在 RSDOCTOR 为 true 时执行分析插件，因为插件会增加构建耗时
         chain.plugin('rsdoctor').use(RsdoctorWebpackPlugin, [
-          options // options 属性查看下方
+          {
+            disableClientServer: !!process.env.DISABLE_CLIENT_SERVER, // 插件的 options 属性查看下方
+          }
         ]);
       }
     }
