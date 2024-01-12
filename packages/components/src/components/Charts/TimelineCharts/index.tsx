@@ -4,21 +4,9 @@ import * as echarts from 'echarts/core';
 import dayjs from 'dayjs';
 import { ChartProps, DurationMetric, ITraceEventData } from '../types';
 import { groupBy } from 'lodash-es';
+import randomColor from 'randomcolor';
 
 interface CoordSysType { x: number; y: number; width: number; height: number; } 
-
-const ColorMap = [
-  { color: '#DC2626' },
-  { color: '#FFE382' },
-  { color: '#7B66FF' },
-  { color: '#96EFFF' },
-  { color: '#E25E3E' },
-  { color: '#D0F288' },
-  { color: '#8ADAB2' },
-  { color: '#FFC5C5' },
-  { color: '#3876BF' },
-];
-
 type LoaderType = { name: string; value: number[]; itemStyle: { normal: { color: string } }; ext?: Record<string, any> };
 
 export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?: ITraceEventData[], formatterFn: Function, chartType?: string }> = memo(({ loaderData, pluginsData, formatterFn, chartType = 'normal' }) => {
@@ -36,13 +24,12 @@ export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?
 
     // Generate mock data
     loaderData.forEach(function (_loaderData, _i) {
-      const typeItem = ColorMap[_i % 9];
       data.push({
         name: _loaderData.n + ' total',
         value: [_categories.indexOf(_loaderData.n + ' total'), _loaderData.s , _loaderData.e , _loaderData.e - _loaderData.s ],
         itemStyle: {
           normal: {
-            color: typeItem.color,
+            color: randomColor(),
           },
         },
       });
@@ -54,7 +41,7 @@ export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?
           value: [_categories.indexOf(_loaderData.n), _loaderData.c[l].s , _loaderData.c[l].e , _loaderData.c[l].e  - _loaderData.c[l].s ],
           itemStyle: {
             normal: {
-              color: ColorMap[Math.round(Math.random() * (ColorMap.length - 1))].color,
+              color: randomColor(),
             },
           },
           ext: _loaderData.c[l].ext as ChartProps['loaders'][0]
@@ -84,7 +71,7 @@ export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?
           value: [i, _plugin.args.s , _plugin.args.e , _plugin.args.e - _plugin.args.s],
           itemStyle: {
             normal: {
-              color: ColorMap[Math.round(Math.random() * (ColorMap.length - 1))].color,
+              color: randomColor(),
             },
           },
           ext: _plugin
