@@ -3,5 +3,10 @@
     "type": "dir",
     "name": "start",
     "label": "快速开始"
+  },
+  {
+    "type": "dir",
+    "name": "usage",
+    "label": "功能介绍"
   }
 ]

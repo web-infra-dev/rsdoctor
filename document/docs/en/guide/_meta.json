@@ -3,5 +3,10 @@
     "type": "dir",
     "name": "start",
     "label": "Getting Started"
+  },
+  {
+    "type": "dir",
+    "name": "usage",
+    "label": "Usage"
   }
 ]
