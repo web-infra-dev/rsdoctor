@@ -13,5 +13,8 @@ export default defineConfig({
         },
       ]);
     }
+  },
+  output: {
+    disableMinimize: false
   }
 });

@@ -1,0 +1,93 @@
+# Compile Overall
+
+## Overview
+
+On the homepage of **Rsdoctor**, there is a card called `Compile Overall` that provides information about the **compilation process** of the current project. The content is shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/overall/compile-overall-1.jpg" width='400px' height="600px" style={{"margin": 'auto'}} />
+
+:::tip
+For each compilation phase, if the time data is displayed in <u>blue</u>, it means that you can <u>click to view the detailed time breakdown</u>.
+:::
+
+## Glossary
+
+The following table explains the meaning and code implementation of each phase in the card:
+
+| Phase Name                                 |  Description        | Code Implementation                  |                                                                                                                                                                                                                                                                        
+| ---------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <b><i>Bootstrap -> BeforeCompile</i></b> | Represents the time taken from project startup to before compilation starts                    | <ul><li>In `Webpack` or `Rspack` projects: Reports [process.uptime()](https://nodejs.org/dist/latest-v18.x/docs/api/process.html#processuptime) as the <b>duration</b> when **compiler.hooks.beforeCompile** is called</li></ul>                                    |
+| <b><i>Compile</i></b>                    | Represents the total time taken for the project compilation                           | <ul><li>In `Webpack` or `Rspack` projects: The <b>start time</b> is the time when **compiler.hooks.beforeCompile** is called, and the <b>end time</b> is the time when **compiler.hooks.afterCompile** is called</li></ul> |
+| <b><i>AfterCompile -> Done</i></b>       | Represents the time taken from compilation completion to the end of the entire process                 | <ul><li>In `Webpack` or `Rspack` projects: The <b>start time</b> is the time when **compiler.hooks.afterCompile** is called, and the <b>end time</b> is the time when **compiler.hooks.done** is called</li></ul>                   |
+| <b><i>Minify</i></b>                     | Represents the time taken for file compression during the compilation process in most cases | <ul><li>In `Webpack` or `Rspack` projects: Calculates the sum of the time taken for each call of **compilation.hooks.optimizeChunkAssets** and **compilation.hooks.processAssets**</li></ul>                      |
+
+## Usage Instructions
+
+### Bootstrap -> BeforeCompile Details
+
+By **clicking on the data of the `Bootstrap -> BeforeCompile` phase**, a popup will appear on the page, as shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/overall/compile-overall-boostrap.jpg" width='600px' style={{"margin": 'auto'}}/>
+
+The popup mainly contains a chart:
+
+- The **x-axis** represents **time**
+- The **y-axis** represents all the **hooks** that have been **tapped by plugins** before the **compiler.hooks.beforeCompile** is called
+- The data in the chart represents the **start and end time** of each **hook**.
+
+Hovering over a data point in the chart will display the following information in a tooltip:
+
+- **hook**: the name of the hook
+- **tap name**: the name value when [.tap](https://github.com/webpack/tapable#hookhookmap-interface) is called
+- **start**: the start time
+- **end**: the end time
+- **duration**: the duration, calculated as `end - start`
+
+### AfterCompile -> Done Details
+
+By **clicking on the data of the `AfterCompile -> Done` phase**, a popup will appear on the page, as shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/overall/compile-overall-aftercompile-1.jpg" width='600px' height="400px" style={{"margin": 'auto'}} />
+
+The popup mainly contains a data table that shows the relevant data of the calls. The field meanings are as follows:
+
+- **Plugin Tap Name**: the name value when [.tap](https://github.com/webpack/tapable#hookhookmap-interface) is called
+- **Hook**: the name of the hook
+- **calls**: the number of times the hook is called
+- **duration(total)**: the total time of all the calls
+
+Scrolling down the page will show the corresponding chart:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/overall/compile-overall-aftercompile-2.jpg" width='600px' style={{"margin": 'auto'}} />
+
+The chart shows:
+
+- The **x-axis** represents **time**
+- The **y-axis** represents all the **hooks** that have been **tapped by plugins** between **compiler.hooks.afterCompile** and **compiler.hooks.done**
+- The data in the chart represents the **start and end time** of each **hook**.
+
+Hovering over a data point in the chart will display the following information in a tooltip:
+
+- **hook**: the name of the hook
+- **tap name**: the name value when [.tap](https://github.com/webpack/tapable#hookhookmap-interface) is called
+- **start**: the start time
+- **end**: the end time
+- **duration**: the duration, calculated as `end - start`
+
+### Minify Details
+
+:::tip
+Minify details are currently not available for Rspack projects.
+:::
+
+By **clicking on the data of the `Minify` phase**, a popup will appear on the page, as shown in the following images:
+
+| <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/overall/compile-overall-minify-1.jpg" /> | <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/overall/compile-overall-minify-2.jpg" /> |
+| --------------------------- | ------------------------------- |
+
+The content in the popup has similar meanings to the previous paragraphs, so it will not be repeated here.
+
+## Reference Documentation
+
+- [**Rspack Hooks**](https://www.rspack.dev/api/plugin-api.html#beforecompile)
+- [**Webpack Hooks**](https://webpack.js.org/api/compilation-hooks/)
