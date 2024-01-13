@@ -8,5 +8,10 @@
     "text": "Config",
     "link": "/config/options/",
     "activeMatch": "/config/"
+  },
+  {
+    "text": "About",
+    "link": "/about/rules",
+    "activeMatch": "/about/"
   }
 ]

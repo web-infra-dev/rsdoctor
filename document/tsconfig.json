@@ -10,6 +10,7 @@
     "paths": {
       "@zh/*": ["./docs/zh/*"],
       "@en/*": ["./docs/en/*"],
+      "@src/*": ["./src/*"],
     }
   },
   "include": ["src", "theme"],
