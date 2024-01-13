@@ -1,0 +1,54 @@
+# Loaders 分析
+
+**Rsdoctor** 提供了 `Loader Analysis` 模块，该模块主要功能是提供的针对 **目录与文件维度** 的 Loader 统计数据，来帮助你更好的针对分析**文件夹**以及**单个文件**在 Loader 编译中的情况。
+
+## 概览
+
+首先，我们在该模块可以直接看到所有被 Loader 所处理过的文件树结构，如下图所示：
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png" width='600px' style={{"margin": 'auto'}} />
+
+可以看到在头部的**筛选搜索框**中，我们可以进行 **Loader 筛选** 与 **文件名搜索**，填入后动态展示匹配条件的文件树，可以更方便的定位我们想要查询的文件。
+
+而在下方文件树结构中，我们可以通过两种交互形式，来获得不同的数据信息，分别是
+
+- 「**点击目录**」：展示 **文件目录的 Loaders 数据**。
+
+- 「**点击文件**」：展示 **单个文件的 Loaders 详情**。
+
+在下方的段落中，会介绍对应详细的内容。
+
+## 文件目录的 Loaders 数据
+
+通过 **点击选中目录** 可以在 文件树 的右侧，看到当前**选中目录下所有 Loader 的耗时统计数据**（[**预估耗时**]() {/* TODO::: add link */}），即 `"Statistics of xxx"` 的卡片内容如下图所示：
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-table.png" width='300px' height="400px" style={{"margin": 'auto'}} />
+
+其中，我们可以获得主要的信息如下：
+
+- **单个 Loader** 在选中目录内处理的 **文件数** 和 **预估耗时**
+- **所有 Loader** 在选中目录内处理的 **文件数** 和 **预估耗时**
+
+通常来说，我们可以通过**选中 `node_modules`** 内的一些**三方库目录**，然后根据 Loader 的耗时信息，来判断我们是不是有必要要给这个目录设置 [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude)，来减少比如常见的 `babel-loader` 的处理耗时长的问题。
+
+如果是一些存在**高级 ES 语法**的 三方库 或者 **workspace** 内的包，需要根据下个段落的内容，来进行更细粒度的单文件级别的内容判断，来决策如何优化 Loader 耗时。
+
+## 单个文件的 Loaders 详情
+
+通过 **点击文件** 则会弹出一个遮罩层，其中内容组成如下：
+
+- 「**模块左侧**」：当前点击的文件 **所有执行过的 Loader 列表**以及 **Loader 编译本文件的耗时**。
+
+- 「**模块右侧**」：当前选中的 Loader **调用时**的**输入输出**和**参数数据信息**。
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-code-change.png" width='600px' style={{"margin": 'auto'}} /> 
+
+-  **参数数据信息**：点击「**show more**」或者左上角展开按钮，可查看对应参数信息。
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-options.png" width='600px' style={{"margin": 'auto'}} /> 
+
+如图所示，我们可以获得 **目标文件** 的以下信息：
+
+- **所经过的所有 Loader**
+- **[Loader Context](https://webpack.js.org/api/loaders/#the-loader-context) 上的参数数据**
+- **Loader 的输入输出**

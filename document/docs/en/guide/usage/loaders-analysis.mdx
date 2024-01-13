@@ -1,0 +1,53 @@
+# Loaders Analysis
+
+**Rsdoctor** provides the `Loader Analysis` module, which mainly provides statistics on Loaders at the **directory and file level**. It helps you analyze the compilation of **folders** and **individual files** by Loaders.
+
+## Overview
+
+Firstly, in this module, you can directly see the file tree structure of all files processed by Loaders, as shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png" width='600px' style={{"margin": 'auto'}} />
+
+In the **filter search box** at the top, you can filter Loaders and search for file names. After entering the name, the file tree dynamically displays the matching files, making it easier to locate the files you want to query.
+
+In the file tree structure below, there are two interactive forms to obtain different data information:
+
+- **Clicking on a directory**: Displays **Loader data for the file directory**.
+- **Clicking on a file**: Displays **detailed Loader information for the individual file**.
+
+The corresponding details will be explained in the following paragraphs.
+
+## Loader Data for File Directories
+
+By **clicking on a selected directory**, you can see the **time statistics of all Loaders in the selected directory** (estimated time consumption) on the right side of the file tree. The content of the "Statistics of xxx" card is shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-table.png" width='300px' height="400px" style={{"margin": 'auto'}} />
+
+Here are the main information we can obtain:
+
+- The number of **files processed** and the **estimated time consumption** for an **individual Loader** in the selected directory.
+- The number of **files processed** and the **estimated time consumption** for **all Loaders** in the selected directory.
+
+Usually, we can select some **third-party library directories** within `node_modules` and then determine whether it is necessary to set [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude) for this directory based on the Loader's time consumption information. This helps reduce the processing time of common Loaders like `babel-loader`.
+
+If it is a third-party library with **advanced ES syntax** or a package within the **workspace**, we need to make more granular decisions at the individual file level based on the content in the next paragraph to optimize Loader performance.
+
+## Loader Details for Individual Files
+
+By **clicking on a file**, a modal will appear with the following content:
+
+- "**Left section**": A list of all **executed Loaders** for the clicked file and the **time consumption** of each Loader for compiling the file.
+
+- "**Right section**": Information about the **input, output**, and **parameter data** of the selected Loader at the time of invocation.
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-code-change.png" width='600px' style={{"margin": 'auto'}} /> 
+
+- **Parameter Data**: Click on "**show more**" or the expand button in the top left corner to view the corresponding parameter information.
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-options.png" width='600px' style={{"margin": 'auto'}} /> 
+
+As shown in the image, we can obtain the following information about the **target file**:
+
+- All the Loaders it has gone through.
+- The **parameter data** on the **[Loader Context](https://webpack.js.org/api/loaders/#the-loader-context).
+- The input and output of the Loader.
