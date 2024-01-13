@@ -8,5 +8,10 @@
     "text": "配置",
     "link": "/config/options",
     "activeMatch": "/config/"
+  },
+  {
+    "text": "关于",
+    "link": "/about/rules",
+    "activeMatch": "/about/"
   }
 ]
