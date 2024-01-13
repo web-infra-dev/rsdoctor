@@ -60,7 +60,7 @@ export const CommonExecutionEmptyTips: React.FC = () => {
           <Typography.Text>make sure that you have turn on </Typography.Text>
           {/* <Typography.Text code> TODO::
             <a
-              href={`http://${tccConfig.webDoctorHost}/api/webpack-plugin.html#features`}
+              href={`http://${host}/api/webpack-plugin.html#features`}
               target="_blank"
               rel="noreferrer"
             >
