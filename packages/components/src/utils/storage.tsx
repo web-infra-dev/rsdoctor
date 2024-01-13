@@ -2,7 +2,7 @@ import type { Config } from '../config';
 import { APILoaderMode4Dev, Language, Theme, ViewMode } from '../constants';
 
 enum Keys {
-  Namespace = '__WEBDOCTOR__STORAGE__',
+  Namespace = '__RSDOCTOR__STORAGE__',
   Theme = 'THEME',
   Locale = 'LOCALE',
   ViewMode = 'VIEWMODE',
