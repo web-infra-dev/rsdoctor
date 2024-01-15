@@ -9,6 +9,8 @@ import randomColor from 'randomcolor';
 interface CoordSysType { x: number; y: number; width: number; height: number; } 
 type LoaderType = { name: string; value: number[]; itemStyle: { normal: { color: string } }; ext?: Record<string, any> };
 
+const LINE_HEIGHT = 60;
+
 export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?: ITraceEventData[], formatterFn: Function, chartType?: string }> = memo(({ loaderData, pluginsData, formatterFn, chartType = 'normal' }) => {
   const data: LoaderType[] = [];
   let categories: string[] = [];
@@ -95,11 +97,12 @@ export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?
       const categoryIndex = api.value(0);
       const start = api.coord([api.value(1), categoryIndex]);
       const end = api.coord([api.value(2), categoryIndex]);
-      const height = api.size([0, 1])[1] * 0.5;
+      const height = api.size([0, 1])[1] * 0.3;
+
       const rectShape = echarts.graphic.clipRectByRect(
         {
           x: start[0],
-          y: chartType === 'loader' ? start[1] - (categoryIndex % 2 !== 0 ? 0 : height) : start[1],
+          y: chartType === 'loader' ? start[1] - (categoryIndex % 2 !== 0 ? 0 : height * 2) : start[1],
           width: end[0] - start[0] || 5,
           height: height,
         },
@@ -123,7 +126,7 @@ export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?
         }
       );
     }
-  
+
     const option = {
       tooltip: {
         formatter: (raw: any) => { 
@@ -148,7 +151,7 @@ export const TimelineCom: React.FC<{ loaderData?: DurationMetric[]; pluginsData?
         left: 0,
         bottom: 10,
         right: 0,
-        height: categories.length > 2 ? 'auto' : chartType === 'loader' ? categories.length * 150 : categories.length * 100,
+        height: categories.length > (chartType === 'loader' ? 6 : 3) ? 'auto' : categories.length * LINE_HEIGHT,
         containLabel: true,
       },
       xAxis: {
