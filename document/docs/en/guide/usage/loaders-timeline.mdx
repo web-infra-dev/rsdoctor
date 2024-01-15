@@ -1,0 +1,48 @@
+# Loaders Timeline
+
+## Overview
+
+In the **Rsdoctor** `Loaders` submenu, specifically in the `Loaders Timeline`, we can see the **execution timeline** of all the loaders in the current project. The content is shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png" width="700" style={{"margin": 'auto'}} />
+
+## Glossary
+
+The fields in the chart on the page have the following meanings:
+
+| Term                                 | Description                                                                                  |
+| ------------------------------------ | -------------------------------------------------------------------------------------------- |
+| <b><i>files</i></b>                  | Represents the **total number of files** processed by the loader                             |
+| <b><i>files(node_modules)</i></b>    | Represents the number of files processed by the loader within `node_modules`                 |
+| <b><i>files(outside the cwd)</i></b> | Represents the number of files processed by the loader outside of the `cwd`                   |
+| <b><i>duration</i></b>               | Represents the **estimated time** taken by the loader to execute                             |
+| <b><i>start(min)</i></b>             | Represents the **earliest start time** among all the data of the loader                       |
+| <b><i>end(max)</i></b>               | Represents the **latest end time** among all the data of the loader                           |
+| <b><i>isPitch</i></b>                | Represents whether the loader execution is a [pitch](https://webpack.js.org/api/loaders/#pitching-loader) function or not |
+| <b><i>filepath</i></b>               | Represents the **file path** received by the loader                                          |
+| <b><i>start</i></b>                  | Represents the **start time** of the loader execution                                         |
+| <b><i>end</i></b>                    | Represents the **end time** of the loader execution                                           |
+
+## Usage
+
+In the **Loaders Timeline**, the **left Y-axis** represents the **loader names**, while the **top X-axis** corresponds to **time (hour:minute:second)**. We can use the zoom feature and hover over the chart to view more detailed information about loader invocations.
+
+There are two selector at the top of the page, where you can enter the **Loaders** or **Files** you want to filter, and the timeline chart will be displayed based on the filtered content.
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png" width="700" style={{"margin": 'auto'}} />
+
+### Viewing Overall Loader Information
+
+If we want to view the **summary of all data** for a single loader, we can hover over the position shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-loader-timeline.png" width="700" style={{"margin": 'auto'}} />
+
+At this point, we can see the **summary of all invocations** within a single loader (refer to the [Glossary](#glossary) for field definitions), as shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-loader-card.png" width="700" style={{"margin": 'auto'}} />
+
+### Viewing Individual Loader Invocation Information
+
+If we want to view the **information of a single invocation** for a loader, we can hover over any **colored stripe** within the position shown in the following image. At this point, we can see the **information of the current invocation** within a single loader (refer to the [Glossary](#glossary) for field definitions), as shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-loader-file.png" width="700" style={{"margin": 'auto'}} />
