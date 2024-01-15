@@ -104,12 +104,6 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
           key: BundleSize.route,
           icon: <FolderViewOutlined style={iconStyle} />,
         },
-        // TODO: Tree shaking menu
-        // includes(enableRoutes, Manifest.DoctorManifestClientRoutes.TreeShaking) && {
-        //   label: t(TreeShakingConstants.name),
-        //   key: TreeShakingConstants.route,
-        //   icon: <ShakeOutlined style={iconStyle} />,
-        // },
       ].filter((e) => Boolean(e)) as MenuProps['items'],
     });
   }
@@ -131,7 +125,7 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
     />
   );
 
-  if (items.length <= 2) {
+  if (items.length <= 3) {
     return <Col>{MenuComponent}</Col>;
   }
 

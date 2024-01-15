@@ -1,22 +1,40 @@
 {
-  "name": "@example/doctor-rspack-minimal",
+  "name": "@example/rsdoctor-rspack-cra-ts",
+  "version": "0.1.1",
   "private": true,
-  "version": "1.0.0",
   "scripts": {
     "dev": "ENABLE_CLIENT_SERVER=true NODE_ENV=development rspack serve",
     "build": "ENABLE_CLIENT_SERVER=false NODE_ENV=production rspack build",
     "build:analysis": "ENABLE_CLIENT_SERVER=true NODE_ENV=production rspack build"
   },
   "dependencies": {
+    "@arco-design/web-react": "^2.58.3",
+    "@svgr/webpack": "^8.1.0",
+    "classnames": "^2.5.1",
+    "css-loader": "^6.9.0",
+    "less-loader": "^11.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@rsdoctor/rspack-plugin": "workspace:*",
-    "@rspack/plugin-react-refresh": "0.4.5",
     "@rspack/cli": "0.4.5",
     "@rspack/core": "0.4.5",
+    "@rspack/plugin-react-refresh": "0.4.5",
     "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.8"
+    "@types/react-dom": "^18.0.8",
+    "web-vitals": "^2.1.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

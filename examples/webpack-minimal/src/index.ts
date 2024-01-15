@@ -2,6 +2,7 @@ import { Instance } from 'chalk';
 import { highlight } from './utils';
 import { getHtmlText } from './html';
 import { key6 } from './utils2';
+import "./style.css";
 
 const print = new Instance();
 
