@@ -8,5 +8,10 @@
     "type": "dir",
     "name": "usage",
     "label": "Usage"
+  },
+  {
+    "type": "dir",
+    "name": "topic",
+    "label": "Topic"
   }
 ]
