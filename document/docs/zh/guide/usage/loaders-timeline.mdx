@@ -1,0 +1,49 @@
+# Loaders 时序图
+
+## 功能概览
+
+
+我们在 **Rsdoctor** 内 `Loaders` 的二级菜单 `Loaders Timeline` 中，可以看到当前项目中所有 Loader 的**执行时序图**，其内容如下图所示：
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png" width="700" style={{"margin": 'auto'}} />
+
+## 名词释义
+
+页面中图表内的字段含义如下：
+
+| 名词                                 | 描述说明                                                                                     |
+| ------------------------------------ | -------------------------------------------------------------------------------------------- |
+| <b><i>files</i></b>                  | 代表 Loader 处理的**文件总数**                                                               |
+| <b><i>files(node_modules)</i></b>    | 代表 Loader 处理 `node_modules` 内的文件数量                                                 |
+| <b><i>files(outside the cwd)</i></b> | 代表 Loader 处理 `cwd` 之外的文件数量                                                        |
+| <b><i>duration</i></b>               | 代表 Loader 执行的**预估耗时**                                                               |
+| <b><i>start(min)</i></b>             | 代表 Loader 所有数据中的**最小开始时间**                                                     |
+| <b><i>end(max)</i></b>               | 代表该 Loader 所有数据中的**最大结束时间**                                                   |
+| <b><i>isPitch</i></b>                | 代表 Loader 本次执行是否为 [pitch](https://webpack.js.org/api/loaders/#pitching-loader) 函数 |
+| <b><i>filepath</i></b>               | 代表 Loader 所接收的**文件路径**                                                             |
+| <b><i>start</i></b>                  | 代表 Loader 本次执行的**开始时间**                                                           |
+| <b><i>end</i></b>                    | 代表 Loader 本次执行的**结束时间**                                                           |
+
+## 使用说明
+
+在 **Loader 时序图** 中，图表内的**左侧 Y 轴**代表了 **Loader 名称**，**顶部 X 轴**则对应了**时间 (时:分:秒)**，我们可以通过图表内的缩放，以及鼠标悬浮去查看更详细的 Loader 调用信息。
+
+页面顶部有两个筛选框，可以输入想要筛选的 **Loaders** 或 **Files**，时序图就是根据筛选的内容进行展示。
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png" width="700" style={{"margin": 'auto'}} />
+
+### 查看 Loader 总信息
+
+我们如果想要查看单个 Loader 所有数据的**调用信息汇总**，可以通过**鼠标悬浮**到如下图所示的位置：
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-loader-timeline.png" width="700" style={{"margin": 'auto'}} />
+
+此时，我们就可以看到单个 Loader 内的所有调用信息汇总（字段释义详见[名词释义](#名词释义)），如下图所示：
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-loader-card.png" width="700" style={{"margin": 'auto'}} />
+
+### 查看单个 Loader 调用信息
+
+我们如果想要查看单个 Loader 的**单次调用信息**，可以通过**鼠标悬浮**到如下图所示位置内的**任意一个色彩条纹**上，此时，我们就可以看到单个 Loader 内的**本次调用信息**（字段释义详见[名词释义](#名词释义)），如下图所示：
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-loader-file.png" width="700" style={{"margin": 'auto'}} />

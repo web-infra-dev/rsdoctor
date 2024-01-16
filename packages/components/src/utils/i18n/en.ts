@@ -3,7 +3,7 @@ const en = {
   Overall: 'Overall',
   'Compile Analysis': 'Compile Analysis',
   LoadersAnalysis: 'Loaders Analysis',
-  'Loaders Overall': 'Loaders Overall',
+  'Loaders Timeline': 'Loaders Timeline',
   'Loaders Analysis': 'Loaders Analysis',
   PluginsAnalysis: 'Plugins Analysis',
   ModuleResolve: 'Module Resolve',
