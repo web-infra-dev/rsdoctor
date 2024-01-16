@@ -1,5 +1,6 @@
 import './App.css';
-import './button.css';
+import './semver';
+import './semver7';
 
 const App = () => {
   return (

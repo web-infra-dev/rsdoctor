@@ -43,7 +43,7 @@ export function useViewMode() {
 }
 
 export function useManifest(url: string) {
-  const [manifest, setManifest] = useState<Manifest.DoctorManifestWithShardingFiles>();
+  const [manifest, setManifest] = useState<Manifest.RsdoctorManifestWithShardingFiles>();
 
   useEffect(() => {
     fetchManifest(url).then((res) => {

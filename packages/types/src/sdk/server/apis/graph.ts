@@ -1,6 +1,6 @@
 import { API } from './index';
 import { ModuleData, ModuleGraphData } from '../../module';
-import { DoctorClientAssetsSummary } from '../../../client';
+import { RsdoctorClientAssetsSummary } from '../../../client';
 import {
   AssetData,
   ChunkData,
@@ -9,7 +9,7 @@ import {
 } from '../../chunk';
 
 export interface GraphAPIResponse {
-  [API.GetAssetsSummary]: DoctorClientAssetsSummary;
+  [API.GetAssetsSummary]: RsdoctorClientAssetsSummary;
   [API.GetAssetDetails]: {
     asset: AssetData;
   } & Pick<ModuleGraphData, 'modules'> &

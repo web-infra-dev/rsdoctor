@@ -7,7 +7,7 @@ export class BaseAPI implements Manifest.ManifestDataLoader {
 
   protected dataLoader: Data.APIDataLoader;
 
-  constructor(sdk: SDK.DoctorSDKInstance, server: SDK.DoctorServerInstance) {
+  constructor(sdk: SDK.RsdoctorSDKInstance, server: SDK.RsdoctorServerInstance) {
     this.ctx = { sdk, server } as SDK.ServerAPI.APIContext;
     this.dataLoader = new Data.APIDataLoader(this);
   }
@@ -16,13 +16,13 @@ export class BaseAPI implements Manifest.ManifestDataLoader {
     return this.ctx.sdk.getManifestData();
   }
 
-  public async loadData<T extends Manifest.DoctorManifestMappingKeys>(
+  public async loadData<T extends Manifest.RsdoctorManifestMappingKeys>(
     key: T,
   ): Promise<Manifest.InferManifestDataValue<T>>;
 
   public async loadData(key: string): Promise<void>;
 
-  public async loadData(key: Manifest.DoctorManifestObjectKeys) {
+  public async loadData(key: Manifest.RsdoctorManifestObjectKeys) {
     const data = this.ctx.sdk.getStoreData();
 
     const sep = '.';

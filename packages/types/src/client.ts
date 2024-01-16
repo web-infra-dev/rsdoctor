@@ -1,9 +1,9 @@
-export enum DoctorClientUrlQuery {
+export enum RsdoctorClientUrlQuery {
   BundleDiffFiles = '__bundle_files__',
   ManifestFile = 'manifest',
 }
 
-export enum DoctorClientRoutes {
+export enum RsdoctorClientRoutes {
   Overall = '/overall',
   WebpackLoaderOverall = '/webpack/loaders/overall',
   WebpackLoaderAnalysis = '/webpack/loaders/analysis',
@@ -18,13 +18,13 @@ export enum DoctorClientRoutes {
   EmoCheck = '/emo/check',
 }
 
-export enum DoctorClientDiffState {
+export enum RsdoctorClientDiffState {
   Equal = '-',
   Up = 'UP',
   Down = 'DOWN',
 }
 
-export interface DoctorClientAssetsDiffItem {
+export interface RsdoctorClientAssetsDiffItem {
   size: {
     baseline: number;
     current: number;
@@ -34,38 +34,38 @@ export interface DoctorClientAssetsDiffItem {
     current: number;
   };
   percent: number;
-  state: DoctorClientDiffState;
+  state: RsdoctorClientDiffState;
 }
 
-export interface DoctorClientAssetsDiffResult {
+export interface RsdoctorClientAssetsDiffResult {
   all: {
-    total: DoctorClientAssetsDiffItem;
+    total: RsdoctorClientAssetsDiffItem;
   };
   js: {
-    total: DoctorClientAssetsDiffItem;
-    initial: DoctorClientAssetsDiffItem;
+    total: RsdoctorClientAssetsDiffItem;
+    initial: RsdoctorClientAssetsDiffItem;
   };
   css: {
-    total: DoctorClientAssetsDiffItem;
-    initial: DoctorClientAssetsDiffItem;
+    total: RsdoctorClientAssetsDiffItem;
+    initial: RsdoctorClientAssetsDiffItem;
   };
   imgs: {
-    total: DoctorClientAssetsDiffItem;
+    total: RsdoctorClientAssetsDiffItem;
   };
   html: {
-    total: DoctorClientAssetsDiffItem;
+    total: RsdoctorClientAssetsDiffItem;
   };
   media: {
-    total: DoctorClientAssetsDiffItem;
+    total: RsdoctorClientAssetsDiffItem;
   };
   fonts: {
-    total: DoctorClientAssetsDiffItem;
+    total: RsdoctorClientAssetsDiffItem;
   };
   /**
    * files exclude these extensions above
    */
   others: {
-    total: DoctorClientAssetsDiffItem;
+    total: RsdoctorClientAssetsDiffItem;
   };
 }
 
@@ -80,7 +80,7 @@ interface AssetInfo {
   }[];
 }
 
-export interface DoctorClientAssetsSummary {
+export interface RsdoctorClientAssetsSummary {
   all: {
     total: AssetInfo;
   };

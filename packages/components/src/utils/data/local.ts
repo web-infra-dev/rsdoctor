@@ -11,14 +11,14 @@ export class LocalServerDataLoader extends BaseDataLoader {
     return true;
   }
 
-  public async loadData<T extends keyof Manifest.DoctorManifestData>(
+  public async loadData<T extends keyof Manifest.RsdoctorManifestData>(
     key: T,
-  ): Promise<void | Manifest.DoctorManifestData[T]>;
+  ): Promise<void | Manifest.RsdoctorManifestData[T]>;
 
   public async loadData(key: string): Promise<unknown> {
     return this.limit(key, async () => {
       const [scope, ...rest] = this.getKeys(key);
-      const data = this.getData(scope as keyof Manifest.DoctorManifestData);
+      const data = this.getData(scope as keyof Manifest.RsdoctorManifestData);
 
       if (!data) return;
 

@@ -28,13 +28,13 @@ export async function fetchShardingData(
 }
 
 export async function fetchShardingFiles(
-  data: Manifest.DoctorManifestWithShardingFiles['data'],
+  data: Manifest.RsdoctorManifestWithShardingFiles['data'],
   fetchImplement: (url: string) => Promise<string>,
-  filterKeys?: Array<keyof Manifest.DoctorManifestData>,
+  filterKeys?: Array<keyof Manifest.RsdoctorManifestData>,
 ) {
   const datas = await Promise.all(
     Object.keys(data).map(async (_key) => {
-      const key = _key as keyof Manifest.DoctorManifestData;
+      const key = _key as keyof Manifest.RsdoctorManifestData;
       const val = data[key];
       if (filterKeys?.length && filterKeys.indexOf(key) < 0) {
         return {
@@ -55,5 +55,5 @@ export async function fetchShardingFiles(
 
   return datas.reduce((t, c) =>
     Object.assign(t, c),
-  ) as Manifest.DoctorManifestData;
+  ) as Manifest.RsdoctorManifestData;
 }

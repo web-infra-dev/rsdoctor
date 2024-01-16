@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { debug } from '@rsdoctor/utils/logger';
 import { generateReport } from 'webpack-bundle-analyzer/lib/viewer';
-import { DoctorOutputFolder } from '@rsdoctor/types/dist/constants';
+import { RsdoctorOutputFolder } from '@rsdoctor/types/dist/constants';
 
 export const TileGraphReportName = 'rsdoctor-tile-graph.html';
 
@@ -35,7 +35,7 @@ export async function generateTileGraph(
   buildOutputPath: string,
 ) {
   try {
-    const tileReportHtmlDir = path.join(buildOutputPath, DoctorOutputFolder);
+    const tileReportHtmlDir = path.join(buildOutputPath, RsdoctorOutputFolder);
     if (!fs.existsSync(tileReportHtmlDir)) {
       fs.mkdirSync(tileReportHtmlDir);
     }

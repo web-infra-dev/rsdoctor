@@ -1,27 +1,27 @@
 import { PlainObject, ObjectPropertyNames } from './common';
 import { StoreData } from './sdk';
 
-export interface DoctorManifest {
-  client: DoctorManifestClient;
-  data: DoctorManifestData;
+export interface RsdoctorManifest {
+  client: RsdoctorManifestClient;
+  data: RsdoctorManifestData;
   /** current build name */
   name?: string;
   /**
    * multiple build info
    */
-  series?: DoctorManifestSeriesData[];
+  series?: RsdoctorManifestSeriesData[];
 }
 
-export interface DoctorManifestSeriesData {
+export interface RsdoctorManifestSeriesData {
   name: string;
   path: string;
   stage: number;
   origin?: string;
 }
 
-export interface DoctorManifestWithShardingFiles
-  extends Omit<DoctorManifest, 'data'> {
-  data: Record<keyof DoctorManifestData, string[] | string>;
+export interface RsdoctorManifestWithShardingFiles
+  extends Omit<RsdoctorManifest, 'data'> {
+  data: Record<keyof RsdoctorManifestData, string[] | string>;
   /**
    * local server will proxy the manifest content and inject `__LOCAL__SERVER__: true`
    */
@@ -29,13 +29,13 @@ export interface DoctorManifestWithShardingFiles
   __SOCKET__URL__?: string;
 }
 
-export interface DoctorManifestClient {
-  enableRoutes: DoctorManifestClientRoutes[];
+export interface RsdoctorManifestClient {
+  enableRoutes: RsdoctorManifestClientRoutes[];
 }
 
-export interface DoctorManifestData extends StoreData {}
+export interface RsdoctorManifestData extends StoreData {}
 
-export enum DoctorManifestClientRoutes {
+export enum RsdoctorManifestClientRoutes {
   Overall = 'Overall',
   WebpackLoaders = 'Compile.WebpackLoaders',
   ModuleResolve = 'Compile.ModuleResolve',
@@ -45,45 +45,45 @@ export enum DoctorManifestClientRoutes {
   TreeShaking = 'Bundle.TreeShaking',
 }
 
-export enum DoctorManifestClientConstant {
+export enum RsdoctorManifestClientConstant {
   WindowPropertyForManifestUrl = '__DEVTOOLS_MANIFEST_URL__',
 }
 
-export type DoctorManifestObjectKeys = NonNullable<
-  ObjectPropertyNames<DoctorManifestData>
+export type RsdoctorManifestObjectKeys = NonNullable<
+  ObjectPropertyNames<RsdoctorManifestData>
 >;
 
-export type DoctorManifestRootKeys = keyof DoctorManifestData;
+export type RsdoctorManifestRootKeys = keyof RsdoctorManifestData;
 
-export type DoctorManifestMappingKeys =
+export type RsdoctorManifestMappingKeys =
   | {
-      [K in DoctorManifestObjectKeys]: DoctorManifestData[K] extends PlainObject
-        ? DoctorManifestData[K] extends Array<unknown>
+      [K in RsdoctorManifestObjectKeys]: RsdoctorManifestData[K] extends PlainObject
+        ? RsdoctorManifestData[K] extends Array<unknown>
           ? never
-          : string extends keyof DoctorManifestData[K]
+          : string extends keyof RsdoctorManifestData[K]
           ? never
-          : keyof DoctorManifestData[K] extends string
-          ? `${K}.${keyof DoctorManifestData[K]}`
+          : keyof RsdoctorManifestData[K] extends string
+          ? `${K}.${keyof RsdoctorManifestData[K]}`
           : never
         : never;
-    }[DoctorManifestObjectKeys]
-  | DoctorManifestRootKeys;
+    }[RsdoctorManifestObjectKeys]
+  | RsdoctorManifestRootKeys;
 
 export type InferManifestDataValue<T> =
   T extends `${infer Scope}.${infer Child}`
-    ? Scope extends DoctorManifestObjectKeys
-      ? Child extends keyof DoctorManifestData[Scope]
-        ? DoctorManifestData[Scope][Child]
+    ? Scope extends RsdoctorManifestObjectKeys
+      ? Child extends keyof RsdoctorManifestData[Scope]
+        ? RsdoctorManifestData[Scope][Child]
         : never
       : never
-    : T extends DoctorManifestRootKeys
-    ? DoctorManifestData[T]
+    : T extends RsdoctorManifestRootKeys
+    ? RsdoctorManifestData[T]
     : never;
 
 export interface ManifestDataLoader {
-  loadManifest(): Promise<DoctorManifest | DoctorManifestWithShardingFiles>;
+  loadManifest(): Promise<RsdoctorManifest | RsdoctorManifestWithShardingFiles>;
   loadData: {
-    <T extends DoctorManifestMappingKeys>(
+    <T extends RsdoctorManifestMappingKeys>(
       key: T,
     ): Promise<void | InferManifestDataValue<T>>;
   };

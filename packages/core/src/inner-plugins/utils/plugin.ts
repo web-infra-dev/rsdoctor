@@ -1,10 +1,10 @@
 import type { Hook } from 'tapable';
 import type { SDK } from '@rsdoctor/types';
-import type { DoctorWebpackSDK } from '@rsdoctor/sdk';
+import type { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import { DevToolError } from '@rsdoctor/utils/error';
 
 export function reportPluginData(
-  sdk: DoctorWebpackSDK,
+  sdk: RsdoctorWebpackSDK,
   hook: string,
   tapName: string,
   start: number,
@@ -36,7 +36,7 @@ export function reportPluginData(
 }
 
 export function interceptPluginHook(
-  sdk: DoctorWebpackSDK,
+  sdk: RsdoctorWebpackSDK,
   name: string,
   hook: Hook<any, any>,
 ) {

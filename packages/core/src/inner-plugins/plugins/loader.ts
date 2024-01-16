@@ -34,7 +34,7 @@ export class InternalLoaderPlugin<
 
     // add loader page to client
     this.sdk.addClientRoutes([
-      Manifest.DoctorManifestClientRoutes.WebpackLoaders,
+      Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
     ]);
   };
 

@@ -6,7 +6,7 @@ import { fetchManifest, changeOrigin } from '../../utils';
 
 export const BuilderSelect: React.FC = () => {
   const [buildName, setBuildName] = useState('');
-  const [series, setSeries] = useState<Manifest.DoctorManifestSeriesData[]>([]);
+  const [series, setSeries] = useState<Manifest.RsdoctorManifestSeriesData[]>([]);
 
   useEffect(() => {
     fetchManifest().then(({ name, series }) => {
@@ -41,7 +41,7 @@ export const BuilderSelect: React.FC = () => {
             if (item.origin) {
               location.href = changeOrigin(item.origin);
             } else {
-              console.error('No DoctorManifestSeriesData.origin')
+              console.error('No RsdoctorManifestSeriesData.origin')
             }
           }
         }}

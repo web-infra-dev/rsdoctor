@@ -13,13 +13,13 @@ export interface DiffCardProps extends Pick<DiffCardContentProps, 'formatter'> {
 }
 
 export interface DiffCardContentProps {
-  data: Client.DoctorClientAssetsDiffItem;
+  data: Client.RsdoctorClientAssetsDiffItem;
   formatter?(v: number, target: 'baseline' | 'current'): number | string | React.ReactNode;
 }
 
 export interface PercentProps {
   percent: number;
-  state: Client.DoctorClientDiffState;
+  state: Client.RsdoctorClientDiffState;
   fontSize?: React.CSSProperties['fontSize'];
 }
 
@@ -39,7 +39,7 @@ export const Percent: React.FC<PercentProps> = ({ percent, state, fontSize = 14 
   if (_percent > 0) {
     const percentText = `${_percent}`;
 
-    if (state === Client.DoctorClientDiffState.Up) {
+    if (state === Client.RsdoctorClientDiffState.Up) {
       return (
         <Typography.Text strong style={{ fontSize, color: Color.Red }}>
           +{percentText}%
@@ -47,7 +47,7 @@ export const Percent: React.FC<PercentProps> = ({ percent, state, fontSize = 14 
       );
     }
 
-    if (state === Client.DoctorClientDiffState.Down) {
+    if (state === Client.RsdoctorClientDiffState.Down) {
       return (
         <Typography.Text strong style={{ fontSize, color: Color.Green }}>
           -{percentText}%

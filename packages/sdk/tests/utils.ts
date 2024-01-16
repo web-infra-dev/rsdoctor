@@ -4,11 +4,11 @@ import { Common, SDK } from '@rsdoctor/types';
 import { request } from 'http';
 import { tmpdir } from 'os';
 import path from 'path';
-import { DoctorWebpackSDK } from '../src/sdk';
+import { RsdoctorWebpackSDK } from '../src/sdk';
 
 export interface MockSDKResponse {
-  sdk: DoctorWebpackSDK;
-  server: SDK.DoctorServerInstance;
+  sdk: RsdoctorWebpackSDK;
+  server: SDK.RsdoctorServerInstance;
   // get<T extends boolean = false>(pathname: string, toJson?: T): Promise<T extends true ? object : string>;
   get<T extends SDK.ServerAPI.API>(
     pathname: T,
@@ -34,7 +34,7 @@ export async function createSDK(
   config?: SDK.SDKOptionsType,
 ): Promise<MockSDKResponse> {
   const port = await Server.getPort(4396);
-  const sdk = new DoctorWebpackSDK({ name: 'test', root: cwd, port, config });
+  const sdk = new RsdoctorWebpackSDK({ name: 'test', root: cwd, port, config });
 
   await sdk.bootstrap();
 

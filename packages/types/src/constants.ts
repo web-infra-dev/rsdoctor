@@ -29,21 +29,21 @@ export const FontExtensions = ['.ttf', '.fnt', '.fon', '.otf'];
 
 export const MapExtensions = ['.js.map', '.ts.map', '.LICENSE.txt'];
 
-export const DoctorOutputFolder = '.rsdoctor';
+export const RsdoctorOutputFolder = '.rsdoctor';
 
-export const DoctorOutputManifest = 'manifest.json';
+export const RsdoctorOutputManifest = 'manifest.json';
 
-export const DoctorOutputManifestPath =
-  `${DoctorOutputFolder}/${DoctorOutputManifest}` as const;
+export const RsdoctorOutputManifestPath =
+  `${RsdoctorOutputFolder}/${RsdoctorOutputManifest}` as const;
 
 export const StatsFilePath = 'dist/stats.json';
 
-export const DoctorMonitorNodeBId = 'Rsdoctor';
+export const RsdoctorMonitorNodeBId = 'Rsdoctor';
 
-export const DoctorMonitorWebBId = 'Rsdoctor-Client';
+export const RsdoctorMonitorWebBId = 'Rsdoctor-Client';
 
-export const DoctorMonitorDocBId = 'Rsdoctor-Doc';
+export const RsdoctorMonitorDocBId = 'Rsdoctor-Doc';
 
-export const DoctorProcessEnvDebugKey = 'RSDOCTOR_DEBUG';
+export const RsdoctorProcessEnvDebugKey = 'RSDOCTOR_DEBUG';
 
 export const RsdoctorClientUrl = '' // TODO: rsdoctor client url

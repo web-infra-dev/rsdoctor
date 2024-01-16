@@ -10,7 +10,7 @@ import { useUrlQuery } from '../../../utils';
 export const Page: React.FC = () => {
   const query = useUrlQuery();
 
-  const defaultErrorCode = query[Rule.DoctorRuleClientConstant.UrlQueryForErrorCode] || '';
+  const defaultErrorCode = query[Rule.RsdoctorRuleClientConstant.UrlQueryForErrorCode] || '';
 
   // @ts-ignore
   const [ruleMessage, setRuleMessage] = useState<Rule.RuleMessage>(Rule.RuleErrorMap[defaultErrorCode]);

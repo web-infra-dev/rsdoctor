@@ -23,7 +23,7 @@ export class DataAPI extends BaseAPI {
       key = uri.pathname.replace(
         /^\//,
         '',
-      ) as Manifest.DoctorManifestMappingKeys;
+      ) as Manifest.RsdoctorManifestMappingKeys;
     }
 
     const data = await this.loadData(key);

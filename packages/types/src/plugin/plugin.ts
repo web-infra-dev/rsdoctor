@@ -1,4 +1,4 @@
-export interface DoctorWebpackPluginFeatures {
+export interface RsdoctorWebpackPluginFeatures {
   /**
    * turn off it if you need not to analyze the executions of webpack loaders.
    * @default true

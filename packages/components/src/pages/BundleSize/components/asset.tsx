@@ -30,7 +30,7 @@ const tagStyle = {
 };
 
 export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) => {
-  const [tab, setTab] = useState('parsedSource');
+  const [tab, setTab] = useState('source');
   const { t } = useI18n();
 
   const TAB_LAB_MAP: Record<string, string> = {
@@ -60,19 +60,18 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) =
         {(source) => {
           return (
             <>
-            { !source['source'] && !source['parsedSource'] ?
+            { !source['source'] && !source['parsedSource'] && !source['transformed'] ?
               <Empty description="No Code. Rspack builder not support code yet. And if you upload the stats.json to analysis, it's also no code to show." />
               :
               <Card
                 className="code-size-card"
                 style={{ width: '100%' }}
-                tabList={Object.keys(omitBy(source, (s) => !s)).map(k => ({ 'tab': k })).map((e) => ({
+                tabList={Object.keys(omitBy(source, (s) => !s)).map(k => ({ tab: k })).map((e) => ({
                   ...e,
                   tab: TAB_LAB_MAP[e.tab],
                   key: e.tab,
                   })
                 )}
-                activeTabKey={tab}
                 onTabChange={(v) => setTab(v)}
                 tabBarExtraContent={
                   <Popover

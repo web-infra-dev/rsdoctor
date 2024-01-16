@@ -1,8 +1,8 @@
 import { Manifest } from '@rsdoctor/types';
-import { DoctorSlaveSDK } from './slave';
+import { RsdoctorSlaveSDK } from './slave';
 
-export class DoctorSDKController {
-  readonly slaves: DoctorSlaveSDK[] = [];
+export class RsdoctorSDKController {
+  readonly slaves: RsdoctorSlaveSDK[] = [];
 
   public root = '';
 
@@ -24,7 +24,7 @@ export class DoctorSDKController {
 
   getSeriesData(serverUrl = false) {
     return this.slaves.map((item) => {
-      const data: Manifest.DoctorManifestSeriesData = {
+      const data: Manifest.RsdoctorManifestSeriesData = {
         name: item.name,
         path: item.diskManifestPath,
         stage: item.stage,
@@ -42,8 +42,8 @@ export class DoctorSDKController {
     name,
     stage,
     extraConfig,
-  }: Omit<ConstructorParameters<typeof DoctorSlaveSDK>[0], 'controller'>) {
-    const slave = new DoctorSlaveSDK({
+  }: Omit<ConstructorParameters<typeof RsdoctorSlaveSDK>[0], 'controller'>) {
+    const slave = new RsdoctorSlaveSDK({
       name,
       stage,
       controller: this,

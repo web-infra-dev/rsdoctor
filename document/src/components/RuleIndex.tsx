@@ -61,7 +61,7 @@ const RuleIndex = () => {
       ) : (
         <div className={`${styles.card} ${styles.content}`}>
           <div className={styles["card-header"]}>
-            This page lists all the error codes emitted by the Web Doctor.
+            This page lists all the error codes emitted by the Rsdoctor.
           </div>
           <div className={styles["card-body"]}>
             click the error code in left bar to show more details.

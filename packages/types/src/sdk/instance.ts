@@ -7,19 +7,19 @@ import { PluginData } from './plugin';
 import { BuilderStoreData, EMOStoreData, StoreData } from './result';
 import { ModuleGraphInstance } from './module';
 import {
-  DoctorManifestClientRoutes,
-  DoctorManifestWithShardingFiles,
+  RsdoctorManifestClientRoutes,
+  RsdoctorManifestWithShardingFiles,
 } from '../manifest';
 import { SummaryData } from './summary';
 import { RuntimeContext, RuntimeContextOptions } from './context';
-import { DoctorServerInstance } from './server';
+import { RsdoctorServerInstance } from './server';
 import { PlainObject } from '../common';
 import { EmoCheckData } from '../emo';
 import { Hooks } from './hooks';
 
 export type WriteStoreOptionsType = {};
-export interface DoctorBuilderSDKInstance extends DoctorSDKInstance {
-  readonly server: DoctorServerInstance;
+export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
+  readonly server: RsdoctorServerInstance;
   /** Report configuration information */
   reportConfiguration(config: Configuration): void;
   /** Report error message */
@@ -39,15 +39,15 @@ export interface DoctorBuilderSDKInstance extends DoctorSDKInstance {
   /** report tile graph like webpack bundle analyzer data */
   reportTileHtml(data: string): void;
 
-  getClientRoutes(): DoctorManifestClientRoutes[];
-  addClientRoutes(routes: DoctorManifestClientRoutes[]): void;
+  getClientRoutes(): RsdoctorManifestClientRoutes[];
+  addClientRoutes(routes: RsdoctorManifestClientRoutes[]): void;
 
   /** Application error modification */
   applyErrorFix(id: number): Promise<void>;
   /** Get build result data */
   getStoreData(): BuilderStoreData;
   /** Get build resource entry file */
-  getManifestData(): DoctorManifestWithShardingFiles;
+  getManifestData(): RsdoctorManifestWithShardingFiles;
   /** Get rule context */
   getRuleContext(options: RuntimeContextOptions): RuntimeContext;
   /** Get SourceMap from cache */
@@ -58,12 +58,12 @@ export interface DoctorBuilderSDKInstance extends DoctorSDKInstance {
   clear(): void;
 }
 
-export interface DoctorEMOSDKInstance extends DoctorSDKInstance {
+export interface RsdoctorEMOSDKInstance extends RsdoctorSDKInstance {
   reportEmoData(data: EmoCheckData): void;
   getStoreData(): EMOStoreData;
 }
 
-export interface DoctorSDKInstance {
+export interface RsdoctorSDKInstance {
   readonly name: string;
   readonly root: string;
   readonly extraConfig: SDKOptionsType | undefined;
@@ -106,10 +106,10 @@ export type SDKOptionsType = { disableTOSUpload: boolean };
 /**
  * @deprecated
  */
-export interface DoctorSdkInstance {
+export interface RsdoctorSdkInstance {
   readonly name: string;
   readonly root: string;
-  readonly server: DoctorServerInstance;
+  readonly server: RsdoctorServerInstance;
 
   /**
    * folder of manifest
@@ -159,8 +159,8 @@ export interface DoctorSdkInstance {
   /** Report sourceMap data */
   reportSourceMap(data: RawSourceMap): void;
 
-  getClientRoutes(): DoctorManifestClientRoutes[];
-  addClientRoutes(routes: DoctorManifestClientRoutes[]): void;
+  getClientRoutes(): RsdoctorManifestClientRoutes[];
+  addClientRoutes(routes: RsdoctorManifestClientRoutes[]): void;
 
   /**
    * write the manifest to a folder
@@ -176,7 +176,7 @@ export interface DoctorSdkInstance {
   getStoreData(): StoreData;
 
   /** Get build resource entry file */
-  getManifestData(): DoctorManifestWithShardingFiles;
+  getManifestData(): RsdoctorManifestWithShardingFiles;
 
   /** Get rule context */
   getRuleContext(options: RuntimeContextOptions): RuntimeContext;

@@ -9,26 +9,26 @@ export abstract class BaseDataLoader implements Manifest.ManifestDataLoader {
   protected disposed = false;
 
   protected shardingDataMap = new Map<
-    keyof Manifest.DoctorManifestData | string,
-    Promise<Manifest.DoctorManifestData[keyof Manifest.DoctorManifestData]>
+    keyof Manifest.RsdoctorManifestData | string,
+    Promise<Manifest.RsdoctorManifestData[keyof Manifest.RsdoctorManifestData]>
   >();
 
-  constructor(protected manifest: Manifest.DoctorManifestWithShardingFiles) {
+  constructor(protected manifest: Manifest.RsdoctorManifestWithShardingFiles) {
     this.loader = new Data.APIDataLoader(this);
     console.log('[DataLoader] isLocal: ', this.isLocal());
   }
 
-  protected get<T extends keyof Manifest.DoctorManifestWithShardingFiles>(
+  protected get<T extends keyof Manifest.RsdoctorManifestWithShardingFiles>(
     key: T,
-  ): void | Manifest.DoctorManifestWithShardingFiles[T] {
+  ): void | Manifest.RsdoctorManifestWithShardingFiles[T] {
     if (!this.manifest) return;
     return this.manifest[key];
   }
 
-  protected getData<T extends keyof Manifest.DoctorManifestData>(
+  protected getData<T extends keyof Manifest.RsdoctorManifestData>(
     key: T,
     scope: 'data' = 'data',
-  ): void | Manifest.DoctorManifestWithShardingFiles['data'][T] {
+  ): void | Manifest.RsdoctorManifestWithShardingFiles['data'][T] {
     const data = this.get(scope);
     if (!data) return;
     return data[key];
@@ -65,7 +65,7 @@ export abstract class BaseDataLoader implements Manifest.ManifestDataLoader {
 
   abstract loadData<T extends string, P>(key: T): Promise<void | P>;
 
-  abstract loadData<T extends Manifest.DoctorManifestMappingKeys>(
+  abstract loadData<T extends Manifest.RsdoctorManifestMappingKeys>(
     key: T,
   ): Promise<void | Manifest.InferManifestDataValue<T>>;
 

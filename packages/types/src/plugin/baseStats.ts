@@ -1,3 +1,5 @@
+import { BaseCompilation } from "./baseCompiler";
+
 interface StatsOptionsObj {
   all?: boolean;
   preset?: 'normal' | 'none' | 'verbose' | 'errors-only' | 'errors-warnings';
@@ -114,6 +116,8 @@ interface StatsChunk {
 
 export declare class Stats {
   constructor(statsJson: any);
+
+  compilation: BaseCompilation;
 
   hasErrors(): boolean;
 
