@@ -71,9 +71,9 @@ const config = {
 			}
 		]
 	},
-	optimization: {
-		minimize: false // Disabling minification because it takes too long on CI
-	},
+	resolve: {
+    extensions: ['...', '.tsx', '.ts', '.jsx'], // "..." means to extend from the default extensions
+  },
 	plugins: [
 		new ReactRefreshPlugin(),
 		new RsdoctorRspackPlugin({
