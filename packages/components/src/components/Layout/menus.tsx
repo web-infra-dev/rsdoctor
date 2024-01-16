@@ -22,7 +22,7 @@ import { CompileName } from './constants';
 
 const BuilderSwitchName = 'builder-switcher';
 
-const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.DoctorManifestClientRoutes[] }> = (
+const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.RsdoctorManifestClientRoutes[] }> = (
   props,
 ) => {
   const { t } = useI18n();
@@ -44,7 +44,7 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
 
   console.log('enableRoutes: ', enableRoutes);
 
-  if (includes(enableRoutes, Manifest.DoctorManifestClientRoutes.Overall)) {
+  if (includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.Overall)) {
     items.push({
       label: t(OverallConstants.name),
       key: OverallConstants.route,
@@ -62,7 +62,7 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
       key: CompileName,
       icon: <ToolOutlined style={iconStyle} />,
       children: [
-        includes(enableRoutes, Manifest.DoctorManifestClientRoutes.WebpackLoaders) && {
+        includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.WebpackLoaders) && {
           label: <Typography.Text style={{ marginRight: 8 }}>{t(LoaderFiles.name)}</Typography.Text>,
           key: LoaderFiles.route,
           icon: <img src={WebpackIcon} alt="" style={{ ...iconStyle, width: 16 }} />,
@@ -79,12 +79,12 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
             },
           ],
         },
-        includes(enableRoutes, Manifest.DoctorManifestClientRoutes.ModuleResolve) && {
+        includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.ModuleResolve) && {
           label: t(ModuleResolve.name),
           key: ModuleResolve.route,
           icon: <NodeIndexOutlined style={iconStyle} />,
         },
-        includes(enableRoutes, Manifest.DoctorManifestClientRoutes.WebpackPlugins) && {
+        includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.WebpackPlugins) && {
           label: t(PluginsAnalyze.name),
           key: PluginsAnalyze.route,
           icon: <ApiOutlined style={iconStyle} />,
@@ -99,7 +99,7 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Doctor
       key: BundleSize.name,
       icon: <span style={customIconStyle}>📦</span>,
       children: [
-        includes(enableRoutes, Manifest.DoctorManifestClientRoutes.BundleSize) && {
+        includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.BundleSize) && {
           label: t(BundleSize.name),
           key: BundleSize.route,
           icon: <FolderViewOutlined style={iconStyle} />,

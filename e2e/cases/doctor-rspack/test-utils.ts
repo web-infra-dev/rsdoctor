@@ -1,12 +1,12 @@
-import { DoctorRspackPluginOptions } from '@rsdoctor/core/types';
+import { RsdoctorRspackPluginOptions } from '@rsdoctor/core/types';
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import { Linter } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
 import { tmpdir } from 'os';
 import path from 'path';
 
-export function createDoctorPlugin<T extends Linter.ExtendRuleData[]>(
-  options: DoctorRspackPluginOptions<T>,
+export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
+  options: RsdoctorRspackPluginOptions<T>,
 ) {
   const plugin = new RsdoctorRspackPlugin({
     ...options,

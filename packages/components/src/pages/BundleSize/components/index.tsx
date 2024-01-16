@@ -41,7 +41,7 @@ const largeCardBodyHeight = 800;
 interface WebpackModulesOverallProps {
   cwd: string;
   errors: SDK.ErrorsData;
-  summary: Client.DoctorClientAssetsSummary;
+  summary: Client.RsdoctorClientAssetsSummary;
   entryPoints: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetEntryPoints>;
 }
 

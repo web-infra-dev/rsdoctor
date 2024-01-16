@@ -1,5 +1,5 @@
 import type { AsyncSeriesHook } from 'tapable';
-import { DoctorManifestWithShardingFiles } from '../manifest';
+import { RsdoctorManifestWithShardingFiles } from '../manifest';
 
 /**
  * sdk hooks map
@@ -8,7 +8,7 @@ export interface Hooks {
   afterSaveManifest: AsyncSeriesHook<
     [
       {
-        manifestWithShardingFiles: DoctorManifestWithShardingFiles;
+        manifestWithShardingFiles: RsdoctorManifestWithShardingFiles;
         manifestDiskPath: string;
       },
     ]

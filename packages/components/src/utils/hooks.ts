@@ -10,7 +10,7 @@ import './i18n';
 import { Language } from '../constants';
 import { setLocaleToStorage } from './storage';
 
-const route = Client.DoctorClientRoutes.RuleIndex;
+const route = Client.RsdoctorClientRoutes.RuleIndex;
 
 export const useI18n: typeof useTranslation = () => {
   const { i18n, ...rest } = useTranslation();
@@ -39,7 +39,7 @@ export function useRuleIndexNavigate(code: string, link?: string | undefined) {
   }
 
   return () => {
-    navigate(`${route}?${Rule.DoctorRuleClientConstant.UrlQueryForErrorCode}=${code}`);
+    navigate(`${route}?${Rule.RsdoctorRuleClientConstant.UrlQueryForErrorCode}=${code}`);
   };
 }
 
@@ -66,16 +66,16 @@ export function useLoading(defaultLoading = false) {
   };
 }
 
-export function useProjectRootByManifest(manifest: Manifest.DoctorManifest) {
+export function useProjectRootByManifest(manifest: Manifest.RsdoctorManifest) {
   return manifest.data.root;
 }
 
-export function useHashByManifest(manifest: Manifest.DoctorManifest) {
+export function useHashByManifest(manifest: Manifest.RsdoctorManifest) {
   return manifest.data.hash;
 }
 
 export function useCloudManifestUrlByManifest(
-  manifest: Manifest.DoctorManifest | Manifest.DoctorManifestWithShardingFiles | void,
+  manifest: Manifest.RsdoctorManifest | Manifest.RsdoctorManifestWithShardingFiles | void,
 ) {
   if (!manifest) return;
 }
@@ -91,7 +91,7 @@ function ensurePlainObject<T extends object>(value: T, dfts: T): T {
   return dfts;
 }
 
-export function useChunkGraphByManifest(manifest: Manifest.DoctorManifest) {
+export function useChunkGraphByManifest(manifest: Manifest.RsdoctorManifest) {
   const prev = manifest.data.chunkGraph;
   if (typeof prev === 'string') {
     manifest.data.chunkGraph = JSON.parse(Algorithm.decompressText(prev as string));
@@ -100,14 +100,14 @@ export function useChunkGraphByManifest(manifest: Manifest.DoctorManifest) {
   return ensurePlainObject(manifest.data.chunkGraph, { assets: [], chunks: [], entrypoints: [] });
 }
 
-export function useConfigOutputFileNameByManifest(manifest: Manifest.DoctorManifest) {
+export function useConfigOutputFileNameByManifest(manifest: Manifest.RsdoctorManifest) {
   if (typeof manifest.data.configs?.[0]?.config?.output?.filename === 'string') {
     return manifest.data.configs?.[0]?.config?.output?.filename;
   }
   return '';
 }
 
-export function useModuleGraphByManifest(manifest: Manifest.DoctorManifest) {
+export function useModuleGraphByManifest(manifest: Manifest.RsdoctorManifest) {
   const prev = manifest.data.moduleGraph;
   if (typeof prev === 'string') {
     manifest.data.moduleGraph = JSON.parse(Algorithm.decompressText(prev as string));
@@ -139,7 +139,7 @@ export function useModuleGraph(moduleGraph: SDK.ModuleGraphData) {
   });
 }
 
-export function usePackageGraphByManifest(manifest: Manifest.DoctorManifest) {
+export function usePackageGraphByManifest(manifest: Manifest.RsdoctorManifest) {
   const prev = manifest.data.packageGraph;
   if (typeof prev === 'string') {
     manifest.data.packageGraph = JSON.parse(Algorithm.decompressText(prev as string));
@@ -150,7 +150,7 @@ export function usePackageGraphByManifest(manifest: Manifest.DoctorManifest) {
   });
 }
 
-export function useUniqModulesByManifest(manifest: Manifest.DoctorManifest) {
+export function useUniqModulesByManifest(manifest: Manifest.RsdoctorManifest) {
   return uniqBy(useModuleGraphByManifest(manifest).modules, (e) => e.path);
 }
 
@@ -158,7 +158,7 @@ export function useUniqModules(modules: SDK.ModuleData[]) {
   return uniqBy(modules, (e) => e.path);
 }
 
-export function useErrorsByManifest(manifest: Manifest.DoctorManifest) {
+export function useErrorsByManifest(manifest: Manifest.RsdoctorManifest) {
   const prev = manifest.data.errors;
   if (typeof prev === 'string') {
     manifest.data.errors = JSON.parse(Algorithm.decompressText(prev as string));
@@ -166,19 +166,19 @@ export function useErrorsByManifest(manifest: Manifest.DoctorManifest) {
   return manifest.data.errors || [];
 }
 
-export function useBundleAlertsByManifest(manifest: Manifest.DoctorManifest) {
+export function useBundleAlertsByManifest(manifest: Manifest.RsdoctorManifest) {
   const errors = useErrorsByManifest(manifest);
   return useBundleAlertsByErrors(errors);
 }
 
 export function useDuplicatePackagesByManifest(
-  manifest: Manifest.DoctorManifest,
+  manifest: Manifest.RsdoctorManifest,
 ): Rule.PackageRelationDiffRuleStoreData[] {
   const alerts = useBundleAlertsByManifest(manifest);
   return useDuplicatePackagesByErrors(alerts);
 }
 
-export function useCompileAlertsByErrors(errors: Manifest.DoctorManifestData['errors']) {
+export function useCompileAlertsByErrors(errors: Manifest.RsdoctorManifestData['errors']) {
   if (isArray(errors)) {
     return errors.filter(
       (e) => e.category === Rule.RuleMessageCategory.Compile && e.code !== Rule.RuleMessageCodeEnumerated.Overlay,
@@ -187,7 +187,7 @@ export function useCompileAlertsByErrors(errors: Manifest.DoctorManifestData['er
   return [];
 }
 
-export function useBundleAlertsByErrors(errors: Manifest.DoctorManifestData['errors']) {
+export function useBundleAlertsByErrors(errors: Manifest.RsdoctorManifestData['errors']) {
   if (isArray(errors)) {
     return errors.filter(
       (e) => e.category === Rule.RuleMessageCategory.Bundle && e.code !== Rule.RuleMessageCodeEnumerated.Overlay,
@@ -196,7 +196,7 @@ export function useBundleAlertsByErrors(errors: Manifest.DoctorManifestData['err
   return [];
 }
 
-export function useDuplicatePackagesByErrors(errors: Manifest.DoctorManifestData['errors']) {
+export function useDuplicatePackagesByErrors(errors: Manifest.RsdoctorManifestData['errors']) {
   return useBundleAlertsByErrors(errors).filter(
     (e) => e.code === Rule.RuleErrorMap.E1001.code,
   ) as Rule.PackageRelationDiffRuleStoreData[];

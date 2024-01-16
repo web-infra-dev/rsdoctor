@@ -1,3 +1,3 @@
 export * from './webpack';
 
-export { DoctorWebpackSDK as DoctorSDK } from './webpack';
+export { RsdoctorWebpackSDK as RsdoctorSDK } from './webpack';

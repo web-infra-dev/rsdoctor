@@ -4,7 +4,7 @@ import { compileByRspack } from '@rsbuild/test-helper';
 import { Compiler } from '@rspack/core';
 import os from 'os';
 import path from 'path';
-import { createDoctorPlugin } from './test-utils';
+import { createRsdoctorPlugin } from './test-utils';
 
 async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
   const file = path.resolve(__dirname, './fixtures/a.js');
@@ -20,7 +20,7 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
     },
     plugins: [
       // @ts-ignore
-      createDoctorPlugin({}),
+      createRsdoctorPlugin({}),
       {
         name: tapName,
         apply(compiler: Compiler) {

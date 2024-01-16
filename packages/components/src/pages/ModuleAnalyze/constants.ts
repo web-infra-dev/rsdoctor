@@ -2,7 +2,7 @@ import { Client } from '@rsdoctor/types';
 
 export const name = 'Module Analyze';
 
-export const route = Client.DoctorClientRoutes.ModuleAnalyze;
+export const route = Client.RsdoctorClientRoutes.ModuleAnalyze;
 
 export enum DevtoolsRuleClientConstant {
   UrlQueryForModuleAnalyze = 'curModuleId',

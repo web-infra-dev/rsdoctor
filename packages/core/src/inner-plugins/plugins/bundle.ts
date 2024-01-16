@@ -74,8 +74,8 @@ export class InternalBundlePlugin<
     Chunks.assetsContents(this.map, this.scheduler.chunkGraph);
 
     this.sdk.addClientRoutes([
-      Manifest.DoctorManifestClientRoutes.ModuleGraph,
-      Manifest.DoctorManifestClientRoutes.BundleSize,
+      Manifest.RsdoctorManifestClientRoutes.ModuleGraph,
+      Manifest.RsdoctorManifestClientRoutes.BundleSize,
     ]);
   };
 }

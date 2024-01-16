@@ -1,11 +1,11 @@
-import { DoctorWebpackSDK } from '@rsdoctor/sdk';
+import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 
-let sdk: DoctorWebpackSDK;
+let sdk: RsdoctorWebpackSDK;
 
-export function setSDK(t: DoctorWebpackSDK) {
+export function setSDK(t: RsdoctorWebpackSDK) {
   sdk = t;
 }
 
-export function getSDK(): DoctorWebpackSDK {
+export function getSDK(): RsdoctorWebpackSDK {
   return sdk;
 }

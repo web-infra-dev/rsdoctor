@@ -16,7 +16,7 @@ const App: React.FC = (): React.ReactElement => {
 
   const [state, setState] = useState<Constants.PageState>(PageState.Success);
   const [viewMode, setViewMode] = useState<Config['viewMode']>({ ...defaultConfig.viewMode });
-  const [manifest, setManifest] = useState<Manifest.DoctorManifest>();
+  const [manifest, setManifest] = useState<Manifest.RsdoctorManifest>();
   const [theme, setTheme] = useState(defaultConfig.theme);
 
   if (state === Constants.PageState.Fail) {

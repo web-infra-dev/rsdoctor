@@ -1,12 +1,12 @@
 import path from 'path';
 import { SDK } from '@rsdoctor/types';
-import { DoctorWebpackSDK } from '../sdk';
-import { DoctorSlaveServer } from './server';
-import type { DoctorSDKController } from './controller';
+import { RsdoctorWebpackSDK } from '../sdk';
+import { RsdoctorSlaveServer } from './server';
+import type { RsdoctorSDKController } from './controller';
 
 let id = 1;
 
-interface DoctorSlaveSDKOptions {
+interface RsdoctorSlaveSDKOptions {
   name: string;
   /**
    * use to sort for display in the client page.
@@ -15,21 +15,21 @@ interface DoctorSlaveSDKOptions {
    */
   stage?: number;
   extraConfig?: SDK.SDKOptionsType;
-  controller: DoctorSDKController;
+  controller: RsdoctorSDKController;
 }
 
-export class DoctorSlaveSDK extends DoctorWebpackSDK {
+export class RsdoctorSlaveSDK extends RsdoctorWebpackSDK {
   id: number;
 
   public readonly stage: number;
 
-  private parent: DoctorSDKController;
+  private parent: RsdoctorSDKController;
 
   private uploadPieces!: Promise<void>;
 
   private finishUploadPieceSwitch!: () => void;
 
-  constructor({ name, stage, controller, extraConfig }: DoctorSlaveSDKOptions) {
+  constructor({ name, stage, controller, extraConfig }: RsdoctorSlaveSDKOptions) {
     super({ name, root: controller.root });
 
     const lastSdk = controller.getLastSdk();
@@ -39,7 +39,7 @@ export class DoctorSlaveSDK extends DoctorWebpackSDK {
     this.stage = typeof stage === 'number' ? stage : 1;
     this.extraConfig = extraConfig;
     this.parent = controller;
-    this.server = new DoctorSlaveServer(this, port);
+    this.server = new RsdoctorSlaveServer(this, port);
     this.setName(name);
     this.clearSwitch();
   }

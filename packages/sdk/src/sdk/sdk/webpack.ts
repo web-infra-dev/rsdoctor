@@ -4,18 +4,18 @@ import { File } from '@rsdoctor/utils/build';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/graph';
 import { debug } from '@rsdoctor/utils/logger';
-import { DoctorServer } from '../server';
-import { DoctorFakeServer } from '../server/fakeServer';
-import { DoctorWebpackSDKOptions } from './types';
+import { RsdoctorServer } from '../server';
+import { RsdoctorFakeServer } from '../server/fakeServer';
+import { RsdoctorWebpackSDKOptions } from './types';
 import { SDKCore } from './core';
 
-export class DoctorWebpackSDK<
-    T extends DoctorWebpackSDKOptions = DoctorWebpackSDKOptions,
+export class RsdoctorWebpackSDK<
+    T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
   >
   extends SDKCore<T>
-  implements SDK.DoctorBuilderSDKInstance
+  implements SDK.RsdoctorBuilderSDKInstance
 {
-  public server: DoctorServer;
+  public server: RsdoctorServer;
 
   public extraConfig: SDK.SDKOptionsType | undefined;
 
@@ -48,27 +48,27 @@ export class DoctorWebpackSDK<
   constructor(options: T) {
     super(options);
     this.server = options.noServer
-      ? new DoctorFakeServer(this, undefined)
-      : new DoctorServer(this, options.port);
+      ? new RsdoctorFakeServer(this, undefined)
+      : new RsdoctorServer(this, options.port);
     this.type = options.type || SDK.ToDataType.Normal;
     this.extraConfig = options.config;
   }
 
   async bootstrap() {
-    debug(() => `${Date.now()}`, '[DoctorWebpackSDK][bootstrap start]');
+    debug(() => `${Date.now()}`, '[RsdoctorWebpackSDK][bootstrap start]');
     this.server && (await this.server.bootstrap());
     await super.bootstrap();
     debug(
       () => `${Date.now()} ${this.server.origin}`,
-      '[DoctorWebpackSDK][bootstrap end]',
+      '[RsdoctorWebpackSDK][bootstrap end]',
     );
   }
 
   async dispose() {
-    debug(() => `${Date.now()}`, '[DoctorWebpackSDK][dispose start]');
+    debug(() => `${Date.now()}`, '[RsdoctorWebpackSDK][dispose start]');
     this.server && (await this.server.dispose());
     await super.dispose();
-    debug(() => `${Date.now()}`, '[DoctorWebpackSDK][dispose end]');
+    debug(() => `${Date.now()}`, '[RsdoctorWebpackSDK][dispose end]');
   }
 
   async applyErrorFix(id: number) {
@@ -399,9 +399,9 @@ export class DoctorWebpackSDK<
     };
   }
 
-  public getManifestData(): Manifest.DoctorManifestWithShardingFiles {
+  public getManifestData(): Manifest.RsdoctorManifestWithShardingFiles {
     const dataValue = this.getStoreData();
-    const data: Manifest.DoctorManifestWithShardingFiles = {
+    const data: Manifest.RsdoctorManifestWithShardingFiles = {
       client: {
         enableRoutes: this.getClientRoutes(),
       },
@@ -416,7 +416,7 @@ export class DoctorWebpackSDK<
         }
 
         return t;
-      }, {} as Common.PlainObject) as unknown as Manifest.DoctorManifestWithShardingFiles['data'],
+      }, {} as Common.PlainObject) as unknown as Manifest.RsdoctorManifestWithShardingFiles['data'],
       __LOCAL__SERVER__: true,
       __SOCKET__URL__: this.server.socketUrl,
     };

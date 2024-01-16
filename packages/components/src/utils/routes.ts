@@ -1,18 +1,18 @@
 import { includes } from 'lodash-es';
 import { Manifest } from '@rsdoctor/types';
 
-export function hasCompile(routes: Manifest.DoctorManifestClientRoutes[]) {
+export function hasCompile(routes: Manifest.RsdoctorManifestClientRoutes[]) {
   const hasCompile =
-    includes(routes, Manifest.DoctorManifestClientRoutes.WebpackLoaders) ||
-    includes(routes, Manifest.DoctorManifestClientRoutes.ModuleResolve) ||
-    includes(routes, Manifest.DoctorManifestClientRoutes.WebpackPlugins);
+    includes(routes, Manifest.RsdoctorManifestClientRoutes.WebpackLoaders) ||
+    includes(routes, Manifest.RsdoctorManifestClientRoutes.ModuleResolve) ||
+    includes(routes, Manifest.RsdoctorManifestClientRoutes.WebpackPlugins);
   return hasCompile;
 }
 
-export function hasBundle(routes: Manifest.DoctorManifestClientRoutes[]) {
+export function hasBundle(routes: Manifest.RsdoctorManifestClientRoutes[]) {
   const hasBundle =
-    includes(routes, Manifest.DoctorManifestClientRoutes.BundleSize) ||
-    includes(routes, Manifest.DoctorManifestClientRoutes.ModuleGraph) ||
-    includes(routes, Manifest.DoctorManifestClientRoutes.TreeShaking);
+    includes(routes, Manifest.RsdoctorManifestClientRoutes.BundleSize) ||
+    includes(routes, Manifest.RsdoctorManifestClientRoutes.ModuleGraph) ||
+    includes(routes, Manifest.RsdoctorManifestClientRoutes.TreeShaking);
   return hasBundle;
 }

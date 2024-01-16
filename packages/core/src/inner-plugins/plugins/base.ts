@@ -1,10 +1,10 @@
-import type { DoctorWebpackSDK } from '@rsdoctor/sdk';
+import type { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import type { Linter, Plugin } from '@rsdoctor/types';
 import {
   internalPluginTapPostOptions,
   internalPluginTapPreOptions,
 } from '../constants';
-import type { InternalPlugin, DoctorPluginInstance } from '@/types';
+import type { InternalPlugin, RsdoctorPluginInstance } from '@/types';
 
 export abstract class InternalBasePlugin<T extends Plugin.BaseCompiler>
   implements InternalPlugin<T, Linter.ExtendRuleData[]>
@@ -12,7 +12,7 @@ export abstract class InternalBasePlugin<T extends Plugin.BaseCompiler>
   abstract name: string;
 
   constructor(
-    public readonly scheduler: DoctorPluginInstance<
+    public readonly scheduler: RsdoctorPluginInstance<
       Plugin.BaseCompiler,
       Linter.ExtendRuleData[]
     >,
@@ -24,7 +24,7 @@ export abstract class InternalBasePlugin<T extends Plugin.BaseCompiler>
     return this.scheduler.options;
   }
 
-  get sdk(): DoctorWebpackSDK {
+  get sdk(): RsdoctorWebpackSDK {
     return this.scheduler.sdk;
   }
 

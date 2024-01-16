@@ -152,7 +152,7 @@ export function getInitialAssetsSizeInfo(
 export function getAssetsDiffResult(
   baseline: SDK.ChunkGraphData,
   current: SDK.ChunkGraphData,
-): Client.DoctorClientAssetsDiffResult {
+): Client.RsdoctorClientAssetsDiffResult {
   return {
     all: {
       total: diffAssetsByExtensions(baseline, current),
@@ -231,11 +231,11 @@ export function diffSize(bSize: number, cSize: number) {
     ? 100
     : (Math.abs(cSize - bSize) / bSize) * 100;
 
-  const state: Client.DoctorClientDiffState = isEqual
-    ? Client.DoctorClientDiffState.Equal
+  const state: Client.RsdoctorClientDiffState = isEqual
+    ? Client.RsdoctorClientDiffState.Equal
     : bSize > cSize
-    ? Client.DoctorClientDiffState.Down
-    : Client.DoctorClientDiffState.Up;
+    ? Client.RsdoctorClientDiffState.Down
+    : Client.RsdoctorClientDiffState.Up;
 
   return { percent, state };
 }
@@ -245,7 +245,7 @@ export function diffAssetsByExtensions(
   current: SDK.ChunkGraphData,
   filterOrExtensions?: FilterFunctionOrExtensions,
   isInitial = false,
-): Client.DoctorClientAssetsDiffItem {
+): Client.RsdoctorClientAssetsDiffItem {
   const { size: bSize, count: bCount } = isInitial
     ? getInitialAssetsSizeInfo(baseline.assets, baseline.chunks, {
         filterOrExtensions,
@@ -293,7 +293,7 @@ export function getAssetsSummary(
   assets: SDK.AssetData[],
   chunks: SDK.ChunkData[],
   options: Omit<GetAssetsOptions, 'filterOrExtensions'> = {},
-): Client.DoctorClientAssetsSummary {
+): Client.RsdoctorClientAssetsSummary {
   const jsOpt: GetAssetsOptions = {
     ...options,
     filterOrExtensions: Constants.JSExtension,

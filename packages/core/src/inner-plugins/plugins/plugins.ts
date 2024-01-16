@@ -23,7 +23,7 @@ export class InternalPluginsPlugin<
 
     // add plugins page to client
     this.sdk.addClientRoutes([
-      Manifest.DoctorManifestClientRoutes.WebpackPlugins,
+      Manifest.RsdoctorManifestClientRoutes.WebpackPlugins,
     ]);
   };
 

@@ -12,7 +12,7 @@ import { Router } from './router';
 import * as APIs from './apis';
 export * from './utils';
 
-export class DoctorServer implements SDK.DoctorServerInstance {
+export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   private _server!: Common.PromiseReturnType<typeof Server.createServer>;
 
   public port: number;
@@ -24,7 +24,7 @@ export class DoctorServer implements SDK.DoctorServerInstance {
   private _router: Router;
 
   constructor(
-    protected sdk: SDK.DoctorBuilderSDKInstance,
+    protected sdk: SDK.RsdoctorBuilderSDKInstance,
     port = Server.defaultPort,
   ) {
     assert(typeof port === 'number');
@@ -33,7 +33,7 @@ export class DoctorServer implements SDK.DoctorServerInstance {
     this._router = new Router({ sdk, server: this, apis: Object.values(APIs) });
   }
 
-  public get app(): SDK.DoctorServerInstance['app'] {
+  public get app(): SDK.RsdoctorServerInstance['app'] {
     return this._server.app;
   }
 
@@ -135,20 +135,20 @@ export class DoctorServer implements SDK.DoctorServerInstance {
     });
   }
 
-  public get: SDK.DoctorServerInstance['get'] = (route, cb) => {
+  public get: SDK.RsdoctorServerInstance['get'] = (route, cb) => {
     const { app } = this;
     app.use(route, this.wrapNextHandleFunction('GET', cb));
     return app;
   };
 
-  public post: SDK.DoctorServerInstance['post'] = (route, cb) => {
+  public post: SDK.RsdoctorServerInstance['post'] = (route, cb) => {
     const { app } = this;
     app.use(route, this.wrapNextHandleFunction('POST', cb));
     return app;
   };
 
   public getClientUrl(
-    route: Client.DoctorClientRoutes,
+    route: Client.RsdoctorClientRoutes,
     baselineUrl: string,
     currentUrl: string,
   ): string;
@@ -159,10 +159,10 @@ export class DoctorServer implements SDK.DoctorServerInstance {
     const url = `${this.origin}${SDK.ServerAPI.API.EntryHtml}`;
 
     switch (route) {
-      case Client.DoctorClientRoutes.BundleDiff: {
+      case Client.RsdoctorClientRoutes.BundleDiff: {
         const [baseline, current] = args as string[];
         const qs = Bundle.getBundleDiffPageQueryString([baseline, current]);
-        return `${url}${qs}#${Client.DoctorClientRoutes.BundleDiff}`;
+        return `${url}${qs}#${Client.RsdoctorClientRoutes.BundleDiff}`;
       }
       default:
         return url;
@@ -170,7 +170,7 @@ export class DoctorServer implements SDK.DoctorServerInstance {
   }
 
   public async openClientPage(
-    route: Client.DoctorClientRoutes,
+    route: Client.RsdoctorClientRoutes,
     baselineUrl: string,
     currentUrl: string,
   ): Promise<void>;
@@ -179,7 +179,7 @@ export class DoctorServer implements SDK.DoctorServerInstance {
 
   public async openClientPage(...args: unknown[]) {
     const url = this.getClientUrl(
-      ...(args as Parameters<SDK.DoctorServerInstance['getClientUrl']>),
+      ...(args as Parameters<SDK.RsdoctorServerInstance['getClientUrl']>),
     );
     await open(url);
     console.log(`Rsdoctor analyze run at: ${url}`);

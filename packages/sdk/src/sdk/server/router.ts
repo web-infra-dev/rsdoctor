@@ -4,8 +4,8 @@ import { BaseAPI } from './apis/base';
 
 interface RouterOptions {
   apis: Common.Constructor<typeof BaseAPI>[];
-  sdk: SDK.DoctorBuilderSDKInstance;
-  server: SDK.DoctorServerInstance;
+  sdk: SDK.RsdoctorBuilderSDKInstance;
+  server: SDK.RsdoctorServerInstance;
 }
 
 export class Router {

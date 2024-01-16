@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
-import { DoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
+import { RsdoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
 import { SDK } from '@rsdoctor/types';
 import { compileByWebpack5 } from '@rsbuild/test-helper';
 import os from 'os';
@@ -41,7 +41,7 @@ test('webpack5', async () => {
   const { modules } = await webpack5(mode);
 
   expect(modules!.length).toEqual(1);
-  expect(getSDK()).toBeInstanceOf(DoctorWebpackSDK);
+  expect(getSDK()).toBeInstanceOf(RsdoctorWebpackSDK);
 
   const { loader } = getSDK().getStoreData();
 
@@ -69,7 +69,7 @@ test('test async', async () => {
   const { modules } = await webpack5(mode);
 
   expect(modules!.length).toEqual(1);
-  expect(getSDK()).toBeInstanceOf(DoctorWebpackSDK);
+  expect(getSDK()).toBeInstanceOf(RsdoctorWebpackSDK);
 
   const { loader } = getSDK().getStoreData();
 
@@ -97,7 +97,7 @@ test('test callback', async () => {
   const { modules } = await webpack5(mode);
 
   expect(modules!.length).toEqual(1);
-  expect(getSDK()).toBeInstanceOf(DoctorWebpackSDK);
+  expect(getSDK()).toBeInstanceOf(RsdoctorWebpackSDK);
 
   const { loader } = getSDK().getStoreData();
 
@@ -126,7 +126,7 @@ test('test pitch', async () => {
   const { modules } = await webpack5(mode, pitchResult);
 
   expect(modules!.length).toEqual(1);
-  expect(getSDK()).toBeInstanceOf(DoctorWebpackSDK);
+  expect(getSDK()).toBeInstanceOf(RsdoctorWebpackSDK);
 
   const { loader } = getSDK().getStoreData();
 

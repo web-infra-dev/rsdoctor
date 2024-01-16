@@ -1,6 +1,6 @@
 import {
-  DoctorManifestClientRoutes,
-  DoctorManifestData,
+  RsdoctorManifestClientRoutes,
+  RsdoctorManifestData,
 } from '../../../manifest';
 import { API, APIExtends } from './index';
 
@@ -10,10 +10,10 @@ export interface ProjectAPIResponse {
     port: number;
   };
   [API.GetProjectInfo]: Pick<
-    DoctorManifestData,
+    RsdoctorManifestData,
     'hash' | 'root' | 'pid' | 'summary' | 'configs' | 'envinfo' | 'errors'
   >;
-  [API.GetClientRoutes]: DoctorManifestClientRoutes[];
+  [API.GetClientRoutes]: RsdoctorManifestClientRoutes[];
   [APIExtends.GetCompileProgess]: {
     percentage: number;
     message: string;

@@ -7,10 +7,10 @@ import process from 'process';
 import { AsyncSeriesHook } from 'tapable';
 import { debug } from '@rsdoctor/utils/logger';
 import { transformDataUrls } from '../utils';
-import { DoctorSDKOptions, DataWithUrl } from './types';
+import { RsdoctorSDKOptions, DataWithUrl } from './types';
 
-export abstract class SDKCore<T extends DoctorSDKOptions>
-  implements SDK.DoctorSDKInstance
+export abstract class SDKCore<T extends RsdoctorSDKOptions>
+  implements SDK.RsdoctorSDKInstance
 {
   protected _name: string;
 
@@ -28,21 +28,21 @@ export abstract class SDKCore<T extends DoctorSDKOptions>
 
   protected _envinfo: SDK.EnvInfo = {} as SDK.EnvInfo;
 
-  private _clientRoutes: Set<Manifest.DoctorManifestClientRoutes> = new Set([
-    Manifest.DoctorManifestClientRoutes.Overall,
+  private _clientRoutes: Set<Manifest.RsdoctorManifestClientRoutes> = new Set([
+    Manifest.RsdoctorManifestClientRoutes.Overall,
   ]);
 
   private _outputDir: string;
 
   public diskManifestPath = '';
 
-  public cloudData?: Manifest.DoctorManifestWithShardingFiles;
+  public cloudData?: Manifest.RsdoctorManifestWithShardingFiles;
 
   constructor({ name, root }: T) {
     this._name = name;
     this.root = root;
     this.pid = process.pid;
-    this._outputDir = path.join(this.root, Constants.DoctorOutputFolder);
+    this._outputDir = path.join(this.root, Constants.RsdoctorOutputFolder);
   }
 
   get outputDir() {
@@ -103,7 +103,7 @@ export abstract class SDKCore<T extends DoctorSDKOptions>
     return [...this._clientRoutes];
   }
 
-  public addClientRoutes(routes: Manifest.DoctorManifestClientRoutes[]) {
+  public addClientRoutes(routes: Manifest.RsdoctorManifestClientRoutes[]) {
     routes.forEach((route) => {
       this._clientRoutes.add(route);
     });
@@ -116,7 +116,7 @@ export abstract class SDKCore<T extends DoctorSDKOptions>
     _options?: SDK.WriteStoreOptionsType,
   ) {
     const { outputDir } = this;
-    const manifest = path.resolve(outputDir, Constants.DoctorOutputManifest);
+    const manifest = path.resolve(outputDir, Constants.RsdoctorOutputManifest);
 
     this.diskManifestPath = manifest;
     await File.fse.ensureDir(outputDir);

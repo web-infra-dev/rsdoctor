@@ -11,7 +11,7 @@ export interface DataWithUrl {
     | string;
 }
 
-export interface DoctorSDKOptions {
+export interface RsdoctorSDKOptions {
   name: string;
   root: string;
 }
@@ -19,7 +19,7 @@ export interface DoctorSDKOptions {
 /**
  * sdk options for builder.
  */
-export interface DoctorBuilderSDK extends DoctorSDKOptions {
+export interface RsdoctorBuilderSDK extends RsdoctorSDKOptions {
   type?: SDK.ToDataType;
   /**
    * port for client server
@@ -29,6 +29,6 @@ export interface DoctorBuilderSDK extends DoctorSDKOptions {
   config?: SDK.SDKOptionsType;
 }
 
-export interface DoctorWebpackSDKOptions extends DoctorBuilderSDK {}
+export interface RsdoctorWebpackSDKOptions extends RsdoctorBuilderSDK {}
 
-export interface DoctorEMOSDKOptions extends DoctorSDKOptions {}
+export interface RsdoctorEMOSDKOptions extends RsdoctorSDKOptions {}

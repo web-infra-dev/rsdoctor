@@ -1,20 +1,20 @@
 import { PlainObject } from '../../common';
 import { connect } from '../../thirdparty';
-import { DoctorClientRoutes } from '../../client';
+import { RsdoctorClientRoutes } from '../../client';
 import { API } from './apis';
 
 export * as ServerAPI from './apis';
 
 interface ClientUrlFunctionWithRouteDefined<T> {
   (
-    route: DoctorClientRoutes.BundleDiff,
+    route: RsdoctorClientRoutes.BundleDiff,
     baselineUrl: string,
     currentUrl: string,
   ): T;
   (route?: 'homepage'): T;
 }
 
-export interface DoctorServerInstance {
+export interface RsdoctorServerInstance {
   readonly app: connect.Server;
 
   readonly port: number;
