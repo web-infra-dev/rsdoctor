@@ -1,4 +1,4 @@
-import { Compiler } from '@rspack/core';
+import { Compiler, Configuration, RuleSetRule } from '@rspack/core';
 import fs from 'fs';
 import { ModuleGraph } from '@rsdoctor/graph';
 import { DoctorWebpackSDK } from '@rsdoctor/sdk';
@@ -7,6 +7,7 @@ import {
   InternalLoaderPlugin,
   InternalPluginsPlugin,
   InternalSummaryPlugin,
+  makeRulesSerializable,
   normalizeUserConfig,
   setSDK,
 } from '@rsdoctor/core/plugins';
@@ -25,6 +26,7 @@ import {
 import path from 'path';
 import { TransUtils } from '@rsdoctor/core/common-utils';
 import { pluginTapName, pluginTapPostOptions } from './constants';
+import { cloneDeep } from 'lodash';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements DoctorPluginInstance<Compiler, Rules>
@@ -84,10 +86,22 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   }
 
   public done = async (compiler: Compiler): Promise<void> => {
+    
     const json = compiler.compilation
-      .getStats()
-      .toJson() as Plugin.StatsCompilation; // TODO: if this type can compatible?
+    .getStats()
+    .toJson({
+      all: false,
+      version: true,
+      chunks: true,
+      modules: true,
+      chunkModules: true,
+      assets: true,
+      builtAt: true,
+      chunkRelations: true,
+    }) as Plugin.StatsCompilation; // TODO: if this type can compatible?
     const { chunkGraph, moduleGraph } = await TransUtils.transStats(json);
+
+    this.getRspackConfig(compiler, json.rspackVersion || '');
 
     await this.sdk.bootstrap();
     this.sdk.reportChunkGraph(chunkGraph);
@@ -122,6 +136,35 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       await this.sdk.dispose();
     }
   };
+
+  public getRspackConfig(compiler: Compiler, version: string) {
+    if (compiler.isChild()) return;
+    const { plugins, infrastructureLogging, ...rest } = compiler.options;
+    const _rest = cloneDeep(rest);
+
+    makeRulesSerializable(_rest.module.defaultRules as RuleSetRule[]);
+    makeRulesSerializable(_rest.module.rules as RuleSetRule[]);
+
+    const configuration = {
+      ..._rest,
+      plugins: plugins.map((e) => e?.constructor.name),
+    } as unknown as Configuration;
+
+    // save webpack configuration to sdk
+    this.sdk.reportConfiguration({
+      name: 'rspack',
+      version: version || 'unknown',
+      config: configuration,
+    });
+
+    this.sdk.setOutputDir(
+      path.resolve(compiler.outputPath, `./${Constants.DoctorOutputFolder}`),
+    );
+
+    if (configuration.name) {
+      this.sdk.setName(configuration.name);
+    }
+  }
 
   public ensureModulesChunksGraphApplied() {
     // empty functions
