@@ -81,7 +81,7 @@ export type StatsChunkGroup = JSStatsChunkGroup;
 export interface StatsCompilation {
   version?: string;
   /** rspack version */
-  // rspackVersion?: string;
+  rspackVersion?: string;
   name?: string;
   hash?: string;
   time?: number;

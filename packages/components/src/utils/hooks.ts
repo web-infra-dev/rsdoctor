@@ -204,7 +204,7 @@ export function useDuplicatePackagesByErrors(errors: Manifest.DoctorManifestData
 
 export function useWebpackConfigurationByConfigs(configs: SDK.ConfigData = []) {
   if (isArray(configs)) {
-    return configs.find((e) => e.name === 'webpack');
+    return configs.find((e) => (e.name === 'webpack' ||  e.name === 'rspack'));
   }
   return null;
 }

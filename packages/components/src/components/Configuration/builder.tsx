@@ -17,12 +17,12 @@ export const WebpackConfigurationViewerBase: React.FC<WebpackConfigurationViewer
   defaultKeys,
   configs,
 }) => {
-  const webpackData = useWebpackConfigurationByConfigs(configs || []);
+  const builderConfigData = useWebpackConfigurationByConfigs(configs || []);
 
-  if (!webpackData) return null;
+  if (!builderConfigData) return null;
 
-  const { config: webpack, version } = webpackData;
-  const keys = Object.keys(webpack);
+  const { config, version, name } = builderConfigData;
+  const keys = Object.keys(config);
   const [selectKeys, setSelectKeys] = useState<string[]>(defaultKeys || keys);
 
   return (
@@ -55,9 +55,9 @@ export const WebpackConfigurationViewerBase: React.FC<WebpackConfigurationViewer
         </Space>
         <Divider />
         <ReactJson
-          name={version && version !== 'unknown' ? `webpack@${version}` : `webpack.config`}
+          name={version && version !== 'unknown' ? `${name}@${version}` : `webpack.config`}
           theme="monokai"
-          src={selectKeys.length === 0 ? webpack : pick(webpack, selectKeys)}
+          src={selectKeys.length === 0 ? config : pick(config, selectKeys)}
           displayDataTypes={false}
           displayObjectSize={false}
         />
