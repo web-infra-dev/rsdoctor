@@ -13,7 +13,7 @@ import cardStyles from './card.module.scss';
 import numberButtonStyles from './NumberButton.module.scss';
 import { NumberButton } from './NumberButton';
 
-const getFilesWithDrawer = (data: Client.DoctorClientAssetsSummary['all']['total']): JSX.Element => {
+const getFilesWithDrawer = (data: Client.RsdoctorClientAssetsSummary['all']['total']): JSX.Element => {
   const fileStructures = useMemo(() => {
     if (!data.files.length) return [];
     return createFileStructures({
@@ -58,7 +58,7 @@ const getFilesWithDrawer = (data: Client.DoctorClientAssetsSummary['all']['total
   );
 };
 
-const BundleDescriptions = ({ res }: { res: Client.DoctorClientAssetsSummary }) => {
+const BundleDescriptions = ({ res }: { res: Client.RsdoctorClientAssetsSummary }) => {
   const items: DescriptionsProps['items'] = [
     {
       key: 'total-files-count',
@@ -157,7 +157,7 @@ export const BundleOverall: React.FC<{
                   description="Total Size"
                   numberFontSize="30px"
                   onClick={() => {
-                    navigate(Client.DoctorClientRoutes.BundleSize);
+                    navigate(Client.RsdoctorClientRoutes.BundleSize);
                   }}
                 />
               </Col>

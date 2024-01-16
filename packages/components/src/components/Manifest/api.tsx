@@ -17,7 +17,7 @@ export type InferServerAPIBody<T> = SDK.ServerAPI.InferRequestBodyType<T> extend
     };
 
 type ServerAPIProviderProps<T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends> = {
-  manifestLoader?: () => Promise<Manifest.DoctorManifestWithShardingFiles>;
+  manifestLoader?: () => Promise<Manifest.RsdoctorManifestWithShardingFiles>;
   api: T;
   children: (response: SDK.ServerAPI.InferResponseType<T>) => JSX.Element;
   fallbackComponent?: React.FC;
@@ -48,7 +48,7 @@ export const ServerAPIProvider = <T extends SDK.ServerAPI.API | SDK.ServerAPI.AP
     fallbackComponent,
   } = props;
   let promise = manifestLoader();
-  const [manifest, setManifest] = useState<Manifest.DoctorManifestWithShardingFiles>();
+  const [manifest, setManifest] = useState<Manifest.RsdoctorManifestWithShardingFiles>();
   const [state, setState] = useState(ComponentState.Pending);
   const [res, setRes] = useState({} as SDK.ServerAPI.InferResponseType<T>);
 
@@ -91,7 +91,7 @@ export const ServerAPIProvider = <T extends SDK.ServerAPI.API | SDK.ServerAPI.AP
     };
   }, [loader, api, body]);
 
-  function ensureManifest(pro: Promise<Manifest.DoctorManifestWithShardingFiles>) {
+  function ensureManifest(pro: Promise<Manifest.RsdoctorManifestWithShardingFiles>) {
     return pro
       .then((manifest) => {
         setManifest(manifest);

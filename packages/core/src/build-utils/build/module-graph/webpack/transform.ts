@@ -144,7 +144,7 @@ async function appendModuleData(
   webpackGraph: Webpack.ModuleGraph,
   graph: ModuleGraph,
   wbFs: WebpackFs,
-  features?: Plugin.DoctorWebpackPluginFeatures,
+  features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
 ) {
   const module = graph.getModuleByWebpackId(getWebpackModuleId(origin));
@@ -241,7 +241,7 @@ async function appendModuleData(
 export async function appendModuleGraphByCompilation(
   compilation: Plugin.BaseCompilation,
   graph: ModuleGraph,
-  features?: Plugin.DoctorWebpackPluginFeatures,
+  features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
 ) {
   try {

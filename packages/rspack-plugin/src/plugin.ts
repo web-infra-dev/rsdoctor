@@ -1,7 +1,7 @@
 import { Compiler, Configuration, RuleSetRule } from '@rspack/core';
 import fs from 'fs';
 import { ModuleGraph } from '@rsdoctor/graph';
-import { DoctorWebpackSDK } from '@rsdoctor/sdk';
+import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import { Chunks } from '@rsdoctor/core/build-utils';
 import {
   InternalLoaderPlugin,
@@ -15,9 +15,9 @@ import {
   InternalRulesPlugin,
 } from '@rsdoctor/core/plugins';
 import type {
-  DoctorPluginInstance,
-  DoctorPluginOptionsNormalized,
-  DoctorRspackPluginOptions,
+  RsdoctorPluginInstance,
+  RsdoctorPluginOptionsNormalized,
+  RsdoctorRspackPluginOptions,
 } from '@rsdoctor/core/types';
 import {
   Constants,
@@ -31,11 +31,11 @@ import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
-  implements DoctorPluginInstance<Compiler, Rules>
+  implements RsdoctorPluginInstance<Compiler, Rules>
 {
   public readonly name = pluginTapName;
 
-  public readonly sdk: DoctorWebpackSDK;
+  public readonly sdk: RsdoctorWebpackSDK;
 
   public _bootstrapTask!: Promise<unknown>;
 
@@ -43,11 +43,11 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   public modulesGraph: ModuleGraph;
 
-  public options: DoctorPluginOptionsNormalized<Rules>;
+  public options: RsdoctorPluginOptionsNormalized<Rules>;
 
-  constructor(options?: DoctorRspackPluginOptions<Rules>) {
+  constructor(options?: RsdoctorRspackPluginOptions<Rules>) {
     this.options = normalizeUserConfig<Rules>(options);
-    this.sdk = new DoctorWebpackSDK({
+    this.sdk = new RsdoctorWebpackSDK({
       name: pluginTapName,
       root: process.cwd(),
       type: SDK.ToDataType.Normal,
@@ -98,7 +98,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
    * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
    * @param {Compiler} compiler
    * @return {*}
-   * @memberof DoctorWebpackPlugin
+   * @memberof RsdoctorWebpackPlugin
    */
   public ensureModulesChunksGraphApplied(compiler: Compiler) {
     ensureModulesChunksGraphFn(compiler, this)
@@ -124,7 +124,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     await this.sdk.bootstrap();
 
     this.sdk.addClientRoutes([
-      ManifestType.DoctorManifestClientRoutes.Overall,
+      ManifestType.RsdoctorManifestClientRoutes.Overall,
     ]);
 
     /** Generate rspack-bundle-analyzer tile graph */
@@ -140,7 +140,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       (await this.sdk.reportTileHtml(fs.readFileSync(reportFilePath, 'utf-8')));
 
     this.sdk.setOutputDir(
-      path.resolve(compiler.outputPath, `./${Constants.DoctorOutputFolder}`),
+      path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
     );
     await this.sdk.writeStore();
     if (!this.options.disableClientServer) {
@@ -173,7 +173,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     });
 
     this.sdk.setOutputDir(
-      path.resolve(compiler.outputPath, `./${Constants.DoctorOutputFolder}`),
+      path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
     );
 
     if (configuration.name) {

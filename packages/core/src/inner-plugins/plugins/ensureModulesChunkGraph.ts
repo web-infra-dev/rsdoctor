@@ -11,16 +11,16 @@ import {
 } from '../../build-utils/common';
 import fse from 'fs-extra';
 import { internalPluginTapPreOptions } from '../constants';
-import { DoctorPluginInstance } from '@/types';
+import { RsdoctorPluginInstance } from '@/types';
 import { ModuleGraph } from '@rsdoctor/graph';
 
   /**
    * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
    * @param {Compiler} compiler
    * @return {*}
-   * @memberof DoctorWebpackPlugin
+   * @memberof RsdoctorWebpackPlugin
    */
-  export const ensureModulesChunksGraphFn = (compiler: Plugin.BaseCompiler, _this: DoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>) => {
+  export const ensureModulesChunksGraphFn = (compiler: Plugin.BaseCompiler, _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>) => {
     if (_this._modulesGraphApplied) return;
     _this._modulesGraphApplied = true;
 
@@ -93,7 +93,7 @@ import { ModuleGraph } from '@rsdoctor/graph';
    * @param {StatsCompilation} stats
    * @param {ModuleGraph} moduleGraph
    * @return {*}
-   * @memberof DoctorWebpackPlugin
+   * @memberof RsdoctorWebpackPlugin
    */
     async function getModulesInfosByStats(
       compiler: Plugin.BaseCompiler,

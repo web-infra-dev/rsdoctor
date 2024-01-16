@@ -13,7 +13,7 @@ const height = 100;
 
 interface CardProps {
   showProgress?: boolean;
-  data: Client.DoctorClientAssetsSummary['all']['total'];
+  data: Client.RsdoctorClientAssetsSummary['all']['total'];
   total: number;
   tagBgColor?: string;
 }

@@ -2,7 +2,7 @@ import { Data } from '@rsdoctor/utils/common';
 import { Manifest, SDK } from '@rsdoctor/types';
 
 interface SocketAPILoaderOptions {
-  sdk: SDK.DoctorBuilderSDKInstance;
+  sdk: SDK.RsdoctorBuilderSDKInstance;
 }
 
 export class SocketAPILoader implements Manifest.ManifestDataLoader {
@@ -16,7 +16,7 @@ export class SocketAPILoader implements Manifest.ManifestDataLoader {
     return this.options.sdk.getManifestData();
   }
 
-  public async loadData<T extends Manifest.DoctorManifestMappingKeys>(
+  public async loadData<T extends Manifest.RsdoctorManifestMappingKeys>(
     key: T,
   ): Promise<Manifest.InferManifestDataValue<T>>;
 

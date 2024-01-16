@@ -9,7 +9,7 @@ import { isDeepStrictEqual } from 'util';
 import { SocketAPILoader } from './api';
 
 interface SocketOptions {
-  sdk: SDK.DoctorBuilderSDKInstance;
+  sdk: SDK.RsdoctorBuilderSDKInstance;
   server: Server;
   port: number;
   socketOptions?: SocketServerOptions;

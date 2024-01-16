@@ -6,7 +6,7 @@ export function getBundleDiffPageQueryString(files: string[]) {
   let qs = encodeURIComponent(files.join(sep));
 
   if (qs) {
-    qs = `?${Client.DoctorClientUrlQuery.BundleDiffFiles}=${qs}`;
+    qs = `?${Client.RsdoctorClientUrlQuery.BundleDiffFiles}=${qs}`;
   }
 
   return qs;
@@ -21,11 +21,11 @@ export function getBundleDiffPageUrl(files: string[]) {
       if (search) {
         qs += `&${search.slice(1)}`;
       }
-      return `${origin}${qs}#${Client.DoctorClientRoutes.BundleDiff}`;
+      return `${origin}${qs}#${Client.RsdoctorClientRoutes.BundleDiff}`;
     }
   }
 
-  return `${qs}#${Client.DoctorClientRoutes.BundleDiff}`; // TODO: client host check
+  return `${qs}#${Client.RsdoctorClientRoutes.BundleDiff}`; // TODO: client host check
 }
 
 export function parseFilesFromBundlePageUrlQuery(queryValue: string) {

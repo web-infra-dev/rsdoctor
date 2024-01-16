@@ -26,7 +26,7 @@ export const RuleErrorMap: Record<keyof RuleErrorCodes, RuleMessage> = {
   [E1004.code]: E1004.message,
 };
 
-export enum DoctorRuleClientConstant {
+export enum RsdoctorRuleClientConstant {
   UrlQueryForErrorCode = 'code',
 }
 

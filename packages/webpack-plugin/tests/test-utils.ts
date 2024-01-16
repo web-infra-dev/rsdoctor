@@ -1,4 +1,4 @@
-import { DoctorWebpackPluginOptions } from '@rsdoctor/core/types';
+import { RsdoctorWebpackPluginOptions } from '@rsdoctor/core/types';
 import { Linter } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
 import { tmpdir } from 'os';
@@ -6,7 +6,7 @@ import path from 'path';
 import { RsdoctorWebpackPlugin } from '../src';
 
 export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
-  options: DoctorWebpackPluginOptions<T> = {},
+  options: RsdoctorWebpackPluginOptions<T> = {},
 ) {
   const plugin = new RsdoctorWebpackPlugin({
     ...options,

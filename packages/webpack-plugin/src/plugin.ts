@@ -11,13 +11,13 @@ import {
   setSDK,
 } from '@rsdoctor/core/plugins';
 import type {
-  DoctorPluginInstance,
-  DoctorPluginOptionsNormalized,
-  DoctorWebpackPluginOptions,
+  RsdoctorPluginInstance,
+  RsdoctorPluginOptionsNormalized,
+  RsdoctorWebpackPluginOptions,
 } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
-import { DoctorWebpackSDK } from '@rsdoctor/sdk';
-import { Constants, Linter} from '@rsdoctor/types';
+import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
+import { Constants, Linter } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { debug } from '@rsdoctor/utils/logger';
 import { cloneDeep } from 'lodash';
@@ -36,13 +36,13 @@ import { InternalResolverPlugin } from './plugins/resolver';
 import { ensureModulesChunksGraphFn } from '@rsdoctor/core/plugins';
 
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
-  implements DoctorPluginInstance<Compiler, Rules>
+  implements RsdoctorPluginInstance<Compiler, Rules>
 {
   public readonly name = pluginTapName;
 
-  public readonly options: DoctorPluginOptionsNormalized<Rules>;
+  public readonly options: RsdoctorPluginOptionsNormalized<Rules>;
 
-  public readonly sdk: DoctorWebpackSDK;
+  public readonly sdk: RsdoctorWebpackSDK;
 
   public modulesGraph: ModuleGraph;
 
@@ -54,11 +54,11 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   public chunkGraph: ChunkGraph;
 
-  constructor(options?: DoctorWebpackPluginOptions<Rules>) {
+  constructor(options?: RsdoctorWebpackPluginOptions<Rules>) {
     this.options = normalizeUserConfig<Rules>(options);
     this.sdk =
       this.options.sdkInstance ??
-      new DoctorWebpackSDK({
+      new RsdoctorWebpackSDK({
         name: pluginTapName,
         root: process.cwd(),
         type: this.options.reportCodeType,
@@ -102,7 +102,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
       new InternalBundlePlugin<Compiler>(this).apply(compiler);
     }
 
-    // InternalErrorReporterPlugin must called before InternalRulesPlugin, to avoid treat Doctor's lint warnings/errors as Webpack's warnings/errors.
+    // InternalErrorReporterPlugin must called before InternalRulesPlugin, to avoid treat Rsdoctor's lint warnings/errors as Webpack's warnings/errors.
     new InternalErrorReporterPlugin(this).apply(compiler);
     // InternalRulesPlugin will add lint errors and warnings to Webpack compilation as Webpack's warnings/errors.
     new InternalRulesPlugin(this).apply(compiler);
@@ -146,7 +146,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     });
 
     this.sdk.setOutputDir(
-      path.resolve(compiler.outputPath, `./${Constants.DoctorOutputFolder}`),
+      path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
     );
 
     if (configuration.name) {
@@ -169,7 +169,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
    * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
    * @param {Compiler} compiler
    * @return {*}
-   * @memberof DoctorWebpackPlugin
+   * @memberof RsdoctorWebpackPlugin
    */
   public ensureModulesChunksGraphApplied(compiler: Compiler) {
     ensureModulesChunksGraphFn(compiler, this)

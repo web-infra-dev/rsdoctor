@@ -14,17 +14,17 @@ type ExtractAlias<T> = T extends [property: string, alias: infer P][] ? `${P ext
 export function ConnectManifestData<
   Props extends object,
   Keys extends
-    | [property: `${Manifest.DoctorManifestMappingKeys}`, alias: keyof Props][]
+    | [property: `${Manifest.RsdoctorManifestMappingKeys}`, alias: keyof Props][]
     | [property: string, alias: keyof Props][],
 >(
-  manifestLoader: () => Promise<Manifest.DoctorManifestWithShardingFiles>,
+  manifestLoader: () => Promise<Manifest.RsdoctorManifestWithShardingFiles>,
   keys: Keys,
   Component: React.FC<Props>,
 ): React.FC<Omit<Props, ExtractAlias<Keys>>> {
   const promise = manifestLoader();
 
   return function _() {
-    const [manifest, setManifest] = useState<Manifest.DoctorManifestWithShardingFiles>();
+    const [manifest, setManifest] = useState<Manifest.RsdoctorManifestWithShardingFiles>();
     const [state, setState] = useState(PageState.Pending);
     const [props, setProps] = useState<Props>({} as Props);
 
@@ -36,7 +36,7 @@ export function ConnectManifestData<
       });
     }, [loader]);
 
-    function ensureManifest(pro: Promise<Manifest.DoctorManifestWithShardingFiles>) {
+    function ensureManifest(pro: Promise<Manifest.RsdoctorManifestWithShardingFiles>) {
       return pro
         .then((manifest) => {
           setManifest(manifest);

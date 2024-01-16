@@ -1,11 +1,11 @@
 import { InternalBasePlugin } from '@rsdoctor/core/plugins';
-import { DoctorWebpackSDK } from '@rsdoctor/sdk';
+import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Time } from '@rsdoctor/utils/common';
 import path from 'path';
 import type { Compiler, ResolvePluginInstance, Resolver } from 'webpack';
 
-interface DoctorResolverPluginOptions {}
+interface RsdoctorResolverPluginOptions {}
 
 interface ResolveRequestContext {
   issuer: string;
@@ -16,16 +16,16 @@ interface ResolveRequestWithContext {
   context: ResolveRequestContext;
 }
 
-export class DoctorResolverPlugin implements ResolvePluginInstance {
+export class RsdoctorResolverPlugin implements ResolvePluginInstance {
   protected tapOptions = {
-    name: 'DoctorResolverPlugin',
+    name: 'RsdoctorResolverPlugin',
   };
 
   protected contextMap = new Map<string, [number, [number, number]]>();
 
   constructor(
-    protected options: DoctorResolverPluginOptions,
-    protected sdk: DoctorWebpackSDK,
+    protected options: RsdoctorResolverPluginOptions,
+    protected sdk: RsdoctorWebpackSDK,
   ) {}
 
   protected getResolverData(
@@ -202,11 +202,11 @@ export class InternalResolverPlugin extends InternalBasePlugin<Compiler> {
     // add plugin to collect the data of resolver
     compiler.options.resolve.plugins = (
       compiler.options.resolve.plugins ?? []
-    ).concat(new DoctorResolverPlugin({}, this.sdk));
+    ).concat(new RsdoctorResolverPlugin({}, this.sdk));
 
     // add resolver page to client
     this.sdk.addClientRoutes([
-      Manifest.DoctorManifestClientRoutes.ModuleResolve,
+      Manifest.RsdoctorManifestClientRoutes.ModuleResolve,
     ]);
   };
 }

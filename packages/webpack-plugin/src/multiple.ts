@@ -1,23 +1,23 @@
-import { DoctorSDKController } from '@rsdoctor/sdk';
+import { RsdoctorSDKController } from '@rsdoctor/sdk';
 import { Linter } from '@rsdoctor/types';
-import type { DoctorWebpackMultiplePluginOptions } from '@rsdoctor/core';
+import type { RsdoctorWebpackMultiplePluginOptions } from '@rsdoctor/core';
 
 import { RsdoctorWebpackPlugin } from './plugin';
 
-let globalController: DoctorSDKController | undefined;
+let globalController: RsdoctorSDKController | undefined;
 
 export class RsdoctorWebpackMultiplePlugin<
   Rules extends Linter.ExtendRuleData[],
 > extends RsdoctorWebpackPlugin<Rules> {
   // @ts-expect-error
-  private controller: DoctorSDKController;
+  private controller: RsdoctorSDKController;
 
-  constructor(options: DoctorWebpackMultiplePluginOptions<Rules> = {}) {
+  constructor(options: RsdoctorWebpackMultiplePluginOptions<Rules> = {}) {
     const controller = (() => {
       if (globalController) {
         return globalController;
       }
-      const controller = new DoctorSDKController();
+      const controller = new RsdoctorSDKController();
       globalController = controller;
       return controller;
     })();

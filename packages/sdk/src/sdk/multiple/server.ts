@@ -1,11 +1,11 @@
 import { Server } from '@rsdoctor/utils/build';
-import { DoctorServer } from '../server';
-import type { DoctorSlaveSDK } from './slave';
+import { RsdoctorServer } from '../server';
+import type { RsdoctorSlaveSDK } from './slave';
 
-export class DoctorSlaveServer extends DoctorServer {
-  protected sdk: DoctorSlaveSDK;
+export class RsdoctorSlaveServer extends RsdoctorServer {
+  protected sdk: RsdoctorSlaveSDK;
 
-  constructor(sdk: DoctorSlaveSDK, port = Server.defaultPort) {
+  constructor(sdk: RsdoctorSlaveSDK, port = Server.defaultPort) {
     super(sdk, port);
     this.sdk = sdk;
   }

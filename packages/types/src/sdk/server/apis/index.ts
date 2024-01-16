@@ -2,8 +2,8 @@ import { ServerResponse } from 'http';
 import { SDK } from 'src';
 import { PlainObject, Get } from '../../../common';
 import { connect } from '../../../thirdparty';
-import { DoctorBuilderSDKInstance } from '../../index';
-import { DoctorServerInstance } from '../index';
+import { RsdoctorBuilderSDKInstance } from '../../index';
+import { RsdoctorServerInstance } from '../index';
 import { LoaderData } from '../../loader';
 import { ProjectAPIResponse, ProjectAPIResquestBody } from './project';
 import { LoaderAPIResponse, LoaderAPIResquestBody } from './loader';
@@ -11,7 +11,7 @@ import { ResolverAPIResponse, ResolverAPIResquestBody } from './resolver';
 import { PluginAPIResponse, PluginAPIResquestBody } from './plugin';
 import { GraphAPIResponse, GraphAPIResquestBody } from './graph';
 import { AlertsAPIResponse, AlertsAPIResquestBody } from './alerts';
-import { DoctorManifestMappingKeys } from '../../../manifest';
+import { RsdoctorManifestMappingKeys } from '../../../manifest';
 
 export * from './pagination';
 
@@ -140,7 +140,7 @@ export interface ResquestBodyTypes
      * @example 'plugin'
      * @example 'moduleGraph.modules'
      */
-    key: DoctorManifestMappingKeys;
+    key: RsdoctorManifestMappingKeys;
   };
 }
 
@@ -149,8 +149,8 @@ export type InferResponseType<T, F = void> = Get<ResponseTypes, T, F>;
 export type InferRequestBodyType<T, F = void> = Get<ResquestBodyTypes, T, F>;
 
 export interface APIContext {
-  server: DoctorServerInstance;
-  sdk: DoctorBuilderSDKInstance;
+  server: RsdoctorServerInstance;
+  sdk: RsdoctorBuilderSDKInstance;
   req: connect.IncomingMessage & { body?: PlainObject };
   res: ServerResponse;
 }

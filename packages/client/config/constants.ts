@@ -6,7 +6,7 @@ export const DistPath = path.resolve(__dirname, '../dist');
 
 export const DistResourcePath = path.resolve(__dirname, '../dist/resource');
 
-export const WebpackDoctorDirPath = path.resolve(__dirname, `../dist/${Constants.DoctorOutputFolder}`);
+export const WebpackRsdoctorDirPath = path.resolve(__dirname, `../dist/${Constants.RsdoctorOutputFolder}`);
 
 export const WebpackStatsFilePath = path.resolve(__dirname, '../dist/stats.json');
 

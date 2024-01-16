@@ -25,7 +25,7 @@ export async function loadManifestByUrl(url: string) {
 }
 
 export async function fetchJSONByUrl(url: string) {
-  let json: Manifest.DoctorManifestWithShardingFiles = await axios.get(url, { timeout: 30000 }).then((e) => e.data);
+  let json: Manifest.RsdoctorManifestWithShardingFiles = await axios.get(url, { timeout: 30000 }).then((e) => e.data);
 
   if (typeof json === 'string') {
     json = JSON.parse(json);
@@ -40,8 +40,8 @@ export function fetchJSONByUrls(urls: string[]) {
   return Promise.all(urls.map((url) => fetchJSONByUrl(url)));
 }
 
-export async function parseManifest(json: Manifest.DoctorManifestWithShardingFiles) {
-  let transformedData: Manifest.DoctorManifestData;
+export async function parseManifest(json: Manifest.RsdoctorManifestWithShardingFiles) {
+  let transformedData: Manifest.RsdoctorManifestData;
 
   // try to load cloud data first
   if (json.data) {
@@ -65,9 +65,9 @@ const manifestUrlForDev = '/manifest.json';
 export function getManifestUrl(): string {
   let file: string | void;
 
-  if ((window as { [key: string]: any })[Manifest.DoctorManifestClientConstant.WindowPropertyForManifestUrl]) {
+  if ((window as { [key: string]: any })[Manifest.RsdoctorManifestClientConstant.WindowPropertyForManifestUrl]) {
     // load from window property
-    file = (window as { [key: string]: any })[Manifest.DoctorManifestClientConstant.WindowPropertyForManifestUrl];
+    file = (window as { [key: string]: any })[Manifest.RsdoctorManifestClientConstant.WindowPropertyForManifestUrl];
   } else {
     // load from url query
     file = getManifestUrlFromUrlQuery();
@@ -86,7 +86,7 @@ export function getManifestUrl(): string {
   return file;
 }
 
-const pool = new Map<string, Promise<Manifest.DoctorManifestWithShardingFiles>>();
+const pool = new Map<string, Promise<Manifest.RsdoctorManifestWithShardingFiles>>();
 
 export async function fetchManifest(url = getManifestUrl()) {
   if (!pool.has(url)) {

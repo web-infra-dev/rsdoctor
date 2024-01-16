@@ -11,7 +11,7 @@ import {
   DistPath,
   PortForCLI,
   PortForWeb,
-  WebpackDoctorDirPath,
+  WebpackRsdoctorDirPath,
   WebpackStatsFilePath,
 } from './config/constants';
 
@@ -135,8 +135,8 @@ export default defineConfig((env) => {
         historyApiFallback: true,
         setupMiddlewares: [
           (middlewares) => {
-            if (fs.existsSync(WebpackDoctorDirPath)) {
-              const fn = serve(WebpackDoctorDirPath, {
+            if (fs.existsSync(WebpackRsdoctorDirPath)) {
+              const fn = serve(WebpackRsdoctorDirPath, {
                 index: false,
                 setHeaders(res) {
                   res.setHeader('Content-Type', 'text/plain; charset=utf-8');

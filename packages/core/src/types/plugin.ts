@@ -4,14 +4,14 @@ import type {
   Plugin,
   SDK,
 } from '@rsdoctor/types';
-import type { DoctorSlaveSDK, DoctorWebpackSDK } from '@rsdoctor/sdk';
+import type { RsdoctorSlaveSDK, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import { ModuleGraph } from '@rsdoctor/graph';
 // import { rules } from '@web-doctor/webpack-rules';
 
 // type InternalRules = Common.UnionToTuple<typeof rules[number]>;
 type InternalRules = any; // TODO: add webpack-rules later;
 
-export interface DoctorWebpackPluginOptions<
+export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
   /** Checker configuration */
@@ -20,8 +20,8 @@ export interface DoctorWebpackPluginOptions<
    * the switch for the Rsdoctor features.
    */
   features?:
-    | Plugin.DoctorWebpackPluginFeatures
-    | Array<keyof Plugin.DoctorWebpackPluginFeatures>;
+    | Plugin.RsdoctorWebpackPluginFeatures
+    | Array<keyof Plugin.RsdoctorWebpackPluginFeatures>;
   /**
    * configuration of the interceptor for webpack loaders.
    * @description worked when the `features.loader === true`.
@@ -40,7 +40,7 @@ export interface DoctorWebpackPluginOptions<
   /**
    * sdk instance of outside
    */
-  sdkInstance?: DoctorWebpackSDK;
+  sdkInstance?: RsdoctorWebpackSDK;
   /**
    * control the Rsdoctor reporter codes records.
    */
@@ -54,27 +54,27 @@ export interface DoctorWebpackPluginOptions<
   disableTOSUpload?: boolean;
 }
 
-export interface DoctorWebpackMultiplePluginOptions<
+export interface RsdoctorWebpackMultiplePluginOptions<
   Rules extends LinterType.ExtendRuleData[] = LinterType.ExtendRuleData[],
-> extends Omit<DoctorWebpackPluginOptions<Rules>, 'sdkInstance'>,
-    Pick<ConstructorParameters<typeof DoctorSlaveSDK>[0], 'stage'> {
+> extends Omit<RsdoctorWebpackPluginOptions<Rules>, 'sdkInstance'>,
+    Pick<ConstructorParameters<typeof RsdoctorSlaveSDK>[0], 'stage'> {
   /**
    * name of builder
    */
   name?: string;
 }
 
-export interface DoctorPluginOptionsNormalized<
+export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends Common.DeepRequired<
     Omit<
-      DoctorWebpackPluginOptions<Rules>,
+      RsdoctorWebpackPluginOptions<Rules>,
       'sdkInstance' | 'linter' | 'reportCodeType'
     >
   > {
-  features: Common.DeepRequired<Plugin.DoctorWebpackPluginFeatures>;
+  features: Common.DeepRequired<Plugin.RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
-  sdkInstance?: DoctorWebpackSDK;
+  sdkInstance?: RsdoctorWebpackSDK;
   reportCodeType?: SDK.ToDataType;
 }
 
@@ -88,20 +88,20 @@ export interface InternalPlugin<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends BasePluginInstance<T> {
   readonly name: string;
-  readonly scheduler: DoctorPluginInstance<T, Rules>;
+  readonly scheduler: RsdoctorPluginInstance<T, Rules>;
 }
 
-export interface DoctorPluginInstance<
+export interface RsdoctorPluginInstance<
   T extends Plugin.BaseCompiler,
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends BasePluginInstance<T> {
   readonly name: string;
-  readonly options: DoctorPluginOptionsNormalized<Rules>;
-  readonly sdk: DoctorWebpackSDK;
+  readonly options: RsdoctorPluginOptionsNormalized<Rules>;
+  readonly sdk: RsdoctorWebpackSDK;
   modulesGraph: ModuleGraph;
   ensureModulesChunksGraphApplied(compiler: T): void;
 }
 
-export interface DoctorRspackPluginOptions<
+export interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
-> extends DoctorWebpackPluginOptions<Rules> {}
+> extends RsdoctorWebpackPluginOptions<Rules> {}

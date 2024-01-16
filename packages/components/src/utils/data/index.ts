@@ -6,9 +6,9 @@ import { BaseDataLoader } from './base';
 import { getAPILoaderModeFromStorage } from '../storage';
 import { APILoaderMode4Dev } from '../../constants';
 
-const loaderTask = new WeakMap<Manifest.DoctorManifestWithShardingFiles, Promise<BaseDataLoader>>();
+const loaderTask = new WeakMap<Manifest.RsdoctorManifestWithShardingFiles, Promise<BaseDataLoader>>();
 
-async function createDataLoader(manifest: Manifest.DoctorManifestWithShardingFiles) {
+async function createDataLoader(manifest: Manifest.RsdoctorManifestWithShardingFiles) {
   try {
     if (process.env.NODE_ENV === 'development') {
       const mode = getAPILoaderModeFromStorage();
@@ -27,7 +27,7 @@ async function createDataLoader(manifest: Manifest.DoctorManifestWithShardingFil
   return new RemoteDataLoader(manifest);
 }
 
-export function useDataLoader(manifest: Manifest.DoctorManifestWithShardingFiles | void) {
+export function useDataLoader(manifest: Manifest.RsdoctorManifestWithShardingFiles | void) {
   const [loader, setLoader] = useState<BaseDataLoader | void>(undefined);
 
   useEffect(() => {

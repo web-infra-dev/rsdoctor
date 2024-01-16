@@ -19,18 +19,18 @@ describe('test server/apis/project.ts', () => {
 
   it(`test api: ${SDK.ServerAPI.API.Manifest}`, async () => {
     target.sdk.addClientRoutes([
-      Manifest.DoctorManifestClientRoutes.WebpackLoaders,
+      Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
     ]);
 
     const manifestStr = (
       await target.get(SDK.ServerAPI.API.Manifest)
     ).toString();
-    const manifest: Manifest.DoctorManifest = JSON.parse(manifestStr);
+    const manifest: Manifest.RsdoctorManifest = JSON.parse(manifestStr);
 
     expect(manifest.data.root === cwd);
     expect(manifest.client.enableRoutes).toStrictEqual([
-      Manifest.DoctorManifestClientRoutes.Overall,
-      Manifest.DoctorManifestClientRoutes.WebpackLoaders,
+      Manifest.RsdoctorManifestClientRoutes.Overall,
+      Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
     ]);
     expect(manifest.data.pid).toEqual(process.pid);
 

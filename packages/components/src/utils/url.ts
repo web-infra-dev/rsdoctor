@@ -13,8 +13,8 @@ function setDefaultUrl(url: parse<Record<string, string | undefined>>) {
 }
 
 function setUploaderHash(url: parse<Record<string, string | undefined>>) {
-  if (endsWith(url.hash, Client.DoctorClientRoutes.Uploader)) {
-    url.set('hash', Client.DoctorClientRoutes.Overall);
+  if (endsWith(url.hash, Client.RsdoctorClientRoutes.Uploader)) {
+    url.set('hash', Client.RsdoctorClientRoutes.Overall);
   }
 }
 
@@ -24,7 +24,7 @@ export function isJsDataUrl(path: string) {
 
 export function getManifestUrlFromUrlQuery(): string | void {
   const { query } = parse(location.href, true);
-  const url = query[Client.DoctorClientUrlQuery.ManifestFile];
+  const url = query[Client.RsdoctorClientUrlQuery.ManifestFile];
   if (url) {
     return decodeURIComponent(url);
   }
@@ -52,7 +52,7 @@ export function getSharingUrl(manifestCloudUrl: string) {
 
   url.set('query', {
     ...url.query,
-    [Client.DoctorClientUrlQuery.ManifestFile]: manifestCloudUrl,
+    [Client.RsdoctorClientUrlQuery.ManifestFile]: manifestCloudUrl,
   });
 
   return url.toString();

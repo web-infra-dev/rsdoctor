@@ -9,14 +9,14 @@ export class RemoteDataLoader extends BaseDataLoader {
     return false;
   }
 
-  public async loadData<T extends Manifest.DoctorManifestMappingKeys>(
+  public async loadData<T extends Manifest.RsdoctorManifestMappingKeys>(
     key: T,
   ): Promise<Manifest.InferManifestDataValue<T>>;
 
   public async loadData(key: string): Promise<unknown> {
     return this.limit(key, async () => {
       const [scope, ...rest] = this.getKeys(key);
-      const data = this.getData(scope as keyof Manifest.DoctorManifestData);
+      const data = this.getData(scope as keyof Manifest.RsdoctorManifestData);
 
       if (!data) return;
 

@@ -7,8 +7,8 @@ import {
   RuleSetRule,
 } from 'webpack';
 import {
-  DoctorWebpackPluginOptions,
-  DoctorPluginOptionsNormalized,
+  RsdoctorWebpackPluginOptions,
+  RsdoctorPluginOptionsNormalized,
 } from '@/types';
 
 function defaultBoolean(v: unknown, dft: boolean): boolean {
@@ -16,8 +16,8 @@ function defaultBoolean(v: unknown, dft: boolean): boolean {
 }
 
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
-  config: DoctorWebpackPluginOptions<Rules> = {},
-): DoctorPluginOptionsNormalized<Rules> {
+  config: RsdoctorWebpackPluginOptions<Rules> = {},
+): RsdoctorPluginOptionsNormalized<Rules> {
   const {
     linter = {},
     features = {},
@@ -35,7 +35,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   );
   assert(typeof disableClientServer === 'boolean');
 
-  const _features: DoctorPluginOptionsNormalized['features'] = Array.isArray(
+  const _features: RsdoctorPluginOptionsNormalized['features'] = Array.isArray(
     features,
   )
     ? {
@@ -55,14 +55,14 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         lite: defaultBoolean(features.lite, false),
       };
 
-  const _linter: DoctorPluginOptionsNormalized<Rules>['linter'] = {
-    rules: {} as DoctorPluginOptionsNormalized<Rules>['linter']['rules'],
+  const _linter: RsdoctorPluginOptionsNormalized<Rules>['linter'] = {
+    rules: {} as RsdoctorPluginOptionsNormalized<Rules>['linter']['rules'],
     extends: [] as unknown as any,
     level: 'Error',
     ...linter,
   };
 
-  const res: DoctorPluginOptionsNormalized<Rules> = {
+  const res: RsdoctorPluginOptionsNormalized<Rules> = {
     linter: _linter,
     features: _features,
     loaderInterceptorOptions: {

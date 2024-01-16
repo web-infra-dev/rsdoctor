@@ -11,9 +11,9 @@ export interface Config {
     bundleAlerts: ViewMode;
     compileAlerts: ViewMode;
   };
-  json: Manifest.DoctorManifest;
+  json: Manifest.RsdoctorManifest;
   setTheme(theme: Config['theme']): void;
-  setManifest(json: Manifest.DoctorManifest): void;
+  setManifest(json: Manifest.RsdoctorManifest): void;
   setPageState(state: PageState): void;
   setViewMode(mode: Partial<Config['viewMode']>, saveStorage?: boolean): void;
 }
@@ -23,7 +23,7 @@ export const defaultConfig: Config = {
   theme: getThemeFromStorage(),
   pageState: PageState.Pending,
   viewMode: getViewModeFromStorage(),
-  json: {} as Manifest.DoctorManifest,
+  json: {} as Manifest.RsdoctorManifest,
   setTheme() {},
   setManifest() {},
   setPageState(_state: PageState) {},
