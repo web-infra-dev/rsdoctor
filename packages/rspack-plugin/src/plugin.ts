@@ -10,6 +10,9 @@ import {
   makeRulesSerializable,
   normalizeUserConfig,
   setSDK,
+  ensureModulesChunksGraphFn,
+  InternalBundlePlugin,
+  InternalRulesPlugin,
 } from '@rsdoctor/core/plugins';
 import type {
   DoctorPluginInstance,
@@ -24,7 +27,6 @@ import {
   SDK,
 } from '@rsdoctor/types';
 import path from 'path';
-import { TransUtils } from '@rsdoctor/core/common-utils';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
 
@@ -83,6 +85,23 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     if (this.options.features.plugins) {
       new InternalPluginsPlugin<Compiler>(this).apply(compiler);
     }
+
+    if (this.options.features.bundle) {
+      new InternalBundlePlugin<Compiler>(this).apply(compiler);
+    }
+
+    new InternalRulesPlugin(this).apply(compiler);
+  }
+
+
+  /**
+   * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
+   * @param {Compiler} compiler
+   * @return {*}
+   * @memberof DoctorWebpackPlugin
+   */
+  public ensureModulesChunksGraphApplied(compiler: Compiler) {
+    ensureModulesChunksGraphFn(compiler, this)
   }
 
   public done = async (compiler: Compiler): Promise<void> => {
@@ -99,17 +118,13 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       builtAt: true,
       chunkRelations: true,
     }) as Plugin.StatsCompilation; // TODO: if this type can compatible?
-    const { chunkGraph, moduleGraph } = await TransUtils.transStats(json);
 
     this.getRspackConfig(compiler, json.rspackVersion || '');
 
     await this.sdk.bootstrap();
-    this.sdk.reportChunkGraph(chunkGraph);
-    this.sdk.reportModuleGraph(moduleGraph);
+
     this.sdk.addClientRoutes([
       ManifestType.DoctorManifestClientRoutes.Overall,
-      ManifestType.DoctorManifestClientRoutes.BundleSize,
-      ManifestType.DoctorManifestClientRoutes.ModuleGraph,
     ]);
 
     /** Generate rspack-bundle-analyzer tile graph */
@@ -164,9 +179,5 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     if (configuration.name) {
       this.sdk.setName(configuration.name);
     }
-  }
-
-  public ensureModulesChunksGraphApplied() {
-    // empty functions
   }
 }

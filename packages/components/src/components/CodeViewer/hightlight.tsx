@@ -21,8 +21,8 @@ export const FileHightLightViewer: React.FC<FileHightLightViewerProps> = ({ depe
   if (!dependency) return null;
 
   const { statements } = dependency;
-  const hasSourceRange = Boolean(statements[0].position.source);
-  const { start, end } = hasSourceRange ? statements[0].position.source! : statements[0].position.transformed;
+  const hasSourceRange = Boolean(statements?.[0]?.position?.source);
+  const { start, end } = statements?.[0]?.position ? hasSourceRange ? statements[0].position.source! : statements[0].position.transformed : { start: { line: 0, column: 0  }, end: { line: 0, column: 0  } } ;
   const content = hasSourceRange ? moduleCode?.source : moduleCode?.transformed;
   const modulePath = module.path;
 

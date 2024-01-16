@@ -4,3 +4,6 @@ export * from './errors';
 export * from './progress';
 export * from './summary';
 export * from './base';
+export * from './bundle';
+export * from './ensureModulesChunkGraph';
+export * from './rules';

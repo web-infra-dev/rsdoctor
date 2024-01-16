@@ -22,7 +22,7 @@
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/graph": "workspace:*",
-    "@rspack/core": "0.3.14",
+    "@rspack/core": "0.5.1",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

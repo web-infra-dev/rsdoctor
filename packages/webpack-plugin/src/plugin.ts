@@ -1,15 +1,11 @@
 import {
-  Chunks as ChunksBuildUtils,
-  ModuleGraph as ModuleGraphBuildUtils,
-  Types,
-} from '@rsdoctor/core/build-utils';
-import { Chunks as ChunkUtils } from '@rsdoctor/core/common-utils';
-import {
   InternalErrorReporterPlugin,
   InternalLoaderPlugin,
   InternalPluginsPlugin,
   InternalProgressPlugin,
   InternalSummaryPlugin,
+  InternalRulesPlugin,
+  InternalBundlePlugin,
   makeRulesSerializable,
   normalizeUserConfig,
   setSDK,
@@ -21,30 +17,23 @@ import type {
 } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { DoctorWebpackSDK } from '@rsdoctor/sdk';
-import { Constants, Linter, Manifest, Plugin } from '@rsdoctor/types';
+import { Constants, Linter} from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { debug } from '@rsdoctor/utils/logger';
-import type { Node } from '@rsdoctor/utils/ruleUtils';
-import fse from 'fs-extra';
 import { cloneDeep } from 'lodash';
 import path from 'path';
 import {
   Compiler,
   Configuration,
-  ParserState,
   RuleSetRule,
-  StatsCompilation,
 } from 'webpack';
 import {
-  internalPluginTapPostOptions,
-  internalPluginTapPreOptions,
   pluginTapName,
   pluginTapPostOptions,
-  pluginTapPreOptions,
 } from './constants';
-import { InternalBundlePlugin } from './plugins/bundle';
+
 import { InternalResolverPlugin } from './plugins/resolver';
-import { InternalRulesPlugin } from './plugins/rules';
+import { ensureModulesChunksGraphFn } from '@rsdoctor/core/plugins';
 
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements DoctorPluginInstance<Compiler, Rules>
@@ -176,8 +165,6 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     });
   };
 
-  private _modulesGraphApplied = false;
-
   /**
    * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
    * @param {Compiler} compiler
@@ -185,104 +172,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
    * @memberof DoctorWebpackPlugin
    */
   public ensureModulesChunksGraphApplied(compiler: Compiler) {
-    if (this._modulesGraphApplied) return;
-    this._modulesGraphApplied = true;
-
-    const context: Required<ModuleGraphBuildUtils.TransformContext> = {
-      astCache: new Map(),
-      packagePathMap: new Map(),
-      getSourceMap: (file: string) => {
-        return this.sdk.getSourceMap(file);
-      },
-    };
-
-    compiler.hooks.normalModuleFactory.tap(
-      internalPluginTapPostOptions('moduleGraph'),
-      (factory: Types.NormalModuleFactory) => {
-        const record = (parser: ParserState) => {
-          parser.hooks.program.tap(pluginTapPreOptions, (ast: Node.Program) => {
-            context.astCache!.set(parser.state.current, ast);
-          });
-        };
-
-        factory.hooks.parser
-          .for('javascript/auto')
-          .tap(pluginTapPostOptions, record);
-        factory.hooks.parser
-          .for('javascript/dynamic')
-          .tap(pluginTapPostOptions, record);
-        factory.hooks.parser
-          .for('javascript/esm')
-          .tap(pluginTapPostOptions, record);
-      },
-    );
-
-    compiler.hooks.done.tapPromise(
-      internalPluginTapPreOptions('moduleGraph'),
-      async (stats) => {
-        const statsJson = stats.toJson();
-
-        debug(Process.getMemoryUsageMessage, '[Before Generate ModuleGraph]');
-
-        this.chunkGraph = ChunksBuildUtils.chunkTransform(new Map(), statsJson);
-
-        /** generate module graph */
-        this.modulesGraph = await ModuleGraphBuildUtils.getModuleGraphByStats(
-          stats.compilation,
-          statsJson,
-          process.cwd(),
-          this.chunkGraph,
-          this.options.features,
-          context,
-        );
-
-        debug(Process.getMemoryUsageMessage, '[After Generate ModuleGraph]');
-
-        /** Tree Shaking */
-        if (this.options.features.treeShaking) {
-          this.modulesGraph = ModuleGraphBuildUtils.appendTreeShaking(
-            this.modulesGraph,
-            stats.compilation,
-          );
-          this.sdk.addClientRoutes([
-            Manifest.DoctorManifestClientRoutes.TreeShaking,
-          ]);
-
-          debug(
-            Process.getMemoryUsageMessage,
-            '[After AppendTreeShaking to ModuleGraph]',
-          );
-        }
-
-        /** transform modules graph */
-        await this.getModulesInfosByStats(
-          compiler,
-          statsJson,
-          this.modulesGraph,
-        );
-
-        debug(Process.getMemoryUsageMessage, '[After Transform ModuleGraph]');
-
-        this.modulesGraph &&
-          (await this.sdk.reportModuleGraph(this.modulesGraph));
-        await this.sdk.reportChunkGraph(this.chunkGraph);
-
-        /** Generate webpack-bundle-analyzer tile graph */
-        const reportFilePath = await ChunksBuildUtils.generateTileGraph(
-          statsJson as Plugin.BaseStats,
-          {
-            reportFilename: ChunksBuildUtils.TileGraphReportName,
-            reportTitle: 'bundle-analyzer',
-          },
-          compiler.outputPath,
-        );
-
-        reportFilePath &&
-          (await this.sdk.reportTileHtml(
-            fse.readFileSync(reportFilePath, 'utf-8'),
-          ));
-      },
-    );
+    ensureModulesChunksGraphFn(compiler, this)
   }
 
   public done = async (): Promise<void> => {
@@ -298,31 +188,4 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
       }
     } catch (e) {}
   };
-
-  /**
-   * @protected
-   * @description This function to get module parsed code and size;
-   * @param {Compiler} compiler
-   * @param {StatsCompilation} stats
-   * @param {ModuleGraph} moduleGraph
-   * @return {*}
-   * @memberof DoctorWebpackPlugin
-   */
-  protected async getModulesInfosByStats(
-    compiler: Compiler,
-    stats: StatsCompilation,
-    moduleGraph: ModuleGraph,
-  ) {
-    if (!moduleGraph) {
-      return;
-    }
-    try {
-      const parsedModulesData =
-        (await ChunksBuildUtils.getAssetsModulesData(
-          stats,
-          compiler.outputPath,
-        )) || {};
-      ChunkUtils.transformAssetsModulesData(parsedModulesData, moduleGraph);
-    } catch (e) {}
-  }
 }
