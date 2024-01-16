@@ -8,5 +8,10 @@
     "type": "dir",
     "name": "usage",
     "label": "功能介绍"
+  },
+  {
+    "type": "dir",
+    "name": "topic",
+    "label": "专题"
   }
 ]
