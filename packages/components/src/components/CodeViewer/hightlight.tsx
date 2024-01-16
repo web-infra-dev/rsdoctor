@@ -23,7 +23,7 @@ export const FileHightLightViewer: React.FC<FileHightLightViewerProps> = ({ depe
   const { statements } = dependency;
   const hasSourceRange = Boolean(statements?.[0]?.position?.source);
   const { start, end } = statements?.[0]?.position ? hasSourceRange ? statements[0].position.source! : statements[0].position.transformed : { start: { line: 0, column: 0  }, end: { line: 0, column: 0  } } ;
-  const content = hasSourceRange ? moduleCode?.source : moduleCode?.transformed;
+  const content = hasSourceRange ? moduleCode?.source : moduleCode?.transformed || moduleCode?.source;
   const modulePath = module.path;
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
