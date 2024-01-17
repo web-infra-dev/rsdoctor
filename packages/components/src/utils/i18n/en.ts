@@ -19,7 +19,7 @@ const en = {
   'Expand Omitted':
     'By default, the reasons tree collapses to the middle of the module introduced by a third party. Click on this icon to view the full tree diagram',
   'Concatenated Tag':
-    'Concatenated Module,hover can display the name of the concatenated main module. Note: the parsed size of the concatenated module is zero, possibly because it is aggregated into the main module.',
+    'Concatenated Module,hover can display the name of the concatenated main module. Note: the bundled size of the concatenated module is zero, possibly because it is aggregated into the main module.',
 
   'the file content not changed after transpiled by this loader':
     'the file content not changed after transpiled by this loader',

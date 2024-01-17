@@ -81,15 +81,15 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) =
                       <>
                         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 30 }}>
                           <div>
-                            <Typography.Text strong>source: </Typography.Text>
+                            <Typography.Text strong>Source: </Typography.Text>
                             <Typography.Text>{TAB_MAP.source}</Typography.Text>
                           </div>
                           <div>
-                            <Typography.Text strong>transformed: </Typography.Text>
+                            <Typography.Text strong>Transformed: </Typography.Text>
                             <Typography.Text>{TAB_MAP.transformed}</Typography.Text>
                           </div>
                           <div>
-                            <Typography.Text strong>parsedSource: </Typography.Text>
+                            <Typography.Text strong>Bundled Source: </Typography.Text>
                             <Typography.Text>{TAB_MAP.parsedSource}</Typography.Text>
                           </div>
                           <br />
@@ -195,13 +195,13 @@ export const ModulesStatistics: React.FC<{
         title={
           <Space direction="vertical">
             <Typography.Text style={{ color: 'inherit' }}>
-              Total modules parsed size: {formatSize(parsedSize)}
+              Total modules bundled size: {formatSize(parsedSize)}
             </Typography.Text>
             <Typography.Text style={{ color: 'inherit' }}>
               Total modules source size: {formatSize(sourceSize)}
             </Typography.Text>
             <Typography.Text style={{ color: 'inherit' }}>
-              Filtered modules parsed size: {formatSize(filteredParsedSize)}
+              Filtered modules bundled size: {formatSize(filteredParsedSize)}
             </Typography.Text>
             <Typography.Text style={{ color: 'inherit' }}>
               Filtered modules source size: {formatSize(filteredSourceSize)}
@@ -294,14 +294,14 @@ export const AssetDetail: React.FC<{
               <Tooltip
                 title={
                   <Space direction="vertical">
-                  <Tag color={'orange'}>{'Parsed Size:' + formatSize(parsedSize)}</Tag>
+                  <Tag color={'orange'}>{'Bundled Size:' + formatSize(parsedSize)}</Tag>
                   <Tag color={'volcano'}>{'Source Size:' + formatSize(sourceSize)}</Tag>
                 </Space>
                 }
                 color={'white'}
               >
 
-                <Tag color={'purple'} style={tagStyle}>{'Parsed: ' + formatSize(parsedSize)}</Tag> 
+                <Tag color={'purple'} style={tagStyle}>{'Bundled: ' + formatSize(parsedSize)}</Tag> 
               </Tooltip>
             ) : sourceSize !== 0 ? (
               // fallback to display tag for source size
@@ -384,7 +384,7 @@ export const AssetDetail: React.FC<{
             <Space>
               <Typography.Text>{defaultTitle}</Typography.Text>
               {parsedSize > 0 ? (
-                <Tag style={tagStyle} color={'orange'}>{'Parsed:' + formatSize(parsedSize)}</Tag>
+                <Tag style={tagStyle} color={'orange'}>{'Bundled:' + formatSize(parsedSize)}</Tag>
               ) : null}
             </Space>
           );
