@@ -1,0 +1,59 @@
+# FAQ
+
+## 如何只使用 Rsdoctor 的某个功能？
+
+当我们**只需要** Rsdoctor 内 [Bundle Size]() {/* TODO: link */} 分析产物大小的功能时，我们可以在接入 Rsdoctor 插件时配置对应的 [Features](/config/options/index) 配置项，参考下方代码：
+
+```ts
+import { RsdoctorWebpackPlugin } from "@rsdoctor/webpack-plugin";
+
+new RsdoctorWebpackPlugin({
+  features: ["bundle"], // 代表只开启 bundle size 的功能分析
+});
+```
+
+
+## Loader 耗时数据不准？
+
+Rsdoctor 提供的 Loader 耗时时间是**预估耗时**，为什么没法统计到准确耗时？是因为我们知道 Loader 执行可能是**异步**函数也可能是**同步**函数，同时，构建器会**并行执行多个**不冲突的 Loader 函数，其中 **JS 是单线程**的，多个 Loader 函数均可能**抢占当前的任务队列**，同时 Loader 函数内的**异步逻辑没法识别**，导致单个 Loader 函数在执行过程中，**可能横跨**多个其他 Loader 的执行过程，所以会存在如下图所示的三种 case：
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-cases.jpeg" style={{ width: "250px" }} />
+
+因此，Rsdoctor 提供的 Loader 耗时是一个**预估**的数据，而我们给出的耗时数据适配了上图中 Case 1 和 Case 2 的情况，对于 Case 3 的解决方案，我们目前还在探索中。
+
+
+## 使用 `Rsdoctor` 构建时出现了 `out of memory` 问题
+
+如果出现了 `out of memory` 的报错，可以尝试下列两个方法，推荐优先使用第一个：
+
+### 方法一
+
+增大 node 内存上限, 例如：NODE_OPTIONS=--max-old-space-size=8096。
+
+### 方法二
+
+可以在 `features` 数组中添加 `lite` 字段，使用 lite 模式，同时，因为 features 为数组时会覆盖掉默认配置，所以：
+
+- 如果需要构建时分析，`features` 数组中添加 `loader` 和 `plugins`，是开启 `loader` 和 `plugins` 的耗时分析。
+
+- 如果需要构建产物分析，`features` 数组中添加 `bundle`，是开启构建产物分析。
+
+下面示例是开启了 lite 模式以及构建时和构建产物分析：
+
+```js
+const { RsdoctorWebpackPlugin } = require("@rsdoctor/webpack-plugin");
+
+// adding the plugin to your configuration
+module.exports = {
+  // ...
+  plugins: [
+    new RsdoctorWebpackPlugin({
+      disableClientServer: false,
+      features: ["lite", "loader", "plugins", "bundle"]
+    }),
+  ].filter(Boolean),
+};
+```
+
+- 原因：因为构建过程中，存储了源码信息，超过了内存，所以开启 `lite` 模式可以缓解。
+- 区别：`lite` 模式和普通模式的区别就是不再存储**源码信息**，只存储**打包后的代码**，同时分析报告上的代码也将**只有打包后的代码**。

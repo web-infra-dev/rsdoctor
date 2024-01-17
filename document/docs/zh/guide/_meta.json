@@ -13,5 +13,10 @@
     "type": "dir",
     "name": "topic",
     "label": "专题"
+  },
+  {
+    "type": "dir",
+    "name": "more",
+    "label": "更多"
   }
 ]
