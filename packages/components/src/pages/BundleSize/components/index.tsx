@@ -245,8 +245,8 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
                   </Row>
                   <Row>
                     <Col>
-                      <Tag color={'purple'} >{'Parsed: 15.77 KB'}</Tag> 
-                      <Typography.Text strong>Parsed Size</Typography.Text>
+                      <Tag color={'purple'} >{'Bundled: 15.77 KB'}</Tag> 
+                      <Typography.Text strong>Bundled Size</Typography.Text>
                       <Typography.Text>The size of the code which bundled. That is, after bundle and tree-shaking.</Typography.Text>
                     </Col>
                   </Row>

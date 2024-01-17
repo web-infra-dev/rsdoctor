@@ -1,0 +1,102 @@
+# 产物分析
+
+## 功能介绍
+
+**Rsdoctor** 提供了 `Bundle Size` 模块，该模块主要用于分析 **Webpack** 或 **Rspack** 构建产物的信息，包括当前编译产物的**资源大小**、**重复包**、**模块引用关系**等：
+
+- **产物概览**：展示产物总数、各类型文件数目、大小以及占比，以及重复包和重复包的引用链；
+- **产物分析（`Bundle Analysis`）模块**：分析构建产物资源（**Assets**）以及所包含的 **Modules** 的大小和代码信息。在该模块中，可以查看 Assets 中 **Module 打包后的实际代码大小**，以及模块的原始代码或**打包后的代码段**以及**模块引用关系**。
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-overall.png" width={'700px'} style={{ margin: 'auto' }} />
+
+点击**导航栏 「Bundle Size」-> 「Bundle Size」选项**，即可查看 Bundle 分析报告。请注意，要展示此页面，需要开启构建产物分析能力 [features](/config/options/index)。
+
+
+
+### 名词解释
+- **`Assets`**：资源是对图像、字体、媒体和其他文件类型的统称，是最终存在于输出文件夹内的文件，同时，每个 Chunk 都有对应的 [Assets 资源](https://webpack.js.org/concepts/under-the-hood/#chunks)。
+- **`Module`**：一个或多个 Module 组合成了 Chunk。有关 Module 类型的详细信息，请参阅 [Rspack Modules](https://www.rspack.dev/api/modules.html) 和 [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module)。
+- **`Bundle Size`**：资源产物的最终打包大小，这是构建器处理后的最终大小。
+- **`Module Bundled Source & Size`**：**Module Parsed Source** 是指 **Module** 在打包产物中的最终代码片段，**Module Parsed Size** 是指 **Module** 在打包产物中的最终代码片段的大小。
+- **`Package Count`**：第三方包的数量。
+- **`Initial Chunk`**: **initial(初始化)** 是入口起点的主 Chunk，该 chunk 包含入口起点指定的所有模块及其依赖项，与「**按需加载**」的 **Chunk** 资源不同。
+  - 有关 Initial Chunk 的详细信息，请参阅 [Initial Chunk 介绍](https://webpack.js.org/concepts/under-the-hood/#chunks)。
+- **`Duplicate Packages`**: 打包到项目中的重复的第三方包。不包括未打包进产物的第三方包，请参阅[重复第三方包](/guide/usage/bundle-alerts)。
+- **`Concatenated Module`**: 串联模块是将多个模块在打包时提升或串联到一个闭包中。在过去，Webpack 在打包时会将每个模块都打包到单独的闭包中，这种封装函数会导致 JavaScript 在浏览器中执行时较慢。可以通过打开 [`optimization.concatenateModules`](https://webpack.js.org/plugins/module-concatenation-plugin/#root) 参数来进行优化。
+
+## 产物概览
+
+### 产物信息卡
+
+产物概览显示了 `Total Files` 等文件数目和大小信息。点击卡片图表可以展开资源详情，如下图所示：
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-overall-1.png" width={'700px'} style={{ margin: 'auto' }} />
+
+- 点击详情小图标，右侧会展示对应资源树，标明资源大小：
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-tree.png" width={'300px'} height={'400px'}  style={{ margin: 'auto' }} />
+
+- 点击标签切换资源信息查看，例如：**「Total JS | Initial JS」**。同时，卡片上展示了资源的体积占比、体积大小以及资源数目。同样，点击右下图标可以展开资源列表。
+
+
+### 重复第三方包
+
+- **Duplicate Packages** 卡片上展示了项目中重复的第三方包数量。点击图片可以查看重复第三方包的具体详情。请注意，这里的第三方包是被打包的第三方包。
+
+更多信息，请参阅[重复第三方包](/guide/usage/bundle-alerts)
+
+## 产物分析
+
+::: tip
+如果项目基于 Rspack 且版本低于 0.5.1，无法查看代码信息。
+:::
+
+### 资源与模块关系展示
+
+**Bundle Analysis** 模块用于分析构建产物资源（**Assets**）以及所包含的 **Modules** 的大小和代码信息。示例图如下：
+
+- 左侧是 **Assets** 资源列表，按照资源大小降序排列，可以点击 **「expand all」** 按钮展开全部节点。
+- 右侧是 **Assets** 对应的 **Modules** 列表，同样按照打包后模块大小降序排列。
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-analysis-tree.png" />
+
+### 搜索筛选框
+
+顶部工具栏从左到右依次是：搜索 `Assets` 工具、筛选 `Assets` 大小工具、筛选 `Module` 大小工具。
+
+  - **搜索 Entry 输入框**：在输入框中输入 **Entry** 的关键词，可以搜索对应的 **Entry**，只展示该 **Entry** 下的 **Assets** 等。
+  - **搜索 Assets 输入框**：在输入框中输入 `Assets` 的关键词，可以搜索对应的 `Assets`。
+  - **Assets Size 筛选工具**：填写数字，单位为：KB、MB，可以过滤掉小于所填 `Size` 的 `Assets` 资源。
+  - **Module Size 筛选工具**：填写数字，单位为：KB、MB，可以过滤掉小于所填 `Size` 的 `Module` 资源。
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-analysis-selects.png" />
+
+### 模块标签说明
+
+**Assets** 标签如左图所示，从左到右依次代表：**资源体积**、**[Initial Chunk](https://webpack.js.org/concepts/under-the-hood/#chunks)** 和 **代码查看**。
+
+<div style={{ display: "flex" }}>
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-assets-tags.png" height='200px' width='360px' style={{"margin": 'auto' }} />
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-modules-tags.png" height='300px' width='440px' style={{"margin": 'auto'}} />
+</div>
+
+**Modules** 标签如右图所示，从左到右依次代表：
+  - **Bundled Size**
+    - 模块打包进产物的最终大小。一些标有 `concatenated` 的模块是串联模块，对此值有一定影响，请参阅下方的 `concatenated module` 解释。
+  - **[Concatenated Module](https://webpack.js.org/plugins/module-concatenation-plugin/#root)** 串联模块，串联模块是将多个模块在打包时提升或串联到一个闭包中。有两种类型：
+    - 一种是串联主模块，标明串联了多少个 `Modules`；
+    - 另一种是被串联的子模块，标明被聚合到了哪个 `Module` 内。这种子模块无法继续拆解打包后的代码，因此无法得知具体的 `Bundled Size`，只能得知整个串联模块的大小，该大小标注在主模块尾部。
+  - **Module Explorer** 标签：点击可打开 `Module` 之间的依赖关系分析页面。
+  - **代码查看** 标签，点击可展开代码段，包括 `Source`（源码）、`Transformed`（编译后代码）和 `Bundled`（打包后代码）。
+
+{/* 
+// TODO:
+:::tip
+- `Transformed`（编译后代码）默认未开启。需要配置 'All'
+:::: */}
+
+## 产物总览瓦片图
+
+点击 **「Bundle Size」** 页面的 **「Bundle Analyzer Graph」** 按钮，可以查看经典的瓦片图。
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-tile-graph.png" width='500px' style={{"margin": 'auto' }} />
