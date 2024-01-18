@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
-import { RsdoctorWebpackSDK } from '@rsdoctor/sdk/sdk';
+import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import { SDK } from '@rsdoctor/types';
 import { compileByWebpack5 } from '@rsbuild/test-helper';
 import os from 'os';

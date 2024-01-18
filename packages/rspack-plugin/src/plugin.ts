@@ -29,6 +29,7 @@ import {
 import path from 'path';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
+import { BuiltinLoaderPlugin } from './builtinLoaderPlugin';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorPluginInstance<Compiler, Rules>
@@ -91,6 +92,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     }
 
     new InternalRulesPlugin(this).apply(compiler);
+    new BuiltinLoaderPlugin().apply(compiler);
   }
 
 

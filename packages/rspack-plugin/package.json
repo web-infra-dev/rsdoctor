@@ -20,13 +20,15 @@
   },
   "dependencies": {
     "@rsdoctor/core": "workspace:*",
-    "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/graph": "workspace:*",
+    "@rsdoctor/sdk": "workspace:*",
     "@rspack/core": "0.5.1",
+    "loader-utils": "^2.0.4",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
+    "@types/loader-utils": "^2.0.5",
     "@types/lodash": "^4.14.200",
     "@types/node": "^16",
     "@types/tapable": "2.2.2",

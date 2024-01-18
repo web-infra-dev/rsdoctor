@@ -1,7 +1,7 @@
 import type { Configuration } from 'webpack';
 import type { SourceMapConsumer, RawSourceMap } from 'source-map';
 
-import { LoaderData } from './loader';
+import { LoaderData, ResourceLoaderData } from './loader';
 import { ResolverData } from './resolver';
 import { PluginData } from './plugin';
 import { BuilderStoreData, EMOStoreData, StoreData } from './result';
@@ -26,6 +26,8 @@ export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   reportError(errors: Error[]): void;
   /** Report error message */
   reportLoader(data: LoaderData): void;
+  /** Report loader message before or after some builtin loader */
+  reportLoaderStartOrEnd(data: ResourceLoaderData): void;
   /** Report path request information */
   reportResolver(data: ResolverData): void;
   /** Report plugin information */
