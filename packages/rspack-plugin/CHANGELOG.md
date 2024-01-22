@@ -1,5 +1,20 @@
 # @rsdoctor/rspack-plugin
 
+## 0.1.0-beta.3
+
+### Minor Changes
+
+- e1ac5e7: release: 0.1.0
+
+### Patch Changes
+
+- 82d21e4: feat(plugin): support rspack builtin loader report
+- Updated dependencies [82d21e4]
+- Updated dependencies [e1ac5e7]
+  - @rsdoctor/sdk@0.1.0-beta.3
+  - @rsdoctor/core@0.1.0-beta.3
+  - @rsdoctor/graph@0.1.0-beta.3
+
 ## 0.0.2-beta.2
 
 ### Patch Changes
