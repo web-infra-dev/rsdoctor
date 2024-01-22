@@ -1,5 +1,15 @@
 # @rsdoctor/graph
 
+## 0.0.2-beta.2
+
+### Patch Changes
+
+- cbd9fbe: feat(client): refactor(graph): Normal mode no transformed code
+- Updated dependencies [cbd9fbe]
+- Updated dependencies [0e3abb7]
+  - @rsdoctor/types@0.0.2-beta.2
+  - @rsdoctor/utils@0.0.2-beta.2
+
 ## 0.0.2-beta.1
 
 ### Patch Changes

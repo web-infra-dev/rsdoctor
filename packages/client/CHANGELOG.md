@@ -1,5 +1,11 @@
 # @rsdoctor/components
 
+## 0.0.2-beta.2
+
+### Patch Changes
+
+- 0e3abb7: feat(bundle): rspack mode add bundle analysis by rspack's hooks and add rules scan.
+
 ## 0.0.2-beta.1
 
 ### Patch Changes

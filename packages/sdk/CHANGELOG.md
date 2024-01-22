@@ -1,5 +1,16 @@
 # @rsdoctor/sdk
 
+## 0.0.2-beta.2
+
+### Patch Changes
+
+- Updated dependencies [cbd9fbe]
+- Updated dependencies [0e3abb7]
+  - @rsdoctor/graph@0.0.2-beta.2
+  - @rsdoctor/types@0.0.2-beta.2
+  - @rsdoctor/client@0.0.2-beta.2
+  - @rsdoctor/utils@0.0.2-beta.2
+
 ## 0.0.2-beta.1
 
 ### Patch Changes
