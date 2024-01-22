@@ -119,7 +119,7 @@ importers:
         specifier: workspace:*
         version: link:../packages/rspack-plugin
       '@rsdoctor/sdk':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../packages/sdk
       '@rsdoctor/types':
         specifier: workspace:*
@@ -658,6 +658,9 @@ importers:
       '@rspack/core':
         specifier: 0.5.1
         version: 0.5.1(@swc/helpers@0.5.3)
+      loader-utils:
+        specifier: ^2.0.4
+        version: 2.0.4
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -665,6 +668,9 @@ importers:
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
+      '@types/loader-utils':
+        specifier: ^2.0.5
+        version: 2.0.6
       '@types/lodash':
         specifier: ^4.14.200
         version: 4.14.202
@@ -707,6 +713,9 @@ importers:
       ip:
         specifier: 1.1.8
         version: 1.1.8
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       open:
         specifier: ^8.4.0
         version: 8.4.0
@@ -732,6 +741,9 @@ importers:
       '@types/ip':
         specifier: 1.1.0
         version: 1.1.0
+      '@types/lodash':
+        specifier: ^4.14.200
+        version: 4.14.202
       '@types/node':
         specifier: ^16
         version: 16.18.66

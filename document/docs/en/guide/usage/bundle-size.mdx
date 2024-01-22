@@ -1,0 +1,99 @@
+# Bundle Analysis
+
+## Introduction
+
+**Rsdoctor** provides the `Bundle Size` module, which is mainly used to analyze the information of the build artifacts of **Webpack** or **Rspack**, including the **size of resources**, **duplicate packages**, and **module reference relationships**:
+
+- **Bundle Overview**: Displays the total number and size of artifacts, as well as the number and size of each file type. It also shows the duplicate packages and their reference chains.
+- **Bundle Analysis Module**: Analyzes the size and code information of the build artifacts' resources (**Assets**) and the included **Modules**. In this module, you can view the **actual code size of modules after packaging** in the Assets, as well as the original code or **packaged code segments** and **module reference relationships**.
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-overall.png" width={'700px'} style={{ margin: 'auto' }} />
+
+Click on the **"Bundle Size"** option in the navigation bar to view the Bundle analysis report. Please note that to display this page, you need to enable the build artifact analysis capability [features](/config/options/index). 
+
+### Glossary
+- **`Assets`**: Resources refer to images, fonts, media, and other file types. They are the files that ultimately exist in the output folder. Each Chunk has corresponding [Assets resources](https://webpack.js.org/concepts/under-the-hood/#chunks).
+- **`Module`**: One or more Modules combine to form a Chunk. For more information about Module types, please refer to [Rspack Modules](https://www.rspack.dev/api/modules.html) and [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module).
+- **`Bundle Size`**: The final packaged size of the resource artifact, which is the final size after being processed by the builder.
+- **`Module Bundled Source & Size`**: **Module Parsed Source** refers to the final code fragment of the **Module** in the packaged artifact, and **Module Parsed Size** refers to the size of the final code fragment of the **Module** in the packaged artifact.
+- **`Package Count`**: The number of third-party packages.
+- **`Initial Chunk`**: The **initial** chunk is the main chunk of the entry point. This chunk contains all the modules specified by the entry point and their dependencies, unlike the **chunks** for "on-demand loading".
+  - For more information about Initial Chunk, please refer to [Initial Chunk Introduction](https://webpack.js.org/concepts/under-the-hood/#chunks).
+- **`Duplicate Packages`**: Duplicate third-party packages bundled into the project. Excludes third-party packages that are not bundled into the artifact. Please refer to [Duplicate Packages](/guide/usage/bundle-alerts).
+- **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. In the past, Webpack would package each module into a separate closure, and this encapsulation function would cause slower execution of JavaScript in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://webpack.js.org/plugins/module-concatenation-plugin/#root) parameter.
+
+## Bundle Overview
+
+### Bundle Information Card
+
+The bundle overview displays information about the number and size of files, such as `Total Files`. Clicking on the card chart expands the resource details, as shown in the following image:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-overall-1.png" width={'700px'} style={{ margin: 'auto' }} />
+
+- Clicking on the details icon displays the corresponding resource tree on the right, indicating the resource sizes:
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-tree.png" width={'300px'} height={'400px'}  style={{ margin: 'auto' }} />
+
+- Clicking on the tabs allows you to switch between different resource information views, such as **[Total JS | Initial JS]**. The card also displays the percentage, size, and number of resources. Similarly, clicking on the icon in the lower right corner expands the resource list.
+
+### Duplicate Packages
+
+The **Duplicate Packages** card displays the number of duplicate third-party packages in the project. Clicking on the image allows you to view the specific details of the duplicate packages. Please note that these are duplicate packages that have been bundled.
+
+For more information, please refer to [Duplicate Packages](/guide/usage/bundle-alerts).
+
+## Bundle Analysis
+
+::: tip
+If your project is based on Rspack and the version is lower than 0.5.1, you cannot view code information.
+:::
+
+### Resource and Module Relationship Display
+
+The **Bundle Analysis** module is used to analyze the size and code information of the build artifacts' resources (**Assets**) and the included **Modules**. The example image is shown below:
+
+- On the left side is the list of **Assets** resources, sorted in descending order by resource size. You can click the **"expand all"** button to expand all nodes.
+- On the right side is the list of **Modules** corresponding to the **Assets**, also sorted in descending order by module size after packaging.
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-analysis-tree.png" />
+
+### Search and Filter Box
+
+The top toolbar from left to right includes: the search tool for **Assets**, the filter tool for **Assets** size, and the filter tool for **Module** size.
+
+- **Search Entry Input Box**: Enter the keyword of an **Entry** in the input box to search for the corresponding **Entry** and display only the related **Assets**.
+- **Search Assets Input Box**: Enter the keyword of an **Assets** in the input box to search for the corresponding **Assets**.
+- **Assets Size Filter Tool**: Enter a number with units of KB or MB to filter out **Assets** resources smaller than the specified size.
+- **Module Size Filter Tool**: Enter a number with units of KB or MB to filter out **Module** resources smaller than the specified size.
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-analysis-selects.png" />
+
+### Module Tag Explanation
+
+The **Assets** tag is shown in the left image, from left to right representing: **Resource Size**, **[Initial Chunk](https://webpack.js.org/concepts/under-the-hood/#chunks)**, and **Code View**.
+
+<div style={{ display: "flex" }}>
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-assets-tags.png" height='200px' width='360px' style={{"margin": 'auto' }} />
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-modules-tags.png" height='300px' width='440px' style={{"margin": 'auto'}} />
+</div>
+
+The **Modules** tag is shown in the right image, from left to right representing:
+  - **Bundled Size**
+    - The final size of the module bundled into the artifact. Some modules labeled as `concatenated` are concatenated modules, which have a certain impact on this value. Please refer to the explanation of `concatenated module` below.
+  - **[Concatenated Module](https://webpack.js.org/plugins/module-concatenation-plugin/#root)**: Concatenated modules are modules that are optimized or concatenated into one closure during bundling. There are two types:
+    - One is the concatenated main module, indicating how many `Modules` are concatenated.
+    - The other is the concatenated sub-module, indicating which `Module` it is aggregated into. This sub-module cannot be further unpacked after bundling, so the specific `Bundled Size` cannot be determined. Only the size of the entire concatenated module is known, which is marked at the end of the main module.
+  - **Module Explorer** tag: Click to open the dependency analysis page between `Modules`.
+  - **Code View** tag: Click to expand code segments, including `Source` (source code), `Transformed` (compiled code), and `Bundled` (bundled code).
+
+{/* 
+// TODO:
+:::tip
+- `Transformed`（编译后代码）默认未开启。需要配置 'All'
+:::: */}
+
+## Bundle Overview Tile Graph
+
+Click the **"Bundle Analyzer Graph"** button on the **"Bundle Size"** page to view the classic tile graph.
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-tile-graph.png" width='500px' style={{"margin": 'auto' }} />

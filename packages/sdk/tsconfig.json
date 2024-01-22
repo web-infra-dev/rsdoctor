@@ -2,7 +2,6 @@
   "extends": "@rsdoctor/tsconfig/base",
   "compilerOptions": {
     "experimentalDecorators": true,
-    "noUnusedLocals": false,
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {

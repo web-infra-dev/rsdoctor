@@ -107,7 +107,7 @@ export const FileTree: React.FC<FileTreeProps> = (props) => {
                       key={`${node.data.name}-size-tag`}
                       className={`${prefix}-node-title-tag`}
                       color={TAG_PALLETE.COLOR_B}
-                    >{`Parsed: ${node.data.size}`}</Tag>
+                    >{`Bundled: ${node.data.size}`}</Tag>
                   ) : (
                     <></>
                   )}

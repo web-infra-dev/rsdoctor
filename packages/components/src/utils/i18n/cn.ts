@@ -19,7 +19,7 @@ const cn: typeof en = {
   'Bundle Overall': '产物数据概览',
   'Expand Omitted': ' reasons 树会默认折叠中间的第三方引入的模块，点击这个图标可以查看完整树图',
   'Concatenated Tag':
-    '串联模块，hover 上去可以显示聚合成的主模块名称。注：聚合模块 parsed size 为零，有可能是因为被聚合到了主模块中。',
+    '串联模块，hover 上去可以显示聚合成的主模块名称。注：聚合模块 bundled size 为零，有可能是因为被聚合到了主模块中。',
 
   'the file content not changed after transpiled by this loader': '该文件内容在 loader 处理前后没有发生变化',
 

@@ -17,11 +17,12 @@
 | 功能                  | 描述                                       | 相关链接 |
 | --------------------- | ------------------------------------------ | -------- |
 | 编译概览  | 查看当前项目编译过程的数据信息         |[编译概览](../usage/compile-overall) |
-| 编译预警  | 基于编译数据做检测的能力               | [编译预警](../usage/compile-overall) |
+| 编译预警  | 基于编译数据做检测的能力               | [编译预警](../usage/compile-alerts) |
 | Loader 编译行为分析   | 以目录与文件维度的 Loader 分析数据，展示单个文件编译行为 | [Loaders 分析](../usage/loaders-analysis)  |
 | Loaders 耗时分析      | 当前项目中所有 Loader 的执行时序图           | [Loaders 时序图](../usage/loaders-timeline)         |
 | Plugins 分析          | 项目所使用插件的数据分析                     | [Plugins 分析](../usage/plugins-analysis)          |
 | Resolver 分析         | Resolver 解析能力分析数据                   | [Resolver 分析](../usage/resolver)        |
+| Loader 耗时分析及优化  |  该文档介绍如何使用 Rsdoctor 进行构建耗时分析并优化  | [ Loader 耗时分析及优化 ](../topic/loader-optimization)  |
 
 ## 构建产物分析
 
@@ -29,7 +30,7 @@
 | --------- | ------------------------------------------------------------ | -------- |
 | 产物概览  | 查看当前项目构建产物的信息               | [产物概览](../usage/bundle-overall) |
 | 产物预警  | 基于构建产物数据做检测的能力             | [产物预警](../usage/bundle-alerts) |
-| 产物分析  | 产物中 assets、chunks、modules 关系分析，以及每个 module 打包代码及大小分析等 | -        |
-| 模块分析  | Modules 依赖关系分析                                         | -        |
-| 重复包优化 | 检查项目使用的依赖包的重复情况                               | -        |
+| 产物分析  | 产物中 assets、chunks、modules 关系分析，以及每个 module 打包代码及大小分析等 | [产物分析](../usage/bundle-size)       |
+| 模块分析  | Modules 依赖关系分析                                         | [Modules 依赖链分析](../usage/module-analysis)    |
+| 重复包优化 | 检查项目使用的依赖包的重复情况                               | [重复包优化](../topic/duplicate-pkg-problem)         |
 | Bundle Diff | 两份产物对比分析                                             | 计划支持 |
