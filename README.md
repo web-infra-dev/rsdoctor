@@ -16,7 +16,12 @@ English | [简体中文](./README.zh-CN.md)
 - Rsdoctor is a one-stop tool for diagnosing and analyzing the build process and build artifacts.
 - Rsdoctor is a tool that supports Webpack and Rspack build analysis.
 - Rsdoctor is an analysis tool that can display the time-consuming and behavioral details of the compilation.
-- Rsdoctor is a tool that provides bundle Diff and other anti-degradation capabilities simultaneously.
+- Rsdoctor is a tool that can analyze the time-consuming and compilation process of the rspack builtin:swc-loader.
+
+
+## 📚 Getting Started
+
+To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/start/quick-start).
 
 ## 🔥 Features
 
@@ -30,7 +35,6 @@ English | [简体中文](./README.zh-CN.md)
   - Build artifact support for resource lists and module dependencies, etc.
   - Build-time analysis supports Loader, Plugin, and Resolver building process analysis.
   - Build rules support duplicate package detection and ES Version Check, etc.
-  - Currently, bundle Diff capabilities are also available.
 
 - **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
 
@@ -46,6 +50,13 @@ Please read the [Contributing Guide](https://github.com/web-infra-dev/rsdoctor/b
 
 Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rsdoctor team and users are active there, and we're always looking for contributions.
 
+## 🪐 Link
+
+- [Rspack](https://github.com/web-infra-dev/rspack): A fast Rust-based web bundler.
+- [Rsbuild](https://github.com/web-infra-dev/rsbuild): An Rspack-based build tool for the web, rebranded from Modern.js Builder.
+- [Rspress](https://github.com/web-infra-dev/rspress): A fast Rspack-based static site generator.
+- [Modern.js](https://github.com/web-infra-dev/modern.js): A progressive React framework based on Rsbuild.
+
 ## 🙌 Code of Conduct
 
 This repo has adopted the ByteDance Open Source Code of Conduct. Please check [Code of Conduct](./CODE_OF_CONDUCT.md) for more details.
@@ -55,11 +66,10 @@ This repo has adopted the ByteDance Open Source Code of Conduct. Please check [C
 Some of the implementation of Rsdoctor refers to the excellent projects in the community, and we would like to thank them:
 
 - Some analysis logics are referenced from [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme).
+- Some analysis logics are referenced from [Webpack](https://github.com/webpack/webpack/blob/main/README.md).
 - The built-in analysis graph in the build artifact page is from [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer).
 
-## 🚧 Notice
-
-The Rsdoctor features and official website documentation are currently under development. Please wait for the 0.1.0 version.
+This Rsdoctor website is powered by [Netlify](https://www.netlify.com/).
 
 ## 📖 License
 
