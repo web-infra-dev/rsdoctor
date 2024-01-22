@@ -1,6 +1,6 @@
 # @rsdoctor/graph
 
-## 0.1.0-beta.3
+## 0.1.0-beta
 
 ### Minor Changes
 
@@ -10,8 +10,8 @@
 
 - Updated dependencies [82d21e4]
 - Updated dependencies [e1ac5e7]
-  - @rsdoctor/types@0.1.0-beta.3
-  - @rsdoctor/utils@0.1.0-beta.3
+  - @rsdoctor/types@0.1.0-beta
+  - @rsdoctor/utils@0.1.0-beta
 
 ## 0.0.2-beta.2
 

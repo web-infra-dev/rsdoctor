@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/test-helper",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta",
   "description": "The vitest helpers of Rsdoctor.",
   "repository": {
     "type": "git",
