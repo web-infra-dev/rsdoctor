@@ -1,0 +1,40 @@
+# Module 引用链分析
+
+## 功能介绍
+
+**Rsdoctor** 提供了 `Module 引用链分析` 模块，该模块主要是分析某个 Module 的依赖树，即被那些模块所依赖，即 [Webpack 的 stats.reasons](https://webpack.js.org/configuration/stats/#statsreasons)。
+
+在该模块中，可以分析 `Module` 引用链，如果有拆包诉求或者想要看某个 `Module` 为何被引入，可以通过 `Module 引用链分析` 快速清晰的定位引用链。
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/module-analysis-tree.png" width='600px' style={{"margin": 'auto'}} />
+
+### 入口
+
+`「Bundle Size」` 页面中点击某个 **Assets** 后右侧会显示 `「Module 树」`，**Module** 后面会有跟着如下红框内图标，点击即可查看该 **Module** 的引用链关系图。
+
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/module-analysis-entry.png" height='300px' width='440px' style={{"margin": 'auto'}} />
+
+### 名词解释
+
+- **`Reasons`** : 顾名思义是 `[原因]` 的意思，即某个 `Module` 存在的原因。Reasons 就是该 `Module` 被哪些 `Module` 们引入，而整个 `Reasons Tree` 就是这个 `Module` 的整个上游引用链，包括了直接父级和间接父级们。[即 Webpack 的 stats.reasons。](https://webpack.js.org/configuration/stats/#statsreasons)
+- **`Dependencies`** : 是该 `Module` 依赖了哪些 `Module`。
+
+## Reasons 依赖树
+
+### 使用介绍
+
+`Reasons Tree` 展示了该 `Module` 的被其他模块引入的依赖链，即被哪些 `Module` 直接或间接引入。在该依赖树中可以查看依赖链上 `Module` 的 `Bundled Size` ，还可以通过点击最右侧 `>` 箭头跳转到该 `Module`的 `Module 依赖链分析` 页面。
+
+- **依赖链树的父子关系**：父节点文件是被子节点文件所依赖，进而被打包到产物中的。同理，孙子节点文件是被子节点所依赖而打包到产物中的，依次类推。
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/module-analysis-jump-icon.png" width='700px' style={{"margin": 'auto'}}  />
+
+- `Usage` 标签会展示各种模块标签的作用。
+
+- `Concatenated`标签: 
+  - `Concatenated` 标签标识该模块是被串联的子模块，`hover` 上去就可以看到被聚合到了哪个主模块中。这种聚合模块无法继续拆解打包后的代码，因此无法得知具体的 `Bundled Size`，只能得知整个串联模块的大小。
+  - 名词解释：串联模块是将多个模块在打包时提升或串联到一个闭包中。 `Concatenated Module` 的解释可以查看[名词解释](guide/usage/bundle-size#%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A)。
+
+- `!` 标签，`hover` 上去可以展示模块详细路径.
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/module-analysis-icons.png" width='600px' style={{"margin": 'auto'}}  />
