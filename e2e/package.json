@@ -17,7 +17,7 @@
     "@playwright/test": "1.33.0",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
-    "@rsdoctor/sdk": "workspace:^",
+    "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",

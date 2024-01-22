@@ -8,6 +8,7 @@ import { RsdoctorServer } from '../server';
 import { RsdoctorFakeServer } from '../server/fakeServer';
 import { RsdoctorWebpackSDKOptions } from './types';
 import { SDKCore } from './core';
+import { ResourceLoaderData } from '@rsdoctor/types/dist/sdk';
 
 export class RsdoctorWebpackSDK<
     T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
@@ -28,6 +29,8 @@ export class RsdoctorWebpackSDK<
   private _errors: DevToolError[] = [];
 
   private _loader: SDK.LoaderData = [];
+
+  private _loaderStart: SDK.LoaderData = [];
 
   private _resolver: SDK.ResolverData = [];
 
@@ -212,6 +215,24 @@ export class RsdoctorWebpackSDK<
       });
     });
     this.onDataReport();
+  }
+
+  reportLoaderStartOrEnd(data: ResourceLoaderData) {
+    // Just one loader data in array list.
+    const _builtinLoader = data.loaders[0];
+    if (_builtinLoader.startAt) {
+      this._loaderStart.push(data);
+    } else if (_builtinLoader.endAt) {
+      const matchLoaderStart = this._loaderStart.find(
+        (e) => (e.resource.path === data.resource.path && e.loaders[0].loader === _builtinLoader.loader),
+      );
+
+      if (matchLoaderStart) {
+        matchLoaderStart.loaders[0].result = _builtinLoader.result;
+        matchLoaderStart.loaders[0].endAt = _builtinLoader.endAt;
+        this.reportLoader([matchLoaderStart])
+      }
+    }
   }
 
   reportResolver(data: SDK.ResolverData): void {
