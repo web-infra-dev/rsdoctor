@@ -1,8 +1,6 @@
 import { Compiler, Configuration, RuleSetRule } from '@rspack/core';
-import fs from 'fs';
 import { ModuleGraph } from '@rsdoctor/graph';
 import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
-import { Chunks } from '@rsdoctor/core/build-utils';
 import {
   InternalLoaderPlugin,
   InternalPluginsPlugin,
@@ -128,18 +126,6 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     this.sdk.addClientRoutes([
       ManifestType.RsdoctorManifestClientRoutes.Overall,
     ]);
-
-    /** Generate rspack-bundle-analyzer tile graph */
-    const reportFilePath = await Chunks.generateTileGraph(
-      json as Plugin.BaseStats,
-      {
-        reportFilename: Chunks.TileGraphReportName,
-        reportTitle: 'webpack-bundle-analyzer',
-      },
-      compiler.outputPath,
-    );
-    reportFilePath &&
-      (await this.sdk.reportTileHtml(fs.readFileSync(reportFilePath, 'utf-8')));
 
     this.sdk.setOutputDir(
       path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
