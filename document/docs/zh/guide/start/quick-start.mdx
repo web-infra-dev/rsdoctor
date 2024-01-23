@@ -4,68 +4,21 @@
 
 ## 第一步：安装依赖
 
+import { PackageManagerTabs } from '@theme';
+
 ### Rspack 项目
 
-<Tabs>
+基于 Rspack 或 Rsbuild 的项目，安装以下依赖：
 
-<Tab label="pnpm">
-
-```bash
-pnpm add @rsdoctor/rspack-plugin -D
-```
-
-</Tab>
-
-<Tab label="npm">
-
-```bash
-npm install @rsdoctor/rspack-plugin -D
-```
-
-</Tab>
-
-<Tab label="yarn">
-
-```bash
-yarn add @rsdoctor/rspack-plugin -D
-```
-
-</Tab>
-
-</Tabs>
+<PackageManagerTabs command="add @rsdoctor/rspack-plugin -D" />
 
 ### Webpack 项目
 
-import { Tabs, Tab } from "@theme";
+基于 Webpack 的项目，安装以下依赖：
 
-<Tabs>
+<PackageManagerTabs command="add @rsdoctor/webpack-plugin -D" />
 
-<Tab label="pnpm">
-
-```bash
-pnpm add @rsdoctor/webpack-plugin -D
-```
-
-</Tab>
-
-<Tab label="npm">
-
-```bash
-npm install @rsdoctor/webpack-plugin -D
-```
-
-</Tab>
-
-<Tab label="yarn">
-
-```bash
-yarn add @rsdoctor/webpack-plugin -D
-```
-
-</Tab>
-
-</Tabs>
-
+---
 
 ## 第二步：注册插件
 
