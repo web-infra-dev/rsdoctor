@@ -22,112 +22,112 @@ For projects based on Webpack, install the following dependencies:
 
 ## Step 2: Register Plugin
 
-After the dependency installation is completed, you need to integrate the Rsdoctor plugin into the project. You can configure it according to the corresponding configuration guide based on the project framework.
+After the dependency installation, you need to integrate the Rsdoctor plugin into your project. Below are some examples of common tools and frameworks:
 
 ### Rspack
 
-We need to initialize the RsdoctorRspackPlugin in the [plugins](https://www.rspack.dev/config/plugins.html#plugins) of `rspack.config.js`, referring to the following code:
+Initialize the RsdoctorRspackPlugin in the [plugins](https://www.rspack.dev/config/plugins.html#plugins) of `rspack.config.js`:
 
-```js
+```js title="rspack.config.js"
 const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 
 module.exports = {
   // ...
   plugins: [
-    process.env.RSDOCTOR && // It is recommended to execute the analysis plugin when RSDOCTOR is true, because the plugin may increase the build time.
+    // Only register the plugin when RSDOCTOR is true, as the plugin will increase the build time.
+    process.env.RSDOCTOR &&
       new RsdoctorRspackPlugin({
-        disableClientServer: !!process.env.DISABLE_CLIENT_SERVER,
-      }), // Details of the plugin's options are provided below.
+        // plugin options
+      }),
   ].filter(Boolean),
 };
 ```
 
-Next, when you execute the **build** command within the project and complete the build, Rsdoctor will automatically open the analysis page of the build results.
+### Rsbuild
 
-- **Options Config**
+Initialize the RsdoctorRspackPlugin in the [tools.rspack](https://rsbuild.dev/config/tools/rspack) of `rsbuild.config.ts`:
 
-Please refer to [Options Configuration](../../config/options/index) for Options configuration items.
+```js title="rsbuild.config.ts"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  // ...
+  tools: {
+    rspack(config, { appendPlugins }) {
+      // Only register the plugin when RSDOCTOR is true, as the plugin will increase the build time.
+      if (process.env.RSDOCTOR) {
+        appendPlugins(
+          new RsdoctorRspackPlugin({
+            // plugin options
+          }),
+        );
+      }
+    },
+  },
+};
+```
 
 ### Webpack
 
-We need to initialize the RsdoctorWebpackPlugin in the [plugins](https://webpack.js.org/configuration/plugins/#plugins) of `webpack.config.js`, referring to the following code:
+Initialize the RsdoctorWebpackPlugin in the [plugins](https://webpack.js.org/configuration/plugins/#plugins) of `webpack.config.js`:
 
-```js
+```js title="webpack.config.js"
 const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
 
 module.exports = {
   // ...
   plugins: [
-    process.env.RSDOCTOR && // It is recommended to execute the analysis plugin when RSDOCTOR is true, because the plugin may increase the build time.
+    // Only register the plugin when RSDOCTOR is true, as the plugin will increase the build time.
+    process.env.RSDOCTOR &&
       new RsdoctorWebpackPlugin({
-        disableClientServer: !!process.env.DISABLE_CLIENT_SERVER,
-      }), // Details of the plugin's options are provided below.
+        // plugin options
+      }),
   ].filter(Boolean),
 };
 ```
 
-Next, when you execute the **build** command within the project and complete the build, Rsdoctor will automatically open the analysis page of the build results.
-
-- **Options Config**
-
-Please refer to [Options Configuration](../../config/options/index) for Options configuration items.
-
 ### Modern.js Framework
 
-We need to initialize the RsdoctorWebpackPlugin in the [tools.bundlerChain](https://modernjs.dev/configure/app/tools/bundler-chain.html#toolsbundlerchain) of `modern.config.ts`, referring to the following code:
+Initialize the plugin in the [tools.rspack](https://modernjs.dev/configure/app/tools/rspack) of `modern.config.ts`:
 
-```js
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+```ts title="modern.config.ts"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
-module.exports = {
+export default {
   // ...
   tools: {
-    bundlerChain: (chain) => {
+    rspack(config, { appendPlugins }) {
+      // Only register the plugin when RSDOCTOR is true, as the plugin will increase the build time.
       if (process.env.RSDOCTOR) {
-        // It is recommended to execute the analysis plugin when RSDOCTOR is true, because the plugin may increase the build time.
-        chain.plugin('rsdoctor').use(RsdoctorWebpackPlugin, [
-          {
-            disableClientServer: !!process.env.DISABLE_CLIENT_SERVER,
-          }, // Details of the plugin's options are provided below.
-        ]);
+        appendPlugins(
+          new RsdoctorRspackPlugin({
+            // plugin options
+          }),
+        );
       }
     },
   },
 };
 ```
 
-Next, when you execute the **build** command within the project and complete the build, Rsdoctor will automatically open the analysis page of the build results.
+:::tip
+For projects using Modern.js Webpack mode, please register the `RsdoctorWebpackPlugin` plugin through [tools.webpack](https://modernjs.dev/configure/app/tools/webpack).
+:::
 
-- **Options Config**
+---
 
-Please refer to [Options Configuration](../../config/options/index) for Options configuration items.
+## Step 3: Run Build
 
-### Rsbuild Framework
+Now, you can run the **build** command in the project. After the build is complete, Rsdoctor will automatically open the analysis page of this build.
 
-We need to initialize the RsdoctorWebpackPlugin in the [tools.bundlerChain](https://rsbuild.dev/guide/basic/configure-rspack#toolsbundlerchain) of `rsbuild.config.ts`, referring to the following code:
+```bash
+# Enable Rsdoctor
+RSDOCTOR=true npm run build
 
-```js
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
-
-module.exports = {
-  // ...
-  tools: {
-    bundlerChain: (chain) => {
-      if (process.env.RSDOCTOR) {
-        // It is recommended to execute the analysis plugin when RSDOCTOR is true, because the plugin may increase the build time.
-        chain.plugin('rsdoctor').use(RsdoctorWebpackPlugin, [
-          {
-            disableClientServer: !!process.env.DISABLE_CLIENT_SERVER,
-          }, // Details of the plugin's options are provided below.
-        ]);
-      }
-    },
-  },
-};
+# Disable Rsdoctor
+npm run build
 ```
 
-Next, when you execute the **build** command within the project and complete the build, Rsdoctor will automatically open the analysis page of the build results.
-
-- **Options Config**
-
-Please refer to [Options Configuration](../../config/options/index) for Options configuration items.
+:::tip
+The Rsdoctor plugin provides some configurations, please refer to [Options](../../config/options/index).
+:::
