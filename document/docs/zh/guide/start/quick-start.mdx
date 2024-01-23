@@ -22,109 +22,112 @@ import { PackageManagerTabs } from '@theme';
 
 ## 第二步：注册插件
 
-依赖安装完成后，需要在项目中接入 Rsdoctor 插件。可以按照项目框架选择对应配置指南进行配置。
+依赖安装完成后，你需要在项目中接入 Rsdoctor 插件，下面是一些常见工具和框架的示例：
 
-### Rspack 项目接入
+### Rspack 项目
 
+在 `rspack.config.js` 的 [plugins](https://www.rspack.dev/config/plugins.html#plugins) 中初始化 RsdoctorRspackPlugin 插件，参考：
 
-我们需要在 `rspack.config.js` 的 [plugins](https://www.rspack.dev/config/plugins.html#plugins) 中初始化 RsdoctorRspackPlugin 插件，参考下方代码：
-
-```js
-const { RsdoctorRspackPlugin } = require("@rsdoctor/rspack-plugin");
-
-module.exports = {
-  // ...
-  plugins: [
-    process.env.RSDOCTOR && // 建议仅在 RSDOCTOR 为 true 时执行分析插件，因为插件会增加构建耗时
-      new RsdoctorRspackPlugin({ disableClientServer: !!process.env.DISABLE_CLIENT_SERVER }), // 插件的 options 属性查看下方
-  ].filter(Boolean),
-};
-```
-
-接下来，当你在项目内执行 **build** 命令并完成构建后，Rsdoctor 会自动打开本次构建结果的分析页面。
-
-- **Options Config**
-
-Options 配置项查看 [Options 配置](../../config/options/index)。
-
-### Webpack 项目接入
-
-我们需要在 `webpack.config.js` 的 [plugins](https://webpack.js.org/configuration/plugins/#plugins) 中初始化 RsdoctorWebpackPlugin 插件，参考下方代码：
-
-```js
-const { RsdoctorWebpackPlugin } = require("@rsdoctor/webpack-plugin");
+```js title="rspack.config.js"
+const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 
 module.exports = {
   // ...
   plugins: [
-    process.env.RSDOCTOR && // 建议仅在 RSDOCTOR 为 true 时执行分析插件，因为插件会增加构建耗时
-      new RsdoctorWebpackPlugin({ disableClientServer: !!process.env.DISABLE_CLIENT_SERVER }),// 插件的 options 属性查看下方
+    // 仅在 RSDOCTOR 为 true 时注册插件，因为插件会增加构建耗时
+    process.env.RSDOCTOR &&
+      new RsdoctorRspackPlugin({
+        // 插件选项
+      }),
   ].filter(Boolean),
 };
 ```
 
-接下来，当你在项目内执行 **build** 命令并完成构建后，Rsdoctor 会自动打开本次构建结果的分析页面。
+### Rsbuild 项目
 
-- **Options Config**
+在 `rsbuild.config.ts` 的 [tools.rspack](https://rsbuild.dev/config/tools/rspack) 中初始化 RsdoctorWebpackPlugin 插件，参考：
 
-Options 配置项查看 [Options 配置](../../config/options/index)。
+```js title="rsbuild.config.ts"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
-
-### Modern.js 项目接入
-
-我们需要在 `modern.config.ts` 的 [tools.bundlerChain](https://modernjs.dev/configure/app/tools/bundler-chain.html#toolsbundlerchain) 中初始化 RsdoctorWebpackPlugin 插件，参考下方代码：
-
-```js
-import { RsdoctorWebpackPlugin } from "@rsdoctor/webpack-plugin";
-
-module.exports = {
+export default {
   // ...
   tools: {
-    bundlerChain: (chain) => {
-      if (process.env.RSDOCTOR) { // 建议仅在 RSDOCTOR 为 true 时执行分析插件，因为插件会增加构建耗时
-        chain.plugin('rsdoctor').use(RsdoctorWebpackPlugin, [
-          {
-              disableClientServer: !!process.env.DISABLE_CLIENT_SERVER, //  插件的 options 属性查看下方
-          }
-        ]);
+    rspack(config, { appendPlugins }) {
+      // 仅在 RSDOCTOR 为 true 时注册插件，因为插件会增加构建耗时
+      if (process.env.RSDOCTOR) {
+        appendPlugins(
+          new RsdoctorRspackPlugin({
+            // 插件选项
+          }),
+        );
       }
-    }
-  }
+    },
+  },
 };
 ```
 
-接下来，当你在项目内执行 **build** 命令并完成构建后，Rsdoctor 会自动打开本次构建结果的分析页面。
+### Webpack 项目
 
-- **Options Config**
+在 `webpack.config.js` 的 [plugins](https://webpack.js.org/configuration/plugins/#plugins) 中初始化 RsdoctorWebpackPlugin 插件，参考：
 
-Options 配置项查看 [Options 配置](../../config/options/index)。
-
-
-### Rsbuild 项目接入
-
-我们需要在 `rsbuild.config.ts` 的 [tools.bundlerChain](https://rsbuild.dev/guide/basic/configure-rspack#toolsbundlerchain) 中初始化 RsdoctorWebpackPlugin 插件，参考下方代码：
-
-```js
-import { RsdoctorWebpackPlugin } from "@rsdoctor/webpack-plugin";
+```js title="webpack.config.js"
+const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
 
 module.exports = {
   // ...
-  tools: {
-    bundlerChain: (chain) => {
-      if (process.env.RSDOCTOR) { // 建议仅在 RSDOCTOR 为 true 时执行分析插件，因为插件会增加构建耗时
-        chain.plugin('rsdoctor').use(RsdoctorWebpackPlugin, [
-          {
-            disableClientServer: !!process.env.DISABLE_CLIENT_SERVER, // 插件的 options 属性查看下方
-          }
-        ]);
-      }
-    }
-  }
+  plugins: [
+    // 仅在 RSDOCTOR 为 true 时注册插件，因为插件会增加构建耗时
+    process.env.RSDOCTOR &&
+      new RsdoctorWebpackPlugin({
+        // 插件选项
+      }),
+  ].filter(Boolean),
 };
 ```
 
-接下来，当你在项目内执行 **build** 命令并完成构建后，Rsdoctor 会自动打开本次构建结果的分析页面。
+### Modern.js 项目
 
-- **Options Config**
+在 `modern.config.ts` 的 [tools.bundlerChain](https://modernjs.dev/configure/app/tools/rspack) 中初始化插件，参考：
 
-Options 配置项查看 [Options 配置](../../config/options/index)。
+```ts title="modern.config.ts"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  // ...
+  tools: {
+    rspack(config, { appendPlugins }) {
+      // 仅在 RSDOCTOR 为 true 时注册插件，因为插件会增加构建耗时
+      if (process.env.RSDOCTOR) {
+        appendPlugins(
+          new RsdoctorRspackPlugin({
+            // 插件选项
+          }),
+        );
+      }
+    },
+  },
+};
+```
+
+:::tip
+对于使用 Modern.js Webpack 模式的项目，请使用 [tools.webpack](https://modernjs.dev/configure/app/tools/webpack) 注册 `RsdoctorWebpackPlugin` 插件。
+:::
+
+---
+
+## 第三步：执行构建
+
+现在你可以在项目内执行 **build** 命令，在完成构建后，Rsdoctor 会自动打开本次构建的分析页面。
+
+```bash
+# 开启 Rsdoctor
+RSDOCTOR=true npm run build
+
+# 未开启 Rsdoctor
+npm run build
+```
+
+:::tip
+Rsdoctor 插件提供了一些配置项，请参考 [Options](../../config/options/index)。
+:::
