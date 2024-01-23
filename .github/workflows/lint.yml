@@ -9,7 +9,7 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - 'packages/document/**'
+      - 'document/**'
       - '*.md'
       - '*.mdx'
 

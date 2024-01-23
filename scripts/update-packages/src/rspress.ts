@@ -29,7 +29,7 @@ const updateRspressVersion = async (dependencies?: Record<string, string>) => {
 async function run() {
   const cwd = process.cwd();
   const repoDir = path.join(cwd, '../../');
-  const documentDir = path.join(repoDir, 'packages/document');
+  const documentDir = path.join(repoDir, 'document');
   const pkgPath = path.join(documentDir, 'package.json');
   const pkgObj = fs.readJSONSync(pkgPath);
   pkgObj.devDependencies = await updateRspressVersion(pkgObj.devDependencies);
