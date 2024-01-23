@@ -22,7 +22,7 @@ import { Process } from '@rsdoctor/utils/build';
 import { debug } from '@rsdoctor/utils/logger';
 import { cloneDeep } from 'lodash';
 import path from 'path';
-import {
+import type {
   Compiler,
   Configuration,
   RuleSetRule,

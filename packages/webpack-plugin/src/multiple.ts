@@ -1,5 +1,5 @@
 import { RsdoctorSDKController } from '@rsdoctor/sdk';
-import { Linter } from '@rsdoctor/types';
+import type { Linter } from '@rsdoctor/types';
 import type { RsdoctorWebpackMultiplePluginOptions } from '@rsdoctor/core';
 
 import { RsdoctorWebpackPlugin } from './plugin';

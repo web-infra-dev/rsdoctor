@@ -84,22 +84,6 @@ export function renderTotalLoadersTooltip(
     `.trim();
 }
 
-export function replaceSlashWithNewline(input: string) {
-  let result = '';
-  for(let i = 0; i < input.length; i++) {
-    if(input[i] === '/') {
-      if(true) {
-        result += '/\n';
-      } else {
-        result += '/';
-      }
-    } else {
-      result += input[i];
-    }
-  }
-  return result;
-}
-
 export function transformDurationMetric(
   rawData: DurationMetric[]
 ): ITraceEventData[] {

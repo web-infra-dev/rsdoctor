@@ -15,7 +15,7 @@
     "dev:doc": "cd document && pnpm run dev",
     "e2e": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
     "gen-release-note": "modern gen-release-note",
-    "lint": "echo todo",
+    "lint": "biome lint . --diagnostic-level=error",
     "new": "modern new",
     "pre": "modern pre",
     "prepare": "pnpm run build -p @rsdoctor/* && husky install",
@@ -34,6 +34,7 @@
     "package.json": "pnpm run check-dependency-version"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.5.1",
     "@modern-js/module-tools": "^2.41.0",
     "@modern-js/monorepo-tools": "^2.41.0",
     "@rsbuild/test-helper": "0.1.5",

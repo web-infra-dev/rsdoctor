@@ -1,0 +1,63 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "files": {
+    "ignore": [
+      ".nx/**/*",
+      "dist/**/*",
+      "dist-*/**/*",
+      "coverage/**/*",
+      "cspell.json",
+      "compiled/**/*",
+      "**/*/fixtures/**/*",
+      "*.test.ts",
+      "*.js",
+      "*.tsx",
+      "*.css.d.ts"
+    ],
+    "ignoreUnknown": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "style": {
+        "noNonNullAssertion": "off",
+        "noParameterAssign": "off",
+        "useEnumInitializers": "off",
+        "useConst": "off",
+        "noUnusedTemplateLiteral": "off",
+        "noArguments": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noConfusingVoidType": "off",
+        "useGetterReturn": "off",
+        "noEmptyInterface": "off",
+        "noAssignInExpressions": "off",
+        "noImplicitAnyLet": "off"
+      },
+      "complexity": {
+        "noForEach": "off",
+        "noBannedTypes": "off",
+        "useOptionalChain": "off"
+      },
+      "performance": {
+        "noDelete": "off"
+      },
+      "nursery": {
+        "useImportType": "off",
+        "useExportType": "error"
+      },
+      "correctness": {
+        "noSwitchDeclarations": "off" 
+      },
+      "a11y": {
+        "useButtonType": "off",
+        "useKeyWithClickEvents": "off"
+      }
+    }
+  }
+}

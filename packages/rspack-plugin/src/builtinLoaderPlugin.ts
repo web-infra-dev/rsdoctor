@@ -7,7 +7,7 @@ export class BuiltinLoaderPlugin {
   apply(compiler: Compiler) {
     compiler.hooks.beforeRun.tap(
       {
-        name: `CustomLoaderPlugin`,
+        name: 'CustomLoaderPlugin',
       }, () => {
         const rules = compiler.options.module.rules;
         rules.forEach((rule) => {

@@ -87,7 +87,7 @@ export function getModuleExportsType(
 
   // webpack4
   // https://github.com/webpack/webpack/blob/v4.46.0/lib/RuntimeTemplate.js#L215
-  const exportsType = module.buildMeta && module.buildMeta.exportsType;
+  const exportsType = module.buildMeta?.exportsType;
 
   if (!exportsType && !strict) {
     return 'dynamic';

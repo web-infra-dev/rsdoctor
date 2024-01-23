@@ -127,11 +127,7 @@ export class InternalLoaderPlugin<
       },
     };
 
-    if (
-      compiler.webpack &&
-      compiler.webpack.NormalModule &&
-      compiler.webpack.NormalModule.getCompilationHooks
-    ) {
+    if (compiler.webpack?.NormalModule?.getCompilationHooks) {
       // webpack5 or rspack
       compiler.webpack.NormalModule.getCompilationHooks(
         compilation,

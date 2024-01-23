@@ -67,7 +67,7 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
   callback: (rule: T) => T,
 ): T[] {
-  return rules.map((rule, i) => {
+  return rules.map((rule) => {
     if (typeof rule === 'string') {
       return callback({
         loader: rule,
@@ -114,10 +114,6 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
         ...rule,
         use: mapEachRules([rule.use] as T[], callback),
       };
-
-      throw new Error(
-        `webpack.module.rules.use[${i}] parse error: ${rule.use}`,
-      );
     }
 
     // nested rule, https://webpack.js.org/configuration/module/#nested-rules

@@ -58,8 +58,7 @@ export async function getAssetsModulesData(
     bundlesSources = {};
     parsedModules = {};
 
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    for (const statAsset of bundleStats?.assets) {
+    for (const statAsset of bundleStats.assets) {
       const assetFile = path.join(bundleDir, statAsset.name);
       let bundleInfo: ReturnType<ParseBundle>;
       const collectedModules: Plugin.StatsModule[] = [];

@@ -20,7 +20,7 @@ export type EmoCheckData = {
 };
 
 export enum EmoCheckSeverity {
-  Error,
-  Warn,
-  Info,
+  Error = 0,
+  Warn = 1,
+  Info = 2,
 }

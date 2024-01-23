@@ -268,7 +268,7 @@ export function getLoaderFileInputAndOutput(
     const item = loaders[i];
 
     if (item.resource.path === file) {
-      // eslint-disable-next-line no-unreachable-loop
+      // biome-ignore lint/correctness/noUnreachable: may not need change
       for (let j = 0; j < item.loaders.length; j++) {
         const l = item.loaders[j];
         if (l.loader === loader && l.loaderIndex === loaderIndex) {

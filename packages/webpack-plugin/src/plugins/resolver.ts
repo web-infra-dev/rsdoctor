@@ -105,7 +105,7 @@ export class RsdoctorResolverPlugin implements ResolvePluginInstance {
   ) {
     if (request) return request;
 
-    if (ctx && ctx.stack) {
+    if (ctx?.stack) {
       // ctx.stack example:
       //   Set([
       //     'resolve: (/Users/node_modules/antd/es/card) ./Grid',
