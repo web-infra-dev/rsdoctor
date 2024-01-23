@@ -178,13 +178,7 @@ pnpm run lint
 
 Currently Rsdoctor provides documentation in English and Chinese. If you can use Chinese, please update both documents at the same time. Otherwise, just update the English documentation.
 
-You can find all the documentation in the `packages/document` folder:
-
-```bash
-root
-└─ packages
-   └─ document
-```
+You can find all the documentation in the `document` folder.
 
 This website is built with Rspress, the document content can be written using markdown or mdx syntax. You can refer to the [Rspress Website](https://rspress.dev/) for detailed usage.
 

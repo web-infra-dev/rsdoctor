@@ -5,7 +5,7 @@ const SKIP_FOLDERS = [
   '.changeset',
   '.github',
   '.vscode',
-  'packages/document',
+  'document',
   'scripts/skipCI.js',
 ];
 
