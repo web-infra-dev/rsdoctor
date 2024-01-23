@@ -1,5 +1,5 @@
 <picture>
-  <img alt="Rsdoctor Banner" width="100%" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf">
+  <img alt="Rsdoctor Banner" width="100%" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" />
 </picture>
 
 
@@ -33,7 +33,7 @@ To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/s
 - **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
 
   - Build artifact support for resource lists and module dependencies, etc.
-  - Build-time analysis supports Loader, Plugin, and Resolver building process analysis.
+  - Build-time analysis supports Loader, Plugin, and Resolver building process analysis, including: **Rspack's builtin:swc-loader**.
   - Build rules support duplicate package detection and ES Version Check, etc.
 
 - **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
