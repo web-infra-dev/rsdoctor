@@ -1,0 +1,12 @@
+[
+  {
+    "type": "dir",
+    "name": "release",
+    "label": "Release 公告"
+  },
+  {
+    "type": "dir",
+    "name": "topic",
+    "label": "专题"
+  }
+]

@@ -1,0 +1,101 @@
+# Rsdoctor v0.1 发布公告
+
+<picture>
+  <img alt="Rsdoctor Banner" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" style={{ margin: 'auto' }}/>
+</picture>
+
+我们很高兴地宣布 [Rsdoctor](https://rsdoctor.dev/) v0.1 发布了！
+
+Rsdoctor 是一个针对 Rspack 和 Webpack 的一站式构建分析工具，可以对构建时和构建产物进行详细分析，让构建过程变得可视化和透明。
+
+## 📌 Rsdoctor 定位
+
+在开发过程中遇到构建报错或需要进行构建优化时，往往很难抓取构建过程中的行为或拆解产物的关系。此时，你可以通过 **Rsdoctor** 直观地看到项目构建器的编译行为及详细构建信息，从而更深入地分析项目问题，比如：
+- 更加直观地看到重复包的上游依赖链路。
+- 深入分析 Loader 的调用过程与构建耗时，包括 Rspack 的 builtin:swc-loader。
+- 更清晰地查看构建产物中资源与模块的关系，以及资源内打包的模块代码。
+- 直观地看到 Resolver 解析行为及解析耗时。
+- ... ...
+
+## 🔥 特性
+
+- **编译可视化**：Rsdoctor 将编译行为及耗时进行可视化展示，方便开发同学查看构建问题。
+- **多种分析能力**：支持构建产物、构建时分析能力：
+  - 构建产物支持资源列表及模块依赖等。
+  - 构建时分析支持 Loader、Plugin、Resolver 构建过程分析。
+  - 支持 Rspack 的 builtin:swc-loader 分析。
+  - 构建规则支持重复包检测及 ES Version Check 检查等。
+- **支持自定义规则**：除了内置构建扫描规则外，还支持用户根据 Rsdoctor 的构建数据添加自定义构建扫描规则。
+- **框架无关**：支持所有基于 Webpack 或 Rspack 构建的项目。
+
+## 🛠️ 功能介绍
+
+### ⭐️ 概览
+
+- 概览页能够知道**项目配置、诊断信息、编译信息、产物情况**。
+
+![Overall](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/overall.jpg)
+
+- 除了项目概览之外，我们还提供了诊断模块，分别用于编译诊断、重复包诊断等。如果你的编译、产物命中了我们定义的诊断规则，就会在工具首页出现对应的警示模块, **其中重复包可以查看到详细的引用路径**。
+
+![Overall-Alerts](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/overall-alerts.jpg)
+
+
+### ⭐️ 编译分析
+
+面向 **Loaders、Plugins、Module Resolver** 提供了对应的数据与分析功能，来帮助你分析编译过程中的问题。
+
+#### Loader 分析
+
+- 该模块主要提供了 **Rspack** 或 **Webpack Loaders** 内的输入输出、预估耗时、参数等数据分析的功能。
+
+<div style={{ display: "flex" }}>
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png"  width='520px' style={{"margin": 'auto' }} />
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png" width='420px' style={{"margin": 'auto'}} />
+</div>
+
+#### Plugin 分析
+
+- 该模块主要拦截并收集了 Plugins 的调用次数、预估耗时等数据信息。
+
+<p>
+  <img alt="bundle" src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/compile-plugin.jpg'} width='600px' style={{"margin": 'auto'}} />
+</p>
+
+#### Resolver 分析
+
+- 该模块主要提供了项目内部单个文件中模块解析的路径数据以及预估耗时。Rspack 暂时未支持该模块。
+
+<p>
+  <img alt="bundle" src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/resolver.jpeg'} width='700px' style={{"margin": 'auto'}} />
+</p>
+
+
+### ⭐️ 产物分析
+
+- 我们在 **「Bundle Size」** 模块中，可以看到当前项目的产物数据信息概览，以及分析重复包引入的体积与上游依赖链路。
+
+- 此外，还可以通过 **「Bundle Analysis」** 模块来进一步分析当前产物中资源与模块关系，体积数据等信息，以及查看模块引入的原因。
+
+<p>
+  <img alt="bundle" src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/bundle-size.jpg'} width='700px' style={{"margin": 'auto'}} />
+</p>
+
+
+## 📚 快速上手
+
+你可以参考 [快速上手](/guide/start/quick-start) 来开始体验 **Rsdoctor**。
+
+## 💡 下一步
+
+**提升 Rsdoctor 构建分析效率**：目前开启 Rsdoctor 时会增加项目的构建耗时，下一步我们将抽离 Rsdoctor 的部分构建分析逻辑，并转化为 **Rust 插件**，内置到 Rspack 中，从而提升 Rsdoctor 的构建分析效率。
+
+
+
+## 致谢
+
+Rsdoctor 的一些实现参考了社区中杰出的项目，对他们表示感谢：
+
+- 借鉴了 [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme) 对产物关系的分析逻辑。
+- 借鉴了 [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) 对产物模块拆解及分析逻辑。
+- [Webpack 团队和社区](https://github.com/webpack/webpack/blob/main/README.md) 创建了一个优秀的打包工具和丰富的生态。

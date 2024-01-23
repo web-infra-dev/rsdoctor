@@ -1,11 +1,21 @@
-# Introduction
+# Rsdoctor v0.1 Release Note
 
-## 💡 What is Rsdoctor?
+<picture>
+  <img alt="Rsdoctor Banner" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" style={{ margin: 'auto' }}/>
+</picture>
 
-- Rsdoctor is a one-stop tool for diagnosing and analyzing the build process and build artifacts.
-- Rsdoctor is a tool that supports Webpack and Rspack build analysis.
-- Rsdoctor is an analysis tool that can display the time-consuming and behavioral details of the compilation.
-- Rsdoctor is a tool that provides bundle Diff and other anti-degradation capabilities simultaneously.
+We are excited to announce the release of [Rsdoctor](https://rsdoctor.dev/) v0.1!
+
+Rsdoctor is a one-stop build analysis tool for Rspack and Webpack. It allows for detailed analysis of the build process and bundles, making the build process more visual and transparent.
+
+## 📌 Why Rsdoctor?
+
+When encountering build errors or needing to optimize the build process in a project, it is often difficult to capture the behavior of the build process or analyze the relationships between the generated bundles. In such cases, **Rsdoctor** provides a visual representation of the project's build behavior and detailed build information, allowing for a deeper analysis of project issues, such as:
+- Visualizing the upstream dependency chain of **duplicate packages**.
+- Analyzing the **invocation process and build time** of loaders, including **Rspack's builtin:swc-loader**.
+- Clearer view of the **relationship between assets and modules** in the build artifacts, as well as **the bundled module code** within assets.
+- Visualizing the behavior and time taken by the **Resolver** for module resolution.
+- ... ...
 
 ## 🔥 Features
 
@@ -38,11 +48,12 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
 
 #### Loader Analysis
 
-- This module mainly provides the function of data analysis such as input and output, estimated time consumption, and parameters within Rspack / Webpack Loaders.
+- This module mainly provides the function of data analysis such as input and output, estimated time consumption, and parameters within **Rspack or Webpack Loaders**.
 
-| ![Loader-timeline](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/loader-timeline.jpg) | ![Loader-timeline](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/loader-analysis.jpg) |
-| ---------------------------------------------------------- | ------------------------------------------------ |
-
+<div style={{ display: "flex" }}>
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png"  width='520px' style={{"margin": 'auto' }} />
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png" width='420px' style={{"margin": 'auto'}} />
+</div>
 
 #### Plugin Analysis
 
@@ -72,21 +83,18 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
 </p>
 
 
-### ⭐️ Bundle Diff
+## 📚 Quick Start
 
-::: tip
-Support in progress...
-:::
+You can refer to the [Quick Start](https://rsdoctor.dev/en/guide/start/quick-start) to get started with **Rsdoctor**.
 
-Using the bundle diff function provided by Rsdoctor, you can see the changes in **the size of resources, duplicate packages, Packages and other data in the product**, as well as **the size of module files and code changes in each resource**.
+## 💡 Next Steps
 
-| ![bundle-diff-1](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/bundle-diff-2.png) | ![bundle-diff-2](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/bundle-diff-1.png) |
-| ---------------------------------------------------------- | ------------------------------------------------ |
+**Improve Rsdoctor build analysis efficiency**: Currently, enabling Rsdoctor plugin increases project build time. In the next step, we will extract and convert some of Rsdoctor's build analysis logic into a rust plugin, built-in to [Rspack](https://www.rspack.dev/), in order to improve Rsdoctor's build analysis efficiency.
 
+## Acknowledgements
 
-## 🧑‍💻 Community
+**Rsdoctor** has been inspired by outstanding projects in the community, and we would like to express our gratitude to them:
 
-Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rsdoctor team and users are active there, and we're always looking for contributions.
-
-
-
+- Refer to the analysis logic of artifact relationships from [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme).
+- Refer to the module breakdown and analysis logic from [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer).
+- [Webpack team and community](https://github.com/webpack/webpack/blob/main/README.md) have created an excellent bundling tool and a rich ecosystem.

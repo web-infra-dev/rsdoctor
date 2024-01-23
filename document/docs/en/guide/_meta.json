@@ -11,11 +11,6 @@
   },
   {
     "type": "dir",
-    "name": "topic",
-    "label": "Topic"
-  },
-  {
-    "type": "dir",
     "name": "more",
     "label": "More"
   }

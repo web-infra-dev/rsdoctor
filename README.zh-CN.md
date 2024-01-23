@@ -1,5 +1,5 @@
 <picture>
-  <img alt="Rsdoctor Banner" width="100%" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf">
+  <img alt="Rsdoctor Banner" width="100%" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" />
 </picture>
 
 # Rsdoctor
@@ -25,16 +25,16 @@
 
 - **编译可视化**：Rsdoctor 将编译行为及耗时进行可视化展示，方便开发同学查看构建问题。
 
-| <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/loader-timeline.png"  alt="loader timeline" /> | <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/rsdoctor-analyze-code.png" alt="loader codes" /> |
+| <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/eea845fa-f19f-49d4-9bc6-6795688e6a33"  alt="loader timeline" /> | <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/rsdoctor-analyze-code.png" alt="loader codes" /> |
 | ---------------------------------------------------------- | ------------------------------------------------ |
 
-- **多种分析能力**：支持构建产物、构建时分析能力以及防劣化能力：
+
+- **多种分析能力**：支持构建产物、构建时分析能力：
   - 构建产物支持资源列表及模块依赖等。
   - 构建时分析支持 Loader、Plugin、Resolver 构建过程分析。
+  - 支持 Rspack 的 builtin:swc-loader 分析。
   - 构建规则支持重复包检测及 ES Version Check 检查等。
-
 - **支持自定义规则**：除了内置构建扫描规则外，还支持用户根据 Rsdoctor 的构建数据添加自定义构建扫描规则。
-
 - **框架无关**：支持所有基于 Webpack 或 Rspack 构建的项目。
 
 ## 🤝 参与贡献

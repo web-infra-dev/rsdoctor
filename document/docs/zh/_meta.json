@@ -10,8 +10,8 @@
     "activeMatch": "/config/"
   },
   {
-    "text": "关于",
-    "link": "/about/rules",
-    "activeMatch": "/about/"
+    "text": "博客",
+    "link": "/blog/release/release-note-1",
+    "activeMatch": "/blog/"
   }
 ]
