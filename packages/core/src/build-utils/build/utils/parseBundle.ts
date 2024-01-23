@@ -100,8 +100,7 @@ export const parseBundle: ParseBundle = (
       const { left, right } = node;
 
       if (
-        left &&
-        left.object &&
+        left?.object &&
         left.object.name === 'exports' &&
         left.property &&
         left.property.name === 'modules' &&

@@ -25,9 +25,9 @@ export interface OffsetRange {
 
 /** Error Level */
 export enum ErrorLevel {
-  Ignore,
-  Warn,
-  Error,
+  Ignore = 0,
+  Warn = 1,
+  Error = 2,
 }
 
 /** Code prompt location */

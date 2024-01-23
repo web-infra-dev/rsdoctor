@@ -1,6 +1,6 @@
 import type * as Node from 'estree';
 
-export { Node };
+export type { Node };
 
 export enum ECMAVersion {
   ES5 = 'ES5',

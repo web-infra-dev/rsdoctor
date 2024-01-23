@@ -3,7 +3,7 @@ import './index.css';
 
 const Index = (): JSX.Element => (
   <div className="container-box">
-    <Helmet></Helmet>
+    <Helmet />
     Hello world
   </div>
 );

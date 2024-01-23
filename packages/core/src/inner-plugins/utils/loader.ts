@@ -105,7 +105,7 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
   };
 
   return BuildUtils.mapEachRules(rules, (rule) => {
-    if (rule?.loader && rule.loader.startsWith('builtin:')) {
+    if (rule.loader?.startsWith('builtin:')) {
       return rule;
     }
     const opts: ProxyLoaderOptions = {
@@ -197,7 +197,7 @@ export async function reportLoader(
 
   // sdk exists means in the same process
   const sdk = getSDK();
-  if (sdk && sdk.reportLoader) {
+  if (sdk?.reportLoader) {
     sdk.reportLoader(loaderData);
     sdk.reportSourceMap(sourceMapData);
     return loaderData;

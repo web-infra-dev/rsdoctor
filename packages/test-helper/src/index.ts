@@ -2,8 +2,8 @@ import { isPathString, normalizeToPosixPath } from './path';
 import {
   applyMatcherReplacement,
   createDefaultPathMatchers,
-  PathMatcher,
 } from './pathSerializer';
+import type { PathMatcher } from './pathSerializer'
 
 export interface SnapshotSerializerOptions {
   cwd?: string;

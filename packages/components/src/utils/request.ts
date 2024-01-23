@@ -109,7 +109,7 @@ if (process.env.NODE_ENV === 'development') {
   if (getAPILoaderModeFromStorage() === APILoaderMode4Dev.Local) {
     axios.interceptors.request.use((c) => {
       c.withCredentials = false;
-      if (c.url && c.url.startsWith('/')) {
+      if (c.url?.startsWith('/')) {
         if (c.url === manifestUrlForDev) {
           c.url = SDK.ServerAPI.API.Manifest;
         }

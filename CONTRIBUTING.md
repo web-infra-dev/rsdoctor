@@ -121,6 +121,19 @@ pnpm run reset
 
 ---
 
+## Startup Rsdoctor Client
+
+When you make changes to the code and want to view the `Rsdoctor` analysis report, you can execute `build:analysis` in the `examples/xxx` project to see it:
+
+```sh
+pnpm run build:analysis
+```
+
+- Based on the **Webpack** project: `modern-minimal` and `webpack-minimal`.
+- Based on the **Rspack** project: `rspack-minimal` and `rsbuild-minimal`.
+
+---
+
 ## Testing
 
 ### Add New Tests
@@ -153,14 +166,6 @@ You can run the `test:e2e` command to run the E2E tests:
 pnpm run test:e2e
 ```
 
-If you need to run a specified test, you can add keywords to filter:
-
-```sh
-# Only run test cases with the copy-assets keyword
-npx jest copy-assets
-```
-
----
 
 ## Linting
 
@@ -178,7 +183,12 @@ pnpm run lint
 
 Currently Rsdoctor provides documentation in English and Chinese. If you can use Chinese, please update both documents at the same time. Otherwise, just update the English documentation.
 
-You can find all the documentation in the `document` folder.
+You can find all the documentation in the `document` folder:
+
+```bash
+root
+└─ document
+```
 
 This website is built with Rspress, the document content can be written using markdown or mdx syntax. You can refer to the [Rspress Website](https://rspress.dev/) for detailed usage.
 

@@ -5,11 +5,14 @@ const PRESET_COUNT = [2, 3, 4];
 const getGridClass = (count?: number): string => {
   if (!count) {
     return '';
-  } else if (PRESET_COUNT.includes(count)) {
+  } 
+  if (PRESET_COUNT.includes(count)) {
     return `grid-${12 / count}`;
-  } else if (count % 3 === 0) {
+  } 
+  if (count % 3 === 0) {
     return 'grid-4';
-  } else if (count % 2 === 0) {
+  } 
+  if (count % 2 === 0) {
     return 'grid-6';
   }
   return '';
