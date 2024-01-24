@@ -8,14 +8,18 @@
 
 ## 💡 什么是 Rsdoctor？
 
-<div align=center>
- <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/7fa6728b-7f13-4621-8030-33326f86e483" alt="duplicate packages" width='50%' style="margin-left: 25%" />
-</div>
-
 - Rsdoctor 是一个面向构建过程与构建产物提供诊断和分析的一站式工具。
 - Rsdoctor 是一个支持 **Webpack** 及 **Rspack** 构建分析工具。
 - Rsdoctor 是一个可以展示编译耗时及编译行为细节的分析工具。
 - Rsdoctor 是一个可以支持 **Rspack builtin:swc-loader** 构建耗时及构建行为分析的工具
+
+## 📌 定位
+
+**Rsdoctor** 是一个构建分析工具，用于分析基于 [Rspack](https://www.rspack.dev/) 和 [Webpack](https://webpack.js.org/) 构建的项目。它支持分析的项目包括：[Rsbuild](https://rsbuild.dev/)、[Create-react-app](https://create-react-app.dev/)、[Modern.js](https://modernjs.dev/) 等。
+
+<div align=center>
+ <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/30c7d096-0175-49dc-a142-50e51a79a34c" alt="duplicate packages" />
+</div>
 
 ## 📚 快速上手
 
