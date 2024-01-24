@@ -20,7 +20,7 @@ English | [简体中文](./README.zh-CN.md)
 **Rsdoctor** is a build analysis tool for analyzing projects built with [Rspack](https://www.rspack.dev/) and [Webpack](https://webpack.js.org/). It supports analysis of projects such as [Rsbuild](https://rsbuild.dev/), [Create-react-app](https://create-react-app.dev/), [Modern.js](https://modernjs.dev/), and more.
   
 <div align=center>
- <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/30c7d096-0175-49dc-a142-50e51a79a34c" alt="duplicate packages" />
+ <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/4f28312a-68bf-4f9c-91cb-6fd603a37f53" alt="duplicate packages" />
 </div>
 
 ## 📚 Getting Started
@@ -69,9 +69,10 @@ This repo has adopted the ByteDance Open Source Code of Conduct. Please check [C
 
 Some of the implementation of Rsdoctor refers to the excellent projects in the community, and we would like to thank them:
 
-- Some analysis logics are referenced from [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme).
-- Some analysis logics are referenced from [Webpack](https://github.com/webpack/webpack/blob/main/README.md).
-- The built-in analysis graph in the build artifact page is from [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer).
+- [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme) is an excellent tool for analyzing build artifacts, and Rsdoctor is inspired by it in terms of build analysis.
+- [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) is a classic tool for analyzing Webpack, and Rsdoctor is inspired by it in terms of build artifact analysis. Rsdoctor also uses its classic treemap visualization.
+- [Webpack Team and Community](https://github.com/webpack/webpack/blob/main/README.md) have created an excellent bundling tool and a rich ecosystem.
+- [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect) has inspired Rsdoctor's exploration of build process analysis.
 
 This Rsdoctor website is powered by [Netlify](https://www.netlify.com/).
 
