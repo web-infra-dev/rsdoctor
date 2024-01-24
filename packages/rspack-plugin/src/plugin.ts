@@ -16,7 +16,7 @@ import type {
   RsdoctorPluginInstance,
   RsdoctorPluginOptionsNormalized,
   RsdoctorRspackPluginOptions,
-} from '@rsdoctor/core/types';
+} from '@rsdoctor/core';
 import {
   Constants,
   Linter,
@@ -75,7 +75,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       this.done.bind(this, compiler),
     );
 
-    new InternalSummaryPlugin(this).apply(compiler);
+    new InternalSummaryPlugin<Compiler>(this).apply(compiler);
 
     if (this.options.features.loader) {
       new InternalLoaderPlugin<Compiler>(this).apply(compiler);

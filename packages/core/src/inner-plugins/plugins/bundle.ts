@@ -71,7 +71,9 @@ export class InternalBundlePlugin<
   };
 
   public done = async (): Promise<void> => {
-    Chunks.assetsContents(this.map, this.scheduler.chunkGraph);
+    if (this.scheduler.chunkGraph) {
+      Chunks.assetsContents(this.map, this.scheduler.chunkGraph);
+    }
 
     this.sdk.addClientRoutes([
       Manifest.RsdoctorManifestClientRoutes.ModuleGraph,

@@ -5,11 +5,12 @@ import type {
   SDK,
 } from '@rsdoctor/types';
 import type { RsdoctorSlaveSDK, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
-import { ModuleGraph } from '@rsdoctor/graph';
-// import { rules } from '@web-doctor/webpack-rules';
+import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
+import { rules } from '@/rules/rules';
+import { RuleData } from '@rsdoctor/types/dist/linter';
 
-// type InternalRules = Common.UnionToTuple<typeof rules[number]>;
-type InternalRules = any; // TODO: add webpack-rules later;
+
+type InternalRules = typeof rules[number] & RuleData[];
 
 export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
@@ -98,6 +99,8 @@ export interface RsdoctorPluginInstance<
   readonly name: string;
   readonly options: RsdoctorPluginOptionsNormalized<Rules>;
   readonly sdk: RsdoctorWebpackSDK;
+  _modulesGraphApplied?: boolean;
+  chunkGraph?: ChunkGraph;
   modulesGraph: ModuleGraph;
   ensureModulesChunksGraphApplied(compiler: T): void;
 }

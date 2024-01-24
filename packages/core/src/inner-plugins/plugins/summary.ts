@@ -14,7 +14,7 @@ export class InternalSummaryPlugin<
 
   private postTimes: Map<Summary.SummaryCostsDataName, number> = new Map();
 
-  public apply(compiler: Plugin.BaseCompiler) {
+  public apply(compiler: T) {
     compiler.hooks.beforeCompile.tapPromise(
       this.tapPostOptions,
       this.beforeCompile,
@@ -71,7 +71,7 @@ export class InternalSummaryPlugin<
     }
   };
 
-  public done = async (compiler: Plugin.BaseCompiler): Promise<void> => {
+  public done = async (compiler: T): Promise<void> => {
     // report compile -> done
     const start = this.postTimes.get(Summary.SummaryCostsDataName.Compile)!;
     this.report(Summary.SummaryCostsDataName.Done, start);
