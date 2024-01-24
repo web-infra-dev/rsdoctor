@@ -17,7 +17,7 @@ English | [简体中文](./README.zh-CN.md)
 
 ## 📌 Position
 
-**Rsdoctor** is a build analysis tool that supports projects based on [Rspack](https://www.rspack.dev/) and [Webpack](https://webpack.js.org/). Therefore, it can also perform build analysis for projects based on [Rsbuild](https://rsbuild.dev/), [Modern.js](https://modernjs.dev/), and others.
+**Rsdoctor** is a build analysis tool for analyzing projects built with [Rspack](https://www.rspack.dev/) and [Webpack](https://webpack.js.org/). It supports analysis of projects such as [Rsbuild](https://rsbuild.dev/), [Create-react-app](https://create-react-app.dev/), [Modern.js](https://modernjs.dev/), and more.
   
 <div align=center>
  <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/30c7d096-0175-49dc-a142-50e51a79a34c" alt="duplicate packages" />
