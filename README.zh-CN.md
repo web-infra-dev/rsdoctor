@@ -17,6 +17,9 @@
 
 **Rsdoctor** 是一个构建分析工具，用于分析基于 [Rspack](https://www.rspack.dev/) 和 [Webpack](https://webpack.js.org/) 构建的项目。它支持分析的项目包括：[Rsbuild](https://rsbuild.dev/)、[Create-react-app](https://create-react-app.dev/)、[Modern.js](https://modernjs.dev/) 等。
 
+<div align=center>
+ <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/30c7d096-0175-49dc-a142-50e51a79a34c" alt="duplicate packages" />
+</div>
 
 ## 📚 快速上手
 
