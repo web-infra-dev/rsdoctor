@@ -18,7 +18,7 @@
 **Rsdoctor** 是一个构建分析工具，用于分析基于 [Rspack](https://www.rspack.dev/) 和 [Webpack](https://webpack.js.org/) 构建的项目。它支持分析的项目包括：[Rsbuild](https://rsbuild.dev/)、[Create-react-app](https://create-react-app.dev/)、[Modern.js](https://modernjs.dev/) 等。
 
 <div align=center>
- <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/30c7d096-0175-49dc-a142-50e51a79a34c" alt="duplicate packages" />
+ <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/4f28312a-68bf-4f9c-91cb-6fd603a37f53" alt="duplicate packages" />
 </div>
 
 ## 📚 快速上手
@@ -68,9 +68,11 @@
 
 Rsdoctor 的一些实现参考了社区中杰出的项目，对他们表示感谢：
 
-- 部分分析逻辑参考了 [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme)。
-- 部分分析逻辑参考了 [Webpack](https://github.com/webpack/webpack/blob/main/README.md).
-- 构建产物页面中内嵌了 [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) 分析图。
+- [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme)是一个优秀的构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发。
+- [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) 是一个经典的 Webpack 构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发，同时 Rsdoctor 使用了其经典的瓦片图。
+- [Webpack 团队和社区](https://github.com/webpack/webpack/blob/main/README.md) 创建了一个优秀的打包工具和丰富的生态。
+- [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect) 启发了 Rsdoctor 对构建过程分析的探索。
+
 
 Rsdoctor 网站由 [Netlify](https://www.netlify.com/) 提供支持。
 
