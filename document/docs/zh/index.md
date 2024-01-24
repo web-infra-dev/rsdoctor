@@ -8,10 +8,10 @@ hero:
   actions:
     - theme: brand
       text: 介绍
-      link: /guide/start/intro
+      link: /zh/guide/start/intro
     - theme: alt
       text: 快速开始
-      link: /guide/start/quick-start
+      link: /zh/guide/start/quick-start
   image:
     src: https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/logo/rsdoctor.png
     alt: Rsdoctor Logo
