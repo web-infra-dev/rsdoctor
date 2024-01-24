@@ -1,5 +1,27 @@
 # @rsdoctor/graph
 
+## 0.1.0
+
+### Minor Changes
+
+- e1ac5e7: release: 0.1.0
+
+### Patch Changes
+
+- 96d0d68: Rsdoctor report platform add overall page (close: #25)
+- 918ee1f: fix: lack @rsdoctor/types dependency
+- cbd9fbe: feat(client): refactor(graph): Normal mode no transformed code
+- 481eb53: fix(graph): duplicate pkg version
+- Updated dependencies [82d21e4]
+- Updated dependencies [918ee1f]
+- Updated dependencies [e1ac5e7]
+- Updated dependencies [d8bc40e]
+- Updated dependencies [ffe30be]
+- Updated dependencies [cbd9fbe]
+- Updated dependencies [0e3abb7]
+  - @rsdoctor/types@0.1.0
+  - @rsdoctor/utils@0.1.0
+
 ## 0.1.0-beta
 
 ### Minor Changes
