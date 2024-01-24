@@ -161,7 +161,7 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
 
                 <Divider type="vertical" />
                 <Typography.Paragraph
-                  style={{ marginBottom: 0, width: windowWith > 1500 ? '50vw' : windowWith > 1200 ? '40vw' : '30vw' }}
+                  style={{ marginBottom: 0, width: windowWith > 1500 ? '40rem' : windowWith > 1200 ? '30rem' : '20rem' }}
                   copyable={{ text: el.root }}
                   ellipsis={{ rows: 1, expandable: true, symbol: <ExpandAltOutlined />, tooltip: el.root }}
                   code
