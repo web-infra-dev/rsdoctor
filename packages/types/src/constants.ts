@@ -25,7 +25,7 @@ export const MediaExtensions = [
   '.mpeg',
 ];
 
-export const FontExtensions = ['.ttf', '.fnt', '.fon', '.otf'];
+export const FontExtensions = ['.ttf', '.fnt', '.fon', '.otf', '.woff', '.woff2'];
 
 export const MapExtensions = ['.js.map', '.ts.map', '.LICENSE.txt'];
 
