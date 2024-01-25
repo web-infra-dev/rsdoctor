@@ -59,6 +59,9 @@ importers:
       react-markdown:
         specifier: ^9.0.1
         version: 9.0.1(@types/react@18.2.39)(react@18.2.0)
+      rsfamily-nav-icon:
+        specifier: ^1.0.1
+        version: 1.0.1
       rspress:
         specifier: ^1.9.2
         version: 1.9.2(typescript@5.3.3)(webpack@5.89.0)
@@ -16812,6 +16815,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  /rsfamily-nav-icon@1.0.1:
+    resolution: {integrity: sha512-TJdyzLpFfmEGfJiPAwZqn1TdXwoR7j/Y0j9ejovNk3zABzJ1FRQ6WZl7DVQQTHoJnABlRgXphMuxnAZ2UMePdQ==}
+    dev: false
 
   /rslog@1.1.1:
     resolution: {integrity: sha512-ncYfbtX17x9Irt3gowS8lPdbx6F9WaRpR+5M/OopoCvfUDFDyQGxUEG+cbnjzyZ7PTYmb07Fn+rdGBfWPN2b7w==}
