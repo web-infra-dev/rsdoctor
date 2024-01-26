@@ -10,6 +10,7 @@ import { PassThrough } from 'stream';
 import { Socket } from './socket';
 import { Router } from './router';
 import * as APIs from './apis';
+import { chalk, logger } from '@rsdoctor/utils/logger';
 export * from './utils';
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
@@ -182,7 +183,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       ...(args as Parameters<SDK.RsdoctorServerInstance['getClientUrl']>),
     );
     await open(url);
-    console.log(`Rsdoctor analyze run at: ${url}`);
+    logger.info(`Rsdoctor analyze server running on: ${chalk.cyan(url)}`);
   }
 
   public sendAPIDataToClient<

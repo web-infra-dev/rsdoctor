@@ -1,13 +1,12 @@
 import { isEmpty, pick } from 'lodash';
 import path from 'path';
 
-import { createLogger } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/utils/logger';
 import { Plugin } from '@rsdoctor/types';
 import type { ModuleGraph } from '@rsdoctor/graph';
 import { ParseBundle } from '@/types';
 import { getModulesFromArray } from '../module-graph';
 
-const logger = createLogger();
 export type ParsedModuleSizeData = {
   [x: string]: { size: number; sizeConvert: string; content: string };
 };

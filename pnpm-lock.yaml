@@ -874,6 +874,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      rslog:
+        specifier: ^1.2.0
+        version: 1.2.0
       strip-ansi:
         specifier: ^6.0.1
         version: 6.0.1
@@ -4773,7 +4776,7 @@ packages:
       '@swc/helpers': 0.5.3
       caniuse-lite: 1.0.30001559
       lodash: 4.17.21
-      rslog: 1.1.1
+      rslog: 1.2.0
 
   /@modern-js/utils@2.44.0:
     resolution: {integrity: sha512-jzl9NS/cqkFWSI+SsoICzkc+NPpiMMcBpRI4BZBdOwcDpHcM/rntvULQq8XBvzYYo07CEv1vHMGyHiLqdZMbhA==}
@@ -4781,7 +4784,7 @@ packages:
       '@swc/helpers': 0.5.3
       caniuse-lite: 1.0.30001566
       lodash: 4.17.21
-      rslog: 1.1.1
+      rslog: 1.2.0
     dev: false
 
   /@module-federation/runtime-tools@0.0.8:
@@ -6258,7 +6261,7 @@ packages:
       execa: 5.1.1
       fs-extra: 11.2.0
       gray-matter: 4.0.3
-      rslog: 1.1.1
+      rslog: 1.2.0
       unified: 10.1.2
     dev: false
 
@@ -16820,8 +16823,8 @@ packages:
     resolution: {integrity: sha512-TJdyzLpFfmEGfJiPAwZqn1TdXwoR7j/Y0j9ejovNk3zABzJ1FRQ6WZl7DVQQTHoJnABlRgXphMuxnAZ2UMePdQ==}
     dev: false
 
-  /rslog@1.1.1:
-    resolution: {integrity: sha512-ncYfbtX17x9Irt3gowS8lPdbx6F9WaRpR+5M/OopoCvfUDFDyQGxUEG+cbnjzyZ7PTYmb07Fn+rdGBfWPN2b7w==}
+  /rslog@1.2.0:
+    resolution: {integrity: sha512-2ZFW7Jtkzt4VkwCFRTE+0lKbzSLSH7U5OM9qZ5YuKk4xVrlIJJZx9Qh/fCyfsk8H+qXbermMc7+18qKJxLQ/bw==}
     engines: {node: '>=14.17.6'}
 
   /rspack-plugin-virtual-module@0.1.12:
