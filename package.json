@@ -29,7 +29,8 @@
   "nano-staged": {
     "*.{md,mdx,json,css,less,scss}": "prettier --write",
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
-      "prettier --write"
+      "prettier --write",
+      "biome lint --diagnostic-level=error --no-errors-on-unmatched"
     ],
     "package.json": "pnpm run check-dependency-version"
   },
