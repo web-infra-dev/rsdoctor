@@ -3,7 +3,6 @@ import { Server } from '@rsdoctor/utils/build';
 import { Bundle } from '@rsdoctor/utils/common';
 import assert from 'assert';
 import bodyParser from 'body-parser';
-import open from 'open';
 import ip from 'ip';
 import cors from 'cors';
 import { PassThrough } from 'stream';
@@ -11,6 +10,7 @@ import { Socket } from './socket';
 import { Router } from './router';
 import * as APIs from './apis';
 import { chalk, logger } from '@rsdoctor/utils/logger';
+import { openBrowser } from '@/sdk/utils/openBrowser';
 export * from './utils';
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
@@ -182,7 +182,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     const url = this.getClientUrl(
       ...(args as Parameters<SDK.RsdoctorServerInstance['getClientUrl']>),
     );
-    await open(url);
+    await openBrowser(url);
     logger.info(`Rsdoctor analyze server running on: ${chalk.cyan(url)}`);
   }
 
