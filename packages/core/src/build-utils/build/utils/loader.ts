@@ -5,18 +5,37 @@ import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule, SourceMapInput as WebpackSourceMapInput } from '../../../types';
 
+// webpack https://github.com/webpack/webpack/blob/2953d23a87d89b3bd07cf73336ee34731196c62e/lib/util/identifier.js#L311
+// rspack https://github.com/web-infra-dev/rspack/blob/d22f049d4bce4f8ac20c1cbabeab3706eddaecc1/packages/rspack/src/loader-runner/index.ts#L47
+const PATH_QUERY_FRAGMENT_REGEXP =
+  /^((?:\0.|[^?#\0])*)(\?(?:\0.|[^#\0])*)?(#.*)?$/;
+
+export function parsePathQueryFragment(str: string): {
+  path: string;
+  query: string;
+  fragment: string;
+} {
+  const match = PATH_QUERY_FRAGMENT_REGEXP.exec(str);
+  return {
+    path: match?.[1].replace(/\0(.)/g, '$1') || '',
+    query: match?.[2] ? match[2].replace(/\0(.)/g, '$1') : '',
+    fragment: match?.[3] || '',
+  };
+}
+
 export function loadLoaderModule(
-  p: string,
+  loaderPath: string,
   cwd = process.cwd(),
 ): {
   default: Plugin.LoaderDefinition<Common.PlainObject, {}>;
   pitch: Plugin.PitchLoaderDefinitionFunction;
   raw: boolean | void;
 } {
+  const cleanLoaderPath = parsePathQueryFragment(loaderPath).path;
   const mod = require(
     process.env.DOCTOR_TEST
-      ? path.resolve(cwd, p)
-      : require.resolve(p, {
+      ? path.resolve(cwd, cleanLoaderPath)
+      : require.resolve(cleanLoaderPath, {
           paths: [cwd, path.resolve(cwd, 'node_modules')],
         }),
   );
@@ -104,6 +123,18 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
         };
       }
 
+      if (typeof rule.use === 'function') {
+        const funcUse = rule.use;
+        const newRule = {
+          ...rule,
+          use: (...args: any) => {
+            const rules = funcUse.apply(null, args) as any;
+            return mapEachRules(rules, callback);
+          },
+        };
+        return newRule;
+      }
+
       if (Array.isArray(rule.use)) {
         return {
           ...rule,
@@ -171,6 +202,7 @@ export function createLoaderContextTrap(
         case 'query':
           if (target.query) {
             // avoid loader options validation error.
+            // FIXME: useless in theory, in proxy-loader this.query always hits rule.options
             if (typeof target.query === 'string') {
               const res = target.query.replace(
                 // eslint-disable-next-line no-useless-escape
@@ -190,7 +222,9 @@ export function createLoaderContextTrap(
               if (options.hasOptions) {
                 return omit(target.query, [Loader.LoaderInternalPropertyName]);
               }
-              return target.resourceQuery;
+              const innerLoaderPath = options?.loader;
+              const loaderQuery = parsePathQueryFragment(innerLoaderPath).query;
+              return loaderQuery;
             }
           }
 

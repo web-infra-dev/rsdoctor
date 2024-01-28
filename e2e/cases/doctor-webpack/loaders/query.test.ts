@@ -13,14 +13,14 @@ const loaderPath = path.resolve(
 );
 
 async function webpack5(query?: string) {
-  const res = await compileByWebpack5(query ? `${file}${query}` : file, {
+  const res = await compileByWebpack5(file, {
     module: {
       rules: [
         {
           test: /\.js$/,
           use: [
             {
-              loader: loaderPath,
+              loader: query ? `${loaderPath}${query}` : loaderPath,
             },
           ],
         },

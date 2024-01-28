@@ -66,14 +66,16 @@ describe('test utils/loader.ts createLoaderContextTrap()', () => {
       // @ts-ignore
       {
         query: {
-          [Loader.LoaderInternalPropertyName]: { hasOptions: false },
+          [Loader.LoaderInternalPropertyName]: {
+            hasOptions: false,
+            loader: './loader1?xyz=1!loader2!./resource?rrr',
+          },
           a: 1,
         },
-        resourceQuery: '?a=2',
       },
       final,
     );
-    expect(trap2.query).toEqual('?a=2');
+    expect(trap2.query).toEqual('?xyz=1!loader2!./resource?rrr');
   });
 
   it('this.query is neither string or object', () => {
