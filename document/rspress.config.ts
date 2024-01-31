@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { defineConfig }from 'rspress/config';
+import { defineConfig } from 'rspress/config';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
@@ -9,7 +9,8 @@ export default defineConfig({
   lang: 'en',
   base: '/',
   logo: {
-    light: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/logo/rsdoctor-logo-light.png',
+    light:
+      'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/logo/rsdoctor-logo-light.png',
     dark: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/logo/rsdoctor-logo-dark.png',
   },
   head: [
@@ -28,7 +29,7 @@ export default defineConfig({
   globalStyles: path.join(__dirname, 'theme', 'index.css'),
   themeConfig: {
     footer: {
-      message: "Copyright © 2023 Bytedance",
+      message: 'Copyright © 2023 Bytedance',
     },
     socialLinks: [
       {
@@ -72,7 +73,7 @@ export default defineConfig({
     },
     tools: {
       postcss(config, { addPlugins }) {
-        addPlugins([require("tailwindcss")]);
+        addPlugins([require('tailwindcss')]);
       },
     },
     html: {
@@ -82,7 +83,7 @@ export default defineConfig({
           tag: 'script',
           attrs: {
             async: true,
-            src: 'https://www.googletagmanager.com/gtag/js?id=G-L6BZ6TKW4R',
+            src: 'https://www.googletagmanager.com/gtag/js?id=G-9DETE89N4Q',
           },
         },
         {
@@ -91,7 +92,7 @@ export default defineConfig({
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-L6BZ6TKW4R');`,
+gtag('config', 'G-9DETE89N4Q');`,
         },
       ],
     },
