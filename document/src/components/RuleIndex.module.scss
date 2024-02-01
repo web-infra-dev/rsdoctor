@@ -9,9 +9,8 @@
   margin: 0;
   padding: 0;
   position: relative;
-  background: #ffffff;
   border-radius: 8px;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--rp-c-divider-light);
   margin-right: 24px;
   font-size: 14px;
 }
@@ -21,7 +20,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--rp-c-divider-light);
   height: 55.5px;
   overflow: hidden;
   font-weight: bold;
