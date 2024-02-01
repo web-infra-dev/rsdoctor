@@ -17,8 +17,15 @@ export interface SourceMap {
   names?: string[];
 }
 
-export type RuleSetRule = RspackRuleSetRule | WebpackRuleSetRule;
-export type Configuration = WebpackConfiguration | RspackConfiguration;
+type RspackConfigurationWrapper = any extends RspackConfiguration
+  ? never
+  : RspackConfiguration;
+type RspackRuleSetRuleWrapper = any extends RspackRuleSetRule
+  ? never
+  : RspackRuleSetRule;
+
+export type RuleSetRule = RspackRuleSetRuleWrapper | WebpackRuleSetRule;
+export type Configuration = WebpackConfiguration | RspackConfigurationWrapper;
 
 declare interface AdditionalData {
   [index: string]: any;
