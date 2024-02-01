@@ -18,7 +18,6 @@
     "start": "npm run build -- -w"
   },
   "dependencies": {
-    "@rspack/core": "0.5.1",
     "@types/connect": "3.4.35",
     "@types/estree": "1.0.0",
     "@types/tapable": "2.2.2",
@@ -30,6 +29,14 @@
     "@types/react": "^18",
     "tslib": "2.4.1",
     "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "@rspack/core": "^0.5.1"
+  },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",
