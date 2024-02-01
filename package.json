@@ -11,7 +11,7 @@
     "bump": "modern bump",
     "change": "modern change",
     "check-changeset": "cd ./scripts/check-changeset && pnpm start",
-    "check-dependency-version": "check-dependency-version-consistency .",
+    "check-dependency-version": "check-dependency-version-consistency . --ignore-path examples",
     "dev:doc": "cd document && pnpm run dev",
     "e2e": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
     "gen-release-note": "modern gen-release-note",
