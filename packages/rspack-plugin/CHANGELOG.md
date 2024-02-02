@@ -1,5 +1,18 @@
 # @rsdoctor/rspack-plugin
 
+## 0.1.1
+
+### Patch Changes
+
+- 05737c1: fix(rspack):optimize the builtin:swc-loader matching calculation
+- Updated dependencies [da541be]
+- Updated dependencies [e64a428]
+- Updated dependencies [05737c1]
+- Updated dependencies [39e57a2]
+  - @rsdoctor/sdk@0.1.1
+  - @rsdoctor/core@0.1.1
+  - @rsdoctor/graph@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

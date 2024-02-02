@@ -1,5 +1,16 @@
 # @rsdoctor/utils
 
+## 0.1.1
+
+### Patch Changes
+
+- 85da1c2: bundle overall support woff/woff2 files
+- e64a428: feat: integrate rslog as the logger
+- Updated dependencies [89d79bf]
+- Updated dependencies [e64a428]
+- Updated dependencies [05737c1]
+  - @rsdoctor/types@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # @rsdoctor/types
 
+## 0.1.1
+
+### Patch Changes
+
+- 89d79bf: fix: rsdoctor types package change the dependency of @rspack/core
+- e64a428: feat: integrate rslog as the logger
+- 05737c1: fix(rspack):optimize the builtin:swc-loader matching calculation
+
 ## 0.1.0
 
 ### Minor Changes

@@ -1,5 +1,20 @@
 # @rsdoctor/sdk
 
+## 0.1.1
+
+### Patch Changes
+
+- da541be: reuse browser tab on OS X
+- e64a428: feat: integrate rslog as the logger
+- Updated dependencies [89d79bf]
+- Updated dependencies [85da1c2]
+- Updated dependencies [e64a428]
+- Updated dependencies [05737c1]
+  - @rsdoctor/types@0.1.1
+  - @rsdoctor/utils@0.1.1
+  - @rsdoctor/client@0.1.1
+  - @rsdoctor/graph@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes

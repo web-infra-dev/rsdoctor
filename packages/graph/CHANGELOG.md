@@ -1,5 +1,16 @@
 # @rsdoctor/graph
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [89d79bf]
+- Updated dependencies [85da1c2]
+- Updated dependencies [e64a428]
+- Updated dependencies [05737c1]
+  - @rsdoctor/types@0.1.1
+  - @rsdoctor/utils@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
