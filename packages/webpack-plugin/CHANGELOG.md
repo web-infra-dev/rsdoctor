@@ -1,5 +1,19 @@
 # @rsdoctor/webpack-plugin
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [da541be]
+- Updated dependencies [85da1c2]
+- Updated dependencies [e64a428]
+- Updated dependencies [05737c1]
+- Updated dependencies [39e57a2]
+  - @rsdoctor/sdk@0.1.1
+  - @rsdoctor/utils@0.1.1
+  - @rsdoctor/core@0.1.1
+  - @rsdoctor/graph@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
