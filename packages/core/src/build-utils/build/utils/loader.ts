@@ -1,6 +1,6 @@
 import { getOptions } from 'loader-utils';
 import path from 'path';
-import { omit } from 'lodash';
+import { omit, findIndex } from 'lodash';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule, SourceMapInput as WebpackSourceMapInput } from '../../../types';
@@ -163,6 +163,86 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
       };
     }
 
+    return rule;
+  });
+}
+
+function getLoaderNameMatch(_r: Plugin.BuildRuleSetRule, loaderName: string) {
+  return (
+    (typeof _r === 'object' &&
+      typeof _r?.loader === 'string' &&
+      _r.loader === loaderName) ||
+    (typeof _r === 'string' && _r === loaderName)
+  );
+}
+
+// FIXME: Type BuildRuleSetRule maybe need optimize.
+export function changeBuiltinLoader<T extends Plugin.BuildRuleSetRule>(
+  rules: T[],
+  loaderName: string,
+  appendRules: (rule: T, index: number) => T,
+): T[] {
+  return rules.map((rule) => {
+    if (!rule || typeof rule === 'string') return rule;
+
+    if (getLoaderNameMatch(rule, loaderName)) {
+      const _rule = {
+        ...rule,
+        use: [
+          {
+            loader: rule.loader,
+            options: rule.options,
+          },
+        ],
+        loader: undefined,
+        options: undefined,
+      };
+      return appendRules(_rule, 0);
+    }
+
+    if (rule.use) {
+      if (Array.isArray(rule.use)) {
+        const _index = findIndex(rule.use, (_r) =>
+          getLoaderNameMatch(_r as T, loaderName),
+        );
+        if (_index > -1) {
+          return appendRules(rule, _index);
+        }
+      } else if (
+        typeof rule.use === 'object' &&
+        !Array.isArray(rule.use) &&
+        typeof rule.use !== 'function'
+      ) {
+        rule.use = [
+          {
+            ...rule.use,
+          },
+        ];
+        return appendRules(rule, 0);
+      }
+    }
+
+    if ('oneOf' in rule && rule.oneOf) {
+      return {
+        ...rule,
+        oneOf: changeBuiltinLoader<T>(
+          rule.oneOf as T[],
+          loaderName,
+          appendRules,
+        ),
+      };
+    }
+
+    if ('rules' in rule && rule.rules) {
+      return {
+        ...rule,
+        rules: changeBuiltinLoader<T>(
+          rule.rules as T[],
+          loaderName,
+          appendRules,
+        ),
+      };
+    }
     return rule;
   });
 }

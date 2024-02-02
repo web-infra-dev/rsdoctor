@@ -1,0 +1,189 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`test src/build/utils/loader.ts changeBuiltinLoader > changeBuiltinLoader() 1`] = `
+[
+  {
+    "test": /\\\\\\.less\\$/,
+    "type": "css",
+    "use": "less-loader",
+  },
+  {
+    "test": /\\\\\\.module\\\\\\.less\\$/,
+    "type": "css/module",
+    "use": "less-loader",
+  },
+  {
+    "test": /\\\\\\.svg\\$/,
+    "use": "@svgr/webpack",
+  },
+  {
+    "oneOf": [
+      {
+        "loader": undefined,
+        "options": undefined,
+        "type": "javascript/auto",
+        "use": [
+          {
+            "loader": "probe",
+            "options": {
+              "loader": "builtin:swc-loader",
+              "options": {
+                "jsc": {
+                  "parser": {
+                    "jsx": true,
+                    "syntax": "typescript",
+                  },
+                },
+                "sourceMap": true,
+              },
+              "type": "end",
+            },
+          },
+          {
+            "loader": "builtin:swc-loader",
+            "options": {
+              "jsc": {
+                "parser": {
+                  "jsx": true,
+                  "syntax": "typescript",
+                },
+              },
+              "sourceMap": true,
+            },
+          },
+          {
+            "loader": "probe",
+            "options": {
+              "loader": "builtin:swc-loader",
+              "options": {
+                "jsc": {
+                  "parser": {
+                    "jsx": true,
+                    "syntax": "typescript",
+                  },
+                },
+                "sourceMap": true,
+              },
+              "type": "start",
+            },
+          },
+        ],
+      },
+    ],
+    "test": /\\\\\\.tsx\\$/,
+  },
+  {
+    "rules": [
+      {
+        "loader": undefined,
+        "options": undefined,
+        "type": "javascript/auto",
+        "use": [
+          {
+            "loader": "probe",
+            "options": {
+              "loader": "builtin:swc-loader",
+              "options": {
+                "jsc": {
+                  "parser": {
+                    "jsx": true,
+                    "syntax": "typescript",
+                  },
+                },
+                "sourceMap": true,
+              },
+              "type": "end",
+            },
+          },
+          {
+            "loader": "builtin:swc-loader",
+            "options": {
+              "jsc": {
+                "parser": {
+                  "jsx": true,
+                  "syntax": "typescript",
+                },
+              },
+              "sourceMap": true,
+            },
+          },
+          {
+            "loader": "probe",
+            "options": {
+              "loader": "builtin:swc-loader",
+              "options": {
+                "jsc": {
+                  "parser": {
+                    "jsx": true,
+                    "syntax": "typescript",
+                  },
+                },
+                "sourceMap": true,
+              },
+              "type": "start",
+            },
+          },
+        ],
+      },
+    ],
+    "test": /\\\\\\.tsx\\$/,
+  },
+  {
+    "test": /\\\\\\.ts\\$/,
+    "type": "javascript/auto",
+    "use": [
+      {
+        "loader": "probe",
+        "options": {
+          "loader": "builtin:swc-loader",
+          "options": {
+            "jsc": {
+              "externalHelpers": true,
+              "parser": {
+                "syntax": "typescript",
+              },
+              "preserveAllComments": false,
+            },
+            "sourceMap": true,
+          },
+          "type": "end",
+        },
+      },
+      {
+        "loader": "builtin:swc-loader",
+        "options": {
+          "jsc": {
+            "externalHelpers": true,
+            "parser": {
+              "syntax": "typescript",
+            },
+            "preserveAllComments": false,
+          },
+          "sourceMap": true,
+        },
+      },
+      {
+        "loader": "probe",
+        "options": {
+          "loader": "builtin:swc-loader",
+          "options": {
+            "jsc": {
+              "externalHelpers": true,
+              "parser": {
+                "syntax": "typescript",
+              },
+              "preserveAllComments": false,
+            },
+            "sourceMap": true,
+          },
+          "type": "start",
+        },
+      },
+    ],
+  },
+  {
+    "test": /\\\\\\.svg\\$/,
+    "type": "asset/resource",
+  },
+]
+`;
