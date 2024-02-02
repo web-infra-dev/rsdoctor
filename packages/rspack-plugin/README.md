@@ -40,4 +40,4 @@ Please read the [Contributing Guide](https://github.com/web-infra-dev/rsdoctor/b
 
 ## License
 
-Rsdocor is [MIT licensed](https://github.com/web-infra-dev/rsdoctor/blob/main/LICENSE).
+Rsdoctor is [MIT licensed](https://github.com/web-infra-dev/rsdoctor/blob/main/LICENSE).
