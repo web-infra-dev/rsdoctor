@@ -38,13 +38,17 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     return this._server.app;
   }
 
-  public get origin(): string {
+  public get host(): string {
     const host = ip.address();
-    return `http://${host}:${this.port}`;
+    return host;
+  }
+
+  public get origin(): string {
+    return `http://${this.host}:${this.port}`;
   }
 
   public get socketUrl(): string {
-    return `ws://${ip.address()}:${this.port}`;
+    return `ws://localhost:${this.port}`;
   }
 
   async bootstrap() {
@@ -157,16 +161,16 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   public getClientUrl(route?: 'homepage'): string;
 
   public getClientUrl(route = 'homepage', ...args: unknown[]) {
-    const url = `${this.origin}${SDK.ServerAPI.API.EntryHtml}`;
+    const relativeUrl = SDK.ServerAPI.API.EntryHtml;
 
     switch (route) {
       case Client.RsdoctorClientRoutes.BundleDiff: {
         const [baseline, current] = args as string[];
         const qs = Bundle.getBundleDiffPageQueryString([baseline, current]);
-        return `${url}${qs}#${Client.RsdoctorClientRoutes.BundleDiff}`;
+        return `${relativeUrl}${qs}#${Client.RsdoctorClientRoutes.BundleDiff}`;
       }
       default:
-        return url;
+        return relativeUrl;
     }
   }
 
@@ -179,11 +183,16 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   public async openClientPage(route?: 'homepage'): Promise<void>;
 
   public async openClientPage(...args: unknown[]) {
-    const url = this.getClientUrl(
+    const relativeUrl = this.getClientUrl(
       ...(args as Parameters<SDK.RsdoctorServerInstance['getClientUrl']>),
     );
+    const url = `http://${this.host}:${this.port}${relativeUrl}`;
+    const localhostUrl = `http://localhost:${this.port}${relativeUrl}`;
     await openBrowser(url);
     logger.info(`Rsdoctor analyze server running on: ${chalk.cyan(url)}`);
+    logger.info(
+      `Rsdoctor analyze server running on: ${chalk.cyan(localhostUrl)}`,
+    );
   }
 
   public sendAPIDataToClient<
