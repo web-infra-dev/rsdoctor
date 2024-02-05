@@ -36,8 +36,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.5.1",
-    "@modern-js/module-tools": "^2.41.0",
-    "@modern-js/monorepo-tools": "^2.41.0",
+    "@modern-js/module-tools": "^2.44.0",
+    "@modern-js/monorepo-tools": "^2.44.0",
     "@rsbuild/test-helper": "0.1.5",
     "@rsdoctor/test-helper": "workspace:*",
     "@rsdoctor/tsconfig": "workspace:*",
