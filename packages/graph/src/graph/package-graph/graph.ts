@@ -94,9 +94,7 @@ export class PackageGraph implements SDK.PackageGraphInstance {
         }
         current = dirname(current);
         if (readFile) {
-          result =
-            readFile(join(current, 'package.json')) ||
-            PackageUtil.getPackageMetaFromModulePath(file);
+          result = readFile(join(current, 'package.json'));
         }
         if (!readFile) {
           result = PackageUtil.getPackageMetaFromModulePath(file);
@@ -194,10 +192,10 @@ export class PackageGraph implements SDK.PackageGraphInstance {
   getDuplicatePackages(): Package[][] {
     return unionBy(
       Array.from(this._pkgNameMap.values())
-      .map(pkgs => {
-        return unionBy(pkgs, 'version')
-      })
-      .filter((pkgs) => pkgs.length > 1),
+        .map((pkgs) => {
+          return unionBy(pkgs, 'version');
+        })
+        .filter((pkgs) => pkgs.length > 1),
       (pkgs) => pkgs[0].name,
     );
   }
