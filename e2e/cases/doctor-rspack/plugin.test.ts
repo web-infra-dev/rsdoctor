@@ -113,7 +113,6 @@ test('rspack data store', async () => {
   await rspackCompile(tapName, compileByRspack);
   const sdk = getSDK();
   const datas = sdk.getStoreData();
-  console.log(datas.errors);
   expect(datas.errors.length).toBe(0);
   const graphData = datas.moduleGraph;
 
