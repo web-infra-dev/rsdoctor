@@ -4,7 +4,7 @@ import fs from 'fs';
 import { ModuleGraph } from '@/build-utils/common';
 import { Chunks } from '@/build-utils/build';
 import { removeAbsModulePath } from '../utils';
-import { compileByWebpack5 } from '@rsdoctor/test-helper';
+import { compileByWebpack5 } from '@scripts/test-helper';
 
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, '../../fixtures', ...paths);

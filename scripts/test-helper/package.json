@@ -1,5 +1,5 @@
 {
-  "name": "@rsdoctor/test-helper",
+  "name": "@scripts/test-helper",
   "version": "0.1.1",
   "description": "The vitest helpers of Rsdoctor.",
   "repository": {

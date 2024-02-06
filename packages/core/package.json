@@ -63,7 +63,7 @@
     "webpack-bundle-analyzer": "^4.9.1"
   },
   "devDependencies": {
-    "@rsdoctor/test-helper": "workspace:*",
+    "@scripts/test-helper": "workspace:*",
     "@types/bytes": "3.1.1",
     "@types/fs-extra": "^11.0.2",
     "@types/loader-utils": "^2.0.5",

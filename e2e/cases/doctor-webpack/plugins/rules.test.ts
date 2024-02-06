@@ -1,6 +1,6 @@
 import { defineRule } from '@rsdoctor/core/rules';
 import { Rule } from '@rsdoctor/types';
-import { compileByWebpack5 } from '@rsbuild/test-helper';
+import { compileByWebpack5 } from '@scripts/test-helper';
 import path from 'path';
 import { test, expect } from '@playwright/test';
 import { createRsdoctorPlugin } from '../test-utils';

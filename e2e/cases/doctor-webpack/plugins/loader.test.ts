@@ -1,5 +1,5 @@
 import { Common } from '@rsdoctor/types';
-import { compileByWebpack5 } from '@rsbuild/test-helper';
+import { compileByWebpack5 } from '@scripts/test-helper';
 import { cloneDeep } from 'lodash';
 import path from 'path';
 import { test, expect } from '@playwright/test';

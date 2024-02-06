@@ -3,7 +3,7 @@ import {
   applyMatcherReplacement,
   createDefaultPathMatchers,
 } from './pathSerializer';
-import type { PathMatcher } from './pathSerializer'
+import type { PathMatcher } from './pathSerializer';
 
 export interface SnapshotSerializerOptions {
   cwd?: string;

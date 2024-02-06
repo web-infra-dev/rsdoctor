@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
-import { compileByRspack } from '@rsbuild/test-helper';
+import { compileByRspack } from '@scripts/test-helper';
 import { Compiler } from '@rspack/core';
 import os from 'os';
 import path from 'path';
@@ -12,6 +12,9 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
   const file = path.resolve(__dirname, './fixtures/a.js');
   const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
   const res = await compile(file, {
+    resolve: {
+      extensions: ['.ts', '.js'],
+    },
     module: {
       rules: [
         {
@@ -19,21 +22,21 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
           use: loader,
         },
         {
-          test: /\.ts$/,
+          test: /\.[jt]s$/,
           use: {
-            loader: "builtin:swc-loader",
+            loader: 'builtin:swc-loader',
             options: {
               sourceMap: true,
               jsc: {
                 parser: {
-                  syntax: "typescript"
+                  syntax: 'typescript',
                 },
                 externalHelpers: true,
-                preserveAllComments: false
-              }
-            }
+                preserveAllComments: false,
+              },
+            },
           },
-          type: "javascript/auto"
+          type: 'javascript/auto',
         },
       ],
     },
@@ -62,9 +65,9 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
                       case 'reportLoader':
                         return null;
                       case 'reportLoaderStartOrEnd':
-                          return (_data: any) => {
-                            reportLoaderStartOrEndTimes += 1;
-                          };
+                        return (_data: any) => {
+                          reportLoaderStartOrEndTimes += 1;
+                        };
                       default:
                         return Reflect.get(target, key, receiver);
                     }
@@ -110,6 +113,7 @@ test('rspack data store', async () => {
   await rspackCompile(tapName, compileByRspack);
   const sdk = getSDK();
   const datas = sdk.getStoreData();
+  console.log(datas.errors);
   expect(datas.errors.length).toBe(0);
   const graphData = datas.moduleGraph;
 
@@ -124,7 +128,7 @@ test('rspack data store', async () => {
   graphData.modules.forEach((mod) => (mod.webpackId = ''));
   expect(graphData.modules[0].size).toEqual({
     sourceSize: 68,
-    transformedSize: 83,
+    transformedSize: 79,
     parsedSize: 0,
   });
   expect(graphData.modules[0].path).toMatch('/fixtures/a.js');
