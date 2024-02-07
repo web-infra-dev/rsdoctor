@@ -14,7 +14,9 @@ function promisifyCompilerRun<
       }
 
       if (!stats) {
-        reject('The Stats file is empty, please check the build configuration.');
+        reject(
+          'The Stats file is empty, please check the build configuration.',
+        );
         return;
       }
 

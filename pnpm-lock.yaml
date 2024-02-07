@@ -17,15 +17,12 @@ importers:
       '@modern-js/monorepo-tools':
         specifier: ^2.44.0
         version: 2.46.1(typescript@5.3.3)
-      '@rsbuild/test-helper':
-        specifier: 0.1.5
-        version: 0.1.5
-      '@rsdoctor/test-helper':
-        specifier: workspace:*
-        version: link:packages/test-helper
       '@rsdoctor/tsconfig':
         specifier: workspace:*
         version: link:scripts/tsconfig
+      '@scripts/test-helper':
+        specifier: workspace:*
+        version: link:scripts/test-helper
       check-dependency-version-consistency:
         specifier: ^4.1.0
         version: 4.1.0
@@ -561,9 +558,9 @@ importers:
         specifier: ^4.9.1
         version: 4.10.1
     devDependencies:
-      '@rsdoctor/test-helper':
+      '@scripts/test-helper':
         specifier: workspace:*
-        version: link:../test-helper
+        version: link:../../scripts/test-helper
       '@types/bytes':
         specifier: 3.1.1
         version: 3.1.1
@@ -763,33 +760,6 @@ importers:
         specifier: ^5.2.2
         version: 5.3.2
 
-  packages/test-helper:
-    dependencies:
-      '@rspack/core':
-        specifier: 0.5.1
-        version: 0.5.1(@swc/helpers@0.5.3)
-      '@types/lodash':
-        specifier: ^4.14.200
-        version: 4.14.202
-      '@types/node':
-        specifier: ^16
-        version: 16.18.66
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
-      memfs:
-        specifier: 3.4.10
-        version: 3.4.10
-      typescript:
-        specifier: ^5.2.2
-        version: 5.3.2
-      upath:
-        specifier: 2.0.1
-        version: 2.0.1
-      webpack:
-        specifier: ^5.89.0
-        version: 5.89.0(webpack-cli@5.0.0)
-
   packages/types:
     dependencies:
       '@rspack/core':
@@ -976,6 +946,33 @@ importers:
       tsx:
         specifier: 4.6.1
         version: 4.6.1
+
+  scripts/test-helper:
+    dependencies:
+      '@rspack/core':
+        specifier: 0.5.1
+        version: 0.5.1(@swc/helpers@0.5.3)
+      '@types/lodash':
+        specifier: ^4.14.200
+        version: 4.14.202
+      '@types/node':
+        specifier: ^16
+        version: 16.18.66
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      memfs:
+        specifier: 3.4.10
+        version: 3.4.10
+      typescript:
+        specifier: ^5.2.2
+        version: 5.3.3
+      upath:
+        specifier: 2.0.1
+        version: 2.0.1
+      webpack:
+        specifier: ^5.89.0
+        version: 5.89.0(webpack-cli@5.0.0)
 
   scripts/tsconfig: {}
 
@@ -5422,19 +5419,6 @@ packages:
       - supports-color
     dev: true
 
-  /@rsbuild/core@0.1.5:
-    resolution: {integrity: sha512-gVGAJwr+mblpc9cZvTZvvNQYqzR+V69oA1d/ApdkeIZS69SRuxvnU8mmPszKEyqyPDuUvyHS/XrBNG51BRvzPQ==}
-    engines: {node: '>=14.0.0'}
-    hasBin: true
-    dependencies:
-      '@rsbuild/shared': 0.1.5
-      '@rspack/core': 0.4.1
-      core-js: 3.32.2
-      html-webpack-plugin: /html-rspack-plugin@5.5.7
-      postcss: 8.4.31
-      semver: 7.5.4
-    dev: true
-
   /@rsbuild/core@0.1.9:
     resolution: {integrity: sha512-UsMUeBQqIOulHyLCaVQew0WtHSL+/S5zSMU9+Iby/t5szEsWytRDjwekcZDxKhhut21Kyktr5d1RofTvY19ttg==}
     engines: {node: '>=14.0.0'}
@@ -5553,16 +5537,6 @@ packages:
       fs-extra: 11.2.0
     dev: true
 
-  /@rsbuild/shared@0.1.5:
-    resolution: {integrity: sha512-or+5OOyEIMvzD0Q8FOL4joWknlCE6iCi+8Z8UdBr7UYifYSd/9A7xQnCmeLorWszx1a9Z2tuqUA5lfBr/7nVSg==}
-    dependencies:
-      '@rspack/core': 0.4.1
-      caniuse-lite: 1.0.30001566
-      line-diff: 2.1.1
-      lodash: 4.17.21
-      postcss: 8.4.31
-    dev: true
-
   /@rsbuild/shared@0.1.9:
     resolution: {integrity: sha512-u2RAfuNRMIt+7KnCgikjIzl64nS3Ce3HI1EB3ALPkPdtV8ZvORID8RqdYzIJSfv4/cHD8rGeR6oXIFsAOc84OA==}
     dependencies:
@@ -5591,26 +5565,6 @@ packages:
       postcss: 8.4.31
     transitivePeerDependencies:
       - '@swc/helpers'
-    dev: true
-
-  /@rsbuild/test-helper@0.1.5:
-    resolution: {integrity: sha512-MXBA0AX5baRq09FjRo/etIi+48LFCZq2wAMQra8HrCp5R4H3/npDrKUfgjbICWiGI37L5lsY/tD2ToTUGYr3XA==}
-    dependencies:
-      '@rsbuild/core': 0.1.5
-      '@rsbuild/shared': 0.1.5
-      '@rspack/core': 0.4.1
-      '@types/lodash': 4.14.202
-      '@types/node': 16.18.66
-      lodash: 4.17.21
-      memfs: 3.4.10
-      typescript: 5.3.3
-      upath: 2.0.1
-      webpack: 5.89.0(webpack-cli@5.0.0)
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
-      - webpack-cli
     dev: true
 
   /@rspack/binding-darwin-arm64@0.4.1:
@@ -18544,6 +18498,7 @@ packages:
   /upath@2.0.1:
     resolution: {integrity: sha512-1uEe95xksV1O0CYKXo8vQvN1JEbtJp7lb7C5U9HMsIp6IVwntkH/oNUzyVNQSd4S1sYk2FpSSW44FqMc8qee5w==}
     engines: {node: '>=4'}
+    dev: false
 
   /update-browserslist-db@1.0.13(browserslist@4.22.2):
     resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}
