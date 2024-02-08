@@ -20,14 +20,18 @@ interface CommonAlertsContainerProps {
   extraCom?: JSX.Element | undefined;
 }
 
-interface CommonAlertsContentProps extends Pick<CommonAlertsContainerProps, 'dataSource' | 'extraData'> {}
+interface CommonAlertsContentProps
+  extends Pick<CommonAlertsContainerProps, 'dataSource' | 'extraData'> {}
 
 const LevelMap = {
   warn: 1,
   error: 2,
 };
 
-const CommonAlertsList: React.FC<CommonAlertsContentProps> = ({ dataSource, extraData }) => {
+const CommonAlertsList: React.FC<CommonAlertsContentProps> = ({
+  dataSource,
+  extraData,
+}) => {
   const _dataSource = useMemo(
     () =>
       dataSource.slice().sort((a, b) => {
@@ -37,7 +41,10 @@ const CommonAlertsList: React.FC<CommonAlertsContentProps> = ({ dataSource, extr
   );
 
   return (
-    <Space direction="vertical" style={{ wordBreak: 'break-all', width: '100%' }}>
+    <Space
+      direction="vertical"
+      style={{ wordBreak: 'break-all', width: '100%' }}
+    >
       {_dataSource.map((err, i) => {
         return <Alert data={err} key={i} {...extraData} />;
       })}
@@ -45,11 +52,20 @@ const CommonAlertsList: React.FC<CommonAlertsContentProps> = ({ dataSource, extr
   );
 };
 
-const CommonAlertsGroup: React.FC<CommonAlertsContentProps> = ({ dataSource, extraData }) => {
-  const _dataSource = useMemo(() => values(groupBy(dataSource, (e) => e.code)), [dataSource]);
+const CommonAlertsGroup: React.FC<CommonAlertsContentProps> = ({
+  dataSource,
+  extraData,
+}) => {
+  const _dataSource = useMemo(
+    () => values(groupBy(dataSource, (e) => e.code)),
+    [dataSource],
+  );
 
   return (
-    <Space direction="vertical" style={{ wordBreak: 'break-all', width: '100%' }}>
+    <Space
+      direction="vertical"
+      style={{ wordBreak: 'break-all', width: '100%' }}
+    >
       <Collapse>
         {_dataSource.map((el) => {
           const [first] = el;
@@ -60,13 +76,16 @@ const CommonAlertsGroup: React.FC<CommonAlertsContentProps> = ({ dataSource, ext
                   <Typography.Text code strong style={{ cursor: 'pointer' }}>
                     {first.code}
                   </Typography.Text>
-                  <Typography.Text strong>{Rule.RuleErrorMap[first.code as keyof RuleErrorCodes]?.title || first.title}</Typography.Text>
+                  <Typography.Text strong>
+                    {Rule.RuleErrorMap[first.code as keyof RuleErrorCodes]
+                      ?.title || first.title}
+                  </Typography.Text>
                   <Bdg label={'count'} value={el.length} type="error" />
                 </Space>
               }
               key={first.code}
             >
-              <Space direction="vertical" size={16}>
+              <Space direction="vertical" size={16} style={{ width: '100%' }}>
                 {el.map((err, i) => {
                   return <Alert data={err} key={i} {...extraData} />;
                 })}
