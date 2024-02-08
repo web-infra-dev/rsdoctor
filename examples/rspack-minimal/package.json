@@ -1,5 +1,5 @@
 {
-  "name": "@example/rsdoctor-rspack-cra-ts",
+  "name": "@examples/rsdoctor-rspack-cra-ts",
   "version": "0.1.1",
   "private": true,
   "scripts": {

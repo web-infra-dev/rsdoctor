@@ -18,7 +18,7 @@
     "lint": "biome lint . --diagnostic-level=error",
     "new": "modern new",
     "pre": "modern pre",
-    "prepare": "pnpm run build -p @rsdoctor/* && husky install",
+    "prepare": "pnpm run build && husky install",
     "release": "modern release",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm run ut",
     "test:all": "pnpm run test && pnpm run e2e",
