@@ -5,10 +5,10 @@ import {
   MenuOutlined,
   MonitorOutlined,
   NodeIndexOutlined,
-  ToolOutlined
+  ToolOutlined,
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Col, Grid, Menu, MenuProps, Typography } from 'antd';
+import { Col, Menu, Grid, MenuProps, Typography } from 'antd';
 import { includes } from 'lodash-es';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -17,14 +17,21 @@ import { Size } from '../../constants';
 import * as OverallConstants from '../../pages/Overall/constants';
 import { useI18n, hasBundle, hasCompile } from '../../utils';
 import { withServerAPI } from '../Manifest';
-import { BundleSize, LoaderFiles, PluginsAnalyze, ModuleResolve, LoaderTimeline } from 'src/pages';
+import {
+  BundleSize,
+  LoaderFiles,
+  PluginsAnalyze,
+  ModuleResolve,
+  LoaderTimeline,
+} from 'src/pages';
 import { CompileName } from './constants';
 
 const BuilderSwitchName = 'builder-switcher';
 
-const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.RsdoctorManifestClientRoutes[] }> = (
-  props,
-) => {
+const MenusBase: React.FC<{
+  style?: React.CSSProperties;
+  routes: Manifest.RsdoctorManifestClientRoutes[];
+}> = (props) => {
   const { t } = useI18n();
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -55,17 +62,26 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Rsdoct
       },
     });
   }
-  
+
   if (hasCompile(enableRoutes)) {
     items.push({
       label: t(CompileName),
       key: CompileName,
       icon: <ToolOutlined style={iconStyle} />,
       children: [
-        includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.WebpackLoaders) && {
-          label: <Typography.Text style={{ marginRight: 8 }}>{t(LoaderFiles.name)}</Typography.Text>,
+        includes(
+          enableRoutes,
+          Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+        ) && {
+          label: (
+            <Typography.Text style={{ marginRight: 8 }}>
+              {t(LoaderFiles.name)}
+            </Typography.Text>
+          ),
           key: LoaderFiles.route,
-          icon: <img src={WebpackIcon} alt="" style={{ ...iconStyle, width: 16 }} />,
+          icon: (
+            <img src={WebpackIcon} alt="" style={{ ...iconStyle, width: 16 }} />
+          ),
           children: [
             {
               label: t(LoaderTimeline.name),
@@ -79,12 +95,18 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Rsdoct
             },
           ],
         },
-        includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.ModuleResolve) && {
+        includes(
+          enableRoutes,
+          Manifest.RsdoctorManifestClientRoutes.ModuleResolve,
+        ) && {
           label: t(ModuleResolve.name),
           key: ModuleResolve.route,
           icon: <NodeIndexOutlined style={iconStyle} />,
         },
-        includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.WebpackPlugins) && {
+        includes(
+          enableRoutes,
+          Manifest.RsdoctorManifestClientRoutes.WebpackPlugins,
+        ) && {
           label: t(PluginsAnalyze.name),
           key: PluginsAnalyze.route,
           icon: <ApiOutlined style={iconStyle} />,
@@ -99,7 +121,10 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Rsdoct
       key: BundleSize.name,
       icon: <span style={customIconStyle}>📦</span>,
       children: [
-        includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.BundleSize) && {
+        includes(
+          enableRoutes,
+          Manifest.RsdoctorManifestClientRoutes.BundleSize,
+        ) && {
           label: t(BundleSize.name),
           key: BundleSize.route,
           icon: <FolderViewOutlined style={iconStyle} />,
@@ -119,22 +144,25 @@ const MenusBase: React.FC<{ style?: React.CSSProperties; routes: Manifest.Rsdoct
         }
       }}
       overflowedIndicator={<MenuOutlined />}
-      style={{ height: Size.NavBarHeight, lineHeight: `${Size.NavBarHeight}px`, ...props.style }}
-
+      style={{
+        height: Size.NavBarHeight,
+        lineHeight: `${Size.NavBarHeight}px`,
+        minWidth: 0,
+        justifyContent: xxl ? 'center' : 'flex-end',
+        ...props.style,
+      }}
       selectedKeys={[pathname === '/' ? OverallConstants.route : pathname]}
     />
   );
 
-  if (items.length <= 3) {
-    return <Col>{MenuComponent}</Col>;
-  }
-
-  if (xxl) {
-    return <Col>{MenuComponent}</Col>;
-  }
-
   return (
-    <Col xs={{ span: 3 }} md={{ span: 6 }} lg={{ span: 10 }} xl={{ span: 11 }}>
+    <Col
+      xs={{ span: 3 }}
+      md={{ span: 6 }}
+      lg={{ span: 10 }}
+      xl={{ span: 11 }}
+      xxl={{ span: 12 }}
+    >
       {MenuComponent}
     </Col>
   );

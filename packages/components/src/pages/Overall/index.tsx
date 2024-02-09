@@ -1,10 +1,13 @@
-import { Col, Row } from 'antd';
-import React from 'react';
 import { SDK } from '@rsdoctor/types';
-import { Size } from '../../constants';
-import { BundleOverall, ProjectOverall, CompileOverall } from '../../components/Overall';
-import { CompileAlerts, BundleAlerts } from '../../components/Alerts';
+import React from 'react';
+import { BundleAlerts, CompileAlerts } from '../../components/Alerts';
 import { withServerAPI } from '../../components/Manifest';
+import {
+  BundleOverall,
+  CompileOverall,
+  ProjectOverall,
+} from '../../components/Overall';
+import { ResponsiveGridLayout } from './responsiveGridList';
 
 interface Props {
   project: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetProjectInfo>;
@@ -15,17 +18,16 @@ const Component: React.FC<Props> = ({ project }) => {
 
   return (
     <div>
-      <Row gutter={Size.BasePadding}>
-        <Col span={8}>
-          <ProjectOverall configs={configs} cwd={cwd} envinfo={envinfo} alerts={errors} />
-        </Col>
-        <Col span={8}>
-          <BundleOverall errors={errors} cwd={cwd} />
-        </Col>
-        <Col span={8}>
-          <CompileOverall summary={summary} />
-        </Col>
-      </Row>
+      <ResponsiveGridLayout>
+        <ProjectOverall
+          configs={configs}
+          cwd={cwd}
+          envinfo={envinfo}
+          alerts={errors}
+        />
+        <BundleOverall errors={errors} cwd={cwd} />
+        <CompileOverall summary={summary} />
+      </ResponsiveGridLayout>
 
       <CompileAlerts />
 
@@ -34,7 +36,7 @@ const Component: React.FC<Props> = ({ project }) => {
   );
 };
 
-export const Page =  withServerAPI({
+export const Page = withServerAPI({
   api: SDK.ServerAPI.API.GetProjectInfo,
   responsePropName: 'project',
   Component,

@@ -1,10 +1,25 @@
 /* eslint-disable financial/no-float-calculation */
 import React, { useState } from 'react';
-import { Space, Alert, Button, Typography, Divider, Tabs, Row, Col, Timeline, Card, Tag, Empty, Popover } from 'antd';
+import {
+  Space,
+  Alert,
+  Button,
+  Typography,
+  Divider,
+  Tabs,
+  Row,
+  Col,
+  Timeline,
+  Card,
+  Tag,
+  Empty,
+  Popover,
+  Grid,
+} from 'antd';
 import { sumBy } from 'lodash-es';
 import { Rule, SDK } from '@rsdoctor/types';
 import { ExpandAltOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { useRuleIndexNavigate, formatSize, useI18n, useWindowWidth } from '../../utils';
+import { useRuleIndexNavigate, formatSize, useI18n } from '../../utils';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 import { Size, Color } from '../../constants';
@@ -27,7 +42,13 @@ export const PackageRelationReasons: React.FC<{
           title={`The reasons for importing this version`}
           style={{ height: '100%' }}
           extra={
-            <Popover content={<Typography.Text>{t('DuplicatePakCodeExplain')}</Typography.Text>}>
+            <Popover
+              content={
+                <Typography.Text>
+                  {t('DuplicatePakCodeExplain')}
+                </Typography.Text>
+              }
+            >
               <a href="#">Explain</a>
             </Popover>
           }
@@ -44,11 +65,14 @@ export const PackageRelationReasons: React.FC<{
                 {data.map((e, i) => {
                   const { dependency, module, relativePath } = e!;
                   const { statements } = dependency;
-                  const { start } = statements?.[0]?.position ? module.isPreferSource
-                    ? statements[0].position.source!
-                    : statements[0].position.transformed
-                    : { start:{ line:0, column: 0 } };
-                  const text = `${relativePath}:${start.line}:${start.column || 1}`;
+                  const { start } = statements?.[0]?.position
+                    ? module.isPreferSource
+                      ? statements[0].position.source!
+                      : statements[0].position.transformed
+                    : { start: { line: 0, column: 0 } };
+                  const text = `${relativePath}:${start.line}:${
+                    start.column || 1
+                  }`;
 
                   return (
                     <Timeline.Item
@@ -64,7 +88,10 @@ export const PackageRelationReasons: React.FC<{
                           setIndex(i);
                         }}
                         strong={i === index}
-                        style={{ color: i === index ? Color.Blue : 'inherit', display: 'block' }}
+                        style={{
+                          color: i === index ? Color.Blue : 'inherit',
+                          display: 'block',
+                        }}
                       >
                         {text}
                       </Typography.Text>
@@ -100,29 +127,44 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
   const navigate = useRuleIndexNavigate(code, data.link);
   const totalSize = sumBy(packages, (e) => e.targetSize.sourceSize);
   const totalSizeStr = formatSize(totalSize);
-  const windowWith = useWindowWidth();
+  const { xs, lg, xxl } = Grid.useBreakpoint();
   const { name } = packages.find((e) => !!e.target.name)!.target;
 
   const versions = packages.map((item) => item.target.version);
-  
+
   return (
     <Alert
-      showIcon
+      showIcon={!xs}
       message={
-        <Space>
-          <Typography.Text code strong onClick={navigate} style={{ cursor: 'pointer' }}>
-            <a>{code}</a>
-          </Typography.Text>
-          <Typography.Text strong>{Rule.RuleErrorMap[code as keyof Rule.RuleErrorCodes]?.title || data.title}</Typography.Text>
-          <Divider type="vertical" />
-          <Typography.Text>
+        <Space
+          wrap
+          split={xs ? null : <Divider type="vertical" />}
+          align="center"
+        >
+          <Space wrap={false}>
+            <Typography.Text
+              code
+              strong
+              onClick={navigate}
+              style={{ cursor: 'pointer' }}
+            >
+              <a>{code}</a>
+            </Typography.Text>
+            <Typography.Text strong>
+              {Rule.RuleErrorMap[code as keyof Rule.RuleErrorCodes]?.title ||
+                data.title}
+            </Typography.Text>
+          </Space>
+          <Typography.Paragraph
+            ellipsis={{ rows: 1 }}
+            style={{ marginBottom: 0 }}
+          >
             <Typography.Text strong code>
               {name}
             </Typography.Text>
             <Typography.Text strong> {data.packages.length}</Typography.Text>
             <Typography.Text> versions was found</Typography.Text>
-          </Typography.Text>
-          <Divider type="vertical" />
+          </Typography.Paragraph>
           <Bdg
             label={'total size'}
             value={totalSizeStr}
@@ -135,38 +177,60 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
         <Space direction="vertical" wrap={false}>
           {data.packages.map(({ target: el, targetSize: size }) => {
             const sizeStr = formatSize(size.sourceSize);
-            const parsedSizeStr = size.parsedSize ? formatSize(size.parsedSize) : null;
+            const parsedSizeStr = size.parsedSize
+              ? formatSize(size.parsedSize)
+              : null;
             const name = `${el.name}@${el.version}`;
             return (
-              <Space key={el.version} style={{ wordBreak: 'break-all' }} align="center">
-                <Typography.Text style={{ marginLeft: 4 }}>└</Typography.Text>
-                <Bdg label={el.name} value={`v${el.version}`} tooltip={name} />
-              <Divider type="vertical" />
-                <Bdg
-                  label={
-                    <div color={'rgb(255, 255, 255)'}>
-                      Source Size <InfoCircleOutlined />
-                    </div>
-                  }
-                  value={sizeStr}
-                  tooltip={`The bundle size of "${name}" is ${sizeStr}, this is source size.`}
-                  type="error"
-                />
-                <Bdg
-                  label="Bundled size"
-                  value={parsedSizeStr || 'CONCATENATED'}
-                  tooltip={`The bundle size of "${name}" is ${sizeStr}, this is after bundled, concatenated module cannot get bundled size. `}
-                  type="error"
-                />
+              <Space
+                key={el.version}
+                style={{ wordBreak: 'break-all' }}
+                align="center"
+                split={xs ? null : <Divider type="vertical" />}
+                wrap
+              >
+                <Space wrap={false}>
+                  <Typography.Text style={{ marginLeft: 4 }}>└</Typography.Text>
+                  <Bdg
+                    label={el.name}
+                    value={`v${el.version}`}
+                    tooltip={name}
+                  />
+                </Space>
+                <Space>
+                  <Bdg
+                    label={
+                      <div color={'rgb(255, 255, 255)'}>
+                        Source Size <InfoCircleOutlined />
+                      </div>
+                    }
+                    value={sizeStr}
+                    tooltip={`The bundle size of "${name}" is ${sizeStr}, this is source size.`}
+                    type="error"
+                  />
+                  <Bdg
+                    label="Bundled size"
+                    value={parsedSizeStr || 'CONCATENATED'}
+                    tooltip={`The bundle size of "${name}" is ${sizeStr}, this is after bundled, concatenated module cannot get bundled size. `}
+                    type="error"
+                  />
+                </Space>
 
-                <Divider type="vertical" />
                 <Typography.Paragraph
-                  style={{ marginBottom: 0, width: windowWith > 1500 ? '40rem' : windowWith > 1200 ? '30rem' : '20rem' }}
+                  style={{
+                    marginBottom: 0,
+                    width: xxl ? '40rem' : lg ? '30rem' : '20rem',
+                  }}
                   copyable={{ text: el.root }}
-                  ellipsis={{ rows: 1, expandable: true, symbol: <ExpandAltOutlined />, tooltip: el.root }}
+                  ellipsis={{
+                    rows: 1,
+                    expandable: true,
+                    symbol: <ExpandAltOutlined />,
+                    tooltip: el.root,
+                  }}
                   code
                 >
-              {el.root}
+                  {el.root}
                 </Typography.Paragraph>
               </Space>
             );
@@ -177,7 +241,11 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
       action={
         <React.Fragment>
           {packages && packages.length > 0 ? (
-            <TextDrawer text="Show Relations" buttonProps={{ size: 'small' }} drawerProps={{ title: data.title }}>
+            <TextDrawer
+              text="Show Relations"
+              buttonProps={{ size: 'small' }}
+              drawerProps={{ title: data.title }}
+            >
               <Space direction="vertical" className="alert-space">
                 <Space style={{ marginBottom: Size.BasePadding / 2 }}>
                   <Title text={name} upperFisrt={false} />
@@ -201,11 +269,16 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
                         label: (
                           <Space>
                             <Typography.Text>{`${name}@${target.version}`}</Typography.Text>
-                            <Tag color={Color.Red}>{formatSize(targetSize.sourceSize)}</Tag>
+                            <Tag color={Color.Red}>
+                              {formatSize(targetSize.sourceSize)}
+                            </Tag>
                           </Space>
                         ),
                         key: `${target.root}${target.name}${target.version}`,
-                        children: getPackageRelationContentComponent({ data, package: pkg }),
+                        children: getPackageRelationContentComponent({
+                          data,
+                          package: pkg,
+                        }),
                       };
                     })!
                   }
@@ -214,7 +287,12 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
             </TextDrawer>
           ) : null}
           <Divider type="vertical" />
-          <Button type="link" onClick={navigate} size="small" icon={<InfoCircleOutlined />} />
+          <Button
+            type="link"
+            onClick={navigate}
+            size="small"
+            icon={<InfoCircleOutlined />}
+          />
         </React.Fragment>
       }
     />
