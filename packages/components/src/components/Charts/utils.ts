@@ -6,6 +6,7 @@ import { formatCosts } from 'src/utils';
 
 import './tooltips.scss';
 import { DurationMetric, ETraceEventPhase, ITraceEventData } from './types';
+import { useEffect, useState } from 'react';
 
 export function getTooltipHtmlForLoader(
   loader: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData>[0],
@@ -27,11 +28,15 @@ export function getTooltipHtmlForLoader(
     </li>
     <li class="loader-tooltip-item">
       <span>start</span>
-      <span class="loader-tooltip-textbold">${dayjs(loader.startAt).format('YYYY/MM/DD HH:mm:ss')}</span>
+      <span class="loader-tooltip-textbold">${dayjs(loader.startAt).format(
+        'YYYY/MM/DD HH:mm:ss',
+      )}</span>
     </li>
     <li class="loader-tooltip-item">
       <span>end</span>
-      <span class="loader-tooltip-textbold">${dayjs(loader.endAt).format('YYYY/MM/DD HH:mm:ss')}</span>
+      <span class="loader-tooltip-textbold">${dayjs(loader.endAt).format(
+        'YYYY/MM/DD HH:mm:ss',
+      )}</span>
     </li>
   </div>
   `.trim();
@@ -45,7 +50,9 @@ export function renderTotalLoadersTooltip(
   const filter = (loader: { loader: string }) => loader.loader === loaderName;
   const filteredLoaders = loaders.filter(filter);
   const resources = filteredLoaders.map((e) => e.resource);
-  const nodeModulesResources = resources.filter((e) => e.includes('/node_modules/'));
+  const nodeModulesResources = resources.filter((e) =>
+    e.includes('/node_modules/'),
+  );
   const outsideResources = resources.filter((e) => !e.startsWith(cwd));
   const start = minBy(filteredLoaders, (e) => e.startAt)!.startAt;
   const end = maxBy(filteredLoaders, (e) => e.endAt)!.endAt;
@@ -85,7 +92,7 @@ export function renderTotalLoadersTooltip(
 }
 
 export function transformDurationMetric(
-  rawData: DurationMetric[]
+  rawData: DurationMetric[],
 ): ITraceEventData[] {
   return rawData.reduce((acc, cur) => {
     if (cur.c) {
@@ -105,7 +112,7 @@ export function transformDurationMetric(
           pid: cur.p,
           ts: cur.e,
           args: cur,
-        }
+        },
       );
     } else {
       acc.push({
@@ -131,15 +138,18 @@ export function transformDurationMetric(
 export function processTrans(rawData: DurationMetric[]) {
   const processedData = rawData
     .sort((a, b) => a.s - b.s)
-    .reduce((prev, cur) => {
-      const ca = prev[cur.p];
-      if (ca) {
-        loop(ca, cur);
-      } else {
-        prev[cur.p] = [cur];
-      }
-      return prev;
-    }, {} as Record<string, DurationMetric[]>);
+    .reduce(
+      (prev, cur) => {
+        const ca = prev[cur.p];
+        if (ca) {
+          loop(ca, cur);
+        } else {
+          prev[cur.p] = [cur];
+        }
+        return prev;
+      },
+      {} as Record<string, DurationMetric[]>,
+    );
   const data = Object.entries(processedData).reduce((prev, [_key, val]) => {
     // @ts-ignore
     prev.push(...val);
@@ -173,7 +183,7 @@ function loop(dur: DurationMetric[], target: DurationMetric) {
   }
 }
 
-export function formatterForPlugins(raw: { data: { ext: ITraceEventData }}) {
+export function formatterForPlugins(raw: { data: { ext: ITraceEventData } }) {
   const { ext } = raw.data;
   return `
   <div class="loader-tooltip-container">
@@ -200,4 +210,16 @@ export function formatterForPlugins(raw: { data: { ext: ITraceEventData }}) {
     </li>
   </div>
       `.trim();
+}
+
+export function useDebounceHook(
+  value: DurationMetric[],
+  delay: number,
+): DurationMetric[] | undefined {
+  const [debounceValue, setDebounceValue] = useState(value);
+  useEffect(() => {
+    let timer = setTimeout(() => setDebounceValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+  return debounceValue;
 }
