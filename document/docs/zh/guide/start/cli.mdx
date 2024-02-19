@@ -1,0 +1,94 @@
+# CLI 使用教程
+
+我们提供了 `@rsdoctor/cli` 让你可以在本地通过 CLI 程序来使用 Rsdoctor 提供的功能
+
+:::tip
+`@rsdoctor/webpack-plugin`、`@rsdoctor/rspack-plugin` 与 `@rsdoctor/cli` 要保持同一个 major 和 minor 版本。
+:::
+
+## 安装 @rsdoctor/cli
+
+:::tip
+
+- @rsdoctor/cli & @rsdoctor/webpack-plugin & @rsdoctor/rspack-plugin >= 0.1.2。
+- 可以使用非安装方式，使用 `npx @rsdoctor/cli <command> [options]`。
+
+:::
+
+import { PackageManagerTabs } from '@theme';
+
+import { Tab, Tabs } from 'rspress/theme';
+
+<PackageManagerTabs command="add @rsdoctor/cli -D" />
+
+## 命令使用
+
+```linux
+
+rsdoctor <command> [options]
+
+```
+
+`@rsdoctor/cli` 目前提供了以下几个命令对应不同的功能：
+
+### analyze 命令
+
+`analyze` 命令主要是用于在**本地**加载 [manifest.json](../../config/options/term.mdx) 并且无需再次构建直接启动 Rsdoctor 的分析报告页面。
+
+```linux
+rsdoctor analyze --profile <manifestFile>
+```
+
+**参数定义**
+
+- `manifestFile` 即为 [manifest.json](../../config/options/term.mdx) 的路径（支持本地路径）
+
+**使用示例**
+
+```bash
+rsdoctor analyze --profile "./dist/.rsdoctor/manifest.json"
+```
+
+## Node API
+
+我们在 `@rsdoctor/cli` 中提供了 Node.js API，可以让你在 Node.js 运行时进行调用。
+
+**引入模块**
+
+<Tabs>
+
+<Tab label="cjs">
+
+```js
+const { execute } = require('@rsdoctor/cli');
+```
+
+</Tab>
+
+<Tab label="esm">
+
+```js
+import { execute } from '@rsdoctor/cli';
+```
+
+</Tab>
+
+</Tabs>
+
+**execute()**
+
+`execute` 异步函数是 Rsdoctor CLI 的执行函数，通过调用 `execute` 函数就会自动解析 [process.argv](https://nodejs.org/dist/latest-v18.x/docs/api/process.html#processargv)，然后调用不同的命令。
+
+**execute('analyze', \{...\})**
+
+如果你需要通过 Node.js API 直接执行 [analyze 命令](#analyze-命令)，则可以通过如下方式调用：
+
+```ts
+execute('analyze', {
+  profile: 'input the manifest.json path or url',
+}).then((sdk) => {
+  console.log('execute "anaylze" command success');
+  // you can stop the Rsdoctor's dev-server by calling the sdk'api below:
+  // sdk.dispose();
+});
+```

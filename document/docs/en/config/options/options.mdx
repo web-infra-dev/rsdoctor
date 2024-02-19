@@ -9,7 +9,7 @@
 <Tab label="cjs">
 
 ```js
-const { RsdoctorRspackPlugin } = require("@rsdoctor/rspack-plugin");
+const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 
 new RsdoctorRspackPlugin({
   /** RsdoctorRspackPluginOptions */
@@ -21,7 +21,7 @@ new RsdoctorRspackPlugin({
 <Tab label="esm">
 
 ```ts
-import { RsdoctorRspackPlugin } from "@rsdoctor/rspack-plugin";
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 new RsdoctorRspackPlugin({
   /** RsdoctorRspackPluginOptions */
@@ -36,14 +36,14 @@ new RsdoctorRspackPlugin({
 
 `RsdoctorWebpackPlugin` class are exported by `@rsdoctor/webpack-plugin`, and the option is [RsdoctorWebpackPluginOptions](#options-1).
 
-import { Tab, Tabs } from "@theme";
+import { Tab, Tabs } from '@theme';
 
 <Tabs>
 
 <Tab label="cjs">
 
 ```js
-const { RsdoctorWebpackPlugin } = require("@rsdoctor/webpack-plugin");
+const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
 
 new RsdoctorWebpackPlugin({
   /** RsdoctorWebpackPluginOptions */
@@ -55,7 +55,7 @@ new RsdoctorWebpackPlugin({
 <Tab label="esm">
 
 ```ts
-import { RsdoctorWebpackPlugin } from "@rsdoctor/webpack-plugin";
+import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
 new RsdoctorWebpackPlugin({
   /** RsdoctorWebpackPluginOptions */
@@ -89,12 +89,12 @@ Whether to automatically open the Rsdoctor report page. If you do not need to vi
 - **Optional:** `true`
 - **Default:** `['loader', 'plugins', 'bundle']`
 
-
 #### features values
 
 :::tip
 
 **If an "out of memory" error occurs, you can try the following:**
+
 1. Open the **lite** mode。
 2. Increase the node memory limit, for example: NODE_OPTIONS=--max-old-space-size=8096.
 
@@ -111,14 +111,12 @@ The `features` attribute is used to analyze the function switches, and the speci
 - **resolver**: resolver analysis, disabled by default.
 - **lite**: lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
 
-
 Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.
 
 #### features types
 
 - if the `features` is set as an `Array`, it will **open** the features which you define in this array **only**.
 - if the `features` is set as an `Object`, it will **close** the features which you set the value is `false`.
-
 
 #### RsdoctorWebpackPluginFeatures
 

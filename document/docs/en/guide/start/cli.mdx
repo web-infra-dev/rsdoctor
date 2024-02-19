@@ -1,0 +1,94 @@
+# CLI Tutorial
+
+We provide `@rsdoctor/cli` for you to use Rsdoctor's features locally through the CLI program.
+
+:::tip
+`@rsdoctor/webpack-plugin`, `@rsdoctor/rspack-plugin`, and `@rsdoctor/cli` should have the same major and minor versions.
+:::
+
+## Install @rsdoctor/cli
+
+:::tip
+
+- @rsdoctor/cli & @rsdoctor/webpack-plugin & @rsdoctor/rspack-plugin >= 0.1.2.
+- You can also use the non-installation method by using the `npx @rsdoctor/cli <command> [options]` command.
+
+:::
+
+import { PackageManagerTabs } from '@theme';
+
+import { Tab, Tabs } from 'rspress/theme';
+
+<PackageManagerTabs command="add @rsdoctor/cli -D" />
+
+## Command Usage
+
+```linux
+
+rsdoctor <command> [options]
+
+```
+
+`@rsdoctor/cli` currently provides the following commands for different functionalities:
+
+### analyze Command
+
+The `analyze` command is mainly used to load the [manifest.json](../../config/options/term.mdx) file locally and start Rsdoctor's analysis report page without the need to rebuild.
+
+```linux
+rsdoctor analyze --profile <manifestFile>
+```
+
+**Parameter Definition**
+
+- `manifestFile` is the path to the [manifest.json](../../config/options/term.mdx) file (supports local path)
+
+**Usage Example**
+
+```bash
+rsdoctor analyze --profile "./dist/.rsdoctor/manifest.json"
+```
+
+## Node API
+
+We provide a Node.js API in `@rsdoctor/cli` that allows you to make calls during runtime in Node.js.
+
+**Importing the Module**
+
+<Tabs>
+
+<Tab label="cjs">
+
+```js
+const { execute } = require('@rsdoctor/cli');
+```
+
+</Tab>
+
+<Tab label="esm">
+
+```js
+import { execute } from '@rsdoctor/cli';
+```
+
+</Tab>
+
+</Tabs>
+
+**execute()**
+
+The `execute` asynchronous function is the execution function of Rsdoctor CLI. By calling the `execute` function, it will automatically parse [process.argv](https://nodejs.org/dist/latest-v18.x/docs/api/process.html#processargv) and invoke different commands.
+
+**execute('analyze', \{...\})**
+
+If you need to directly execute the [analyze command](#analyze-command) through the Node.js API, you can call it as follows:
+
+```ts
+execute('analyze', {
+  profile: 'input the manifest.json path or url',
+}).then((sdk) => {
+  console.log('execute "anaylze" command success');
+  // you can stop the Rsdoctor's dev-server by calling the sdk'api below:
+  // sdk.dispose();
+});
+```

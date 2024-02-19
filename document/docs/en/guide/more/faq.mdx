@@ -2,13 +2,13 @@
 
 ## How to use only a specific feature of Rsdoctor?
 
-When we **only need** the [bundle size analysis](../usage/bundle-size) feature of Rsdoctor, we can configure the corresponding [Features](/config/options/index) option when integrating the Rsdoctor plugin. Refer to the code snippet below:
+When we **only need** the [bundle size analysis](../usage/bundle-size) feature of Rsdoctor, we can configure the corresponding [Features](/config/options/options) option when integrating the Rsdoctor plugin. Refer to the code snippet below:
 
 ```ts
-import { RsdoctorWebpackPlugin } from "@rsdoctor/webpack-plugin";
+import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
 new RsdoctorWebpackPlugin({
-  features: ["bundle"], // Represents enabling only the bundle size analysis feature
+  features: ['bundle'], // Represents enabling only the bundle size analysis feature
 });
 ```
 
@@ -18,7 +18,10 @@ The time-consuming data provided by Rsdoctor for loaders is an **estimated time*
 Additionally, the builder will **parallelize the execution** of multiple non-conflicting loader functions. Since JavaScript is single-threaded, multiple loader functions can **compete for the current task queue**.
 Furthermore, the asynchronous logic within loader functions cannot be recognized, causing a single loader function to potentially span across the execution of multiple other loaders. As a result, there are three possible cases, as shown in the following diagram:
 
-<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-cases.jpeg" style={{ width: "250px" }} />
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-cases.jpeg"
+  style={{ width: '250px' }}
+/>
 
 Therefore, the loader timing provided by Rsdoctor is an **estimate**. The timing data we provide is adapted to handle Case 1 and Case 2 from the diagram. As for Case 3, we are still exploring solutions.
 
@@ -41,7 +44,7 @@ You can add the `lite` field to the `features` array to use the lite mode. Addit
 The following example enables the lite mode, build-time analysis, and bundle analysis:
 
 ```js
-const { RsdoctorWebpackPlugin } = require("@rsdoctor/webpack-plugin");
+const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
 
 // adding the plugin to your configuration
 module.exports = {
@@ -49,7 +52,7 @@ module.exports = {
   plugins: [
     new RsdoctorWebpackPlugin({
       disableClientServer: false,
-      features: ["lite", "loader", "plugins", "bundle"]
+      features: ['lite', 'loader', 'plugins', 'bundle'],
     }),
   ].filter(Boolean),
 };
