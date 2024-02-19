@@ -1,9 +1,7 @@
 import { Plugin } from '@rsdoctor/types';
 import path from 'path';
-import fs from 'fs';
-import { debug } from '@rsdoctor/utils/logger';
+import { debug, logger } from '@rsdoctor/utils/logger';
 import { generateReport } from 'webpack-bundle-analyzer/lib/viewer';
-import { RsdoctorOutputFolder } from '@rsdoctor/types/dist/constants';
 
 export const TileGraphReportName = 'rsdoctor-tile-graph.html';
 
@@ -23,7 +21,7 @@ async function generateJSONReportUtil(
       warn: () => {},
       info: () => {},
       error: (e: any) => {
-        console.log(e);
+        logger.info(`webpack-bundle-analyzer generateReport has error ${e}`);
       },
     },
   });
@@ -35,18 +33,14 @@ export async function generateTileGraph(
   buildOutputPath: string,
 ) {
   try {
-    const tileReportHtmlDir = path.join(buildOutputPath, RsdoctorOutputFolder);
-    if (!fs.existsSync(tileReportHtmlDir)) {
-      fs.mkdirSync(tileReportHtmlDir);
-    }
     const { reportFilename } = opts;
     await generateJSONReportUtil(bundleStats, {
       ...opts,
       openBrowser: false,
-      bundleDir: tileReportHtmlDir,
+      bundleDir: buildOutputPath,
     });
 
-    return path.join(tileReportHtmlDir, `${reportFilename}`);
+    return path.join(buildOutputPath, `${reportFilename}`);
   } catch (e) {
     debug(() => `Generate webpack-bundle-analyzer tile graph has error:${e}`);
     return null;
