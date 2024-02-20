@@ -1,7 +1,11 @@
 # Rsdoctor v0.1 发布公告
 
 <picture>
-  <img alt="Rsdoctor Banner" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" style={{ margin: 'auto' }}/>
+  <img
+    alt="Rsdoctor Banner"
+    src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf"
+    style={{ margin: 'auto' }}
+  />
 </picture>
 
 我们很高兴地宣布 [Rsdoctor](https://rsdoctor.dev/) v0.1 发布了！
@@ -37,7 +41,6 @@ Rsdoctor 是一个针对 Rspack 和 Webpack 的一站式构建分析工具，可
 
 ![Overall-Alerts](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/overall-alerts.jpg)
 
-
 ### ⭐️ 编译分析
 
 面向 **Loaders、Plugins、Module Resolver** 提供了对应的数据与分析功能，来帮助你分析编译过程中的问题。
@@ -46,9 +49,17 @@ Rsdoctor 是一个针对 Rspack 和 Webpack 的一站式构建分析工具，可
 
 - 该模块主要提供了 **Rspack** 或 **Webpack Loaders** 内的输入输出、预估耗时、参数等数据分析的功能。
 
-<div style={{ display: "flex" }}>
-  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png"  width='55%' style={{"margin": 'auto' }} />
-  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png" width='45%' style={{"margin": 'auto'}} />
+<div style={{ display: 'flex' }}>
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png"
+    width="55%"
+    style={{ margin: 'auto' }}
+  />
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png"
+    width="45%"
+    style={{ margin: 'auto' }}
+  />
 </div>
 
 #### Plugin 分析
@@ -56,7 +67,14 @@ Rsdoctor 是一个针对 Rspack 和 Webpack 的一站式构建分析工具，可
 - 该模块主要拦截并收集了 Plugins 的调用次数、预估耗时等数据信息。
 
 <p>
-  <img alt="bundle" src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/compile-plugin.jpg'} width='600px' style={{"margin": 'auto'}} />
+  <img
+    alt="bundle"
+    src={
+      'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/compile-plugin.jpg'
+    }
+    width="600px"
+    style={{ margin: 'auto' }}
+  />
 </p>
 
 #### Resolver 分析
@@ -64,9 +82,15 @@ Rsdoctor 是一个针对 Rspack 和 Webpack 的一站式构建分析工具，可
 - 该模块主要提供了项目内部单个文件中模块解析的路径数据以及预估耗时。Rspack 暂时未支持该模块。
 
 <p>
-  <img alt="bundle" src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/resolver.jpeg'} width='700px' style={{"margin": 'auto'}} />
+  <img
+    alt="bundle"
+    src={
+      'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/resolver.jpeg'
+    }
+    width="700px"
+    style={{ margin: 'auto' }}
+  />
 </p>
-
 
 ### ⭐️ 产物分析
 
@@ -75,9 +99,15 @@ Rsdoctor 是一个针对 Rspack 和 Webpack 的一站式构建分析工具，可
 - 此外，还可以通过 **「Bundle Analysis」** 模块来进一步分析当前产物中资源与模块关系，体积数据等信息，以及查看模块引入的原因。
 
 <p>
-  <img alt="bundle" src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/bundle-size.jpg'} width='700px' style={{"margin": 'auto'}} />
+  <img
+    alt="bundle"
+    src={
+      'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/bundle-size.jpg'
+    }
+    width="700px"
+    style={{ margin: 'auto' }}
+  />
 </p>
-
 
 ## 📚 快速上手
 
@@ -87,12 +117,12 @@ Rsdoctor 是一个针对 Rspack 和 Webpack 的一站式构建分析工具，可
 
 **提升 Rsdoctor 构建分析效率**：目前开启 Rsdoctor 时会增加项目的构建耗时，下一步我们将抽离 Rsdoctor 的部分构建分析逻辑，并转化为 **Rust 插件**，内置到 Rspack 中，从而提升 Rsdoctor 的构建分析效率。
 
-
-
 ## 致谢
 
 Rsdoctor 的一些实现参考了社区中杰出的项目，对他们表示感谢：
 
 - 借鉴了 [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme) 对产物关系的分析逻辑。
 - 借鉴了 [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) 对产物模块拆解及分析逻辑。
+- [Statoscope](https://github.com/statoscope/statoscope/blob/master/README.md)是一个优秀的构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发。
 - [Webpack 团队和社区](https://github.com/webpack/webpack/blob/main/README.md) 创建了一个优秀的打包工具和丰富的生态。
+- [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect) 启发了 Rsdoctor 对构建过程分析的探索。

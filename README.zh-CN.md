@@ -30,8 +30,7 @@
 - **编译可视化**：Rsdoctor 将编译行为及耗时进行可视化展示，方便开发同学查看构建问题。
 
 | <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/eea845fa-f19f-49d4-9bc6-6795688e6a33"  alt="loader timeline" /> | <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/rsdoctor-analyze-code.png" alt="loader codes" /> |
-| ---------------------------------------------------------- | ------------------------------------------------ |
-
+| ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 
 - **多种分析能力**：支持构建产物、构建时分析能力：
   - 构建产物支持资源列表及模块依赖等。
@@ -70,9 +69,9 @@ Rsdoctor 的一些实现参考了社区中杰出的项目，对他们表示感�
 
 - [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme)是一个优秀的构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发。
 - [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) 是一个经典的 Webpack 构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发，同时 Rsdoctor 使用了其经典的瓦片图。
+- [Statoscope](https://github.com/statoscope/statoscope/blob/master/README.md)是一个优秀的构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发。
 - [Webpack 团队和社区](https://github.com/webpack/webpack/blob/main/README.md) 创建了一个优秀的打包工具和丰富的生态。
 - [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect) 启发了 Rsdoctor 对构建过程分析的探索。
-
 
 Rsdoctor 网站由 [Netlify](https://www.netlify.com/) 提供支持。
 
