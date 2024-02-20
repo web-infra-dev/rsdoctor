@@ -1,7 +1,11 @@
 # Rsdoctor v0.1 Release Note
 
 <picture>
-  <img alt="Rsdoctor Banner" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" style={{ margin: 'auto' }}/>
+  <img
+    alt="Rsdoctor Banner"
+    src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf"
+    style={{ margin: 'auto' }}
+  />
 </picture>
 
 We are excited to announce the release of [Rsdoctor](https://rsdoctor.dev/) v0.1!
@@ -13,7 +17,6 @@ Rsdoctor is a one-stop build analysis tool for Rspack and Webpack. It allows for
 **Rsdoctor** is a build analysis tool for analyzing projects built with [Rspack](https://www.rspack.dev/) and [Webpack](https://webpack.js.org/). It supports analysis of projects such as [Rsbuild](https://rsbuild.dev/), [Create React App](https://create-react-app.dev/), [Modern.js](https://modernjs.dev/), and more.
 
 ![Position](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rsdoctor-position.png)
-
 
 ## 🔥 Features
 
@@ -35,10 +38,9 @@ Rsdoctor is a one-stop build analysis tool for Rspack and Webpack. It allows for
 ![Overall](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/overall.jpg)
 
 - In addition to the project overview, we also provide diagnostic functions, including compilation diagnostics and duplicate packages diagnostics. If your compilation and products hit the diagnostic rules we defined,
-the corresponding warning alerts will appear on the tool's home page. **where you can see the detailed reference path of duplicate packages**:
+  the corresponding warning alerts will appear on the tool's home page. **where you can see the detailed reference path of duplicate packages**:
 
 ![Overall-Alerts](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/overall-alerts.jpg)
-
 
 ### ⭐️ Compilation Analysis
 
@@ -48,9 +50,17 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
 
 - This module mainly provides the function of data analysis such as input and output, estimated time consumption, and parameters within **Rspack or Webpack Loaders**.
 
-<div style={{ display: "flex" }}>
-  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png"  width='55%' style={{"margin": 'auto' }} />
-  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png" width='45%' style={{"margin": 'auto'}} />
+<div style={{ display: 'flex' }}>
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-timeline-overall.png"
+    width="55%"
+    style={{ margin: 'auto' }}
+  />
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png"
+    width="45%"
+    style={{ margin: 'auto' }}
+  />
 </div>
 
 #### Plugin Analysis
@@ -58,7 +68,14 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
 - This module mainly intercepts and collects data information such as the number of calls and estimated time consumption of Plugins.
 
 <p>
-  <img alt="bundle" src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/compile-plugin.jpg'} width='600px' style={{"margin": 'auto'}} />
+  <img
+    alt="bundle"
+    src={
+      'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/compile-plugin.jpg'
+    }
+    width="600px"
+    style={{ margin: 'auto' }}
+  />
 </p>
 
 #### Resolve Analysis
@@ -66,9 +83,15 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
 - This module mainly provides path data and estimated time consumption for module resolution in a single file within the project. Rspack does not currently support this module.
 
 <p>
-  <img alt="bundle" src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/resolver.jpeg'} width='700px' style={{"margin": 'auto'}} />
+  <img
+    alt="bundle"
+    src={
+      'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/resolver.jpeg'
+    }
+    width="700px"
+    style={{ margin: 'auto' }}
+  />
 </p>
-
 
 ### ⭐️ Product Analysis
 
@@ -77,9 +100,15 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
 - In addition, we can also use the **Bundle Analysis** page to further analyze the relationship between the product and module in the current product, size data and other information, as well as the reasons for module introduction.
 
 <p>
-  <img alt="bundle" src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/bundle-size.jpg'} width='700px' style={{"margin": 'auto'}} />
+  <img
+    alt="bundle"
+    src={
+      'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/bundle-size.jpg'
+    }
+    width="700px"
+    style={{ margin: 'auto' }}
+  />
 </p>
-
 
 ## 📚 Quick Start
 
@@ -95,4 +124,6 @@ You can refer to the [Quick Start](https://rsdoctor.dev/guide/start/quick-start)
 
 - Refer to the analysis logic of artifact relationships from [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme).
 - Refer to the module breakdown and analysis logic from [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer).
+- [Statoscope](https://github.com/statoscope/statoscope/blob/master/README.md) is an excellent tool for analyzing build artifacts, and Rsdoctor is inspired by it in terms of build analysis.
 - [Webpack team and community](https://github.com/webpack/webpack/blob/main/README.md) have created an excellent bundling tool and a rich ecosystem.
+- [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect) has inspired Rsdoctor's exploration of build process analysis.

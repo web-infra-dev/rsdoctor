@@ -2,7 +2,6 @@
   <img alt="Rsdoctor Banner" width="100%" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" />
 </picture>
 
-
 # Rsdoctor
 
 English | [简体中文](./README.zh-CN.md)
@@ -14,11 +13,10 @@ English | [简体中文](./README.zh-CN.md)
 - Rsdoctor is an analysis tool that can display the time-consuming and behavioral details of the compilation.
 - Rsdoctor is a tool that can analyze the time-consuming and compilation process of the rspack builtin:swc-loader.
 
-
 ## 📌 Position
 
 **Rsdoctor** is a build analysis tool for analyzing projects built with [Rspack](https://www.rspack.dev/) and [Webpack](https://webpack.js.org/). It supports analysis of projects such as [Rsbuild](https://rsbuild.dev/), [Create-react-app](https://create-react-app.dev/), [Modern.js](https://modernjs.dev/), and more.
-  
+
 <div align=center>
  <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/4f28312a-68bf-4f9c-91cb-6fd603a37f53" alt="duplicate packages" />
 </div>
@@ -32,7 +30,7 @@ To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/s
 - **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.
 
 | <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/eea845fa-f19f-49d4-9bc6-6795688e6a33" alt="loader timeline" /> | <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/172f5328-4508-4f4b-b53b-27ec1095ef9d" alt="loader codes" /> |
-| ---------------------------------------------------------- | ------------------------------------------------ |
+| ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 
 - **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
 
@@ -71,6 +69,7 @@ Some of the implementation of Rsdoctor refers to the excellent projects in the c
 
 - [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme) is an excellent tool for analyzing build artifacts, and Rsdoctor is inspired by it in terms of build analysis.
 - [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) is a classic tool for analyzing Webpack, and Rsdoctor is inspired by it in terms of build artifact analysis. Rsdoctor also uses its classic treemap visualization.
+- [Statoscope](https://github.com/statoscope/statoscope/blob/master/README.md) is an excellent tool for analyzing build artifacts, and Rsdoctor is inspired by it in terms of build analysis.
 - [Webpack Team and Community](https://github.com/webpack/webpack/blob/main/README.md) have created an excellent bundling tool and a rich ecosystem.
 - [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect) has inspired Rsdoctor's exploration of build process analysis.
 
