@@ -1,15 +1,17 @@
 # Resolver Analysis
 
 :::tip
+
 - Resolve analysis capability is not currently supported in Rspack projects.
 
-- The Resolver analysis capability is disabled by default. To enable it, you can add `resolver` to the `features` array as shown in the example below. [features configuration](../../config/options/index).
+- The Resolver analysis capability is disabled by default. To enable it, you can add `resolver` to the `features` array as shown in the example below. [features configuration](../../config/options/options).
 
 ```js
   new rsdoctorWebpackPlugin({
     features: ["xxx", "xxx", "resolver"]
   }),
 ```
+
 :::
 
 In the **Rsdoctor** `Module Resolve` section, we can see all the source files in the current Webpack project. By **clicking on a file**, we can view information such as the **module paths** imported in that file, the **before and after resolution path comparison**, and the **resolution time**, as shown in the following image:
@@ -20,8 +22,8 @@ In the **Rsdoctor** `Module Resolve` section, we can see all the source files in
 
 The fields in the data statistics table on the page are defined as follows:
 
-| Term                        | Description                               |
-| ---------------------------- | ----------------------------------------- |
-| <b><i>Source Code</i></b>    | Represents the **source code** of the import statement |
-| <b><i>Duration</i></b>       | Represents the **time taken** for resolution |
+| Term                         | Description                                                     |
+| ---------------------------- | --------------------------------------------------------------- |
+| <b><i>Source Code</i></b>    | Represents the **source code** of the import statement          |
+| <b><i>Duration</i></b>       | Represents the **time taken** for resolution                    |
 | <b><i>Resolve Result</i></b> | Represents the **final path** after resolving the `Source Code` |

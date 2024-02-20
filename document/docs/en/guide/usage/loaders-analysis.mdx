@@ -2,13 +2,17 @@
 
 **Rsdoctor** provides the `Loader Analysis` module, which mainly provides statistics on Loaders at the **directory and file level**. It helps you analyze the compilation of **folders** and **individual files** by Loaders.
 
-Click on the navigation bar **"Compile Analysis"** -> **"Loader Analysis"** option to view the compilation analysis report. Of course, this page will only display the features if the `loader` analysis capability is enabled [features](/config/options/index).
+Click on the navigation bar **"Compile Analysis"** -> **"Loader Analysis"** option to view the compilation analysis report. Of course, this page will only display the features if the `loader` analysis capability is enabled [features](/config/options/options).
 
 ## Overview
 
 Firstly, in this module, you can directly see the file tree structure of all files processed by Loaders, as shown in the following image:
 
-<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png" width='600px' style={{"margin": 'auto'}} />
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
 
 In the **filter search box** at the top, you can filter Loaders and search for file names. After entering the name, the file tree dynamically displays the matching files, making it easier to locate the files you want to query.
 
@@ -23,7 +27,12 @@ The corresponding details will be explained in the following paragraphs.
 
 By **clicking on a selected directory**, you can see the **time statistics of all Loaders in the selected directory** ([estimated time consumption](../../guide/more/faq#loader-time-consuming-data-is-inaccurate)) on the right side of the file tree. The content of the "Statistics of xxx" card is shown in the following image:
 
-<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-table.png" width='300px' height="400px" style={{"margin": 'auto'}} />
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-table.png"
+  width="300px"
+  height="400px"
+  style={{ margin: 'auto' }}
+/>
 
 Here are the main information we can obtain:
 
@@ -42,11 +51,19 @@ By **clicking on a file**, a modal will appear with the following content:
 
 - "**Right section**": Information about the **input, output**, and **parameter data** of the selected Loader at the time of invocation.
 
-<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-code-change.png" width='600px' style={{"margin": 'auto'}} /> 
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-code-change.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>{' '}
 
 - **Parameter Data**: Click on "**show more**" or the expand button in the top left corner to view the corresponding parameter information.
 
-<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-options.png" width='600px' style={{"margin": 'auto'}} /> 
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-options.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>{' '}
 
 As shown in the image, we can obtain the following information about the **target file**:
 
