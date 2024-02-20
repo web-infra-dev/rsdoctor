@@ -1,5 +1,11 @@
 # @rsdoctor/components
 
+## 0.1.2
+
+### Patch Changes
+
+- caf10f0: fix(components): responsive Header Menu fix
+
 ## 0.1.1
 
 ## 0.1.0

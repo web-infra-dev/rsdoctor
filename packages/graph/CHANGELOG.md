@@ -1,5 +1,13 @@
 # @rsdoctor/graph
 
+## 0.1.2
+
+### Patch Changes
+
+- 4b6715f: fix(graph): dependency has some error
+  - @rsdoctor/types@0.1.2
+  - @rsdoctor/utils@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

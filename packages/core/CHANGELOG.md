@@ -1,5 +1,17 @@
 # @rsdoctor/core
 
+## 0.1.2
+
+### Patch Changes
+
+- 7dc4430: fix: no parsed/gziped size on 'Bundle Analyzer Graph' page error.
+- Updated dependencies [4b6715f]
+- Updated dependencies [4f3bb70]
+  - @rsdoctor/graph@0.1.2
+  - @rsdoctor/sdk@0.1.2
+  - @rsdoctor/types@0.1.2
+  - @rsdoctor/utils@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

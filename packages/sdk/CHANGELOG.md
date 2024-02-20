@@ -1,5 +1,16 @@
 # @rsdoctor/sdk
 
+## 0.1.2
+
+### Patch Changes
+
+- 4f3bb70: optimise(sdk): change the socket host url support the doctor used in devcontainer (Docker)
+- Updated dependencies [4b6715f]
+  - @rsdoctor/graph@0.1.2
+  - @rsdoctor/client@0.1.2
+  - @rsdoctor/types@0.1.2
+  - @rsdoctor/utils@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
