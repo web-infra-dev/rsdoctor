@@ -1,5 +1,15 @@
 # @rsdoctor/core
 
+## 0.1.3
+
+### Patch Changes
+
+- 9677ac3: optimize(core): loader analysis compatible with next.js module logic
+  - @rsdoctor/graph@0.1.3
+  - @rsdoctor/sdk@0.1.3
+  - @rsdoctor/types@0.1.3
+  - @rsdoctor/utils@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
