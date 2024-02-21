@@ -353,6 +353,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@rsdoctor/client':
+        specifier: workspace:*
+        version: link:../client
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk

@@ -71,28 +71,37 @@ export class InternalLoaderPlugin<
         });
 
         const newLoaders = cloneDeep(originLoaders);
-        const proxyModule = new Proxy(module, {
-          get(target, p, receiver) {
-            if (p === 'loaders') return newLoaders;
-            return Reflect.get(target, p, receiver);
-          },
-          set(target, p, newValue, receiver) {
-            const _newValue = cloneDeep(newValue);
-            if (p === 'loaders') {
-              if (Array.isArray(_newValue)) {
-                newLoaders.length = 0;
-                _newValue.forEach((e) => {
-                  newLoaders.push(e);
-                });
+        if (
+          typeof compiler.options.cache === 'object' &&
+          'version' in compiler.options.cache &&
+          typeof compiler.options.cache.version === 'string' &&
+          compiler.options.cache.version.indexOf('next/dist/build') > -1
+        ) {
+          callback(loaderContext, module);
+        } else {
+          const proxyModule = new Proxy(module, {
+            get(target, p, receiver) {
+              if (p === 'loaders') return newLoaders;
+              return Reflect.get(target, p, receiver);
+            },
+            set(target, p, newValue, receiver) {
+              const _newValue = cloneDeep(newValue);
+              if (p === 'loaders') {
+                if (Array.isArray(_newValue)) {
+                  newLoaders.length = 0;
+                  _newValue.forEach((e) => {
+                    newLoaders.push(e);
+                  });
+                }
               }
-            }
-            return Reflect.set(target, p, _newValue, receiver);
-          },
-          deleteProperty(target, p) {
-            return Reflect.deleteProperty(target, p);
-          },
-        });
-        callback(loaderContext, proxyModule);
+              return Reflect.set(target, p, _newValue, receiver);
+            },
+            deleteProperty(target, p) {
+              return Reflect.deleteProperty(target, p);
+            },
+          });
+          callback(loaderContext, proxyModule);
+        }
 
         // loaders are overwrite when originLoader is not same with newLoaders
         if (!isEqual(originLoaders, newLoaders)) {
