@@ -14,6 +14,10 @@ For projects based on Rspack or Rsbuild, install the following dependencies:
 
 ### Webpack Projects
 
+:::tip
+Not supported in Webpack 4.
+:::
+
 For projects based on Webpack, install the following dependencies:
 
 <PackageManagerTabs command="add @rsdoctor/webpack-plugin -D" />
@@ -122,6 +126,71 @@ export default {
 For projects using Modern.js Webpack mode, please register the `RsdoctorWebpackPlugin` plugin through [tools.webpack](https://modernjs.dev/configure/app/tools/webpack).
 :::
 
+### Next.js Framework
+
+Initialize the RsdoctorWebpackPlugin plugin in the [Webpack Config](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) of `next.config.mjs`.
+
+```ts title="next.config.mjs"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  // ...
+  webpack: (config, { isServer }) => {
+    config.plugins.push(
+      new RsdoctorWebpackPlugin({
+        // plugin options
+      }),
+    );
+
+    return config;
+  },
+};
+```
+
+- **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
+
+#### 📢 Next.js Project Notice
+
+1. Next.js Project Reporting Page Issues
+
+For more details, see: [FAQ](../more/faq#nextjs)
+
+2. Loader Analysis with Rules Overriding Not Supported in Next.js
+
+For more details, see: [FAQ](../more/faq#nextjs)
+
+### Vue Framework
+
+Initialize the RsdoctorWebpackPlugin plugin in the config file, using rsbuild project as an example below:
+
+```ts title="rsbuild.config.ts"
+import { defineConfig } from '@rsbuild/core';
+import { pluginVue } from '@rsbuild/plugin-vue';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default defineConfig({
+  plugins: [pluginVue()],
+  performance: {
+    buildCache: false,
+  },
+  tools: {
+    bundlerChain: (chain, { CHAIN_ID }) => {
+      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+        {
+          // plugin options
+        },
+      ]);
+    },
+  },
+});
+```
+
+- **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
+
+#### 📢 Vue Project Notice
+
+Because `vue-loader` analysis is not supported at the moment, loader analysis is disabled by default for Vue projects. However, plugin and build artifact analysis can still be performed.
+
 ---
 
 ## Step 3: Run Build
@@ -139,17 +208,3 @@ npm run build
 :::tip
 The Rsdoctor plugin provides some configurations, please refer to [Options](../../config/options/options).
 :::
-
-## 📢 Note
-
-### Next.js Projects
-
-Initialize the RsdoctorWebpackPlugin plugin in the [Webpack Config](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) of `next.config.js`.
-
-#### 1. Next.js Project Reporting Page Issues
-
-For more details, see: [FAQ](../more/faq#nextjs)
-
-#### 2. Loader Analysis with Rules Overriding Not Supported in Next.js
-
-For more details, see: [FAQ](../more/faq#nextjs)

@@ -702,6 +702,9 @@ importers:
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
+      '@rsdoctor/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@types/loader-utils':
         specifier: ^2.0.5
         version: 2.0.6
