@@ -28,6 +28,7 @@ import path from 'path';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
 import { BuiltinLoaderPlugin } from './builtinLoaderPlugin';
+import { Loader } from '@rsdoctor/utils/common';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorPluginInstance<Compiler, Rules>
@@ -77,7 +78,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     new InternalSummaryPlugin<Compiler>(this).apply(compiler);
 
-    if (this.options.features.loader) {
+    if (this.options.features.loader && !Loader.isVue(compiler)) {
       new InternalLoaderPlugin<Compiler>(this).apply(compiler);
     }
 
@@ -90,9 +91,11 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     }
 
     new InternalRulesPlugin(this).apply(compiler);
-    new BuiltinLoaderPlugin().apply(compiler);
-  }
 
+    if (!Loader.isVue(compiler)) {
+      new BuiltinLoaderPlugin().apply(compiler);
+    }
+  }
 
   /**
    * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
@@ -101,14 +104,11 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
    * @memberof RsdoctorWebpackPlugin
    */
   public ensureModulesChunksGraphApplied(compiler: Compiler) {
-    ensureModulesChunksGraphFn(compiler, this)
+    ensureModulesChunksGraphFn(compiler, this);
   }
 
   public done = async (compiler: Compiler): Promise<void> => {
-    
-    const json = compiler.compilation
-    .getStats()
-    .toJson({
+    const json = compiler.compilation.getStats().toJson({
       all: false,
       version: true,
       chunks: true,

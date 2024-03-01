@@ -1,5 +1,6 @@
 import { SDK } from '@rsdoctor/types';
 import { mergeIntervals } from './algorithm';
+import { Plugin } from '@rsdoctor/types';
 
 export function findLoaderTotalTiming(
   loaders: Pick<SDK.LoaderTransformData, 'startAt' | 'endAt'>[],
@@ -293,3 +294,19 @@ export function getLoaderFileInputAndOutput(
 }
 
 export const LoaderInternalPropertyName = '__l__';
+
+export const isVue = (compiler: Plugin.BaseCompiler) => {
+  const rules = compiler.options.module.rules;
+  const hasVueRule = rules.some((rule) => {
+    if (
+      rule &&
+      typeof rule === 'object' &&
+      rule.test instanceof RegExp &&
+      rule.test?.test('.vue')
+    ) {
+      return true;
+    }
+    return false;
+  });
+  return hasVueRule;
+};

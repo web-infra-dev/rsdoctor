@@ -22,18 +22,12 @@ import { Process } from '@rsdoctor/utils/build';
 import { debug } from '@rsdoctor/utils/logger';
 import { cloneDeep } from 'lodash';
 import path from 'path';
-import type {
-  Compiler,
-  Configuration,
-  RuleSetRule,
-} from 'webpack';
-import {
-  pluginTapName,
-  pluginTapPostOptions,
-} from './constants';
+import type { Compiler, Configuration, RuleSetRule } from 'webpack';
+import { pluginTapName, pluginTapPostOptions } from './constants';
 
 import { InternalResolverPlugin } from './plugins/resolver';
 import { ensureModulesChunksGraphFn } from '@rsdoctor/core/plugins';
+import { Loader } from '@rsdoctor/utils/common';
 
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorPluginInstance<Compiler, Rules>
@@ -86,7 +80,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     new InternalSummaryPlugin<Compiler>(this).apply(compiler);
 
-    if (this.options.features.loader) {
+    if (this.options.features.loader && !Loader.isVue(compiler)) {
       new InternalLoaderPlugin<Compiler>(this).apply(compiler);
     }
 
@@ -172,7 +166,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
    * @memberof RsdoctorWebpackPlugin
    */
   public ensureModulesChunksGraphApplied(compiler: Compiler) {
-    ensureModulesChunksGraphFn(compiler, this)
+    ensureModulesChunksGraphFn(compiler, this);
   }
 
   public done = async (): Promise<void> => {

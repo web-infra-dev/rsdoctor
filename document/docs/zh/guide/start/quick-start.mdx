@@ -14,6 +14,10 @@ import { PackageManagerTabs } from '@theme';
 
 ### Webpack 项目
 
+:::tip
+不支持 Webpack 4 项目。
+:::
+
 基于 Webpack 的项目，安装以下依赖：
 
 <PackageManagerTabs command="add @rsdoctor/webpack-plugin -D" />
@@ -122,6 +126,70 @@ export default {
 对于使用 Modern.js Webpack 模式的项目，请使用 [tools.webpack](https://modernjs.dev/configure/app/tools/webpack) 注册 `RsdoctorWebpackPlugin` 插件。
 :::
 
+### Next.js 项目
+
+在 `next.config.js` 的 [Webpack Config](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) 中初始化 RsdoctorWebpackPlugin 插件。
+
+```ts title="next.config.mjs"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  // ...
+  webpack: (config, { isServer }) => {
+    config.plugins.push(
+      new RsdoctorWebpackPlugin({
+        // 插件选项
+      }),
+    );
+    return config;
+  },
+};
+```
+
+- **Options:** 插件提供了一些配置项，请参考 [Options](../../config/options/options)。
+
+#### 📢 Next.js 项目使用注意
+
+1. Next.js 项目报告页面问题
+
+详情查看：[FAQ](../more/faq#nextjs)
+
+2. Next.js 中不支持对 rules 进行重写的 Loader 分析
+
+详情查看：[FAQ](../more/faq#nextjs)
+
+### Vue 项目
+
+在配置文件中初始化 RsdoctorWebpackPlugin 插件，以下是使用 rsbuild 项目的 Rspack 构建模式（如果是 webpack 请使用 `@rsdoctor/webpack-plugin`）作为示例：
+
+```ts title="rsbuild.config.ts"
+import { defineConfig } from '@rsbuild/core';
+import { pluginVue } from '@rsbuild/plugin-vue';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default defineConfig({
+  plugins: [pluginVue()],
+  performance: {
+    buildCache: false,
+  },
+  tools: {
+    bundlerChain: (chain, { CHAIN_ID }) => {
+      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+        {
+          // 插件选项
+        },
+      ]);
+    },
+  },
+});
+```
+
+- **Options:** 插件提供了一些配置项，请参考 [Options](../../config/options/options)。
+
+#### 📢 Vue 项目使用注意
+
+由于目前不支持对 `vue-loader` 进行分析，对于 Vue 项目，默认情况下禁用了 loader 分析。但是，仍然可以进行插件和构建产物的分析。
+
 ---
 
 ## 第三步：执行构建
@@ -139,17 +207,3 @@ npm run build
 :::tip
 Rsdoctor 插件提供了一些配置项，请参考 [Options](../../config/options/options)。
 :::
-
-## 📢 注意
-
-### Next.js 项目
-
-在 `next.config.js` 的 [Webpack Config](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) 中初始化 RsdoctorWebpackPlugin 插件。
-
-#### 1. Next.js 项目报告页面问题
-
-详情查看：[FAQ](../more/faq#nextjs)
-
-#### 2. Next.js 中不支持对 rules 进行重写的 Loader 分析
-
-详情查看：[FAQ](../more/faq#nextjs)
