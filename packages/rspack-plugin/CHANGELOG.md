@@ -1,5 +1,15 @@
 # @rsdoctor/rspack-plugin
 
+## 0.1.4
+
+### Patch Changes
+
+- ddaee4b: feat: vue repo disable loader analysis
+- Updated dependencies [08c5a5e]
+  - @rsdoctor/core@0.1.4
+  - @rsdoctor/graph@0.1.4
+  - @rsdoctor/sdk@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes
