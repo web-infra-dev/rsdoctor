@@ -1,5 +1,12 @@
 # @rsdoctor/utils
 
+## 0.1.4
+
+### Patch Changes
+
+- ddaee4b: feat: vue repo disable loader analysis
+  - @rsdoctor/types@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

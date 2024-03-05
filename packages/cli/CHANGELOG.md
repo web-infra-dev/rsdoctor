@@ -1,5 +1,15 @@
 # @rsdoctor/cli
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [ddaee4b]
+  - @rsdoctor/utils@0.1.4
+  - @rsdoctor/sdk@0.1.4
+  - @rsdoctor/client@0.1.4
+  - @rsdoctor/types@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes
