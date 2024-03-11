@@ -549,15 +549,9 @@ importers:
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
-      '@rspack/core':
-        specifier: 0.5.1
-        version: 0.5.1(@swc/helpers@0.5.3)
       axios:
         specifier: ^1.6.1
         version: 1.6.1
@@ -589,6 +583,12 @@ importers:
         specifier: ^4.9.1
         version: 4.10.1
     devDependencies:
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
+      '@rspack/core':
+        specifier: 0.5.1
+        version: 0.5.1(@swc/helpers@0.5.3)
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:../../scripts/test-helper
@@ -689,9 +689,6 @@ importers:
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk
-      '@rspack/core':
-        specifier: 0.5.1
-        version: 0.5.1(@swc/helpers@0.5.3)
       loader-utils:
         specifier: ^2.0.4
         version: 2.0.4
@@ -705,6 +702,9 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
+      '@rspack/core':
+        specifier: 0.5.1
+        version: 0.5.1(@swc/helpers@0.5.3)
       '@types/loader-utils':
         specifier: ^2.0.5
         version: 2.0.6
@@ -936,9 +936,6 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
-      webpack:
-        specifier: ^5.89.0
-        version: 5.89.0(webpack-cli@5.0.0)
     devDependencies:
       '@rsdoctor/types':
         specifier: workspace:*
@@ -964,6 +961,9 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.3.2
+      webpack:
+        specifier: ^5.89.0
+        version: 5.89.0(webpack-cli@5.0.0)
 
   scripts/check-changeset:
     dependencies:

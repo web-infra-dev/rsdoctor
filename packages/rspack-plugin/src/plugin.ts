@@ -1,4 +1,4 @@
-import { Compiler, Configuration, RuleSetRule } from '@rspack/core';
+import type { Compiler, Configuration, RuleSetRule } from '@rspack/core';
 import { ModuleGraph } from '@rsdoctor/graph';
 import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import {

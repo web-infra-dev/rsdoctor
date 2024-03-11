@@ -1,13 +1,14 @@
-import { getSDK } from "@rsdoctor/core/plugins";
-import { Plugin, SDK } from '@rsdoctor/types'
-import { LoaderDefinitionFunction } from "@rspack/core";
+import { getSDK } from '@rsdoctor/core/plugins';
+import { Plugin, SDK } from '@rsdoctor/types';
+import type { LoaderDefinitionFunction } from '@rspack/core';
 import { parseQuery } from 'loader-utils';
-import { omit } from "lodash";
-import path from "path";
+import { omit } from 'lodash';
+import path from 'path';
 
-const loaderModule: Plugin.LoaderDefinition<Parameters<LoaderDefinitionFunction>, {}> = function (
-  ...args
-) {
+const loaderModule: Plugin.LoaderDefinition<
+  Parameters<LoaderDefinitionFunction>,
+  {}
+> = function (...args) {
   const time = Date.now();
   const code = args[0];
   const sdk = getSDK();
@@ -28,11 +29,11 @@ const loaderModule: Plugin.LoaderDefinition<Parameters<LoaderDefinitionFunction>
       {
         loader: _options.loader,
         loaderIndex: this.loaderIndex,
-        path:  _options.loader,
+        path: _options.loader,
         input: _options.type === 'start' ? code : null,
         result: _options.type === 'end' ? code : null,
         startAt: _options.type === 'start' ? time : 0,
-        endAt:  _options.type === 'end' ? time : 0,
+        endAt: _options.type === 'end' ? time : 0,
         options: omit(_options.options, 'type'),
         isPitch: false,
         sync: false,
@@ -40,7 +41,7 @@ const loaderModule: Plugin.LoaderDefinition<Parameters<LoaderDefinitionFunction>
         pid: process.pid,
         ppid: process.ppid,
       },
-    ]
+    ],
   };
 
   sdk.reportLoaderStartOrEnd(loaderData);

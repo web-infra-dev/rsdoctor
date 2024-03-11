@@ -1,6 +1,6 @@
 import { Common, Linter, Plugin, SDK } from '@rsdoctor/types';
 import assert from 'assert';
-import { RuleSetCondition as RspackRuleSetCondition } from '@rspack/core';
+import type { RuleSetCondition as RspackRuleSetCondition } from '@rspack/core';
 import {
   RuleSetCondition,
   RuleSetConditionAbsolute,

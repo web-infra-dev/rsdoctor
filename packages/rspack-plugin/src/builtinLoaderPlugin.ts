@@ -1,8 +1,8 @@
-import { Compiler } from '@rspack/core';
+import type { Compiler } from '@rspack/core';
 import { Utils } from '@rsdoctor/core/build-utils';
 import path from 'path';
 import { Plugin } from '@rsdoctor/types';
-import { RuleSetRules } from '@rspack/core';
+import type { RuleSetRules } from '@rspack/core';
 
 const BuiltinLoaderName = 'builtin:swc-loader';
 

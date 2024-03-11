@@ -22,11 +22,11 @@
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
-    "@rspack/core": "0.5.1",
     "loader-utils": "^2.0.4",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@rspack/core": "0.5.1",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@types/loader-utils": "^2.0.5",
@@ -35,6 +35,9 @@
     "@types/tapable": "2.2.2",
     "tslib": "2.4.1",
     "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "@rspack/core": "^0.5.1"
   },
   "publishConfig": {
     "access": "public",
