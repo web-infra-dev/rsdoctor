@@ -1,5 +1,14 @@
 # @rsdoctor/core
 
+## 0.1.5
+
+### Patch Changes
+
+- 8d82c10: fix(core): optimize the package's dependencies
+  - @rsdoctor/graph@0.1.5
+  - @rsdoctor/sdk@0.1.5
+  - @rsdoctor/utils@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @rsdoctor/utils
 
+## 0.1.5
+
+### Patch Changes
+
+- @rsdoctor/types@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes
