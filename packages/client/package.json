@@ -7,6 +7,9 @@
     "url": "https://github.com/web-infra-dev/rsdoctor",
     "directory": "packages/client"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "rsbuild dev",
     "start": "rsbuild build -w",
