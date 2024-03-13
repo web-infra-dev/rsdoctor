@@ -188,7 +188,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     );
     const url = `http://${this.host}:${this.port}${relativeUrl}`;
     const localhostUrl = `http://localhost:${this.port}${relativeUrl}`;
-    await openBrowser(url);
+    await openBrowser(localhostUrl);
     logger.info(`Rsdoctor analyze server running on: ${chalk.cyan(url)}`);
     logger.info(
       `Rsdoctor analyze server running on: ${chalk.cyan(localhostUrl)}`,
