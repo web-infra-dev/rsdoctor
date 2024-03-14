@@ -748,8 +748,8 @@ importers:
         specifier: 1.11.6
         version: 1.11.6
       ip:
-        specifier: 1.1.8
-        version: 1.1.8
+        specifier: 1.1.9
+        version: 1.1.9
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -11849,8 +11849,8 @@ packages:
     dependencies:
       loose-envify: 1.4.0
 
-  /ip@1.1.8:
-    resolution: {integrity: sha512-PuExPYUiu6qMBQb4l06ecm6T6ujzhmh+MeJcW9wa89PoAz5pvd4zPgN5WJV104mb6S2T1AwNIAaB70JNrLQWhg==}
+  /ip@1.1.9:
+    resolution: {integrity: sha512-cyRxvOEpNHNtchU3Ln9KC/auJgup87llfQpQ+t5ghoC/UhL16SWzbueiCsdTnWmqAWl7LadfuwhlqmtOaqMHdQ==}
     dev: false
 
   /ipaddr.js@1.9.1:
