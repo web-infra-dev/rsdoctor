@@ -1,5 +1,5 @@
 ---
-'@rsdoctor/sdk': minor
+'@rsdoctor/sdk': patch
 ---
 
 fix(sdk): openBrowser in localhostUrl
