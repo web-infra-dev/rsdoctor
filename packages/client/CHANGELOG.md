@@ -1,5 +1,11 @@
 # @rsdoctor/components
 
+## 0.1.6
+
+### Patch Changes
+
+- 4cb8c62: fix(client): publish only dist files
+
 ## 0.1.5
 
 ## 0.1.4

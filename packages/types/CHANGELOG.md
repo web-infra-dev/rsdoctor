@@ -1,5 +1,11 @@
 # @rsdoctor/types
 
+## 0.1.6
+
+### Patch Changes
+
+- 8527171: fix(inner-doctor): support getHash for inner rsdoctor
+
 ## 0.1.5
 
 ## 0.1.4
