@@ -10,6 +10,6 @@ export const message: RuleMessage = {
   description: `
 #### Description
 
-Detect if there is a bigger version of ECMA syntax in the js bundle file
+Detect if there is a newer version of ECMA syntax in the js bundle file
 `,
 };
