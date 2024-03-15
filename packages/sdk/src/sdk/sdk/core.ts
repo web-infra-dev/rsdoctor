@@ -99,6 +99,10 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     this.hash = hash;
   }
 
+  public getHash() {
+    return this.hash;
+  }
+
   public getClientRoutes() {
     return [...this._clientRoutes];
   }
