@@ -4,7 +4,7 @@ Thanks for that you are interested in contributing to Rsdoctor. Before starting 
 
 ---
 
-## Setup the Dev Environment
+## Setup the Environment
 
 ### Fork the Repo
 
@@ -36,12 +36,13 @@ nvm use 18
 
 ### Install pnpm
 
+Enable [pnpm](https://pnpm.io/) with corepack:
+
 ```sh
-# Enable pnpm with corepack, only available on Node.js >= `v14.19.0`
 corepack enable
 ```
 
-### Install Dependencies
+Install dependencies:
 
 ```sh
 pnpm install
@@ -49,11 +50,9 @@ pnpm install
 
 What this will do:
 
-- Install all dependencies
-- Create symlinks between packages in the monorepo
-- Run the `prepare` script to build all packages (this will take some time, but is necessary to make ensure all packages are built)
-
-> A full rebuild of all packages is generally not required after this. If a new feature you are developing requires an updated version of another package, it is usually sufficient to build the changed dependencies.
+- Install all dependencies.
+- Create symlinks between packages in the monorepo.
+- Run the `prepare` script to build all packages, powered by [nx](https://nx.dev/).
 
 ### Set Git Email
 
@@ -93,30 +92,16 @@ git checkout -b MY_BRANCH_NAME
 
 ### Build the Package
 
-To build the package you want to change, first open the package directory, then run the `build` command:
+Use [nx build](https://nx.dev/nx-api/nx/documents/run) to build the package you want to change:
 
 ```sh
-# Replace some-path with the path of the package you want to work on
-cd ./packages/some-path
-pnpm run build
-```
-
-Alternatively, you can build the package from the root directory of the repository using the `--filter` option:
-
-```sh
-pnpm run --filter @rsdoctor/some-package build
+npx nx build @rsdoctor/core
 ```
 
 Build all packages:
 
 ```sh
-pnpm run prepare
-```
-
-If you need to clean all `node_modules/*` in the project, run the `reset` command:
-
-```sh
-pnpm run reset
+pnpm run build
 ```
 
 ---
@@ -140,7 +125,7 @@ pnpm run build:analysis
 
 If you've fixed a bug or added code that should be tested, then add some tests.
 
-You can add unit test cases in the `<PACKAGE_DIR>/tests` folder. The test syntax is based on [Jest](https://jestjs.io/) and [Vitest](https://vitest.dev/).
+You can add unit test cases in the `<PACKAGE_DIR>/tests` folder. The test syntax is based on [Vitest](https://vitest.dev/).
 
 ### Run Unit Tests
 
@@ -166,16 +151,17 @@ You can run the `test:e2e` command to run the E2E tests:
 pnpm run test:e2e
 ```
 
-
 ## Linting
 
-To help maintain consistency and readability of the codebase, we use a [Oxc](https://github.com/web-infra-dev/oxc) to lint the codes.
+To help maintain consistency and readability of the codebase, we use [Biome](https://github.com/biomejs/biome) to lint the codes.
 
 You can run the Linter by executing the following command:
 
 ```sh
 pnpm run lint
 ```
+
+For VS Code users, you can install the [Biome VS Code extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) to see lints while typing.
 
 ---
 
@@ -191,8 +177,6 @@ root
 ```
 
 This website is built with Rspress, the document content can be written using markdown or mdx syntax. You can refer to the [Rspress Website](https://rspress.dev/) for detailed usage.
-
-The source code of Rspress can be found in [this repo](https://github.com/web-infra-dev/rspress).
 
 ---
 
