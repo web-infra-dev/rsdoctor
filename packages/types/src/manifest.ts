@@ -3,6 +3,10 @@ import { StoreData } from './sdk';
 
 export interface RsdoctorManifest {
   client: RsdoctorManifestClient;
+  /**
+   * manifest url in tos, used by inner-rsdoctor.
+   */
+  cloudManifestUrl?: string;
   data: RsdoctorManifestData;
   /** current build name */
   name?: string;
@@ -22,6 +26,10 @@ export interface RsdoctorManifestSeriesData {
 export interface RsdoctorManifestWithShardingFiles
   extends Omit<RsdoctorManifest, 'data'> {
   data: Record<keyof RsdoctorManifestData, string[] | string>;
+  /**
+   * manifest data shareding file urls in tos, used by inner-rsdoctor.
+   */
+  cloudData?: Record<keyof RsdoctorManifestData, string[] | string>;
   /**
    * local server will proxy the manifest content and inject `__LOCAL__SERVER__: true`
    */

@@ -16,7 +16,10 @@ export class RemoteDataLoader extends BaseDataLoader {
   public async loadData(key: string): Promise<unknown> {
     return this.limit(key, async () => {
       const [scope, ...rest] = this.getKeys(key);
-      const data = this.getData(scope as keyof Manifest.RsdoctorManifestData);
+      const data = this.getData(
+        scope as keyof Manifest.RsdoctorManifestData,
+        'cloudData',
+      );
 
       if (!data) return;
 
@@ -26,7 +29,10 @@ export class RemoteDataLoader extends BaseDataLoader {
       if (ManifestShared.isShardingData(res)) {
         // only cache by the root key in data
         if (!this.shardingDataMap.has(scope)) {
-          const task = ManifestShared.fetchShardingData(res, fetchShardingFile).catch((err) => {
+          const task = ManifestShared.fetchShardingData(
+            res,
+            fetchShardingFile,
+          ).catch((err) => {
             this.log(`loadData error: `, res, key);
             throw err;
           });
@@ -42,8 +48,10 @@ export class RemoteDataLoader extends BaseDataLoader {
 
   public async loadAPI<
     T extends SDK.ServerAPI.API,
-    B extends SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-    R extends SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+    B extends
+      SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
+    R extends
+      SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
   >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
     const [api, body] = args;
     // request limitation key
