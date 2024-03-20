@@ -9,8 +9,7 @@ import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { rules } from '@/rules/rules';
 import { RuleData } from '@rsdoctor/types/dist/linter';
 
-
-type InternalRules = typeof rules[number] & RuleData[];
+type InternalRules = (typeof rules)[number] & RuleData[];
 
 export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
@@ -49,10 +48,16 @@ export interface RsdoctorWebpackPluginOptions<
     | { noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }
     | undefined;
   /**
-   * control the Rsdoctor upload data to TOS.
+   * control the Rsdoctor upload data to TOS, used by inner-rsdoctor.
    * @default false
    */
   disableTOSUpload?: boolean;
+
+  /**
+   * The name of inner rsdoctor's client package, used by inner-rsdoctor.
+   * @default false
+   */
+  innerClientName?: string;
 }
 
 export interface RsdoctorWebpackMultiplePluginOptions<

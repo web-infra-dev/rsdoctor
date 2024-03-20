@@ -52,7 +52,7 @@ export class RsdoctorWebpackSDK<
     super(options);
     this.server = options.noServer
       ? new RsdoctorFakeServer(this, undefined)
-      : new RsdoctorServer(this, options.port);
+      : new RsdoctorServer(this, options.port, options.innerClientName);
     this.type = options.type || SDK.ToDataType.Normal;
     this.extraConfig = options.config;
   }
@@ -224,13 +224,15 @@ export class RsdoctorWebpackSDK<
       this._loaderStart.push(data);
     } else if (_builtinLoader.endAt) {
       const matchLoaderStart = this._loaderStart.find(
-        (e) => (e.resource.path === data.resource.path && e.loaders[0].loader === _builtinLoader.loader),
+        (e) =>
+          e.resource.path === data.resource.path &&
+          e.loaders[0].loader === _builtinLoader.loader,
       );
 
       if (matchLoaderStart) {
         matchLoaderStart.loaders[0].result = _builtinLoader.result;
         matchLoaderStart.loaders[0].endAt = _builtinLoader.endAt;
-        this.reportLoader([matchLoaderStart])
+        this.reportLoader([matchLoaderStart]);
       }
     }
   }
