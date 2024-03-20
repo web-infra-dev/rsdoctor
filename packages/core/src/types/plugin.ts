@@ -57,7 +57,7 @@ export interface RsdoctorWebpackPluginOptions<
    * The name of inner rsdoctor's client package, used by inner-rsdoctor.
    * @default false
    */
-  innerClientName?: string;
+  innerClientPath?: string;
 }
 
 export interface RsdoctorWebpackMultiplePluginOptions<

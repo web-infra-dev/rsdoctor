@@ -52,7 +52,7 @@ export class RsdoctorWebpackSDK<
     super(options);
     this.server = options.noServer
       ? new RsdoctorFakeServer(this, undefined)
-      : new RsdoctorServer(this, options.port, options.innerClientName);
+      : new RsdoctorServer(this, options.port, options.innerClientPath);
     this.type = options.type || SDK.ToDataType.Normal;
     this.extraConfig = options.config;
   }

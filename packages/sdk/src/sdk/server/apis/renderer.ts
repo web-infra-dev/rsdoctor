@@ -4,7 +4,6 @@ import path from 'path';
 import { File } from '@rsdoctor/utils/build';
 import { BaseAPI } from './base';
 import { Router } from '../router';
-import { Algorithm } from '@rsdoctor/utils/common';
 
 export class RendererAPI extends BaseAPI {
   private isClientServed = false;
@@ -14,13 +13,12 @@ export class RendererAPI extends BaseAPI {
   public async entryHtml(): Promise<
     SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.EntryHtml>
   > {
-    const { server, res, req } = this.ctx;
-    const name = req.url && req.url.match(/innerClientName=([\w-|\=]+)/)?.[1];
+    const { server, res } = this.ctx;
 
     // dynamic serve client:
     // require.resolve will failed due to the dist will remove when execute "npm run build" of client.
-    const clientHtmlPath = name
-      ? require.resolve(`${Algorithm.decompressText(name)}/react-client`)
+    const clientHtmlPath = server.innerClientPath
+      ? server.innerClientPath
       : require.resolve('@rsdoctor/client');
     if (!this.isClientServed) {
       this.isClientServed = true;
