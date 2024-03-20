@@ -11,12 +11,15 @@ import { Router } from './router';
 import * as APIs from './apis';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
+import { Algorithm } from '@rsdoctor/utils/common';
 export * from './utils';
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   private _server!: Common.PromiseReturnType<typeof Server.createServer>;
 
   public port: number;
+
+  public innerClientName: string;
 
   private _socket?: Socket;
 
@@ -27,11 +30,13 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   constructor(
     protected sdk: SDK.RsdoctorBuilderSDKInstance,
     port = Server.defaultPort,
+    innerClientName = '',
   ) {
     assert(typeof port === 'number');
     // maybe the port will be rewrite in bootstrap()
     this.port = port;
     this._router = new Router({ sdk, server: this, apis: Object.values(APIs) });
+    this.innerClientName = innerClientName;
   }
 
   public get app(): SDK.RsdoctorServerInstance['app'] {
@@ -161,13 +166,21 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   public getClientUrl(route?: 'homepage'): string;
 
   public getClientUrl(route = 'homepage', ...args: unknown[]) {
-    const relativeUrl = SDK.ServerAPI.API.EntryHtml;
+    const relativeUrl = this.innerClientName
+      ? `${
+          SDK.ServerAPI.API.EntryHtml
+        }?innerClientName=${Algorithm.compressText(this.innerClientName)}`
+      : SDK.ServerAPI.API.EntryHtml;
 
     switch (route) {
       case Client.RsdoctorClientRoutes.BundleDiff: {
         const [baseline, current] = args as string[];
         const qs = Bundle.getBundleDiffPageQueryString([baseline, current]);
-        return `${relativeUrl}${qs}#${Client.RsdoctorClientRoutes.BundleDiff}`;
+        return this.innerClientName
+          ? `${relativeUrl}${qs.replace('?', '&')}#${
+              Client.RsdoctorClientRoutes.BundleDiff
+            }`
+          : `${relativeUrl}${qs}#${Client.RsdoctorClientRoutes.BundleDiff}`;
       }
       default:
         return relativeUrl;
