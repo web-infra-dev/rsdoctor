@@ -1,5 +1,13 @@
 # @rsdoctor/utils
 
+## 0.1.6-beta.0
+
+### Patch Changes
+
+- Updated dependencies [8527171]
+- Updated dependencies [5986abf]
+  - @rsdoctor/types@0.1.6-beta.0
+
 ## 0.1.5
 
 ### Patch Changes

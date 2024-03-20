@@ -1,0 +1,22 @@
+{
+  "mode": "exit",
+  "tag": "beta",
+  "initialVersions": {
+    "@rsdoctor/cli": "0.1.5",
+    "@rsdoctor/client": "0.1.5",
+    "@rsdoctor/components": "0.1.5",
+    "@rsdoctor/core": "0.1.5",
+    "@rsdoctor/graph": "0.1.5",
+    "@rsdoctor/rspack-plugin": "0.1.5",
+    "@rsdoctor/sdk": "0.1.5",
+    "@rsdoctor/types": "0.1.5",
+    "@rsdoctor/utils": "0.1.5",
+    "@rsdoctor/webpack-plugin": "0.1.5"
+  },
+  "changesets": [
+    "bright-kids-change",
+    "early-tables-grow",
+    "funny-chicken-beg",
+    "late-crabs-work"
+  ]
+}
