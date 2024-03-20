@@ -11,7 +11,6 @@ import { Router } from './router';
 import * as APIs from './apis';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
-import { Algorithm } from '@rsdoctor/utils/common';
 export * from './utils';
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
@@ -19,24 +18,24 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
   public port: number;
 
-  public innerClientName: string;
-
   private _socket?: Socket;
 
   private disposed = true;
 
   private _router: Router;
 
+  private _innerClientPath: string;
+
   constructor(
     protected sdk: SDK.RsdoctorBuilderSDKInstance,
     port = Server.defaultPort,
-    innerClientName = '',
+    innerClientPath = '',
   ) {
     assert(typeof port === 'number');
     // maybe the port will be rewrite in bootstrap()
     this.port = port;
     this._router = new Router({ sdk, server: this, apis: Object.values(APIs) });
-    this.innerClientName = innerClientName;
+    this._innerClientPath = innerClientPath;
   }
 
   public get app(): SDK.RsdoctorServerInstance['app'] {
@@ -54,6 +53,10 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
   public get socketUrl(): string {
     return `ws://localhost:${this.port}`;
+  }
+
+  public get innerClientPath(): string {
+    return this._innerClientPath;
   }
 
   async bootstrap() {
@@ -166,21 +169,13 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   public getClientUrl(route?: 'homepage'): string;
 
   public getClientUrl(route = 'homepage', ...args: unknown[]) {
-    const relativeUrl = this.innerClientName
-      ? `${
-          SDK.ServerAPI.API.EntryHtml
-        }?innerClientName=${Algorithm.compressText(this.innerClientName)}`
-      : SDK.ServerAPI.API.EntryHtml;
+    const relativeUrl = SDK.ServerAPI.API.EntryHtml;
 
     switch (route) {
       case Client.RsdoctorClientRoutes.BundleDiff: {
         const [baseline, current] = args as string[];
         const qs = Bundle.getBundleDiffPageQueryString([baseline, current]);
-        return this.innerClientName
-          ? `${relativeUrl}${qs.replace('?', '&')}#${
-              Client.RsdoctorClientRoutes.BundleDiff
-            }`
-          : `${relativeUrl}${qs}#${Client.RsdoctorClientRoutes.BundleDiff}`;
+        return `${relativeUrl}${qs}#${Client.RsdoctorClientRoutes.BundleDiff}`;
       }
       default:
         return relativeUrl;
