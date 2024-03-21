@@ -1,5 +1,11 @@
 # @rsdoctor/components
 
+## 0.1.6-beta.0
+
+### Patch Changes
+
+- 5986abf: feat(inner-rsdoctor): add innerClientName for inner-rsdoctor
+
 ## 0.1.5
 
 ## 0.1.4
