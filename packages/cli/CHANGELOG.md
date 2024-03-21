@@ -1,6 +1,6 @@
 # @rsdoctor/cli
 
-## 0.1.6-beta.0
+## 0.1.6-beta.1
 
 ### Patch Changes
 
@@ -8,10 +8,10 @@
 - Updated dependencies [8527171]
 - Updated dependencies [4cb8c62]
 - Updated dependencies [5986abf]
-  - @rsdoctor/sdk@0.1.6-beta.0
-  - @rsdoctor/types@0.1.6-beta.0
-  - @rsdoctor/client@0.1.6-beta.0
-  - @rsdoctor/utils@0.1.6-beta.0
+  - @rsdoctor/sdk@0.1.6-beta.1
+  - @rsdoctor/types@0.1.6-beta.1
+  - @rsdoctor/client@0.1.6-beta.1
+  - @rsdoctor/utils@0.1.6-beta.1
 
 ## 0.1.5
 

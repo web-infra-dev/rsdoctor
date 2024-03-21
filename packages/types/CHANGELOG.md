@@ -1,6 +1,6 @@
 # @rsdoctor/types
 
-## 0.1.6-beta.0
+## 0.1.6-beta.1
 
 ### Patch Changes
 

@@ -1,6 +1,6 @@
 # @rsdoctor/rspack-plugin
 
-## 0.1.6-beta.0
+## 0.1.6-beta.1
 
 ### Patch Changes
 
@@ -8,9 +8,9 @@
 - Updated dependencies [60b805f]
 - Updated dependencies [8527171]
 - Updated dependencies [5986abf]
-  - @rsdoctor/sdk@0.1.6-beta.0
-  - @rsdoctor/core@0.1.6-beta.0
-  - @rsdoctor/graph@0.1.6-beta.0
+  - @rsdoctor/sdk@0.1.6-beta.1
+  - @rsdoctor/core@0.1.6-beta.1
+  - @rsdoctor/graph@0.1.6-beta.1
 
 ## 0.1.5
 
