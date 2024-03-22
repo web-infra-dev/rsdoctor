@@ -1,5 +1,12 @@
 # @rsdoctor/utils
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies [597d223]
+  - @rsdoctor/types@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes
