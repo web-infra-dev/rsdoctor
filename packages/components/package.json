@@ -60,7 +60,7 @@
     "@types/react": "^18",
     "@types/url-parse": "1.4.8",
     "ansi-to-react": "6.1.6",
-    "antd": "5.8.3",
+    "antd": "5.15.3",
     "axios": "^1.6.1",
     "dayjs": "1.11.6",
     "echarts": "^5.4.3",
