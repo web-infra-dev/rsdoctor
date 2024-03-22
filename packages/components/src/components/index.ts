@@ -8,4 +8,5 @@ export * from './Overall';
 export * from './Manifest';
 export * from './Form/keyword';
 export * from './TextDrawer';
+export * from './BundleDiff';
 export { TimelineCom } from './Charts/TimelineCharts';
