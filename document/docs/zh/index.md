@@ -3,8 +3,8 @@ pageType: home
 
 hero:
   name: Rsdoctor
-  text: Rspack 和 Webpack 构建分析器
-  tagline: 让构建行为可视化
+  text: Rspack & Webpack 构建分析工具
+  tagline: 让构建过程可视化
   actions:
     - theme: brand
       text: 介绍

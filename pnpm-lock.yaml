@@ -57,8 +57,8 @@ importers:
         specifier: ^9.0.1
         version: 9.0.1(@types/react@18.2.39)(react@18.2.0)
       rsfamily-nav-icon:
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^1.0.2
+        version: 1.0.2
       rspress:
         specifier: ^1.15.1
         version: 1.15.1(@swc/helpers@0.5.3)(webpack@5.89.0)
@@ -84,6 +84,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      rspress-plugin-font-open-sans:
+        specifier: ^1.0.0
+        version: 1.0.0
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@16.18.66)(typescript@5.3.3)
@@ -4302,7 +4305,7 @@ packages:
       '@formily/json-schema': 2.2.30(typescript@4.9.4)
       '@formily/validator': 2.2.30
       '@modern-js/codesmith': 2.3.0
-      '@modern-js/utils': 2.41.0
+      '@modern-js/utils': 2.48.1
       '@swc/helpers': 0.5.1
       inquirer: 8.2.6
     transitivePeerDependencies:
@@ -4317,7 +4320,7 @@ packages:
       '@formily/json-schema': 2.2.30(typescript@5.3.3)
       '@formily/validator': 2.2.30
       '@modern-js/codesmith': 2.3.3
-      '@modern-js/utils': 2.41.0
+      '@modern-js/utils': 2.48.1
       '@swc/helpers': 0.5.1
       inquirer: 8.2.6
     transitivePeerDependencies:
@@ -4332,7 +4335,7 @@ packages:
       '@formily/json-schema': 2.2.30(typescript@5.3.3)
       '@formily/validator': 2.2.30
       '@modern-js/codesmith': 2.3.3
-      '@modern-js/utils': 2.46.1
+      '@modern-js/utils': 2.48.1
       '@swc/helpers': 0.5.1
       inquirer: 8.2.6
     transitivePeerDependencies:
@@ -4342,7 +4345,7 @@ packages:
   /@modern-js/codesmith@2.3.0:
     resolution: {integrity: sha512-jZtoOvyH8GtPJTtgnTBtamBbqOEryoMolSgjJDVjJwIQNREnt4tcUtXK2n9kTVVrTVIVqeFNe3gaaMZm0n+aQA==}
     dependencies:
-      '@modern-js/utils': 2.41.0
+      '@modern-js/utils': 2.48.1
       '@swc/helpers': 0.5.1
       axios: 0.21.4
       tar: 6.2.0
@@ -4353,7 +4356,7 @@ packages:
   /@modern-js/codesmith@2.3.3:
     resolution: {integrity: sha512-KBmkO05++5UB73DvNsoR9EhGMH1Z9jO9bq4nlDREwonc4XE3dJv6ojQlw9B9JRauG+FzNfp+i2cdqn4AWNPBbA==}
     dependencies:
-      '@modern-js/utils': 2.46.1
+      '@modern-js/utils': 2.48.1
       '@swc/helpers': 0.5.1
       axios: 1.6.1
       tar: 6.2.0
@@ -4961,6 +4964,7 @@ packages:
       caniuse-lite: 1.0.30001566
       lodash: 4.17.21
       rslog: 1.2.0
+    dev: true
 
   /@modern-js/utils@2.48.1:
     resolution: {integrity: sha512-acQ1NRKPMfz0AvlDZrw0MzF5OWnONWTFBhecEzELPo+cqZejw5dNV9OQYwntZVuFjMHIbQpR1wtoOqHdNnbTFQ==}
@@ -4969,7 +4973,6 @@ packages:
       caniuse-lite: 1.0.30001597
       lodash: 4.17.21
       rslog: 1.2.0
-    dev: false
 
   /@module-federation/runtime-tools@0.0.8:
     resolution: {integrity: sha512-tqx3wlVHnpWLk+vn22c0x9Nv1BqdZnoS6vdMb53IsVpbQIFP70nhhvymHUyFuPkoLzMFidS7GpG58DYT/4lvCw==}
@@ -8431,7 +8434,6 @@ packages:
 
   /caniuse-lite@1.0.30001597:
     resolution: {integrity: sha512-7LjJvmQU6Sj7bL0j5b5WY/3n7utXUJvAe1lxhsHDbLmwX9mdL86Yjtr+5SRCyf8qME4M7pU2hswj0FpyBVCv9w==}
-    dev: false
 
   /ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -16924,8 +16926,8 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /rsfamily-nav-icon@1.0.1:
-    resolution: {integrity: sha512-TJdyzLpFfmEGfJiPAwZqn1TdXwoR7j/Y0j9ejovNk3zABzJ1FRQ6WZl7DVQQTHoJnABlRgXphMuxnAZ2UMePdQ==}
+  /rsfamily-nav-icon@1.0.2:
+    resolution: {integrity: sha512-gbvJ3wxy1iV6g6T1m/+UIM09t1Sr1ISEBMLUVwPITW+Ckhjuca1xyDh2gbMpYnYX+jXhOSSqA9qtlXpchUOH9Q==}
     dev: false
 
   /rslog@1.2.0:
@@ -16937,6 +16939,10 @@ packages:
     dependencies:
       fs-extra: 11.2.0
     dev: false
+
+  /rspress-plugin-font-open-sans@1.0.0:
+    resolution: {integrity: sha512-4GP0pd7h3W8EWdqE0VkA62nzUJZNy4ZnYK7be8+lOKHQKsQ5nZ+22A/VurNssi1eZFx3kjwbmIuoAkgb5W8S9Q==}
+    dev: true
 
   /rspress@1.15.1(@swc/helpers@0.5.3)(webpack@5.89.0):
     resolution: {integrity: sha512-PnRdc2bEEVGBR9KaZXv/RK+j13N8Dd+rE0QGQRCx6WHh1+rd6aFVHcp3cFwdqZ+oDM5hisWoqiOZ8ZtcMlDvCQ==}
