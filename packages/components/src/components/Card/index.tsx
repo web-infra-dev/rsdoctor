@@ -1,14 +1,24 @@
-import { ColumnHeightOutlined, VerticalAlignMiddleOutlined } from '@ant-design/icons';
+import {
+  ColumnHeightOutlined,
+  VerticalAlignMiddleOutlined,
+} from '@ant-design/icons';
 import { Card as C, CardProps as CProps, Space, Button, Divider } from 'antd';
 import React, { useState, CSSProperties } from 'react';
-
+export * from './diff';
 export interface CardProps extends CProps {
   collapsable?: boolean;
   dividerStyle?: CSSProperties;
   defaultCollapsed?: boolean;
 }
 
-export const Card: React.FC<CardProps> = ({ collapsable = false, children, title, dividerStyle, defaultCollapsed = false, ...rest }) => {
+export const Card: React.FC<CardProps> = ({
+  collapsable = false,
+  children,
+  title,
+  dividerStyle,
+  defaultCollapsed = false,
+  ...rest
+}) => {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
   if (title && collapsable) {
@@ -18,7 +28,13 @@ export const Card: React.FC<CardProps> = ({ collapsable = false, children, title
         title={
           <Space style={{ fontSize: 'inherit' }}>
             <Button
-              icon={collapsed ? <ColumnHeightOutlined /> : <VerticalAlignMiddleOutlined />}
+              icon={
+                collapsed ? (
+                  <ColumnHeightOutlined />
+                ) : (
+                  <VerticalAlignMiddleOutlined />
+                )
+              }
               onClick={() => setCollapsed(!collapsed)}
               size="small"
             />
@@ -28,7 +44,11 @@ export const Card: React.FC<CardProps> = ({ collapsable = false, children, title
       >
         {collapsed ? (
           <Divider orientation="center" style={dividerStyle} plain>
-            <Button icon={<ColumnHeightOutlined />} type="text" onClick={() => setCollapsed(!collapsed)}>
+            <Button
+              icon={<ColumnHeightOutlined />}
+              type="text"
+              onClick={() => setCollapsed(!collapsed)}
+            >
               show more
             </Button>
           </Divider>
