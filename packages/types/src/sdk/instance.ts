@@ -91,6 +91,7 @@ export interface RsdoctorSDKInstance {
   /** Change build name */
   setName(name: string): void;
   setHash(hash: string): void;
+  getHash(): string;
 
   /**
    * write the manifest to a folder

@@ -10,6 +10,7 @@ export interface Hooks {
       {
         manifestWithShardingFiles: RsdoctorManifestWithShardingFiles;
         manifestDiskPath: string;
+        manifestCloudPath?: string;
       },
     ]
   >;

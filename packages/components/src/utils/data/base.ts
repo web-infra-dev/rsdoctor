@@ -27,7 +27,7 @@ export abstract class BaseDataLoader implements Manifest.ManifestDataLoader {
 
   protected getData<T extends keyof Manifest.RsdoctorManifestData>(
     key: T,
-    scope: 'data' = 'data',
+    scope: 'data' | 'cloudData' = 'data',
   ): void | Manifest.RsdoctorManifestWithShardingFiles['data'][T] {
     const data = this.get(scope);
     if (!data) return;
@@ -46,7 +46,10 @@ export abstract class BaseDataLoader implements Manifest.ManifestDataLoader {
     this.disposed = true;
   }
 
-  public limit<T>(key: string, fn: Common.Function<unknown[], Promise<T>>): Promise<T> {
+  public limit<T>(
+    key: string,
+    fn: Common.Function<unknown[], Promise<T>>,
+  ): Promise<T> {
     if (this.pool.has(key)) {
       return this.pool.get(key) as Promise<T>;
     }
@@ -73,17 +76,17 @@ export abstract class BaseDataLoader implements Manifest.ManifestDataLoader {
 
   abstract loadAPI<
     T extends SDK.ServerAPI.API,
-    B extends SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-    R extends SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+    B extends
+      SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
+    R extends
+      SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
   >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R>;
 
-  public abstract onDataUpdate<T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends>(
-    api: T,
-    fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void,
-  ): void;
+  public abstract onDataUpdate<
+    T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
+  >(api: T, fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void): void;
 
-  public abstract removeOnDataUpdate<T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends>(
-    api: T,
-    fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void,
-  ): void;
+  public abstract removeOnDataUpdate<
+    T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
+  >(api: T, fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void): void;
 }

@@ -2,10 +2,10 @@ import { Client } from '@rsdoctor/types';
 import { Segmented, Space, Tooltip, Typography } from 'antd';
 import { Graph } from '@rsdoctor/utils/common';
 import React, { useState } from 'react';
-import { formatSize } from '../../utils';
-import { Color } from '../../constants';
-import { StatisticCard } from './statistic';
-export { StatisticCard } from './statistic';
+import { Color } from 'src/constants';
+import { StatisticCard } from 'src/components/Card';
+import { formatSize } from 'src/utils';
+
 export interface DiffCardProps extends Pick<DiffCardContentProps, 'formatter'> {
   titles: Array<string> | [string | React.ReactNode];
   datas: Array<DiffCardContentProps['data']>;

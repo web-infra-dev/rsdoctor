@@ -11,7 +11,9 @@ function random() {
 
 export async function fetchShardingFile(url: string): Promise<string> {
   if (Url.isUrl(url)) {
-    return axios.get(url, { timeout: 999999, responseType: 'text' }).then((e) => e.data);
+    return axios
+      .get(url, { timeout: 999999, responseType: 'text' })
+      .then((e) => e.data);
   }
   // json string
   return url;
@@ -25,7 +27,9 @@ export async function loadManifestByUrl(url: string) {
 }
 
 export async function fetchJSONByUrl(url: string) {
-  let json: Manifest.RsdoctorManifestWithShardingFiles = await axios.get(url, { timeout: 30000 }).then((e) => e.data);
+  let json: Manifest.RsdoctorManifestWithShardingFiles = await axios
+    .get(url, { timeout: 30000 })
+    .then((e) => e.data);
 
   if (typeof json === 'string') {
     json = JSON.parse(json);
@@ -40,18 +44,33 @@ export function fetchJSONByUrls(urls: string[]) {
   return Promise.all(urls.map((url) => fetchJSONByUrl(url)));
 }
 
-export async function parseManifest(json: Manifest.RsdoctorManifestWithShardingFiles) {
+export async function parseManifest(
+  json: Manifest.RsdoctorManifestWithShardingFiles,
+) {
   let transformedData: Manifest.RsdoctorManifestData;
 
-  // try to load cloud data first
-  if (json.data) {
-    try {
-      transformedData = await ManifestMethod.fetchShardingFiles(json.data, fetchShardingFile);
-    } catch (error) {
-      console.log('cloudData load error: ', error);
+  try {
+    // try to load cloud data first
+    if (json.cloudData) {
+      try {
+        transformedData = await ManifestMethod.fetchShardingFiles(
+          json.cloudData,
+          fetchShardingFile,
+        );
+      } catch (error) {
+        console.log('cloudData load error: ', error);
+      }
+    } else {
+      transformedData = await ManifestMethod.fetchShardingFiles(
+        json.data,
+        fetchShardingFile,
+      );
     }
-  } else {
-    throw new Error('fallback to load json.data');
+  } catch (error) {
+    transformedData = await ManifestMethod.fetchShardingFiles(
+      json.data,
+      fetchShardingFile,
+    );
   }
 
   return {
@@ -65,9 +84,15 @@ const manifestUrlForDev = '/manifest.json';
 export function getManifestUrl(): string {
   let file: string | void;
 
-  if ((window as { [key: string]: any })[Manifest.RsdoctorManifestClientConstant.WindowPropertyForManifestUrl]) {
+  if (
+    (window as { [key: string]: any })[
+      Manifest.RsdoctorManifestClientConstant.WindowPropertyForManifestUrl
+    ]
+  ) {
     // load from window property
-    file = (window as { [key: string]: any })[Manifest.RsdoctorManifestClientConstant.WindowPropertyForManifestUrl];
+    file = (window as { [key: string]: any })[
+      Manifest.RsdoctorManifestClientConstant.WindowPropertyForManifestUrl
+    ];
   } else {
     // load from url query
     file = getManifestUrlFromUrlQuery();
@@ -86,7 +111,10 @@ export function getManifestUrl(): string {
   return file;
 }
 
-const pool = new Map<string, Promise<Manifest.RsdoctorManifestWithShardingFiles>>();
+const pool = new Map<
+  string,
+  Promise<Manifest.RsdoctorManifestWithShardingFiles>
+>();
 
 export async function fetchManifest(url = getManifestUrl()) {
   if (!pool.has(url)) {
@@ -128,11 +156,17 @@ if (process.env.NODE_ENV === 'development') {
 
 export async function postServerAPI<
   T extends SDK.ServerAPI.API,
-  B extends SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-  R extends SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+  B extends
+    SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
+  R extends
+    SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
 >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
   const [api, body] = args;
   const timeout = process.env.NODE_ENV === 'development' ? 10000 : 60000;
-  const { data } = await axios.post<SDK.ServerAPI.InferResponseType<T>>(`${api}?_t=${random()}`, body, { timeout });
+  const { data } = await axios.post<SDK.ServerAPI.InferResponseType<T>>(
+    `${api}?_t=${random()}`,
+    body,
+    { timeout },
+  );
   return data as R;
 }

@@ -1,5 +1,22 @@
 # @rsdoctor/sdk
 
+## 0.1.6
+
+### Patch Changes
+
+- 60b805f: fix(sdk): openBrowser in localhostUrl
+- 8527171: fix(inner-doctor): support getHash for inner rsdoctor
+- 5986abf: feat(inner-rsdoctor): add innerClientName for inner-rsdoctor
+- e322824: feat(client): add bundle diff components
+- Updated dependencies [8527171]
+- Updated dependencies [4cb8c62]
+- Updated dependencies [5986abf]
+- Updated dependencies [e322824]
+  - @rsdoctor/types@0.1.6
+  - @rsdoctor/client@0.1.6
+  - @rsdoctor/graph@0.1.6
+  - @rsdoctor/utils@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

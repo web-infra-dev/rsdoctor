@@ -20,6 +20,8 @@ export interface RsdoctorServerInstance {
   readonly port: number;
   readonly origin: string;
 
+  innerClientPath?: string;
+
   get(
     route: string,
     cb: (

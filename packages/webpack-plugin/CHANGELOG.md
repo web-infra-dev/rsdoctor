@@ -1,5 +1,19 @@
 # @rsdoctor/webpack-plugin
 
+## 0.1.6
+
+### Patch Changes
+
+- 5986abf: feat(inner-rsdoctor): add innerClientName for inner-rsdoctor
+- Updated dependencies [60b805f]
+- Updated dependencies [8527171]
+- Updated dependencies [5986abf]
+- Updated dependencies [e322824]
+  - @rsdoctor/sdk@0.1.6
+  - @rsdoctor/core@0.1.6
+  - @rsdoctor/graph@0.1.6
+  - @rsdoctor/utils@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes
