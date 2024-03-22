@@ -21,7 +21,7 @@
     "framer-motion": "^10.17.6",
     "react-markdown": "^9.0.1",
     "rsfamily-nav-icon": "^1.0.1",
-    "rspress": "^1.15.0",
+    "rspress": "^1.15.1",
     "tailwindcss": "^3.4.0"
   }
 }
