@@ -3,8 +3,8 @@ pageType: home
 
 hero:
   name: Rsdoctor
-  text: Analyzer for Rspack and Webpack.
-  tagline: Visualize building behavior
+  text: Analyzer for Rspack & Webpack
+  tagline: Visualize the building process
   actions:
     - theme: brand
       text: Introduction

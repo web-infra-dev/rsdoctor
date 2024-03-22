@@ -1,7 +1,9 @@
 import * as path from 'path';
 import { defineConfig } from 'rspress/config';
+import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 
 export default defineConfig({
+  plugins: [pluginFontOpenSans()],
   root: path.join(__dirname, 'docs'),
   title: 'Rsdoctor',
   description: 'A one-stop build analyzer for Rspack and Webpack.',
@@ -53,13 +55,13 @@ export default defineConfig({
         lang: 'en',
         label: 'English',
         title: 'Rsdoctor',
-        description: 'TAnalyzer for Rspack and Webpack',
+        description: 'Analyzer for Rspack and Webpack',
       },
       {
         lang: 'zh',
         label: '简体中文',
         title: 'Rsdoctor',
-        description: 'Rspack 和 Webpack 项目的构建分析器',
+        description: 'Rspack 和 Webpack 项目的构建分析工具',
       },
     ],
   },
