@@ -116,6 +116,7 @@ export interface ResponseTypes
     moduleGraph: SDK.ModuleGraphData;
     packageGraph: SDK.PackageGraphData;
     moduleCodeMap: SDK.ModuleCodeData;
+    cloudManifestUrl: string;
   };
   [API.GetModuleCodeByModuleId]: SDK.ModuleSource;
   [API.GetModuleCodeByModuleIds]: SDK.ModuleCodeData;
