@@ -1,5 +1,12 @@
 # @rsdoctor/components
 
+## 0.1.6
+
+### Patch Changes
+
+- 5986abf: feat(inner-rsdoctor): add innerClientName for inner-rsdoctor
+- e322824: feat(client): add bundle diff components
+
 ## 0.1.5
 
 ## 0.1.4
