@@ -1,5 +1,14 @@
 # @rsdoctor/rspack-plugin
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies [597d223]
+  - @rsdoctor/sdk@0.1.7
+  - @rsdoctor/core@0.1.7
+  - @rsdoctor/graph@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @rsdoctor/sdk
 
+## 0.1.7
+
+### Patch Changes
+
+- 597d223: feat: add Bundle diff components
+- Updated dependencies [597d223]
+  - @rsdoctor/types@0.1.7
+  - @rsdoctor/client@0.1.7
+  - @rsdoctor/graph@0.1.7
+  - @rsdoctor/utils@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes

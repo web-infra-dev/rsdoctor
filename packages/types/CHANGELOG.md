@@ -1,5 +1,11 @@
 # @rsdoctor/types
 
+## 0.1.7
+
+### Patch Changes
+
+- 597d223: feat: add Bundle diff components
+
 ## 0.1.6
 
 ### Patch Changes
