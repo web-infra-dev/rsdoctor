@@ -846,8 +846,8 @@ importers:
         specifier: ^8.10.0
         version: 8.10.0
       acorn-import-assertions:
-        specifier: 1.8.0
-        version: 1.8.0(acorn@8.10.0)
+        specifier: 1.9.0
+        version: 1.9.0(acorn@8.10.0)
       acorn-walk:
         specifier: 8.2.0
         version: 8.2.0
@@ -7562,14 +7562,6 @@ packages:
     dependencies:
       mime-types: 2.1.35
       negotiator: 0.6.3
-
-  /acorn-import-assertions@1.8.0(acorn@8.10.0):
-    resolution: {integrity: sha512-m7VZ3jwz4eK6A4Vtt8Ew1/mNbP24u0FhdyfA7fSvnJR6LMdfOYnmuIrrJAgrYfYJ10F/otaHTtrtrtmHdMNzEw==}
-    peerDependencies:
-      acorn: ^8
-    dependencies:
-      acorn: 8.10.0
-    dev: false
 
   /acorn-import-assertions@1.9.0(acorn@8.10.0):
     resolution: {integrity: sha512-cmMwop9x+8KFhxvKrKfPYmN6/pKTYYHBqLa0DfvVZcKMJWNyWLnaqND7dx/qn66R7ewM1UX5XMaDVP5wlVTaVA==}
