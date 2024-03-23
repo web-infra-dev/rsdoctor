@@ -7,6 +7,10 @@ export interface RsdoctorManifest {
    * manifest url in tos, used by inner-rsdoctor.
    */
   cloudManifestUrl?: string;
+  /**
+   * manifest data shareding file urls in tos, used by inner-rsdoctor.
+   */
+  cloudData?: Record<keyof RsdoctorManifestData, string[] | string>;
   data: RsdoctorManifestData;
   /** current build name */
   name?: string;
