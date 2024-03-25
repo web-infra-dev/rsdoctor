@@ -1,5 +1,15 @@
 # @rsdoctor/rspack-plugin
 
+## 0.1.8
+
+### Patch Changes
+
+- 157549c: fix(rspack-plugin): rspack plugin dependencies error
+  - @rsdoctor/core@0.1.8
+  - @rsdoctor/graph@0.1.8
+  - @rsdoctor/sdk@0.1.8
+  - @rsdoctor/utils@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes
