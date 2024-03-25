@@ -1,0 +1,49 @@
+# 产物预警
+
+## 功能介绍
+
+### 重复第三方包
+
+- `Duplicate Packages` 卡片上展示了项目重复第三方包数目。点击图片可以查看重复第三方包的具体详情。注：这里的第三方都是被打包的第三方包。
+
+  <div style={{ display: 'flex' }}>
+    <img
+      src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-1.png"
+      height="200px"
+      width="360px"
+      style={{ margin: 'auto' }}
+    />
+    <img
+      src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-2.png"
+      height="300px"
+      width="440px"
+      style={{ margin: 'auto' }}
+    />
+  </div>
+
+- 重复包预警卡片
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts.png" />
+
+- 点击图标展开重复包详情，可以看到：重复包的包名、版本、大小、引用文件。
+
+  - 点击最右侧 **「Show Relations」** 可以查看具体这个第三方的引用链路和对应的引用文件代码位置。
+
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-relations.png" />
+
+  - 点击最右侧 **「!（叹号）」** 图标，可以查看重复第三方包的规则的具体解释。
+
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-rule.png" />
+
+### 重复包优化问题
+
+请查看[重复包优化方案](../../blog/topic/duplicate-pkg-problem)。
+
+### ECMA 版本检查
+
+产物预警中会对产物进行 ECMA 版本做检查，如下图：
+
+{' '}
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts-ecma.png" />
+
+点击 「**More**」可以查看对应规则解释。

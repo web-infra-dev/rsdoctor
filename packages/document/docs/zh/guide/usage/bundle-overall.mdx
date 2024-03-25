@@ -1,0 +1,57 @@
+# 产物概览
+
+## 功能概览
+
+我们在启动 **Rsdoctor** 的首页中，会看到名为 `Bundle Overall` 的一个卡片，可以通过它了解到当前项目**构建产物**的信息，其内容如下图所示：
+
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/overall/bundle-overall-1.jpg"
+  width="400px"
+  height="500px"
+  style={{ margin: 'auto' }}
+/>
+
+## 名词释义
+
+| 名词                             | 描述说明                                                                           |
+| -------------------------------- | ---------------------------------------------------------------------------------- |
+| <b><i>total files</i></b>        | 代表产物中所有文件的数量                                                           |
+| <b><i>total size</i></b>         | 代表产物中所有文件的总体积                                                         |
+| <b><i>js files</i></b>           | 代表产物中所有 `.js` 的文件数量                                                    |
+| <b><i>css files</i></b>          | 代表产物中所有 `.css` 文件数量                                                     |
+| <b><i>image files</i></b>        | 代表产物中所有 `.png`/`.jpg`/`.svg`/`.webp`/`.jpeg`/`.gif`/`.bmp` 的文件数量       |
+| <b><i>font files</i></b>         | 代表产物中所有 `.ttf`/`.fnt`/`.fon`/`.otf`/`.woff`/`.woff2` 的文件数量             |
+| <b><i>media files</i></b>        | 代表产物中所有 `.mp3`/`.mp4`/`.avi`/`.wav`/`.flv`/`.mov`/`.mpg`/`.mpeg` 的文件数量 |
+| <b><i>html files</i></b>         | 代表产物中所有 `.html` 的文件数量                                                  |
+| <b><i>modules</i></b>            | 代表产物中 module 总数                                                             |
+| <b><i>duplicate packages</i></b> | 代表产物中存在的重复包总数                                                         |
+
+## 使用说明
+
+### View Bundle Artifacts
+
+- 卡片上的 **「TOTAL Size」** 数据是项目的总大小。点击该数字可以跳转到 [Bundle Size 页面](./bundle-size.mdx)
+
+- 卡片上还可以查看到不同类型文件的个数及总 Size，点击对应的蓝色图标则可以查看到对应的文件列表，如下图：
+  - **Initial:** 是指该资源是入口的主 Chunk。
+
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/overall/bundle-overall-files.png"
+  width="400px"
+  height="600px"
+  style={{ margin: 'auto' }}
+/>
+
+### [Duplicate Packages](../../blog/topic/duplicate-pkg-problem.mdx)
+
+如果卡片中的 `Duplicate Packages` 显示的数字大于 0，则可以**点击来查看对应的重复包详情列表**，其内容如下图所示：
+
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/overall/bundle-overall-dup-pkg.jpg"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+我们可以看到当前 Rsdoctor 在本次构建产物中检测出来的所有重复包的列表。
+
+更多请查看[重复第三方包](/guide/usage/bundle-alerts)。
