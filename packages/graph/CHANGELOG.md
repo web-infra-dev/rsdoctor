@@ -1,5 +1,12 @@
 # @rsdoctor/graph
 
+## 0.1.8
+
+### Patch Changes
+
+- @rsdoctor/types@0.1.8
+- @rsdoctor/utils@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

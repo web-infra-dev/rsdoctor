@@ -1,5 +1,14 @@
 # @rsdoctor/sdk
 
+## 0.1.8
+
+### Patch Changes
+
+- @rsdoctor/client@0.1.8
+- @rsdoctor/graph@0.1.8
+- @rsdoctor/types@0.1.8
+- @rsdoctor/utils@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes
