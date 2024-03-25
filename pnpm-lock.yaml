@@ -94,8 +94,8 @@ importers:
         specifier: 0.5.1
         version: 0.5.1(@swc/helpers@0.5.3)
       '@types/lodash':
-        specifier: ^4.14.200
-        version: 4.14.202
+        specifier: ^4.17.0
+        version: 4.17.0
       '@types/node':
         specifier: ^16
         version: 16.18.66
@@ -559,8 +559,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.6
       '@types/lodash':
-        specifier: ^4.14.200
-        version: 4.14.202
+        specifier: ^4.17.0
+        version: 4.17.0
       '@types/node':
         specifier: ^16
         version: 16.18.66
@@ -669,8 +669,8 @@ importers:
         specifier: 1.0.0
         version: 1.0.0
       '@types/lodash':
-        specifier: ^4.14.200
-        version: 4.14.202
+        specifier: ^4.17.0
+        version: 4.17.0
       '@types/node':
         specifier: ^16
         version: 16.18.66
@@ -712,8 +712,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.6
       '@types/lodash':
-        specifier: ^4.14.200
-        version: 4.14.202
+        specifier: ^4.17.0
+        version: 4.17.0
       '@types/node':
         specifier: ^16
         version: 16.18.66
@@ -782,8 +782,8 @@ importers:
         specifier: 1.1.0
         version: 1.1.0
       '@types/lodash':
-        specifier: ^4.14.200
-        version: 4.14.202
+        specifier: ^4.17.0
+        version: 4.17.0
       '@types/node':
         specifier: ^16
         version: 16.18.66
@@ -907,8 +907,8 @@ importers:
         specifier: ^11.0.2
         version: 11.0.4
       '@types/lodash':
-        specifier: ^4.14.200
-        version: 4.14.202
+        specifier: ^4.17.0
+        version: 4.17.0
       '@types/node':
         specifier: ^16
         version: 16.18.66
@@ -947,8 +947,8 @@ importers:
         specifier: ^11.0.2
         version: 11.0.4
       '@types/lodash':
-        specifier: ^4.14.200
-        version: 4.14.202
+        specifier: ^4.17.0
+        version: 4.17.0
       '@types/node':
         specifier: ^16
         version: 16.18.66
@@ -990,8 +990,8 @@ importers:
         specifier: 0.5.1
         version: 0.5.1(@swc/helpers@0.5.3)
       '@types/lodash':
-        specifier: ^4.14.200
-        version: 4.14.202
+        specifier: ^4.17.0
+        version: 4.17.0
       '@types/node':
         specifier: ^16
         version: 16.18.66
@@ -6993,11 +6993,11 @@ packages:
   /@types/lodash-es@4.17.6:
     resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
     dependencies:
-      '@types/lodash': 4.14.202
+      '@types/lodash': 4.17.0
     dev: true
 
-  /@types/lodash@4.14.202:
-    resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
+  /@types/lodash@4.17.0:
+    resolution: {integrity: sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==}
 
   /@types/mdast@3.0.15:
     resolution: {integrity: sha512-LnwD+mUEfxWMa1QpDraczIn6k0Ee3SMicuYSSzS6ZYl2gKS09EClnJYGd8Du6rfc5r/GZEk5o1mRb8TaTj03sQ==}
@@ -9433,7 +9433,7 @@ packages:
       '@types/debug': 0.0.30
       '@types/get-port': 3.2.0
       '@types/glob': 5.0.38
-      '@types/lodash': 4.14.202
+      '@types/lodash': 4.17.0
       '@types/mkdirp': 0.5.2
       '@types/node': 8.10.66
       '@types/rimraf': 2.0.5
