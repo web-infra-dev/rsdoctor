@@ -692,6 +692,9 @@ importers:
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk
+      '@rsdoctor/utils':
+        specifier: workspace:*
+        version: link:../utils
       loader-utils:
         specifier: ^2.0.4
         version: 2.0.4
@@ -702,9 +705,6 @@ importers:
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
-      '@rsdoctor/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@rspack/core':
         specifier: 0.5.1
         version: 0.5.1(@swc/helpers@0.5.3)
