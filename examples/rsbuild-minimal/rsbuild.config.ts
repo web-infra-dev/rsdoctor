@@ -9,13 +9,13 @@ export default defineConfig({
       chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
         {
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
-          features: ['bundle', 'plugins', 'loader', 'resolver']
+          features: ['bundle', 'plugins', 'loader', 'resolver'],
         },
       ]);
-    }
+    },
   },
   output: {
-    disableFilenameHash: true,
-    disableMinimize: true
-  }
+    minify: false,
+    filenameHash: false,
+  },
 });
