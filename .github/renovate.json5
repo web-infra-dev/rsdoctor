@@ -45,6 +45,9 @@
 		// manually updating
 		"typescript",
 		// align Node.js version minimum requirements
-		"@types/node"
+		"@types/node",
+		"acorn",
+		"enhanced-resolve",
+		"@biomejs/biome"
 	]
 }
