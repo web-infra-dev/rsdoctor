@@ -411,8 +411,8 @@ importers:
         specifier: 4.8.0
         version: 4.8.0(react-dom@17.0.2)(react@18.2.0)
       '@monaco-editor/react':
-        specifier: 4.4.6
-        version: 4.4.6(monaco-editor@0.34.1)(react-dom@17.0.2)(react@18.2.0)
+        specifier: 4.6.0
+        version: 4.6.0(monaco-editor@0.34.1)(react-dom@17.0.2)(react@18.2.0)
       '@rsdoctor/graph':
         specifier: workspace:*
         version: link:../graph
@@ -4999,8 +4999,8 @@ packages:
       state-local: 1.0.7
     dev: true
 
-  /@monaco-editor/react@4.4.6(monaco-editor@0.34.1)(react-dom@17.0.2)(react@18.2.0):
-    resolution: {integrity: sha512-Gr3uz3LYf33wlFE3eRnta4RxP5FSNxiIV9ENn2D2/rN8KgGAD8ecvcITRtsbbyuOuNkwbuHYxfeaz2Vr+CtyFA==}
+  /@monaco-editor/react@4.6.0(monaco-editor@0.34.1)(react-dom@17.0.2)(react@18.2.0):
+    resolution: {integrity: sha512-RFkU9/i7cN2bsq/iTkurMWOEErmYcY6JiQI3Jn+WeR/FGISH8JbHERjpS9oRuSOPvDMJI0Z8nJeKkbOs9sBYQw==}
     peerDependencies:
       monaco-editor: '>= 0.25.0 < 1'
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -5008,7 +5008,6 @@ packages:
     dependencies:
       '@monaco-editor/loader': 1.4.0(monaco-editor@0.34.1)
       monaco-editor: 0.34.1
-      prop-types: 15.8.1
       react: 18.2.0
       react-dom: 17.0.2(react@18.2.0)
     dev: true
