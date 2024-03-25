@@ -623,16 +623,16 @@ importers:
         specifier: ^16
         version: 16.18.66
       '@types/react':
-        specifier: ^18.2.0
+        specifier: ^18
         version: 18.2.39
       '@types/react-dom':
-        specifier: ^18.2.0
+        specifier: ^18
         version: 18.2.17
       react:
-        specifier: ^18.2.0
+        specifier: ^18
         version: 18.2.0
       react-dom:
-        specifier: ^18.2.0
+        specifier: ^18
         version: 18.2.0(react@18.2.0)
       rspress-plugin-font-open-sans:
         specifier: ^1.0.0
@@ -641,7 +641,7 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@16.18.66)(typescript@5.3.3)
       typescript:
-        specifier: ^5.3.3
+        specifier: ^5.2.2
         version: 5.3.3
 
   packages/graph:

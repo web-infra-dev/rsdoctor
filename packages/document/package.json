@@ -14,13 +14,13 @@
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
     "@types/node": "^16",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "react": "^18",
+    "react-dom": "^18",
     "rspress-plugin-font-open-sans": "^1.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "framer-motion": "^10.17.6",
