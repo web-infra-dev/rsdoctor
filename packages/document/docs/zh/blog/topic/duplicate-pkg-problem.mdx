@@ -1,0 +1,138 @@
+# 重复依赖问题
+
+Rsdoctor 会在产物预警中报告对同一份产物中含有多个重复依赖包的情况
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts.png" />
+
+## 重复包的危害
+
+- **安全性**
+  - 很多包采用单例模式，默认用户使用时只会加载一次，如 core-js、react 和一些组件库会污染全局环境，多版本共存会引发运行时错误
+- **运行时性能**
+  - 增大产物体积，网络传输变慢
+  - 相同功能的代码运行多次
+
+## 如何解决重复包问题？
+
+解决依赖多版本的问题，可以从依赖和构建两个层面解决。
+
+### 依赖层面
+
+#### 1. 使用 npm dedupe命令
+
+一般包管理器会根据 semver 范围尽量安装相同版本的包，但由于 lock 文件的存在，长期项目可能会存在一些重复依赖。
+
+包管理器会提供 `dedupe` 命令如 `npm/yarn/pnpm dedupe` 等，在 semver 正确的范围内进行重复依赖的优化。
+
+#### 2. 使用 resolutions
+
+在 semver 的限制下，dedupe 命令的效果可能不是特别好。比如产物中包含的依赖为 `debug@4.3.4` 和 `debug@3.0.0` 它们分别被 `"debug": "^4"` 和另一个包的 `"debug": "^3"` 所依赖。
+
+这时可以尝试使用包管理器的 `resolutions` 的功能，如 pnpm 的 [**pnpm.overrides**](https://pnpm.io/package_json#pnpmoverrides)、[**.pnpmfile.cjs**](https://pnpm.io/pnpmfile#hooksreadpackagepkg-context-pkg--promisepkg) 或 **yarn 的 resolutions** 等功能
+。它们的特点是可以突破 semver 的束缚，安装时改变 `package.json` 中声明的版本号，来精确控制安装的版本。
+
+但在使用前需要注意包版本之间的兼容性，评估是否有必要进行优化。例如：同一个包不同版本之间的逻辑变化是否会影响项目功能。
+
+### 构建层面
+
+#### 使用 [resolve.alias](https://www.rspack.dev/config/resolve.html#resolvealias)
+
+基本所有的构建器都支持对 npm 包解析的路径进行修改。因此我们可以通过在编译时手动指定 package 的 resolve 路径，来达到消除重复依赖的目的，例如：以 **Rspack** 或 **Webpack** 为例，如果 `lodash` 重复打包，我们可以进行如下配置，将所有 `lodash` 的 resolve 路径指定到当前目录的 `node_modules` 中。
+
+```js
+// webpack.config.js/rspack.config.js
+const path = require('path');
+
+module.exports = {
+  //...
+  resolve: {
+    alias: {
+      lodash: path.resolve(__dirname, 'node_modules/lodash'),
+    },
+  },
+};
+```
+
+这种方法同样需要注意包版本之间的兼容性。
+
+## 常见的重复包处理案例
+
+### 处理 pnpm-workspace 中的重复包
+
+该项目中，web 依赖了 `react@18.2.0` 并通过 `"component": "workspace:*"` 引入了 `component`，`component` 依赖 `react@18.1.0`。项目结构如下：
+
+```txt
+├── node_modules
+├── apps
+│   └── web
+│       ├── node_modules
+│       │   ├── component  -> ../../packages/component
+│       │   └── react      -> ../../../node_modules/.pnpm/react@18.2.0
+│       ├── src
+│       │   └── index.js
+│       ├── webpack.config.js
+│       └── package.json
+└── packages
+    └── component
+        ├── node_modules
+        │   └── react      -> ../../../node_modules/.pnpm/react@18.1.0
+        ├── src
+        │   └── index.js
+        └── package.json
+```
+
+在 `apps/web` 下执行 `webpack build`，打包 web 下的代码时，会解析到 `react@18.2.0`，接着打包 `component` 下的代码时，会解析到 `react@18.1.0`，这导致 web 项目的产物中同时含有两个版本的 `React`。
+
+#### 解决方案
+
+此问题可以通过构建器的 [resolve.alias](https://www.rspack.dev/config/resolve.html#resolvealias) 来解决。让 `Rspack` 或 `Webpack` 解析 `React` 时只解析到 `apps/web/node_modules/react` 这一个版本，示例代码如下：
+
+```javascript
+// apps/web/webpack.config.js
+const path = require('path');
+
+module.exports = {
+  //...
+  resolve: {
+    alias: {
+      react: path.dirname(require.resolve('react/package.json')),
+    },
+  },
+};
+```
+
+#### Peer Dependency 引起的重复包问题
+
+这种处理方法同样适用于由于 `pnpm workspace` 中 **[peerDependencies](https://pnpm.io/how-peers-are-resolved)** 多分身引起的重复包的项目中，项目目录结构如下：
+
+```txt
+├── node_modules
+├── apps
+│   └── web
+│       ├── node_modules
+│       │   ├── component  ->  ../../packages/component
+│       │   ├── axios      ->  ../../../node_modules/.pnpm/axios@0.27.2_debug@4.3.4
+│       │   └── debug      ->  ../../../node_modules/.pnpm/debug@4.3.4
+│       ├── src
+│       │   └── index.js
+│       ├── webpack.config.js
+│       └── package.json
+└── packages
+    └── component
+        ├── node_modules
+        │   └── axios      ->  ../../../node_modules/.pnpm/axios@0.27.2
+        ├── src
+        │   └── index.js
+        └── package.json
+```
+
+在该项目中，在 `apps/web` 下执行 `webpack build`，打包 web 下的代码时，会解析到 `axios@0.27.2_debug@4.3.4`，接着打包 `packages/component` 下的代码时，会解析到 `axios@0.27.2`，它们虽然是同一版本，但路径不同，产物中也会存在两份 `axios`。
+
+解决方案如下，让 `web` 项目构建时都只解析到 `web` 下 `node_modules` 的 `axios` 包即可。
+
+```javascript
+// apps/web/webpack.config.js
+alias: {
+  'axios': path.resolve(__dirname, 'node_modules/axios')
+}
+```

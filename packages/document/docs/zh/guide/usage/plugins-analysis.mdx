@@ -1,0 +1,43 @@
+# Plugin 分析
+
+## 功能概览
+
+我们在 **Rsdoctor** 内 `Compile Analysis` 的二级页面 `Plugins Analysis` 中，可以看到当前 Rspack 或 Webpack 项目中所有被插件使用过的 **Compiler Hooks** 以及 **Compilation Hooks** 的调用数据信息，其内容如下图所示：
+
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/plugins-analysis-overall.png"
+  width={'600px'}
+  style={{ margin: 'auto' }}
+/>
+
+:::tip
+plugin 耗时中会计算 Rsdoctor 的内部插件耗时。
+:::
+
+## 名词释义
+
+页面中数据统计表格内的字段含义如下：
+
+| 名词                          | 描述说明                                                                               |
+| ----------------------------- | -------------------------------------------------------------------------------------- |
+| <b><i>Plugin Tap Name</i></b> | 代表 [.tap 调用时的 name 值](https://github.com/webpack/tapable#hookhookmap-interface) |
+| <b><i>Hook</i></b>            | 代表 **hook 名称**                                                                     |
+| <b><i>calls</i></b>           | 代表 **被调用的次数**                                                                  |
+| <b><i>duration(total)</i></b> | 代表 **所有调用次数的时间总和**                                                        |
+
+## 使用说明
+
+### View Builder Config
+
+如果我们需要查看项目的 Webpack 配置，则可以通过点击卡片右上角的 `View Builder Config`，页面会弹出一个浮层，其中包含被序列化后的 **Builder Config**，如下图所示：
+
+<img
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/plugins-analysis-config.png"
+  width={'400px'}
+  style={{ margin: 'auto' }}
+/>
+
+## 参考文档
+
+- [**Rspack Hooks**](https://www.rspack.dev/api/plugin-api.html#beforecompile)
+- [**Webpack Hooks**](https://webpack.js.org/api/compilation-hooks/)
