@@ -1,8 +1,8 @@
-import type { Compiler } from 'webpack';
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
+import type { Rspack, RsbuildConfig } from '@rsbuild/core';
 import serve from 'serve-static';
 import path from 'path';
 import fs from 'fs';
@@ -22,10 +22,10 @@ const {
   ENABLE_CLIENT_SERVER,
 } = process.env;
 
-export default defineConfig((env) => {
-  const IS_PRODUCTION = env.env === 'production';
+export default defineConfig(({ env }) => {
+  const IS_PRODUCTION = env === 'production';
 
-  return {
+  const config: RsbuildConfig = {
     plugins: [
       pluginReact(),
       pluginNodePolyfill(),
@@ -38,7 +38,7 @@ export default defineConfig((env) => {
       },
       define: {
         'process.env.NODE_DEBUG': JSON.stringify(false),
-        'process.env.NODE_ENV': JSON.stringify(env.env),
+        'process.env.NODE_ENV': JSON.stringify(env),
         'process.env.OFFICAL_DEMO_MANIFEST_PATH': JSON.stringify(
           OFFICAL_DEMO_MANIFEST_PATH,
         ),
@@ -60,9 +60,10 @@ export default defineConfig((env) => {
         ? OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || '/'
         : '/',
       cleanDistPath: IS_PRODUCTION,
-      disableTsChecker: !IS_PRODUCTION,
-      disableSourceMap: true,
-      disableMinimize: !IS_PRODUCTION,
+      sourceMap: {
+        js: false,
+        css: false,
+      },
     },
 
     performance: {
@@ -90,7 +91,7 @@ export default defineConfig((env) => {
             require('../rspack-plugin/dist') as typeof import('../rspack-plugin/dist');
 
           class StatsWriter {
-            apply(compiler: Compiler) {
+            apply(compiler: Rspack.Compiler) {
               compiler.hooks.done.tapPromise(
                 { name: 'webpack-stats-json-writer', stage: 99999 },
                 async (stats) => {
@@ -130,23 +131,6 @@ export default defineConfig((env) => {
           ]);
         }
       },
-
-      devServer: {
-        historyApiFallback: true,
-        setupMiddlewares: [
-          (middlewares) => {
-            if (fs.existsSync(WebpackRsdoctorDirPath)) {
-              const fn = serve(WebpackRsdoctorDirPath, {
-                index: false,
-                setHeaders(res) {
-                  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-                },
-              });
-              middlewares.push(fn);
-            }
-          },
-        ],
-      },
     },
 
     html: {
@@ -155,10 +139,26 @@ export default defineConfig((env) => {
 
     server: {
       port: PortForWeb,
+      historyApiFallback: true,
     },
 
     dev: {
       startUrl: ENABLE_CLIENT_SERVER ? undefined : true,
+      setupMiddlewares: [
+        (middlewares) => {
+          if (fs.existsSync(WebpackRsdoctorDirPath)) {
+            const fn = serve(WebpackRsdoctorDirPath, {
+              index: false,
+              setHeaders(res) {
+                res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+              },
+            });
+            middlewares.push(fn);
+          }
+        },
+      ],
     },
   };
+
+  return config;
 });

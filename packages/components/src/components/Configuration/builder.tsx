@@ -13,10 +13,9 @@ interface WebpackConfigurationViewerBaseProps {
   configs: SDK.ConfigData;
 }
 
-export const WebpackConfigurationViewerBase: React.FC<WebpackConfigurationViewerBaseProps> = ({
-  defaultKeys,
-  configs,
-}) => {
+export const WebpackConfigurationViewerBase: React.FC<
+  WebpackConfigurationViewerBaseProps
+> = ({ defaultKeys, configs }) => {
   const builderConfigData = useWebpackConfigurationByConfigs(configs || []);
 
   if (!builderConfigData) return null;
@@ -26,9 +25,9 @@ export const WebpackConfigurationViewerBase: React.FC<WebpackConfigurationViewer
   const [selectKeys, setSelectKeys] = useState<string[]>(defaultKeys || keys);
 
   return (
-    <TextDrawer text="View Builder Config">
+    <TextDrawer text="View Bundler Config">
       <Row>
-        <Title text={`Builder Config Viewer`} />
+        <Title text={`Bundler Config Viewer`} />
         <Divider />
         <Space>
           <Typography.Text>Properties: </Typography.Text>
@@ -55,7 +54,11 @@ export const WebpackConfigurationViewerBase: React.FC<WebpackConfigurationViewer
         </Space>
         <Divider />
         <ReactJson
-          name={version && version !== 'unknown' ? `${name}@${version}` : `webpack.config`}
+          name={
+            version && version !== 'unknown'
+              ? `${name}@${version}`
+              : `webpack.config`
+          }
           theme="monokai"
           src={selectKeys.length === 0 ? config : pick(config, selectKeys)}
           displayDataTypes={false}
