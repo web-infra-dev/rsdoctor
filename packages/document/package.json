@@ -1,16 +1,28 @@
 {
   "name": "@rsdoctor/docs",
   "version": "0.1.8",
-  "private": true,
   "scripts": {
     "dev": "rspress dev",
     "build": "rspress build",
     "preview": "rspress preview"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/document"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "docs",
     "src"
   ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
     "@types/node": "^16",
