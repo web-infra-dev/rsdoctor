@@ -1,6 +1,6 @@
 {
   "extends": "@rsdoctor/tsconfig/base",
-  "include": ["src", "webpack.config.ts"],
+  "include": ["src"],
   "compilerOptions": {
     "outDir": "dist",
     "baseUrl": ".",
