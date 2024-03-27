@@ -12,7 +12,6 @@ export function HomeLayout() {
       <div
         className="relative dark:border-dark-50"
         style={{
-          background: 'var(--rp-home-bg)',
           minHeight: 'calc(40rem - var(--rp-nav-height))',
           paddingBottom: '24px',
         }}

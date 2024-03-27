@@ -1,6 +1,7 @@
-import * as path from 'path';
+import path from 'node:path';
 import { defineConfig } from 'rspress/config';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
+import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 
 export default defineConfig({
   plugins: [pluginFontOpenSans()],
@@ -21,7 +22,6 @@ export default defineConfig({
   ],
   markdown: {
     checkDeadLinks: true,
-    experimentalMdxRs: true,
   },
   route: {
     cleanUrls: true,
@@ -31,7 +31,7 @@ export default defineConfig({
   globalStyles: path.join(__dirname, 'theme', 'index.css'),
   themeConfig: {
     footer: {
-      message: 'Copyright © 2023 Bytedance',
+      message: 'Copyright © 2024 ByteDance',
     },
     socialLinks: [
       {
@@ -66,6 +66,7 @@ export default defineConfig({
     ],
   },
   builderConfig: {
+    plugins: [pluginGoogleAnalytics({ id: 'G-9DETE89N4Q' })],
     source: {
       alias: {
         '@components': path.join(__dirname, 'src/components'),
@@ -77,26 +78,6 @@ export default defineConfig({
       postcss(config, { addPlugins }) {
         addPlugins([require('tailwindcss')]);
       },
-    },
-    html: {
-      tags: [
-        // Configure Google Analytics
-        {
-          tag: 'script',
-          attrs: {
-            async: true,
-            src: 'https://www.googletagmanager.com/gtag/js?id=G-9DETE89N4Q',
-          },
-        },
-        {
-          tag: 'script',
-          children: `
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-9DETE89N4Q');`,
-        },
-      ],
     },
   },
 });
