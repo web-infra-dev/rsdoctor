@@ -27,12 +27,12 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@rspack/core": "0.5.1",
+    "@rspack/core": "0.5.9",
     "@rsdoctor/types": "workspace:*",
-    "@types/loader-utils": "^2.0.5",
+    "@types/loader-utils": "^2.0.6",
     "@types/lodash": "^4.17.0",
     "@types/node": "^16",
-    "@types/tapable": "2.2.2",
+    "@types/tapable": "2.2.7",
     "tslib": "2.4.1",
     "typescript": "^5.2.2"
   },
