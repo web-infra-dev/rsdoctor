@@ -1,5 +1,13 @@
 # @rsdoctor/graph
 
+## 0.1.9-beta.0
+
+### Patch Changes
+
+- Updated dependencies [5bed2ce]
+  - @rsdoctor/utils@0.1.9-beta.0
+  - @rsdoctor/types@0.1.9-beta.0
+
 ## 0.1.8
 
 ### Patch Changes
