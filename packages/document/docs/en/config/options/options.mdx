@@ -118,18 +118,54 @@ Therefore, **the default configuration enables bundle analysis capabilities and 
 - if the `features` is set as an `Array`, it will **open** the features which you define in this array **only**.
 - if the `features` is set as an `Object`, it will **close** the features which you set the value is `false`.
 
-#### RsdoctorWebpackPluginFeatures
+### reportCodeType 参数
 
-The types of `features` are as follows：
+- Type: `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
+- Optional: true
+- Default: undefined
+- Description
 
-import Features from '@zh/shared/features.md';
+  - 选择输出的分析数据：
 
-<Features />
+    - undefined 是所有完整数据；
+    - noModuleSource: true 是输出除了 module 代码之外的数据；Module 代码即 Bundle 内拆解出来的一个一个文件的打包模块代码。
+    - noAssetsAndModuleSource: true 是输出除了 module 代码和 Assets 产物代码之外的数据。
 
-#### RsdoctorRspackPluginFeatures
+  - Select the output analysis data:
 
-The types of `features` are as follows：
+    - undefined is all complete data;
 
-import FeaturesRspack from '@zh/shared/features-rspack.md';
+    - noModuleSource: true is the output of data other than module code; Module code is the packaged module code of a file disassembled in the Bundle.
 
-<FeaturesRspack />
+    - noAssetsAndModuleSource: true is the output of data other than module code and Assets product code.
+
+- Example
+
+```js
+new WebDoctorWebpackPlugin({
+        disableClientServer: false, // 建议 CI 环境下关闭 server 能力，否则会卡住 pipeline 流程，检测 CI 环境可以使用 `process.env.CI_ACTOR`.
+        features: ['loader', 'bundle', 'plugins'],
+        reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
+      }),
+```
+
+### disableTOSUpload
+
+- Type: boolean
+- Optional: true
+- Default: false
+- Description
+
+  开启或关闭需要 tos 上传， true 是关闭 tos 上传，false 是开启 tos 上传。
+
+  Turn tos upload on or off. True is to turn off tos upload, and false is tos upload on.
+
+- Example
+
+```js
+new WebDoctorWebpackPlugin({
+        disableClientServer: false, // 建议 CI 环境下关闭 server 能力，否则会卡住 pipeline 流程，检测 CI 环境可以使用 `process.env.CI_ACTOR`.
+        features: ['loader', 'bundle', 'plugins'],
+        disableTOSUpload: true,
+      }),
+```
