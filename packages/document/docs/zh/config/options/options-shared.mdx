@@ -1,0 +1,70 @@
+## Options
+
+**类型：** `Object`
+
+这个 `Options` 是 [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin-%E6%8F%92%E4%BB%B6) 和 [RsdoctorRspackPlugin](#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
+
+- [disableClientServer](#disableclientserver)
+- [features](#features)
+
+### disableClientServer
+
+- **Type:** `boolean`
+- **Optional:** `true`
+- **Default:** `false`
+
+:::tip
+建议在 CI 环境下将 disableClientServer 设置为 true，否则启动的服务会卡住 pipeline 流程.
+:::
+
+是否需要自动打开 Rsdoctor 报告页面。如果你不需要在浏览器内查看本次 Rsdoctor 提供的分析报告，则可以开启这个配置项。
+
+### features
+
+- **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **Optional:** `true`
+- **Default:** `['loader', 'plugins', 'bundle']`
+
+#### features values
+
+:::tip
+**如果出现了 out of memory 的报错，可以尝试：**
+
+1. 打开 **lite** 模式。
+2. 增大 node 内存上限，例如：NODE_OPTIONS=--max-old-space-size=8096。
+
+- 原因：因为构建过程中，缓存了源码信息，超过了内存，所以开启 `lite` 模式可以缓解。
+- 区别：`lite` 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。
+
+:::
+
+features 属性是用于分析功能开关的，具体的功能项如下：
+
+- **loader**：Loaders 耗时及代码编译变化分析，默认开启。
+- **plugins**：Plugins 调用以及耗时分析，默认开启。
+- **bundle**：构建产物分析，默认开启。
+- **resolver**：resolver 分析，默认关闭。
+- **lite**: lite 模式。lite 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
+
+所以，**默认配置是开启了 Bundle 分析能力、 Loader he Plugin 构建时分析**。没有开启 Resolver 分析能力， Rspack 暂不支持 Resolver 分析能力。
+
+#### features types
+
+- 如果你将 `features` 设置为**数组**类型，该插件**只会开启**你在 `features` 数组中定义的功能。
+- 如果你将 `features` 设置为**简单对象**类型，该插件**只会关闭**你在 `features` 对象中值为 `false` 的功能。
+
+#### RsdoctorWebpackPluginFeatures
+
+`features` 类型如下：
+
+import Features from '@zh/shared/features.md';
+
+<Features />
+
+#### RsdoctorRspackPluginFeatures
+
+`features` 类型如下：
+
+import FeaturesRspack from '@zh/shared/features-rspack.md';
+
+<FeaturesRspack />
