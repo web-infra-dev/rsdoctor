@@ -1,5 +1,13 @@
 # @rsdoctor/core
 
+## 0.1.9-beta.1
+
+### Patch Changes
+
+- @rsdoctor/graph@0.1.9-beta.1
+- @rsdoctor/sdk@0.1.9-beta.1
+- @rsdoctor/utils@0.1.9-beta.1
+
 ## 0.1.9-beta.0
 
 ### Patch Changes

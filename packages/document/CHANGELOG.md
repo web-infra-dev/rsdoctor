@@ -1,5 +1,11 @@
 # @rsdoctor/docs
 
+## 0.1.9-beta.1
+
+### Patch Changes
+
+- e3decf5: chore: support for inner rsdoctor documents
+
 ## 0.1.9-beta.0
 
 ### Patch Changes

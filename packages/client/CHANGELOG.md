@@ -1,5 +1,7 @@
 # @rsdoctor/components
 
+## 0.1.9-beta.1
+
 ## 0.1.9-beta.0
 
 ## 0.1.8
