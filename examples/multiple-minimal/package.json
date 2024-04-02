@@ -1,0 +1,36 @@
+{
+  "name": "@example/rsdoctor-multiple-minimal",
+  "version": "0.0.1",
+  "description": "",
+  "files": [
+    "dist",
+    "src",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "node -r tsm build.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@arco-design/web-react": "2.29.2",
+    "@arco-plugins/webpack-react": "1.4.9-beta.2",
+    "@types/node": "^16",
+    "@types/react": "^18",
+    "@types/react-dom": "18.0.8",
+    "@rsdoctor/tsconfig": "workspace:*",
+    "@rsdoctor/webpack-plugin": "workspace:*",
+    "css-loader": "6.7.3",
+    "eslint": "8.22.0",
+    "less-loader": "11.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "style-loader": "3.3.2",
+    "ts-loader": "9.4.2",
+    "tslib": "2.4.1",
+    "tsm": "2.3.0",
+    "typescript": "^5.2.2",
+    "webpack": "5.89.0"
+  }
+}
