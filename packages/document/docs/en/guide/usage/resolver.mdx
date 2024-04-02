@@ -7,9 +7,12 @@
 - The Resolver analysis capability is disabled by default. To enable it, you can add `resolver` to the `features` array as shown in the example below. [features configuration](../../config/options/options).
 
 ```js
-  new rsdoctorWebpackPlugin({
-    features: ["xxx", "xxx", "resolver"]
-  }),
+new rsdoctorWebpackPlugin({
+  features: [
+    'resolver',
+    // ...other features
+  ],
+});
 ```
 
 :::

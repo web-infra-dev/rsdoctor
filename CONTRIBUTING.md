@@ -108,7 +108,7 @@ pnpm run build
 
 ## Startup Rsdoctor Client
 
-When you make changes to the code and want to view the `Rsdoctor` analysis report, you can execute `build:analysis` in the `examples/xxx` project to see it:
+When you make changes to the code and want to view the `Rsdoctor` analysis report, you can execute `build:analysis` in the `examples/foo` project to see it:
 
 ```sh
 pnpm run build:analysis
@@ -203,7 +203,7 @@ The format of PR titles follow Conventional Commits.
 An example:
 
 ```
-feat(plugin-swc): Add `xxx` config
+feat(plugin-swc): Add `newOption` config
 ^    ^    ^
 |    |    |__ Subject
 |    |_______ Scope

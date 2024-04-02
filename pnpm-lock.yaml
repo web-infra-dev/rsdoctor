@@ -29,6 +29,9 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      cspell-ban-words:
+        specifier: ^0.0.3
+        version: 0.0.3
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -8844,6 +8847,10 @@ packages:
   /crypto-random-string@2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
     engines: {node: '>=8'}
+    dev: true
+
+  /cspell-ban-words@0.0.3:
+    resolution: {integrity: sha512-Q7ZO16DFWEP8Vv5CJ63LG95/FomTuxB6WvKhvGUDE3L2hiYl7n2fH+0qoSXL5C3zH6NRPQT4rDS66t1Pi/fILA==}
     dev: true
 
   /css-color-keywords@1.0.0:
