@@ -7,8 +7,8 @@ import { VSCode, openVSCode } from './vscode';
 interface CodeOpenerProps {
   windowId?: number;
   /**
-   * @example /xx/src/pages/home/index.ts + 100 modules
-   * @example /xx/src/pages/b/index.ts
+   * @example /foo/src/pages/home/index.ts + 100 modules
+   * @example /foo/src/pages/b/index.ts
    */
   url: string;
   /**
@@ -82,7 +82,13 @@ export const CodeOpener = ({
         </Typography.Text>
       </Typography.Text>
       {process.env.NODE_ENV === 'development' ? (
-        <VSCode file={file} line={line} column={columnStart} windowId={windowId} style={{ marginLeft: 3 }} />
+        <VSCode
+          file={file}
+          line={line}
+          column={columnStart}
+          windowId={windowId}
+          style={{ marginLeft: 3 }}
+        />
       ) : (
         <div style={{ display: 'inline-block' }} />
       )}
