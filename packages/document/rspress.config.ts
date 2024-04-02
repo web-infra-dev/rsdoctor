@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { defineConfig } from 'rspress/config';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
+import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 
 export default defineConfig({
@@ -55,7 +56,7 @@ export default defineConfig({
         lang: 'en',
         label: 'English',
         title: 'Rsdoctor',
-        description: 'Analyzer for Rspack and Webpack',
+        description: 'Build analyzer for Rspack and Webpack',
       },
       {
         lang: 'zh',
@@ -66,7 +67,20 @@ export default defineConfig({
     ],
   },
   builderConfig: {
-    plugins: [pluginGoogleAnalytics({ id: 'G-9DETE89N4Q' })],
+    plugins: [
+      pluginGoogleAnalytics({ id: 'G-9DETE89N4Q' }),
+      pluginOpenGraph({
+        title: 'Rsdoctor',
+        type: 'website',
+        url: 'https://rsdoctor.dev/',
+        image: 'https://rsdoctor.dev/og-image.png',
+        description: 'Build analyzer for Rspack and Webpack',
+        twitter: {
+          site: '@rspack_dev',
+          card: 'summary_large_image',
+        },
+      }),
+    ],
     source: {
       alias: {
         '@components': path.join(__dirname, 'src/components'),
