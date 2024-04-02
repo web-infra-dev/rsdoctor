@@ -1,0 +1,12 @@
+{
+  "extends": "@rsdoctor/tsconfig/base",
+  "include": ["src", "webpack.config.ts"],
+  "compilerOptions": {
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "module": "NodeNext",
+    "jsx": "react",
+    "lib": ["DOM"]
+  }
+}
