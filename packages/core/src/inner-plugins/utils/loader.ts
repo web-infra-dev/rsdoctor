@@ -197,7 +197,8 @@ export async function reportLoader(
 
   // sdk exists means in the same process
   const sdk = getSDK();
-  if (sdk?.reportLoader) {
+
+  if (sdk?.reportLoader && !('parent' in sdk && sdk.parent)) {
     sdk.reportLoader(loaderData);
     sdk.reportSourceMap(sourceMapData);
     return loaderData;

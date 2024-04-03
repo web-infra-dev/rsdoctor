@@ -2,13 +2,13 @@ import { RsdoctorSDKController } from '@rsdoctor/sdk';
 import type { Linter } from '@rsdoctor/types';
 import type { RsdoctorMultiplePluginOptions } from '@rsdoctor/core';
 
-import { RsdoctorWebpackPlugin } from './plugin';
+import { RsdoctorRspackPlugin } from './plugin';
 
 let globalController: RsdoctorSDKController | undefined;
 
-export class RsdoctorWebpackMultiplePlugin<
+export class RsdoctorRspackMultiplePlugin<
   Rules extends Linter.ExtendRuleData[],
-> extends RsdoctorWebpackPlugin<Rules> {
+> extends RsdoctorRspackPlugin<Rules> {
   // @ts-expect-error
   private controller: RsdoctorSDKController;
 
