@@ -21,15 +21,20 @@ interface RsdoctorSlaveSDKOptions {
 export class RsdoctorSlaveSDK extends RsdoctorWebpackSDK {
   id: number;
 
-  public readonly stage: number;
+  parent: RsdoctorSDKController;
 
-  private parent: RsdoctorSDKController;
+  public readonly stage: number;
 
   private uploadPieces!: Promise<void>;
 
   private finishUploadPieceSwitch!: () => void;
 
-  constructor({ name, stage, controller, extraConfig }: RsdoctorSlaveSDKOptions) {
+  constructor({
+    name,
+    stage,
+    controller,
+    extraConfig,
+  }: RsdoctorSlaveSDKOptions) {
     super({ name, root: controller.root });
 
     const lastSdk = controller.getLastSdk();
