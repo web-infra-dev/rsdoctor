@@ -21,13 +21,23 @@ export class BuiltinLoaderPlugin {
               typeof _builtinRule.options === 'string'
                 ? {}
                 : { ..._builtinRule };
+
             rule.use.splice(index, 0, {
               loader: path.join(__dirname, './probeLoader.js'),
-              options: { ..._options, type: 'end' },
+              options: {
+                ..._options,
+                type: 'end',
+                builderName: compiler.options.name,
+              },
             });
+
             rule.use.splice(index + 2, 0, {
               loader: path.join(__dirname, './probeLoader.js'),
-              options: { ..._options, type: 'start' },
+              options: {
+                ..._options,
+                type: 'start',
+                builderName: compiler.options.name,
+              },
             });
           }
           return rule;

@@ -60,7 +60,7 @@ export interface RsdoctorWebpackPluginOptions<
   innerClientPath?: string;
 }
 
-export interface RsdoctorWebpackMultiplePluginOptions<
+export interface RsdoctorMultiplePluginOptions<
   Rules extends LinterType.ExtendRuleData[] = LinterType.ExtendRuleData[],
 > extends Omit<RsdoctorWebpackPluginOptions<Rules>, 'sdkInstance'>,
     Pick<ConstructorParameters<typeof RsdoctorSlaveSDK>[0], 'stage'> {
