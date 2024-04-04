@@ -11,12 +11,13 @@ const loaderModule: Plugin.LoaderDefinition<
 > = function (...args) {
   const time = Date.now();
   const code = args[0];
-  const sdk = getSDK();
   const _options = this.getOptions() as unknown as {
     loader: string;
     options: Record<string, any>;
     type: 'start' | 'end';
+    builderName: string;
   };
+  const sdk = getSDK(_options.builderName);
 
   const loaderData: SDK.ResourceLoaderData = {
     resource: {

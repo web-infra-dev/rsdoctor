@@ -1,6 +1,6 @@
 import type { Compiler, Configuration, RuleSetRule } from '@rspack/core';
 import { ModuleGraph } from '@rsdoctor/graph';
-import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
+import { RsdoctorSlaveSDK, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import {
   InternalLoaderPlugin,
   InternalPluginsPlugin,
@@ -35,7 +35,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 {
   public readonly name = pluginTapName;
 
-  public readonly sdk: RsdoctorWebpackSDK;
+  public readonly sdk: RsdoctorWebpackSDK | RsdoctorSlaveSDK;
 
   public _bootstrapTask!: Promise<unknown>;
 
@@ -47,13 +47,15 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   constructor(options?: RsdoctorRspackPluginOptions<Rules>) {
     this.options = normalizeUserConfig<Rules>(options);
-    this.sdk = new RsdoctorWebpackSDK({
-      name: pluginTapName,
-      root: process.cwd(),
-      type: SDK.ToDataType.Normal,
-      config: { disableTOSUpload: this.options.disableTOSUpload },
-      innerClientPath: this.options.innerClientPath,
-    });
+    this.sdk =
+      this.options.sdkInstance ??
+      new RsdoctorWebpackSDK({
+        name: pluginTapName,
+        root: process.cwd(),
+        type: SDK.ToDataType.Normal,
+        config: { disableTOSUpload: this.options.disableTOSUpload },
+        innerClientPath: this.options.innerClientPath,
+      });
     this.modulesGraph = new ModuleGraph();
   }
 
@@ -65,6 +67,10 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     // avoid to has different sdk instance in one plugin, because of webpack-chain toConfig() will new every webpack plugins.
     if (!this._bootstrapTask) {
       this._bootstrapTask = this.sdk.bootstrap();
+    }
+
+    if (compiler.options.name) {
+      this.sdk.setName(compiler.options.name);
     }
 
     setSDK(this.sdk);
@@ -164,9 +170,5 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     this.sdk.setOutputDir(
       path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
     );
-
-    if (configuration.name) {
-      this.sdk.setName(configuration.name);
-    }
   }
 }

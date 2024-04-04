@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "ENABLE_CLIENT_SERVER=true NODE_ENV=development rspack serve",
-    "build": "ENABLE_CLIENT_SERVER=false NODE_ENV=production rspack build",
-    "build:analysis": "ENABLE_CLIENT_SERVER=true NODE_ENV=production rspack build"
+    "build:s": "ENABLE_CLIENT_SERVER=false NODE_ENV=production rspack build -c ./rspack.config.js",
+    "build:analysis": "ENABLE_CLIENT_SERVER=true NODE_ENV=production rspack build",
+    "build:m": "ENABLE_CLIENT_SERVER=false NODE_ENV=production node -r tsm build.ts",
+    "build": "npm run build:s && npm run build:m"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.58.3",
@@ -18,6 +20,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "tsm": "2.3.0",
     "@rsdoctor/rspack-plugin": "workspace:*",
     "@rspack/cli": "0.5.1",
     "@rspack/core": "0.5.1",
