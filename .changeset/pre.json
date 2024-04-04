@@ -2,21 +2,22 @@
   "mode": "exit",
   "tag": "beta",
   "initialVersions": {
-    "@rsdoctor/cli": "0.1.8",
-    "@rsdoctor/client": "0.1.8",
-    "@rsdoctor/components": "0.1.8",
-    "@rsdoctor/core": "0.1.8",
-    "@rsdoctor/docs": "0.1.8",
-    "@rsdoctor/graph": "0.1.8",
-    "@rsdoctor/rspack-plugin": "0.1.8",
-    "@rsdoctor/sdk": "0.1.8",
-    "@rsdoctor/types": "0.1.8",
-    "@rsdoctor/utils": "0.1.8",
-    "@rsdoctor/webpack-plugin": "0.1.8"
+    "@rsdoctor/cli": "0.1.9-beta.0",
+    "@rsdoctor/client": "0.1.9-beta.0",
+    "@rsdoctor/components": "0.1.9-beta.0",
+    "@rsdoctor/core": "0.1.9-beta.0",
+    "@rsdoctor/docs": "0.1.9-beta.0",
+    "@rsdoctor/graph": "0.1.9-beta.0",
+    "@rsdoctor/rspack-plugin": "0.1.9-beta.0",
+    "@rsdoctor/sdk": "0.1.9-beta.0",
+    "@rsdoctor/types": "0.1.9-beta.0",
+    "@rsdoctor/utils": "0.1.9-beta.0",
+    "@rsdoctor/webpack-plugin": "0.1.9-beta.0"
   },
   "changesets": [
     "proud-fans-appear",
     "selfish-frogs-wash",
+    "tiny-pumpkins-compete",
     "weak-chairs-laugh"
   ]
 }
