@@ -1,6 +1,6 @@
 # @rsdoctor/components
 
-## 0.1.9
+## 0.1.9-beta.2
 
 ### Patch Changes
 
