@@ -25,8 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # Rsdoctor need to compat Node.js 16
-        node-version: [16.x] 
+        node-version: [18.x] 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -65,8 +64,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   strategy:
   #     matrix:
-  #       # Rsdoctor need to compat Node.js 16
-  #       node-version: [16.x] 
+  #       node-version: [18.x] 
 
   #   # Steps represent a sequence of tasks that will be executed as part of the job
   #   steps:
