@@ -63,7 +63,7 @@
     "antd": "5.15.3",
     "axios": "^1.6.1",
     "dayjs": "1.11.6",
-    "echarts": "^5.4.3",
+    "echarts": "^5.5.0",
     "echarts-for-react": "^3.0.2",
     "i18next": "22.0.4",
     "lodash-es": "4.17.21",
