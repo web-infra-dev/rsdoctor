@@ -1,22 +1,16 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.5.1/schema.json",
   "organizeImports": {
     "enabled": true
   },
+  "vcs": {
+    "enabled": true,
+    "defaultBranch": "main",
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "files": {
-    "ignore": [
-      ".nx/**/*",
-      "dist/**/*",
-      "dist-*/**/*",
-      "coverage/**/*",
-      "cspell.json",
-      "compiled/**/*",
-      "**/*/fixtures/**/*",
-      "*.test.ts",
-      "*.js",
-      "*.tsx",
-      "*.css.d.ts"
-    ],
+    "ignore": ["*.test.ts", "*.js", "*.tsx"],
     "ignoreUnknown": true
   },
   "linter": {
@@ -52,7 +46,7 @@
         "useExportType": "error"
       },
       "correctness": {
-        "noSwitchDeclarations": "off" 
+        "noSwitchDeclarations": "off"
       },
       "a11y": {
         "useButtonType": "off",
