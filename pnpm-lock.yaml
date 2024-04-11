@@ -912,8 +912,8 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       envinfo:
-        specifier: 7.8.1
-        version: 7.8.1
+        specifier: 7.12.0
+        version: 7.12.0
       fs-extra:
         specifier: ^11.1.1
         version: 11.1.1
@@ -9514,6 +9514,12 @@ packages:
   /entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
+
+  /envinfo@7.12.0:
+    resolution: {integrity: sha512-Iw9rQJBGpJRd3rwXm9ft/JiGoAZmLxxJZELYDQoPRZ4USVhkKtIcNBPw6U+/K2mBpaqM25JSV6Yl4Az9vO2wJg==}
+    engines: {node: '>=4'}
+    hasBin: true
+    dev: false
 
   /envinfo@7.8.1:
     resolution: {integrity: sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==}
