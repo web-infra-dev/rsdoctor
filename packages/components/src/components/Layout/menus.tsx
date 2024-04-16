@@ -8,7 +8,7 @@ import {
   ToolOutlined,
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Col, Menu, Grid, MenuProps, Typography } from 'antd';
+import { Col, Menu, MenuProps, Typography } from 'antd';
 import { includes } from 'lodash-es';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -46,8 +46,6 @@ const MenusBase: React.FC<{
   };
 
   const items: MenuProps['items'] = [];
-
-  const { xxl } = Grid.useBreakpoint();
 
   console.log('enableRoutes: ', enableRoutes);
 
@@ -148,7 +146,7 @@ const MenusBase: React.FC<{
         height: Size.NavBarHeight,
         lineHeight: `${Size.NavBarHeight}px`,
         minWidth: 0,
-        justifyContent: xxl ? 'center' : 'flex-end',
+        justifyContent: 'flex-end',
         ...props.style,
       }}
       selectedKeys={[pathname === '/' ? OverallConstants.route : pathname]}
