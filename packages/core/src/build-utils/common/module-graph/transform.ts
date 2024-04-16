@@ -1,11 +1,6 @@
 import { SDK, Plugin } from '@rsdoctor/types';
 import path from 'path-browserify';
-import {
-  ModuleGraph,
-  Module,
-  Statement,
-  ChunkGraph,
-} from '@rsdoctor/graph';
+import { ModuleGraph, Module, Statement, ChunkGraph } from '@rsdoctor/graph';
 import { isImportDependency, getImportKind } from './utils';
 import { getPositionByStatsLocation } from './compatible';
 
@@ -138,11 +133,17 @@ export function getModuleGraphByStats(
           SDK.ModuleKind.Normal,
         );
 
-      normal.chunks?.forEach((_chunkId) => {
-        const chunk = chunkGraph.getChunkById(String(_chunkId));
-        chunk && normalModule.addChunk(chunk);
-      });
-
+      if (normal.chunks?.length) {
+        normal.chunks?.forEach((_chunkId) => {
+          const chunk = chunkGraph.getChunkById(String(_chunkId));
+          chunk && normalModule.addChunk(chunk);
+        });
+      } else {
+        data.chunks?.forEach((_chunkId) => {
+          const chunk = chunkGraph.getChunkById(String(_chunkId));
+          chunk && normalModule.addChunk(chunk);
+        });
+      }
       if (normal.source) {
         normalModule.setSource({
           transformed: Buffer.isBuffer(normal.source)
