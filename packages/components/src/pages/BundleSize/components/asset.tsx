@@ -103,7 +103,7 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) =
                     <a href="#">Explain</a>
                   </Popover>
                 }
-              >     
+              >
                 <Editor
                   theme="vs-dark"
                   language={getOriginalLanguage(path)}
@@ -301,7 +301,7 @@ export const AssetDetail: React.FC<{
                 color={'white'}
               >
 
-                <Tag color={'purple'} style={tagStyle}>{'Bundled: ' + formatSize(parsedSize)}</Tag> 
+                <Tag color={'purple'} style={tagStyle}>{'Bundled: ' + formatSize(parsedSize)}</Tag>
               </Tooltip>
             ) : sourceSize !== 0 ? (
               // fallback to display tag for source size
@@ -450,7 +450,7 @@ export const AssetDetail: React.FC<{
             </Col>
           </Row>
         ) : (
-          <Empty description={<Typography.Text strong>{`"${asset.path}" don't has any modules`}</Typography.Text>} />
+          <Empty description={<Typography.Text strong>{`"${asset.path}" doesn't have any modules`}</Typography.Text>} />
         )}
 
         <ModuleGraphViewer
