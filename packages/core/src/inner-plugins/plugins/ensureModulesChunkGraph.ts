@@ -1,7 +1,7 @@
 import path from 'path';
 import { RsdoctorPluginInstance } from '@/types';
 import { ModuleGraph } from '@rsdoctor/graph';
-import { Linter, Plugin, Constants } from '@rsdoctor/types';
+import { Linter, Plugin, Constants, Manifest } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { debug } from '@rsdoctor/utils/logger';
 import fse from 'fs-extra';
@@ -54,6 +54,23 @@ export const ensureModulesChunksGraphFn = (
       );
 
       debug(Process.getMemoryUsageMessage, '[After Generate ModuleGraph]');
+
+      /** Tree Shaking */
+      if (_this.options.features.treeShaking) {
+        _this.modulesGraph =
+          ModuleGraphBuildUtils.appendTreeShaking(
+            _this.modulesGraph,
+            stats.compilation,
+          ) || _this.modulesGraph;
+        _this.sdk.addClientRoutes([
+          Manifest.RsdoctorManifestClientRoutes.TreeShaking,
+        ]);
+
+        debug(
+          Process.getMemoryUsageMessage,
+          '[After AppendTreeShaking to ModuleGraph]',
+        );
+      }
 
       /** transform modules graph */
       await getModulesInfosByStats(compiler, statsJson, _this.modulesGraph);

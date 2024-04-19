@@ -1,7 +1,15 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Overall, BundleSize, LoaderFiles, PluginsAnalyze, ModuleResolve, LoaderTimeline, RuleIndex } from '@rsdoctor/components/pages';
-
+import {
+  Overall,
+  BundleSize,
+  LoaderFiles,
+  PluginsAnalyze,
+  ModuleResolve,
+  LoaderTimeline,
+  RuleIndex,
+  TreeShaking,
+} from '@rsdoctor/components/pages';
 
 export default function Router(): React.ReactElement {
   const routes = [
@@ -32,6 +40,10 @@ export default function Router(): React.ReactElement {
     {
       path: RuleIndex.route,
       element: <RuleIndex.Page />,
+    },
+    {
+      path: TreeShaking.route,
+      element: <TreeShaking.TreeShakingPage />,
     },
   ].filter((e) => Boolean(e)) as { path: string; element: JSX.Element }[];
 
