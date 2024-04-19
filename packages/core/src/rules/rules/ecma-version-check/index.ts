@@ -43,7 +43,7 @@ export const rule = defineRule<typeof title, Config>(() => {
           const assetsName = path.basename(asset.path);
 
           report({
-            message: `The ECMA version of asset ${assetsName} is ${currentVersion}, which is bigger than ${ruleConfig.highestVersion}.`,
+            message: `The ECMA version used in "${assetsName}" is ${currentVersion}, which exceeds the ${ruleConfig.highestVersion} standard.`,
             detail: {
               type: 'link',
             },
