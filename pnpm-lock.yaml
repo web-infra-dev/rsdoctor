@@ -473,9 +473,15 @@ importers:
       '@types/node':
         specifier: ^16
         version: 16.18.66
+      '@types/path-browserify':
+        specifier: 1.0.1
+        version: 1.0.1
       '@types/react':
         specifier: ^18
         version: 18.2.39
+      '@types/react-highlight-words':
+        specifier: ^0.16.7
+        version: 0.16.7
       '@types/url-parse':
         specifier: 1.4.8
         version: 1.4.8
@@ -506,6 +512,9 @@ importers:
       monaco-editor:
         specifier: 0.34.1
         version: 0.34.1
+      path-browserify:
+        specifier: 1.0.1
+        version: 1.0.1
       rc-dialog:
         specifier: 9.1.0
         version: 9.1.0(react-dom@17.0.2)(react@18.2.0)
@@ -515,6 +524,9 @@ importers:
       react:
         specifier: 18.2.0
         version: 18.2.0
+      react-highlight-words:
+        specifier: ^0.20.0
+        version: 0.20.0(react@18.2.0)
       react-hyper-tree:
         specifier: 0.3.12
         version: 0.3.12(react-dom@17.0.2)(react@18.2.0)
@@ -6837,6 +6849,12 @@ packages:
       '@types/react': 18.2.39
     dev: true
 
+  /@types/react-highlight-words@0.16.7:
+    resolution: {integrity: sha512-+upXTIaRd3rGvh1aDQSs9z5X+sV3UM6Jrmjk03GN2GXl4v/+iOJKQj2LZHo6Vp2IoTvMdtxgME26feqo12xXLg==}
+    dependencies:
+      '@types/react': 18.2.39
+    dev: true
+
   /@types/react@18.2.39:
     resolution: {integrity: sha512-Oiw+ppED6IremMInLV4HXGbfbG6GyziY3kqAwJYOR0PNbkYDmLWQA3a95EhdSmamsvbkJN96ZNN+YD+fGjzSBA==}
     dependencies:
@@ -11259,6 +11277,10 @@ packages:
     hasBin: true
     dev: true
 
+  /highlight-words-core@1.2.2:
+    resolution: {integrity: sha512-BXUKIkUuh6cmmxzi5OIbUJxrG8OAk2MqoL1DtO3Wo9D2faJg2ph5ntyuQeLqaHJmzER6H5tllCDA9ZnNe9BVGg==}
+    dev: true
+
   /highlight.js@10.7.3:
     resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
     dev: false
@@ -12860,6 +12882,10 @@ packages:
     engines: {node: '>= 4.0.0'}
     dependencies:
       fs-monkey: 1.0.5
+    dev: true
+
+  /memoize-one@4.0.3:
+    resolution: {integrity: sha512-QmpUu4KqDmX0plH4u+tf0riMc1KHE1+lw95cMrLlXQAFOx/xnBtwhZ52XJxd9X2O6kwKBqX32kmhbhlobD0cuw==}
     dev: true
 
   /meow@6.1.1:
@@ -16278,6 +16304,17 @@ packages:
       react: 18.2.0
       react-fast-compare: 3.2.2
       react-side-effect: 2.1.2(react@18.2.0)
+    dev: true
+
+  /react-highlight-words@0.20.0(react@18.2.0):
+    resolution: {integrity: sha512-asCxy+jCehDVhusNmCBoxDf2mm1AJ//D+EzDx1m5K7EqsMBIHdZ5G4LdwbSEXqZq1Ros0G0UySWmAtntSph7XA==}
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      highlight-words-core: 1.2.2
+      memoize-one: 4.0.3
+      prop-types: 15.8.1
+      react: 18.2.0
     dev: true
 
   /react-hyper-tree@0.3.12(react-dom@17.0.2)(react@18.2.0):

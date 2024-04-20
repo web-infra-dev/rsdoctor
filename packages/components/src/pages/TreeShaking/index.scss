@@ -1,0 +1,93 @@
+$treePrefixCls: 'tree-shaking';
+
+.#{$treePrefixCls}-page {
+  width: 100%;
+  height: 100%;
+
+  .ant-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .#{$treePrefixCls}-statement-side-effect {
+    text-decoration: underline;
+    background: #711f1c;
+  }
+
+  .#{$treePrefixCls}-statement-declaration-identifier {
+    text-decoration: underline;
+    background: rgb(44, 135, 236);
+  }
+
+  .#{$treePrefixCls}-files-box {
+    height: 700px;
+  }
+
+  .#{$treePrefixCls}-files {
+    overflow: auto;
+    height: 100%;
+  }
+
+  .#{$treePrefixCls}-editor {
+    // margin-left: 40px
+    flex-grow: 1;
+    height: 700px;
+
+    .ant-card-body {
+      padding: 0;
+    }
+  }
+
+  .#{$treePrefixCls}-files-box,
+  .#{$treePrefixCls}-editor .ant-card-body {
+    width: auto;
+    height: calc(100% - 48px);
+  }
+
+  .#{$treePrefixCls}-export-table {
+    .ant-card-body {
+      padding: 0;
+      .ant-divider {
+        margin: 24px;
+      }
+    }
+    .ant-table-wrapper .ant-table-tbody > tr:last-child > td {
+      border-bottom: none;
+      .ant-table-container table > thead > tr:first-child th {
+        border-top: 1px solid rgba(5, 5, 5, 0.06);
+
+        th:first-child {
+          border-start-start-radius: 0;
+        }
+        th:last-child {
+          border-start-end-radius: 0;
+        }
+      }
+    }
+  }
+
+  .#{$treePrefixCls}-side-effect-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    .#{$treePrefixCls}-side-effect-list-item {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+.monaco-hover .markdown-hover.hover-row {
+  hr {
+    margin: 2px;
+    background-color: gray;
+  }
+
+  div[data-code='tree-shaking-hover'] ol {
+    margin: 4px 0 10px 0;
+    padding-left: 4px;
+    pre {
+      margin: 2px 0;
+    }
+  }
+}

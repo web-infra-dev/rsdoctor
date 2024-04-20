@@ -6,3 +6,4 @@ export * as LoaderFiles from './WebpackLoaders/Analysis';
 export * as PluginsAnalyze from './WebpackPlugins';
 export * as ModuleResolve from './ModuleResolve';
 export * as RuleIndex from './Resources/RuleIndex';
+export * as TreeShaking from './TreeShaking';

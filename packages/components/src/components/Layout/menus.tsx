@@ -23,6 +23,7 @@ import {
   PluginsAnalyze,
   ModuleResolve,
   LoaderTimeline,
+  TreeShaking,
 } from 'src/pages';
 import { CompileName } from './constants';
 
@@ -125,6 +126,14 @@ const MenusBase: React.FC<{
         ) && {
           label: t(BundleSize.name),
           key: BundleSize.route,
+          icon: <FolderViewOutlined style={iconStyle} />,
+        },
+        includes(
+          enableRoutes,
+          Manifest.RsdoctorManifestClientRoutes.TreeShaking,
+        ) && {
+          label: t(TreeShaking.name),
+          key: TreeShaking.route,
           icon: <FolderViewOutlined style={iconStyle} />,
         },
       ].filter((e) => Boolean(e)) as MenuProps['items'],

@@ -75,3 +75,7 @@ export const getShortPath = (path: string) => {
   }
   return path;
 };
+
+export function isDef<E = unknown>(data: E): data is NonNullable<E> {
+  return data !== undefined && data !== null;
+}

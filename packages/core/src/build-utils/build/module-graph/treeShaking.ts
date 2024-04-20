@@ -6,9 +6,8 @@ import {
   ModuleGraphModule,
   Statement,
 } from '@rsdoctor/graph';
-import type { SDK } from '@rsdoctor/types';
+import type { SDK, Plugin } from '@rsdoctor/types';
 import type {
-  Compilation,
   NormalModule as WebpackNormalModule,
   ModuleGraph as WebpackModuleGraph,
 } from 'webpack';
@@ -159,24 +158,26 @@ function appendImportConnection(
 
 export function appendTreeShaking(
   moduleGraph: ModuleGraph,
-  compilation: Compilation,
+  compilation: Plugin.BaseCompilation,
 ) {
   if (!isWebpack5orRspack(compilation)) {
     return moduleGraph;
   }
 
-  const exportData = new Map<WebExportInfo, ExportInfo>();
-  const { moduleGraph: webpackGraph } = compilation;
-  const allModules = getAllModules(compilation);
+  if ('moduleGraph' in compilation) {
+    const exportData = new Map<WebExportInfo, ExportInfo>();
+    const { moduleGraph: webpackGraph } = compilation;
+    const allModules = getAllModules(compilation);
 
-  allModules.forEach((origin) =>
-    transformMgm(origin, webpackGraph, moduleGraph, exportData),
-  );
-  allModules.forEach((origin) =>
-    appendExportConnection(origin, webpackGraph, moduleGraph, exportData),
-  );
-  allModules.forEach((origin) => appendImportConnection(origin, moduleGraph));
-  exportData.clear();
+    allModules.forEach((origin) =>
+      transformMgm(origin, webpackGraph, moduleGraph, exportData),
+    );
+    allModules.forEach((origin) =>
+      appendExportConnection(origin, webpackGraph, moduleGraph, exportData),
+    );
+    allModules.forEach((origin) => appendImportConnection(origin, moduleGraph));
+    exportData.clear();
 
-  return moduleGraph;
+    return moduleGraph;
+  }
 }
