@@ -1,5 +1,5 @@
 ---
-'@rsdoctor/core': patch
+'@rsdoctor/core': minor
 ---
 
-feat: publish the 0.2.0
+feat: publish the minor version.
