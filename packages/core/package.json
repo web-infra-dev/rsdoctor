@@ -39,6 +39,28 @@
       "default": "./dist/types/index.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "./build-utils": [
+        "./dist/build-utils/build/index.d.ts"
+      ],
+      "./common-utils": [
+        "./dist/build-utils/common/index.d.ts"
+      ],
+      "./plugins": [
+        "./dist/inner-plugins/index.d.ts"
+      ],
+      "./rules": [
+        "./dist/rules/index.d.ts"
+      ],
+      "types": [
+        "./dist/types/types.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "dev": "npm run start",
     "build": "modern build",
