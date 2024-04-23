@@ -39,6 +39,28 @@
       "import": "./dist/esm/logger.js"
     }
   },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/type/index.d.ts"
+      ],
+      "common": [
+        "./dist/type/common/index.d.ts"
+      ],
+      "build": [
+        "./dist/type/build/index.d.ts"
+      ],
+      "error": [
+        "./dist/type/error/index.d.ts"
+      ],
+      "ruleUtils": [
+        "./dist/type/rule-utils/index.d.ts"
+      ],
+      "logger": [
+        "./dist/type/logger.d.ts"
+      ]
+    }
+  },
   "main": "dist/index.js",
   "types": "dist/type/index.d.ts",
   "files": [

@@ -44,16 +44,16 @@
       ".": [
         "./dist/index.d.ts"
       ],
-      "./build-utils": [
+      "build-utils": [
         "./dist/build-utils/build/index.d.ts"
       ],
-      "./common-utils": [
+      "common-utils": [
         "./dist/build-utils/common/index.d.ts"
       ],
-      "./plugins": [
+      "plugins": [
         "./dist/inner-plugins/index.d.ts"
       ],
-      "./rules": [
+      "rules": [
         "./dist/rules/index.d.ts"
       ],
       "types": [
