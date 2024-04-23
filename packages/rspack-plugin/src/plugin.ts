@@ -135,7 +135,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       ManifestType.RsdoctorManifestClientRoutes.Overall,
     ]);
 
-    const _sdk = getSDK(compiler.build.name);
+    const _sdk = getSDK(compiler.options.name);
 
     _sdk.setOutputDir(
       path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
