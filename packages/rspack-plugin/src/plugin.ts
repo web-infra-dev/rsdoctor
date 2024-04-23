@@ -11,6 +11,7 @@ import {
   ensureModulesChunksGraphFn,
   InternalBundlePlugin,
   InternalRulesPlugin,
+  getSDK,
 } from '@rsdoctor/core/plugins';
 import type {
   RsdoctorPluginInstance,
@@ -134,7 +135,9 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       ManifestType.RsdoctorManifestClientRoutes.Overall,
     ]);
 
-    this.sdk.setOutputDir(
+    const _sdk = getSDK(compiler.build.name);
+
+    _sdk.setOutputDir(
       path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
     );
     await this.sdk.writeStore();
