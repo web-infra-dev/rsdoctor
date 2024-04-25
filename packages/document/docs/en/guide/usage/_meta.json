@@ -9,5 +9,6 @@
   "plugins-analysis",
   "bundle-size",
   "module-analysis",
-  "resolver"
+  "resolver",
+  "rule-config"
 ]
