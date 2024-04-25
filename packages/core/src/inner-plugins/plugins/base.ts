@@ -13,7 +13,7 @@ export abstract class InternalBasePlugin<T extends Plugin.BaseCompiler>
 
   constructor(
     public readonly scheduler: RsdoctorPluginInstance<
-      Plugin.BaseCompiler,
+      T,
       Linter.ExtendRuleData[]
     >,
   ) {}

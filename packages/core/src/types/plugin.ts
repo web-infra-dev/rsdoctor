@@ -7,9 +7,8 @@ import type {
 import type { RsdoctorSlaveSDK, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { rules } from '@/rules/rules';
-import { RuleData } from '@rsdoctor/types/dist/linter';
 
-type InternalRules = (typeof rules)[number] & RuleData[];
+type InternalRules = Common.UnionToTuple<(typeof rules)[number]>;
 
 export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
