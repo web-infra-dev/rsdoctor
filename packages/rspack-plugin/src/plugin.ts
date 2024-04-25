@@ -11,7 +11,6 @@ import {
   ensureModulesChunksGraphFn,
   InternalBundlePlugin,
   InternalRulesPlugin,
-  getSDK,
 } from '@rsdoctor/core/plugins';
 import type {
   RsdoctorPluginInstance,
@@ -46,6 +45,8 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   public options: RsdoctorPluginOptionsNormalized<Rules>;
 
+  public outsideInstance: boolean;
+
   constructor(options?: RsdoctorRspackPluginOptions<Rules>) {
     this.options = normalizeUserConfig<Rules>(options);
     this.sdk =
@@ -57,6 +58,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         config: { disableTOSUpload: this.options.disableTOSUpload },
         innerClientPath: this.options.innerClientPath,
       });
+    this.outsideInstance = Boolean(this.options.sdkInstance);
     this.modulesGraph = new ModuleGraph();
   }
 
@@ -135,9 +137,16 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       ManifestType.RsdoctorManifestClientRoutes.Overall,
     ]);
 
-    const _sdk = getSDK(compiler.options.name);
+    if (this.outsideInstance && 'parent' in this.sdk) {
+      this.sdk.parent.master.setOutputDir(
+        path.resolve(
+          compiler.outputPath,
+          `./${Constants.RsdoctorOutputFolder}`,
+        ),
+      );
+    }
 
-    _sdk.setOutputDir(
+    this.sdk.setOutputDir(
       path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
     );
     await this.sdk.writeStore();
