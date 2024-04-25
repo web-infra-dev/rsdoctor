@@ -86,6 +86,8 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       this.done.bind(this, compiler),
     );
 
+    // TODO: to fix the TypeError: Type instantiation is excessively deep and possibly infinite.
+    // @ts-ignore
     new InternalSummaryPlugin<Compiler>(this).apply(compiler);
 
     if (this.options.features.loader && !Loader.isVue(compiler)) {
