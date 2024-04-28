@@ -11,6 +11,7 @@ import {
   ensureModulesChunksGraphFn,
   InternalBundlePlugin,
   InternalRulesPlugin,
+  InternalErrorReporterPlugin,
 } from '@rsdoctor/core/plugins';
 import type {
   RsdoctorPluginInstance,
@@ -103,6 +104,9 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     }
 
     new InternalRulesPlugin(this).apply(compiler);
+
+    // InternalErrorReporterPlugin must called before InternalRulesPlugin, to avoid treat Rsdoctor's lint warnings/errors as Webpack's warnings/errors.
+    new InternalErrorReporterPlugin(this).apply(compiler);
 
     if (!Loader.isVue(compiler)) {
       new BuiltinLoaderPlugin().apply(compiler);
