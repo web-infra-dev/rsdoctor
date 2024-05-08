@@ -92,6 +92,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     new InternalSummaryPlugin<Compiler>(this).apply(compiler);
 
     if (this.options.features.loader && !Loader.isVue(compiler)) {
+      new BuiltinLoaderPlugin().apply(compiler);
       new InternalLoaderPlugin<Compiler>(this).apply(compiler);
     }
 
@@ -107,10 +108,6 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     // InternalErrorReporterPlugin must called before InternalRulesPlugin, to avoid treat Rsdoctor's lint warnings/errors as Webpack's warnings/errors.
     new InternalErrorReporterPlugin(this).apply(compiler);
-
-    if (!Loader.isVue(compiler)) {
-      new BuiltinLoaderPlugin().apply(compiler);
-    }
   }
 
   /**
