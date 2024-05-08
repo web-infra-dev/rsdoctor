@@ -563,6 +563,9 @@ importers:
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
@@ -597,9 +600,6 @@ importers:
         specifier: ^4.9.1
         version: 4.10.1
     devDependencies:
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@rspack/core':
         specifier: 0.5.1
         version: 0.5.1(@swc/helpers@0.5.3)
