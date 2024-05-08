@@ -5,6 +5,7 @@ import { Plugin } from '@rsdoctor/types';
 import type { RuleSetRules } from '@rspack/core';
 
 const BuiltinLoaderName = 'builtin:swc-loader';
+const ESMLoaderFile = '.mjs';
 
 export class BuiltinLoaderPlugin {
   apply(compiler: Compiler) {
@@ -60,6 +61,13 @@ export class BuiltinLoaderPlugin {
       rules,
       BuiltinLoaderName,
       appendRule,
+    ) as RuleSetRules;
+
+    compiler.options.module.rules = Utils.changeBuiltinLoader(
+      rules,
+      ESMLoaderFile,
+      appendRule,
+      false,
     ) as RuleSetRules;
   }
 }

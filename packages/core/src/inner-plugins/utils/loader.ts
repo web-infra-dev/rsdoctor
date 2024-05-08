@@ -105,7 +105,7 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
   };
 
   return BuildUtils.mapEachRules(rules, (rule) => {
-    if (rule.loader?.startsWith('builtin:')) {
+    if (rule.loader?.startsWith('builtin:') || rule.loader?.endsWith('.mjs')) {
       return rule;
     }
     const opts: ProxyLoaderOptions = {

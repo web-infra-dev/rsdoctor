@@ -167,7 +167,20 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
   });
 }
 
-function getLoaderNameMatch(_r: Plugin.BuildRuleSetRule, loaderName: string) {
+function getLoaderNameMatch(
+  _r: Plugin.BuildRuleSetRule,
+  loaderName: string,
+  strict = true,
+) {
+  if (!strict) {
+    return (
+      (typeof _r === 'object' &&
+        typeof _r?.loader === 'string' &&
+        _r.loader.includes(loaderName)) ||
+      (typeof _r === 'string' && (_r as string).includes(loaderName))
+    );
+  }
+
   return (
     (typeof _r === 'object' &&
       typeof _r?.loader === 'string' &&
@@ -181,11 +194,12 @@ export function changeBuiltinLoader<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
   loaderName: string,
   appendRules: (rule: T, index: number) => T,
+  strict?: boolean,
 ): T[] {
   return rules.map((rule) => {
     if (!rule || typeof rule === 'string') return rule;
 
-    if (getLoaderNameMatch(rule, loaderName)) {
+    if (getLoaderNameMatch(rule, loaderName, strict)) {
       const _rule = {
         ...rule,
         use: [
@@ -203,7 +217,7 @@ export function changeBuiltinLoader<T extends Plugin.BuildRuleSetRule>(
     if (rule.use) {
       if (Array.isArray(rule.use)) {
         const _index = findIndex(rule.use, (_r) =>
-          getLoaderNameMatch(_r as T, loaderName),
+          getLoaderNameMatch(_r as T, loaderName, strict),
         );
         if (_index > -1) {
           return appendRules(rule, _index);
