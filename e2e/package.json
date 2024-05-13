@@ -3,7 +3,7 @@
   "name": "@rsdoctor/e2e",
   "version": "0.0.1",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test ./cases/doctor-rspack/plugin.test.ts"
   },
   "dependencies": {
     "devcert": "1.2.2",
@@ -28,6 +28,7 @@
     "@types/react-dom": "^18",
     "@types/webpack": "5.28.0",
     "fast-glob": "^3.3.1",
+    "loader-utils": "^2.0.4",
     "playwright": "1.33.0",
     "typescript": "^5.2.2"
   }

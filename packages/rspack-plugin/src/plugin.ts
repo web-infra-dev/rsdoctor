@@ -28,7 +28,7 @@ import {
 import path from 'path';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
-import { BuiltinLoaderPlugin } from './builtinLoaderPlugin';
+import { ProbeLoaderPlugin } from './probeLoaderPlugin';
 import { Loader } from '@rsdoctor/utils/common';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
@@ -92,7 +92,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     new InternalSummaryPlugin<Compiler>(this).apply(compiler);
 
     if (this.options.features.loader && !Loader.isVue(compiler)) {
-      new BuiltinLoaderPlugin().apply(compiler);
+      new ProbeLoaderPlugin().apply(compiler);
       new InternalLoaderPlugin<Compiler>(this).apply(compiler);
     }
 

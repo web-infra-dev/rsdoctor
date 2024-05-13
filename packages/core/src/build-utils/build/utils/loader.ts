@@ -190,7 +190,7 @@ function getLoaderNameMatch(
 }
 
 // FIXME: Type BuildRuleSetRule maybe need optimize.
-export function changeBuiltinLoader<T extends Plugin.BuildRuleSetRule>(
+export function addProbeLoader2Rules<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
   loaderName: string,
   appendRules: (rule: T, index: number) => T,
@@ -239,7 +239,7 @@ export function changeBuiltinLoader<T extends Plugin.BuildRuleSetRule>(
     if ('oneOf' in rule && rule.oneOf) {
       return {
         ...rule,
-        oneOf: changeBuiltinLoader<T>(
+        oneOf: addProbeLoader2Rules<T>(
           rule.oneOf as T[],
           loaderName,
           appendRules,
@@ -250,7 +250,7 @@ export function changeBuiltinLoader<T extends Plugin.BuildRuleSetRule>(
     if ('rules' in rule && rule.rules) {
       return {
         ...rule,
-        rules: changeBuiltinLoader<T>(
+        rules: addProbeLoader2Rules<T>(
           rule.rules as T[],
           loaderName,
           appendRules,

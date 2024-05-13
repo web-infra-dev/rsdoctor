@@ -7,11 +7,11 @@ import type { RuleSetRules } from '@rspack/core';
 const BuiltinLoaderName = 'builtin:swc-loader';
 const ESMLoaderFile = '.mjs';
 
-export class BuiltinLoaderPlugin {
+export class ProbeLoaderPlugin {
   apply(compiler: Compiler) {
     compiler.hooks.beforeRun.tap(
       {
-        name: 'BuiltinLoaderPlugin',
+        name: 'ProbeLoaderPlugin',
       },
       () => {
         this.addProbeLoader(compiler);
@@ -20,7 +20,7 @@ export class BuiltinLoaderPlugin {
 
     compiler.hooks.watchRun.tap(
       {
-        name: 'BuiltinLoaderPlugin',
+        name: 'ProbeLoaderPlugin',
       },
       () => {
         this.addProbeLoader(compiler);
@@ -57,13 +57,13 @@ export class BuiltinLoaderPlugin {
       return rule;
     };
 
-    compiler.options.module.rules = Utils.changeBuiltinLoader(
+    compiler.options.module.rules = Utils.addProbeLoader2Rules(
       rules,
       BuiltinLoaderName,
       appendRule,
     ) as RuleSetRules;
 
-    compiler.options.module.rules = Utils.changeBuiltinLoader(
+    compiler.options.module.rules = Utils.addProbeLoader2Rules(
       rules,
       ESMLoaderFile,
       appendRule,

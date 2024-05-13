@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`test src/build/utils/loader.ts changeBuiltinLoader > changeBuiltinLoader() 1`] = `
+exports[`test src/build/utils/loader.ts addProbeLoader2Rules > addProbeLoader2Rules() 1`] = `
 [
   {
     "test": /\\\\\\.less\\$/,
