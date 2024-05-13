@@ -3,7 +3,7 @@
   "name": "@rsdoctor/e2e",
   "version": "0.0.1",
   "scripts": {
-    "test": "playwright test ./cases/doctor-rspack/plugin.test.ts"
+    "test": "playwright test"
   },
   "dependencies": {
     "devcert": "1.2.2",
