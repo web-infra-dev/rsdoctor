@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
-import { Compiler } from '@rspack/core';
+import { Compiler, RuleSetRule } from '@rspack/core';
 import os from 'os';
 import path from 'path';
 import { createRsdoctorPlugin } from './test-utils';
@@ -11,6 +11,10 @@ let reportLoaderStartOrEndTimes = 0;
 async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
   const file = path.resolve(__dirname, './fixtures/a.js');
   const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
+  const esmLoader = path.resolve(
+    __dirname,
+    './fixtures/loaders/esm-serialize-query-to-comment.mjs',
+  );
   const res = await compile(file, {
     resolve: {
       extensions: ['.ts', '.js'],
@@ -20,6 +24,10 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
         {
           test: /\.js/,
           use: loader,
+        },
+        {
+          test: /\.js/,
+          use: esmLoader,
         },
         {
           test: /\.[jt]s$/,
@@ -115,6 +123,7 @@ test('rspack data store', async () => {
   const datas = sdk.getStoreData();
   expect(datas.errors.length).toBe(0);
   const graphData = datas.moduleGraph;
+  const configs = datas.configs;
 
   os.EOL === '\n'
     ? expect(
@@ -127,8 +136,13 @@ test('rspack data store', async () => {
   graphData.modules.forEach((mod) => (mod.webpackId = ''));
   expect(graphData.modules[0].size).toEqual({
     sourceSize: 68,
-    transformedSize: 79,
+    transformedSize: 86,
     parsedSize: 0,
   });
   expect(graphData.modules[0].path).toMatch('/fixtures/a.js');
+  // @ts-ignore
+  const ruleLengthList = configs[0].config.module?.rules?.map(
+    (_rule) => (_rule as RuleSetRule)?.use?.length,
+  );
+  expect(ruleLengthList).toEqual([1, 3, 3]);
 });

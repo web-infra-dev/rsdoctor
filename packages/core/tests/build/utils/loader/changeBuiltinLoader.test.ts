@@ -1,4 +1,4 @@
-import { changeBuiltinLoader } from '@/build-utils/build/utils/loader';
+import { addProbeLoader2Rules } from '@/build-utils/build/utils/loader';
 import { describe, it, expect } from 'vitest';
 import { Plugin } from '@rsdoctor/types';
 
@@ -92,10 +92,10 @@ const appendRule = (rule: Plugin.RuleSetRule, index: number) => {
   }
   return rule;
 };
-describe('test src/build/utils/loader.ts changeBuiltinLoader', () => {
-  it('changeBuiltinLoader()', () => {
+describe('test src/build/utils/loader.ts addProbeLoader2Rules', () => {
+  it('addProbeLoader2Rules()', () => {
     expect(
-      changeBuiltinLoader(rules, 'builtin:swc-loader', appendRule),
+      addProbeLoader2Rules(rules, 'builtin:swc-loader', appendRule),
     ).toMatchSnapshot();
   });
 });
