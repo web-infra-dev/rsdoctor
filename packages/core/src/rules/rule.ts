@@ -113,16 +113,17 @@ export class Rule<Config = DefaultRuleConfig>
       if (remove) {
         replace.push(remove);
       }
-
+      let severity = data.severity ? toSeverity(data.severity, this.severity) : this.severity;
       const error: Linter.Diagnostic = {
         ...data,
         code: this.code,
-        severity: this.severity,
+        severity,
         category: this.category,
         title: this.title.toUpperCase(),
       };
-
-      errors.push(error);
+      if (severity !== Linter.Severity.Ignore) {
+        errors.push(error);
+      }
     };
 
     await this.check({
