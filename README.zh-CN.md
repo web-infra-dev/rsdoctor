@@ -38,7 +38,7 @@
 
 ## 📚 快速上手
 
-你可以参考 [快速上手](https://rsdoctor.dev/zh/guide/start/quick-start) 来开始体验 Rsbuild。
+你可以参考 [快速上手](https://rsdoctor.dev/zh/guide/start/quick-start) 来开始体验 Rsdoctor
 
 ## 🔥 特性
 
