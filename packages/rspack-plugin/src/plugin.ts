@@ -1,4 +1,4 @@
-import type { Compiler, Configuration, RuleSetRule } from '@rspack/core';
+import type { Compiler, Configuration, RuleSetRule, Stats } from '@rspack/core';
 import { ModuleGraph } from '@rsdoctor/graph';
 import { RsdoctorSlaveSDK, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import {
@@ -120,8 +120,8 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     ensureModulesChunksGraphFn(compiler, this);
   }
 
-  public done = async (compiler: Compiler): Promise<void> => {
-    const json = compiler.compilation.getStats().toJson({
+  public done = async (compiler: Compiler, stats: Stats): Promise<void> => {
+    const json = stats.toJson({
       all: false,
       version: true,
       chunks: true,
