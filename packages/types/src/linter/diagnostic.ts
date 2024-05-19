@@ -1,5 +1,6 @@
 import { RuleMessage, BaseRuleStoreData, RuleStoreDataItem } from '../rule';
 import { ErrorLevel as Severity, Range, FixData } from '../error';
+import { SeverityString } from './rule';
 
 export { ErrorLevel as Severity } from '../error';
 export type { Range, OffsetRange, Position, FixData } from '../error';
@@ -25,6 +26,8 @@ export interface ReportDocument {
 export interface ReportData {
   /** Error message */
   message: string;
+  /** Modify severity dynamically at runtime */
+  severity?: SeverityString
   /** Error file information  */
   document?: ReportDocument;
   /** Diagnostic suggestiions */
@@ -48,8 +51,8 @@ export type ReportDetailData<T extends BaseRuleStoreData> = Omit<
 };
 
 export interface Diagnostic
-  extends ReportData,
-    Pick<RuleMessage, 'category' | 'code'> {
+  extends Omit<ReportData, 'severity'>,
+  Pick<RuleMessage, 'category' | 'code'> {
   severity: Severity;
   title: string;
   detail?: RuleStoreDataItem;
