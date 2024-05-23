@@ -1,10 +1,11 @@
-import type { Hook } from 'tapable';
 import type { Common } from '@rsdoctor/types';
-
-import { Plugin } from '@rsdoctor/types';
 import { isWebpack5orRspack } from '@/build-utils/common/module-graph/compatible';
+import { Plugin } from '@rsdoctor/types';
 
-export function shouldInterceptPluginHook<T extends Hook<any, any>>(hook: T) {
+export type IHook =
+  Plugin.BaseCompiler['hooks'][keyof Plugin.BaseCompiler['hooks']];
+
+export function shouldInterceptPluginHook<T extends IHook>(hook: T) {
   // webpack5 use fakehook for deprecated hook.
   if ((hook as Common.PlainObject)._fakeHook) {
     return false;
@@ -28,7 +29,7 @@ export function shouldInterceptPluginHook<T extends Hook<any, any>>(hook: T) {
 
 export function interceptCompilerHooks(
   compiler: Plugin.BaseCompiler,
-  interceptor: (name: string, hook: Hook<any, any>, scope: 'compiler') => void,
+  interceptor: (name: string, hook: IHook, scope: 'compiler') => void,
 ) {
   Object.keys(compiler.hooks).forEach((hook) => {
     const v = compiler.hooks[hook as keyof Plugin.BaseCompiler['hooks']];
@@ -40,11 +41,7 @@ export function interceptCompilerHooks(
 
 export function interceptCompilationHooks(
   compilation: Plugin.BaseCompilation,
-  interceptor: (
-    name: string,
-    hook: Hook<any, any>,
-    scope: 'compilation',
-  ) => void,
+  interceptor: (name: string, hook: IHook, scope: 'compilation') => void,
 ) {
   Object.keys(compilation.hooks).forEach((hook) => {
     /**
@@ -56,9 +53,7 @@ export function interceptCompilationHooks(
       return;
     }
 
-    const v = compilation.hooks[
-      hook as keyof Plugin.BaseCompilation['hooks']
-    ] as Hook<unknown, unknown>;
+    const v = compilation.hooks[hook as keyof Plugin.BaseCompilation['hooks']];
     if (shouldInterceptPluginHook(v)) {
       interceptor(hook, v, 'compilation');
     }

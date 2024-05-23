@@ -31,7 +31,7 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@rspack/core": "^0.5.1"
+    "@rspack/core": "^0.6.5"
   },
   "peerDependenciesMeta": {
     "@rspack/core": {
