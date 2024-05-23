@@ -7,6 +7,7 @@ import { extname } from 'path';
 
 import { Plugin } from '@rsdoctor/types';
 import { ParseBundle } from '@/types';
+import { debug } from '@rsdoctor/utils/logger';
 
 /**
  * The following code is based on
@@ -31,7 +32,27 @@ export const parseBundle: ParseBundle = (
     return {};
   }
 
-  const content = fs.readFileSync(bundlePath, 'utf8');
+  let content = fs.readFileSync(bundlePath, 'utf8');
+  const tagCache = new Map();
+
+  let _hasBannerPlugin = content.indexOf('RSDOCTOR_START::') > 0;
+
+  if (_hasBannerPlugin && !tagCache.get(bundlePath)) {
+    const tagMatchResult = getStringBetween(
+      content,
+      0,
+      /([a-z|A-Z]+\.[a-z]+)\(\SRSDOCTOR_START::(.*?);/,
+      /([a-z|A-Z]+\.[a-z]+)\(\SRSDOCTOR_END::(.*?)\)/,
+    );
+    content = tagMatchResult.result?.trim() || content;
+    tagCache.set(bundlePath, tagMatchResult.loc);
+    _hasBannerPlugin = true;
+  } else if (_hasBannerPlugin && !tagCache.get(bundlePath)) {
+    const loc = tagCache.get(bundlePath);
+    content = content.slice(loc.start, loc.end);
+    _hasBannerPlugin = true;
+  }
+
   const ast = parser.internal.parse(content, {
     sourceType: 'script',
     ecmaVersion: 'latest',
@@ -51,24 +72,68 @@ export const parseBundle: ParseBundle = (
       if (state.locations) return;
 
       state.expressionStatementDepth++;
-
-      if (
-        // Webpack 5 stores modules in the the top-level IIFE
-        state.expressionStatementDepth === 1 &&
-        // ast?.range?.includes(node) &&
-        isIIFE(node)
-      ) {
-        const fn = getIIFECallExpression(node);
-
+      try {
         if (
-          // It should not contain neither arguments
-          fn.arguments.length === 0 &&
-          // ...nor parameters
-          fn.callee.params.length === 0
+          // Webpack 5 stores modules in the the top-level IIFE
+          state.expressionStatementDepth === 1 &&
+          // ast?.range?.includes(node) &&
+          isIIFE(node)
         ) {
+          const fn = getIIFECallExpression(node);
+
+          if (
+            // It should not contain neither arguments
+            fn.arguments.length === 0 &&
+            // ...nor parameters
+            fn.callee.params.length === 0
+          ) {
+            // Modules are stored in the very first variable declaration as hash
+            const firstVariableDeclaration = fn.callee.body.body.find(
+              (node: { type: string }) => node.type === 'VariableDeclaration',
+            );
+
+            if (firstVariableDeclaration) {
+              for (const declaration of firstVariableDeclaration.declarations) {
+                if (declaration.init) {
+                  state.locations = getModulesLocations(declaration.init);
+
+                  if (state.locations) {
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (!state.locations) {
+          c(node.expression, state);
+        }
+      } catch (e: any) {
+        debug(() => e);
+      }
+
+      state.expressionStatementDepth--;
+    },
+
+    Program(
+      node: any,
+      state: { locations: any; expressionStatementDepth: number },
+      _c: (arg0: any, arg1: any) => void,
+    ) {
+      if (state.locations) return;
+
+      try {
+        if (_hasBannerPlugin) {
           // Modules are stored in the very first variable declaration as hash
-          const firstVariableDeclaration = fn.callee.body.body.find(
-            (node: { type: string }) => node.type === 'VariableDeclaration',
+          const firstVariableDeclaration = node.body.find(
+            (node: { type: string; declarations?: any[] }) => {
+              return (
+                node.type === 'VariableDeclaration' &&
+                node.declarations?.[0]?.init?.type === 'ObjectExpression' &&
+                node.declarations?.[0]?.init?.properties?.length
+              );
+            },
           );
 
           if (firstVariableDeclaration) {
@@ -83,10 +148,12 @@ export const parseBundle: ParseBundle = (
             }
           }
         }
-      }
 
-      if (!state.locations) {
-        c(node.expression, state);
+        if (!state.locations) {
+          node.body.forEach((n: any) => _c(n, state));
+        }
+      } catch (e: any) {
+        debug(() => e);
       }
 
       state.expressionStatementDepth--;
@@ -450,4 +517,69 @@ function getModuleLocation(node: { start: any; end: any }) {
     start: node.start,
     end: node.end,
   };
+}
+
+/**
+ *
+ * @description The purpose of this function is to obtain the code in the start and end tags of Rsdoctor.
+ *
+ * @param {string} raw
+ * @param {number} position
+ * @param {RegExp} start
+ * @param {RegExp} end
+ * @return {*}
+ */
+function getStringBetween(
+  raw: string,
+  position: number,
+  start: RegExp,
+  end: RegExp,
+) {
+  try {
+    const matchStart = raw.match(start);
+    const startFlagIndex = matchStart?.length
+      ? raw.indexOf(matchStart[0], position)
+      : -1;
+
+    if (startFlagIndex === -1 || !matchStart?.length) {
+      return {
+        result: null,
+        remain: position,
+      };
+    }
+    const startTagLength = matchStart[0].length;
+    const matchEnd = raw.match(end);
+    const endFlagIndex = matchEnd?.length
+      ? raw.indexOf(matchEnd[0], startFlagIndex + startTagLength)
+      : -1;
+
+    if (endFlagIndex === -1 || !matchEnd?.length) {
+      return {
+        result: null,
+        remain: position,
+      };
+    }
+    let innerContent = raw
+      .slice(startFlagIndex + startTagLength, endFlagIndex)
+      .trim();
+    if (innerContent.endsWith(',')) {
+      innerContent = innerContent.slice(0, -1);
+    }
+    return {
+      result: innerContent,
+      remain: matchEnd?.length
+        ? endFlagIndex + matchEnd[0].length
+        : endFlagIndex,
+      loc: {
+        start: startFlagIndex + startTagLength,
+        end: endFlagIndex,
+      },
+    };
+  } catch (e: any) {
+    debug(() => e);
+    return {
+      result: null,
+      remain: position,
+    };
+  }
 }

@@ -64,6 +64,11 @@ export async function getAssetsModulesData(
 
       getModulesFromArray(bundleStats.modules ?? [], collectedModules);
 
+      // Add childCompiler's stats.modules
+      const childrenModules: Plugin.StatsModule[] =
+        bundleStats.children?.flatMap((c) => c.modules || []) || [];
+      collectedModules.push(...childrenModules);
+
       try {
         bundleInfo = await parseBundle(assetFile, collectedModules);
       } catch (err: any) {

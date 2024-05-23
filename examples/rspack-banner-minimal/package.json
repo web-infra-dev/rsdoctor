@@ -1,0 +1,43 @@
+{
+  "name": "@examples/rsdoctor-rspack-banner",
+  "version": "0.1.1",
+  "private": true,
+  "scripts": {
+    "dev": "ENABLE_CLIENT_SERVER=true NODE_ENV=development rspack serve",
+    "build": "ENABLE_CLIENT_SERVER=false NODE_ENV=production rspack build -c ./rspack.config.js",
+    "build:analysis": "ENABLE_CLIENT_SERVER=true NODE_ENV=production rspack build"
+  },
+  "dependencies": {
+    "@arco-design/web-react": "^2.58.3",
+    "@svgr/webpack": "^8.1.0",
+    "@swc/helpers": "^0.5.3",
+    "classnames": "^2.5.1",
+    "css-loader": "^6.9.0",
+    "less-loader": "^11.1.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "tsm": "2.3.0",
+    "@rsdoctor/rspack-plugin": "workspace:*",
+    "@rspack/cli": "0.5.1",
+    "@rspack/core": "0.5.1",
+    "@rspack/plugin-react-refresh": "0.5.1",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.8",
+    "react-refresh": "^0.14.0",
+    "web-vitals": "^2.1.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

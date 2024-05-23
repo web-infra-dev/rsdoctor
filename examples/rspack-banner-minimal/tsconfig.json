@@ -2,8 +2,6 @@
   "extends": "@rsdoctor/tsconfig/base",
   "include": ["src"],
   "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
     "outDir": "dist",
     "baseUrl": ".",
     "module": "ESNext"
