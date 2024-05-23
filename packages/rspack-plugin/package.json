@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
-    "@rspack/core": "0.5.1",
+    "@rspack/core": "0.6.5",
     "@types/loader-utils": "^2.0.5",
     "@types/lodash": "^4.17.0",
     "@types/node": "^16",
@@ -39,7 +39,7 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@rspack/core": "^0.5.1"
+    "@rspack/core": "^0.6.5"
   },
   "publishConfig": {
     "access": "public",

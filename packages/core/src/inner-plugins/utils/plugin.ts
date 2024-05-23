@@ -1,7 +1,7 @@
-import type { Hook } from 'tapable';
 import type { SDK } from '@rsdoctor/types';
 import type { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import { DevToolError } from '@rsdoctor/utils/error';
+import { IHook } from '@/build-utils/build/utils';
 
 export function reportPluginData(
   sdk: RsdoctorWebpackSDK,
@@ -38,7 +38,7 @@ export function reportPluginData(
 export function interceptPluginHook(
   sdk: RsdoctorWebpackSDK,
   name: string,
-  hook: Hook<any, any>,
+  hook: IHook,
 ) {
   if (!hook.intercept) {
     return;

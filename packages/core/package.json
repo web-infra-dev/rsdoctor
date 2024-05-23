@@ -84,7 +84,7 @@
     "webpack-bundle-analyzer": "^4.9.1"
   },
   "devDependencies": {
-    "@rspack/core": "0.5.1",
+    "@rspack/core": "0.6.5",
     "@scripts/test-helper": "workspace:*",
     "@types/bytes": "3.1.1",
     "@types/fs-extra": "^11.0.2",

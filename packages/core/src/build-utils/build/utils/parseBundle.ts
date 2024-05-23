@@ -35,9 +35,9 @@ export const parseBundle: ParseBundle = (
   let content = fs.readFileSync(bundlePath, 'utf8');
   const tagCache = new Map();
 
-  let _hasBannerPlugin = content.indexOf('RSDOCTOR_START::') > 0;
+  let hasBannerPlugin = content.indexOf('RSDOCTOR_START::') > 0;
 
-  if (_hasBannerPlugin && !tagCache.get(bundlePath)) {
+  if (hasBannerPlugin && !tagCache.get(bundlePath)) {
     const tagMatchResult = getStringBetween(
       content,
       0,
@@ -46,11 +46,11 @@ export const parseBundle: ParseBundle = (
     );
     content = tagMatchResult.result?.trim() || content;
     tagCache.set(bundlePath, tagMatchResult.loc);
-    _hasBannerPlugin = true;
-  } else if (_hasBannerPlugin && !tagCache.get(bundlePath)) {
+    hasBannerPlugin = true;
+  } else if (hasBannerPlugin && !tagCache.get(bundlePath)) {
     const loc = tagCache.get(bundlePath);
     content = content.slice(loc.start, loc.end);
-    _hasBannerPlugin = true;
+    hasBannerPlugin = true;
   }
 
   const ast = parser.internal.parse(content, {
@@ -124,7 +124,7 @@ export const parseBundle: ParseBundle = (
       if (state.locations) return;
 
       try {
-        if (_hasBannerPlugin) {
+        if (hasBannerPlugin) {
           // Modules are stored in the very first variable declaration as hash
           const firstVariableDeclaration = node.body.find(
             (node: { type: string; declarations?: any[] }) => {

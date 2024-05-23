@@ -2,8 +2,9 @@ import { InternalBasePlugin } from '../plugins';
 import { Linter } from '../../rules';
 import { DevToolError } from '@rsdoctor/utils/error';
 import { isArray, pull } from 'lodash';
-import { Plugin } from '@rsdoctor/types'
+import { Plugin } from '@rsdoctor/types';
 import { WebpackError } from 'webpack';
+import { JsStatsWarning } from '@rsdoctor/types/dist/plugin';
 
 export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler> {
   public readonly name = 'rules';
@@ -32,7 +33,7 @@ export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler>
     const errors = validateErrors.filter((item) => item.level === 'Error');
     const warnings = validateErrors.filter((item) => item.level === 'Warn');
     const toWebpackError = (err: DevToolError) =>
-      err.toError() as unknown as WebpackError;
+      err.toError() as unknown as WebpackError & JsStatsWarning;
 
     result.replace.forEach((item) => {
       if (isArray(compilation.errors) && compilation.errors.includes(item)) {

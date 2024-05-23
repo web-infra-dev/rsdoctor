@@ -6,9 +6,7 @@
     "test": "playwright test"
   },
   "dependencies": {
-    "@types/fs-extra": "^11.0.2",
     "devcert": "1.2.2",
-    "fs-extra": "^11.1.1",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,7 +21,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",
-    "@rspack/core": "0.5.1",
+    "@rspack/core": "0.6.5",
     "@types/lodash": "^4.17.0",
     "@types/node": "^16",
     "@types/react": "^18",

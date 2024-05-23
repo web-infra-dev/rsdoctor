@@ -8,8 +8,8 @@ export function App({ name }: any) {
     <>
       Hello <i>{name}</i>. Welcome!
       <>
-        <h1 className={styles.header}>标题{name}</h1>
-        <p className="worker">内容</p>
+        <h1 className={styles.header}>Title:{name}</h1>
+        <p className="worker">Content</p>
         <Button type="primary">Hello Arco</Button>,
       </>
     </>

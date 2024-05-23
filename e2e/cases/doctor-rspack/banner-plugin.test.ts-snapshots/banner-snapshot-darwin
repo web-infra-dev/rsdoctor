@@ -1,1 +1,0 @@
-{"":{"size":229,"sizeConvert":"229B","content":"function (__unused_webpack_module, __webpack_exports__, __webpack_require__) {\n\"use strict\";\n__webpack_require__.r(__webpack_exports__);\n__webpack_require__.d(__webpack_exports__, {\n  a: function() { return a; }\n});\n var a = 1;\n}"}}
