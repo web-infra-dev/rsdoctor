@@ -5,6 +5,7 @@
     "jsx": "react-jsx",
     "isolatedModules": true,
     "declaration": true,
+    "declarationMap": false,
     "composite": true,
     "rootDir": "src",
     "outDir": "dist",

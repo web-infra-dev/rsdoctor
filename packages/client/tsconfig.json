@@ -4,9 +4,10 @@
     "baseUrl": "./",
     "jsx": "react-jsx",
     "isolatedModules": true,
-    "declaration": true,
+    "declaration": false,
+    "declarationMap": false,
     "composite": true,
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": ["src", "config"],
   "exclude": ["**/node_modules"]
