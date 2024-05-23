@@ -64,6 +64,7 @@ export default defineConfig(({ env }) => {
         js: false,
         css: false,
       },
+      legalComments: 'none',
     },
 
     performance: {
