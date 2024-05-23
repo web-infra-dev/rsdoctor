@@ -69,8 +69,15 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
           (url: string) => loadShardingFileWithSpinner(url, cwd, spinner),
         );
       } catch (error) {
-        spinner.fail(red((error as Error).message));
-        throw error;
+        try {
+          dataValue = await Manifest.fetchShardingFiles(
+            json.cloudData || {},
+            (url: string) => loadShardingFileWithSpinner(url, cwd, spinner),
+          );
+        } catch (e) {
+          spinner.fail(red((error as Error).message));
+          throw error;
+        }
       }
 
       spinner.text = `start server`;
