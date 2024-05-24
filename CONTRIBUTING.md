@@ -148,7 +148,7 @@ In addition to the unit tests, the Rsdoctor also includes end-to-end (E2E) tests
 You can run the `test:e2e` command to run the E2E tests:
 
 ```sh
-pnpm run test:e2e
+pnpm run e2e
 ```
 
 ## Linting
