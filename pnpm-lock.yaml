@@ -810,6 +810,9 @@ importers:
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
@@ -823,9 +826,6 @@ importers:
         specifier: ^3.2.3
         version: 3.2.3
     devDependencies:
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@rspack/core':
         specifier: 0.6.5
         version: 0.6.5(@swc/helpers@0.5.3)
@@ -1054,6 +1054,9 @@ importers:
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
@@ -1064,9 +1067,6 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
     devDependencies:
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@types/fs-extra':
         specifier: ^11.0.2
         version: 11.0.4
