@@ -30,7 +30,6 @@ import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
 import { ProbeLoaderPlugin } from './probeLoaderPlugin';
 import { Loader } from '@rsdoctor/utils/common';
-import { BundleTagPlugin } from './bundleTagPlugin';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorPluginInstance<Compiler, Rules>
@@ -103,7 +102,6 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     if (this.options.features.bundle) {
       new InternalBundlePlugin<Compiler>(this).apply(compiler);
-      new BundleTagPlugin().apply(compiler);
     }
 
     new InternalRulesPlugin(this).apply(compiler);
