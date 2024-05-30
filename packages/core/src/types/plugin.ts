@@ -46,6 +46,11 @@ export interface RsdoctorWebpackPluginOptions<
   reportCodeType?:
     | { noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }
     | undefined;
+
+  /**
+   * Whether to turn on some characteristic analysis capabilities, such as: the support for the BannerPlugin.
+   */
+  supports?: ISupport | undefined;
   /**
    * control the Rsdoctor upload data to TOS, used by inner-rsdoctor.
    * @default false
@@ -68,6 +73,10 @@ export interface RsdoctorMultiplePluginOptions<
    */
   name?: string;
 }
+
+type ISupport = {
+  banner: boolean;
+};
 
 export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],

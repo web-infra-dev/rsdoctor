@@ -9,6 +9,7 @@ import {
   makeRulesSerializable,
   normalizeUserConfig,
   setSDK,
+  InternalBundleTagPlugin,
 } from '@rsdoctor/core/plugins';
 import type {
   RsdoctorPluginInstance,
@@ -96,6 +97,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     if (this.options.features.bundle) {
       new InternalBundlePlugin<Compiler>(this).apply(compiler);
+      new InternalBundleTagPlugin<Compiler>(this).apply(compiler);
     }
 
     // InternalErrorReporterPlugin must called before InternalRulesPlugin, to avoid treat Rsdoctor's lint warnings/errors as Webpack's warnings/errors.
