@@ -168,10 +168,6 @@ new WebDoctorWebpackPlugin({
 - **Optional:** `true`
 - **Default:** `undefined`
 
-:::danger
-When enabling the analysis of BannerPlugin, Rsdoctor should not be used in production versions.
-:::
-
 This option is used to configure whether Rsdoctor enables support for certain detailed feature analysis capabilities, such as whether to enable compatibility with BannerPlugin.
 
 #### Supports Types
@@ -183,5 +179,9 @@ type ISupport = {
 ```
 
 #### banner
+
+:::danger
+When enabling the analysis of BannerPlugin, Rsdoctor should not be used in production versions.
+:::
 
 If `supports.banner` is enabled, Rsdoctor will enable compatibility logic for BannerPlugin. For more details, please refer to: [Supports BannerPlugin](../../guide/usage/bundle-size#supports-bannerplugin)
