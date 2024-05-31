@@ -120,3 +120,29 @@
   width="500px"
   style={{ margin: 'auto' }}
 />
+
+## 支持 BannerPlugin
+
+:::danger
+开启 BannerPlugin 分析时，请勿在生产版本中使用 Rsdoctor。
+:::
+
+由于 Rspack 和 Webpack 都支持 [BannerPlugin](https://www.rspack.dev/plugins/webpack/banner-plugin#bannerplugin)，BannerPlugin 是可在生成的 chunk 顶部或尾部添加一段指定的内容的内置插件。
+添加的代码段将会影响到对 Bundle 的解析能力。
+
+Rsdoctor 兼容了对 BannerPlugin 这种添加代码的逻辑，但因为 Rsdoctor 需要添加标记代码，所以没有默认开启，以下两种情况会开启 Rsdoctor BannerPlugin 能力：
+
+1. 项目在 `rspack.config.j|ts` 或 `webpack.config.j|ts` 中使用了 BannerPlugin；
+
+2. 通过 Rsdoctor options 配置 supports.banner 来开启：
+
+```ts
+new RsdoctorRspackPlugin (
+  supports: {
+    banner: true
+  }
+)
+
+```
+
+- 注：如果开启了 `drop_console` 将会影响 Rsdoctor 对 BannerPlugin 的分析，所以可以在 `RSDOCTOR = true` 时，关闭 `drop_console`。

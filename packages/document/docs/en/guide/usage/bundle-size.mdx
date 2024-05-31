@@ -120,3 +120,29 @@ Click the **"Bundle Analyzer Graph"** button on the **"Bundle Size"** page to vi
   width="500px"
   style={{ margin: 'auto' }}
 />
+
+## Supports BannerPlugin
+
+:::danger
+When enabling the BannerPlugin analysis, do not use Rsdoctor in the production version.
+:::
+
+Both Rspack and Webpack support the [BannerPlugin](https://www.rspack.dev/plugins/webpack/banner-plugin#bannerplugin), which is a built-in plugin that allows you to add specific content at the top or bottom of the generated chunks.
+The added code segment will affect the analysis capability of the bundle.
+
+Rsdoctor is compatible with the logic of adding code using the BannerPlugin, but it is not enabled by default because Rsdoctor needs to add tag code. The Rsdoctor BannerPlugin capability is enabled in the following two cases:
+
+1. The project uses the BannerPlugin in `rspack.config.j|ts` or `webpack.config.j|ts`.
+
+2. Enable Rsdoctor BannerPlugin capability through Rsdoctor options by setting `supports.banner`:
+
+```ts
+new RsdoctorRspackPlugin (
+  supports: {
+    banner: true
+  }
+)
+
+```
+
+- Note: Enabling `drop_console` will affect Rsdoctor's analysis of the BannerPlugin. Therefore, you can disable `drop_console` when `RSDOCTOR = true`.

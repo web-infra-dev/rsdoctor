@@ -118,18 +118,12 @@ Therefore, **the default configuration enables bundle analysis capabilities and 
 - if the `features` is set as an `Array`, it will **open** the features which you define in this array **only**.
 - if the `features` is set as an `Object`, it will **close** the features which you set the value is `false`.
 
-### reportCodeType 参数
+### reportCodeType
 
 - Type: `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
 - Optional: true
 - Default: undefined
 - Description
-
-  - 选择输出的分析数据：
-
-    - undefined 是所有完整数据；
-    - noModuleSource: true 是输出除了 module 代码之外的数据；Module 代码即 Bundle 内拆解出来的一个一个文件的打包模块代码。
-    - noAssetsAndModuleSource: true 是输出除了 module 代码和 Assets 产物代码之外的数据。
 
   - Select the output analysis data:
 
@@ -143,7 +137,7 @@ Therefore, **the default configuration enables bundle analysis capabilities and 
 
 ```js
 new WebDoctorWebpackPlugin({
-        disableClientServer: false, // 建议 CI 环境下关闭 server 能力，否则会卡住 pipeline 流程，检测 CI 环境可以使用 `process.env.CI_ACTOR`.
+        disableClientServer: false, // It is recommended to disable the server capability in the CI environment, otherwise it will block the pipeline process. You can check the CI environment using `process.env.CI_ACTOR`.
         features: ['loader', 'bundle', 'plugins'],
         reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
       }),
@@ -156,16 +150,38 @@ new WebDoctorWebpackPlugin({
 - Default: false
 - Description
 
-  开启或关闭需要 tos 上传， true 是关闭 tos 上传，false 是开启 tos 上传。
-
   Turn tos upload on or off. True is to turn off tos upload, and false is tos upload on.
 
 - Example
 
 ```js
 new WebDoctorWebpackPlugin({
-        disableClientServer: false, // 建议 CI 环境下关闭 server 能力，否则会卡住 pipeline 流程，检测 CI 环境可以使用 `process.env.CI_ACTOR`.
+        disableClientServer: false,  // It is recommended to disable the server capability in the CI environment, otherwise it will block the pipeline process. You can check the CI environment using `process.env.CI_ACTOR`.
         features: ['loader', 'bundle', 'plugins'],
         disableTOSUpload: true,
       }),
 ```
+
+### supports
+
+- **Type:** [Supports Types](#supports-types)
+- **Optional:** `true`
+- **Default:** `undefined`
+
+This option is used to configure whether Rsdoctor enables support for certain detailed feature analysis capabilities, such as whether to enable compatibility with BannerPlugin.
+
+#### Supports Types
+
+```ts
+type ISupport = {
+  banner: boolean;
+};
+```
+
+#### banner
+
+:::danger
+When enabling the analysis of BannerPlugin, Rsdoctor should not be used in production versions.
+:::
+
+If `supports.banner` is enabled, Rsdoctor will enable compatibility logic for BannerPlugin. For more details, please refer to: [Supports BannerPlugin](../../guide/usage/bundle-size#supports-bannerplugin)

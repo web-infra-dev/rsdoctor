@@ -136,3 +136,27 @@ import Features from '@zh/shared/features.md';
 import FeaturesRspack from '@zh/shared/features-rspack.md';
 
 <FeaturesRspack />
+
+### supports
+
+- **Type:** [Supports Types](#supports-types)
+- **Optional:** `true`
+- **Default:** `undefined`
+
+该选项是配置 Rsdoctor 是否开启某些细节特性分析能力支持的，例如：是否开启对 BannerPlugin 的兼容能力。
+
+#### Supports Types
+
+```ts
+type ISupport = {
+  banner: boolean;
+};
+```
+
+#### banner
+
+:::danger
+开启 BannerPlugin 分析时，请勿在生产版本中使用 Rsdoctor。
+:::
+
+如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
