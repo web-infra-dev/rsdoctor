@@ -5,7 +5,10 @@ import { BaseDataLoader } from './base';
 import { getSocket } from '../socket';
 
 export class LocalServerDataLoader extends BaseDataLoader {
-  protected events: Map<SDK.ServerAPI.API | SDK.ServerAPI.APIExtends, Set<Common.Function>> = new Map();
+  protected events: Map<
+    SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
+    Set<Common.Function>
+  > = new Map();
 
   public isLocal() {
     return true;
@@ -28,10 +31,12 @@ export class LocalServerDataLoader extends BaseDataLoader {
       if (ManifestShared.isShardingData(res)) {
         if (!this.shardingDataMap.has(key)) {
           const task = new Promise((resolve) => {
-            getSocket(this.manifest.__SOCKET__URL__).emit(
+            getSocket().emit(
               SDK.ServerAPI.API.LoadDataByKey,
               { key },
-              (res: SDK.ServerAPI.SocketResponseType<SDK.ServerAPI.API.LoadDataByKey>) => {
+              (
+                res: SDK.ServerAPI.SocketResponseType<SDK.ServerAPI.API.LoadDataByKey>,
+              ) => {
                 resolve(res.res);
               },
             );
@@ -55,8 +60,10 @@ export class LocalServerDataLoader extends BaseDataLoader {
 
   public async loadAPI<
     T extends SDK.ServerAPI.API,
-    B extends SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-    R extends SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+    B extends
+      SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
+    R extends
+      SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
   >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
     const [api, body] = args;
     // request limitation key
@@ -64,9 +71,13 @@ export class LocalServerDataLoader extends BaseDataLoader {
 
     return this.limit(key, async () => {
       return new Promise((resolve) => {
-        getSocket(this.manifest.__SOCKET__URL__).emit(api, body, (res: SDK.ServerAPI.SocketResponseType<T>) => {
-          resolve(res.res as R);
-        });
+        getSocket().emit(
+          api,
+          body,
+          (res: SDK.ServerAPI.SocketResponseType<T>) => {
+            resolve(res.res as R);
+          },
+        );
       });
       // const res = await postServerAPI(...args).catch((err) => {
       //   this.log(`loadAPI error: `, key);
@@ -104,14 +115,13 @@ export class LocalServerDataLoader extends BaseDataLoader {
     }
 
     this.events.get(api)!.add(fn);
-    getSocket(this.manifest.__SOCKET__URL__).on(api as string, fn);
+    getSocket().on(api as string, fn);
   }
 
-  public removeOnDataUpdate<T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends>(
-    api: T,
-    fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void,
-  ) {
-    getSocket(this.manifest.__SOCKET__URL__).off(api as string, fn);
+  public removeOnDataUpdate<
+    T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
+  >(api: T, fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void) {
+    getSocket().off(api as string, fn);
     this.events.get(api)!.delete(fn);
   }
 }
