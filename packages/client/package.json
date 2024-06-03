@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/client",
-  "version": "0.3.1",
+  "version": "0.3.1-beta.0",
   "main": "dist/index.html",
   "repository": {
     "type": "git",
