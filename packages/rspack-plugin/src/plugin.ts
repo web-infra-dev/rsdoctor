@@ -1,4 +1,4 @@
-import type { Compiler, Configuration, RuleSetRule, Stats } from '@rspack/core';
+import type { Compiler, Configuration, RuleSetRule } from '@rspack/core';
 import { ModuleGraph } from '@rsdoctor/graph';
 import { RsdoctorSlaveSDK, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import {
@@ -23,7 +23,6 @@ import {
   Constants,
   Linter,
   Manifest as ManifestType,
-  Plugin,
   SDK,
 } from '@rsdoctor/types';
 import path from 'path';
@@ -122,19 +121,8 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     ensureModulesChunksGraphFn(compiler, this);
   }
 
-  public done = async (compiler: Compiler, stats: Stats): Promise<void> => {
-    const json = stats.toJson({
-      all: false,
-      version: true,
-      chunks: true,
-      modules: true,
-      chunkModules: true,
-      assets: true,
-      builtAt: true,
-      chunkRelations: true,
-    }) as Plugin.StatsCompilation; // TODO: if this type can compatible?
-
-    this.getRspackConfig(compiler, json.rspackVersion || '');
+  public done = async (compiler: Compiler): Promise<void> => {
+    this.getRspackConfig(compiler);
 
     await this.sdk.bootstrap();
 
@@ -164,7 +152,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     }
   };
 
-  public getRspackConfig(compiler: Compiler, version: string) {
+  public getRspackConfig(compiler: Compiler) {
     if (compiler.isChild()) return;
     const { plugins, infrastructureLogging, ...rest } = compiler.options;
     const _rest = cloneDeep(rest);
@@ -177,10 +165,13 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       plugins: plugins.map((e) => e?.constructor.name),
     } as unknown as Configuration;
 
-    // save webpack configuration to sdk
+    const rspackVersion = compiler.webpack?.rspackVersion;
+    const webpackVersion = compiler.webpack?.version;
+
+    // save webpack or rspack configuration to sdk
     this.sdk.reportConfiguration({
-      name: 'rspack',
-      version: version || 'unknown',
+      name: rspackVersion ? 'rspack' : 'webpack',
+      version: rspackVersion || webpackVersion || 'unknown',
       config: configuration,
     });
 
