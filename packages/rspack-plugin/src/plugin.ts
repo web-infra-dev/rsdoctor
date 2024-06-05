@@ -19,12 +19,7 @@ import type {
   RsdoctorPluginOptionsNormalized,
   RsdoctorRspackPluginOptions,
 } from '@rsdoctor/core';
-import {
-  Constants,
-  Linter,
-  Manifest as ManifestType,
-  SDK,
-} from '@rsdoctor/types';
+import { Constants, Linter, Manifest as ManifestType } from '@rsdoctor/types';
 import path from 'path';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
@@ -55,7 +50,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       new RsdoctorWebpackSDK({
         name: pluginTapName,
         root: process.cwd(),
-        type: SDK.ToDataType.Normal,
+        type: this.options.reportCodeType,
         config: { disableTOSUpload: this.options.disableTOSUpload },
         innerClientPath: this.options.innerClientPath,
       });
