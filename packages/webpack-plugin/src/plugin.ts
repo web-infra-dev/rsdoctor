@@ -136,10 +136,14 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
       plugins: plugins.map((e) => e?.constructor.name),
     } as unknown as Configuration;
 
-    // save webpack configuration to sdk
+    // @ts-expect-error
+    const rspackVersion = compiler.webpack?.rspackVersion;
+    const webpackVersion = compiler.webpack?.version;
+
+    // save webpack or rspack configuration to sdk
     this.sdk.reportConfiguration({
-      name: 'webpack',
-      version: compiler.webpack?.version || 'unknown',
+      name: rspackVersion ? 'rspack' : 'webpack',
+      version: rspackVersion || webpackVersion || 'unknown',
       config: configuration,
     });
 
