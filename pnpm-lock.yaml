@@ -1025,8 +1025,8 @@ importers:
         specifier: 4.0.0
         version: 4.0.0
       '@types/envinfo':
-        specifier: 7.8.1
-        version: 7.8.1
+        specifier: 7.8.4
+        version: 7.8.4
       '@types/fs-extra':
         specifier: ^11.0.2
         version: 11.0.4
@@ -6770,8 +6770,8 @@ packages:
     resolution: {integrity: sha512-UkfTYLA64vGUyR4ez8ybIC01wtilS/ydOqKL1fSHOvnX1sVm1sI5btr7Q+bqpdaPGD+QNhOgBXq1HGjO+99e1A==}
     dev: true
 
-  /@types/envinfo@7.8.1:
-    resolution: {integrity: sha512-pTyshpmGxqB9lRwG75v2YR0oqKYpCrklOYlZWQ88z/JB0fimT8EVmYekuIwpU3IxPZDHSXCqXKzkCrtAcKY25g==}
+  /@types/envinfo@7.8.4:
+    resolution: {integrity: sha512-K5WaRgSlqjc408IyPbxOFnz7rVG9E8ELhj7XR3Ncui15EgeyIXTcCfmwrRnU4uEOCJQhzZRAQurYznEEc1dD2g==}
     dev: true
 
   /@types/eslint-scope@3.7.7:
