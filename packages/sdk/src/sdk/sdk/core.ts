@@ -61,7 +61,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
         EnvInfo.getNodeVersion(),
         EnvInfo.getYarnVersion(),
         EnvInfo.getNpmVersion(),
-        EnvInfo.getGlobalNpmPackageVersion('pnpm'),
+        EnvInfo.getPnpmVersion(),
       ]);
 
     this._envinfo = {
