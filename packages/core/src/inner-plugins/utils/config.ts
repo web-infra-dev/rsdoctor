@@ -28,6 +28,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     disableTOSUpload = false,
     innerClientPath = '',
     supports = { banner: false },
+    port,
   } = config;
 
   assert(linter && typeof linter === 'object');
@@ -93,6 +94,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     disableTOSUpload,
     innerClientPath,
     supports,
+    port,
   };
 
   return res;

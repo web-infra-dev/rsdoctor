@@ -54,6 +54,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     this.sdk =
       this.options.sdkInstance ??
       new RsdoctorWebpackSDK({
+        port: this.options.port,
         name: pluginTapName,
         root: process.cwd(),
         type: this.options.reportCodeType,

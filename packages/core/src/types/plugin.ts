@@ -62,6 +62,11 @@ export interface RsdoctorWebpackPluginOptions<
    * @default false
    */
   innerClientPath?: string;
+
+  /**
+   * The port of the Rsdoctor server.
+   */
+  port?: number;
 }
 
 export interface RsdoctorMultiplePluginOptions<
@@ -83,13 +88,14 @@ export interface RsdoctorPluginOptionsNormalized<
 > extends Common.DeepRequired<
     Omit<
       RsdoctorWebpackPluginOptions<Rules>,
-      'sdkInstance' | 'linter' | 'reportCodeType'
+      'sdkInstance' | 'linter' | 'reportCodeType' | 'port'
     >
   > {
   features: Common.DeepRequired<Plugin.RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: RsdoctorWebpackSDK;
   reportCodeType?: SDK.ToDataType;
+  port?: number;
 }
 
 export interface BasePluginInstance<T extends Plugin.BaseCompiler> {
