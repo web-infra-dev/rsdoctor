@@ -180,28 +180,30 @@ export class Module implements SDK.ModuleInstance {
   }
 
   getSource(type: SDK.ToDataType = SDK.ToDataType.Normal) {
-    return type === SDK.ToDataType.Lite
-      ? {
-          source: '',
-          transformed: '',
-          parsedSource: this.source.parsedSource,
-        }
-      : this.isPreferSource
-      ? {
-          source: this.source.source,
-          transformed: '',
-          parsedSource: '',
-        }
-      : type === SDK.ToDataType.All ? {
+    if (
+      type === SDK.ToDataType.Lite ||
+      type === SDK.ToDataType.LiteAndNoAsset
+    ) {
+      return {
+        source: '',
+        transformed: '',
+        parsedSource: this.isPreferSource ? '' : this.source.parsedSource,
+      };
+    }
+
+    if (type === SDK.ToDataType.All) {
+      return {
         source: this.source.source,
         transformed: this.source.transformed,
-        parsedSource: this.source.parsedSource,
-      }
-      : {
-          source: this.source.source,
-          transformed: '',
-          parsedSource: this.source.parsedSource,
-        };
+        parsedSource: this.isPreferSource ? '' : this.source.parsedSource,
+      };
+    }
+
+    return {
+      source: this.source.source,
+      transformed: '',
+      parsedSource: this.isPreferSource ? '' : this.source.parsedSource,
+    };
   }
 
   setSourceMap(sourceMap: SourceMapConsumer): void {
