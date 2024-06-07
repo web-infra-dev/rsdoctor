@@ -28,6 +28,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     disableTOSUpload = false,
     innerClientPath = '',
     supports = { parseBundle: true, banner: false },
+    port,
   } = config;
 
   assert(linter && typeof linter === 'object');

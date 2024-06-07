@@ -89,12 +89,13 @@ export interface RsdoctorPluginOptionsNormalized<
 > extends Common.DeepRequired<
     Omit<
       RsdoctorWebpackPluginOptions<Rules>,
-      'sdkInstance' | 'linter' | 'reportCodeType' | 'supports'
+      'sdkInstance' | 'linter' | 'reportCodeType' | 'supports' | 'port'
     >
   > {
   features: Common.DeepRequired<Plugin.RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: RsdoctorWebpackSDK;
+  port?: number;
   reportCodeType: SDK.ToDataType;
   supports: ISupport;
 }
