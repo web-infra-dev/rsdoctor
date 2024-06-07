@@ -72,7 +72,7 @@
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "axios": "^1.6.1",
+    "axios": "^1.7.2",
     "bytes": "3.1.2",
     "enhanced-resolve": "5.12.0",
     "fs-extra": "^11.1.1",

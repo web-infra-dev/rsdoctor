@@ -426,8 +426,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       axios:
-        specifier: ^1.6.1
-        version: 1.6.1
+        specifier: ^1.7.2
+        version: 1.7.2
       chalk:
         specifier: ^4.1.2
         version: 4.1.2
@@ -550,8 +550,8 @@ importers:
         specifier: 5.15.3
         version: 5.15.3(react-dom@17.0.2)(react@18.2.0)
       axios:
-        specifier: ^1.6.1
-        version: 1.6.1
+        specifier: ^1.7.2
+        version: 1.7.2
       dayjs:
         specifier: 1.11.6
         version: 1.11.6
@@ -628,8 +628,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       axios:
-        specifier: ^1.6.1
-        version: 1.6.1
+        specifier: ^1.7.2
+        version: 1.7.2
       bytes:
         specifier: 3.1.2
         version: 3.1.2
@@ -4258,7 +4258,7 @@ packages:
     dependencies:
       '@modern-js/utils': 2.49.3
       '@swc/helpers': 0.5.1
-      axios: 1.6.1
+      axios: 1.7.2
       tar: 6.2.0
     transitivePeerDependencies:
       - debug
@@ -4373,7 +4373,7 @@ packages:
       '@modern-js/plugin-i18n': 2.49.2
       '@modern-js/utils': 2.49.2
       '@swc/helpers': 0.5.3
-      axios: 1.6.1
+      axios: 1.7.2
       resolve-from: 5.0.0
     transitivePeerDependencies:
       - debug
@@ -4603,7 +4603,7 @@ packages:
       '@modern-js/types': 2.48.3
       '@modern-js/utils': 2.48.3
       '@swc/helpers': 0.5.3
-      axios: 1.6.1
+      axios: 1.7.2
       connect-history-api-fallback: 2.0.0
       http-compression: 1.0.6
       minimatch: 3.1.2
@@ -7919,6 +7919,16 @@ packages:
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
+    dev: true
+
+  /axios@1.7.2:
+    resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
+    dependencies:
+      follow-redirects: 1.15.6
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
 
   /b-tween@0.3.3:
     resolution: {integrity: sha512-oEHegcRpA7fAuc9KC4nktucuZn2aS8htymCPcP3qkEGPqiBH+GfqtqoG2l7LxHngg6O0HFM7hOeOYExl1Oz4ZA==}
@@ -10699,6 +10709,16 @@ packages:
 
   /follow-redirects@1.15.3:
     resolution: {integrity: sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: true
+
+  /follow-redirects@1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
