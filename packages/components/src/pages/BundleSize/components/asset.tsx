@@ -1,7 +1,25 @@
-import { CodepenCircleOutlined, ColumnHeightOutlined, DeploymentUnitOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import {
+  CodepenCircleOutlined,
+  ColumnHeightOutlined,
+  DeploymentUnitOutlined,
+  InfoCircleOutlined,
+} from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
-import { Button, Card, Col, Divider, Drawer, Empty, Popover, Row, Space, Tag, Tooltip, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Drawer,
+  Empty,
+  Popover,
+  Row,
+  Space,
+  Tag,
+  Tooltip,
+  Typography,
+} from 'antd';
 import { omitBy, sumBy } from 'lodash-es';
 import { dirname, relative } from 'path';
 import { Key } from 'rc-tree/lib/interface';
@@ -14,7 +32,14 @@ import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
 import { TextDrawer } from '../../../components/TextDrawer';
 import { Size, drawerWidth } from '../../../constants';
-import { DataNode, createFileStructures, formatSize, getOriginalLanguage, isJsDataUrl, useI18n } from '../../../utils';
+import {
+  DataNode,
+  createFileStructures,
+  formatSize,
+  getOriginalLanguage,
+  isJsDataUrl,
+  useI18n,
+} from '../../../utils';
 import { ModuleGraphListContext } from '../config';
 
 let expanedModulesKeys: Key[] = [];
@@ -25,12 +50,14 @@ const TAB_MAP = {
 };
 
 const tagStyle = {
-  'margin': 'none',
-  'marginInlineEnd': 0,
+  margin: 'none',
+  marginInlineEnd: 0,
 };
 
-export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) => {
-  const [tab, setTab] = useState('source');
+export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
+  data,
+}) => {
+  const [tab, setTab] = useState('parsedSource');
   const { t } = useI18n();
 
   const TAB_LAB_MAP: Record<string, string> = {
@@ -56,72 +83,98 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({ data }) =
         title: `Code of "${path}"`,
       }}
     >
-      <ServerAPIProvider api={SDK.ServerAPI.API.GetModuleCodeByModuleId} body={{ moduleId: data.id }}>
+      <ServerAPIProvider
+        api={SDK.ServerAPI.API.GetModuleCodeByModuleId}
+        body={{ moduleId: data.id }}
+      >
         {(source) => {
           return (
             <>
-            { !source['source'] && !source['parsedSource'] && !source['transformed'] ?
-              <Empty description="No Code. Rspack builder not support code yet. And if you upload the stats.json to analysis, it's also no code to show." />
-              :
-              <Card
-                className="code-size-card"
-                style={{ width: '100%' }}
-                tabList={Object.keys(omitBy(source, (s) => !s)).map(k => ({ tab: k })).map((e) => ({
-                  ...e,
-                  tab: TAB_LAB_MAP[e.tab],
-                  key: e.tab,
-                  })
-                )}
-                onTabChange={(v) => setTab(v)}
-                tabBarExtraContent={
-                  <Popover
-                    placement="bottom"
-                    title={<Typography.Title level={5}>Explain</Typography.Title>}
-                    content={
-                      <>
-                        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 30 }}>
-                          <div>
-                            <Typography.Text strong>Source: </Typography.Text>
-                            <Typography.Text>{TAB_MAP.source}</Typography.Text>
+              {!source['source'] &&
+              !source['parsedSource'] &&
+              !source['transformed'] ? (
+                <Empty description="No Code. Rspack builder not support code yet. And if you upload the stats.json to analysis, it's also no code to show." />
+              ) : (
+                <Card
+                  className="code-size-card"
+                  style={{ width: '100%' }}
+                  tabList={Object.keys(omitBy(source, (s) => !s))
+                    .map((k) => ({ tab: k }))
+                    .map((e) => ({
+                      ...e,
+                      tab: TAB_LAB_MAP[e.tab],
+                      key: e.tab,
+                    }))}
+                  onTabChange={(v) => setTab(v)}
+                  tabBarExtraContent={
+                    <Popover
+                      placement="bottom"
+                      title={
+                        <Typography.Title level={5}>Explain</Typography.Title>
+                      }
+                      content={
+                        <>
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              marginBottom: 30,
+                            }}
+                          >
+                            <div>
+                              <Typography.Text strong>Source: </Typography.Text>
+                              <Typography.Text>
+                                {TAB_MAP.source}
+                              </Typography.Text>
+                            </div>
+                            <div>
+                              <Typography.Text strong>
+                                Transformed:{' '}
+                              </Typography.Text>
+                              <Typography.Text>
+                                {TAB_MAP.transformed}
+                              </Typography.Text>
+                            </div>
+                            <div>
+                              <Typography.Text strong>
+                                Bundled Source:{' '}
+                              </Typography.Text>
+                              <Typography.Text>
+                                {TAB_MAP.parsedSource}
+                              </Typography.Text>
+                            </div>
+                            <br />
+                            <Typography.Text strong>{'More'}</Typography.Text>
+                            <Typography.Text>
+                              {t('CodeModeExplain')}
+                            </Typography.Text>
                           </div>
-                          <div>
-                            <Typography.Text strong>Transformed: </Typography.Text>
-                            <Typography.Text>{TAB_MAP.transformed}</Typography.Text>
-                          </div>
-                          <div>
-                            <Typography.Text strong>Bundled Source: </Typography.Text>
-                            <Typography.Text>{TAB_MAP.parsedSource}</Typography.Text>
-                          </div>
-                          <br />
-                          <Typography.Text strong>{'More'}</Typography.Text>
-                          <Typography.Text>{t('CodeModeExplain')}</Typography.Text>
-                        </div>
-                      </>
-                    }
-                    trigger={'hover'}
-                  >
-                    <a href="#">Explain</a>
-                  </Popover>
-                }
-              >
-                <Editor
-                  theme="vs-dark"
-                  language={getOriginalLanguage(path)}
-                  // eslint-disable-next-line financial/no-float-calculation
-                  height={window.innerHeight / 1.5}
-                  value={source[tab]}
-                  options={{
-                    readOnly: true,
-                    domReadOnly: true,
-                    fontSize: 14,
-                    wordWrap: 'bounded',
-                    minimap: {
-                      enabled: false,
-                    },
-                  }}
-                />
-              </Card>
-            }
+                        </>
+                      }
+                      trigger={'hover'}
+                    >
+                      <a href="#">Explain</a>
+                    </Popover>
+                  }
+                >
+                  <Editor
+                    theme="vs-dark"
+                    language={getOriginalLanguage(path)}
+                    // eslint-disable-next-line financial/no-float-calculation
+                    height={window.innerHeight / 1.5}
+                    value={source[tab]}
+                    options={{
+                      readOnly: true,
+                      domReadOnly: true,
+                      fontSize: 14,
+                      wordWrap: 'bounded',
+                      minimap: {
+                        enabled: false,
+                      },
+                    }}
+                  />
+                </Card>
+              )}
             </>
           );
         }}
@@ -139,9 +192,16 @@ export const ModuleGraphViewer: React.FC<{
   if (!id) return null;
 
   return (
-    <Drawer open={show} maskClosable width={drawerWidth} onClose={() => setShow(false)}>
+    <Drawer
+      open={show}
+      maskClosable
+      width={drawerWidth}
+      onClose={() => setShow(false)}
+    >
       <ServerAPIProvider api={SDK.ServerAPI.API.GetAllModuleGraph} body={{}}>
-        {(modules) => <ModuleAnalyzeComponent cwd={cwd} moduleId={id} modules={modules} />}
+        {(modules) => (
+          <ModuleAnalyzeComponent cwd={cwd} moduleId={id} modules={modules} />
+        )}
       </ServerAPIProvider>
     </Drawer>
   );
@@ -169,14 +229,15 @@ export const ModulesStatistics: React.FC<{
   chunks: SDK.ChunkData[];
   filteredModules: SDK.ModuleData[];
 }> = ({ modules, chunks, filteredModules }) => {
-  const { sourceSize, parsedSize, filteredParsedSize, filteredSourceSize } = useMemo(() => {
-    return {
-      sourceSize: sumBy(modules, (e) => e.size.sourceSize),
-      parsedSize: sumBy(modules, (e) => e.size.parsedSize),
-      filteredSourceSize: sumBy(filteredModules, (e) => e.size.sourceSize),
-      filteredParsedSize: sumBy(filteredModules, (e) => e.size.parsedSize),
-    };
-  }, [modules, filteredModules]);
+  const { sourceSize, parsedSize, filteredParsedSize, filteredSourceSize } =
+    useMemo(() => {
+      return {
+        sourceSize: sumBy(modules, (e) => e.size.sourceSize),
+        parsedSize: sumBy(modules, (e) => e.size.parsedSize),
+        filteredSourceSize: sumBy(filteredModules, (e) => e.size.sourceSize),
+        filteredParsedSize: sumBy(filteredModules, (e) => e.size.parsedSize),
+      };
+    }, [modules, filteredModules]);
 
   return (
     <Space>
@@ -184,7 +245,10 @@ export const ModulesStatistics: React.FC<{
         title={`total modules count is ${modules.length}, the filtered modules count is ${filteredModules.length}`}
       >
         <Space>
-          <Typography.Text type="secondary" style={{ fontSize: 12, fontWeight: 400 }}>
+          <Typography.Text
+            type="secondary"
+            style={{ fontSize: 12, fontWeight: 400 }}
+          >
             Modules: {filteredModules.length} / {modules.length}
           </Typography.Text>
           <InfoCircleOutlined />
@@ -210,7 +274,10 @@ export const ModulesStatistics: React.FC<{
         }
       >
         <Space>
-          <Typography.Text type="secondary" style={{ fontSize: 12, fontWeight: 400 }}>
+          <Typography.Text
+            type="secondary"
+            style={{ fontSize: 12, fontWeight: 400 }}
+          >
             Modules Size:{' '}
             {filteredParsedSize === parsedSize
               ? formatSize(parsedSize)
@@ -223,7 +290,9 @@ export const ModulesStatistics: React.FC<{
       <Tooltip
         title={
           <Space direction="vertical">
-            <Typography.Text style={{ color: 'inherit' }}>this asset includes {chunks.length} chunks: </Typography.Text>
+            <Typography.Text style={{ color: 'inherit' }}>
+              this asset includes {chunks.length} chunks:{' '}
+            </Typography.Text>
             {chunks.map((e) => (
               <Bdg label="chunk" value={e.name} key={e.name} />
             ))}
@@ -231,7 +300,10 @@ export const ModulesStatistics: React.FC<{
         }
       >
         <Space>
-          <Typography.Text type="secondary" style={{ fontSize: 12, fontWeight: 400 }}>
+          <Typography.Text
+            type="secondary"
+            style={{ fontSize: 12, fontWeight: 400 }}
+          >
             Chunks: {chunks.length}
           </Typography.Text>
           <InfoCircleOutlined />
@@ -248,7 +320,14 @@ export const AssetDetail: React.FC<{
   moduleSizeLimit?: number;
   height?: number;
   root: string;
-}> = ({ asset, chunks: includeChunks, modules: includeModules, moduleSizeLimit, height, root }) => {
+}> = ({
+  asset,
+  chunks: includeChunks,
+  modules: includeModules,
+  moduleSizeLimit,
+  height,
+  root,
+}) => {
   // const navigate = useNavigate();
   const [moduleKeyword, setModuleKeyword] = useState('');
   const [defaultExpandAll, setDefaultExpandAll] = useState(false);
@@ -269,7 +348,6 @@ export const AssetDetail: React.FC<{
     return res;
   }, [includeModules, moduleKeyword, moduleSizeLimit]);
 
-
   const fileStructures = useMemo(() => {
     const res = createFileStructures({
       files: filteredModules.map((e) => e.path).filter(Boolean),
@@ -285,39 +363,56 @@ export const AssetDetail: React.FC<{
         const containedOtherModules =
           !isConcatenation &&
           parsedSize === 0 &&
-          includeModules.filter((e) => e !== mod && e.modules && e.modules.indexOf(mod.id) > -1);
+          includeModules.filter(
+            (e) => e !== mod && e.modules && e.modules.indexOf(mod.id) > -1,
+          );
 
         return (
           <Space>
-            <Keyword ellipsis style={{ maxWidth: 500 }} text={basename} keyword={moduleKeyword} />
+            <Keyword
+              ellipsis
+              style={{ maxWidth: 500 }}
+              text={basename}
+              keyword={moduleKeyword}
+            />
             {parsedSize !== 0 ? (
               <Tooltip
                 title={
                   <Space direction="vertical">
-                  <Tag color={'orange'}>{'Bundled Size:' + formatSize(parsedSize)}</Tag>
-                  <Tag color={'volcano'}>{'Source Size:' + formatSize(sourceSize)}</Tag>
-                </Space>
+                    <Tag color={'orange'}>
+                      {'Bundled Size:' + formatSize(parsedSize)}
+                    </Tag>
+                    <Tag color={'volcano'}>
+                      {'Source Size:' + formatSize(sourceSize)}
+                    </Tag>
+                  </Space>
                 }
                 color={'white'}
               >
-
-                <Tag color={'purple'} style={tagStyle}>{'Bundled: ' + formatSize(parsedSize)}</Tag>
+                <Tag color={'purple'} style={tagStyle}>
+                  {'Bundled: ' + formatSize(parsedSize)}
+                </Tag>
               </Tooltip>
             ) : sourceSize !== 0 ? (
               // fallback to display tag for source size
-              <Tag color={'geekblue'}>{'Source Size:' + formatSize(sourceSize)}</Tag>
+              <Tag color={'geekblue'}>
+                {'Source Size:' + formatSize(sourceSize)}
+              </Tag>
             ) : null}
             {isConcatenation ? (
               <Tooltip
                 title={
                   <Space>
                     <Typography.Text style={{ color: 'inherit' }}>
-                      this is a concatenated module, it contains {mod.modules?.length} modules
+                      this is a concatenated module, it contains{' '}
+                      {mod.modules?.length} modules
                     </Typography.Text>
                   </Space>
                 }
               >
-                <Tag color="green" style={tagStyle}>concatenated</Tag>
+                <Tag color="green" style={tagStyle}>
+                  concatenated
+                </Tag>
               </Tooltip>
             ) : null}
             {containedOtherModules && containedOtherModules.length ? (
@@ -325,7 +420,8 @@ export const AssetDetail: React.FC<{
                 title={
                   <Space direction="vertical">
                     <Typography.Text style={{ color: 'inherit' }}>
-                      this is a concatenated module, it is be contained in these modules below:
+                      this is a concatenated module, it is be contained in these
+                      modules below:
                     </Typography.Text>
                     {containedOtherModules.map(({ id, path }) => {
                       if (isJsDataUrl(path)) {
@@ -345,14 +441,22 @@ export const AssetDetail: React.FC<{
 
                       if (p.startsWith('javascript;charset=utf-8;base64,')) {
                         return (
-                          <Typography.Text key={id} style={{ color: 'inherit', maxWidth: '100%' }} code>
+                          <Typography.Text
+                            key={id}
+                            style={{ color: 'inherit', maxWidth: '100%' }}
+                            code
+                          >
                             {p[0] === '.' ? p : `./${p}`}
                           </Typography.Text>
                         );
                       }
 
                       return (
-                        <Typography.Text key={id} style={{ color: 'inherit' }} code>
+                        <Typography.Text
+                          key={id}
+                          style={{ color: 'inherit' }}
+                          code
+                        >
                           {p[0] === '.' ? p : `./${p}`}
                         </Typography.Text>
                       );
@@ -378,13 +482,17 @@ export const AssetDetail: React.FC<{
       dirTitle(dir, defaultTitle) {
         const paths = getChildrenModule(dir);
         if (paths.length) {
-          const mods = paths.map((e) => includeModules.find((m) => m.path === e)!);
+          const mods = paths.map(
+            (e) => includeModules.find((m) => m.path === e)!,
+          );
           const parsedSize = sumBy(mods, (e) => e.size?.parsedSize || 0);
           return (
             <Space>
               <Typography.Text>{defaultTitle}</Typography.Text>
               {parsedSize > 0 ? (
-                <Tag style={tagStyle} color={'orange'}>{'Bundled:' + formatSize(parsedSize)}</Tag>
+                <Tag style={tagStyle} color={'orange'}>
+                  {'Bundled:' + formatSize(parsedSize)}
+                </Tag>
               ) : null}
             </Space>
           );
@@ -408,17 +516,35 @@ export const AssetDetail: React.FC<{
   }, [moduleKeyword]);
 
   return (
-    <ModuleGraphListContext.Provider value={{ moduleJumpList, setModuleJumpList }}>
-      <Card title={`Modules of "${asset.path}"`} bodyStyle={{ overflow: 'scroll', height }} size="small">
+    <ModuleGraphListContext.Provider
+      value={{ moduleJumpList, setModuleJumpList }}
+    >
+      <Card
+        title={`Modules of "${asset.path}"`}
+        bodyStyle={{ overflow: 'scroll', height }}
+        size="small"
+      >
         {includeModules.length ? (
           <Row>
             <Col span={24}>
-              <ModulesStatistics modules={includeModules} chunks={includeChunks} filteredModules={filteredModules} />
+              <ModulesStatistics
+                modules={includeModules}
+                chunks={includeChunks}
+                filteredModules={filteredModules}
+              />
             </Col>
             <Col span={24}>
               <Space>
-                <KeywordInput placeholder="search module by keyword" onChange={onSearch} key={asset.path} />
-                <Button onClick={() => setDefaultExpandAll(true)} size="small" icon={<ColumnHeightOutlined />}>
+                <KeywordInput
+                  placeholder="search module by keyword"
+                  onChange={onSearch}
+                  key={asset.path}
+                />
+                <Button
+                  onClick={() => setDefaultExpandAll(true)}
+                  size="small"
+                  icon={<ColumnHeightOutlined />}
+                >
                   expand all
                 </Button>
               </Space>
@@ -436,25 +562,41 @@ export const AssetDetail: React.FC<{
                     expanedModulesKeys?.length
                       ? expanedModulesKeys
                       : fileStructures.length === 1
-                      ? [fileStructures[0].key]
-                      : []
+                        ? [fileStructures[0].key]
+                        : []
                   }
                   key={`tree_${moduleKeyword}_${defaultExpandAll}_${asset.path}`}
-                  defaultExpandAll={defaultExpandAll || filteredModules.length <= 20}
+                  defaultExpandAll={
+                    defaultExpandAll || filteredModules.length <= 20
+                  }
                 />
               ) : (
                 <Empty
-                  description={<Typography.Text strong>{`"${moduleKeyword}" can't match any modules`}</Typography.Text>}
+                  description={
+                    <Typography.Text
+                      strong
+                    >{`"${moduleKeyword}" can't match any modules`}</Typography.Text>
+                  }
                 />
               )}
             </Col>
           </Row>
         ) : (
-          <Empty description={<Typography.Text strong>{`"${asset.path}" doesn't have any modules`}</Typography.Text>} />
+          <Empty
+            description={
+              <Typography.Text
+                strong
+              >{`"${asset.path}" doesn't have any modules`}</Typography.Text>
+            }
+          />
         )}
 
         <ModuleGraphViewer
-          id={moduleJumpList?.length ? moduleJumpList[moduleJumpList.length - 1] : ''}
+          id={
+            moduleJumpList?.length
+              ? moduleJumpList[moduleJumpList.length - 1]
+              : ''
+          }
           show={show}
           setShow={setShow}
           cwd={root}
