@@ -13,6 +13,7 @@ export default defineConfig({
           reportCodeType: {
             noAssetsAndModuleSource: true,
           },
+          port: 9988,
         },
       ]);
     },
