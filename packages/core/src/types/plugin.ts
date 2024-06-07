@@ -50,7 +50,7 @@ export interface RsdoctorWebpackPluginOptions<
   /**
    * Whether to turn on some characteristic analysis capabilities, such as: the support for the BannerPlugin.
    */
-  supports?: ISupport | undefined;
+  supports?: ISupport;
   /**
    * control the Rsdoctor upload data to TOS, used by inner-rsdoctor.
    * @default false
@@ -79,23 +79,24 @@ export interface RsdoctorMultiplePluginOptions<
   name?: string;
 }
 
-type ISupport = {
-  banner: boolean;
-};
+interface ISupport {
+  banner?: boolean;
+  parseBundle?: boolean;
+}
 
 export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends Common.DeepRequired<
     Omit<
       RsdoctorWebpackPluginOptions<Rules>,
-      'sdkInstance' | 'linter' | 'reportCodeType' | 'port'
+      'sdkInstance' | 'linter' | 'reportCodeType' | 'supports'
     >
   > {
   features: Common.DeepRequired<Plugin.RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: RsdoctorWebpackSDK;
-  reportCodeType?: SDK.ToDataType;
-  port?: number;
+  reportCodeType: SDK.ToDataType;
+  supports: ISupport;
 }
 
 export interface BasePluginInstance<T extends Plugin.BaseCompiler> {
