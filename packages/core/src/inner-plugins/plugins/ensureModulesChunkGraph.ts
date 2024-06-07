@@ -73,7 +73,13 @@ export const ensureModulesChunksGraphFn = (
       }
 
       /** transform modules graph */
-      await getModulesInfosByStats(compiler, statsJson, _this.modulesGraph);
+      const shouldParseBundle = _this.options.supports.parseBundle !== false;
+      await getModulesInfosByStats(
+        compiler,
+        statsJson,
+        _this.modulesGraph,
+        shouldParseBundle,
+      );
 
       debug(Process.getMemoryUsageMessage, '[After Transform ModuleGraph]');
 
@@ -115,6 +121,7 @@ async function getModulesInfosByStats(
   compiler: Plugin.BaseCompiler,
   stats: Plugin.StatsCompilation,
   moduleGraph: ModuleGraph,
+  parseBundle: boolean,
 ) {
   if (!moduleGraph) {
     return;
@@ -124,6 +131,7 @@ async function getModulesInfosByStats(
       (await ChunksBuildUtils.getAssetsModulesData(
         stats,
         compiler.outputPath,
+        parseBundle,
       )) || {};
     ChunksUtils.transformAssetsModulesData(parsedModulesData, moduleGraph);
   } catch (e) {}
