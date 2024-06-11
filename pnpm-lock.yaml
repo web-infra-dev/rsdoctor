@@ -562,8 +562,8 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(echarts@5.5.0)(react@18.2.0)
       i18next:
-        specifier: 22.0.4
-        version: 22.0.4
+        specifier: 22.5.1
+        version: 22.5.1
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -590,7 +590,7 @@ importers:
         version: 0.3.12(react-dom@17.0.2)(react@18.2.0)
       react-i18next:
         specifier: 12.0.0
-        version: 12.0.0(i18next@22.0.4)(react-dom@17.0.2)(react@18.2.0)
+        version: 12.0.0(i18next@22.5.1)(react-dom@17.0.2)(react@18.2.0)
       react-json-view:
         specifier: 1.21.3
         version: 1.21.3(@types/react@18.2.39)(react-dom@17.0.2)(react@18.2.0)
@@ -4256,7 +4256,7 @@ packages:
   /@modern-js/codesmith@2.3.3:
     resolution: {integrity: sha512-KBmkO05++5UB73DvNsoR9EhGMH1Z9jO9bq4nlDREwonc4XE3dJv6ojQlw9B9JRauG+FzNfp+i2cdqn4AWNPBbA==}
     dependencies:
-      '@modern-js/utils': 2.49.3
+      '@modern-js/utils': 2.52.0
       '@swc/helpers': 0.5.1
       axios: 1.7.2
       tar: 6.2.0
@@ -4842,7 +4842,6 @@ packages:
       caniuse-lite: 1.0.30001627
       lodash: 4.17.21
       rslog: 1.2.0
-    dev: true
 
   /@module-federation/runtime-tools@0.0.8:
     resolution: {integrity: sha512-tqx3wlVHnpWLk+vn22c0x9Nv1BqdZnoS6vdMb53IsVpbQIFP70nhhvymHUyFuPkoLzMFidS7GpG58DYT/4lvCw==}
@@ -11721,10 +11720,10 @@ packages:
     engines: {node: '>=14'}
     dev: true
 
-  /i18next@22.0.4:
-    resolution: {integrity: sha512-TOp7BTMKDbUkOHMzDlVsCYWpyaFkKakrrO3HNXfSz4EeJaWwnBScRmgQSTaWHScXVHBUFXTvShrCW8uryBYFcg==}
+  /i18next@22.5.1:
+    resolution: {integrity: sha512-8TGPgM3pAD+VRsMtUMNknRz3kzqwp/gPALrWMsDnmC1mKqJwpWyooQRLMcbTwq8z8YwSmuj+ZYvc+xCuEpkssA==}
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.1
     dev: true
 
   /iconv-lite@0.4.24:
@@ -16487,7 +16486,7 @@ packages:
       react-dom: 17.0.2(react@18.2.0)
     dev: true
 
-  /react-i18next@12.0.0(i18next@22.0.4)(react-dom@17.0.2)(react@18.2.0):
+  /react-i18next@12.0.0(i18next@22.5.1)(react-dom@17.0.2)(react@18.2.0):
     resolution: {integrity: sha512-/O7N6aIEAl1FaWZBNvhdIo9itvF/MO/nRKr9pYqRc9LhuC1u21SlfwpiYQqvaeNSEW3g3qUXLREOWMt+gxrWbg==}
     peerDependencies:
       i18next: '>= 19.0.0'
@@ -16502,7 +16501,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       html-parse-stringify: 3.0.1
-      i18next: 22.0.4
+      i18next: 22.5.1
       react: 18.2.0
       react-dom: 17.0.2(react@18.2.0)
     dev: true
