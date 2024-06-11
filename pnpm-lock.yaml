@@ -991,8 +991,8 @@ importers:
         specifier: 7.13.0
         version: 7.13.0
       fs-extra:
-        specifier: ^11.1.1
-        version: 11.1.1
+        specifier: ^11.2.0
+        version: 11.2.0
       get-port:
         specifier: 5.1.1
         version: 5.1.1
@@ -1061,8 +1061,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       fs-extra:
-        specifier: ^11.1.1
-        version: 11.1.1
+        specifier: ^11.2.0
+        version: 11.2.0
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1146,8 +1146,8 @@ importers:
         specifier: ^3.2.8
         version: 3.3.0(@modern-js/codesmith@2.3.3)(typescript@5.3.3)
       fs-extra:
-        specifier: ^11.1.1
-        version: 11.1.1
+        specifier: ^11.2.0
+        version: 11.2.0
     devDependencies:
       '@types/fs-extra':
         specifier: ^11.0.2
@@ -4256,7 +4256,7 @@ packages:
   /@modern-js/codesmith@2.3.3:
     resolution: {integrity: sha512-KBmkO05++5UB73DvNsoR9EhGMH1Z9jO9bq4nlDREwonc4XE3dJv6ojQlw9B9JRauG+FzNfp+i2cdqn4AWNPBbA==}
     dependencies:
-      '@modern-js/utils': 2.49.3
+      '@modern-js/utils': 2.52.0
       '@swc/helpers': 0.5.1
       axios: 1.7.2
       tar: 6.2.0
@@ -4842,7 +4842,6 @@ packages:
       caniuse-lite: 1.0.30001627
       lodash: 4.17.21
       rslog: 1.2.0
-    dev: true
 
   /@module-federation/runtime-tools@0.0.8:
     resolution: {integrity: sha512-tqx3wlVHnpWLk+vn22c0x9Nv1BqdZnoS6vdMb53IsVpbQIFP70nhhvymHUyFuPkoLzMFidS7GpG58DYT/4lvCw==}
@@ -10863,15 +10862,6 @@ packages:
       jsonfile: 6.1.0
       universalify: 2.0.0
     dev: true
-
-  /fs-extra@11.1.1:
-    resolution: {integrity: sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==}
-    engines: {node: '>=14.14'}
-    dependencies:
-      graceful-fs: 4.2.11
-      jsonfile: 6.1.0
-      universalify: 2.0.0
-    dev: false
 
   /fs-extra@11.2.0:
     resolution: {integrity: sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==}
