@@ -36,7 +36,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "framer-motion": "^10.17.6",
+    "framer-motion": "^10.18.0",
     "react-markdown": "^9.0.1",
     "rsfamily-nav-icon": "^1.0.3",
     "rspress": "^1.21.0",
