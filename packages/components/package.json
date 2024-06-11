@@ -62,7 +62,7 @@
     "@types/react-highlight-words": "^0.16.7",
     "@types/url-parse": "1.4.8",
     "ansi-to-react": "6.1.6",
-    "antd": "5.15.3",
+    "antd": "5.18.0",
     "axios": "^1.7.2",
     "dayjs": "1.11.6",
     "echarts": "^5.5.0",
