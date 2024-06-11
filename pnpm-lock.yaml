@@ -997,8 +997,8 @@ importers:
         specifier: 5.1.1
         version: 5.1.1
       json-stream-stringify:
-        specifier: 3.0.1
-        version: 3.0.1
+        specifier: 3.1.4
+        version: 3.1.4
       lines-and-columns:
         specifier: 2.0.4
         version: 2.0.4
@@ -4256,7 +4256,7 @@ packages:
   /@modern-js/codesmith@2.3.3:
     resolution: {integrity: sha512-KBmkO05++5UB73DvNsoR9EhGMH1Z9jO9bq4nlDREwonc4XE3dJv6ojQlw9B9JRauG+FzNfp+i2cdqn4AWNPBbA==}
     dependencies:
-      '@modern-js/utils': 2.49.3
+      '@modern-js/utils': 2.52.0
       '@swc/helpers': 0.5.1
       axios: 1.7.2
       tar: 6.2.0
@@ -4842,7 +4842,6 @@ packages:
       caniuse-lite: 1.0.30001627
       lodash: 4.17.21
       rslog: 1.2.0
-    dev: true
 
   /@module-federation/runtime-tools@0.0.8:
     resolution: {integrity: sha512-tqx3wlVHnpWLk+vn22c0x9Nv1BqdZnoS6vdMb53IsVpbQIFP70nhhvymHUyFuPkoLzMFidS7GpG58DYT/4lvCw==}
@@ -12361,8 +12360,9 @@ packages:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
     dev: true
 
-  /json-stream-stringify@3.0.1:
-    resolution: {integrity: sha512-vuxs3G1ocFDiAQ/SX0okcZbtqXwgj1g71qE9+vrjJ2EkjKQlEFDAcUNRxRU8O+GekV4v5cM2qXP0Wyt/EMDBiQ==}
+  /json-stream-stringify@3.1.4:
+    resolution: {integrity: sha512-oGoz05ft577LolnXFQHD2CjnXDxXVA5b8lHwfEZgRXQUZeCMo6sObQQRq+NXuHQ3oTeMZHHmmPY2rjVwyqR62A==}
+    engines: {node: '>=7.10.1'}
     dev: false
 
   /json2mq@0.2.0:
