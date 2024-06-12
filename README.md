@@ -6,7 +6,7 @@
 
 <p>
   <a href="https://discord.gg/wrBPBT6rkM">
-    <img src="https://img.shields.io/badge/chat-discord-blue?logo=discord&colorA=564341&colorB=EDED91" alt="discord channel" />
+    <img src="https://img.shields.io/badge/chat-discord-blue?style=flat-square&logo=discord&colorA=564341&colorB=EDED91" alt="discord channel" />
   </a>
   <a href="https://npmjs.com/package/@rsdoctor/core?activeTab=readme">
    <img src="https://img.shields.io/npm/v/@rsdoctor/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" />
