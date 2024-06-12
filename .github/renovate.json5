@@ -48,6 +48,12 @@
 		"@types/node",
 		"acorn",
 		"enhanced-resolve",
-		"@biomejs/biome"
+		"@biomejs/biome",
+		"json-stream-stringify",
+		"fs-extra",
+		"socket.io",
+		"tailwindcss",
+		"antd",
+		"i18next"
 	]
 }
