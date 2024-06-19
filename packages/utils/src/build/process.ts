@@ -1,4 +1,4 @@
-import bytes from 'bytes';
+import { filesize } from 'filesize';
 import { memoryUsage, pid } from 'process';
 
 export function getMemoryUsage() {
@@ -10,17 +10,17 @@ export function getMemoryUsageMessage() {
 
   // https://nodejs.org/api/process#processmemoryusage
   const msgs = [
-    `RSS: ${bytes(usage.rss)}`,
-    `Heap Total: ${bytes(usage.heapTotal)}`,
-    `Heap Used: ${bytes(usage.heapUsed)}`,
+    `RSS: ${filesize(usage.rss)}`,
+    `Heap Total: ${filesize(usage.heapTotal)}`,
+    `Heap Used: ${filesize(usage.heapUsed)}`,
   ];
 
   if (usage.arrayBuffers) {
-    msgs.push(`ArrayBuffers: ${bytes(usage.arrayBuffers)}`);
+    msgs.push(`ArrayBuffers: ${filesize(usage.arrayBuffers)}`);
   }
 
   if (usage.external) {
-    msgs.push(`External: ${bytes(usage.external)}`);
+    msgs.push(`External: ${filesize(usage.external)}`);
   }
 
   return `["${pid}" Memory Usage] ${msgs.join(', ')}`;
