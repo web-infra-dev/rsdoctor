@@ -25,9 +25,16 @@ export const MediaExtensions = [
   '.mpeg',
 ];
 
-export const FontExtensions = ['.ttf', '.fnt', '.fon', '.otf', '.woff', '.woff2'];
+export const FontExtensions = [
+  '.ttf',
+  '.fnt',
+  '.fon',
+  '.otf',
+  '.woff',
+  '.woff2',
+];
 
-export const MapExtensions = ['.js.map', '.ts.map', '.LICENSE.txt'];
+export const MapExtensions = ['.js.map', '.css.map', '.ts.map', '.LICENSE.txt'];
 
 export const RsdoctorOutputFolder = '.rsdoctor';
 
@@ -46,4 +53,4 @@ export const RsdoctorMonitorDocBId = 'Rsdoctor-Doc';
 
 export const RsdoctorProcessEnvDebugKey = 'RSDOCTOR_DEBUG';
 
-export const RsdoctorClientUrl = '' // TODO: rsdoctor client url
+export const RsdoctorClientUrl = ''; // TODO: rsdoctor client url
