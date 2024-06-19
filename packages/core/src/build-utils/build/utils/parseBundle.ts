@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { find, mapValues } from 'lodash';
-import bytes from 'bytes';
+import { filesize } from 'filesize';
 
 import { parser } from '@rsdoctor/utils/ruleUtils';
 import { extname } from 'path';
@@ -262,7 +262,7 @@ export const parseBundle: ParseBundle = (
       '';
     modulesObj[identifier] = {
       size,
-      sizeConvert: bytes(size || 0),
+      sizeConvert: filesize(size || 0),
       content: moduleContent,
     };
   }

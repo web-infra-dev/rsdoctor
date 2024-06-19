@@ -1,5 +1,5 @@
 import path from 'path';
-import bytes from 'bytes';
+import { filesize } from 'filesize';
 import type { SDK, Rule } from '@rsdoctor/types';
 
 export function getErrorMsg(
@@ -11,7 +11,7 @@ export function getErrorMsg(
   let message = `Multiple packages of ${pkgName} found:\n`;
 
   for (const pkg of packages) {
-    message += `  ${pkg.version} ${bytes(
+    message += `  ${pkg.version} ${filesize(
       pkg.getSize().parsedSize,
     )} ${path.relative(root, pkg.root)}\n`;
   }

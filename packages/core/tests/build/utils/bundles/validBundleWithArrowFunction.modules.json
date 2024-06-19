@@ -2,7 +2,7 @@
   "modules": {
     "0": {
       "size": 43,
-      "sizeConvert": "43B",
+      "sizeConvert": "43 B",
       "content": "(t,e,r)=>{\n  console.log('Hello world!');\n}"
     }
   }
