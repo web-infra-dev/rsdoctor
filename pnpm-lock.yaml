@@ -630,12 +630,12 @@ importers:
       axios:
         specifier: ^1.7.2
         version: 1.7.2
-      bytes:
-        specifier: 3.1.2
-        version: 3.1.2
       enhanced-resolve:
         specifier: 5.12.0
         version: 5.12.0
+      filesize:
+        specifier: ^10.1.2
+        version: 10.1.2
       fs-extra:
         specifier: ^11.1.1
         version: 11.2.0
@@ -667,9 +667,6 @@ importers:
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:../../scripts/test-helper
-      '@types/bytes':
-        specifier: 3.1.1
-        version: 3.1.1
       '@types/fs-extra':
         specifier: ^11.0.2
         version: 11.0.4
@@ -975,9 +972,6 @@ importers:
       acorn-walk:
         specifier: 8.3.2
         version: 8.3.2
-      bytes:
-        specifier: 3.1.2
-        version: 3.1.2
       chalk:
         specifier: ^4.1.2
         version: 4.1.2
@@ -990,6 +984,9 @@ importers:
       envinfo:
         specifier: 7.13.0
         version: 7.13.0
+      filesize:
+        specifier: ^10.1.2
+        version: 10.1.2
       fs-extra:
         specifier: ^11.1.1
         version: 11.1.1
@@ -1015,9 +1012,6 @@ importers:
       '@types/babel__code-frame':
         specifier: 7.0.3
         version: 7.0.3
-      '@types/bytes':
-        specifier: 3.1.1
-        version: 3.1.1
       '@types/connect':
         specifier: 3.4.35
         version: 3.4.35
@@ -6882,10 +6876,6 @@ packages:
       '@types/node': 16.18.66
     dev: true
 
-  /@types/bytes@3.1.1:
-    resolution: {integrity: sha512-lOGyCnw+2JVPKU3wIV0srU0NyALwTBJlVSx5DfMQOFuuohA8y9S8orImpuIQikZ0uIQ8gehrRjxgQC1rLRi11w==}
-    dev: true
-
   /@types/configstore@2.1.1:
     resolution: {integrity: sha512-YY+hm3afkDHeSM2rsFXxeZtu0garnusBWNG1+7MknmDWQHqcH2w21/xOU9arJUi8ch4qyFklidANLCu3ihhVwQ==}
     dev: false
@@ -10717,6 +10707,11 @@ packages:
     dependencies:
       flat-cache: 3.2.0
     dev: true
+
+  /filesize@10.1.2:
+    resolution: {integrity: sha512-Dx770ai81ohflojxhU+oG+Z2QGvKdYxgEr9OSA8UVrqhwNHjfH9A8f5NKfg83fEH8ZFA5N5llJo5T3PIoZ4CRA==}
+    engines: {node: '>= 10.4.0'}
+    dev: false
 
   /fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
