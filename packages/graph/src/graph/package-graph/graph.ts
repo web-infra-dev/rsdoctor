@@ -19,6 +19,10 @@ export class PackageGraph implements SDK.PackageGraphInstance {
 
     // Generate all package data.
     for (const item of modules) {
+      // If module don't have chunks,so this module's package no need to be counted.
+      const itemChunks = item.getChunks();
+      if (!itemChunks) continue;
+
       const pkg = pkgGraph.getPackageByModule(item, getPackageFile);
 
       if (pkg) {
