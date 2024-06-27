@@ -5,6 +5,7 @@ export interface PackageJSONData {
   /** package name */
   name: string;
   version: string;
+  type?: string;
 }
 
 export interface PackageBasicData extends PackageJSONData {

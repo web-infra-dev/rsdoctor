@@ -124,6 +124,8 @@ importers:
         specifier: ^5.2.2
         version: 5.3.2
 
+  e2e/cases/doctor-rspack/fixtures/loaders/esm: {}
+
   examples/modern-minimal:
     dependencies:
       react:
@@ -798,12 +800,19 @@ importers:
       '@types/node':
         specifier: ^16
         version: 16.18.66
+      fs-extra:
+        specifier: ^11.1.1
+        version: 11.2.0
       tslib:
         specifier: 2.4.1
         version: 2.4.1
       typescript:
         specifier: ^5.2.2
         version: 5.3.2
+
+  packages/graph/tests/fixture: {}
+
+  packages/graph/tests/fixture/index: {}
 
   packages/rspack-plugin:
     dependencies:

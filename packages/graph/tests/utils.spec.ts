@@ -1,6 +1,8 @@
 import { expect, describe, it } from 'vitest';
 import { getModuleName } from '../src/graph/module-graph/utils';
-
+import { readPackageJson } from '../src/graph/package-graph/utils';
+import { join } from 'path';
+import fse from 'fs-extra';
 /**
  * The following code is modified based on
  * https://github.com/relative-ci/bundle-stats/blob/master/packages/utils/src/webpack/__tests__/utils-get-module-name.js
@@ -47,5 +49,19 @@ describe('Webpack/utils/getModuleName', () => {
     expect(
       getModuleName('css ../node_modules../node_modules/package-a/style.css'),
     ).toBe('../node_modules/package-a/style.css');
+  });
+});
+
+describe('readPackageJson util', () => {
+  it('readPackageJson util', () => {
+    expect(
+      readPackageJson(join(__dirname, './fixture/index/index.js'), (file) => {
+        try {
+          return fse.readJsonSync(file, { encoding: 'utf8' });
+        } catch (e) {
+          // console.log(e)
+        }
+      }),
+    ).toMatchSnapshot();
   });
 });

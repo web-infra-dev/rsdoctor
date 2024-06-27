@@ -1,6 +1,7 @@
 import { addProbeLoader2Rules } from '@/build-utils/build/utils/loader';
 import { describe, it, expect } from 'vitest';
 import { Plugin } from '@rsdoctor/types';
+import { Utils } from '@/build-utils/build';
 
 const rules = [
   {
@@ -95,7 +96,9 @@ const appendRule = (rule: Plugin.RuleSetRule, index: number) => {
 describe('test src/build/utils/loader.ts addProbeLoader2Rules', () => {
   it('addProbeLoader2Rules()', () => {
     expect(
-      addProbeLoader2Rules(rules, 'builtin:swc-loader', appendRule),
+      addProbeLoader2Rules(rules, appendRule, (r: Plugin.BuildRuleSetRule) =>
+        Utils.getLoaderNameMatch(r, 'builtin:swc-loader', true),
+      ),
     ).toMatchSnapshot();
   });
 });

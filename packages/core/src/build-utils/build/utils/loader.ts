@@ -1,9 +1,11 @@
 import { getOptions } from 'loader-utils';
 import path from 'path';
+import fse from 'fs-extra';
 import { omit, findIndex } from 'lodash';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule, SourceMapInput as WebpackSourceMapInput } from '../../../types';
+import { readPackageJson } from '@rsdoctor/graph';
 
 // webpack https://github.com/webpack/webpack/blob/2953d23a87d89b3bd07cf73336ee34731196c62e/lib/util/identifier.js#L311
 // rspack https://github.com/web-infra-dev/rspack/blob/d22f049d4bce4f8ac20c1cbabeab3706eddaecc1/packages/rspack/src/loader-runner/index.ts#L47
@@ -167,39 +169,67 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
   });
 }
 
-function getLoaderNameMatch(
-  _r: Plugin.BuildRuleSetRule,
+export function isESMLoader(r: Plugin.BuildRuleSetRule) {
+  let _loaderName =
+    typeof r === 'object' && typeof r?.loader === 'string'
+      ? r.loader
+      : typeof r === 'string'
+        ? r
+        : '';
+  if (!_loaderName) return false;
+  const isPath =
+    _loaderName.startsWith('/') ||
+    _loaderName.startsWith('./') ||
+    _loaderName.startsWith('../');
+  if (isPath) {
+    // Code to handle loaderName as a path address
+    const packageJsonData = readPackageJson(_loaderName, (file) => {
+      try {
+        return fse.readJsonSync(file, { encoding: 'utf8' });
+      } catch (e) {
+        // console.log(e)
+      }
+    });
+
+    if (packageJsonData?.type === 'module') return true;
+  }
+
+  // Code to handle loaderName as a loader name
+  return false;
+}
+
+export function getLoaderNameMatch(
+  r: Plugin.BuildRuleSetRule,
   loaderName: string,
   strict = true,
 ) {
   if (!strict) {
     return (
-      (typeof _r === 'object' &&
-        typeof _r?.loader === 'string' &&
-        _r.loader.includes(loaderName)) ||
-      (typeof _r === 'string' && (_r as string).includes(loaderName))
+      (typeof r === 'object' &&
+        typeof r?.loader === 'string' &&
+        r.loader.includes(loaderName)) ||
+      (typeof r === 'string' && (r as string).includes(loaderName))
     );
   }
 
   return (
-    (typeof _r === 'object' &&
-      typeof _r?.loader === 'string' &&
-      _r.loader === loaderName) ||
-    (typeof _r === 'string' && _r === loaderName)
+    (typeof r === 'object' &&
+      typeof r?.loader === 'string' &&
+      r.loader === loaderName) ||
+    (typeof r === 'string' && r === loaderName)
   );
 }
 
 // FIXME: Type BuildRuleSetRule maybe need optimize.
 export function addProbeLoader2Rules<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
-  loaderName: string,
   appendRules: (rule: T, index: number) => T,
-  strict?: boolean,
+  fn: (r: Plugin.BuildRuleSetRule) => boolean,
 ): T[] {
   return rules.map((rule) => {
     if (!rule || typeof rule === 'string') return rule;
 
-    if (getLoaderNameMatch(rule, loaderName, strict)) {
+    if (fn(rule)) {
       const _rule = {
         ...rule,
         use: [
@@ -216,9 +246,7 @@ export function addProbeLoader2Rules<T extends Plugin.BuildRuleSetRule>(
 
     if (rule.use) {
       if (Array.isArray(rule.use)) {
-        const _index = findIndex(rule.use, (_r) =>
-          getLoaderNameMatch(_r as T, loaderName, strict),
-        );
+        const _index = findIndex(rule.use, (_r) => fn(_r as T));
         if (_index > -1) {
           return appendRules(rule, _index);
         }
@@ -239,22 +267,14 @@ export function addProbeLoader2Rules<T extends Plugin.BuildRuleSetRule>(
     if ('oneOf' in rule && rule.oneOf) {
       return {
         ...rule,
-        oneOf: addProbeLoader2Rules<T>(
-          rule.oneOf as T[],
-          loaderName,
-          appendRules,
-        ),
+        oneOf: addProbeLoader2Rules<T>(rule.oneOf as T[], appendRules, fn),
       };
     }
 
     if ('rules' in rule && rule.rules) {
       return {
         ...rule,
-        rules: addProbeLoader2Rules<T>(
-          rule.rules as T[],
-          loaderName,
-          appendRules,
-        ),
+        rules: addProbeLoader2Rules<T>(rule.rules as T[], appendRules, fn),
       };
     }
     return rule;

@@ -17,6 +17,7 @@ import { getSDK } from './sdk';
 import { checkCirclePath } from './circleDetect';
 import { ProxyLoaderInternalOptions, ProxyLoaderOptions } from '@/types';
 import { Utils as BuildUtils, Types } from '@/build-utils/build';
+import { isESMLoader } from '@/build-utils/build/utils';
 
 export function getInternalLoaderOptions(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,
@@ -105,7 +106,11 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
   };
 
   return BuildUtils.mapEachRules(rules, (rule) => {
-    if (rule.loader?.startsWith('builtin:') || rule.loader?.endsWith('.mjs')) {
+    if (
+      rule.loader?.startsWith('builtin:') ||
+      rule.loader?.endsWith('.mjs') ||
+      isESMLoader(rule)
+    ) {
       return rule;
     }
     const opts: ProxyLoaderOptions = {
@@ -183,8 +188,8 @@ export async function reportLoader(
   const data: Types.SourceMap = !sourceMap
     ? {}
     : isString(sourceMap)
-    ? JSON.parse(sourceMap)
-    : sourceMap;
+      ? JSON.parse(sourceMap)
+      : sourceMap;
   const sourceMapData = {
     version: data.version ?? -1,
     sources: data.sources ?? [],
