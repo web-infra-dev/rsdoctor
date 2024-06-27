@@ -1,10 +1,11 @@
 import { unionBy } from 'lodash';
 import { dirname, join, resolve } from 'path';
 import { SDK } from '@rsdoctor/types';
-import { Package as PackageUtil } from '@rsdoctor/utils/common';
 import type { ModuleGraph, Module } from '../module-graph';
 import { Package } from './package';
 import { PackageDependency } from './dependency';
+import { readPackageJson } from './utils';
+export { readPackageJson } from './utils';
 
 export class PackageGraph implements SDK.PackageGraphInstance {
   static fromModuleGraph(
@@ -83,44 +84,6 @@ export class PackageGraph implements SDK.PackageGraphInstance {
       pkgsMap.set(file, pkg);
       return pkg;
     }
-
-    // TODO: add test for this function.
-    const readPackageJson = (
-      file: string,
-      readFile?: SDK.GetPackageFile,
-    ): SDK.PackageBasicData | undefined => {
-      let result: SDK.PackageJSONData | undefined;
-      let current = file;
-
-      while (current !== '/' && !result) {
-        if (dirname(current) === current) {
-          break;
-        }
-        current = dirname(current);
-        if (readFile) {
-          result = readFile(join(current, 'package.json'));
-        }
-        if (!readFile) {
-          result = PackageUtil.getPackageMetaFromModulePath(file);
-        } else if (!result?.name) {
-          result = undefined;
-        }
-      }
-
-      if (!result) {
-        return;
-      }
-
-      // Some packages will put an empty package.json in the source folder.
-      if (readFile && (!result.name || !result.version)) {
-        return readPackageJson(dirname(current), readFile);
-      }
-
-      return {
-        ...result,
-        root: current,
-      };
-    };
 
     const cache = this.getPackageContainFile(file);
 

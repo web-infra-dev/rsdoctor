@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`readPackageJson util > readPackageJson util 1`] = `
+{
+  "name": "@lodash/es",
+  "root": "/Users/congzhe/Documents/workspace/rsdoctor/packages/graph/tests/fixture",
+  "type": "module",
+  "version": "0.1.0",
+}
+`;

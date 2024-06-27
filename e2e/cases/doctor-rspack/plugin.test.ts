@@ -15,6 +15,10 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
     __dirname,
     './fixtures/loaders/esm-serialize-query-to-comment.mjs',
   );
+  const esmLoaderJs = path.resolve(
+    __dirname,
+    './fixtures/loaders/esm/esm-serialize-query-to-comment.js',
+  );
   const res = await compile(file, {
     resolve: {
       extensions: ['.ts', '.js'],
@@ -27,7 +31,7 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
         },
         {
           test: /\.js/,
-          use: esmLoader,
+          use: esmLoaderJs,
         },
         {
           test: /\.[jt]s$/,
