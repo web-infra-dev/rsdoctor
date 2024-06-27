@@ -1,4 +1,3 @@
-import type { Compiler } from '@rspack/core';
 import { Utils } from '@rsdoctor/core/build-utils';
 import path from 'path';
 import { Plugin } from '@rsdoctor/types';
@@ -8,7 +7,7 @@ const BuiltinLoaderName = 'builtin:swc-loader';
 const ESMLoaderFile = '.mjs';
 
 export class ProbeLoaderPlugin {
-  apply(compiler: Compiler) {
+  apply(compiler: Plugin.BaseCompiler) {
     compiler.hooks.beforeRun.tap(
       {
         name: 'ProbeLoaderPlugin',
@@ -28,7 +27,7 @@ export class ProbeLoaderPlugin {
     );
   }
 
-  private addProbeLoader(compiler: Compiler) {
+  private addProbeLoader(compiler: Plugin.BaseCompiler) {
     const rules = compiler.options.module.rules as Plugin.RuleSetRule[];
     const appendRule = (rule: Plugin.RuleSetRule, index: number) => {
       if ('use' in rule && Array.isArray(rule.use)) {

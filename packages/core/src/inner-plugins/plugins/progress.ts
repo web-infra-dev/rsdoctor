@@ -3,7 +3,7 @@ import type { Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
 
 export class InternalProgressPlugin<
-  T extends Plugin.BaseCompiler,
+  T extends Plugin.BaseCompilerType<'webpack'>,
 > extends InternalBasePlugin<T> {
   public readonly name = 'progress';
 

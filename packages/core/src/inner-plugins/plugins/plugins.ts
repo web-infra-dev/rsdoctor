@@ -8,8 +8,11 @@ export class InternalPluginsPlugin<
 > extends InternalBasePlugin<T> {
   public readonly name = 'plugins';
 
-  public apply(compiler: T) {
-    compiler.hooks.afterPlugins.tap(this.tapPostOptions, this.afterPlugins);
+  public apply(compiler: Plugin.BaseCompiler) {
+    compiler.hooks.afterPlugins.tap(
+      this.tapPostOptions,
+      this.afterPlugins.bind(this, compiler),
+    );
     compiler.hooks.compilation.tap(this.tapPostOptions, this.compilation);
   }
 

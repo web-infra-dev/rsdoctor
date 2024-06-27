@@ -126,6 +126,10 @@ export interface RsdoctorPluginInstance<
   ensureModulesChunksGraphApplied(compiler: T): void;
 }
 
+export interface RsdoctorRspackPluginInstance<
+  Rules extends LinterType.ExtendRuleData[] = [],
+> extends RsdoctorPluginInstance<Plugin.BaseCompilerType<'rspack'>, Rules> {}
+
 export interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > extends RsdoctorWebpackPluginOptions<Rules> {}
