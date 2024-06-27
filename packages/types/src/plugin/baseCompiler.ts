@@ -10,16 +10,18 @@ import type {
   Compilation as RspackCompilation,
   Stats as RspackStats,
   RuleSetRule as RspackRuleSetRule,
-  RuleSetRules as RspackRuleSetRules,
+  MultiCompiler,
 } from '@rspack/core';
 
-type RspackCompilerWrapper = any extends RspackCompiler
-  ? never
-  : RspackCompiler;
+type RspackCompilerWrapper = RspackCompiler &
+  Pick<
+    MultiCompiler,
+    keyof Omit<MultiCompiler, 'hooks' | 'options' | 'isChild'>
+  >;
 
-type RspackCompilationWrapper = any extends RspackCompilation
-  ? never
-  : RspackCompilation;
+// type RspackCompilationWrapper = any extends RspackCompilation
+//   ? never
+//   : RspackCompilation;
 
 type RspackStatsWrapper = any extends RspackStats ? never : RspackStats;
 
@@ -27,15 +29,19 @@ type RspackRuleSetRuleWrapper = any extends RspackRuleSetRule
   ? never
   : RspackRuleSetRule;
 
-type RspackRuleSetRulesWrapper = any extends RspackRuleSetRules
-  ? never
-  : (RspackRuleSetRule | '...')[] | RspackRuleSetRules;
+// type RspackRuleSetRulesWrapper = any extends RspackRuleSetRules
+//   ? never
+//   : (RspackRuleSetRule | '...')[] | RspackRuleSetRules;
 
-export type BaseCompiler = (Compiler | RspackCompilerWrapper) & {
-  webpack: any;
-};
+export type BaseCompilerType<T extends 'rspack' | 'webpack' = 'webpack'> =
+  T extends 'rspack' ? RspackCompilerWrapper : Compiler;
+export type BaseCompiler = BaseCompilerType | BaseCompilerType<'rspack'>;
 
-export type BaseCompilation = RspackCompilationWrapper | Compilation;
+export type BaseCompilationType<T extends 'rspack' | 'webpack' = 'webpack'> =
+  T extends 'rspack' ? Compilation : RspackCompilation;
+export type BaseCompilation =
+  | BaseCompilationType
+  | BaseCompilationType<'rspack'>;
 
 export type BaseStats = Stats | RspackStatsWrapper;
 
@@ -52,7 +58,13 @@ export interface JsStatsWarning {
 export type BuildError = JsStatsError | StatsError;
 export type BuildWarning = JsStatsWarning | StatsError;
 
-export type BuildRuleSetRules =
-  | (RuleSetRule | '...')[]
-  | RspackRuleSetRulesWrapper;
+export type BuildRuleSetRules = (
+  | false
+  | ''
+  | 0
+  | RuleSetRule
+  | '...'
+  | null
+  | undefined
+)[];
 export type BuildRuleSetRule = RuleSetRule | RspackRuleSetRuleWrapper;

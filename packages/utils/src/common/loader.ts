@@ -296,7 +296,8 @@ export function getLoaderFileInputAndOutput(
 export const LoaderInternalPropertyName = '__l__';
 
 export const isVue = (compiler: Plugin.BaseCompiler) => {
-  const rules = compiler.options.module.rules;
+  const rules =
+    ('module' in compiler.options && compiler.options.module.rules) || [];
   const hasVueRule = rules.some((rule) => {
     if (
       rule &&

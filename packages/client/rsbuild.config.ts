@@ -3,6 +3,7 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import type { Rspack, RsbuildConfig } from '@rsbuild/core';
+import { pluginSass } from '@rsbuild/plugin-sass';
 import serve from 'serve-static';
 import path from 'path';
 import fs from 'fs';
@@ -29,6 +30,7 @@ export default defineConfig(({ env }) => {
     plugins: [
       pluginReact(),
       pluginNodePolyfill(),
+      pluginSass(),
       pluginTypeCheck({ enable: IS_PRODUCTION }),
     ],
 

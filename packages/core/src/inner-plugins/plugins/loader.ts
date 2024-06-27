@@ -2,7 +2,7 @@ import { Manifest, Plugin } from '@rsdoctor/types';
 import type { HookInterceptor } from 'tapable';
 import { Loader } from '@rsdoctor/utils/common';
 import { cloneDeep, isEqual, omit } from 'lodash';
-import { LoaderContext, NormalModule, RuleSetRule } from 'webpack';
+import { LoaderContext, NormalModule } from 'webpack';
 import { interceptLoader } from '../utils';
 import { InternalBasePlugin } from './base';
 import { ProxyLoaderOptions } from '@/types';
@@ -16,20 +16,24 @@ export class InternalLoaderPlugin<
 
   public apply(compiler: T) {
     // make sure that loaders were intercepted.
-    compiler.hooks.afterPlugins.tap(this.tapPostOptions, this.afterPlugins);
+    compiler.hooks.afterPlugins.tap(
+      this.tapPostOptions,
+      this.afterPlugins.bind(this, compiler),
+    );
 
     compiler.hooks.compilation.tap(
       this.tapPreOptions,
-      this.compilation.bind(this, compiler),
+      (compilation: Plugin.BaseCompilation) =>
+        this.compilation(compiler, compilation),
     );
   }
 
-  public afterPlugins = (compiler: Plugin.BaseCompiler) => {
+  public afterPlugins = (compiler: T) => {
     if (compiler.isChild()) return;
     // intercept loader to collect the costs of loaders
     compiler.options.module.rules = this.getInterceptRules(
       compiler,
-      compiler.options.module.rules as RuleSetRule[],
+      compiler.options.module.rules as Plugin.BuildRuleSetRules,
     ) as Plugin.BuildRuleSetRules;
 
     // add loader page to client
@@ -38,10 +42,7 @@ export class InternalLoaderPlugin<
     ]);
   };
 
-  public compilation(
-    compiler: Plugin.BaseCompiler,
-    compilation: Plugin.BaseCompilation,
-  ) {
+  public compilation(compiler: T, compilation: Plugin.BaseCompilation) {
     if (compiler.isChild()) return;
 
     /**
@@ -139,7 +140,8 @@ export class InternalLoaderPlugin<
     if (compiler.webpack?.NormalModule?.getCompilationHooks) {
       // webpack5 or rspack
       compiler.webpack.NormalModule.getCompilationHooks(
-        compilation,
+        compilation as Plugin.BaseCompilationType &
+          Plugin.BaseCompilationType<'rspack'>,
       ).loader.intercept(interceptor);
     } else if ('normalModuleLoader' in compilation.hooks) {
       // webpack4
@@ -149,11 +151,11 @@ export class InternalLoaderPlugin<
   }
 
   public getInterceptRules(
-    compiler: Plugin.BaseCompiler,
-    rules: RuleSetRule[],
-  ) {
+    compiler: T,
+    rules: Plugin.BuildRuleSetRules,
+  ): Plugin.BuildRuleSetRule[] {
     return interceptLoader(
-      rules as RuleSetRule[],
+      rules as Plugin.BuildRuleSetRule[],
       this.internalLoaderPath,
       {
         cwd: compiler.context || process.cwd(),
