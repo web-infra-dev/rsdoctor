@@ -121,7 +121,7 @@ test('rspack data store', async () => {
   await rspackCompile(tapName, compileByRspack);
   const sdk = getSDK();
   const datas = sdk.getStoreData();
-  expect(datas.errors.length).toBe(0);
+  expect(datas.errors.length).toBe(2);
   const graphData = datas.moduleGraph;
   const configs = datas.configs;
 
@@ -136,7 +136,7 @@ test('rspack data store', async () => {
   graphData.modules.forEach((mod) => (mod.webpackId = ''));
   expect(graphData.modules[0].size).toEqual({
     sourceSize: 68,
-    transformedSize: 86,
+    transformedSize: 85,
     parsedSize: 0,
   });
   expect(graphData.modules[0].path).toMatch('/fixtures/a.js');

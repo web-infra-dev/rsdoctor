@@ -124,8 +124,6 @@ importers:
         specifier: ^5.2.2
         version: 5.3.2
 
-  e2e/cases/doctor-rspack/fixtures/loaders/esm: {}
-
   examples/modern-minimal:
     dependencies:
       react:
@@ -704,7 +702,7 @@ importers:
         version: 3.2.3
       babel-loader:
         specifier: 9.1.3
-        version: 9.1.3(@babel/core@7.23.2)(webpack@5.89.0)
+        version: 9.1.3(@babel/core@7.24.7)(webpack@5.89.0)
       string-loader:
         specifier: 0.0.1
         version: 0.0.1
@@ -806,10 +804,6 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.3.2
-
-  packages/graph/tests/fixture: {}
-
-  packages/graph/tests/fixture/index: {}
 
   packages/rspack-plugin:
     dependencies:
@@ -5625,7 +5619,7 @@ packages:
   /@modern-js/codesmith@2.3.6:
     resolution: {integrity: sha512-wUF2L1mxUrYWPAj50jQ7yqcsLXt5g19Dt/USn3TxnosFE57GCvrsVjZseKUai9zfC0pnX7PXOj3KXXoV7EaiFw==}
     dependencies:
-      '@modern-js/utils': 2.52.0
+      '@modern-js/utils': 2.54.3
       '@swc/helpers': 0.5.1
       axios: 1.7.2
       tar: 6.2.0
@@ -6128,15 +6122,6 @@ packages:
       - webpack-hot-middleware
       - webpack-plugin-serve
     dev: true
-
-  /@modern-js/utils@2.52.0:
-    resolution: {integrity: sha512-WHLM/qS4OyccH2gVua6tPZ6rnl0iFne6qPiR+5PHn9rLfJJIKouvGoPnomHovaStuTOtQALwrzeGZCY0R0zt+w==}
-    dependencies:
-      '@swc/helpers': 0.5.3
-      caniuse-lite: 1.0.30001627
-      lodash: 4.17.21
-      rslog: 1.2.0
-    dev: false
 
   /@modern-js/utils@2.54.2:
     resolution: {integrity: sha512-ORsy7hMa8g1W6Z2m9R8xPlHNHeRfnW+MtdsApxG5MLDAgM5UQWjzlUau6N0QAgxoFYJKb7cevSPYNw86iBO3DQ==}
@@ -9360,19 +9345,6 @@ packages:
   /b-validate@1.5.3:
     resolution: {integrity: sha512-iCvCkGFskbaYtfQ0a3GmcQCHl/Sv1GufXFGuUQ+FE+WJa7A/espLOuFIn09B944V8/ImPj71T4+rTASxO2PAuA==}
 
-  /babel-loader@9.1.3(@babel/core@7.23.2)(webpack@5.89.0):
-    resolution: {integrity: sha512-xG3ST4DglodGf8qSwv0MdeWLhrDsw/32QMdTO5T1ZIp9gQur0HkCyFs7Awskr10JKXFXwpAhiCuYX5oGXnRGbw==}
-    engines: {node: '>= 14.15.0'}
-    peerDependencies:
-      '@babel/core': ^7.12.0
-      webpack: '>=5'
-    dependencies:
-      '@babel/core': 7.23.2
-      find-cache-dir: 4.0.0
-      schema-utils: 4.2.0
-      webpack: 5.89.0(webpack-cli@5.0.0)
-    dev: true
-
   /babel-loader@9.1.3(@babel/core@7.23.2)(webpack@5.92.1):
     resolution: {integrity: sha512-xG3ST4DglodGf8qSwv0MdeWLhrDsw/32QMdTO5T1ZIp9gQur0HkCyFs7Awskr10JKXFXwpAhiCuYX5oGXnRGbw==}
     engines: {node: '>= 14.15.0'}
@@ -9384,6 +9356,19 @@ packages:
       find-cache-dir: 4.0.0
       schema-utils: 4.2.0
       webpack: 5.92.1(esbuild@0.17.19)
+    dev: true
+
+  /babel-loader@9.1.3(@babel/core@7.24.7)(webpack@5.89.0):
+    resolution: {integrity: sha512-xG3ST4DglodGf8qSwv0MdeWLhrDsw/32QMdTO5T1ZIp9gQur0HkCyFs7Awskr10JKXFXwpAhiCuYX5oGXnRGbw==}
+    engines: {node: '>= 14.15.0'}
+    peerDependencies:
+      '@babel/core': ^7.12.0
+      webpack: '>=5'
+    dependencies:
+      '@babel/core': 7.24.7
+      find-cache-dir: 4.0.0
+      schema-utils: 4.2.0
+      webpack: 5.89.0(webpack-cli@5.0.0)
     dev: true
 
   /babel-plugin-dynamic-import-node@2.3.3:
