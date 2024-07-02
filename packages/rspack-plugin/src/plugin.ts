@@ -49,7 +49,17 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   public outsideInstance: boolean;
 
   constructor(options?: RsdoctorRspackPluginOptions<Rules>) {
-    this.options = normalizeUserConfig<Rules>(options);
+    this.options = normalizeUserConfig<Rules>(
+      Object.assign(options || {}, {
+        supports: {
+          ...options?.supports,
+          // Generate Tile Graph default false in rspack builder.
+          generateTileGraph: options?.supports?.generateTileGraph
+            ? options?.supports?.generateTileGraph
+            : false,
+        },
+      }),
+    );
     this.sdk =
       this.options.sdkInstance ??
       new RsdoctorWebpackSDK({
