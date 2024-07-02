@@ -186,6 +186,39 @@ When enabling the analysis of BannerPlugin, Rsdoctor should not be used in produ
 
 If `supports.banner` is enabled, Rsdoctor will enable compatibility logic for BannerPlugin. For more details, please refer to: [Supports BannerPlugin](../../guide/usage/bundle-size#supports-bannerplugin)
 
+#### parseBundle
+
+In some large repositories, the execution time of parsing the bundle is too long. Since the Parse Bundle analysis utilizes AST parsing and processing, it can be time-consuming when there are a large number of output files.
+If this capability is not necessary, it can be selectively disabled using the supports.parseBundle configuration. An example is shown below:
+
+```ts
+chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+  {
+    supports: {
+      parseBundle: false,
+    },
+  },
+]);
+```
+
+Disabling the Parse Bundle capability will only affect the visibility of the Bundled Size and Bundled Code of the modules in the bundle:
+
+<div style={{ display: 'flex' }}>
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-size.jpeg"
+    height="300px"
+    width="400px"
+    style={{ margin: 'auto' }}
+  />
+
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-code.png"
+    height="300px"
+    width="500px"
+    style={{ margin: 'auto' }}
+  />
+</div>
+
 ### port
 
 - **Type:** `number`

@@ -1,0 +1,130 @@
+# Rsdoctor v0.2-0.3 Release Note
+
+### Custom Extension Rules
+
+Considering that users may have their own specific rule definition requirements, Rsdoctor provides an external interface for users to customize their own rule checks in addition to the internal rules already available.
+External extension interfaces need to be configured on the Rsdoctor plugin through the `extends` field, and their configurations are also placed in the `rules` field.
+
+For more details, please refer to: [Custom Extension Rules](../../guide/custom/rule-custom)
+
+Additionally, the use of custom rules can also be applied for user data collection and reporting. [Data Reporting](../../guide/custom/upload-data)
+
+- Example:
+
+```ts
+// src/rules/assets-count-limit.ts
+import { defineRule } from '@rsdoctor/core/rules';
+
+export const AssetsCountLimit = defineRule(() => ({
+  meta: {
+    category: 'bundle',
+    severity: 'Warn',
+    title: 'assets-count-limit',
+    defaultConfig: {
+      limit: 10,
+    },
+  },
+  check({ chunkGraph, report, ruleConfig }) {
+    const assets = chunkGraph.getAssets();
+
+    if (assets.length > ruleConfig.limit) {
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          type: 'link',
+          link: 'https://rsdoctor.dev/zh/guide/start/quick-start', // This link just for show case.
+        },
+      });
+    }
+  },
+}));
+```
+
+```ts
+// rsbuild.config.ts
+import { AssetsCountLimit } from './rules/assets-count-limit';
+
+export default {
+  tools: {
+    bundlerChain: (chain) => {
+      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+        {
+          linter: {
+            level: 'Error',
+            extends: [AssetsCountLimit],
+            rules: {
+              'assets-count-limit': [
+                'on',
+                {
+                  limit: 1, // rule custom configs
+                },
+              ],
+            },
+          },
+        },
+      ]);
+    },
+  },
+};
+```
+
+### Support for Banner Plugin
+
+Both Rspack and Webpack support the BannerPlugin, which is an built-in plugin that allows you to add specific content at the top or bottom of the generated chunks. The added code will affect the parsing capability of the bundle.
+Therefore, Rsdoctor has added support for the Banner Plugin.
+
+Please refer to [Support for BannerPlugin](../../guide/usage/bundle-size#support-for-bannerplugin)
+
+### Support for ESM Loader
+
+Starting from Rspack@0.7.3, support for ESM Loader execution with `.js` extension and `type: module` configuration in `package.json` is added ([related issue](https://github.com/web-infra-dev/rspack/issues/5735)). Therefore, Rsdoctor also supports the analysis of ESM Loader, mainly supporting the following two types:
+
+1. ESM Loader with `.mjs` extension.
+2. ESM Loader with `.js` extension and `type: module` configuration in `package.json`.
+
+### Support for defining port
+
+Support for [defining the port of Rsdoctor service](../../config/options/options#port) has been added.
+
+- Example:
+
+```ts
+chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+  {
+    port: 8888, // port
+  },
+]);
+```
+
+### Support for Parse Bundle Configuration
+
+In some large repositories, the execution time for parsing bundles is significant. This is because the Parse Bundle analysis relies on AST parsing and processing, which can be time-consuming when there are a large number of files.
+If this capability is not necessary, it can be selectively disabled using the `supports.parseBundle` configuration. Here is an example:
+
+```ts
+chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+  {
+    supports: {
+      parseBundle: false,
+    },
+  },
+]);
+```
+
+Disabling the Parse Bundle capability only affects the ability to view the final bundled size and code of modules in the bundle (Bundled Code).
+
+<div style={{ display: 'flex' }}>
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-size.jpeg"
+    height="300px"
+    width="400px"
+    style={{ margin: 'auto' }}
+  />
+
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-code.png"
+    height="300px"
+    width="500px"
+    style={{ margin: 'auto' }}
+  />
+</div>
