@@ -1,0 +1,133 @@
+# Rsdoctor v0.2-0.3 Release Note
+
+Rsdoctor v0.3 已经发布啦!
+
+Rsdoctor v0.3 的新特性有:
+
+- 自定义拓展规则：用户可以通过接口定制特有的规则检查。
+- 支持 Banner Plugin：增加了对 Banner Plugin 的支持，该插件会对产物代码添加模板包裹，因此 Rsdoctor 支持了变化后产物代码的分析。
+- 支持 ESM Loader 分析：支持了对 ESM Loader 的分析，以提升针对 Rspack 的编译分析能力。
+
+## 自定义拓展规则
+
+考虑到用户会有特有的规则定义需求，Rsdoctor 除了内部已有的规则外，还提供了外部接口供用户定制自己的规则检查。外部扩展接口通过 `extends` 字段配置到 Rsdoctor 插件上，配置也放在 `rules` 字段内。详情请查看：[自定义拓展规则](/guide/custom/rule-custom)。
+
+此外，利用自定义规则的方式还可以用于用户数据收集和上报。请参阅[数据上报](/guide/custom/upload-data)。
+
+- 示例：
+
+```ts
+// src/rules/assets-count-limit.ts
+import { defineRule } from '@rsdoctor/core/rules';
+
+export const AssetsCountLimit = defineRule(() => ({
+  meta: {
+    category: 'bundle',
+    severity: 'Warn',
+    title: 'assets-count-limit',
+    defaultConfig: {
+      limit: 10,
+    },
+  },
+  check({ chunkGraph, report, ruleConfig }) {
+    const assets = chunkGraph.getAssets();
+
+    if (assets.length > ruleConfig.limit) {
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          type: 'link',
+          link: 'https://rsdoctor.dev/zh/guide/start/quick-start', // This link just for show case.
+        },
+      });
+    }
+  },
+}));
+```
+
+```ts
+// rsbuild.config.ts
+import { AssetsCountLimit } from './rules/assets-count-limit';
+
+export default {
+  tools: {
+    bundlerChain: (chain) => {
+      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+        {
+          linter: {
+            level: 'Error',
+            extends: [AssetsCountLimit],
+            rules: {
+              'assets-count-limit': [
+                'on',
+                {
+                  limit: 1, // rule custom configs
+                },
+              ],
+            },
+          },
+        },
+      ]);
+    },
+  },
+};
+```
+
+## 支持 Banner Plugin
+
+由于 Rspack 和 Webpack 都支持 BannerPlugin，且 BannerPlugin 可在生成的 chunk 顶部或尾部添加指定内容的代码段，这会影响到对 Bundle 的解析能力。因此，Rsdoctor 增加了 Banner Plugin 的支持。
+
+详情请查看[支持 BannerPlugin](/guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
+
+### 支持 ESM Loader
+
+自 Rspack@0.7.3 开始，支持以 `.js` 为后缀且 `package.json` 中配置 `type: module` 的 ESM Loader 执行（[相关 issue](https://github.com/web-infra-dev/rspack/issues/5735)）。因此，Rsdoctor 也支持 ESM Loader 的分析，主要支持以下两种类型：
+
+1. 以 `.mjs` 为后缀的 ESM Loader。
+2. 以 `.js` 为后缀且 `package.json` 中配置 `type: module` 的 ESM Loader。
+
+## 支持 port 定义
+
+Rsdoctor 新增了配置服务端口的能力。[详情请参阅](/config/options/options#port)。
+
+- 示例：
+
+```ts
+chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+  {
+    port: 8888, // port
+  },
+]);
+```
+
+## 支持 Parse Bundle 配置
+
+在部分大型仓库中，反解 Bundle 解析执行耗时过大，这是因为 Parse Bundle 的分析利用了 AST 解析与处理。当产物文件过多时，耗时也会增加。如果不需要此功能，可以通过 `supports.parseBundle` 配置进行选择性关闭。示例如下：
+
+```ts
+chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+  {
+    supports: {
+      parseBundle: false,
+    },
+  },
+]);
+```
+
+关闭 Parse Bundle 能力只会影响是否能查看到 Bundle 中 Module 的最终打包大小（Bundled Size）及最终打包代码（Bundled Code）。
+
+<div style={{ display: 'flex' }}>
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-size.jpeg"
+    height="300px"
+    width="400px"
+    style={{ margin: 'auto' }}
+  />
+
+  <img
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-code.png"
+    height="300px"
+    width="500px"
+    style={{ margin: 'auto' }}
+  />
+</div>
