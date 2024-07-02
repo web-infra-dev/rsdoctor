@@ -87,23 +87,25 @@ export const ensureModulesChunksGraphFn = (
         (await _this.sdk.reportModuleGraph(_this.modulesGraph));
       await _this.sdk.reportChunkGraph(_this.chunkGraph);
 
-      /** Generate webpack-bundle-analyzer tile graph */
-      const reportFilePath = await ChunksBuildUtils.generateTileGraph(
-        statsJson as Plugin.BaseStats,
-        {
-          reportFilename: path.join(
-            Constants.RsdoctorOutputFolder,
-            ChunksBuildUtils.TileGraphReportName,
-          ),
-          reportTitle: 'bundle-analyzer',
-        },
-        compiler.outputPath,
-      );
+      if (_this.options.supports.generateTileGraph) {
+        /** Generate webpack-bundle-analyzer tile graph */
+        const reportFilePath = await ChunksBuildUtils.generateTileGraph(
+          statsJson as Plugin.BaseStats,
+          {
+            reportFilename: path.join(
+              Constants.RsdoctorOutputFolder,
+              ChunksBuildUtils.TileGraphReportName,
+            ),
+            reportTitle: 'bundle-analyzer',
+          },
+          compiler.outputPath,
+        );
 
-      reportFilePath &&
-        (await _this.sdk.reportTileHtml(
-          fse.readFileSync(reportFilePath, 'utf-8'),
-        ));
+        reportFilePath &&
+          (await _this.sdk.reportTileHtml(
+            fse.readFileSync(reportFilePath, 'utf-8'),
+          ));
+      }
     },
   );
 };

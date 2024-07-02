@@ -82,6 +82,7 @@ export interface RsdoctorMultiplePluginOptions<
 interface ISupport {
   banner?: boolean;
   parseBundle?: boolean;
+  generateTileGraph?: boolean;
 }
 
 export interface RsdoctorPluginOptionsNormalized<

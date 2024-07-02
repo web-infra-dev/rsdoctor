@@ -27,7 +27,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     reportCodeType = { noModuleSource: false, noAssetsAndModuleSource: false },
     disableTOSUpload = false,
     innerClientPath = '',
-    supports = { parseBundle: true, banner: false },
+    supports = { parseBundle: true, banner: false, generateTileGraph: true },
     port,
   } = config;
 
