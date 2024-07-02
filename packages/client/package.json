@@ -10,6 +10,7 @@
   "files": [
     "dist"
   ],
+  "license": "MIT",
   "scripts": {
     "dev": "rsbuild dev",
     "start": "rsbuild build -w",
