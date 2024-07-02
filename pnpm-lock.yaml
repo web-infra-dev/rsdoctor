@@ -42,8 +42,8 @@ importers:
         specifier: ^17.3.2
         version: 17.3.2
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.3.2
+        version: 3.3.2
       vite-tsconfig-paths:
         specifier: 4.2.1
         version: 4.2.1
@@ -5753,7 +5753,7 @@ packages:
   /@modern-js/codesmith@2.3.6:
     resolution: {integrity: sha512-wUF2L1mxUrYWPAj50jQ7yqcsLXt5g19Dt/USn3TxnosFE57GCvrsVjZseKUai9zfC0pnX7PXOj3KXXoV7EaiFw==}
     dependencies:
-      '@modern-js/utils': 2.54.3
+      '@modern-js/utils': 2.54.5
       '@swc/helpers': 0.5.1
       axios: 1.7.2
       tar: 6.2.0
@@ -6290,7 +6290,6 @@ packages:
       caniuse-lite: 1.0.30001638
       lodash: 4.17.21
       rslog: 1.2.0
-    dev: true
 
   /@module-federation/runtime-tools@0.1.6:
     resolution: {integrity: sha512-7ILVnzMIa0Dlc0Blck5tVZG1tnk1MmLnuZpLOMpbdW+zl+N6wdMjjHMjEZFCUAJh2E5XJ3BREwfX8Ets0nIkLg==}
@@ -16577,8 +16576,8 @@ packages:
     hasBin: true
     dev: true
 
-  /prettier@3.2.5:
-    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
+  /prettier@3.3.2:
+    resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
