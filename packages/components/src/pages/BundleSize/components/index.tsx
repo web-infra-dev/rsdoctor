@@ -1,4 +1,10 @@
-import { CodepenCircleOutlined, ColumnHeightOutlined, DeploymentUnitOutlined, InfoCircleOutlined, VerticalAlignMiddleOutlined } from '@ant-design/icons';
+import {
+  CodepenCircleOutlined,
+  ColumnHeightOutlined,
+  DeploymentUnitOutlined,
+  InfoCircleOutlined,
+  VerticalAlignMiddleOutlined,
+} from '@ant-design/icons';
 import { Client, SDK } from '@rsdoctor/types';
 import {
   Button,
@@ -45,13 +51,12 @@ interface WebpackModulesOverallProps {
   entryPoints: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetEntryPoints>;
 }
 
-export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = ({
-  errors,
-  cwd,
-  summary,
-  entryPoints,
-}) => {
-  const [selectedEntryPoints, setEntryPoints] = useState<SDK.EntryPointData[]>([]);
+export const WebpackModulesOverallBase: React.FC<
+  WebpackModulesOverallProps
+> = ({ errors, cwd, summary, entryPoints }) => {
+  const [selectedEntryPoints, setEntryPoints] = useState<SDK.EntryPointData[]>(
+    [],
+  );
   const [inputModule, setModuleValue] = useState(0);
   const [inputAssetName, setAssetName] = useState('');
   const [inputAssetSize, setAssetSize] = useState(0);
@@ -85,7 +90,8 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
   );
   const onChangeModule = useCallback(
     debounce((newValue: number) => {
-      const count = inputModuleUnit === 'mb' ? newValue * 1024 * 1024 : newValue * 1024;
+      const count =
+        inputModuleUnit === 'mb' ? newValue * 1024 * 1024 : newValue * 1024;
       setModuleValue(count);
     }, 300),
     [],
@@ -93,7 +99,8 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
 
   const onChangeAsset = useCallback(
     debounce((newValue: number) => {
-      const count = inputChunkUnit === 'mb' ? newValue * 1024 * 1024 : newValue * 1024;
+      const count =
+        inputChunkUnit === 'mb' ? newValue * 1024 * 1024 : newValue * 1024;
       setAssetSize(count);
     }, 300),
     [],
@@ -192,9 +199,27 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
         <ServerAPIProvider api={SDK.ServerAPI.API.GetTileReportHtml} body={{}}>
           {(data) => {
             if (data && graphType === 'tile') {
-              return <iframe srcDoc={data} width={'100%'} height={largeCardBodyHeight} style={{ border: 'none' }} />;
+              return (
+                <iframe
+                  srcDoc={data}
+                  width={'100%'}
+                  height={largeCardBodyHeight}
+                  style={{ border: 'none' }}
+                />
+              );
             }
-            return <Empty />;
+            return (
+              <Empty
+                description={
+                  <div>
+                    Generate Tile Graph is Closed.
+                    <a href="https://rsdoctor.dev/zh/config/options/options#generatetilegraph">
+                      Please check the document.
+                    </a>
+                  </div>
+                }
+              />
+            );
           }}
         </ServerAPIProvider>
       </Card>
@@ -207,60 +232,71 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
             <Tooltip
               color={'white'}
               title={
-                <Space direction='vertical' color='white'>
+                <Space direction="vertical" color="white">
                   <Row>
                     <Col>
                       <Tag color="cyan" style={{ margin: 0 }}>
                         initial
                       </Tag>
-                      <Typography.Text>: Indignify whether the chunk is the initial chunk.</Typography.Text>
+                      <Typography.Text>
+                        : Indignify whether the chunk is the initial chunk.
+                      </Typography.Text>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
                       <Tag color="green">concatenated</Tag>
-                      <Typography.Text>: Indignify whether the module is the concatenated module.  </Typography.Text>
+                      <Typography.Text>
+                        : Indignify whether the module is the concatenated
+                        module.{' '}
+                      </Typography.Text>
                       <br />
-                      <Typography.Text strong>Concatenated Module:</Typography.Text>
-                      <Typography.Text>A series module is to lift or series multiple modules into a closure when packaging. </Typography.Text>
+                      <Typography.Text strong>
+                        Concatenated Module:
+                      </Typography.Text>
+                      <Typography.Text>
+                        A series module is to lift or series multiple modules
+                        into a closure when packaging.{' '}
+                      </Typography.Text>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
-                      <Button
-                        size="small"
-                        icon={<CodepenCircleOutlined />}
-                      />
+                      <Button size="small" icon={<CodepenCircleOutlined />} />
                       <Typography.Text>: Open the code.</Typography.Text>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
-                      <Button
-                        size="small"
-                        icon={<DeploymentUnitOutlined />}
-                      />
-                      <Typography.Text>: View the module dependency, that is, module reasons in stats.json.</Typography.Text>
+                      <Button size="small" icon={<DeploymentUnitOutlined />} />
+                      <Typography.Text>
+                        : View the module dependency, that is, module reasons in
+                        stats.json.
+                      </Typography.Text>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
-                      <Tag color={'purple'} >{'Bundled: 15.77 KB'}</Tag> 
+                      <Tag color={'purple'}>{'Bundled: 15.77 KB'}</Tag>
                       <Typography.Text strong>Bundled Size</Typography.Text>
-                      <Typography.Text>The size of the code which bundled. That is, after bundle and tree-shaking.</Typography.Text>
+                      <Typography.Text>
+                        The size of the code which bundled. That is, after
+                        bundle and tree-shaking.
+                      </Typography.Text>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
-                      <Tag color={'orange'} >{'Source: 15.77 KB'}</Tag> 
+                      <Tag color={'orange'}>{'Source: 15.77 KB'}</Tag>
                       <Typography.Text strong>Source Size</Typography.Text>
-                      <Typography.Text>The size of the code which before bundle and transform.</Typography.Text>
+                      <Typography.Text>
+                        The size of the code which before bundle and transform.
+                      </Typography.Text>
                     </Col>
                   </Row>
                 </Space>
-                
               }
-              style={{ marginLeft: 3, }}
+              style={{ marginLeft: 3 }}
             >
               <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
             </Tooltip>
@@ -292,7 +328,11 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
                 style={{ minWidth: 230, width: 'auto', maxWidth: 300 }}
                 placeholder={'filter assets by entry point'}
                 onChange={(name: string[]) => {
-                  setEntryPoints(name.map((e) => entryPoints.find((ep) => ep.name === e)!).filter(Boolean));
+                  setEntryPoints(
+                    name
+                      .map((e) => entryPoints.find((ep) => ep.name === e)!)
+                      .filter(Boolean),
+                  );
                 }}
                 allowClear
                 onClear={() => {
@@ -303,7 +343,11 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
                   return (
                     <Select.Option key={e.name} value={e.name}>
                       <Space>
-                        <Bdg label={e.name} value={formatSize(e.size)} tooltip={e.name} />
+                        <Bdg
+                          label={e.name}
+                          value={formatSize(e.size)}
+                          tooltip={e.name}
+                        />
                       </Space>
                     </Select.Option>
                   );
@@ -312,7 +356,10 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
             </Col>
           ) : null}
           <Col>
-            <KeywordInput placeholder="search asset by keyword" onChange={onSearch} />
+            <KeywordInput
+              placeholder="search asset by keyword"
+              onChange={onSearch}
+            />
           </Col>
           <Col span={7}>
             <InputNumber
@@ -320,9 +367,13 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
               style={{ width: '95%' }}
               addonBefore={
                 <Space>
-                  <Typography.Text style={{ fontSize: 14, color: 'inherit' }}>Asset Size</Typography.Text>
+                  <Typography.Text style={{ fontSize: 14, color: 'inherit' }}>
+                    Asset Size
+                  </Typography.Text>
                   <Tooltip
-                    title={t('filter the output assets which size is greater than the input value')}
+                    title={t(
+                      'filter the output assets which size is greater than the input value',
+                    )}
                     style={{ marginLeft: 3 }}
                   >
                     <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
@@ -339,9 +390,13 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
               style={{ width: '95%' }}
               addonBefore={
                 <Space>
-                  <Typography.Text style={{ fontSize: 14, color: 'inherit' }}>Module Size</Typography.Text>
+                  <Typography.Text style={{ fontSize: 14, color: 'inherit' }}>
+                    Module Size
+                  </Typography.Text>
                   <Tooltip
-                    title={t('filter the modules which size is greater than the input value')}
+                    title={t(
+                      'filter the modules which size is greater than the input value',
+                    )}
                     style={{ marginLeft: 3 }}
                   >
                     <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
@@ -361,25 +416,40 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
                   <Card
                     title={
                       <Space>
-                        <Typography.Text>{t('Output Assets List')}</Typography.Text>
+                        <Typography.Text>
+                          {t('Output Assets List')}
+                        </Typography.Text>
                         <Divider type="vertical" />
                         <Tooltip
                           title={`total assets count is ${assets.length}, the filtered assets count is ${filteredAssets.length}`}
                         >
-                          <Typography.Text type="secondary" style={{ fontSize: 12, fontWeight: 400 }}>
+                          <Typography.Text
+                            type="secondary"
+                            style={{ fontSize: 12, fontWeight: 400 }}
+                          >
                             {filteredAssets.length} / {assets.length}
                           </Typography.Text>
                         </Tooltip>
                         <Divider type="vertical" />
-                        <Typography.Text type="secondary" style={{ fontSize: 12, fontWeight: 400 }}>
+                        <Typography.Text
+                          type="secondary"
+                          style={{ fontSize: 12, fontWeight: 400 }}
+                        >
                           {formatSize(sumBy(filteredAssets, (e) => e.size))}
                         </Typography.Text>
                       </Space>
                     }
                     size="small"
-                    bodyStyle={{ overflow: 'scroll', height: fold ? cardBodyHeight : largeCardBodyHeight }}
+                    bodyStyle={{
+                      overflow: 'scroll',
+                      height: fold ? cardBodyHeight : largeCardBodyHeight,
+                    }}
                     extra={
-                      <Button size="small" icon={<ColumnHeightOutlined />} onClick={() => setDefaultExpandAll(true)}>
+                      <Button
+                        size="small"
+                        icon={<ColumnHeightOutlined />}
+                        onClick={() => setDefaultExpandAll(true)}
+                      >
                         expand all
                       </Button>
                     }
@@ -387,14 +457,19 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
                     <FileTree
                       treeData={assetsStructures}
                       autoExpandParent
-                      defaultExpandAll={defaultExpandAll || filteredAssets.length <= 20}
+                      defaultExpandAll={
+                        defaultExpandAll || filteredAssets.length <= 20
+                      }
                       key={`tree_${inputAssetName}_${defaultExpandAll}`}
                     />
                   </Card>
                 </Col>
                 <Col span={16}>
                   {assetPath ? (
-                    <ServerAPIProvider api={SDK.ServerAPI.API.GetAssetDetails} body={{ assetPath }}>
+                    <ServerAPIProvider
+                      api={SDK.ServerAPI.API.GetAssetDetails}
+                      body={{ assetPath }}
+                    >
                       {(details) => (
                         <AssetDetail
                           asset={details.asset}
@@ -407,11 +482,18 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
                       )}
                     </ServerAPIProvider>
                   ) : (
-                    <Card bodyStyle={{ height: fold ? cardBodyHeight + 40 : largeCardBodyHeight }}>
+                    <Card
+                      bodyStyle={{
+                        height: fold
+                          ? cardBodyHeight + 40
+                          : largeCardBodyHeight,
+                      }}
+                    >
                       <Empty
                         description={
                           <Typography.Text strong>
-                            Click the file path on the left to show the modules of the asset
+                            Click the file path on the left to show the modules
+                            of the asset
                           </Typography.Text>
                         }
                       />
@@ -426,22 +508,31 @@ export const WebpackModulesOverallBase: React.FC<WebpackModulesOverallProps> = (
         </Row>
       </Card>
     </React.Fragment>
-
   );
 };
 
 export const WebpackModulesOverall = withServerAPI({
   api: SDK.ServerAPI.API.GetProjectInfo,
   responsePropName: 'project',
-  Component: (props: { project: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetProjectInfo> }) => {
+  Component: (props: {
+    project: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetProjectInfo>;
+  }) => {
     const { root, errors } = props.project;
     return (
-      <ServerAPIProvider api={SDK.ServerAPI.API.GetAssetsSummary} body={{ withFileContent: true }}>
+      <ServerAPIProvider
+        api={SDK.ServerAPI.API.GetAssetsSummary}
+        body={{ withFileContent: true }}
+      >
         {(summary) => {
           return (
             <ServerAPIProvider api={SDK.ServerAPI.API.GetEntryPoints}>
               {(entryPoints) => (
-                <WebpackModulesOverallBase cwd={root} errors={errors} summary={summary} entryPoints={entryPoints} />
+                <WebpackModulesOverallBase
+                  cwd={root}
+                  errors={errors}
+                  summary={summary}
+                  entryPoints={entryPoints}
+                />
               )}
             </ServerAPIProvider>
           );
