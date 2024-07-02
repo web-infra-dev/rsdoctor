@@ -1,0 +1,558 @@
+# Custom Extension Rules
+
+## Introduction
+
+Considering that users may have their own specific rule definition requirements, Rsdoctor provides an external interface for users to customize their own rule checks in addition to the built-in rules.
+The external extension interface needs to be configured on the Rsdoctor plugin through the `extends` field, and its configuration is also placed in the `rules` field. See the example below:
+
+```ts
+// src/rules/assets-count-limit.ts
+import { defineRule } from '@rsdoctor/core/rules';
+
+export const AssetsCountLimit = defineRule(() => ({
+  meta: {
+    category: 'bundle',
+    severity: 'Warn',
+    title: 'assets-count-limit',
+    defaultConfig: {
+      limit: 10,
+    },
+  },
+  check({ chunkGraph, report, ruleConfig }) {
+    const assets = chunkGraph.getAssets();
+
+    if (assets.length > ruleConfig.limit) {
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          type: 'link',
+          link: 'https://rsdoctor.dev/zh/guide/start/quick-start', // This link just for show case.
+        },
+      });
+    }
+  },
+}));
+```
+
+```ts
+// rsbuild.config.ts
+import { AssetsCountLimit } from './rules/assets-count-limit';
+
+export default {
+  tools: {
+    bundlerChain: (chain) => {
+      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+        {
+          linter: {
+            level: 'Error',
+            extends: [AssetsCountLimit],
+            rules: {
+              'assets-count-limit': [
+                'on',
+                {
+                  limit: 1, // rule custom configs
+                },
+              ],
+            },
+          },
+        },
+      ]);
+    },
+  },
+};
+```
+
+You can follow the detailed steps below to define and write custom rules.
+
+## Steps for Custom Rules
+
+### 1. Installation
+
+When writing custom rules, in addition to installing the basic `@rsdoctor/rspack-plugin (@rsdoctor/webpack-plugin)` dependencies, you also need to install `@rsdoctor/core` and use the defineRule function from `@rsdoctor/core/rules` to define unified Rsdoctor rules.
+
+import { PackageManagerTabs } from '@theme';
+
+import { Tab, Tabs } from 'rspress/theme';
+
+<PackageManagerTabs command="add @rsdoctor/core -D" />
+
+### 2. Writing Rules
+
+To write rules, you need to use the `defineRule` function, which takes a function as input and returns an object in a fixed format. Refer to the following example:
+
+```ts
+// src/rules/some-rule.ts
+import { defineRule } from '@rsdoctor/core/rules';
+
+const ruleTitle = 'check-rule';
+const ruleConfig = {
+  // some rule configs
+};
+
+export const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
+  meta: {
+    category: 'bundle', // rule category
+    severity: 'Warn', // rule severity
+    title: ruleTitle, // rule title
+    defaultConfig: {
+      // rule default config
+    },
+  },
+  check(ruleContext) {
+    // rule check...
+  },
+}));
+```
+
+The `meta` field contains the fixed configuration and content of this rule, and the `check` field contains the callback that includes the specific logic for rule checking. Their types are as follows.
+
+#### meta Object
+
+For the definition of the meta type, please refer to [RuleMeta](#rulemeta).
+
+##### Property Meanings
+
+- meta
+  - category
+    - info: Defines the category of the rule: compilation rule or build packaging rule.
+    - type: 'compile' | 'bundle'.
+  - title
+    - info: The title of the rule, used to display in the Rsdoctor report page.
+    - type: string | generics, can be passed down through generics.
+  - severity
+    - info: The severity level of the rule.
+    - type: Refer to the ErrorLevel type below.
+    - default: 'Warn'
+  - defaultConfig
+    - info: The default configuration of the rule. Custom rules may require specific configurations, and defaultConfig can be used to configure the default rule configuration.
+    - type: Generics, can be defined through generics. As shown in the example above.
+  - referenceUrl
+    - info: The documentation link for the rule.
+    - type: string.
+
+#### check Function
+
+The check function is mainly used for rule judgment. The parameter `ruleContext` is all the build information that Rsdoctor integrates during the build analysis process, and its type is defined as follows.
+You can use the build information in the body of the check function to make custom rule judgments. After the judgment, if the rule check fails, you can report it using the `report` method in the parameter. See the next step for details.
+
+##### CheckCallback Type
+
+```ts
+type CheckCallback<Config = DefaultRuleConfig> = (
+  context: RuleCheckerContext<Config>,
+) => void | Promise<void>;
+```
+
+[`RuleCheckerContext` type definition, please refer to the details](#rulecheckercontext)
+
+##### Example
+
+The following example is a custom rule that limits the number of assets:
+
+```ts
+// src/rules/some-rule.ts
+const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
+  // .....
+
+  check({ chunkGraph, report, ruleConfig }) {
+    const assets = chunkGraph.getAssets();
+
+    if (assets.length > ruleConfig.limit) {
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          type: 'link',
+          link: 'https://rsdoctor.dev/zh/guide/start/quick-start', // This link just for show case.
+        },
+      });
+    }
+  },
+}));
+```
+
+### 3. Reporting Rule Results
+
+To report errors, you need to use the `report` method in the `check` callback function's parameter. The `report` method's parameters mainly include the following parts:
+
+- message: The error message.
+- document: File data used to describe the location of the error code and code position.
+- suggestions: Rule suggestions.
+- detail: Detailed information, mainly providing additional data to the frontend.
+
+For detailed type definitions, refer to: [ReportData](#reportdata)
+
+### 4. Displaying Rule Results
+
+The `report` function will pass the error information of custom rules to the compilation's errors or warnings. It will display the rule results in the terminal during the build process, and even interrupt the build.
+At the same time, Rsdoctor also has two components that can be used to display rules. For more details, see [Display Components](#display-components).
+
+- Basic Rule Warning Component
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-1.jpeg" />
+
+- Code Display Component
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-2.jpeg" />
+
+## Display Components
+
+### Basic Rule Warning Component
+
+- Component Type
+
+  [LinkRule Type](#linkrulestoredata)
+
+- Component Input
+
+  - type
+
+    - The type of the component.
+    - value: 'link'.
+
+  - title
+
+    - The title of the rule.
+    - type: string.
+
+  - description
+
+    - The description of the rule. The data comes from the `message` or `detail.description` in the `report` function:
+      ```js
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          // ......
+          description: 'The count of assets is bigger than limit',
+        },
+      });
+      ```
+    - type: string.
+
+  - level
+
+    - The level of the rule.
+    - type: warn | error.
+
+  - link:
+    - The details of the rule. The data comes from `detail.link`:
+      ```js
+      report({
+        detail: {
+          // ......
+          link: 'http://....',
+        },
+      });
+      ```
+    - type：string。
+
+- Example
+
+```ts
+report({
+  message: 'The count of assets is bigger than limit',
+  detail: {
+    type: 'link',
+    link: 'https://rsdoctor.dev/zh/guide/start/quick-start', // This link just for show case.
+  },
+});
+```
+
+- Display Components
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-1.jpeg" />
+
+- Component Code [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/components/src/components/Alert/link.tsx)
+
+### Code Display Component
+
+- Component Type
+
+  [CodeViewRule Type](#codeviewrule)
+
+- Component Input
+
+  - type
+
+    - The type of the component.
+    - value: 'code-view'.
+
+  - title
+
+    - The title of the rule.
+    - type: string.
+
+  - description
+
+    - The description of the rule. The data comes from the `message` or `detail.description` in the `report` function:
+      ```js
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          // ......
+          description: 'The count of assets is bigger than limit',
+        },
+      });
+      ```
+    - type: string.
+
+  - level
+
+    - The level of the rule.
+    - type: warn | error.
+
+  - file
+    - Code details for display.
+    - [type](#codeviewrule):
+      - file: string, code file path.
+      - content: string, code content.
+      - ranges: SourceRange, code line and column ranges.
+
+- Example
+
+```js
+  const detail {
+    type: 'code-view',
+    file: {
+      path: document.path,
+      content: document.content,
+      ranges: [node.loc!],
+    },
+  };
+
+  report({
+    message,
+    document,
+    detail,
+  });
+
+```
+
+- [More Examples](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/core/src/rules/rules/default-import-check/index.ts#L103)
+
+- Component Display
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-2.jpeg" />
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-3.jpeg" />
+
+- Component Code: [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/components/src/components/Alert/view.tsx)
+
+## Type Definitions
+
+### RuleMeta
+
+```ts
+interface RuleMeta<
+  Config = DefaultRuleConfig,
+  Title extends DefaultRuleTitle = DefaultRuleTitle,
+> {
+  title: Title;
+  category:
+  severity: ErrorLevel;
+  referenceUrl?: string;
+  defaultConfig?: Config;
+}
+
+/** Error Level */
+export enum ErrorLevel {
+  Ignore = 0,
+  Warn = 1,
+  Error = 2,
+}
+```
+
+### RuleCheckerContext
+
+```ts
+interface RuleCheckerContext<Config> {
+  /** Project root directory */
+  root: string;
+  /** Current rule configuration */
+  ruleConfig: Config;
+  /** Project configuration */
+  configs: ConfigData;
+  /** Build errors */
+  errors: Error[];
+  /** Chunk graph */
+  chunkGraph: ChunkGraph;
+  /** Module graph */
+  moduleGraph: ModuleGraph;
+  /** Package graph */
+  packageGraph: PackageGraph;
+  /** Loader data */
+  loader: LoaderData;
+  /**
+   * Report Error
+   * @param {any} error - error info
+   * @param {any} replacer - Replace the original error
+   */
+  report(error: ReportData, replacer?: any): void;
+}
+```
+
+### ReportData
+
+```ts
+interface ReportData {
+  /** Error message */
+  message: string;
+  /** File data */
+  document?: ReportDocument;
+  /** Diagnostic suggestions */
+  suggestions?: Suggestion;
+  /**
+   * Detailed information
+   *   - Mainly provides additional data for the frontend
+   */
+  detail?: any;
+}
+
+/** Error file information */
+interface ReportDocument {
+  /** file path */
+  path: string;
+  /**  Is it a transformed code */
+  isTransformed?: boolean;
+  /** code content */
+  content: string;
+  range: Range;
+}
+```
+
+### LinkRuleStoreData
+
+```ts
+interface BaseRuleStoreData extends Pick<RuleMessage, 'code' | 'category'> {
+  /**
+   * unique of error
+   */
+  id: number | string;
+  /**
+   * title of alerts
+   */
+  title: string;
+  /**
+   * description of alerts
+   */
+  description?: string;
+  /**
+   * level of error
+   */
+  level: 'warn' | 'error';
+  /**
+   * rule doc link
+   */
+  link?: string;
+}
+
+interface LinkRuleStoreData extends BaseRuleStoreData {
+  type: 'link';
+}
+```
+
+### CodeViewRule
+
+```ts
+interface CodeViewRuleStoreData extends BaseRuleStoreData {
+  type: 'code-view';
+  file: {
+    /**
+     * file path
+     */
+    path: string;
+    /**
+     * the code content
+     */
+    content: string;
+    /**
+     * fix highlight range in source
+     */
+    ranges?: SourceRange[];
+  };
+}
+
+/** Source code location */
+interface SourcePosition {
+  line?: number;
+  column?: number;
+  index?: number;
+}
+
+/** Source code range */
+interface SourceRange {
+  start: SourcePosition;
+  end?: SourcePosition;
+}
+```
+
+## Tools
+
+### AST Processing
+
+When performing rule detection and analysis, it is common to perform AST analysis on modules and other operations. To provide more auxiliary functions, we also provide `@rsdoctor/utils/rule-utils` in the `@rsdoctor/utils` package, which contains many useful utility functions and methods.
+
+```ts
+/** This includes the type definitions for all AST nodes */
+type Node = /* SyntaxNode */;
+
+interface parser {
+  /** AST iterator */
+  walk,
+  /**
+   * Compile code
+   *   - The root node is `Node.Program`
+   */
+  parse,
+  /**
+   * Compile the next expression
+   *   - The root node is `Node.ExpressionStatement`
+   */
+  parseExpressionAt,
+  /** Assertion methods */
+  asserts,
+  /** Utility methods */
+  utils,
+}
+
+/** Document class */
+interface Document {
+  /** Get the position in the text at the given offset */
+  positionAt!: (offset: number) => Position | undefined;
+  /** Get the position in the file at the given point */
+  offsetAt!: (position: Position) => number | undefined;
+}
+```
+
+The `asserts` assertion method set provides type assertion methods for all AST nodes, while the `utils` utility method set provides commonly used methods such as determining whether certain statements have the same semantics and retrieving Import nodes.
+
+### Reporting Code Position
+
+Some errors require providing the position of the code, so the content of the `document` field needs to be provided. However, there is an important distinction here: each module actually has two sets of code, transformed and source, which means the code after being processed by the loader and the user's original code. The AST is actually the transformed code format.
+To facilitate display for users, we need to use the original code as much as possible. Therefore, after selecting the corresponding AST node, users need to use the SourceMap module provided by the module to convert the position information to the original code. If the module does not have the original code or SourceMap for some special reasons, then using the transformed code/position is more appropriate. A typical workflow is as follows:
+
+```ts
+const module: SDK.ModuleInstance;
+const node: Node.ImportDeclaration;
+/** The default type is optional, but in reality, they all have values */
+const transformedRange = node.loc!;
+/** If the module's SourceMap is not available, this value is null */
+const sourceRange = module.getSourceRange(transformedRange);
+/** Get the code */
+const source = mod.getSource();
+
+// Determine which value to use based on whether the original position is generated
+const range = (sourceRange ?? transformed) as Linter.Range;
+const content = sourceRange ? source.source : source.transformed;
+
+report({
+  document: {
+    path: module.path,
+    content,
+    range,
+  },
+});
+```
+
+## Data Reporting
+
+Please go to [Data Reporting](./upload-data) for viewing.

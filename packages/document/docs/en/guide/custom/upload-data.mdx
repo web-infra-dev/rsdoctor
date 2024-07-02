@@ -1,0 +1,45 @@
+# Data Upload
+
+To perform data upload, you need to use the interface of custom extension rules. Please refer to [Custom Extension Rules](./rule-custom) for more information.
+
+The same approach used for custom extension rules can also be used for collecting and uploading user data. The only difference is that you don't need to report any errors in the check function. For example:
+
+```ts
+// src/rules/upload-data.ts
+import { defineRule } from '@rsdoctor/core/rules';
+
+export const UploadData = defineRule(() => ({
+  meta: {
+    category: 'bundle',
+    severity: 'Warn',
+    title: 'upload-data',
+    defaultConfig: {
+      limit: 10,
+    },
+  },
+  check({ chunkGraph, moduleGraph, ruleConfig }) {
+    // upload some data
+    Upload({ chunkGraph, moduleGraph });
+  },
+}));
+```
+
+```ts
+// rsbuild.config.ts
+import { UploadData } from './rules/upload-data';
+
+export default {
+  tools: {
+    bundlerChain: (chain) => {
+      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+        {
+          linter: {
+            level: 'Warn',
+            extends: [UploadData],
+          },
+        },
+      ]);
+    },
+  },
+};
+```
