@@ -546,8 +546,8 @@ importers:
         specifier: ^18
         version: 18.2.39
       '@types/react-highlight-words':
-        specifier: ^0.16.7
-        version: 0.16.7
+        specifier: ^0.20.0
+        version: 0.20.0
       '@types/url-parse':
         specifier: 1.4.8
         version: 1.4.8
@@ -5753,7 +5753,7 @@ packages:
   /@modern-js/codesmith@2.3.6:
     resolution: {integrity: sha512-wUF2L1mxUrYWPAj50jQ7yqcsLXt5g19Dt/USn3TxnosFE57GCvrsVjZseKUai9zfC0pnX7PXOj3KXXoV7EaiFw==}
     dependencies:
-      '@modern-js/utils': 2.54.3
+      '@modern-js/utils': 2.54.5
       '@swc/helpers': 0.5.1
       axios: 1.7.2
       tar: 6.2.0
@@ -6290,7 +6290,6 @@ packages:
       caniuse-lite: 1.0.30001638
       lodash: 4.17.21
       rslog: 1.2.0
-    dev: true
 
   /@module-federation/runtime-tools@0.1.6:
     resolution: {integrity: sha512-7ILVnzMIa0Dlc0Blck5tVZG1tnk1MmLnuZpLOMpbdW+zl+N6wdMjjHMjEZFCUAJh2E5XJ3BREwfX8Ets0nIkLg==}
@@ -8385,8 +8384,8 @@ packages:
       '@types/react': 18.2.39
     dev: true
 
-  /@types/react-highlight-words@0.16.7:
-    resolution: {integrity: sha512-+upXTIaRd3rGvh1aDQSs9z5X+sV3UM6Jrmjk03GN2GXl4v/+iOJKQj2LZHo6Vp2IoTvMdtxgME26feqo12xXLg==}
+  /@types/react-highlight-words@0.20.0:
+    resolution: {integrity: sha512-Qm512TiOakvtNzHJ2+TNVHnLn5cJ2wLQV0+LrhuispVth6dRf5b8ydjq3Kc0thpZ7bz4s6RnG6meboAXHWRK+Q==}
     dependencies:
       '@types/react': 18.2.39
     dev: true
