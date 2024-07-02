@@ -11,6 +11,11 @@
   },
   {
     "type": "dir",
+    "name": "custom",
+    "label": "User Custom"
+  },
+  {
+    "type": "dir",
     "name": "more",
     "label": "More"
   }

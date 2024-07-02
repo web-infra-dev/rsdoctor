@@ -1,0 +1,557 @@
+# 自定义扩展规则
+
+## 功能介绍
+
+考虑到用户会有自己特有的规则定义需求，所以 Rsdoctor 除了内部已有的规则外，我们还提供了外部接口供用户定制自己的规则检查。外部扩展接口需要通过`extends`字段配置到 Rsdoctor 插件上，它的配置也是放在`rules`字段内。如下方示例：
+
+```ts
+// src/rules/assets-count-limit.ts
+import { defineRule } from '@rsdoctor/core/rules';
+
+export const AssetsCountLimit = defineRule(() => ({
+  meta: {
+    category: 'bundle',
+    severity: 'Warn',
+    title: 'assets-count-limit',
+    defaultConfig: {
+      limit: 10,
+    },
+  },
+  check({ chunkGraph, report, ruleConfig }) {
+    const assets = chunkGraph.getAssets();
+
+    if (assets.length > ruleConfig.limit) {
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          type: 'link',
+          link: 'https://rsdoctor.dev/zh/guide/start/quick-start', // This link just for show case.
+        },
+      });
+    }
+  },
+}));
+```
+
+```ts
+// rsbuild.config.ts
+import { AssetsCountLimit } from './rules/assets-count-limit';
+
+export default {
+  tools: {
+    bundlerChain: (chain) => {
+      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+        {
+          linter: {
+            level: 'Error',
+            extends: [AssetsCountLimit],
+            rules: {
+              'assets-count-limit': [
+                'on',
+                {
+                  limit: 1, // rule custom configs
+                },
+              ],
+            },
+          },
+        },
+      ]);
+    },
+  },
+};
+```
+
+可按照下面自定义规则详细步骤进行规则定义及编写。
+
+## 自定义规则步骤
+
+### 1. 安装
+
+编写自定义规则时，除了安装基本的 @rsdoctor/rspack-plugin(@rsdoctor/webpack-plugin) 依赖，还需要安装 @rsdoctor/core 并使用 @rsdoctor/core/rules 中的 defineRule 函数来定义统一的 Rsdoctor 规则。
+
+import { PackageManagerTabs } from '@theme';
+
+import { Tab, Tabs } from 'rspress/theme';
+
+<PackageManagerTabs command="add @rsdoctor/core -D" />
+
+### 2. 编写规则
+
+编写规则需要先使用`defineRule`函数，它内部输入一个函数，此函数返回一个固定格式的对象。参考按照如下实例：
+
+```ts
+// src/rules/some-rule.ts
+import { defineRule } from '@rsdoctor/core/rules';
+
+const ruleTitle = 'check-rule';
+const ruleConfig = {
+  // some rule configs
+};
+
+export const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
+  meta: {
+    category: 'bundle', // rule category
+    severity: 'Warn', // rule severity
+    title: ruleTitle, // rule title
+    defaultConfig: {
+      // rule default config
+    },
+  },
+  check(ruleContext) {
+    // rule check...
+  },
+}));
+```
+
+其中，`meta` 字段为此规则的固定配置和内容，`check` 字段为包含规则检查具体逻辑的回调，它们的类型如下。
+
+#### meta 对象
+
+meta 类型定义查看：[RuleMeta](#rulemeta)。
+
+##### 属性含义
+
+- meta
+  - category
+    - info: 定义规则分类：编译规则或构建打包规则。
+    - type: 'compile' | 'bundle'。
+  - title
+    - info：规则标题，用于在 Rsdoctor 报告页面中展示。
+    - type：string | 泛型，用户可通过泛型下传。
+  - severity
+    - info: 规则等级。
+    - type: 参考下方 ErrorLevel 类型。
+    - default: 'Warn'
+  - defaultConfig
+    - info：规则默认配置。自定义规则中可能需要特有的配置，defaultConfig 可用于配置默认的规则配置。
+    - type：泛型，用户可通过泛型定义。如上面示例。
+  - referenceUrl
+    - info: 规则文档链接。
+    - type： string。
+
+#### check 函数
+
+check 函数主要是用来做规则判断的，参数 `ruleContext` 是 Rsdoctor 在构建分析过程中所整合到的所有构建信息，类型定义如下。
+可以在 `check` 函数的函数体内利用构建信息进行自定义的规则判断。判断后，如果规则检查出问题，可通过参数中的 `report` 方法进行上报，具体参见下一步。
+
+##### CheckCallback 类型
+
+```ts
+type CheckCallback<Config = DefaultRuleConfig> = (
+  context: RuleCheckerContext<Config>,
+) => void | Promise<void>;
+```
+
+[`RuleCheckerContext` 类型定义请查看详情](#rulecheckercontext)
+
+##### 示例
+
+如下实例是对 assets 资源的个数进行一个限制的自定义规则：
+
+```ts
+// src/rules/some-rule.ts
+const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
+  // .....
+
+  check({ chunkGraph, report, ruleConfig }) {
+    const assets = chunkGraph.getAssets();
+
+    if (assets.length > ruleConfig.limit) {
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          type: 'link',
+          link: 'https://rsdoctor.dev/zh/guide/start/quick-start', // This link just for show case.
+        },
+      });
+    }
+  },
+}));
+```
+
+### 3. 上报规则结果
+
+上报错误需要使用`check` 回调函数的参数中的 `report` 方法，`report` 方法的参数主要是包含以下的几个部分：
+
+- message：错误消息
+- document：文件数据, 用于描述报错代码文件位置及代码位置。
+- suggestions：规则建议。
+- detail：详细信息，主要是提供给前端的额外数据。
+
+详细类型定义查看：[ReportData](#reportdata)
+
+### 4. 规则结果展示
+
+`report` 函数会把自定义规则的错误信息传递给 compilation 的 errors 或 warnings，会在构建的时候在终端中输出构建规则结果提示，甚至中断构建。
+同时，Rsdoctor 还有两种组件可以作为规则展示，详细的查看下方[展示组件](#%E5%B1%95%E7%A4%BA%E7%BB%84%E4%BB%B6)
+
+- 基本规则警示组件
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-1.jpeg" />
+
+- 代码展示组件
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-2.jpeg" />
+
+## 展示组件
+
+### 基本规则警示组件
+
+- 组件类型
+
+  [LinkRule Type](#linkrulestoredata)
+
+- 组件输入
+
+  - type
+
+    - 使用组件类型。
+    - value： 'link'。
+
+  - title
+
+    - 规则标题。
+    - type： string。
+
+  - description
+
+    - 规则描述。数据来源为 report 中的 message 或 detail.description:
+      ```js
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          // ......
+          description: 'The count of assets is bigger than limit',
+        },
+      });
+      ```
+    - type： string。
+
+  - level
+
+    - 规则级别。
+    - type：warn | error。
+
+  - link:
+    - 规则详情。数据来源为 detail.link:
+      ```js
+      report({
+        detail: {
+          // ......
+          link: 'http://....',
+        },
+      });
+      ```
+    - type：string。
+
+- 示例
+
+```ts
+report({
+  message: 'The count of assets is bigger than limit',
+  detail: {
+    type: 'link',
+    link: 'https://rsdoctor.dev/zh/guide/start/quick-start', // This link just for show case.
+  },
+});
+```
+
+- 组件展示
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-1.jpeg" />
+
+- 组件代码 [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/components/src/components/Alert/link.tsx)
+
+### 代码展示组件
+
+- 组件类型
+
+  [CodeViewRule Type](#codeviewrule)
+
+- 组件输入
+
+  - type
+
+    - 使用组件类型。
+    - value： 'code-view'。
+
+  - title
+
+    - 规则标题。
+    - type： string。
+
+  - description
+
+    - 规则描述。数据来源为 report 中的 message 或 detail.description:
+      ```js
+      report({
+        message: 'The count of assets is bigger than limit',
+        detail: {
+          // ......
+          description: 'The count of assets is bigger than limit',
+        },
+      });
+      ```
+    - type： string。
+
+  - level
+
+    - 规则级别。
+    - type：warn | error。
+
+  - file
+    - 代码详情展示。
+    - [type](#codeviewrule)：
+      - file: string, 代码文件地址。
+      - content: string, 代码内容。
+      - ranges: SourceRange， 代码行列范围。
+
+- 示例
+
+```js
+  const detail {
+    type: 'code-view',
+    file: {
+      path: document.path,
+      content: document.content,
+      ranges: [node.loc!],
+    },
+  };
+
+  report({
+    message,
+    document,
+    detail,
+  });
+
+```
+
+- [更多示例代码](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/core/src/rules/rules/default-import-check/index.ts#L103)
+
+- 组件展示
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-2.jpeg" />
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-3.jpeg" />
+
+- 组件代码 [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/components/src/components/Alert/view.tsx)
+
+## 类型定义
+
+### RuleMeta
+
+```ts
+interface RuleMeta<
+  Config = DefaultRuleConfig,
+  Title extends DefaultRuleTitle = DefaultRuleTitle,
+> {
+  title: Title;
+  category:
+  severity: ErrorLevel;
+  referenceUrl?: string;
+  defaultConfig?: Config;
+}
+
+/** Error Level */
+export enum ErrorLevel {
+  Ignore = 0,
+  Warn = 1,
+  Error = 2,
+}
+```
+
+### RuleCheckerContext
+
+```ts
+interface RuleCheckerContext<Config> {
+  /** 工程根目录 */
+  root: string;
+  /** 当前规则配置 */
+  ruleConfig: Config;
+  /** 工程配置 */
+  configs: ConfigData;
+  /** 构建错误 */
+  errors: Error[];
+  /** Chunk 图 */
+  chunkGraph: ChunkGraph;
+  /** 模块图 */
+  moduleGraph: ModuleGraph;
+  /** 依赖图 */
+  packageGraph: PackageGraph;
+  /** loader 数据 */
+  loader: LoaderData;
+  /**
+   * 上报错误
+   * @param {any} error - 错误数据
+   * @param {any} replacer - 替换原错误
+   */
+  report(error: ReportData, replacer?: any): void;
+}
+```
+
+### ReportData
+
+```ts
+interface ReportData {
+  /** 错误消息 */
+  message: string;
+  /** 文件数据 */
+  document?: ReportDocument;
+  /** 诊断建议 */
+  suggestions?: Suggestion;
+  /**
+   * 详细信息
+   *   - 主要是提供给前端的额外数据
+   */
+  detail?: any;
+}
+
+/** Error file information */
+interface ReportDocument {
+  /** file path */
+  path: string;
+  /**  Is it a transformed code */
+  isTransformed?: boolean;
+  /** code content */
+  content: string;
+  range: Range;
+}
+```
+
+### LinkRuleStoreData
+
+```ts
+interface BaseRuleStoreData extends Pick<RuleMessage, 'code' | 'category'> {
+  /**
+   * unique of error
+   */
+  id: number | string;
+  /**
+   * title of alerts
+   */
+  title: string;
+  /**
+   * description of alerts
+   */
+  description?: string;
+  /**
+   * level of error
+   */
+  level: 'warn' | 'error';
+  /**
+   * rule doc link
+   */
+  link?: string;
+}
+
+interface LinkRuleStoreData extends BaseRuleStoreData {
+  type: 'link';
+}
+```
+
+### CodeViewRule
+
+```ts
+interface CodeViewRuleStoreData extends BaseRuleStoreData {
+  type: 'code-view';
+  file: {
+    /**
+     * file path
+     */
+    path: string;
+    /**
+     * the code content
+     */
+    content: string;
+    /**
+     * fix highlight range in source
+     */
+    ranges?: SourceRange[];
+  };
+}
+
+/** Source code location */
+interface SourcePosition {
+  line?: number;
+  column?: number;
+  index?: number;
+}
+
+/** Source code range */
+interface SourceRange {
+  start: SourcePosition;
+  end?: SourcePosition;
+}
+```
+
+## 工具
+
+### AST 处理
+
+在进行规则检测分析时，对模块进行AST分析等操作是常见的。为了提供更多辅助功能，我们还提供了 `@rsdoctor/utils` 包中的 `@rsdoctor/utils/rule-utils`，其中包含了许多实用的工具函数和方法。
+
+```ts
+/** 这里包含了 AST 所有节点的类型定义 */
+export type Node = /* SyntaxNode */;
+
+export interface parser {
+  /** AST 迭代器 */
+  walk,
+  /**
+   * 编译代码
+   *   - 输出根节点为`Node.Program`
+   */
+  parse,
+  /**
+   * 编译接下来的首个表达式
+   *   - 输出根节点为`Node.ExpressionStatement`
+   */
+  parseExpressionAt,
+  /** 断言方法集 */
+  asserts,
+  /** 辅助方法集 */
+  utils,
+}
+
+/** 文档类 */
+export interface Document {
+  /** 获取文件位置在文本中的位移 */
+  positionAt!: (offset: number) => Position | undefined;
+  /** 获取位移点在文件的位置 */
+  offsetAt!: (position: Position) => number | undefined;
+}
+```
+
+其中的 `asserts` 断言方法集，提供了所有 AST 节点的类型断言方法，`utils` 辅助方法集里提供了诸如判断某些语句的语义是否相同，获取 Import 节点等等常用的方法。
+
+### 上报代码位置
+
+有些错误需要提供代码的位置，所以需要提供`document`字段的内容。但是在这里有个很重要的区别，那就是每个模块实际上有两套代码，transformed 和 source，意为经过 loader 之后的代码和用户的原始代码，AST 实际上也是转换之后的代码格式。
+为了给用户展示的方便，我们需要尽量使用原始代码，所以就需要用户在选中对应的 AST 节点之后，使用模块带有的 SourceMap 模块将位置信息转换到原始代码，如果模块因为某些特殊原因没有原始代码或者是 SourceMap，此时再使用转换后的代码/位置是比较合适的。一个比较典型的流程是这样的：
+
+```ts
+const module: SDK.ModuleInstance;
+const node: Node.ImportDeclaration;
+/** 默认类型为可选，实际上都是有值的 */
+const transformedRange = node.loc!;
+/** 若是模块的 SourceMap 不可用，则这个值为空 */
+const sourceRange = module.getSourceRange(transformedRange);
+/** 获取代码 */
+const source = mod.getSource();
+
+// 根据是否生成原始位置来判断使用哪个值
+const range = (sourceRange ?? transformed) as Linter.Range;
+const content = sourceRange ? source.source : source.transformed;
+
+report({
+  document: {
+    path: module.path,
+    content,
+    range,
+  },
+});
+```
+
+## 数据上报
+
+请跳转到[数据上报](./upload-data)进行查看

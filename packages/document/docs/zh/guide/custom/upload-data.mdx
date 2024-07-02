@@ -1,0 +1,45 @@
+# 数据上报
+
+进行数据上报需要借助自定义拓展规则的接口，请先查看[自定义拓展规则](./rule-custom)。
+
+自定义规则的方式还可以用于用户数据收集和上报，像自定义拓展规则一样的方式，只是在 check 函数中不进行 report 上报错误即可。例如：
+
+```ts
+// src/rules/upload-data.ts
+import { defineRule } from '@rsdoctor/core/rules';
+
+export const UploadData = defineRule(() => ({
+  meta: {
+    category: 'bundle',
+    severity: 'Warn',
+    title: 'upload-data',
+    defaultConfig: {
+      limit: 10,
+    },
+  },
+  check({ chunkGraph, moduleGraph, ruleConfig }) {
+    // upload some data
+    Upload({ chunkGraph, moduleGraph });
+  },
+}));
+```
+
+```ts
+// rsbuild.config.ts
+import { UploadData } from './rules/upload-data';
+
+export default {
+  tools: {
+    bundlerChain: (chain) => {
+      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+        {
+          linter: {
+            level: 'Warn',
+            extends: [UploadData],
+          },
+        },
+      ]);
+    },
+  },
+};
+```

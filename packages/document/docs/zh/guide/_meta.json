@@ -11,6 +11,11 @@
   },
   {
     "type": "dir",
+    "name": "custom",
+    "label": "自定义"
+  },
+  {
+    "type": "dir",
     "name": "more",
     "label": "更多"
   }
