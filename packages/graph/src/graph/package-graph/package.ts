@@ -91,12 +91,14 @@ export class Package implements SDK.PackageInstance {
   }
 
   contain(file: string) {
-    const subPath = relative(this.root, file);
+    const ifCotain = file.includes(this.root);
 
     // Non-identical directories.
-    if (subPath.startsWith('..')) {
+    if (!ifCotain) {
       return false;
     }
+
+    const subPath = relative(this.root, file);
 
     // Some modules will be in the node_modules of the current module, and another judgment needs to be made here.
     return !isPackagePath(subPath);
