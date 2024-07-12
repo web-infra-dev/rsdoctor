@@ -1,5 +1,6 @@
 import { Common, SDK, Thirdparty, Client } from '@rsdoctor/types';
 import { Server } from '@rsdoctor/utils/build';
+import serve from 'serve-static';
 import { Bundle } from '@rsdoctor/utils/common';
 import assert from 'assert';
 import bodyParser from 'body-parser';
@@ -11,6 +12,7 @@ import { Router } from './router';
 import * as APIs from './apis';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
+import path from 'path';
 export * from './utils';
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
@@ -79,6 +81,11 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
     this.app.use(cors());
     this.app.use(bodyParser.json({ limit: '500mb' }));
+    const clientHtmlPath = this._innerClientPath
+      ? this._innerClientPath
+      : require.resolve('@rsdoctor/client');
+    const clientDistPath = path.resolve(clientHtmlPath, '..');
+    this.app.use(serve(clientDistPath));
 
     await this._router.setup();
 
@@ -194,6 +201,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     const relativeUrl = this.getClientUrl(
       ...(args as Parameters<SDK.RsdoctorServerInstance['getClientUrl']>),
     );
+
     const url = `http://${this.host}:${this.port}${relativeUrl}`;
     const localhostUrl = `http://localhost:${this.port}${relativeUrl}`;
     await openBrowser(localhostUrl);
