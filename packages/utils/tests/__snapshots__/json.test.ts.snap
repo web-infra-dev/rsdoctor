@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`test src/json.ts > stringify() > Array & Object 1`] = `
+[
+  "["abcde"]",
+]
+`;
+
+exports[`test src/json.ts > stringify() > Array & Object 2`] = `
+[
+  "["abcde",123,null,null,true,false]",
+]
+`;
+
+exports[`test src/json.ts > stringify() > Array & Object 3`] = `
+[
+  "[{"a":1,"c":null},1,[2,{"k":1}]]",
+]
+`;
+
+exports[`test src/json.ts > stringify() > Array & Object 4`] = `
+[
+  "{"a":1,"c":null}",
+]
+`;
+
+exports[`test src/json.ts > stringify() > Array & Object 5`] = `
+[
+  "{"a":1,"c":null,"d":{"e":23}}",
+]
+`;
+
+exports[`test src/json.ts > stringify() > Array & Object 6`] = `
+[
+  "{"d":{"e":23,"f":null,"h":{"a":1}}}",
+]
+`;
