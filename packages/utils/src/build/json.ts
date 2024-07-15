@@ -4,7 +4,7 @@ import { dirname, join } from 'path';
 import { Package } from 'src/common';
 import { Transform } from 'stream';
 
-const maxFileSize = 1024 * 1024 * 400; // maximum length of each file, measured in bytes, with 400MB as an example.
+const maxFileSize = 1024 * 1024 * 400; // Maximum length of each file is 400MB, measured in bytes.
 
 export function stringify<T, P = T extends undefined ? undefined : string>(
   json: T,
@@ -44,7 +44,6 @@ export function stringify<T, P = T extends undefined ? undefined : string>(
       });
 
       stream
-        // .pipe(split2(/\\n/))
         .pipe(batchProcessor)
         .on('data', (line: string | any[]) => {
           if (currentLength + line.length > maxFileSize) {
