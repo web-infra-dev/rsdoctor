@@ -5753,7 +5753,7 @@ packages:
   /@modern-js/codesmith@2.3.6:
     resolution: {integrity: sha512-wUF2L1mxUrYWPAj50jQ7yqcsLXt5g19Dt/USn3TxnosFE57GCvrsVjZseKUai9zfC0pnX7PXOj3KXXoV7EaiFw==}
     dependencies:
-      '@modern-js/utils': 2.54.3
+      '@modern-js/utils': 2.54.5
       '@swc/helpers': 0.5.1
       axios: 1.7.2
       tar: 6.2.0
@@ -6290,7 +6290,6 @@ packages:
       caniuse-lite: 1.0.30001638
       lodash: 4.17.21
       rslog: 1.2.0
-    dev: true
 
   /@module-federation/runtime-tools@0.1.6:
     resolution: {integrity: sha512-7ILVnzMIa0Dlc0Blck5tVZG1tnk1MmLnuZpLOMpbdW+zl+N6wdMjjHMjEZFCUAJh2E5XJ3BREwfX8Ets0nIkLg==}

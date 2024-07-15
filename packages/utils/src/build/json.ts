@@ -1,8 +1,10 @@
 import { JsonStreamStringify } from 'json-stream-stringify';
-import { PassThrough } from 'stream';
 import { SDK } from '@rsdoctor/types';
 import { dirname, join } from 'path';
 import { Package } from 'src/common';
+import { Transform } from 'stream';
+
+const maxFileSize = 1024 * 1024 * 400; // maximum length of each file, measured in bytes, with 400MB as an example.
 
 export function stringify<T, P = T extends undefined ? undefined : string>(
   json: T,
@@ -10,29 +12,62 @@ export function stringify<T, P = T extends undefined ? undefined : string>(
   space?: string | number,
   cycle?: boolean,
 ): Promise<P> {
+  const jsonList: string[] = [];
   if (json && typeof json === 'object') {
     return new Promise((resolve, reject) => {
-      let res = '';
-      const pt = new PassThrough();
       const stream = new JsonStreamStringify(json, replacer, space, cycle);
 
-      pt.on('data', (chunk) => {
-        res += chunk;
+      let currentLength = 0;
+      let currentContent = '';
+
+      const batchProcessor = new Transform({
+        readableObjectMode: true,
+        transform(chunk, _encoding, callback) {
+          const lines = chunk.toString().split('\\n');
+
+          lines.forEach((line: string | any[]) => {
+            if (currentLength + line.length > maxFileSize) {
+              // 超出最大长度，保存当前内容
+              jsonList.push(currentContent);
+              currentContent = '';
+              currentLength = 0;
+            }
+
+            if (line.length) {
+              currentContent += line;
+              currentLength += line.length;
+            }
+          });
+
+          callback();
+        },
       });
 
-      pt.on('end', () => {
-        return resolve(res as P);
-      });
+      stream
+        // .pipe(split2(/\\n/))
+        .pipe(batchProcessor)
+        .on('data', (line: string | any[]) => {
+          if (currentLength + line.length > maxFileSize) {
+            //Exceeding the maximum length, closing the current file stream.
+            jsonList.push(currentContent);
+            currentContent = '';
+            currentLength = 0;
+          }
 
-      pt.on('error', (err) => {
-        return reject(err);
-      });
-
-      stream.on('error', (err) => {
-        return reject(err);
-      });
-
-      stream.pipe(pt);
+          if (line.length) {
+            currentContent += line;
+            currentLength += line.length;
+          }
+        })
+        .on('end', () => {
+          if (jsonList.length < 1) {
+            jsonList.push(currentContent);
+          }
+          resolve(jsonList as P);
+        })
+        .on('error', (err: any) => {
+          return reject(err);
+        });
     });
   }
 

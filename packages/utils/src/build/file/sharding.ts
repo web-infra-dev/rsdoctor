@@ -12,7 +12,7 @@ export class FileSharding {
   /**
    * @param ext the extension name of the output file (must starts with ".")
    */
-  public createVirtualShardingFiles(ext = '') {
+  public createVirtualShardingFiles(ext = '', index = 0) {
     const bf = Buffer.from(this.content, this.encoding);
     const res: Buffer[] = [];
     const threshold = this.limitBytes;
@@ -23,17 +23,17 @@ export class FileSharding {
       tmpBytes += threshold;
     }
 
-    return res.map((e, i) => ({ filename: `${i}${ext}`, content: e }));
+    return res.map((e, i) => ({ filename: `${i + index}${ext}`, content: e }));
   }
 
   /**
    * @param folder absolute path of folder which used to save string sharding files.
    * @param ext the extension name of the output file (must starts with ".")
    */
-  public async writeStringToFolder(folder: string, ext = '') {
+  public async writeStringToFolder(folder: string, ext = '', index?: number) {
     const dist = path.resolve(folder);
     await fse.ensureDir(dist);
-    const res = this.createVirtualShardingFiles(ext);
+    const res = this.createVirtualShardingFiles(ext, index);
 
     await Promise.all(
       res.map(

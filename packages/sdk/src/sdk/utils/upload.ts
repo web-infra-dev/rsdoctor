@@ -5,7 +5,7 @@ export const transformDataUrls = (
 ): Record<string, string[] | string> => {
   return d.reduce((t: { [key: string]: string[] | string }, item) => {
     t[item.name] = Array.isArray(item.files)
-      ? item.files.map((e) => e.path)
+      ? item.files.map((e) => e.path).concat(t[item.name] || [])
       : item.files;
     return t;
   }, {});
