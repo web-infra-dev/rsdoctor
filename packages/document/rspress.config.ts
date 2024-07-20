@@ -9,7 +9,7 @@ export default defineConfig({
   root: path.join(__dirname, 'docs'),
   title: 'Rsdoctor',
   description: 'A one-stop build analyzer for Rspack and Webpack.',
-  icon: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/logo/rsdoctor-large.png',
+  icon: 'https://assets.rspack.dev/rsdoctor/rsdoctor-logo-960x960.png',
   lang: 'en',
   base: '/',
   logo: {
