@@ -1,9 +1,21 @@
 import Theme from 'rspress/theme';
-import { HomeLayout } from './pages';
-import { RsfamilyNavIcon } from 'rsfamily-nav-icon';
-import 'rsfamily-nav-icon/dist/index.css';
+import { NavIcon } from 'rsfamily-doc-ui/nav-icon';
+import { HomeLayout as BaseHomeLayout } from 'rspress/theme';
+import { ToolStack } from './components/ToolStack';
 
-const Layout = () => <Theme.Layout beforeNavTitle={<RsfamilyNavIcon />} />;
+function HomeLayout() {
+  return (
+    <BaseHomeLayout
+      afterFeatures={
+        <>
+          <ToolStack />
+        </>
+      }
+    />
+  );
+}
+
+const Layout = () => <Theme.Layout beforeNavTitle={<NavIcon />} />;
 
 // eslint-disable-next-line import/export
 export * from 'rspress/theme';

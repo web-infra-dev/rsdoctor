@@ -88,10 +88,5 @@ export default defineConfig({
         '@zh': path.join(__dirname, 'docs/zh'),
       },
     },
-    tools: {
-      postcss(config, { addPlugins }) {
-        addPlugins([require('tailwindcss')]);
-      },
-    },
   },
 });
