@@ -13,7 +13,7 @@ hero:
       text: Quick Start
       link: /guide/start/quick-start
   image:
-    src: https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/logo/rsdoctor.png
+    src: https://assets.rspack.dev/rsdoctor/rsdoctor-logo-960x960.png
     alt: Rsdoctor Logo
 
 features:

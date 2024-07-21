@@ -2,10 +2,7 @@ import { TranslationOutlined } from '@ant-design/icons';
 import { Col, Dropdown, Layout, Row, Typography } from 'antd';
 import React from 'react';
 import { Language, Size } from '../../constants';
-import {
-  useI18n,
-  useTheme
-} from '../../utils';
+import { useI18n, useTheme } from '../../utils';
 import { OverlayAlertsWithButton } from '../Alerts';
 import { BuilderSelect } from './builder-select';
 import { Menus } from './menus';
@@ -43,11 +40,44 @@ export const Header: React.FC = () => {
         transition: 'none',
       }}
     >
-      <Row justify="space-between" align="middle" style={{ height: Size.NavBarHeight }} wrap={false}>
-        <Col style={{ height: Size.NavBarHeight, lineHeight: `${Size.NavBarHeight + 2}px` }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
-            <img style={{ height: 30 }} src={'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/logo/rsdoctor.png'} className="web-doctor-logo" alt="logo" />
-            <Typography.Text style={{ color: 'inherit', fontSize: 18, marginLeft: 4, marginTop: 8 }}>Rsdoctor</Typography.Text>
+      <Row
+        justify="space-between"
+        align="middle"
+        style={{ height: Size.NavBarHeight }}
+        wrap={false}
+      >
+        <Col
+          style={{
+            height: Size.NavBarHeight,
+            lineHeight: `${Size.NavBarHeight + 2}px`,
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              height: '100%',
+            }}
+          >
+            <img
+              style={{ height: 30 }}
+              src={
+                'https://assets.rspack.dev/rsdoctor/rsdoctor-logo-960x960.png'
+              }
+              className="web-doctor-logo"
+              alt="logo"
+            />
+            <Typography.Text
+              style={{
+                color: 'inherit',
+                fontSize: 18,
+                marginLeft: 4,
+                marginTop: 8,
+              }}
+            >
+              Rsdoctor
+            </Typography.Text>
             <BuilderSelect />
           </div>
         </Col>
@@ -90,7 +120,10 @@ export const Header: React.FC = () => {
                   selectedKeys: [i18n.language],
                 }}
               >
-                <TranslationOutlined className="header-icon" style={iconStyle} />
+                <TranslationOutlined
+                  className="header-icon"
+                  style={iconStyle}
+                />
               </Dropdown>
             </Col>
           </Row>

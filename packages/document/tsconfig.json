@@ -10,7 +10,8 @@
     "paths": {
       "@zh/*": ["./docs/zh/*"],
       "@en/*": ["./docs/en/*"],
-      "@src/*": ["./src/*"]
+      "@components/*": ["./theme/components/*"],
+      "i18n": ["./i18n.json"]
     }
   },
   "include": ["src", "theme"],
