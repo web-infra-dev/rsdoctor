@@ -135,6 +135,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
           name: key,
           files: data,
         });
+        continue;
       }
       const jsonstr: string | string[] = await (async () => {
         try {
