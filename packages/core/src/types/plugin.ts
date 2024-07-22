@@ -121,6 +121,7 @@ export interface RsdoctorPluginInstance<
   readonly name: string;
   readonly options: RsdoctorPluginOptionsNormalized<Rules>;
   readonly sdk: RsdoctorWebpackSDK;
+  readonly isRsdoctorPlugin: boolean;
   _modulesGraphApplied?: boolean;
   chunkGraph?: ChunkGraph;
   modulesGraph: ModuleGraph;

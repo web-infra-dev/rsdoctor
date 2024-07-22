@@ -38,6 +38,8 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   public readonly sdk: RsdoctorWebpackSDK | RsdoctorSlaveSDK;
 
+  public readonly isRsdoctorPlugin: boolean;
+
   public _bootstrapTask!: Promise<unknown>;
 
   protected browserIsOpened = false;
@@ -72,6 +74,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       });
     this.outsideInstance = Boolean(this.options.sdkInstance);
     this.modulesGraph = new ModuleGraph();
+    this.isRsdoctorPlugin = true;
   }
 
   // avoid hint error from ts type validation

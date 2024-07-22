@@ -39,6 +39,8 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   public readonly sdk: RsdoctorWebpackSDK;
 
+  public readonly isRsdoctorPlugin: boolean;
+
   public modulesGraph: ModuleGraph;
 
   private outsideInstance = false;
@@ -64,6 +66,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     this.outsideInstance = Boolean(this.options.sdkInstance);
     this.modulesGraph = new ModuleGraph();
     this.chunkGraph = new ChunkGraph();
+    this.isRsdoctorPlugin = true;
   }
 
   // avoid hint error from ts type validation
