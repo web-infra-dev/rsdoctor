@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
-import ip from 'ip';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Manifest as ManifestShared } from '@rsdoctor/utils/common';
 
 import { cwd, setupSDK } from '../../utils';
+import { getLocalIpAddress } from '@/sdk/server/utils';
 
 vi.setConfig({ testTimeout: 50000 });
 
@@ -13,7 +13,7 @@ describe('test server/apis/project.ts', () => {
   it(`test api: ${SDK.ServerAPI.API.Env}`, async () => {
     const env = (await target.get(SDK.ServerAPI.API.Env)).toJSON();
 
-    expect(env.ip).toEqual(ip.address());
+    expect(env.ip).toEqual(getLocalIpAddress());
     expect(env.port).toEqual(target.server.port);
   });
 

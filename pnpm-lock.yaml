@@ -880,9 +880,6 @@ importers:
       dayjs:
         specifier: 1.11.6
         version: 1.11.6
-      ip:
-        specifier: 1.1.9
-        version: 1.1.9
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -908,9 +905,6 @@ importers:
       '@types/cors':
         specifier: 2.8.13
         version: 2.8.13
-      '@types/ip':
-        specifier: 1.1.0
-        version: 1.1.0
       '@types/lodash':
         specifier: ^4.17.0
         version: 4.17.0
@@ -8179,12 +8173,6 @@ packages:
       '@types/node': 16.18.66
     dev: true
 
-  /@types/ip@1.1.0:
-    resolution: {integrity: sha512-dwNe8gOoF70VdL6WJBwVHtQmAX4RMd62M+mAB9HQFjG1/qiCLM/meRy95Pd14FYBbEDwCq7jgJs89cHpLBu4HQ==}
-    dependencies:
-      '@types/node': 16.18.66
-    dev: true
-
   /@types/istanbul-lib-coverage@2.0.6:
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
     dev: true
@@ -13397,10 +13385,6 @@ packages:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
     dependencies:
       loose-envify: 1.4.0
-
-  /ip@1.1.9:
-    resolution: {integrity: sha512-cyRxvOEpNHNtchU3Ln9KC/auJgup87llfQpQ+t5ghoC/UhL16SWzbueiCsdTnWmqAWl7LadfuwhlqmtOaqMHdQ==}
-    dev: false
 
   /ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
