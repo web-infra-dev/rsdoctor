@@ -49,6 +49,9 @@ export default defineConfig(({ env }) => {
     },
 
     output: {
+      externals: {
+        lz4: 'window.lz4',
+      },
       distPath: {
         root: path.basename(DistPath),
         js: 'resource/js',
@@ -67,6 +70,25 @@ export default defineConfig(({ env }) => {
         css: false,
       },
       legalComments: 'none',
+      minify: false,
+    },
+    html: {
+      title: 'Rsdoctor',
+      tags: [
+        {
+          tag: 'script',
+          attrs: {
+            src: 'https://cdn.jsdelivr.net/npm/lz4@0.6.5/build/lz4.min.js',
+          },
+          head: false,
+          publicPath: false,
+        },
+        {
+          tag: 'script',
+          children: "window.lz4 = require('lz4')",
+          head: false,
+        },
+      ],
     },
 
     performance: {
@@ -134,10 +156,6 @@ export default defineConfig(({ env }) => {
           ]);
         }
       },
-    },
-
-    html: {
-      title: 'Rsdoctor',
     },
 
     server: {
