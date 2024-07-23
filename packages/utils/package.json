@@ -89,6 +89,7 @@
     "json-stream-stringify": "3.0.1",
     "lines-and-columns": "2.0.4",
     "lodash": "^4.17.21",
+    "lz4": "^0.6.5",
     "rslog": "^1.2.0",
     "strip-ansi": "^6.0.1"
   },
@@ -99,6 +100,7 @@
     "@types/envinfo": "7.8.4",
     "@types/fs-extra": "^11.0.2",
     "@types/lodash": "^4.17.0",
+    "@types/lz4": "^0.6.4",
     "@types/node": "^16",
     "tslib": "2.4.1",
     "typescript": "^5.2.2"

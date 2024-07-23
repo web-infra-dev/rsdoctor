@@ -1,5 +1,5 @@
-import { deflateSync, inflateSync } from 'zlib';
 import { Buffer } from 'buffer';
+import lz4 from 'lz4';
 
 export function mergeIntervals(intervals: [number, number][]) {
   // Sort from small to large
@@ -25,11 +25,20 @@ export function mergeIntervals(intervals: [number, number][]) {
 }
 
 export function compressText(input: string): string {
-  return deflateSync(input).toString('base64');
+  const inputBuffer = Buffer.from(input);
+  let output = Buffer.alloc(lz4.encodeBound(input.length));
+  const compressedSize = lz4.encodeBlock(inputBuffer, output);
+  // remove unnecessary bytes
+  output = output.slice(0, compressedSize);
+  return output.toString('base64');
 }
 
 export function decompressText(input: string): string {
-  return inflateSync(Buffer.from(input, 'base64')).toString();
+  let uncompressedBlock = Buffer.alloc(input.length * 10);
+  const inputBuffer = Buffer.from(input, 'base64');
+  const uncompressedSize = lz4.decodeBlock(inputBuffer, uncompressedBlock);
+  uncompressedBlock = uncompressedBlock.slice(0, uncompressedSize);
+  return uncompressedBlock.toString('utf-8');
 }
 
 export function random(min: number, max: number) {

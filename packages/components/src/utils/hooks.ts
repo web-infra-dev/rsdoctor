@@ -12,6 +12,22 @@ import { setLocaleToStorage } from './storage';
 
 const route = Client.RsdoctorClientRoutes.RuleIndex;
 
+export function decompressText(input: string): string {
+  try {
+    // @ts-ignore
+    if (!window.lz4) return '';
+    const compressedBlock = Buffer.from(input);
+    let uncompressedBlock = Buffer.alloc(input.length * 10);
+    // @ts-ignore
+    const n = window.lz4.decodeBlock(compressedBlock, uncompressedBlock);
+    uncompressedBlock = uncompressedBlock.slice(0, n);
+    return uncompressedBlock.toString('utf-8');
+  } catch (e) {
+    console.log(e);
+    return '';
+  }
+}
+
 export const useI18n: typeof useTranslation = () => {
   const { i18n, ...rest } = useTranslation();
 
@@ -39,7 +55,9 @@ export function useRuleIndexNavigate(code: string, link?: string | undefined) {
   }
 
   return () => {
-    navigate(`${route}?${Rule.RsdoctorRuleClientConstant.UrlQueryForErrorCode}=${code}`);
+    navigate(
+      `${route}?${Rule.RsdoctorRuleClientConstant.UrlQueryForErrorCode}=${code}`,
+    );
   };
 }
 
@@ -55,7 +73,9 @@ export function useLoading(defaultLoading = false) {
   return {
     loading,
     setLoading,
-    async withLoading(func: (...args: unknown[]) => Promise<unknown> | unknown) {
+    async withLoading(
+      func: (...args: unknown[]) => Promise<unknown> | unknown,
+    ) {
       try {
         setLoading(true);
         await func();
@@ -75,7 +95,10 @@ export function useHashByManifest(manifest: Manifest.RsdoctorManifest) {
 }
 
 export function useCloudManifestUrlByManifest(
-  manifest: Manifest.RsdoctorManifest | Manifest.RsdoctorManifestWithShardingFiles | void,
+  manifest:
+    | Manifest.RsdoctorManifest
+    | Manifest.RsdoctorManifestWithShardingFiles
+    | void,
 ) {
   if (!manifest) return;
 }
@@ -94,14 +117,24 @@ function ensurePlainObject<T extends object>(value: T, dfts: T): T {
 export function useChunkGraphByManifest(manifest: Manifest.RsdoctorManifest) {
   const prev = manifest.data.chunkGraph;
   if (typeof prev === 'string') {
-    manifest.data.chunkGraph = JSON.parse(Algorithm.decompressText(prev as string));
+    manifest.data.chunkGraph = JSON.parse(
+      Algorithm.decompressText(prev as string),
+    );
   }
 
-  return ensurePlainObject(manifest.data.chunkGraph, { assets: [], chunks: [], entrypoints: [] });
+  return ensurePlainObject(manifest.data.chunkGraph, {
+    assets: [],
+    chunks: [],
+    entrypoints: [],
+  });
 }
 
-export function useConfigOutputFileNameByManifest(manifest: Manifest.RsdoctorManifest) {
-  if (typeof manifest.data.configs?.[0]?.config?.output?.filename === 'string') {
+export function useConfigOutputFileNameByManifest(
+  manifest: Manifest.RsdoctorManifest,
+) {
+  if (
+    typeof manifest.data.configs?.[0]?.config?.output?.filename === 'string'
+  ) {
     return manifest.data.configs?.[0]?.config?.output?.filename;
   }
   return '';
@@ -110,7 +143,9 @@ export function useConfigOutputFileNameByManifest(manifest: Manifest.RsdoctorMan
 export function useModuleGraphByManifest(manifest: Manifest.RsdoctorManifest) {
   const prev = manifest.data.moduleGraph;
   if (typeof prev === 'string') {
-    manifest.data.moduleGraph = JSON.parse(Algorithm.decompressText(prev as string));
+    manifest.data.moduleGraph = JSON.parse(
+      Algorithm.decompressText(prev as string),
+    );
   }
 
   return ensurePlainObject(manifest.data.moduleGraph, {
@@ -142,7 +177,9 @@ export function useModuleGraph(moduleGraph: SDK.ModuleGraphData) {
 export function usePackageGraphByManifest(manifest: Manifest.RsdoctorManifest) {
   const prev = manifest.data.packageGraph;
   if (typeof prev === 'string') {
-    manifest.data.packageGraph = JSON.parse(Algorithm.decompressText(prev as string));
+    manifest.data.packageGraph = JSON.parse(
+      Algorithm.decompressText(prev as string),
+    );
   }
   return ensurePlainObject(manifest.data.packageGraph, {
     packages: [],
@@ -178,25 +215,35 @@ export function useDuplicatePackagesByManifest(
   return useDuplicatePackagesByErrors(alerts);
 }
 
-export function useCompileAlertsByErrors(errors: Manifest.RsdoctorManifestData['errors']) {
+export function useCompileAlertsByErrors(
+  errors: Manifest.RsdoctorManifestData['errors'],
+) {
   if (isArray(errors)) {
     return errors.filter(
-      (e) => e.category === Rule.RuleMessageCategory.Compile && e.code !== Rule.RuleMessageCodeEnumerated.Overlay,
+      (e) =>
+        e.category === Rule.RuleMessageCategory.Compile &&
+        e.code !== Rule.RuleMessageCodeEnumerated.Overlay,
     );
   }
   return [];
 }
 
-export function useBundleAlertsByErrors(errors: Manifest.RsdoctorManifestData['errors']) {
+export function useBundleAlertsByErrors(
+  errors: Manifest.RsdoctorManifestData['errors'],
+) {
   if (isArray(errors)) {
     return errors.filter(
-      (e) => e.category === Rule.RuleMessageCategory.Bundle && e.code !== Rule.RuleMessageCodeEnumerated.Overlay,
+      (e) =>
+        e.category === Rule.RuleMessageCategory.Bundle &&
+        e.code !== Rule.RuleMessageCodeEnumerated.Overlay,
     );
   }
   return [];
 }
 
-export function useDuplicatePackagesByErrors(errors: Manifest.RsdoctorManifestData['errors']) {
+export function useDuplicatePackagesByErrors(
+  errors: Manifest.RsdoctorManifestData['errors'],
+) {
   return useBundleAlertsByErrors(errors).filter(
     (e) => e.code === Rule.RuleErrorMap.E1001.code,
   ) as Rule.PackageRelationDiffRuleStoreData[];
@@ -204,13 +251,16 @@ export function useDuplicatePackagesByErrors(errors: Manifest.RsdoctorManifestDa
 
 export function useWebpackConfigurationByConfigs(configs: SDK.ConfigData = []) {
   if (isArray(configs)) {
-    return configs.find((e) => (e.name === 'webpack' ||  e.name === 'rspack'));
+    return configs.find((e) => e.name === 'webpack' || e.name === 'rspack');
   }
   return null;
 }
 
 export function useDetectIfCloudIdeEnv() {
-  if (window.location.protocol === 'https:' && window.location.href.indexOf('ide-proxy') > 0) {
+  if (
+    window.location.protocol === 'https:' &&
+    window.location.href.indexOf('ide-proxy') > 0
+  ) {
     return true;
   }
   return false;
@@ -226,7 +276,6 @@ export function useWindowWidth() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  
+
   return windowWidth;
 }
-
