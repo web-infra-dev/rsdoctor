@@ -28,7 +28,6 @@
     "body-parser": "1.20.1",
     "cors": "2.8.5",
     "dayjs": "1.11.6",
-    "ip": "1.1.9",
     "lodash": "^4.17.21",
     "open": "^8.4.0",
     "serve-static": "1.15.0",
@@ -39,7 +38,6 @@
   "devDependencies": {
     "@types/body-parser": "1.19.2",
     "@types/cors": "2.8.13",
-    "@types/ip": "1.1.0",
     "@types/lodash": "^4.17.0",
     "@types/node": "^16",
     "@types/serve-static": "1.15.0",
