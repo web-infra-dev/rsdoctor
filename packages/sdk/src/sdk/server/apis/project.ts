@@ -1,7 +1,7 @@
 import { SDK } from '@rsdoctor/types';
-import ip from 'ip';
 import { BaseAPI } from './base';
 import { Router } from '../router';
+import { getLocalIpAddress } from '../utils';
 
 export class ProjectAPI extends BaseAPI {
   @Router.get(SDK.ServerAPI.API.Env)
@@ -11,7 +11,7 @@ export class ProjectAPI extends BaseAPI {
     const { server } = this.ctx;
 
     return {
-      ip: ip.address(),
+      ip: getLocalIpAddress(),
       port: server.port,
     };
   }

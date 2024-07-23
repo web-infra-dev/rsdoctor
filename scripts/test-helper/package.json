@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@rspack/core": "0.7.5",
-    "@types/lodash": "^4.17.0",
+    "@types/lodash": "^4.17.7",
     "@types/node": "^16",
     "lodash": "^4.17.21",
     "memfs": "3.5.3",

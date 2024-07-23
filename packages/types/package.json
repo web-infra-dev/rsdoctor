@@ -18,10 +18,10 @@
     "start": "npm run build -- -w"
   },
   "dependencies": {
-    "@types/connect": "3.4.35",
-    "@types/estree": "1.0.0",
-    "@types/tapable": "2.2.2",
-    "@types/webpack": "5.28.0",
+    "@types/connect": "3.4.38",
+    "@types/estree": "1.0.5",
+    "@types/tapable": "2.2.7",
+    "@types/webpack": "5.28.5",
     "source-map": "^0.7.4"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "@rspack/core": "0.7.5"
   },
   "peerDependencies": {
-    "@rspack/core": "0.x"
+    "@rspack/core": "0.x || 1.x"
   },
   "peerDependenciesMeta": {
     "@rspack/core": {

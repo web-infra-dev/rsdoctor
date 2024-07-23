@@ -57,7 +57,7 @@ const tagStyle = {
 export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
   data,
 }) => {
-  const [tab, setTab] = useState('parsedSource');
+  const [tab, setTab] = useState('');
   const { t } = useI18n();
 
   const TAB_LAB_MAP: Record<string, string> = {
@@ -105,6 +105,9 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
                       tab: TAB_LAB_MAP[e.tab],
                       key: e.tab,
                     }))}
+                  defaultActiveTabKey={
+                    source['parsedSource'] ? 'parsedSource' : 'source'
+                  }
                   onTabChange={(v) => setTab(v)}
                   tabBarExtraContent={
                     <Popover
@@ -162,7 +165,13 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
                     language={getOriginalLanguage(path)}
                     // eslint-disable-next-line financial/no-float-calculation
                     height={window.innerHeight / 1.5}
-                    value={source[tab]}
+                    value={
+                      tab
+                        ? source[tab]
+                        : source['parsedSource']
+                          ? source['parsedSource']
+                          : source['source']
+                    }
                     options={{
                       readOnly: true,
                       domReadOnly: true,

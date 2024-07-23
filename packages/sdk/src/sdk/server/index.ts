@@ -4,7 +4,6 @@ import serve from 'serve-static';
 import { Bundle } from '@rsdoctor/utils/common';
 import assert from 'assert';
 import bodyParser from 'body-parser';
-import ip from 'ip';
 import cors from 'cors';
 import { PassThrough } from 'stream';
 import { Socket } from './socket';
@@ -13,6 +12,7 @@ import * as APIs from './apis';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
+import { getLocalIpAddress } from './utils';
 export * from './utils';
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
@@ -45,7 +45,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   }
 
   public get host(): string {
-    const host = ip.address();
+    const host = getLocalIpAddress();
     return host;
   }
 
