@@ -32,7 +32,7 @@
     "@rspack/core": "0.7.5"
   },
   "peerDependencies": {
-    "@rspack/core": "0.x"
+    "@rspack/core": "0.x || 1.x"
   },
   "peerDependenciesMeta": {
     "@rspack/core": {
