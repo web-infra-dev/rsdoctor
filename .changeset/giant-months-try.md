@@ -3,4 +3,4 @@
 '@rsdoctor/types': patch
 ---
 
-chore: support rspack 1.x
+feat: support rspack 1.x
