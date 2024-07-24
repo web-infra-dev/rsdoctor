@@ -29,10 +29,10 @@
   },
   "devDependencies": {
     "@rspack/core": "0.7.5",
-    "@types/loader-utils": "^2.0.5",
-    "@types/lodash": "^4.17.0",
+    "@types/loader-utils": "^2.0.6",
+    "@types/lodash": "^4.17.7",
     "@types/node": "^16",
-    "@types/tapable": "2.2.2",
+    "@types/tapable": "2.2.7",
     "tslib": "2.4.1",
     "typescript": "^5.2.2"
   },
