@@ -40,13 +40,13 @@ const getTargetBrowser = async () => {
 /**
  * Reads the BROWSER environment variable and decides what to do with it.
  */
-export async function openBrowser(url: string): Promise<boolean> {
+export async function openBrowser(url: string): Promise<boolean | undefined> {
   // If we're on OS X, the user hasn't specifically
   // requested a different browser, we can try opening
   // a Chromium browser with AppleScript. This lets us reuse an
   // existing tab when possible instead of creating a new one.
-  const shouldTryOpenChromeWithAppleScript = process.platform === 'darwin';
-
+  const shouldTryOpenChromeWithAppleScript =
+    process.platform === 'darwin' || process.platform === 'win32';
   if (shouldTryOpenChromeWithAppleScript) {
     try {
       const targetBrowser = await getTargetBrowser();
@@ -60,24 +60,24 @@ export async function openBrowser(url: string): Promise<boolean> {
             cwd: join(__dirname, '../../../../static'),
           },
         );
-
         return true;
       }
       logger.debug('Failed to find the target browser.');
     } catch (err) {
       logger.debug('Failed to open Rsdoctor URL with apple script.');
       logger.debug(err);
+      return false;
     }
-  }
-
-  // Fallback to open
-  // (It will always open new tab)
-  try {
-    await open(url);
-    return true;
-  } catch (err) {
-    logger.error('Failed to open Rsdoctor URL.');
-    logger.error(err);
-    return false;
+  } else {
+    // Fallback to open
+    // (It will always open new tab)
+    try {
+      await open(url);
+      return true;
+    } catch (err) {
+      logger.error('Failed to open Rsdoctor URL.');
+      logger.error(err);
+      return false;
+    }
   }
 }
