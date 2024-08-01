@@ -54,6 +54,12 @@
 		"socket.io",
 		"tailwindcss",
 		"antd",
-		"i18next"
+		"i18next",
+		"rc-tree",
+		"rc-dialog",
+		"monaco-editor",
+		"react-i18next",
+		"socket.io-client",
+		"react-router-dom"
 	]
 }
