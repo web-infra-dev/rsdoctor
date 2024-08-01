@@ -81,7 +81,7 @@
     "react-markdown": "^9.0.1",
     "react-router-dom": "6.4.3",
     "socket.io-client": "4.6.1",
-    "terser": "^5.26.0",
+    "terser": "^5.31.3",
     "typescript": "^5.2.2",
     "url-parse": "1.5.10"
   },
