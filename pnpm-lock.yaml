@@ -585,8 +585,8 @@ importers:
         specifier: 9.1.0
         version: 9.1.0(react-dom@17.0.2)(react@18.2.0)
       rc-tree:
-        specifier: 5.7.2
-        version: 5.7.2(react-dom@17.0.2)(react@18.2.0)
+        specifier: 5.8.8
+        version: 5.8.8(react-dom@17.0.2)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -5688,7 +5688,7 @@ packages:
   /@modern-js/codesmith@2.3.6:
     resolution: {integrity: sha512-wUF2L1mxUrYWPAj50jQ7yqcsLXt5g19Dt/USn3TxnosFE57GCvrsVjZseKUai9zfC0pnX7PXOj3KXXoV7EaiFw==}
     dependencies:
-      '@modern-js/utils': 2.56.2
+      '@modern-js/utils': 2.57.0
       '@swc/helpers': 0.5.1
       axios: 1.7.2
       tar: 6.2.0
@@ -9069,7 +9069,7 @@ packages:
       rc-tabs: 14.1.1(react-dom@17.0.2)(react@18.2.0)
       rc-textarea: 1.6.3(react-dom@17.0.2)(react@18.2.0)
       rc-tooltip: 6.2.0(react-dom@17.0.2)(react@18.2.0)
-      rc-tree: 5.8.5(react-dom@17.0.2)(react@18.2.0)
+      rc-tree: 5.8.8(react-dom@17.0.2)(react@18.2.0)
       rc-tree-select: 5.19.0(react-dom@17.0.2)(react@18.2.0)
       rc-upload: 4.5.2(react-dom@17.0.2)(react@18.2.0)
       rc-util: 5.39.1(react-dom@17.0.2)(react@18.2.0)
@@ -16289,7 +16289,7 @@ packages:
       array-tree-filter: 2.1.0
       classnames: 2.5.1
       rc-select: 14.13.0(react-dom@17.0.2)(react@18.2.0)
-      rc-tree: 5.8.5(react-dom@17.0.2)(react@18.2.0)
+      rc-tree: 5.8.8(react-dom@17.0.2)(react@18.2.0)
       rc-util: 5.39.1(react-dom@17.0.2)(react@18.2.0)
       react: 18.2.0
       react-dom: 17.0.2(react@18.2.0)
@@ -16305,7 +16305,7 @@ packages:
       array-tree-filter: 2.1.0
       classnames: 2.5.1
       rc-select: 14.13.0(react-dom@18.2.0)(react@18.2.0)
-      rc-tree: 5.8.5(react-dom@18.2.0)(react@18.2.0)
+      rc-tree: 5.8.8(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -17185,7 +17185,7 @@ packages:
       '@babel/runtime': 7.24.7
       classnames: 2.5.1
       rc-select: 14.13.0(react-dom@17.0.2)(react@18.2.0)
-      rc-tree: 5.8.5(react-dom@17.0.2)(react@18.2.0)
+      rc-tree: 5.8.8(react-dom@17.0.2)(react@18.2.0)
       rc-util: 5.39.1(react-dom@17.0.2)(react@18.2.0)
       react: 18.2.0
       react-dom: 17.0.2(react@18.2.0)
@@ -17200,30 +17200,30 @@ packages:
       '@babel/runtime': 7.24.7
       classnames: 2.5.1
       rc-select: 14.13.0(react-dom@18.2.0)(react@18.2.0)
-      rc-tree: 5.8.5(react-dom@18.2.0)(react@18.2.0)
+      rc-tree: 5.8.8(react-dom@18.2.0)(react@18.2.0)
       rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: true
 
-  /rc-tree@5.7.2(react-dom@17.0.2)(react@18.2.0):
-    resolution: {integrity: sha512-nmnL6qLnfwVckO5zoqKL2I9UhwDqzyCtjITQCkwhimyz1zfuFkG5ZPIXpzD/Guzso94qQA/QrMsvzic5W6QDjg==}
+  /rc-tree@5.8.5(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-PRfcZtVDNkR7oh26RuNe1hpw11c1wfgzwmPFL0lnxGnYefe9lDAO6cg5wJKIAwyXFVt5zHgpjYmaz0CPy1ZtKg==}
     engines: {node: '>=10.x'}
     peerDependencies:
       react: '*'
       react-dom: '*'
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.7
       classnames: 2.5.1
-      rc-motion: 2.9.0(react-dom@17.0.2)(react@18.2.0)
-      rc-util: 5.38.1(react-dom@17.0.2)(react@18.2.0)
-      rc-virtual-list: 3.11.3(react-dom@17.0.2)(react@18.2.0)
+      rc-motion: 2.9.0(react-dom@18.2.0)(react@18.2.0)
+      rc-util: 5.39.1(react-dom@18.2.0)(react@18.2.0)
+      rc-virtual-list: 3.11.3(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
-      react-dom: 17.0.2(react@18.2.0)
+      react-dom: 18.2.0(react@18.2.0)
     dev: true
 
-  /rc-tree@5.8.5(react-dom@17.0.2)(react@18.2.0):
-    resolution: {integrity: sha512-PRfcZtVDNkR7oh26RuNe1hpw11c1wfgzwmPFL0lnxGnYefe9lDAO6cg5wJKIAwyXFVt5zHgpjYmaz0CPy1ZtKg==}
+  /rc-tree@5.8.8(react-dom@17.0.2)(react@18.2.0):
+    resolution: {integrity: sha512-S+mCMWo91m5AJqjz3PdzKilGgbFm7fFJRFiTDOcoRbD7UfMOPnerXwMworiga0O2XIo383UoWuEfeHs1WOltag==}
     engines: {node: '>=10.x'}
     peerDependencies:
       react: '*'
@@ -17238,8 +17238,8 @@ packages:
       react-dom: 17.0.2(react@18.2.0)
     dev: true
 
-  /rc-tree@5.8.5(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-PRfcZtVDNkR7oh26RuNe1hpw11c1wfgzwmPFL0lnxGnYefe9lDAO6cg5wJKIAwyXFVt5zHgpjYmaz0CPy1ZtKg==}
+  /rc-tree@5.8.8(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-S+mCMWo91m5AJqjz3PdzKilGgbFm7fFJRFiTDOcoRbD7UfMOPnerXwMworiga0O2XIo383UoWuEfeHs1WOltag==}
     engines: {node: '>=10.x'}
     peerDependencies:
       react: '*'
