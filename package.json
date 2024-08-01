@@ -34,7 +34,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.5.1",
     "@changesets/cli": "^2.27.7",
-    "@modern-js/module-tools": "^2.54.5",
+    "@modern-js/module-tools": "^2.56.2",
     "@rsdoctor/tsconfig": "workspace:*",
     "@scripts/test-helper": "workspace:*",
     "check-dependency-version-consistency": "^4.1.0",
