@@ -597,8 +597,8 @@ importers:
         specifier: 0.3.12
         version: 0.3.12(react-dom@17.0.2)(react@18.2.0)
       react-i18next:
-        specifier: 12.0.0
-        version: 12.0.0(i18next@22.0.4)(react-dom@17.0.2)(react@18.2.0)
+        specifier: 12.3.1
+        version: 12.3.1(i18next@22.0.4)(react-dom@17.0.2)(react@18.2.0)
       react-json-view:
         specifier: 1.21.3
         version: 1.21.3(@types/react@18.2.39)(react-dom@17.0.2)(react@18.2.0)
@@ -5688,7 +5688,7 @@ packages:
   /@modern-js/codesmith@2.3.6:
     resolution: {integrity: sha512-wUF2L1mxUrYWPAj50jQ7yqcsLXt5g19Dt/USn3TxnosFE57GCvrsVjZseKUai9zfC0pnX7PXOj3KXXoV7EaiFw==}
     dependencies:
-      '@modern-js/utils': 2.56.2
+      '@modern-js/utils': 2.57.0
       '@swc/helpers': 0.5.1
       axios: 1.7.2
       tar: 6.2.0
@@ -17483,8 +17483,8 @@ packages:
       react-dom: 17.0.2(react@18.2.0)
     dev: true
 
-  /react-i18next@12.0.0(i18next@22.0.4)(react-dom@17.0.2)(react@18.2.0):
-    resolution: {integrity: sha512-/O7N6aIEAl1FaWZBNvhdIo9itvF/MO/nRKr9pYqRc9LhuC1u21SlfwpiYQqvaeNSEW3g3qUXLREOWMt+gxrWbg==}
+  /react-i18next@12.3.1(i18next@22.0.4)(react-dom@17.0.2)(react@18.2.0):
+    resolution: {integrity: sha512-5v8E2XjZDFzK7K87eSwC7AJcAkcLt5xYZ4+yTPDAW1i7C93oOY1dnr4BaQM7un4Hm+GmghuiPvevWwlca5PwDA==}
     peerDependencies:
       i18next: '>= 19.0.0'
       react: '>= 16.8.0'
@@ -17496,7 +17496,7 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.7
       html-parse-stringify: 3.0.1
       i18next: 22.0.4
       react: 18.2.0
