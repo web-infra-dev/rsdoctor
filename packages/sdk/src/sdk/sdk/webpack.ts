@@ -8,7 +8,6 @@ import { RsdoctorServer } from '../server';
 import { RsdoctorFakeServer } from '../server/fakeServer';
 import { RsdoctorWebpackSDKOptions } from './types';
 import { SDKCore } from './core';
-import { ResourceLoaderData } from '@rsdoctor/types/dist/sdk';
 
 export class RsdoctorWebpackSDK<
     T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
@@ -50,9 +49,12 @@ export class RsdoctorWebpackSDK<
 
   constructor(options: T) {
     super(options);
-    this.server = options.noServer
+    this.server = options.config?.noServer
       ? new RsdoctorFakeServer(this, undefined)
-      : new RsdoctorServer(this, options.port, options.innerClientPath);
+      : new RsdoctorServer(this, options.port, {
+          innerClientPath: options.config?.innerClientPath || '',
+          printServerUrl: options.config?.printLog?.serverUrls,
+        });
     this.type = options.type || SDK.ToDataType.Normal;
     this.extraConfig = options.config;
   }
@@ -217,7 +219,7 @@ export class RsdoctorWebpackSDK<
     this.onDataReport();
   }
 
-  reportLoaderStartOrEnd(data: ResourceLoaderData) {
+  reportLoaderStartOrEnd(data: SDK.ResourceLoaderData) {
     // Just one loader data in array list.
     const _builtinLoader = data.loaders[0];
     if (_builtinLoader.startAt) {
