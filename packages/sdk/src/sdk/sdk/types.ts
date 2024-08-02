@@ -25,9 +25,7 @@ export interface RsdoctorBuilderSDK extends RsdoctorSDKOptions {
    * port for client server
    */
   port?: number;
-  noServer?: boolean;
   config?: SDK.SDKOptionsType;
-  innerClientPath?: string;
 }
 
 export interface RsdoctorWebpackSDKOptions extends RsdoctorBuilderSDK {}

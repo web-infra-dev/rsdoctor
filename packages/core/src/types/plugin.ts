@@ -67,6 +67,11 @@ export interface RsdoctorWebpackPluginOptions<
    * The port of the Rsdoctor server.
    */
   port?: number;
+
+  /**
+   * Options to control the log printing.
+   */
+  printLog?: SDK.IPrintLog;
 }
 
 export interface RsdoctorMultiplePluginOptions<

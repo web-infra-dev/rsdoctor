@@ -104,7 +104,16 @@ export interface RsdoctorSDKInstance {
   ): Promise<string>;
 }
 
-export type SDKOptionsType = { disableTOSUpload: boolean };
+export interface IPrintLog {
+  serverUrls: boolean;
+}
+
+export type SDKOptionsType = {
+  disableTOSUpload: boolean;
+  innerClientPath?: string;
+  noServer?: boolean;
+  printLog?: IPrintLog;
+};
 
 /**
  * @deprecated

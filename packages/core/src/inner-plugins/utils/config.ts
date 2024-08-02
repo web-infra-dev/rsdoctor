@@ -29,6 +29,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     innerClientPath = '',
     supports = { parseBundle: true, banner: false, generateTileGraph: true },
     port,
+    printLog = { serverUrls: true },
   } = config;
 
   assert(linter && typeof linter === 'object');
@@ -95,6 +96,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     innerClientPath,
     supports,
     port,
+    printLog,
   };
 
   return res;
