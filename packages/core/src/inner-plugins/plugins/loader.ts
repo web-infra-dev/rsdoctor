@@ -54,7 +54,7 @@ export class InternalLoaderPlugin<
       (callback: Function) =>
       (loaderContext: LoaderContext<unknown>, module: NormalModule) => {
         // loaders which are already intercepted in afterPlugins hook by Rsdoctor.
-        const proxyLoaders = module.loaders || loaderContext?.loaders || [];
+        const proxyLoaders = module?.loaders || loaderContext?.loaders || [];
 
         // return origin loaders not doctor internal loaders
         const originLoaders = proxyLoaders.map((loader) => {
@@ -78,9 +78,9 @@ export class InternalLoaderPlugin<
           typeof compiler.options.cache.version === 'string' &&
           compiler.options.cache.version.indexOf('next/dist/build') > -1
         ) {
-          callback(loaderContext, module);
+          callback(loaderContext, module || {});
         } else {
-          const proxyModule = new Proxy(module, {
+          const proxyModule = new Proxy(module || {}, {
             get(target, p, receiver) {
               if (p === 'loaders') return newLoaders;
               return Reflect.get(target, p, receiver);

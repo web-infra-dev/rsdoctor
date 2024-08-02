@@ -35,7 +35,7 @@ export const ensureModulesChunksGraphFn = (
 
   compiler.hooks.done.tapPromise(
     internalPluginTapPreOptions('moduleGraph'),
-    async (_stats) => {
+    async (_stats: any) => {
       const stats = _stats as Plugin.Stats;
       const statsJson = stats.toJson();
 
