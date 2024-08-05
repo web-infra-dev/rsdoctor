@@ -726,12 +726,12 @@ importers:
 
   packages/document:
     dependencies:
+      '@rstack-dev/doc-ui':
+        specifier: ^1.2.0
+        version: 1.2.0(react-dom@18.2.0)(react@18.2.0)
       react-markdown:
         specifier: ^9.0.1
         version: 9.0.1(@types/react@18.2.39)(react@18.2.0)
-      rsfamily-doc-ui:
-        specifier: ^1.1.2
-        version: 1.1.2(react-dom@18.2.0)(react@18.2.0)
       rspress:
         specifier: ^1.26.3
         version: 1.26.3(webpack@5.89.0)
@@ -7753,6 +7753,16 @@ packages:
       react-syntax-highlighter: 15.5.0(react@18.3.1)
       react-transition-group: 4.4.5(react-dom@18.3.1)(react@18.3.1)
       rspack-plugin-virtual-module: 0.1.12
+    dev: false
+
+  /@rstack-dev/doc-ui@1.2.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-/slMk3IPj9EQcdDnVriZce9qGavU+LJiHeylhgThEBfJBJT2MPUig/hMTpERlDtaJ0+Y/YE4THS1R2DsVG/W0A==}
+    dependencies:
+      framer-motion: 11.3.8(react-dom@18.2.0)(react@18.2.0)
+    transitivePeerDependencies:
+      - '@emotion/is-prop-valid'
+      - react
+      - react-dom
     dev: false
 
   /@selderee/plugin-htmlparser2@0.11.0:
@@ -18120,16 +18130,6 @@ packages:
     dependencies:
       '@rsbuild/core': 1.0.0-alpha.9
     dev: true
-
-  /rsfamily-doc-ui@1.1.2(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-6GHgf1zg50HwjVDFUNMfT2TM4fa8BtoTDGJCCReJu6MPfrvJKqb221XaPS4XAVwv9wc1V5UpCg56e48kPruCCg==}
-    dependencies:
-      framer-motion: 11.3.8(react-dom@18.2.0)(react@18.2.0)
-    transitivePeerDependencies:
-      - '@emotion/is-prop-valid'
-      - react
-      - react-dom
-    dev: false
 
   /rslog@1.2.2:
     resolution: {integrity: sha512-tZP8KjrI1nz6qOYCrFxAV7cfmfS2GV94jotU2zOmF/6ByO1zNvGR6/+0inylpjqyBjAdnnutTUW0m4th06bSTw==}
