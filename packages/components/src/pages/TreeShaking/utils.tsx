@@ -3,7 +3,8 @@ import path from 'path-browserify';
 import { escape, get } from 'lodash-es';
 import { Module, ModuleGraph, Statement, Variable } from '@rsdoctor/graph';
 import { Tag, Space } from 'antd';
-import { Range, editor } from 'monaco-editor';
+import { Range } from './range';
+import type { editor, Range as RangeClass } from 'monaco-editor';
 import { getOpenTagText } from './open-tag';
 import {
   createFileStructures,
@@ -168,7 +169,9 @@ export function getHoverMessageInModule(
       const position = isPreferSource
         ? item.identifier.position.source
         : item.identifier.position.transformed;
-      const range = position && getSelectionRange(position, Range);
+      const range =
+        position &&
+        getSelectionRange(position, Range as unknown as typeof RangeClass);
 
       if (!position || !range) {
         return;

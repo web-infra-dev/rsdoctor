@@ -47,6 +47,11 @@
     "vite-tsconfig-paths": "4.2.1",
     "vitest": "1.0.0-beta.1"
   },
+  "pnpm": {
+    "overrides": {
+      "react-dom": "18.2.0"
+    }
+  },
   "packageManager": "pnpm@8.9.0",
   "engines": {
     "node": ">=16.18.1",

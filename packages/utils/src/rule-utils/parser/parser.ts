@@ -43,7 +43,7 @@ export const parser = {
       input,
       pos,
       options,
-    ) as Node.ExpressionStatement;
+    ) as unknown as Node.ExpressionStatement;
   },
   /**
    * add plugins for acorn
@@ -68,7 +68,7 @@ export const parser = {
         input,
         pos,
         options,
-      ) as Node.ExpressionStatement;
+      ) as unknown as Node.ExpressionStatement;
     },
   },
 };
