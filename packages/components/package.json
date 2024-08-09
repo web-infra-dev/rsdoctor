@@ -50,7 +50,7 @@
     "dist/"
   ],
   "devDependencies": {
-    "@ant-design/icons": "4.8.3",
+    "@ant-design/icons": "5.3.5",
     "@monaco-editor/react": "4.6.0",
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",

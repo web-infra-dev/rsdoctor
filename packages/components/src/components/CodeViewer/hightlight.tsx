@@ -4,8 +4,13 @@ import { Space, Card, Tooltip } from 'antd';
 import { SDK } from '@rsdoctor/types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import Editor, { OnMount } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
-import { getOriginalLanguage, beautifyModulePath, getSelectionRange, getRevealPositionForViewer } from '../../utils';
+import type { editor, Range as RangeClass } from 'monaco-editor';
+import {
+  getOriginalLanguage,
+  beautifyModulePath,
+  getSelectionRange,
+  getRevealPositionForViewer,
+} from '../../utils';
 import { CodeOpener } from '../Opener';
 
 interface FileHightLightViewerProps {
@@ -15,15 +20,26 @@ interface FileHightLightViewerProps {
   moduleCode: SDK.ModuleSource;
 }
 
-export const FileHightLightViewer: React.FC<FileHightLightViewerProps> = ({ dependency, module, cwd, moduleCode }) => {
+export const FileHightLightViewer: React.FC<FileHightLightViewerProps> = ({
+  dependency,
+  module,
+  cwd,
+  moduleCode,
+}) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
 
   if (!dependency) return null;
 
   const { statements } = dependency;
   const hasSourceRange = Boolean(statements?.[0]?.position?.source);
-  const { start, end } = statements?.[0]?.position ? hasSourceRange ? statements[0].position.source! : statements[0].position.transformed : { start: { line: 0, column: 0  }, end: { line: 0, column: 0  } } ;
-  const content = hasSourceRange ? moduleCode?.source : moduleCode?.transformed || moduleCode?.source;
+  const { start, end } = statements?.[0]?.position
+    ? hasSourceRange
+      ? statements[0].position.source!
+      : statements[0].position.transformed
+    : { start: { line: 0, column: 0 }, end: { line: 0, column: 0 } };
+  const content = hasSourceRange
+    ? moduleCode?.source
+    : moduleCode?.transformed || moduleCode?.source;
   const modulePath = module.path;
 
   const handleEditorDidMount: OnMount = (editor, monaco) => {
@@ -31,8 +47,14 @@ export const FileHightLightViewer: React.FC<FileHightLightViewerProps> = ({ depe
     // you can store it in `useRef` for further usage
     // @ts-ignore
     editorRef.current = editor;
-    const range = getSelectionRange({ start, end }, monaco.Range);
-    const position = getRevealPositionForViewer(range.startLineNumber, range.startColumn);
+    const range = getSelectionRange(
+      { start, end },
+      monaco.Range as unknown as typeof RangeClass,
+    );
+    const position = getRevealPositionForViewer(
+      range.startLineNumber,
+      range.startColumn,
+    );
     editor.revealPositionInCenter(position);
     editor.deltaDecorations(
       [],

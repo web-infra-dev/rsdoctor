@@ -1,11 +1,11 @@
 /* eslint-disable financial/no-float-calculation */
 import { extname } from 'path';
 import type { SDK } from '@rsdoctor/types';
-import type { Range as RangeClass } from 'monaco-editor';
-import { loader } from '@monaco-editor/react'
+import { loader } from '@monaco-editor/react';
 import { isJsDataUrl } from './url';
+import type { Range as RangeClass } from 'monaco-editor';
 
-const monacoLoader = loader.init()
+const monacoLoader = loader.init();
 
 export function getOriginalLanguage(filepath: string) {
   if (isJsDataUrl(filepath)) {
@@ -38,40 +38,51 @@ export function getModifiedLanguage(filepath: string) {
   }
 }
 
-export function getRevealPositionForViewer(startLineNumber: number, startColumn: number) {
+export function getRevealPositionForViewer(
+  startLineNumber: number,
+  startColumn: number,
+) {
   return {
     lineNumber: Math.floor(startLineNumber / 1.2) || 1,
     column: Math.floor(startColumn / 1.5) || 1,
   };
 }
 
-export function getSelectionRange(source: SDK.SourceRange, Range: typeof RangeClass) {
+export function getSelectionRange(
+  source: SDK.SourceRange,
+  Range: typeof RangeClass,
+) {
   const { start, end } = source;
   const { line = 1, column = 0 } = start;
-  return new Range(line, column + 1, end?.line ?? line, (end?.column ?? 9999) + 1);
+  return new Range(
+    line,
+    column + 1,
+    end?.line ?? line,
+    (end?.column ?? 9999) + 1,
+  );
 }
 
 const initMonaco = (monacoRef: any) => {
   return new Promise<void>((resolve, reject) => {
     if (monacoRef.value) {
-      resolve()
-      return
+      resolve();
+      return;
     }
     monacoLoader
       .then((monacoInstance: any) => {
-        monacoRef.value = monacoInstance
+        monacoRef.value = monacoInstance;
       })
       .catch((error: any) => {
         if (error?.type !== 'cancelation') {
-          console.error('Monaco initialization error:', error)
-          reject()
+          console.error('Monaco initialization error:', error);
+          reject();
         }
-      })
-  })
-}
+      });
+  });
+};
 
 export function useMonacoEditor() {
   return {
     initMonaco,
-  }
+  };
 }

@@ -4,7 +4,8 @@ import { Card, Space, Tooltip, Typography } from 'antd';
 import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import type { Module, ModuleGraph, SourceRange } from '@rsdoctor/graph';
 import Editor, { OnMount } from '@monaco-editor/react';
-import { Range, editor } from 'monaco-editor';
+import { Range } from './range';
+import type { editor, Range as RangeClass } from 'monaco-editor';
 import { SDK } from '@rsdoctor/types';
 import { SetEditorStatus } from './types';
 import { parseOpenTag } from './open-tag';
@@ -61,14 +62,17 @@ export function CodeEditor(props: CodeEditorProps) {
         oldRanges.current,
         ranges.map((arr) => {
           return {
-            range: getSelectionRange(arr, Range),
+            range: getSelectionRange(
+              arr,
+              Range as unknown as typeof RangeClass,
+            ),
             options: {
               stickiness: 1,
               inlineClassName: 'tree-shaking-statement-side-effect',
               isWholeLine: false,
               showIfCollapsed: true,
             },
-          } as editor.IModelDecoration;
+          } as unknown as editor.IModelDecoration;
         }),
       );
 
@@ -78,7 +82,7 @@ export function CodeEditor(props: CodeEditorProps) {
         oldToLine.current !== toLine
       ) {
         oldToLine.current = toLine;
-        editorRef.current.revealLine(toLine, editor.ScrollType.Smooth);
+        editorRef.current.revealLine(toLine, 0);
       }
     }
 
