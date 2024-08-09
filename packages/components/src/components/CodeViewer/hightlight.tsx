@@ -49,7 +49,7 @@ export const FileHightLightViewer: React.FC<FileHightLightViewerProps> = ({
     editorRef.current = editor;
     const range = getSelectionRange(
       { start, end },
-      monaco.Range as any as typeof RangeClass,
+      monaco.Range as unknown as typeof RangeClass,
     );
     const position = getRevealPositionForViewer(
       range.startLineNumber,
