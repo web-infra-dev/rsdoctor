@@ -34,7 +34,7 @@
     "@types/node": "^16",
     "@types/tapable": "2.2.7",
     "@types/webpack": "5.28.5",
-    "tslib": "2.4.1",
+    "tslib": "2.6.3",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
