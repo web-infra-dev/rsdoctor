@@ -11,7 +11,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.17.0",
-    "vue": "^3.3.4"
+    "vue": "^3.4.37"
   },
   "devDependencies": {
     "@playwright/test": "1.33.0",
@@ -24,7 +24,7 @@
     "@rspack/core": "0.7.5",
     "@types/lodash": "^4.17.7",
     "@types/node": "^16",
-    "@types/react": "^18",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18",
     "@types/webpack": "5.28.5",
     "fast-glob": "^3.3.2",
