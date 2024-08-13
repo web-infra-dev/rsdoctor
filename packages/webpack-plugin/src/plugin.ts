@@ -101,7 +101,14 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     }
 
     if (this.options.features.plugins) {
-      new InternalPluginsPlugin<Compiler>(this).apply(compiler);
+      if (Loader.isVue(compiler)) {
+        this.sdk.addClientRoutes([
+          Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+        ]);
+        new InternalLoaderPlugin(this).apply(compiler);
+      } else {
+        new InternalPluginsPlugin<Compiler>(this).apply(compiler);
+      }
     }
 
     if (this.options.features.bundle) {

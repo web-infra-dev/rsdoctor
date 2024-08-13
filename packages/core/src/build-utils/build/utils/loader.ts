@@ -1,6 +1,6 @@
 import path from 'path';
 import fse from 'fs-extra';
-import { omit, findIndex } from 'lodash';
+import { cloneDeep, omit } from 'lodash';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule, SourceMapInput as WebpackSourceMapInput } from '../../../types';
@@ -225,6 +225,7 @@ export function addProbeLoader2Rules<T extends Plugin.BuildRuleSetRule>(
           {
             loader: rule.loader,
             options: rule.options,
+            ident: ('ident' in rule && rule.ident) || undefined,
           },
         ],
         loader: undefined,
@@ -235,11 +236,26 @@ export function addProbeLoader2Rules<T extends Plugin.BuildRuleSetRule>(
 
     if (rule.use) {
       if (Array.isArray(rule.use)) {
-        const _index = findIndex(rule.use, (_r) => fn(_r as T));
-        if (_index > -1) {
-          return appendRules(rule, _index);
+        const indexList = rule.use.map((_r, index) => {
+          if (fn(_r as T)) {
+            return index;
+          }
+        });
+
+        let _rule2 = cloneDeep(rule);
+
+        if (indexList.length) {
+          indexList.forEach((i, _index) => {
+            if (i !== undefined) {
+              _rule2 = appendRules(_rule2, i + _index * 2);
+            }
+          });
         }
-      } else if (
+
+        return _rule2;
+      }
+
+      if (
         typeof rule.use === 'object' &&
         !Array.isArray(rule.use) &&
         typeof rule.use !== 'function'
