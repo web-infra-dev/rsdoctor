@@ -26,6 +26,7 @@ import type {
 import {
   Constants,
   Linter,
+  Manifest,
   Manifest as ManifestType,
   Plugin,
   SDK,
@@ -118,11 +119,18 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       compiler,
     );
 
-    if (this.options.features.loader && !Loader.isVue(compiler)) {
+    if (this.options.features.loader) {
       new ProbeLoaderPlugin().apply(compiler);
-      new InternalLoaderPlugin<Plugin.BaseCompilerType<'rspack'>>(this).apply(
-        compiler,
-      );
+      // add loader page to client
+      this.sdk.addClientRoutes([
+        Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+      ]);
+
+      if (!Loader.isVue(compiler)) {
+        new InternalLoaderPlugin<Plugin.BaseCompilerType<'rspack'>>(this).apply(
+          compiler,
+        );
+      }
     }
 
     if (this.options.features.plugins) {
