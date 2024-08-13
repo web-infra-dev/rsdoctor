@@ -18,7 +18,7 @@ import type {
 } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
-import { Constants, Linter } from '@rsdoctor/types';
+import { Constants, Linter, Manifest } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { debug } from '@rsdoctor/utils/logger';
 import { cloneDeep } from 'lodash';
@@ -99,7 +99,14 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     }
 
     if (this.options.features.plugins) {
-      new InternalPluginsPlugin<Compiler>(this).apply(compiler);
+      if (Loader.isVue(compiler)) {
+        this.sdk.addClientRoutes([
+          Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+        ]);
+        new InternalLoaderPlugin(this).apply(compiler);
+      } else {
+        new InternalPluginsPlugin<Compiler>(this).apply(compiler);
+      }
     }
 
     if (this.options.features.bundle) {
