@@ -30,7 +30,7 @@ export class ProbeLoaderPlugin {
   }
 
   private addProbeLoader(compiler: Plugin.BaseCompiler) {
-    const rules = compiler.options.module.rules as Plugin.RuleSetRule[];
+    let rules = compiler.options.module.rules as Plugin.RuleSetRule[];
     const appendRule = (rule: Plugin.RuleSetRule, index: number) => {
       if ('use' in rule && Array.isArray(rule.use)) {
         const _builtinRule = rule.use[index] as Plugin.RuleSetRule;
@@ -69,12 +69,12 @@ export class ProbeLoaderPlugin {
       return;
     }
 
-    compiler.options.module.rules = Utils.addProbeLoader2Rules(
+    rules = Utils.addProbeLoader2Rules(
       rules,
       appendRule,
       (r: Plugin.BuildRuleSetRule) =>
         Build.Utils.getLoaderNameMatch(r, BuiltinLoaderName, true),
-    ) as RuleSetRules;
+    ) as Plugin.RuleSetRule[];
 
     compiler.options.module.rules = Utils.addProbeLoader2Rules(
       rules,
