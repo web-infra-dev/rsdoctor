@@ -3,6 +3,7 @@ import path from 'path';
 import { Plugin } from '@rsdoctor/types';
 import type { RuleSetRules } from '@rspack/core';
 import { Build } from '@rsdoctor/core';
+import { Loader } from '@rsdoctor/utils/common';
 
 const BuiltinLoaderName = 'builtin:swc-loader';
 const ESMLoaderFile = '.mjs';
@@ -40,6 +41,7 @@ export class ProbeLoaderPlugin {
           loader: path.join(__dirname, './probeLoader.js'),
           options: {
             ..._options,
+            ident: undefined,
             type: 'end',
             builderName: compiler.options.name,
           },
@@ -49,6 +51,7 @@ export class ProbeLoaderPlugin {
           loader: path.join(__dirname, './probeLoader.js'),
           options: {
             ..._options,
+            ident: undefined,
             type: 'start',
             builderName: compiler.options.name,
           },
@@ -56,6 +59,15 @@ export class ProbeLoaderPlugin {
       }
       return rule;
     };
+
+    if (Loader.isVue(compiler)) {
+      compiler.options.module.rules = Utils.addProbeLoader2Rules(
+        rules,
+        appendRule,
+        (r: Plugin.BuildRuleSetRule) => !!r.loader,
+      ) as RuleSetRules;
+      return;
+    }
 
     compiler.options.module.rules = Utils.addProbeLoader2Rules(
       rules,
