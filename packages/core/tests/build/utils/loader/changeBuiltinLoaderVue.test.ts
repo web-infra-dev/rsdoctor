@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import os from 'os';
 import { Plugin } from '@rsdoctor/types';
-import { Utils } from '@/build-utils/build';
 import { addProbeLoader2Rules } from '@/build-utils/build/utils';
 
 const rules = [
@@ -19,38 +19,11 @@ const rules = [
     use: '@svgr/webpack',
   },
   {
-    test: /\.tsx$/,
-    oneOf: [
-      {
-        loader: 'builtin:swc-loader',
-        options: {
-          sourceMap: true,
-          jsc: {
-            parser: {
-              syntax: 'typescript',
-              jsx: true,
-            },
-          },
-        },
-        type: 'javascript/auto',
-      },
-    ],
-  },
-  {
-    test: /\.tsx$/,
+    test: /\.vue$/,
     rules: [
       {
-        loader: 'builtin:swc-loader',
-        options: {
-          sourceMap: true,
-          jsc: {
-            parser: {
-              syntax: 'typescript',
-              jsx: true,
-            },
-          },
-        },
-        type: 'javascript/auto',
+        loader: 'vue-loader',
+        experimentalInlineMatchResource: true,
       },
     ],
   },
@@ -73,6 +46,7 @@ const rules = [
   },
   {
     test: /\.svg$/,
+    loader: 'svg-loader',
     type: 'asset/resource',
   },
 ];
@@ -83,11 +57,13 @@ const mockCompiler: Plugin.BaseCompiler = {
   },
 } as Plugin.BaseCompiler;
 
-describe('test src/build/utils/loader.ts addProbeLoader2Rules', () => {
+describe('test addProbeLoader2Rules for vue-loader', () => {
   it('addProbeLoader2Rules()', () => {
     expect(
-      addProbeLoader2Rules(rules, mockCompiler, (r: Plugin.BuildRuleSetRule) =>
-        Utils.getLoaderNameMatch(r, 'builtin:swc-loader', true),
+      addProbeLoader2Rules(
+        rules,
+        mockCompiler,
+        (r: Plugin.BuildRuleSetRule) => !!r.loader || typeof r === 'string',
       ),
     ).toMatchSnapshot();
   });
@@ -114,21 +90,19 @@ describe('addProbeLoader2Rules', () => {
 
   it('should add probe loaders to rules', () => {
     const rules = [mockRule];
-    const result = addProbeLoader2Rules(rules, mockCompiler, mockFn);
     const porbeLoaderPath =
       os.EOL === '\n' ? 'build-utils/build/loader/probeLoader' : 'probeLoader';
+    const result = addProbeLoader2Rules(rules, mockCompiler, mockFn);
 
     expect(result).toHaveLength(1);
     expect(result[0]).toHaveProperty('use');
     expect(result[0].use).toHaveLength(3);
     expect(result[0].use[0]).toHaveProperty('loader');
     expect(result[0].use[0].loader).toContain(porbeLoaderPath);
-    console.log('result[0].use[0].loader::', result[0].use[0].loader);
     expect(result[0].use[0]).toHaveProperty('options.type', 'end');
     expect(result[0].use[1]).toHaveProperty('loader', 'mock-loader');
     expect(result[0].use[2]).toHaveProperty('loader');
     expect(result[0].use[2].loader).toContain(porbeLoaderPath);
-    console.log('result[0].use[2].loader::', result[0].use[2].loader);
     expect(result[0].use[2]).toHaveProperty('options.type', 'start');
   });
 
