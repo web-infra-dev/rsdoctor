@@ -27,9 +27,7 @@ export default defineConfig({
             },
           },
           port: 9988,
-          printLog: {
-            serverUrls: false,
-          },
+          mode: 'Brief',
         },
       ]);
     },

@@ -115,6 +115,7 @@ const Component: React.FC<{ data: SDK.ModuleGraphData; cwd: string }> = ({
             className="tree-shaking-files-box"
           >
             <FileTree
+              style={{ height: '80%' }}
               className="tree-shaking-files"
               selectedKeys={selectedModule ? [selectedModule.path] : []}
               defaultExpandedKeys={getTreeFilesDefaultExpandedKeys(files)}

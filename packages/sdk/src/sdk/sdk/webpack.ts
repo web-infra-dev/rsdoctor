@@ -183,6 +183,13 @@ export class RsdoctorWebpackSDK<
 
   reportLoader(data: SDK.LoaderData) {
     data.forEach((item) => {
+      if (this.extraConfig?.mode === 'Brief') {
+        item.loaders.forEach((_loader) => {
+          _loader.input = '';
+          _loader.result = '';
+        });
+      }
+
       // find by resource.path
       let match = this._loader.find(
         (e) => e.resource.path === item.resource.path,

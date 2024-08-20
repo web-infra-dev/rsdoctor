@@ -18,6 +18,9 @@ import { EmoCheckData } from '../emo';
 import { Hooks } from './hooks';
 
 export type WriteStoreOptionsType = {};
+
+export type IMode = 'Brief' | 'Lite' | 'Normal';
+
 export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   readonly server: RsdoctorServerInstance;
   /** Report configuration information */
@@ -113,6 +116,7 @@ export type SDKOptionsType = {
   innerClientPath?: string;
   noServer?: boolean;
   printLog?: IPrintLog;
+  mode?: IMode;
 };
 
 /**

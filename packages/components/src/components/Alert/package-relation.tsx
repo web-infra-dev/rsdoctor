@@ -24,20 +24,21 @@ import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 import { Size, Color } from '../../constants';
 import { Badge as Bdg } from '../Badge';
-import { FileHightLightViewer } from '../CodeViewer';
 import { PackageRelationAlertProps } from './types';
 import { withServerAPI } from '../Manifest';
+
+const TextDrawerWidth = '60%';
 
 export const PackageRelationReasons: React.FC<{
   data: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetPackageRelationAlertDetails>;
   cwd: string;
-}> = ({ data, cwd }) => {
+}> = ({ data }) => {
   const [index, setIndex] = useState(0);
   const { t } = useI18n();
 
   return (
     <Row gutter={Size.BasePadding} wrap={false} align="top">
-      <Col span={12} style={{ height: '100%' }}>
+      <Col span={20} style={{ height: '100%' }}>
         <Card
           title={`The reasons for importing this version`}
           style={{ height: '100%' }}
@@ -104,9 +105,6 @@ export const PackageRelationReasons: React.FC<{
             <Empty description={'This package no dependencies'} />
           )}
         </Card>
-      </Col>
-      <Col span={12} style={{ height: '100%' }}>
-        <FileHightLightViewer {...data[index]!} key={index} cwd={cwd} />
       </Col>
     </Row>
   );
@@ -244,7 +242,7 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
             <TextDrawer
               text="Show Relations"
               buttonProps={{ size: 'small' }}
-              drawerProps={{ title: data.title }}
+              drawerProps={{ title: data.title, width: TextDrawerWidth }}
             >
               <Space direction="vertical" className="alert-space">
                 <Space style={{ marginBottom: Size.BasePadding / 2 }}>
