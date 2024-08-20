@@ -412,6 +412,9 @@ export class RsdoctorWebpackSDK<
         return ctx._chunkGraph.toData(ctx.type);
       },
       get moduleCodeMap() {
+        if (ctx.extraConfig?.mode === 'Brief') {
+          ctx.type = SDK.ToDataType.NoCode;
+        }
         return ctx._moduleGraph.toCodeData(ctx.type);
       },
       get plugin() {

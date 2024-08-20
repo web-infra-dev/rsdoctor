@@ -59,8 +59,8 @@ export default defineConfig(({ env }) => {
         media: 'resource/media',
       },
       assetPrefix: IS_PRODUCTION
-        ? OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || '/'
-        : '/',
+        ? OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || 'auto'
+        : 'auto',
       cleanDistPath: IS_PRODUCTION,
       sourceMap: {
         js: false,
