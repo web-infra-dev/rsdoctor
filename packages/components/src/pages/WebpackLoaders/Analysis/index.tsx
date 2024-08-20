@@ -8,11 +8,11 @@ export const Page: React.FC = () => {
     <Card
       title="Webpack Loader Analysis"
       extra={<WebpackConfigurationViewer defaultKeys={['module', 'resolve']} />}
-      bodyStyle={{ paddingTop: 0 }}
+      bodyStyle={{ paddingTop: 0, height: 800 }}
     >
       <LoaderAnalysis />
     </Card>
   );
 };
 
-export * from './constants'
+export * from './constants';

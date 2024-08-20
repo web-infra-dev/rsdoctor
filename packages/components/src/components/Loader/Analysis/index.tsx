@@ -12,10 +12,22 @@ export const LoaderAnalysisBase: React.FC<{
   return (
     <div>
       <ServerAPIProvider api={SDK.ServerAPI.API.GetLoaderNames}>
-        {(loaderNames) => <LoaderCommonSelect onChange={(e) => setStore(e)} loaderNames={loaderNames} />}
+        {(loaderNames) => (
+          <LoaderCommonSelect
+            onChange={(e) => setStore(e)}
+            loaderNames={loaderNames}
+          />
+        )}
       </ServerAPIProvider>
       <ServerAPIProvider api={SDK.ServerAPI.API.GetLoaderFileTree}>
-        {(filetree) => <LoaderFiles filename={store.filename} filetree={filetree} loaders={store.loaders} cwd={cwd} />}
+        {(filetree) => (
+          <LoaderFiles
+            filename={store.filename}
+            filetree={filetree}
+            loaders={store.loaders}
+            cwd={cwd}
+          />
+        )}
       </ServerAPIProvider>
     </div>
   );

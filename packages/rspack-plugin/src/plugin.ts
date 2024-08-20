@@ -73,6 +73,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
           disableTOSUpload: this.options.disableTOSUpload,
           innerClientPath: this.options.innerClientPath,
           printLog: this.options.printLog,
+          mode: this.options.mode,
         },
       });
     this.outsideInstance = Boolean(this.options.sdkInstance);

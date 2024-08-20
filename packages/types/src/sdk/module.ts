@@ -84,6 +84,7 @@ export enum ModuleKind {
 }
 
 export enum ToDataType {
+  NoCode,
   /** Normal mode */
   Normal,
   /** Lite mode */

@@ -22,10 +22,6 @@ export default function Router(): React.ReactElement {
       element: <LoaderFiles.Page />,
     },
     {
-      path: LoaderFiles.route,
-      element: <LoaderFiles.Page />,
-    },
-    {
       path: PluginsAnalyze.route,
       element: <PluginsAnalyze.Page />,
     },

@@ -30,6 +30,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     supports = { parseBundle: true, banner: false, generateTileGraph: true },
     port,
     printLog = { serverUrls: true },
+    mode = 'Normal',
   } = config;
 
   assert(linter && typeof linter === 'object');
@@ -97,6 +98,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     supports,
     port,
     printLog,
+    mode,
   };
 
   return res;
