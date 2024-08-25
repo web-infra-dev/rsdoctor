@@ -24,10 +24,10 @@ export interface RsdoctorWebpackPluginOptions<
 
   /**
    * Rsdoctor mode option:
-   * - Normal: Refers to the normal mode.
-   * - Brief: Refers to the brief mode, which only displays the results of the duration analysis and build artifact analysis
+   * - normal: Refers to the normal mode.
+   * - brief: Refers to the brief mode, which only displays the results of the duration analysis and build artifact analysis
    *    and does not display any part of the code.
-   * - Lite: Refers to the lightweight mode,
+   * - lite: Refers to the lightweight mode,
    *   which is a lightweight analysis report in the normal mode with the source code display removed.
    */
   mode?: SDK.IMode;

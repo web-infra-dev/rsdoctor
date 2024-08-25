@@ -49,6 +49,11 @@ export default defineConfig(({ env }) => {
     },
 
     output: {
+      externals: [
+        '@rsbuild/core',
+        '@rsbuild/plugin-node-polyfill',
+        '@rsbuild/plugin-react',
+      ],
       distPath: {
         root: path.basename(DistPath),
         js: 'resource/js',
@@ -59,8 +64,8 @@ export default defineConfig(({ env }) => {
         media: 'resource/media',
       },
       assetPrefix: IS_PRODUCTION
-        ? OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || 'auto'
-        : 'auto',
+        ? OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || './'
+        : './',
       cleanDistPath: IS_PRODUCTION,
       sourceMap: {
         js: false,
@@ -81,6 +86,39 @@ export default defineConfig(({ env }) => {
               chunks: 'all',
               maxSize: 1000000,
               minSize: 500000,
+            },
+            react: {
+              test: /node_modules\/react-*/,
+              name: 'react',
+              chunks: 'all',
+            },
+            rc: {
+              test: /node_modules\/rc-*/,
+              name: 'rc',
+              chunks: 'all',
+              maxSize: 1000000,
+              minSize: 500000,
+            },
+            antDesign: {
+              chunks: 'all',
+              name: 'ant-design',
+              test: /node_modules\/antd\//,
+              maxSize: 1000000,
+              minSize: 500000,
+            },
+            antDesignIcons: {
+              chunks: 'all',
+              name: 'ant-design-icons',
+              test: /node_modules\/@ant-design\/icons/,
+              maxSize: 1000000,
+              minSize: 50000,
+            },
+            vender: {
+              chunks: 'all',
+              name: 'vender',
+              test: /node_modules\/(acorn|lodash|i18next|socket.io-*|axios|remark-*)/,
+              maxSize: 1000000,
+              minSize: 200000,
             },
           },
         },

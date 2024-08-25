@@ -30,7 +30,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     supports = { parseBundle: true, banner: false, generateTileGraph: true },
     port,
     printLog = { serverUrls: true },
-    mode = 'Normal',
+    mode = 'normal',
   } = config;
 
   assert(linter && typeof linter === 'object');
@@ -75,7 +75,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         ? loaderInterceptorOptions.skipLoaders
         : [],
     },
-    disableClientServer,
+    disableClientServer: mode === 'brief' ? true : disableClientServer,
     sdkInstance,
     /**
      * Data storage is divided into three types:

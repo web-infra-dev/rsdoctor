@@ -1,4 +1,4 @@
-import { Rule, SDK, Manifest } from '@rsdoctor/types';
+import { Rule, SDK, Manifest, Constants } from '@rsdoctor/types';
 
 import * as Loader from '../loader';
 import * as Resolver from '../resolver';
@@ -51,6 +51,12 @@ export class APIDataLoader {
             ({ root, pid, hash, summary, configs, envinfo, errors }) as R,
         );
       case SDK.ServerAPI.API.GetClientRoutes:
+        if (
+          typeof window !== 'undefined' &&
+          window?.[Constants.WINDOW_RSDOCTOR_TAG]
+        ) {
+          return window[Constants.WINDOW_RSDOCTOR_TAG].enableRoutes;
+        }
         return this.loader.loadManifest().then((res) => {
           const { enableRoutes = [] } = res.client || {};
           return enableRoutes as R;

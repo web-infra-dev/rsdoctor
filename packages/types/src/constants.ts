@@ -54,3 +54,5 @@ export const RsdoctorMonitorDocBId = 'Rsdoctor-Doc';
 export const RsdoctorProcessEnvDebugKey = 'RSDOCTOR_DEBUG';
 
 export const RsdoctorClientUrl = ''; // TODO: rsdoctor client url
+
+export const WINDOW_RSDOCTOR_TAG = '__RSDOCTOR__';
