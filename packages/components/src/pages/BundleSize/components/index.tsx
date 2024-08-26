@@ -161,6 +161,7 @@ export const WebpackModulesOverallBase: React.FC<
               path={path}
               content={content!}
               editorConfig={{ readOnly: false, domReadOnly: false }}
+              emptyReason="Do not have the codes of assets. If you use the lite or brief mode, there will have codes."
             />
           </Space>
         );

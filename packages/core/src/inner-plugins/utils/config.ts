@@ -75,7 +75,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         ? loaderInterceptorOptions.skipLoaders
         : [],
     },
-    disableClientServer: mode === 'brief' ? true : disableClientServer,
+    disableClientServer,
     sdkInstance,
     /**
      * Data storage is divided into three types:

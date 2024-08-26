@@ -1,6 +1,10 @@
 import type { Configuration, RuleSetRule } from '@rspack/core';
 import { ModuleGraph } from '@rsdoctor/graph';
-import { RsdoctorSlaveSDK, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
+import {
+  openBrowser,
+  RsdoctorSlaveSDK,
+  RsdoctorWebpackSDK,
+} from '@rsdoctor/sdk';
 import {
   InternalLoaderPlugin,
   InternalPluginsPlugin,
@@ -24,12 +28,14 @@ import {
   Linter,
   Manifest as ManifestType,
   Plugin,
+  SDK,
 } from '@rsdoctor/types';
 import path from 'path';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
 import { ProbeLoaderPlugin } from './probeLoaderPlugin';
 import { Loader } from '@rsdoctor/utils/common';
+import { chalk } from '@rsdoctor/utils/logger';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorRspackPluginInstance<Rules>
@@ -73,7 +79,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
           disableTOSUpload: this.options.disableTOSUpload,
           innerClientPath: this.options.innerClientPath,
           printLog: this.options.printLog,
-          mode: this.options.mode,
+          mode: this.options.mode ? this.options.mode : undefined,
         },
       });
     this.outsideInstance = Boolean(this.options.sdkInstance);
@@ -176,7 +182,20 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     );
     await this.sdk.writeStore();
     if (!this.options.disableClientServer) {
-      await this.sdk.server.openClientPage('homepage');
+      if (this.options.mode === SDK.IMode[SDK.IMode.brief]) {
+        const outputFilePath = path.resolve(
+          this.sdk.outputDir,
+          'rsdoctor-report.html',
+        );
+
+        console.log(
+          `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
+        );
+
+        openBrowser(`file:///${outputFilePath}`);
+      } else {
+        await this.sdk.server.openClientPage('homepage');
+      }
     }
 
     if (this.options.disableClientServer) {

@@ -5,12 +5,14 @@ import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/graph';
-import { chalk, debug } from '@rsdoctor/utils/logger';
+import { debug } from '@rsdoctor/utils/logger';
 import { RsdoctorServer } from '../server';
 import { RsdoctorFakeServer } from '../server/fakeServer';
 import { RsdoctorWebpackSDKOptions } from './types';
 import { SDKCore } from './core';
 import { Algorithm } from '@rsdoctor/utils/common';
+
+export * from '../utils/openBrowser';
 
 export class RsdoctorWebpackSDK<
     T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
@@ -186,7 +188,7 @@ export class RsdoctorWebpackSDK<
 
   reportLoader(data: SDK.LoaderData) {
     data.forEach((item) => {
-      if (this.extraConfig?.mode === 'brief') {
+      if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
         item.loaders.forEach((_loader) => {
           _loader.input = '';
           _loader.result = '';
@@ -372,7 +374,7 @@ export class RsdoctorWebpackSDK<
 
   public writeStore(options?: SDK.WriteStoreOptionsType) {
     debug(() => `sdk.writeStore has run.`, '[SDK.writeStore][end]');
-    if (this.extraConfig?.mode === 'brief') {
+    if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
       const clientHtmlPath = this.extraConfig.innerClientPath
         ? this.extraConfig.innerClientPath
         : require.resolve('@rsdoctor/client');
@@ -422,7 +424,7 @@ export class RsdoctorWebpackSDK<
         return ctx._chunkGraph.toData(ctx.type);
       },
       get moduleCodeMap() {
-        if (ctx.extraConfig?.mode === 'brief') {
+        if (ctx.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
           ctx.type = SDK.ToDataType.NoCode;
         }
         return ctx._moduleGraph.toCodeData(ctx.type);
@@ -599,11 +601,6 @@ export class RsdoctorWebpackSDK<
       encoding: 'utf-8',
       flag: 'w',
     });
-
-    console.log(
-      `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
-    );
-
     return outputFilePath;
   }
 }
