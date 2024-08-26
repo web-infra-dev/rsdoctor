@@ -1,4 +1,4 @@
-import { Manifest, SDK } from '@rsdoctor/types';
+import { Constants, Manifest, SDK } from '@rsdoctor/types';
 import { Skeleton, Spin } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { includes, isEqual, isNil, values } from 'lodash-es';
@@ -7,16 +7,19 @@ import { ComponentState } from '../../constants';
 import { FailedStatus } from '../Status';
 import { BaseDataLoader } from '../../utils/data/base';
 
-export type InferServerAPIBody<T> = SDK.ServerAPI.InferRequestBodyType<T> extends void
-  ? {
-      // use `any` to avoid ts check when need not to define the body in this component.
-      body?: any;
-    }
-  : {
-      body: SDK.ServerAPI.InferRequestBodyType<T>;
-    };
+export type InferServerAPIBody<T> =
+  SDK.ServerAPI.InferRequestBodyType<T> extends void
+    ? {
+        // use `any` to avoid ts check when need not to define the body in this component.
+        body?: any;
+      }
+    : {
+        body: SDK.ServerAPI.InferRequestBodyType<T>;
+      };
 
-type ServerAPIProviderProps<T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends> = {
+type ServerAPIProviderProps<
+  T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
+> = {
   manifestLoader?: () => Promise<Manifest.RsdoctorManifestWithShardingFiles>;
   api: T;
   children: (response: SDK.ServerAPI.InferResponseType<T>) => JSX.Element;
@@ -35,7 +38,9 @@ type ServerAPIProviderProps<T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExten
  *   }}
  * </ServerAPIProvider>
  */
-export const ServerAPIProvider = <T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends>(
+export const ServerAPIProvider = <
+  T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
+>(
   props: ServerAPIProviderProps<T>,
 ): JSX.Element | null => {
   const {
@@ -47,17 +52,24 @@ export const ServerAPIProvider = <T extends SDK.ServerAPI.API | SDK.ServerAPI.AP
     showSkeleton = true,
     fallbackComponent,
   } = props;
-  let promise = manifestLoader();
-  const [manifest, setManifest] = useState<Manifest.RsdoctorManifestWithShardingFiles>();
+  let promise: Promise<Manifest.RsdoctorManifestWithShardingFiles>;
+
+  const [manifest, setManifest] =
+    useState<Manifest.RsdoctorManifestWithShardingFiles>();
   const [state, setState] = useState(ComponentState.Pending);
   const [res, setRes] = useState({} as SDK.ServerAPI.InferResponseType<T>);
 
   const { loader } = useDataLoader(manifest);
 
   function init(loader: BaseDataLoader | void) {
-    ensureManifest(promise).then(() => {
+    if (window[Constants.WINDOW_RSDOCTOR_TAG]) {
       executeLoader(loader);
-    });
+    } else {
+      promise = manifestLoader();
+      ensureManifest(promise).then(() => {
+        executeLoader(loader);
+      });
+    }
   }
 
   const update = useCallback(
@@ -91,7 +103,9 @@ export const ServerAPIProvider = <T extends SDK.ServerAPI.API | SDK.ServerAPI.AP
     };
   }, [loader, api, body]);
 
-  function ensureManifest(pro: Promise<Manifest.RsdoctorManifestWithShardingFiles>) {
+  function ensureManifest(
+    pro: Promise<Manifest.RsdoctorManifestWithShardingFiles>,
+  ) {
     return pro
       .then((manifest) => {
         setManifest(manifest);
@@ -138,7 +152,8 @@ export const ServerAPIProvider = <T extends SDK.ServerAPI.API | SDK.ServerAPI.AP
   }
 
   if (state === ComponentState.Fail) {
-    if (fallbackComponent) return fallbackComponent as unknown as React.ReactElement;
+    if (fallbackComponent)
+      return fallbackComponent as unknown as React.ReactElement;
 
     return (
       <FailedStatus
@@ -158,7 +173,11 @@ export const ServerAPIProvider = <T extends SDK.ServerAPI.API | SDK.ServerAPI.AP
   return children(res);
 };
 
-export function withServerAPI<T, P extends keyof T, A extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends>({
+export function withServerAPI<
+  T,
+  P extends keyof T,
+  A extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
+>({
   Component,
   api,
   responsePropName,
@@ -171,13 +190,20 @@ export function withServerAPI<T, P extends keyof T, A extends SDK.ServerAPI.API 
   responsePropName: P;
   fallbackComponent?: React.FC;
   showSkeleton?: boolean;
-} & Partial<Partial<InferServerAPIBody<A>>>): React.FC<Omit<T, P> & Partial<InferServerAPIBody<A>>> {
+} & Partial<Partial<InferServerAPIBody<A>>>): React.FC<
+  Omit<T, P> & Partial<InferServerAPIBody<A>>
+> {
   return function _(props) {
     const { body = bodyInRoot, ...rest } = props;
 
     return (
       // @ts-ignore
-      <ServerAPIProvider api={api} body={body} showSkeleton={showSkeleton} fallbackComponent={fallbackComponent}>
+      <ServerAPIProvider
+        api={api}
+        body={body}
+        showSkeleton={showSkeleton}
+        fallbackComponent={fallbackComponent}
+      >
         {(res) => {
           const _props = {
             ...rest,

@@ -1,13 +1,16 @@
+import fse from 'fs-extra';
+import path from 'path';
 import { DevToolError } from '@rsdoctor/utils/error';
-import { Common, Manifest, SDK } from '@rsdoctor/types';
+import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/graph';
-import { debug } from '@rsdoctor/utils/logger';
+import { chalk, debug } from '@rsdoctor/utils/logger';
 import { RsdoctorServer } from '../server';
 import { RsdoctorFakeServer } from '../server/fakeServer';
 import { RsdoctorWebpackSDKOptions } from './types';
 import { SDKCore } from './core';
+import { Algorithm } from '@rsdoctor/utils/common';
 
 export class RsdoctorWebpackSDK<
     T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
@@ -183,7 +186,7 @@ export class RsdoctorWebpackSDK<
 
   reportLoader(data: SDK.LoaderData) {
     data.forEach((item) => {
-      if (this.extraConfig?.mode === 'Brief') {
+      if (this.extraConfig?.mode === 'brief') {
         item.loaders.forEach((_loader) => {
           _loader.input = '';
           _loader.result = '';
@@ -369,6 +372,13 @@ export class RsdoctorWebpackSDK<
 
   public writeStore(options?: SDK.WriteStoreOptionsType) {
     debug(() => `sdk.writeStore has run.`, '[SDK.writeStore][end]');
+    if (this.extraConfig?.mode === 'brief') {
+      const clientHtmlPath = this.extraConfig.innerClientPath
+        ? this.extraConfig.innerClientPath
+        : require.resolve('@rsdoctor/client');
+
+      return this.inlineScriptsAndStyles(clientHtmlPath);
+    }
     return this.saveManifest(this.getStoreData(), options || {});
   }
 
@@ -412,7 +422,7 @@ export class RsdoctorWebpackSDK<
         return ctx._chunkGraph.toData(ctx.type);
       },
       get moduleCodeMap() {
-        if (ctx.extraConfig?.mode === 'Brief') {
+        if (ctx.extraConfig?.mode === 'brief') {
           ctx.type = SDK.ToDataType.NoCode;
         }
         return ctx._moduleGraph.toCodeData(ctx.type);
@@ -478,5 +488,122 @@ export class RsdoctorWebpackSDK<
 
   public onDataReport(): void | Promise<void> {
     this.server.broadcast();
+  }
+
+  public addRsdoctorDataToHTML(
+    storeData: SDK.BuilderStoreData,
+    htmlContent: string,
+  ) {
+    let compressTextScripts = `<script>window.${Constants.WINDOW_RSDOCTOR_TAG}={}</script>`;
+    for (let key of Object.keys(storeData)) {
+      const data = storeData[key];
+
+      const jsonstrFn = () => {
+        try {
+          return JSON.stringify(data);
+        } catch (error) {
+          console.error(error);
+          return '';
+        }
+      };
+      const compressText = Algorithm.compressText(jsonstrFn());
+
+      compressTextScripts = `${compressTextScripts} <script>window.${Constants.WINDOW_RSDOCTOR_TAG}.${key}=${JSON.stringify(compressText)}</script>`;
+    }
+    compressTextScripts = `${compressTextScripts} <script>window.${Constants.WINDOW_RSDOCTOR_TAG}.enableRoutes=${JSON.stringify(this.getClientRoutes())}</script>`;
+
+    htmlContent = htmlContent.replace('<body>', `<body>${compressTextScripts}`);
+
+    return htmlContent;
+  }
+
+  public inlineScriptsAndStyles(htmlFilePath: string) {
+    // Helper function to inline JavaScript files
+    function inlineScripts(basePath: string, scripts: string[]): string {
+      return scripts
+        .map((src) => {
+          const scriptPath = path.resolve(basePath, src);
+          try {
+            const scriptContent = fse.readFileSync(scriptPath, 'utf-8');
+            return `<script>${scriptContent}</script>`;
+          } catch (error) {
+            console.error(`Could not read script at ${scriptPath}:`, error);
+            return '';
+          }
+        })
+        .join('');
+    }
+
+    // Helper function to inline CSS files
+    function inlineCss(basePath: string, cssFiles: string[]): string {
+      return cssFiles
+        .map((href) => {
+          const cssPath = path.resolve(basePath, href);
+          try {
+            const cssContent = fse.readFileSync(cssPath, 'utf-8');
+            return `<style>${cssContent}</style>`;
+          } catch (error) {
+            console.error(`Could not read CSS at ${cssPath}:`, error);
+            return '';
+          }
+        })
+        .join('');
+    }
+
+    // Path to your HTML file
+    let htmlContent = fse.readFileSync(htmlFilePath, 'utf-8');
+
+    // Base path to the resources
+    const basePath = path.dirname(htmlFilePath);
+
+    // Extract scripts and links from the HTML
+    const scriptSrcs = Array.from(
+      htmlContent.matchAll(
+        /<script\s+defer="defer"\s+src=["'](.+?)["']><\/script>/g,
+      ),
+      (m) => m[1],
+    );
+    const cssHrefs = Array.from(
+      htmlContent.matchAll(/<link\s+href=["'](.+?)["']\s+rel="stylesheet">/g),
+      (m) => m[1],
+    );
+
+    // Remove all <script> tags
+    htmlContent = htmlContent.replace(
+      /<script\s+.*?src=["'].*?["']><\/script>/g,
+      '',
+    );
+
+    // Remove all <link rel="stylesheet"> tags
+    htmlContent = htmlContent.replace(
+      /<link\s+.*?rel=["']stylesheet["'].*?>/g,
+      '',
+    );
+
+    // Inline scripts and CSS
+    const inlinedScripts = inlineScripts(basePath, scriptSrcs);
+    const inlinedCss = inlineCss(basePath, cssHrefs);
+
+    const index = htmlContent.indexOf('</body>');
+    htmlContent =
+      htmlContent.slice(0, index) +
+      inlinedCss +
+      inlinedScripts +
+      htmlContent.slice(index);
+    htmlContent = this.addRsdoctorDataToHTML(this.getStoreData(), htmlContent);
+
+    // Output the processed HTML content
+    const outputFilePath = path.resolve(this.outputDir, 'rsdoctor-report.html');
+
+    fse.outputFileSync(outputFilePath, htmlContent, {
+      encoding: 'utf-8',
+      flag: 'w',
+    });
+
+    console.log(
+      `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
+    );
+
+    return outputFilePath;
   }
 }
