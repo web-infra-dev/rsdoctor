@@ -30,7 +30,7 @@ export interface RsdoctorWebpackPluginOptions<
    * - lite: Refers to the lightweight mode,
    *   which is a lightweight analysis report in the normal mode with the source code display removed.
    */
-  mode?: SDK.IMode;
+  mode?: keyof typeof SDK.IMode;
 
   /**
    * configuration of the interceptor for webpack loaders.

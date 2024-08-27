@@ -49,7 +49,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         resolver: features.includes('resolver'),
         bundle: features.includes('bundle'),
         treeShaking: features.includes('treeShaking'),
-        lite: features.includes('lite'),
+        lite: features.includes('lite') || mode === SDK.IMode[SDK.IMode.lite],
       }
     : {
         loader: defaultBoolean(features.loader, true),
@@ -57,7 +57,9 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         resolver: defaultBoolean(features.resolver, false),
         bundle: defaultBoolean(features.bundle, true),
         treeShaking: defaultBoolean(features.treeShaking, false),
-        lite: defaultBoolean(features.lite, false),
+        lite:
+          defaultBoolean(features.lite, false) ||
+          mode === SDK.IMode[SDK.IMode.lite],
       };
 
   const _linter: RsdoctorPluginOptionsNormalized<Rules>['linter'] = {
@@ -75,7 +77,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         ? loaderInterceptorOptions.skipLoaders
         : [],
     },
-    disableClientServer: mode === 'brief' ? true : disableClientServer,
+    disableClientServer,
     sdkInstance,
     /**
      * Data storage is divided into three types:

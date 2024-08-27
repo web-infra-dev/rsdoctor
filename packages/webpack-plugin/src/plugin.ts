@@ -17,10 +17,10 @@ import type {
   RsdoctorWebpackPluginOptions,
 } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
-import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
-import { Constants, Linter } from '@rsdoctor/types';
+import { openBrowser, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
+import { Constants, Linter, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
-import { debug } from '@rsdoctor/utils/logger';
+import { chalk, debug } from '@rsdoctor/utils/logger';
 import { cloneDeep } from 'lodash';
 import path from 'path';
 import type { Compiler, Configuration, RuleSetRule } from 'webpack';
@@ -168,8 +168,19 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     await this._bootstrapTask.then(() => {
       if (!this.options.disableClientServer && !this.browserIsOpened) {
-        this.browserIsOpened = true;
-        this.sdk.server.openClientPage();
+        if (this.options.mode === SDK.IMode[SDK.IMode.brief]) {
+          const outputFilePath = path.resolve(
+            this.sdk.outputDir,
+            'rsdoctor-report.html',
+          );
+          console.log(
+            `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
+          );
+          openBrowser(`file:///${outputFilePath}`);
+        } else {
+          this.browserIsOpened = true;
+          this.sdk.server.openClientPage();
+        }
       }
     });
   };

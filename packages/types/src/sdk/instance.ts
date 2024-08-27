@@ -19,7 +19,11 @@ import { Hooks } from './hooks';
 
 export type WriteStoreOptionsType = {};
 
-export type IMode = 'brief' | 'lite' | 'normal';
+export enum IMode {
+  brief,
+  lite,
+  normal,
+}
 
 export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   readonly server: RsdoctorServerInstance;
@@ -114,9 +118,10 @@ export interface IPrintLog {
 export type SDKOptionsType = {
   disableTOSUpload: boolean;
   innerClientPath?: string;
+  disableClientServer?: boolean;
   noServer?: boolean;
   printLog?: IPrintLog;
-  mode?: IMode;
+  mode?: keyof typeof IMode;
 };
 
 /**

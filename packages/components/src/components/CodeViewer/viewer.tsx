@@ -8,6 +8,7 @@ import type { editor } from 'monaco-editor';
 import { getOriginalLanguage, getSelectionRange } from '../../utils';
 import { DefaultEditorConfig } from './config';
 import { TextDrawer } from '../TextDrawer';
+import { Empty } from 'antd';
 
 interface CodeViewerProps {
   path: string;
@@ -15,9 +16,17 @@ interface CodeViewerProps {
   defaultLine?: number;
   ranges?: SDK.SourceRange[];
   editorConfig?: editor.IStandaloneEditorConstructionOptions;
+  emptyReason?: string;
 }
 
-export const CodeViewer: React.FC<CodeViewerProps> = ({ content, ranges, path, defaultLine, editorConfig = {} }) => {
+export const CodeViewer: React.FC<CodeViewerProps> = ({
+  content,
+  ranges,
+  path,
+  defaultLine,
+  editorConfig = {},
+  emptyReason,
+}) => {
   const handleEditorDidMount: OnMount = (editor, monaco) => {
     if (isNumber(defaultLine)) {
       editor.revealLine(defaultLine);
@@ -36,7 +45,7 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({ content, ranges, path, d
     }
   };
 
-  return (
+  return content ? (
     <Editor
       theme="vs-dark"
       language={getOriginalLanguage(path)}
@@ -46,6 +55,8 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({ content, ranges, path, d
       options={{ ...DefaultEditorConfig, ...editorConfig }}
       onMount={handleEditorDidMount}
     />
+  ) : (
+    <Empty description={emptyReason} />
   );
 };
 

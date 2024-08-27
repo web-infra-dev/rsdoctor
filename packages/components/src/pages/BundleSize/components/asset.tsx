@@ -53,6 +53,13 @@ const tagStyle = {
   margin: 'none',
   marginInlineEnd: 0,
 };
+const EmptyCodeItem = () => (
+  <Empty
+    description={`Do not have the module code.
+  (1) If you use the brief mode, there will not have any codes to show. 
+  (2) If you use lite mode, there will not have source codes.`}
+  />
+);
 
 export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
   data,
@@ -93,7 +100,7 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
               {!source['source'] &&
               !source['parsedSource'] &&
               !source['transformed'] ? (
-                <Empty description="No Code. Rspack builder not support code yet. And if you upload the stats.json to analysis, it's also no code to show." />
+                <EmptyCodeItem />
               ) : (
                 <Card
                   className="code-size-card"
@@ -160,28 +167,33 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
                     </Popover>
                   }
                 >
-                  <Editor
-                    theme="vs-dark"
-                    language={getOriginalLanguage(path)}
-                    // eslint-disable-next-line financial/no-float-calculation
-                    height={window.innerHeight / 1.5}
-                    value={
-                      tab
-                        ? source[tab]
-                        : source['parsedSource']
-                          ? source['parsedSource']
-                          : source['source']
-                    }
-                    options={{
-                      readOnly: true,
-                      domReadOnly: true,
-                      fontSize: 14,
-                      wordWrap: 'bounded',
-                      minimap: {
-                        enabled: false,
-                      },
-                    }}
-                  />
+                  {source['parsedSource'] ||
+                  source['source'] ||
+                  source['transformed'] ? (
+                    <Editor
+                      theme="vs-dark"
+                      language={getOriginalLanguage(path)}
+                      height={window.innerHeight / 1.5}
+                      value={
+                        tab
+                          ? source[tab]
+                          : source['parsedSource']
+                            ? source['parsedSource']
+                            : source['source']
+                      }
+                      options={{
+                        readOnly: true,
+                        domReadOnly: true,
+                        fontSize: 14,
+                        wordWrap: 'bounded',
+                        minimap: {
+                          enabled: false,
+                        },
+                      }}
+                    />
+                  ) : (
+                    <EmptyCodeItem />
+                  )}
                 </Card>
               )}
             </>
