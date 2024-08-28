@@ -23,7 +23,7 @@ export class Asset implements SDK.AssetInstance {
       size: this.size,
       chunks: this.chunks?.map((ck) => ck.id),
       content:
-        types === SDK.ToDataType.LiteAndNoAsset ||
+        types === SDK.ToDataType.NoSourceAndAssets ||
         types === SDK.ToDataType.NoCode
           ? ''
           : this.content,

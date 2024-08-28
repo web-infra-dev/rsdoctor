@@ -9,6 +9,7 @@ import {
 import {
   RsdoctorWebpackPluginOptions,
   RsdoctorPluginOptionsNormalized,
+  IReportCodeType,
 } from '@/types';
 
 function defaultBoolean(v: unknown, dft: boolean): boolean {
@@ -24,7 +25,13 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     loaderInterceptorOptions = {},
     disableClientServer = false,
     sdkInstance,
-    reportCodeType = { noModuleSource: false, noAssetsAndModuleSource: false },
+    reportCodeType = {
+      noModuleSource: false,
+      noAssetsAndModuleSource: false,
+      noCode: false,
+      sourceCode: true,
+      assetsCode: true,
+    },
     disableTOSUpload = false,
     innerClientPath = '',
     supports = { parseBundle: true, banner: false, generateTileGraph: true },
@@ -86,15 +93,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
      * The third type: reportCodeType.noAssetsAndModuleSource means there is no module source code nor the packaged product code.
      *
      *  */
-    reportCodeType: reportCodeType
-      ? reportCodeType.noModuleSource
-        ? SDK.ToDataType.Lite
-        : reportCodeType.noAssetsAndModuleSource
-          ? SDK.ToDataType.LiteAndNoAsset
-          : SDK.ToDataType.Normal
-      : _features.lite
-        ? SDK.ToDataType.Lite
-        : SDK.ToDataType.Normal,
+    reportCodeType: normalizeReportType(reportCodeType, mode),
     disableTOSUpload,
     innerClientPath,
     supports,
@@ -160,3 +159,31 @@ export function makeRulesSerializable(
     }
   });
 }
+
+export const normalizeReportType = (
+  reportCodeType: IReportCodeType,
+  mode: keyof typeof SDK.IMode,
+): SDK.ToDataType => {
+  let globalReportCodeType = SDK.ToDataType.Normal;
+
+  switch (mode) {
+    case SDK.IMode[SDK.IMode.brief]:
+      globalReportCodeType = SDK.ToDataType.NoCode;
+      break;
+    case SDK.IMode[SDK.IMode.lite]:
+      if (reportCodeType.noAssetsAndModuleSource) {
+        globalReportCodeType = SDK.ToDataType.NoSourceAndAssets;
+      } else {
+        globalReportCodeType = SDK.ToDataType.NoSource;
+      }
+      break;
+    default: {
+      if (reportCodeType.noCode) {
+        globalReportCodeType = SDK.ToDataType.NoCode;
+      } else {
+        globalReportCodeType = SDK.ToDataType.Normal;
+      }
+    }
+  }
+  return globalReportCodeType;
+};
