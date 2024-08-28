@@ -64,6 +64,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
           disableTOSUpload: this.options.disableTOSUpload,
           innerClientPath: this.options.innerClientPath,
           printLog: this.options.printLog,
+          mode: this.options.mode ? this.options.mode : undefined,
         },
       });
     this.outsideInstance = Boolean(this.options.sdkInstance);
@@ -168,16 +169,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     await this._bootstrapTask.then(() => {
       if (!this.options.disableClientServer && !this.browserIsOpened) {
-        if (this.options.mode === SDK.IMode[SDK.IMode.brief]) {
-          const outputFilePath = path.resolve(
-            this.sdk.outputDir,
-            'rsdoctor-report.html',
-          );
-          console.log(
-            `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
-          );
-          openBrowser(`file:///${outputFilePath}`);
-        } else {
+        if (this.options.mode !== SDK.IMode[SDK.IMode.brief]) {
           this.browserIsOpened = true;
           this.sdk.server.openClientPage();
         }
@@ -205,6 +197,18 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
       if (this.options.disableClientServer) {
         await this.sdk.dispose();
         debug(Process.getMemoryUsageMessage, '[After SDK Dispose]');
+      } else if (
+        this.options.mode === SDK.IMode[SDK.IMode.brief] &&
+        !this.options.disableClientServer
+      ) {
+        const outputFilePath = path.resolve(
+          this.sdk.outputDir,
+          'rsdoctor-report.html',
+        );
+        console.log(
+          `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
+        );
+        openBrowser(`file:///${outputFilePath}`);
       }
     } catch (e) {}
   };

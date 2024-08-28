@@ -10,6 +10,12 @@ import { rules } from '@/rules/rules';
 
 type InternalRules = Common.UnionToTuple<(typeof rules)[number]>;
 
+export type IReportCodeType = {
+  noModuleSource?: boolean;
+  noAssetsAndModuleSource?: boolean;
+  noCode?: boolean;
+};
+
 export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
@@ -54,9 +60,7 @@ export interface RsdoctorWebpackPluginOptions<
   /**
    * control the Rsdoctor reporter codes records.
    */
-  reportCodeType?:
-    | { noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }
-    | undefined;
+  reportCodeType?: IReportCodeType | undefined;
 
   /**
    * Whether to turn on some characteristic analysis capabilities, such as: the support for the BannerPlugin.

@@ -87,10 +87,10 @@ export enum ToDataType {
   NoCode,
   /** Normal mode */
   Normal,
-  /** Lite mode */
-  Lite,
+  /** Lite mode: no source code */
+  NoSource,
   /** Lite & No Assets Code mode */
-  LiteAndNoAsset,
+  NoSourceAndAssets,
   /** All Data, include module transformed data. */
   All,
 }

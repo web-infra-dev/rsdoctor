@@ -188,8 +188,8 @@ export class Module implements SDK.ModuleInstance {
       };
     }
     if (
-      type === SDK.ToDataType.Lite ||
-      type === SDK.ToDataType.LiteAndNoAsset
+      type === SDK.ToDataType.NoSourceAndAssets ||
+      type === SDK.ToDataType.NoSource
     ) {
       return {
         source: '',

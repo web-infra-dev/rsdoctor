@@ -11,6 +11,7 @@ import { RsdoctorFakeServer } from '../server/fakeServer';
 import { RsdoctorWebpackSDKOptions } from './types';
 import { SDKCore } from './core';
 import { Algorithm } from '@rsdoctor/utils/common';
+import { isNumber } from 'lodash';
 
 export * from '../utils/openBrowser';
 
@@ -60,7 +61,7 @@ export class RsdoctorWebpackSDK<
           innerClientPath: options.config?.innerClientPath || '',
           printServerUrl: options.config?.printLog?.serverUrls,
         });
-    this.type = options.type || SDK.ToDataType.Normal;
+    this.type = isNumber(options.type) ? options.type : SDK.ToDataType.Normal;
     this.extraConfig = options.config;
   }
 
@@ -424,9 +425,6 @@ export class RsdoctorWebpackSDK<
         return ctx._chunkGraph.toData(ctx.type);
       },
       get moduleCodeMap() {
-        if (ctx.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
-          ctx.type = SDK.ToDataType.NoCode;
-        }
         return ctx._moduleGraph.toCodeData(ctx.type);
       },
       get plugin() {

@@ -871,9 +871,6 @@ importers:
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
-      '@rsdoctor/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
@@ -908,6 +905,9 @@ importers:
         specifier: 2.2.1
         version: 2.2.1
     devDependencies:
+      '@rsdoctor/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@types/body-parser':
         specifier: 1.19.5
         version: 1.19.5
