@@ -100,7 +100,7 @@ async function rspackCompile(
   return res;
 }
 
-test('rspack banner plugin', async () => {
+test('rspack brief mode', async () => {
   const tapName = 'XXX';
   await rspackCompile(tapName, compileByRspack);
 
