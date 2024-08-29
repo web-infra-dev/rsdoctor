@@ -1,6 +1,7 @@
 import { SDK } from '@rsdoctor/types';
 import type { Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
+import { debug } from '@rsdoctor/utils/logger';
 
 export class InternalProgressPlugin<
   T extends Plugin.BaseCompilerType<'webpack'>,
@@ -22,13 +23,17 @@ export class InternalProgressPlugin<
           currentProgress.message = msg || '';
 
           const api = SDK.ServerAPI.APIExtends.GetCompileProgess;
-          sdk.server.sendAPIDataToClient(api, {
-            req: {
-              api,
-              body: undefined,
-            },
-            res: currentProgress,
-          });
+          try {
+            sdk.server.sendAPIDataToClient(api, {
+              req: {
+                api,
+                body: undefined,
+              },
+              res: currentProgress,
+            });
+          } catch (e: any) {
+            debug(() => e);
+          }
         },
       });
       progress.apply(compiler);
