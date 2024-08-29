@@ -42,7 +42,10 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     this._name = name;
     this.root = root;
     this.pid = process.pid;
-    this._outputDir = path.join(this.root, Constants.RsdoctorOutputFolder);
+    this._outputDir = path.join(
+      this.outputDir || this.root,
+      Constants.RsdoctorOutputFolder,
+    );
   }
 
   get outputDir() {

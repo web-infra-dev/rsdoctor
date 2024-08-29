@@ -65,6 +65,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
           innerClientPath: this.options.innerClientPath,
           printLog: this.options.printLog,
           mode: this.options.mode ? this.options.mode : undefined,
+          brief: this.options.brief,
         },
       });
     this.outsideInstance = Boolean(this.options.sdkInstance);
@@ -156,7 +157,10 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     });
 
     this.sdk.setOutputDir(
-      path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
+      path.resolve(
+        this.options.reportDir || compiler.outputPath,
+        `./${Constants.RsdoctorOutputFolder}`,
+      ),
     );
 
     if (configuration.name) {
@@ -203,7 +207,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
       ) {
         const outputFilePath = path.resolve(
           this.sdk.outputDir,
-          'rsdoctor-report.html',
+          this.options.brief.reportHtmlName || 'rsdoctor-report.html',
         );
         console.log(
           `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
