@@ -16,6 +16,8 @@ export type IReportCodeType = {
   noCode?: boolean;
 };
 
+export type IOutput = {};
+
 export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
@@ -57,15 +59,37 @@ export interface RsdoctorWebpackPluginOptions<
    * sdk instance of outside
    */
   sdkInstance?: RsdoctorWebpackSDK;
-  /**
-   * control the Rsdoctor reporter codes records.
-   */
-  reportCodeType?: IReportCodeType | undefined;
 
   /**
    * Whether to turn on some characteristic analysis capabilities, such as: the support for the BannerPlugin.
    */
   supports?: ISupport;
+
+  /**
+   * The directory where the report files will be output.
+   */
+  reportDir?: string;
+
+  /**
+   * Control the Rsdoctor reporter codes records.
+   */
+  reportCodeType?: IReportCodeType | undefined;
+
+  /**
+   * The port of the Rsdoctor server.
+   */
+  port?: number;
+
+  /**
+   * Options to control the log printing.
+   */
+  printLog?: SDK.IPrintLog;
+
+  /**
+   * Options to control brief mode reports.
+   */
+  brief?: SDK.BriefConfig;
+
   /**
    * control the Rsdoctor upload data to TOS, used by inner-rsdoctor.
    * @default false
@@ -77,16 +101,6 @@ export interface RsdoctorWebpackPluginOptions<
    * @default false
    */
   innerClientPath?: string;
-
-  /**
-   * The port of the Rsdoctor server.
-   */
-  port?: number;
-
-  /**
-   * Options to control the log printing.
-   */
-  printLog?: SDK.IPrintLog;
 }
 
 export interface RsdoctorMultiplePluginOptions<
@@ -110,7 +124,12 @@ export interface RsdoctorPluginOptionsNormalized<
 > extends Common.DeepRequired<
     Omit<
       RsdoctorWebpackPluginOptions<Rules>,
-      'sdkInstance' | 'linter' | 'reportCodeType' | 'supports' | 'port'
+      | 'sdkInstance'
+      | 'linter'
+      | 'reportCodeType'
+      | 'supports'
+      | 'port'
+      | 'brief'
     >
   > {
   features: Common.DeepRequired<Plugin.RsdoctorWebpackPluginFeatures>;
@@ -119,6 +138,7 @@ export interface RsdoctorPluginOptionsNormalized<
   port?: number;
   reportCodeType: SDK.ToDataType;
   supports: ISupport;
+  brief: SDK.BriefConfig;
 }
 
 export interface BasePluginInstance<T extends Plugin.BaseCompiler> {

@@ -380,6 +380,9 @@ export class RsdoctorWebpackSDK<
         ? this.extraConfig.innerClientPath
         : require.resolve('@rsdoctor/client');
 
+      if (this.extraConfig.brief?.writeDataJson) {
+        this.saveManifest(this.getStoreData(), options || {});
+      }
       return this.inlineScriptsAndStyles(clientHtmlPath);
     }
     return this.saveManifest(this.getStoreData(), options || {});
@@ -593,7 +596,10 @@ export class RsdoctorWebpackSDK<
     htmlContent = this.addRsdoctorDataToHTML(this.getStoreData(), htmlContent);
 
     // Output the processed HTML content
-    const outputFilePath = path.resolve(this.outputDir, 'rsdoctor-report.html');
+    const outputFilePath = path.resolve(
+      this.outputDir,
+      this.extraConfig?.brief?.reportHtmlName || 'rsdoctor-report.html',
+    );
 
     fse.outputFileSync(outputFilePath, htmlContent, {
       encoding: 'utf-8',

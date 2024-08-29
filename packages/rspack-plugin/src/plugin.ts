@@ -80,6 +80,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
           innerClientPath: this.options.innerClientPath,
           printLog: this.options.printLog,
           mode: this.options.mode ? this.options.mode : undefined,
+          brief: this.options.brief,
         },
       });
     this.outsideInstance = Boolean(this.options.sdkInstance);
@@ -171,21 +172,24 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     if (this.outsideInstance && 'parent' in this.sdk) {
       this.sdk.parent.master.setOutputDir(
         path.resolve(
-          compiler.outputPath,
+          this.options.reportDir || compiler.outputPath,
           `./${Constants.RsdoctorOutputFolder}`,
         ),
       );
     }
 
     this.sdk.setOutputDir(
-      path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
+      path.resolve(
+        this.options.reportDir || compiler.outputPath,
+        `./${Constants.RsdoctorOutputFolder}`,
+      ),
     );
     await this.sdk.writeStore();
     if (!this.options.disableClientServer) {
       if (this.options.mode === SDK.IMode[SDK.IMode.brief]) {
         const outputFilePath = path.resolve(
           this.sdk.outputDir,
-          'rsdoctor-report.html',
+          this.options.brief.reportHtmlName || 'rsdoctor-report.html',
         );
 
         console.log(
@@ -227,7 +231,10 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     });
 
     this.sdk.setOutputDir(
-      path.resolve(compiler.outputPath, `./${Constants.RsdoctorOutputFolder}`),
+      path.resolve(
+        this.options.reportDir || compiler.outputPath,
+        `./${Constants.RsdoctorOutputFolder}`,
+      ),
     );
   }
 }

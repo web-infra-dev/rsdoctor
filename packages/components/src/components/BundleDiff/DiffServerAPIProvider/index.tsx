@@ -37,7 +37,6 @@ export const DiffServerAPIProvider = <
             }
           >
             {(current) => {
-              // TODO:: need check
               return current ? children(baseline, current) : <Empty />;
             }}
           </ServerAPIProvider>

@@ -38,6 +38,12 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     port,
     printLog = { serverUrls: true },
     mode = 'normal',
+    brief = {
+      reportHtmlDir: undefined,
+      reportHtmlName: undefined,
+      writeDataJson: false,
+    },
+    reportDir = '',
   } = config;
 
   assert(linter && typeof linter === 'object');
@@ -100,6 +106,8 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     port,
     printLog,
     mode,
+    brief,
+    reportDir,
   };
 
   return res;

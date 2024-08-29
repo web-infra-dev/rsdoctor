@@ -115,6 +115,11 @@ export interface IPrintLog {
   serverUrls: boolean;
 }
 
+export interface BriefConfig {
+  reportHtmlName?: string | undefined;
+  writeDataJson: boolean;
+}
+
 export type SDKOptionsType = {
   disableTOSUpload: boolean;
   innerClientPath?: string;
@@ -122,6 +127,7 @@ export type SDKOptionsType = {
   noServer?: boolean;
   printLog?: IPrintLog;
   mode?: keyof typeof IMode;
+  brief?: BriefConfig;
 };
 
 /**
