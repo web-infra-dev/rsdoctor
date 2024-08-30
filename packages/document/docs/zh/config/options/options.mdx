@@ -95,6 +95,16 @@ new RsdoctorWebpackPlugin({
 
 #### features values
 
+features 属性是用于分析功能开关的，具体的功能项如下：
+
+- **loader**：Loaders 耗时及代码编译变化分析，默认开启。
+- **plugins**：Plugins 调用以及耗时分析，默认开启。
+- **bundle**：构建产物分析，默认开启。
+- **resolver**：resolver 分析，默认关闭。
+- **lite**: **(废弃，使用 [mode.lite](#mode))** lite 模式。lite 模式和普通模式的区别就是不再展示源码信息，只展示打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
+
+所以，**默认配置是开启了 Bundle 分析能力、 Loader he Plugin 构建时分析**。没有开启 Resolver 分析能力， Rspack 暂不支持 Resolver 分析能力。
+
 :::tip
 **如果出现了 out of memory 的报错，可以尝试：**
 
@@ -105,16 +115,6 @@ new RsdoctorWebpackPlugin({
 - 区别：`lite` 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。
 
 :::
-
-features 属性是用于分析功能开关的，具体的功能项如下：
-
-- **loader**：Loaders 耗时及代码编译变化分析，默认开启。
-- **plugins**：Plugins 调用以及耗时分析，默认开启。
-- **bundle**：构建产物分析，默认开启。
-- **resolver**：resolver 分析，默认关闭。
-- **lite**: lite 模式。lite 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
-
-所以，**默认配置是开启了 Bundle 分析能力、 Loader he Plugin 构建时分析**。没有开启 Resolver 分析能力， Rspack 暂不支持 Resolver 分析能力。
 
 #### features types
 
@@ -137,6 +137,66 @@ import FeaturesRspack from '@zh/shared/features-rspack.md';
 
 <FeaturesRspack />
 
+### mode
+
+- **Type:** `normal | brief | lite`
+- **Optional:** `true`
+- **Default:** `normal`
+
+选择使用的 Rsdoctor 构建报告模式，有以下几种：
+
+- normal：普通模式，会在构建产物目录生成 '.rsdoctor' 文件夹，里面会有不同的数据文件，报告页面中会有代码展示。输出目录可配置：[reportDir](#reportdir).
+- brief: 简报模式，会在构建产物目录的 '.rsdoctor' 文件夹中生成一个 HTML 报告文件，可通过在浏览器中打开这个 HTML 查看报告.brief 模式还有更多配置项，查看：[brief](#brief)
+- lite: 轻量模式，这个模式是在普通模式基础下不展示源码和产物代码的模式，只展示打包后的代码信息。
+
+### reportDir
+
+- **Type:** string
+- **Optional:** `true`
+- **Default:** undefined
+
+Rsdoctor 报告输出目录，默认是构建产物输出目录。
+
+### brief
+
+- **Type:** [BriefType](#brieftype)
+- **Optional:** `true`
+- **Default:** undefined
+
+Brief 模式更多配置，如下：
+
+- **reportHtmlName:** 配置 Brief 的 HTML 报告的名称，默认 `report-rsdoctor.html`。
+- **writeDataJson:** 默认 Brief 模式下将分析数据注入到 HTML 文件中，所以不会再产生构建分析数据。如果想要而外本地生成数据则需要配置 `writeDataJson: true`。
+
+#### briefType
+
+```ts
+interface BriefConfig {
+  reportHtmlName?: string | undefined;
+  writeDataJson: boolean;
+}
+```
+
+### reportCodeType
+
+- Type: `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
+- Optional: true
+- Default: undefined
+- Description
+
+  - 选择输出的分析数据：
+    - 默认是所有完整数据；
+    - noModuleSource: true 是输出除了 module 代码之外的数据，Module 代码即 Bundle 内一个一个文件的打包模块代码。
+    - noAssetsAndModuleSource: true 是输出除了 module 代码和 Assets 产物代码之外的数据。
+
+- Example
+
+```js
+new RsdoctorRspackPlugin({
+  reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
+}),
+```
+
 ### supports
 
 - **Type:** [Supports Types](#supports-types)
@@ -145,7 +205,7 @@ import FeaturesRspack from '@zh/shared/features-rspack.md';
 
 该选项是配置 Rsdoctor 是否开启某些细节特性分析能力支持的，例如：是否开启对 BannerPlugin 的兼容能力。
 
-#### Supports Types
+#### supportsTypes
 
 ```ts
 type ISupport = {
@@ -189,14 +249,14 @@ chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
   <img
     src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-size.jpeg"
     height="300px"
-    width="400px"
+    width="300px"
     style={{ margin: 'auto' }}
   />
 
   <img
     src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-code.png"
     height="300px"
-    width="500px"
+    width="400px"
     style={{ margin: 'auto' }}
   />
 </div>
