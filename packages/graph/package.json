@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/graph",
-  "version": "0.3.11",
+  "version": "0.4.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
