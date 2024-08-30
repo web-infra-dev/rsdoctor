@@ -23,6 +23,17 @@ Whether to automatically open the Rsdoctor report page. If you do not need to vi
 
 #### features values
 
+The `features` attribute is used to analyze the function switches, and the specific functional items are as follows:
+
+- **loader**: Analysis of Loader time consumption and code compilation changes, enabled by default.
+- **plugins**: Analysis of Plugins calls and time consumption, enabled by default.
+- **bundle**: Analysis of build artifacts, enabled by default.
+- **resolver**: resolver analysis, disabled by default.
+- **lite**: [**depracated, please use [mode.lite](#mode)**]
+  lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
+
+Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.
+
 :::tip
 
 **If an "out of memory" error occurs, you can try the following:**
@@ -34,16 +45,6 @@ Whether to automatically open the Rsdoctor report page. If you do not need to vi
 - Difference: The difference between the "lite" mode and the normal mode is that source code information is no longer cached, only packaged code information is cached. Thus, the code analyzed on the page will also only be packaged.
 
 :::
-
-The `features` attribute is used to analyze the function switches, and the specific functional items are as follows:
-
-- **loader**: Analysis of Loader time consumption and code compilation changes, enabled by default.
-- **plugins**: Analysis of Plugins calls and time consumption, enabled by default.
-- **bundle**: Analysis of build artifacts, enabled by default.
-- **resolver**: resolver analysis, disabled by default.
-- **lite**: lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
-
-Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.
 
 #### features types
 

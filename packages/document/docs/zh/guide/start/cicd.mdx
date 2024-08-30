@@ -1,0 +1,32 @@
+# CI/CD 使用教程
+
+CI/CD 中，往往想要上报历史报告到 CDN 作为历史记录，因为普通模式下无法便捷的做到即开即用，所以支持了 **Brief** 模式。
+
+## Brief 模式
+
+Brief 模式中，会将数据报告整合到一个 HTML 页面中，方便用户在 CI/CD 及其他方试下使用简报来查看历史构建数据。
+
+### 开启 Brief 模式
+
+通过配置 Rsdoctor 插件的 `mode.brief` 选项，即可开启 Brief 模式。Brief 模式会在构建后生成一份报告到构建产物目录中： `[outputDir]/.rsdoctor/report-rsdoctor.html`，通过浏览器打开 HTML 文件，
+即可看到构建分析简报。
+
+- Brief 模式下是不展示任何的代码数据的，为了防止数据过大导致页面崩溃。
+- 报告输出的目录和文件名可配置，可参考：[Options](/config/options/options#brief)。
+- 更多配置可参考：[Options](/config/options/options#brief)。
+
+```ts title="rspack.config.js"
+const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+
+module.exports = {
+  // ...
+  plugins: [
+    // 仅在 RSDOCTOR 为 true 时注册插件，因为插件会增加构建耗时
+    process.env.RSDOCTOR &&
+      new RsdoctorRspackPlugin({
+        // 其他插件选项
+        mode: 'brief',
+      }),
+  ].filter(Boolean),
+};
+```

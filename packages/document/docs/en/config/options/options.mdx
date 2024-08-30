@@ -91,11 +91,22 @@ Whether to automatically open the Rsdoctor report page. If you do not need to vi
 
 #### features values
 
+The `features` attribute is used to analyze the function switches, and the specific functional items are as follows:
+
+- **loader**: Analysis of Loader time consumption and code compilation changes, enabled by default.
+- **plugins**: Analysis of Plugins calls and time consumption, enabled by default.
+- **bundle**: Analysis of build bundles, enabled by default.
+- **resolver**: resolver analysis, disabled by default.
+- **lite**: [**depracated, please use [mode.lite](#mode)**]
+  lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
+
+Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.
+
 :::tip
 
 **If an "out of memory" error occurs, you can try the following:**
 
-1. Open the **lite** mode。
+1. Open the **lite** mode.[mode.lite](#mode)
 2. Increase the node memory limit, for example: NODE_OPTIONS=--max-old-space-size=8096.
 
 - Reason: During the build process, source code information is cached, which exceeds memory. Therefore, enabling the **"lite" mode** can help alleviate the problem.
@@ -103,20 +114,66 @@ Whether to automatically open the Rsdoctor report page. If you do not need to vi
 
 :::
 
-The `features` attribute is used to analyze the function switches, and the specific functional items are as follows:
-
-- **loader**: Analysis of Loader time consumption and code compilation changes, enabled by default.
-- **plugins**: Analysis of Plugins calls and time consumption, enabled by default.
-- **bundle**: Analysis of build artifacts, enabled by default.
-- **resolver**: resolver analysis, disabled by default.
-- **lite**: lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
-
-Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.
-
 #### features types
 
 - if the `features` is set as an `Array`, it will **open** the features which you define in this array **only**.
 - if the `features` is set as an `Object`, it will **close** the features which you set the value is `false`.
+
+#### RsdoctorWebpackPluginFeatures
+
+`features` type：
+
+import Features from '@en/shared/features.md';
+
+<Features />
+
+#### RsdoctorRspackPluginFeatures
+
+`features` type：
+
+import FeaturesRspack from '@en/shared/features-rspack.md';
+
+<FeaturesRspack />
+
+### mode
+
+- **Type:** `normal | brief | lite`
+- **Optional:** `true`
+- **Default:** `normal`
+
+Choose the Rsdoctor build report mode to use, which includes the following options:
+
+- normal: Normal mode, which generates a '.rsdoctor' folder in the build output directory. It contains different data files and the report page displays code. The output directory can be configured using [reportDir](#reportdir).
+- brief: Brief mode, which generates an HTML report file in the `.rsdoctor` folder of the build output directory. You can open this HTML file in a browser to view the report. Brief mode also has additional configuration options, see [brief](#brief).
+- lite: Lite mode, which is a mode based on normal mode that does not display source code and bundles codes. It only displays information about the built codes.
+
+### reportDir
+
+- **Type:** string
+- **Optional:** `true`
+- **Default:** undefined
+
+The output directory for Rsdoctor reports. By default, it is the build output directory.
+
+### brief
+
+- **Type:** [BriefType](#brieftype)
+- **Optional:** `true`
+- **Default:** undefined
+
+More configurations for Brief mode are as follows:
+
+- **reportHtmlName:** Configures the name of the HTML report for Brief mode. The default value is `report-rsdoctor.html`.
+- **writeDataJson:** By default, in Brief mode, the analysis data is injected into the HTML file, so no additional build analysis data is generated. If you want to generate additional local data, you need to configure `writeDataJson: true`.
+
+#### briefType
+
+```ts
+interface BriefConfig {
+  reportHtmlName?: string | undefined;
+  writeDataJson: boolean;
+}
+```
 
 ### reportCodeType
 
@@ -127,7 +184,7 @@ Therefore, **the default configuration enables bundle analysis capabilities and 
 
   - Select the output analysis data:
 
-    - undefined is all complete data;
+    - default is all complete data;
 
     - noModuleSource: true is the output of data other than module code; Module code is the packaged module code of a file disassembled in the Bundle.
 
@@ -136,30 +193,9 @@ Therefore, **the default configuration enables bundle analysis capabilities and 
 - Example
 
 ```js
-new WebDoctorWebpackPlugin({
-        disableClientServer: false, // It is recommended to disable the server capability in the CI environment, otherwise it will block the pipeline process. You can check the CI environment using `process.env.CI_ACTOR`.
-        features: ['loader', 'bundle', 'plugins'],
-        reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
-      }),
-```
-
-### disableTOSUpload
-
-- Type: boolean
-- Optional: true
-- Default: false
-- Description
-
-  Turn tos upload on or off. True is to turn off tos upload, and false is tos upload on.
-
-- Example
-
-```js
-new WebDoctorWebpackPlugin({
-        disableClientServer: false,  // It is recommended to disable the server capability in the CI environment, otherwise it will block the pipeline process. You can check the CI environment using `process.env.CI_ACTOR`.
-        features: ['loader', 'bundle', 'plugins'],
-        disableTOSUpload: true,
-      }),
+new RsdoctorRspackPlugin({
+  reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
+}),
 ```
 
 ### supports
@@ -215,14 +251,14 @@ Disabling the Parse Bundle capability will only affect the visibility of the Bun
   <img
     src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-size.jpeg"
     height="300px"
-    width="400px"
+    width="300px"
     style={{ margin: 'auto' }}
   />
 
   <img
     src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundled-code.png"
     height="300px"
-    width="500px"
+    width="400px"
     style={{ margin: 'auto' }}
   />
 </div>
