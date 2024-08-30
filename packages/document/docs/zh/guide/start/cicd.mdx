@@ -1,3 +1,5 @@
+import { Badge } from '@theme';
+
 # CI/CD 使用教程
 
 CI/CD 中，往往想要上报历史报告到 CDN 作为历史记录，因为普通模式下无法便捷的做到即开即用，所以支持了 **Brief** 模式。
@@ -8,7 +10,9 @@ Brief 模式中，会将数据报告整合到一个 HTML 页面中，方便用�
 
 ### 开启 Brief 模式
 
-通过配置 Rsdoctor 插件的 `mode.brief` 选项，即可开启 Brief 模式。Brief 模式会在构建后生成一份报告到构建产物目录中： `[outputDir]/.rsdoctor/report-rsdoctor.html`，通过浏览器打开 HTML 文件，
+<Badge text="Version: 0.4.0" type="warning" />
+
+通过配置 Rsdoctor 插件的 [mode.brief](/config/options/options#mode) 选项，即可开启 Brief 模式。Brief 模式会在构建后生成一份报告到构建产物目录中： `[outputDir]/.rsdoctor/report-rsdoctor.html`，通过浏览器打开 HTML 文件，
 即可看到构建分析简报。
 
 - Brief 模式下是不展示任何的代码数据的，为了防止数据过大导致页面崩溃。
@@ -30,3 +34,11 @@ module.exports = {
   ].filter(Boolean),
 };
 ```
+
+### Brief 模式和 Lite 模式的区别
+
+目前 Rsdoctor 有几种报告模式：`Normal、Brief 和 Lite`。
+
+import ModeIntro from '@zh/shared/mode-intro.md';
+
+<ModeIntro />

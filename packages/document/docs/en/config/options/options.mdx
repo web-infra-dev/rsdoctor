@@ -1,3 +1,5 @@
+import { Badge } from '@theme';
+
 # Options
 
 ## RsdoctorRspackPlugin
@@ -137,17 +139,21 @@ import FeaturesRspack from '@en/shared/features-rspack.md';
 
 ### mode
 
+<Badge text="Version: 0.4.0" type="warning" />
+
 - **Type:** `normal | brief | lite`
 - **Optional:** `true`
 - **Default:** `normal`
 
 Choose the Rsdoctor build report mode to use, which includes the following options:
 
-- normal: Normal mode, which generates a '.rsdoctor' folder in the build output directory. It contains different data files and the report page displays code. The output directory can be configured using [reportDir](#reportdir).
-- brief: Brief mode, which generates an HTML report file in the `.rsdoctor` folder of the build output directory. You can open this HTML file in a browser to view the report. Brief mode also has additional configuration options, see [brief](#brief).
-- lite: Lite mode, which is a mode based on normal mode that does not display source code and bundles codes. It only displays information about the built codes.
+import ModeIntro from '@en/shared/mode-intro.md';
+
+<ModeIntro />
 
 ### reportDir
+
+<Badge text="Version: 0.4.0" type="warning" />
 
 - **Type:** string
 - **Optional:** `true`
@@ -156,6 +162,8 @@ Choose the Rsdoctor build report mode to use, which includes the following optio
 The output directory for Rsdoctor reports. By default, it is the build output directory.
 
 ### brief
+
+<Badge text="Version: 0.4.0" type="warning" />
 
 - **Type:** [BriefType](#brieftype)
 - **Optional:** `true`

@@ -1,3 +1,5 @@
+import { Badge } from '@theme';
+
 # Options 配置
 
 ## RsdoctorRspackPlugin 插件
@@ -139,17 +141,21 @@ import FeaturesRspack from '@zh/shared/features-rspack.md';
 
 ### mode
 
+<Badge text="Version: 0.4.0" type="warning" />
+
 - **Type:** `normal | brief | lite`
 - **Optional:** `true`
 - **Default:** `normal`
 
 选择使用的 Rsdoctor 构建报告模式，有以下几种：
 
-- normal：普通模式，会在构建产物目录生成 '.rsdoctor' 文件夹，里面会有不同的数据文件，报告页面中会有代码展示。输出目录可配置：[reportDir](#reportdir).
-- brief: 简报模式，会在构建产物目录的 '.rsdoctor' 文件夹中生成一个 HTML 报告文件，可通过在浏览器中打开这个 HTML 查看报告.brief 模式还有更多配置项，查看：[brief](#brief)
-- lite: 轻量模式，这个模式是在普通模式基础下不展示源码和产物代码的模式，只展示打包后的代码信息。
+import ModeIntro from '@zh/shared/mode-intro.md';
+
+<ModeIntro />
 
 ### reportDir
+
+<Badge text="Version: 0.4.0" type="warning" />
 
 - **Type:** string
 - **Optional:** `true`
@@ -158,6 +164,8 @@ import FeaturesRspack from '@zh/shared/features-rspack.md';
 Rsdoctor 报告输出目录，默认是构建产物输出目录。
 
 ### brief
+
+<Badge text="Version: 0.4.0" type="warning" />
 
 - **Type:** [BriefType](#brieftype)
 - **Optional:** `true`

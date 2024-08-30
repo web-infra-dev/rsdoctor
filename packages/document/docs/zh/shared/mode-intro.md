@@ -1,0 +1,3 @@
+- **normal：** 普通模式，会在构建产物目录生成 `.rsdoctor` 文件夹，里面会有不同的数据文件，报告页面中会有代码展示。输出目录可配置：[reportDir](/config/options/options#reportdir).
+- **brief：** 简报模式，会在构建产物目录的 `.rsdoctor` 文件夹中生成一个 HTML 报告文件，所有的构建分析数据会整合注入到这个 HTML 文件中，可通过在浏览器中打开这个 HTML 查看报告.brief 模式还有更多配置项，查看：[brief](/config/options/options#brief)
+- **lite：** 轻量模式，这个模式是在普通模式基础下不展示源码和产物代码的模式，只展示打包后的代码信息。
