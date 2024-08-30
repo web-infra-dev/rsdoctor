@@ -27,6 +27,16 @@
 
 #### features values
 
+features 属性是用于分析功能开关的，具体的功能项如下：
+
+- **loader**：Loaders 耗时及代码编译变化分析，默认开启。
+- **plugins**：Plugins 调用以及耗时分析，默认开启。
+- **bundle**：构建产物分析，默认开启。
+- **resolver**：resolver 分析，默认关闭。
+- **lite**: **(废弃，参考：[mode.lite]())** lite 模式。lite 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
+
+所以，**默认配置是开启了 Bundle 分析能力、 Loader he Plugin 构建时分析**。没有开启 Resolver 分析能力， Rspack 暂不支持 Resolver 分析能力。
+
 :::tip
 **如果出现了 out of memory 的报错，可以尝试：**
 
@@ -37,16 +47,6 @@
 - 区别：`lite` 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。
 
 :::
-
-features 属性是用于分析功能开关的，具体的功能项如下：
-
-- **loader**：Loaders 耗时及代码编译变化分析，默认开启。
-- **plugins**：Plugins 调用以及耗时分析，默认开启。
-- **bundle**：构建产物分析，默认开启。
-- **resolver**：resolver 分析，默认关闭。
-- **lite**: lite 模式。lite 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
-
-所以，**默认配置是开启了 Bundle 分析能力、 Loader he Plugin 构建时分析**。没有开启 Resolver 分析能力， Rspack 暂不支持 Resolver 分析能力。
 
 #### features types
 

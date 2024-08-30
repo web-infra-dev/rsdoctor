@@ -1,0 +1,30 @@
+# CI/CD Tutorial
+
+In CI/CD, there is often a desire to upload historical reports to the CDN as historical records. Because it's not convenient to achieve instant use in the standard mode, the **Brief** mode is supported.
+
+## Brief Mode
+
+In Brief mode, data reports are integrated into a single HTML page, making it easy for users to view historical build data in a summary form within CI/CD and other scenarios.
+
+### Enabling Brief Mode
+
+You can enable Brief mode by configuring the `mode.brief` option in the Rsdoctor plugin. After the build, Brief mode will generate a report in the build output directory: `[outputDir]/.rsdoctor/report-rsdoctor.html`. You can view the build analysis summary by opening the HTML file in a browser.
+
+- In Brief mode, no code data is displayed to prevent the page from crashing due to large data sizes.
+- The report output directory and file name can be configured. Refer to: [Options](/config/options/options#brief).
+- For more configurations, refer to: [Options](/config/options/options#brief).
+
+```ts title="rspack.config.js"
+const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+
+module.exports = {
+  // ...
+  plugins: [
+    process.env.RSDOCTOR &&
+      new RsdoctorRspackPlugin({
+        // other options
+        mode: 'brief',
+      }),
+  ].filter(Boolean),
+};
+```
