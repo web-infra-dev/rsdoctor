@@ -92,7 +92,7 @@
     "@types/lodash": "^4.17.7",
     "@types/node": "^16",
     "@types/node-fetch": "^2.6.11",
-    "@types/path-browserify": "1.0.2",
+    "@types/path-browserify": "1.0.3",
     "@types/semver": "^7.5.8",
     "@types/tapable": "2.2.7",
     "@types/webpack": "5.28.5",
