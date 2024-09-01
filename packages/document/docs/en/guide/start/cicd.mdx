@@ -1,3 +1,5 @@
+import { Badge } from '@theme';
+
 # CI/CD Tutorial
 
 In CI/CD, there is often a desire to upload historical reports to the CDN as historical records. Because it's not convenient to achieve instant use in the standard mode, the **Brief** mode is supported.
@@ -8,7 +10,9 @@ In Brief mode, data reports are integrated into a single HTML page, making it ea
 
 ### Enabling Brief Mode
 
-You can enable Brief mode by configuring the `mode.brief` option in the Rsdoctor plugin. After the build, Brief mode will generate a report in the build output directory: `[outputDir]/.rsdoctor/report-rsdoctor.html`. You can view the build analysis summary by opening the HTML file in a browser.
+<Badge text="Version: 0.4.0" type="warning" />
+
+You can enable Brief mode by configuring the [mode.brief](/config/options/options#mode) option in the Rsdoctor plugin. After the build, Brief mode will generate a report in the build output directory: `[outputDir]/.rsdoctor/report-rsdoctor.html`. You can view the build analysis summary by opening the HTML file in a browser.
 
 - In Brief mode, no code data is displayed to prevent the page from crashing due to large data sizes.
 - The report output directory and file name can be configured. Refer to: [Options](/config/options/options#brief).
@@ -28,3 +32,11 @@ module.exports = {
   ].filter(Boolean),
 };
 ```
+
+### Differences between Brief Mode and Lite Mode
+
+Currently, Rsdoctor has several report modes: `Normal, Brief, and Lite`.
+
+import ModeIntro from '@en/shared/mode-intro.md';
+
+<ModeIntro />
