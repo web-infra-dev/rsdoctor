@@ -24,7 +24,7 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@types/yargs": "17.0.32",
+    "@types/yargs": "17.0.33",
     "typescript": "^5.2.2"
   },
   "dependencies": {
