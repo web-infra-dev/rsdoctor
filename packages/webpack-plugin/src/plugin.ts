@@ -214,6 +214,8 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
         );
         openBrowser(`file:///${outputFilePath}`);
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error(`[Rsdoctor] Webpack plugin this.done error`, e);
+    }
   };
 }

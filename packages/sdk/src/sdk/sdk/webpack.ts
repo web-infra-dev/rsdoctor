@@ -373,7 +373,7 @@ export class RsdoctorWebpackSDK<
     }
   }
 
-  public writeStore(options?: SDK.WriteStoreOptionsType) {
+  public async writeStore(options?: SDK.WriteStoreOptionsType) {
     debug(() => `sdk.writeStore has run.`, '[SDK.writeStore][end]');
     if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
       const clientHtmlPath = this.extraConfig.innerClientPath
@@ -381,7 +381,7 @@ export class RsdoctorWebpackSDK<
         : require.resolve('@rsdoctor/client');
 
       if (this.extraConfig.brief?.writeDataJson) {
-        this.saveManifest(this.getStoreData(), options || {});
+        await this.saveManifest(this.getStoreData(), options || {});
       }
       return this.inlineScriptsAndStyles(clientHtmlPath);
     }
