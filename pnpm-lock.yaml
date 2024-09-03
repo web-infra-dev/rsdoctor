@@ -730,8 +730,8 @@ importers:
   packages/document:
     dependencies:
       '@rstack-dev/doc-ui':
-        specifier: ^1.2.0
-        version: 1.2.0(react-dom@18.2.0)(react@18.2.0)
+        specifier: 1.4.2
+        version: 1.4.2(react-dom@18.2.0)(react@18.2.0)
       react-markdown:
         specifier: ^9.0.1
         version: 9.0.1(@types/react@18.3.5)(react@18.2.0)
@@ -4494,7 +4494,7 @@ packages:
   /@modern-js/codesmith@2.4.1:
     resolution: {integrity: sha512-rPav38SZ6eKl7/o67oz9IurvjzZns3i8WzpkIHLgzlqKVNVHGdvIBUc/p8nOmtigThgBGIK1NK0KfEdrvNRyMA==}
     dependencies:
-      '@modern-js/utils': 2.58.2
+      '@modern-js/utils': 2.58.3
       '@swc/helpers': 0.5.1
       axios: 1.7.4
       tar: 6.2.1
@@ -5050,15 +5050,6 @@ packages:
       lodash: 4.17.21
       rslog: 1.2.2
     dev: true
-
-  /@modern-js/utils@2.58.2:
-    resolution: {integrity: sha512-nIT6jOdYSqNDDZq3arf8WoIcxhznTdK+AgwWZ5dqpL7IUzfUBt80MgOThttVZL8c10N0SGgbeEsQZpdpkCA+gA==}
-    dependencies:
-      '@swc/helpers': 0.5.3
-      caniuse-lite: 1.0.30001651
-      lodash: 4.17.21
-      rslog: 1.2.2
-    dev: false
 
   /@modern-js/utils@2.58.3:
     resolution: {integrity: sha512-e8cxOhOQzKd67m67QwbR9r67yRntqBakKIdrR4OTSXjcw9dUMv+Srk7ovEFsgjXCGDyV4+02LHgfooMKM8BRVg==}
@@ -6780,8 +6771,8 @@ packages:
       rspack-plugin-virtual-module: 0.1.12
     dev: false
 
-  /@rstack-dev/doc-ui@1.2.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-/slMk3IPj9EQcdDnVriZce9qGavU+LJiHeylhgThEBfJBJT2MPUig/hMTpERlDtaJ0+Y/YE4THS1R2DsVG/W0A==}
+  /@rstack-dev/doc-ui@1.4.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-dC1L65hIqzO0OwPtKXf7Y+wJJCy5FudEibUf8XW9AAaTM47/izBR768zTdhv+IIwk+40ZsBp7jnIIEsR05BnNQ==}
     dependencies:
       framer-motion: 11.3.24(react-dom@18.2.0)(react@18.2.0)
     transitivePeerDependencies:

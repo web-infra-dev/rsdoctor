@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "react-markdown": "^9.0.1",
-    "@rstack-dev/doc-ui": "^1.2.0",
+    "@rstack-dev/doc-ui": "1.4.2",
     "rspress": "^1.28.3"
   }
 }
