@@ -14,6 +14,9 @@
       "i18n": ["./i18n.json"]
     }
   },
-  "include": ["src", "theme"],
+  "mdx": {
+    "checkMdx": true
+  },
+  "include": ["src", "theme", "i18n.json"],
   "exclude": ["**/node_modules"]
 }
