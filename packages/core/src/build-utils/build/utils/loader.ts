@@ -88,7 +88,7 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
   callback: (rule: T) => T,
 ): T[] {
-  return rules.map((rule) => {
+  return rules.filter(Boolean).map((rule) => {
     if (typeof rule === 'string') {
       return callback({
         loader: rule,
