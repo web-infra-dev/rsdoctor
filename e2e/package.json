@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "webpack": "^5.90.0",
-    "@playwright/test": "1.33.0",
+    "@playwright/test": "1.47.0",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
@@ -30,7 +30,7 @@
     "@types/react-dom": "^18",
     "fast-glob": "^3.3.2",
     "loader-utils": "^2.0.4",
-    "playwright": "1.33.0",
+    "playwright": "1.47.0",
     "typescript": "^5.2.2"
   }
 }
