@@ -15,6 +15,7 @@
     "vue": "^3.4.38"
   },
   "devDependencies": {
+    "webpack": "^5.90.0",
     "@playwright/test": "1.33.0",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
@@ -27,7 +28,6 @@
     "@types/node": "^16",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18",
-    "@types/webpack": "5.28.5",
     "fast-glob": "^3.3.2",
     "loader-utils": "^2.0.4",
     "playwright": "1.33.0",

@@ -1,8 +1,6 @@
-
 import { Manifest, Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
 import { Chunks } from '@/build-utils/common';
-
 
 export class InternalBundlePlugin<
   T extends Plugin.BaseCompiler,
@@ -34,7 +32,7 @@ export class InternalBundlePlugin<
     ) {
       compilation.hooks.afterOptimizeAssets.tap(
         this.tapPostOptions,
-        (assets) => {
+        (assets: any) => {
           Object.keys(assets).forEach((file) => {
             const v = this.ensureAssetContent(file);
             v.content = assets[file].source().toString();
@@ -44,18 +42,15 @@ export class InternalBundlePlugin<
     } else if (
       compilation.hooks.processAssets &&
       'afterProcessAssets' in compilation.hooks
-    )  { 
+    ) {
       // This is for rspack hooks.
-      compilation.hooks.afterProcessAssets.tap(
-        this.tapPostOptions,
-        () => {
-          Object.keys(compilation.assets).forEach((file) => {
-            const v = this.ensureAssetContent(file);
-            v.content = compilation.assets[file].source().toString();
-          });
-        },
-      );
-    } else if ('afterOptimizeChunkAssets' in compilation.hooks)  { 
+      compilation.hooks.afterProcessAssets.tap(this.tapPostOptions, () => {
+        Object.keys(compilation.assets).forEach((file) => {
+          const v = this.ensureAssetContent(file);
+          v.content = compilation.assets[file].source().toString();
+        });
+      });
+    } else if ('afterOptimizeChunkAssets' in compilation.hooks) {
       compilation.hooks.afterOptimizeChunkAssets.tap(
         this.tapPostOptions,
         (chunks) => {

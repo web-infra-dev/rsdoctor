@@ -3,7 +3,7 @@ import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Time } from '@rsdoctor/utils/common';
 import path from 'path';
-import type { Compiler, ResolvePluginInstance, Resolver } from 'webpack';
+import type { Compiler, Resolver } from 'webpack';
 
 interface RsdoctorResolverPluginOptions {}
 
@@ -14,6 +14,18 @@ interface ResolveRequestContext {
 interface ResolveRequestWithContext {
   [key: string]: unknown;
   context: ResolveRequestContext;
+}
+
+/**
+ * Plugin instance. ResolvePluginInstance in webpack@5.90 is not the interface, it's a type.
+ */
+declare interface ResolvePluginInstance {
+  [index: string]: any;
+
+  /**
+   * The run point of the plugin, required method.
+   */
+  apply: (resolver: Resolver) => void;
 }
 
 export class RsdoctorResolverPlugin implements ResolvePluginInstance {

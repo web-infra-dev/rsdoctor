@@ -23,7 +23,9 @@ export function compileByWebpack5(
     },
   });
 
-  compiler.outputFileSystem = createFsFromVolume(new Volume());
+  compiler.outputFileSystem = createFsFromVolume(
+    new Volume(),
+  ) as webpack.OutputFileSystem;
   compiler.outputFileSystem.join = path.join.bind(path);
 
   return promisifyCompilerRun(compiler);
