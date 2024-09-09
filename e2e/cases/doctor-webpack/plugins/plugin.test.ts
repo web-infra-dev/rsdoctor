@@ -64,7 +64,7 @@ test('webpack5 plugins tests', async () => {
   expect(assets[0].content.length).toBeGreaterThan(10);
   os.EOL === '\n' &&
     expect(assets[0].content).toStrictEqual(
-      "/******/ (() => { // webpackBootstrap\nvar __webpack_exports__ = {};\nconsole.log('a');\n\n// hello world\n/******/ })()\n;",
+      "/******/ (() => { // webpackBootstrap\nconsole.log('a');\n\n// hello world\n/******/ })()\n;",
     );
 
   expect(chunks.length).toBe(1);

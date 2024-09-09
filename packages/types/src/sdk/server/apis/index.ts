@@ -1,5 +1,4 @@
 import { ServerResponse } from 'http';
-import { SDK } from 'src';
 import { PlainObject, Get } from '../../../common';
 import { connect } from '../../../thirdparty';
 import { RsdoctorBuilderSDKInstance } from '../../index';
@@ -12,6 +11,7 @@ import { PluginAPIResponse, PluginAPIResquestBody } from './plugin';
 import { GraphAPIResponse, GraphAPIResquestBody } from './graph';
 import { AlertsAPIResponse, AlertsAPIResquestBody } from './alerts';
 import { RsdoctorManifestMappingKeys } from '../../../manifest';
+import { SDK } from '@/index';
 
 export * from './pagination';
 

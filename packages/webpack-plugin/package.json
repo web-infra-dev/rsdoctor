@@ -28,12 +28,11 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "webpack": "^5.89.0",
+    "webpack": "^5.90.0",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.7",
     "@types/node": "^16",
     "@types/tapable": "2.2.7",
-    "@types/webpack": "5.28.5",
     "tslib": "2.4.1",
     "typescript": "^5.2.2"
   },
