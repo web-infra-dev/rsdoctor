@@ -1,8 +1,8 @@
 import { Plugin } from '@rsdoctor/types';
 import { extname } from 'path';
-import { ConcatSource, Source } from 'webpack-sources';
 import { InternalBasePlugin } from './base';
 import { chalk, logger } from '@rsdoctor/utils/logger';
+import type { sources } from 'webpack';
 
 export class InternalBundleTagPlugin<
   T extends Plugin.BaseCompiler,
@@ -41,10 +41,12 @@ export class InternalBundleTagPlugin<
                   continue;
                 }
 
+                const { ConcatSource } = compiler.webpack.sources;
+
                 compilation.updateAsset(
                   file,
                   // @ts-ignore
-                  (old: Source) => {
+                  (old: sources.Source) => {
                     const concatSource = new ConcatSource();
                     let header = "\n console.log('RSDOCTOR_START::');\n";
                     let footer = "\n console.log('RSDOCTOR_END::');\n";
