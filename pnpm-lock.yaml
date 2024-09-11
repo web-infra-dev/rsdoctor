@@ -724,8 +724,8 @@ importers:
   packages/document:
     dependencies:
       '@rstack-dev/doc-ui':
-        specifier: 1.4.2
-        version: 1.4.2(react-dom@18.2.0)(react@18.2.0)
+        specifier: 1.5.0
+        version: 1.5.0(react-dom@18.2.0)(react@18.2.0)
       react-markdown:
         specifier: ^9.0.1
         version: 9.0.1(@types/react@18.3.5)(react@18.2.0)
@@ -6762,8 +6762,8 @@ packages:
       rspack-plugin-virtual-module: 0.1.12
     dev: false
 
-  /@rstack-dev/doc-ui@1.4.2(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-dC1L65hIqzO0OwPtKXf7Y+wJJCy5FudEibUf8XW9AAaTM47/izBR768zTdhv+IIwk+40ZsBp7jnIIEsR05BnNQ==}
+  /@rstack-dev/doc-ui@1.5.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-7nlp2cDAWy3BWey3GumNAWjyEzLAgb3MbgwhasANY4Z8lD8EDG4VmhDK/blsRO5IAvwDg22Wv4iETsC4GCZN+Q==}
     dependencies:
       framer-motion: 11.3.24(react-dom@18.2.0)(react@18.2.0)
     transitivePeerDependencies:
