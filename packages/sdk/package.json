@@ -26,7 +26,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@types/fs-extra": "^11.0.4",
-    "body-parser": "1.20.2",
+    "body-parser": "1.20.3",
     "cors": "2.8.5",
     "dayjs": "1.11.13",
     "fs-extra": "^11.1.1",
