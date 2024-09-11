@@ -23,13 +23,11 @@
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "loader-utils": "^2.0.4",
     "lodash": "^4.17.21",
     "@rsdoctor/types": "workspace:*"
   },
   "devDependencies": {
     "@rspack/core": "0.7.5",
-    "@types/loader-utils": "^2.0.6",
     "@types/lodash": "^4.17.7",
     "@types/node": "^16",
     "@types/tapable": "2.2.7",

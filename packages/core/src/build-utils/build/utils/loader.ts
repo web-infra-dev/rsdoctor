@@ -1,4 +1,3 @@
-import { getOptions } from 'loader-utils';
 import path from 'path';
 import fse from 'fs-extra';
 import { omit, findIndex } from 'lodash';
@@ -49,16 +48,6 @@ export function loadLoaderModule(
     pitch: mod.default?.pitch || mod.pitch,
     raw: mod.default?.raw || mod.raw || false,
   };
-}
-
-export function getLoaderOptions<T>(loaderContext: Plugin.LoaderContext<T>) {
-  // webpack5
-  if (typeof loaderContext.getOptions === 'function') {
-    return loaderContext.getOptions();
-  }
-
-  // if don't have loaderContext.getOptions use loader-utils.
-  return getOptions(loaderContext as any) as unknown as Readonly<T>;
 }
 
 export function extractLoaderName(loaderPath: string, cwd = ''): string {
@@ -373,4 +362,12 @@ export function createLoaderContextTrap(
   });
 
   return trap;
+}
+
+export function parseQuery(query: string) {
+  if (query.startsWith('?')) {
+    query = query.slice(1);
+  }
+  const searchParams = new URLSearchParams(query);
+  return Object.fromEntries(searchParams.entries());
 }

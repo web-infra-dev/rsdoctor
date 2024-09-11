@@ -1,7 +1,7 @@
 import { getSDK } from '@rsdoctor/core/plugins';
 import { Plugin, SDK } from '@rsdoctor/types';
+import { Build } from '@rsdoctor/core';
 import type { LoaderDefinitionFunction } from '@rspack/core';
-import { parseQuery } from 'loader-utils';
 import { omit } from 'lodash';
 import path from 'path';
 
@@ -22,7 +22,7 @@ const loaderModule: Plugin.LoaderDefinition<
   const loaderData: SDK.ResourceLoaderData = {
     resource: {
       path: this.resourcePath,
-      query: parseQuery(this.resourceQuery || '?'),
+      query: Build.Utils.parseQuery(this.resourceQuery),
       queryRaw: this.resourceQuery,
       ext: path.extname(this.resourcePath).slice(1),
     },
