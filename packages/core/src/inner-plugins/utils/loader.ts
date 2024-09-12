@@ -4,7 +4,6 @@ import {
   create as ResolverCreator,
 } from 'enhanced-resolve';
 import fs from 'fs';
-import { parseQuery } from 'loader-utils';
 import { isString, omit } from 'lodash';
 import path from 'path';
 import { debug } from '@rsdoctor/utils/logger';
@@ -17,12 +16,12 @@ import { getSDK } from './sdk';
 import { checkCirclePath } from './circleDetect';
 import { ProxyLoaderInternalOptions, ProxyLoaderOptions } from '@/types';
 import { Utils as BuildUtils, Types } from '@/build-utils/build';
-import { isESMLoader } from '@/build-utils/build/utils';
+import { isESMLoader, parseQuery } from '@/build-utils/build/utils';
 
 export function getInternalLoaderOptions(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,
 ): ProxyLoaderInternalOptions {
-  const options = BuildUtils.getLoaderOptions(loaderContext);
+  const options = loaderContext.getOptions();
 
   return options[Loader.LoaderInternalPropertyName];
 }
@@ -30,7 +29,7 @@ export function getInternalLoaderOptions(
 export function getLoaderOptionsWithoutInternalKeys(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,
 ) {
-  const options = BuildUtils.getLoaderOptions(loaderContext);
+  const options = loaderContext.getOptions();
   const circlePaths: string[][] = [];
   const loaderOptions = omit(options, [Loader.LoaderInternalPropertyName]);
 
