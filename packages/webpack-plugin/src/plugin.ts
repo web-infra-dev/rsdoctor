@@ -18,7 +18,7 @@ import type {
 } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { openBrowser, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
-import { Constants, Linter, SDK } from '@rsdoctor/types';
+import { Constants, Linter, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { chalk, debug } from '@rsdoctor/utils/logger';
 import { cloneDeep } from 'lodash';
@@ -29,6 +29,7 @@ import { pluginTapName, pluginTapPostOptions } from './constants';
 import { InternalResolverPlugin } from './plugins/resolver';
 import { ensureModulesChunksGraphFn } from '@rsdoctor/core/plugins';
 import { Loader } from '@rsdoctor/utils/common';
+import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
 
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorPluginInstance<Compiler, Rules>
@@ -92,8 +93,16 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     // @ts-ignore
     new InternalSummaryPlugin<Compiler>(this).apply(compiler);
 
-    if (this.options.features.loader && !Loader.isVue(compiler)) {
-      new InternalLoaderPlugin<Compiler>(this).apply(compiler);
+    if (this.options.features.loader) {
+      new BuildUtilLoader.ProbeLoaderPlugin().apply(compiler);
+      // add loader page to client
+      this.sdk.addClientRoutes([
+        Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+      ]);
+
+      if (!Loader.isVue(compiler)) {
+        new InternalLoaderPlugin(this).apply(compiler);
+      }
     }
 
     if (this.options.features.resolver) {
@@ -101,14 +110,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     }
 
     if (this.options.features.plugins) {
-      if (Loader.isVue(compiler)) {
-        this.sdk.addClientRoutes([
-          Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
-        ]);
-        new InternalLoaderPlugin(this).apply(compiler);
-      } else {
-        new InternalPluginsPlugin<Compiler>(this).apply(compiler);
-      }
+      new InternalPluginsPlugin<Compiler>(this).apply(compiler);
     }
 
     if (this.options.features.bundle) {

@@ -1,9 +1,9 @@
-import { Utils } from '@rsdoctor/core/build-utils';
-import path from 'path';
 import { Plugin } from '@rsdoctor/types';
 import type { RuleSetRules } from '@rspack/core';
-import { Build } from '@rsdoctor/core';
 import { Loader } from '@rsdoctor/utils/common';
+import { Build } from '@/build-utils';
+import { Utils } from '..';
+import path from 'path';
 
 const BuiltinLoaderName = 'builtin:swc-loader';
 const ESMLoaderFile = '.mjs';
