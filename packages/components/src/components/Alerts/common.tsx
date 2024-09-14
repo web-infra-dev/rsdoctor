@@ -2,7 +2,7 @@ import { Collapse, Space, Radio, Typography, Tooltip } from 'antd';
 import React, { useMemo } from 'react';
 import { AppstoreOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Rule } from '@rsdoctor/types';
-import { groupBy, values } from 'lodash-es';
+import { groupBy, sumBy, values } from 'lodash-es';
 import { Size, ViewMode } from '../../constants';
 import { Alert } from '../Alert';
 import { Card } from '../Card';
@@ -56,10 +56,24 @@ const CommonAlertsGroup: React.FC<CommonAlertsContentProps> = ({
   dataSource,
   extraData,
 }) => {
-  const _dataSource = useMemo(
-    () => values(groupBy(dataSource, (e) => e.code)),
-    [dataSource],
-  );
+  const _dataSource = useMemo(() => {
+    const sortedDataSource = dataSource.toSorted((a, b) => {
+      let sizeA = 0;
+      let sizeB = 0;
+
+      if (a.type === 'package-relation') {
+        sizeA = sumBy(a.packages, (e) => e.targetSize.sourceSize);
+      }
+
+      if (b.type === 'package-relation') {
+        sizeB = sumBy(b.packages, (e) => e.targetSize.sourceSize);
+      }
+
+      return sizeB - sizeA;
+    });
+    const groups = groupBy(sortedDataSource, (e) => e.code);
+    return values(groups);
+  }, [dataSource]);
 
   return (
     <Space
