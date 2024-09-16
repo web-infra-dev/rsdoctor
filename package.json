@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.5.1",
-    "@changesets/cli": "^2.27.7",
+    "@changesets/cli": "^2.27.8",
     "@modern-js/module-tools": "^2.58.3",
     "@rsdoctor/tsconfig": "workspace:*",
     "@scripts/test-helper": "workspace:*",
