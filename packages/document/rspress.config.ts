@@ -24,6 +24,9 @@ export default defineConfig({
   markdown: {
     checkDeadLinks: true,
   },
+  ssg: {
+    strict: true,
+  },
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
@@ -41,7 +44,7 @@ export default defineConfig({
         content: 'https://github.com/web-infra-dev/rsdoctor',
       },
       {
-        icon: 'twitter',
+        icon: 'X',
         mode: 'link',
         content: 'https://twitter.com/rspack_dev',
       },
