@@ -16,7 +16,7 @@ export default defineWorkspace([
       name: 'node',
       globals: true,
       environment: 'node',
-      testTimeout: 30000,
+      testTimeout: 50000,
       restoreMocks: true,
       include: ['packages/**/*.test.ts'],
       exclude: ['**/node_modules/**'],

@@ -40,7 +40,10 @@ const getTargetBrowser = async () => {
 /**
  * Reads the BROWSER environment variable and decides what to do with it.
  */
-export async function openBrowser(url: string): Promise<boolean | undefined> {
+export async function openBrowser(
+  url: string,
+  needEncodeURI = true,
+): Promise<boolean | undefined> {
   // If we're on OS X, the user hasn't specifically
   // requested a different browser, we can try opening
   // a Chromium browser with AppleScript. This lets us reuse an
@@ -53,9 +56,9 @@ export async function openBrowser(url: string): Promise<boolean | undefined> {
       if (targetBrowser) {
         // Try to reuse existing tab with AppleScript
         await execAsync(
-          `osascript openChrome.applescript "${encodeURI(
-            url,
-          )}" "${targetBrowser}"`,
+          `osascript openChrome.applescript "${
+            needEncodeURI ? encodeURI(url) : url
+          }" "${targetBrowser}"`,
           {
             cwd: join(__dirname, '../../../../static'),
           },

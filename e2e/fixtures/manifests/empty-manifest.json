@@ -1,0 +1,28 @@
+{
+  "client": {
+    "enableRoutes": [
+      "Overall",
+      "Compile.WebpackLoaders",
+      "Compile.ModuleResolve",
+      "Compile.WebpackPlugins",
+      "Bundle.TreeShaking",
+      "Bundle.ModuleGraph",
+      "Bundle.BundleSize"
+    ]
+  },
+  "data": {
+    "hash": "9b2728ff006f21d827e28e763dec2efc",
+    "root": "/Users/bytedance/Projects/webinfra/devtools/packages/client",
+    "envinfo": [],
+    "pid": 11413,
+    "errors": [],
+    "configs": [],
+    "summary": [],
+    "resolver": [],
+    "loader": [],
+    "moduleGraph": [],
+    "chunkGraph": [],
+    "plugin": [],
+    "packageGraph": []
+  }
+}

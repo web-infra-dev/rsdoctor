@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "test": "pnpm run i:webkit && playwright test",
-    "i:webkit": "playwright install-deps"
+    "i:webkit": "playwright install-deps chromium"
   },
   "dependencies": {
     "devcert": "1.2.2",
@@ -23,6 +23,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",
+    "@rsdoctor/cli": "workspace:*",
     "@rspack/core": "0.7.5",
     "@types/lodash": "^4.17.7",
     "@types/node": "^16",

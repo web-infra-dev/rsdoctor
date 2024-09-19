@@ -208,9 +208,11 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       ...(args as Parameters<SDK.RsdoctorServerInstance['getClientUrl']>),
     );
 
+    const needEncodeURI =
+      arguments[0] === Client.RsdoctorClientRoutes.BundleDiff;
     const url = `http://${this.host}:${this.port}${relativeUrl}`;
     const localhostUrl = `http://localhost:${this.port}${relativeUrl}`;
-    await openBrowser(localhostUrl);
+    await openBrowser(localhostUrl, !needEncodeURI);
     if (this._printServerUrl) {
       logger.info(`Rsdoctor analyze server running on: ${chalk.cyan(url)}`);
       logger.info(
