@@ -1,10 +1,7 @@
 import { webkit } from '@playwright/test';
 
 export async function launchPlaywright() {
-  const browser = await webkit.launch({
-    headless: true,
-    args: ['--no-sandbox'],
-  });
+  const browser = await webkit.launch();
 
   const page = await browser.newPage();
 

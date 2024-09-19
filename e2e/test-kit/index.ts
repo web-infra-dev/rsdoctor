@@ -63,10 +63,10 @@ export async function openBrowserByDiffCLI(
   console.log('launch puppeteer');
 
   const { browser, page } = await launchPlaywright();
-  const { origin, port } = sdk.server;
+  const { origin } = sdk.server;
 
   await page.goto(
-    `http://${origin}:${port}/index.html?__bundle_files__=http%3A%2F%2F${origin}%3A${port}%2Fapi%2Fbundle_diff%2Fmanifest.json%2Chttp%3A%2F%2F${origin}%3A${port}%2Fapi%2Fbundle_diff%2Fmanifest.json#/resources/bundle/diff`,
+    `${origin}/index.html?__bundle_files__=${origin}%2Fapi%2Fbundle_diff%2Fmanifest.json%2C${origin}%2Fapi%2Fbundle_diff%2Fmanifest.json#/resources/bundle/diff`,
   );
 
   console.log('waitForNetworkIdle');
