@@ -100,7 +100,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.7",
     "@types/node": "^16",
-    "tslib": "2.4.1",
+    "tslib": "2.7.0",
     "typescript": "^5.2.2"
   },
   "publishConfig": {
