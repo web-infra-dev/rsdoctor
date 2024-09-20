@@ -60,6 +60,7 @@
 		"monaco-editor",
 		"react-i18next",
 		"socket.io-client",
-		"react-router-dom"
+		"react-router-dom",
+		"tsx"
 	]
 }
