@@ -43,7 +43,7 @@
     "@types/lodash": "^4.17.7",
     "@types/node": "^16",
     "@types/serve-static": "1.15.7",
-    "tslib": "2.4.1",
+    "tslib": "2.7.0",
     "typescript": "^5.2.2"
   },
   "publishConfig": {
