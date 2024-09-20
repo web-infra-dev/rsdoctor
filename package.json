@@ -44,7 +44,7 @@
     "nano-staged": "^0.8.0",
     "nx": "^17.3.2",
     "prettier": "^3.3.3",
-    "vite-tsconfig-paths": "4.2.1",
+    "vite-tsconfig-paths": "4.3.2",
     "vitest": "1.0.0-beta.1"
   },
   "pnpm": {
