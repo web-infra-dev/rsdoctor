@@ -36,7 +36,7 @@
     "chalk": "^4.1.2",
     "ora": "^5.4.1",
     "tslib": "2.4.1",
-    "yargs": "17.6.2"
+    "yargs": "17.7.2"
   },
   "publishConfig": {
     "access": "public",
