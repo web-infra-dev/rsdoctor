@@ -22,7 +22,7 @@ export class InternalBundleTagPlugin<
             if (
               !compilation.options.plugins
                 .map((p) => p && p.constructor.name)
-                .includes('BannerPlugin') &&
+                .includes('BannerPlugin') ||
               !supportBannerPlugin
             ) {
               return;
