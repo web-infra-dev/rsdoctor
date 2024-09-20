@@ -22,4 +22,4 @@ tsconfig.tsbuildinfo
 
 log/
 
-e2e/**/*/manifest.json
+e2e/**/.rsdoctor/manifest.json

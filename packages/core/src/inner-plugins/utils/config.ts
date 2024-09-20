@@ -34,7 +34,11 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     },
     disableTOSUpload = false,
     innerClientPath = '',
-    supports = { parseBundle: true, banner: false, generateTileGraph: true },
+    supports = {
+      parseBundle: true,
+      banner: undefined,
+      generateTileGraph: true,
+    },
     port,
     printLog = { serverUrls: true },
     mode = 'normal',
