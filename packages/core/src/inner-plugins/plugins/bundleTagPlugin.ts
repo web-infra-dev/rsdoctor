@@ -9,7 +9,7 @@ export class InternalBundleTagPlugin<
   public readonly name = 'bundleTag';
 
   public apply(compiler: Plugin.BaseCompiler) {
-    const supportBannerPlugin = !!this.options.supports?.banner;
+    const supportBannerPlugin = this.options.supports?.banner;
     compiler.hooks.compilation.tap(
       'RsdoctorTagBannerPlugin',
       (compilation: Plugin.BaseCompilation) => {
@@ -22,8 +22,8 @@ export class InternalBundleTagPlugin<
             if (
               !compilation.options.plugins
                 .map((p) => p && p.constructor.name)
-                .includes('BannerPlugin') &&
-              !supportBannerPlugin
+                .includes('BannerPlugin') ||
+              supportBannerPlugin === false
             ) {
               return;
             }
