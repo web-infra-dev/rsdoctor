@@ -7,3 +7,4 @@ export * as PluginsAnalyze from './WebpackPlugins';
 export * as ModuleResolve from './ModuleResolve';
 export * as RuleIndex from './Resources/RuleIndex';
 export * as TreeShaking from './TreeShaking';
+export * as BundleDiff from './Resources/BundleDiff';

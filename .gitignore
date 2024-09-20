@@ -19,3 +19,7 @@ tsconfig.tsbuildinfo
 .history/
 .env.local
 .env.*.local
+
+log/
+
+e2e/**/*/manifest.json

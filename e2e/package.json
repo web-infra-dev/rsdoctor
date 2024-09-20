@@ -23,6 +23,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",
+    "@rsdoctor/cli": "workspace:*",
     "@rspack/core": "0.7.5",
     "@types/lodash": "^4.17.7",
     "@types/node": "^16",

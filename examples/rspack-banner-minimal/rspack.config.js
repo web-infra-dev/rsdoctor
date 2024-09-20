@@ -84,6 +84,9 @@ const config = {
     new RsdoctorRspackPlugin({
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
       features: ['bundle', 'plugins', 'loader'],
+      supports: {
+        banner: false,
+      },
     }),
     new rspack.BannerPlugin({
       test: /\.js/,
