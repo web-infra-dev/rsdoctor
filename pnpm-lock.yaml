@@ -522,8 +522,8 @@ importers:
   packages/components:
     devDependencies:
       '@ant-design/icons':
-        specifier: 5.3.5
-        version: 5.3.5(react-dom@18.2.0)(react@18.2.0)
+        specifier: 5.5.1
+        version: 5.5.1(react-dom@18.2.0)(react@18.2.0)
       '@monaco-editor/react':
         specifier: 4.6.0
         version: 4.6.0(monaco-editor@0.49.0)(react-dom@18.2.0)(react@18.2.0)
@@ -1179,6 +1179,22 @@ packages:
 
   /@ant-design/icons@5.3.5(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-Vyv/OsKz56BsKBtcRlLP6G8RGaRW43f7G5dK3XNPCaeV4YyehLVaITuNKi2YJG9hMVURkBdzdGhveNQlnKTFqw==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      react: '>=16.0.0'
+      react-dom: 18.2.0
+    dependencies:
+      '@ant-design/colors': 7.1.0
+      '@ant-design/icons-svg': 4.4.2
+      '@babel/runtime': 7.25.0
+      classnames: 2.5.1
+      rc-util: 5.43.0(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: true
+
+  /@ant-design/icons@5.5.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-0UrM02MA2iDIgvLatWrj6YTCYe0F/cwXvVE0E2SqGrL7PZireQwgEKTKBisWpZyal5eXZLvuM98kju6YtYne8w==}
     engines: {node: '>=8'}
     peerDependencies:
       react: '>=16.0.0'
