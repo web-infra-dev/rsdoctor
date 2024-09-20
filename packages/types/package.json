@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/node": "^16",
     "@types/react": "^18.3.5",
-    "tslib": "2.4.1",
+    "tslib": "2.7.0",
     "typescript": "^5.2.2",
     "@rspack/core": "0.7.5"
   },

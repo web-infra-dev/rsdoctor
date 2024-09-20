@@ -35,7 +35,7 @@
     "axios": "^1.7.2",
     "chalk": "^4.1.2",
     "ora": "^5.4.1",
-    "tslib": "2.4.1",
+    "tslib": "2.7.0",
     "yargs": "17.7.2"
   },
   "publishConfig": {
