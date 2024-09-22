@@ -30,8 +30,23 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
           use: loader,
         },
         {
+          test: /\.css$/,
+          use: [
+            {
+              loader: 'builtin:lightningcss-loader',
+              options: {
+                targets: 'ie 10',
+              },
+            },
+          ],
+        },
+        {
           test: /\.js/,
           use: esmLoaderJs,
+        },
+        {
+          test: /\.js/,
+          use: esmLoader,
         },
         {
           test: /\.[jt]s$/,
@@ -140,7 +155,7 @@ test('rspack data store', async () => {
   graphData.modules.forEach((mod) => (mod.webpackId = ''));
   expect(graphData.modules[0].size).toEqual({
     sourceSize: 68,
-    transformedSize: 85,
+    transformedSize: 91,
     parsedSize: 0,
   });
   expect(graphData.modules[0].path).toMatch('/fixtures/a.js');
