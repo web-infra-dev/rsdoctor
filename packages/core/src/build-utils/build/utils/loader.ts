@@ -1,10 +1,13 @@
 import path from 'path';
 import fse from 'fs-extra';
-import { omit, findIndex } from 'lodash';
+import { omit } from 'lodash';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule, SourceMapInput as WebpackSourceMapInput } from '../../../types';
 import { readPackageJson } from '@rsdoctor/graph';
+import { RuleSetUseItem } from '@rspack/core';
+import { RuleSetUseItem as WebpackRuleSetUseItem } from 'webpack';
+import { debug } from '@rsdoctor/utils/logger';
 
 // webpack https://github.com/webpack/webpack/blob/2953d23a87d89b3bd07cf73336ee34731196c62e/lib/util/identifier.js#L311
 // rspack https://github.com/web-infra-dev/rspack/blob/d22f049d4bce4f8ac20c1cbabeab3706eddaecc1/packages/rspack/src/loader-runner/index.ts#L47
@@ -90,8 +93,8 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
     }
 
     // https://webpack.js.org/configuration/module/#ruleloaders
-    if (Array.isArray((rule as unknown as Rule).loaders)) {
-      const { loaders, ...rest } = rule as unknown as Rule;
+    if (Array.isArray((rule as Rule).loaders)) {
+      const { loaders, ...rest } = rule as Rule;
       return {
         ...(rest as Plugin.RuleSetRule),
         use: mapEachRules(loaders as T[], callback),
@@ -119,7 +122,7 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
         const newRule = {
           ...rule,
           use: (...args: any) => {
-            const rules = funcUse.apply(null, args) as any;
+            const rules = funcUse.apply(null, args) as T[];
             return mapEachRules(rules, callback);
           },
         };
@@ -176,7 +179,7 @@ export function isESMLoader(r: Plugin.BuildRuleSetRule) {
       try {
         return fse.readJsonSync(file, { encoding: 'utf8' });
       } catch (e) {
-        // console.log(e)
+        debug(() => `isESMLoader function error：${e}`);
       }
     });
 
@@ -185,6 +188,40 @@ export function isESMLoader(r: Plugin.BuildRuleSetRule) {
 
   // Code to handle loaderName as a loader name
   return false;
+}
+
+function appendProbeLoaders(
+  compiler: Plugin.BaseCompiler,
+  loaderConfig: RuleSetUseItem | WebpackRuleSetUseItem,
+): RuleSetUseItem[] {
+  const _options =
+    typeof loaderConfig === 'object'
+      ? typeof loaderConfig.options === 'string'
+        ? { options: loaderConfig.options }
+        : loaderConfig.options
+      : {};
+  const loaderPath = path.join(__dirname, '../loader/probeLoader.js');
+  const loader =
+    typeof loaderConfig === 'string'
+      ? loaderConfig
+      : typeof loaderConfig === 'object' && loaderConfig.loader;
+
+  const createProbeLoader = (type: 'start' | 'end') => ({
+    loader: loaderPath,
+    options: {
+      ..._options,
+      loader,
+      ident: undefined,
+      type,
+      builderName: compiler.options.name,
+    },
+  });
+
+  return [
+    createProbeLoader('end'),
+    loaderConfig as RuleSetUseItem,
+    createProbeLoader('start'),
+  ];
 }
 
 export function getLoaderNameMatch(
@@ -200,7 +237,6 @@ export function getLoaderNameMatch(
       (typeof r === 'string' && (r as string).includes(loaderName))
     );
   }
-
   return (
     (typeof r === 'object' &&
       typeof r?.loader === 'string' &&
@@ -208,64 +244,84 @@ export function getLoaderNameMatch(
     (typeof r === 'string' && r === loaderName)
   );
 }
-
-// FIXME: Type BuildRuleSetRule maybe need optimize.
 export function addProbeLoader2Rules<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
-  appendRules: (rule: T, index: number) => T,
+  compiler: Plugin.BaseCompiler,
   fn: (r: Plugin.BuildRuleSetRule) => boolean,
 ): T[] {
   return rules.map((rule) => {
     if (!rule || typeof rule === 'string') return rule;
 
-    if (fn(rule)) {
-      const _rule = {
+    // Handle single loader case
+    if (fn(rule) && !rule.use) {
+      const loaderConfig: RuleSetUseItem = {
+        loader: rule.loader ?? '',
+        options: rule.options,
+        ident:
+          'ident' in rule && typeof rule.ident === 'string'
+            ? rule.ident
+            : undefined,
+      };
+      return {
         ...rule,
-        use: [
-          {
-            loader: rule.loader,
-            options: rule.options,
-          },
-        ],
+        use: appendProbeLoaders(compiler, loaderConfig),
         loader: undefined,
         options: undefined,
       };
-      return appendRules(_rule, 0);
     }
 
+    // Handle 'use' property
     if (rule.use) {
       if (Array.isArray(rule.use)) {
-        const _index = findIndex(rule.use, (_r) => fn(_r as T));
-        if (_index > -1) {
-          return appendRules(rule, _index);
-        }
+        rule.use = rule.use.flatMap((loaderConfig) => {
+          if (
+            typeof loaderConfig === 'string' ||
+            (typeof loaderConfig === 'object' &&
+              loaderConfig &&
+              'loader' in loaderConfig)
+          ) {
+            return fn(loaderConfig as T)
+              ? appendProbeLoaders(compiler, loaderConfig)
+              : [loaderConfig];
+          }
+          return [loaderConfig];
+        });
       } else if (
         typeof rule.use === 'object' &&
         !Array.isArray(rule.use) &&
         typeof rule.use !== 'function'
       ) {
-        rule.use = [
-          {
-            ...rule.use,
-          },
-        ];
-        return appendRules(rule, 0);
+        if ('loader' in rule.use) {
+          rule.use = fn(rule.use as T)
+            ? appendProbeLoaders(compiler, rule.use)
+            : [rule.use];
+        }
+      } else if (typeof rule.use === 'string') {
+        rule.use = fn(rule.use as unknown as T)
+          ? appendProbeLoaders(compiler, { loader: rule.use })
+          : [
+              {
+                loader: rule.use,
+              },
+            ];
       }
     }
 
+    // Handle nested rules
     if ('oneOf' in rule && rule.oneOf) {
       return {
         ...rule,
-        oneOf: addProbeLoader2Rules<T>(rule.oneOf as T[], appendRules, fn),
+        oneOf: addProbeLoader2Rules<T>(rule.oneOf as T[], compiler, fn),
       };
     }
 
     if ('rules' in rule && rule.rules) {
       return {
         ...rule,
-        rules: addProbeLoader2Rules<T>(rule.rules as T[], appendRules, fn),
+        rules: addProbeLoader2Rules<T>(rule.rules as T[], compiler, fn),
       };
     }
+
     return rule;
   });
 }

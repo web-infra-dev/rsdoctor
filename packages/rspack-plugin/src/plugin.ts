@@ -23,9 +23,11 @@ import type {
   RsdoctorPluginOptionsNormalized,
   RsdoctorRspackPluginOptions,
 } from '@rsdoctor/core';
+import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
 import {
   Constants,
   Linter,
+  Manifest,
   Manifest as ManifestType,
   Plugin,
   SDK,
@@ -33,7 +35,7 @@ import {
 import path from 'path';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
-import { ProbeLoaderPlugin } from './probeLoaderPlugin';
+
 import { Loader } from '@rsdoctor/utils/common';
 import { chalk } from '@rsdoctor/utils/logger';
 
@@ -118,11 +120,18 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       compiler,
     );
 
-    if (this.options.features.loader && !Loader.isVue(compiler)) {
-      new ProbeLoaderPlugin().apply(compiler);
-      new InternalLoaderPlugin<Plugin.BaseCompilerType<'rspack'>>(this).apply(
-        compiler,
-      );
+    if (this.options.features.loader) {
+      new BuildUtilLoader.ProbeLoaderPlugin().apply(compiler);
+      // add loader page to client
+      this.sdk.addClientRoutes([
+        Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+      ]);
+
+      if (!Loader.isVue(compiler)) {
+        new InternalLoaderPlugin<Plugin.BaseCompilerType<'rspack'>>(this).apply(
+          compiler,
+        );
+      }
     }
 
     if (this.options.features.plugins) {
