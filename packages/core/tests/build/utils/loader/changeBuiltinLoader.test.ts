@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import os from 'os';
 import { Plugin } from '@rsdoctor/types';
 import { Utils } from '@/build-utils/build';
 import { addProbeLoader2Rules } from '@/build-utils/build/utils';
