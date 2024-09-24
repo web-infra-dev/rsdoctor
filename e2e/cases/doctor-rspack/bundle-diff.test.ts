@@ -44,7 +44,7 @@ test('use Webpack stats.json', async () => {
   // Usage
   const manifestPath = path.resolve(
     __dirname,
-    '../../fixtures/.rsdoctor/manifest.json',
+    '../../fixtures/rsdoctor/manifest.json',
   );
   const oldPath = '<root>/rsdoctor';
   const newPath = path.resolve(__dirname, '../../../');
@@ -58,6 +58,8 @@ test('use Webpack stats.json', async () => {
   await page.evaluate(
     `window.location.hash = ${JSON.stringify(Client.RsdoctorClientRoutes.BundleDiff)}`,
   );
+
+  replacePaths(manifestPath, newPath, oldPath);
 
   const statisticCardTitleDom = await page.$(statisticCardTitle);
   expect(statisticCardTitleDom).toBeTruthy();

@@ -5,6 +5,6 @@ export function getFixtures(name: string) {
 }
 
 export function getRsdoctorManifestPath() {
-  const testManifestUrl = getFixtures('.rsdoctor/manifest.json');
+  const testManifestUrl = getFixtures('rsdoctor/manifest.json');
   return testManifestUrl;
 }

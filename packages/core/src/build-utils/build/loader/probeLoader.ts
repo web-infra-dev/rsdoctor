@@ -1,11 +1,11 @@
-import { getSDK } from '@rsdoctor/core/plugins';
+import { Build } from '@/build-utils';
+import { getSDK } from '@/inner-plugins';
 import { Plugin, SDK } from '@rsdoctor/types';
-import { Build } from '@rsdoctor/core';
 import type { LoaderDefinitionFunction } from '@rspack/core';
 import { omit } from 'lodash';
 import path from 'path';
 
-const loaderModule: Plugin.LoaderDefinition<
+export const loaderModule: Plugin.LoaderDefinition<
   Parameters<LoaderDefinitionFunction>,
   {}
 > = function (...args) {

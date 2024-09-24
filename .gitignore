@@ -21,5 +21,3 @@ tsconfig.tsbuildinfo
 .env.*.local
 
 log/
-
-e2e/**/.rsdoctor/manifest.json
