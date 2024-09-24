@@ -61,6 +61,7 @@
 		"react-i18next",
 		"socket.io-client",
 		"react-router-dom",
-		"tsx"
+		"tsx",
+		"@types/estree"
 	]
 }
