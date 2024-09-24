@@ -11,13 +11,13 @@ function ensureSocket(socketUrl: string = defaultSocketUrl) {
   if (!map.has(socketUrl)) {
     const socket = io(socketUrl, {});
     socket.on('connect', () => {
-      console.log(`Scoket Connect ${socketUrl}`);
+      console.log(`Socket Connect ${socketUrl}`);
     });
     map.set(socketUrl, socket);
   }
   return map.get(socketUrl)!;
 }
-export function getSocket(): Socket {
-  const socket = ensureSocket(defaultSocketUrl);
+export function getSocket(socketUrl?: string): Socket {
+  const socket = ensureSocket(socketUrl || defaultSocketUrl);
   return socket;
 }
