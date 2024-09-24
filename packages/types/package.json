@@ -19,13 +19,13 @@
   },
   "dependencies": {
     "@types/connect": "3.4.38",
-    "@types/estree": "1.0.5",
+    "@types/estree": "1.0.6",
     "@types/tapable": "2.2.7",
     "source-map": "^0.7.4"
   },
   "devDependencies": {
     "@types/node": "^16",
-    "@types/react": "^18.3.5",
+    "@types/react": "^18.3.8",
     "tslib": "2.7.0",
     "typescript": "^5.2.2",
     "@rspack/core": "0.7.5"
