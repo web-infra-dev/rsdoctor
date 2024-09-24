@@ -45,10 +45,6 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
           use: esmLoaderJs,
         },
         {
-          test: /\.js/,
-          use: esmLoader,
-        },
-        {
           test: /\.[jt]s$/,
           use: {
             loader: 'builtin:swc-loader',
@@ -155,7 +151,7 @@ test('rspack data store', async () => {
   graphData.modules.forEach((mod) => (mod.webpackId = ''));
   expect(graphData.modules[0].size).toEqual({
     sourceSize: 68,
-    transformedSize: 91,
+    transformedSize: 85,
     parsedSize: 0,
   });
   expect(graphData.modules[0].path).toMatch('/fixtures/a.js');
@@ -163,5 +159,5 @@ test('rspack data store', async () => {
   const ruleLengthList = configs[0].config.module?.rules?.map(
     (_rule) => (_rule as RuleSetRule)?.use?.length,
   );
-  expect(ruleLengthList).toEqual([1, 3, 3]);
+  expect(ruleLengthList).toEqual([1, 3, 3, 3]);
 });
