@@ -5,6 +5,7 @@ import { Build } from '@/build-utils';
 import { Utils } from '..';
 
 const BuiltinLoaderName = 'builtin:swc-loader';
+const BuiltinLightingCssName = 'builtin:lightningcss-loader';
 const ESMLoaderFile = '.mjs';
 
 export class ProbeLoaderPlugin {
@@ -45,6 +46,13 @@ export class ProbeLoaderPlugin {
       compiler,
       (r: Plugin.BuildRuleSetRule) =>
         Build.Utils.getLoaderNameMatch(r, BuiltinLoaderName, true),
+    ) as Plugin.RuleSetRule[];
+
+    rules = Utils.addProbeLoader2Rules(
+      rules,
+      compiler,
+      (r: Plugin.BuildRuleSetRule) =>
+        Build.Utils.getLoaderNameMatch(r, BuiltinLightingCssName, true),
     ) as Plugin.RuleSetRule[];
 
     compiler.options.module.rules = Utils.addProbeLoader2Rules(

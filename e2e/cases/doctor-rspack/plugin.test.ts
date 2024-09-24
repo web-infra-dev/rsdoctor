@@ -30,6 +30,17 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
           use: loader,
         },
         {
+          test: /\.css$/,
+          use: [
+            {
+              loader: 'builtin:lightningcss-loader',
+              options: {
+                targets: 'ie 10',
+              },
+            },
+          ],
+        },
+        {
           test: /\.js/,
           use: esmLoaderJs,
         },
@@ -148,5 +159,5 @@ test('rspack data store', async () => {
   const ruleLengthList = configs[0].config.module?.rules?.map(
     (_rule) => (_rule as RuleSetRule)?.use?.length,
   );
-  expect(ruleLengthList).toEqual([1, 3, 3]);
+  expect(ruleLengthList).toEqual([1, 3, 3, 3]);
 });

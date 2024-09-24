@@ -66,6 +66,17 @@ const config = {
         type: 'javascript/auto',
       },
       {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'builtin:lightningcss-loader',
+            options: {
+              targets: 'ie 10',
+            },
+          },
+        ],
+      },
+      {
         test: /\.svg$/,
         type: 'asset/resource',
       },
@@ -92,5 +103,8 @@ const config = {
       ],
     }),
   ],
+  experiments: {
+    css: true,
+  },
 };
 module.exports = config;
