@@ -615,7 +615,7 @@ importers:
         specifier: 4.6.1
         version: 4.6.1
       terser:
-        specifier: ^5.31.6
+        specifier: ^5.33.0
         version: 5.33.0
       typescript:
         specifier: ^5.2.2
