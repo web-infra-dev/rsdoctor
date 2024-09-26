@@ -31,7 +31,7 @@ export const Layout = (props: PropsWithChildren<LayoutProps>): JSX.Element => {
           height: '100%',
           minHeight: '100vh',
           padding: Size.BasePadding,
-          marginTop: Size.NavBarHeight,
+          marginTop: !ctx.embedded ? Size.NavBarHeight : 0,
           background: MAIN_BG,
         }}
       >
