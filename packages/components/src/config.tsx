@@ -1,6 +1,10 @@
 import { createContext } from 'react';
 import { Manifest } from '@rsdoctor/types';
-import { getLocaleFromStorage, getThemeFromStorage, getViewModeFromStorage } from './utils/storage';
+import {
+  getLocaleFromStorage,
+  getThemeFromStorage,
+  getViewModeFromStorage,
+} from './utils/storage';
 import { PageState, ViewMode, Language, Theme } from './constants';
 
 export interface Config {
@@ -16,6 +20,8 @@ export interface Config {
   setManifest(json: Manifest.RsdoctorManifest): void;
   setPageState(state: PageState): void;
   setViewMode(mode: Partial<Config['viewMode']>, saveStorage?: boolean): void;
+  // whether the page is embedded in another page
+  embedded?: boolean;
 }
 
 export const defaultConfig: Config = {
