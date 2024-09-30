@@ -1,0 +1,63 @@
+# Rsdoctor v0.4 Release Note
+
+Rsdoctor v0.4 is now released!
+
+The new features of Rsdoctor v0.4 include:
+
+- **Brief Mode**: Outputs a single HTML file, ideal for CI processes.
+- **Bundle Diff**: Compare and analyze changes between two build artifacts.
+- **Vue Loader Analysis**: Added support for loader analysis in Vue projects.
+
+## Brief Mode
+
+In Rsdoctor v0.4, a new **Brief mode** has been added, designed specifically for CI/CD scenarios. Brief mode consolidates the data report into a single HTML page, making it convenient for users to view historical build data in CI/CD and other scenarios. The main features of Brief mode are:
+
+- **Single report file**: Previously, Rsdoctor output multiple report data and `Manifest.json`, which was inconvenient for CDN upload and sharing. Brief mode outputs a single report, making it convenient for use in CI processes.
+- **Easy to configure**: Enable by configuring the [mode.brief](/config/options/options#mode) option in the Rsdoctor plugin.
+- **Report output**: The report will be generated in the build artifacts directory, and the output directory and filename of the Brief report can be configured.
+
+This feature greatly enhances the convenience of using Rsdoctor analysis reports in CI processes. The report can be uploaded to a CDN in the pipeline to display historical reports. [For more details, please refer to](/guide/start/cicd)
+
+## Bundle Diff
+
+import { Badge } from '@theme';
+
+<Badge text="Version: 0.4.5" type="warning" />
+
+The **Bundle Diff** feature helps users compare and analyze changes between two build artifacts. Key capabilities include:
+
+- **Total size change**: Displays the total size change between two build artifacts.
+- **File type change**: Compares the size changes of different types of files (JS, CSS, images, fonts, etc.).
+- **First screen resource change**: Analyzes the size changes of resources loaded on the first screen.
+- **Duplicate package count change**: Counts and compares the number of duplicate packages between two builds.
+- **NPM Packages change**: Displays changes in the number of NPM packages, including added, removed, and changed packages.
+- **Detailed data query**: Provides a detailed list module for deeper data query and analysis.
+- **Module-level comparison**: View the name, size, and change rate of modules, and supports viewing the code changes of modules.
+
+<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+  <img
+    src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/6c20c39a1dd576a513c2a7cb0fb0d2e162f63343/others/assets/rsdoctor/bundle-diff-cards.png"
+    style={{ width: '48%' }}
+  />
+  <img
+    src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-module-list.png"
+    style={{ width: '48%' }}
+  />
+</div>
+
+This feature enhances the user's ability to visually analyze changes in build artifacts, helping users better understand and optimize build results. [For more details, please refer to](/guide/usage/bundle-diff)
+
+## Vue Loader Analysis
+
+<Badge text="Version: 0.4.5" type="warning" />
+
+Support for loader analysis for Vue projects has been added in Rsdoctor v0.4.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/d8074588e99dbdcaa278cd1e82f1298663e425db/others/assets/rsdoctor/vue-loader.png" />
+
+## Other Features
+
+- **Rspack's builtin:lightningcss-loader analysis**: Added support for [builtin:lightningcss-loader](https://rspack.dev/guide/features/builtin-lightningcss-loader#builtin-lightningcss-loader) analysis.
+- **Performance optimization**:
+  - Reduced the size of the `@rsdoctor/client` package by 60%, improving page rendering speed.
+  - Reduced third-party dependencies, thereby reducing the total download size during installation.
