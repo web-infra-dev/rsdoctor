@@ -10,5 +10,6 @@
   "bundle-size",
   "module-analysis",
   "resolver",
-  "rule-config"
+  "rule-config",
+  "bundle-diff"
 ]

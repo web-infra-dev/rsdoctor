@@ -49,6 +49,25 @@ rsdoctor analyze --profile <manifestFile>
 rsdoctor analyze --profile "./dist/.rsdoctor/manifest.json"
 ```
 
+### `bundle-diff` Command
+
+The `bundle-diff` command is used to load **two** [manifest.json](/config/options/term#manifestjson) files **locally** and open the Rsdoctor [Bundle Diff](../usage/bundle-diff) page for **comparison and analysis of build bundles**.
+
+```bash
+rsdoctor bundle-diff --baseline <baselineManifestJsonPath> --current <currentManifestJsonPath>
+```
+
+**Parameter Definitions**
+
+- `baselineManifestJsonPath` Path to the [manifest.json](/config/options/term#manifestjson) used as the **baseline** (supports local paths as well as online URLs).
+- `currentManifestJsonPath` Path to the [manifest.json](/config/options/term#manifestjson) used as the **current** (supports local paths as well as online URLs) for comparison with the **baseline**.
+
+**Usage Example**
+
+```bash
+rsdoctor bundle-diff --baseline="baseline/.rsdoctor/manifest.json" --current="current/.rsdoctor/manifest.json"
+```
+
 ## Node API
 
 We provide a Node.js API in `@rsdoctor/cli` that allows you to make calls during runtime in Node.js.
