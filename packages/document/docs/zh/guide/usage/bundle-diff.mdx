@@ -1,0 +1,127 @@
+# Bundle Diff
+
+我们提供了 Bundle Diff 的功能，可以让你进行对比分析两次构建产物发生的变化。
+
+目前我们提供了以下几种使用方式：
+
+- [CLI 本地打开](/guide/start/cli)
+- 在线上传分析（计划支持）
+
+## 使用方式
+
+### CLI 本地打开
+
+首先你需要准备 **2 份** Rsdoctor 产出的[manifest.json](/config/options/term#manifestjson)，然后通过安装[@rsdoctor/cli](/guide/start/cli#%E5%AE%89%E8%A3%85-rsdoctorcli) 并使用 CLI 提供的 `bundle-diff` 命令，详见[命令使用教程](/guide/start/cli#bundle-diff-%E5%91%BD%E4%BB%A4)。
+
+### 在线上传分析（计划支持）
+
+我们计划提供了一个在线页面用于 Bundle Diff 分析，你可以通过在页面中上传 **2 份** Rsdoctor 产出的[manifest.json](/config/options/term#manifestjson)，其中一份作为基准（Baseline），另一份则作为当前产物结果 (Current)，通过点击 Start Diff 则就可以进入我们的分析页面。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/51ae2fdf0635ebf52ef04a11f779314c64ef2fb6/others/assets/rsdoctor/bundle-diff.png" />
+
+## 使用指南
+
+### 功能概览
+
+在 Bundle Diff 模块，你可以看到两次产物结果的信息对比，其中包含:
+
+- **总体积变化**
+- **不同类型文件的体积变化**
+- **首屏资源的体积变化**
+- **重复包的数量变化**
+- **NPM Packages 的数量变化** 等信息
+
+除了上面的数据变化概览之外，我们还能通过页面下方的**详情列表**模块，进行更深入的数据查询分析。
+
+### 名词释义
+
+| 名词                             | 描述说明                                                                           |
+| -------------------------------- | ---------------------------------------------------------------------------------- |
+| <b><i>Baseline</i></b>           | 代表作为**基准的数据源**                                                           |
+| <b><i>Current</i></b>            | 代表当前需要**与 Baseline 进行对比的目标数据源**                                   |
+| <b><i>Asset / Assets</i></b>     | 代表当前**产物文件**                                                               |
+| <b><i>Bundle Size</i></b>        | 代表产物中**所有文件**的体积                                                       |
+| <b><i>Total JS</i></b>           | 代表产物中所有 `.js` 文件的体积                                                    |
+| <b><i>Initial JS</i></b>         | 代表产物中所有**首屏**加载的 `.js` 文件的体积                                      |
+| <b><i>Total CSS</i></b>          | 代表产物中所有 `.css` 文件的体积                                                   |
+| <b><i>Initial CSS</i></b>        | 代表产物中所有**首屏**加载的 `.css` 文件的体积                                     |
+| <b><i>Image</i></b>              | 代表产物中所有 `.png`/`.jpg`/`.svg`/`.webp`/`.jpeg`/`.gif`/`.bmp` 的文件体积       |
+| <b><i>Font</i></b>               | 代表产物中所有 `.ttf`/`.fnt`/`.fon`/`.otf` 的文件体积                              |
+| <b><i>Media</i></b>              | 代表产物中所有 `.mp3`/`.mp4`/`.avi`/`.wav`/`.flv`/`.mov`/`.mpg`/`.mpeg` 的文件体积 |
+| <b><i>HTML</i></b>               | 代表产物中所有 `.html` 的文件体积                                                  |
+| <b><i>Duplicate Packages</i></b> | 代表产物中存在的**重复包总数**                                                     |
+| <b><i>Modules</i></b>            | 代表产物中 Module 总数                                                             |
+| <b><i>Packages</i></b>           | 代表产物中存在的 **NPM Packages 总数**                                             |
+| <b><i>New</i></b>                | 代表**新增**，即 **Baseline 中不存在，Current 中存在**                             |
+| <b><i>Deleted</i></b>            | 代表**移除了**，即 **Baseline 中存在，Current 中不存在**                           |
+| <b><i>Changed</i></b>            | 代表**只发生了内容改变**，即 **Baseline 和 Current 中都存在**，但是**内容变化**了  |
+| <b><i>Parsed Size</i></b>        | 代表**打包进产物的最终体积**                                                       |
+
+### 使用说明
+
+#### Dashboard
+
+在页面顶部，我们可以看到很多数据由不同的卡片组成，其中包含了如下信息：
+
+- **Bundle Size** 包含了两次产物总体积以及变化幅度。
+- **Total JS | Initial JS** 包含了两次产物中 所有 JS 与 首屏 JS 的总体积以及变化幅度。
+- **Total CSS | Initial CSS** 包含了两次产物中 所有 CSS 与 首屏 CSS 的总体积以及变化幅度。
+- **Image | Font | Media** 包含了图片、字体、音频类文件的体积以及变化幅度。
+- **HTML** 包含了 html 文件的体积以及变化幅度。
+- **Others** 代表除了上述文件外的其他所有文件的体积以及变化幅度。
+- **Duplicate Package** 代表两次产物中存在的重复包数量，点击则可以查看对应的重复包详情。
+- **Modules** 代表两次产物中存在的 Modules 数量。
+- **Packages** 代表两次产物中存在的 NPM Packages 总数，以及新增、删除、变更的数量变化。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/6c20c39a1dd576a513c2a7cb0fb0d2e162f63343/others/assets/rsdoctor/bundle-diff-cards.png" />
+
+#### Overview
+
+在 Overview 模块中，我们可以看到不同**文件类型维度**的**体积**、**数量**以及**变化幅度**。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/6c20c39a1dd576a513c2a7cb0fb0d2e162f63343/others/assets/rsdoctor/bundle-diff-all.png" />
+
+#### Assets
+
+:::tip
+Rsdoctor 在展示 Asset 名称时，会尝试移除产物文件名中的 hash 值，以方便进行产物文件对比。
+:::
+
+在 Assets 模块中，我们可以看到产物文件之间的**体积**以及**变化幅度**。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-assets-list.png" />
+
+同时**点击**列表项目前的 **"+" 按钮**，则可以展开看到对应 Asset 所**包含的模块列表**（即 `Modules of "xxx"`），其中则会显示模块之间的**体积**以及**变化幅度**。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-assets.png" />
+
+Rsdoctor 会**兼容同名 Assets 文件 hash 不同**的情况，但是对于**拆包产生的命名不同的 Assets**，Rsdoctor 则无法辨别其比较对象。
+
+所以 Rsdoctor Assets 模块**还提供了 select 组件**，你可以**手动选择想要对比的 Assets 资源**。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/6c20c39a1dd576a513c2a7cb0fb0d2e162f63343/others/assets/rsdoctor/bundle-diff-select-assets.png" />
+
+#### Modules
+
+在 Modules 模块中，我们可以看到两次产物中包含的所有模块的**名称**、**体积**以及**变化幅度**。
+
+其中 `New` / `Deleted` / `Changed` 标签则代表模块在 `Current` 中到底是 新增 还是 被删除 或者只是发生了改变。
+
+而 `node_modules` 标签则意味着该模块的路径中包含了 `/node_modules/`。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-module-list.png" />
+
+在列表项的右侧，则可以通过对应的「View Changes」按钮来查看模块代码的变更。
+
+**代码对比，分几种数据：**
+
+- **Source Code: 源码数据。** `Normal` 模式下存在代码资源，`Lite` 模式下不存在代码资源，`Brief` 模式不存在代码资源。
+- **Bundled Code: 构建后代码。** `Normal` 模式下存在代码资源，`Lite` 模式下存在代码资源，`Brief` 模式不存在代码资源。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-module-changes.png" />
+
+#### Packages
+
+在 Packages 模块，我们可以看到两次产物中包含的**所有 NPM Packages 列表**，每个列表项则会包含其对应的 **Package Name**、**Version（版本号）**、**Parsed Size（打包后的最终体积）**。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-packages.png" />

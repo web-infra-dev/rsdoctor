@@ -49,6 +49,25 @@ rsdoctor analyze --profile <manifestFile>
 rsdoctor analyze --profile "./dist/.rsdoctor/manifest.json"
 ```
 
+### bundle-diff 命令
+
+`bundle-diff` 命令是用于在**本地**加载**两份** [manifest.json](/config/options/term#manifestjson) 并且打开 Rsdoctor 的 [Bundle Diff](../usage/bundle-diff) 页面进行**构建产物的对比和分析**。
+
+```bash
+rsdoctor bundle-diff --baseline <baselineManifestJsonPath> --current <currentManifestJsonPath>
+```
+
+**参数定义**
+
+- `baselineManifestJsonPath` 当作 **基准** 的 [manifest.json](/config/options/term#manifestjson) 的路径（支持本地路径以及在线 url）
+- `currentManifestJsonPath` 当作 **当前** 的 [manifest.json](/config/options/term#manifestjson) 的路径（支持本地路径以及在线 url），用于和 **基准** 进行对比
+
+**使用示例**
+
+```bash
+rsdoctor bundle-diff --baseline="baseline/.rsdoctor/manifest.json" --current="current/.rsdoctor/manifest.json"
+```
+
 ## Node API
 
 我们在 `@rsdoctor/cli` 中提供了 Node.js API，可以让你在 Node.js 运行时进行调用。

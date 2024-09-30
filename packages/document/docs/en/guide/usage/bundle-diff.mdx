@@ -1,0 +1,127 @@
+# Bundle Diff
+
+We provide the Bundle Diff feature, which allows you to compare and analyze the changes between two build bundles.
+
+Currently, we offer the following usage methods:
+
+- [Open locally with CLI](/guide/start/cli)
+- Online upload analysis (planned support)
+
+## Usage
+
+### Open locally with CLI
+
+First, you need to prepare **2 copies** of the [manifest.json](/config/options/term#manifestjson) produced by Rsdoctor. Then, install [@rsdoctor/cli](/guide/start/cli#cli-tutorial) and use the CLI command `bundle-diff`. For detailed command usage, see [command usage tutorial](/guide/start/cli#bundle-diff-command).
+
+### Online upload analysis (planned support)
+
+We plan to provide an online page for Bundle Diff analysis. You can upload **2 copies** of the [manifest.json](/config/options/term#manifestjson) produced by Rsdoctor on the page, one as the Baseline and the other as the Current. By clicking Start Diff, you can enter our analysis page.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/51ae2fdf0635ebf52ef04a11f779314c64ef2fb6/others/assets/rsdoctor/bundle-diff.png" />
+
+## User Guide
+
+### Feature Overview
+
+In the Bundle Diff module, you can see the comparison of information between the two build bundles, including:
+
+- **total size changes**
+- **size changes of different file types**
+- **initial bundles size changes**
+- **changes in the number of duplicate packages**
+- **changes in the number of NPM Packages**, and more.
+
+In addition to the above data overview, we can also perform more in-depth data query and analysis through the **details list** module at the bottom of the page.
+
+### Terminology
+
+| Term                             | Description                                                                                                                |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| <b><i>Baseline</i></b>           | Represents the **reference data source**                                                                                   |
+| <b><i>Current</i></b>            | Represents the **target data source** to be compared with the Baseline                                                     |
+| <b><i>Asset / Assets</i></b>     | Represents the **build files**                                                                                             |
+| <b><i>Bundle Size</i></b>        | Represents the **total size** of all files in the build                                                                    |
+| <b><i>Total JS</i></b>           | Represents the total size of all `.js` files in the build                                                                  |
+| <b><i>Initial JS</i></b>         | Represents the total size of all **first screen** `.js` files in the build                                                 |
+| <b><i>Total CSS</i></b>          | Represents the total size of all `.css` files in the build                                                                 |
+| <b><i>Initial CSS</i></b>        | Represents the total size of all **first screen** `.css` files in the build                                                |
+| <b><i>Image</i></b>              | Represents the total size of all `.png`/`.jpg`/`.svg`/`.webp`/`.jpeg`/`.gif`/`.bmp` files in the build                     |
+| <b><i>Font</i></b>               | Represents the total size of all `.ttf`/`.fnt`/`.fon`/`.otf` files in the build                                            |
+| <b><i>Media</i></b>              | Represents the total size of all `.mp3`/`.mp4`/`.avi`/`.wav`/`.flv`/`.mov`/`.mpg`/`.mpeg` files in the build               |
+| <b><i>HTML</i></b>               | Represents the total size of all `.html` files in the build                                                                |
+| <b><i>Duplicate Packages</i></b> | Represents the **total number of duplicate packages** in the build                                                         |
+| <b><i>Modules</i></b>            | Represents the total number of modules in the build                                                                        |
+| <b><i>Packages</i></b>           | Represents the total number of **NPM Packages** in the build                                                               |
+| <b><i>New</i></b>                | Represents **newly added** items, i.e., **not present in Baseline but present in Current**                                 |
+| <b><i>Deleted</i></b>            | Represents **removed** items, i.e., **present in Baseline but not in Current**                                             |
+| <b><i>Changed</i></b>            | Represents items that **only changed in content**, i.e., **present in both Baseline and Current but with content changes** |
+| <b><i>Parsed Size</i></b>        | Represents the **final size** of the build bundles                                                                         |
+
+### Instructions
+
+#### Dashboard
+
+At the top of the page, we can see many data points composed of different cards, including the following information:
+
+- **Bundle Size** includes the total size of the two builds and the change rate.
+- **Total JS | Initial JS** includes the total size and change rate of all JS and first screen JS in the two builds.
+- **Total CSS | Initial CSS** includes the total size and change rate of all CSS and first screen CSS in the two builds.
+- **Image | Font | Media** includes the size and change rate of image, font, and media files.
+- **HTML** includes the size and change rate of HTML files.
+- **Others** represents the size and change rate of all other files not mentioned above.
+- **Duplicate Package** represents the number of duplicate packages in the two builds. Clicking on it allows you to view the details of the duplicate packages.
+- **Modules** represents the number of modules in the two builds.
+- **Packages** represents the total number of NPM Packages in the two builds, as well as the number of new, deleted, and changed packages.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/6c20c39a1dd576a513c2a7cb0fb0d2e162f63343/others/assets/rsdoctor/bundle-diff-cards.png" />
+
+#### Overview
+
+In the Overview module, we can see the **size**, **quantity**, and **change rate** of different **file types**.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/6c20c39a1dd576a513c2a7cb0fb0d2e162f63343/others/assets/rsdoctor/bundle-diff-all.png" />
+
+#### Assets
+
+:::tip
+When displaying Asset names, Rsdoctor tries to remove the hash values from the build file names to facilitate comparison.
+:::
+
+In the Assets module, we can see the **size** and **change rate** of the build files.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-assets-list.png" />
+
+By **clicking** the **"+" button** in front of the list items, you can expand to see the **list of modules** contained in the corresponding Asset (i.e., `Modules of "xxx"`), which shows the **size** and **change rate** of the modules.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-assets.png" />
+
+Rsdoctor is compatible with the situation where Assets files have **the same name but different hashes**. However, for Assets with **different names generated by splitting packages**, Rsdoctor cannot identify their comparison objects.
+
+Therefore, the Rsdoctor Assets module also provides a select component, allowing you to **manually select the Assets resources you want to compare**.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/6c20c39a1dd576a513c2a7cb0fb0d2e162f63343/others/assets/rsdoctor/bundle-diff-select-assets.png" />
+
+#### Modules
+
+In the Modules module, we can see the **name**, **size**, and **change rate** of all modules contained in the two builds.
+
+The `New` / `Deleted` / `Changed` tags indicate whether the module is newly added, deleted, or just changed in the `Current` build.
+
+The `node_modules` tag indicates that the module's path contains `/node_modules/`.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-module-list.png" />
+
+On the right side of the list items, you can view the module code changes by clicking the corresponding "View Changes" button.
+
+**Code comparison includes several types of data:**
+
+- **Source Code: Source code data.** Available in `Normal` mode, not available in `Lite` mode, and not available in `Brief` mode.
+- **Bundled Code: Built code.** Available in `Normal` mode, available in `Lite` mode, and not available in `Brief` mode.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-module-changes.png" />
+
+#### Packages
+
+In the Packages module, we can see the **list of all NPM Packages** contained in the two builds. Each list item includes the **Package Name**, **Version**, and **Parsed Size** (final size after packaging).
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-packages.png" />
