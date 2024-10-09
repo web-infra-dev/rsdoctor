@@ -40,7 +40,7 @@
   "devDependencies": {
     "@types/body-parser": "1.19.5",
     "@types/cors": "2.8.17",
-    "@types/lodash": "^4.17.9",
+    "@types/lodash": "^4.17.10",
     "@types/node": "^16",
     "@types/serve-static": "1.15.7",
     "tslib": "2.7.0",
