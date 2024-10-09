@@ -1,0 +1,77 @@
+# Rsdoctor v0.4 Release Note
+
+Rsdoctor v0.4 已经发布啦!
+
+Rsdoctor v0.4 的新特性有:
+
+- **Brief 模式**: 输出单个报告文件，适用于 CI 流程。
+- **Bundle Diff**: 对比和分析两次构建产物的变化。
+- **Vue Loader 分析**: 增加了对 Vue 项目中 loader 分析的支持。
+
+## Brief Report
+
+在 Rsdoctor v0.4 中，新增了 **Brief 模式**，专为 CI/CD 场景设计。Brief 模式将数据报告整合到一个 HTML 页面中，方便用户在 CI/CD 及其他场景下查看历史构建数据。以下是 Brief 模式的主要特点：
+
+- **单个报告文件**：之前 Rsdoctor 输出的多个报告数据与 `Manifest.json`，不方便进行 CDN 上传和共享，Brief 模式输出单一报告方便 CI 流程中使用。
+- **易于配置**：通过配置 Rsdoctor 插件的 [mode.brief](/config/options/options#mode) 选项即可开启 Brief 模式。
+- **报告输出**：报告会生成在构建产物目录中，同时可配置 Brief 报告生成目录和文件名。
+
+此功能极大地提升了在 CI 流程中使用 Rsdoctor 分析报告的便捷性，可以在 Pipeline 中将报告上传到 CDN 以便展示历史报告。[详情请参阅](/guide/start/cicd)
+
+## Bundle Diff
+
+import { Badge } from '@theme';
+
+<Badge text="Version: 0.4.5" type="warning" />
+
+我们引入了 **Bundle Diff** 功能，帮助用户对比分析两次构建产物的变化。以下是 Bundle Diff 的主要能力：
+
+- **总体积变化**：展示两次构建产物的总体积变化。
+- **文件类型变化**：对比不同类型文件（如 JS、CSS、图片、字体等）的体积变化。
+- **首屏资源变化**：分析首屏加载资源的体积变化。
+- **重复包数量变化**：统计并对比两次构建中重复包的数量变化。
+- **NPM Packages 变化**：展示 NPM 包的数量变化，包括新增、删除和变更的包。
+- **详细数据查询**：通过详情列表模块，进行更深入的数据查询和分析。
+- **模块级别对比**：查看模块的名称、体积及变化幅度，并支持查看模块代码的变更。
+
+<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+  <img
+    src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/6c20c39a1dd576a513c2a7cb0fb0d2e162f63343/others/assets/rsdoctor/bundle-diff-cards.png"
+    style={{ width: '48%' }}
+  />
+  <img
+    src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/632e3087495b569de77a93235196fdacf09627d5/others/assets/rsdoctor/bundle-diff-module-list.png"
+    style={{ width: '48%' }}
+  />
+</div>
+
+此功能极大地提升了用户对构建产物变化的可视化分析能力，帮助用户更好地理解和优化构建结果。[详情请参阅](/guide/usage/bundle-diff)
+
+### 计划
+
+后续将计划支持用于 GitHub 平台的 Bundle Diff Action，更方便的进行 CI 阶段的劣化监控。
+
+## 支持 Vue Loader 分析能力
+
+<Badge text="Version: 0.4.5" type="warning" />
+
+在 Rsdoctor 0.4 版本中支持了 Vue 项目的 Loader 分析。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/d8074588e99dbdcaa278cd1e82f1298663e425db/others/assets/rsdoctor/vue-loader.png" />
+
+## 其他 Feature
+
+- 支持了 Rspack 的 builtin:lightningcss-loader 分析
+
+  在 Rsdoctor 0.4 版本中支持了 Rspack 的 [builtin:lightningcss-loader](https://rspack.dev/guide/features/builtin-lightningcss-loader#builtin-lightningcss-loader) 分析。
+
+- Rsdoctor 自身的性能优化
+
+  - 减少了 60% 的 `@rsdoctor/client` 包体积，提高页面渲染速度。
+
+  <img
+    src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/34e6d96d6948a08cade4bd419f50b962e228a4a8/others/assets/rsdoctor/package-size-diff.png"
+    style={{ width: '60%', margin: 'auto' }}
+  />
+
+  - 减少 Rsdoctor 可替代的第三方依赖包，从而减少安装时下载总大小。
