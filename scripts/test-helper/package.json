@@ -25,13 +25,13 @@
   },
   "dependencies": {
     "@rspack/core": "0.7.5",
-    "@types/lodash": "^4.17.9",
+    "@types/lodash": "^4.17.10",
     "@types/node": "^16",
     "lodash": "^4.17.21",
     "memfs": "3.5.3",
     "typescript": "^5.2.2",
     "upath": "2.0.1",
-    "webpack": "^5.90.0"
+    "webpack": "^5.95.0"
   },
   "publishConfig": {
     "access": "public",
