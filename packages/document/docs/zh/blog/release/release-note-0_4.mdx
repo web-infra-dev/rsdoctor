@@ -47,6 +47,10 @@ import { Badge } from '@theme';
 
 此功能极大地提升了用户对构建产物变化的可视化分析能力，帮助用户更好地理解和优化构建结果。[详情请参阅](/guide/usage/bundle-diff)
 
+### 计划
+
+后续将计划支持用于 GitHub 平台的 Bundle Diff Action，更方便的进行 CI 阶段的劣化监控。
+
 ## 支持 Vue Loader 分析能力
 
 <Badge text="Version: 0.4.5" type="warning" />
@@ -64,4 +68,10 @@ import { Badge } from '@theme';
 - Rsdoctor 自身的性能优化
 
   - 减少了 60% 的 `@rsdoctor/client` 包体积，提高页面渲染速度。
+
+  <img
+    src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/34e6d96d6948a08cade4bd419f50b962e228a4a8/others/assets/rsdoctor/package-size-diff.png"
+    style={{ width: '60%', margin: 'auto' }}
+  />
+
   - 减少 Rsdoctor 可替代的第三方依赖包，从而减少安装时下载总大小。
