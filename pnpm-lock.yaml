@@ -100,8 +100,8 @@ importers:
         specifier: workspace:*
         version: link:../packages/webpack-plugin
       '@rspack/core':
-        specifier: 0.7.5
-        version: 0.7.5(@swc/helpers@0.5.3)
+        specifier: 1.0.0
+        version: 1.0.0(@swc/helpers@0.5.13)
       '@types/lodash':
         specifier: ^4.17.9
         version: 4.17.9
@@ -667,8 +667,8 @@ importers:
         version: 4.10.2
     devDependencies:
       '@rspack/core':
-        specifier: 0.7.5
-        version: 0.7.5(@swc/helpers@0.5.3)
+        specifier: 1.0.0
+        version: 1.0.0(@swc/helpers@0.5.13)
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:../../scripts/test-helper
@@ -821,8 +821,8 @@ importers:
         version: 4.17.21
     devDependencies:
       '@rspack/core':
-        specifier: 0.7.5
-        version: 0.7.5(@swc/helpers@0.5.3)
+        specifier: 1.0.0
+        version: 1.0.0(@swc/helpers@0.5.13)
       '@types/lodash':
         specifier: ^4.17.9
         version: 4.17.9
@@ -928,8 +928,8 @@ importers:
         version: 5.95.0(webpack-cli@5.0.0)
     devDependencies:
       '@rspack/core':
-        specifier: 0.7.5
-        version: 0.7.5(@swc/helpers@0.5.3)
+        specifier: 1.0.0
+        version: 1.0.0(@swc/helpers@0.5.13)
       '@types/node':
         specifier: ^16
         version: 16.18.111
@@ -1093,8 +1093,8 @@ importers:
   scripts/test-helper:
     dependencies:
       '@rspack/core':
-        specifier: 0.7.5
-        version: 0.7.5(@swc/helpers@0.5.3)
+        specifier: 1.0.0
+        version: 1.0.0(@swc/helpers@0.5.13)
       '@types/lodash':
         specifier: ^4.17.9
         version: 4.17.9
@@ -6386,6 +6386,7 @@ packages:
       caniuse-lite: 1.0.30001664
       tapable: 2.2.1
       webpack-sources: 3.2.3
+    dev: true
 
   /@rspack/core@1.0.0(@swc/helpers@0.5.13):
     resolution: {integrity: sha512-F4RA9uOLLvD1oTKa96Gcly+Sro1qaqPNENadFyiPwepa7DrwexQa/ym6CQKbvKMOYGKlVSFDPUmgFAirz35ETg==}
@@ -6920,6 +6921,7 @@ packages:
     resolution: {integrity: sha512-FaruWX6KdudYloq1AHD/4nU+UsMTdNE8CKyrseXWEcgjDAbvkwJg2QGPAnfIJLIWsjZOSPLOAykK6fuYp4vp4A==}
     dependencies:
       tslib: 2.7.0
+    dev: true
 
   /@swc/plugin-styled-components@2.0.11:
     resolution: {integrity: sha512-OIuqXS97sT1q/wq/T6D5wNtBYf3YOO0tfJHTnYaiuIqtsjabeTYu/EJOfB+fbCMPf/lHiKxSWtJVCov2X0v1BA==}
