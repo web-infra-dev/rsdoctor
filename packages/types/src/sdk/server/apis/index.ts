@@ -4,12 +4,12 @@ import { connect } from '../../../thirdparty';
 import { RsdoctorBuilderSDKInstance } from '../../index';
 import { RsdoctorServerInstance } from '../index';
 import { LoaderData } from '../../loader';
-import { ProjectAPIResponse, ProjectAPIResquestBody } from './project';
-import { LoaderAPIResponse, LoaderAPIResquestBody } from './loader';
-import { ResolverAPIResponse, ResolverAPIResquestBody } from './resolver';
-import { PluginAPIResponse, PluginAPIResquestBody } from './plugin';
-import { GraphAPIResponse, GraphAPIResquestBody } from './graph';
-import { AlertsAPIResponse, AlertsAPIResquestBody } from './alerts';
+import { ProjectAPIResponse, ProjectAPIRequestBody } from './project';
+import { LoaderAPIResponse, LoaderAPIRequestBody } from './loader';
+import { ResolverAPIResponse, ResolverAPIRequestBody } from './resolver';
+import { PluginAPIResponse, PluginAPIRequestBody } from './plugin';
+import { GraphAPIResponse, GraphAPIRequestBody } from './graph';
+import { AlertsAPIResponse, AlertsAPIRequestBody } from './alerts';
 import { RsdoctorManifestMappingKeys } from '../../../manifest';
 import { SDK } from '@/index';
 
@@ -77,7 +77,7 @@ export enum API {
  * api which used outside the sdk.
  */
 export enum APIExtends {
-  GetCompileProgess = '/api/progress',
+  GetCompileProgress = '/api/progress',
 }
 
 export interface SocketResponseType<T extends API | APIExtends = API> {
@@ -124,13 +124,13 @@ export interface ResponseTypes
   [API.GetAllChunkGraph]: SDK.ChunkGraphData;
 }
 
-export interface ResquestBodyTypes
-  extends LoaderAPIResquestBody,
-    ResolverAPIResquestBody,
-    PluginAPIResquestBody,
-    GraphAPIResquestBody,
-    AlertsAPIResquestBody,
-    ProjectAPIResquestBody {
+export interface RequestBodyTypes
+  extends LoaderAPIRequestBody,
+    ResolverAPIRequestBody,
+    PluginAPIRequestBody,
+    GraphAPIRequestBody,
+    AlertsAPIRequestBody,
+    ProjectAPIRequestBody {
   [API.ReportLoader]: LoaderData;
   [API.SendAPIDataToClient]: {
     api: API;
@@ -147,7 +147,7 @@ export interface ResquestBodyTypes
 
 export type InferResponseType<T, F = void> = Get<ResponseTypes, T, F>;
 
-export type InferRequestBodyType<T, F = void> = Get<ResquestBodyTypes, T, F>;
+export type InferRequestBodyType<T, F = void> = Get<RequestBodyTypes, T, F>;
 
 export interface APIContext {
   server: RsdoctorServerInstance;

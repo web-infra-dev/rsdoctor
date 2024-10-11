@@ -63,10 +63,10 @@ async function rspackCompile(
       // @ts-ignore
       createRsdoctorPlugin({}),
       {
-        name: 'XXX',
+        name: 'Foo',
         apply(compiler: Compiler) {
           compiler.hooks.beforeRun.tapPromise(
-            { name: 'XXX', stage: 99999 },
+            { name: 'Foo', stage: 99999 },
             async () => {
               const sdk = getSDK();
               setSDK(
@@ -113,7 +113,7 @@ async function rspackCompile(
 }
 
 test('rspack banner plugin', async () => {
-  const tapName = 'XXX';
+  const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);
   const sdk = getSDK();
 

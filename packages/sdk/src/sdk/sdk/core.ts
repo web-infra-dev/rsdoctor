@@ -140,7 +140,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
         });
         continue;
       }
-      const jsonstr: string | string[] = await (async () => {
+      const jsonStr: string | string[] = await (async () => {
         try {
           return JSON.stringify(data);
         } catch (error) {
@@ -149,13 +149,13 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
         }
       })();
 
-      if (Array.isArray(jsonstr)) {
-        const urls = jsonstr.map((str, index) => {
+      if (Array.isArray(jsonStr)) {
+        const urls = jsonStr.map((str, index) => {
           return this.writeToFolder(str, outputDir, key, index + 1);
         });
         urlsPromiseList.push(...urls);
       } else {
-        urlsPromiseList.push(this.writeToFolder(jsonstr, outputDir, key));
+        urlsPromiseList.push(this.writeToFolder(jsonStr, outputDir, key));
       }
     }
 
@@ -205,12 +205,12 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
   }
 
   protected writeToFolder(
-    jsonstr: string,
+    jsonStr: string,
     dir: string,
     key: string,
     index?: number,
   ): Promise<DataWithUrl> {
-    const sharding = new File.FileSharding(Algorithm.compressText(jsonstr));
+    const sharding = new File.FileSharding(Algorithm.compressText(jsonStr));
     const folder = path.resolve(dir, key);
     const writer = sharding.writeStringToFolder(folder, '', index);
     return writer.then((item) => {

@@ -21,9 +21,9 @@ $padding: 4px;
     font-size: 14px;
     padding-bottom: $padding;
     display: block;
-    color: rgba(0,0,0,.4);
+    color: rgba(0, 0, 0, 0.4);
   }
-  
+
   &-item {
     font-size: 12px;
     font-weight: 400;
@@ -36,7 +36,7 @@ $padding: 4px;
     align-items: baseline;
 
     &::before {
-      content: " ";
+      content: ' ';
       display: block;
       width: $padding;
       height: $padding;
@@ -68,7 +68,7 @@ $padding: 4px;
     }
   }
 
-  &-textbold {
+  &-text-bold {
     font-weight: 500;
   }
 }

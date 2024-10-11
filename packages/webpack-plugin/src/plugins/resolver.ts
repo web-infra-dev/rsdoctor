@@ -139,13 +139,13 @@ export class RsdoctorResolverPlugin implements ResolvePluginInstance {
 
   apply(resolver: Resolver) {
     // only calls the resolve success.
-    resolver.hooks.result.tap(this.tapOptions, (request, rsctx) => {
+    resolver.hooks.result.tap(this.tapOptions, (request, resolveCtx) => {
       const { context } = request as unknown as ResolveRequestWithContext;
       const ctx = this.contextMap.get(context.issuer);
-      // console.log(request.path, request.request, rsctx.stack);
+      // console.log(request.path, request.request, resolveCtx.stack);
       if (ctx) {
         const data = this.getResolverData(context, {
-          request: this.getResolveRequest(request.request, rsctx),
+          request: this.getResolveRequest(request.request, resolveCtx),
           query: request.query,
           result: request.path as string,
         });

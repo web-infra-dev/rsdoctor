@@ -79,17 +79,17 @@ export const getSizeColumnPropsForModuleRow = (
 
 export const getTargetColumnPropsForModuleRow = (
   key: 'baseline' | 'current',
-  bMoudlesCount: number,
-  cMoudlesCount: number,
+  bModulesCount: number,
+  cModulesCount: number,
 ): ColumnGroupType<BundleDiffTableModulesData> => {
   const [sortByChanged, setSortByChanged] = useState(false);
 
   const isB = key === 'baseline';
   return {
     title: () => {
-      const count = isB ? bMoudlesCount : cMoudlesCount;
+      const count = isB ? bModulesCount : cModulesCount;
       const title = upperFirst(key);
-      const diff = Graph.diffSize(bMoudlesCount, cMoudlesCount);
+      const diff = Graph.diffSize(bModulesCount, cModulesCount);
       return (
         <div>
           <Typography.Text>{title}</Typography.Text>
@@ -239,7 +239,7 @@ export const ModuleRowForAsset: React.FC<
     return [...map.values()];
   }, [bModules, cModules, searchText]);
 
-  const { bMoudlesCount, cMoudlesCount, totalCount } = useMemo(() => {
+  const { bModulesCount, cModulesCount, totalCount } = useMemo(() => {
     const fileNameFilter = (e: BundleDiffTableModulesData) =>
       getPathInfo(e).alias.indexOf(searchText) > -1;
 
@@ -254,8 +254,8 @@ export const ModuleRowForAsset: React.FC<
     }
 
     return {
-      bMoudlesCount: b.length,
-      cMoudlesCount: c.length,
+      bModulesCount: b.length,
+      cModulesCount: c.length,
       totalCount,
     };
   }, [dataSource, searchText]);
@@ -392,13 +392,13 @@ export const ModuleRowForAsset: React.FC<
         },
         getTargetColumnPropsForModuleRow(
           'current',
-          bMoudlesCount,
-          cMoudlesCount,
+          bModulesCount,
+          cModulesCount,
         ),
         getTargetColumnPropsForModuleRow(
           'baseline',
-          bMoudlesCount,
-          cMoudlesCount,
+          bModulesCount,
+          cModulesCount,
         ),
         {
           title: 'Actions',

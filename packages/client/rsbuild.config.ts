@@ -18,8 +18,8 @@ import {
 
 const {
   ENABLE_DEVTOOLS_PLUGIN,
-  OFFICAL_PREVIEW_PUBLIC_PATH,
-  OFFICAL_DEMO_MANIFEST_PATH,
+  OFFICIAL_PREVIEW_PUBLIC_PATH,
+  OFFICIAL_DEMO_MANIFEST_PATH,
   ENABLE_CLIENT_SERVER,
 } = process.env;
 
@@ -41,8 +41,8 @@ export default defineConfig(({ env }) => {
       define: {
         'process.env.NODE_DEBUG': JSON.stringify(false),
         'process.env.NODE_ENV': JSON.stringify(env),
-        'process.env.OFFICAL_DEMO_MANIFEST_PATH': JSON.stringify(
-          OFFICAL_DEMO_MANIFEST_PATH,
+        'process.env.OFFICIAL_DEMO_MANIFEST_PATH': JSON.stringify(
+          OFFICIAL_DEMO_MANIFEST_PATH,
         ),
         'process.env.LOCAL_CLI_PORT': JSON.stringify(PortForCLI),
       },
@@ -64,7 +64,7 @@ export default defineConfig(({ env }) => {
         media: 'resource/media',
       },
       assetPrefix: IS_PRODUCTION
-        ? OFFICAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || './'
+        ? OFFICIAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || './'
         : './',
       cleanDistPath: IS_PRODUCTION,
       sourceMap: {

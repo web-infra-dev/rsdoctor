@@ -197,10 +197,10 @@ export function getHoverMessageInModule(
 
   /**
    * 导出部分的信息，需要先过滤声明和导出位置重叠的部分
-   * export { xxx };
-   * export { xxx } from 'xxx';
-   * export * as name from 'xxx';
-   * export * from 'xxx';
+   * export { foo };
+   * export { foo } from 'foo';
+   * export * as name from 'foo';
+   * export * from 'foo';
    * 最后一种需要合并位置
    */
 

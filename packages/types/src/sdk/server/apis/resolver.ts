@@ -11,6 +11,6 @@ export interface ResolverAPIResponse {
   };
 }
 
-export interface ResolverAPIResquestBody {
+export interface ResolverAPIRequestBody {
   [API.GetResolverFileDetails]: { filepath: string };
 }

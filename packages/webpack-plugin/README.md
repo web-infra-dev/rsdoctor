@@ -11,7 +11,7 @@ This Rsdoctor plugin is an analysis plugin for the Webpack builder.
 
 ## Note
 
-This plugin is used by the `Webpack` repo to open Rsdoctor, [Quik Start](https://rsdoctor.dev/guide/start/quick-start).
+This plugin is used by the `Webpack` repo to open Rsdoctor, [Quick Start](https://rsdoctor.dev/guide/start/quick-start).
 
 Initialize the RsdoctorWebpackPlugin plugin in the [plugins](https://webpack.js.org/configuration/plugins/#plugins) section of the `webpack.config.js` file, as shown below:
 

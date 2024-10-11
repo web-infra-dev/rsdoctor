@@ -41,7 +41,7 @@ export interface LoaderAPIResponse {
   [API.GetTileReportHtml]: string;
 }
 
-export interface LoaderAPIResquestBody {
+export interface LoaderAPIRequestBody {
   [API.GetLoaderFileDetails]: Pick<ResourceData, 'path'>;
   [API.GetLoaderFolderStatistics]: { folder: string };
   [API.GetLoaderFileFirstInput]: { file: string };

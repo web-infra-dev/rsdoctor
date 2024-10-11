@@ -17,7 +17,7 @@ export class BundleDiffAPI extends BaseAPI {
       packageGraph,
       configs,
       moduleCodeMap,
-      // Just usedby bytedance's inner Rsdoctor
+      // Just used by bytedance's inner Rsdoctor
       cloudManifestUrl,
     } = sdk.getStoreData();
 
@@ -36,7 +36,7 @@ export class BundleDiffAPI extends BaseAPI {
       packageGraph,
       outputFilename,
       moduleCodeMap,
-      // Just usedby bytedance's inner Rsdoctor
+      // Just used by bytedance's inner Rsdoctor
       cloudManifestUrl,
     };
   }

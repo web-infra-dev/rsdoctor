@@ -42,7 +42,7 @@ async function webpack(tapName: string, compile: typeof compileByWebpack5) {
 }
 
 test('webpack5 plugins tests', async () => {
-  const tapName = 'XXX';
+  const tapName = 'Foo';
   await webpack(tapName, compileByWebpack5);
   const sdk = getSDK();
   const { done, seal } = sdk.getStoreData().plugin;

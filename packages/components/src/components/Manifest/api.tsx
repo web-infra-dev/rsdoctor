@@ -98,7 +98,7 @@ export const ServerAPIProvider = <
     // add update event listener
     loader.onDataUpdate(api, update);
     return () => {
-      // remove update event when the componet unmount.
+      // remove update event when the component unmount.
       loader.removeOnDataUpdate(api, update);
     };
   }, [loader, api, body]);

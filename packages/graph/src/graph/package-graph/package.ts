@@ -91,10 +91,10 @@ export class Package implements SDK.PackageInstance {
   }
 
   contain(file: string) {
-    const ifCotain = file.includes(this.root);
+    const ifContain = file.includes(this.root);
 
     // Non-identical directories.
-    if (!ifCotain) {
+    if (!ifContain) {
       return false;
     }
 

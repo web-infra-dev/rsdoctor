@@ -11,7 +11,7 @@ This Rsdoctor plugin is an analysis plugin for the Rspack builder.
 
 ## Note
 
-This plugin is used by the `Rspack` repo to open Rsdoctor, [Quik Start](https://rsdoctor.dev/guide/start/quick-start).
+This plugin is used by the `Rspack` repo to open Rsdoctor, [Quick Start](https://rsdoctor.dev/guide/start/quick-start).
 
 Initialize the RsdoctorRspackPlugin in the [plugins](https://www.rspack.dev/config/plugins.html#plugins) of `rspack.config.js`:
 

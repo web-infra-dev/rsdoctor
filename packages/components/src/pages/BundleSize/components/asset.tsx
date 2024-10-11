@@ -42,7 +42,7 @@ import {
 } from '../../../utils';
 import { ModuleGraphListContext } from '../config';
 
-let expanedModulesKeys: Key[] = [];
+let expandedModulesKeys: Key[] = [];
 const TAB_MAP = {
   source: 'source code',
   transformed: 'Transformed Code (After compile)',
@@ -574,14 +574,14 @@ export const AssetDetail: React.FC<{
               {filteredModules.length ? (
                 <FileTree
                   onExpand={(expandedKeys) => {
-                    expanedModulesKeys = expandedKeys;
+                    expandedModulesKeys = expandedKeys;
                   }}
                   treeData={fileStructures}
                   autoExpandParent
                   defaultExpandParent
                   defaultExpandedKeys={
-                    expanedModulesKeys?.length
-                      ? expanedModulesKeys
+                    expandedModulesKeys?.length
+                      ? expandedModulesKeys
                       : fileStructures.length === 1
                         ? [fileStructures[0].key]
                         : []

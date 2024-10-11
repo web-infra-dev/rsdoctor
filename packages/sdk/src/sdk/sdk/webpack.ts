@@ -501,7 +501,7 @@ export class RsdoctorWebpackSDK<
     for (let key of Object.keys(storeData)) {
       const data = storeData[key];
 
-      const jsonstrFn = () => {
+      const jsonStrFn = () => {
         try {
           return JSON.stringify(data);
         } catch (error) {
@@ -509,7 +509,7 @@ export class RsdoctorWebpackSDK<
           return '';
         }
       };
-      const compressText = Algorithm.compressText(jsonstrFn());
+      const compressText = Algorithm.compressText(jsonStrFn());
 
       compressTextScripts = `${compressTextScripts} <script>window.${Constants.WINDOW_RSDOCTOR_TAG}.${key}=${JSON.stringify(compressText)}</script>`;
     }

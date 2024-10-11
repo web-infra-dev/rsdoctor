@@ -9,11 +9,11 @@ interface FailedStatusProps {
 }
 
 const defaultTitle = 'Load data failed, please try again';
-const defaultBottonText = 'retry';
+const defaultButtonText = 'retry';
 
 const FailedStatusComponent: React.FC<FailedStatusProps> = ({
   title = defaultTitle,
-  buttonText = defaultBottonText,
+  buttonText = defaultButtonText,
   retry,
 }) => {
   return (

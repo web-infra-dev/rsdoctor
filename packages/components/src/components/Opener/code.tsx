@@ -92,7 +92,7 @@ export const CodeOpener = ({
       ) : (
         <div style={{ display: 'inline-block' }} />
       )}
-      {/* TODO implement open cloude ide or codebase by git url + branch + relative filepath in production */}
+      {/* TODO implement open cloud ide or codebase by git url + branch + relative filepath in production */}
     </span>
   );
 };

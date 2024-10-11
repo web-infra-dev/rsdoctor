@@ -59,8 +59,8 @@ export function getSharingUrl(manifestCloudUrl: string) {
 }
 
 export function getDemoUrl() {
-  if (process.env.OFFICAL_DEMO_MANIFEST_PATH) {
-    return getSharingUrl(process.env.OFFICAL_DEMO_MANIFEST_PATH);
+  if (process.env.OFFICIAL_DEMO_MANIFEST_PATH) {
+    return getSharingUrl(process.env.OFFICIAL_DEMO_MANIFEST_PATH);
   }
   return null;
 }
