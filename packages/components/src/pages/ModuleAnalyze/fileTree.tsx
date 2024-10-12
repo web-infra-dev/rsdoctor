@@ -6,7 +6,17 @@ import {
   RightSquareTwoTone,
 } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
-import { Badge, Button, Col, Empty, Popover, Radio, Row, Tag, Typography } from 'antd';
+import {
+  Badge,
+  Button,
+  Col,
+  Empty,
+  Popover,
+  Radio,
+  Row,
+  Tag,
+  Typography,
+} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ServerAPIProvider } from 'src/components/Manifest';
 import { Title } from 'src/components/Title';
@@ -15,9 +25,9 @@ import { useI18n } from 'src/utils/hooks';
 import { ChunksTable } from './chunks';
 import { FileTree } from './components/fileTreeCom';
 import { clsNamePrefix } from './constants';
-import DependencyTree from './dependncy';
+import DependencyTree from './dependency';
 import { getImporteds, getModuleReasonsTree } from './utils';
-import { useCreatFileTreeData } from './utils/hooks';
+import { useCreateFileTreeData } from './utils/hooks';
 
 enum ChartDimension {
   Dependencies,
@@ -33,11 +43,21 @@ export const ModuleFilesTree: React.FC<{
 }> = (props) => {
   const { curModule, modules, dependencies, cwd, selectedChunk = '' } = props;
   const { t } = useI18n();
-  const [importedModules, setImportedModules] = useState([] as SDK.ModuleData[]);
-  const [dimension, setDimension] = useState<ChartDimension>(ChartDimension.Dependencies);
+  const [importedModules, setImportedModules] = useState(
+    [] as SDK.ModuleData[],
+  );
+  const [dimension, setDimension] = useState<ChartDimension>(
+    ChartDimension.Dependencies,
+  );
   const [fold, setFold] = useState(true);
-  const { data: fileStructures } = useCreatFileTreeData(modules, importedModules, curModule);
-  const [reasonsTree, setReasonsTree] = useState({} as Record<string, string[]>);
+  const { data: fileStructures } = useCreateFileTreeData(
+    modules,
+    importedModules,
+    curModule,
+  );
+  const [reasonsTree, setReasonsTree] = useState(
+    {} as Record<string, string[]>,
+  );
 
   useEffect(() => {
     const importeds = getImporteds(curModule, modules);
@@ -71,7 +91,11 @@ export const ModuleFilesTree: React.FC<{
               </div>
               <div>
                 <Badge status="success" text=" " />
-                <Popover content="xxxx" title="Concatenated Module Name" trigger="hover">
+                <Popover
+                  content="*"
+                  title="Concatenated Module Name"
+                  trigger="hover"
+                >
                   <Tag color={TAG_PALLETE.DARK_BLUE}>{'Concatenated'}</Tag>
                 </Popover>
                 <Typography.Text>{`: ${t('Concatenated Tag')}`}</Typography.Text>
@@ -80,7 +104,9 @@ export const ModuleFilesTree: React.FC<{
                 <Badge status="success" text=" " />
                 <RightSquareTwoTone />
                 <Typography.Text>
-                  {': Jump button, click to jump to the Module dependency analysis page of this module.'}
+                  {
+                    ': Jump button, click to jump to the Module dependency analysis page of this module.'
+                  }
                 </Typography.Text>
               </div>
             </div>
@@ -102,7 +128,10 @@ export const ModuleFilesTree: React.FC<{
                   cwd={cwd}
                   treeData={
                     selectedChunk
-                      ? fileStructures.filter((_parent) => reasonsTree[_parent.id].indexOf(selectedChunk) >= 0)
+                      ? fileStructures.filter(
+                          (_parent) =>
+                            reasonsTree[_parent.id].indexOf(selectedChunk) >= 0,
+                        )
                       : fileStructures
                   }
                   needCode={true}
@@ -117,14 +146,23 @@ export const ModuleFilesTree: React.FC<{
           </Row>
         </Col>
         <Col span={fold ? 6 : 12}>
-          <div className={`${clsNamePrefix}-file-tree`} style={{ padding: Size.BasePadding / 2 }}>
+          <div
+            className={`${clsNamePrefix}-file-tree`}
+            style={{ padding: Size.BasePadding / 2 }}
+          >
             {fold ? (
               <Popover content={'Unfold [Dependencies & Chunks] Box.'}>
-                <MenuFoldOutlined onClick={() => setFold(!fold)} style={{ marginRight: 8 }} />
+                <MenuFoldOutlined
+                  onClick={() => setFold(!fold)}
+                  style={{ marginRight: 8 }}
+                />
               </Popover>
             ) : (
               <Popover content={'Fold [Dependencies & Chunks] Box.'}>
-                <MenuUnfoldOutlined onClick={() => setFold(!fold)} style={{ marginRight: 8 }} />
+                <MenuUnfoldOutlined
+                  onClick={() => setFold(!fold)}
+                  style={{ marginRight: 8 }}
+                />
               </Popover>
             )}
 
@@ -150,7 +188,11 @@ export const ModuleFilesTree: React.FC<{
                 {dimension === ChartDimension.Dependencies && (
                   <Col span={24} style={{ marginTop: Size.BasePadding / 2 }}>
                     {curModule ? (
-                      <DependencyTree module={curModule} dependencies={dependencies} cwd={cwd} />
+                      <DependencyTree
+                        module={curModule}
+                        dependencies={dependencies}
+                        cwd={cwd}
+                      />
                     ) : (
                       <Empty className={`${clsNamePrefix}-empty`} />
                     )}
@@ -159,7 +201,10 @@ export const ModuleFilesTree: React.FC<{
                 {dimension === ChartDimension.Chunks && (
                   <Col span={18} style={{ marginTop: Size.BasePadding / 2 }}>
                     {curModule ? (
-                      <ServerAPIProvider api={SDK.ServerAPI.API.GetChunksByModuleId} body={{ moduleId: curModule.id }}>
+                      <ServerAPIProvider
+                        api={SDK.ServerAPI.API.GetChunksByModuleId}
+                        body={{ moduleId: curModule.id }}
+                      >
                         {(res) => <ChunksTable chunks={res} />}
                       </ServerAPIProvider>
                     ) : (

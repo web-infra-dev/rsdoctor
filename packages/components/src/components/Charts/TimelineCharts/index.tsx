@@ -37,7 +37,7 @@ export const TimelineCom: React.FC<{
 }> = memo(({ loaderData, pluginsData, formatterFn, chartType = 'normal' }) => {
   const data: LoaderType[] = [];
   let categories: string[] = [];
-  const [optionsData, setOptinsData] = useState({});
+  const [optionsData, setOptionsData] = useState({});
 
   // Register the required components
   echarts.use([
@@ -259,7 +259,7 @@ export const TimelineCom: React.FC<{
         },
       ],
     };
-    setOptinsData(option);
+    setOptionsData(option);
   }, [loaderData, pluginsData]);
 
   return (

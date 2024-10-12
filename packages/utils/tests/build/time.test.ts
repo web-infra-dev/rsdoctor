@@ -10,12 +10,12 @@ describe('test src/build/time.ts', () => {
     const startH = hrtime();
     const delay = 500;
 
-    const expt = await new Promise((r) => {
+    const value = await new Promise((r) => {
       setTimeout(() => {
         r(Time.getCurrentTimestamp(start, startH));
       }, delay);
     });
 
-    expect(expt).toBeGreaterThanOrEqual(start + delay);
+    expect(value).toBeGreaterThanOrEqual(start + delay);
   });
 });

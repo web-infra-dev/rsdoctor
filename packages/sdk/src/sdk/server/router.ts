@@ -11,7 +11,7 @@ interface RouterOptions {
 export class Router {
   static routes = {
     /**
-     * - `key` is the constuctor of object which used to match the API class
+     * - `key` is the constructor of object which used to match the API class
      */
     get: new Map<Function, Array<[apiKey: PropertyKey, pathname: string]>>(),
     post: new Map<Function, Array<[apiKey: PropertyKey, pathname: string]>>(),

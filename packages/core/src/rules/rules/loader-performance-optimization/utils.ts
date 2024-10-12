@@ -1,7 +1,7 @@
-export function match(str: string, partterns: (string | RegExp)[]) {
-  if (partterns.length === 0) return false;
+export function match(str: string, patterns: (string | RegExp)[]) {
+  if (patterns.length === 0) return false;
 
-  return partterns.some((p) => {
+  return patterns.some((p) => {
     if (typeof p === 'string') return str === p;
     if (p instanceof RegExp) return p.test(str);
     return false;

@@ -5,7 +5,7 @@ import { Size } from 'src/constants';
 import { withServerAPI } from '../Manifest';
 
 export interface ProgressProps {
-  progress: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.APIExtends.GetCompileProgess>;
+  progress: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.APIExtends.GetCompileProgress>;
 }
 
 const ProgressBase: React.FC<ProgressProps> = ({ progress }) => {
@@ -34,7 +34,10 @@ const ProgressBase: React.FC<ProgressProps> = ({ progress }) => {
           status="active"
           size="small"
           format={() => (
-            <Typography.Text style={{ fontSize: 12 }} type="secondary">{`${per}% ${message}`}</Typography.Text>
+            <Typography.Text
+              style={{ fontSize: 12 }}
+              type="secondary"
+            >{`${per}% ${message}`}</Typography.Text>
           )}
         />
       </Col>
@@ -43,7 +46,7 @@ const ProgressBase: React.FC<ProgressProps> = ({ progress }) => {
 };
 
 export const Progress = withServerAPI({
-  api: SDK.ServerAPI.APIExtends.GetCompileProgess,
+  api: SDK.ServerAPI.APIExtends.GetCompileProgress,
   responsePropName: 'progress',
   Component: ProgressBase,
   fallbackComponent: () => null,

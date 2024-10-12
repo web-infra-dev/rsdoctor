@@ -22,7 +22,7 @@ export interface GraphAPIResponse {
   [API.GetEntryPoints]: EntryPointData[];
 }
 
-export interface GraphAPIResquestBody {
+export interface GraphAPIRequestBody {
   [API.GetAssetsSummary]: {
     withFileContent?: boolean;
   };

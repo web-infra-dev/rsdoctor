@@ -29,7 +29,7 @@ The `features` attribute is used to analyze the function switches, and the speci
 - **plugins**: Analysis of Plugins calls and time consumption, enabled by default.
 - **bundle**: Analysis of build artifacts, enabled by default.
 - **resolver**: resolver analysis, disabled by default.
-- **lite**: [**depracated, please use [mode.lite](#mode)**]
+- **lite**: [**deprecated, please use [mode.lite](#mode)**]
   lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
 
 Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.

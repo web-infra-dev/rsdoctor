@@ -246,7 +246,7 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
             >
               <Space direction="vertical" className="alert-space">
                 <Space style={{ marginBottom: Size.BasePadding / 2 }}>
-                  <Title text={name} upperFisrt={false} />
+                  <Title text={name} upperFirst={false} />
                   <Typography.Text strong>{versions.length}</Typography.Text>
                   <Typography.Text> versions was found: </Typography.Text>
                   {versions.map((e) => (

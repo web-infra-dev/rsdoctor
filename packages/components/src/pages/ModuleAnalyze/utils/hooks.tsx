@@ -21,7 +21,7 @@ export type NewTreeNodeType = {
   needExpand?: boolean | string;
 };
 
-export function useCreatFileTreeData(
+export function useCreateFileTreeData(
   modules: SDK.ModuleData[],
   importedModules: SDK.ModuleData[],
   curModule: SDK.ModuleData,
@@ -56,7 +56,11 @@ export function useCreatFileTreeData(
   }, [importedModules, curModule]);
 }
 
-function getLeafs(imported: SDK.ModuleData, modules: SDK.ModuleData[], fatherModule: SDK.ModuleData) {
+function getLeafs(
+  imported: SDK.ModuleData,
+  modules: SDK.ModuleData[],
+  fatherModule: SDK.ModuleData,
+) {
   const leafModules = getImporteds(imported, modules);
 
   const leafs = leafModules?.map((_imported, index) => {
@@ -79,7 +83,12 @@ function getLeafs(imported: SDK.ModuleData, modules: SDK.ModuleData[], fatherMod
   return leafs;
 }
 
-export function getContactMainModulePath(concatModules: number[], modules: SDK.ModuleData[]): string[] {
-  const concatModulesPath = concatModules?.map((cm) => modules.filter((m) => m.id === cm)?.[0]);
+export function getContactMainModulePath(
+  concatModules: number[],
+  modules: SDK.ModuleData[],
+): string[] {
+  const concatModulesPath = concatModules?.map(
+    (cm) => modules.filter((m) => m.id === cm)?.[0],
+  );
   return concatModulesPath?.map((m) => m.path);
 }

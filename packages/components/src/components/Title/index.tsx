@@ -6,7 +6,7 @@ interface TitleProps {
   /**
    * @default true
    */
-  upperFisrt?: boolean;
+  upperFirst?: boolean;
   /**
    * @default 16
    */
@@ -15,8 +15,13 @@ interface TitleProps {
   hash?: string;
 }
 
-export const Title: React.FC<PropsWithChildren<TitleProps>> = ({ upperFisrt = true, fontSize = 16, text, hash }) => {
-  const t = typeof text === 'string' ? (upperFisrt ? upf(text) : text) : text;
+export const Title: React.FC<PropsWithChildren<TitleProps>> = ({
+  upperFirst = true,
+  fontSize = 16,
+  text,
+  hash,
+}) => {
+  const t = typeof text === 'string' ? (upperFirst ? upf(text) : text) : text;
   return (
     <Typography.Text style={{ fontSize }} strong>
       {hash ? (

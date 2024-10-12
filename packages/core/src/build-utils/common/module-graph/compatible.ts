@@ -2,8 +2,7 @@ import { Plugin, SDK } from '@rsdoctor/types';
 
 /**
  * Reverse decode the location (loc) information.
- * baseon
- * // TODO::
+ * // TODO:
  * @link https://github.com/webpack/webpack/blob/main/lib/formatLocation.js#L30-L66
  */
 export function getPositionByStatsLocation(

@@ -20,7 +20,7 @@ export function getTooltipHtmlForLoader(
     </li>
     <li class="loader-tooltip-item">
       <span>duration</span>
-      <span class="loader-tooltip-textbold">${formatCosts(loader.costs)}</span>
+      <span class="loader-tooltip-text-bold">${formatCosts(loader.costs)}</span>
     </li>
     <li class="loader-tooltip-item">
       <span>filepath</span>
@@ -28,13 +28,13 @@ export function getTooltipHtmlForLoader(
     </li>
     <li class="loader-tooltip-item">
       <span>start</span>
-      <span class="loader-tooltip-textbold">${dayjs(loader.startAt).format(
+      <span class="loader-tooltip-text-bold">${dayjs(loader.startAt).format(
         'YYYY/MM/DD HH:mm:ss',
       )}</span>
     </li>
     <li class="loader-tooltip-item">
       <span>end</span>
-      <span class="loader-tooltip-textbold">${dayjs(loader.endAt).format(
+      <span class="loader-tooltip-text-bold">${dayjs(loader.endAt).format(
         'YYYY/MM/DD HH:mm:ss',
       )}</span>
     </li>
@@ -65,19 +65,19 @@ export function renderTotalLoadersTooltip(
   <div class="loader-tooltip-title">${loaderName}</div>
   <li class="loader-tooltip-item">
     <span>files</span>
-    <span class="loader-tooltip-textbold">${resources.length}</span>
+    <span class="loader-tooltip-text-bold">${resources.length}</span>
   </li>
   <li class="loader-tooltip-item">
     <span>files(node_modules)</span>
-    <span class="loader-tooltip-textbold">${nodeModulesResources.length}</span>
+    <span class="loader-tooltip-text-bold">${nodeModulesResources.length}</span>
   </li>
   <li class="loader-tooltip-item">
     <span>files(outside the cwd)</span>
-    <span class="loader-tooltip-textbold">${outsideResources.length}</span>
+    <span class="loader-tooltip-text-bold">${outsideResources.length}</span>
   </li>
   <li class="loader-tooltip-item">
     <span>duration(estimated)</span>
-    <span class="loader-tooltip-textbold">${formatCosts(duration)}</span>
+    <span class="loader-tooltip-text-bold">${formatCosts(duration)}</span>
   </li>
   <li class="loader-tooltip-item">
     <span>start(min)</span>

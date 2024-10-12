@@ -8,7 +8,7 @@ export class InternalProgressPlugin<
 > extends InternalBasePlugin<T> {
   public readonly name = 'progress';
 
-  protected currentProgress: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.APIExtends.GetCompileProgess> =
+  protected currentProgress: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.APIExtends.GetCompileProgress> =
     {
       percentage: 100,
       message: '',
@@ -22,7 +22,7 @@ export class InternalProgressPlugin<
           currentProgress.percentage = percentage;
           currentProgress.message = msg || '';
 
-          const api = SDK.ServerAPI.APIExtends.GetCompileProgess;
+          const api = SDK.ServerAPI.APIExtends.GetCompileProgress;
           try {
             sdk.server.sendAPIDataToClient(api, {
               req: {

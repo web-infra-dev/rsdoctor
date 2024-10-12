@@ -4,9 +4,9 @@ import { describe, expect, it } from 'vitest';
  * create sandbox to load src/multiple.ts to avoid sdk save in global variable between different test cases.
  */
 function loadMultipleFile() {
-  let mutiple: typeof import('../dist/multiple');
-  mutiple = require('../dist/multiple');
-  return mutiple!;
+  let multiple: typeof import('../dist/multiple');
+  multiple = require('../dist/multiple');
+  return multiple!;
 }
 
 describe('test src/multiple.ts', () => {

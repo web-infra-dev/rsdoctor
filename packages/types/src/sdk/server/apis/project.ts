@@ -14,10 +14,10 @@ export interface ProjectAPIResponse {
     'hash' | 'root' | 'pid' | 'summary' | 'configs' | 'envinfo' | 'errors'
   >;
   [API.GetClientRoutes]: RsdoctorManifestClientRoutes[];
-  [APIExtends.GetCompileProgess]: {
+  [APIExtends.GetCompileProgress]: {
     percentage: number;
     message: string;
   };
 }
 
-export interface ProjectAPIResquestBody {}
+export interface ProjectAPIRequestBody {}

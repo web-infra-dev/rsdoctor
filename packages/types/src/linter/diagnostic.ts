@@ -27,10 +27,10 @@ export interface ReportData {
   /** Error message */
   message: string;
   /** Modify severity dynamically at runtime */
-  severity?: SeverityString
+  severity?: SeverityString;
   /** Error file information  */
   document?: ReportDocument;
-  /** Diagnostic suggestiions */
+  /** Diagnostic suggestions */
   suggestions?: Suggestion;
   /**
    * Detailed information
@@ -52,7 +52,7 @@ export type ReportDetailData<T extends BaseRuleStoreData> = Omit<
 
 export interface Diagnostic
   extends Omit<ReportData, 'severity'>,
-  Pick<RuleMessage, 'category' | 'code'> {
+    Pick<RuleMessage, 'category' | 'code'> {
   severity: Severity;
   title: string;
   detail?: RuleStoreDataItem;

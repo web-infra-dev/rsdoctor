@@ -2,7 +2,7 @@ import path from 'path';
 import { expect, describe, it } from 'vitest';
 import type { SDK } from '@rsdoctor/types';
 import { Module, ModuleGraph, PackageGraph } from '../src/graph';
-// TODO: simplyfy the module-graph-basic.json data size.
+// TODO: simplify the module-graph-basic.json data size.
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, 'fixture', ...paths);
 };

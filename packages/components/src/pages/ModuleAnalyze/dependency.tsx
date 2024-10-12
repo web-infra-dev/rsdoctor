@@ -30,7 +30,13 @@ const DependencyTree: React.FC<{
 
   return (
     <Row justify="start" align="middle">
-      <Col span={24}>{treedata.length ? <FileTree treeData={treedata} needJumpto cwd={cwd} /> : <Empty />}</Col>
+      <Col span={24}>
+        {treedata.length ? (
+          <FileTree treeData={treedata} needJumpto cwd={cwd} />
+        ) : (
+          <Empty />
+        )}
+      </Col>
     </Row>
   );
 };

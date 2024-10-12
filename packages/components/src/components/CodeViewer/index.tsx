@@ -1,4 +1,4 @@
 export * from './diff';
-export * from './hightlight';
+export * from './highlight';
 export * from './viewer';
 export * from './config';

@@ -90,7 +90,7 @@ describe('addProbeLoader2Rules', () => {
 
   it('should add probe loaders to rules', () => {
     const rules = [mockRule];
-    const porbeLoaderPath =
+    const probeLoaderPath =
       os.EOL === '\n' ? 'build-utils/build/loader/probeLoader' : 'probeLoader';
     const result = addProbeLoader2Rules(rules, mockCompiler, mockFn);
 
@@ -98,11 +98,11 @@ describe('addProbeLoader2Rules', () => {
     expect(result[0]).toHaveProperty('use');
     expect(result[0].use).toHaveLength(3);
     expect(result[0].use[0]).toHaveProperty('loader');
-    expect(result[0].use[0].loader).toContain(porbeLoaderPath);
+    expect(result[0].use[0].loader).toContain(probeLoaderPath);
     expect(result[0].use[0]).toHaveProperty('options.type', 'end');
     expect(result[0].use[1]).toHaveProperty('loader', 'mock-loader');
     expect(result[0].use[2]).toHaveProperty('loader');
-    expect(result[0].use[2].loader).toContain(porbeLoaderPath);
+    expect(result[0].use[2].loader).toContain(probeLoaderPath);
     expect(result[0].use[2]).toHaveProperty('options.type', 'start');
   });
 

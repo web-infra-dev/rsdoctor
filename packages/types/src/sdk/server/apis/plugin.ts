@@ -14,7 +14,7 @@ export interface PluginAPIResponse {
   }[];
 }
 
-export interface PluginAPIResquestBody {
+export interface PluginAPIRequestBody {
   [API.GetPluginData]: {
     hooks?: string[];
     tapNames?: string[];

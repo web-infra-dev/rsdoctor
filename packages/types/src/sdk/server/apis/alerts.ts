@@ -20,7 +20,7 @@ export interface AlertsAPIResponse {
   [API.GetOverlayAlerts]: OverlayRuleStoreData[];
 }
 
-export interface AlertsAPIResquestBody {
+export interface AlertsAPIRequestBody {
   [API.GetPackageRelationAlertDetails]: {
     id: RuleStoreDataItem['id'];
     target: PackageBasicData;
