@@ -9,14 +9,14 @@
   "dependencies": {
     "devcert": "1.2.2",
     "lodash": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router-dom": "^6.17.0",
     "vue": "^3.5.8"
   },
   "devDependencies": {
     "webpack": "^5.90.0",
-    "@playwright/test": "1.48.0",
+    "@playwright/test": "1.33.0",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
@@ -28,10 +28,10 @@
     "@types/lodash": "^4.17.9",
     "@types/node": "^16",
     "@types/react": "^18.3.8",
-    "@types/react-dom": "^18",
+    "@types/react-dom": "^18.3.1",
     "fast-glob": "^3.3.2",
     "loader-utils": "^2.0.4",
-    "playwright": "1.48.0",
+    "playwright": "1.33.0",
     "typescript": "^5.2.2"
   }
 }
