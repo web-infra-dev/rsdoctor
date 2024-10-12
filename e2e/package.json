@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "test": "pnpm run i:webkit && playwright test",
-    "i:webkit": "playwright install"
+    "i:webkit": "playwright install-deps"
   },
   "dependencies": {
     "devcert": "1.2.2",
