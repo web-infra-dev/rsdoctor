@@ -59,6 +59,14 @@ module.exports = {
 - 原因：因为构建过程中，存储了源码信息，超过了内存，所以开启 `lite` 模式可以缓解。
 - 区别：`lite` 模式和普通模式的区别就是不再存储**源码信息**，只存储**打包后的代码**，同时分析报告上的代码也将**只有打包后的代码**。
 
+## CssExtractRspackPlugin 的 loader 耗时过长问题
+
+在使用 Rsdoctor 对 Rspack 项目进行编译耗时分析时，可能会发现 [CssExtractRspackPlugin](https://rspack.dev/plugins/rspack/css-extract-rspack-plugin) 的 loader 耗时较长。然而，这个数值并不代表 CssExtractRspackPlugin 的 loader 的真实耗时，它还包含了对本模块编译的其他 loader 的耗时。
+
+- 原因：[CssExtractRspackPlugin](https://rspack.dev/plugins/rspack/css-extract-rspack-plugin) 中的 loader 在 pitch 阶段会异步调用其他 loader，并等待这些 loader 执行后的回调结果。因此，CssExtractRspackPlugin 的耗时实际上包括了其他 loader 的执行时间和空闲时间。
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/4ffe579c62f6e8d995b7856d608abdef61219155/rsdoctor/css-extract-loader.png" />
+
 ## Next.js
 
 ### Next.js 项目报告页面问题

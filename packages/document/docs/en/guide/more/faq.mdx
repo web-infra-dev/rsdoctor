@@ -61,6 +61,14 @@ module.exports = {
 - Cause: During the build process, the source code information is stored, which exceeds the memory limit. Enabling the `lite` mode can alleviate this issue.
 - Difference: The difference between the **lite mode** and the **normal mode** is that the **lite mode** no longer stores the **source code information**, only the **bundled code** is stored. Additionally, the code displayed in the analysis report will only consist of the **bundled code**.
 
+## The loader of CssExtractRspackPlugin takes too long
+
+When using Rsdoctor to analyze the compilation time of Rspack projects, you may find that the loader of [CssExtractRspackPlugin](https://rspack.dev/plugins/rspack/css-extract-rspack-plugin) takes a long time. However, this figure does not represent the actual time taken by the CssExtractRspackPlugin's loader; it also includes the time taken by other loaders involved in compiling this module.
+
+- Reason: The loader in [CssExtractRspackPlugin](https://rspack.dev/plugins/rspack/css-extract-rspack-plugin) asynchronously calls other loaders during the pitch phase and waits for the callback results after these loaders execute. Therefore, the time taken by CssExtractRspackPlugin actually includes the execution time of other loaders and idle time.
+
+<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/4ffe579c62f6e8d995b7856d608abdef61219155/rsdoctor/css-extract-loader.png" />
+
 ## Next.js
 
 ### Issue with Next.js project report page
