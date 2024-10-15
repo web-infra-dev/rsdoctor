@@ -58,7 +58,7 @@
     "@types/lodash-es": "4.17.12",
     "@types/node": "^16",
     "@types/path-browserify": "1.0.3",
-    "@types/react": "^18.3.8",
+    "@types/react": "^18.3.11",
     "@types/react-highlight-words": "^0.20.0",
     "@types/url-parse": "1.4.11",
     "ansi-to-react": "6.1.6",
@@ -81,7 +81,7 @@
     "react-markdown": "^9.0.1",
     "react-router-dom": "6.4.3",
     "socket.io-client": "4.6.1",
-    "terser": "^5.33.0",
+    "terser": "^5.34.1",
     "typescript": "^5.2.2",
     "url-parse": "1.5.10"
   },

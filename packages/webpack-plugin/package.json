@@ -28,9 +28,9 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "webpack": "^5.90.0",
+    "webpack": "^5.95.0",
     "@types/fs-extra": "^11.0.4",
-    "@types/lodash": "^4.17.9",
+    "@types/lodash": "^4.17.10",
     "@types/node": "^16",
     "@types/tapable": "2.2.7",
     "tslib": "2.7.0",
