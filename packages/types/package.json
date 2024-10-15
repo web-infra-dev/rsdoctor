@@ -28,7 +28,7 @@
     "@types/react": "^18.3.11",
     "tslib": "2.7.0",
     "typescript": "^5.2.2",
-    "@rspack/core": "0.7.5"
+    "@rspack/core": "1.0.0"
   },
   "peerDependencies": {
     "@rspack/core": "*",
