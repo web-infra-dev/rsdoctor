@@ -86,7 +86,7 @@
     "@rspack/core": "0.7.5",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
-    "@types/lodash": "^4.17.9",
+    "@types/lodash": "^4.17.10",
     "@types/node": "^16",
     "@types/node-fetch": "^2.6.11",
     "@types/path-browserify": "1.0.3",
@@ -97,7 +97,7 @@
     "ts-loader": "^9.5.1",
     "tslib": "2.7.0",
     "typescript": "^5.2.2",
-    "webpack": "^5.90.0"
+    "webpack": "^5.95.0"
   },
   "publishConfig": {
     "access": "public",

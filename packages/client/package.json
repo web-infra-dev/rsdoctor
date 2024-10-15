@@ -36,7 +36,7 @@
     "@rsdoctor/components": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@types/node": "^16",
-    "@types/react": "^18.3.8",
+    "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "@types/serve-static": "1.15.7",
     "antd": "5.15.3",
