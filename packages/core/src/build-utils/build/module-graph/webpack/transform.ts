@@ -173,15 +173,15 @@ async function appendModuleData(
     const transformed = isExternalModule(origin)
       ? ''
       : module.getSource().transformed.length > 0
-      ? module.getSource().transformed
-      : isFunction(origin?.originalSource)
-      ? origin.originalSource()?.source()?.toString() ?? ''
-      : '';
+        ? module.getSource().transformed
+        : isFunction(origin?.originalSource)
+          ? (origin.originalSource()?.source()?.toString() ?? '')
+          : '';
     const transformedSize = isExternalModule(origin)
       ? 0
       : module.getSize().transformedSize > 0
-      ? module.getSize().transformedSize
-      : Buffer.from(transformed).byteLength;
+        ? module.getSize().transformedSize
+        : Buffer.from(transformed).byteLength;
 
     module.setSource({
       transformed,
@@ -247,11 +247,10 @@ export async function appendModuleGraphByCompilation(
   context?: TransformContext,
 ) {
   try {
-
     // Only webpack will execute the following logic.
-    const { moduleGraph: webpackGraph, fileSystemInfo } =
-      compilation as Webpack.Compilation;
-    const allModules = getAllModules(compilation as Webpack.Compilation);
+    const webpackCompilation = compilation as unknown as Webpack.Compilation;
+    const { moduleGraph: webpackGraph, fileSystemInfo } = webpackCompilation;
+    const allModules = getAllModules(webpackCompilation);
 
     await Promise.all(
       allModules.map((module: Webpack.NormalModule) => {

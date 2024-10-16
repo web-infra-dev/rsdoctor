@@ -32,6 +32,6 @@
     "tsm": "2.3.0",
     "typescript": "^5.2.2",
     "webpack": "^5.90.0",
-    "webpack-cli": "5.0.0"
+    "webpack-cli": "5.1.4"
   }
 }

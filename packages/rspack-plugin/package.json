@@ -27,7 +27,7 @@
     "@rsdoctor/types": "workspace:*"
   },
   "devDependencies": {
-    "@rspack/core": "0.7.5",
+    "@rspack/core": "1.0.11",
     "@types/lodash": "^4.17.10",
     "@types/node": "^16",
     "@types/tapable": "2.2.7",
