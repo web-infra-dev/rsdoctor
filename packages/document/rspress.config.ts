@@ -3,9 +3,63 @@ import { defineConfig } from 'rspress/config';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
+import { pluginRss } from '@rspress/plugin-rss';
+import pluginSitemap from 'rspress-plugin-sitemap';
+
+const siteUrl = 'https://rsdoctor.dev';
 
 export default defineConfig({
-  plugins: [pluginFontOpenSans()],
+  plugins: [
+    pluginSitemap({
+      domain: siteUrl,
+    }),
+    pluginFontOpenSans(),
+    pluginRss({
+      siteUrl,
+      feed: [
+        {
+          id: 'releases-rss',
+          test: '/blog/release/release-note-',
+          title: 'Rsdoctor Releases',
+          language: 'en',
+          output: {
+            type: 'rss',
+            filename: 'releases-rss.xml',
+          },
+        },
+        {
+          id: 'releases-rss-zh',
+          test: '/zh/blog/release/release-note-',
+          title: 'Rsdoctor 发布',
+          language: 'zh-CN',
+          output: {
+            type: 'rss',
+            filename: 'releases-rss-zh.xml',
+          },
+        },
+        {
+          id: 'blog-rss',
+          test: '/blog/topic',
+          title: 'Rsdoctor Blog',
+          language: 'en',
+          output: {
+            type: 'rss',
+            filename: 'blog-rss.xml',
+          },
+        },
+        {
+          id: 'blog-rss-zh',
+          test: '/zh/blog/topic',
+          title: 'Rsdoctor 博客',
+          language: 'zh-CN',
+          output: {
+            type: 'rss',
+            filename: 'blog-rss-zh.xml',
+          },
+        },
+      ],
+    }),
+  ],
   root: path.join(__dirname, 'docs'),
   title: 'Rsdoctor',
   description: 'A one-stop build analyzer for Rspack and Webpack.',
