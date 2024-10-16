@@ -10,6 +10,7 @@ import type { SDK, Plugin } from '@rsdoctor/types';
 import type {
   NormalModule as WebpackNormalModule,
   ModuleGraph as WebpackModuleGraph,
+  Compilation,
 } from 'webpack';
 
 import type {
@@ -166,8 +167,9 @@ export function appendTreeShaking(
 
   if ('moduleGraph' in compilation) {
     const exportData = new Map<WebExportInfo, ExportInfo>();
-    const { moduleGraph: webpackGraph } = compilation;
-    const allModules = getAllModules(compilation);
+    const webpackCompilation = compilation as unknown as Compilation;
+    const { moduleGraph: webpackGraph } = webpackCompilation;
+    const allModules = getAllModules(webpackCompilation);
 
     allModules.forEach((origin) =>
       transformMgm(origin, webpackGraph, moduleGraph, exportData),

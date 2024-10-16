@@ -44,7 +44,7 @@ export class InternalBundleTagPlugin<
 
                 compilation.updateAsset(
                   file,
-                  (old) => {
+                  (old: any) => {
                     const concatSource = new ConcatSource();
                     let header = "\n console.log('RSDOCTOR_START::');\n";
                     let footer = "\n console.log('RSDOCTOR_END::');\n";

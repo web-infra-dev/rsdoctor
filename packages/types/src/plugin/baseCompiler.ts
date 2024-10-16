@@ -49,7 +49,7 @@ export type BaseCompiler = BaseCompilerType | BaseCompilerType<'rspack'>;
 
 export type BaseCompilationType<T extends 'rspack' | 'webpack' = 'webpack'> =
   T extends 'rspack'
-    ? Compilation & { updateAsset: updateAsset }
+    ? Compilation
     : RspackCompilation & { updateAsset: updateAsset };
 export type BaseCompilation =
   | BaseCompilationType
