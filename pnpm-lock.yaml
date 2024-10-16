@@ -440,8 +440,8 @@ importers:
         specifier: ^1.7.7
         version: 1.7.7(debug@4.3.7)
       chalk:
-        specifier: ^4.1.2
-        version: 4.1.2
+        specifier: ^5.3.0
+        version: 5.3.0
       ora:
         specifier: ^5.4.1
         version: 5.4.1
@@ -970,8 +970,8 @@ importers:
         specifier: 8.3.4
         version: 8.3.4
       chalk:
-        specifier: ^4.1.2
-        version: 4.1.2
+        specifier: ^5.3.0
+        version: 5.3.0
       connect:
         specifier: 3.7.0
         version: 3.7.0
