@@ -63,10 +63,21 @@ export interface JsStatsError {
   title: string;
 }
 
-export interface JsStatsWarning {
+export interface JsStatsWarning extends JsRspackError {
   message: string;
   formatted: string;
 }
+
+export interface JsRspackError {
+  name: string;
+  message: string;
+  moduleIdentifier?: string;
+  loc?: string;
+  file?: string;
+  stack?: string;
+  hideStack?: boolean;
+}
+
 export type BuildError = JsStatsError | StatsError;
 export type BuildWarning = JsStatsWarning | StatsError;
 
