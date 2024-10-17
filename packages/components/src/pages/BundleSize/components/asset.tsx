@@ -81,7 +81,11 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
       text=""
       buttonProps={{
         size: 'small',
-        icon: <CodepenCircleOutlined />,
+        icon: (
+          <Popover content="Open the Codes Box">
+            <CodepenCircleOutlined />
+          </Popover>
+        ),
         type: 'default',
       }}
       buttonStyle={{ padding: `0 4px` }}
@@ -488,14 +492,16 @@ export const AssetDetail: React.FC<{
                 <Tag color="green">concatenated</Tag>
               </Tooltip>
             ) : null}
-            <Button
-              size="small"
-              icon={<DeploymentUnitOutlined />}
-              onClick={() => {
-                setModuleJumpList([mod.id]);
-                setShow(true);
-              }}
-            />
+            <Popover content="Open the Module Graph Box">
+              <Button
+                size="small"
+                icon={<DeploymentUnitOutlined />}
+                onClick={() => {
+                  setModuleJumpList([mod.id]);
+                  setShow(true);
+                }}
+              />
+            </Popover>
             <ModuleCodeViewer data={mod} />
           </Space>
         );
@@ -507,14 +513,24 @@ export const AssetDetail: React.FC<{
             (e) => includeModules.find((m) => m.path === e)!,
           );
           const parsedSize = sumBy(mods, (e) => e.size?.parsedSize || 0);
+          const sourceSize = sumBy(mods, (e) => e.size?.sourceSize || 0);
           return (
             <Space>
               <Typography.Text>{defaultTitle}</Typography.Text>
               {parsedSize > 0 ? (
-                <Tag style={tagStyle} color={'orange'}>
-                  {'Bundled:' + formatSize(parsedSize)}
+                <>
+                  <Tag style={tagStyle} color={'orange'}>
+                    {'Bundled:' + formatSize(parsedSize)}
+                  </Tag>
+                  <Tag style={tagStyle} color={'lime'}>
+                    {'Source:' + formatSize(sourceSize)}
+                  </Tag>
+                </>
+              ) : (
+                <Tag style={tagStyle} color={'lime'}>
+                  {'Source:' + formatSize(sourceSize)}
                 </Tag>
-              ) : null}
+              )}
             </Space>
           );
         }
