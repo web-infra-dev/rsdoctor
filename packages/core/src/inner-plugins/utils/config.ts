@@ -192,6 +192,10 @@ export const normalizeReportType = (
     default: {
       if (reportCodeType.noCode) {
         globalReportCodeType = SDK.ToDataType.NoCode;
+      } else if (reportCodeType.noModuleSource) {
+        globalReportCodeType = SDK.ToDataType.NoSource;
+      } else if (reportCodeType.noAssetsAndModuleSource) {
+        globalReportCodeType = SDK.ToDataType.NoSourceAndAssets;
       } else {
         globalReportCodeType = SDK.ToDataType.Normal;
       }
