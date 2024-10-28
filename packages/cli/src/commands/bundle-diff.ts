@@ -118,14 +118,16 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
     const baselineManifestsBuffer = Buffer.from(
       JSON.stringify({
         __LOCAL__SERVER__: true,
-        __SOCKET__URL__: baselineSdk.server.socketUrl,
+        __SOCKET__URL__: baselineSdk.server.socketUrl.socketUrl,
+        __SOCKET__PORT__: baselineSdk.server.socketUrl.port,
         ...baselineData,
       }),
     );
     const currentManifestsBuffer = Buffer.from(
       JSON.stringify({
         __LOCAL__SERVER__: true,
-        __SOCKET__URL__: currentSdk.server.socketUrl,
+        __SOCKET__PORT__: currentSdk.server.socketUrl.port,
+        __SOCKET__URL__: currentSdk.server.socketUrl.socketUrl,
         ...currentData,
       }),
     );

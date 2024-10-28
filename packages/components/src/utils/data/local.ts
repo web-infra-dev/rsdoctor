@@ -68,11 +68,11 @@ export class LocalServerDataLoader extends BaseDataLoader {
     const [api, body] = args;
     // request limitation key
     const key = body ? `${api}_${JSON.stringify(body)}` : `${api}`;
-    const socketUrl = this.get('__SOCKET__URL__') ?? ''
-    
+    const socketPort = this.get('__SOCKET__PORT__') ?? '';
+
     return this.limit(key, async () => {
       return new Promise((resolve) => {
-        getSocket(socketUrl).emit(
+        getSocket(socketPort).emit(
           api,
           body,
           (res: SDK.ServerAPI.SocketResponseType<T>) => {

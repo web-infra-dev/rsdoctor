@@ -16,6 +16,8 @@ import { getLocalIpAddress } from './utils';
 import { isUndefined } from 'lodash';
 export * from './utils';
 
+export type ISocketType = { port: number; socketUrl: string };
+
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   private _server!: Common.PromiseReturnType<typeof Server.createServer>;
 
@@ -59,8 +61,11 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     return `http://${this.host}:${this.port}`;
   }
 
-  public get socketUrl(): string {
-    return `ws://localhost:${this.port}`;
+  public get socketUrl(): ISocketType {
+    return {
+      port: this.port,
+      socketUrl: `ws://localhost:${this.port}`,
+    };
   }
 
   public get innerClientPath(): string {
