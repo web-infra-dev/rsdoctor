@@ -38,6 +38,7 @@ export interface RsdoctorManifestWithShardingFiles
    * local server will proxy the manifest content and inject `__LOCAL__SERVER__: true`
    */
   __LOCAL__SERVER__?: boolean;
+  __SOCKET__PORT__?: string;
   __SOCKET__URL__?: string;
 }
 
@@ -73,10 +74,10 @@ export type RsdoctorManifestMappingKeys =
         ? RsdoctorManifestData[K] extends Array<unknown>
           ? never
           : string extends keyof RsdoctorManifestData[K]
-          ? never
-          : keyof RsdoctorManifestData[K] extends string
-          ? `${K}.${keyof RsdoctorManifestData[K]}`
-          : never
+            ? never
+            : keyof RsdoctorManifestData[K] extends string
+              ? `${K}.${keyof RsdoctorManifestData[K]}`
+              : never
         : never;
     }[RsdoctorManifestObjectKeys]
   | RsdoctorManifestRootKeys;
@@ -89,8 +90,8 @@ export type InferManifestDataValue<T> =
         : never
       : never
     : T extends RsdoctorManifestRootKeys
-    ? RsdoctorManifestData[T]
-    : never;
+      ? RsdoctorManifestData[T]
+      : never;
 
 export interface ManifestDataLoader {
   loadManifest(): Promise<RsdoctorManifest | RsdoctorManifestWithShardingFiles>;

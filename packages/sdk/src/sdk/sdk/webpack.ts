@@ -466,7 +466,8 @@ export class RsdoctorWebpackSDK<
         return t;
       }, {} as Common.PlainObject) as unknown as Manifest.RsdoctorManifestWithShardingFiles['data'],
       __LOCAL__SERVER__: true,
-      __SOCKET__URL__: this.server.socketUrl,
+      __SOCKET__PORT__: this.server.socketUrl.port.toString(),
+      __SOCKET__URL__: this.server.socketUrl.socketUrl,
     };
 
     return data;
