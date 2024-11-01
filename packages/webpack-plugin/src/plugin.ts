@@ -44,8 +44,6 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   public modulesGraph: ModuleGraph;
 
-  private outsideInstance = false;
-
   public _bootstrapTask!: Promise<unknown>;
 
   protected browserIsOpened = false;
@@ -69,7 +67,6 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
           brief: this.options.brief,
         },
       });
-    this.outsideInstance = Boolean(this.options.sdkInstance);
     this.modulesGraph = new ModuleGraph();
     this.chunkGraph = new ChunkGraph();
     this.isRsdoctorPlugin = true;
@@ -86,9 +83,8 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     }
 
     // External instances do not need to be injected into the global.
-    if (!this.outsideInstance) {
-      setSDK(this.sdk);
-    }
+    setSDK(this.sdk);
+
     // TODO: to fix the TypeError: Type instantiation is excessively deep and possibly infinite.
     // @ts-ignore
     new InternalSummaryPlugin<Compiler>(this).apply(compiler);
