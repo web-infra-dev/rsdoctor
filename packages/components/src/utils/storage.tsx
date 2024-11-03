@@ -7,6 +7,7 @@ enum Keys {
   Locale = 'LOCALE',
   ViewMode = 'VIEWMODE',
   APILoaderMode4Dev = 'APILOADERMODE_DEV',
+  FirstVisit = 'FIRST_VISIT'
 }
 
 export function getStorage(key: string): string | null {
@@ -66,4 +67,12 @@ export function setAPILoaderModeToStorage(mode: APILoaderMode4Dev) {
 
 export function getAPILoaderModeFromStorage() {
   return getStorage(Keys.APILoaderMode4Dev) || APILoaderMode4Dev.Default;
+}
+
+export function getFirstVisitFromStorage() {
+  return getStorage(Keys.FirstVisit);
+}
+
+export function setFirstVisitToStorage(value: '1') {
+  setStorage(Keys.FirstVisit, value);
 }
