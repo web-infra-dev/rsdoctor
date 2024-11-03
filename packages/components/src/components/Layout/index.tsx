@@ -2,7 +2,13 @@ import { PropsWithChildren, useContext, useEffect } from 'react';
 import { FloatButton, Layout as L } from 'antd';
 import { Language, MAIN_BG, Size } from '../../constants';
 import { Header } from './header';
-import { useLocale, useI18n, getFirstVisitFromStorage, setFirstVisitToStorage, getLocale } from '../../utils';
+import {
+  useLocale,
+  useI18n,
+  getFirstVisitFromStorage,
+  setFirstVisitToStorage,
+  getLanguage,
+} from '../../utils';
 import { Progress } from './progress';
 import { ConfigContext } from '../../config';
 
@@ -18,14 +24,14 @@ export const Layout = (props: PropsWithChildren<LayoutProps>): JSX.Element => {
   useEffect(() => {
     let currentLocale = locale;
     // Check if the user is visiting the site for the first time
-    const visited = getFirstVisitFromStorage()
+    const visited = getFirstVisitFromStorage();
     if (!visited) {
-      setFirstVisitToStorage('1')
+      setFirstVisitToStorage('1');
       const targetLang = window.navigator.language.split('-')[0];
-      const userLocale = getLocale(targetLang);
+      const userLang = getLanguage(targetLang);
 
-      if(Object.values(Language).includes(userLocale)) {
-        currentLocale = userLocale;
+      if (Object.values(Language).includes(userLang)) {
+        currentLocale = userLang;
       }
     }
 
