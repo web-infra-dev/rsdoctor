@@ -2,7 +2,7 @@ import { Manifest } from '@rsdoctor/utils/common';
 import { Constants, Manifest as ManifestType, SDK } from '@rsdoctor/types';
 import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
 import ora from 'ora';
-import { cyan, red } from 'chalk';
+import { cyan, red } from 'picocolors';
 import { Command } from '../types';
 import {
   enhanceCommand,

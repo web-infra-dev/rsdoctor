@@ -1,6 +1,6 @@
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
-import chalk from 'chalk';
+import { red } from 'picocolors';
 import { Common } from '@rsdoctor/types';
 import { analyze, bundleDiff } from './commands';
 import { Command, CommandContext, GetCommandArgumentsType } from './types';
@@ -68,7 +68,7 @@ export async function execute(
         } catch (error) {
           const { message, stack } = error as Error;
           console.log('');
-          console.error(chalk.red(stack || message));
+          console.error(red(stack || message));
           process.exit(1);
         }
       },
