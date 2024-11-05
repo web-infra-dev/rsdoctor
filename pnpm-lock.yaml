@@ -615,8 +615,8 @@ importers:
         specifier: 4.6.1
         version: 4.6.1
       terser:
-        specifier: ^5.34.1
-        version: 5.34.1
+        specifier: ^5.36.0
+        version: 5.36.0
       typescript:
         specifier: ^5.2.2
         version: 5.5.4
@@ -6155,7 +6155,7 @@ packages:
     dependencies:
       '@rsbuild/core': 1.0.14
       deepmerge: 4.3.1
-      terser: 5.34.1
+      terser: 5.36.0
     dev: true
 
   /@rsbuild/plugin-sass@0.7.10(@rsbuild/core@0.7.10):
@@ -11915,7 +11915,7 @@ packages:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.34.1
+      terser: 5.36.0
     dev: true
 
   /html-minifier-terser@7.2.0:
@@ -11929,7 +11929,7 @@ packages:
       entities: 4.5.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.34.1
+      terser: 5.36.0
     dev: true
 
   /html-parse-stringify@3.0.1:
@@ -18082,7 +18082,7 @@ packages:
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
-      terser: 5.34.1
+      terser: 5.36.0
       webpack: 5.95.0(esbuild@0.17.19)
     dev: true
 
@@ -18106,7 +18106,7 @@ packages:
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
-      terser: 5.34.1
+      terser: 5.36.0
       webpack: 5.94.0(webpack-cli@5.1.4)
 
   /terser-webpack-plugin@5.3.10(webpack@5.95.0):
@@ -18129,11 +18129,22 @@ packages:
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.2
-      terser: 5.34.1
+      terser: 5.36.0
       webpack: 5.95.0
 
   /terser@5.34.1:
     resolution: {integrity: sha512-FsJZ7iZLd/BXkz+4xrRTGJ26o/6VTjQytUk8b8OxkwcD2I+79VPJlz7qss1+zE7h8GNIScFqXcDyJ/KqBYZFVA==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      '@jridgewell/source-map': 0.3.6
+      acorn: 8.12.1
+      commander: 2.20.3
+      source-map-support: 0.5.21
+    dev: true
+
+  /terser@5.36.0:
+    resolution: {integrity: sha512-IYV9eNMuFAV4THUspIRXkLakHnV6XO7FEdtKjf/mDyrnqUg9LnlOn6/RwRvM9SZjR4GUq8Nk8zj67FzVARr74w==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
