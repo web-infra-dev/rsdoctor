@@ -24,8 +24,8 @@
     "dev": "modern build --watch"
   },
   "dependencies": {
-    "@rspack/core": "1.0.0",
-    "@types/lodash": "^4.17.10",
+    "@rspack/core": "1.0.14",
+    "@types/lodash": "^4.17.13",
     "@types/node": "^16",
     "lodash": "^4.17.21",
     "memfs": "3.5.3",
