@@ -1,5 +1,5 @@
 import ora from 'ora';
-import { cyan, red } from 'chalk';
+import { cyan, red } from 'picocolors';
 import { Command } from '../types';
 import {
   enhanceCommand,
