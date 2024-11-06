@@ -33,8 +33,8 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "axios": "^1.7.7",
-    "chalk": "^4.1.2",
     "ora": "^5.4.1",
+    "picocolors": "^1.1.1",
     "tslib": "2.7.0",
     "yargs": "17.7.2"
   },
