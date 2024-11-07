@@ -1,10 +1,6 @@
 import type { Configuration, RuleSetRule } from '@rspack/core';
 import { ModuleGraph } from '@rsdoctor/graph';
-import {
-  openBrowser,
-  RsdoctorSlaveSDK,
-  RsdoctorWebpackSDK,
-} from '@rsdoctor/sdk';
+import { openBrowser, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import {
   InternalLoaderPlugin,
   InternalPluginsPlugin,
@@ -44,7 +40,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 {
   public readonly name = pluginTapName;
 
-  public readonly sdk: RsdoctorWebpackSDK | RsdoctorSlaveSDK;
+  public readonly sdk: RsdoctorSDK | RsdoctorPrimarySDK;
 
   public readonly isRsdoctorPlugin: boolean;
 
@@ -72,7 +68,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     );
     this.sdk =
       this.options.sdkInstance ??
-      new RsdoctorWebpackSDK({
+      new RsdoctorSDK({
         port: this.options.port,
         name: pluginTapName,
         root: process.cwd(),

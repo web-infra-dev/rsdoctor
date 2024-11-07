@@ -4,7 +4,7 @@ import type {
   Plugin,
   SDK,
 } from '@rsdoctor/types';
-import type { RsdoctorSlaveSDK, RsdoctorWebpackSDK } from '@rsdoctor/sdk';
+import type { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { rules } from '@/rules/rules';
 
@@ -58,7 +58,7 @@ export interface RsdoctorWebpackPluginOptions<
   /**
    * sdk instance of outside
    */
-  sdkInstance?: RsdoctorWebpackSDK;
+  sdkInstance?: RsdoctorSDK;
 
   /**
    * Whether to turn on some characteristic analysis capabilities, such as: the support for the BannerPlugin.
@@ -106,7 +106,7 @@ export interface RsdoctorWebpackPluginOptions<
 export interface RsdoctorMultiplePluginOptions<
   Rules extends LinterType.ExtendRuleData[] = LinterType.ExtendRuleData[],
 > extends Omit<RsdoctorWebpackPluginOptions<Rules>, 'sdkInstance'>,
-    Pick<ConstructorParameters<typeof RsdoctorSlaveSDK>[0], 'stage'> {
+    Pick<ConstructorParameters<typeof RsdoctorPrimarySDK>[0], 'stage'> {
   /**
    * name of builder
    */
@@ -134,7 +134,7 @@ export interface RsdoctorPluginOptionsNormalized<
   > {
   features: Common.DeepRequired<Plugin.RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
-  sdkInstance?: RsdoctorWebpackSDK;
+  sdkInstance?: RsdoctorSDK;
   port?: number;
   reportCodeType: SDK.ToDataType;
   supports: ISupport;
@@ -160,7 +160,7 @@ export interface RsdoctorPluginInstance<
 > extends BasePluginInstance<T> {
   readonly name: string;
   readonly options: RsdoctorPluginOptionsNormalized<Rules>;
-  readonly sdk: RsdoctorWebpackSDK;
+  readonly sdk: RsdoctorSDK;
   readonly isRsdoctorPlugin: boolean;
   _modulesGraphApplied?: boolean;
   chunkGraph?: ChunkGraph;

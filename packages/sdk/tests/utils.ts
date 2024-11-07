@@ -4,10 +4,10 @@ import { Common, SDK } from '@rsdoctor/types';
 import { request } from 'http';
 import { tmpdir } from 'os';
 import path from 'path';
-import { RsdoctorWebpackSDK } from '../src/sdk';
+import { RsdoctorSDK } from '../src/sdk';
 
 export interface MockSDKResponse {
-  sdk: RsdoctorWebpackSDK;
+  sdk: RsdoctorSDK;
   server: SDK.RsdoctorServerInstance;
   // get<T extends boolean = false>(pathname: string, toJson?: T): Promise<T extends true ? object : string>;
   get<T extends SDK.ServerAPI.API>(
@@ -34,7 +34,7 @@ export async function createSDK(
   config?: SDK.SDKOptionsType,
 ): Promise<MockSDKResponse> {
   const port = await Server.getPort(4396);
-  const sdk = new RsdoctorWebpackSDK({ name: 'test', root: cwd, port, config });
+  const sdk = new RsdoctorSDK({ name: 'test', root: cwd, port, config });
 
   await sdk.bootstrap();
 

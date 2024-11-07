@@ -1,6 +1,6 @@
 import path from 'path';
 import { SDK } from '@rsdoctor/types';
-import { RsdoctorWebpackSDK } from '../sdk';
+import { RsdoctorSDK } from '../sdk';
 import { RsdoctorSlaveServer } from './server';
 import type { RsdoctorSDKController } from './controller';
 
@@ -18,7 +18,7 @@ interface RsdoctorSlaveSDKOptions {
   controller: RsdoctorSDKController;
 }
 
-export class RsdoctorSlaveSDK extends RsdoctorWebpackSDK {
+export class RsdoctorPrimarySDK extends RsdoctorSDK {
   id: number;
 
   parent: RsdoctorSDKController;
