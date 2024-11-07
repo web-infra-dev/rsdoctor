@@ -1,4 +1,4 @@
-import { BaseCompilation } from "./baseCompiler";
+import { BaseCompilation } from './baseCompiler';
 
 interface StatsOptionsObj {
   all?: boolean;
@@ -60,6 +60,7 @@ export interface StatsModule {
   depth?: number | string; // rspack is lack of nameForCondition type ? packages/rspack/src/stats/DefaultStatsPrinterPlugin.ts , impact tree-shaking analysis ability.
   loc?: string; // rspack is lack of nameForCondition type ? packages/rspack/src/stats/DefaultStatsPrinterPlugin.ts
   modules?: StatsModule[]; // rspack is lack of nameForCondition type
+  layer?: string;
 }
 
 export interface StatsModuleReason {

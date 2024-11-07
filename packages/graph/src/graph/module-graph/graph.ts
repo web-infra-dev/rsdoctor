@@ -28,6 +28,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
         item.path,
         item.isEntry,
         item.kind,
+        item.layer,
       );
       (module as any).id = item.id;
       module.setSize(item.size);
@@ -242,6 +243,8 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
 
   private _varIdMap: Map<number, Variable> = new Map();
 
+  private _layers: Map<string, number> = new Map();
+
   clear() {
     this._dependenciesIdMap = new Map();
     this._moduleWebpackIdMap = new Map();
@@ -250,6 +253,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
     this._exportIdMap = new Map();
     this._sideEffectIdMap = new Map();
     this._varIdMap = new Map();
+    this._layers = new Map();
   }
 
   size() {
@@ -324,6 +328,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
       if (!this._moduleIdMap.has(module.id)) {
         this._moduleWebpackIdMap.set(module.webpackId, module);
         this._moduleIdMap.set(module.id, module);
+        module.layer && this.addLayer(module.layer);
       }
     }
   }
@@ -384,6 +389,16 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
     this._varIdMap.set(data.id, data);
   }
 
+  addLayer(layer: string) {
+    if (!this._layers.get(layer)) {
+      this._layers.set(layer, 1);
+    }
+  }
+
+  getLayers() {
+    return this._layers;
+  }
+
   toData(configs?: SDK.ModuleGraphToDataArgs): SDK.ModuleGraphData {
     return {
       dependencies: this.getDependencies().map((item) => item.toData()),
@@ -402,6 +417,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
       variables: Array.from(this._varIdMap.values()).map((item) =>
         item.toData(),
       ),
+      layers: this._layers,
     };
   }
 

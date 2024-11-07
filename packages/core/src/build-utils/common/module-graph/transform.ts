@@ -92,6 +92,7 @@ export function getModuleGraphByStats(
       getGetModuleName(root, data),
       data.depth === 0,
       isConcatenated ? SDK.ModuleKind.Concatenation : SDK.ModuleKind.Normal,
+      data.layer!,
     );
 
     data.chunks?.forEach((_chunkId) => {
@@ -131,6 +132,7 @@ export function getModuleGraphByStats(
           getGetModuleName(root, normal),
           normal.depth === 0,
           SDK.ModuleKind.Normal,
+          normal.layer,
         );
 
       if (normal.chunks?.length) {
@@ -181,11 +183,10 @@ export function getModuleGraphByStats(
     // webpack@5.x has type === 'from origin' https://github.com/webpack/webpack/blob/HEAD/lib/stats/DefaultStatsFactoryPlugin.js#L2220
     (module.reasons ?? [])
       .filter((item) => item.type === 'from origin')
-      .forEach(
-        (dep) =>
-          dep?.children?.forEach((_d: Plugin.StatsModuleReason) =>
-            dependencies.push({ ...dep, ..._d, children: undefined }),
-          ),
+      .forEach((dep) =>
+        dep?.children?.forEach((_d: Plugin.StatsModuleReason) =>
+          dependencies.push({ ...dep, ..._d, children: undefined }),
+        ),
       );
 
     for (const dep of dependencies) {
