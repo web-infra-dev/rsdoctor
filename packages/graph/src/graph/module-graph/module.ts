@@ -27,6 +27,8 @@ export class Module implements SDK.ModuleInstance {
 
   readonly kind: SDK.ModuleKind;
 
+  readonly layer?: string;
+
   private source: SDK.ModuleSource = {
     source: '',
     transformed: '',
@@ -65,12 +67,14 @@ export class Module implements SDK.ModuleInstance {
     path: string,
     isEntry = false,
     kind = SDK.ModuleKind.Normal,
+    layer = '',
   ) {
     this.id = id++;
     this.webpackId = webpackId;
     this.path = path;
     this.isEntry = isEntry;
     this.kind = kind;
+    this.layer = layer;
   }
 
   get rootModule(): Module | undefined {

@@ -331,6 +331,8 @@ export interface ModuleData
   /** Module size */
   size: ModuleSize;
 
+  layer?: string;
+
   /** Connected base subpackage */
   modules?: number[];
 
@@ -376,4 +378,5 @@ export interface ModuleGraphData {
   exports: ExportData[];
   sideEffects: SideEffectData[];
   variables: VariableData[];
+  layers?: Map<string, number>;
 }
