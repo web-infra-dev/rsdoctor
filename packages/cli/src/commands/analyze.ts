@@ -1,6 +1,6 @@
 import { Manifest } from '@rsdoctor/utils/common';
 import { Constants, Manifest as ManifestType, SDK } from '@rsdoctor/types';
-import { RsdoctorWebpackSDK } from '@rsdoctor/sdk';
+import { RsdoctorSDK } from '@rsdoctor/sdk';
 import ora from 'ora';
 import { cyan, red } from 'picocolors';
 import { Command } from '../types';
@@ -18,7 +18,7 @@ interface Options {
   type?: SDK.ToDataType;
 }
 
-export const analyze: Command<Commands.Analyze, Options, RsdoctorWebpackSDK> =
+export const analyze: Command<Commands.Analyze, Options, RsdoctorSDK> =
   enhanceCommand(({ cwd, name, bin }) => ({
     command: Commands.Analyze,
     description: `
@@ -82,7 +82,7 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
 
       spinner.text = `start server`;
 
-      const sdk = new RsdoctorWebpackSDK({ name, root: cwd, port, type });
+      const sdk = new RsdoctorSDK({ name, root: cwd, port, type });
 
       await sdk.bootstrap();
 

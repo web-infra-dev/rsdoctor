@@ -15,7 +15,7 @@ import { isNumber } from 'lodash';
 
 export * from '../utils/openBrowser';
 
-export class RsdoctorWebpackSDK<
+export class RsdoctorSDK<
     T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
   >
   extends SDKCore<T>
