@@ -26,7 +26,7 @@
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
     "@types/node": "^16",
-    "@types/react": "^18.3.11",
+    "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "react-markdown": "^9.0.1",
-    "@rstack-dev/doc-ui": "1.5.2",
+    "@rstack-dev/doc-ui": "1.5.3",
     "rspress": "^1.33.1"
   }
 }
