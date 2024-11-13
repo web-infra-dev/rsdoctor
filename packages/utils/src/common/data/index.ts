@@ -68,6 +68,12 @@ export class APIDataLoader {
           return Loader.getLoaderNames(res || []) as R;
         });
 
+      case SDK.ServerAPI.API.GetLayers:
+        return this.loader.loadData('moduleGraph').then((res) => {
+          const { layers } = res || {};
+          return layers as R;
+        });
+
       case SDK.ServerAPI.API.GetLoaderChartData:
         return this.loader.loadData('loader').then((res) => {
           return Loader.getLoaderChartData(res || []) as R;

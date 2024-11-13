@@ -150,10 +150,13 @@ export async function reportLoader(
   const loaderData: SDK.LoaderData = [
     {
       resource: {
-        path: ctx.resourcePath,
+        path: ctx._module?.layer
+          ? `${ctx.resourcePath}[${ctx._module.layer}]`
+          : ctx.resourcePath,
         query: parseQuery(ctx.resourceQuery || '?'),
         queryRaw: ctx.resourceQuery,
         ext: path.extname(ctx.resourcePath).slice(1),
+        ...(ctx._module?.layer ? { layer: ctx._module.layer } : {}),
       },
       loaders: [
         {

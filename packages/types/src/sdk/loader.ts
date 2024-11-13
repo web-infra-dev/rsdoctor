@@ -35,6 +35,9 @@ export interface LoaderTransformData extends ProcessData {
 
   /** Error during conversion */
   errors: DevToolErrorInstance[];
+
+  /** module layer */
+  layer?: string;
 }
 
 /** Original file data */
@@ -59,6 +62,10 @@ export interface ResourceData {
    * @example 'txt'
    */
   ext: string;
+  /**
+   * Resource module layer
+   */
+  layer?: string;
 }
 
 /** File conversion process data */

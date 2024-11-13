@@ -5,18 +5,21 @@ import { Get } from '../../../common';
 export interface LoaderAPIResponse {
   [API.GetLoaderNames]: string[];
 
+  [API.GetLayers]: string[];
+
   [API.GetLoaderChartData]: Array<
     Pick<
       LoaderTransformData,
       'loader' | 'isPitch' | 'startAt' | 'endAt' | 'pid' | 'sync'
     > & {
       resource: Get<ResourceData, 'path'>;
+      layer: Get<ResourceData, 'layer'>;
       costs: number;
     }
   >;
 
   [API.GetLoaderFileTree]: Array<
-    Pick<ResourceData, 'path'> & {
+    Pick<ResourceData, 'path' | 'layer'> & {
       loaders: Array<
         Pick<LoaderTransformData, 'loader' | 'path' | 'errors'> & {
           costs: number;

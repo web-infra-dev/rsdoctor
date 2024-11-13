@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { get, sumBy } from 'lodash-es';
 import {
+  Tag,
   Card,
   Col,
   Descriptions,
@@ -33,6 +34,7 @@ export const LoaderFiles: React.FC<{
   cwd: string;
   loaders: string[];
   filename: string;
+  layer?: string;
 }> = (props) => {
   const { cwd, filetree } = props;
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -53,10 +55,17 @@ export const LoaderFiles: React.FC<{
     () =>
       filetree.filter((e) =>
         e.loaders.some((l) =>
-          filterLoader(e.path, l.loader, props.filename, props.loaders),
+          filterLoader(
+            e.path,
+            l.loader,
+            props.filename,
+            props.loaders,
+            e.layer,
+            props?.layer,
+          ),
         ),
       ),
-    [props.filename, props.loaders],
+    [props.filename, props.loaders, props.layer],
   );
 
   const inlinedResourcePathKey = '__RESOURCEPATH__';
@@ -66,7 +75,7 @@ export const LoaderFiles: React.FC<{
       files: filteredFiles.map((e) => e.path),
       cwd,
       fileTitle(file, basename) {
-        const { loaders } = filetree.find((e) => e.path === file)!;
+        const { loaders, layer } = filetree.find((e) => e.path === file)!;
         return (
           <Space
             style={{ wordBreak: 'break-all' }}
@@ -76,7 +85,18 @@ export const LoaderFiles: React.FC<{
               setDrawerVisible(true);
             }}
           >
-            <Keyword text={basename} keyword={props.filename} />
+            <Keyword
+              text={basename.replace(/\[.*?\]/g, '')}
+              keyword={props.filename}
+            />
+
+            {layer ? (
+              <Tag color="cyan" bordered={false}>
+                {layer}
+              </Tag>
+            ) : (
+              <></>
+            )}
             {loaders.map((e, i) => {
               const isError = e.errors && e.errors.length;
               const key = `${file}_${e.loader}_${i}`;
