@@ -1,10 +1,13 @@
 import { Common, Linter, Plugin, SDK } from '@rsdoctor/types';
 import assert from 'assert';
-import type { RuleSetCondition as RspackRuleSetCondition } from '@rspack/core';
+import type {
+  RuleSetCondition as RspackRuleSetCondition,
+  RuleSetRule as RspackRuleSetRule,
+} from '@rspack/core';
 import {
-  RuleSetCondition,
-  RuleSetConditionAbsolute,
-  RuleSetRule,
+  RuleSetCondition as WebpackRuleSetCondition,
+  RuleSetConditionAbsolute as WebpackRuleSetConditionAbsolute,
+  RuleSetRule as WebpackRuleSetRule,
 } from 'webpack';
 import {
   RsdoctorWebpackPluginOptions,
@@ -119,9 +122,9 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
 
 export function makeRuleSetSerializable(
   item:
-    | RuleSetConditionAbsolute
-    | RuleSetCondition
     | RspackRuleSetCondition
+    | WebpackRuleSetConditionAbsolute
+    | WebpackRuleSetCondition
     | void,
 ) {
   if (!item) return;
@@ -139,7 +142,10 @@ export function makeRuleSetSerializable(
 }
 
 export function makeRulesSerializable(
-  rules: Plugin.RuleSetRule[] | RuleSetRule['oneOf'],
+  rules:
+    | Plugin.RuleSetRule[]
+    | RspackRuleSetRule['oneOf']
+    | WebpackRuleSetRule['oneOf'],
 ) {
   if (!Array.isArray(rules)) return;
 
