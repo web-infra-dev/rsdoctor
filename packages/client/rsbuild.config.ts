@@ -181,10 +181,10 @@ export default defineConfig(({ env }) => {
     server: {
       port: PortForWeb,
       historyApiFallback: true,
+      open: ENABLE_CLIENT_SERVER ? undefined : true,
     },
 
     dev: {
-      startUrl: ENABLE_CLIENT_SERVER ? undefined : true,
       setupMiddlewares: [
         (middlewares) => {
           if (fs.existsSync(WebpackRsdoctorDirPath)) {

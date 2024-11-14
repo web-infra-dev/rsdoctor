@@ -18,14 +18,14 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "tsm": "2.3.0",
     "@rsdoctor/rspack-plugin": "workspace:*",
-    "@rspack/cli": "1.0.0",
-    "@rspack/core": "1.0.0",
+    "@rspack/cli": "^1.1.1",
+    "@rspack/core": "^1.1.1",
     "@rspack/plugin-react-refresh": "1.0.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "react-refresh": "^0.14.0",
+    "tsm": "2.3.0",
     "web-vitals": "^2.1.4"
   },
   "browserslist": {

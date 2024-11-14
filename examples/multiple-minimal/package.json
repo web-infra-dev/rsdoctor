@@ -16,11 +16,11 @@
   "devDependencies": {
     "@arco-design/web-react": "2.29.2",
     "@arco-plugins/webpack-react": "1.4.9-beta.2",
+    "@rsdoctor/tsconfig": "workspace:*",
+    "@rsdoctor/webpack-plugin": "workspace:*",
     "@types/node": "^16",
     "@types/react": "^18",
     "@types/react-dom": "18.0.8",
-    "@rsdoctor/tsconfig": "workspace:*",
-    "@rsdoctor/webpack-plugin": "workspace:*",
     "css-loader": "6.7.3",
     "eslint": "8.22.0",
     "less-loader": "11.1.0",

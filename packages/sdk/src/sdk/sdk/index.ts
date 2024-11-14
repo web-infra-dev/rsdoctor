@@ -563,7 +563,7 @@ export class RsdoctorSDK<
     // Extract scripts and links from the HTML
     const scriptSrcs = Array.from(
       htmlContent.matchAll(
-        /<script\s+defer="defer"\s+src=["'](.+?)["']><\/script>/g,
+        /<script\s+(?:defer="defer"|defer)\s+src=["'](.+?)["']><\/script>/g,
       ),
       (m) => m[1],
     );
