@@ -15,15 +15,14 @@
     "vue": "^3.5.12"
   },
   "devDependencies": {
-    "webpack": "^5.95.0",
     "@playwright/test": "1.33.0",
+    "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",
-    "@rsdoctor/cli": "workspace:*",
     "@rspack/core": "1.0.14",
     "@types/lodash": "^4.17.13",
     "@types/node": "^16",
@@ -32,6 +31,7 @@
     "fast-glob": "^3.3.2",
     "loader-utils": "^2.0.4",
     "playwright": "1.33.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "webpack": "^5.95.0"
   }
 }
