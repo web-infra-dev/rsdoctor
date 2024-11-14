@@ -213,9 +213,9 @@ export const WebpackModulesOverallBase: React.FC<
               <Empty
                 description={
                   <div>
-                    Generate Tile Graph is Closed.
-                    <a href="https://rsdoctor.dev/zh/config/options/options#generatetilegraph">
-                      Please check the document.
+                    Tile graph is disabled,{' '}
+                    <a href="https://rsdoctor.dev/config/options/options#generatetilegraph">
+                      see the documentation to learn how to enable.
                     </a>
                   </div>
                 }
