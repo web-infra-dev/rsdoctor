@@ -1,5 +1,6 @@
-@import "normalize.css";
-@import "./theme.scss";
+@use 'sass:meta';
+@import 'normalize.css';
+@include meta.load-css('./theme.scss');
 
 .body {
   font-size: 12px;
