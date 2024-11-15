@@ -378,5 +378,5 @@ export interface ModuleGraphData {
   exports: ExportData[];
   sideEffects: SideEffectData[];
   variables: VariableData[];
-  layers?: Map<string, number>;
+  layers?: string[];
 }

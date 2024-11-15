@@ -13,6 +13,7 @@ export function filterLoaders(
   loaderData: SDK.ResourceLoaderData,
   keyword: string,
   loaderNames: string[],
+  layer?: string,
 ) {
   return loaderData.loaders.filter((item) => {
     return filterLoader(
@@ -20,6 +21,8 @@ export function filterLoaders(
       item.loader,
       keyword,
       loaderNames,
+      loaderData.resource.layer,
+      layer,
     );
   });
 }
@@ -29,9 +32,15 @@ export function filterLoader(
   loader: string,
   keyword: string,
   loaderNames: string[],
+  resorceLayer?: string,
+  layer?: string,
 ) {
   if (keyword) {
     if (resourcePath.indexOf(keyword) === -1) return false;
+  }
+
+  if (resorceLayer && layer && resorceLayer !== layer) {
+    return false;
   }
 
   if (loaderNames?.length) {

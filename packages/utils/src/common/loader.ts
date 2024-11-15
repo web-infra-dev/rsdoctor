@@ -151,6 +151,7 @@ export function getLoaderChartData(
   loaders.forEach((item) => {
     item.loaders.forEach((el) => {
       res.push({
+        layer: item.resource.layer,
         loader: el.loader,
         isPitch: el.isPitch,
         startAt: el.startAt,
@@ -174,8 +175,10 @@ export function getLoaderFileTree(
     const { loaders: arr, resource } = data;
     return {
       path: resource.path,
+      layer: resource.layer,
       loaders: arr.map((l) => {
         return {
+          key: l.path,
           loader: l.loader,
           path: l.path,
           errors: l.errors,

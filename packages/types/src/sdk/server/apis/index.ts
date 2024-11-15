@@ -61,6 +61,7 @@ export enum API {
   GetModuleCodeByModuleIds = '/api/graph/module/codes',
   GetAllModuleGraph = '/api/graph/module/all',
   GetAllChunkGraph = '/api/graph/chunk/all',
+  GetLayers = '/api/graph/layers',
 
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',

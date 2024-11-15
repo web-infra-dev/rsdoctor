@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { SDK } from '@rsdoctor/types';
 import { ServerAPIProvider, withServerAPI } from '../../Manifest';
 import { LoaderFiles } from './files';
-import { LoaderCommonSelect } from '../../Select';
+import { ISelectLoaderProps, LoaderCommonSelect } from '../../Select';
 
 export const LoaderAnalysisBase: React.FC<{
   cwd: string;
 }> = ({ cwd }) => {
-  const [store, setStore] = useState({ filename: '', loaders: [] as string[] });
+  const [store, setStore] = useState({
+    filename: '',
+    loaders: [] as string[],
+    layer: '',
+  } as ISelectLoaderProps);
 
   return (
     <div>
@@ -25,6 +29,7 @@ export const LoaderAnalysisBase: React.FC<{
             filename={store.filename}
             filetree={filetree}
             loaders={store.loaders}
+            layer={store.layer}
             cwd={cwd}
           />
         )}

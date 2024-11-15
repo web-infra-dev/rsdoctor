@@ -6,7 +6,7 @@ import { Card } from '../../../components/Card';
 export const Page: React.FC = () => {
   return (
     <Card
-      title="Webpack Loader Analysis"
+      title="Loader Analysis"
       extra={<WebpackConfigurationViewer defaultKeys={['module', 'resolve']} />}
       bodyStyle={{ paddingTop: 0, height: 800 }}
     >

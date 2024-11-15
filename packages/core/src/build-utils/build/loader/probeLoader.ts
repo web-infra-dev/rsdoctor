@@ -21,10 +21,13 @@ export const loaderModule: Plugin.LoaderDefinition<
 
   const loaderData: SDK.ResourceLoaderData = {
     resource: {
-      path: this.resourcePath,
+      path: this._module?.layer
+        ? `${this.resourcePath}[${this._module.layer}]`
+        : this.resourcePath,
       query: Build.Utils.parseQuery(this.resourceQuery),
       queryRaw: this.resourceQuery,
       ext: path.extname(this.resourcePath).slice(1),
+      ...(this._module?.layer ? { layer: this._module.layer } : {}),
     },
     loaders: [
       {

@@ -326,6 +326,7 @@ export class Module implements SDK.ModuleInstance {
       chunks: this.chunks.map((item) => item.id),
       size: this.getSize(),
       kind: this.kind,
+      ...(this.layer ? { layer: this.layer } : {}),
     };
 
     if (this.meta.hasSetEsModuleStatement || this.meta.strictHarmonyModule) {

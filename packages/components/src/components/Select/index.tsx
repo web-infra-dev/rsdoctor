@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Select, Space, Typography } from 'antd';
+import { Button, Col, Input, Row, Select, Typography } from 'antd';
 import { FileSearchOutlined, SelectOutlined } from '@ant-design/icons';
 import { KeywordInput } from '../Form/keyword';
 import { Size } from 'src/constants';
+import { ServerAPIProvider } from '../Manifest';
+import { SDK } from '@rsdoctor/types';
 
 interface LoaderNamesSelectProps {
   style?: React.CSSProperties;
@@ -10,7 +12,17 @@ interface LoaderNamesSelectProps {
   loaderNames: string[];
 }
 
-export const LoaderNamesSelect: React.FC<LoaderNamesSelectProps> = ({ style, onChange, loaderNames }) => {
+export type ISelectLoaderProps = {
+  loaders: string[];
+  filename: string;
+  layer?: string;
+};
+
+export const LoaderNamesSelect: React.FC<LoaderNamesSelectProps> = ({
+  style,
+  onChange,
+  loaderNames,
+}) => {
   const [selectLoaders, setSelectLoaders] = useState([]);
 
   const labelStyle: React.CSSProperties = { width: 120 };
@@ -25,7 +37,7 @@ export const LoaderNamesSelect: React.FC<LoaderNamesSelectProps> = ({ style, onC
         mode="multiple"
         allowClear
         defaultValue={selectLoaders}
-        style={{ width: 350 }}
+        style={{ width: 300 }}
         dropdownMatchSelectWidth
         placeholder={'select loaders'}
         onChange={(e) => {
@@ -45,34 +57,95 @@ export const LoaderNamesSelect: React.FC<LoaderNamesSelectProps> = ({ style, onC
   );
 };
 
+const LoaderLayerSelect: React.FC<{
+  onChange(value: string): void;
+  layers: string[];
+}> = ({ onChange, layers }) => {
+  const [layer, setLayer] = useState('');
+  const labelStyle: React.CSSProperties = { width: 120 };
+
+  return (
+    <Input.Group compact>
+      <Button style={labelStyle}>
+        <SelectOutlined />
+        <Typography.Text>Layers</Typography.Text>
+      </Button>
+      <Select
+        allowClear
+        style={{ width: 150 }}
+        defaultValue={layer}
+        placeholder={'select layer'}
+        onChange={(e) => {
+          setLayer(e);
+          onChange(e);
+        }}
+      >
+        {layers?.length ? (
+          layers?.map((e) => {
+            return (
+              <Select.Option key={e} label={e} value={e}>
+                {e}
+              </Select.Option>
+            );
+          })
+        ) : (
+          <></>
+        )}
+      </Select>
+    </Input.Group>
+  );
+};
+
 export const LoaderCommonSelect: React.FC<{
-  onChange(value: { loaders: string[]; filename: string }): void;
+  onChange(value: ISelectLoaderProps): void;
   loaderNames: string[];
 }> = ({ onChange, loaderNames }) => {
   const [selectLoaders, setSelectLoaders] = useState<string[]>([]);
   const [filename, setFilename] = useState('');
+  const [layer, setLayer] = useState('');
 
   useEffect(() => {
-    onChange({ loaders: selectLoaders, filename });
-  }, [selectLoaders, filename]);
+    onChange({ loaders: selectLoaders, filename, layer });
+  }, [selectLoaders, filename, layer]);
 
   return (
-    <Space style={{ marginBottom: Size.BasePadding }}>
-      <LoaderNamesSelect
-        loaderNames={loaderNames}
-        style={{ marginRight: Size.BasePadding - 8 }}
-        onChange={(e) => {
-          setSelectLoaders(e);
-        }}
-      />
-      <KeywordInput
-        icon={<FileSearchOutlined />}
-        label="Filename"
-        placeholder="search filename by keyword"
-        onChange={(e) => {
-          setFilename(e);
-        }}
-      />
-    </Space>
+    <Row style={{ marginBottom: Size.BasePadding }}>
+      <Col>
+        <LoaderNamesSelect
+          loaderNames={loaderNames}
+          style={{ marginRight: Size.BasePadding / 2 }}
+          onChange={(e) => {
+            setSelectLoaders(e);
+          }}
+        />
+      </Col>
+      <Col>
+        <KeywordInput
+          icon={<FileSearchOutlined />}
+          style={{ marginRight: Size.BasePadding / 2 }}
+          label="Filename"
+          placeholder="search filename by keyword"
+          onChange={(e) => {
+            setFilename(e);
+          }}
+        />
+      </Col>
+      <Col>
+        <ServerAPIProvider api={SDK.ServerAPI.API.GetLayers}>
+          {(layers) =>
+            layers.length ? (
+              <LoaderLayerSelect
+                layers={layers}
+                onChange={(e) => {
+                  setLayer(e);
+                }}
+              />
+            ) : (
+              <></>
+            )
+          }
+        </ServerAPIProvider>
+      </Col>
+    </Row>
   );
 };

@@ -268,6 +268,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
     this._exportIdMap = new Map(data._exportIdMap);
     this._sideEffectIdMap = new Map(data._sideEffectIdMap);
     this._varIdMap = new Map(data._varIdMap);
+    this._layers = new Map(data._layers);
   }
 
   getSubGraphByModule(module: Module): Module[] {
@@ -417,7 +418,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
       variables: Array.from(this._varIdMap.values()).map((item) =>
         item.toData(),
       ),
-      layers: this._layers,
+      layers: Array.from(this._layers.keys()),
     };
   }
 
