@@ -65,7 +65,7 @@ export const Header: React.FC = () => {
               src={
                 'https://assets.rspack.dev/rsdoctor/rsdoctor-logo-960x960.png'
               }
-              className="web-doctor-logo"
+              className="rsdoctor-logo"
               alt="logo"
             />
             <Typography.Text

@@ -1,6 +1,6 @@
 import { ClockCircleOutlined } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
-import { Constants, SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/types';
 import {
   Badge,
   Button,
@@ -18,7 +18,6 @@ import {
 import type { EllipsisConfig } from 'antd/lib/typography/Base';
 import type { TextProps } from 'antd/lib/typography/Text';
 import dayjs from 'dayjs';
-import { endsWith } from 'lodash-es';
 import { PropsWithChildren, useCallback, useState } from 'react';
 import { Size } from '../../constants';
 import {
@@ -31,7 +30,6 @@ import { Card } from '../Card';
 import { DiffViewer } from '../CodeViewer';
 import { CodeOpener } from '../Opener';
 import { Title } from '../Title';
-import { JSIsEqualTag } from '../worker/jsequal/client';
 
 interface LoaderExecutionsProps {
   cwd: string;
@@ -73,17 +71,13 @@ const LoaderInfoItem = ({
 
 const LoaderPropsItem = ({
   loader,
-  hasError,
   resource,
-  before,
   cwd,
 }: {
   loader: SDK.LoaderTransformData & {
     costs: number;
   };
-  hasError: number;
   resource: SDK.ResourceData;
-  before: string;
   cwd: string;
 }): JSX.Element => {
   return (
@@ -97,11 +91,6 @@ const LoaderPropsItem = ({
       }
     >
       {loader.isPitch ? <Typography.Text code>pitch</Typography.Text> : null}
-      {loader.isPitch ||
-      hasError ||
-      !endsWith(resource.path, Constants.JSExtension) ? null : (
-        <JSIsEqualTag input={before} output={loader.result || ''} />
-      )}
       <Space
         direction="vertical"
         style={{ padding: Size.BasePadding, wordBreak: 'break-all' }}
@@ -243,9 +232,7 @@ export const LoaderExecutions = ({
               children: (
                 <LoaderPropsItem
                   loader={loader}
-                  hasError={hasError}
                   resource={resource}
-                  before={before}
                   cwd={cwd}
                 />
               ),
