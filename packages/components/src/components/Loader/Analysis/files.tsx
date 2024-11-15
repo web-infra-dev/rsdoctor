@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { endsWith, get, sumBy } from 'lodash-es';
+import { get, sumBy } from 'lodash-es';
 import {
   Card,
   Col,
@@ -13,7 +13,7 @@ import {
   Typography,
 } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Constants, SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/types';
 import { ServerAPIProvider } from '../../Manifest';
 import { drawerWidth, Size } from '../../../constants';
 import {
@@ -27,7 +27,6 @@ import {
 import { LoaderExecutions } from '../executions';
 import { FileTree } from '../../FileTree';
 import { Keyword } from '../../Keyword';
-import { ECMAVersionDetectTag } from '../../worker/ecmaversion/client';
 
 export const LoaderFiles: React.FC<{
   filetree: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileTree>;
@@ -78,15 +77,6 @@ export const LoaderFiles: React.FC<{
             }}
           >
             <Keyword text={basename} keyword={props.filename} />
-            {endsWith(file, Constants.JSExtension) ? (
-              <ServerAPIProvider
-                api={SDK.ServerAPI.API.GetLoaderFileFirstInput}
-                body={{ file }}
-                fallbackComponent={() => null}
-              >
-                {(res) => <ECMAVersionDetectTag code={res} />}
-              </ServerAPIProvider>
-            ) : null}
             {loaders.map((e, i) => {
               const isError = e.errors && e.errors.length;
               const key = `${file}_${e.loader}_${i}`;
