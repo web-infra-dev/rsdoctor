@@ -45,12 +45,12 @@ export function isExternalModule(mod: Module): mod is ExternalModule {
 export function getModuleSource(mod: NormalModule): string {
   return isExternalModule(mod)
     ? ''
-    : mod.originalSource?.()?.source().toString() ?? '';
+    : (mod.originalSource?.()?.source().toString() ?? '');
 }
 
 export function getResolveModule(dep: Dependency, graph?: ModuleGraph) {
   // webpack5
-  if (graph) {
+  if (graph && 'getResolvedModule' in graph) {
     return graph.getResolvedModule(dep);
   }
 
