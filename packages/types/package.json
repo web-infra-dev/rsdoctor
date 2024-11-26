@@ -24,7 +24,7 @@
     "source-map": "^0.7.4"
   },
   "devDependencies": {
-    "@rspack/core": "^1.1.1",
+    "@rspack/core": "^1.1.4",
     "@types/node": "^16",
     "@types/react": "^18.3.12",
     "tslib": "2.7.0",
