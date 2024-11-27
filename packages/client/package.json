@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/client",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "main": "dist/index.html",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "dist/"
   ],
   "devDependencies": {
-    "@rsbuild/core": "^1.1.3",
+    "@rsbuild/core": "^1.1.6",
     "@rsbuild/plugin-node-polyfill": "^1.2.0",
     "@rsbuild/plugin-react": "^1.0.7",
     "@rsbuild/plugin-sass": "^1.1.1",
