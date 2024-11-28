@@ -3,6 +3,7 @@ import type { Linter } from '@rsdoctor/types';
 import type { RsdoctorMultiplePluginOptions } from '@rsdoctor/core';
 
 import { RsdoctorWebpackPlugin } from './plugin';
+import { normalizeUserConfig } from '@rsdoctor/core/plugins';
 
 let globalController: RsdoctorSDKController | undefined;
 
@@ -22,10 +23,19 @@ export class RsdoctorWebpackMultiplePlugin<
       return controller;
     })();
 
+    const normallizedOptions = normalizeUserConfig<Rules>(options);
+
     const instance = controller.createSlave({
       name: options.name || 'Builder',
       stage: options.stage,
-      extraConfig: { disableTOSUpload: options.disableTOSUpload || false },
+      extraConfig: {
+        disableTOSUpload: normallizedOptions.disableTOSUpload || false,
+        innerClientPath: normallizedOptions.innerClientPath,
+        printLog: normallizedOptions.printLog,
+        mode: normallizedOptions.mode ? normallizedOptions.mode : undefined,
+        brief: normallizedOptions.brief,
+      },
+      type: normallizedOptions.reportCodeType,
     });
 
     super({

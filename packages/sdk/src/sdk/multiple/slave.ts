@@ -16,6 +16,7 @@ interface RsdoctorSlaveSDKOptions {
   stage?: number;
   extraConfig?: SDK.SDKOptionsType;
   controller: RsdoctorSDKController;
+  type: SDK.ToDataType;
 }
 
 export class RsdoctorPrimarySDK extends RsdoctorSDK {
@@ -34,6 +35,7 @@ export class RsdoctorPrimarySDK extends RsdoctorSDK {
     stage,
     controller,
     extraConfig,
+    type,
   }: RsdoctorSlaveSDKOptions) {
     super({ name, root: controller.root });
 
@@ -45,6 +47,7 @@ export class RsdoctorPrimarySDK extends RsdoctorSDK {
     this.extraConfig = extraConfig;
     this.parent = controller;
     this.server = new RsdoctorSlaveServer(this, port);
+    this.type = type;
     this.setName(name);
     this.clearSwitch();
   }
