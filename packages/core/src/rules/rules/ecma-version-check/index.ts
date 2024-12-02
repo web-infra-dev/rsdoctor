@@ -1,8 +1,10 @@
-import { parser, ECMAVersion } from '@rsdoctor/utils/ruleUtils';
 import path from 'path';
+import { CheckSyntax } from '@rsbuild/plugin-check-syntax';
+import { loadConfig } from 'browserslist-load-config';
+
 import { defineRule } from '../../rule';
 import { Config } from './types';
-import { getVersionNumber } from './utils';
+
 import { Linter } from '@rsdoctor/types';
 
 export type { Config } from './types';
@@ -17,38 +19,43 @@ export const rule = defineRule<typeof title, Config>(() => {
       category: 'bundle',
       severity: Linter.Severity.Warn,
       defaultConfig: {
-        highestVersion: ECMAVersion.ES5,
-        ignore: [],
+        ecmaVersion: undefined,
+        targets: [],
       },
     },
-    check({ chunkGraph, report, ruleConfig }) {
+    async check({ chunkGraph, report, ruleConfig, root }) {
       for (const asset of chunkGraph.getAssets()) {
         if (path.extname(asset.path) !== '.js') {
           continue;
         }
 
-        if (ruleConfig.ignore.includes(asset.path)) {
-          continue;
-        }
-
-        const currentVersion = parser.utils.detectECMAVersion(asset.content);
-        const currentVersionNumber = getVersionNumber(currentVersion);
-        const configVersionNumber = getVersionNumber(ruleConfig.highestVersion);
-
-        if (!configVersionNumber || !currentVersionNumber) {
+        const browserslistConfig = loadConfig({
+          path: root,
+          env: 'production',
+        });
+        const { exclude, excludeOutput, targets, ecmaVersion } = ruleConfig;
+        const finalTargets = targets || browserslistConfig || [];
+        // disable check syntax
+        if (!finalTargets.length && !ecmaVersion) {
           return;
         }
-
-        if (currentVersionNumber > configVersionNumber) {
-          const assetsName = path.basename(asset.path);
-
+        const checkSyntax = new CheckSyntax({
+          exclude,
+          excludeOutput,
+          ecmaVersion,
+          rootPath: root,
+          targets: finalTargets,
+        });
+        await checkSyntax.check(asset.path, asset.content);
+        checkSyntax.errors.forEach((err) => {
           report({
-            message: `The ECMA version used in "${assetsName}" is ${currentVersion}, which exceeds the ${ruleConfig.highestVersion} standard.`,
+            message: err.message,
             detail: {
+              err,
               type: 'link',
             },
           });
-        }
+        });
       }
     },
   };

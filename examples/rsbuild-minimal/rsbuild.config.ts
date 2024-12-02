@@ -35,5 +35,9 @@ export default defineConfig({
   output: {
     minify: false,
     filenameHash: false,
+    sourceMap: {
+      js: 'cheap-module-source-map',
+      css: true,
+    },
   },
 });

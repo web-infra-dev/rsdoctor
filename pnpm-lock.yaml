@@ -678,6 +678,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@rsbuild/plugin-check-syntax':
+        specifier: 1.2.0-beta.1
+        version: 1.2.0-beta.1
       '@rsdoctor/graph':
         specifier: workspace:*
         version: link:../graph
@@ -693,6 +696,9 @@ importers:
       axios:
         specifier: ^1.7.7
         version: 1.7.7(debug@4.3.7)
+      browserslist-load-config:
+        specifier: ^1.0.0
+        version: 1.0.0
       enhanced-resolve:
         specifier: 5.12.0
         version: 5.12.0
@@ -1485,12 +1491,10 @@ packages:
   /@babel/compat-data@7.25.2:
     resolution: {integrity: sha512-bYcppcpKBvX4znYaPEeFau03bp89ShqNMLs+rmdptMw+heSZh9+z84d2YG+K7cYLbWwzdjtDoW/uqZmPjulClQ==}
     engines: {node: '>=6.9.0'}
-    dev: false
 
   /@babel/compat-data@7.25.8:
     resolution: {integrity: sha512-ZsysZyXY4Tlx+Q53XdnOFmqwfB9QDTHYxaZYajWRoBLuLEAwI2UIbtxOjWh/cFaa9IKUlcB+DDuoskLuKu56JA==}
     engines: {node: '>=6.9.0'}
-    dev: false
 
   /@babel/compat-data@7.26.2:
     resolution: {integrity: sha512-Z0WgzSEa+aUcdiJuCIqgujCshpMWgUpgOxXotrYPSA53hA3qopNaqcJpyr0hVb1FeWdnqFA35/fUtXgBK8srQg==}
@@ -1623,7 +1627,6 @@ packages:
       browserslist: 4.24.0
       lru-cache: 5.1.1
       semver: 6.3.1
-    dev: false
 
   /@babel/helper-compilation-targets@7.25.9:
     resolution: {integrity: sha512-j9Db8Suy6yV/VHa4qzrj9yZfZxhLWQdVnRlXxmKLYlhWUVB1sB2G5sxuWYXk/whHD9iW76PmNzxZ4UCnTQTVEQ==}
@@ -1962,7 +1965,6 @@ packages:
   /@babel/helper-validator-option@7.25.7:
     resolution: {integrity: sha512-ytbPLsm+GjArDYXJ8Ydr1c/KJuutjF2besPNbIZnZ6MKUxi/uTA22t2ymmA4WFjZFpjiAMO0xuuJPqK2nvDVfQ==}
     engines: {node: '>=6.9.0'}
-    dev: false
 
   /@babel/helper-validator-option@7.25.9:
     resolution: {integrity: sha512-e/zv1co8pp55dNdEcCynfj9X7nyUKUXoUEwfXqaZt0omVOmDe9oOTdKStH4GmAw6zxMFs50ZayuMfHDKlO7Tfw==}
@@ -2001,7 +2003,7 @@ packages:
       '@babel/helper-validator-identifier': 7.25.7
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.1.0
+      picocolors: 1.1.1
 
   /@babel/parser@7.25.3:
     resolution: {integrity: sha512-iLTJKDbJ4hMvFPgQwwsVoxtHyWpKKPBrxkANrSYewDPaPpT5py5yeVkgPIJ7XYXhndxJpaA3PyALSXQ7u8e/Dw==}
@@ -2791,6 +2793,19 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+
+  /@babel/plugin-transform-class-properties@7.24.7(@babel/core@7.26.0):
+    resolution: {integrity: sha512-vKbfawVYayKcSeSR5YYzzyXvsDFWU2mD8U5TFeXtbCPLFUqe7GyCgvO6XDHzje862ODrOwy6WCPmKeWHbCFJ4w==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    dependencies:
+      '@babel/core': 7.26.0
+      '@babel/helper-create-class-features-plugin': 7.25.0(@babel/core@7.26.0)
+      '@babel/helper-plugin-utils': 7.24.8
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
 
   /@babel/plugin-transform-class-properties@7.25.7(@babel/core@7.26.0):
     resolution: {integrity: sha512-mhyfEW4gufjIqYFo9krXHJ3ElbFLIze5IDp+wQTxoPd+mwFb1NxatNAwmv8Q8Iuxv7Zc+q8EkiMQwc9IhyGf4g==}
@@ -4090,11 +4105,11 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/compat-data': 7.26.2
+      '@babel/compat-data': 7.25.2
       '@babel/core': 7.26.0
-      '@babel/helper-compilation-targets': 7.25.9
-      '@babel/helper-plugin-utils': 7.25.7
-      '@babel/helper-validator-option': 7.25.9
+      '@babel/helper-compilation-targets': 7.25.2
+      '@babel/helper-plugin-utils': 7.24.8
+      '@babel/helper-validator-option': 7.24.8
       '@babel/plugin-bugfix-firefox-class-in-computed-class-key': 7.25.3(@babel/core@7.26.0)
       '@babel/plugin-bugfix-safari-class-field-initializer-scope': 7.25.0(@babel/core@7.26.0)
       '@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression': 7.25.0(@babel/core@7.26.0)
@@ -4124,7 +4139,7 @@ packages:
       '@babel/plugin-transform-async-to-generator': 7.24.7(@babel/core@7.26.0)
       '@babel/plugin-transform-block-scoped-functions': 7.24.7(@babel/core@7.26.0)
       '@babel/plugin-transform-block-scoping': 7.25.0(@babel/core@7.26.0)
-      '@babel/plugin-transform-class-properties': 7.25.7(@babel/core@7.26.0)
+      '@babel/plugin-transform-class-properties': 7.24.7(@babel/core@7.26.0)
       '@babel/plugin-transform-class-static-block': 7.24.7(@babel/core@7.26.0)
       '@babel/plugin-transform-classes': 7.25.0(@babel/core@7.26.0)
       '@babel/plugin-transform-computed-properties': 7.24.7(@babel/core@7.26.0)
@@ -4142,7 +4157,7 @@ packages:
       '@babel/plugin-transform-logical-assignment-operators': 7.24.7(@babel/core@7.26.0)
       '@babel/plugin-transform-member-expression-literals': 7.24.7(@babel/core@7.26.0)
       '@babel/plugin-transform-modules-amd': 7.24.7(@babel/core@7.26.0)
-      '@babel/plugin-transform-modules-commonjs': 7.25.7(@babel/core@7.26.0)
+      '@babel/plugin-transform-modules-commonjs': 7.24.8(@babel/core@7.26.0)
       '@babel/plugin-transform-modules-systemjs': 7.25.0(@babel/core@7.26.0)
       '@babel/plugin-transform-modules-umd': 7.24.7(@babel/core@7.26.0)
       '@babel/plugin-transform-named-capturing-groups-regex': 7.24.7(@babel/core@7.26.0)
@@ -7342,12 +7357,27 @@ packages:
         optional: true
     dependencies:
       '@rsbuild/core': 1.0.19
-      acorn: 8.12.1
+      acorn: 8.14.0
       browserslist-to-es-version: 1.0.0
       htmlparser2: 9.1.0
       picocolors: 1.1.1
       source-map: 0.7.4
     dev: true
+
+  /@rsbuild/plugin-check-syntax@1.2.0-beta.1:
+    resolution: {integrity: sha512-WxeaLJf6lTWxuaFaTK3HpOy9OoFC/uSSheDNCV5NRk8v8RAm+7NsNOec+rik0AfHlITl9QgsnNjTR3PG6EewdQ==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+    peerDependenciesMeta:
+      '@rsbuild/core':
+        optional: true
+    dependencies:
+      acorn: 8.14.0
+      browserslist-to-es-version: 1.0.0
+      htmlparser2: 9.1.0
+      picocolors: 1.1.1
+      source-map: 0.7.4
+    dev: false
 
   /@rsbuild/plugin-css-minimizer@1.0.2(@rsbuild/core@1.0.19)(esbuild@0.17.19)(webpack@5.95.0):
     resolution: {integrity: sha512-x695i5PHWI9uV9VA1Dun66G0DeJMgxbt3wEk4eHZMz9pi6n8Dah6BHG2WcloYAEi7yVoUcPIGXDdag27s2B+4A==}
@@ -9450,6 +9480,14 @@ packages:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
       acorn: 8.12.1
+    dev: true
+
+  /acorn-jsx@5.3.2(acorn@8.14.0):
+    resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
+    peerDependencies:
+      acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
+    dependencies:
+      acorn: 8.14.0
 
   /acorn-walk@8.3.2:
     resolution: {integrity: sha512-cjkyv4OtNCIeqhHrfS81QWXoCBPExR/J62oyEqepVw8WaQeSqpW2uhuLPh1m9eWhDuOo/jUXVTlifvesOWp/4A==}
@@ -9471,6 +9509,11 @@ packages:
   /acorn@8.12.1:
     resolution: {integrity: sha512-tcpGyI9zbizT9JbV6oYE477V6mTlXvvi0T0G3SNIYE2apm/G5huBa1+K89VGeovbg+jycCrfhl3ADxErOuO6Jg==}
     engines: {node: '>=0.4.0'}
+
+  /acorn@8.14.0:
+    resolution: {integrity: sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
 
   /agent-base@6.0.2:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
@@ -10167,11 +10210,14 @@ packages:
       pako: 1.0.11
     dev: true
 
+  /browserslist-load-config@1.0.0:
+    resolution: {integrity: sha512-jj4xzExS1hRVMUIFQSkW4l3KPni5JRxnKfYfRpirooK5S4CjY31PhqfEjCB/mfqgCxkZIxc9rcu0pyXlEpYp/Q==}
+    dev: false
+
   /browserslist-to-es-version@1.0.0:
     resolution: {integrity: sha512-i6dR03ClGy9ti97FSa4s0dpv01zW/t5VbvGjFfTLsrRQFsPgSeyGkCrlU7BTJuI5XDHVY5S2JgDnDsvQXifJ8w==}
     dependencies:
       browserslist: 4.24.0
-    dev: true
 
   /browserslist@4.23.1:
     resolution: {integrity: sha512-TUfofFo/KsK/bWZ9TWQ5O26tsWW4Uhmt8IYklbnUa70udB6P2wA7w7o4PY4muaEPBQaAX+CEnmmIA41NVHtPVw==}
@@ -15007,8 +15053,8 @@ packages:
   /micromark-extension-mdxjs@1.0.1:
     resolution: {integrity: sha512-7YA7hF6i5eKOfFUzZ+0z6avRG52GpWR8DL+kN47y3f2KhxbBZMhmxe7auOeaTBrW2DenbbZTf1ea9tA2hDpC2Q==}
     dependencies:
-      acorn: 8.12.1
-      acorn-jsx: 5.3.2(acorn@8.12.1)
+      acorn: 8.14.0
+      acorn-jsx: 5.3.2(acorn@8.14.0)
       micromark-extension-mdx-expression: 1.0.8
       micromark-extension-mdx-jsx: 1.0.5
       micromark-extension-mdx-md: 1.0.1
@@ -19557,7 +19603,7 @@ packages:
       css-tree: 2.3.1
       css-what: 6.1.0
       csso: 5.0.5
-      picocolors: 1.1.0
+      picocolors: 1.1.1
 
   /sync-child-process@1.0.2:
     resolution: {integrity: sha512-8lD+t2KrrScJ/7KXCSyfhT3/hRq78rC0wBFqNJXv3mZyn6hW2ypM05JmlSvtqRbeq6jqA94oHbxAr2vYsJ8vDA==}
@@ -19688,7 +19734,7 @@ packages:
     hasBin: true
     dependencies:
       '@jridgewell/source-map': 0.3.6
-      acorn: 8.12.1
+      acorn: 8.14.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
