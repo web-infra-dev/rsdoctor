@@ -42,12 +42,14 @@ export class RsdoctorSDKController {
     name,
     stage,
     extraConfig,
+    type,
   }: Omit<ConstructorParameters<typeof RsdoctorPrimarySDK>[0], 'controller'>) {
     const slave = new RsdoctorPrimarySDK({
       name,
       stage,
       controller: this,
       extraConfig,
+      type,
     });
     this.slaves.push(slave);
     // sort by stage after create slave sdk.
