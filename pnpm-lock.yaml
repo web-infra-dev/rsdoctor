@@ -529,8 +529,8 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1(@rsbuild/core@1.1.6)
       '@rsbuild/plugin-type-check':
-        specifier: ^1.0.1
-        version: 1.0.1(@rsbuild/core@1.1.6)(typescript@5.5.4)
+        specifier: ^1.1.0
+        version: 1.1.0(@rsbuild/core@1.1.6)(@rspack/core@1.1.4)(typescript@5.5.4)
       '@rsdoctor/components':
         specifier: workspace:*
         version: link:../components
@@ -4206,7 +4206,7 @@ packages:
     dependencies:
       '@babel/core': 7.26.0
       '@babel/helper-plugin-utils': 7.24.8
-      '@babel/helper-validator-option': 7.25.9
+      '@babel/helper-validator-option': 7.24.8
       '@babel/plugin-syntax-jsx': 7.24.7(@babel/core@7.26.0)
       '@babel/plugin-transform-modules-commonjs': 7.24.8(@babel/core@7.26.0)
       '@babel/plugin-transform-typescript': 7.25.2(@babel/core@7.26.0)
@@ -7557,26 +7557,22 @@ packages:
       - webpack-cli
     dev: true
 
-  /@rsbuild/plugin-type-check@1.0.1(@rsbuild/core@1.1.6)(typescript@5.5.4):
-    resolution: {integrity: sha512-BahXAJNq4kWtL2dINUlrOL9UCN1t8c/qf5RW8JXx2HSSasfKPJGJ1BVfieMcIaFa/t8/QdafcwoxY1WKPTlSMg==}
+  /@rsbuild/plugin-type-check@1.1.0(@rsbuild/core@1.1.6)(@rspack/core@1.1.4)(typescript@5.5.4):
+    resolution: {integrity: sha512-9W/TxibRe7L6i4JnsIDRJfkvypPZQqCLO/jrAp+Liv4SCo9BVmbk/Rmpj+hfo2gjyewobk0AVi4/YQ5wOP7GSQ==}
     peerDependencies:
-      '@rsbuild/core': 1.x || ^1.0.1-beta.0
+      '@rsbuild/core': 1.x
     peerDependenciesMeta:
       '@rsbuild/core':
         optional: true
     dependencies:
       '@rsbuild/core': 1.1.6
       deepmerge: 4.3.1
-      fork-ts-checker-webpack-plugin: 9.0.2(typescript@5.5.4)(webpack@5.95.0)
       json5: 2.2.3
       reduce-configs: 1.0.0
-      webpack: 5.95.0
+      ts-checker-rspack-plugin: 1.0.1(@rspack/core@1.1.4)(typescript@5.5.4)
     transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
+      - '@rspack/core'
       - typescript
-      - uglify-js
-      - webpack-cli
     dev: true
 
   /@rsbuild/plugin-typed-css-modules@1.0.2(@rsbuild/core@1.0.19):
@@ -12578,7 +12574,7 @@ packages:
       semver: 7.6.3
       tapable: 2.2.1
       typescript: 5.5.4
-      webpack: 5.95.0
+      webpack: 5.95.0(esbuild@0.17.19)
     dev: true
 
   /form-data@4.0.0:
@@ -19424,6 +19420,23 @@ packages:
 
   /trough@2.2.0:
     resolution: {integrity: sha512-tmMpK00BjZiUyVyvrBK7knerNgmgvcV/KLVyuma/SC+TQN167GrMRciANTz09+k3zW8L8t60jWO1GpfkZdjTaw==}
+
+  /ts-checker-rspack-plugin@1.0.1(@rspack/core@1.1.4)(typescript@5.5.4):
+    resolution: {integrity: sha512-u+RgBXBr6RHCJ+nJtA3A6MG3oDt20faU8DryX+H3HPhhU+cCnrGY304vmwOsQLJmoMWDk7/xkkbz2j9pC0aX1Q==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      '@rspack/core': ^1.0.0
+      typescript: '>=3.8.0'
+    dependencies:
+      '@babel/code-frame': 7.25.7
+      '@rspack/core': 1.1.4(@swc/helpers@0.5.15)
+      '@rspack/lite-tapable': 1.0.1
+      chokidar: 3.6.0
+      memfs: 4.14.0
+      minimatch: 9.0.5
+      picocolors: 1.1.1
+      typescript: 5.5.4
+    dev: true
 
   /ts-deepmerge@7.0.0:
     resolution: {integrity: sha512-WZ/iAJrKDhdINv1WG6KZIGHrZDar6VfhftG1QJFpVbOYZMYJLJOvZOo1amictRXVdBXZIgBHKswMTXzElngprA==}
