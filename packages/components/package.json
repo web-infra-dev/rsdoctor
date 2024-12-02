@@ -50,6 +50,7 @@
     "dist/"
   ],
   "devDependencies": {
+    "@rsbuild/plugin-check-syntax": "1.2.0-beta.1",
     "@ant-design/icons": "5.5.1",
     "@monaco-editor/react": "4.6.0",
     "@rsdoctor/graph": "workspace:*",

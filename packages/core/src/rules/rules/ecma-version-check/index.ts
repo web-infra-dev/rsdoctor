@@ -6,7 +6,6 @@ import { defineRule } from '../../rule';
 import { Config } from './types';
 
 import { Linter } from '@rsdoctor/types';
-
 export type { Config } from './types';
 
 const title = 'ecma-version-check';
@@ -49,9 +48,9 @@ export const rule = defineRule<typeof title, Config>(() => {
         await checkSyntax.check(asset.path, asset.content);
         checkSyntax.errors.forEach((err) => {
           report({
-            message: err.message,
+            message: `Find some syntax that does not match "ecmaVersion <= ${checkSyntax.ecmaVersion}"`,
             detail: {
-              err,
+              error: err,
               type: 'link',
             },
           });

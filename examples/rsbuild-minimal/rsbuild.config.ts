@@ -24,6 +24,12 @@ export default defineConfig({
                   limit: 1,
                 },
               ],
+              'ecma-version-check': [
+                'Warn',
+                {
+                  ecmaVersion: 3,
+                },
+              ],
             },
           },
           port: 9988,
