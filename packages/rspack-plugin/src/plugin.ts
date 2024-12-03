@@ -33,7 +33,7 @@ import { pluginTapName, pluginTapPostOptions } from './constants';
 import { cloneDeep } from 'lodash';
 
 import { Loader } from '@rsdoctor/utils/common';
-import { chalk } from '@rsdoctor/utils/logger';
+import { chalk, logger } from '@rsdoctor/utils/logger';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorRspackPluginInstance<Rules>
@@ -143,6 +143,14 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       new InternalBundleTagPlugin<Plugin.BaseCompilerType<'rspack'>>(
         this,
       ).apply(compiler);
+    }
+
+    if (this.options.features.resolver) {
+      logger.info(
+        chalk.yellow(
+          'Rspack currently does not support Resolver capabilities.',
+        ),
+      );
     }
 
     new InternalRulesPlugin(this).apply(compiler);

@@ -83,7 +83,7 @@ const config = {
     new ReactRefreshPlugin(),
     new RsdoctorRspackPlugin({
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
-      features: ['bundle', 'plugins', 'loader'],
+      features: ['bundle', 'plugins', 'loader', 'treeShaking', 'resolver'],
     }),
     new rspack.BannerPlugin({
       test: /\.js/,

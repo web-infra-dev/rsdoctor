@@ -3,7 +3,7 @@ import { RsdoctorPluginInstance } from '@/types';
 import { ModuleGraph } from '@rsdoctor/graph';
 import { Linter, Plugin, Constants, Manifest } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
-import { debug } from '@rsdoctor/utils/logger';
+import { chalk, debug, logger } from '@rsdoctor/utils/logger';
 import fse from 'fs-extra';
 import {
   Chunks as ChunksBuildUtils,
@@ -37,8 +37,7 @@ export const ensureModulesChunksGraphFn = (
     internalPluginTapPreOptions('moduleGraph'),
     async (_stats: any) => {
       const stats = _stats as Plugin.Stats;
-      const statsJson = stats.toJson();
-
+      const statsJson = stats.toJson(); // TODO: need optimize this stats.toJSON 's stats options.
       debug(Process.getMemoryUsageMessage, '[Before Generate ModuleGraph]');
 
       _this.chunkGraph = ChunksBuildUtils.chunkTransform(new Map(), statsJson);
@@ -57,6 +56,15 @@ export const ensureModulesChunksGraphFn = (
 
       /** Tree Shaking */
       if (_this.options.features.treeShaking) {
+        if ('rspackVersion' in compiler.webpack) {
+          logger.info(
+            chalk.yellow(
+              'Rspack currently does not support treeShaking capabilities.',
+            ),
+          );
+          return;
+        }
+
         _this.modulesGraph =
           ModuleGraphBuildUtils.appendTreeShaking(
             _this.modulesGraph,
