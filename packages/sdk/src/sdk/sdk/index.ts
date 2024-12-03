@@ -26,7 +26,7 @@ export class RsdoctorSDK<
 
   public extraConfig: SDK.SDKOptionsType | undefined;
 
-  private type: SDK.ToDataType;
+  public type: SDK.ToDataType;
 
   private _summary: SDK.SummaryData = { costs: [] };
 
