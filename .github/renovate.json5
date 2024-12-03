@@ -66,6 +66,7 @@
 		"playwright",
 		"@babel/code-frame",
 		"get-port",
-		"chalk"
+		"chalk",
+		"deep-eql"
 	]
 }
