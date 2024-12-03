@@ -926,6 +926,9 @@ importers:
       fs-extra:
         specifier: ^11.1.1
         version: 11.2.0
+      json-cycle:
+        specifier: ^1.5.0
+        version: 1.5.0
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -4174,7 +4177,7 @@ packages:
     dependencies:
       '@babel/core': 7.26.0
       '@babel/helper-plugin-utils': 7.24.8
-      '@babel/helper-validator-option': 7.25.9
+      '@babel/helper-validator-option': 7.24.8
       '@babel/plugin-transform-react-display-name': 7.24.7(@babel/core@7.26.0)
       '@babel/plugin-transform-react-jsx': 7.25.2(@babel/core@7.26.0)
       '@babel/plugin-transform-react-jsx-development': 7.24.7(@babel/core@7.26.0)
@@ -13964,6 +13967,11 @@ packages:
   /json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
     dev: true
+
+  /json-cycle@1.5.0:
+    resolution: {integrity: sha512-GOehvd5PO2FeZ5T4c+RxobeT5a1PiGpF4u9/3+UvrMU4bhnVqzJY7hm39wg8PDCqkU91fWGH8qjWR4bn+wgq9w==}
+    engines: {node: '>= 4'}
+    dev: false
 
   /json-parse-even-better-errors@2.3.1:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
