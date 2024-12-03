@@ -12,6 +12,7 @@ import { RsdoctorWebpackSDKOptions } from './types';
 import { SDKCore } from './core';
 import { Algorithm } from '@rsdoctor/utils/common';
 import { isNumber } from 'lodash';
+const jc = require('json-cycle');
 
 export * from '../utils/openBrowser';
 
@@ -25,7 +26,7 @@ export class RsdoctorSDK<
 
   public extraConfig: SDK.SDKOptionsType | undefined;
 
-  private type: SDK.ToDataType;
+  public type: SDK.ToDataType;
 
   private _summary: SDK.SummaryData = { costs: [] };
 
@@ -504,6 +505,9 @@ export class RsdoctorSDK<
 
       const jsonStrFn = () => {
         try {
+          if (key === 'configs') {
+            return JSON.stringify(jc.decycle(data));
+          }
           return JSON.stringify(data);
         } catch (error) {
           console.error(error);

@@ -40,7 +40,7 @@ export function formatAssetName(assetName: string, fileConfig?: string) {
 }
 
 export function isAssetMatchExtension(asset: SDK.AssetData, ext: string) {
-  return asset.path.slice(-ext.length) === ext;
+  return asset.path.slice(-ext.length) === ext || extname(asset.path) === ext;
 }
 
 export function isAssetMatchExtensions(asset: SDK.AssetData, exts: string[]) {
@@ -228,14 +228,14 @@ export function diffSize(bSize: number, cSize: number) {
   const percent = isEqual
     ? 0
     : bSize === 0
-    ? 100
-    : (Math.abs(cSize - bSize) / bSize) * 100;
+      ? 100
+      : (Math.abs(cSize - bSize) / bSize) * 100;
 
   const state: Client.RsdoctorClientDiffState = isEqual
     ? Client.RsdoctorClientDiffState.Equal
     : bSize > cSize
-    ? Client.RsdoctorClientDiffState.Down
-    : Client.RsdoctorClientDiffState.Up;
+      ? Client.RsdoctorClientDiffState.Down
+      : Client.RsdoctorClientDiffState.Up;
 
   return { percent, state };
 }
@@ -379,4 +379,12 @@ export function getAssetDetails(
     chunks: getChunksByAsset(asset, chunks),
     modules: getModulesByAsset(asset, chunks, modules),
   };
+}
+
+export function extname(filename: string) {
+  // 移除查询参数部分
+  const baseName = filename.split('?')[0];
+  // 使用正则表达式匹配扩展名
+  const matches = baseName.match(/\.([0-9a-z]+)(?:[\?#]|$)/i);
+  return matches ? `.${matches[1]}` : '';
 }

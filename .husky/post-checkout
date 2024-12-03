@@ -1,5 +1,4 @@
 #!/bin/sh
-HUSKY_SCRIPT="$(dirname "$0")/_/husky.sh"
 
 if [ -f "$HUSKY_SCRIPT" ]; then
     . "$HUSKY_SCRIPT"
