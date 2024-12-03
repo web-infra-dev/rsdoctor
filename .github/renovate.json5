@@ -65,6 +65,7 @@
 		"@types/estree",
 		"playwright",
 		"@babel/code-frame",
-		"get-port"
+		"get-port",
+		"chalk"
 	]
 }
