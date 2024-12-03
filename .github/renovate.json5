@@ -62,6 +62,9 @@
 		"socket.io-client",
 		"react-router-dom",
 		"tsx",
-		"@types/estree"
+		"@types/estree",
+		"playwright",
+		"@babel/code-frame",
+		"get-port"
 	]
 }
