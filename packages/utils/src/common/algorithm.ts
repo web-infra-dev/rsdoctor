@@ -1,5 +1,6 @@
 import { deflateSync, inflateSync } from 'zlib';
 import { Buffer } from 'buffer';
+import { debug } from '../logger';
 
 export function mergeIntervals(intervals: [number, number][]) {
   // Sort from small to large
@@ -25,9 +26,13 @@ export function mergeIntervals(intervals: [number, number][]) {
 }
 
 export function compressText(input: string): string {
-  return deflateSync(input).toString('base64');
+  try {
+    return deflateSync(input).toString('base64');
+  } catch (e) {
+    debug(() => `compressText error: ${e}`);
+    return '';
+  }
 }
-
 export function decompressText(input: string): string {
   return inflateSync(Buffer.from(input, 'base64')).toString();
 }
