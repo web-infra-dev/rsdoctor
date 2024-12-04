@@ -32,7 +32,3 @@ export interface CodeViewAlertProps {
 export interface LinkAlertProps {
   data: Rule.LinkRuleStoreData;
 }
-
-export interface EMOAlertProps {
-  data: Rule.EMORuleStoreData;
-}

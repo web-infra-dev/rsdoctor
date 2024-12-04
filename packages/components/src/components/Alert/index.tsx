@@ -24,11 +24,6 @@ export const Alert: React.FC<AlertProps> = (props) => {
     return <CodeChangeAlert data={data} cwd={cwd} />;
   }
 
-  // TODO: If need add emo alters.
-  if (data.type === 'emo') {
-    return <></>;
-  }
-
   if (data.type === 'package-relation') {
     const { getPackageRelationContentComponent } = props;
     return (
