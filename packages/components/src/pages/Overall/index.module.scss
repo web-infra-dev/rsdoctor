@@ -1,0 +1,12 @@
+.overall {
+  display: flex;
+  justify-content: space-between;
+}
+
+.layout {
+  margin-right: 20px;
+
+  .row {
+    margin-bottom: 20px;
+  }
+}
