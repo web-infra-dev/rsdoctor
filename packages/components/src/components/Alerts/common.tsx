@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { AppstoreOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Rule } from '@rsdoctor/types';
 import { groupBy, sumBy, values } from 'lodash-es';
-import { Size, ViewMode } from '../../constants';
+import { ViewMode } from '../../constants';
 import { Alert } from '../Alert';
 import { Card } from '../Card';
 import { Badge as Bdg } from '../Badge';
@@ -125,7 +125,6 @@ export const CommonAlertsContainer: React.FC<CommonAlertsContainerProps> = ({
   return (
     <Card
       title={title}
-      style={{ marginTop: Size.BasePadding }}
       collapsable
       extra={
         extraCom || (
