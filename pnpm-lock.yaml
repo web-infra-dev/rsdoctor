@@ -523,8 +523,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0(@rsbuild/core@1.1.7)
       '@rsbuild/plugin-react':
-        specifier: ^1.0.7
-        version: 1.0.7(@rsbuild/core@1.1.7)
+        specifier: ^1.1.0
+        version: 1.1.0(@rsbuild/core@1.1.7)
       '@rsbuild/plugin-sass':
         specifier: ^1.1.1
         version: 1.1.1(@rsbuild/core@1.1.7)
@@ -7444,6 +7444,16 @@ packages:
       '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.14.2)
       react-refresh: 0.14.2
 
+  /@rsbuild/plugin-react@1.1.0(@rsbuild/core@1.1.7):
+    resolution: {integrity: sha512-uqdRoV2V91G1XIA14dAmxqYTlTDVf0ktpE7TgwG29oQ2j+DerF1kh29WPHK9HvGE34JTfaBrsme2Zmb6bGD0cw==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+    dependencies:
+      '@rsbuild/core': 1.1.7
+      '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.16.0)
+      react-refresh: 0.16.0
+    dev: true
+
   /@rsbuild/plugin-rem@1.0.1(@rsbuild/core@1.0.19):
     resolution: {integrity: sha512-wsaEvFLVpWsvGi5Bh1j3Yxq1C5RgD+AyveNTbEHaoHHj7ChDx1lrTSRZhre3Jmgjse02gUZjbnAhcO+v5aJPVw==}
     peerDependencies:
@@ -8114,6 +8124,19 @@ packages:
       error-stack-parser: 2.1.4
       html-entities: 2.5.2
       react-refresh: 0.14.2
+
+  /@rspack/plugin-react-refresh@1.0.0(react-refresh@0.16.0):
+    resolution: {integrity: sha512-WvXkLewW5G0Mlo5H1b251yDh5FFiH4NDAbYlFpvFjcuXX2AchZRf9zdw57BDE/ADyWsJgA8kixN/zZWBTN3iYA==}
+    peerDependencies:
+      react-refresh: '>=0.10.0 <1.0.0'
+    peerDependenciesMeta:
+      react-refresh:
+        optional: true
+    dependencies:
+      error-stack-parser: 2.1.4
+      html-entities: 2.5.2
+      react-refresh: 0.16.0
+    dev: true
 
   /@rspress/core@1.37.3(webpack@5.95.0):
     resolution: {integrity: sha512-uebqtPxwARA5ajKJlDs3+9B3bf33P8ErgRTjLebCZdAHUsKt2Fs+5riGUiGE6vuVHQLOt0OpgcNjU7Dl0dhjWw==}
@@ -17596,6 +17619,11 @@ packages:
   /react-refresh@0.14.2:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
     engines: {node: '>=0.10.0'}
+
+  /react-refresh@0.16.0:
+    resolution: {integrity: sha512-FPvF2XxTSikpJxcr+bHut2H4gJ17+18Uy20D5/F+SKzFap62R3cM5wH6b8WN3LyGSYeQilLEcJcR1fjBSI2S1A==}
+    engines: {node: '>=0.10.0'}
+    dev: true
 
   /react-router-dom@6.22.0(react-dom@18.3.1)(react@18.2.0):
     resolution: {integrity: sha512-z2w+M4tH5wlcLmH3BMMOMdrtrJ9T3oJJNsAlBJbwk+8Syxd5WFJ7J5dxMEW0/GEXD1BBis4uXRrNIz3mORr0ag==}
