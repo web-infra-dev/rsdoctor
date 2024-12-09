@@ -34,10 +34,10 @@
   "devDependencies": {
     "@biomejs/biome": "1.5.1",
     "@changesets/cli": "^2.27.10",
-    "@modern-js/module-tools": "^2.63.0",
+    "@modern-js/module-tools": "^2.63.1",
     "@rsdoctor/tsconfig": "workspace:*",
     "@scripts/test-helper": "workspace:*",
-    "check-dependency-version-consistency": "^4.1.0",
+    "check-dependency-version-consistency": "^4.1.1",
     "cross-env": "^7.0.3",
     "cspell-ban-words": "^0.0.4",
     "husky": "^9.1.7",
