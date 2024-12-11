@@ -7,7 +7,9 @@ import {
   CompileOverall,
   ProjectOverall,
 } from '../../components/Overall';
-import { ResponsiveGridLayout } from './responsiveGridList';
+import { ResponsiveLayout } from './responsiveLayout';
+
+import style from './index.module.scss';
 
 interface Props {
   project: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetProjectInfo>;
@@ -17,21 +19,23 @@ const Component: React.FC<Props> = ({ project }) => {
   const { summary, configs, root: cwd, envinfo, errors } = project;
 
   return (
-    <div>
-      <ResponsiveGridLayout>
+    <div className={style.overall}>
+      <ResponsiveLayout>
         <ProjectOverall
           configs={configs}
           cwd={cwd}
           envinfo={envinfo}
           alerts={errors}
         />
+        <BundleAlerts />
+      </ResponsiveLayout>
+
+      <ResponsiveLayout>
         <BundleOverall errors={errors} cwd={cwd} />
         <CompileOverall summary={summary} />
-      </ResponsiveGridLayout>
-
-      <CompileAlerts />
-
-      <BundleAlerts />
+        {/* TODO Change this component */}
+        <CompileAlerts />
+      </ResponsiveLayout>
     </div>
   );
 };
