@@ -15,17 +15,27 @@ import {
   Empty,
   Popover,
   Grid,
+  Badge,
 } from 'antd';
 import { sumBy } from 'lodash-es';
-import { Rule, SDK } from '@rsdoctor/types';
-import { ExpandAltOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import {
+  ExpandAltOutlined,
+  InfoCircleOutlined,
+  DoubleRightOutlined,
+} from '@ant-design/icons';
+
 import { useRuleIndexNavigate, formatSize, useI18n } from '../../utils';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 import { Size, Color } from '../../constants';
 import { Badge as Bdg } from '../Badge';
-import { PackageRelationAlertProps } from './types';
 import { withServerAPI } from '../Manifest';
+
+import { Rule, SDK } from '@rsdoctor/types';
+
+import { PackageRelationAlertProps } from './types';
+
+import styles from './package-relation.module.scss';
 
 const TextDrawerWidth = '60%';
 
@@ -39,72 +49,55 @@ export const PackageRelationReasons: React.FC<{
   return (
     <Row gutter={Size.BasePadding} wrap={false} align="top">
       <Col span={20} style={{ height: '100%' }}>
-        <Card
-          title={`The reasons for importing this version`}
-          style={{ height: '100%' }}
-          extra={
-            <Popover
-              content={
-                <Typography.Text>
-                  {t('DuplicatePakCodeExplain')}
-                </Typography.Text>
-              }
-            >
-              <a href="#">Explain</a>
-            </Popover>
-          }
-          bodyStyle={{ overflow: 'scroll' }}
-        >
-          {data.length ? (
-            <React.Fragment>
-              <div style={{ marginBottom: Size.BasePadding }}>
-                <Typography.Text type="secondary" strong>
-                  Click the file path below to show the reason in code viewer.
-                </Typography.Text>
-              </div>
-              <Timeline>
-                {data.map((e, i) => {
-                  const { dependency, module, relativePath } = e!;
-                  const { statements } = dependency;
-                  const { start } = statements?.[0]?.position
-                    ? module.isPreferSource
-                      ? statements[0].position.source!
-                      : statements[0].position.transformed
-                    : { start: { line: 0, column: 0 } };
-                  const text = `${relativePath}:${start.line}:${
-                    start.column || 1
-                  }`;
+        {data.length ? (
+          <>
+            <div style={{ marginBottom: Size.BasePadding }}>
+              <Typography.Text type="secondary" strong>
+                Click the file path below to show the reason in code viewer.
+              </Typography.Text>
+            </div>
+            <Timeline>
+              {data.map((e, i) => {
+                const { dependency, module, relativePath } = e!;
+                const { statements } = dependency;
+                const { start } = statements?.[0]?.position
+                  ? module.isPreferSource
+                    ? statements[0].position.source!
+                    : statements[0].position.transformed
+                  : { start: { line: 0, column: 0 } };
+                const text = `${relativePath}:${start.line}:${
+                  start.column || 1
+                }`;
 
-                  return (
-                    <Timeline.Item
-                      key={text}
-                      style={{ cursor: 'pointer' }}
-                      dot={i === data.length - 1 ? undefined : '⬇️'}
+                return (
+                  <Timeline.Item key={text} style={{ cursor: 'default' }}>
+                    <Typography.Text
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIndex(i);
+                      }}
+                      strong={i === index}
+                      style={{
+                        color: i === index ? Color.Blue : 'inherit',
+                        display: 'block',
+                      }}
                     >
-                      <Typography.Text
-                        copyable={{ text: relativePath }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIndex(i);
-                        }}
-                        strong={i === index}
-                        style={{
-                          color: i === index ? Color.Blue : 'inherit',
-                          display: 'block',
-                        }}
-                      >
+                      <div className={styles.filePath}>
                         {text}
-                      </Typography.Text>
-                    </Timeline.Item>
-                  );
-                })}
-              </Timeline>
-            </React.Fragment>
-          ) : (
-            <Empty description={'This package no dependencies'} />
-          )}
-        </Card>
+                        <Typography.Paragraph
+                          copyable={{ text: relativePath }}
+                        />
+                      </div>
+                    </Typography.Text>
+                  </Timeline.Item>
+                );
+              })}
+            </Timeline>
+          </>
+        ) : (
+          <Empty description={'This package no dependencies'} />
+        )}
       </Col>
     </Row>
   );
