@@ -10,6 +10,7 @@ type IGenerateReportOpts = {
   reportTitle?: string;
   bundleDir?: string;
   openBrowser?: boolean;
+  reportDir?: string;
 };
 async function generateJSONReportUtil(
   bundleStats: Plugin.BaseStats,
@@ -33,14 +34,22 @@ export async function generateTileGraph(
   buildOutputPath: string,
 ) {
   try {
-    const { reportFilename } = opts;
+    const { reportFilename, reportDir } = opts;
     await generateJSONReportUtil(bundleStats, {
       ...opts,
       openBrowser: false,
-      bundleDir: buildOutputPath,
+      bundleDir: reportDir || buildOutputPath,
     });
 
-    return path.join(buildOutputPath, `${reportFilename}`);
+    return path.join(
+      reportDir
+        ? path.resolve(
+            buildOutputPath,
+            path.relative(buildOutputPath, reportDir),
+          )
+        : buildOutputPath,
+      `${reportFilename}`,
+    );
   } catch (e) {
     debug(() => `Generate webpack-bundle-analyzer tile graph has error:${e}`);
     return null;
