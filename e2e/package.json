@@ -32,6 +32,6 @@
     "loader-utils": "^2.0.4",
     "playwright": "1.33.0",
     "typescript": "^5.2.2",
-    "webpack": "^5.95.0"
+    "webpack": "^5.97.1"
   }
 }
