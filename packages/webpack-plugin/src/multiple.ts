@@ -1,9 +1,10 @@
-import { RsdoctorSDKController } from '@rsdoctor/sdk';
+import { RsdoctorPrimarySDK, RsdoctorSDKController } from '@rsdoctor/sdk';
 import type { Linter } from '@rsdoctor/types';
 import type { RsdoctorMultiplePluginOptions } from '@rsdoctor/core';
 
 import { RsdoctorWebpackPlugin } from './plugin';
 import { normalizeUserConfig } from '@rsdoctor/core/plugins';
+import type { Compiler } from 'webpack';
 
 let globalController: RsdoctorSDKController | undefined;
 
@@ -44,5 +45,14 @@ export class RsdoctorWebpackMultiplePlugin<
     });
 
     this.controller = controller;
+  }
+
+  apply(compiler: Compiler) {
+    if ('dependencies' in compiler.options) {
+      (this.sdk as RsdoctorPrimarySDK).dependencies =
+        compiler.options.dependencies;
+    }
+
+    super.apply(compiler);
   }
 }
