@@ -28,7 +28,7 @@
     "dist/"
   ],
   "devDependencies": {
-    "@rsbuild/core": "^1.1.9",
+    "@rsbuild/core": "^1.1.10",
     "@rsbuild/plugin-node-polyfill": "^1.2.0",
     "@rsbuild/plugin-react": "^1.1.0",
     "@rsbuild/plugin-sass": "^1.1.2",
@@ -36,8 +36,8 @@
     "@rsdoctor/components": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@types/node": "^16",
-    "@types/react": "^18.3.14",
-    "@types/react-dom": "^18.3.2",
+    "@types/react": "^18.3.16",
+    "@types/react-dom": "^18.3.5",
     "@types/serve-static": "1.15.7",
     "antd": "5.15.3",
     "normalize.css": "8.0.1",
