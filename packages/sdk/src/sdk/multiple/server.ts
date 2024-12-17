@@ -1,6 +1,6 @@
 import { Server } from '@rsdoctor/utils/build';
 import { RsdoctorServer } from '../server';
-import type { RsdoctorPrimarySDK } from './slave';
+import type { RsdoctorPrimarySDK } from './primary';
 
 export class RsdoctorSlaveServer extends RsdoctorServer {
   protected sdk: RsdoctorPrimarySDK;

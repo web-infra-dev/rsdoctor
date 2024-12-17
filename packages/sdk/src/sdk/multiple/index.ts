@@ -1,2 +1,2 @@
 export * from './controller';
-export * from './slave';
+export * from './primary';

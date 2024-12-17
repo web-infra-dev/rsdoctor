@@ -1,5 +1,5 @@
 import { Manifest } from '@rsdoctor/types';
-import { RsdoctorPrimarySDK } from './slave';
+import { RsdoctorPrimarySDK } from './primary';
 
 export class RsdoctorSDKController {
   readonly slaves: RsdoctorPrimarySDK[] = [];

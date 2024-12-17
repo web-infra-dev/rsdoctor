@@ -1,4 +1,3 @@
-import type { WorkspaceCheckDataType } from '../emo';
 import type { RuleMessage, RuleMessageCodeEnumerated } from './code';
 import type { SourceRange } from '../sdk';
 import type { PackageBasicData } from '../sdk/package';
@@ -127,11 +126,6 @@ export interface CodeChangeRuleStoreData extends BaseRuleStoreData {
   };
 }
 
-export interface EMORuleStoreData extends BaseRuleStoreData {
-  type: 'emo';
-  emoCheckData: WorkspaceCheckDataType;
-}
-
 export interface OverlayRuleStoreData extends BaseRuleStoreData {
   code: RuleMessageCodeEnumerated.Overlay;
   stack?: string;
@@ -142,7 +136,6 @@ export type RuleStoreDataItem =
   | FileRelationRuleStoreData
   | CodeChangeRuleStoreData
   | PackageRelationDiffRuleStoreData
-  | CodeViewRuleStoreData
-  | EMORuleStoreData;
+  | CodeViewRuleStoreData;
 
 export type RuleStoreData = RuleStoreDataItem[];

@@ -38,7 +38,3 @@ export interface LinkAlertProps {
     error?: CheckSyntaxError;
   };
 }
-
-export interface EMOAlertProps {
-  data: Rule.EMORuleStoreData;
-}
