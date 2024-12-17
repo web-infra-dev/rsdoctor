@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import {
+import type {
   Module,
   ModuleGraph,
   Statement,

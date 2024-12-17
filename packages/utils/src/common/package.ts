@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { isEmpty, last, compact } from 'lodash';
+import { compact, isEmpty, last } from './lodash';
 
 /**
  * The following code is modified based on

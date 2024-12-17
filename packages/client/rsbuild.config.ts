@@ -146,6 +146,7 @@ export default defineConfig(({ env }) => {
                     ids: true,
                     version: true,
                     entrypoints: true,
+                    optimizationBailout: true,
                   });
                   await fs.promises.writeFile(
                     WebpackStatsFilePath,
@@ -161,13 +162,6 @@ export default defineConfig(({ env }) => {
           chainConfig.plugin('rsdoctor').use(RsdoctorRspackPlugin, [
             {
               disableClientServer: !ENABLE_CLIENT_SERVER,
-              features: {
-                loader: true,
-                plugins: true,
-                resolver: true,
-                bundle: true,
-                treeShaking: true,
-              },
             },
           ]);
         }
