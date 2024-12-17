@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Collapse, Typography, Divider, Space, Tabs, Tag } from 'antd';
-import { BorderOuterOutlined } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
 import { sumBy } from 'lodash-es';
 
 import Overview from '../Overall/overview';
@@ -8,6 +8,10 @@ import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 import { Size } from '../../constants';
 import { formatSize } from '../../utils';
+import BundleSizeSvg from '../../common/svg/bundle-size.svg';
+import SourceSizeSvg from '../../common/svg/source-size.svg';
+import TotalSizeSvg from '../../common/svg/total-size.svg';
+import VersionSvg from '../../common/svg/version.svg';
 
 import { Rule } from '@rsdoctor/types';
 
@@ -66,23 +70,32 @@ export const AlertCollapse = (props: {
                 <div className={styles.collapseChild}>
                   <div>
                     <div className={styles.attribute}>Version</div>
-                    <div>
-                      <BorderOuterOutlined className={styles.dataIcon} />
-                      <span>v.{version}</span>
+                    <div className={styles.iconContainer}>
+                      <Icon
+                        style={{ fontSize: '18px' }}
+                        component={VersionSvg}
+                      />
+                      <span className={styles.data}>v.{version}</span>
                     </div>
                   </div>
                   <div>
                     <div className={styles.attribute}>Source size</div>
-                    <div>
-                      <BorderOuterOutlined className={styles.dataIcon} />
-                      <span>{sizeStr}</span>
+                    <div className={styles.iconContainer}>
+                      <Icon
+                        style={{ fontSize: '18px' }}
+                        component={SourceSizeSvg}
+                      />
+                      <span className={styles.data}>{sizeStr}</span>
                     </div>
                   </div>
                   <div>
                     <div className={styles.attribute}>Bundle size</div>
-                    <div>
-                      <BorderOuterOutlined className={styles.dataIcon} />
-                      <span>xxx</span>
+                    <div className={styles.iconContainer}>
+                      <Icon
+                        style={{ fontSize: '18px' }}
+                        component={BundleSizeSvg}
+                      />
+                      <span className={styles.data}>xxx</span>
                     </div>
                   </div>
                 </div>
@@ -110,9 +123,9 @@ export const AlertCollapse = (props: {
           description={`${data.length} versions was found`}
           extra={
             <div className={styles.extraContainer}>
-              <div className={styles.size}>
-                <BorderOuterOutlined className={styles.dataIcon} />
-                <span>{totalSizeStr}</span>
+              <div className={styles.iconContainer}>
+                <Icon style={{ fontSize: '18px' }} component={TotalSizeSvg} />
+                <span className={styles.data}>{totalSizeStr}</span>
               </div>
               {packages && packages.length > 0 ? (
                 <TextDrawer

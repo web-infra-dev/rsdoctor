@@ -10,12 +10,9 @@ import {
   Row,
   Col,
   Timeline,
-  Card,
   Tag,
   Empty,
-  Popover,
   Grid,
-  Badge,
 } from 'antd';
 import { sumBy } from 'lodash-es';
 import {
@@ -24,7 +21,7 @@ import {
   DoubleRightOutlined,
 } from '@ant-design/icons';
 
-import { useRuleIndexNavigate, formatSize, useI18n } from '../../utils';
+import { useRuleIndexNavigate, formatSize } from '../../utils';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 import { Size, Color } from '../../constants';
@@ -44,7 +41,6 @@ export const PackageRelationReasons: React.FC<{
   cwd: string;
 }> = ({ data }) => {
   const [index, setIndex] = useState(0);
-  const { t } = useI18n();
 
   return (
     <Row gutter={Size.BasePadding} wrap={false} align="top">
@@ -80,15 +76,18 @@ export const PackageRelationReasons: React.FC<{
                       strong={i === index}
                       style={{
                         color: i === index ? Color.Blue : 'inherit',
-                        display: 'block',
                       }}
                     >
                       <div className={styles.filePath}>
                         {text}
                         <Typography.Paragraph
                           copyable={{ text: relativePath }}
+                          style={{ position: 'relative', top: '7px' }}
                         />
                       </div>
+                      {i !== data.length - 1 ? (
+                        <DoubleRightOutlined className={styles.arrow} />
+                      ) : null}
                     </Typography.Text>
                   </Timeline.Item>
                 );

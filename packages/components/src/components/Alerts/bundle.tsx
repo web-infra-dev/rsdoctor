@@ -4,6 +4,7 @@ import {
   hasViewModeFromStorage,
   useBundleAlertsByErrors,
   useViewMode,
+  useI18n,
 } from '../../utils';
 import { BundleAlert } from './bundle-alert';
 import { withServerAPI } from '../Manifest';
@@ -23,6 +24,7 @@ export const BundleAlertsBase: React.FC<BundleAlertsProps> = ({
   const { errors, root: cwd } = project;
   const bundleAlerts = useBundleAlertsByErrors(errors);
   const { setBundleAlertsViewMode, viewMode, setViewMode } = useViewMode();
+  const { t } = useI18n();
 
   const dataSource = filter ? bundleAlerts.filter(filter) : bundleAlerts;
 
@@ -50,7 +52,7 @@ export const BundleAlertsBase: React.FC<BundleAlertsProps> = ({
       }}
     >
       <BundleAlert
-        title="Bundle Alerts"
+        title={t('Bundle Alerts')}
         dataSource={dataSource}
         extraData={{
           cwd,

@@ -10,5 +10,10 @@ export default defineConfig({
     dts: {
       abortOnError: false,
     },
+    asset: {
+      svgr: {
+        include: /\.svg$/,
+      },
+    },
   },
 });

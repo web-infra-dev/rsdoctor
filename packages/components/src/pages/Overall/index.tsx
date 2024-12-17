@@ -1,5 +1,7 @@
 import { SDK } from '@rsdoctor/types';
 import React from 'react';
+
+import { HelpCenter } from '../../components/Overall/help-center';
 import { BundleAlerts, CompileAlerts } from '../../components/Alerts';
 import { withServerAPI } from '../../components/Manifest';
 import {
@@ -20,22 +22,54 @@ const Component: React.FC<Props> = ({ project }) => {
 
   return (
     <div className={style.overall}>
-      <ResponsiveLayout>
-        <ProjectOverall
-          configs={configs}
-          cwd={cwd}
-          envinfo={envinfo}
-          alerts={errors}
-        />
-        <BundleAlerts />
-      </ResponsiveLayout>
+      <div>
+        <ResponsiveLayout>
+          <ProjectOverall
+            configs={configs}
+            cwd={cwd}
+            envinfo={envinfo}
+            alerts={errors}
+          />
+          <BundleAlerts />
+        </ResponsiveLayout>
+      </div>
 
-      <ResponsiveLayout>
-        <BundleOverall errors={errors} cwd={cwd} />
-        <CompileOverall summary={summary} />
-        {/* TODO Change this component */}
-        <CompileAlerts />
-      </ResponsiveLayout>
+      <div>
+        <ResponsiveLayout>
+          <BundleOverall errors={errors} cwd={cwd} />
+          <CompileOverall summary={summary} />
+          {/* TODO Change this component */}
+          <CompileAlerts />
+          <HelpCenter
+            data={[
+              {
+                title: 'FAQ',
+                link: './faq',
+              },
+              {
+                title: 'FAQ',
+                link: './faq',
+              },
+              {
+                title: 'FAQ',
+                link: './faq',
+              },
+              {
+                title: 'FAQ',
+                link: './faq',
+              },
+              {
+                title: 'FAQ',
+                link: './faq',
+              },
+              {
+                title: 'FAQ',
+                link: './faq',
+              },
+            ]}
+          />
+        </ResponsiveLayout>
+      </div>
     </div>
   );
 };

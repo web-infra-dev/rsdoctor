@@ -8,4 +8,14 @@
 .filePath {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  border: 1px solid #eaedf1;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.arrow {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%) rotate(90deg);
 }

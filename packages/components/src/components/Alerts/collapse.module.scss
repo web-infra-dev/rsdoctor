@@ -27,7 +27,7 @@
     text-align: left;
 
     & > * {
-      margin-right: 20px;
+      margin-right: 10px;
     }
 
     .attribute {
@@ -37,6 +37,7 @@
       line-height: 16px;
       text-align: left;
       color: #00000073;
+      margin: 5px 0;
     }
 
     .copy {
@@ -45,10 +46,6 @@
       top: -50%;
     }
   }
-}
-
-.dataIcon {
-  margin-right: 5px;
 }
 
 .drawerLabelTitle {
@@ -67,8 +64,15 @@
 .extraContainer {
   display: flex;
   align-items: center;
+}
 
-  .size {
-    margin-right: 20px;
+.iconContainer {
+  display: flex;
+  margin-right: 20px;
+  justify-content: center;
+  align-items: center;
+
+  .data {
+    margin-left: 5px;
   }
 }

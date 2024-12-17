@@ -1,26 +1,35 @@
+import { Button, Empty } from 'antd';
+
 import { Overview } from '../Overall/overview';
+import { useRuleIndexNavigate } from '../../utils';
 
 import { Rule } from '@rsdoctor/types';
 
 import styles from './list.module.scss';
 
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
-];
-
 export const CommonList = (props: { data: Array<Rule.RuleStoreDataItem> }) => {
   const { data } = props;
-  return (
-    <Overview
-      style={{
-        background: '#fff',
-      }}
-      description={<span className={styles.description}>aaa</span>}
-      icon={<span>more</span>}
-    />
+  return data.length ? (
+    data.map((d) => {
+      const { code, link } = d;
+      const navigate = useRuleIndexNavigate(code, link);
+      return (
+        <Overview
+          style={{
+            background: '#fff',
+          }}
+          description={
+            <span className={styles.description}>{d.description}</span>
+          }
+          icon={
+            <Button onClick={() => navigate} type="link">
+              more
+            </Button>
+          }
+        />
+      );
+    })
+  ) : (
+    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
   );
 };

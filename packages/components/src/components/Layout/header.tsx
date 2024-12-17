@@ -81,6 +81,8 @@ export const Header: React.FC = () => {
             <BuilderSelect />
           </div>
         </Col>
+        <Menus style={{ transition: 'none' }} />
+
         <Col flex={1}>
           <Row
             align="middle"
@@ -92,7 +94,6 @@ export const Header: React.FC = () => {
             <Col>
               <OverlayAlertsWithButton />
             </Col>
-            <Menus style={{ transition: 'none' }} />
 
             {/* <Col> TODO:  dark mode has some error need fix.
               <Switch

@@ -1,11 +1,12 @@
 import { Typography, Tabs } from 'antd';
 import { Rule } from '@rsdoctor/types';
 
-import { ViewMode } from '../../constants';
 import { Card } from '../Card';
+import { LinkRuleAlert } from '../Alert/ecma-version-check';
 import { Overview } from '../Overall/overview';
 import { AlertCollapse } from './collapse';
 import { CommonList } from './list';
+import { ViewMode } from '../../constants';
 
 import { AlertProps } from '../Alert/types';
 
@@ -76,13 +77,13 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
         children = <AlertCollapse data={td.data} extraData={extraData} />;
         break;
       case 'E1002':
-        children = <CommonList data={[{ title: 'aaa' }]} />;
+        children = <CommonList data={td.data} />;
         break;
       case 'E1003':
-        children = <CommonList data={[{ title: 'bbb' }]} />;
+        children = <CommonList data={td.data} />;
         break;
       case 'E1004':
-        children = <>1004</>;
+        children = <LinkRuleAlert data={td.data} />;
         break;
       default:
         children = null;
@@ -102,7 +103,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
 
   return (
     <Card title={title}>
-      <Tabs defaultActiveKey="E1002" items={tabItems} />
+      <Tabs defaultActiveKey="E1001" items={tabItems} />
     </Card>
   );
 };

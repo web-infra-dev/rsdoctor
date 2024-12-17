@@ -3,6 +3,8 @@ import en from './en';
 const cn: typeof en = {
   Overall: '概览',
   'Compile Analysis': '编译分析',
+  'Bundle Alerts': '产物告警',
+  'Help Center': '帮助中心',
   LoadersAnalysis: 'Loaders 分析',
   'Loaders Timeline': 'Loaders 概览',
   'Loaders Analysis': 'Loaders 分析',

@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { SDK } from '@rsdoctor/types';
-import { Alert, Button, Col, Collapse, Row, Tag, Typography } from 'antd';
+import {
+  Alert,
+  Button,
+  Col,
+  Collapse,
+  Row,
+  Tag,
+  Typography,
+  Badge,
+} from 'antd';
 import {
   BugOutlined,
   CloseCircleOutlined,
@@ -180,22 +189,19 @@ export const OverlayAlertsButton: React.FC<{
 }> = ({ alerts = [] }) => {
   if (!alerts.length) return null;
 
-  const { errors } = getOverlayAlertsMessage(alerts);
-  const defaultOpen = errors > 0; // open modal when has compiled error.
-  const [open, setOpen] = useState(defaultOpen);
+  const [open, setOpen] = useState(false);
 
   return (
-    <React.Fragment>
-      <Button
-        icon={<BugOutlined />}
-        danger
-        size="small"
-        onClick={() => setOpen(!open)}
-      >
-        {getOverlayAlertsMessage(alerts).title}
-      </Button>
-      {/* <OverlayAlertsModal alerts={alerts} open={open} onClose={() => setOpen(false)} /> */}
-    </React.Fragment>
+    <div style={{ position: 'relative', top: '4px' }}>
+      <Badge count={5} size="small">
+        <BugOutlined style={{ fontSize: 15 }} onClick={() => setOpen(!open)} />
+      </Badge>
+      <OverlayAlertsModal
+        alerts={alerts}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
+    </div>
   );
 };
 
