@@ -26,6 +26,8 @@ export class RsdoctorPrimarySDK extends RsdoctorSDK {
 
   public readonly stage: number;
 
+  public dependencies: Array<string> | undefined;
+
   private uploadPieces!: Promise<void>;
 
   private finishUploadPieceSwitch!: () => void;
@@ -78,9 +80,15 @@ export class RsdoctorPrimarySDK extends RsdoctorSDK {
   }
 
   protected async writeManifest() {
-    const { parent, cloudData } = this;
+    const { parent, cloudData, dependencies } = this;
 
-    await Promise.all(this.parent.slaves.map((item) => item.uploadPieces));
+    if (!dependencies?.length) {
+      await Promise.all(
+        this.parent.slaves
+          .filter((item) => !item.dependencies?.length)
+          .map((item) => item.uploadPieces),
+      );
+    }
 
     if (cloudData) {
       cloudData.name = this.name;
