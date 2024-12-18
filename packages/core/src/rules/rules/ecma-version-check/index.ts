@@ -22,7 +22,7 @@ export const rule = defineRule<typeof title, Config>(() => {
         targets: [],
       },
     },
-    async check({ chunkGraph, report, ruleConfig, root }) {
+    async check({ chunkGraph, report, ruleConfig, root, configs }) {
       for (const asset of chunkGraph.getAssets()) {
         if (path.extname(asset.path) !== '.js') {
           continue;
@@ -32,21 +32,26 @@ export const rule = defineRule<typeof title, Config>(() => {
           path: root,
           env: 'production',
         });
-        const { exclude, excludeOutput, targets, ecmaVersion, outputDir } =
-          ruleConfig;
+        const { exclude, excludeOutput, targets, ecmaVersion } = ruleConfig;
         const finalTargets = targets || browserslistConfig || [];
         // disable check syntax
         if (!finalTargets.length && !ecmaVersion) {
           return;
         }
+
+        const buildConfig = configs[0]?.config;
+        const context = buildConfig?.context || root;
         const checkSyntax = new CheckSyntax({
           exclude,
           excludeOutput,
           ecmaVersion,
-          rootPath: root,
+          rootPath: context,
           targets: finalTargets,
         });
-        const assetPath = path.resolve(root, outputDir || 'dist', asset.path);
+
+        const outputDir =
+          buildConfig?.output?.path || path.resolve(root, 'dist');
+        const assetPath = path.resolve(outputDir, asset.path);
         await checkSyntax.check(assetPath, asset.content);
         checkSyntax.errors.forEach((err) => {
           report({
