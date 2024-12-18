@@ -62,17 +62,7 @@ export const PackageRelationReasons: React.FC<{
 
                 return (
                   <Timeline.Item key={text} style={{ cursor: 'default' }}>
-                    <Typography.Text
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIndex(i);
-                      }}
-                      strong={i === index}
-                      style={{
-                        color: i === index ? Color.Blue : 'inherit',
-                      }}
-                    >
+                    <Typography.Text>
                       <div className={styles.filePath}>
                         {text}
                         <Typography.Paragraph
