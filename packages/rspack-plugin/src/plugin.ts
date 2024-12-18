@@ -102,6 +102,10 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     setSDK(this.sdk);
 
+    compiler.hooks.afterPlugins.tap(
+      pluginTapPostOptions,
+      this.afterPlugins.bind(this, compiler),
+    );
     compiler.hooks.done.tapPromise(
       {
         ...pluginTapPostOptions,
@@ -171,11 +175,13 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     ensureModulesChunksGraphFn(compiler, this);
   }
 
+  public afterPlugins = (compiler: Plugin.BaseCompilerType<'rspack'>): void => {
+    this.getRspackConfig(compiler);
+  };
+
   public done = async (
     compiler: Plugin.BaseCompilerType<'rspack'>,
   ): Promise<void> => {
-    this.getRspackConfig(compiler);
-
     await this.sdk.bootstrap();
 
     this.sdk.addClientRoutes([

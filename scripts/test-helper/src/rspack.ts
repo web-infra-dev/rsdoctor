@@ -36,10 +36,6 @@ export function compileByRspack(
   const compiler = rspack({
     entry: absPath,
     mode: 'none',
-    output: {
-      path: path.resolve(__dirname),
-      filename: 'bundle.js',
-    },
     stats: 'normal',
     cache: false,
     ...options,
