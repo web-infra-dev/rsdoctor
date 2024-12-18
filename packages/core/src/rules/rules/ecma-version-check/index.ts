@@ -32,7 +32,8 @@ export const rule = defineRule<typeof title, Config>(() => {
           path: root,
           env: 'production',
         });
-        const { exclude, excludeOutput, targets, ecmaVersion } = ruleConfig;
+        const { exclude, excludeOutput, targets, ecmaVersion, outputDir } =
+          ruleConfig;
         const finalTargets = targets || browserslistConfig || [];
         // disable check syntax
         if (!finalTargets.length && !ecmaVersion) {
@@ -45,7 +46,8 @@ export const rule = defineRule<typeof title, Config>(() => {
           rootPath: root,
           targets: finalTargets,
         });
-        await checkSyntax.check(asset.path, asset.content);
+        const assetPath = path.resolve(root, outputDir || 'dist', asset.path);
+        await checkSyntax.check(assetPath, asset.content);
         checkSyntax.errors.forEach((err) => {
           report({
             message: `Find some syntax that does not match "ecmaVersion <= ${checkSyntax.ecmaVersion}"`,

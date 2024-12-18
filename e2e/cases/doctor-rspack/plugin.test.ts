@@ -65,7 +65,18 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
     },
     plugins: [
       // @ts-ignore
-      createRsdoctorPlugin({}),
+      createRsdoctorPlugin({
+        linter: {
+          rules: {
+            'ecma-version-check': [
+              'Error',
+              {
+                ecmaVersion: 3,
+              },
+            ],
+          },
+        },
+      }),
       {
         name: 'Foo',
         apply(compiler: Compiler) {
@@ -108,6 +119,7 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
         },
       },
     ],
+    devtool: 'cheap-module-source-map',
   });
 
   return res;
@@ -140,6 +152,8 @@ test('rspack data store', async () => {
   const graphData = datas.moduleGraph;
   const configs = datas.configs;
 
+  const ecmaCheckError = datas.errors.some((e) => e.code === 'E1004');
+  expect(ecmaCheckError).toBeTruthy();
   os.EOL === '\n'
     ? expect(
         graphData.modules[0].webpackId.indexOf('/fixtures/a.js'),
