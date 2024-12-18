@@ -47,12 +47,7 @@ export const PackageRelationReasons: React.FC<{
       <Col span={20} style={{ height: '100%' }}>
         {data.length ? (
           <>
-            <div style={{ marginBottom: Size.BasePadding }}>
-              <Typography.Text type="secondary" strong>
-                Click the file path below to show the reason in code viewer.
-              </Typography.Text>
-            </div>
-            <Timeline>
+            <Timeline style={{ marginTop: '20px' }}>
               {data.map((e, i) => {
                 const { dependency, module, relativePath } = e!;
                 const { statements } = dependency;

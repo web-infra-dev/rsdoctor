@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Collapse, Typography, Divider, Space, Tabs, Tag } from 'antd';
+import { Collapse, Typography, Divider, Space, Tabs, Tag, Tooltip } from 'antd';
 import Icon from '@ant-design/icons';
 import { sumBy } from 'lodash-es';
 
@@ -56,10 +56,9 @@ export const AlertCollapse = (props: {
         const version = pkg.target.version;
         const root = pkg.target.root;
         const sizeStr = formatSize(pkg.targetSize.sourceSize);
-        // TODO add parsed size
-        // const parsedSizeStr = pkg.targetSize.parsedSize
-        //   ? formatSize(pkg.targetSize.parsedSize)
-        //   : null;
+        const parsedSizeStr = pkg.targetSize.parsedSize
+          ? formatSize(pkg.targetSize.parsedSize)
+          : null;
 
         return (
           <div className={styles.collapseContainer}>
@@ -95,7 +94,13 @@ export const AlertCollapse = (props: {
                         style={{ fontSize: '18px' }}
                         component={BundleSizeSvg}
                       />
-                      <span className={styles.data}>xxx</span>
+                      <Tooltip
+                        title={`The bundle size of "${name}" is ${sizeStr}, this is after bundled, concatenated module cannot get bundled size. `}
+                      >
+                        <span className={styles.data}>
+                          {parsedSizeStr || 'CONCATENATED'}
+                        </span>
+                      </Tooltip>
                     </div>
                   </div>
                 </div>
