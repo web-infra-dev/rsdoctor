@@ -1,4 +1,4 @@
-import { isObject } from 'lodash';
+import { isObject } from 'src/common/lodash';
 import { Node } from './types';
 
 function isSyntaxNode(node: unknown): node is Node.SyntaxNode {
