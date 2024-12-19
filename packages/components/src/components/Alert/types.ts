@@ -30,5 +30,5 @@ export interface CodeViewAlertProps {
 }
 
 export interface LinkAlertProps {
-  data: Rule.LinkRuleStoreData;
+  data: Rule.RuleStoreDataItem[];
 }

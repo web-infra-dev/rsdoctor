@@ -2,6 +2,8 @@
 const en = {
   Overall: 'Overall',
   'Compile Analysis': 'Compile Analysis',
+  'Bundle Alerts': 'Bundle Alerts',
+  'Help Center': 'Help Center',
   LoadersAnalysis: 'Loaders Analysis',
   'Loaders Timeline': 'Loaders Timeline',
   'Loaders Analysis': 'Loaders Analysis',
@@ -33,7 +35,8 @@ const en = {
   'After Compile': 'After Compile',
   'After Bundle': 'After Bundle',
   CodeModeExplain: 'In lite mode or pure stats.json upload, only source code.',
-  DuplicatePakCodeExplain: 'There is no code, when in the case of pure stats.json.',
+  DuplicatePakCodeExplain:
+    'There is no code, when in the case of pure stats.json.',
 };
 
 export default en;

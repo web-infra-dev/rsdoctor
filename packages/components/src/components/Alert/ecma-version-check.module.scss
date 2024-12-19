@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  font-family: Roboto;
+
+  .title {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    margin-bottom: 5px;
+    color: #00000073;
+  }
+
+  .content {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px;
+    margin-left: 5px;
+  }
+}

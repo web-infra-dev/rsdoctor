@@ -1,17 +1,23 @@
-import { Space, Row, Col, Descriptions, DescriptionsProps } from 'antd';
-import React from 'react';
+import { Descriptions, DescriptionsProps, Avatar } from 'antd';
+import {
+  CloseCircleFilled,
+  WarningFilled,
+  FileFilled,
+  ExperimentFilled,
+} from '@ant-design/icons';
 import { filter } from 'lodash-es';
-import { SDK } from '@rsdoctor/types';
-import { useI18n } from '../../utils';
+
+import { ServerAPIProvider } from '../Manifest';
+import { useI18n, formatSize } from '../../utils';
 import { WebpackConfigurationViewer } from '../Configuration';
 import { Card } from '../Card';
+import { Overview } from './overview';
 
 import listStyles from './list.module.scss';
 import cardStyles from './card.module.scss';
-import numberButtonStyles from './NumberButton.module.scss';
-import { TextDrawer } from '../TextDrawer';
-import { BundleAlerts, CompileAlerts, OverlayAlertsWithTips } from '../Alerts';
-import { NumberButton } from './NumberButton';
+import projectStyles from './project.module.scss';
+
+import { SDK } from '@rsdoctor/types';
 
 export const ProjectOverall: React.FC<{
   configs: SDK.ConfigData;
@@ -53,34 +59,88 @@ export const ProjectOverall: React.FC<{
   ];
 
   return (
-    <Card title={t('Project Overall')} extra={<WebpackConfigurationViewer />} className={cardStyles.card}>
-      <Row gutter={16}>
-        <Col span={12} className={numberButtonStyles.container}>
-          <TextDrawer
-            button={<NumberButton theme={errors === 0 ? 'success' : 'error'} number={errors} description="Errors" />}
-            drawerProps={{ title: 'Errors List' }}
+    <ServerAPIProvider
+      api={SDK.ServerAPI.API.GetAssetsSummary}
+      body={{ withFileContent: false }}
+    >
+      {(res) => {
+        const totalSizeStr = formatSize(res.all.total.size);
+        const totalFiles = res.all.total.count;
+        const [size, unit] = totalSizeStr.split(' ');
+        const overViewData = [
+          {
+            title: 'Errors',
+            description: <span style={{ color: '#FF4D4F' }}>{errors}</span>,
+            icon: (
+              <Avatar
+                style={{ background: '#FF4D4F' }}
+                shape="circle"
+                icon={<CloseCircleFilled style={{ fontSize: '18px' }} />}
+              />
+            ),
+          },
+          {
+            title: 'Warnings',
+            description: <span style={{ color: '#FAAD14' }}>{warns}</span>,
+            icon: (
+              <Avatar
+                style={{ background: '#FAAD14' }}
+                shape="circle"
+                icon={<WarningFilled style={{ fontSize: '18px' }} />}
+              />
+            ),
+          },
+          {
+            title: 'Total Files',
+            description: <span>{totalFiles}</span>,
+            icon: (
+              <Avatar
+                style={{ background: '#3874F6' }}
+                shape="circle"
+                icon={<FileFilled style={{ fontSize: '18px' }} />}
+              />
+            ),
+          },
+          {
+            title: 'Total Size',
+            description: (
+              <>
+                <span style={{ fontSize: '20px' }}>{size}</span>
+                <span style={{ fontSize: '13px', marginLeft: '5px' }}>
+                  {unit}
+                </span>
+              </>
+            ),
+            icon: (
+              <Avatar
+                style={{ background: '#FF4D4F' }}
+                shape="circle"
+                icon={<ExperimentFilled style={{ fontSize: '18px' }} />}
+              />
+            ),
+          },
+        ];
+
+        return (
+          <Card
+            title={t('Project Overall')}
+            extra={<WebpackConfigurationViewer />}
+            className={cardStyles.card}
           >
-            <Space direction="vertical" style={{ width: '100%' }}>
-              <OverlayAlertsWithTips defaultOpen={false} />
-              <BundleAlerts filter={(r) => r.level === 'error'} />
-              <CompileAlerts filter={(r) => r.level === 'error'} />
-            </Space>
-          </TextDrawer>
-        </Col>
-        <Col span={12} className={numberButtonStyles.container}>
-          <TextDrawer
-            button={<NumberButton theme={warns === 0 ? 'success' : 'warning'} number={warns} description="Warnings" />}
-            drawerProps={{ title: 'Warnings List' }}
-          >
-            <Space direction="vertical" style={{ width: '100%' }}>
-              <OverlayAlertsWithTips defaultOpen={false} />
-              <BundleAlerts filter={(r) => r.level === 'warn'} />
-              <CompileAlerts filter={(r) => r.level === 'warn'} />
-            </Space>
-          </TextDrawer>
-        </Col>
-      </Row>
-      <Descriptions className={listStyles.root} items={items} size="small" column={1} />
-    </Card>
+            <div className={projectStyles.overview}>
+              {overViewData.map((data, idx) => (
+                <Overview
+                  key={idx}
+                  title={data.title}
+                  description={<span>{data.description}</span>}
+                  icon={data.icon}
+                />
+              ))}
+            </div>
+            <Descriptions className={listStyles.root} items={items} />
+          </Card>
+        );
+      }}
+    </ServerAPIProvider>
   );
 };

@@ -1,0 +1,16 @@
+.card {
+  :global {
+    .ant-card-body {
+      padding: 0;
+    }
+
+    .ant-collapse {
+      border-radius: 0;
+      border: 0;
+    }
+
+    .ant-collapse-content {
+      border-radius: 0 !important;
+    }
+  }
+}

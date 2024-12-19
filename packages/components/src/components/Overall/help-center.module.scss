@@ -1,0 +1,14 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+
+  .content {
+    width: 48%;
+  }
+}

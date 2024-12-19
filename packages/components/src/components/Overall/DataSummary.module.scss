@@ -1,9 +1,10 @@
 .errorNumber,
 .warningNumber,
 .successNumber {
-  font-size: 36px;
+  font-family: Roboto;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 54px;
+  line-height: 32px;
 }
 
 .errorNumber,
@@ -67,7 +68,36 @@
 
 .container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 16px;
+  align-items: center;
+  padding: 10px 20px 10px 5px;
+  border-radius: 10px;
+  margin: 10px 0;
+
+  .icon {
+    margin: 0 5px 0 10px;
+  }
+
+  .description {
+    margin-right: 5px;
+    font-family: PingFang SC;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #000000a6;
+  }
+
+  .data {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 32px;
+  }
+}
+
+.common {
+  background: #f0f5ff;
+}
+
+.warning {
+  background: #fff7e6;
 }
