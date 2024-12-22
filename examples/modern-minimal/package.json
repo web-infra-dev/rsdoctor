@@ -11,6 +11,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@rsdoctor/utils": "^0.4.12",
+    "@types/lodash": "^4.17.13",
+    "lodash": "^4.17.21",
     "react": "^18",
     "react-dom": "^18"
   },

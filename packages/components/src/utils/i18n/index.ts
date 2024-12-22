@@ -28,7 +28,7 @@ i18n
     // have a common namespace used around the full app
     ns: ['translations'],
     defaultNS: 'translations',
-
+    supportedLngs: ['en', 'zh'],
     keySeparator: false, // we use content as keys
 
     interpolation: {

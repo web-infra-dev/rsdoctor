@@ -8,11 +8,19 @@ import {
   DataZoomComponent,
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-
 import dayjs from 'dayjs';
+// import 'dayjs/locale/es'
+// // @ts-ignore
+// import dayjs  from 'node_modules/dayjs/dist/index.mjs';
+// import advancedFormat from 'dayjs/plugin/customParseFormat';
 import { ChartProps, DurationMetric, ITraceEventData } from '../types';
 import { groupBy } from 'lodash-es';
 import { LITTLE_PALETTE_COLORS, PALETTE_COLORS } from '../constants';
+
+// dayjs.locale('es')
+// dayjs.locale('cn')
+
+// dayjs.extend(advancedFormat);
 
 interface CoordSysType {
   x: number;

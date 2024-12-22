@@ -1,12 +1,19 @@
 import { Loader } from '@rsdoctor/utils/common';
 import { SDK } from '@rsdoctor/types';
-import dayjs from 'dayjs';
+// // @ts-ignore
+// import dayjs  from 'node_modules/dayjs/dist/index.mjs';
+// import advancedFormat from 'dayjs/plugin/customParseFormat';
 import { maxBy, minBy } from 'lodash-es';
 import { formatCosts } from 'src/utils';
 
 import './tooltips.scss';
 import { DurationMetric, ETraceEventPhase, ITraceEventData } from './types';
 import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+// dayjs.locale('es')
+// dayjs.locale('cn')
+
+// dayjs.extend(advancedFormat);
 
 export function getTooltipHtmlForLoader(
   loader: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData>[0],

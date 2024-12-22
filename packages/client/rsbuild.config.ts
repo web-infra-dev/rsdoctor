@@ -49,6 +49,7 @@ export default defineConfig(({ env }) => {
     },
 
     output: {
+      minify: true,
       externals: [
         '@rsbuild/core',
         '@rsbuild/plugin-node-polyfill',
@@ -162,6 +163,10 @@ export default defineConfig(({ env }) => {
           chainConfig.plugin('rsdoctor').use(RsdoctorRspackPlugin, [
             {
               disableClientServer: !ENABLE_CLIENT_SERVER,
+<<<<<<< Updated upstream
+=======
+             
+>>>>>>> Stashed changes
             },
           ]);
         }

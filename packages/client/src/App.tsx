@@ -1,12 +1,13 @@
 import { Constants } from '@rsdoctor/components';
 import { Config, ConfigContext, defaultConfig } from '@rsdoctor/components/config';
 import { Layout } from '@rsdoctor/components/elements';
-import { getDemoUrl, getLocale, setThemeToStorage, setViewModeToStorage, useDetectIfCloudIdeEnv } from '@rsdoctor/components/utils';
+import { getDemoUrl, setThemeToStorage, setViewModeToStorage, useDetectIfCloudIdeEnv } from '@rsdoctor/components/utils';
 import type { Manifest } from '@rsdoctor/types';
 import { Alert, Button, ConfigProvider, Divider, Result, Space, Typography, theme as te } from 'antd';
 import React, { useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HashRouter as BrowserRouter } from 'react-router-dom';
+import zhCN from 'antd/locale/zh_CN';
 import Router from './router';
 
 const { PageState, Theme } = Constants;
@@ -86,10 +87,10 @@ const App: React.FC = (): React.ReactElement => {
         }}
       >
         <ConfigContext.Consumer>
-          {(v) => {
+          {(_v) => {
             return (
               <ConfigProvider
-                locale={getLocale(v.locale)}
+                locale={zhCN}
                 theme={{
                   algorithm: theme === Theme.Dark ? te.darkAlgorithm : te.defaultAlgorithm,
                 }}

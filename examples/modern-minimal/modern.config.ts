@@ -19,6 +19,10 @@ export default defineConfig({
       },
     },
   },
+  output: {
+    minify: true,
+    disableNodePolyfill: false
+  },
   plugins: [appTools()],
   tools: {
     bundlerChain: (chain) => {
@@ -26,7 +30,7 @@ export default defineConfig({
         {
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
           features: ['bundle', 'plugins', 'loader'],
-          mode: 'brief',
+          // mode: 'brief',
         },
       ]);
     },

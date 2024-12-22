@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Rule, SDK } from '@rsdoctor/types';
+import zhCN from 'antd/locale/zh_CN';
 import { hasViewModeFromStorage, useBundleAlertsByErrors, useViewMode } from '../../utils';
 import { CommonAlertsContainer } from './common';
 import { withServerAPI } from '../Manifest';
@@ -32,6 +33,7 @@ export const BundleAlertsBase: React.FC<BundleAlertsProps> = ({ filter, project 
 
   return (
     <ConfigProvider
+      locale={zhCN}
       theme={{
         components: {
           Alert: {

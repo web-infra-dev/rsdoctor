@@ -18,6 +18,10 @@ import {
 import type { EllipsisConfig } from 'antd/lib/typography/Base';
 import type { TextProps } from 'antd/lib/typography/Text';
 import dayjs from 'dayjs';
+// import 'dayjs/locale/es'
+// // @ts-ignore
+// import dayjs  from 'node_modules/dayjs/dist/index.mjs';
+// import advancedFormat from 'dayjs/plugin/customParseFormat';
 import { PropsWithChildren, useCallback, useState } from 'react';
 import { Size } from '../../constants';
 import {
@@ -31,6 +35,11 @@ import { DiffViewer } from '../CodeViewer';
 import { CodeOpener } from '../Opener';
 import { Title } from '../Title';
 
+
+// dayjs.locale('es')
+// dayjs.locale('cn')
+
+// dayjs.extend(advancedFormat);
 interface LoaderExecutionsProps {
   cwd: string;
   data: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileDetails>;
