@@ -88,7 +88,6 @@
     "get-port": "5.1.1",
     "json-stream-stringify": "3.0.1",
     "lines-and-columns": "2.0.4",
-    "lodash": "^4.17.21",
     "rslog": "^1.2.3",
     "strip-ansi": "^6.0.1"
   },
@@ -98,7 +97,6 @@
     "@types/deep-eql": "4.0.2",
     "@types/envinfo": "7.8.4",
     "@types/fs-extra": "^11.0.4",
-    "@types/lodash": "^4.17.13",
     "@types/node": "^16",
     "tslib": "2.8.1",
     "typescript": "^5.2.2"

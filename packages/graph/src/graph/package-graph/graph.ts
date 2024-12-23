@@ -1,5 +1,5 @@
-import { unionBy } from 'lodash';
-import { dirname, join, resolve } from 'path';
+import unionBy from 'lodash.unionby';
+import { resolve } from 'path';
 import { SDK } from '@rsdoctor/types';
 import type { ModuleGraph, Module } from '../module-graph';
 import { Package } from './package';

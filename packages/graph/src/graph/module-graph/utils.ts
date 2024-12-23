@@ -1,5 +1,5 @@
 import type { SDK } from '@rsdoctor/types';
-import { last, isUndefined, isNil } from 'lodash';
+import { Lodash } from '@rsdoctor/utils/common';
 
 export function isSamePosition(
   po1: SDK.SourcePosition,
@@ -13,11 +13,11 @@ export function isSameRange(po1: SDK.SourceRange, po2: SDK.SourceRange) {
     return false;
   }
 
-  if (!isNil(po1.end) && !isNil(po2.end)) {
+  if (!Lodash.isNil(po1.end) && !Lodash.isNil(po2.end)) {
     return isSamePosition(po1.end, po2.end);
   }
 
-  return isUndefined(po1.end) && isUndefined(po2.end);
+  return Lodash.isUndefined(po1.end) && Lodash.isUndefined(po2.end);
 }
 
 /**
@@ -44,7 +44,7 @@ export function getModuleName(name?: string) {
   }
 
   if (NAME_WITH_LOADERS.test(name)) {
-    const normalizedName = last(name.split(NAME_WITH_LOADERS));
+    const normalizedName = Lodash.last(name.split(NAME_WITH_LOADERS));
 
     if (normalizedName?.trim()) {
       return normalizedName;

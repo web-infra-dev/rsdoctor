@@ -821,9 +821,9 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
+      lodash.unionby:
+        specifier: ^4.8.0
+        version: 4.8.0
       socket.io:
         specifier: 4.8.1
         version: 4.8.1
@@ -837,9 +837,9 @@ importers:
       '@types/estree':
         specifier: 1.0.5
         version: 1.0.5
-      '@types/lodash':
-        specifier: ^4.17.13
-        version: 4.17.13
+      '@types/lodash.unionby':
+        specifier: ^4.8.9
+        version: 4.8.9
       '@types/node':
         specifier: ^16
         version: 16.18.104
@@ -1051,9 +1051,6 @@ importers:
       lines-and-columns:
         specifier: 2.0.4
         version: 2.0.4
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
       rslog:
         specifier: ^1.2.3
         version: 1.2.3
@@ -1076,9 +1073,6 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
-      '@types/lodash':
-        specifier: ^4.17.13
-        version: 4.17.13
       '@types/node':
         specifier: ^16
         version: 16.18.104
@@ -8757,6 +8751,12 @@ packages:
       '@types/lodash': 4.17.13
     dev: true
 
+  /@types/lodash.unionby@4.8.9:
+    resolution: {integrity: sha512-mhu+q4xOl7nwf1EJi0jknjrOMBbKip54kW6rlvu7/gna5zqOIdwJjBfiMa26n6oPb5Bjbcz08tC2oz62p6EqyQ==}
+    dependencies:
+      '@types/lodash': 4.17.13
+    dev: true
+
   /@types/lodash@4.17.13:
     resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
 
@@ -14273,6 +14273,10 @@ packages:
   /lodash.truncate@4.4.2:
     resolution: {integrity: sha512-jttmRe7bRse52OsWIMDLaXxWqRAmtIUccAQ3garviCqJjafXOfNMO0yMfNpdD6zbGaTU0P5Nz7e7gAT6cKmJRw==}
     dev: true
+
+  /lodash.unionby@4.8.0:
+    resolution: {integrity: sha512-e60kn4GJIunNkw6v9MxRnUuLYI/Tyuanch7ozoCtk/1irJTYBj+qNTxr5B3qVflmJhwStJBv387Cb+9VOfABMg==}
+    dev: false
 
   /lodash.uniq@4.5.0:
     resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}

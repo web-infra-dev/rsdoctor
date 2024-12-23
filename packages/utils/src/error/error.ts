@@ -2,10 +2,10 @@ import { codeFrameColumns } from '@babel/code-frame';
 import { Err, Rule } from '@rsdoctor/types';
 import { Chalk, Instance } from 'chalk';
 import deepEql from 'deep-eql';
-import { isNil } from 'lodash';
 import stripAnsi from 'strip-ansi';
 import { transform } from './transform';
 import { insertSpace, toLevel } from './utils';
+import { isNil } from 'src/common/lodash';
 
 let id = 1;
 

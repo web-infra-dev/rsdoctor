@@ -13,3 +13,4 @@ export * as Data from './data';
 export * as Alerts from './alerts';
 export * as Rspack from './rspack';
 export * as Package from './package';
+export * as Lodash from './lodash';
