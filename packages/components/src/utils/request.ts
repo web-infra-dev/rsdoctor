@@ -99,13 +99,7 @@ export function getManifestUrl(): string {
   }
 
   if (!file) {
-    if (process.env.NODE_ENV === 'development') {
-      // load from mock
-      file = manifestUrlForDev;
-    } else {
-      // load from cli
-      file = SDK.ServerAPI.API.Manifest;
-    }
+    file = SDK.ServerAPI.API.Manifest;
   }
 
   return file;
