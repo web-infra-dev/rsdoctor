@@ -1,4 +1,4 @@
-import { Typography, Tabs } from 'antd';
+import { Typography, Tabs, Empty } from 'antd';
 import { Rule } from '@rsdoctor/types';
 
 import { Card } from '../Card';
@@ -88,6 +88,10 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
       default:
         children = null;
         break;
+    }
+
+    if (!td.data.length) {
+      children = <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     }
 
     return {

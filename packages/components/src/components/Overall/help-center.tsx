@@ -24,7 +24,12 @@ export const HelpCenter = (props: HelpCenterProps) => {
       title={
         <div className={styles.title}>
           <span>{t('Help Center')}</span>
-          <Button type="link" onClick={() => {}}>
+          <Button
+            type="link"
+            onClick={() => {
+              window.open('https://rsdoctor.dev/index', '_blank');
+            }}
+          >
             More
           </Button>
         </div>
@@ -33,8 +38,11 @@ export const HelpCenter = (props: HelpCenterProps) => {
       <div className={styles.container}>
         {data.map(({ title, link }) => {
           return (
-            <div className={styles.content} onClick={() => navigate(link)}>
-              {title}
+            <div
+              className={styles.content}
+              onClick={() => window.open(link, '_blank')}
+            >
+              {t(title)}
             </div>
           );
         })}

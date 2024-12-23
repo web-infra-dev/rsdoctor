@@ -1,51 +1,102 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  Space,
-  Typography,
-  Tag,
   Descriptions,
   DescriptionsProps,
   Radio,
   RadioChangeEvent,
   Button,
+  Tree,
+  Tag,
 } from 'antd';
-import { Client, SDK } from '@rsdoctor/types';
+import Icon, { FolderOpenTwoTone } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
-import { createFileStructures, formatSize, useI18n } from '../../utils';
+import { formatSize, useI18n } from '../../utils';
 import { TextDrawer } from '../TextDrawer';
 import { Card } from '../Card';
 import { ServerAPIProvider } from '../Manifest';
-import { FileTree } from '../FileTree';
 import listStyles from './list.module.scss';
 import cardStyles from './card.module.scss';
 import { DataSummary } from './DataSummary';
+import JsSvg from '../../common/svg/file-js.svg';
+import CssSvg from '../../common/svg/file-css.svg';
+import HtmlSvg from '../../common/svg/file-html.svg';
+import ImageSvg from '../../common/svg/file-image.svg';
+import UnknownSvg from '../../common/svg/file-unknown.svg';
+
+import { Client, SDK } from '@rsdoctor/types';
+import type { TreeDataNode } from 'antd';
 
 import styles from './bundle.module.scss';
 
 type viewType = 'files' | 'size';
 
+const { DirectoryTree } = Tree;
 const getFilesWithDrawer = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
+  fileType: 'js' | 'css' | 'image' | 'html' | 'unknown',
 ): JSX.Element => {
-  const fileStructures = useMemo(() => {
-    if (!data.files.length) return [];
-    return createFileStructures({
-      files: data.files.map((e) => e.path),
-      fileTitle(file, basename) {
-        const { size, initial } = data.files.find((e) => e.path === file)!;
-        return (
-          <Space>
-            <Typography.Text>{basename}</Typography.Text>
-            <Tag color="success" style={{ marginRight: 0 }}>
-              {formatSize(size)}
-            </Tag>
-            {initial ? <Tag color="cyan">Initial</Tag> : null}
-          </Space>
-        );
-      },
+  let files: Array<{
+    fileName: string;
+    defaultDir: string;
+    size: number;
+    initial: boolean;
+  }> = [];
+  if (data.files.length) {
+    files = data.files.map((fileMessage) => {
+      const filePath = fileMessage.path;
+      const pathArray = filePath.split('/');
+      const fileName = pathArray.pop()!;
+      const defaultDir = pathArray.join('/') || 'output';
+
+      return {
+        fileName,
+        defaultDir,
+        size: fileMessage.size,
+        initial: fileMessage.initial,
+      };
     });
-  }, [data.files]);
+  }
+
+  const iconMap = {
+    js: <Icon className={styles.icon} component={JsSvg} />,
+    css: <Icon className={styles.icon} component={CssSvg} />,
+    image: <Icon className={styles.icon} component={ImageSvg} />,
+    html: <Icon className={styles.icon} component={HtmlSvg} />,
+    unknown: <Icon className={styles.icon} component={UnknownSvg} />,
+  };
+  const treeData: TreeDataNode[] = [];
+  files.forEach((file) => {
+    const target = treeData.find((data) => data.title === file.defaultDir);
+    const parent: TreeDataNode = target || {
+      title: file.defaultDir,
+      key: file.defaultDir,
+      icon: <FolderOpenTwoTone />,
+      children: [],
+    };
+    if (!target) {
+      treeData.push(parent);
+    }
+    parent.children!.push({
+      title: (
+        <div className={styles.treeContainer}>
+          <div className={styles.treeTitle}>{file.fileName}</div>
+          <div className={styles.line} />
+          <Tag className={styles.tag} color="green">
+            {formatSize(file.size)}
+          </Tag>
+          {file.initial ? (
+            <Tag className={styles.tag} color="cyan">
+              initial
+            </Tag>
+          ) : null}
+        </div>
+      ),
+      key: file.fileName,
+      isLeaf: true,
+      icon: iconMap[fileType],
+    });
+  });
 
   return (
     <>
@@ -57,9 +108,20 @@ const getFilesWithDrawer = (
           buttonStyle={{
             fontSize: 'inherit',
           }}
+          drawerProps={{
+            title: 'Files',
+          }}
           text={<span>{data.count}</span>}
         >
-          <FileTree treeData={fileStructures} defaultExpandAll />
+          <DirectoryTree
+            defaultExpandAll
+            selectable={false}
+            treeData={treeData}
+            rootStyle={{
+              minHeight: '800px',
+              border: '1px solid rgba(235, 237, 241)',
+            }}
+          />
         </TextDrawer>
       ) : (
         data.count
@@ -81,7 +143,7 @@ const BundleDescriptions = ({
       label: 'JS files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.js.total)}
+          {getFilesWithDrawer(res.js.total, 'js')}
         </span>
       ),
     },
@@ -90,7 +152,7 @@ const BundleDescriptions = ({
       label: 'CSS files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.css.total)}
+          {getFilesWithDrawer(res.css.total, 'css')}
         </span>
       ),
     },
@@ -99,7 +161,7 @@ const BundleDescriptions = ({
       label: 'Font files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.fonts.total)}
+          {getFilesWithDrawer(res.fonts.total, 'unknown')}
         </span>
       ),
     },
@@ -108,7 +170,7 @@ const BundleDescriptions = ({
       label: 'HTML files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.html.total)}
+          {getFilesWithDrawer(res.html.total, 'html')}
         </span>
       ),
     },
@@ -117,7 +179,7 @@ const BundleDescriptions = ({
       label: 'Image files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.imgs.total)}
+          {getFilesWithDrawer(res.imgs.total, 'image')}
         </span>
       ),
     },
@@ -126,7 +188,7 @@ const BundleDescriptions = ({
       label: 'Media files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.media.total)}
+          {getFilesWithDrawer(res.media.total, 'unknown')}
         </span>
       ),
     },

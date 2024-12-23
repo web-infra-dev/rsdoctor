@@ -32,7 +32,7 @@ export const TextDrawer = (
       <Drawer
         maskClosable
         zIndex={999}
-        size="large"
+        width={'60%'}
         {...props.drawerProps}
         open={visible}
         onClose={() => setVisible(false)}

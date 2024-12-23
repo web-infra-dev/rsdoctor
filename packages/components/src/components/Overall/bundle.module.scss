@@ -23,3 +23,38 @@
   font-weight: 400;
   line-height: 32px;
 }
+
+.treeContainer {
+  display: flex;
+
+  .line {
+    border-bottom: 1px dashed #e5e6eb;
+    flex: 1;
+    transform: translateY(-45%);
+    margin: 0 15px 0 10px;
+  }
+
+  .treeTitle {
+    word-wrap: break-word;
+    word-break: break-all;
+    flex-wrap: wrap;
+  }
+
+  .icon {
+    font-size: 16px;
+  }
+
+  .tag {
+    height: 23px;
+  }
+}
+
+:global {
+  .ant-tree-title {
+    flex: 1;
+  }
+
+  .ant-tree-node-content-wrapper-normal {
+    display: flex;
+  }
+}

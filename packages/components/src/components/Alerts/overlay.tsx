@@ -192,8 +192,8 @@ export const OverlayAlertsButton: React.FC<{
   const [open, setOpen] = useState(false);
 
   return (
-    <div style={{ position: 'relative', top: '4px' }}>
-      <Badge count={5} size="small">
+    <div style={{ position: 'relative', top: '4px', marginRight: '3px' }}>
+      <Badge count={alerts.length} size="small">
         <BugOutlined style={{ fontSize: 15 }} onClick={() => setOpen(!open)} />
       </Badge>
       <OverlayAlertsModal

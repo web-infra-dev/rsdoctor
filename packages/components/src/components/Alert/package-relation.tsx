@@ -40,8 +40,6 @@ export const PackageRelationReasons: React.FC<{
   data: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetPackageRelationAlertDetails>;
   cwd: string;
 }> = ({ data }) => {
-  const [index, setIndex] = useState(0);
-
   return (
     <Row gutter={Size.BasePadding} wrap={false} align="top">
       <Col span={20} style={{ height: '100%' }}>
