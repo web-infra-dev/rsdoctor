@@ -1,5 +1,4 @@
 import { Typography, Tabs, Empty } from 'antd';
-import { Rule } from '@rsdoctor/types';
 
 import { Card } from '../Card';
 import { LinkRuleAlert } from '../Alert/ecma-version-check';
@@ -9,6 +8,8 @@ import { CommonList } from './list';
 import { ViewMode } from '../../constants';
 
 import { AlertProps } from '../Alert/types';
+
+import type { Rule } from '@rsdoctor/types';
 
 import styles from './bundle-alert.module.scss';
 

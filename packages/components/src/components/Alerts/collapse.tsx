@@ -13,9 +13,9 @@ import SourceSizeSvg from '../../common/svg/source-size.svg';
 import TotalSizeSvg from '../../common/svg/total-size.svg';
 import VersionSvg from '../../common/svg/version.svg';
 
-import { Rule } from '@rsdoctor/types';
+import type { Rule } from '@rsdoctor/types';
 
-import { AlertProps } from '../Alert/types';
+import type { AlertProps } from '../Alert/types';
 
 import styles from './collapse.module.scss';
 

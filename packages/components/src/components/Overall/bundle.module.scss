@@ -11,12 +11,6 @@
   margin-right: 5px;
 }
 
-:global {
-  .rc-tree .rc-tree-treenode .rc-tree-node-content-wrapper {
-    cursor: default;
-  }
-}
-
 .unit {
   font-family: Roboto;
   font-size: 12px;
@@ -46,15 +40,5 @@
 
   .tag {
     height: 23px;
-  }
-}
-
-:global {
-  .ant-tree-title {
-    flex: 1;
-  }
-
-  .ant-tree-node-content-wrapper-normal {
-    display: flex;
   }
 }

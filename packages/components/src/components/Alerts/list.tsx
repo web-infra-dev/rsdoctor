@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import { Overview } from '../Overall/overview';
 import { useRuleIndexNavigate } from '../../utils';
 
-import { Rule } from '@rsdoctor/types';
+import type { Rule } from '@rsdoctor/types';
 
 import styles from './list.module.scss';
 
