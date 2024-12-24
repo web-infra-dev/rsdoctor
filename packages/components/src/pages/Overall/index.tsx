@@ -2,7 +2,7 @@ import { SDK } from '@rsdoctor/types';
 import React from 'react';
 
 import { HelpCenter } from '../../components/Overall/help-center';
-import { BundleAlerts, CompileAlerts } from '../../components/Alerts';
+import { BundleAlerts } from '../../components/Alerts';
 import { withServerAPI } from '../../components/Manifest';
 import {
   BundleOverall,

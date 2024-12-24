@@ -5,17 +5,24 @@ import { SDK } from '@rsdoctor/types';
 import { Summary } from '@rsdoctor/utils/common';
 import { TextDrawer } from '../TextDrawer';
 import { Card } from '../Card';
-import { CommonChartProps, CommonExecutionsChart, CommonExecutionEmptyTips } from './common';
+import {
+  CommonChartProps,
+  CommonExecutionsChart,
+  CommonExecutionEmptyTips,
+} from './common';
 import { WebpackPluginsDataTable } from '../Plugins/webpack';
 import { ServerAPIProvider } from '../Manifest';
 
 import './loader.scss';
 import './tooltips.scss';
 
-
-export const DoneChartContainer: React.FC<CommonChartProps> = ({ summary }): JSX.Element | null => {
+export const DoneChartContainer: React.FC<CommonChartProps> = ({
+  summary,
+}): JSX.Element | null => {
   const { costs = [] } = summary || {};
-  const target = costs.find((e) => e.name === Summary.SummaryCostsDataName.Done);
+  const target = costs.find(
+    (e) => e.name === Summary.SummaryCostsDataName.Done,
+  );
 
   const hooks: Array<string> = [
     'afterCompile',
@@ -32,6 +39,7 @@ export const DoneChartContainer: React.FC<CommonChartProps> = ({ summary }): JSX
 
   return (
     <TextDrawer
+      containerProps={{ style: { display: 'inline' } }}
       drawerProps={{ title: `Details ${suffix}` }}
       text={
         <Space>

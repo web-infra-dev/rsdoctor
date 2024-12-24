@@ -7,9 +7,6 @@ export default defineConfig({
     format: 'esm',
     target: 'es2020',
     outDir: './dist',
-    dts: {
-      abortOnError: false,
-    },
     asset: {
       svgr: {
         include: /\.svg$/,

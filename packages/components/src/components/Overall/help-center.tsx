@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 
 import { Card } from '../Card';
@@ -16,7 +15,6 @@ interface HelpCenterProps {
 export const HelpCenter = (props: HelpCenterProps) => {
   const { data } = props;
   const { t } = useI18n();
-  const navigate = useNavigate();
 
   return (
     <Card

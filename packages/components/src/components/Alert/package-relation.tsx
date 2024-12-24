@@ -1,5 +1,4 @@
 /* eslint-disable financial/no-float-calculation */
-import React, { useState } from 'react';
 import {
   Space,
   Alert,
@@ -42,7 +41,7 @@ export const PackageRelationReasons: React.FC<{
 }> = ({ data }) => {
   return (
     <Row gutter={Size.BasePadding} wrap={false} align="top">
-      <Col span={20} style={{ height: '100%' }}>
+      <Col style={{ height: '100%' }}>
         {data.length ? (
           <>
             <Timeline style={{ marginTop: '20px' }}>
@@ -212,7 +211,7 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
       }
       type={level === 'warn' ? 'info' : level}
       action={
-        <React.Fragment>
+        <>
           {packages && packages.length > 0 ? (
             <TextDrawer
               text="Show Relations"
@@ -266,7 +265,7 @@ export const PackageRelationAlert: React.FC<PackageRelationAlertProps> = ({
             size="small"
             icon={<InfoCircleOutlined />}
           />
-        </React.Fragment>
+        </>
       }
     />
   );

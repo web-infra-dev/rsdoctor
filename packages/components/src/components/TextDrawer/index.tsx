@@ -1,5 +1,10 @@
 import { Button, Drawer, ButtonProps, DrawerProps } from 'antd';
-import React, { CSSProperties, PropsWithChildren, useState } from 'react';
+import React, {
+  CSSProperties,
+  HTMLAttributes,
+  PropsWithChildren,
+  useState,
+} from 'react';
 
 export interface TextDrawerProps {
   text?: string | React.ReactNode;
@@ -7,6 +12,7 @@ export interface TextDrawerProps {
   buttonProps?: ButtonProps;
   buttonStyle?: CSSProperties;
   drawerProps?: DrawerProps;
+  containerProps?: HTMLAttributes<HTMLDivElement>;
 }
 
 export const TextDrawer = (
@@ -16,7 +22,7 @@ export const TextDrawer = (
 
   return (
     // avoid propagation event affect collapse component
-    <div onClick={(e) => e.stopPropagation()}>
+    <div onClick={(e) => e.stopPropagation()} {...props.containerProps}>
       {props.button ? (
         <div onClick={() => setVisible(!visible)}>{props.button}</div>
       ) : (

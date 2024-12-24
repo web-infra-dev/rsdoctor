@@ -1,4 +1,4 @@
-import { Button, Empty } from 'antd';
+import { Button } from 'antd';
 
 import { Overview } from '../Overall/overview';
 import { useRuleIndexNavigate } from '../../utils';
