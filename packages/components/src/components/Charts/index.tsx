@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Space } from 'antd';
 import { SDK } from '@rsdoctor/types';
-
 import { ISelectLoaderProps, LoaderCommonSelect } from '../Select';
 import { ServerAPIProvider, withServerAPI } from '../Manifest';
 import { LoaderExecutionsChart } from './loader';
 import { filterLoader } from 'src/utils/loader';
+import { Space } from 'antd';
 
 enum ChartDimension {
   Loader,
@@ -28,24 +27,6 @@ export const LoaderChartBase: React.FC<{
 
   return (
     <Space direction="vertical" style={{ width: '100%' }}>
-      {/* <Radio.Group TODO:: process dimension
-          options={[
-            {
-              label: 'Loader Dimension',
-              value: ChartDimension.Loader,
-            },
-            {
-              label: 'Process Dimension',
-              value: ChartDimension.Process,
-            },
-          ]}
-          onChange={(e) => setDimension(e.target.value)}
-          value={dimension}
-          optionType="button"
-          buttonStyle="solid"
-          size="middle"
-          style={{ marginRight: Size.BasePadding - 8 }}
-        /> */}
       <ServerAPIProvider api={SDK.ServerAPI.API.GetLoaderNames}>
         {(loaderNames) => (
           <LoaderCommonSelect onChange={setStore} loaderNames={loaderNames} />
