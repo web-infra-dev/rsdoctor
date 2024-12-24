@@ -33,7 +33,7 @@ export enum APILoaderMode4Dev {
 }
 
 export enum Size {
-  BasePadding = 24,
+  BasePadding = 20,
   BaseBorderRadius = 8,
   NavBarHeight = 54,
 }
@@ -47,7 +47,11 @@ export enum Color {
 
 export const drawerWidth =
   // eslint-disable-next-line financial/no-float-calculation
-  typeof window === 'undefined' ? 0 : window.innerWidth * 0.85 >= 1100 ? window.innerWidth * 0.85 : 1100;
+  typeof window === 'undefined'
+    ? 0
+    : window.innerWidth * 0.85 >= 1100
+      ? window.innerWidth * 0.85
+      : 1100;
 
 export const TAG_PALLETE = {
   COLOR_A: '#90DCE9',
@@ -59,5 +63,5 @@ export const TAG_PALLETE = {
 };
 
 // export const MAIN_BG = 'linear-gradient(307deg, rgb(255, 255, 255) 0%, rgba(228, 243, 255, 0.56) 100%)';
-export const MAIN_BG = ''
+export const MAIN_BG = '';
 export const ROOT_BG_COLOR = 'rgb(105, 177, 255)';
