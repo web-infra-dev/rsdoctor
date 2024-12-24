@@ -8,7 +8,7 @@ import {
   ToolOutlined,
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Col, Menu, MenuProps, Typography } from 'antd';
+import { Menu, MenuProps, Typography } from 'antd';
 import { includes } from 'lodash-es';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -47,8 +47,6 @@ const MenusBase: React.FC<{
   };
 
   const items: MenuProps['items'] = [];
-
-  console.log('enableRoutes: ', enableRoutes);
 
   if (includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.Overall)) {
     items.push({
@@ -162,17 +160,7 @@ const MenusBase: React.FC<{
     />
   );
 
-  return (
-    <Col
-      xs={{ span: 3 }}
-      md={{ span: 6 }}
-      lg={{ span: 10 }}
-      xl={{ span: 11 }}
-      xxl={{ span: 12 }}
-    >
-      {MenuComponent}
-    </Col>
-  );
+  return <div style={{ marginLeft: '30px' }}>{MenuComponent}</div>;
 };
 
 export const Menus = withServerAPI({

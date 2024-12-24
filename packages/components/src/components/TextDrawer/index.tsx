@@ -1,6 +1,10 @@
 import { Button, Drawer, ButtonProps, DrawerProps } from 'antd';
-import React, { CSSProperties, PropsWithChildren, useState } from 'react';
-import { drawerWidth } from '../../constants';
+import React, {
+  CSSProperties,
+  HTMLAttributes,
+  PropsWithChildren,
+  useState,
+} from 'react';
 
 export interface TextDrawerProps {
   text?: string | React.ReactNode;
@@ -8,13 +12,17 @@ export interface TextDrawerProps {
   buttonProps?: ButtonProps;
   buttonStyle?: CSSProperties;
   drawerProps?: DrawerProps;
+  containerProps?: HTMLAttributes<HTMLDivElement>;
 }
 
-export const TextDrawer = (props: PropsWithChildren<TextDrawerProps>): JSX.Element => {
+export const TextDrawer = (
+  props: PropsWithChildren<TextDrawerProps>,
+): JSX.Element => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <React.Fragment>
+    // avoid propagation event affect collapse component
+    <div onClick={(e) => e.stopPropagation()} {...props.containerProps}>
       {props.button ? (
         <div onClick={() => setVisible(!visible)}>{props.button}</div>
       ) : (
@@ -29,8 +37,8 @@ export const TextDrawer = (props: PropsWithChildren<TextDrawerProps>): JSX.Eleme
       )}
       <Drawer
         maskClosable
-        width={drawerWidth}
         zIndex={999}
+        width={'60%'}
         {...props.drawerProps}
         open={visible}
         onClose={() => setVisible(false)}
@@ -38,7 +46,7 @@ export const TextDrawer = (props: PropsWithChildren<TextDrawerProps>): JSX.Eleme
       >
         {props.children}
       </Drawer>
-    </React.Fragment>
+    </div>
   );
 };
 

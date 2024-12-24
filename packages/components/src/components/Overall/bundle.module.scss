@@ -1,0 +1,44 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.description {
+  font-family: var(--font-family-code);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 32px;
+  margin-right: 5px;
+}
+
+.unit {
+  font-family: var(--font-family-code);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.treeContainer {
+  display: flex;
+
+  .line {
+    border-bottom: 1px dashed #e5e6eb;
+    flex: 1;
+    transform: translateY(-45%);
+    margin: 0 15px 0 10px;
+  }
+
+  .treeTitle {
+    word-wrap: break-word;
+    word-break: break-all;
+    flex-wrap: wrap;
+  }
+
+  .icon {
+    font-size: 16px;
+  }
+
+  .tag {
+    height: 23px;
+  }
+}

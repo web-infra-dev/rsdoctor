@@ -1,5 +1,6 @@
 .card {
-  min-height: 440px;
+  width: 100%;
+  padding-bottom: 10px;
 
   :global(.ant-card-body) {
     padding-bottom: 16px;

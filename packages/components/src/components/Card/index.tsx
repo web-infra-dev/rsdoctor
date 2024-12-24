@@ -1,9 +1,9 @@
+import React, { useState, CSSProperties } from 'react';
 import {
   ColumnHeightOutlined,
   VerticalAlignMiddleOutlined,
 } from '@ant-design/icons';
 import { Card as C, CardProps as CProps, Space, Button, Divider } from 'antd';
-import React, { useState, CSSProperties } from 'react';
 export * from './diff';
 export interface CardProps extends CProps {
   collapsable?: boolean;
