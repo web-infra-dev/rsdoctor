@@ -1,7 +1,7 @@
 .errorNumber,
 .warningNumber,
 .successNumber {
-  font-family: Roboto;
+  font-family: var(--font-family-code);
   font-size: 14px;
   font-weight: 500;
   line-height: 32px;
@@ -79,7 +79,7 @@
 
   .description {
     margin-right: 5px;
-    font-family: PingFang SC;
+    font-family: var(--font-family-code);
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
@@ -87,7 +87,7 @@
   }
 
   .data {
-    font-family: Roboto;
+    font-family: var(--font-family-code);
     font-size: 14px;
     font-weight: 500;
     line-height: 32px;

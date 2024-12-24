@@ -20,7 +20,7 @@
 .collapseContainer {
   .collapseChild {
     display: flex;
-    font-family: Roboto;
+    font-family: var(--font-family-code);
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
@@ -31,7 +31,7 @@
     }
 
     .attribute {
-      font-family: Roboto;
+      font-family: var(--font-family-code);
       font-size: 12px;
       font-weight: 400;
       line-height: 16px;
@@ -55,7 +55,7 @@
   align-items: center;
 
   .drawerLabelSize {
-    font-family: Roboto Mono;
+    font-family: var(--font-family-code);
     font-size: 12px;
     font-weight: 400;
   }
