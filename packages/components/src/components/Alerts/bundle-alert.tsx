@@ -65,7 +65,6 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   const tabItems = tabData.map((td) => {
     const LabelComponent = () => (
       <Overview
-        key={td.key}
         title={td.label}
         description={td.data.length}
         icon={<Typography.Text code>{td.key}</Typography.Text>}

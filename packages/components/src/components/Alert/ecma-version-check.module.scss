@@ -5,6 +5,11 @@
   padding: 10px 20px;
   font-family: var(--font-family-code);
 
+  .box {
+    max-width: 300px;
+    display: flex;
+  }
+
   .title {
     font-size: 12px;
     font-weight: 400;

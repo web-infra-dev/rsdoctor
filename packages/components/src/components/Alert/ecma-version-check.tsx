@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Typography } from 'antd';
 import Icon from '@ant-design/icons';
 
 import SourceSvg from '../../common/svg/source.svg';
@@ -10,6 +10,8 @@ import { LinkAlertProps } from './types';
 
 import styles from './ecma-version-check.module.scss';
 
+const { Text } = Typography;
+
 export const LinkRuleAlert: React.FC<LinkAlertProps> = ({ data }) => {
   return data.map((d) => {
     const { code, link } = d;
@@ -18,23 +20,38 @@ export const LinkRuleAlert: React.FC<LinkAlertProps> = ({ data }) => {
       <div className={styles.container}>
         <div>
           <div className={styles.title}>Source</div>
-          <div>
+          <div className={styles.box}>
             <Icon component={SourceSvg} />
-            <span className={styles.content}>Source</span>
+            <Text
+              ellipsis={{ tooltip: 'source placeholder' }}
+              className={styles.content}
+            >
+              source placeholder
+            </Text>
           </div>
         </div>
         <div>
           <div className={styles.title}>Output</div>
-          <div>
+          <div className={styles.box}>
             <Icon component={OutputSvg} />
-            <span className={styles.content}>Source</span>
+            <Text
+              ellipsis={{ tooltip: 'output placeholder' }}
+              className={styles.content}
+            >
+              output placeholder
+            </Text>
           </div>
         </div>
         <div>
           <div className={styles.title}>Error</div>
-          <div>
+          <div className={styles.box}>
             <Icon component={ErrorSvg} />
-            <span className={styles.content}>{d.description}</span>
+            <Text
+              ellipsis={{ tooltip: d.description }}
+              className={styles.content}
+            >
+              {d.description}
+            </Text>
           </div>
         </div>
         <Button onClick={navigate} type="link">
