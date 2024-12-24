@@ -113,7 +113,7 @@ export const LoaderCommonSelect: React.FC<{
       <Col>
         <LoaderNamesSelect
           loaderNames={loaderNames}
-          style={{ marginRight: Size.BasePadding / 2 }}
+          style={{ marginRight: Size.BasePadding }}
           onChange={(e) => {
             setSelectLoaders(e);
           }}
@@ -122,7 +122,7 @@ export const LoaderCommonSelect: React.FC<{
       <Col>
         <KeywordInput
           icon={<FileSearchOutlined />}
-          style={{ marginRight: Size.BasePadding / 2 }}
+          style={{ marginRight: Size.BasePadding }}
           label="Filename"
           placeholder="search filename by keyword"
           onChange={(e) => {
