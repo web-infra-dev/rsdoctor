@@ -80,7 +80,9 @@
     "path-browserify": "1.0.1",
     "semver": "^7.6.3",
     "source-map": "^0.7.4",
-    "webpack-bundle-analyzer": "^4.10.2"
+    "webpack-bundle-analyzer": "^4.10.2",
+    "@rsbuild/plugin-check-syntax": "1.2.0-beta.1",
+    "browserslist-load-config": "^1.0.0"
   },
   "devDependencies": {
     "@rspack/core": "^1.1.8",
