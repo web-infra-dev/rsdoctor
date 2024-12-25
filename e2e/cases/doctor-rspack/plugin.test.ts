@@ -69,7 +69,7 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
         linter: {
           rules: {
             'ecma-version-check': [
-              'Error',
+              'Warn',
               {
                 ecmaVersion: 3,
               },
