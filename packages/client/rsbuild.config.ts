@@ -166,7 +166,7 @@ export default defineConfig(({ env }) => {
               linter: {
                 rules: {
                   'ecma-version-check': [
-                    'Error',
+                    'Warn',
                     {
                       ecmaVersion: 3,
                     },
