@@ -213,7 +213,7 @@ export const WebpackModulesOverallBase: React.FC<
               <Empty
                 description={
                   <div>
-                    Tile graph is disabled,{' '}
+                    Tile graph is disabled,
                     <a href="https://rsdoctor.dev/config/options/options#generatetilegraph">
                       see the documentation to learn how to enable.
                     </a>
@@ -249,7 +249,7 @@ export const WebpackModulesOverallBase: React.FC<
                       <Tag color="green">concatenated</Tag>
                       <Typography.Text>
                         : Indignify whether the module is the concatenated
-                        module.{' '}
+                        module.
                       </Typography.Text>
                       <br />
                       <Typography.Text strong>
@@ -257,7 +257,7 @@ export const WebpackModulesOverallBase: React.FC<
                       </Typography.Text>
                       <Typography.Text>
                         A series module is to lift or series multiple modules
-                        into a closure when packaging.{' '}
+                        into a closure when packaging.
                       </Typography.Text>
                     </Col>
                   </Row>

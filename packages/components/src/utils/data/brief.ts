@@ -18,7 +18,6 @@ export class BriefDataLoader extends BaseDataLoader {
 
     console.log(`[loadData]-[scope]: ${scope}`);
     const data = this.getData(scope);
-    console.log(`[loadData]-[data]: ${data}`);
 
     if (!data) return;
 
@@ -30,7 +29,7 @@ export class BriefDataLoader extends BaseDataLoader {
         typeof res === 'object'
           ? res
           : JSON.parse(Algorithm.decompressText(res));
-      console.log(`[loadData]-[scopeData]: ${scopeData}`);
+
       this.shardingDataMap.set(scope, scopeData);
     }
 

@@ -12,6 +12,7 @@ import {
   CommonExecutionEmptyTips,
   CommonExecutionsChart,
 } from './common';
+import { ChartTypes } from './constants';
 
 import './loader.scss';
 import './tooltips.scss';
@@ -46,7 +47,7 @@ export const MinifyChartContainer: React.FC<CommonChartProps> = ({
               </Card>
               <Divider />
               <Card title='Chart of the "Minify"'>
-                <CommonExecutionsChart plugins={res} />
+                <CommonExecutionsChart plugins={res} type={ChartTypes.Minify} />
               </Card>
             </Space>
           ) : (

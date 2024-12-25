@@ -12,7 +12,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import dayjs from 'dayjs';
 import { ChartProps, DurationMetric, ITraceEventData } from '../types';
 import { groupBy } from 'lodash-es';
-import { PALETTE_COLORS } from '../constants';
+import { ChartTypes, PALETTE_COLORS } from '../constants';
 
 interface CoordSysType {
   x: number;
@@ -33,20 +33,19 @@ export const TimelineCom: React.FC<{
   loaderData?: DurationMetric[];
   pluginsData?: ITraceEventData[];
   formatterFn: Function;
-  chartType?: string;
-  ext?: { endTimestamp: number; startTimestamp: number };
+  chartType?: ChartTypes;
+  exts?: { endTimestamp: number; startTimestamp: number };
 }> = memo(
   ({
     loaderData,
     pluginsData,
     formatterFn,
-    chartType = 'normal',
-    ext = {},
+    chartType = ChartTypes.Normal,
+    exts = null,
   }) => {
     const data: LoaderType[] = [];
     let categories: string[] = [];
     const [optionsData, setOptionsData] = useState({});
-    console.log('', JSON.stringify(ext));
 
     // Register the required components
     echarts.use([
@@ -132,7 +131,8 @@ export const TimelineCom: React.FC<{
               ],
               itemStyle: {
                 normal: {
-                  color: PALETTE_COLORS[(_i + i) % 30],
+                  color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
+                  opacity: 0.25,
                 },
               },
               ext: _plugin,
@@ -161,7 +161,7 @@ export const TimelineCom: React.FC<{
           {
             x: start[0],
             y:
-              chartType === 'loader'
+              chartType === ChartTypes.Loader
                 ? start[1] - (categoryIndex % 2 !== 0 ? 0 : height * 2)
                 : start[1],
             width: end[0] - start[0] || 5,
@@ -212,16 +212,16 @@ export const TimelineCom: React.FC<{
           bottom: 10,
           right: 0,
           height:
-            categories.length > (chartType === 'loader' ? 6 : 3)
+            categories.length > (chartType === ChartTypes.Loader ? 6 : 3)
               ? 'auto'
               : categories.length * LINE_HEIGHT,
           containLabel: true,
         },
         xAxis: {
           interval:
-            ext.endTimestamp && ext.startTimestamp
-              ? (ext.endTimestamp - ext.startTimestamp) / 5
-              : 500,
+            exts?.endTimestamp && exts?.startTimestamp
+              ? Math.floor((exts.endTimestamp - exts.startTimestamp) / 8)
+              : null,
           position: 'top',
           splitLine: {
             show: true,
@@ -273,7 +273,7 @@ export const TimelineCom: React.FC<{
         ],
       };
       setOptionsData(option);
-    }, [loaderData, pluginsData, ext]);
+    }, [loaderData, pluginsData, exts]);
 
     return (
       <ReactEChartsCore
@@ -281,7 +281,13 @@ export const TimelineCom: React.FC<{
         echarts={echarts}
         style={{
           width: '100%',
-          minHeight: '500px',
+          minHeight:
+            chartType === ChartTypes.Loader
+              ? '500px'
+              : chartType === ChartTypes.Minify
+                ? '100px'
+                : '200px',
+          maxHeight: chartType === ChartTypes.Minify ? '100px' : '1000px',
           border: '1px solid #eee',
           borderRadius: '10px',
         }}

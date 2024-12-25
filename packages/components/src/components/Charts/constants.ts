@@ -27,3 +27,12 @@ export const PALETTE_COLORS = [
   '#9F40FF',
   '#528BFF',
 ];
+
+export enum ChartTypes {
+  Bootstrap,
+  Compile,
+  Done,
+  Minify,
+  Loader,
+  Normal,
+}

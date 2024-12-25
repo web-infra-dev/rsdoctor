@@ -18,7 +18,9 @@ import {
   getTooltipHtmlForLoader,
   useDebounceHook,
 } from './utils';
+import { ChartTypes } from './constants';
 let startTimestamp = 0;
+let endTimestamp = 0;
 
 export const LoaderExecutionsChart: React.FC<ChartProps> = ({
   loaders,
@@ -28,7 +30,7 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({
   const ref = useRef(null);
   const [data, setData] = useState([] as DurationMetric[]);
   const durationMetricData = useDebounceHook(data, 200);
-  const [endTimestamp, setEndTimestamp] = useState(0);
+  // const [endTimestamp, setEndTimestamp] = useState(0);
 
   const groupByLoader = useMemo(
     () => groupBy(loaders, (e) => e.loader),
@@ -56,7 +58,7 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({
         }
 
         if (end > endTimestamp || endTimestamp === 0) {
-          setEndTimestamp(end);
+          endTimestamp = end;
         }
 
         return {
@@ -96,8 +98,8 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({
           <TimelineCom
             loaderData={durationMetricData}
             formatterFn={formatterForLoader}
-            chartType={'loader'}
-            ext={{ startTimestamp: startTimestamp, endTimestamp: endTimestamp }}
+            chartType={ChartTypes.Loader}
+            exts={{ startTimestamp, endTimestamp }}
           />
         </div>
       ) : (
