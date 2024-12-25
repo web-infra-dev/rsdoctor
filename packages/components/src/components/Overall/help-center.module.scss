@@ -1,0 +1,23 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+
+  .content {
+    cursor: pointer;
+    font-size: 16px;
+    width: 48%;
+    margin-bottom: 13px;
+    padding: 0 10px;
+    transition: color 0.5s ease;
+  }
+
+  .content:hover {
+    color: #1677ff;
+  }
+}

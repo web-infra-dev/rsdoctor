@@ -1,0 +1,78 @@
+.label {
+  display: flex;
+  justify-content: space-between;
+
+  :global {
+    .ant-collapse-header {
+      background-color: white;
+    }
+  }
+
+  .labelContent {
+    display: flex;
+
+    & > * {
+      margin-right: 10px;
+    }
+  }
+}
+
+.collapseContainer {
+  .collapseChild {
+    display: flex;
+    font-family: var(--font-family-code);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+
+    & > * {
+      margin-right: 10px;
+    }
+
+    .attribute {
+      font-family: var(--font-family-code);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      text-align: left;
+      color: #00000073;
+      margin: 5px 0;
+    }
+
+    .copy {
+      position: relative;
+      left: 100%;
+      top: -50%;
+    }
+  }
+}
+
+.drawerLabelTitle {
+  min-width: 120px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  .drawerLabelSize {
+    font-family: var(--font-family-code);
+    font-size: 12px;
+    font-weight: 400;
+  }
+}
+
+.extraContainer {
+  display: flex;
+  align-items: center;
+}
+
+.iconContainer {
+  display: flex;
+  margin-right: 20px;
+  justify-content: center;
+  align-items: center;
+
+  .data {
+    margin-left: 5px;
+  }
+}

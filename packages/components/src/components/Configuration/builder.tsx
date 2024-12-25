@@ -63,6 +63,7 @@ export const WebpackConfigurationViewerBase: React.FC<
           src={selectKeys.length === 0 ? config : pick(config, selectKeys)}
           displayDataTypes={false}
           displayObjectSize={false}
+          style={{ width: '100%' }}
         />
       </Row>
     </TextDrawer>

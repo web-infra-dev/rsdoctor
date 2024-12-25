@@ -1,0 +1,35 @@
+:root {
+  --font-family-code: Roboto, Roboto Mono, 'Segoe UI', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+}
+
+:global {
+  .ant-tabs .ant-tabs-tab + .ant-tabs-tab {
+    margin-left: 7px;
+  }
+
+  .rc-tree .rc-tree-treenode .rc-tree-node-content-wrapper {
+    cursor: default;
+  }
+
+  // for bundle overall
+  .ant-tree-title {
+    flex: 1;
+  }
+  .ant-tree-node-content-wrapper-normal {
+    display: flex;
+  }
+}
+
+.overall {
+  display: flex;
+  justify-content: space-between;
+}
+
+.layout {
+  margin-right: 20px;
+
+  .row {
+    margin-bottom: 20px;
+  }
+}

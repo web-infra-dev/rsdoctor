@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
 import { SDK } from '@rsdoctor/types';
-import { Alert, Button, Col, Collapse, Row, Tag, Typography } from 'antd';
-import { BugOutlined, CloseCircleOutlined, DownOutlined, RightOutlined } from '@ant-design/icons';
+import {
+  Alert,
+  Button,
+  Col,
+  Collapse,
+  Row,
+  Tag,
+  Typography,
+  Badge,
+} from 'antd';
+import {
+  BugOutlined,
+  CloseCircleOutlined,
+  DownOutlined,
+  RightOutlined,
+} from '@ant-design/icons';
 import Dialog from 'rc-dialog';
 import Ansi from 'ansi-to-react';
+
 import { withServerAPI } from '../Manifest';
 import { Size, Color } from '../../constants';
 
 import 'rc-dialog/assets/index.css';
 
-function getOverlayAlertsMessage(alerts: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetOverlayAlerts>) {
+function getOverlayAlertsMessage(
+  alerts: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetOverlayAlerts>,
+) {
   let warns = 0;
   let errors = 0;
 
@@ -21,7 +38,8 @@ function getOverlayAlertsMessage(alerts: SDK.ServerAPI.InferResponseType<SDK.Ser
     }
   });
 
-  const suffixText = warns !== 0 && errors !== 0 ? 'problems' : warns === 0 ? 'errors' : 'warns';
+  const suffixText =
+    warns !== 0 && errors !== 0 ? 'problems' : warns === 0 ? 'errors' : 'warns';
 
   const fontSize = 16;
 
@@ -29,11 +47,16 @@ function getOverlayAlertsMessage(alerts: SDK.ServerAPI.InferResponseType<SDK.Ser
     title: `${alerts.length} compiled ${suffixText}`,
     detail: (
       <Typography.Text strong style={{ color: '#fff', marginBottom: 0 }}>
-        <Typography.Text style={{ color: 'inherit', fontSize }}>Compiled with </Typography.Text>
+        <Typography.Text style={{ color: 'inherit', fontSize }}>
+          Compiled with{' '}
+        </Typography.Text>
         <Typography.Text strong style={{ color: Color.Red, fontSize }}>
           {errors} errors
         </Typography.Text>
-        <Typography.Text style={{ color: 'inherit', fontSize }}> and </Typography.Text>
+        <Typography.Text style={{ color: 'inherit', fontSize }}>
+          {' '}
+          and{' '}
+        </Typography.Text>
         <Typography.Text strong style={{ color: Color.Yellow, fontSize }}>
           {warns} warnings
         </Typography.Text>
@@ -82,7 +105,15 @@ export const OverlayAlertsModal: React.FC<{
       <Row gutter={[0, Size.BasePadding]}>
         {alerts.map((e) => {
           return (
-            <Col span={24} key={e.id} style={{ whiteSpace: 'pre-wrap', lineHeight: `16px`, fontSize: 14 }}>
+            <Col
+              span={24}
+              key={e.id}
+              style={{
+                whiteSpace: 'pre-wrap',
+                lineHeight: `16px`,
+                fontSize: 14,
+              }}
+            >
               <Collapse
                 ghost
                 style={{ background: '#000' }}
@@ -145,7 +176,11 @@ export const OverlayAlertsTips: React.FC<{
           </Button>
         }
       ></Alert>
-      <OverlayAlertsModal alerts={alerts} open={open} onClose={() => setOpen(false)} />
+      <OverlayAlertsModal
+        alerts={alerts}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
     </React.Fragment>
   );
 };
@@ -155,17 +190,19 @@ export const OverlayAlertsButton: React.FC<{
 }> = ({ alerts = [] }) => {
   if (!alerts.length) return null;
 
-  const { errors } = getOverlayAlertsMessage(alerts);
-  const defaultOpen = errors > 0; // open modal when has compiled error.
-  const [open, setOpen] = useState(defaultOpen);
+  const [open, setOpen] = useState(false);
 
   return (
-    <React.Fragment>
-      <Button icon={<BugOutlined />} danger size="small" onClick={() => setOpen(!open)}>
-        {getOverlayAlertsMessage(alerts).title}
-      </Button>
-      <OverlayAlertsModal alerts={alerts} open={open} onClose={() => setOpen(false)} />
-    </React.Fragment>
+    <div style={{ position: 'relative', top: '4px', marginRight: '3px' }}>
+      <Badge count={alerts.length} size="small">
+        <BugOutlined style={{ fontSize: 15 }} onClick={() => setOpen(!open)} />
+      </Badge>
+      <OverlayAlertsModal
+        alerts={alerts}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
+    </div>
   );
 };
 
