@@ -9,7 +9,7 @@
     "package.json"
   ],
   "scripts": {
-    "compile": "node -r tsm ./node_modules/webpack/bin/webpack.js -c webpack.config.ts",
+    "compile": "node -r tsm ./node_modules/webpack/bin/webpack.js -c webpack-c.config.ts",
     "build:analysis": "ENABLE_CLIENT_SERVER=true npm run compile"
   },
   "keywords": [],
