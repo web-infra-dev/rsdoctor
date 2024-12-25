@@ -13,8 +13,6 @@ function rspackBuild(config: rspack.Configuration) {
         throw err;
       }
 
-      console.log();
-
       if (stats) {
         console.log(
           stats.toString({
