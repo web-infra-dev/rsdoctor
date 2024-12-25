@@ -4,12 +4,16 @@ import { DevToolError } from '@rsdoctor/utils/error';
 import { isArray, pull } from 'lodash';
 import { Plugin } from '@rsdoctor/types';
 import { WebpackError } from 'webpack';
+import { circularDependencyPlugin } from './rule-plugins';
 
 export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler> {
   public readonly name = 'rules';
 
   public apply(compiler: Plugin.BaseCompiler) {
     compiler.hooks.done.tapPromise(this.tapPreOptions, this.done);
+
+    // Execute rules plugins.
+    circularDependencyPlugin.apply(compiler);
   }
 
   public done = async (stats: Plugin.BaseStats): Promise<void> => {

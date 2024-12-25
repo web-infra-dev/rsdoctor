@@ -67,7 +67,6 @@ export async function execute(
           await action(args);
         } catch (error) {
           const { message, stack } = error as Error;
-          console.log('');
           console.error(red(stack || message));
           process.exit(1);
         }
