@@ -7,19 +7,28 @@ import { Summary } from '@rsdoctor/utils/common';
 import { Card } from '../Card';
 import { ServerAPIProvider } from '../Manifest';
 import { WebpackPluginsDataTable } from '../Plugins/webpack';
-import { CommonChartProps, CommonExecutionEmptyTips, CommonExecutionsChart } from './common';
+import {
+  CommonChartProps,
+  CommonExecutionEmptyTips,
+  CommonExecutionsChart,
+} from './common';
 
 import './loader.scss';
 import './tooltips.scss';
 
-export const MinifyChartContainer: React.FC<CommonChartProps> = ({ summary }) => {
+export const MinifyChartContainer: React.FC<CommonChartProps> = ({
+  summary,
+}) => {
   const hooks: Array<string> = ['processAssets', 'optimizeChunkAssets'];
   const { costs = [] } = summary || {};
-  const target = costs.find((e) => e.name === Summary.SummaryCostsDataName.Minify);
+  const target = costs.find(
+    (e) => e.name === Summary.SummaryCostsDataName.Minify,
+  );
 
   if (!target) return null;
   return (
     <TextDrawer
+      containerProps={{ style: { display: 'inline' } }}
       drawerProps={{ title: 'Details of the "Minify" stage' }}
       text={
         <Space>

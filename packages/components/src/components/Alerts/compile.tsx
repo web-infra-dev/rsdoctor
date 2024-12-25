@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 import { Rule, SDK } from '@rsdoctor/types';
-import { hasViewModeFromStorage, useCompileAlertsByErrors, useViewMode } from '../../utils';
-import { CommonAlertsContainer } from './common';
+import {
+  hasViewModeFromStorage,
+  useCompileAlertsByErrors,
+  useViewMode,
+} from '../../utils';
+import { BundleAlert } from './bundle-alert';
 import { withServerAPI } from '../Manifest';
 import { ViewMode } from '../../constants';
 import { PackageRelationReasonsWithServer } from '../Alert/package-relation';
@@ -11,7 +15,10 @@ interface CompileAlertsProps {
   project: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetProjectInfo>;
 }
 
-const CompileAlertsBase: React.FC<CompileAlertsProps> = ({ filter, project }) => {
+const CompileAlertsBase: React.FC<CompileAlertsProps> = ({
+  filter,
+  project,
+}) => {
   const { root: cwd, errors } = project;
   const compileAlerts = useCompileAlertsByErrors(errors);
   const { setCompileAlertsViewMode, viewMode, setViewMode } = useViewMode();
@@ -22,7 +29,8 @@ const CompileAlertsBase: React.FC<CompileAlertsProps> = ({ filter, project }) =>
     if (!hasViewModeFromStorage()) {
       setViewMode(
         {
-          compileAlerts: compileAlerts.length >= 5 ? ViewMode.Group : ViewMode.List,
+          compileAlerts:
+            compileAlerts.length >= 5 ? ViewMode.Group : ViewMode.List,
         },
         false,
       );
@@ -30,13 +38,16 @@ const CompileAlertsBase: React.FC<CompileAlertsProps> = ({ filter, project }) =>
   }, []);
 
   return (
-    <CommonAlertsContainer
+    <BundleAlert
       title="Compile Alerts"
       dataSource={dataSource}
       extraData={{
         cwd,
         getPackageRelationContentComponent: (res) => (
-          <PackageRelationReasonsWithServer body={{ id: res.data.id, target: res.package.target }} cwd={cwd} />
+          <PackageRelationReasonsWithServer
+            body={{ id: res.data.id, target: res.package.target }}
+            cwd={cwd}
+          />
         ),
       }}
       viewMode={viewMode.compileAlerts}

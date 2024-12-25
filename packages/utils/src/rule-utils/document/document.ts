@@ -1,6 +1,6 @@
 import { LinesAndColumns } from 'lines-and-columns';
-import { isUndefined, isNumber } from 'lodash';
 import { Range, OffsetRange, Position, DocumentEditData } from './types';
+import { isNumber, isUndefined } from 'src/common/lodash';
 
 /** Document Catalogue */
 export class Document {

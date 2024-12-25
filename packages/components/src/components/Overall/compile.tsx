@@ -25,14 +25,9 @@ const Stage: React.FC<
   );
 };
 
-const getProgressColor = (percent: number) => {
-  if (percent < 33.3) {
-    return { '0%': '#95de64', '100%': '#5cdbd3' };
-  }
-  return { '0%': '#ff9c6e', '100%': '#ff7875' };
-};
-
-export const CompileOverall: React.FC<{ summary: SDK.SummaryData }> = ({ summary }) => {
+export const CompileOverall: React.FC<{ summary: SDK.SummaryData }> = ({
+  summary,
+}) => {
   const { t } = useI18n();
 
   if (!summary?.costs?.length) return null;
@@ -41,7 +36,11 @@ export const CompileOverall: React.FC<{ summary: SDK.SummaryData }> = ({ summary
 
   return (
     <Card title={t('Compile Overall')} className={cardStyles.card}>
-      <Space style={{ wordBreak: 'break-all', width: '100%' }} size={20} direction="vertical">
+      <Space
+        style={{ wordBreak: 'break-all', width: '100%' }}
+        size={20}
+        direction="vertical"
+      >
         {summary.costs.map((e) => {
           const { name, costs } = e;
           const percent = (costs * 100) / maxCosts;
@@ -51,7 +50,6 @@ export const CompileOverall: React.FC<{ summary: SDK.SummaryData }> = ({ summary
               className={styles.progress}
               percent={percent}
               status="normal"
-              strokeColor={getProgressColor(percent)}
               format={() => formatCosts(costs)}
             />
           );

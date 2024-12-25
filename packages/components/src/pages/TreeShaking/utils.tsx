@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import path from 'path-browserify';
 import { escape, get } from 'lodash-es';
-import { Module, ModuleGraph, Statement, Variable } from '@rsdoctor/graph';
+import type { ModuleGraph, Statement, Variable } from '@rsdoctor/graph';
+import { Module } from '@rsdoctor/graph';
 import { Tag, Space } from 'antd';
 import { Range } from './range';
 import type { editor, Range as RangeClass } from 'monaco-editor';

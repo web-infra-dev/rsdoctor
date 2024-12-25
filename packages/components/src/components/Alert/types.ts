@@ -34,7 +34,7 @@ export interface CodeViewAlertProps {
 type CheckSyntaxError =
   CheckSyntax['errors'] extends Array<infer T> ? T : false;
 export interface LinkAlertProps {
-  data: Rule.LinkRuleStoreData & {
+  data: (Rule.RuleStoreDataItem & {
     error?: CheckSyntaxError;
-  };
+  })[];
 }

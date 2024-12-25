@@ -7,6 +7,7 @@ import { pluginSass } from '@rsbuild/plugin-sass';
 import serve from 'serve-static';
 import path from 'path';
 import fs from 'fs';
+
 import {
   ClientEntry,
   DistPath,
@@ -68,8 +69,8 @@ export default defineConfig(({ env }) => {
         : './',
       cleanDistPath: IS_PRODUCTION,
       sourceMap: {
-        js: false,
-        css: false,
+        js: 'cheap-module-source-map',
+        css: true,
       },
       legalComments: 'none',
     },
@@ -146,6 +147,7 @@ export default defineConfig(({ env }) => {
                     ids: true,
                     version: true,
                     entrypoints: true,
+                    optimizationBailout: true,
                   });
                   await fs.promises.writeFile(
                     WebpackStatsFilePath,
@@ -161,12 +163,15 @@ export default defineConfig(({ env }) => {
           chainConfig.plugin('rsdoctor').use(RsdoctorRspackPlugin, [
             {
               disableClientServer: !ENABLE_CLIENT_SERVER,
-              features: {
-                loader: true,
-                plugins: true,
-                resolver: true,
-                bundle: true,
-                treeShaking: true,
+              linter: {
+                rules: {
+                  'ecma-version-check': [
+                    'Error',
+                    {
+                      ecmaVersion: 3,
+                    },
+                  ],
+                },
               },
             },
           ]);

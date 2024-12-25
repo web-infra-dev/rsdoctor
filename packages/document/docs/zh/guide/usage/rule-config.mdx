@@ -45,6 +45,32 @@ export default {
 };
 ```
 
+#### 开启 ECMA Version check
+
+```ts
+import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorWebpackPlugin({
+      linter: {
+        rules: {
+          'ecma-version-check': [
+            'Error',
+            {
+              ecmaVersion: 2015,
+              // targets: ["chrome >= 53"],
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
+更多 `ECMA Version Check` 配置请参考 [ECMA Version Check Options](https://github.com/rspack-contrib/rsbuild-plugin-check-syntax?tab=readme-ov-file#options)
+
 `linter`字段的类型为：
 
 ```ts

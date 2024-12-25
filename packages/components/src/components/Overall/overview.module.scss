@@ -1,0 +1,26 @@
+.container {
+  width: 100%;
+  display: flex;
+  background: #f6f8fa;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 280px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-right: 10px;
+
+  .title {
+    font-family: var(--font-family-code);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #000000a6;
+  }
+
+  .description {
+    font-family: var(--font-family-code);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 32px;
+  }
+}
