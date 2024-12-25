@@ -158,7 +158,6 @@ export function readJSONByFileReader<T extends Common.PlainObject>(file: unknown
     const reader = new FileReader();
     reader.onloadend = () => {
       const { result } = reader;
-      console.log('reader result: ', result);
       try {
         const json = JSON.parse(result!.toString());
         resolve(json);
