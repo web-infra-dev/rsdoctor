@@ -143,7 +143,7 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
                             </div>
                             <div>
                               <Typography.Text strong>
-                                Transformed:{' '}
+                                Transformed:
                               </Typography.Text>
                               <Typography.Text>
                                 {TAB_MAP.transformed}
@@ -151,7 +151,7 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
                             </div>
                             <div>
                               <Typography.Text strong>
-                                Bundled Source:{' '}
+                                Bundled Source:
                               </Typography.Text>
                               <Typography.Text>
                                 {TAB_MAP.parsedSource}
@@ -303,7 +303,7 @@ export const ModulesStatistics: React.FC<{
             type="secondary"
             style={{ fontSize: 12, fontWeight: 400 }}
           >
-            Modules Size:{' '}
+            Modules Size:
             {filteredParsedSize === parsedSize
               ? formatSize(parsedSize)
               : `${formatSize(filteredParsedSize)} / ${formatSize(parsedSize)}`}
@@ -316,7 +316,7 @@ export const ModulesStatistics: React.FC<{
         title={
           <Space direction="vertical">
             <Typography.Text style={{ color: 'inherit' }}>
-              this asset includes {chunks.length} chunks:{' '}
+              this asset includes {chunks.length} chunks:
             </Typography.Text>
             {chunks.map((e) => (
               <Bdg label="chunk" value={e.name} key={e.name} />
@@ -429,7 +429,7 @@ export const AssetDetail: React.FC<{
                 title={
                   <Space>
                     <Typography.Text style={{ color: 'inherit' }}>
-                      this is a concatenated module, it contains{' '}
+                      this is a concatenated module, it contains
                       {mod.modules?.length} modules
                     </Typography.Text>
                   </Space>
