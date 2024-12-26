@@ -69,8 +69,8 @@ export default defineConfig(({ env }) => {
         : './',
       cleanDistPath: IS_PRODUCTION,
       sourceMap: {
-        js: false,
-        css: false,
+        js: 'cheap-module-source-map',
+        css: true,
       },
       legalComments: 'none',
     },
@@ -163,6 +163,16 @@ export default defineConfig(({ env }) => {
           chainConfig.plugin('rsdoctor').use(RsdoctorRspackPlugin, [
             {
               disableClientServer: !ENABLE_CLIENT_SERVER,
+              linter: {
+                rules: {
+                  'ecma-version-check': [
+                    'Warn',
+                    {
+                      ecmaVersion: 3,
+                    },
+                  ],
+                },
+              },
             },
           ]);
         }

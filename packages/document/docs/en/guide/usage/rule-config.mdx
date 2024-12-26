@@ -45,6 +45,34 @@ export default {
 };
 ```
 
+#### Enable ECMA Version check
+
+The configuration of `browserslist` is used first. If there is no `browserslist`, the following configuration is used for detection
+
+```ts
+import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorWebpackPlugin({
+      linter: {
+        rules: {
+          'ecma-version-check': [
+            'Warn',
+            {
+              ecmaVersion: 2015,
+              // targets: ["chrome >= 53"],
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
+For more `ECMA Version Check` configuration, please refer to [ECMA Version Check Options](https://github.com/rspack-contrib/rsbuild-plugin-check-syntax?tab=readme-ov-file#options)
+
 The type of `linter`：
 
 ```ts

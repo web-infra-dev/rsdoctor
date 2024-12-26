@@ -5,7 +5,10 @@ import { LoaderChart } from 'src/components/Charts';
 
 export const Page: React.FC = () => {
   return (
-    <Card title="Loader Timeline" extra={<WebpackConfigurationViewer defaultKeys={['module']} />} collapsable>
+    <Card
+      title="Loader Timeline"
+      extra={<WebpackConfigurationViewer defaultKeys={['module']} />}
+    >
       <LoaderChart />
     </Card>
   );

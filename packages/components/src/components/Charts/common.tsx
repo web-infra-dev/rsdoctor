@@ -8,6 +8,7 @@ import './loader.scss';
 import './tooltips.scss';
 import { DurationMetric, ITraceEventData, Metric } from './types';
 import { formatterForPlugins, processTrans } from './utils';
+import { ChartTypes } from './constants';
 
 export interface CommonChartProps {
   summary: SDK.SummaryData;
@@ -16,10 +17,11 @@ export interface CommonChartProps {
 export const CommonExecutionsChart: React.FC<{
   plugins: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetPluginData>;
   defaultDatas?: Metric[];
-}> = ({ plugins, defaultDatas = [] }) => {
+  type?: ChartTypes;
+}> = ({ plugins, defaultDatas = [], type }) => {
   const { isDark } = useTheme();
   const ref = useRef(null);
-  const [data, setData] = useState([] as ITraceEventData[])
+  const [data, setData] = useState([] as ITraceEventData[]);
 
   useEffect(() => {
     const arr: Metric[] = [];
@@ -43,11 +45,20 @@ export const CommonExecutionsChart: React.FC<{
 
   return (
     <div
-      className={['loader-chart-container', isDark ? 'loader-chart-container_dark' : ''].join(' ').trim()}
+      className={[
+        'loader-chart-container',
+        isDark ? 'loader-chart-container_dark' : '',
+      ]
+        .join(' ')
+        .trim()}
       ref={ref}
-      style={{ width: '100%', height: '600px' }}
+      style={{ width: '100%' }}
     >
-      <TimelineCom pluginsData={data} formatterFn={formatterForPlugins} />
+      <TimelineCom
+        pluginsData={data}
+        formatterFn={formatterForPlugins}
+        chartType={type}
+      />
     </div>
   );
 };
@@ -67,7 +78,10 @@ export const CommonExecutionEmptyTips: React.FC = () => {
               features.plugins
             </a>
           </Typography.Text> */}
-          <Typography.Text> in configuration for the Rsdoctor plugin.</Typography.Text>
+          <Typography.Text>
+            {' '}
+            in configuration for the Rsdoctor plugin.
+          </Typography.Text>
         </Typography.Text>
       }
       type="info"

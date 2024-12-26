@@ -13,6 +13,7 @@ import {
 } from './common';
 import { ServerAPIProvider } from '../Manifest';
 import { Summary } from '@rsdoctor/utils/common';
+import { ChartTypes } from './constants';
 
 export const BootstrapChartContainer: React.FC<CommonChartProps> = ({
   summary,
@@ -53,7 +54,7 @@ export const BootstrapChartContainer: React.FC<CommonChartProps> = ({
       <ServerAPIProvider api={SDK.ServerAPI.API.GetPluginData} body={{ hooks }}>
         {(res) =>
           res && res.length ? (
-            <CommonExecutionsChart plugins={res} />
+            <CommonExecutionsChart plugins={res} type={ChartTypes.Bootstrap} />
           ) : (
             <CommonExecutionEmptyTips />
           )

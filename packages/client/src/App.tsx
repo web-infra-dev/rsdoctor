@@ -1,9 +1,28 @@
 import { Constants } from '@rsdoctor/components';
-import { Config, ConfigContext, defaultConfig } from '@rsdoctor/components/config';
+import {
+  Config,
+  ConfigContext,
+  defaultConfig,
+} from '@rsdoctor/components/config';
 import { Layout } from '@rsdoctor/components/elements';
-import { getDemoUrl, getLocale, setThemeToStorage, setViewModeToStorage, useDetectIfCloudIdeEnv } from '@rsdoctor/components/utils';
+import {
+  getDemoUrl,
+  getLocale,
+  setThemeToStorage,
+  setViewModeToStorage,
+  useDetectIfCloudIdeEnv,
+} from '@rsdoctor/components/utils';
 import type { Manifest } from '@rsdoctor/types';
-import { Alert, Button, ConfigProvider, Divider, Result, Space, Typography, theme as te } from 'antd';
+import {
+  Alert,
+  Button,
+  ConfigProvider,
+  Divider,
+  Result,
+  Space,
+  Typography,
+  theme as te,
+} from 'antd';
 import React, { useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HashRouter as BrowserRouter } from 'react-router-dom';
@@ -15,7 +34,9 @@ const App: React.FC = (): React.ReactElement => {
   const ifCloudIdeEnv = useDetectIfCloudIdeEnv();
 
   const [state, setState] = useState<Constants.PageState>(PageState.Success);
-  const [viewMode, setViewMode] = useState<Config['viewMode']>({ ...defaultConfig.viewMode });
+  const [viewMode, setViewMode] = useState<Config['viewMode']>({
+    ...defaultConfig.viewMode,
+  });
   const [manifest, setManifest] = useState<Manifest.RsdoctorManifest>();
   const [theme, setTheme] = useState(defaultConfig.theme);
 
@@ -27,12 +48,14 @@ const App: React.FC = (): React.ReactElement => {
           load json file of Rsdoctor failed.
         </Typography.Text>
         <Typography.Text>
-          try to use <Typography.Text keyboard>command + r</Typography.Text> to refresh page.
+          try to use <Typography.Text keyboard>command + r</Typography.Text> to
+          refresh page.
         </Typography.Text>
         {process.env.NODE_ENV === 'development' ? (
           <Typography.Text>
-            in development, you need to run <Typography.Text keyboard>emo run build:analysis</Typography.Text> to make
-            sure the mock data has been generated.
+            in development, you need to run{' '}
+            <Typography.Text keyboard>emo run build:analysis</Typography.Text>{' '}
+            to make sure the mock data has been generated.
           </Typography.Text>
         ) : null}
         <Divider />
@@ -40,8 +63,7 @@ const App: React.FC = (): React.ReactElement => {
           <Typography.Text style={{ fontSize: 16 }}>
             you can
             <Typography.Text strong style={{ fontSize: 'inherit' }}>
-              {' '}
-              upload a file{' '}
+              upload a file
             </Typography.Text>
             in the area below to analyze your project.
           </Typography.Text>
@@ -50,12 +72,12 @@ const App: React.FC = (): React.ReactElement => {
         <Divider />
         {demoUrl ? (
           <Typography.Text style={{ fontSize: 16 }}>
-            or you can open the{' '}
+            or you can open the
             <Typography.Text strong style={{ fontSize: 'inherit' }}>
               <a href={demoUrl} target="_blank" rel="noreferrer">
                 demo
               </a>
-            </Typography.Text>{' '}
+            </Typography.Text>
             to get started with the Rsdoctor.
           </Typography.Text>
         ) : null}
@@ -91,7 +113,10 @@ const App: React.FC = (): React.ReactElement => {
               <ConfigProvider
                 locale={getLocale(v.locale)}
                 theme={{
-                  algorithm: theme === Theme.Dark ? te.darkAlgorithm : te.defaultAlgorithm,
+                  algorithm:
+                    theme === Theme.Dark
+                      ? te.darkAlgorithm
+                      : te.defaultAlgorithm,
                 }}
               >
                 <Layout>
@@ -115,13 +140,19 @@ const App: React.FC = (): React.ReactElement => {
                           status="error"
                           title="Sorry, something went wrong."
                           extra={
-                            <Button type="primary" onClick={resetErrorBoundary} loading={state === PageState.Pending}>
+                            <Button
+                              type="primary"
+                              onClick={resetErrorBoundary}
+                              loading={state === PageState.Pending}
+                            >
                               Reload
                             </Button>
                           }
                         >
                           <Typography.Paragraph>
-                            <Typography.Title level={3}>Error Stack</Typography.Title>
+                            <Typography.Title level={3}>
+                              Error Stack
+                            </Typography.Title>
                             <pre>{error.stack || error.message}</pre>
                           </Typography.Paragraph>
                         </Result>
