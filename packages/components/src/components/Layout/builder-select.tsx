@@ -1,12 +1,15 @@
-import { Select, Divider, Typography } from 'antd';
+import { Select, Divider, Typography, Space } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { Manifest } from '@rsdoctor/types';
-import Icon from '../../common/imgs/connection-point.svg';
+import TotalSizeSvg from '../../common/svg/total-size.svg';
 import { fetchManifest, changeOrigin } from '../../utils';
+import Icon from '@ant-design/icons';
 
 export const BuilderSelect: React.FC = () => {
   const [buildName, setBuildName] = useState('');
-  const [series, setSeries] = useState<Manifest.RsdoctorManifestSeriesData[]>([]);
+  const [series, setSeries] = useState<Manifest.RsdoctorManifestSeriesData[]>(
+    [],
+  );
 
   useEffect(() => {
     fetchManifest().then(({ name, series }) => {
@@ -27,31 +30,37 @@ export const BuilderSelect: React.FC = () => {
   return (
     <>
       <Divider type="vertical" style={{ margin: '0 24px' }} />
-      <img src={Icon} style={{ marginRight: 6, height: 16 }} />
-      <Typography>Compiler</Typography>
-      <Select
-        className="builder-selector"
-        defaultValue={buildName}
-        bordered={false}
-        style={{ minWidth: 100 }}
-        onChange={(val) => {
-          const item = series.find((item) => item.name === val);
+      <Space>
+        <Icon style={{ fontSize: '18px' }} component={TotalSizeSvg} />
+        <Typography>Compiler</Typography>
+        <Select
+          className="builder-selector"
+          defaultValue={buildName}
+          bordered={false}
+          style={{ minWidth: 100 }}
+          onChange={(val) => {
+            const item = series.find((item) => item.name === val);
 
-          if (item) {
-            if (item.origin) {
-              location.href = changeOrigin(item.origin);
-            } else {
-              console.error('No RsdoctorManifestSeriesData.origin')
+            if (item) {
+              if (item.origin) {
+                location.href = changeOrigin(item.origin);
+              } else {
+                console.error('No RsdoctorManifestSeriesData.origin');
+              }
             }
-          }
-        }}
-      >
-        {series.map((item, i) => (
-          <Select.Option key={i} value={item.name} className="builder-selector-option-item">
-            {item.name}
-          </Select.Option>
-        ))}
-      </Select>
+          }}
+        >
+          {series.map((item, i) => (
+            <Select.Option
+              key={i}
+              value={item.name}
+              className="builder-selector-option-item"
+            >
+              {item.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Space>
     </>
   );
 };
