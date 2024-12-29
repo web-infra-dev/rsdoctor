@@ -12,13 +12,19 @@ interface DiffViewerProps {
   editorProps?: DiffEditorProps;
 }
 
-export const DiffViewer: React.FC<DiffViewerProps> = ({ before, after, filepath, className, editorProps }) => {
+export const DiffViewer: React.FC<DiffViewerProps> = ({
+  before,
+  after,
+  filepath,
+  className,
+  editorProps,
+}) => {
   return (
     <DiffEditor
       className={className}
       originalLanguage={getOriginalLanguage(filepath)}
       modifiedLanguage={getModifiedLanguage(filepath)}
-      theme="vs-dark"
+      theme="vs-light"
       original={before}
       modified={after}
       width="100%"

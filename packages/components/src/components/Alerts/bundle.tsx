@@ -49,6 +49,10 @@ export const BundleAlertsBase: React.FC<BundleAlertsProps> = ({
             colorInfoBorder: 'none',
           },
         },
+        token: {
+          padding: 16,
+          colorText: 'rgba(0, 0, 0, 0.85)',
+        },
       }}
     >
       <BundleAlert
