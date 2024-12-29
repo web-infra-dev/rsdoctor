@@ -1,9 +1,7 @@
-import { ClockCircleOutlined } from '@ant-design/icons';
+import { ClockCircleTwoTone } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
 import {
-  Badge,
-  Button,
   Col,
   Divider,
   Empty,
@@ -14,11 +12,14 @@ import {
   Tooltip,
   Typography,
   Tabs,
+  List,
 } from 'antd';
-import type { EllipsisConfig } from 'antd/lib/typography/Base';
-import type { TextProps } from 'antd/lib/typography/Text';
 import dayjs from 'dayjs';
 import { PropsWithChildren, useCallback, useState } from 'react';
+
+import StepIcon from 'src/common/svg/loader/step.svg';
+import InputIcon from 'src/common/svg/loader/input.svg';
+import OutputIcon from 'src/common/svg/loader/output.svg';
 import { Size } from '../../constants';
 import {
   beautifyPath,
@@ -30,44 +31,13 @@ import { Card } from '../Card';
 import { DiffViewer } from '../CodeViewer';
 import { CodeOpener } from '../Opener';
 import { Title } from '../Title';
+import styles from './Analysis/style.module.scss';
 
 interface LoaderExecutionsProps {
   cwd: string;
   data: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileDetails>;
   index?: number;
 }
-
-const LoaderInfoItem = ({
-  label,
-  value,
-  ellipsis = false,
-  ...textProps
-}: {
-  label: string;
-  value: string | JSX.Element;
-  ellipsis?: EllipsisConfig;
-} & TextProps): JSX.Element => {
-  return (
-    <Row>
-      <Col span={6}>
-        <Space>
-          <Badge status="processing" />
-          <div style={{ width: 180 }}>
-            <Typography.Text strong code>
-              {label}
-            </Typography.Text>
-          </div>
-          <Divider type="vertical" />
-        </Space>
-      </Col>
-      <Col span={18}>
-        <Typography.Paragraph ellipsis={ellipsis} strong {...textProps}>
-          {value}
-        </Typography.Paragraph>
-      </Col>
-    </Row>
-  );
-};
 
 const LoaderPropsItem = ({
   loader,
@@ -85,51 +55,61 @@ const LoaderPropsItem = ({
       title={'Loader Details'}
       style={{ border: 'none' }}
       extra={
-        <Tag icon={<ClockCircleOutlined />} color="default">
+        <Tag icon={<ClockCircleTwoTone />} color="default">
           {dayjs(loader.startAt).format('YYYY-MM-DD HH:mm:ss')}
         </Tag>
       }
     >
       {loader.isPitch ? <Typography.Text code>pitch</Typography.Text> : null}
-      <Space
-        direction="vertical"
-        style={{ padding: Size.BasePadding, wordBreak: 'break-all' }}
-      >
-        <LoaderInfoItem
-          label="file path"
-          value={beautifyPath(resource.path, cwd)}
-          code
-        />
-        <LoaderInfoItem
-          label="resource path"
-          value={<CodeOpener cwd={cwd} url={resource.path} loc="" disabled />}
-        />
-        <LoaderInfoItem
-          label="resource query"
-          value={resource.queryRaw || '-'}
-        />
-        <LoaderInfoItem
-          label="duration"
-          value={formatCosts(loader.costs)}
-          mark
-        />
-        <LoaderInfoItem label="loader name" value={loader.loader} code />
-        <LoaderInfoItem label="loader index" value={`${loader.loaderIndex}`} />
-        <LoaderInfoItem
-          label="loader path"
-          value={<CodeOpener cwd={cwd} url={loader.path} loc="" disabled />}
-        />
-        <LoaderInfoItem
-          label="options"
-          value={JSON.stringify(loader.options || '-')}
-          copyable
-          ellipsis={{
-            rows: 2,
-            expandable: true,
-            symbol: 'more',
-          }}
-        />
-      </Space>
+
+      <List size="large" bordered>
+        <List.Item>
+          <Typography.Text strong>{'File Path'}</Typography.Text>
+          <div>{beautifyPath(resource.path, cwd)}</div>
+        </List.Item>
+        <List.Item>
+          <Typography.Text strong>{'Resource Path'}</Typography.Text>
+          <CodeOpener cwd={cwd} url={resource.path} loc="" disabled />
+        </List.Item>
+        <List.Item>
+          <Typography.Text strong>{'Resource Query'}</Typography.Text>
+          <div>{resource.queryRaw || '-'}</div>
+        </List.Item>
+        <List.Item>
+          <Typography.Text strong>{'Duration'}</Typography.Text>
+          <div>{formatCosts(loader.costs)}</div>
+        </List.Item>
+        <List.Item>
+          <Typography.Text strong>{'Loader'}</Typography.Text>
+          <div>
+            <Typography.Text code>{loader.loader}</Typography.Text>
+          </div>
+        </List.Item>
+        <List.Item>
+          <Typography.Text strong>{'Loader Index'}</Typography.Text>
+          <div>{`${loader.loaderIndex}`}</div>
+        </List.Item>
+        <List.Item>
+          <Typography.Text strong>{'Loader Path'}</Typography.Text>
+          <CodeOpener cwd={cwd} url={loader.path} loc="" disabled />
+        </List.Item>
+        <List.Item>
+          <div style={{ width: 180 }}>
+            <Typography.Text strong>{'Options'}</Typography.Text>
+          </div>
+          <Divider type="vertical" />
+          <Typography.Paragraph
+            ellipsis={{
+              rows: 2,
+              expandable: true,
+              symbol: 'more',
+            }}
+            copyable
+          >
+            {JSON.stringify(loader.options || '-')}
+          </Typography.Paragraph>
+        </List.Item>
+      </List>
     </Card>
   );
 };
@@ -154,7 +134,7 @@ export const LoaderExecutions = ({
   }, []);
 
   return (
-    <Row style={{ height: '100%' }}>
+    <Row className={styles.executions} style={{ height: '100%' }}>
       <Col
         span={leftSpan}
         style={{
@@ -167,6 +147,7 @@ export const LoaderExecutions = ({
           <Timeline mode="left" style={{ marginTop: Size.BasePadding }}>
             {loaders.map((e, i, arr) => {
               const { loader, isPitch } = e;
+              const costs = formatCosts(e.costs);
               return (
                 <Timeline.Item
                   dot={
@@ -175,43 +156,45 @@ export const LoaderExecutions = ({
                         pitch
                       </Tag>
                     ) : (
-                      <ClockCircleOutlined />
+                      <ClockCircleTwoTone />
                     )
                   }
                   style={{ paddingBottom: 10, textAlign: 'center' }}
                   key={i}
                 >
                   <Row align="middle" justify="space-between" gutter={[0, 10]}>
-                    <Col span={24}>
+                    <Col span={24} className={styles.timeline}>
                       <Tooltip title={loader} trigger="hover">
-                        <Button
-                          type={i === currentIndex ? 'primary' : 'default'}
-                          block
+                        <div
+                          className={`${styles.box} ${currentIndex === i ? styles.selected : ''}`}
                           onClick={() => {
                             setCurrentIndex(i);
                           }}
                           style={{ textAlign: 'left' }}
                         >
-                          <Typography.Text
-                            ellipsis
-                            style={{ color: 'inherit' }}
-                          >
+                          <div>
+                            <Typography.Text style={{ color: '#000' }}>
+                              {costs.match(/[0-9]+/g)}
+                            </Typography.Text>{' '}
                             <Typography.Text
-                              strong
-                              style={{ color: 'inherit' }}
+                              style={{ color: 'rgba(0,0,0,0.45)' }}
                             >
-                              {formatCosts(e.costs)}
+                              {costs.match(/[a-zA-Z]+/g)}
                             </Typography.Text>
-                            <Divider type="vertical" />
+                          </div>
+                          <Typography.Text
+                            style={{ color: 'rgba(0,0,0,0.65)' }}
+                            className={styles.loader}
+                          >
                             {loader}
                           </Typography.Text>
-                        </Button>
+                        </div>
                       </Tooltip>
                     </Col>
                   </Row>
                   {i === arr.length - 1 ? null : (
                     <div style={{ paddingTop: 10 }}>
-                      <Typography.Text>⬇️</Typography.Text>
+                      <StepIcon />
                     </div>
                   )}
                 </Timeline.Item>
@@ -257,7 +240,7 @@ export const LoaderExecutions = ({
                       </div>
                       <div style={{ height: '90%' }}>
                         <Editor
-                          theme="vs-dark"
+                          theme="vs"
                           options={{
                             readOnly: true,
                             domReadOnly: true,
@@ -287,7 +270,7 @@ export const LoaderExecutions = ({
                         loader.result ? (
                           <div style={{ height: '90%' }}>
                             <Editor
-                              theme="vs-dark"
+                              theme="vs"
                               options={{
                                 readOnly: true,
                                 domReadOnly: true,
@@ -315,7 +298,10 @@ export const LoaderExecutions = ({
                                 padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
                               }}
                             >
-                              <Typography.Text strong>Input</Typography.Text>
+                              <Space align="center" className={styles.space}>
+                                <InputIcon />
+                                <Typography.Text strong>Input</Typography.Text>
+                              </Space>
                             </Col>
                             <Col
                               span={12}
@@ -323,7 +309,10 @@ export const LoaderExecutions = ({
                                 padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
                               }}
                             >
-                              <Typography.Text strong>Output</Typography.Text>
+                              <Space align="center" className={styles.space}>
+                                <OutputIcon />
+                                <Typography.Text strong>Output</Typography.Text>
+                              </Space>
                             </Col>
                           </Row>
                           <div style={{ height: '40rem' }}>

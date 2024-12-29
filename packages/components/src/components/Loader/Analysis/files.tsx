@@ -12,9 +12,12 @@ import {
   Table,
   Tooltip,
   Typography,
+  List,
+  Popover,
 } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
+import styles from './style.module.scss';
 import { ServerAPIProvider } from '../../Manifest';
 import { drawerWidth, Size } from '../../../constants';
 import {
@@ -28,6 +31,8 @@ import {
 import { LoaderExecutions } from '../executions';
 import { FileTree } from '../../FileTree';
 import { Keyword } from '../../Keyword';
+
+const ADDITION_LOADER_NUMBER = 3;
 
 export const LoaderFiles: React.FC<{
   filetree: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileTree>;
@@ -76,20 +81,42 @@ export const LoaderFiles: React.FC<{
       cwd,
       fileTitle(file, basename) {
         const { loaders, layer } = filetree.find((e) => e.path === file)!;
+        const additionalLoaders: (Pick<
+          SDK.LoaderTransformData,
+          'path' | 'loader' | 'errors'
+        > & { costs: number })[] = [];
+        loaders.forEach(
+          (l, i) => i > ADDITION_LOADER_NUMBER && additionalLoaders.push(l),
+        );
+
         return (
           <Space
-            style={{ wordBreak: 'break-all' }}
+            style={{ wordBreak: 'break-all', height: 40 }}
             onClick={() => {
               setLoaderIndex(0);
               setResourcePath(file);
               setDrawerVisible(true);
             }}
           >
-            <Keyword
-              text={basename.replace(/\[.*?\]/g, '')}
-              keyword={props.filename}
-            />
-
+            <div
+              className={styles.box}
+              style={{
+                width:
+                  window.innerWidth < 1500
+                    ? window.innerWidth * 0.3
+                    : window.innerWidth * 0.5,
+              }}
+            >
+              <div className={styles.keywords}>
+                <Keyword
+                  text={basename.replace(/\[.*?\]/g, '')}
+                  keyword={props.filename}
+                />
+              </div>
+              <div className={styles.dividerDiv}>
+                <Divider className={styles.divider} dashed />
+              </div>
+            </div>
             {layer ? (
               <Tag color="cyan" bordered={false}>
                 {layer}
@@ -97,39 +124,90 @@ export const LoaderFiles: React.FC<{
             ) : (
               <></>
             )}
-            {loaders.map((e, i) => {
+            {loaders.slice(0, ADDITION_LOADER_NUMBER).map((e, i) => {
               const isError = e.errors && e.errors.length;
               const key = `${file}_${e.loader}_${i}`;
-              return (
-                <Tooltip title={e.path} key={key}>
-                  <Typography.Text
-                    code
-                    style={{ color: isError ? '#f50' : 'inherit' }}
-                    onClick={(ev) => {
-                      ev.stopPropagation();
-                      setResourcePath(file);
-                      setLoaderIndex(i);
-                      setDrawerVisible(true);
-                    }}
-                  >
-                    <Typography.Text
-                      style={{ maxWidth: 135, color: 'inherit' }}
-                      ellipsis
-                    >
-                      {e.loader}
-                    </Typography.Text>
-                    <Divider type="vertical" />
-                    {isError ? (
-                      <CloseCircleOutlined />
-                    ) : (
-                      <Typography.Text strong>
-                        {formatCosts(e.costs)}
+              if (i <= ADDITION_LOADER_NUMBER) {
+                return (
+                  <Tooltip title={e.path} key={key}>
+                    <div style={{ paddingBottom: 5 }}>
+                      <Typography.Text
+                        className={styles.textBox}
+                        style={{ color: isError ? '#f50' : 'inherit' }}
+                        onClick={(ev) => {
+                          ev.stopPropagation();
+                          setResourcePath(file);
+                          setLoaderIndex(i);
+                          setDrawerVisible(true);
+                        }}
+                      >
+                        <Typography.Text className={styles.text} ellipsis>
+                          {e.loader.match(/([^/]+-loader)/g)?.[0] || e.loader}
+                        </Typography.Text>
+                        <Divider type="vertical" />
+                        {isError ? (
+                          <CloseCircleOutlined />
+                        ) : (
+                          <Typography.Text className={styles.text}>
+                            {formatCosts(e.costs)}
+                          </Typography.Text>
+                        )}
                       </Typography.Text>
-                    )}
-                  </Typography.Text>
-                </Tooltip>
-              );
+                    </div>
+                  </Tooltip>
+                );
+              }
             })}
+            {additionalLoaders?.length ? (
+              <Popover
+                content={
+                  <List
+                    dataSource={additionalLoaders}
+                    renderItem={(e, i) => {
+                      const isError = e.errors && e.errors.length;
+                      const key = `${file}_${e.loader}_${i + ADDITION_LOADER_NUMBER}`;
+
+                      return (
+                        <List.Item>
+                          <Tooltip title={e.path} key={key}>
+                            <div style={{ paddingBottom: 5 }}>
+                              <Typography.Text
+                                className={styles.textBox}
+                                style={{ color: isError ? '#f50' : 'inherit' }}
+                                onClick={(ev) => {
+                                  ev.stopPropagation();
+                                  setResourcePath(file);
+                                  setLoaderIndex(i);
+                                  setDrawerVisible(true);
+                                }}
+                              >
+                                <Typography.Text
+                                  className={styles.text}
+                                  ellipsis
+                                >
+                                  {e.loader.match(/([^/]+-loader)/g)?.[0] ||
+                                    e.loader}
+                                </Typography.Text>
+                                <Divider type="vertical" />
+                                <Typography.Text className={styles.text}>
+                                  {formatCosts(e.costs)}
+                                </Typography.Text>
+                              </Typography.Text>
+                            </div>
+                          </Tooltip>
+                        </List.Item>
+                      );
+                    }}
+                  />
+                }
+              >
+                <div className={styles.textBox}>
+                  <Typography.Text>···</Typography.Text>
+                </div>
+              </Popover>
+            ) : (
+              <></>
+            )}
           </Space>
         );
       },
@@ -141,14 +219,29 @@ export const LoaderFiles: React.FC<{
 
   return (
     <Row style={{ width: '100%' }} gutter={Size.BasePadding}>
-      <Col span={14}>
+      <Col span={24}>
         <Card
           title={
-            <Typography.Text strong>
-              Total Files: {filteredFiles.length}
-            </Typography.Text>
+            <Space>
+              <Typography.Text strong>Files</Typography.Text>
+              <Typography.Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: 400,
+                  color: '#1C1F2399',
+                  opacity: 0.6,
+                }}
+              >
+                Total Files: {filteredFiles.length}
+              </Typography.Text>
+            </Space>
           }
-          bodyStyle={{ overflow: 'scroll', maxHeight, height: '40rem' }}
+          bodyStyle={{
+            overflow: 'scroll',
+            maxHeight,
+            height: '40rem',
+            padding: 14,
+          }}
         >
           <FileTree
             defaultExpandedKeys={mapFileKey(
@@ -195,87 +288,99 @@ export const LoaderFiles: React.FC<{
         </Card>
       </Col>
 
-      {selectedNode ? (
-        <Col span={10}>
-          <Card
-            title={
-              <Tooltip
-                title={React.cloneElement(
-                  selectedNode.title as React.ReactElement,
-                  { style: { color: '#fff' } },
-                )}
+      <Drawer
+        open={!!selectedNode}
+        onClose={() => setSelectedNode(null)}
+        maskClosable
+        width={drawerWidth}
+        zIndex={999}
+        bodyStyle={{ padding: 0 }}
+      >
+        {selectedNode && (
+          <Row>
+            <Col span={24}>
+              <Card
+                title={
+                  <Tooltip
+                    title={React.cloneElement(
+                      selectedNode.title as React.ReactElement,
+                      { style: { color: '#fff' } },
+                    )}
+                  >
+                    <Typography.Text>
+                      {`Statistics of`}
+                      {selectedNode.title as React.ReactNode}
+                    </Typography.Text>
+                  </Tooltip>
+                }
               >
-                <Typography.Text>
-                  Statistics of "{selectedNode.title as React.ReactNode}"
-                </Typography.Text>
-              </Tooltip>
-            }
-          >
-            <ServerAPIProvider
-              api={SDK.ServerAPI.API.GetLoaderFolderStatistics}
-              body={{ folder: selectedNode[inlinedResourcePathKey] }}
-            >
-              {(tableData) => (
-                <Table
-                  style={{
-                    width: '100%',
-                    maxHeight,
-                    height: '40rem',
-                    overflowY: 'scroll',
-                    wordBreak: 'break-all',
-                  }}
-                  pagination={false}
-                  bordered
-                  rowKey={(e) => e.loader}
-                  columns={[
-                    {
-                      title: 'Loader Name',
-                      dataIndex: 'loader',
-                    },
-                    {
-                      title: 'Files',
-                      dataIndex: 'files',
-                    },
-                    {
-                      title: 'Total Duration',
-                      dataIndex: 'costs',
-                      render: (v) => (
-                        <Typography.Text strong>
-                          {formatCosts(v)}
-                        </Typography.Text>
-                      ),
-                      sorter: (a, b) => a.costs - b.costs,
-                      defaultSortOrder: 'descend',
-                      sortDirections: ['descend', 'ascend'],
-                    },
-                  ]}
-                  dataSource={tableData!}
-                  footer={() => (
-                    <Descriptions
-                      title="Total"
+                <ServerAPIProvider
+                  api={SDK.ServerAPI.API.GetLoaderFolderStatistics}
+                  body={{ folder: selectedNode[inlinedResourcePathKey] }}
+                >
+                  {(tableData) => (
+                    <Table
+                      style={{
+                        width: '100%',
+                        maxHeight,
+                        height: '40rem',
+                        overflowY: 'scroll',
+                        wordBreak: 'break-all',
+                      }}
+                      pagination={false}
                       bordered
-                      layout="vertical"
-                      size="small"
-                    >
-                      <Descriptions.Item label="loaders">
-                        {tableData!.length}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="files">
-                        {sumBy(tableData, (e) => e.files)}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="duration">
-                        <Typography.Text strong>
-                          {formatCosts(sumBy(tableData, (e) => e.costs))}
-                        </Typography.Text>
-                      </Descriptions.Item>
-                    </Descriptions>
+                      rowKey={(e) => e.loader}
+                      columns={[
+                        {
+                          title: 'Loader Name',
+                          dataIndex: 'loader',
+                        },
+                        {
+                          title: 'Files',
+                          dataIndex: 'files',
+                        },
+                        {
+                          title: 'Total Duration',
+                          dataIndex: 'costs',
+                          render: (v) => (
+                            <Typography.Text strong>
+                              {formatCosts(v)}
+                            </Typography.Text>
+                          ),
+                          sorter: (a, b) => a.costs - b.costs,
+                          defaultSortOrder: 'descend',
+                          sortDirections: ['descend', 'ascend'],
+                        },
+                      ]}
+                      dataSource={tableData!}
+                      footer={() => (
+                        <Descriptions
+                          title="Total"
+                          bordered
+                          layout="vertical"
+                          size="small"
+                        >
+                          <Descriptions.Item label="loaders">
+                            {tableData!.length}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="files">
+                            {sumBy(tableData, (e) => e.files)}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="duration">
+                            <Typography.Text strong>
+                              {formatCosts(sumBy(tableData, (e) => e.costs))}
+                            </Typography.Text>
+                          </Descriptions.Item>
+                        </Descriptions>
+                      )}
+                    />
                   )}
-                />
-              )}
-            </ServerAPIProvider>
-          </Card>
-        </Col>
-      ) : null}
+                </ServerAPIProvider>
+              </Card>
+            </Col>
+          </Row>
+        )}
+      </Drawer>
     </Row>
   );
 };

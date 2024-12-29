@@ -19,47 +19,49 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
       height: 24px;
       margin: 0;
       padding: 0 4px;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.85);
       box-sizing: border-box;
       text-decoration: none;
       vertical-align: top;
       cursor: pointer;
     }
 
-  &-child-tree {
-    display: none;
-    &-open {
-      display: block;
+    &-child-tree {
+      display: none;
+      &-open {
+        display: block;
+      }
     }
-  }
 
-  &-treenode-disabled 
-    > span:not(.#{$treePrefixCls}-switcher),
+    &-treenode-disabled > span:not(.#{$treePrefixCls}-switcher),
     > a,
     > a span {
       color: #767676;
       cursor: not-allowed;
-  }
+    }
 
-  &-treenode-selected {
-    background: rgba(5, 145, 255, 0.3);
-    border-radius: 4px;
-  // &-node-selected
-  }
+    &-treenode-selected {
+      background: rgba(5, 145, 255, 0.3);
+      border-radius: 4px;
+      // &-node-selected
+    }
 
-  &-title {
-    display: inline-block;
-  }
+    &-title {
+      display: inline-block;
+    }
 
-  &-indent {
-    display: inline-block;
-    height: 0;
-    vertical-align: bottom;
+    &-indent {
+      display: inline-block;
+      height: 0;
+      vertical-align: bottom;
+    }
+    &-indent-unit {
+      display: inline-block;
+      width: 14px;
+    }
   }
-  &-indent-unit {
-    display: inline-block;
-    width: 14px;
-  }
-}
 }
 
 .file-tree-switcher-arrow {
@@ -69,4 +71,10 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
   &-expand {
     transform: rotate(90deg);
   }
+}
+
+.file-icon {
+  display: inline-block;
+  padding: 2px 0;
+  margin-left: 7px;
 }
