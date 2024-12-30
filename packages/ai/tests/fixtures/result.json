@@ -1,0 +1,83 @@
+[
+  {
+    "cacheGroups": [
+      {
+        "name": "byted-lightcharts",
+        "test": "[\\\\/]node_modules[\\\\/](?:@byted[\\\\+]lightcharts)[\\\\/]"
+      },
+      {
+        "name": "gulux-bam-ad-report",
+        "test": "[\\\\/]node_modules[\\\\/](?:@gulux-bam[\\\\+]ad_report_user_conf)[\\\\/]"
+      },
+      {
+        "name": "xgplayer",
+        "test": "[\\\\/]node_modules[\\\\/](?:xgplayer)[\\\\/]"
+      }
+    ],
+    "name": "static/js/6842.b671f8a9.js"
+  },
+  {
+    "cacheGroups": [
+      {
+        "name": "ad-local-validator",
+        "test": "/[\\\\/]node_modules[\\\\/](@ad-local)[\\\\/]/"
+      },
+      {
+        "name": "lodash-es",
+        "test": "/[\\\\/]node_modules[\\\\/](lodash-es)[\\\\/]/"
+      }
+    ],
+    "name": "static/js/3812.84416a11.js"
+  },
+  {
+    "cacheGroups": [],
+    "name": "performance_sdk"
+  },
+  {
+    "cacheGroups": [
+      {
+        "name": "ad-local-packages",
+        "test": "[\\\\/]node_modules[\\\\/](@ad-local.*?)[\\\\/]"
+      },
+      {
+        "name": "tanstack-packages",
+        "test": "[\\\\/]node_modules[\\\\/](@tanstack.*?)[\\\\/]"
+      }
+    ],
+    "name": "static/css/9179.dc5af5af.css"
+  },
+  {
+    "cacheGroups": [
+      {
+        "name": "tanstack-packages",
+        "test": "[\\\\/]node_modules[\\\\/](@tanstack)[\\\\/]"
+      }
+    ],
+    "name": "tools_ui"
+  },
+  {
+    "cacheGroups": [
+      {
+        "name": "tanstack-packages",
+        "test": "[\\\\/]node_modules[\\\\/](@tanstack)[\\\\/]"
+      },
+      {
+        "name": "ad-local-packages",
+        "test": "[\\\\/]node_modules[\\\\/](@ad-local)[\\\\/]"
+      },
+      {
+        "name": "lodash-es-packages",
+        "test": "[\\\\/]node_modules[\\\\/](lodash-es)[\\\\/]"
+      },
+      {
+        "name": "ocean-uikit-packages",
+        "test": "[\\\\/]node_modules[\\\\/](@ocean-uikit)[\\\\/]"
+      },
+      {
+        "name": "byted-packages",
+        "test": "[\\\\/]node_modules[\\\\/](@byted)[\\\\/]"
+      }
+    ],
+    "name": "ad"
+  }
+]

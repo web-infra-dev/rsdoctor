@@ -10,7 +10,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": ["*.test.ts", "*.js", "*.tsx"],
+    "ignore": ["*.test.ts", "*.js", "*.tsx", "*.cjs"],
     "ignoreUnknown": true
   },
   "linter": {
