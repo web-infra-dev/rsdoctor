@@ -8,10 +8,9 @@ import { TextDrawer } from '../TextDrawer';
 import { getFiles } from '../Overall';
 import { ServerAPIProvider } from '../Manifest';
 
-import { SDK } from '@rsdoctor/types';
+import { SDK, Client } from '@rsdoctor/types';
 
 import styles from './size.module.scss';
-import { RsdoctorClientAssetsSummary } from '@rsdoctor/types/dist/client';
 
 const { DirectoryTree } = Tree;
 const height = 100;
@@ -44,7 +43,7 @@ export const SizeCard: React.FC<SizeCardProps> = ({
   type,
 }) => {
   const fileType =
-    type.toLocaleLowerCase() as keyof RsdoctorClientAssetsSummary;
+    type.toLocaleLowerCase() as keyof Client.RsdoctorClientAssetsSummary;
   const sum = useMemo(() => {
     return sumBy(files, (e) => e.size);
   }, [files]);
@@ -74,7 +73,7 @@ export const SizeCard: React.FC<SizeCardProps> = ({
       body={{ withFileContent: false }}
     >
       {(res) => {
-        const { treeData } = getFiles(res[fileType].total, 'js');
+        const { treeData } = getFiles(res[fileType].total, fileType);
         return (
           <Space style={{ height }} align="center">
             {showProgress ? (

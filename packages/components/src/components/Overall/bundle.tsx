@@ -35,7 +35,7 @@ const { DirectoryTree } = Tree;
 
 export const getFiles = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
-  fileType: 'js' | 'css' | 'image' | 'html' | 'unknown',
+  fileType: keyof Client.RsdoctorClientAssetsSummary,
 ) => {
   let files: Array<{
     fileName: string;
@@ -65,9 +65,11 @@ export const getFiles = (
     image: <Icon className={styles.icon} component={ImageSvg} />,
     html: <Icon className={styles.icon} component={HtmlSvg} />,
     unknown: <Icon className={styles.icon} component={UnknownSvg} />,
-    imgs: <Icon className={styles.icon} component={UnknownSvg} />,
+    imgs: <Icon className={styles.icon} component={ImageSvg} />,
     fonts: <Icon className={styles.icon} component={UnknownSvg} />,
     media: <Icon className={styles.icon} component={UnknownSvg} />,
+    all: <Icon className={styles.icon} component={UnknownSvg} />,
+    others: <Icon className={styles.icon} component={UnknownSvg} />,
   };
   const treeData: TreeDataNode[] = [];
   files.forEach((file) => {
@@ -109,7 +111,7 @@ export const getFiles = (
 
 export const getFilesWithDrawer = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
-  fileType: 'js' | 'css' | 'image' | 'html' | 'unknown',
+  fileType: keyof Client.RsdoctorClientAssetsSummary,
 ): JSX.Element => {
   const { treeData } = getFiles(data, fileType);
 
@@ -176,7 +178,7 @@ const BundleDescriptions = ({
       label: 'Font files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.fonts.total, 'unknown')}
+          {getFilesWithDrawer(res.fonts.total, 'others')}
         </span>
       ),
     },
@@ -190,11 +192,11 @@ const BundleDescriptions = ({
       ),
     },
     {
-      key: 'image-files-count',
-      label: 'Image files',
+      key: 'img-files-count',
+      label: 'Img files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.imgs.total, 'image')}
+          {getFilesWithDrawer(res.imgs.total, 'imgs')}
         </span>
       ),
     },
@@ -203,7 +205,7 @@ const BundleDescriptions = ({
       label: 'Media files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.media.total, 'unknown')}
+          {getFilesWithDrawer(res.media.total, 'others')}
         </span>
       ),
     },
@@ -260,8 +262,8 @@ const BundleDescriptions = ({
       ),
     },
     {
-      key: 'image-files-size',
-      label: 'Image size',
+      key: 'img-files-size',
+      label: 'Img size',
       children: (
         <>
           <span className={styles.description}>{imgSize}</span>

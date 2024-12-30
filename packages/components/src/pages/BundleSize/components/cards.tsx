@@ -172,7 +172,7 @@ export const BundleCards: React.FC<{
       body={{ withFileContent: false }}
     >
       {(res) => {
-        const { treeData } = getFiles(res['all'].total, 'js');
+        const { treeData } = getFiles(res['all'].total, 'all');
         return (
           <div className={styles.container}>
             <div className={styles.summary}>
