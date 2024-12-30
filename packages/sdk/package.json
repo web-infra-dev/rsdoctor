@@ -25,6 +25,7 @@
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
+    "@rsdoctor/ai": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "body-parser": "1.20.3",
     "cors": "2.8.5",
