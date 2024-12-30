@@ -1,0 +1,31 @@
+.dataContainer {
+  font-family: var(--font-family-code);
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 20px;
+    margin-bottom: 2px;
+    color: #000000a6;
+  }
+}
+
+.description {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #000000d9;
+}
+
+.percentContainer {
+  display: flex;
+  flex-direction: column;
+  .percentDescription {
+    font-family: var(--font-family-code);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 20px;
+  }
+}
