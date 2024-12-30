@@ -24,6 +24,12 @@ export default defineConfig({
                   limit: 1,
                 },
               ],
+              'ecma-version-check': [
+                'Warn',
+                {
+                  ecmaVersion: 3,
+                },
+              ],
             },
           },
           port: 9988,
@@ -35,5 +41,9 @@ export default defineConfig({
   output: {
     minify: false,
     filenameHash: false,
+    sourceMap: {
+      js: 'cheap-module-source-map',
+      css: true,
+    },
   },
 });

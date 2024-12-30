@@ -15,6 +15,7 @@ import { ServerAPIProvider } from '../Manifest';
 
 import './loader.scss';
 import './tooltips.scss';
+import { ChartTypes } from './constants';
 
 export const DoneChartContainer: React.FC<CommonChartProps> = ({
   summary,
@@ -57,7 +58,7 @@ export const DoneChartContainer: React.FC<CommonChartProps> = ({
               </Card>
               <Divider />
               <Card title={`Chart ${suffix}`}>
-                <CommonExecutionsChart plugins={res} />
+                <CommonExecutionsChart plugins={res} type={ChartTypes.Done} />
               </Card>
             </Space>
           ) : (

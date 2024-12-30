@@ -12,9 +12,21 @@ import styles from './ecma-version-check.module.scss';
 
 const { Text } = Typography;
 
-export const LinkRuleAlert: React.FC<LinkAlertProps> = ({ data }) => {
+export const ECMAVersionCheck: React.FC<LinkAlertProps> = ({ data }) => {
   return data.map((d) => {
-    const { code, link } = d;
+    const { code, link, error } = d;
+    const { source, output } = error || {};
+    const sourceMessage = source?.path
+      ? `${source?.path}:${source?.line}:${source?.column}`
+      : null;
+    const outputMessage = output?.path
+      ? `${output?.path}:${output?.line}:${output?.column}`
+      : `There's no source map for this error.Possible reasons are as follows:
+       1. It might come from a third-party library without source map.
+       2. If this is your business source code, source map should be enabled in your build config.
+      `;
+
+    console.log(d, 'ddddddddddd');
     const navigate = useRuleIndexNavigate(code, link);
     return (
       <div className={styles.container}>
@@ -23,10 +35,10 @@ export const LinkRuleAlert: React.FC<LinkAlertProps> = ({ data }) => {
           <div className={styles.box}>
             <Icon component={SourceSvg} />
             <Text
-              ellipsis={{ tooltip: 'source placeholder' }}
+              ellipsis={{ tooltip: sourceMessage }}
               className={styles.content}
             >
-              source placeholder
+              {sourceMessage}
             </Text>
           </div>
         </div>
@@ -35,10 +47,10 @@ export const LinkRuleAlert: React.FC<LinkAlertProps> = ({ data }) => {
           <div className={styles.box}>
             <Icon component={OutputSvg} />
             <Text
-              ellipsis={{ tooltip: 'output placeholder' }}
+              ellipsis={{ tooltip: outputMessage }}
               className={styles.content}
             >
-              output placeholder
+              {outputMessage}
             </Text>
           </div>
         </div>

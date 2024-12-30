@@ -1,7 +1,7 @@
 import { Typography, Tabs, Empty } from 'antd';
 
 import { Card } from '../Card';
-import { LinkRuleAlert } from '../Alert/ecma-version-check';
+import { ECMAVersionCheck } from '../Alert/ecma-version-check';
 import { Overview } from '../Overall/overview';
 import { AlertCollapse } from './collapse';
 import { CommonList } from './list';
@@ -28,8 +28,6 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   dataSource,
   extraData,
 }) => {
-  if (!dataSource.length) return null;
-
   const tabData: Array<{
     key: string;
     label: string;
@@ -71,7 +69,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
       />
     );
 
-    let children;
+    let children, description;
     switch (td.key) {
       case 'E1001':
         children = <AlertCollapse data={td.data} extraData={extraData} />;
@@ -83,7 +81,13 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
         children = <CommonList data={td.data} />;
         break;
       case 'E1004':
-        children = <LinkRuleAlert data={td.data} />;
+        description = (
+          <span>
+            No ECMA Version Check Rules were found. Please refer to
+            「https://rsdoctor.dev/guide/usage/rule-config」.
+          </span>
+        );
+        children = <ECMAVersionCheck data={td.data} />;
         break;
       default:
         children = null;
@@ -91,7 +95,9 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
     }
 
     if (!td.data.length) {
-      children = <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+      children = (
+        <Empty description={description} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      );
     }
 
     return {
@@ -106,8 +112,15 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   });
 
   return (
-    <Card title={title}>
-      <Tabs defaultActiveKey="E1001" items={tabItems} />
+    <Card title={title} style={{ width: '100%' }}>
+      {!dataSource.length ? (
+        <Empty
+          description={'No Bundle Alerts Data'}
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
+      ) : (
+        <Tabs defaultActiveKey="E1001" items={tabItems} />
+      )}
     </Card>
   );
 };

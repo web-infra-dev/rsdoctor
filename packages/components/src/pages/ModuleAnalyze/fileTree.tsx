@@ -86,7 +86,7 @@ export const ModuleFilesTree: React.FC<{
                 <Typography.Text code>
                   <ExpandOutlined />
                   {" Expand the node_modules's modules that was omitted... "}
-                </Typography.Text>{' '}
+                </Typography.Text>
                 <Typography.Text>{`: ${t('Expand Omitted')}`}</Typography.Text>
               </div>
               <div>

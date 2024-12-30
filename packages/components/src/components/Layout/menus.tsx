@@ -1,18 +1,18 @@
 import {
   ApiOutlined,
-  BarChartOutlined,
   FolderViewOutlined,
   MenuOutlined,
   MonitorOutlined,
   NodeIndexOutlined,
-  ToolOutlined,
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Menu, MenuProps, Typography } from 'antd';
+import { Menu, MenuProps } from 'antd';
 import { includes } from 'lodash-es';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import WebpackIcon from 'src/common/imgs/webpack.svg';
+import CompileIcon from './compile-icon.svg';
+import BundleSizeIcon from './bundle-size-icon.svg';
+import OverallIcon from './overall-icon.svg';
 import { Size } from '../../constants';
 import * as OverallConstants from '../../pages/Overall/constants';
 import { useI18n, hasBundle, hasCompile } from '../../utils';
@@ -41,18 +41,13 @@ const MenusBase: React.FC<{
   const iconStyle: React.CSSProperties = {
     fontSize: 16,
   };
-  const customIconStyle: React.CSSProperties = {
-    ...iconStyle,
-    transform: 'translateY(-2px)',
-  };
-
   const items: MenuProps['items'] = [];
 
   if (includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.Overall)) {
     items.push({
       label: t(OverallConstants.name),
       key: OverallConstants.route,
-      icon: <BarChartOutlined style={iconStyle} />,
+      icon: <OverallIcon />,
       children: [],
       onTitleClick(e) {
         navigate(e.key);
@@ -64,33 +59,23 @@ const MenusBase: React.FC<{
     items.push({
       label: t(CompileName),
       key: CompileName,
-      icon: <ToolOutlined style={iconStyle} />,
+      icon: <CompileIcon />,
       children: [
         includes(
           enableRoutes,
           Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
         ) && {
-          label: (
-            <Typography.Text style={{ marginRight: 8 }}>
-              {t(LoaderFiles.name)}
-            </Typography.Text>
-          ),
+          label: t(LoaderTimeline.name),
+          key: LoaderTimeline.route,
+          icon: <CompileIcon />,
+        },
+        includes(
+          enableRoutes,
+          Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+        ) && {
+          label: t(LoaderFiles.name),
           key: LoaderFiles.route,
-          icon: (
-            <img src={WebpackIcon} alt="" style={{ ...iconStyle, width: 16 }} />
-          ),
-          children: [
-            {
-              label: t(LoaderTimeline.name),
-              key: LoaderTimeline.route,
-              icon: <BarChartOutlined style={iconStyle} />,
-            },
-            {
-              label: t(LoaderFiles.name),
-              key: LoaderFiles.route,
-              icon: <MonitorOutlined style={iconStyle} />,
-            },
-          ],
+          icon: <MonitorOutlined style={iconStyle} />,
         },
         includes(
           enableRoutes,
@@ -116,7 +101,7 @@ const MenusBase: React.FC<{
     items.push({
       label: t(BundleSize.name),
       key: BundleSize.name,
-      icon: <span style={customIconStyle}>📦</span>,
+      icon: <BundleSizeIcon />,
       children: [
         includes(
           enableRoutes,

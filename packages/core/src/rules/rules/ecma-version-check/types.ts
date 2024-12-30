@@ -1,8 +1,3 @@
-import type { ECMAVersion } from '@rsdoctor/utils/ruleUtils';
+import type { PluginCheckSyntaxOptions } from '@rsbuild/plugin-check-syntax';
 
-export interface Config {
-  /** Check the ecma version */
-  highestVersion: ECMAVersion;
-  /** Js files that need to be ignored */
-  ignore: string[];
-}
+export interface Config extends PluginCheckSyntaxOptions {}

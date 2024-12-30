@@ -51,6 +51,7 @@
   ],
   "devDependencies": {
     "@ant-design/icons": "5.5.2",
+    "@rsbuild/plugin-check-syntax": "1.2.0-beta.1",
     "@monaco-editor/react": "4.6.0",
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
