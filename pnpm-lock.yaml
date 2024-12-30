@@ -1092,8 +1092,6 @@ importers:
         specifier: ^5.2.2
         version: 5.5.4
 
-  packages/utils/dist/esm: {}
-
   packages/webpack-plugin:
     dependencies:
       '@rsdoctor/core':
