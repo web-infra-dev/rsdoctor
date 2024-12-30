@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  background-color: #fff;
+  padding: 20px 0;
+  margin-bottom: 20px;
+
+  .chart {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.cardTitle {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 25px;
+
+  .title {
+    font-family: var(--font-family-code);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #000;
+  }
+}
