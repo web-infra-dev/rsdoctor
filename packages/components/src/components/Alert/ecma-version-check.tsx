@@ -26,7 +26,6 @@ export const ECMAVersionCheck: React.FC<LinkAlertProps> = ({ data }) => {
        2. If this is your business source code, source map should be enabled in your build config.
       `;
 
-    console.log(d, 'ddddddddddd');
     const navigate = useRuleIndexNavigate(code, link);
     return (
       <div className={styles.container}>
