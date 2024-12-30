@@ -32,10 +32,11 @@ import styles from './bundle.module.scss';
 type viewType = 'files' | 'size';
 
 const { DirectoryTree } = Tree;
-const getFilesWithDrawer = (
+
+export const getFiles = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
   fileType: 'js' | 'css' | 'image' | 'html' | 'unknown',
-): JSX.Element => {
+) => {
   let files: Array<{
     fileName: string;
     defaultDir: string;
@@ -64,6 +65,9 @@ const getFilesWithDrawer = (
     image: <Icon className={styles.icon} component={ImageSvg} />,
     html: <Icon className={styles.icon} component={HtmlSvg} />,
     unknown: <Icon className={styles.icon} component={UnknownSvg} />,
+    imgs: <Icon className={styles.icon} component={UnknownSvg} />,
+    fonts: <Icon className={styles.icon} component={UnknownSvg} />,
+    media: <Icon className={styles.icon} component={UnknownSvg} />,
   };
   const treeData: TreeDataNode[] = [];
   files.forEach((file) => {
@@ -97,6 +101,17 @@ const getFilesWithDrawer = (
       icon: iconMap[fileType],
     });
   });
+
+  return {
+    treeData,
+  };
+};
+
+export const getFilesWithDrawer = (
+  data: Client.RsdoctorClientAssetsSummary['all']['total'],
+  fileType: 'js' | 'css' | 'image' | 'html' | 'unknown',
+): JSX.Element => {
+  const { treeData } = getFiles(data, fileType);
 
   return (
     <>

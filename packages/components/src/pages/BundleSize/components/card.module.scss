@@ -1,18 +1,54 @@
 .container {
   display: flex;
+  align-items: center;
   background-color: #fff;
   padding: 20px 0;
   margin-bottom: 20px;
 
-  .chart {
+  .chartsContainer {
+    width: 100%;
     display: flex;
-    align-items: center;
+    justify-content: space-evenly;
+    .chart {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 20px;
+
+    .description {
+      font-family: var(--font-family-code);
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 32px;
+      margin-right: 5px;
+    }
+
+    .unit {
+      font-family: var(--font-family-code);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 32px;
+    }
+
+    .totalNumber {
+      font-family: var(--font-family-code);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
+    }
   }
 }
 
 .cardTitle {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
 
