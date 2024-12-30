@@ -28,8 +28,6 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   dataSource,
   extraData,
 }) => {
-  if (!dataSource.length) return null;
-
   const tabData: Array<{
     key: string;
     label: string;
@@ -114,8 +112,15 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   });
 
   return (
-    <Card title={title}>
-      <Tabs defaultActiveKey="E1001" items={tabItems} />
+    <Card title={title} style={{ width: '100%' }}>
+      {!dataSource.length ? (
+        <Empty
+          description={'No Bundle Alerts Data'}
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
+      ) : (
+        <Tabs defaultActiveKey="E1001" items={tabItems} />
+      )}
     </Card>
   );
 };
