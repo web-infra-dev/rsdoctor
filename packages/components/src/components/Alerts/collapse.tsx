@@ -125,7 +125,7 @@ export const AlertCollapse = (props: {
       label: (
         <LabelComponent
           title={name}
-          description={`${data.length} versions was found`}
+          description={`${packages.length} versions was found`}
           extra={
             <div className={styles.extraContainer}>
               <div className={styles.iconContainer}>
