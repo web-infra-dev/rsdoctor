@@ -15,7 +15,7 @@
     "vue": "^3.5.13"
   },
   "devDependencies": {
-    "@playwright/test": "1.33.0",
+    "@playwright/test": "1.49.1",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
