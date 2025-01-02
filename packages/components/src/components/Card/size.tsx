@@ -1,13 +1,19 @@
-import { ExceptionOutlined } from '@ant-design/icons';
-import { Empty, Progress, Space, Tag, Tooltip, Typography, theme } from 'antd';
+import { Empty, Progress, Space, Tag, Typography, Tree } from 'antd';
 import { sumBy } from 'lodash-es';
 import React, { useMemo } from 'react';
-import { createFileStructures, formatSize } from 'src/utils';
-import { FileTree } from '../FileTree';
-import { TextDrawer } from '../TextDrawer';
+import { RightOutlined } from '@ant-design/icons';
 
+import { createFileStructures, formatSize } from 'src/utils';
+import { TextDrawer } from '../TextDrawer';
+import { getFiles } from '../Overall';
+import { ServerAPIProvider } from '../Manifest';
+
+import { SDK, Client } from '@rsdoctor/types';
+
+import styles from './size.module.scss';
+
+const { DirectoryTree } = Tree;
 const height = 100;
-const { useToken } = theme;
 
 export interface SizeCardProps {
   files: {
@@ -23,14 +29,21 @@ export interface SizeCardProps {
    */
   showProgress?: boolean;
   tagBgColor: string;
+  type: string;
 }
 export interface bgColorType {
   bgColor: string;
   tagBgColor: string;
 }
 
-export const SizeCard: React.FC<SizeCardProps> = ({ files, total, showProgress = false, tagBgColor }) => {
-  const { token } = useToken()
+export const SizeCard: React.FC<SizeCardProps> = ({
+  files,
+  total,
+  showProgress = false,
+  type,
+}) => {
+  const fileType =
+    type.toLocaleLowerCase() as keyof Client.RsdoctorClientAssetsSummary;
   const sum = useMemo(() => {
     return sumBy(files, (e) => e.size);
   }, [files]);
@@ -51,58 +64,82 @@ export const SizeCard: React.FC<SizeCardProps> = ({ files, total, showProgress =
   }, [files]);
 
   if (fileStructures.length === 0) {
-    return (
-      <Space style={{ height, fontSize: 24 }} align="center">
-        <Tag bordered={false} color={tagBgColor}>
-          <Typography.Text style={{ fontSize: 14, color: token.colorWhite }}>
-              <Typography.Text style={{ color: token.colorWhite  }}> {0}</Typography.Text>
-              {` Files`}
-          </Typography.Text>
-        </Tag>
-      </Space>
-    );
+    return <Empty />;
   }
 
   return (
-    <Space style={{ height }} align="center">
-      {showProgress ? (
-        sum === 0 ?
-        <Empty />
-        :
-        <Progress
-          type="dashboard"
-          percent={+((sum / total) * 100).toFixed(2)}
-          strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
-          width={80}
-        />
-      ) : null}
-      <TextDrawer
-        text={
-          <Tooltip title="Click to show the total files">
-            <Space style={{ textAlign: showProgress ? 'left' : 'center' }} align="end">
-              <Space direction="vertical">
-                <Tag bordered={false} color={tagBgColor}>
-                  <Typography.Text style={{ fontSize: 14, color: token.colorWhite }}>
-                      <Typography.Text style={{ color: token.colorWhite  }}> {files.length}</Typography.Text>
-                      {` Files`}
-                  </Typography.Text>
-                </Tag>
-                <Typography.Text style={{ fontSize: 20 }}>{formatSize(sum)}</Typography.Text>
-              </Space>
-              <ExceptionOutlined style={{ transform: 'translateY(-3.5px)' }} />
-            </Space>
-          </Tooltip>
-        }
-        buttonStyle={{ height: '100%' }}
-        buttonProps={{ type: 'text' }}
-      >
-        <FileTree
-          // autoExpandParent
-          treeData={fileStructures}
-          defaultExpandAll
-          titleRender={(v) => <Typography.Text>{v.title as React.ReactNode}</Typography.Text>}
-        />
-      </TextDrawer>
-    </Space>
+    <ServerAPIProvider
+      api={SDK.ServerAPI.API.GetAssetsSummary}
+      body={{ withFileContent: false }}
+    >
+      {(res) => {
+        const { treeData } = getFiles(res[fileType].total, fileType);
+        return (
+          <Space style={{ height }} align="center">
+            {showProgress ? (
+              sum === 0 ? (
+                <Empty />
+              ) : (
+                <Progress
+                  type="circle"
+                  percent={+((sum / total) * 100).toFixed(2)}
+                  strokeColor={{ '0%': '#108ee9', '100%': '#108ee9' }}
+                  strokeWidth={12}
+                  format={(percent) => (
+                    <div className={styles.percentContainer}>
+                      <span style={{ marginTop: '10px' }}>{percent}%</span>
+                      <span className={styles.percentDescription}>{type}</span>
+                    </div>
+                  )}
+                />
+              )
+            ) : null}
+            <div style={{ marginLeft: '10px' }}>
+              <div className={styles.dataContainer}>
+                <div className={styles.title}>Size</div>
+                <div className={styles.description}>{formatSize(sum)}</div>
+              </div>
+              <TextDrawer
+                buttonProps={{
+                  size: 'small',
+                }}
+                buttonStyle={{
+                  fontSize: 'inherit',
+                }}
+                drawerProps={{
+                  title: 'Files',
+                }}
+                text={
+                  <Space
+                    style={{ textAlign: showProgress ? 'left' : 'center' }}
+                    align="end"
+                  >
+                    <Space direction="vertical">
+                      <div className={styles.dataContainer}>
+                        <div className={styles.title}>
+                          <span style={{ marginRight: '5px' }}>Files</span>
+                          <RightOutlined />
+                        </div>
+                      </div>
+                    </Space>
+                  </Space>
+                }
+              >
+                <DirectoryTree
+                  defaultExpandAll
+                  selectable={false}
+                  treeData={treeData}
+                  rootStyle={{
+                    minHeight: '800px',
+                    border: '1px solid rgba(235, 237, 241)',
+                  }}
+                />
+              </TextDrawer>
+              <div className={styles.description}>{files.length}</div>
+            </div>
+          </Space>
+        );
+      }}
+    </ServerAPIProvider>
   );
 };

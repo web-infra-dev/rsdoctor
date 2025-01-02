@@ -1,53 +1,90 @@
 /* eslint-disable react/jsx-key */
 import React, { useState } from 'react';
-import { Col, Row, Segmented, theme } from 'antd';
+import { Divider, Segmented, theme, Avatar, Tree } from 'antd';
 import { Client, SDK } from '@rsdoctor/types';
-import { useDuplicatePackagesByErrors, useWindowWidth } from '../../../utils';
-import { Size } from '../../../constants';
-import { StatisticCard } from '../../../components/Card/statistic';
-import { DuplicatePackageDrawerWithServer } from '../../../components/TextDrawer';
-import { SizeCard, bgColorType } from '../../../components/Card/size';
+import { RightOutlined, FileFilled, GoldenFilled } from '@ant-design/icons';
 
+import { formatSize, useDuplicatePackagesByErrors } from '../../../utils';
+import { StatisticCard } from '../../../components/Card/statistic';
+import { SizeCard, bgColorType } from '../../../components/Card/size';
+import Overview from '../../../components/Overall/overview';
+import { ServerAPIProvider } from '../../../components/Manifest';
+import { getFiles } from '../../..//components/Overall';
+import { TextDrawer } from '../../..//components/TextDrawer';
+
+import styles from './card.module.scss';
+
+const { DirectoryTree } = Tree;
 const { useToken } = theme;
-const height = 100;
 
 interface CardProps {
   showProgress?: boolean;
   data: Client.RsdoctorClientAssetsSummary['all']['total'];
   total: number;
   tagBgColor?: string;
+  type?: string;
 }
 
-const AssetCard: React.FC<CardProps> = ({ showProgress = false, data, total, tagBgColor }) => {
+const AssetCard: React.FC<CardProps> = ({
+  showProgress = false,
+  data,
+  total,
+  tagBgColor,
+  type,
+}) => {
   const { token } = useToken();
   const _tagBgColor = tagBgColor || token.colorPrimaryBorderHover;
-  return (<SizeCard files={data.files} total={total} showProgress={showProgress} tagBgColor={_tagBgColor } />);
+  return (
+    <SizeCard
+      type={type!}
+      files={data.files}
+      total={total}
+      showProgress={showProgress}
+      tagBgColor={_tagBgColor}
+    />
+  );
 };
 
-const AssetCardContainer: React.FC<{ titles: string[]; datas: CardProps[]; bgColor?: bgColorType }> = ({ titles, datas, bgColor }) => {
+const AssetCardContainer: React.FC<{
+  type?: string;
+  titles: string[];
+  datas: CardProps[];
+  bgColor?: bgColorType;
+}> = ({ titles, datas, bgColor, type }) => {
   const [idx, setIdx] = useState(0);
+  const fileType = type || titles[idx] || titles[0];
 
   return (
     <StatisticCard
       title={
-        titles.length > 1 ? (
-          <Segmented
-            defaultValue={titles[idx]}
-            options={titles}
-            onChange={(e) => {
-              setIdx(titles.indexOf(e as string));
-            }}
-            size="small"
-            style={{ transition: 'transform 0.3s ease' }}
-            value={titles[idx] || titles[0]}
-          />
-        ) : (
-          titles[idx]
-        )
+        <div className={styles.cardTitle}>
+          <div className={styles.title}>{fileType}</div>
+          {titles.length > 1 ? (
+            <Segmented
+              defaultValue={titles[idx]}
+              options={titles}
+              onChange={(e) => {
+                setIdx(titles.indexOf(e as string));
+              }}
+              size="small"
+              style={{ transition: 'transform 0.3s ease' }}
+              value={titles[idx] || titles[0]}
+            />
+          ) : null}
+        </div>
       }
-      value={datas.map((e, i) => <AssetCard {...e} key={i}  tagBgColor={bgColor?.tagBgColor} />)[idx]}
+      value={
+        datas.map((e, i) => (
+          <AssetCard
+            type={fileType}
+            {...e}
+            key={i}
+            tagBgColor={bgColor?.tagBgColor}
+          />
+        ))[idx]
+      }
       boxProps={{
-        style: { background: bgColor?.bgColor }
+        style: { background: bgColor?.bgColor },
       }}
     />
   );
@@ -57,23 +94,16 @@ export const BundleCards: React.FC<{
   cwd: string;
   errors: SDK.ErrorsData;
   summary: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetAssetsSummary>;
-}> = ({ cwd, errors, summary }) => {
-  const windowWith = useWindowWidth();
+}> = ({ errors, summary }) => {
   const duplicatePackages = useDuplicatePackagesByErrors(errors);
+  const [totalSize, totalSizeUnit] = formatSize(summary.all.total.size).split(
+    ' ',
+  );
 
   const arr = [
     <AssetCardContainer
-      titles={['Total Files']}
-      datas={[
-        {
-          data: summary.all.total,
-          total: summary.all.total.size,
-          showProgress: true,
-        },
-      ]}
-    />,
-    <AssetCardContainer
-      titles={['Total JS', 'Initial JS']}
+      type={'JS'}
+      titles={['Total', 'Initial']}
       datas={[
         {
           data: summary.js.total,
@@ -88,7 +118,8 @@ export const BundleCards: React.FC<{
       ]}
     />,
     <AssetCardContainer
-      titles={['Total CSS', 'Initial CSS']}
+      type={'CSS'}
+      titles={['Total', 'Initial']}
       datas={[
         {
           data: summary.css.total,
@@ -99,12 +130,11 @@ export const BundleCards: React.FC<{
           data: summary.css.initial,
           total: summary.all.total.size,
           showProgress: true,
-
         },
       ]}
     />,
     <AssetCardContainer
-      titles={['Images', 'Fonts', 'Media']}
+      titles={['Imgs', 'Fonts', 'Media']}
       datas={[
         {
           data: summary.imgs.total,
@@ -124,6 +154,7 @@ export const BundleCards: React.FC<{
       ]}
     />,
     <AssetCardContainer
+      type={'HTML'}
       titles={['HTML Files']}
       datas={[
         {
@@ -133,21 +164,108 @@ export const BundleCards: React.FC<{
         },
       ]}
     />,
-    <StatisticCard
-      title={'Duplicate Packages'}
-      value={
-        <DuplicatePackageDrawerWithServer buttonStyle={{ height }} duplicatePackages={duplicatePackages} cwd={cwd} />
-      }
-    />,
   ];
 
   return (
-    <Row gutter={ windowWith > 1200 && windowWith < 1400 ? [Size.BasePadding * 2, Size.BasePadding] : [Size.BasePadding, Size.BasePadding]} wrap style={{ marginBottom: Size.BasePadding }}>
-      {arr.map((e, i) => (
-        <Col key={i} span={windowWith > 1500 ? 4 : windowWith > 1200 ? 8 : 8}>
-          {e}
-        </Col>
-      ))}
-    </Row>
+    <ServerAPIProvider
+      api={SDK.ServerAPI.API.GetAssetsSummary}
+      body={{ withFileContent: false }}
+    >
+      {(res) => {
+        const { treeData } = getFiles(res['all'].total, 'all');
+        return (
+          <div className={styles.container}>
+            <div className={styles.summary}>
+              <Overview
+                title={
+                  <TextDrawer
+                    buttonProps={{
+                      size: 'small',
+                    }}
+                    buttonStyle={{
+                      fontSize: 'inherit',
+                    }}
+                    drawerProps={{
+                      title: 'Files',
+                    }}
+                    text={
+                      <div style={{ color: '#000000a6' }}>
+                        <span style={{ marginRight: '5px' }}>Total Files</span>
+                        <RightOutlined />
+                      </div>
+                    }
+                  >
+                    <DirectoryTree
+                      defaultExpandAll
+                      selectable={false}
+                      treeData={treeData}
+                      rootStyle={{
+                        minHeight: '800px',
+                        border: '1px solid rgba(235, 237, 241)',
+                      }}
+                    />
+                  </TextDrawer>
+                }
+                description={
+                  <>
+                    <span className={styles.description}>{totalSize}</span>
+                    <span className={styles.unit}>{totalSizeUnit}</span>
+                    <div className={styles.totalNumber}>
+                      <span style={{ marginRight: '7px' }}>
+                        Number of files
+                      </span>
+                      <span style={{ fontWeight: 500 }}>
+                        {summary.all.total.count}
+                      </span>
+                    </div>
+                  </>
+                }
+                icon={
+                  <Avatar
+                    style={{ background: '#3874F6' }}
+                    shape="circle"
+                    icon={<FileFilled style={{ fontSize: '18px' }} />}
+                  />
+                }
+                style={{
+                  marginBottom: '20px',
+                }}
+              />
+              <Overview
+                title={
+                  <div>
+                    <span style={{ marginRight: '5px' }}>
+                      Duplicate Packages
+                    </span>
+                    <RightOutlined />
+                  </div>
+                }
+                description={duplicatePackages.length}
+                icon={
+                  <Avatar
+                    style={{ background: '#13C2C2' }}
+                    shape="circle"
+                    icon={<GoldenFilled style={{ fontSize: '18px' }} />}
+                  />
+                }
+              />
+            </div>
+            <Divider style={{ height: '200px' }} type="vertical" />
+            <div className={styles.chartsContainer}>
+              {arr.map((e, idx) => (
+                <>
+                  <div key={idx} className={styles.chart}>
+                    {e}
+                  </div>
+                  {idx !== arr.length - 1 ? (
+                    <Divider style={{ height: '200px' }} type="vertical" />
+                  ) : null}
+                </>
+              ))}
+            </div>
+          </div>
+        );
+      }}
+    </ServerAPIProvider>
   );
 };

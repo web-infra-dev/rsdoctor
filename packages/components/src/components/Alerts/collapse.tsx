@@ -151,7 +151,7 @@ export const AlertCollapse = (props: {
                       <Typography.Text strong>
                         {versions.length}
                       </Typography.Text>
-                      <Typography.Text> versions was found</Typography.Text>
+                      <Typography.Text> versions found</Typography.Text>
                     </Space>
                     <Tabs
                       size="middle"
@@ -161,7 +161,7 @@ export const AlertCollapse = (props: {
                           return {
                             label: (
                               <Space className={styles.drawerLabelTitle}>
-                                <div>v.{target.version}</div>
+                                <div>v{target.version}</div>
                                 <Tag className={styles.drawerLabelSize}>
                                   {formatSize(targetSize.sourceSize)}
                                 </Tag>
