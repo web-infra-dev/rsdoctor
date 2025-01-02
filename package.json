@@ -13,7 +13,7 @@
     "check-spell": "npx cspell",
     "check-changeset": "cd ./scripts/check-changeset && pnpm start",
     "check-dependency-version": "check-dependency-version-consistency .",
-    "dev:doc": "cd document && pnpm run dev",
+    "dev:doc": "cd packages/document && pnpm run dev",
     "e2e": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
     "lint": "biome lint . --diagnostic-level=error",
     "prepare": "pnpm run build && husky",
