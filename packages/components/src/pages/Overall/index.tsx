@@ -1,5 +1,6 @@
 import { SDK } from '@rsdoctor/types';
 import React from 'react';
+import { Flex } from 'antd';
 
 import { HelpCenter } from '../../components/Overall/help-center';
 import { BundleAlerts } from '../../components/Alerts';
@@ -64,25 +65,27 @@ const Component: React.FC<Props> = ({ project }) => {
 
   return (
     <div className={style.overall}>
-      <div>
-        <ResponsiveLayout>
-          <ProjectOverall
-            configs={configs}
-            cwd={cwd}
-            envinfo={envinfo}
-            alerts={errors}
-          />
-          <BundleAlerts />
-        </ResponsiveLayout>
-      </div>
+      <Flex>
+        <div style={{ flex: 3 }}>
+          <ResponsiveLayout>
+            <ProjectOverall
+              configs={configs}
+              cwd={cwd}
+              envinfo={envinfo}
+              alerts={errors}
+            />
+            <BundleAlerts />
+          </ResponsiveLayout>
+        </div>
 
-      <div>
-        <ResponsiveLayout>
-          <BundleOverall errors={errors} cwd={cwd} />
-          <CompileOverall summary={summary} />
-          <HelpCenter data={helpCenterData} />
-        </ResponsiveLayout>
-      </div>
+        <div style={{ flex: 1 }}>
+          <ResponsiveLayout>
+            <BundleOverall errors={errors} cwd={cwd} />
+            <CompileOverall summary={summary} />
+            <HelpCenter data={helpCenterData} />
+          </ResponsiveLayout>
+        </div>
+      </Flex>
     </div>
   );
 };

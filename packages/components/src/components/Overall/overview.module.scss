@@ -4,10 +4,10 @@
   background: #f6f8fa;
   align-items: center;
   justify-content: space-between;
-  min-width: 280px;
   padding: 10px 20px;
   border-radius: 8px;
   margin-right: 10px;
+  white-space: nowrap;
 
   .title {
     font-family: var(--font-family-code);
