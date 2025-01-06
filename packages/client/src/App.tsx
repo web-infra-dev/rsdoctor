@@ -117,7 +117,10 @@ const App: React.FC = (): React.ReactElement => {
                     theme === Theme.Dark
                       ? te.darkAlgorithm
                       : te.defaultAlgorithm,
+
                   token: {
+                    padding: 16,
+                    colorText: 'rgba(0, 0, 0, 0.85)',
                     fontFamily: 'var(--font-family-code)',
                   },
                 }}
