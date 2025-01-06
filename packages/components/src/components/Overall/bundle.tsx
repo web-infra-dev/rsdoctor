@@ -8,7 +8,7 @@ import {
   Tree,
   Tag,
 } from 'antd';
-import Icon, { FolderOpenTwoTone } from '@ant-design/icons';
+import Icon, { FolderOpenTwoTone, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 import { formatSize, useI18n } from '../../utils';
@@ -192,8 +192,8 @@ const BundleDescriptions = ({
       ),
     },
     {
-      key: 'img-files-count',
-      label: 'Img files',
+      key: 'image-files-count',
+      label: 'Image files',
       children: (
         <span className={styles.description}>
           {getFilesWithDrawer(res.imgs.total, 'imgs')}
@@ -223,17 +223,17 @@ const BundleDescriptions = ({
   const sizeItems: DescriptionsProps['items'] = [
     {
       key: 'js-files-size',
-      label: 'JS size',
+      label: <span className={styles.label}>JS size</span>,
       children: (
-        <>
+        <div>
           <span className={styles.description}>{jsSize}</span>
           <span className={styles.unit}>{jsSizeUnit}</span>
-        </>
+        </div>
       ),
     },
     {
       key: 'css-files-size',
-      label: 'CSS size',
+      label: <span className={styles.label}>CSS size</span>,
       children: (
         <>
           <span className={styles.description}>{cssSize}</span>
@@ -243,7 +243,7 @@ const BundleDescriptions = ({
     },
     {
       key: 'font-files-size',
-      label: 'Font size',
+      label: <span className={styles.label}>Font size</span>,
       children: (
         <>
           <span className={styles.description}>{fontSize}</span>
@@ -253,7 +253,7 @@ const BundleDescriptions = ({
     },
     {
       key: 'html-files-size',
-      label: 'HTML size',
+      label: <span className={styles.label}>HTML size</span>,
       children: (
         <>
           <span className={styles.description}>{htmlSize}</span>
@@ -262,8 +262,8 @@ const BundleDescriptions = ({
       ),
     },
     {
-      key: 'img-files-size',
-      label: 'Img size',
+      key: 'image-files-size',
+      label: <span className={styles.label}>Image size</span>,
       children: (
         <>
           <span className={styles.description}>{imgSize}</span>
@@ -273,7 +273,7 @@ const BundleDescriptions = ({
     },
     {
       key: 'media-files-size',
-      label: 'Media size',
+      label: <span className={styles.label}>Media size</span>,
       children: (
         <>
           <span className={styles.description}>{mediaSize}</span>
@@ -286,7 +286,7 @@ const BundleDescriptions = ({
   return (
     <Descriptions
       layout={'vertical'}
-      className={listStyles.root}
+      className={listStyles.bundleOverall}
       size="small"
       column={3}
       colon={false}
@@ -315,37 +315,46 @@ export const BundleOverall: React.FC<{
       {(res) => {
         const totalSizeStr = formatSize(res.all.total.size);
         return (
-          <Card
-            title={
+          <Card className={cardStyles.card} style={{ height: '316px' }}>
+            <div style={{ marginTop: '-4px' }}>
               <div className={styles.title}>
                 <span>{t('Bundle Overall')}</span>
                 <Button
                   type="link"
+                  style={{ padding: '0px' }}
                   onClick={() => {
                     navigate(Client.RsdoctorClientRoutes.BundleSize);
                   }}
                 >
-                  View Bundler Size
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span style={{ marginRight: '8px', fontSize: '13px' }}>
+                      View Bundler Size
+                    </span>
+                    <RightOutlined style={{ fontSize: '10px' }} />
+                  </div>
                 </Button>
               </div>
-            }
-            className={cardStyles.card}
-          >
-            <Radio.Group
-              onChange={handleViewChange}
-              value={view}
-              defaultValue={view}
-              style={{ marginBottom: 8 }}
-            >
-              <Radio.Button value="size">Size</Radio.Button>
-              <Radio.Button value="files">Files</Radio.Button>
-            </Radio.Group>
-            <DataSummary
-              theme={view === 'files' ? 'common' : 'warning'}
-              number={view === 'files' ? res.all.total.count : totalSizeStr}
-              description={`Total ${view}`}
-            />
-            <BundleDescriptions view={view} res={res} />
+              <Radio.Group
+                size="small"
+                onChange={handleViewChange}
+                value={view}
+                defaultValue={view}
+                style={{ marginBottom: 8 }}
+              >
+                <Radio.Button style={{ fontSize: '14px' }} value="size">
+                  Size
+                </Radio.Button>
+                <Radio.Button style={{ fontSize: '14px' }} value="files">
+                  Files
+                </Radio.Button>
+              </Radio.Group>
+              <DataSummary
+                theme={view === 'files' ? 'common' : 'warning'}
+                number={view === 'files' ? res.all.total.count : totalSizeStr}
+                description={`Total ${view}`}
+              />
+              <BundleDescriptions view={view} res={res} />
+            </div>
           </Card>
         );
       }}

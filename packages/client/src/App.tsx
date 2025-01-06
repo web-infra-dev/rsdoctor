@@ -117,6 +117,9 @@ const App: React.FC = (): React.ReactElement => {
                     theme === Theme.Dark
                       ? te.darkAlgorithm
                       : te.defaultAlgorithm,
+                  token: {
+                    fontFamily: 'var(--font-family-code)',
+                  },
                 }}
               >
                 <Layout>

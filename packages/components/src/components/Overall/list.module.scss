@@ -1,4 +1,4 @@
-.root {
+.projectOverall {
   :global(.ant-descriptions-item-label),
   :global(.ant-descriptions-item-content) {
     font-size: 13px;
@@ -6,6 +6,18 @@
   }
 
   :global(.ant-descriptions-item) {
-    padding-bottom: 6px !important;
+    padding-bottom: 10px !important;
+  }
+}
+
+.bundleOverall {
+  :global(.ant-descriptions-item-label),
+  :global(.ant-descriptions-item-content) {
+    font-size: 13px;
+    color: #000000a6;
+  }
+
+  :global(.ant-descriptions-item) {
+    padding-bottom: 0px !important;
   }
 }

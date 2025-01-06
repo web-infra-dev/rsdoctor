@@ -1,6 +1,5 @@
 import React from 'react';
 import { Divider, Space } from 'antd';
-import { BarChartOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
 import { Summary } from '@rsdoctor/utils/common';
 import { TextDrawer } from '../TextDrawer';
@@ -42,12 +41,7 @@ export const DoneChartContainer: React.FC<CommonChartProps> = ({
     <TextDrawer
       containerProps={{ style: { display: 'inline' } }}
       drawerProps={{ title: `Details ${suffix}` }}
-      text={
-        <Space>
-          detail
-          <BarChartOutlined />
-        </Space>
-      }
+      text={<Space>detail</Space>}
     >
       <ServerAPIProvider api={SDK.ServerAPI.API.GetPluginData} body={{ hooks }}>
         {(res) =>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Space } from 'antd';
-import { BarChartOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
 import { TextDrawer } from '../TextDrawer';
 
@@ -44,12 +43,7 @@ export const BootstrapChartContainer: React.FC<CommonChartProps> = ({
     <TextDrawer
       containerProps={{ style: { display: 'inline' } }}
       drawerProps={{ title: 'Chart of the "Bootstrap -> BeforeCompile" stage' }}
-      text={
-        <Space>
-          detail
-          <BarChartOutlined />
-        </Space>
-      }
+      text={<Space>detail</Space>}
     >
       <ServerAPIProvider api={SDK.ServerAPI.API.GetPluginData} body={{ hooks }}>
         {(res) =>

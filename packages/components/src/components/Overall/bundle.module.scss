@@ -1,18 +1,25 @@
 .title {
+  height: 40px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: left;
+  position: relative;
+  top: -10px;
 }
 
 .description {
-  font-family: var(--font-family-code);
   font-size: 20px;
   font-weight: 500;
   line-height: 32px;
   margin-right: 5px;
+  margin-bottom: 14px;
 }
 
 .unit {
-  font-family: var(--font-family-code);
   font-size: 12px;
   font-weight: 400;
   line-height: 32px;
@@ -41,4 +48,14 @@
   .tag {
     height: 23px;
   }
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #000000a6;
 }

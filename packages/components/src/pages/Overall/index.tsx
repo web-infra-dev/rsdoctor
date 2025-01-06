@@ -23,7 +23,7 @@ const helpCenterData = [
     link: 'https://rsdoctor.dev/guide/more/faq',
   },
   {
-    title: 'Introduction',
+    title: 'Rsdoctor Introduction',
     link: 'https://rsdoctor.dev/guide/start/intro',
   },
   {
