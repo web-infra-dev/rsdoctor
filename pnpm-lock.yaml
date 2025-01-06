@@ -1169,8 +1169,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       memfs:
-        specifier: 3.5.3
-        version: 3.5.3
+        specifier: 4.15.3
+        version: 4.15.3
       typescript:
         specifier: ^5.2.2
         version: 5.5.4
@@ -5744,7 +5744,6 @@ packages:
       tslib: '2'
     dependencies:
       tslib: 2.8.1
-    dev: true
 
   /@jsonjoy.com/json-pack@1.1.0(tslib@2.8.1):
     resolution: {integrity: sha512-zlQONA+msXPPwHWZMKFVS78ewFczIll5lXiVPwFPCZUsrOKdxc2AvxU1HoNBmMRhqDZUR9HkC3UOm+6pME6Xsg==}
@@ -5757,7 +5756,6 @@ packages:
       hyperdyperid: 1.2.0
       thingies: 1.21.0(tslib@2.8.1)
       tslib: 2.8.1
-    dev: true
 
   /@jsonjoy.com/util@1.5.0(tslib@2.8.1):
     resolution: {integrity: sha512-ojoNsrIuPI9g6o8UxhraZQSyF2ByJanAY4cTFbc8Mf2AXEF4aQRGY1dJxyJpuyav8r9FGflEt/Ff3u5Nt6YMPA==}
@@ -5766,7 +5764,6 @@ packages:
       tslib: '2'
     dependencies:
       tslib: 2.8.1
-    dev: true
 
   /@leichtgewicht/ip-codec@2.0.5:
     resolution: {integrity: sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==}
@@ -12737,6 +12734,7 @@ packages:
 
   /fs-monkey@1.0.6:
     resolution: {integrity: sha512-b1FMfwetIKymC0eioW7mTywihSQE4oLzQn1dB6rZB5fx/3NpNEdAWeCSMB+60/AeT0TCXsxzAlcYVEFCTAksWg==}
+    dev: true
 
   /fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
@@ -13463,7 +13461,6 @@ packages:
   /hyperdyperid@1.2.0:
     resolution: {integrity: sha512-Y93lCzHYgGWdrJ66yIktxiaGULYc6oGiABxhcO5AufBeOyoIdZF7bIfLaOrbM0iGIOXQQgxxRrFEnb+Y6w1n4A==}
     engines: {node: '>=10.18'}
-    dev: true
 
   /i18next@22.0.4:
     resolution: {integrity: sha512-TOp7BTMKDbUkOHMzDlVsCYWpyaFkKakrrO3HNXfSz4EeJaWwnBScRmgQSTaWHScXVHBUFXTvShrCW8uryBYFcg==}
@@ -14713,16 +14710,16 @@ packages:
     engines: {node: '>= 4.0.0'}
     dependencies:
       fs-monkey: 1.0.6
+    dev: true
 
-  /memfs@4.14.0:
-    resolution: {integrity: sha512-JUeY0F/fQZgIod31Ja1eJgiSxLn7BfQlCnqhwXFBzFHEw63OdLK7VJUJ7bnzNsWgCyoUP5tEp1VRY8rDaYzqOA==}
+  /memfs@4.15.3:
+    resolution: {integrity: sha512-vR/g1SgqvKJgAyYla+06G4p/EOcEmwhYuVb1yc1ixcKf8o/sh7Zngv63957ZSNd1xrZJoinmNyDf2LzuP8WJXw==}
     engines: {node: '>= 4.0.0'}
     dependencies:
       '@jsonjoy.com/json-pack': 1.1.0(tslib@2.8.1)
       '@jsonjoy.com/util': 1.5.0(tslib@2.8.1)
       tree-dump: 1.0.2(tslib@2.8.1)
       tslib: 2.8.1
-    dev: true
 
   /memoize-one@4.0.3:
     resolution: {integrity: sha512-QmpUu4KqDmX0plH4u+tf0riMc1KHE1+lw95cMrLlXQAFOx/xnBtwhZ52XJxd9X2O6kwKBqX32kmhbhlobD0cuw==}
@@ -19588,7 +19585,6 @@ packages:
       tslib: ^2
     dependencies:
       tslib: 2.8.1
-    dev: true
 
   /throttle-debounce@5.0.2:
     resolution: {integrity: sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==}
@@ -19686,7 +19682,6 @@ packages:
       tslib: '2'
     dependencies:
       tslib: 2.8.1
-    dev: true
 
   /trim-lines@3.0.1:
     resolution: {integrity: sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg==}
@@ -19707,7 +19702,7 @@ packages:
       '@babel/code-frame': 7.25.7
       '@rspack/lite-tapable': 1.0.1
       chokidar: 3.6.0
-      memfs: 4.14.0
+      memfs: 4.15.3
       minimatch: 9.0.5
       picocolors: 1.1.1
       typescript: 5.5.4
@@ -20586,7 +20581,7 @@ packages:
         optional: true
     dependencies:
       colorette: 2.0.20
-      memfs: 4.14.0
+      memfs: 4.15.3
       mime-types: 2.1.35
       on-finished: 2.4.1
       range-parser: 1.2.1
@@ -20771,11 +20766,11 @@ packages:
       '@webassemblyjs/ast': 1.12.1
       '@webassemblyjs/wasm-edit': 1.12.1
       '@webassemblyjs/wasm-parser': 1.12.1
-      acorn: 8.14.0
-      acorn-import-attributes: 1.9.5(acorn@8.14.0)
-      browserslist: 4.24.0
+      acorn: 8.12.1
+      acorn-import-attributes: 1.9.5(acorn@8.12.1)
+      browserslist: 4.23.3
       chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.18.0
+      enhanced-resolve: 5.17.1
       es-module-lexer: 1.5.4
       eslint-scope: 5.1.1
       events: 3.3.0
