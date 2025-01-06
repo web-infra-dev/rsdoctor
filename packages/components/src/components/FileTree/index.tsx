@@ -37,8 +37,8 @@ function getFileType(filename: string) {
     case 'scss':
     case 'sass':
     case 'less':
-    case '.styl':
-    case '.stylus':
+    case 'styl':
+    case 'stylus':
       return <CSSIcon />;
     case 'html':
       return <HtmlIcon />;
