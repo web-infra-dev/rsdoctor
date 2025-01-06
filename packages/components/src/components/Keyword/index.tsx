@@ -36,7 +36,11 @@ export const Keyword: React.FC<
     }
   }
 
-  return <Typography.Text {...rest}>{els}</Typography.Text>;
+  return (
+    <Typography.Text className={styles.text} {...rest}>
+      {els}
+    </Typography.Text>
+  );
 };
 
 const EllipsisText = ({
@@ -59,8 +63,8 @@ const EllipsisText = ({
     const end = Math.ceil((MAX_LENGTH - 3) / 2);
 
     return (
-      <Popover content={text}>
-        <div style={{ height: '40px' }}>
+      <Popover content={text} placement="left">
+        <div>
           <Typography.Text className={styles.text} mark={!!marked} {...rest}>
             {text.slice(0, start)}...{text.slice(textLength - end)}
           </Typography.Text>
@@ -71,7 +75,7 @@ const EllipsisText = ({
 
   return (
     <Popover content={text}>
-      <div style={{ height: '40px' }}>
+      <div>
         <Typography.Text
           className={styles.text}
           key={els ? els.length : 0}

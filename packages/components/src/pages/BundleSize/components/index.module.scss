@@ -1,0 +1,67 @@
+.assets {
+  :global {
+    .rc-tree-treenode:not(.rc-tree-treenode-switcher-open):not(
+        .rc-tree-treenode-switcher-close
+      ) {
+      line-height: 50px !important;
+
+      .rc-tree-switcher {
+        position: relative;
+        bottom: 8px;
+      }
+
+      .rc-tree-node-content-wrapper {
+        // width: 60%;
+      }
+    }
+  }
+  .assetBox {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    bottom: 10;
+  }
+}
+
+.box {
+  display: flex;
+  height: 40px;
+
+  .keyword {
+    flex: 0 0 auto;
+    padding-right: 5;
+  }
+}
+
+.divider {
+  border-color: rgba(0, 0, 0, 0.12);
+  position: relative;
+  bottom: 20%;
+}
+
+.dividerDiv {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.assetsTag {
+  position: relative;
+  bottom: 25;
+
+  span {
+    border-radius: 2px;
+    font-size: 10;
+    margin-right: 2px;
+    padding: 0 4px;
+  }
+}
+
+.bundle {
+  :global {
+    font-size: 14px;
+
+    .rc-tree-node-content-wrapper {
+      width: 100%;
+    }
+  }
+}

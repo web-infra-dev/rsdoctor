@@ -41,6 +41,7 @@ import {
   useI18n,
 } from '../../../utils';
 import { ModuleGraphListContext } from '../config';
+import styles from './index.module.scss';
 
 let expandedModulesKeys: Key[] = [];
 const TAB_MAP = {
@@ -393,131 +394,137 @@ export const AssetDetail: React.FC<{
           );
 
         return (
-          <Space>
-            <Keyword
-              ellipsis
-              style={{ maxWidth: 500 }}
-              text={basename}
-              keyword={moduleKeyword}
-            />
-            {parsedSize !== 0 ? (
-              <Tooltip
-                title={
-                  <Space direction="vertical">
-                    <Tag color={'orange'}>
-                      {'Bundled Size:' + formatSize(parsedSize)}
-                    </Tag>
-                    <Tag color={'volcano'}>
-                      {'Source Size:' + formatSize(sourceSize)}
-                    </Tag>
-                  </Space>
-                }
-                color={'white'}
-              >
-                <Tag color={'purple'} style={tagStyle}>
-                  {'Bundled: ' + formatSize(parsedSize)}
-                </Tag>
-              </Tooltip>
-            ) : sourceSize !== 0 ? (
-              // fallback to display tag for source size
-              <Tag color={'geekblue'}>
-                {'Source Size:' + formatSize(sourceSize)}
-              </Tag>
-            ) : null}
-            {isConcatenation ? (
-              <Tooltip
-                title={
-                  <Space>
-                    <Typography.Text style={{ color: 'inherit' }}>
-                      this is a concatenated module, it contains
-                      {mod.modules?.length} modules
-                    </Typography.Text>
-                  </Space>
-                }
-              >
-                <Tag color="green" style={tagStyle}>
-                  concatenated
-                </Tag>
-              </Tooltip>
-            ) : null}
-            {containedOtherModules && containedOtherModules.length ? (
-              <Tooltip
-                title={
-                  <Space direction="vertical">
-                    <Typography.Text style={{ color: 'inherit' }}>
-                      this is a concatenated module, it is be contained in these
-                      modules below:
-                    </Typography.Text>
-                    {containedOtherModules.map(({ id, path }) => {
-                      if (isJsDataUrl(path)) {
-                        return (
-                          <Typography.Paragraph
-                            ellipsis={{ rows: 4 }}
-                            key={id}
-                            style={{ color: 'inherit', maxWidth: '100%' }}
-                            code
-                          >
-                            {path}
-                          </Typography.Paragraph>
-                        );
-                      }
+          <div style={{ display: 'flex' }}>
+            <div className={styles.box} style={{ width: 700 }}>
+              {/* <div style={{width: 700}}> */}
+              <div className={styles.keywords}>
+                <Keyword ellipsis text={basename} keyword={moduleKeyword} />
+              </div>
 
-                      const p = relative(dirname(mod.path), path);
+              <div className={styles.dividerDiv}>
+                <Divider className={styles.divider} dashed />
+              </div>
+            </div>
+            <Space>
+              {parsedSize !== 0 ? (
+                <Tooltip
+                  title={
+                    <Space direction="vertical">
+                      <Tag color={'orange'}>
+                        {'Bundled Size:' + formatSize(parsedSize)}
+                      </Tag>
+                      <Tag color={'volcano'}>
+                        {'Source Size:' + formatSize(sourceSize)}
+                      </Tag>
+                    </Space>
+                  }
+                  color={'white'}
+                >
+                  <Tag color={'purple'} style={tagStyle}>
+                    {'Bundled: ' + formatSize(parsedSize)}
+                  </Tag>
+                </Tooltip>
+              ) : sourceSize !== 0 ? (
+                // fallback to display tag for source size
+                <Tag color={'geekblue'}>
+                  {'Source Size:' + formatSize(sourceSize)}
+                </Tag>
+              ) : null}
+              {isConcatenation ? (
+                <Tooltip
+                  title={
+                    <Space>
+                      <Typography.Text style={{ color: 'inherit' }}>
+                        this is a concatenated module, it contains
+                        {mod.modules?.length} modules
+                      </Typography.Text>
+                    </Space>
+                  }
+                >
+                  <Tag color="green" style={tagStyle}>
+                    concatenated
+                  </Tag>
+                </Tooltip>
+              ) : null}
+              {containedOtherModules && containedOtherModules.length ? (
+                <Tooltip
+                  title={
+                    <Space direction="vertical">
+                      <Typography.Text style={{ color: 'inherit' }}>
+                        this is a concatenated module, it is be contained in
+                        these modules below:
+                      </Typography.Text>
+                      {containedOtherModules.map(({ id, path }) => {
+                        if (isJsDataUrl(path)) {
+                          return (
+                            <Typography.Paragraph
+                              ellipsis={{ rows: 4 }}
+                              key={id}
+                              style={{ color: 'inherit', maxWidth: '100%' }}
+                              code
+                            >
+                              {path}
+                            </Typography.Paragraph>
+                          );
+                        }
 
-                      if (p.startsWith('javascript;charset=utf-8;base64,')) {
+                        const p = relative(dirname(mod.path), path);
+
+                        if (p.startsWith('javascript;charset=utf-8;base64,')) {
+                          return (
+                            <Typography.Text
+                              key={id}
+                              style={{ color: 'inherit', maxWidth: '100%' }}
+                              code
+                            >
+                              {p[0] === '.' ? p : `./${p}`}
+                            </Typography.Text>
+                          );
+                        }
+
                         return (
                           <Typography.Text
                             key={id}
-                            style={{ color: 'inherit', maxWidth: '100%' }}
+                            style={{ color: 'inherit' }}
                             code
                           >
                             {p[0] === '.' ? p : `./${p}`}
                           </Typography.Text>
                         );
-                      }
-
-                      return (
-                        <Typography.Text
-                          key={id}
-                          style={{ color: 'inherit' }}
-                          code
-                        >
-                          {p[0] === '.' ? p : `./${p}`}
-                        </Typography.Text>
-                      );
-                    })}
-                  </Space>
-                }
-              >
-                <Tag color="green">concatenated</Tag>
-              </Tooltip>
-            ) : null}
-            <Popover content="Open the Module Graph Box">
-              <Button
-                size="small"
-                icon={<DeploymentUnitOutlined />}
-                onClick={() => {
-                  setModuleJumpList([mod.id]);
-                  setShow(true);
-                }}
-              />
-            </Popover>
-            <ModuleCodeViewer data={mod} />
-          </Space>
+                      })}
+                    </Space>
+                  }
+                >
+                  <Tag color="green">concatenated</Tag>
+                </Tooltip>
+              ) : null}
+              <Popover content="Open the Module Graph Box">
+                <Button
+                  size="small"
+                  icon={<DeploymentUnitOutlined />}
+                  onClick={() => {
+                    setModuleJumpList([mod.id]);
+                    setShow(true);
+                  }}
+                />
+              </Popover>
+              <ModuleCodeViewer data={mod} />
+            </Space>
+          </div>
         );
       },
       dirTitle(dir, defaultTitle) {
         const paths = getChildrenModule(dir);
         if (paths.length) {
-          const mods = paths.map(
-            (e) => includeModules.find((m) => m.path === e)!,
-          );
-          const parsedSize = sumBy(mods, (e) => e.size?.parsedSize || 0);
-          const sourceSize = sumBy(mods, (e) => e.size?.sourceSize || 0);
+          // const mods = paths.map(
+          //   (e) => includeModules.find((m) => m.path === e)!,
+          // );
+          // const parsedSize = sumBy(mods, (e) => e.size?.parsedSize || 0);
+          // const sourceSize = sumBy(mods, (e) => e.size?.sourceSize || 0);
           return (
             <Space>
-              <Typography.Text>{defaultTitle}</Typography.Text>
-              {parsedSize > 0 ? (
+              <Keyword ellipsis text={defaultTitle} keyword={''} />
+              {/* {parsedSize > 0 ? (
                 <>
                   <Tag style={tagStyle} color={'orange'}>
                     {'Bundled:' + formatSize(parsedSize)}
@@ -530,7 +537,7 @@ export const AssetDetail: React.FC<{
                 <Tag style={tagStyle} color={'lime'}>
                   {'Source:' + formatSize(sourceSize)}
                 </Tag>
-              )}
+              )} */}
             </Space>
           );
         }
@@ -557,6 +564,7 @@ export const AssetDetail: React.FC<{
       value={{ moduleJumpList, setModuleJumpList }}
     >
       <Card
+        className={styles.bundle}
         title={`Modules of "${asset.path}"`}
         bodyStyle={{ overflow: 'scroll', height }}
         size="small"

@@ -1,3 +1,4 @@
+import { CodeOutlined } from '@ant-design/icons';
 import { Button, Drawer, ButtonProps, DrawerProps } from 'antd';
 import React, {
   CSSProperties,
@@ -25,7 +26,7 @@ export const TextDrawer = (
     <div onClick={(e) => e.stopPropagation()} {...props.containerProps}>
       {props.button ? (
         <div onClick={() => setVisible(!visible)}>{props.button}</div>
-      ) : (
+      ) : props.text ? (
         <Button
           type={'link'}
           {...props.buttonProps}
@@ -34,6 +35,11 @@ export const TextDrawer = (
         >
           {props.text}
         </Button>
+      ) : (
+        <CodeOutlined
+          style={{ fontSize: 14, padding: 0 }}
+          onClick={() => setVisible(!visible)}
+        />
       )}
       <Drawer
         maskClosable

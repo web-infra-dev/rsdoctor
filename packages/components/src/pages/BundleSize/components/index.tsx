@@ -36,6 +36,7 @@ import { CodeViewerWithDrawer } from '../../../components/CodeViewer';
 
 import { AssetDetail } from './asset';
 import './index.sass';
+import styles from './index.module.scss';
 import { GraphType } from '../constants';
 
 const { Option } = Select;
@@ -142,28 +143,25 @@ export const WebpackModulesOverallBase: React.FC<
         const { size, initial, path, content } = target;
 
         return (
-          <Space
+          <div
+            className={styles.assetBox}
             onClick={() => {
               setAssetPath(path);
             }}
           >
             <Keyword text={basename} keyword={inputAssetName} />
-            <Tag color={'success'} style={{ margin: 0 }}>
-              {formatSize(size)}
-            </Tag>
+            <Space size="small" className={styles.assetsTag}>
+              <Tag color={'success'}>{formatSize(size)}</Tag>
 
-            {initial ? (
-              <Tag color="cyan" style={{ margin: 0 }}>
-                initial
-              </Tag>
-            ) : null}
-            <CodeViewerWithDrawer
-              path={path}
-              content={content!}
-              editorConfig={{ readOnly: false, domReadOnly: false }}
-              emptyReason="Do not have the codes of assets. If you use the lite or brief mode, there will have codes."
-            />
-          </Space>
+              {initial ? <Tag color="cyan">initial</Tag> : null}
+              <CodeViewerWithDrawer
+                path={path}
+                content={content!}
+                editorConfig={{ readOnly: false, domReadOnly: false }}
+                emptyReason="Do not have the codes of assets. If you use the lite or brief mode, there will have codes."
+              />
+            </Space>
+          </div>
         );
       },
     });
@@ -413,7 +411,7 @@ export const WebpackModulesOverallBase: React.FC<
           <Col span={24}>
             {filteredAssets.length ? (
               <Row gutter={Size.BasePadding}>
-                <Col span={8}>
+                <Col span={6}>
                   <Card
                     title={
                       <Space>
@@ -456,6 +454,7 @@ export const WebpackModulesOverallBase: React.FC<
                     }
                   >
                     <FileTree
+                      className={styles.assets}
                       treeData={assetsStructures}
                       autoExpandParent
                       defaultExpandAll={
@@ -465,7 +464,7 @@ export const WebpackModulesOverallBase: React.FC<
                     />
                   </Card>
                 </Col>
-                <Col span={16}>
+                <Col span={18}>
                   {assetPath ? (
                     <ServerAPIProvider
                       api={SDK.ServerAPI.API.GetAssetDetails}
