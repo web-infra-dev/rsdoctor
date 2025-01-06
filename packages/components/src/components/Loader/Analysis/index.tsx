@@ -25,7 +25,7 @@ export const LoaderAnalysisBase: React.FC<{
             theme={{
               token: {
                 padding: 16,
-                fontSize: 12,
+                fontSize: 14,
               },
             }}
           >
