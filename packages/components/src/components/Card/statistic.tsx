@@ -14,10 +14,10 @@ export const StatisticCard: React.FC<StatisticCardProps> = ({
   boxProps,
 }) => {
   return (
-    <div {...boxProps}>
+    <div className="statistic-card" {...boxProps}>
       <Statistic
-        title={<div>{title}</div>}
-        valueRender={() => <div>{value}</div>}
+        title={<div className="statistic-card-title">{title}</div>}
+        valueRender={() => value}
         valueStyle={{ fontSize: 24 }}
         {...statisticProps}
       />
