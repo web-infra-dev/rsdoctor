@@ -18,10 +18,6 @@ on:
         description: 'Release Branch (confirm release branch)'
         required: true
         default: 'main'
-      branch:
-        description: 'Release Branch (confirm release branch)'
-        required: true
-        default: 'main'
 
 permissions:
   # Provenance generation in GitHub Actions requires "write" access to the "id-token"
