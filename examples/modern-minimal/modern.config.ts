@@ -20,15 +20,50 @@ export default defineConfig({
     },
   },
   plugins: [appTools()],
+
   tools: {
     bundlerChain: (chain) => {
       chain.plugin(pluginName).use(RsdoctorWebpackPlugin, [
         {
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
           features: ['bundle', 'plugins', 'loader'],
-          mode: 'brief',
         },
       ]);
+    },
+  },
+  performance: {
+    chunkSplit: {
+      strategy: 'split-by-size',
+      override: {
+        chunks: 'initial', // 处理所有类型的 chunk
+        cacheGroups: {
+          myapp: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'myapp-async',
+            reuseExistingChunk: false,
+            filename: 'static/js/myapp/[name].js', // 指定 myapp 的 async chunk 输出路径
+            minChunks: 1,
+            priority: 10,
+          },
+          myapp2: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'myapp2-async',
+            reuseExistingChunk: false,
+            filename: 'static/js/myapp2/[name].js', // 指定 myapp2 的 async chunk 输出路径
+            minChunks: 1,
+            priority: 10,
+          },
+          default: {
+            minChunks: 5, // 至少被引入两次的模块
+            reuseExistingChunk: true, // 复用已存在的 chunk
+            name: 'common', // 输出的文件名
+          },
+        },
+      },
+    },
+    bundleAnalyze: {
+      generateStatsFile: true,
+      statsOptions: 'verbose',
     },
   },
 });
