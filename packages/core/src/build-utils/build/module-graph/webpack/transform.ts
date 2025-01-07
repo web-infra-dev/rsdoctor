@@ -18,6 +18,7 @@ import {
   getImportKind,
   isImportDependency,
   removeNoImportStyle,
+  isRspack,
 } from '@/build-utils/common/module-graph';
 import { hasSetEsModuleStatement } from '../parser';
 import { isFunction } from 'lodash';
@@ -146,6 +147,7 @@ async function appendModuleData(
   wbFs: WebpackFs,
   features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
+  isRapck?: Boolean,
 ) {
   const module = graph.getModuleByWebpackId(getWebpackModuleId(origin));
 
@@ -218,8 +220,8 @@ async function appendModuleData(
     module.meta.strictHarmonyModule =
       origin.buildMeta?.strictHarmonyModule ?? false;
     module.meta.packageData = packageData;
-
-    if (!features?.lite && origin?.dependencies) {
+    // TODO: Rspack does not appendDependencies current. After subsequent verification.
+    if (!features?.lite && origin?.dependencies && !isRapck) {
       // lite bundle Mode don't have dependency；
       // Record dependent data.
       Array.from(origin.dependencies)
@@ -261,6 +263,7 @@ export async function appendModuleGraphByCompilation(
           fileSystemInfo,
           features,
           context,
+          isRspack(compilation),
         );
       }),
     );

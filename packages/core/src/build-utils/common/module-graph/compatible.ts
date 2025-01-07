@@ -46,8 +46,15 @@ export function getPositionByStatsLocation(
   }
 }
 
-export function isWebpack5orRspack(
+export function hasModuleGraphApi(
   compilation: Plugin.BaseCompilation,
 ): Boolean {
   return 'moduleGraph' in compilation && Boolean(compilation.moduleGraph);
+}
+
+export function isRspack(compilation: Plugin.BaseCompilation): Boolean {
+  return (
+    'rspackVersion' in compilation.compiler.webpack &&
+    Boolean(compilation.compiler.webpack?.rspackVersion)
+  );
 }

@@ -1,5 +1,5 @@
 import type { Common } from '@rsdoctor/types';
-import { isWebpack5orRspack } from '@/build-utils/common/module-graph/compatible';
+import { hasModuleGraphApi } from '@/build-utils/common/module-graph/compatible';
 import { Plugin } from '@rsdoctor/types';
 
 export type IHook =
@@ -49,7 +49,7 @@ export function interceptCompilationHooks(
      * Compilation.hooks.normalModuleLoader is deprecated
      *   MIGRATION: Use NormalModule.getCompilationHooks(compilation).loader instead
      */
-    if (hook === 'normalModuleLoader' && isWebpack5orRspack(compilation)) {
+    if (hook === 'normalModuleLoader' && hasModuleGraphApi(compilation)) {
       return;
     }
 
