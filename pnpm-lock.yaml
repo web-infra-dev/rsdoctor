@@ -529,8 +529,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2(@rsbuild/core@1.1.12)
       '@rsbuild/plugin-type-check':
-        specifier: ^1.1.0
-        version: 1.1.0(@rsbuild/core@1.1.12)(@rspack/core@1.1.8)(typescript@5.5.4)
+        specifier: ^1.2.0
+        version: 1.2.0(@rsbuild/core@1.1.12)(typescript@5.5.4)
       '@rsdoctor/components':
         specifier: workspace:*
         version: link:../components
@@ -7510,8 +7510,8 @@ packages:
       - webpack-cli
     dev: true
 
-  /@rsbuild/plugin-type-check@1.1.0(@rsbuild/core@1.1.12)(@rspack/core@1.1.8)(typescript@5.5.4):
-    resolution: {integrity: sha512-9W/TxibRe7L6i4JnsIDRJfkvypPZQqCLO/jrAp+Liv4SCo9BVmbk/Rmpj+hfo2gjyewobk0AVi4/YQ5wOP7GSQ==}
+  /@rsbuild/plugin-type-check@1.2.0(@rsbuild/core@1.1.12)(typescript@5.5.4):
+    resolution: {integrity: sha512-bx+WmtK7K5Jc07IQn2cBDqcP/Kt98u16NiW3EyxqJGhQ1OgFvK6ewc70+AJnBvtjE+MMB70NAXEl8MNOtSxz6g==}
     peerDependencies:
       '@rsbuild/core': 1.x
     peerDependenciesMeta:
@@ -7521,8 +7521,8 @@ packages:
       '@rsbuild/core': 1.1.12
       deepmerge: 4.3.1
       json5: 2.2.3
-      reduce-configs: 1.0.0
-      ts-checker-rspack-plugin: 1.0.1(@rspack/core@1.1.8)(typescript@5.5.4)
+      reduce-configs: 1.1.0
+      ts-checker-rspack-plugin: 1.1.0(typescript@5.5.4)
     transitivePeerDependencies:
       - '@rspack/core'
       - typescript
@@ -19655,15 +19655,17 @@ packages:
   /trough@2.2.0:
     resolution: {integrity: sha512-tmMpK00BjZiUyVyvrBK7knerNgmgvcV/KLVyuma/SC+TQN167GrMRciANTz09+k3zW8L8t60jWO1GpfkZdjTaw==}
 
-  /ts-checker-rspack-plugin@1.0.1(@rspack/core@1.1.8)(typescript@5.5.4):
-    resolution: {integrity: sha512-u+RgBXBr6RHCJ+nJtA3A6MG3oDt20faU8DryX+H3HPhhU+cCnrGY304vmwOsQLJmoMWDk7/xkkbz2j9pC0aX1Q==}
+  /ts-checker-rspack-plugin@1.1.0(typescript@5.5.4):
+    resolution: {integrity: sha512-nhUzSuSjfgVAJjc+vJa9q8uE7MxAbustG9InRp4ylMfIbkqyJjh7gSuEcL//l76ZSwoKcCod+5lv2mNO0Ugh8g==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@rspack/core': ^1.0.0
       typescript: '>=3.8.0'
+    peerDependenciesMeta:
+      '@rspack/core':
+        optional: true
     dependencies:
       '@babel/code-frame': 7.25.7
-      '@rspack/core': 1.1.8(@swc/helpers@0.5.15)
       '@rspack/lite-tapable': 1.0.1
       chokidar: 3.6.0
       memfs: 4.14.0
