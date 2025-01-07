@@ -32,6 +32,7 @@ jobs:
     name: Release
     if: github.repository == 'web-infra-dev/rsdoctor' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
