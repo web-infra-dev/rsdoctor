@@ -376,7 +376,6 @@ export function createLoaderContextTrap(
             if (typeof target.query === 'object') {
               const options = target.query[Loader.LoaderInternalPropertyName];
 
-              // webpack4 https://v4.webpack.js.org/api/loaders/#thisquery
               // webpack5 https://webpack.js.org/api/loaders/#thisquery
               if (options.hasOptions) {
                 return omit(target.query, [Loader.LoaderInternalPropertyName]);
