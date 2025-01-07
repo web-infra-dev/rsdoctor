@@ -1,6 +1,7 @@
 {
   "name": "@scripts/test-helper",
   "version": "0.1.1",
+  "private": true,
   "description": "The vitest helpers of Rsdoctor.",
   "repository": {
     "type": "git",
