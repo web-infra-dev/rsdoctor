@@ -25,7 +25,7 @@ import {
   getDeclarationIdentifier,
   getExportIdentifierStatement,
 } from './utils';
-import { isWebpack5orRspack } from '@/build-utils/common/module-graph';
+import { hasModuleGraphApi, isRspack } from '@/build-utils/common/module-graph';
 
 type ExportData = Map<WebExportInfo, ExportInfo>;
 
@@ -161,7 +161,8 @@ export function appendTreeShaking(
   moduleGraph: ModuleGraph,
   compilation: Plugin.BaseCompilation,
 ) {
-  if (!isWebpack5orRspack(compilation)) {
+  // TODO: Rspack does not support tree shaking analysis for the time being. After subsequent verification.
+  if (!hasModuleGraphApi(compilation) || isRspack(compilation)) {
     return moduleGraph;
   }
 

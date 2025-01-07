@@ -62,22 +62,21 @@ export const ensureModulesChunksGraphFn = (
               'Rspack currently does not support treeShaking capabilities.',
             ),
           );
-          return;
+        } else {
+          _this.modulesGraph =
+            ModuleGraphBuildUtils.appendTreeShaking(
+              _this.modulesGraph,
+              stats.compilation,
+            ) || _this.modulesGraph;
+          _this.sdk.addClientRoutes([
+            Manifest.RsdoctorManifestClientRoutes.TreeShaking,
+          ]);
+
+          debug(
+            Process.getMemoryUsageMessage,
+            '[After AppendTreeShaking to ModuleGraph]',
+          );
         }
-
-        _this.modulesGraph =
-          ModuleGraphBuildUtils.appendTreeShaking(
-            _this.modulesGraph,
-            stats.compilation,
-          ) || _this.modulesGraph;
-        _this.sdk.addClientRoutes([
-          Manifest.RsdoctorManifestClientRoutes.TreeShaking,
-        ]);
-
-        debug(
-          Process.getMemoryUsageMessage,
-          '[After AppendTreeShaking to ModuleGraph]',
-        );
       }
 
       /** transform modules graph */
