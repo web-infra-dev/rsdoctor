@@ -11,7 +11,7 @@ export const Overview = (props: OverviewProps) => {
   const { title, description, icon, style } = props;
   return (
     <div className={styles.container} style={style}>
-      <div>
+      <div className={styles.content}>
         <div className={styles.title}>{title}</div>
         <div className={styles.description}>{description}</div>
       </div>

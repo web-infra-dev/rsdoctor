@@ -24,6 +24,7 @@ export const Card: React.FC<CardProps> = ({
   if (title && collapsable) {
     return (
       <C
+        style={{ borderRadius: '12px' }}
         {...rest}
         title={
           <Space style={{ fontSize: 'inherit' }}>
@@ -59,7 +60,7 @@ export const Card: React.FC<CardProps> = ({
     );
   }
   return (
-    <C title={title} {...rest}>
+    <C style={{ borderRadius: '12px' }} title={title} {...rest}>
       {children}
     </C>
   );

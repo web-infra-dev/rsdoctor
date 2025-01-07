@@ -134,7 +134,7 @@ export const BundleCards: React.FC<{
       ]}
     />,
     <AssetCardContainer
-      titles={['Imgs', 'Fonts', 'Media']}
+      titles={['Images', 'Fonts', 'Media']}
       datas={[
         {
           data: summary.imgs.total,
@@ -228,12 +228,12 @@ export const BundleCards: React.FC<{
                   />
                 }
                 style={{
-                  marginBottom: '20px',
+                  marginBottom: '12px',
                 }}
               />
               <Overview
                 title={
-                  <div>
+                  <div style={{ margin: '4px 0' }}>
                     <span style={{ marginRight: '5px' }}>
                       Duplicate Packages
                     </span>

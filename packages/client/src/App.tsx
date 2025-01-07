@@ -121,6 +121,7 @@ const App: React.FC = (): React.ReactElement => {
                   token: {
                     padding: 16,
                     colorText: 'rgba(0, 0, 0, 0.85)',
+                    fontFamily: 'var(--font-family-code)',
                   },
                 }}
               >

@@ -22,7 +22,7 @@ import styles from './collapse.module.scss';
 const { Paragraph } = Typography;
 
 const LabelComponent = (props: {
-  title: string;
+  title: string | ReactNode;
   description: string;
   extra: ReactNode;
 }) => {
@@ -124,8 +124,12 @@ export const AlertCollapse = (props: {
       key: d.code,
       label: (
         <LabelComponent
-          title={name}
-          description={`${data.length} versions was found`}
+          title={
+            <Tag style={{ backgroundColor: '#EAEDF1', borderRadius: '2px' }}>
+              <span className={styles.pkgName}>{name}</span>
+            </Tag>
+          }
+          description={`${packages.length} versions was found`}
           extra={
             <div className={styles.extraContainer}>
               <div className={styles.iconContainer}>
