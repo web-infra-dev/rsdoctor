@@ -9,10 +9,12 @@
     width: 100%;
     display: flex;
     justify-content: space-evenly;
+
     .chart {
       display: flex;
       align-items: center;
       justify-content: center;
+      flex: 1;
     }
   }
 
@@ -23,7 +25,6 @@
     margin: 0 20px;
 
     .description {
-      font-family: var(--font-family-code);
       font-size: 20px;
       font-weight: 500;
       line-height: 32px;
@@ -31,17 +32,16 @@
     }
 
     .unit {
-      font-family: var(--font-family-code);
       font-size: 12px;
       font-weight: 400;
       line-height: 32px;
     }
 
     .totalNumber {
-      font-family: var(--font-family-code);
       font-size: 13px;
       font-weight: 400;
       line-height: 20px;
+      margin: 4px 0;
     }
   }
 }
@@ -53,7 +53,6 @@
   margin-bottom: 25px;
 
   .title {
-    font-family: var(--font-family-code);
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;

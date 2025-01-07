@@ -1,4 +1,4 @@
-import { Typography, Tabs, Empty } from 'antd';
+import { Tabs, Empty, Tag } from 'antd';
 
 import { Card } from '../Card';
 import { ECMAVersionCheck } from '../Alert/ecma-version-check';
@@ -12,6 +12,7 @@ import { AlertProps } from '../Alert/types';
 import type { Rule } from '@rsdoctor/types';
 
 import styles from './bundle-alert.module.scss';
+import { CSSProperties, useState } from 'react';
 
 interface BundleAlertProps {
   title: string;
@@ -28,6 +29,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   dataSource,
   extraData,
 }) => {
+  const [activekey, setActiveKey] = useState('E1001');
   const tabData: Array<{
     key: string;
     label: string;
@@ -61,11 +63,40 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   });
 
   const tabItems = tabData.map((td) => {
+    const tagStyle =
+      activekey === td.key
+        ? ({
+            border: '1px solid #91D5FF',
+            backgroundColor: '#E6F7FF',
+          } as CSSProperties)
+        : {};
+
+    const tagTextStyle =
+      activekey === td.key
+        ? {
+            color: '#1890FF',
+          }
+        : {};
+
     const LabelComponent = () => (
       <Overview
-        title={td.label}
-        description={td.data.length}
-        icon={<Typography.Text code>{td.key}</Typography.Text>}
+        style={{
+          backgroundColor: 'transparent',
+          paddingLeft: 0,
+          paddingRight: 0,
+          width: '100%',
+        }}
+        title={<span className={styles.labelTitle}>{td.label}</span>}
+        description={
+          <div className={styles.labelDescription}>
+            <span>{td.data.length}</span>
+            <Tag
+              style={{ fontFamily: 'Menlo', borderRadius: '2px', ...tagStyle }}
+            >
+              <span style={{ ...tagTextStyle }}>{td.key}</span>
+            </Tag>
+          </div>
+        }
       />
     );
 
@@ -104,7 +135,26 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
       key: td.key,
       label: <LabelComponent />,
       children: (
-        <Card className={styles.card} type="inner" title={td.label}>
+        <Card
+          className={styles.card}
+          type="inner"
+          title={
+            <>
+              <Tag
+                style={{
+                  fontFamily: 'Menlo',
+                  fontWeight: '700',
+                  fontSize: '13px',
+                  backgroundColor: '#EAEDF1',
+                  borderRadius: '2px',
+                }}
+              >
+                {td.key}
+              </Tag>
+              <span>{td.label}</span>
+            </>
+          }
+        >
           {children}
         </Card>
       ),
@@ -112,15 +162,24 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   });
 
   return (
-    <Card title={title} style={{ width: '100%' }}>
-      {!dataSource.length ? (
-        <Empty
-          description={'No Bundle Alerts Data'}
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-        />
-      ) : (
-        <Tabs defaultActiveKey="E1001" items={tabItems} />
-      )}
+    <Card style={{ width: '100%', borderRadius: '12px' }}>
+      <div style={{ marginTop: '-4px' }}>
+        <div className={styles.title}>{title}</div>
+        {!dataSource.length ? (
+          <Empty
+            description={'No Bundle Alerts Data'}
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          />
+        ) : (
+          <Tabs
+            onChange={setActiveKey}
+            tabBarGutter={10}
+            type="card"
+            defaultActiveKey="E1001"
+            items={tabItems}
+          />
+        )}
+      </div>
     </Card>
   );
 };

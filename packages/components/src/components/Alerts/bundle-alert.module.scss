@@ -14,3 +14,25 @@
     }
   }
 }
+
+.title {
+  height: 32px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: left;
+}
+
+.labelTitle {
+  font-family: PingFang SC;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+}
+
+.labelDescription {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

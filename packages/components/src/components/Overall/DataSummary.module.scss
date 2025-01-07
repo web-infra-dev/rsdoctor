@@ -1,7 +1,6 @@
 .errorNumber,
 .warningNumber,
 .successNumber {
-  font-family: var(--font-family-code);
   font-size: 14px;
   font-weight: 500;
   line-height: 32px;
@@ -67,11 +66,12 @@
 }
 
 .container {
+  height: 40px;
   display: flex;
   align-items: center;
   padding: 10px 20px 10px 5px;
   border-radius: 10px;
-  margin: 10px 0;
+  margin: 10px 0 20px 0;
 
   .icon {
     margin: 0 5px 0 10px;
@@ -79,7 +79,6 @@
 
   .description {
     margin-right: 5px;
-    font-family: var(--font-family-code);
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
@@ -87,7 +86,6 @@
   }
 
   .data {
-    font-family: var(--font-family-code);
     font-size: 14px;
     font-weight: 500;
     line-height: 32px;

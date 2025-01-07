@@ -3,57 +3,57 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      version:
+      npm_tag:
         type: choice
-        description: 'Release Version (next, beta, alpha, latest)'
+        description: 'Specify npm tag'
         required: true
-        default: 'next'
+        default: 'alpha'
         options:
-          - next
-          - beta
           - alpha
+          - beta
+          - rc
+          - canary
           - latest
       branch:
         description: 'Release Branch (confirm release branch)'
         required: true
         default: 'main'
 
+permissions:
+  # Provenance generation in GitHub Actions requires "write" access to the "id-token"
+  id-token: write
+
 jobs:
   release:
     name: Release
-    if: ${{ github.event_name == 'workflow_dispatch' }}
+    if: github.repository == 'web-infra-dev/rsdoctor' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
-          token: ${{ secrets.REPO_SCOPED_TOKEN }}
-          fetch-depth: 25
+          fetch-depth: 1
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Install Pnpm
         run: corepack enable
 
-      - name: Setup Node.js 18
-        uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.1.0
         with:
-          node-version: '18'
+          node-version: 22
           cache: 'pnpm'
 
-      - name: Install npm v9
-        run: npm install -g npm@9
+      - name: Install Pnpm
+        run: corepack enable
 
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Release
-        uses: web-infra-dev/actions@v2
-        with:
-          version: ${{ github.event.inputs.version }}
-          branch: ${{ github.event.inputs.branch }}
-          type: 'release'
-          tools: 'changeset'
+      - name: Publish to npm
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          REPOSITORY: ${{ github.repository }}
-          REF: ${{ github.ref }}
+          NPM_TOKEN: ${{ secrets.RSDOCTOR_NPM_TOKEN }}
+        run: |
+          npm config set "//registry.npmjs.org/:_authToken" "${NPM_TOKEN}"
+          pnpm -r publish --tag ${{ github.event.inputs.npm_tag }} --publish-branch ${{ github.event.inputs.branch }}

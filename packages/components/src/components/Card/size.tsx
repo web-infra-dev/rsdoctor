@@ -73,7 +73,8 @@ export const SizeCard: React.FC<SizeCardProps> = ({
       body={{ withFileContent: false }}
     >
       {(res) => {
-        const { treeData } = getFiles(res[fileType].total, fileType);
+        const type = fileType.includes('image') ? 'imgs' : fileType;
+        const { treeData } = getFiles(res[type].total, type);
         return (
           <Space style={{ height }} align="center">
             {showProgress ? (
@@ -88,7 +89,9 @@ export const SizeCard: React.FC<SizeCardProps> = ({
                   format={(percent) => (
                     <div className={styles.percentContainer}>
                       <span style={{ marginTop: '10px' }}>{percent}%</span>
-                      <span className={styles.percentDescription}>{type}</span>
+                      <span className={styles.percentDescription}>
+                        total {type}
+                      </span>
                     </div>
                   )}
                 />

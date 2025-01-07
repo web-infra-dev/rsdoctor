@@ -12,6 +12,7 @@ import { useI18n, formatSize } from '../../utils';
 import { WebpackConfigurationViewer } from '../Configuration';
 import { Card } from '../Card';
 import { Overview } from './overview';
+import styles from './project.module.scss';
 
 import listStyles from './list.module.scss';
 import cardStyles from './card.module.scss';
@@ -122,22 +123,27 @@ export const ProjectOverall: React.FC<{
         ];
 
         return (
-          <Card
-            title={t('Project Overall')}
-            extra={<WebpackConfigurationViewer />}
-            className={cardStyles.card}
-          >
-            <div className={projectStyles.overview}>
-              {overViewData.map((data, idx) => (
-                <Overview
-                  key={idx}
-                  title={data.title}
-                  description={<span>{data.description}</span>}
-                  icon={data.icon}
-                />
-              ))}
+          <Card className={cardStyles.card}>
+            <div style={{ marginTop: '-4px' }}>
+              <div className={styles.title}>
+                <span className={styles.left}>{t('Project Overall')}</span>
+                <WebpackConfigurationViewer />
+              </div>
+              <div className={projectStyles.overview}>
+                {overViewData.map((data, idx) => (
+                  <Overview
+                    key={idx}
+                    title={data.title}
+                    description={<span>{data.description}</span>}
+                    icon={data.icon}
+                  />
+                ))}
+              </div>
+              <Descriptions
+                className={listStyles.projectOverall}
+                items={items}
+              />
             </div>
-            <Descriptions className={listStyles.root} items={items} />
           </Card>
         );
       }}

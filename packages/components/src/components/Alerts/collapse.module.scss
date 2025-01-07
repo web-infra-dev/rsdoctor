@@ -20,7 +20,6 @@
 .collapseContainer {
   .collapseChild {
     display: flex;
-    font-family: var(--font-family-code);
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
@@ -31,7 +30,6 @@
     }
 
     .attribute {
-      font-family: var(--font-family-code);
       font-size: 12px;
       font-weight: 400;
       line-height: 16px;
@@ -55,7 +53,6 @@
   align-items: center;
 
   .drawerLabelSize {
-    font-family: var(--font-family-code);
     font-size: 12px;
     font-weight: 400;
   }
@@ -75,4 +72,12 @@
   .data {
     margin-left: 5px;
   }
+}
+
+.pkgName {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: left;
+  font-family: Menlo;
 }
