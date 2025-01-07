@@ -74,7 +74,7 @@ export const AlertCollapse = (props: {
                         style={{ fontSize: '18px' }}
                         component={VersionSvg}
                       />
-                      <span className={styles.data}>v.{version}</span>
+                      <span className={styles.data}>v{version}</span>
                     </div>
                   </div>
                   <div>
