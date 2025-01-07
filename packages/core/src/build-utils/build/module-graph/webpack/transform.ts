@@ -147,7 +147,7 @@ async function appendModuleData(
   wbFs: WebpackFs,
   features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
-  isRapck?: Boolean,
+  isRspack?: Boolean,
 ) {
   const module = graph.getModuleByWebpackId(getWebpackModuleId(origin));
 
@@ -221,7 +221,7 @@ async function appendModuleData(
       origin.buildMeta?.strictHarmonyModule ?? false;
     module.meta.packageData = packageData;
     // TODO: Rspack does not appendDependencies current. After subsequent verification.
-    if (!features?.lite && origin?.dependencies && !isRapck) {
+    if (!features?.lite && origin?.dependencies && !isRspack) {
       // lite bundle Mode don't have dependency；
       // Record dependent data.
       Array.from(origin.dependencies)

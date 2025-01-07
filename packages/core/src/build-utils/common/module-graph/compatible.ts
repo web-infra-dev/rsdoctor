@@ -55,6 +55,6 @@ export function hasModuleGraphApi(
 export function isRspack(compilation: Plugin.BaseCompilation): Boolean {
   return (
     'rspackVersion' in compilation.compiler.webpack &&
-    Boolean(compilation.compiler.webpack?.rspackVersion)
+    Boolean(compilation.compiler.webpack.rspackVersion)
   );
 }
