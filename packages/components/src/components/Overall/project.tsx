@@ -114,7 +114,7 @@ export const ProjectOverall: React.FC<{
             ),
             icon: (
               <Avatar
-                style={{ background: '#FF4D4F' }}
+                style={{ background: 'rgba(226, 129, 73)' }}
                 shape="circle"
                 icon={<ExperimentFilled style={{ fontSize: '18px' }} />}
               />

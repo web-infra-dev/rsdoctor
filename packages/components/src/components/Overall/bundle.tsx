@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import {
   Descriptions,
   DescriptionsProps,
-  Radio,
-  RadioChangeEvent,
   Button,
   Tree,
   Tag,
+  Segmented,
 } from 'antd';
 import Icon, { FolderOpenTwoTone, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -303,8 +302,8 @@ export const BundleOverall: React.FC<{
   const navigate = useNavigate();
   const { t } = useI18n();
 
-  const handleViewChange = (e: RadioChangeEvent) => {
-    setView(e.target.value);
+  const handleViewChange = (value: viewType) => {
+    setView(value);
   };
 
   return (
@@ -334,20 +333,14 @@ export const BundleOverall: React.FC<{
                   </div>
                 </Button>
               </div>
-              <Radio.Group
+              <Segmented
+                options={['Size', 'Files']}
+                onChange={(val) =>
+                  handleViewChange(val.toLocaleLowerCase() as viewType)
+                }
                 size="small"
-                onChange={handleViewChange}
-                value={view}
-                defaultValue={view}
-                style={{ marginBottom: 8 }}
-              >
-                <Radio.Button style={{ fontSize: '14px' }} value="size">
-                  Size
-                </Radio.Button>
-                <Radio.Button style={{ fontSize: '14px' }} value="files">
-                  Files
-                </Radio.Button>
-              </Radio.Group>
+                style={{ marginBottom: 8, fontSize: '14px' }}
+              />
               <DataSummary
                 theme={view === 'files' ? 'common' : 'warning'}
                 number={view === 'files' ? res.all.total.count : totalSizeStr}
