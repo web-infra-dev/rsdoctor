@@ -79,10 +79,7 @@ export class InternalSummaryPlugin<
     // report minify costs
     if (compiler.options.optimization.minimize !== false) {
       const pluginData = this.sdk.getStoreData().plugin;
-      const minifyHookData = [
-        ...(pluginData.optimizeChunkAssets || []), // webpack4
-        ...(pluginData.processAssets || []), // webpack5
-      ];
+      const minifyHookData = [...(pluginData.processAssets || [])];
       minifyHookData.length &&
         this.sdk.reportSummaryData({
           costs: [

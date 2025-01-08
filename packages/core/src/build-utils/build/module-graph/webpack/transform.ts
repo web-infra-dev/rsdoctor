@@ -7,8 +7,6 @@ import { Module, ModuleGraph, PackageData } from '@rsdoctor/graph';
 import {
   getAllModules,
   getDependencyPosition,
-  getModuleExportsType,
-  getResolveModule,
   getWebpackDependencyRequest,
   getWebpackModuleId,
   getWebpackModulePath,
@@ -61,9 +59,8 @@ function appendDependency(
   webpackGraph: Webpack.ModuleGraph,
   graph: ModuleGraph,
 ) {
-  const resolvedWebpackModule = getResolveModule(
+  const resolvedWebpackModule = webpackGraph.getResolvedModule(
     webpackDep,
-    webpackGraph,
   ) as Webpack.NormalModule;
   if (!resolvedWebpackModule) {
     return;
@@ -95,8 +92,7 @@ function appendDependency(
 
   if (dependency) {
     dependency.setBuildMeta({
-      exportsType: getModuleExportsType(
-        resolvedWebpackModule,
+      exportsType: resolvedWebpackModule.getExportsType(
         webpackGraph,
         module.meta.strictHarmonyModule,
       ),

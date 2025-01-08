@@ -137,17 +137,10 @@ export class InternalLoaderPlugin<
       },
     };
 
-    if (compiler.webpack?.NormalModule?.getCompilationHooks) {
-      // webpack5 or rspack
-      compiler.webpack.NormalModule.getCompilationHooks(
-        compilation as Plugin.BaseCompilationType &
-          Plugin.BaseCompilationType<'rspack'>,
-      ).loader.intercept(interceptor);
-    } else if ('normalModuleLoader' in compilation.hooks) {
-      // webpack4
-      'normalModuleLoader' in compilation.hooks &&
-        compilation.hooks.normalModuleLoader.intercept(interceptor);
-    }
+    compiler.webpack.NormalModule.getCompilationHooks(
+      compilation as Plugin.BaseCompilationType &
+        Plugin.BaseCompilationType<'rspack'>,
+    ).loader.intercept(interceptor);
   }
 
   public getInterceptRules(

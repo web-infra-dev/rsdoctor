@@ -1,4 +1,3 @@
-import type { SDK } from '@rsdoctor/types';
 import { unionBy } from 'lodash';
 import {
   ModuleGraph as SdkModuleGraph,
@@ -48,16 +47,6 @@ export function getModuleSource(mod: NormalModule): string {
     : (mod.originalSource?.()?.source().toString() ?? '');
 }
 
-export function getResolveModule(dep: Dependency, graph?: ModuleGraph) {
-  // webpack5
-  if (graph && 'getResolvedModule' in graph) {
-    return graph.getResolvedModule(dep);
-  }
-
-  // webpack4
-  return (dep.module as Module) ?? undefined;
-}
-
 export function getEntryModule(
   entryMap: Map<string, EntryPoint>,
 ): NormalModule[] {
@@ -66,39 +55,6 @@ export function getEntryModule(
     .map((chunk) => (chunk ? chunk.entryModule : null))
     .filter(Boolean)
     .map((mod) => (isNormalModule(mod!) ? mod : (mod as any).rootModule));
-}
-
-/**
- * Get the type of dependencies between modules.
- * This property can determine what runtime webpack has added to the modules.
- * In webpack 5, it can be directly obtained using internal APIs.
- * In webpack 4, manual conversion is required. Since webpack 4 is not as strict as webpack 5 in terms of compatibility, we can follow the logic of webpack 5 here.
- */
-export function getModuleExportsType(
-  module: NormalModule,
-  moduleGraph?: ModuleGraph,
-  strict = false,
-): SDK.DependencyBuildMeta['exportsType'] {
-  // webpack5
-  // https://github.com/webpack/webpack/blob/v5.75.0/lib/RuntimeTemplate.js#L771
-  if (moduleGraph) {
-    return module.getExportsType(moduleGraph, strict);
-  }
-
-  // webpack4
-  // https://github.com/webpack/webpack/blob/v4.46.0/lib/RuntimeTemplate.js#L215
-  const exportsType = module.buildMeta?.exportsType;
-
-  if (!exportsType && !strict) {
-    return 'dynamic';
-  }
-
-  // @ts-ignore
-  if (exportsType === 'named') {
-    return 'namespace';
-  }
-
-  return strict ? 'default-with-named' : 'dynamic';
 }
 
 export function getDependencyPosition(
