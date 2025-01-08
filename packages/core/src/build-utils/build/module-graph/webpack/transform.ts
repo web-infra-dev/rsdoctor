@@ -59,9 +59,9 @@ function appendDependency(
   webpackGraph: Webpack.ModuleGraph,
   graph: ModuleGraph,
 ) {
-  const resolvedWebpackModule = webpackGraph.getResolvedModule(
-    webpackDep,
-  ) as Webpack.NormalModule;
+  const resolvedWebpackModule = webpackGraph.getResolvedModule
+    ? (webpackGraph.getResolvedModule(webpackDep) as Webpack.NormalModule)
+    : undefined;
   if (!resolvedWebpackModule) {
     return;
   }
