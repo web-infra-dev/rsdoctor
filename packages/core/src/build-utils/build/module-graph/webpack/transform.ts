@@ -59,12 +59,15 @@ function appendDependency(
   webpackGraph: Webpack.ModuleGraph,
   graph: ModuleGraph,
 ) {
+  // Rspack does not support `getResolvedModule` yet.
   const resolvedWebpackModule = webpackGraph?.getResolvedModule
     ? (webpackGraph.getResolvedModule(webpackDep) as Webpack.NormalModule)
     : undefined;
+
   if (!resolvedWebpackModule) {
     return;
   }
+
   const rawRequest = getWebpackDependencyRequest(
     webpackDep,
     resolvedWebpackModule,
