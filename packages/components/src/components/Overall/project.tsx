@@ -124,7 +124,7 @@ export const ProjectOverall: React.FC<{
 
         return (
           <Card className={cardStyles.card}>
-            <div style={{ marginTop: '-4px' }}>
+            <div>
               <div className={styles.title}>
                 <span className={styles.left}>{t('Project Overall')}</span>
                 <WebpackConfigurationViewer />

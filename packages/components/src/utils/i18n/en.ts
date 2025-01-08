@@ -7,7 +7,7 @@ const en = {
   LoadersAnalysis: 'Loaders Analysis',
   'Loaders Timeline': 'Loaders Timeline',
   'Loaders Analysis': 'Loaders Analysis',
-  'Rsdoctor Introduction': 'Rsdoctor Introduction',
+  Introduction: 'Introduction',
   'Compilation Alerts': 'Compilation Alerts',
   'Plugin Analysis': 'Plugin Analysis',
   PluginsAnalysis: 'Plugins Analysis',

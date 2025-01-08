@@ -37,9 +37,9 @@ export const CompileOverall: React.FC<{ summary: SDK.SummaryData }> = ({
 
   return (
     <Card className={cardStyles.card}>
-      <div style={{ marginTop: '-4px' }}>
+      <div>
         <Space
-          style={{ wordBreak: 'break-all', width: '100%', marginTop: '-4px' }}
+          style={{ wordBreak: 'break-all', width: '100%', marginTop: '0' }}
           size={20}
           direction="vertical"
         >

@@ -5,7 +5,7 @@ const cn: typeof en = {
   'Compile Analysis': '编译分析',
   'Bundle Alerts': '编译预警',
   'Help Center': '帮助中心',
-  'Rsdoctor Introduction': 'Rsdoctor 介绍',
+  Introduction: '介绍',
   'Compilation Alerts': '编译预警',
   'Plugin Analysis': 'Plugins 分析',
   LoadersAnalysis: 'Loaders 分析',
