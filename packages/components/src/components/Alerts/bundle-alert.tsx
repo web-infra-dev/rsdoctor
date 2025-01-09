@@ -163,13 +163,22 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
 
   return (
     <Card style={{ width: '100%', borderRadius: '12px' }}>
-      <div style={{ marginTop: '-4px' }}>
+      <div style={{ marginTop: '-4px', height: '100%' }}>
         <div className={styles.title}>{title}</div>
-        {!dataSource.length ? (
-          <Empty
-            description={'No Bundle Alerts Data'}
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
+        {dataSource.length ? (
+          <div
+            style={{
+              minHeight: '480px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Empty
+              description={'No Bundle Alerts Data'}
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
+          </div>
         ) : (
           <Tabs
             onChange={setActiveKey}

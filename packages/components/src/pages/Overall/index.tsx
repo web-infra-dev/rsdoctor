@@ -56,7 +56,7 @@ const helpCenterData = [
     link: 'https://rsdoctor.dev/guide/usage/loaders-timeline',
   },
   {
-    title: 'Plugin Analysis',
+    title: 'Plugins Analysis',
     link: 'https://rsdoctor.dev/guide/usage/plugins-analysis',
   },
 ];
