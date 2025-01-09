@@ -9,7 +9,7 @@ const en = {
   'Loaders Analysis': 'Loaders Analysis',
   'Rsdoctor Introduction': 'Rsdoctor Introduction',
   'Compilation Alerts': 'Compilation Alerts',
-  'Plugins Analysis': 'Plugin Analysis',
+  'Plugins Analysis': 'Plugins Analysis',
   PluginsAnalysis: 'Plugins Analysis',
   ModuleResolve: 'Module Resolve',
   'Bundle Analysis': 'Bundle Analysis',
