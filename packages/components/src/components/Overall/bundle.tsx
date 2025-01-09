@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import {
   Descriptions,
   DescriptionsProps,
-  Radio,
-  RadioChangeEvent,
   Button,
   Tree,
   Tag,
+  Segmented,
 } from 'antd';
-import Icon, { FolderOpenTwoTone, RightOutlined } from '@ant-design/icons';
+import { FolderOpenTwoTone, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
+import { getFileCom } from '../FileTree';
 import { formatSize, useI18n } from '../../utils';
 import { TextDrawer } from '../TextDrawer';
 import { Card } from '../Card';
@@ -18,11 +18,6 @@ import { ServerAPIProvider } from '../Manifest';
 import listStyles from './list.module.scss';
 import cardStyles from './card.module.scss';
 import { DataSummary } from './DataSummary';
-import JsSvg from '../../common/svg/file-js.svg';
-import CssSvg from '../../common/svg/file-css.svg';
-import HtmlSvg from '../../common/svg/file-html.svg';
-import ImageSvg from '../../common/svg/file-image.svg';
-import UnknownSvg from '../../common/svg/file-unknown.svg';
 
 import { Client, SDK } from '@rsdoctor/types';
 import type { TreeDataNode } from 'antd';
@@ -35,7 +30,6 @@ const { DirectoryTree } = Tree;
 
 export const getFiles = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
-  fileType: keyof Client.RsdoctorClientAssetsSummary,
 ) => {
   let files: Array<{
     fileName: string;
@@ -59,18 +53,6 @@ export const getFiles = (
     });
   }
 
-  const iconMap = {
-    js: <Icon className={styles.icon} component={JsSvg} />,
-    css: <Icon className={styles.icon} component={CssSvg} />,
-    image: <Icon className={styles.icon} component={ImageSvg} />,
-    html: <Icon className={styles.icon} component={HtmlSvg} />,
-    unknown: <Icon className={styles.icon} component={UnknownSvg} />,
-    imgs: <Icon className={styles.icon} component={ImageSvg} />,
-    fonts: <Icon className={styles.icon} component={UnknownSvg} />,
-    media: <Icon className={styles.icon} component={UnknownSvg} />,
-    all: <Icon className={styles.icon} component={UnknownSvg} />,
-    others: <Icon className={styles.icon} component={UnknownSvg} />,
-  };
   const treeData: TreeDataNode[] = [];
   files.forEach((file) => {
     const target = treeData.find((data) => data.title === file.defaultDir);
@@ -80,6 +62,7 @@ export const getFiles = (
       icon: <FolderOpenTwoTone />,
       children: [],
     };
+    const icon = getFileCom(file.fileName);
     if (!target) {
       treeData.push(parent);
     }
@@ -100,7 +83,7 @@ export const getFiles = (
       ),
       key: file.fileName,
       isLeaf: true,
-      icon: iconMap[fileType],
+      icon,
     });
   });
 
@@ -111,9 +94,8 @@ export const getFiles = (
 
 export const getFilesWithDrawer = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
-  fileType: keyof Client.RsdoctorClientAssetsSummary,
 ): JSX.Element => {
-  const { treeData } = getFiles(data, fileType);
+  const { treeData } = getFiles(data);
 
   return (
     <>
@@ -159,8 +141,8 @@ const BundleDescriptions = ({
       key: 'js-files-count',
       label: 'JS files',
       children: (
-        <span className={styles.description}>
-          {getFilesWithDrawer(res.js.total, 'js')}
+        <span className={`${styles.description} ${styles.column}`}>
+          {getFilesWithDrawer(res.js.total)}
         </span>
       ),
     },
@@ -168,8 +150,8 @@ const BundleDescriptions = ({
       key: 'css-files-count',
       label: 'CSS files',
       children: (
-        <span className={styles.description}>
-          {getFilesWithDrawer(res.css.total, 'css')}
+        <span className={`${styles.description} ${styles.column}`}>
+          {getFilesWithDrawer(res.css.total)}
         </span>
       ),
     },
@@ -177,8 +159,8 @@ const BundleDescriptions = ({
       key: 'font-files-count',
       label: 'Font files',
       children: (
-        <span className={styles.description}>
-          {getFilesWithDrawer(res.fonts.total, 'others')}
+        <span className={`${styles.description} ${styles.column}`}>
+          {getFilesWithDrawer(res.fonts.total)}
         </span>
       ),
     },
@@ -187,7 +169,7 @@ const BundleDescriptions = ({
       label: 'HTML files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.html.total, 'html')}
+          {getFilesWithDrawer(res.html.total)}
         </span>
       ),
     },
@@ -196,7 +178,7 @@ const BundleDescriptions = ({
       label: 'Image files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.imgs.total, 'imgs')}
+          {getFilesWithDrawer(res.imgs.total)}
         </span>
       ),
     },
@@ -205,7 +187,7 @@ const BundleDescriptions = ({
       label: 'Media files',
       children: (
         <span className={styles.description}>
-          {getFilesWithDrawer(res.media.total, 'others')}
+          {getFilesWithDrawer(res.media.total)}
         </span>
       ),
     },
@@ -225,7 +207,7 @@ const BundleDescriptions = ({
       key: 'js-files-size',
       label: <span className={styles.label}>JS size</span>,
       children: (
-        <div>
+        <div className={styles.column}>
           <span className={styles.description}>{jsSize}</span>
           <span className={styles.unit}>{jsSizeUnit}</span>
         </div>
@@ -235,20 +217,20 @@ const BundleDescriptions = ({
       key: 'css-files-size',
       label: <span className={styles.label}>CSS size</span>,
       children: (
-        <>
+        <div className={styles.column}>
           <span className={styles.description}>{cssSize}</span>
           <span className={styles.unit}>{cssSizeUnit}</span>
-        </>
+        </div>
       ),
     },
     {
       key: 'font-files-size',
       label: <span className={styles.label}>Font size</span>,
       children: (
-        <>
+        <div className={styles.column}>
           <span className={styles.description}>{fontSize}</span>
           <span className={styles.unit}>{fontSizeUnit}</span>
-        </>
+        </div>
       ),
     },
     {
@@ -303,8 +285,8 @@ export const BundleOverall: React.FC<{
   const navigate = useNavigate();
   const { t } = useI18n();
 
-  const handleViewChange = (e: RadioChangeEvent) => {
-    setView(e.target.value);
+  const handleViewChange = (value: viewType) => {
+    setView(value);
   };
 
   return (
@@ -316,7 +298,7 @@ export const BundleOverall: React.FC<{
         const totalSizeStr = formatSize(res.all.total.size);
         return (
           <Card className={cardStyles.card} style={{ height: '316px' }}>
-            <div style={{ marginTop: '-4px' }}>
+            <div>
               <div className={styles.title}>
                 <span>{t('Bundle Overall')}</span>
                 <Button
@@ -334,20 +316,14 @@ export const BundleOverall: React.FC<{
                   </div>
                 </Button>
               </div>
-              <Radio.Group
+              <Segmented
+                options={['Size', 'Files']}
+                onChange={(val) =>
+                  handleViewChange(val.toLocaleLowerCase() as viewType)
+                }
                 size="small"
-                onChange={handleViewChange}
-                value={view}
-                defaultValue={view}
-                style={{ marginBottom: 8 }}
-              >
-                <Radio.Button style={{ fontSize: '14px' }} value="size">
-                  Size
-                </Radio.Button>
-                <Radio.Button style={{ fontSize: '14px' }} value="files">
-                  Files
-                </Radio.Button>
-              </Radio.Group>
+                style={{ marginBottom: 8, fontSize: '14px' }}
+              />
               <DataSummary
                 theme={view === 'files' ? 'common' : 'warning'}
                 number={view === 'files' ? res.all.total.count : totalSizeStr}

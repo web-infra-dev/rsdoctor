@@ -163,7 +163,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
 
   return (
     <Card style={{ width: '100%', borderRadius: '12px' }}>
-      <div style={{ marginTop: '-4px' }}>
+      <div className={styles.container}>
         <div className={styles.title}>{title}</div>
         {!dataSource.length ? (
           <Empty

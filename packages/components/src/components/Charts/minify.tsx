@@ -1,4 +1,3 @@
-import { BarChartOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
 import { Divider, Space } from 'antd';
 import React from 'react';
@@ -31,12 +30,7 @@ export const MinifyChartContainer: React.FC<CommonChartProps> = ({
     <TextDrawer
       containerProps={{ style: { display: 'inline' } }}
       drawerProps={{ title: 'Details of the "Minify" stage' }}
-      text={
-        <Space>
-          detail
-          <BarChartOutlined />
-        </Space>
-      }
+      text={<Space>detail</Space>}
     >
       <ServerAPIProvider api={SDK.ServerAPI.API.GetPluginData} body={{ hooks }}>
         {(res) =>

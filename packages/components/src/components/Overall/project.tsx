@@ -114,7 +114,7 @@ export const ProjectOverall: React.FC<{
             ),
             icon: (
               <Avatar
-                style={{ background: '#FF4D4F' }}
+                style={{ background: 'rgba(226, 129, 73)' }}
                 shape="circle"
                 icon={<ExperimentFilled style={{ fontSize: '18px' }} />}
               />
@@ -124,7 +124,7 @@ export const ProjectOverall: React.FC<{
 
         return (
           <Card className={cardStyles.card}>
-            <div style={{ marginTop: '-4px' }}>
+            <div>
               <div className={styles.title}>
                 <span className={styles.left}>{t('Project Overall')}</span>
                 <WebpackConfigurationViewer />

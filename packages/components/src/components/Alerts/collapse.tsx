@@ -19,7 +19,7 @@ import type { AlertProps } from '../Alert/types';
 
 import styles from './collapse.module.scss';
 
-const { Paragraph } = Typography;
+const { Paragraph, Text } = Typography;
 
 const LabelComponent = (props: {
   title: string | ReactNode;
@@ -64,7 +64,16 @@ export const AlertCollapse = (props: {
           <div className={styles.collapseContainer}>
             <Overview
               style={{ backgroundColor: '#fff' }}
-              title={root}
+              title={
+                <Text
+                  style={{ width: 900 }}
+                  ellipsis={{
+                    tooltip: root,
+                  }}
+                >
+                  {root}
+                </Text>
+              }
               description={
                 <div className={styles.collapseChild}>
                   <div>
@@ -142,8 +151,17 @@ export const AlertCollapse = (props: {
                   buttonProps={{ size: 'small' }}
                   drawerProps={{ title: d.title, width: '60%' }}
                 >
-                  <Space direction="vertical" className="alert-space">
-                    <Space style={{ marginBottom: Size.BasePadding / 2 }}>
+                  <Space
+                    direction="vertical"
+                    className="alert-space"
+                    style={{ width: '100%' }}
+                  >
+                    <Space
+                      style={{
+                        marginBottom: Size.BasePadding / 2,
+                        width: '100%',
+                      }}
+                    >
                       <Title
                         text={
                           <Tag style={{ backgroundColor: '#EAEDF1' }}>
