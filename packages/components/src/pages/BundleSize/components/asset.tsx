@@ -21,13 +21,12 @@ import {
   Typography,
 } from 'antd';
 import { omitBy, sumBy } from 'lodash-es';
+import { DataNode as AntdDataNode } from 'antd/es/tree';
 import { dirname, relative } from 'path';
-import { Key } from 'rc-tree/lib/interface';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ServerAPIProvider } from '../../../components/Manifest';
 import { ModuleAnalyzeComponent } from '../../ModuleAnalyze';
 import { Badge as Bdg } from '../../../components/Badge';
-import { FileTree } from '../../../components/FileTree';
 import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
 import { TextDrawer } from '../../../components/TextDrawer';
@@ -42,8 +41,11 @@ import {
 } from '../../../utils';
 import { ModuleGraphListContext } from '../config';
 import styles from './index.module.scss';
+import { Tree } from 'antd';
 
-let expandedModulesKeys: Key[] = [];
+const { DirectoryTree } = Tree;
+
+let expandedModulesKeys: React.Key[] = [];
 const TAB_MAP = {
   source: 'source code',
   transformed: 'Transformed Code (After compile)',
@@ -394,9 +396,8 @@ export const AssetDetail: React.FC<{
           );
 
         return (
-          <div style={{ display: 'flex' }}>
-            <div className={styles.box} style={{ width: 700 }}>
-              {/* <div style={{width: 700}}> */}
+          <div className={styles['bundle-tree']}>
+            <div className={styles.box}>
               <div className={styles.keywords}>
                 <Keyword ellipsis text={basename} keyword={moduleKeyword} />
               </div>
@@ -499,9 +500,7 @@ export const AssetDetail: React.FC<{
                 </Tooltip>
               ) : null}
               <Popover content="Open the Module Graph Box">
-                <Button
-                  size="small"
-                  icon={<DeploymentUnitOutlined />}
+                <DeploymentUnitOutlined
                   onClick={() => {
                     setModuleJumpList([mod.id]);
                     setShow(true);
@@ -544,6 +543,7 @@ export const AssetDetail: React.FC<{
 
         return defaultTitle;
       },
+      page: 'bundle',
     });
     return res;
   }, [filteredModules]);
@@ -589,19 +589,20 @@ export const AssetDetail: React.FC<{
                   onClick={() => setDefaultExpandAll(true)}
                   size="small"
                   icon={<ColumnHeightOutlined />}
-                >
-                  expand all
-                </Button>
+                />
               </Space>
             </Col>
             <Col span={24} style={{ marginTop: Size.BasePadding }}>
               {filteredModules.length ? (
-                <FileTree
+                <DirectoryTree
+                  key={`tree_${moduleKeyword}_${defaultExpandAll}_${asset.path}`}
+                  selectable={false}
+                  defaultExpandAll={
+                    defaultExpandAll || filteredModules.length <= 20
+                  }
                   onExpand={(expandedKeys) => {
                     expandedModulesKeys = expandedKeys;
                   }}
-                  treeData={fileStructures}
-                  autoExpandParent
                   defaultExpandParent
                   defaultExpandedKeys={
                     expandedModulesKeys?.length
@@ -610,10 +611,12 @@ export const AssetDetail: React.FC<{
                         ? [fileStructures[0].key]
                         : []
                   }
-                  key={`tree_${moduleKeyword}_${defaultExpandAll}_${asset.path}`}
-                  defaultExpandAll={
-                    defaultExpandAll || filteredModules.length <= 20
-                  }
+                  treeData={fileStructures as AntdDataNode[]}
+                  rootStyle={{
+                    minHeight: '800px',
+                    border: '1px solid rgba(235, 237, 241)',
+                    padding: '14px 20px',
+                  }}
                 />
               ) : (
                 <Empty

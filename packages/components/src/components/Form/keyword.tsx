@@ -58,9 +58,9 @@ export const KeywordInput: React.FC<KeywordProps> = ({
         style={{ width: width ? width - labelWidth : 250 }}
         placeholder={placeholder}
         onChange={(e) => {
-          clearTimeout(timer);
+          if (timer) clearTimeout(timer);
           const v = e.target.value.trim();
-          setTimeout(() => {
+          timer = setTimeout(() => {
             setFilename(v);
           }, delay);
         }}
