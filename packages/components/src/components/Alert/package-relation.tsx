@@ -41,7 +41,7 @@ export const PackageRelationReasons: React.FC<{
 }> = ({ data }) => {
   return (
     <Row gutter={Size.BasePadding} wrap={false} align="top">
-      <Col style={{ height: '100%' }}>
+      <Col style={{ height: '100%', width: '100%' }}>
         {data.length ? (
           <>
             <Timeline style={{ marginTop: '20px' }}>

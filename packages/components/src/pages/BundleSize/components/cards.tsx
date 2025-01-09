@@ -84,7 +84,10 @@ const AssetCardContainer: React.FC<{
         ))[idx]
       }
       boxProps={{
-        style: { background: bgColor?.bgColor },
+        style: {
+          background: bgColor?.bgColor,
+          width: '80%',
+        },
       }}
     />
   );
@@ -172,7 +175,7 @@ export const BundleCards: React.FC<{
       body={{ withFileContent: false }}
     >
       {(res) => {
-        const { treeData } = getFiles(res['all'].total, 'all');
+        const { treeData } = getFiles(res['all'].total);
         return (
           <div className={styles.container}>
             <div className={styles.summary}>
@@ -229,15 +232,16 @@ export const BundleCards: React.FC<{
                 }
                 style={{
                   marginBottom: '12px',
+                  minWidth: '210px',
                 }}
               />
               <Overview
+                style={{ minWidth: '210px' }}
                 title={
                   <div style={{ margin: '4px 0' }}>
                     <span style={{ marginRight: '5px' }}>
                       Duplicate Packages
                     </span>
-                    <RightOutlined />
                   </div>
                 }
                 description={duplicatePackages.length}

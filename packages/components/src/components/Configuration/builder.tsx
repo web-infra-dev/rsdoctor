@@ -65,19 +65,19 @@ export const WebpackConfigurationViewerBase: React.FC<
           </Select>
         </Space>
         <Divider />
-        <ReactJson
-          name={
-            version && version !== 'unknown'
-              ? `${name}@${version}`
-              : `webpack.config`
-          }
-          theme="monokai"
-          src={selectKeys.length === 0 ? config : pick(config, selectKeys)}
-          displayDataTypes={false}
-          displayObjectSize={false}
-          style={{ width: '100%' }}
-        />
       </Row>
+      <ReactJson
+        name={
+          version && version !== 'unknown'
+            ? `${name}@${version}`
+            : `webpack.config`
+        }
+        theme="monokai"
+        src={selectKeys.length === 0 ? config : pick(config, selectKeys)}
+        displayDataTypes={false}
+        displayObjectSize={false}
+        style={{ overflowX: 'auto' }}
+      />
     </TextDrawer>
   );
 };

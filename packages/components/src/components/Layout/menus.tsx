@@ -1,34 +1,42 @@
 import {
-  ApiOutlined,
-  FolderViewOutlined,
+  BoxPlotFilled,
   MenuOutlined,
-  MonitorOutlined,
+  FundFilled,
+  ApiFilled,
   NodeIndexOutlined,
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Menu, MenuProps } from 'antd';
 import { includes } from 'lodash-es';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import CompileIcon from 'src/common/svg/overall/compile-icon.svg';
-import BundleSizeIcon from 'src/common/svg/overall/bundle-size-icon.svg';
-import OverallIcon from 'src/common/svg/overall/overall-icon.svg';
+
 import { Size } from '../../constants';
 import * as OverallConstants from '../../pages/Overall/constants';
 import { useI18n, hasBundle, hasCompile } from '../../utils';
 import { withServerAPI } from '../Manifest';
+import OverallActive from 'src/common/svg/navbar/overall-active.svg';
+import OverallInActive from 'src/common/svg/navbar/overall-inactive.svg';
+import CompileAnalysisActive from 'src/common/svg/navbar/compile-analysis-active.svg';
+import CompileAnalysisInActive from 'src/common/svg/navbar/compile-analysis-inactive.svg';
+import BundleSizeActive from 'src/common/svg/navbar/bundle-size-active.svg';
+import BundleSizeInActive from 'src/common/svg/navbar/bundle-size-inactive.svg';
 import {
   BundleSize,
   LoaderFiles,
   PluginsAnalyze,
   ModuleResolve,
   LoaderTimeline,
-  TreeShaking,
 } from 'src/pages';
 import { CompileName } from './constants';
 
 const BuilderSwitchName = 'builder-switcher';
 
+const defaultInActive = {
+  overall: <OverallInActive />,
+  webpack: <CompileAnalysisInActive />,
+  bundle: <BundleSizeInActive />,
+};
 const MenusBase: React.FC<{
   style?: React.CSSProperties;
   routes: Manifest.RsdoctorManifestClientRoutes[];
@@ -36,10 +44,30 @@ const MenusBase: React.FC<{
   const { t } = useI18n();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const [navIcon, setNavIcon] = useState(defaultInActive);
   const { routes: enableRoutes } = props;
 
+  useEffect(() => {
+    if (pathname.includes('webpack')) {
+      setNavIcon({
+        ...defaultInActive,
+        webpack: <CompileAnalysisActive />,
+      });
+    } else if (pathname.includes('overall') || pathname === '/') {
+      setNavIcon({
+        ...defaultInActive,
+        overall: <OverallActive />,
+      });
+    } else if (pathname.includes('bundle')) {
+      setNavIcon({
+        ...defaultInActive,
+        bundle: <BundleSizeActive />,
+      });
+    }
+  }, [pathname]);
+
   const iconStyle: React.CSSProperties = {
-    fontSize: 16,
+    color: 'rgba(96, 102, 114)',
   };
   const items: MenuProps['items'] = [];
 
@@ -47,7 +75,7 @@ const MenusBase: React.FC<{
     items.push({
       label: t(OverallConstants.name),
       key: OverallConstants.route,
-      icon: <OverallIcon />,
+      icon: navIcon.overall,
       children: [],
       onTitleClick(e) {
         navigate(e.key);
@@ -59,7 +87,7 @@ const MenusBase: React.FC<{
     items.push({
       label: t(CompileName),
       key: CompileName,
-      icon: <CompileIcon />,
+      icon: navIcon.webpack,
       children: [
         includes(
           enableRoutes,
@@ -67,7 +95,7 @@ const MenusBase: React.FC<{
         ) && {
           label: t(LoaderTimeline.name),
           key: LoaderTimeline.route,
-          icon: <CompileIcon />,
+          icon: <BoxPlotFilled style={iconStyle} />,
         },
         includes(
           enableRoutes,
@@ -75,7 +103,7 @@ const MenusBase: React.FC<{
         ) && {
           label: t(LoaderFiles.name),
           key: LoaderFiles.route,
-          icon: <MonitorOutlined style={iconStyle} />,
+          icon: <FundFilled style={iconStyle} />,
         },
         includes(
           enableRoutes,
@@ -91,7 +119,7 @@ const MenusBase: React.FC<{
         ) && {
           label: t(PluginsAnalyze.name),
           key: PluginsAnalyze.route,
-          icon: <ApiOutlined style={iconStyle} />,
+          icon: <ApiFilled style={iconStyle} />,
         },
       ].filter((e) => Boolean(e)) as MenuProps['items'],
     });
@@ -101,25 +129,11 @@ const MenusBase: React.FC<{
     items.push({
       label: t(BundleSize.name),
       key: BundleSize.name,
-      icon: <BundleSizeIcon />,
-      children: [
-        includes(
-          enableRoutes,
-          Manifest.RsdoctorManifestClientRoutes.BundleSize,
-        ) && {
-          label: t(BundleSize.name),
-          key: BundleSize.route,
-          icon: <FolderViewOutlined style={iconStyle} />,
-        },
-        includes(
-          enableRoutes,
-          Manifest.RsdoctorManifestClientRoutes.TreeShaking,
-        ) && {
-          label: t(TreeShaking.name),
-          key: TreeShaking.route,
-          icon: <FolderViewOutlined style={iconStyle} />,
-        },
-      ].filter((e) => Boolean(e)) as MenuProps['items'],
+      icon: navIcon.bundle,
+      children: [],
+      onTitleClick() {
+        navigate(BundleSize.route);
+      },
     });
   }
 

@@ -21,7 +21,7 @@ export const ECMAVersionCheck: React.FC<LinkAlertProps> = ({ data }) => {
       : null;
     const outputMessage = output?.path
       ? `${output?.path}:${output?.line}:${output?.column}`
-      : `There's no source map for this error.Possible reasons are as follows:
+      : `There's no source map for this error. Possible reasons are as follows:
        1. It might come from a third-party library without source map.
        2. If this is your business source code, source map should be enabled in your build config.
       `;

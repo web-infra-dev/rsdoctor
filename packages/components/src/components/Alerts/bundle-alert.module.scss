@@ -6,11 +6,29 @@
 
     .ant-collapse {
       border-radius: 0;
-      border: 0;
+      border: none;
     }
 
-    .ant-collapse-content {
-      border-radius: 0 !important;
+    .ant-collapse > .ant-collapse-item {
+      border-bottom: none;
+    }
+  }
+}
+
+.container {
+  margin-top: -4px;
+  height: 100%;
+
+  :global {
+    // for bundle alerts
+    .ant-tabs-nav-list {
+      width: 100%;
+    }
+    .ant-tabs-tab {
+      flex: 1;
+    }
+    .ant-tabs-tab-btn {
+      width: 100%;
     }
   }
 }

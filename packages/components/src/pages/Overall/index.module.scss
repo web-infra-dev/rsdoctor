@@ -2,34 +2,23 @@
   --font-family-code: Roboto, Roboto Mono, -apple-system, BlinkMacSystemFont,
     'Segoe UI', Menlo, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-}
 
-:global {
-  .ant-tabs .ant-tabs-tab + .ant-tabs-tab {
-    margin-left: 7px;
-  }
+  :global {
+    .ant-layout-content {
+      padding: 16px 32px !important;
+    }
 
-  .rc-tree .rc-tree-treenode .rc-tree-node-content-wrapper {
-    cursor: default;
-  }
+    .rc-tree .rc-tree-treenode .rc-tree-node-content-wrapper {
+      cursor: default;
+    }
 
-  // for bundle overall
-  .ant-tree-title {
-    flex: 1;
-  }
-  .ant-tree-node-content-wrapper-normal {
-    display: flex;
-  }
-
-  // for bundle alerts
-  .ant-tabs-nav-list {
-    width: 100%;
-  }
-  .ant-tabs-tab {
-    flex: 1;
-  }
-  .ant-tabs-tab-btn {
-    width: 100%;
+    // for bundle overall
+    .ant-tree-title {
+      flex: 1;
+    }
+    .ant-tree-node-content-wrapper-normal {
+      display: flex;
+    }
   }
 }
 
@@ -39,9 +28,7 @@
 }
 
 .layout {
-  margin-right: 20px;
-
   .row {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 }
