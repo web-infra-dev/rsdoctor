@@ -166,10 +166,19 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
       <div className={styles.container}>
         <div className={styles.title}>{title}</div>
         {!dataSource.length ? (
-          <Empty
-            description={'No Bundle Alerts Data'}
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
+          <div
+            style={{
+              minHeight: '480px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Empty
+              description={'No Bundle Alerts Data'}
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
+          </div>
         ) : (
           <Tabs
             onChange={setActiveKey}

@@ -7,7 +7,7 @@ const cn: typeof en = {
   'Help Center': '帮助中心',
   'Rsdoctor Introduction': 'Rsdoctor 介绍',
   'Compilation Alerts': '编译预警',
-  'Plugin Analysis': 'Plugins 分析',
+  'Plugins Analysis': 'Plugins 分析',
   LoadersAnalysis: 'Loaders 分析',
   'Loaders Timeline': 'Loaders 概览',
   'Loaders Analysis': 'Loaders 分析',
