@@ -7,8 +7,6 @@ import { Module, ModuleGraph, PackageData } from '@rsdoctor/graph';
 import {
   getAllModules,
   getDependencyPosition,
-  getModuleExportsType,
-  getResolveModule,
   getWebpackDependencyRequest,
   getWebpackModuleId,
   getWebpackModulePath,
@@ -61,13 +59,15 @@ function appendDependency(
   webpackGraph: Webpack.ModuleGraph,
   graph: ModuleGraph,
 ) {
-  const resolvedWebpackModule = getResolveModule(
-    webpackDep,
-    webpackGraph,
-  ) as Webpack.NormalModule;
+  // Rspack does not support `getResolvedModule` yet.
+  const resolvedWebpackModule = webpackGraph?.getResolvedModule
+    ? (webpackGraph.getResolvedModule(webpackDep) as Webpack.NormalModule)
+    : undefined;
+
   if (!resolvedWebpackModule) {
     return;
   }
+
   const rawRequest = getWebpackDependencyRequest(
     webpackDep,
     resolvedWebpackModule,
@@ -95,8 +95,7 @@ function appendDependency(
 
   if (dependency) {
     dependency.setBuildMeta({
-      exportsType: getModuleExportsType(
-        resolvedWebpackModule,
+      exportsType: resolvedWebpackModule.getExportsType(
         webpackGraph,
         module.meta.strictHarmonyModule,
       ),

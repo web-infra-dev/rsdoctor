@@ -4,7 +4,7 @@ import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import type { Rspack, RsbuildConfig } from '@rsbuild/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import serve from 'serve-static';
+import serve from 'sirv';
 import path from 'path';
 import fs from 'fs';
 

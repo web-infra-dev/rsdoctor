@@ -1,6 +1,6 @@
 import React, { useState, CSSProperties } from 'react';
 import { CaretRightOutlined, CaretDownOutlined } from '@ant-design/icons';
-import { Card as C, CardProps as CProps, Space, Button, Divider } from 'antd';
+import { Card as C, CardProps as CProps, Space } from 'antd';
 export * from './diff';
 export interface CardProps extends CProps {
   collapsable?: boolean;
@@ -35,19 +35,7 @@ export const Card: React.FC<CardProps> = ({
           </Space>
         }
       >
-        {collapsed ? (
-          <Divider orientation="center" style={dividerStyle} plain>
-            <Button
-              icon={<CaretRightOutlined />}
-              type="text"
-              onClick={() => setCollapsed(!collapsed)}
-            >
-              show more
-            </Button>
-          </Divider>
-        ) : (
-          children
-        )}
+        {collapsed ? null : children}
       </C>
     );
   }

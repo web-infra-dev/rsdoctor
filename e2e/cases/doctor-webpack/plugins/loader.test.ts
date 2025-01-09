@@ -43,19 +43,9 @@ async function webpack(
       };
       // @ts-ignore
       compiler.hooks.compilation.tap(pluginName, (compilation) => {
-        // for webpack 5
-        if (
-          compiler.webpack &&
-          compiler.webpack.NormalModule &&
-          compiler.webpack.NormalModule.getCompilationHooks
-        ) {
-          compiler.webpack.NormalModule.getCompilationHooks(
-            compilation,
-          ).loader.tap(pluginName, hookHandler);
-        } else if (compilation.hooks) {
-          // for webpack 4
-          compilation.hooks.normalModuleLoader.tap(pluginName, hookHandler);
-        }
+        compiler.webpack.NormalModule.getCompilationHooks(
+          compilation,
+        ).loader.tap(pluginName, hookHandler);
       });
     },
   };

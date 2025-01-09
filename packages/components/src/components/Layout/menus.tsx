@@ -67,7 +67,7 @@ const MenusBase: React.FC<{
   }, [pathname]);
 
   const iconStyle: React.CSSProperties = {
-    fontSize: 16,
+    color: 'rgba(96, 102, 114)',
   };
   const items: MenuProps['items'] = [];
 

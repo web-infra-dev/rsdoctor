@@ -1,6 +1,6 @@
 import { Common, SDK, Thirdparty, Client } from '@rsdoctor/types';
 import { Server } from '@rsdoctor/utils/build';
-import serve from 'serve-static';
+import serve from 'sirv';
 import { Bundle } from '@rsdoctor/utils/common';
 import assert from 'assert';
 import bodyParser from 'body-parser';
