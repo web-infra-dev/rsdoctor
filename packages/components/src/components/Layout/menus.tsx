@@ -1,7 +1,8 @@
 import {
-  ApiOutlined,
+  BoxPlotFilled,
   MenuOutlined,
-  MonitorOutlined,
+  FundFilled,
+  ApiFilled,
   NodeIndexOutlined,
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
@@ -94,7 +95,7 @@ const MenusBase: React.FC<{
         ) && {
           label: t(LoaderTimeline.name),
           key: LoaderTimeline.route,
-          icon: <CompileAnalysisInActive />,
+          icon: <BoxPlotFilled style={iconStyle} />,
         },
         includes(
           enableRoutes,
@@ -102,7 +103,7 @@ const MenusBase: React.FC<{
         ) && {
           label: t(LoaderFiles.name),
           key: LoaderFiles.route,
-          icon: <MonitorOutlined style={iconStyle} />,
+          icon: <FundFilled style={iconStyle} />,
         },
         includes(
           enableRoutes,
@@ -118,7 +119,7 @@ const MenusBase: React.FC<{
         ) && {
           label: t(PluginsAnalyze.name),
           key: PluginsAnalyze.route,
-          icon: <ApiOutlined style={iconStyle} />,
+          icon: <ApiFilled style={iconStyle} />,
         },
       ].filter((e) => Boolean(e)) as MenuProps['items'],
     });

@@ -114,7 +114,15 @@ export const SizeCard: React.FC<SizeCardProps> = ({
                     }}
                   />
                 ) : (
-                  <Empty />
+                  <div
+                    style={{
+                      position: 'relative',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                    }}
+                  >
+                    <Empty style={{ height: '100%' }} />
+                  </div>
                 )}
               </TextDrawer>
               <div className={styles.description}>{files.length}</div>

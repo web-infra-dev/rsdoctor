@@ -1,8 +1,5 @@
 import React, { useState, CSSProperties } from 'react';
-import {
-  ColumnHeightOutlined,
-  VerticalAlignMiddleOutlined,
-} from '@ant-design/icons';
+import { CaretRightOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { Card as C, CardProps as CProps, Space, Button, Divider } from 'antd';
 export * from './diff';
 export interface CardProps extends CProps {
@@ -28,17 +25,12 @@ export const Card: React.FC<CardProps> = ({
         {...rest}
         title={
           <Space style={{ fontSize: 'inherit' }}>
-            <Button
-              icon={
-                collapsed ? (
-                  <ColumnHeightOutlined />
-                ) : (
-                  <VerticalAlignMiddleOutlined />
-                )
-              }
+            <div
+              style={{ cursor: 'pointer' }}
               onClick={() => setCollapsed(!collapsed)}
-              size="small"
-            />
+            >
+              {collapsed ? <CaretRightOutlined /> : <CaretDownOutlined />}
+            </div>
             {title}
           </Space>
         }
@@ -46,7 +38,7 @@ export const Card: React.FC<CardProps> = ({
         {collapsed ? (
           <Divider orientation="center" style={dividerStyle} plain>
             <Button
-              icon={<ColumnHeightOutlined />}
+              icon={<CaretRightOutlined />}
               type="text"
               onClick={() => setCollapsed(!collapsed)}
             >
