@@ -7,7 +7,7 @@ import {
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Menu, MenuProps } from 'antd';
 import { includes } from 'lodash-es';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Size } from '../../constants';
@@ -43,24 +43,27 @@ const MenusBase: React.FC<{
   const { t } = useI18n();
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const [navIcon, setNavIcon] = useState({
-    overall: pathname.includes('overall') ? (
-      <OverallActive />
-    ) : (
-      <OverallInActive />
-    ),
-    webpack: pathname.includes('webpack') ? (
-      <CompileAnalysisActive />
-    ) : (
-      <CompileAnalysisInActive />
-    ),
-    bundle: pathname.includes('bundle') ? (
-      <BundleSizeActive />
-    ) : (
-      <BundleSizeInActive />
-    ),
-  });
+  const [navIcon, setNavIcon] = useState(defaultInActive);
   const { routes: enableRoutes } = props;
+
+  useEffect(() => {
+    if (pathname.includes('webpack')) {
+      setNavIcon({
+        ...defaultInActive,
+        webpack: <CompileAnalysisActive />,
+      });
+    } else if (pathname.includes('overall') || pathname === '/') {
+      setNavIcon({
+        ...defaultInActive,
+        overall: <OverallActive />,
+      });
+    } else if (pathname.includes('bundle')) {
+      setNavIcon({
+        ...defaultInActive,
+        bundle: <BundleSizeActive />,
+      });
+    }
+  }, [pathname]);
 
   const iconStyle: React.CSSProperties = {
     fontSize: 16,
@@ -74,10 +77,6 @@ const MenusBase: React.FC<{
       icon: navIcon.overall,
       children: [],
       onTitleClick(e) {
-        setNavIcon({
-          ...defaultInActive,
-          overall: <OverallActive />,
-        });
         navigate(e.key);
       },
     });
@@ -132,10 +131,6 @@ const MenusBase: React.FC<{
       icon: navIcon.bundle,
       children: [],
       onTitleClick() {
-        setNavIcon({
-          ...defaultInActive,
-          bundle: <BundleSizeActive />,
-        });
         navigate(BundleSize.route);
       },
     });
@@ -148,10 +143,6 @@ const MenusBase: React.FC<{
       key={enableRoutes.join('')}
       onClick={(e) => {
         if (!e.keyPath.includes(BuilderSwitchName)) {
-          setNavIcon({
-            ...defaultInActive,
-            webpack: <CompileAnalysisActive />,
-          });
           navigate(e.key);
         }
       }}
