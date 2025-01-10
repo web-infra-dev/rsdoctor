@@ -11,7 +11,6 @@ import {
   Card,
   Col,
   Divider,
-  Drawer,
   Empty,
   Popover,
   Row,
@@ -30,7 +29,7 @@ import { Badge as Bdg } from '../../../components/Badge';
 import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
 import { TextDrawer } from '../../../components/TextDrawer';
-import { Size, drawerWidth } from '../../../constants';
+import { Size } from '../../../constants';
 import {
   DataNode,
   createFileStructures,
@@ -220,18 +219,17 @@ export const ModuleGraphViewer: React.FC<{
   if (!id) return null;
 
   return (
-    <Drawer
-      open={show}
-      maskClosable
-      width={drawerWidth}
-      onClose={() => setShow(false)}
-    >
-      <ServerAPIProvider api={SDK.ServerAPI.API.GetAllModuleGraph} body={{}}>
-        {(modules) => (
-          <ModuleAnalyzeComponent cwd={cwd} moduleId={id} modules={modules} />
-        )}
-      </ServerAPIProvider>
-    </Drawer>
+    <ServerAPIProvider api={SDK.ServerAPI.API.GetAllModuleGraph} body={{}}>
+      {(modules) => (
+        <ModuleAnalyzeComponent
+          cwd={cwd}
+          moduleId={id}
+          modules={modules}
+          show={show}
+          setShow={setShow}
+        />
+      )}
+    </ServerAPIProvider>
   );
 };
 

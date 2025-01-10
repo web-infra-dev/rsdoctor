@@ -18,7 +18,10 @@ export const Page: React.FC = () => {
         bodyStyle={{ paddingTop: Size.BasePadding / 3 }}
         extra={<WebpackConfigurationViewer defaultKeys={['plugins']} />}
       >
-        <Space direction="vertical">
+        <Space
+          direction="vertical"
+          style={{ width: '100%', padding: '0 30px' }}
+        >
           <ServerAPIProvider api={SDK.ServerAPI.API.GetPluginSummary}>
             {({ hooks, tapNames }) => (
               <Space style={{ marginBottom: Size.BasePadding / 2 }}>
@@ -83,4 +86,4 @@ export const Page: React.FC = () => {
   );
 };
 
-export * from './constants'
+export * from './constants';

@@ -26,7 +26,6 @@ export default defineConfig({
         {
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
           features: ['bundle', 'plugins', 'loader'],
-          mode: 'brief',
         },
       ]);
     },

@@ -2,12 +2,14 @@ $prefixCls: 'module-analyze';
 
 .#{$prefixCls}-file-tree {
   width: '100%';
-  border: 1px solid #eee;
   min-height: 50em;
-  margin: 4;
-  padding: 4;
 
   .#{$prefixCls}-empty {
     margin-top: 20%;
   }
+}
+
+.module-analyze-box {
+  display: flex;
+  flex-direction: column;
 }
