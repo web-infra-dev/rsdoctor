@@ -354,7 +354,6 @@ export const AssetDetail: React.FC<{
   height,
   root,
 }) => {
-  // const navigate = useNavigate();
   const [moduleKeyword, setModuleKeyword] = useState('');
   const [defaultExpandAll, setDefaultExpandAll] = useState(false);
   const [moduleJumpList, setModuleJumpList] = useState([] as number[]);
@@ -468,7 +467,6 @@ export const AssetDetail: React.FC<{
                         }
 
                         const p = relative(dirname(mod.path), path);
-
                         if (p.startsWith('javascript;charset=utf-8;base64,')) {
                           return (
                             <Typography.Text
@@ -513,6 +511,7 @@ export const AssetDetail: React.FC<{
       dirTitle(dir, defaultTitle) {
         const paths = getChildrenModule(dir);
         if (paths.length) {
+          // TODO: this counts need to fixed.
           // const mods = paths.map(
           //   (e) => includeModules.find((m) => m.path === e)!,
           // );

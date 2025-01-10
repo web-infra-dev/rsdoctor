@@ -1,9 +1,7 @@
-/* eslint-disable financial/no-float-calculation */
 import React from 'react';
 import { SDK } from '@rsdoctor/types';
 import Editor, { OnMount } from '@monaco-editor/react';
 import { isNumber } from 'lodash-es';
-// import { CodeOutlined } from '@ant-design/icons';
 import type { editor } from 'monaco-editor';
 import { getOriginalLanguage, getSelectionRange } from '../../utils';
 import { DefaultEditorConfig } from './config';
