@@ -60,56 +60,57 @@ const LoaderPropsItem = ({
         </Tag>
       }
     >
-      {loader.isPitch ? <Typography.Text code>pitch</Typography.Text> : null}
-
-      <List size="large" bordered>
-        <List.Item>
-          <Typography.Text strong>{'File Path'}</Typography.Text>
-          <div>{beautifyPath(resource.path, cwd)}</div>
-        </List.Item>
-        <List.Item>
-          <Typography.Text strong>{'Resource Path'}</Typography.Text>
-          <CodeOpener cwd={cwd} url={resource.path} loc="" disabled />
-        </List.Item>
-        <List.Item>
-          <Typography.Text strong>{'Resource Query'}</Typography.Text>
-          <div>{resource.queryRaw || '-'}</div>
-        </List.Item>
-        <List.Item>
-          <Typography.Text strong>{'Duration'}</Typography.Text>
-          <div>{formatCosts(loader.costs)}</div>
-        </List.Item>
-        <List.Item>
-          <Typography.Text strong>{'Loader'}</Typography.Text>
-          <div>
-            <Typography.Text code>{loader.loader}</Typography.Text>
-          </div>
-        </List.Item>
-        <List.Item>
-          <Typography.Text strong>{'Loader Index'}</Typography.Text>
-          <div>{`${loader.loaderIndex}`}</div>
-        </List.Item>
-        <List.Item>
-          <Typography.Text strong>{'Loader Path'}</Typography.Text>
-          <CodeOpener cwd={cwd} url={loader.path} loc="" disabled />
-        </List.Item>
-        <List.Item>
-          <div style={{ width: 180 }}>
-            <Typography.Text strong>{'Options'}</Typography.Text>
-          </div>
-          <Divider type="vertical" />
-          <Typography.Paragraph
-            ellipsis={{
-              rows: 2,
-              expandable: true,
-              symbol: 'more',
-            }}
-            copyable
-          >
-            {JSON.stringify(loader.options || '-')}
-          </Typography.Paragraph>
-        </List.Item>
-      </List>
+      <Space direction="vertical" style={{ width: '100%' }}>
+        {loader.isPitch ? <Typography.Text code>pitch</Typography.Text> : null}
+        <List size="large" bordered>
+          <List.Item>
+            <Typography.Text strong>{'File Path'}</Typography.Text>
+            <div>{beautifyPath(resource.path, cwd)}</div>
+          </List.Item>
+          <List.Item>
+            <Typography.Text strong>{'Resource Path'}</Typography.Text>
+            <CodeOpener cwd={cwd} url={resource.path} loc="" disabled />
+          </List.Item>
+          <List.Item>
+            <Typography.Text strong>{'Resource Query'}</Typography.Text>
+            <div>{resource.queryRaw || '-'}</div>
+          </List.Item>
+          <List.Item>
+            <Typography.Text strong>{'Duration'}</Typography.Text>
+            <div>{formatCosts(loader.costs)}</div>
+          </List.Item>
+          <List.Item>
+            <Typography.Text strong>{'Loader'}</Typography.Text>
+            <div>
+              <Typography.Text code>{loader.loader}</Typography.Text>
+            </div>
+          </List.Item>
+          <List.Item>
+            <Typography.Text strong>{'Loader Index'}</Typography.Text>
+            <div>{`${loader.loaderIndex}`}</div>
+          </List.Item>
+          <List.Item>
+            <Typography.Text strong>{'Loader Path'}</Typography.Text>
+            <CodeOpener cwd={cwd} url={loader.path} loc="" disabled />
+          </List.Item>
+          <List.Item>
+            <div style={{ width: 180 }}>
+              <Typography.Text strong>{'Options'}</Typography.Text>
+            </div>
+            <Divider type="vertical" />
+            <Typography.Paragraph
+              ellipsis={{
+                rows: 2,
+                expandable: true,
+                symbol: 'more',
+              }}
+              copyable
+            >
+              {JSON.stringify(loader.options || '-')}
+            </Typography.Paragraph>
+          </List.Item>
+        </List>
+      </Space>
     </Card>
   );
 };

@@ -13,6 +13,10 @@
       .rc-tree-node-content-wrapper {
         font-size: 14px;
       }
+
+      .file-icon {
+        padding: 0;
+      }
     }
   }
 
@@ -78,6 +82,10 @@
     .rc-tree-node-content-wrapper {
       // width: 100%;
       font-size: 14px;
+    }
+
+    .ant-tree-iconEle {
+      margin-right: 2px;
     }
   }
 }

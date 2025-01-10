@@ -3,6 +3,7 @@ import { Typography } from 'antd';
 import path from 'path';
 import { startsWith } from 'lodash-es';
 import { VSCode, openVSCode } from './vscode';
+import { getShortPath } from 'src/utils';
 
 interface CodeOpenerProps {
   windowId?: number;
@@ -77,7 +78,7 @@ export const CodeOpener = ({
           }}
           style={{ cursor: disabled ? 'revert' : 'pointer' }}
         >
-          {label || url}
+          {label || getShortPath(url)}
           {loc ? `:${loc}` : ''}
         </Typography.Text>
       </Typography.Text>

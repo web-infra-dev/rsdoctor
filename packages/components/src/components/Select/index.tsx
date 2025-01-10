@@ -5,6 +5,7 @@ import { KeywordInput } from '../Form/keyword';
 import { Size } from 'src/constants';
 import { ServerAPIProvider } from '../Manifest';
 import { SDK } from '@rsdoctor/types';
+import './index.scss';
 
 interface LoaderNamesSelectProps {
   style?: React.CSSProperties;
@@ -37,8 +38,9 @@ export const LoaderNamesSelect: React.FC<LoaderNamesSelectProps> = ({
         mode="multiple"
         allowClear
         defaultValue={selectLoaders}
+        className="loader-select"
         style={{ width: 300 }}
-        dropdownMatchSelectWidth
+        popupMatchSelectWidth={300}
         placeholder={'select loaders'}
         onChange={(e) => {
           setSelectLoaders(e);
@@ -72,6 +74,7 @@ const LoaderLayerSelect: React.FC<{
       </Button>
       <Select
         allowClear
+        className="layer-select"
         style={{ width: 150 }}
         defaultValue={layer}
         placeholder={'select layer'}
@@ -109,7 +112,7 @@ export const LoaderCommonSelect: React.FC<{
   }, [selectLoaders, filename, layer]);
 
   return (
-    <Row style={{ marginBottom: Size.BasePadding }}>
+    <Row style={{ marginBottom: Size.BasePadding, marginLeft: 10 }}>
       <Col>
         <LoaderNamesSelect
           loaderNames={loaderNames}

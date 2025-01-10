@@ -19,11 +19,12 @@ export function getTooltipHtmlForLoader(
       <span>${loader.isPitch}</span>
     </li>
     ${
-      loader.layer &&
-      `<li class="loader-tooltip-item">
+      loader.layer && loader.layer !== 'undefined'
+        ? `<li class="loader-tooltip-item">
         <span>layer</span>
         <span>${loader.layer}</span>
       </li>`
+        : ``
     }
     <li class="loader-tooltip-item">
       <span>duration</span>

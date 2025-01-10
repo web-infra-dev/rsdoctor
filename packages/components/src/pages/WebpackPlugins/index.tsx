@@ -6,6 +6,7 @@ import { WebpackConfigurationViewer } from '../../components/Configuration';
 import { ServerAPIProvider } from '../../components/Manifest';
 import { WebpackPluginsDataTable } from '../../components/Plugins/webpack';
 import { Size } from '../../constants';
+import './index.scss';
 
 export const Page: React.FC = () => {
   const [selectedTapNames, setSelectedTapNames] = useState([]);
@@ -33,8 +34,9 @@ export const Page: React.FC = () => {
                   <Select
                     mode="multiple"
                     allowClear
-                    style={{ width: 350 }}
-                    dropdownMatchSelectWidth
+                    className="plugin-select"
+                    style={{ width: 300 }}
+                    popupMatchSelectWidth
                     onChange={(e) => {
                       setSelectedTapNames(e);
                     }}
@@ -56,8 +58,9 @@ export const Page: React.FC = () => {
                   <Select
                     mode="multiple"
                     allowClear
-                    style={{ width: 350 }}
-                    dropdownMatchSelectWidth
+                    className="plugin-select"
+                    style={{ width: 300 }}
+                    popupMatchSelectWidth
                     onChange={(e) => {
                       setSelectedHooks(e);
                     }}
