@@ -218,7 +218,7 @@ export const LoaderFiles: React.FC<{
   }, [filteredFiles]);
 
   return (
-    <Row style={{ width: '100%' }} gutter={Size.BasePadding}>
+    <Row style={{ width: '100%', marginLeft: 0 }} gutter={Size.BasePadding}>
       <Col span={24}>
         <Card
           title={

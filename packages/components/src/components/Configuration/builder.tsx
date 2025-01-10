@@ -49,7 +49,7 @@ export const WebpackConfigurationViewerBase: React.FC<
             allowClear
             value={selectKeys.length === keys.length ? [] : selectKeys}
             style={{ width: 350 }}
-            dropdownMatchSelectWidth
+            popupMatchSelectWidth
             placeholder={'Show Selected Properties Only.'}
             onChange={(e) => {
               setSelectKeys(e);
