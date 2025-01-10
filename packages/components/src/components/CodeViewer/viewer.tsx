@@ -1,9 +1,7 @@
-/* eslint-disable financial/no-float-calculation */
 import React from 'react';
 import { SDK } from '@rsdoctor/types';
 import Editor, { OnMount } from '@monaco-editor/react';
 import { isNumber } from 'lodash-es';
-import { CodepenCircleOutlined } from '@ant-design/icons';
 import type { editor } from 'monaco-editor';
 import { getOriginalLanguage, getSelectionRange } from '../../utils';
 import { DefaultEditorConfig } from './config';
@@ -64,12 +62,6 @@ export const CodeViewerWithDrawer: React.FC<CodeViewerProps> = (props) => {
   return (
     <TextDrawer
       text=""
-      buttonProps={{
-        size: 'small',
-        icon: <CodepenCircleOutlined />,
-        type: 'default',
-      }}
-      buttonStyle={{ padding: `0 4px` }}
       drawerProps={{
         destroyOnClose: true,
         title: `Code of "${props.path}"`,

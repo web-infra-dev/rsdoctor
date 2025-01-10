@@ -19,7 +19,7 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
       height: 24px;
       margin: 0;
       padding: 0 4px;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 400;
       color: rgba(0, 0, 0, 0.85);
       box-sizing: border-box;
@@ -76,5 +76,5 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
 .file-icon {
   display: inline-block;
   padding: 2px 0;
-  margin-left: 7px;
+  margin-left: 8px;
 }

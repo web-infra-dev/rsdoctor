@@ -1,7 +1,14 @@
 import { get, startsWith } from 'lodash-es';
 import { Common } from '@rsdoctor/types';
-import { message, UploadFile } from 'antd';
+import { message, Space, TreeNodeProps, UploadFile } from 'antd';
 import { FieldDataNode } from 'rc-tree';
+import {
+  FolderOpenTwoTone,
+  FolderTwoTone,
+  FileOutlined,
+  RightOutlined,
+} from '@ant-design/icons';
+import { getFileCom } from 'src/components/FileTree';
 
 export type DataNode = FieldDataNode<{
   key: string | number;
@@ -33,7 +40,10 @@ export function mapFileKey(
         res.push(e.key);
       }
     });
-    parent = parent.reduce<DataNode[]>((t, e) => t.concat(e.children || []), []);
+    parent = parent.reduce<DataNode[]>(
+      (t, e) => t.concat(e.children || []),
+      [],
+    );
     if (!parent.length) break;
     d++;
   }
@@ -47,7 +57,8 @@ export function flattenDirectory(
   parent: DataNode,
   sep = '/',
   inlinedResourcePathKey: keyof DataNode,
-  dirTitle = (_dir: DataNode, defaultTitle: string): JSX.Element | string => defaultTitle,
+  dirTitle = (_dir: DataNode, defaultTitle: string): JSX.Element | string =>
+    defaultTitle,
 ) {
   if (n.isLeaf) return;
   if (parent.children && parent.children.length === 1) {
@@ -79,6 +90,7 @@ export function createFileStructures({
   inlinedResourcePathKey = '__RESOURCEPATH__',
   fileTitle = (_file: string, basename: string) => basename,
   dirTitle = (_dir: DataNode, defaultTitle: string) => defaultTitle,
+  page = 'other',
 }: {
   files: string[];
   cwd?: string;
@@ -86,6 +98,7 @@ export function createFileStructures({
   inlinedResourcePathKey?: keyof DataNode;
   dirTitle?(dir: DataNode, defaultTitle: string): JSX.Element | string;
   fileTitle?(file: string, basename: string): JSX.Element | string;
+  page?: 'bundle' | 'other';
 }): DataNode[] {
   const sepRegexp = new RegExp(sep);
 
@@ -99,9 +112,15 @@ export function createFileStructures({
         // find the match directory.
         let exist = parent.children!.find((e) => e.title === dir) as DataNode;
         if (!exist) {
-          const p = [parent[inlinedResourcePathKey], dir].filter(Boolean).join(sep);
+          const p = [parent[inlinedResourcePathKey], dir]
+            .filter(Boolean)
+            .join(sep);
           exist = {
             title: dir,
+            icon:
+              page === 'bundle'
+                ? (props) => getFileIcon(props as TreeNodeProps, false)
+                : null,
             // key: [parent.key, parent.children!.length].join('-'),
             key: p,
             children: [],
@@ -113,17 +132,23 @@ export function createFileStructures({
 
         parent = exist;
         dir = rootDirname(basename);
-        basename = dir ? basename.slice(dir.length).replace(sepRegexp, '') : basename;
+        basename = dir
+          ? basename.slice(dir.length).replace(sepRegexp, '')
+          : basename;
       }
 
       // uniq
-      if (parent.children!.some((e) => get(e, inlinedResourcePathKey) === file)) return t;
+      if (parent.children!.some((e) => get(e, inlinedResourcePathKey) === file))
+        return t;
 
       parent.children!.push({
         title() {
           return fileTitle(file, basename);
         },
-        // key: [parent.key, parent.children!.length].join('-'),
+        icon:
+          page === 'bundle'
+            ? (props) => getFileIcon(props as TreeNodeProps)
+            : null,
         key: file,
         isLeaf: true,
         [inlinedResourcePathKey]: file,
@@ -137,7 +162,9 @@ export function createFileStructures({
 
   res.forEach((e) => {
     e.children &&
-      e.children.forEach((item) => flattenDirectory(item, e, sep, inlinedResourcePathKey, dirTitle));
+      e.children.forEach((item) =>
+        flattenDirectory(item, e, sep, inlinedResourcePathKey, dirTitle),
+      );
   });
 
   return res;
@@ -151,9 +178,15 @@ export function beautifyPath(path: string, cwd: string) {
   return path;
 }
 
-export function readJSONByFileReader<T extends Common.PlainObject>(file: UploadFile): Promise<T>;
-export function readJSONByFileReader<T extends Common.PlainObject>(file: Blob): Promise<T>;
-export function readJSONByFileReader<T extends Common.PlainObject>(file: unknown): Promise<T> {
+export function readJSONByFileReader<T extends Common.PlainObject>(
+  file: UploadFile,
+): Promise<T>;
+export function readJSONByFileReader<T extends Common.PlainObject>(
+  file: Blob,
+): Promise<T>;
+export function readJSONByFileReader<T extends Common.PlainObject>(
+  file: unknown,
+): Promise<T> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -197,4 +230,27 @@ export function beautifyModulePath(modulePath: string, cwd: string) {
     alias: res,
     inNodeModules: false,
   };
+}
+
+export function getFileIcon(props: TreeNodeProps, addRowIcon = true) {
+  const { data } = props;
+  const expanded = props.expanded;
+  if (data?.children) {
+    return (
+      <Space>
+        {addRowIcon ? (
+          <RightOutlined
+            className={`file-tree-switcher-arrow ${expanded ? 'file-tree-switcher-arrow-expand' : ''}`}
+          />
+        ) : (
+          <></>
+        )}
+        {expanded ? <FolderOpenTwoTone /> : <FolderTwoTone />}
+      </Space>
+    );
+  }
+  if (props.eventKey && typeof props.eventKey === 'string') {
+    return getFileCom(props.eventKey);
+  }
+  return <FileOutlined />;
 }

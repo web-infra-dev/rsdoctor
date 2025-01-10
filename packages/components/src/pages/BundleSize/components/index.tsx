@@ -1,9 +1,7 @@
 import {
   CodepenCircleOutlined,
-  ColumnHeightOutlined,
   DeploymentUnitOutlined,
   InfoCircleOutlined,
-  VerticalAlignMiddleOutlined,
 } from '@ant-design/icons';
 import { Client, SDK } from '@rsdoctor/types';
 import {
@@ -13,7 +11,6 @@ import {
   Divider,
   Empty,
   InputNumber,
-  Radio,
   Row,
   Select,
   Space,
@@ -28,7 +25,6 @@ import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
 import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
-import { Title } from '../../../components/Title';
 import { Size } from '../../../constants';
 import { createFileStructures, formatSize, useI18n } from '../../../utils';
 import { BundleCards } from './cards';
@@ -36,6 +32,7 @@ import { CodeViewerWithDrawer } from '../../../components/CodeViewer';
 
 import { AssetDetail } from './asset';
 import './index.sass';
+import styles from './index.module.scss';
 import { GraphType } from '../constants';
 
 const { Option } = Select;
@@ -50,6 +47,88 @@ interface WebpackModulesOverallProps {
   summary: Client.RsdoctorClientAssetsSummary;
   entryPoints: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetEntryPoints>;
 }
+const tabList = [
+  {
+    key: 'tree',
+    label: (
+      <Space>
+        <Typography.Text>{'Tree Graph'}</Typography.Text>
+        <Tooltip
+          color={'white'}
+          title={
+            <Space direction="vertical" color="white">
+              <Row>
+                <Col>
+                  <Tag color="cyan" style={{ margin: 0 }}>
+                    initial
+                  </Tag>
+                  <Typography.Text>
+                    : Indignify whether the chunk is the initial chunk.
+                  </Typography.Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Tag color="green">concatenated</Tag>
+                  <Typography.Text>
+                    : Indignify whether the module is the concatenated module.
+                  </Typography.Text>
+                  <br />
+                  <Typography.Text strong>Concatenated Module:</Typography.Text>
+                  <Typography.Text>
+                    A series module is to lift or series multiple modules into a
+                    closure when packaging.
+                  </Typography.Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Button size="small" icon={<CodepenCircleOutlined />} />
+                  <Typography.Text>: Open the code.</Typography.Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Button size="small" icon={<DeploymentUnitOutlined />} />
+                  <Typography.Text>
+                    : View the module dependency, that is, module reasons in
+                    stats.json.
+                  </Typography.Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Tag color={'purple'}>{'Bundled: 15.77 KB'}</Tag>
+                  <Typography.Text strong>Bundled Size</Typography.Text>
+                  <Typography.Text>
+                    The size of the code which bundled. That is, after bundle
+                    and tree-shaking.
+                  </Typography.Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Tag color={'orange'}>{'Source: 15.77 KB'}</Tag>
+                  <Typography.Text strong>Source Size</Typography.Text>
+                  <Typography.Text>
+                    The size of the code which before bundle and transform.
+                  </Typography.Text>
+                </Col>
+              </Row>
+            </Space>
+          }
+          style={{ marginLeft: 3 }}
+        >
+          <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+        </Tooltip>
+      </Space>
+    ),
+  },
+  {
+    key: 'tile',
+    label: 'Tile Graph',
+  },
+];
 
 export const WebpackModulesOverallBase: React.FC<
   WebpackModulesOverallProps
@@ -64,7 +143,6 @@ export const WebpackModulesOverallBase: React.FC<
   const [inputModuleUnit, setModuleUnit] = useState('');
   const [inputChunkUnit, setChunkUnit] = useState('');
   const [assetPath, setAssetPath] = useState<string | null>(null);
-  const [fold, setFold] = useState(false as Boolean);
   const [graphType, setGraphType] = useState('tree' as GraphType);
 
   const { t } = useI18n();
@@ -142,28 +220,25 @@ export const WebpackModulesOverallBase: React.FC<
         const { size, initial, path, content } = target;
 
         return (
-          <Space
+          <div
+            className={styles.assetBox}
             onClick={() => {
               setAssetPath(path);
             }}
           >
             <Keyword text={basename} keyword={inputAssetName} />
-            <Tag color={'success'} style={{ margin: 0 }}>
-              {formatSize(size)}
-            </Tag>
+            <Space size="small" className={styles.assetsTag}>
+              <Tag color={'success'}>{formatSize(size)}</Tag>
 
-            {initial ? (
-              <Tag color="cyan" style={{ margin: 0 }}>
-                initial
-              </Tag>
-            ) : null}
-            <CodeViewerWithDrawer
-              path={path}
-              content={content!}
-              editorConfig={{ readOnly: false, domReadOnly: false }}
-              emptyReason="Do not have the codes of assets. If you use the lite or brief mode, there will have codes."
-            />
-          </Space>
+              {initial ? <Tag color="cyan">initial</Tag> : null}
+              <CodeViewerWithDrawer
+                path={path}
+                content={content!}
+                editorConfig={{ readOnly: false, domReadOnly: false }}
+                emptyReason="Do not have the codes of assets. If you use the lite or brief mode, there will have codes."
+              />
+            </Space>
+          </div>
         );
       },
     });
@@ -176,27 +251,21 @@ export const WebpackModulesOverallBase: React.FC<
   };
 
   return (
-    <React.Fragment>
+    <div className="bundle-size-card">
       <BundleCards cwd={cwd} errors={errors} summary={summary} />
-      <Radio.Group
-        value={graphType}
-        onChange={(e) => setGraphType(e.target.value)}
-        style={{ marginBottom: Size.BasePadding }}
-        buttonStyle="solid"
-        optionType="button"
-      >
-        <Radio.Button value="tree">Tree Graph</Radio.Button>
-        <Radio.Button value="tile">Bundle Analyzer Graph</Radio.Button>
-      </Radio.Group>
       <Card
+        className="bundle-size=card"
+        tabList={tabList}
+        activeTabKey={graphType as 'tree' | 'tile'}
+        onTabChange={(e) => setGraphType(e as 'tree' | 'tile')}
         hidden={graphType === 'tree'}
-        title={
-          <Space>
-            <Title text="From: Webpack Bundle Analyzer" />
-          </Space>
-        }
+        tabProps={{
+          size: 'middle',
+        }}
       >
-        {/* TODO: add loading icon. */}
+        <Row>
+          <Typography.Text code>From: webpack-bundle-analyzer</Typography.Text>
+        </Row>
         <ServerAPIProvider api={SDK.ServerAPI.API.GetTileReportHtml} body={{}}>
           {(data) => {
             if (data && graphType === 'tile') {
@@ -227,98 +296,12 @@ export const WebpackModulesOverallBase: React.FC<
 
       <Card
         hidden={graphType === 'tile'}
-        title={
-          <Space>
-            <Title text="Bundle Analysis" />
-            <Tooltip
-              color={'white'}
-              title={
-                <Space direction="vertical" color="white">
-                  <Row>
-                    <Col>
-                      <Tag color="cyan" style={{ margin: 0 }}>
-                        initial
-                      </Tag>
-                      <Typography.Text>
-                        : Indignify whether the chunk is the initial chunk.
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Tag color="green">concatenated</Tag>
-                      <Typography.Text>
-                        : Indignify whether the module is the concatenated
-                        module.
-                      </Typography.Text>
-                      <br />
-                      <Typography.Text strong>
-                        Concatenated Module:
-                      </Typography.Text>
-                      <Typography.Text>
-                        A series module is to lift or series multiple modules
-                        into a closure when packaging.
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Button size="small" icon={<CodepenCircleOutlined />} />
-                      <Typography.Text>: Open the code.</Typography.Text>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Button size="small" icon={<DeploymentUnitOutlined />} />
-                      <Typography.Text>
-                        : View the module dependency, that is, module reasons in
-                        stats.json.
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Tag color={'purple'}>{'Bundled: 15.77 KB'}</Tag>
-                      <Typography.Text strong>Bundled Size</Typography.Text>
-                      <Typography.Text>
-                        The size of the code which bundled. That is, after
-                        bundle and tree-shaking.
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Tag color={'orange'}>{'Source: 15.77 KB'}</Tag>
-                      <Typography.Text strong>Source Size</Typography.Text>
-                      <Typography.Text>
-                        The size of the code which before bundle and transform.
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                </Space>
-              }
-              style={{ marginLeft: 3 }}
-            >
-              <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
-            </Tooltip>
-          </Space>
-        }
-        extra={
-          fold ? (
-            <Button onClick={() => setFold(false)}>
-              <Typography.Text>
-                Expand <ColumnHeightOutlined />
-              </Typography.Text>
-            </Button>
-          ) : (
-            <Button onClick={() => setFold(true)}>
-              <Typography.Text>
-                Fold
-                <VerticalAlignMiddleOutlined />
-              </Typography.Text>
-            </Button>
-          )
-        }
+        tabList={tabList}
+        activeTabKey={graphType as 'tree' | 'tile'}
+        onTabChange={(e) => setGraphType(e as 'tree' | 'tile')}
+        tabProps={{
+          size: 'middle',
+        }}
       >
         <Row align="middle" gutter={[Size.BasePadding, Size.BasePadding]}>
           {entryPoints && entryPoints.length ? (
@@ -413,7 +396,7 @@ export const WebpackModulesOverallBase: React.FC<
           <Col span={24}>
             {filteredAssets.length ? (
               <Row gutter={Size.BasePadding}>
-                <Col span={8}>
+                <Col span={6}>
                   <Card
                     title={
                       <Space>
@@ -443,19 +426,11 @@ export const WebpackModulesOverallBase: React.FC<
                     size="small"
                     bodyStyle={{
                       overflow: 'scroll',
-                      height: fold ? cardBodyHeight : largeCardBodyHeight,
+                      height: cardBodyHeight,
                     }}
-                    extra={
-                      <Button
-                        size="small"
-                        icon={<ColumnHeightOutlined />}
-                        onClick={() => setDefaultExpandAll(true)}
-                      >
-                        expand all
-                      </Button>
-                    }
                   >
                     <FileTree
+                      className={styles.assets}
                       treeData={assetsStructures}
                       autoExpandParent
                       defaultExpandAll={
@@ -465,7 +440,7 @@ export const WebpackModulesOverallBase: React.FC<
                     />
                   </Card>
                 </Col>
-                <Col span={16}>
+                <Col span={18}>
                   {assetPath ? (
                     <ServerAPIProvider
                       api={SDK.ServerAPI.API.GetAssetDetails}
@@ -476,7 +451,7 @@ export const WebpackModulesOverallBase: React.FC<
                           asset={details.asset}
                           chunks={details.chunks}
                           modules={details.modules}
-                          height={fold ? cardBodyHeight : largeCardBodyHeight}
+                          height={cardBodyHeight}
                           moduleSizeLimit={inputModule}
                           root={cwd}
                         />
@@ -485,9 +460,7 @@ export const WebpackModulesOverallBase: React.FC<
                   ) : (
                     <Card
                       bodyStyle={{
-                        height: fold
-                          ? cardBodyHeight + 40
-                          : largeCardBodyHeight,
+                        height: cardBodyHeight,
                       }}
                     >
                       <Empty
@@ -508,7 +481,7 @@ export const WebpackModulesOverallBase: React.FC<
           </Col>
         </Row>
       </Card>
-    </React.Fragment>
+    </div>
   );
 };
 
