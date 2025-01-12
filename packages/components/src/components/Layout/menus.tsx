@@ -167,4 +167,5 @@ export const Menus = withServerAPI({
   responsePropName: 'routes',
   Component: MenusBase,
   fallbackComponent: () => null,
+  showSkeleton: false,
 });

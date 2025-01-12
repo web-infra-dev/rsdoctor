@@ -1,8 +1,7 @@
 import {
-  InfoCircleOutlined,
   MinusCircleOutlined,
   PlusCircleOutlined,
-  RightSquareTwoTone,
+  RightSquareOutlined,
 } from '@ant-design/icons';
 import { Popover, Space, Typography } from 'antd';
 import React, { useCallback } from 'react';
@@ -11,6 +10,7 @@ import Tree, { DefaultNodeProps, useTreeState } from 'react-hyper-tree';
 import { ModuleGraphListContext } from '../../BundleSize/config';
 import { NewTreeNodeType } from '../utils/hooks';
 import './fileTreeCom.scss';
+import { getFileCom } from 'src/components/FileTree';
 
 const prefix = 'file-tree-com';
 
@@ -45,6 +45,7 @@ export const FileTree: React.FC<FileTreeProps> = (props) => {
     defaultOpenFather &&
       node.data.level < defaultOpenFather &&
       node.setOpened(true);
+    const Icon = getFileCom(node.data.name);
 
     return (
       <div className={`${prefix}-titles-box`} key={node.data.name}>
@@ -59,30 +60,28 @@ export const FileTree: React.FC<FileTreeProps> = (props) => {
                     ) : (
                       <MinusCircleOutlined style={{ color: 'lightblue' }} />
                     )}
-                    <Typography.Text>
-                      {node.data.name}
-                      <Popover
-                        key={`${node.data.name}popover`}
-                        content={
-                          <>
-                            {node.data.__RESOURCEPATH__ ? (
-                              <Typography.Text
-                                key={`${node.data.name}-popover-path`}
-                                code
-                              >
-                                {node.data.__RESOURCEPATH__}
-                              </Typography.Text>
-                            ) : (
-                              <></>
-                            )}
-                          </>
-                        }
-                        title="INFO"
-                        trigger="hover"
-                      >
-                        <InfoCircleOutlined style={{ marginLeft: 4 }} />
-                      </Popover>
-                    </Typography.Text>
+                    {Icon}
+                    <Popover
+                      key={`${node.data.name}popover`}
+                      content={
+                        <>
+                          {node.data.__RESOURCEPATH__ ? (
+                            <Typography.Text
+                              key={`${node.data.name}-popover-path`}
+                              code
+                            >
+                              {node.data.__RESOURCEPATH__}
+                            </Typography.Text>
+                          ) : (
+                            <></>
+                          )}
+                        </>
+                      }
+                      title="INFO"
+                      trigger="hover"
+                    >
+                      <Typography.Text>{node.data.name}</Typography.Text>
+                    </Popover>
                   </Space>
                 </div>
                 <Space>
@@ -90,7 +89,7 @@ export const FileTree: React.FC<FileTreeProps> = (props) => {
                     <ModuleGraphListContext.Consumer>
                       {({ moduleJumpList, setModuleJumpList }) => {
                         return (
-                          <RightSquareTwoTone
+                          <RightSquareOutlined
                             onClick={() => {
                               const _list = [...moduleJumpList];
                               _list.push(+node.id);

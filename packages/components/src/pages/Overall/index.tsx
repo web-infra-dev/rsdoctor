@@ -23,7 +23,7 @@ const Component: React.FC<Props> = ({ project }) => {
 
   return (
     <div className={style.overall}>
-      <Flex>
+      <Flex style={{ width: '100%' }}>
         <div style={{ flex: 3, marginRight: '16px' }}>
           <ResponsiveLayout>
             <ProjectOverall
