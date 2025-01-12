@@ -4,7 +4,7 @@ import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import type { Rspack, RsbuildConfig } from '@rsbuild/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import serve from 'sirv';
+import serve from 'serve-static';
 import path from 'path';
 import fs from 'fs';
 
@@ -68,10 +68,12 @@ export default defineConfig(({ env }) => {
         ? OFFICIAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || './'
         : './',
       cleanDistPath: IS_PRODUCTION,
-      sourceMap: {
-        js: 'cheap-module-source-map',
-        css: true,
-      },
+      sourceMap: IS_PRODUCTION
+        ? false
+        : {
+            js: 'cheap-module-source-map',
+            css: true,
+          },
       legalComments: 'none',
     },
 
@@ -194,7 +196,6 @@ export default defineConfig(({ env }) => {
         (middlewares) => {
           if (fs.existsSync(WebpackRsdoctorDirPath)) {
             const fn = serve(WebpackRsdoctorDirPath, {
-              index: false,
               setHeaders(res) {
                 res.setHeader('Content-Type', 'text/plain; charset=utf-8');
               },
