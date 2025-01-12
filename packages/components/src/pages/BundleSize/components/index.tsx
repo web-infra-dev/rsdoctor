@@ -19,7 +19,7 @@ import {
   Typography,
 } from 'antd';
 import { debounce, includes, sumBy } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ServerAPIProvider, withServerAPI } from '../../../components/Manifest';
 import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
@@ -34,6 +34,7 @@ import { AssetDetail } from './asset';
 import './index.sass';
 import styles from './index.module.scss';
 import { GraphType } from '../constants';
+import { extname } from 'path';
 
 const { Option } = Select;
 
@@ -211,6 +212,15 @@ export const WebpackModulesOverallBase: React.FC<
       return _b - _a;
     });
   }, [assets, selectedEntryPoints, inputAssetName, inputAssetSize]);
+
+  useEffect(() => {
+    summary.all.total.files.forEach((f) => {
+      const ext = extname(f.path).slice(1);
+      if (ext === 'js') {
+        setAssetPath(f.path);
+      }
+    });
+  }, [summary.all.total.files]);
 
   const assetsStructures = useMemo(() => {
     const res = createFileStructures({
