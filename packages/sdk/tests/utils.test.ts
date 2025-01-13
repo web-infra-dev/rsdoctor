@@ -1,5 +1,5 @@
 import { expect, describe, it } from 'vitest';
-import { getModuleName } from '../src/graph/module-graph/utils';
+import { getModuleName } from '@rsdoctor/graph/src/graph/module-graph/utils';
 
 /**
  * The following code is modified based on

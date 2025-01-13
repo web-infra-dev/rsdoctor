@@ -870,6 +870,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
     },
   ],
   "exports": [],
+  "layers": [],
   "moduleGraphModules": [],
   "modules": [
     {
@@ -884,6 +885,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "isPreferSource": false,
       "kind": 0,
       "path": "/Users/demo/node_modules/@angular/common/fesm2022/common.mjs",
+      "renderId": undefined,
       "size": {
         "parsedSize": 0,
         "sourceSize": 267758,
@@ -903,6 +905,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "isPreferSource": false,
       "kind": 0,
       "path": "/Users/demo/node_modules/@angular/common/fesm2022/http.mjs",
+      "renderId": undefined,
       "size": {
         "parsedSize": 0,
         "sourceSize": 94775,
@@ -923,6 +926,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "isPreferSource": false,
       "kind": 0,
       "path": "/Users/demo/node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
+      "renderId": undefined,
       "size": {
         "parsedSize": 0,
         "sourceSize": 76943,
@@ -941,6 +945,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "isPreferSource": false,
       "kind": 0,
       "path": "/Users/demo/node_modules/@angular/router/fesm2022/router.mjs",
+      "renderId": undefined,
       "size": {
         "parsedSize": 0,
         "sourceSize": 268651,
@@ -963,7 +968,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "kind": 1,
       "module": 2,
       "originDependency": 3,
-      "request": "./common",
+      "request": "common",
       "resolvedRequest": "common.js",
       "statements": [
         {
@@ -989,7 +994,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "kind": 1,
       "module": 5,
       "originDependency": 3,
-      "request": "./common",
+      "request": "common",
       "resolvedRequest": "common.js",
       "statements": [
         {
@@ -1011,6 +1016,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
     },
   ],
   "exports": [],
+  "layers": [],
   "moduleGraphModules": [],
   "modules": [
     {
@@ -1028,6 +1034,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         3,
       ],
       "path": "entry1.js",
+      "renderId": undefined,
       "rootModule": 2,
       "size": {
         "parsedSize": 0,
@@ -1037,7 +1044,9 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "webpackId": "",
     },
     {
-      "chunks": [],
+      "chunks": [
+        "0",
+      ],
       "concatenationModules": [
         1,
       ],
@@ -1050,6 +1059,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "isPreferSource": false,
       "kind": 0,
       "path": "entry1.js",
+      "renderId": undefined,
       "size": {
         "parsedSize": 0,
         "sourceSize": 78,
@@ -1058,7 +1068,10 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "webpackId": "",
     },
     {
-      "chunks": [],
+      "chunks": [
+        "0",
+        "1",
+      ],
       "concatenationModules": [
         1,
         4,
@@ -1072,6 +1085,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "isPreferSource": false,
       "kind": 0,
       "path": "common.js",
+      "renderId": undefined,
       "size": {
         "parsedSize": 0,
         "sourceSize": 84,
@@ -1094,6 +1108,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         3,
       ],
       "path": "entry2.js",
+      "renderId": "1",
       "rootModule": 5,
       "size": {
         "parsedSize": 0,
@@ -1103,7 +1118,9 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "webpackId": "",
     },
     {
-      "chunks": [],
+      "chunks": [
+        "1",
+      ],
       "concatenationModules": [
         4,
       ],
@@ -1116,6 +1133,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "isPreferSource": false,
       "kind": 0,
       "path": "entry2.js",
+      "renderId": undefined,
       "size": {
         "parsedSize": 0,
         "sourceSize": 78,

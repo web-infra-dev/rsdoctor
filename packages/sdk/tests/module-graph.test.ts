@@ -1,7 +1,7 @@
 import path from 'path';
 import { expect, describe, it } from 'vitest';
 import type { SDK } from '@rsdoctor/types';
-import { Module, ModuleGraph, PackageGraph } from '../src/graph';
+import { Module, ModuleGraph, PackageGraph } from '@rsdoctor/graph';
 
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, 'fixture', ...paths);
@@ -18,6 +18,7 @@ describe('module graph', () => {
       modules: [],
       dependencies: [],
       exports: [],
+      layers: [],
       moduleGraphModules: [],
       sideEffects: [],
       variables: [],
