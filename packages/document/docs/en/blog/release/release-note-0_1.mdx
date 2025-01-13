@@ -1,4 +1,4 @@
-# Rsdoctor v0.1 Release Note
+# Rsdoctor v0.1 release note
 
 <picture>
   <img
@@ -42,11 +42,11 @@ Rsdoctor is a one-stop build analysis tool for Rspack and Webpack. It allows for
 
 ![Overall-Alerts](https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/start/overall-alerts.jpg)
 
-### ⭐️ Compilation Analysis
+### ⭐️ Compilation analysis
 
 Provides corresponding data and analysis functions for **Loaders, Plugins, and Module Resolve** to help you analyze problems in the compilation process.
 
-#### Loader Analysis
+#### Loader analysis
 
 - This module mainly provides the function of data analysis such as input and output, estimated time consumption, and parameters within **Rspack or Webpack Loaders**.
 
@@ -63,7 +63,7 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
   />
 </div>
 
-#### Plugin Analysis
+#### Plugin analysis
 
 - This module mainly intercepts and collects data information such as the number of calls and estimated time consumption of Plugins.
 
@@ -78,7 +78,7 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
   />
 </p>
 
-#### Resolve Analysis
+#### Resolve analysis
 
 - This module mainly provides path data and estimated time consumption for module resolution in a single file within the project. Rspack does not currently support this module.
 
@@ -93,7 +93,7 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
   />
 </p>
 
-### ⭐️ Product Analysis
+### ⭐️ Product analysis
 
 - In the **Bundle Size** page, we can see an overview of the product data information of the current project, as well as analyze the size and reasons for duplicate package imports.
 
@@ -110,11 +110,11 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
   />
 </p>
 
-## 📚 Quick Start
+## 📚 Quick start
 
 You can refer to the [Quick Start](https://rsdoctor.dev/guide/start/quick-start) to get started with **Rsdoctor**.
 
-## 💡 Next Steps
+## 💡 Next steps
 
 **Improve Rsdoctor build analysis efficiency**: Currently, enabling Rsdoctor plugin increases project build time. In the next step, we will extract and convert some of Rsdoctor's build analysis logic into a rust plugin, built-in to [Rspack](https://www.rspack.dev/), in order to improve Rsdoctor's build analysis efficiency.
 

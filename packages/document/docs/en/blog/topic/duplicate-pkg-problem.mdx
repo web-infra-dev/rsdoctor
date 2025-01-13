@@ -1,10 +1,10 @@
-# Duplicate Dependency Problem
+# Duplicate dependency problem
 
 Rsdoctor will report cases where multiple duplicate dependencies exist in the same builder's artifact.
 
 <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts.png" />
 
-## Hazards of Duplicate Packages
+## Hazards of duplicate packages
 
 - **Security**
   - Many packages adopt singleton mode and are only loaded once by default. Examples include core-js, react, and some component libraries. Having multiple versions coexist can cause runtime errors.
@@ -12,11 +12,11 @@ Rsdoctor will report cases where multiple duplicate dependencies exist in the sa
   - Increases artifact size, slowing down network transmission
   - Same code for the same functionality runs multiple times
 
-## How to Solve Duplicate Package Problems?
+## How to solve duplicate package Problems?
 
 To solve the issue of multiple versions of dependencies, you can address it from both the dependency and build aspects.
 
-### Dependency Aspect
+### Dependency aspect
 
 #### 1. Use the npm dedupe command
 
@@ -34,7 +34,7 @@ The advantage of these features is that they can break free from the constraints
 
 However, before using them, it is important to consider the compatibility between package versions and evaluate whether optimization is necessary. For example, whether the logic changes between different versions of the same package will affect the functionality of the project.
 
-### Build Aspect
+### Build aspect
 
 #### Use [resolve.alias](https://www.rspack.dev/config/resolve.html#resolvealias)
 
@@ -56,9 +56,9 @@ module.exports = {
 
 This method also requires attention to the compatibility between package versions.
 
-## Cases of Handling Duplicate Packages
+## Cases of handling duplicate packages
 
-### Duplicate Packages in pnpm-workspace
+### Duplicate packages in pnpm-workspace
 
 In this project, the `web` app depends on `react@18.2.0` and imports `component` using `"component": "workspace:*"`. The `component` package, in turn, depends on `react@18.1.0`. The project structure is as follows:
 
@@ -102,7 +102,7 @@ module.exports = {
 };
 ```
 
-#### Duplicate Packages Caused by Peer Dependency
+#### Duplicate packages caused by peer dependency
 
 This handling method also applies to projects with duplicate packages caused by multiple instances of **[peerDependencies](https://pnpm.io/how-peers-are-resolved)** in `pnpm workspace`. The project directory structure is as follows:
 

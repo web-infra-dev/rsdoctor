@@ -1,4 +1,4 @@
-# Rsdoctor v0.2-0.3 Release Note
+# Rsdoctor v0.2-0.3 发布公告
 
 Rsdoctor v0.3 已经发布啦!
 
@@ -73,13 +73,13 @@ export default {
 };
 ```
 
-## 支持 Banner Plugin
+## 支持 Banner plugin
 
 由于 Rspack 和 Webpack 都支持 BannerPlugin，且 BannerPlugin 可在生成的 chunk 顶部或尾部添加指定内容的代码段，这会影响到对 Bundle 的解析能力。因此，Rsdoctor 增加了 Banner Plugin 的支持。
 
 详情请查看[支持 BannerPlugin](/guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
 
-### 支持 ESM Loader
+### 支持 ESM loader
 
 自 Rspack@0.7.3 开始，支持以 `.js` 为后缀且 `package.json` 中配置 `type: module` 的 ESM Loader 执行（[相关 issue](https://github.com/web-infra-dev/rspack/issues/5735)）。因此，Rsdoctor 也支持 ESM Loader 的分析，主要支持以下两种类型：
 
@@ -100,7 +100,7 @@ chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
 ]);
 ```
 
-## 支持 Parse Bundle 配置
+## 支持 Parse bundle 配置
 
 在部分大型仓库中，反解 Bundle 解析执行耗时过大，这是因为 Parse Bundle 的分析利用了 AST 解析与处理。当产物文件过多时，耗时也会增加。如果不需要此功能，可以通过 `supports.parseBundle` 配置进行选择性关闭。示例如下：
 

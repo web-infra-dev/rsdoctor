@@ -1,4 +1,4 @@
-# Rsdoctor Core
+# Rsdoctor core
 
 This is the core package of Rsdoctor, providing core tools and analysis capabilities for Rsdoctor plugins.
 

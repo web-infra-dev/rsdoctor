@@ -1,4 +1,4 @@
-# Rsdoctor Graph
+# Rsdoctor graph
 
 This package is the intermediate data layer of Rsdoctor.
 

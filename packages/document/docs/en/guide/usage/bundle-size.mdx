@@ -1,4 +1,4 @@
-# Bundle Analysis
+# Bundle analysis
 
 ## Introduction
 
@@ -27,9 +27,9 @@ Click on the **"Bundle Size"** option in the navigation bar to view the Bundle a
 - **`Duplicate Packages`**: Duplicate third-party packages bundled into the project. Excludes third-party packages that are not bundled into the artifact. Please refer to [Duplicate Packages](/guide/usage/bundle-alerts).
 - **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. In the past, Webpack would package each module into a separate closure, and this encapsulation function would cause slower execution of JavaScript in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://webpack.js.org/plugins/module-concatenation-plugin/#root) parameter.
 
-## Bundle Overview
+## Bundle overview
 
-### Bundle Information Card
+### Bundle information card
 
 The bundle overview displays information about the number and size of files, such as `Total Files`. Clicking on the card chart expands the resource details, as shown in the following image:
 
@@ -50,19 +50,19 @@ The bundle overview displays information about the number and size of files, suc
 
 - Clicking on the tabs allows you to switch between different resource information views, such as **[Total JS | Initial JS]**. The card also displays the percentage, size, and number of resources. Similarly, clicking on the icon in the lower right corner expands the resource list.
 
-### Duplicate Packages
+### Duplicate packages
 
 The **Duplicate Packages** card displays the number of duplicate third-party packages in the project. Clicking on the image allows you to view the specific details of the duplicate packages. Please note that these are duplicate packages that have been bundled.
 
 For more information, please refer to [Duplicate Packages](/guide/usage/bundle-alerts).
 
-## Bundle Analysis
+## Bundle analysis
 
 ::: tip
 If your project is based on Rspack and the version is lower than 0.5.1, you cannot view code information.
 :::
 
-### Resource and Module Relationship Display
+### Resource and module relationship display
 
 The **Bundle Analysis** module is used to analyze the size and code information of the build artifacts' resources (**Assets**) and the included **Modules**. The example image is shown below:
 
@@ -71,7 +71,7 @@ The **Bundle Analysis** module is used to analyze the size and code information 
 
 <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-analysis-tree.png" />
 
-### Search and Filter Box
+### Search and filter box
 
 The top toolbar from left to right includes: the search tool for **Assets**, the filter tool for **Assets** size, and the filter tool for **Module** size.
 
@@ -82,7 +82,7 @@ The top toolbar from left to right includes: the search tool for **Assets**, the
 
 <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-size-analysis-selects.png" />
 
-### Module Tag Explanation
+### Module tag explanation
 
 The **Assets** tag is shown in the left image, from left to right representing: **Resource Size**, **[Initial Chunk](https://webpack.js.org/concepts/under-the-hood/#chunks)**, and **Code View**.
 
@@ -111,7 +111,7 @@ The **Modules** tag is shown in the right image, from left to right representing
 - **Module Explorer** tag: Click to open the dependency analysis page between `Modules`.
 - **Code View** tag: Click to expand code segments, including `Source` (source code), `Transformed` (compiled code), and `Bundled` (bundled code).
 
-## Bundle Overview Tile Graph
+## Bundle overview tile graph
 
 Click the **"Bundle Analyzer Graph"** button on the **"Bundle Size"** page to view the classic tile graph.
 

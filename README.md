@@ -28,7 +28,7 @@ English | [简体中文](./README.zh-CN.md)
  <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/4f28312a-68bf-4f9c-91cb-6fd603a37f53" alt="duplicate packages" />
 </div>
 
-## 📚 Getting Started
+## 📚 Getting started
 
 To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/start/quick-start).
 
@@ -67,7 +67,7 @@ Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rsdoctor 
 - [Rspress](https://github.com/web-infra-dev/rspress): A fast Rspack-based static site generator.
 - [Modern.js](https://github.com/web-infra-dev/modern.js): A progressive React framework based on Rsbuild.
 
-## 🙌 Code of Conduct
+## 🙌 Code of conduct
 
 This repo has adopted the ByteDance Open Source Code of Conduct. Please check [Code of Conduct](./CODE_OF_CONDUCT.md) for more details.
 

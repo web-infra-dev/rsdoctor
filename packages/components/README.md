@@ -1,4 +1,4 @@
-# Rsdoctor Components
+# Rsdoctor components
 
 This package is the Rsdoctor reporting platform’s components.
 

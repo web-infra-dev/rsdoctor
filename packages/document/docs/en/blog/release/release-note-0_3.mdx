@@ -1,4 +1,4 @@
-# Rsdoctor v0.2-0.3 Release Note
+# Rsdoctor v0.2-0.3 release note
 
 Rsdoctor v0.3 has been released!
 
@@ -8,7 +8,7 @@ The new features of Rsdoctor v0.3 include:
 - Support for Banner Plugin: Added support for the Banner Plugin, which adds template wrapping to the bundled code, allowing analysis of code changes.
 - Support for ESM Loader Analysis: Added support for analyzing ESM Loaders in the compilation analysis in Rspack.
 
-## Custom Extension Rules
+## Custom extension rules
 
 Considering that users may have their own specific rule definition requirements, Rsdoctor provides an external interface for users to customize their own rule checks in addition to the internal rules already available.
 External extension interfaces need to be configured on the Rsdoctor plugin through the `extends` field, and their configurations are also placed in the `rules` field.
@@ -76,14 +76,14 @@ export default {
 };
 ```
 
-## Support for Banner Plugin
+## Support for banner plugin
 
 Both Rspack and Webpack support the BannerPlugin, which is an built-in plugin that allows you to add specific content at the top or bottom of the generated chunks. The added code will affect the parsing capability of the bundle.
 Therefore, Rsdoctor has added support for the Banner Plugin.
 
 Please refer to [Support for BannerPlugin](/guide/usage/bundle-size#support-for-bannerplugin)
 
-## Support for ESM Loader
+## Support for ESM loader
 
 Starting from Rspack@0.7.3, support for ESM Loader execution with `.js` extension and `type: module` configuration in `package.json` is added ([related issue](https://github.com/web-infra-dev/rspack/issues/5735)). Therefore, Rsdoctor also supports the analysis of ESM Loader, mainly supporting the following two types:
 
@@ -104,7 +104,7 @@ chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
 ]);
 ```
 
-## Support for Parse Bundle Configuration
+## Support for parse bundle configuration
 
 In some large repositories, the execution time for parsing bundles is significant. This is because the Parse Bundle analysis relies on AST parsing and processing, which can be time-consuming when there are a large number of files.
 If this capability is not necessary, it can be selectively disabled using the `supports.parseBundle` configuration. Here is an example:

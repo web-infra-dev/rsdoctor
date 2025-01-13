@@ -1,4 +1,4 @@
-# Compilation Diagnostic Rules
+# Compilation diagnostic rules
 
 Building diagnostic rules is similar to lint tools like `ESLint`, but with a difference. `ESLint` performs static code scanning and is independent of the build process. On the other hand, the code diagnostics here are closely related to the build process of `Rspack` or `Webpack`. It incorporates various internal parameters generated during the build process to assist in the analysis, such as ModuleGraph, internal markers for each module by Webpack, and runtime added after code transformation, and so on...
 
@@ -16,7 +16,7 @@ If any issues are detected during the build process, they will be displayed in t
   src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/rule-config-1.png"
 />
 
-## How to Use
+## How to use
 
 Using diagnostic rules is simple. They are configured under the `linter` option of the entire plugin, as shown in the following example:
 
@@ -45,7 +45,7 @@ export default {
 };
 ```
 
-#### Enable ECMA Version check
+#### Enable ECMA version check
 
 The configuration of `browserslist` is used first. If there is no `browserslist`, the following configuration is used for detection
 
@@ -103,7 +103,7 @@ type RuleConfigItem =
   | [SeverityInput, unknown];
 ```
 
-## Existing Internal Rules
+## Existing internal rules
 
 There are already three rules included in the existing diagnostic tool, which are:
 
