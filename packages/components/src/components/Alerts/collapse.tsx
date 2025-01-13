@@ -20,6 +20,7 @@ import type { AlertProps } from '../Alert/types';
 import styles from './collapse.module.scss';
 
 const { Paragraph, Text } = Typography;
+const InnerWidth = window.innerWidth;
 
 const LabelComponent = (props: {
   title: string | ReactNode;
@@ -66,7 +67,7 @@ export const AlertCollapse = (props: {
               style={{ backgroundColor: '#fff' }}
               title={
                 <Text
-                  style={{ width: window.innerWidth > 1500 ? 900 : 700 }}
+                  style={{ width: InnerWidth > 1500 ? 900 : 700 }}
                   ellipsis={{
                     tooltip: root,
                   }}
