@@ -1,5 +1,5 @@
 import { TranslationOutlined } from '@ant-design/icons';
-import { Col, Dropdown, Layout, Row, Typography } from 'antd';
+import { Col, Dropdown, Layout, Row } from 'antd';
 import React from 'react';
 import { Language, Size } from '../../constants';
 import { useI18n, useTheme } from '../../utils';
@@ -62,22 +62,10 @@ export const Header: React.FC = () => {
           >
             <img
               style={{ height: 30 }}
-              src={
-                'https://assets.rspack.dev/rsdoctor/rsdoctor-logo-960x960.png'
-              }
+              src={'https://assets.rspack.dev/rsdoctor/rsdoctor-title-logo.png'}
               className="rsdoctor-logo"
               alt="logo"
             />
-            <Typography.Text
-              style={{
-                color: 'inherit',
-                fontSize: 18,
-                marginLeft: 4,
-                marginTop: 8,
-              }}
-            >
-              Rsdoctor
-            </Typography.Text>
             <BuilderSelect />
           </div>
         </Col>
