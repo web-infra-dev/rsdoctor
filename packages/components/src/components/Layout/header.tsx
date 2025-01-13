@@ -62,9 +62,7 @@ export const Header: React.FC = () => {
           >
             <img
               style={{ height: 30 }}
-              src={
-                'https://github.com/rspack-contrib/rstack-design-resources/blob/chore/ui-logo/rsdoctor/rsdoctor-title-logo.png?raw=true'
-              }
+              src={'https://assets.rspack.dev/rsdoctor/rsdoctor-title-logo.png'}
               className="rsdoctor-logo"
               alt="logo"
             />
