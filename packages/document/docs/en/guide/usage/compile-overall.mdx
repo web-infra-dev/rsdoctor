@@ -1,4 +1,4 @@
-# Compile Overall
+# Compile overall
 
 ## Overview
 
@@ -26,9 +26,9 @@ The following table explains the meaning and code implementation of each phase i
 | <b><i>AfterCompile -> Done</i></b>       | Represents the time taken from compilation completion to the end of the entire process      | <ul><li>In `Webpack` or `Rspack` projects: The <b>start time</b> is the time when **compiler.hooks.afterCompile** is called, and the <b>end time</b> is the time when **compiler.hooks.done** is called</li></ul>                |
 | <b><i>Minify</i></b>                     | Represents the time taken for file compression during the compilation process in most cases | <ul><li>In `Webpack` or `Rspack` projects: Calculates the sum of the time taken for each call of **compilation.hooks.optimizeChunkAssets** and **compilation.hooks.processAssets**</li></ul>                                     |
 
-## Usage Instructions
+## Usage instructions
 
-### Bootstrap -> BeforeCompile Details
+### Bootstrap -> BeforeCompile details
 
 By **clicking on the data of the `Bootstrap -> BeforeCompile` phase**, a popup will appear on the page, as shown in the following image:
 
@@ -52,11 +52,11 @@ Hovering over a data point in the chart will display the following information i
 - **end**: the end time
 - **duration**: the duration, calculated as `end - start`
 
-### Compile Phase
+### Compile phase
 
 In this section, you can navigate to "Compile Analysis" -> "Loader Analysis" -> [**"Loader Timeline"**](./loaders-timeline.mdx) in the navigation bar to view the timeline of loader compilation time.
 
-### AfterCompile -> Done Details
+### AfterCompile -> Done details
 
 By **clicking on the data of the `AfterCompile -> Done` phase**, a popup will appear on the page, as shown in the following image:
 
@@ -96,7 +96,7 @@ Hovering over a data point in the chart will display the following information i
 - **end**: the end time
 - **duration**: the duration, calculated as `end - start`
 
-### Minify Details
+### Minify details
 
 :::tip
 Minify details are currently not available for Rspack projects.
@@ -109,7 +109,7 @@ By **clicking on the data of the `Minify` phase**, a popup will appear on the pa
 
 The content in the popup has similar meanings to the previous paragraphs, so it will not be repeated here.
 
-## Reference Documentation
+## Reference documentation
 
 - [**Rspack Hooks**](https://www.rspack.dev/api/plugin-api.html#beforecompile)
 - [**Webpack Hooks**](https://webpack.js.org/api/compilation-hooks/)

@@ -1,4 +1,4 @@
-# Rsdoctor Client
+# Rsdoctor client
 
 This package is the Rsdoctor reporting platform.
 

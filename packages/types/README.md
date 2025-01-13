@@ -1,4 +1,4 @@
-# Rsdoctor Types
+# Rsdoctor types
 
 This package is the Rsdoctor‘s types package.
 

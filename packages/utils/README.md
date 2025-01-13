@@ -1,4 +1,4 @@
-# Rsdoctor Utils
+# Rsdoctor utils
 
 This package is the Rsdoctor‘s tools package.
 

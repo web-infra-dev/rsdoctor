@@ -1,4 +1,4 @@
-# Rsdoctor Cli
+# Rsdoctor CLI
 
 This is the cli package of Rsdoctor, you can use the capabilities of this package to open the analysis page without building.
 

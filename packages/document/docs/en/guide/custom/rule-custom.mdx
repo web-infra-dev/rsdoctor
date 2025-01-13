@@ -1,4 +1,4 @@
-# Custom Extension Rules
+# Custom extension rules
 
 ## Introduction
 
@@ -64,7 +64,7 @@ export default {
 
 You can follow the detailed steps below to define and write custom rules.
 
-## Steps for Custom Rules
+## Steps for custom rules
 
 ### 1. Installation
 
@@ -76,7 +76,7 @@ import { Tab, Tabs } from 'rspress/theme';
 
 <PackageManagerTabs command="add @rsdoctor/core -D" />
 
-### 2. Writing Rules
+### 2. Writing rules
 
 To write rules, you need to use the `defineRule` function, which takes a function as input and returns an object in a fixed format. Refer to the following example:
 
@@ -106,11 +106,11 @@ export const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
 
 The `meta` field contains the fixed configuration and content of this rule, and the `check` field contains the callback that includes the specific logic for rule checking. Their types are as follows.
 
-#### meta Object
+#### meta object
 
 For the definition of the meta type, please refer to [RuleMeta](#rulemeta).
 
-##### Property Meanings
+##### Property meanings
 
 - meta
   - category
@@ -130,12 +130,12 @@ For the definition of the meta type, please refer to [RuleMeta](#rulemeta).
     - info: The documentation link for the rule.
     - type: string.
 
-#### check Function
+#### check function
 
 The check function is mainly used for rule judgment. The parameter `ruleContext` is all the build information that Rsdoctor integrates during the build analysis process, and its type is defined as follows.
 You can use the build information in the body of the check function to make custom rule judgments. After the judgment, if the rule check fails, you can report it using the `report` method in the parameter. See the next step for details.
 
-##### CheckCallback Type
+##### CheckCallback type
 
 ```ts
 type CheckCallback<Config = DefaultRuleConfig> = (
@@ -170,7 +170,7 @@ const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
 }));
 ```
 
-### 3. Reporting Rule Results
+### 3. Reporting rule results
 
 To report errors, you need to use the `report` method in the `check` callback function's parameter. The `report` method's parameters mainly include the following parts:
 
@@ -181,7 +181,7 @@ To report errors, you need to use the `report` method in the `check` callback fu
 
 For detailed type definitions, refer to: [ReportData](#reportdata)
 
-### 4. Displaying Rule Results
+### 4. Displaying rule results
 
 The `report` function will pass the error information of custom rules to the compilation's errors or warnings. It will display the rule results in the terminal during the build process, and even interrupt the build.
 At the same time, Rsdoctor also has two components that can be used to display rules. For more details, see [Display Components](#display-components).
@@ -194,9 +194,9 @@ At the same time, Rsdoctor also has two components that can be used to display r
 
 <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/rule-2.jpeg" />
 
-## Display Components
+## Display components
 
-### Basic Rule Warning Component
+### Basic rule warning component
 
 - Component Type
 
@@ -263,7 +263,7 @@ report({
 
 - Component Code [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/components/src/components/Alert/link.tsx)
 
-### Code Display Component
+### Code display component
 
 - Component Type
 
@@ -337,7 +337,7 @@ report({
 
 - Component Code: [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/components/src/components/Alert/view.tsx)
 
-## Type Definitions
+## Type definitions
 
 ### RuleMeta
 
@@ -487,7 +487,7 @@ interface SourceRange {
 
 ## Tools
 
-### AST Processing
+### AST processing
 
 When performing rule detection and analysis, it is common to perform AST analysis on modules and other operations. To provide more auxiliary functions, we also provide `@rsdoctor/utils/rule-utils` in the `@rsdoctor/utils` package, which contains many useful utility functions and methods.
 
@@ -525,7 +525,7 @@ interface Document {
 
 The `asserts` assertion method set provides type assertion methods for all AST nodes, while the `utils` utility method set provides commonly used methods such as determining whether certain statements have the same semantics and retrieving Import nodes.
 
-### Reporting Code Position
+### Reporting code position
 
 Some errors require providing the position of the code, so the content of the `document` field needs to be provided. However, there is an important distinction here: each module actually has two sets of code, transformed and source, which means the code after being processed by the loader and the user's original code. The AST is actually the transformed code format.
 To facilitate display for users, we need to use the original code as much as possible. Therefore, after selecting the corresponding AST node, users need to use the SourceMap module provided by the module to convert the position information to the original code. If the module does not have the original code or SourceMap for some special reasons, then using the transformed code/position is more appropriate. A typical workflow is as follows:
@@ -553,6 +553,6 @@ report({
 });
 ```
 
-## Data Reporting
+## Data reporting
 
 Please go to [Data Reporting](./upload-data) for viewing.

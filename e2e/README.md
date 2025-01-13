@@ -2,18 +2,18 @@
 
 This folder contains the e2e test cases of Rsdoctor.
 
-## Tech Stack
+## Tech stack
 
 - [playwright](https://github.com/microsoft/playwright): The e2e test framework.
 
 ## Commands
 
 ```bash
-# Run all test cases, including Rspack and Webpack
+# Run all test cases, including Rspack and webpack
 pnpm run test
 ```
 
-## Add Test Cases
+## Add test cases
 
 ### Add test cases for common capabilities
 
