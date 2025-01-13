@@ -42,7 +42,6 @@ export async function getAssetsModulesData(
       const assetFile = path.join(bundleDir, asset.path);
       let bundleInfo: ReturnType<ParseBundle>;
       try {
-        console.log(modules);
         bundleInfo = parseBundle(assetFile, modules);
       } catch (err: any) {
         const { code = '', message } = err;
