@@ -19,7 +19,7 @@ import {
   Typography,
 } from 'antd';
 import { debounce, includes, sumBy } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ServerAPIProvider, withServerAPI } from '../../../components/Manifest';
 import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
@@ -211,6 +211,20 @@ export const WebpackModulesOverallBase: React.FC<
       return _b - _a;
     });
   }, [assets, selectedEntryPoints, inputAssetName, inputAssetSize]);
+
+  useEffect(() => {
+    function getFileExtension(filePath: string) {
+      const parts = filePath.split('.');
+      return parts.length > 1 ? parts.pop() : '';
+    }
+
+    summary.all.total.files.forEach((f) => {
+      const ext = getFileExtension(f.path);
+      if (ext === 'js') {
+        setAssetPath(f.path);
+      }
+    });
+  }, [summary.all.total.files]);
 
   const assetsStructures = useMemo(() => {
     const res = createFileStructures({
