@@ -42,9 +42,9 @@ export class RsdoctorSDK<
 
   private _plugin: SDK.PluginData = {};
 
-  private _moduleGraph = new ModuleGraph();
+  private _moduleGraph: SDK.ModuleGraphInstance = new ModuleGraph();
 
-  private _chunkGraph = new ChunkGraph();
+  private _chunkGraph: SDK.ChunkGraphInstance = new ChunkGraph();
 
   private _rawSourceMapCache = new Map<string, RawSourceMap>();
 
@@ -271,9 +271,9 @@ export class RsdoctorSDK<
     this.onDataReport();
   }
 
-  reportModuleGraph(data: ModuleGraph): void {
+  reportModuleGraph(data: SDK.ModuleGraphInstance): void {
     debug(() => `data size: ${data.size()}`, '[SDK.reportModuleGraph][start]');
-    this._moduleGraph.fromInstance(data);
+    this._moduleGraph.fromInstance(data as ModuleGraph);
     this.createPackageGraph();
     this.onDataReport();
     debug(
@@ -282,7 +282,7 @@ export class RsdoctorSDK<
     );
   }
 
-  reportPackageGraph(data: PackageGraph): void {
+  reportPackageGraph(data: SDK.PackageGraphInstance): void {
     debug(() => '[SDK.reportPackageGraph][start]');
     if (!this._packageGraph) {
       this._packageGraph = data;
@@ -294,7 +294,7 @@ export class RsdoctorSDK<
     );
   }
 
-  reportChunkGraph(data: ChunkGraph): void {
+  reportChunkGraph(data: SDK.ChunkGraphInstance): void {
     this._chunkGraph.addAsset(...data.getAssets());
     this._chunkGraph.addChunk(...data.getChunks());
     this._chunkGraph.addEntryPoint(...data.getEntryPoints());

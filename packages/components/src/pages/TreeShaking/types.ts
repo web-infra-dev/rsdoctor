@@ -1,8 +1,8 @@
-import type { Module, SourceRange } from '@rsdoctor/graph';
+import { SDK } from '@rsdoctor/types';
 
 export type TableKind = 'side-effect' | 'export';
 export type SetEditorStatus = (
-  module: Module,
-  ranges: SourceRange[],
+  module: SDK.ModuleInstance,
+  ranges: SDK.SourceRange[],
   line?: number,
 ) => void;

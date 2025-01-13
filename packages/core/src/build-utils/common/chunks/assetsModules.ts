@@ -2,8 +2,7 @@ import { isEmpty, pick } from 'lodash';
 import path from 'path';
 
 import { logger } from '@rsdoctor/utils/logger';
-import { Plugin } from '@rsdoctor/types';
-import type { ModuleGraph } from '@rsdoctor/graph';
+import { Plugin, SDK } from '@rsdoctor/types';
 import { ParseBundle } from '@/types';
 import { getModulesFromArray } from '../module-graph';
 
@@ -99,7 +98,7 @@ export async function getAssetsModulesData(
 
 export function transformAssetsModulesData(
   parsedModulesData: ParsedModuleSizeData,
-  moduleGraph: ModuleGraph,
+  moduleGraph: SDK.ModuleGraphInstance,
 ) {
   if (!moduleGraph) return;
   Object.entries(parsedModulesData).forEach(([moduleId, parsedData]) => {

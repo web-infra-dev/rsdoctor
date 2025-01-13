@@ -1,10 +1,4 @@
 import { SDK } from '@rsdoctor/types';
-import { Statement } from '../statement';
-import { Module } from '../module';
-import { Variable } from './variable';
-import { ExportInfo } from './export';
-import { ModuleGraphModule } from './module';
-import { Dependency } from '../dependency';
 
 let id = 1;
 
@@ -22,22 +16,22 @@ export class SideEffect implements SDK.SideEffectInstance {
 
   readonly originName?: string;
 
-  readonly module: Module;
+  readonly module: SDK.ModuleInstance;
 
-  readonly identifier: Statement;
+  readonly identifier: SDK.StatementInstance;
 
   readonly isNameSpace: boolean;
 
-  readonly fromDependency?: Dependency;
+  readonly fromDependency?: SDK.DependencyInstance;
 
-  private _exports: ExportInfo[] = [];
+  private _exports: SDK.ExportInstance[] = [];
 
-  private _variable?: Variable | false;
+  private _variable?: SDK.VariableInstance | false;
 
   constructor(
     name: string,
-    module: Module,
-    identifier: Statement,
+    module: SDK.ModuleInstance,
+    identifier: SDK.StatementInstance,
     fromRequest?: string,
     originName?: string | symbol,
   ) {
@@ -76,11 +70,11 @@ export class SideEffect implements SDK.SideEffectInstance {
     return this._exports?.slice() ?? [];
   }
 
-  setModuleExport(mgm: ModuleGraphModule) {
+  setModuleExport(mgm: SDK.ModuleGraphModuleInstance) {
     mgm.getExports().forEach((info) => this.setExportInfo(info));
   }
 
-  setExportInfo(info: ExportInfo) {
+  setExportInfo(info: SDK.ExportInstance) {
     this._exports.push(info);
     info.addSideEffect(this);
   }

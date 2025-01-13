@@ -1,9 +1,5 @@
 import { unionBy } from 'lodash';
-import {
-  ModuleGraph as SdkModuleGraph,
-  Module as SdkModule,
-  Statement,
-} from '@rsdoctor/graph';
+import { Statement } from '@rsdoctor/graph';
 import {
   Compilation,
   Dependency,
@@ -13,6 +9,7 @@ import {
   NormalModule,
 } from 'webpack';
 import type { EntryPoint, ExportInfo } from '@/types/index';
+import { SDK } from '@rsdoctor/types';
 
 export function isNormalModule(mod: Module): mod is NormalModule {
   return 'request' in mod && 'rawRequest' in mod && 'resource' in mod;
@@ -59,9 +56,9 @@ export function getEntryModule(
 
 export function getDependencyPosition(
   dep: Dependency,
-  module: SdkModule,
+  module: SDK.ModuleInstance,
   getSource = true,
-): Statement | undefined {
+): SDK.StatementInstance | undefined {
   const { loc: depLoc } = dep;
 
   if (!('start' in depLoc)) {
@@ -109,7 +106,7 @@ export function getExportDependency(info: ExportInfo, module: NormalModule) {
 export function getSdkDependencyByWebpackDependency(
   dep: Dependency,
   module: NormalModule,
-  graph: SdkModuleGraph,
+  graph: SDK.ModuleGraphInstance,
 ) {
   const modulePath = getWebpackModulePath(module);
   const request = getWebpackDependencyRequest(dep);
@@ -123,7 +120,7 @@ export function getSdkDependencyByWebpackDependency(
 export function getExportStatement(
   info: ExportInfo,
   normalModule: NormalModule,
-  graph: SdkModuleGraph,
+  graph: SDK.ModuleGraphInstance,
 ) {
   const webpackDependency = getExportDependency(info, normalModule);
 

@@ -1,9 +1,8 @@
 import { SDK } from '@rsdoctor/types';
-import type { Module } from './module';
 import { isSameRange } from './utils';
 
 export class Statement implements SDK.StatementInstance {
-  static getDefaultStatement(module: Module) {
+  static getDefaultStatement(module: SDK.ModuleInstance) {
     const defaultPosition = {
       line: 1,
       column: 0,
@@ -21,14 +20,14 @@ export class Statement implements SDK.StatementInstance {
 
   readonly position: SDK.StatementPosition;
 
-  readonly module: Module;
+  readonly module: SDK.ModuleInstance;
 
-  constructor(module: Module, position: SDK.StatementPosition) {
+  constructor(module: SDK.ModuleInstance, position: SDK.StatementPosition) {
     this.module = module;
     this.position = position;
   }
 
-  isSame(statement: Statement): boolean {
+  isSame(statement: SDK.StatementInstance): boolean {
     return (
       this.module.id === statement.module.id &&
       isSameRange(this.position.transformed, statement.position.transformed)

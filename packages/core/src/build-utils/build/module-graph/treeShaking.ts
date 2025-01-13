@@ -1,5 +1,4 @@
 import {
-  ModuleGraph,
   ExportInfo,
   Variable,
   SideEffect,
@@ -27,12 +26,12 @@ import {
 } from './utils';
 import { isWebpack5orRspack } from '@/build-utils/common/module-graph';
 
-type ExportData = Map<WebExportInfo, ExportInfo>;
+type ExportData = Map<WebExportInfo, SDK.ExportInstance>;
 
 function transformMgm(
   origin: WebpackNormalModule,
   webpackGraph: WebpackModuleGraph,
-  graph: ModuleGraph,
+  graph: SDK.ModuleGraphInstance,
   cache: ExportData,
 ) {
   const module = graph.getModuleByWebpackId(origin.identifier());
@@ -80,7 +79,7 @@ function transformMgm(
     const { name, userRequest } = HISDep;
     const originName =
       HISDep.getIds(webpackGraph)[0] ?? SideEffect.NamespaceSymbol;
-    const importIdStatement = module.getStatement(dep.loc as SDK.SourceRange);
+    const importIdStatement = module.getStatement(dep.loc as SDK.SourceRange)!;
     const importInfo = new SideEffect(
       name,
       module,
@@ -96,7 +95,7 @@ function transformMgm(
 function appendExportConnection(
   origin: WebpackNormalModule,
   webpackGraph: WebpackModuleGraph,
-  graph: ModuleGraph,
+  graph: SDK.ModuleGraphInstance,
   cache: ExportData,
 ) {
   const module = graph.getModuleByWebpackId(origin.identifier());
@@ -127,7 +126,7 @@ function appendExportConnection(
 
 function appendImportConnection(
   origin: WebpackNormalModule,
-  graph: ModuleGraph,
+  graph: SDK.ModuleGraphInstance,
 ) {
   const module = graph.getModuleByWebpackId(origin.identifier());
   const mgm = graph.getModuleGraphModule(module!);
@@ -158,7 +157,7 @@ function appendImportConnection(
 }
 
 export function appendTreeShaking(
-  moduleGraph: ModuleGraph,
+  moduleGraph: SDK.ModuleGraphInstance,
   compilation: Plugin.BaseCompilation,
 ) {
   if (!isWebpack5orRspack(compilation)) {
@@ -166,7 +165,7 @@ export function appendTreeShaking(
   }
 
   if ('moduleGraph' in compilation) {
-    const exportData = new Map<WebExportInfo, ExportInfo>();
+    const exportData = new Map<WebExportInfo, SDK.ExportInstance>();
     const webpackCompilation = compilation as unknown as Compilation;
     const { moduleGraph: webpackGraph } = webpackCompilation;
     const allModules = getAllModules(webpackCompilation);
@@ -182,4 +181,6 @@ export function appendTreeShaking(
 
     return moduleGraph;
   }
+
+  return moduleGraph;
 }

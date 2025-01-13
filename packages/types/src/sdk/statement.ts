@@ -179,6 +179,7 @@ export interface StatementInstance {
 
   /** Output data */
   toData(): StatementData;
+  getLineCode(): string | undefined;
 }
 
 /** statement data */

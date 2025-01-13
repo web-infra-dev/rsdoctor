@@ -1,6 +1,6 @@
 import { SDK, Plugin } from '@rsdoctor/types';
 import path from 'path-browserify';
-import { ModuleGraph, Module, Statement, ChunkGraph } from '@rsdoctor/graph';
+import { ModuleGraph, Module, Statement } from '@rsdoctor/graph';
 import { isImportDependency, getImportKind } from './utils';
 import { getPositionByStatsLocation } from './compatible';
 
@@ -63,7 +63,7 @@ function getModulesFromChunks(
 export function getModuleGraphByStats(
   { modules, chunks }: Plugin.StatsCompilation,
   root: string,
-  chunkGraph: ChunkGraph,
+  chunkGraph: SDK.ChunkGraphInstance,
 ) {
   ModuleGraph.init();
 

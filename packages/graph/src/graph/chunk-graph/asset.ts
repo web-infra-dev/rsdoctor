@@ -1,16 +1,17 @@
 import { SDK } from '@rsdoctor/types';
-import { Chunk } from './chunk';
 
 export class Asset implements SDK.AssetInstance {
   path: string;
-
   size: number;
-
   content: string;
+  chunks: SDK.ChunkInstance[];
 
-  chunks: Chunk[];
-
-  constructor(path: string, size: number, chunks: Chunk[], content: string) {
+  constructor(
+    path: string,
+    size: number,
+    chunks: SDK.ChunkInstance[],
+    content: string,
+  ) {
     this.path = path;
     this.size = size;
     this.chunks = chunks;

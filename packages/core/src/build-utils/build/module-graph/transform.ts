@@ -1,13 +1,13 @@
 import { Plugin } from '@rsdoctor/types';
 import { getModuleGraphByStats as transform } from '@/build-utils/common/module-graph';
 import { TransformContext, appendModuleGraphByCompilation } from '.';
-import { ChunkGraph } from '@rsdoctor/graph';
+import { SDK } from '@rsdoctor/types';
 
 export function getModuleGraphByStats(
   compilation: Plugin.BaseCompilation,
   stats: Plugin.StatsCompilation,
   root: string,
-  chunkGraph: ChunkGraph,
+  chunkGraph: SDK.ChunkGraphInstance,
   features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
 ) {

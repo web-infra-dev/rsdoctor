@@ -1,11 +1,4 @@
 import { SDK } from '@rsdoctor/types';
-import type {
-  Module,
-  ModuleGraph,
-  Statement,
-  ExportInfo,
-  SourceRange,
-} from '@rsdoctor/graph';
 import {
   Space,
   Table,
@@ -28,14 +21,14 @@ import { isDef } from '../../utils';
 const tableHeight = 600;
 
 interface TableProps {
-  module: Module;
-  moduleGraph: ModuleGraph;
+  module: SDK.ModuleInstance;
+  moduleGraph: SDK.ModuleGraphInstance;
   setEditorData: SetEditorStatus;
   kind: TableKind;
 }
 
 function getDeclarationElement(
-  val: Statement | undefined,
+  val: SDK.StatementInstance | undefined,
   setEditorData: SetEditorStatus,
 ) {
   if (!val) {
@@ -158,8 +151,8 @@ export const SideEffectTable: React.FC<TableProps> = ({
   interface SideEffectDataRowData {
     key: number;
     name: string;
-    identifier: SourceRange;
-    declaration?: Statement;
+    identifier: SDK.SourceRange;
+    declaration?: SDK.StatementInstance;
     children?: SideEffectDataRowData[];
   }
 
@@ -236,7 +229,7 @@ export const SideEffectTable: React.FC<TableProps> = ({
       dataIndex: 'declaration',
       key: 'declaration',
       align: 'center',
-      render: (val: Statement) => {
+      render: (val: SDK.StatementInstance) => {
         return getDeclarationElement(val, setEditorData);
       },
     },
@@ -316,10 +309,10 @@ export const ExportTable: React.FC<TableProps> = ({
   interface RowData {
     key: number;
     name: string;
-    declaration?: Statement;
+    declaration?: SDK.StatementInstance;
     used: {
-      module: Module;
-      range: SourceRange;
+      module: SDK.ModuleInstance;
+      range: SDK.SourceRange;
     }[];
   }
 
@@ -356,14 +349,14 @@ export const ExportTable: React.FC<TableProps> = ({
       dataIndex: 'name',
       key: 'name',
       align: 'center',
-      ...useSearchCell<ExportInfo>('name'),
+      ...useSearchCell<SDK.ExportInstance>('name'),
     },
     {
       title: 'Declaration',
       dataIndex: 'declaration',
       key: 'declaration',
       align: 'center',
-      render: (val?: Statement) => {
+      render: (val?: SDK.StatementInstance) => {
         return getDeclarationElement(val, setEditorData);
       },
     },

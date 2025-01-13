@@ -1,7 +1,6 @@
 import path from 'path';
 import { RsdoctorPluginInstance } from '@/types';
-import { ModuleGraph } from '@rsdoctor/graph';
-import { Linter, Plugin, Constants, Manifest } from '@rsdoctor/types';
+import { Linter, Plugin, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { chalk, debug, logger } from '@rsdoctor/utils/logger';
 import fse from 'fs-extra';
@@ -131,7 +130,7 @@ export const ensureModulesChunksGraphFn = (
 async function getModulesInfosByStats(
   compiler: Plugin.BaseCompiler,
   stats: Plugin.StatsCompilation,
-  moduleGraph: ModuleGraph,
+  moduleGraph: SDK.ModuleGraphInstance,
   parseBundle: boolean,
 ) {
   if (!moduleGraph) {

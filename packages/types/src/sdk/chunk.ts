@@ -61,16 +61,16 @@ export interface ChunkGraphInstance {
   addChunk(...chunks: ChunkInstance[]): void;
   /** Get chunk by identifier */
   getChunkById(id: string): ChunkInstance | undefined;
-  /** Get Chunk by Module */
-  getChunkByModule(module: ModuleInstance): ChunkInstance | undefined;
   /** Get the file according to the path */
   getAssetByPath(path: string): AssetInstance | undefined;
-  /** Get files based on Chunk */
-  getAssetsByChunk(chunk: ChunkInstance): AssetInstance[] | undefined;
   /**
    * get the list of entry points
    */
   getEntryPoints(): EntryPointInstance[];
+  /**
+   * get the entry point by id
+   */
+  getEntryPointByName(name: string): EntryPointInstance | undefined;
   /**
    * add the entry point instance to chunk graph
    */

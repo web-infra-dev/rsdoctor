@@ -1,5 +1,4 @@
 import { SDK } from '@rsdoctor/types';
-import type { ModuleGraph } from '@rsdoctor/graph';
 
 interface DependencyData {
   type?: string;
@@ -47,7 +46,7 @@ export function getImportKind(dep: DependencyData): SDK.DependencyKind {
  * Remove the css module without connection
  *   - This will happen when the user uses the mini-css plug-in.
  */
-export function removeNoImportStyle(graph: ModuleGraph) {
+export function removeNoImportStyle(graph: SDK.ModuleGraphInstance) {
   graph
     .getModules()
     .filter((module) => isStyleExt(module.path))

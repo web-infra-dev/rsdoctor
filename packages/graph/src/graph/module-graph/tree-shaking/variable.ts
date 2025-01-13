@@ -1,7 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { Statement } from '../statement';
 import { ExportInfo } from './export';
-import { Module } from '../module';
 
 let id = 1;
 
@@ -14,19 +12,19 @@ export class Variable implements SDK.VariableInstance {
 
   readonly name: string;
 
-  readonly module: Module;
+  readonly module: SDK.ModuleInstance;
 
   readonly usedInfo: string;
 
-  readonly identifier: Statement;
+  readonly identifier: SDK.StatementInstance;
 
-  private _exported?: ExportInfo;
+  private _exported?: SDK.ExportInstance;
 
   constructor(
     name: string,
-    module: Module,
+    module: SDK.ModuleInstance,
     usedInfo: string,
-    identifier: Statement,
+    identifier: SDK.StatementInstance,
   ) {
     this.name = name;
     this.module = module;
@@ -38,9 +36,9 @@ export class Variable implements SDK.VariableInstance {
     return this._exported ? this._exported.getSideEffects().length > 0 : false;
   }
 
-  setExportInfo(info: ExportInfo): void {
+  setExportInfo(info: SDK.ExportInstance): void {
     this._exported = info;
-    info.variable = this;
+    (info as ExportInfo).variable = this;
   }
 
   getExportInfo() {
