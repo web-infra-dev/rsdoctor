@@ -1,67 +1,64 @@
 import { SDK } from '@rsdoctor/types';
-import type { Asset } from './asset';
-import type { Chunk } from './chunk';
-import type { Module } from '../module-graph';
-import type { EntryPoint } from './entrypoint';
 
 export class ChunkGraph implements SDK.ChunkGraphInstance {
-  private _assets: Asset[] = [];
+  private _assets: SDK.AssetInstance[] = [];
+  private _chunks: SDK.ChunkInstance[] = [];
+  private _entrypoints: SDK.EntryPointInstance[] = [];
+  private _assetMap: Record<string, SDK.AssetInstance> = {};
+  private _chunkMap: Record<string, SDK.ChunkInstance> = {};
+  private _entrypointMap: Record<string, SDK.EntryPointInstance> = {};
 
-  private _chunks: Chunk[] = [];
-
-  private _entrypoints: EntryPoint[] = [];
-
-  getAssets(): Asset[] {
+  getAssets(): SDK.AssetInstance[] {
     return this._assets.slice();
   }
 
-  getChunks(): Chunk[] {
+  getChunks(): SDK.ChunkInstance[] {
     return this._chunks.slice();
   }
 
-  addAsset(...assets: Asset[]): void {
+  addAsset(...assets: SDK.AssetInstance[]): void {
     assets.forEach((asset) => {
       if (!this._assets.includes(asset)) {
         this._assets.push(asset);
+        this._assetMap[asset.path] = asset;
       }
     });
   }
 
-  addChunk(...chunks: Chunk[]): void {
+  addChunk(...chunks: SDK.ChunkInstance[]): void {
     chunks.forEach((chunk) => {
       if (!this._chunks.includes(chunk)) {
         this._chunks.push(chunk);
+        this._chunkMap[chunk.id] = chunk;
       }
     });
   }
 
-  getChunkById(id: string): Chunk | undefined {
-    return this._chunks.find((item) => item.id === id);
+  getChunkById(id: string): SDK.ChunkInstance | undefined {
+    return this._chunkMap[id];
   }
 
-  getChunkByModule(module: Module): Chunk | undefined {
+  getChunkByModule(module: SDK.ModuleInstance): SDK.ChunkInstance | undefined {
     return this._chunks.find((item) => item.hasModule(module));
   }
 
-  getAssetByPath(path: string): Asset | undefined {
-    return this._assets.find((item) => item.path === path);
+  getAssetByPath(path: string): SDK.AssetInstance | undefined {
+    return this._assetMap[path];
   }
 
-  getAssetsByChunk(chunk: Chunk): Asset[] | undefined {
-    return this._assets.filter((item) => {
-      const _chunk = item.chunks.find((ck) => ck.id === chunk.id);
-      if (_chunk) return true;
-    });
-  }
-
-  getEntryPoints(): EntryPoint[] {
+  getEntryPoints(): SDK.EntryPointInstance[] {
     return this._entrypoints.slice();
   }
 
-  addEntryPoint(...entrypoints: EntryPoint[]): void {
+  getEntryPointByName(name: string): SDK.EntryPointInstance | undefined {
+    return this._entrypointMap[name];
+  }
+
+  addEntryPoint(...entrypoints: SDK.EntryPointInstance[]): void {
     entrypoints.forEach((entrypoint) => {
       if (!this._entrypoints.includes(entrypoint)) {
         this._entrypoints.push(entrypoint);
+        this._entrypointMap[entrypoint.name] = entrypoint;
       }
     });
   }

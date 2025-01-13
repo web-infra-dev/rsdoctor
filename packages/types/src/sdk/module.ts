@@ -106,6 +106,7 @@ export interface ModuleInstance {
   readonly kind: ModuleKind;
   /** Root module in aggregate module */
   readonly rootModule?: ModuleInstance;
+  readonly layer?: string;
   /**
    * Preference to source location
    *   - Indicates that the source code is not empty and there is source code location mapping data.
@@ -137,7 +138,7 @@ export interface ModuleInstance {
   ): DependencyInstance | undefined;
   toData(contextPath?: string): ModuleData;
   setSource(source: Partial<ModuleSource>): void;
-  getSource(): ModuleSource;
+  getSource(type?: ToDataType): ModuleSource;
   /**Set code AST after transform */
   setProgram(program: Program): void;
   /** Get the converted code AST */
@@ -230,6 +231,8 @@ export interface DependencyInstance {
    * - Check properties other than id and statements
    */
   isSameWithoutStatements(dep: DependencyInstance): boolean;
+
+  setBuildMeta(data: DependencyBuildMeta): void;
 }
 
 export type ModuleGraphToDataArgs = { contextPath: string };
@@ -305,7 +308,7 @@ export interface ModuleGraphInstance {
   toData(configs?: ModuleGraphToDataArgs): ModuleGraphData;
 
   /** Generate data */
-  toCodeData(): ModuleCodeData;
+  toCodeData(type?: ToDataType): ModuleCodeData;
 }
 
 export interface ModuleData

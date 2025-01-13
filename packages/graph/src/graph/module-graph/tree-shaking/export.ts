@@ -1,7 +1,4 @@
 import { SDK } from '@rsdoctor/types';
-import { Statement } from '../statement';
-import { Variable } from './variable';
-import type { SideEffect } from './sideEffect';
 
 let id = 1;
 
@@ -14,15 +11,19 @@ export class ExportInfo implements SDK.ExportInstance {
 
   name: string;
 
-  identifier?: Statement;
+  identifier?: SDK.StatementInstance;
 
-  private from?: ExportInfo;
+  private from?: SDK.ExportInstance;
 
-  private _variable?: Variable | false;
+  private _variable?: SDK.VariableInstance | false;
 
-  private _sideEffects: SideEffect[] = [];
+  private _sideEffects: SDK.SideEffectInstance[] = [];
 
-  constructor(name: string, identifier?: Statement, variable?: Variable) {
+  constructor(
+    name: string,
+    identifier?: SDK.StatementInstance,
+    variable?: SDK.VariableInstance,
+  ) {
     this.name = name;
     this.identifier = identifier;
     this._variable = variable;
@@ -32,11 +33,11 @@ export class ExportInfo implements SDK.ExportInstance {
     return Boolean(this.from);
   }
 
-  set variable(data: Variable | undefined) {
+  set variable(data: SDK.VariableInstance | undefined) {
     this._variable = data;
   }
 
-  get variable(): Variable | undefined {
+  get variable(): SDK.VariableInstance | undefined {
     if (this._variable) {
       return this._variable;
     }
@@ -55,7 +56,7 @@ export class ExportInfo implements SDK.ExportInstance {
     return result;
   }
 
-  addSideEffect(info: SideEffect): void {
+  addSideEffect(info: SDK.SideEffectInstance): void {
     if (this._sideEffects.every((item) => item.id !== info.id)) {
       this._sideEffects.push(info);
 
@@ -70,7 +71,7 @@ export class ExportInfo implements SDK.ExportInstance {
     return this._sideEffects.slice();
   }
 
-  setFromExport(from: ExportInfo): void {
+  setFromExport(from: SDK.ExportInstance): void {
     this.from = from;
   }
 
@@ -90,7 +91,7 @@ export class ExportInfo implements SDK.ExportInstance {
 
     while (current.from && currentDepth < depth) {
       currentDepth++;
-      current = current.from!;
+      current = current.from! as ExportInfo;
     }
 
     return current;

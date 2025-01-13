@@ -1,7 +1,9 @@
-import { ModuleGraph } from '@rsdoctor/graph';
 import { relative } from 'path';
-
-export function removeAbsModulePath(graph: ModuleGraph, root: string) {
+import { SDK } from '@rsdoctor/types';
+export function removeAbsModulePath(
+  graph: SDK.ModuleGraphInstance,
+  root: string,
+) {
   for (const mod of graph.getModules()) {
     (mod as any).path = relative(root, mod.path);
   }

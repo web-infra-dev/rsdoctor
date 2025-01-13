@@ -1,19 +1,21 @@
 import type { SDK } from '@rsdoctor/types';
-import type { Package } from './package';
-import type { Dependency } from '../module-graph';
 
 let id = 1;
 
 export class PackageDependency implements SDK.PackageDependencyInstance {
   id = id++;
 
-  dependency: Package;
+  dependency: SDK.PackageInstance;
 
-  package: Package;
+  package: SDK.PackageInstance;
 
-  refDependency: Dependency;
+  refDependency: SDK.DependencyInstance;
 
-  constructor(pack: Package, dep: Package, refDependency: Dependency) {
+  constructor(
+    pack: SDK.PackageInstance,
+    dep: SDK.PackageInstance,
+    refDependency: SDK.DependencyInstance,
+  ) {
     this.package = pack;
     this.dependency = dep;
     this.refDependency = refDependency;
@@ -31,7 +33,7 @@ export class PackageDependency implements SDK.PackageDependencyInstance {
     return this.dependency.root;
   }
 
-  isSame(dep: PackageDependency) {
+  isSame(dep: SDK.PackageDependencyInstance) {
     return (
       this.refDependency === dep.refDependency &&
       this.dependency.isSame(dep.dependency)

@@ -1,14 +1,18 @@
 import type { Compiler, NormalModule, Stats } from 'webpack';
 import { ModuleGraph } from '@rsdoctor/graph';
 import { removeAbsModulePath } from '../common/utils';
-import { Chunks, ModuleGraph as ModuleGraphBuildUtils } from '../../src/build-utils/build';
+import {
+  Chunks,
+  ModuleGraph as ModuleGraphBuildUtils,
+} from '../../src/build-utils/build';
+import { SDK, Plugin } from '@rsdoctor/types';
 
 export class ModuleGraphTestPlugin {
   public readonly name = 'ModuleGraphTestPlugin';
 
   private root: string;
 
-  public modulesGraph = new ModuleGraph();
+  public modulesGraph: SDK.ModuleGraphInstance = new ModuleGraph();
 
   private astCache = new Map<NormalModule, any>();
 
@@ -43,11 +47,14 @@ export class ModuleGraphTestPlugin {
 
   async done(_: Compiler, stats: Stats) {
     const statsData = stats.toJson();
-    const chunkGraph = Chunks.chunkTransform(new Map(), statsData);
+    const chunkGraph = Chunks.chunkTransform(
+      new Map(),
+      statsData as Plugin.StatsCompilation,
+    );
 
     this.modulesGraph = await ModuleGraphBuildUtils.getModuleGraphByStats(
       stats.compilation,
-      statsData,
+      statsData as Plugin.StatsCompilation,
       this.root,
       chunkGraph,
       undefined,
@@ -56,7 +63,10 @@ export class ModuleGraphTestPlugin {
       },
     );
     this.modulesGraph = this.modulesGraph;
-    this.modulesGraph = ModuleGraphBuildUtils.appendTreeShaking(this.modulesGraph, stats.compilation);
+    this.modulesGraph = ModuleGraphBuildUtils.appendTreeShaking(
+      this.modulesGraph,
+      stats.compilation,
+    );
   }
 
   toData() {

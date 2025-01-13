@@ -1,26 +1,15 @@
 import { SDK } from '@rsdoctor/types';
-import { Module } from '../module-graph';
-import { Asset } from './asset';
 
 export class Chunk implements SDK.ChunkInstance {
   readonly id: string;
-
   readonly name: string;
-
   readonly size: number;
-
   readonly initial: boolean;
-
   readonly entry: boolean;
-
-  private _assets: Asset[] = [];
-
-  private _modules: Module[] = [];
-
-  private _dependencies: Chunk[] = [];
-
-  private _imported: Chunk[] = [];
-
+  private _assets: SDK.AssetInstance[] = [];
+  private _modules: SDK.ModuleInstance[] = [];
+  private _dependencies: SDK.ChunkInstance[] = [];
+  private _imported: SDK.ChunkInstance[] = [];
   private _parsedSize: number | undefined;
 
   constructor(
@@ -41,7 +30,7 @@ export class Chunk implements SDK.ChunkInstance {
     return this.entry;
   }
 
-  isChunkEntryModule(module: Module) {
+  isChunkEntryModule(module: SDK.ModuleInstance) {
     // The module is the project entrance, or the modules that rely on this module are not in the current Chunk.
     return (
       module.isEntry ||
@@ -49,23 +38,23 @@ export class Chunk implements SDK.ChunkInstance {
     );
   }
 
-  hasModule(module: Module) {
+  hasModule(module: SDK.ModuleInstance) {
     return this._modules.includes(module);
   }
 
-  addModule(module: Module) {
+  addModule(module: SDK.ModuleInstance) {
     if (!this.hasModule(module)) {
       this._modules.push(module);
       module.addChunk(this);
     }
   }
 
-  addAsset(asset: Asset) {
+  addAsset(asset: SDK.AssetInstance) {
     this._assets.push(asset);
   }
 
-  addModules(modules: Module[]) {
-    modules.forEach((module: Module) => {
+  addModules(modules: SDK.ModuleInstance[]) {
+    modules.forEach((module: SDK.ModuleInstance) => {
       if (!this.hasModule(module)) {
         this._modules.push(module);
         module.addChunk(this);
@@ -73,31 +62,31 @@ export class Chunk implements SDK.ChunkInstance {
     });
   }
 
-  addDependency(dep: Chunk): void {
+  addDependency(dep: SDK.ChunkInstance): void {
     if (!this._dependencies.includes(dep)) {
       this._dependencies.push(dep);
     }
   }
 
-  addImported(imported: Chunk): void {
+  addImported(imported: SDK.ChunkInstance): void {
     if (!this._imported.includes(imported)) {
       this._imported.push(imported);
     }
   }
 
-  getAssets(): Asset[] {
+  getAssets(): SDK.AssetInstance[] {
     return this._assets.slice();
   }
 
-  getModules(): Module[] {
+  getModules(): SDK.ModuleInstance[] {
     return this._modules.slice();
   }
 
-  getDependencies(): Chunk[] {
+  getDependencies(): SDK.ChunkInstance[] {
     return this._dependencies.slice();
   }
 
-  getImported(): Chunk[] {
+  getImported(): SDK.ChunkInstance[] {
     return this._imported.slice();
   }
 

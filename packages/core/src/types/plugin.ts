@@ -5,7 +5,6 @@ import type {
   SDK,
 } from '@rsdoctor/types';
 import type { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
-import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { rules } from '@/rules/rules';
 
 type InternalRules = Common.UnionToTuple<(typeof rules)[number]>;
@@ -163,8 +162,8 @@ export interface RsdoctorPluginInstance<
   readonly sdk: RsdoctorSDK;
   readonly isRsdoctorPlugin: boolean;
   _modulesGraphApplied?: boolean;
-  chunkGraph?: ChunkGraph;
-  modulesGraph: ModuleGraph;
+  chunkGraph?: SDK.ChunkGraphInstance;
+  modulesGraph: SDK.ModuleGraphInstance;
   ensureModulesChunksGraphApplied(compiler: T): void;
 }
 

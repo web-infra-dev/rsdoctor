@@ -1,12 +1,11 @@
-import * as SDK from '@rsdoctor/graph';
 import { isNumber } from 'lodash';
 import { parser, Node } from '@rsdoctor/utils/ruleUtils';
-
+import { SDK } from '@rsdoctor/types';
 function getDefaultExportIdentifier(
   node: Node.ExportDefaultDeclaration,
-  module: SDK.Module,
+  module: SDK.ModuleInstance,
   searchId: boolean,
-): SDK.Statement | undefined {
+): SDK.StatementInstance | undefined {
   const { declaration } = node;
 
   if (parser.asserts.isLiteral(declaration) && declaration.loc) {
@@ -56,7 +55,10 @@ function getDefaultExportIdentifier(
   });
 }
 
-export function getExportIdentifierStatement(name: string, module: SDK.Module) {
+export function getExportIdentifierStatement(
+  name: string,
+  module: SDK.ModuleInstance,
+) {
   const ast = module.getProgram();
 
   if (!ast) {
@@ -81,7 +83,10 @@ export function getExportIdentifierStatement(name: string, module: SDK.Module) {
   }
 }
 
-export function getDeclarationIdentifier(name: string, module: SDK.Module) {
+export function getDeclarationIdentifier(
+  name: string,
+  module: SDK.ModuleInstance,
+) {
   const ast = module.getProgram();
 
   if (!ast) {

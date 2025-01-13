@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import path from 'path-browserify';
 import { Card, Space, Tooltip, Typography } from 'antd';
 import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
-import type { Module, ModuleGraph, SourceRange } from '@rsdoctor/graph';
 import Editor, { OnMount } from '@monaco-editor/react';
 import { Range } from './range';
 import type { editor, Range as RangeClass } from 'monaco-editor';
@@ -14,9 +13,9 @@ import { getOriginalLanguage, getSelectionRange } from '../../utils';
 import { DefaultEditorConfig } from '../../components/CodeViewer';
 
 export interface CodeEditorProps {
-  module: Module;
-  moduleGraph: ModuleGraph;
-  ranges: SourceRange[];
+  module: SDK.ModuleInstance;
+  moduleGraph: SDK.ModuleGraphInstance;
+  ranges: SDK.SourceRange[];
   setEditorData: SetEditorStatus;
   source: SDK.ModuleSource;
   toLine?: number;

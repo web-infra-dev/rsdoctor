@@ -1,5 +1,4 @@
 import type { Configuration, RuleSetRule } from '@rspack/core';
-import { ModuleGraph } from '@rsdoctor/graph';
 import { openBrowser, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import {
   InternalLoaderPlugin,
@@ -34,6 +33,7 @@ import { cloneDeep } from 'lodash';
 
 import { Loader } from '@rsdoctor/utils/common';
 import { chalk, logger } from '@rsdoctor/utils/logger';
+import { ModuleGraph } from '@rsdoctor/graph';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorRspackPluginInstance<Rules>
@@ -48,7 +48,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   protected browserIsOpened = false;
 
-  public modulesGraph: ModuleGraph;
+  public modulesGraph: SDK.ModuleGraphInstance;
 
   public options: RsdoctorPluginOptionsNormalized<Rules>;
 

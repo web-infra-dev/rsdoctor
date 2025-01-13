@@ -2,8 +2,7 @@ import type { SourceMapConsumer } from 'source-map';
 import * as Webpack from 'webpack';
 import { File } from '@rsdoctor/utils/build';
 import { Node } from '@rsdoctor/utils/ruleUtils';
-import { Plugin } from '@rsdoctor/types';
-import { Module, ModuleGraph, PackageData } from '@rsdoctor/graph';
+import { Plugin, SDK } from '@rsdoctor/types';
 import {
   getAllModules,
   getDependencyPosition,
@@ -55,9 +54,9 @@ async function readFile(target: string, wbFs: WebpackFs) {
 
 function appendDependency(
   webpackDep: Webpack.Dependency,
-  module: Module,
+  module: SDK.ModuleInstance,
   webpackGraph: Webpack.ModuleGraph,
-  graph: ModuleGraph,
+  graph: SDK.ModuleGraphInstance,
 ) {
   // Rspack does not support `getResolvedModule` yet.
   const resolvedWebpackModule = webpackGraph?.getResolvedModule
@@ -141,7 +140,7 @@ function getModuleSource(
 async function appendModuleData(
   origin: Webpack.NormalModule,
   webpackGraph: Webpack.ModuleGraph,
-  graph: ModuleGraph,
+  graph: SDK.ModuleGraphInstance,
   wbFs: WebpackFs,
   features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
@@ -192,7 +191,7 @@ async function appendModuleData(
       sourceSize: source.byteLength,
     });
 
-    let packageData: PackageData | undefined;
+    let packageData: SDK.PackageData | undefined;
 
     if (packagePathMap && origin.resourceResolveData) {
       let { descriptionFileRoot: root } = origin.resourceResolveData;
@@ -241,7 +240,7 @@ async function appendModuleData(
 
 export async function appendModuleGraphByCompilation(
   compilation: Plugin.BaseCompilation,
-  graph: ModuleGraph,
+  graph: SDK.ModuleGraphInstance,
   features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
 ) {

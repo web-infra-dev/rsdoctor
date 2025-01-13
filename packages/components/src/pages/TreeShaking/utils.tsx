@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import path from 'path-browserify';
 import { escape, get } from 'lodash-es';
-import type { ModuleGraph, Statement, Variable } from '@rsdoctor/graph';
 import { Module } from '@rsdoctor/graph';
 import { Tag, Space } from 'antd';
 import { Range } from './range';
@@ -13,12 +12,13 @@ import {
   getSelectionRange,
 } from '../../utils';
 import { Keyword } from '../../components/Keyword';
+import { SDK } from '@rsdoctor/types';
 
 export function useFileStructures(
-  modules: Module[],
-  moduleGraph: ModuleGraph,
+  modules: SDK.ModuleInstance[],
+  moduleGraph: SDK.ModuleGraphInstance,
   searchInput: string,
-  selectedModule: Module,
+  selectedModule: SDK.ModuleInstance,
   onItemClick: (file: string) => void,
   cwd: string,
 ) {
@@ -83,7 +83,10 @@ export function ellipsisPath(full: string) {
   return `...${result}`;
 }
 
-export function getModulePositionString(statement: Statement, module: Module) {
+export function getModulePositionString(
+  statement: SDK.StatementInstance,
+  module: SDK.ModuleInstance,
+) {
   const maxLen = 30;
   const { path, isPreferSource } = module;
   const start = isPreferSource
@@ -97,8 +100,8 @@ export function getModulePositionString(statement: Statement, module: Module) {
 }
 
 export function getHoverMessageInModule(
-  module: Module,
-  moduleGraph: ModuleGraph,
+  module: SDK.ModuleInstance,
+  moduleGraph: SDK.ModuleGraphInstance,
 ) {
   const mgm = moduleGraph.getModuleGraphModule(module);
   /** 当前模块导出变量 */
@@ -106,13 +109,13 @@ export function getHoverMessageInModule(
   /** 当前模块声明变量 */
   const variables = exportLocals
     .map((item) => item.variable)
-    .filter((item): item is Variable => Boolean(item));
+    .filter((item): item is SDK.VariableInstance => Boolean(item));
 
   if (exportLocals.length === 0 && variables.length === 0) {
     return [];
   }
 
-  function getVariableMessage(data: Variable) {
+  function getVariableMessage(data: SDK.VariableInstance) {
     const exportData = data.getExportInfo();
 
     if (!exportData) {

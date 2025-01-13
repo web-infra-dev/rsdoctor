@@ -5,7 +5,6 @@ import type { SourceMapConsumer } from 'source-map';
 import type { Program } from 'estree';
 import { Dependency } from './dependency';
 import { Statement } from './statement';
-import { Chunk } from '../chunk-graph';
 import { getModuleName } from './utils';
 
 let id = 1;
@@ -45,15 +44,15 @@ export class Module implements SDK.ModuleInstance {
 
   private program: Program | undefined;
 
-  private chunks: Chunk[] = [];
+  private chunks: SDK.ChunkInstance[] = [];
 
-  private dependencies: Dependency[] = [];
+  private dependencies: SDK.DependencyInstance[] = [];
 
-  private imported: Module[] = [];
+  private imported: SDK.ModuleInstance[] = [];
 
-  private modules: Module[] = [];
+  private modules: SDK.ModuleInstance[] = [];
 
-  private concatenationModules: Module[] = [];
+  private concatenationModules: SDK.ModuleInstance[] = [];
 
   private _isPreferSource?: boolean;
 
@@ -77,7 +76,7 @@ export class Module implements SDK.ModuleInstance {
     this.layer = layer;
   }
 
-  get rootModule(): Module | undefined {
+  get rootModule(): SDK.ModuleInstance | undefined {
     return this.modules.find((item) => item.path === this.path);
   }
 
@@ -94,30 +93,32 @@ export class Module implements SDK.ModuleInstance {
     return result;
   }
 
-  getChunks(): Chunk[] {
+  getChunks(): SDK.ChunkInstance[] {
     return this.chunks.slice();
   }
 
-  addChunk(chunk: Chunk): void {
+  addChunk(chunk: SDK.ChunkInstance): void {
     if (!this.chunks.includes(chunk)) {
       this.chunks.push(chunk);
       chunk.addModule(this);
     }
   }
 
-  removeChunk(chunk: Chunk): void {
+  removeChunk(chunk: SDK.ChunkInstance): void {
     this.chunks = this.chunks.filter((item) => item !== chunk);
   }
 
-  getDependencies(): Dependency[] {
+  getDependencies(): SDK.DependencyInstance[] {
     return this.dependencies.slice();
   }
 
-  getDependencyByRequest(request: string): Dependency | undefined {
+  getDependencyByRequest(request: string): SDK.DependencyInstance | undefined {
     return this.dependencies.find((item) => item.request === request);
   }
 
-  getDependencyByModule(module: Module): Dependency | undefined {
+  getDependencyByModule(
+    module: SDK.ModuleInstance,
+  ): SDK.DependencyInstance | undefined {
     return this.dependencies.find(
       (item) => item.originDependency === module || item.dependency === module,
     );
@@ -125,9 +126,9 @@ export class Module implements SDK.ModuleInstance {
 
   addDependency(
     request: string,
-    module: Module,
+    module: SDK.ModuleInstance,
     kind: SDK.DependencyKind,
-    statements?: Statement[],
+    statements?: SDK.StatementInstance[],
   ) {
     const dep = new Dependency(request, this, module, kind, statements);
 
@@ -143,28 +144,28 @@ export class Module implements SDK.ModuleInstance {
     }
   }
 
-  removeDependency(dep: Dependency): void {
+  removeDependency(dep: SDK.DependencyInstance): void {
     this.dependencies = this.dependencies.filter((item) => item === dep);
   }
 
-  removeDependencyByModule(module: Module): void {
+  removeDependencyByModule(module: SDK.ModuleInstance): void {
     const dep = this.getDependencyByModule(module);
     if (dep) {
       this.removeDependency(dep);
     }
   }
 
-  getImported(): Module[] {
+  getImported(): SDK.ModuleInstance[] {
     return this.imported.slice();
   }
 
-  addImported(module: Module): void {
+  addImported(module: SDK.ModuleInstance): void {
     if (!this.imported.includes(module)) {
       this.imported.push(module);
     }
   }
 
-  removeImported(module: Module): void {
+  removeImported(module: SDK.ModuleInstance): void {
     this.imported = this.imported.filter((item) => item === module);
   }
 
@@ -289,7 +290,7 @@ export class Module implements SDK.ModuleInstance {
     return source;
   }
 
-  addNormalModule(module: Module): void {
+  addNormalModule(module: SDK.ModuleInstance): void {
     if (!this.modules.includes(module)) {
       this.modules.push(module);
       module.addConcatenationModule(this);
@@ -300,13 +301,13 @@ export class Module implements SDK.ModuleInstance {
     return this.modules.slice();
   }
 
-  addConcatenationModule(module: Module): void {
+  addConcatenationModule(module: SDK.ModuleInstance): void {
     if (!this.concatenationModules.includes(module)) {
       this.concatenationModules.push(module);
     }
   }
 
-  getConcatenationModules(): Module[] {
+  getConcatenationModules(): SDK.ModuleInstance[] {
     return this.concatenationModules.slice();
   }
 

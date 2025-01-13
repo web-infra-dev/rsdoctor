@@ -1,8 +1,8 @@
-import { ChunkGraph } from '@rsdoctor/graph';
+import { SDK } from '@rsdoctor/types';
 
 export function assetsContents(
   assetMap: Map<string, { content: string }>,
-  chunkGraph: ChunkGraph,
+  chunkGraph: SDK.ChunkGraphInstance,
 ) {
   const assets = chunkGraph.getAssets();
   assets.forEach((asset) => {

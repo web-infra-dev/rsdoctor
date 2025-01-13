@@ -1,20 +1,17 @@
 import { SDK } from '@rsdoctor/types';
-import type { Asset } from './asset';
-import type { Chunk } from './chunk';
 
 export class EntryPoint implements SDK.EntryPointInstance {
+  private _chunks: SDK.ChunkInstance[] = [];
+  private _assets: SDK.AssetInstance[] = [];
+
   constructor(public readonly name: string) {}
 
-  private _chunks: Chunk[] = [];
-
-  private _assets: Asset[] = [];
-
-  public addChunk(chunk: Chunk): void {
+  public addChunk(chunk: SDK.ChunkInstance): void {
     if (this._chunks.includes(chunk)) return;
     this._chunks.push(chunk);
   }
 
-  public addAsset(asset: Asset): void {
+  public addAsset(asset: SDK.AssetInstance): void {
     if (this._assets.includes(asset)) return;
     this._assets.push(asset);
   }

@@ -1,9 +1,7 @@
 import { SDK } from '@rsdoctor/types';
-import { Module } from '../module';
 import { ExportInfo } from './export';
 import { SideEffect } from './sideEffect';
 import { Variable } from './variable';
-import type { ModuleGraph } from '../graph';
 
 export class ModuleGraphModule implements SDK.ModuleGraphModuleInstance {
   static init() {
@@ -12,19 +10,23 @@ export class ModuleGraphModule implements SDK.ModuleGraphModuleInstance {
     Variable.init();
   }
 
-  readonly module: Module;
+  readonly module: SDK.ModuleInstance;
 
-  private exports: ExportInfo[] = [];
+  private exports: SDK.ExportInstance[] = [];
 
-  private sideEffects: SideEffect[] = [];
+  private sideEffects: SDK.SideEffectInstance[] = [];
 
-  private variables: Variable[] = [];
+  private variables: SDK.VariableInstance[] = [];
 
   private _dynamic?: boolean;
 
-  private _graph: ModuleGraph;
+  private _graph: SDK.ModuleGraphInstance;
 
-  constructor(module: Module, graph: ModuleGraph, dynamic?: boolean) {
+  constructor(
+    module: SDK.ModuleInstance,
+    graph: SDK.ModuleGraphInstance,
+    dynamic?: boolean,
+  ) {
     this.module = module;
     this._graph = graph;
 
@@ -44,17 +46,17 @@ export class ModuleGraphModule implements SDK.ModuleGraphModuleInstance {
       .some((item) => item && item.meta.exportsType === 'dynamic');
   }
 
-  addExportInfo(data: ExportInfo) {
+  addExportInfo(data: SDK.ExportInstance) {
     this.exports.push(data);
     this._graph.addExportInfo(data);
   }
 
-  addSideEffect(data: SideEffect) {
+  addSideEffect(data: SDK.SideEffectInstance) {
     this.sideEffects.push(data);
     this._graph.addSideEffect(data);
   }
 
-  addVariable(data: Variable) {
+  addVariable(data: SDK.VariableInstance) {
     this.variables.push(data);
     this._graph.addVariable(data);
   }

@@ -1,7 +1,6 @@
 import unionBy from 'lodash.unionby';
 import { resolve } from 'path';
 import { SDK } from '@rsdoctor/types';
-import type { ModuleGraph, Module } from '../module-graph';
 import { Package } from './package';
 import { PackageDependency } from './dependency';
 import { readPackageJson } from './utils';
@@ -9,7 +8,7 @@ export { readPackageJson } from './utils';
 
 export class PackageGraph implements SDK.PackageGraphInstance {
   static fromModuleGraph(
-    graph: ModuleGraph,
+    graph: SDK.ModuleGraphInstance,
     root: string,
     getPackageFile?: SDK.GetPackageFile,
   ): PackageGraph {
@@ -49,13 +48,13 @@ export class PackageGraph implements SDK.PackageGraphInstance {
 
   private _root: string;
 
-  private _dependencies: PackageDependency[] = [];
+  private _dependencies: SDK.PackageDependencyInstance[] = [];
 
-  private _packages: Package[] = [];
+  private _packages: SDK.PackageInstance[] = [];
 
-  private _pkgNameMap = new Map<string, Package[]>();
+  private _pkgNameMap = new Map<string, SDK.PackageInstance[]>();
 
-  private _pkgFileMap = new Map<string, Package>();
+  private _pkgFileMap = new Map<string, SDK.PackageInstance>();
 
   constructor(root: string) {
     this._root = root;
@@ -65,7 +64,10 @@ export class PackageGraph implements SDK.PackageGraphInstance {
     return this._packages.slice();
   }
 
-  getPackageByModule(module: Module, readFile?: SDK.GetPackageFile) {
+  getPackageByModule(
+    module: SDK.ModuleInstance,
+    readFile?: SDK.GetPackageFile,
+  ) {
     const { path: file, meta } = module;
     const { _pkgFileMap: pkgsMap } = this;
     const getPackageByData = (data: SDK.PackageBasicData) => {
@@ -128,7 +130,7 @@ export class PackageGraph implements SDK.PackageGraphInstance {
       );
   }
 
-  addPackage(pkg: Package) {
+  addPackage(pkg: SDK.PackageInstance) {
     if (this._packages.every((item) => !item.isSame(pkg))) {
       this._packages.push(pkg);
 
@@ -142,11 +144,11 @@ export class PackageGraph implements SDK.PackageGraphInstance {
     }
   }
 
-  getDependenciesFromPackage(pkg: Package) {
+  getDependenciesFromPackage(pkg: SDK.PackageInstance) {
     return this._dependencies.filter((dep) => dep.dependency === pkg);
   }
 
-  addDependency(dep: PackageDependency) {
+  addDependency(dep: SDK.PackageDependencyInstance) {
     if (this._dependencies.every((item) => !item.isSame(dep))) {
       this._dependencies.push(dep);
     }
@@ -156,7 +158,7 @@ export class PackageGraph implements SDK.PackageGraphInstance {
     return this._dependencies.filter((item) => !item.package);
   }
 
-  getDuplicatePackages(): Package[][] {
+  getDuplicatePackages(): SDK.PackageInstance[][] {
     return unionBy(
       Array.from(this._pkgNameMap.values())
         .map((pkgs) => {

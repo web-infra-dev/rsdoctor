@@ -1,9 +1,6 @@
 import type { SDK } from '@rsdoctor/types';
 import { relative } from 'path';
-import type { Module } from '../module-graph';
-import type { PackageGraph } from './graph';
 import { isPackagePath } from './utils';
-import { PackageDependency } from './dependency';
 
 let id = 1;
 
@@ -16,11 +13,11 @@ export class Package implements SDK.PackageInstance {
 
   version: string;
 
-  private _modules: Module[] = [];
+  private _modules: SDK.ModuleInstance[] = [];
 
-  private _dependencies: PackageDependency[] = [];
+  private _dependencies: SDK.PackageDependencyInstance[] = [];
 
-  private _imported: Package[] = [];
+  private _imported: SDK.PackageInstance[] = [];
 
   constructor(name: string, root: string, version: string) {
     this.name = name;
@@ -28,36 +25,36 @@ export class Package implements SDK.PackageInstance {
     this.version = version;
   }
 
-  getModules(): Module[] {
+  getModules(): SDK.ModuleInstance[] {
     return this._modules.slice();
   }
 
-  getDependencies(): PackageDependency[] {
+  getDependencies(): SDK.PackageDependencyInstance[] {
     return this._dependencies.slice();
   }
 
-  getImported(): Package[] {
+  getImported(): SDK.PackageInstance[] {
     return this._imported.slice();
   }
 
-  addModule(module: Module) {
+  addModule(module: SDK.ModuleInstance) {
     if (!this._modules.includes(module)) {
       this._modules.push(module);
     }
   }
 
-  addDependency(dep: PackageDependency) {
+  addDependency(dep: SDK.PackageDependencyInstance) {
     if (this._dependencies.every((item) => !item.isSame(dep))) {
       this._dependencies.push(dep);
       dep.dependency.addImported(this);
     }
   }
 
-  getDependenciesChain(graph: PackageGraph) {
+  getDependenciesChain(graph: SDK.PackageGraphInstance) {
     function getImported(
-      pkg: Package,
-      ans: PackageDependency[],
-    ): PackageDependency[] {
+      pkg: SDK.PackageInstance,
+      ans: SDK.PackageDependencyInstance[],
+    ): SDK.PackageDependencyInstance[] {
       const dependencies = graph.getDependenciesFromPackage(pkg);
 
       for (const dep of dependencies) {
@@ -84,7 +81,7 @@ export class Package implements SDK.PackageInstance {
     return getImported(this, []);
   }
 
-  addImported(pkg: Package) {
+  addImported(pkg: SDK.PackageInstance) {
     if (!this._imported.includes(pkg)) {
       this._imported.push(pkg);
     }
@@ -104,7 +101,7 @@ export class Package implements SDK.PackageInstance {
     return !isPackagePath(subPath);
   }
 
-  isSame(pkg: Package) {
+  isSame(pkg: SDK.PackageInstance) {
     return (
       this.root === pkg.root &&
       this.version === pkg.version &&
