@@ -86,7 +86,7 @@ const AssetCardContainer: React.FC<{
       boxProps={{
         style: {
           background: bgColor?.bgColor,
-          width: '80%',
+          width: window.innerWidth > 1300 ? '80%' : '95%',
         },
       }}
     />

@@ -13,6 +13,11 @@
 
 .description {
   font-size: 18px;
+
+  @media (max-width: 1500px) {
+    font-size: 14px;
+  }
+
   font-weight: 500;
   line-height: 28px;
   color: #000000d9;
