@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@lodash/es",
   "version": "0.1.0",
   "type": "module"

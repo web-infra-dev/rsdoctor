@@ -1,6 +1,7 @@
 {
   "hash": "d0dabbdde4c7c845",
   "version": "5.76.0",
+  "private": true,
   "time": 6758,
   "builtAt": 1686209529645,
   "publicPath": "",
