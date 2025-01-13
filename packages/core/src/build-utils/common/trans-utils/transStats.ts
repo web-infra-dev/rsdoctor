@@ -8,7 +8,12 @@ export async function transStats(json: Plugin.StatsCompilation) {
   );
   const moduleGraph = ModuleGraph.getModuleGraphByStats(json, '.', chunkGraph);
   const assetsModuleMap =
-    (await Chunks.getAssetsModulesData(json, json.outputPath || '', {})) || {};
+    (await Chunks.getAssetsModulesData(
+      moduleGraph,
+      chunkGraph,
+      json.outputPath || '',
+      {},
+    )) || {};
   Chunks.transformAssetsModulesData(assetsModuleMap, moduleGraph);
   return { chunkGraph, moduleGraph };
 }

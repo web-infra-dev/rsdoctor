@@ -3,6 +3,7 @@ import fs from 'fs';
 import os from 'os';
 import { describe, it, expect } from 'vitest';
 import { parseBundle } from '@/build-utils/build/utils/parseBundle';
+import { SDK } from '@rsdoctor/types';
 
 const BUNDLES_DIR = `${__dirname}/bundles`;
 
@@ -21,13 +22,13 @@ describe('parseBundle', function () {
       it(`should parse ${lowerCase(bundleName)}`, function () {
         const bundleFile = `${BUNDLES_DIR}/${bundleName}.js`;
         const modules = [
-          { id: 0, identifier: '0' },
-          { id: 1, identifier: '1' },
-          { id: 2, identifier: '2' },
-          { id: 3, identifier: '33' },
-          { id: 5, identifier: '5' },
-          { id: 6, identifier: '6' },
-          { id: '/x1Yz5', identifier: '/x1Yz5' },
+          { renderId: '0', webpackId: '0' },
+          { renderId: '1', webpackId: '1' },
+          { renderId: '2', webpackId: '2' },
+          { renderId: '3', webpackId: '33' },
+          { renderId: '5', webpackId: '5' },
+          { renderId: '6', webpackId: '6' },
+          { renderId: '/x1Yz5', webpackId: '/x1Yz5' },
         ];
         const bundle = parseBundle(bundleFile, modules);
 
@@ -37,7 +38,8 @@ describe('parseBundle', function () {
           }),
         );
         expect(bundle.src).toEqual(fs.readFileSync(bundleFile, 'utf8'));
-        os.EOL === '\n' && expect(bundle.modules).toEqual(expectedModules.modules);
+        os.EOL === '\n' &&
+          expect(bundle.modules).toEqual(expectedModules.modules);
       });
     });
 });

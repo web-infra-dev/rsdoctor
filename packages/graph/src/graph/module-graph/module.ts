@@ -18,6 +18,8 @@ export class Module implements SDK.ModuleInstance {
 
   readonly id: number;
 
+  readonly renderId: string | undefined;
+
   readonly webpackId: string;
 
   readonly path: string;
@@ -66,6 +68,7 @@ export class Module implements SDK.ModuleInstance {
     path: string,
     isEntry = false,
     kind = SDK.ModuleKind.Normal,
+    renderId: string | undefined = undefined,
     layer = '',
   ) {
     this.id = id++;
@@ -73,6 +76,7 @@ export class Module implements SDK.ModuleInstance {
     this.path = path;
     this.isEntry = isEntry;
     this.kind = kind;
+    this.renderId = renderId;
     this.layer = layer;
   }
 
@@ -316,6 +320,7 @@ export class Module implements SDK.ModuleInstance {
     const moduleName = getModuleName(this.webpackId);
     const data: SDK.ModuleData = {
       id: this.id,
+      renderId: this.renderId,
       webpackId:
         contextPath && moduleName.indexOf('.') > 0
           ? path.relative(contextPath, moduleName)

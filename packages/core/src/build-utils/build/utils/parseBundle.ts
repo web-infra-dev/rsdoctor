@@ -5,7 +5,7 @@ import { filesize } from 'filesize';
 import { parser } from '@rsdoctor/utils/ruleUtils';
 import { extname } from 'path';
 
-import { Plugin } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/types';
 import { ParseBundle } from '@/types';
 import { debug } from '@rsdoctor/utils/logger';
 
@@ -22,7 +22,7 @@ import { debug } from '@rsdoctor/utils/logger';
 // TODO: optimize type
 export const parseBundle: ParseBundle = (
   bundlePath: string,
-  modulesData: Plugin.StatsModule[],
+  modulesData: Pick<SDK.ModuleInstance, 'renderId' | 'webpackId'>[],
 ) => {
   if (bundlePath.indexOf('.worker.') > 0) {
     return {};
@@ -253,13 +253,7 @@ export const parseBundle: ParseBundle = (
 
     const moduleContent = modules[module];
     const size = moduleContent && Buffer.byteLength(moduleContent);
-    const _filterModules = find(modulesData, {
-      id: Number(module),
-    }) as Plugin.StatsModule;
-    const identifier =
-      _filterModules?.identifier ||
-      find(modulesData, { id: module })?.identifier ||
-      '';
+    const identifier = find(modulesData, { renderId: module })?.webpackId || '';
     modulesObj[identifier] = {
       size,
       sizeConvert: filesize(size || 0),

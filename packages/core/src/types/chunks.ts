@@ -1,4 +1,4 @@
-import { Plugin } from '@rsdoctor/types';
+import { Plugin, SDK } from '@rsdoctor/types';
 
 export type AssetsModules = {
   label?: string;
@@ -8,7 +8,7 @@ export type AssetsModules = {
 
 export type ParseBundle = (
   assetFile: string,
-  modules: Plugin.StatsModule[],
+  modules: Pick<SDK.ModuleInstance, 'renderId' | 'webpackId'>[],
 ) => {
   modules?: Record<string, any>;
   src?: string;

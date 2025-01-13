@@ -98,6 +98,8 @@ export enum ToDataType {
 export interface ModuleInstance {
   /** Module identifier */
   readonly id: number;
+  /** webpack render identifier */
+  readonly renderId?: string;
   /** webpack identifier */
   readonly webpackId: string;
   /** Module path */
