@@ -213,11 +213,12 @@ export const WebpackModulesOverallBase: React.FC<
   }, [assets, selectedEntryPoints, inputAssetName, inputAssetSize]);
 
   useEffect(() => {
+    function getFileExtension(filePath: string) {
+      const parts = filePath.split('.');
+      return parts.length > 1 ? parts.pop() : '';
+    }
+
     summary.all.total.files.forEach((f) => {
-      function getFileExtension(filePath: string) {
-        const parts = filePath.split('.');
-        return parts.length > 1 ? parts.pop() : '';
-      }
       const ext = getFileExtension(f.path);
       if (ext === 'js') {
         setAssetPath(f.path);
