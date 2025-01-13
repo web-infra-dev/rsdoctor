@@ -61,8 +61,6 @@ export interface ChunkGraphInstance {
   addChunk(...chunks: ChunkInstance[]): void;
   /** Get chunk by identifier */
   getChunkById(id: string): ChunkInstance | undefined;
-  /** Get Chunk by Module */
-  getChunkByModule(module: ModuleInstance): ChunkInstance | undefined;
   /** Get the file according to the path */
   getAssetByPath(path: string): AssetInstance | undefined;
   /**
