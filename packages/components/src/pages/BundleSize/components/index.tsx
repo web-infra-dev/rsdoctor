@@ -226,11 +226,22 @@ export const WebpackModulesOverallBase: React.FC<
               setAssetPath(path);
             }}
           >
-            <Keyword text={basename} keyword={inputAssetName} />
+            <Keyword
+              text={basename}
+              keyword={inputAssetName}
+              className={styles.fileText}
+            />
             <Space size="small" className={styles.assetsTag}>
-              <Tag color={'success'}>{formatSize(size)}</Tag>
-
-              {initial ? <Tag color="cyan">initial</Tag> : null}
+              <Divider type="vertical" />
+              <Typography.Text style={{ color: '#4FD233' }}>
+                {formatSize(size)}
+              </Typography.Text>
+              <Divider type="vertical" />
+              {initial ? (
+                <Typography.Text style={{ color: '#009A9E' }}>
+                  initial
+                </Typography.Text>
+              ) : null}
               <CodeViewerWithDrawer
                 path={path}
                 content={content!}

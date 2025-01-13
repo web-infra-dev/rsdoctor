@@ -15,7 +15,7 @@ export const Page: React.FC = () => {
   return (
     <div>
       <Card
-        title="Webpack Plugins Overall"
+        title="Plugins Overall"
         bodyStyle={{ paddingTop: Size.BasePadding / 3 }}
         extra={<WebpackConfigurationViewer defaultKeys={['plugins']} />}
       >

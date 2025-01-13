@@ -1,10 +1,16 @@
 .assets {
   :global {
+    .rc-tree-indent-unit {
+      width: 22px;
+    }
+
+    .rc-tree-treenode {
+      line-height: 30px !important;
+    }
+
     .rc-tree-treenode:not(.rc-tree-treenode-switcher-open):not(
         .rc-tree-treenode-switcher-close
       ) {
-      line-height: 50px !important;
-
       .rc-tree-switcher {
         position: relative;
         bottom: 8px;
@@ -15,16 +21,19 @@
       }
 
       .file-icon {
-        padding: 0;
+        padding: 10px 0 0 0;
+        margin-left: 0;
       }
     }
   }
 
   .assetBox {
     display: flex;
-    flex-direction: column;
-    position: relative;
-    bottom: 10;
+    flex-direction: row;
+
+    .fileText {
+      margin-right: 4px;
+    }
   }
 }
 
@@ -64,14 +73,12 @@
 }
 
 .assetsTag {
-  position: relative;
-  bottom: 25;
+  height: 30px;
 
-  span {
-    border-radius: 2px;
-    font-size: 10;
-    margin-right: 2px;
-    padding: 0 4px;
+  :global {
+    .ant-divider-vertical {
+      margin-inline: 0;
+    }
   }
 }
 
@@ -82,6 +89,13 @@
     .rc-tree-node-content-wrapper {
       // width: 100%;
       font-size: 14px;
+    }
+    .file-icon {
+      margin-left: 0;
+    }
+
+    .ant-tree-indent-unit {
+      width: 10px;
     }
 
     .ant-tree-iconEle {

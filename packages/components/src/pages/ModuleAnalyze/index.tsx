@@ -7,7 +7,6 @@ import {
   Popover,
   Row,
   Space,
-  Tag,
   Typography,
 } from 'antd';
 import React, { useState } from 'react';
@@ -16,14 +15,12 @@ import { getShortPath } from 'src/utils';
 import { ModuleGraphListContext } from '../BundleSize/config';
 import { ModuleFilesTree } from './fileTree';
 import './index.scss';
-import { drawerWidth, TAG_PALLETE } from '../../constants';
+import { drawerWidth } from '../../constants';
 import {
-  ExpandOutlined,
   LeftSquareOutlined,
   QuestionCircleOutlined,
   RightSquareTwoTone,
 } from '@ant-design/icons';
-import { t } from 'i18next';
 
 export enum TabList {
   Reasons,
@@ -61,17 +58,17 @@ export const ModuleAnalyzeComponent: React.FC<{
           <Drawer
             title={
               <div className="module-analyze-box">
-                <Typography.Text>{module.path}</Typography.Text>
+                <Typography.Text>{getShortPath(module.path)}</Typography.Text>
                 <Typography.Text
                   style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.45)' }}
                 >
-                  {`Current Module: ${getShortPath(module.path)}`}
+                  {`Current Module: ${module.path}`}
                 </Typography.Text>
               </div>
             }
             open={show}
             maskClosable
-            width={drawerWidth}
+            width={drawerWidth * 0.8}
             onClose={() => setShow(false)}
           >
             <ServerAPIProvider
@@ -113,29 +110,6 @@ export const ModuleAnalyzeComponent: React.FC<{
                               <Popover
                                 content={
                                   <div>
-                                    <div>
-                                      <Badge status="success" text=" " />
-                                      <Typography.Text code>
-                                        <ExpandOutlined />
-                                        {
-                                          " Expand the node_modules's modules that was omitted... "
-                                        }
-                                      </Typography.Text>
-                                      <Typography.Text>{`: ${t('Expand Omitted')}`}</Typography.Text>
-                                    </div>
-                                    <div>
-                                      <Badge status="success" text=" " />
-                                      <Popover
-                                        content="*"
-                                        title="Concatenated Module Name"
-                                        trigger="hover"
-                                      >
-                                        <Tag color={TAG_PALLETE.DARK_BLUE}>
-                                          {'Concatenated'}
-                                        </Tag>
-                                      </Popover>
-                                      <Typography.Text>{`: ${t('Concatenated Tag')}`}</Typography.Text>
-                                    </div>
                                     <div>
                                       <Badge status="success" text=" " />
                                       <RightSquareTwoTone />

@@ -50,4 +50,5 @@ export const Progress = withServerAPI({
   responsePropName: 'progress',
   Component: ProgressBase,
   fallbackComponent: () => null,
+  showSkeleton: false,
 });

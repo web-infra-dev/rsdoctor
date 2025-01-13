@@ -50,6 +50,23 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
     cursor: pointer;
   }
 
+  &-titles-box:hover {
+    background-color: #f0f3f5;
+    border: 1px solid #e5e6eb;
+    cursor: pointer;
+    width: 80%;
+
+    .ant-typography:hover {
+      color: #0079ff;
+    }
+  }
+
+  &-node-title {
+    .file-icon {
+      padding: 4px 0 0 0;
+    }
+  }
+
   &-indent {
     display: inline-block;
     height: 0;
@@ -81,6 +98,7 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
       display: flex;
       cursor: pointer;
       line-height: 30px;
+
       img {
         cursor: pointer;
         &-tag {
