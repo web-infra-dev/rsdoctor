@@ -66,7 +66,7 @@ export const AlertCollapse = (props: {
               style={{ backgroundColor: '#fff' }}
               title={
                 <Text
-                  style={{ width: 900 }}
+                  style={{ width: window.innerWidth > 1500 ? 900 : 700 }}
                   ellipsis={{
                     tooltip: root,
                   }}
