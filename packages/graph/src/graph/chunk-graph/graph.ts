@@ -29,12 +29,6 @@ export class ChunkGraph implements SDK.ChunkGraphInstance {
     return this._chunkMap.get(id);
   }
 
-  getChunkByModule(module: SDK.ModuleInstance): SDK.ChunkInstance | undefined {
-    return Array.from(this._chunkMap.values()).find((item) =>
-      item.hasModule(module),
-    );
-  }
-
   getAssetByPath(path: string): SDK.AssetInstance | undefined {
     return this._assetMap.get(path);
   }
