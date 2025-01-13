@@ -16,6 +16,7 @@ import styles from './card.module.scss';
 
 const { DirectoryTree } = Tree;
 const { useToken } = theme;
+const { innerWidth } = window;
 
 interface CardProps {
   showProgress?: boolean;
@@ -86,7 +87,7 @@ const AssetCardContainer: React.FC<{
       boxProps={{
         style: {
           background: bgColor?.bgColor,
-          width: '80%',
+          width: innerWidth > 1300 ? '80%' : '95%',
         },
       }}
     />
