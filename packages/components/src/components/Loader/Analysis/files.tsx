@@ -33,7 +33,7 @@ import { FileTree } from '../../FileTree';
 import { Keyword } from '../../Keyword';
 
 const ADDITION_LOADER_NUMBER = 3;
-const InnerWidth = window.innerWidth;
+const { innerWidth } = window;
 
 export const LoaderFiles: React.FC<{
   filetree: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileTree>;
@@ -102,7 +102,7 @@ export const LoaderFiles: React.FC<{
             <div
               className={styles.box}
               style={{
-                width: InnerWidth < 1500 ? InnerWidth * 0.3 : InnerWidth * 0.5,
+                width: innerWidth < 1500 ? innerWidth * 0.3 : innerWidth * 0.5,
               }}
             >
               <div className={styles.keywords}>
