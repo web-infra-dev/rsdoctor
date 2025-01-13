@@ -34,7 +34,6 @@ import { AssetDetail } from './asset';
 import './index.sass';
 import styles from './index.module.scss';
 import { GraphType } from '../constants';
-import { extname } from 'path';
 
 const { Option } = Select;
 
@@ -215,7 +214,11 @@ export const WebpackModulesOverallBase: React.FC<
 
   useEffect(() => {
     summary.all.total.files.forEach((f) => {
-      const ext = extname(f.path).slice(1);
+      function getFileExtension(filePath: string) {
+        const parts = filePath.split('.');
+        return parts.length > 1 ? parts.pop() : '';
+      }
+      const ext = getFileExtension(f.path);
       if (ext === 'js') {
         setAssetPath(f.path);
       }
