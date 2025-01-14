@@ -18,6 +18,7 @@ describe('module graph', () => {
       modules: [],
       dependencies: [],
       exports: [],
+      layers: [],
       moduleGraphModules: [],
       sideEffects: [],
       variables: [],

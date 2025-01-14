@@ -5,6 +5,7 @@ import { ModuleGraph } from '@/build-utils/common';
 import { Chunks } from '@/build-utils/build';
 import { removeAbsModulePath } from '../utils';
 import { compileByWebpack5 } from '@scripts/test-helper';
+import type { Plugin } from '@rsdoctor/types';
 
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, '../../fixtures', ...paths);
@@ -13,7 +14,7 @@ const resolveFixture = (...paths: string[]) => {
 describe('module graph transform from stats', () => {
   it('normal module in multi concatenation module', async () => {
     const fixtureName = 'normal-module-in-multi-concatenation';
-    const stats = await compileByWebpack5(
+    const stats = (await compileByWebpack5(
       {
         entry1: resolveFixture(fixtureName, 'entry1'),
         entry2: resolveFixture(fixtureName, 'entry2'),
@@ -25,7 +26,7 @@ describe('module graph transform from stats', () => {
           chunkFilename: '[name].js',
         },
       },
-    );
+    )) as Plugin.StatsCompilation;
 
     const chunkGraph = Chunks.chunkTransform(new Map(), stats);
 
@@ -42,7 +43,13 @@ describe('module graph transform from stats', () => {
     const graphData = graph.toData();
     expect(graphData.modules[0].webpackId.length).toBeTruthy();
 
-    graphData.modules.forEach((mod) => (mod.webpackId = ''));
+    graphData.modules.forEach((mod) => {
+      // prevent ci failed on win32
+      mod.webpackId = '';
+      mod.size.sourceSize = -1;
+      mod.size.transformedSize = -1;
+      mod.size.parsedSize = -1;
+    });
     expect(graphData).toMatchSnapshot();
   });
 
