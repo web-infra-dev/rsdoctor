@@ -43,7 +43,13 @@ describe('module graph transform from stats', () => {
     const graphData = graph.toData();
     expect(graphData.modules[0].webpackId.length).toBeTruthy();
 
-    graphData.modules.forEach((mod) => (mod.webpackId = ''));
+    graphData.modules.forEach((mod) => {
+      // prevent ci failed on win32
+      mod.webpackId = '';
+      mod.size.sourceSize = -1;
+      mod.size.transformedSize = -1;
+      mod.size.parsedSize = -1;
+    });
     expect(graphData).toMatchSnapshot();
   });
 
