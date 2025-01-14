@@ -36,8 +36,7 @@ To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/s
 
 - **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.
 
-| <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/eea845fa-f19f-49d4-9bc6-6795688e6a33" alt="loader timeline" /> | <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/172f5328-4508-4f4b-b53b-27ec1095ef9d" alt="loader codes" /> |
-| ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+https://github.com/user-attachments/assets/3400e0a2-a1dc-4a14-9466-6283af9dd9ed
 
 - **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
 
