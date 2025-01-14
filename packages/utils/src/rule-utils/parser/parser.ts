@@ -1,6 +1,6 @@
 import { Parser as AcornParser, Options, Position } from 'acorn';
 // @ts-ignore
-import { importAssertions } from 'acorn-import-assertions';
+import { importAttributes } from 'acorn-import-attributes';
 import * as walk from 'acorn-walk';
 import { asserts } from './asserts';
 import * as utils from './utils';
@@ -17,12 +17,12 @@ export interface ParseError extends Error {
 /**
  * parser for internal
  */
-const acornParserInternal = AcornParser.extend(importAssertions);
+const acornParserInternal = AcornParser.extend(importAttributes);
 
 /**
  * parser for developers
  */
-let acornParserExport = AcornParser.extend(importAssertions);
+let acornParserExport = AcornParser.extend(importAttributes);
 
 export const parser = {
   /** AST iterator */
