@@ -182,7 +182,7 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
                       height={window.innerHeight / 1.5}
                       value={
                         tab
-                          ? source[tab]
+                          ? source[tab as keyof SDK.ModuleSource]
                           : source['parsedSource']
                             ? source['parsedSource']
                             : source['source']

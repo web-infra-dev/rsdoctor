@@ -310,25 +310,28 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
                         data={[
                           {
                             baseline:
-                              baseline.moduleCodeMap[r.baseline?.id]?.source,
+                              baseline.moduleCodeMap[r.baseline?.id as number]
+                                ?.source,
                             current:
-                              current.moduleCodeMap[r.current?.id]?.source,
+                              current.moduleCodeMap[r.current?.id as number]
+                                ?.source,
                             group: 'Source',
                           },
                           {
                             baseline:
-                              baseline.moduleCodeMap[r.baseline?.id]
+                              baseline.moduleCodeMap[r.baseline?.id as number]
                                 ?.transformed,
                             current:
-                              current.moduleCodeMap[r.current?.id]?.transformed,
+                              current.moduleCodeMap[r.current?.id as number]
+                                ?.transformed,
                             group: 'Transformed Source',
                           },
                           {
                             baseline:
-                              baseline.moduleCodeMap[r.baseline?.id]
+                              baseline.moduleCodeMap[r.baseline?.id as number]
                                 ?.parsedSource,
                             current:
-                              current.moduleCodeMap[r.current?.id]
+                              current.moduleCodeMap[r.current?.id as number]
                                 ?.parsedSource,
                             group: 'Parsed Source',
                           },
@@ -341,18 +344,22 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
                       data={[
                         {
                           baseline:
-                            current.moduleCodeMap[r.current?.id]?.source,
+                            current.moduleCodeMap[r.current?.id as number]
+                              ?.source,
                           current:
-                            current.moduleCodeMap[r.current?.id]?.transformed,
+                            current.moduleCodeMap[r.current?.id as number]
+                              ?.transformed,
                           baselineTitle: 'Current Source',
                           currentTitle: 'Current Transformed Source',
                           group: 'Transformed Source',
                         },
                         {
                           baseline:
-                            current.moduleCodeMap[r.current?.id]?.source,
+                            current.moduleCodeMap[r.current?.id as number]
+                              ?.source,
                           current:
-                            current.moduleCodeMap[r.current?.id]?.parsedSource,
+                            current.moduleCodeMap[r.current?.id as number]
+                              ?.parsedSource,
                           baselineTitle: 'Current Source',
                           currentTitle: 'Current Parsed Source',
                           group: 'Parsed Source',

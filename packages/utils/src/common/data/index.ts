@@ -236,7 +236,9 @@ export class APIDataLoader {
           const _moduleCodeData = {} as R;
           if (moduleCodeMap) {
             moduleIds.forEach((id: number) => {
-              _moduleCodeData[id] = moduleCodeMap[id] as R;
+              (_moduleCodeData as Record<string, R>)[id] = moduleCodeMap[
+                id
+              ] as R;
             });
             return _moduleCodeData as R;
           }

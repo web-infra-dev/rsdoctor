@@ -2,6 +2,7 @@
 *.log*
 *.cpuprofile
 node_modules/
+*.tsbuildinfo
 
 dist/
 dist-*
