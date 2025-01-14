@@ -36,8 +36,7 @@
 
 - **编译可视化**：Rsdoctor 将编译行为及耗时进行可视化展示，方便开发同学查看构建问题。
 
-| <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/eea845fa-f19f-49d4-9bc6-6795688e6a33"  alt="loader timeline" /> | <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/rsdoctor-analyze-code.png" alt="loader codes" /> |
-| ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+https://github.com/user-attachments/assets/3400e0a2-a1dc-4a14-9466-6283af9dd9ed
 
 - **多种分析能力**：支持构建产物、构建时分析能力：
   - 构建产物支持资源列表及模块依赖等。
