@@ -28,6 +28,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
         item.path,
         item.isEntry,
         item.kind,
+        item.renderId,
         item.layer,
       );
       (module as any).id = item.id;

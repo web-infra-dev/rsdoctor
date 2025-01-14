@@ -81,10 +81,10 @@ export const ensureModulesChunksGraphFn = (
 
       /** transform modules graph */
       const shouldParseBundle = _this.options.supports.parseBundle !== false;
-      await getModulesInfosByStats(
+      await getModulesInfos(
         compiler,
-        statsJson,
         _this.modulesGraph,
+        _this.chunkGraph,
         shouldParseBundle,
       );
 
@@ -127,10 +127,10 @@ export const ensureModulesChunksGraphFn = (
  * @return {*}
  * @memberof RsdoctorWebpackPlugin
  */
-async function getModulesInfosByStats(
+async function getModulesInfos(
   compiler: Plugin.BaseCompiler,
-  stats: Plugin.StatsCompilation,
   moduleGraph: SDK.ModuleGraphInstance,
+  chunkGraph: SDK.ChunkGraphInstance,
   parseBundle: boolean,
 ) {
   if (!moduleGraph) {
@@ -139,7 +139,8 @@ async function getModulesInfosByStats(
   try {
     const parsedModulesData =
       (await ChunksBuildUtils.getAssetsModulesData(
-        stats,
+        moduleGraph,
+        chunkGraph,
         compiler.outputPath,
         parseBundle,
       )) || {};

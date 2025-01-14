@@ -2,9 +2,8 @@ import { isEmpty, pick } from 'lodash';
 import path from 'path';
 
 import { logger } from '@rsdoctor/utils/logger';
-import { Plugin, SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/types';
 import { ParseBundle } from '@/types';
-import { getModulesFromArray } from '../module-graph';
 
 export type ParsedModuleSizeData = {
   [x: string]: { size: number; sizeConvert: string; content: string };
@@ -19,7 +18,8 @@ export type ParsedModuleSizeData = {
  * https://github.com/webpack-contrib/webpack-bundle-analyzer/blob/44bd8d0f9aa3b098e271af220096ea70cc44bc9e/LICENSE
  */
 export async function getAssetsModulesData(
-  bundleStats: Plugin.StatsCompilation,
+  moduleGraph: SDK.ModuleGraphInstance,
+  chunkGraph: SDK.ChunkGraphInstance,
   bundleDir: string,
   opts: {
     parseBundle?: ParseBundle;
@@ -27,49 +27,22 @@ export async function getAssetsModulesData(
 ): Promise<ParsedModuleSizeData | null> {
   const { parseBundle = () => ({}) as ReturnType<ParseBundle> } = opts || {};
 
-  // Sometimes all the information is located in `children` array (e.g. problem in #10)
-  if (isEmpty(bundleStats.assets) && !isEmpty(bundleStats.children)) {
-    const { children } = bundleStats;
-    const _bundleStats = children?.[0];
-    if (!children) {
-      return {};
-    }
-    for (let i = 1; i < children.length; i++) {
-      children[i]?.assets?.forEach((asset: Plugin.StatsAsset) => {
-        _bundleStats?.assets?.push(asset);
-      });
-    }
-  } else if (!isEmpty(bundleStats.children)) {
-    // Sometimes if there are additional child chunks produced add them as child assets
-    bundleStats?.children?.forEach((child: Plugin.StatsCompilation) => {
-      child?.assets?.forEach((asset: Plugin.StatsAsset) => {
-        bundleStats?.assets?.push(asset);
-      });
-    });
-  }
+  const assets = chunkGraph.getAssets();
+  const modules = moduleGraph.getModules();
 
   // Trying to parse bundle assets and get real module sizes if `bundleDir` is provided
   let bundlesSources: Record<string, unknown> | null = null;
   let parsedModules: ParsedModuleSizeData | null = null;
 
-  if (bundleDir && bundleStats?.assets) {
+  if (bundleDir && assets.length) {
     bundlesSources = {};
     parsedModules = {};
 
-    for (const statAsset of bundleStats.assets) {
-      const assetFile = path.join(bundleDir, statAsset.name);
+    for (const asset of assets) {
+      const assetFile = path.join(bundleDir, asset.path);
       let bundleInfo: ReturnType<ParseBundle>;
-      const collectedModules: Plugin.StatsModule[] = [];
-
-      getModulesFromArray(bundleStats.modules ?? [], collectedModules);
-
-      // Add childCompiler's stats.modules
-      const childrenModules: Plugin.StatsModule[] =
-        bundleStats.children?.flatMap((c) => c.modules || []) || [];
-      collectedModules.push(...childrenModules);
-
       try {
-        bundleInfo = await parseBundle(assetFile, collectedModules);
+        bundleInfo = parseBundle(assetFile, modules);
       } catch (err: any) {
         const { code = '', message } = err;
         const msg = code === 'ENOENT' ? 'no such file' : message;
@@ -79,7 +52,7 @@ export async function getAssetsModulesData(
         continue;
       }
 
-      bundlesSources[statAsset.name] = pick(bundleInfo, 'src', 'runtimeSrc');
+      bundlesSources[asset.path] = pick(bundleInfo, 'src', 'runtimeSrc');
       Object.assign(parsedModules, bundleInfo?.modules || {});
     }
 

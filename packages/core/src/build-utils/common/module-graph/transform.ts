@@ -92,6 +92,7 @@ export function getModuleGraphByStats(
       getGetModuleName(root, data),
       data.depth === 0,
       isConcatenated ? SDK.ModuleKind.Concatenation : SDK.ModuleKind.Normal,
+      data.id ? String(data.id) : undefined,
       data.layer!,
     );
 
@@ -132,6 +133,7 @@ export function getModuleGraphByStats(
           getGetModuleName(root, normal),
           normal.depth === 0,
           SDK.ModuleKind.Normal,
+          normal.id ? String(normal.id) : undefined,
           normal.layer,
         );
 
