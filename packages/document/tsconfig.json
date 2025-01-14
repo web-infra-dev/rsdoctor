@@ -18,5 +18,10 @@
     "checkMdx": true
   },
   "include": ["src", "theme", "i18n.json"],
-  "exclude": ["**/node_modules"]
+  "exclude": ["**/node_modules"],
+  "references": [
+    {
+      "path": "../types/tsconfig.json"
+    }
+  ]
 }

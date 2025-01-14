@@ -4,11 +4,19 @@
     "baseUrl": "./",
     "jsx": "react-jsx",
     "isolatedModules": true,
-    "declaration": false,
+    "declaration": true,
     "declarationMap": false,
     "composite": true,
     "outDir": "dist"
   },
   "include": ["src", "config"],
-  "exclude": ["**/node_modules"]
+  "exclude": ["**/node_modules"],
+  "references": [
+    {
+      "path": "../types/tsconfig.json"
+    },
+    {
+      "path": "../components/tsconfig.json"
+    }
+  ]
 }

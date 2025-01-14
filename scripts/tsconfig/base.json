@@ -14,7 +14,8 @@
     "noUnusedParameters": true,
     "jsx": "preserve",
     "resolveJsonModule": true,
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "composite": true
   },
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Base"

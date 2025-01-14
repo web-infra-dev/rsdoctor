@@ -394,22 +394,29 @@ export const ModuleRowForAsset: React.FC<
                   file={r.path}
                   data={[
                     {
-                      baseline: baseline.moduleCodeMap[r.baseline?.id]?.source,
-                      current: current.moduleCodeMap[r.current?.id]?.source,
+                      baseline:
+                        baseline.moduleCodeMap[r.baseline?.id as number]
+                          ?.source,
+                      current:
+                        current.moduleCodeMap[r.current?.id as number]?.source,
                       group: 'Source',
                     },
                     {
                       baseline:
-                        baseline.moduleCodeMap[r.baseline?.id]?.transformed,
+                        baseline.moduleCodeMap[r.baseline?.id as number]
+                          ?.transformed,
                       current:
-                        current.moduleCodeMap[r.current?.id]?.transformed,
+                        current.moduleCodeMap[r.current?.id as number]
+                          ?.transformed,
                       group: 'Transformed Source',
                     },
                     {
                       baseline:
-                        baseline.moduleCodeMap[r.baseline?.id]?.parsedSource,
+                        baseline.moduleCodeMap[r.baseline?.id as number]
+                          ?.parsedSource,
                       current:
-                        current.moduleCodeMap[r.current?.id]?.parsedSource,
+                        current.moduleCodeMap[r.current?.id as number]
+                          ?.parsedSource,
                       group: 'Parsed Source',
                     },
                   ]}

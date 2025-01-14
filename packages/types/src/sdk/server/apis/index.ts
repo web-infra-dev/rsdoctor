@@ -11,7 +11,7 @@ import { PluginAPIResponse, PluginAPIRequestBody } from './plugin';
 import { GraphAPIResponse, GraphAPIRequestBody } from './graph';
 import { AlertsAPIResponse, AlertsAPIRequestBody } from './alerts';
 import { RsdoctorManifestMappingKeys } from '../../../manifest';
-import { SDK } from '@/index';
+import { SDK } from '../../../index';
 
 export * from './pagination';
 
@@ -121,8 +121,8 @@ export interface ResponseTypes
   };
   [API.GetModuleCodeByModuleId]: SDK.ModuleSource;
   [API.GetModuleCodeByModuleIds]: SDK.ModuleCodeData;
-  [API.GetAllModuleGraph]: SDK.ModuleGraphData;
-  [API.GetAllChunkGraph]: SDK.ChunkGraphData;
+  [API.GetAllModuleGraph]: SDK.ModuleData[];
+  [API.GetAllChunkGraph]: SDK.ChunkData[];
 }
 
 export interface RequestBodyTypes
