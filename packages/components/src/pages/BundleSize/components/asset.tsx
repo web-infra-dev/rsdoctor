@@ -219,17 +219,25 @@ export const ModuleGraphViewer: React.FC<{
   if (!id) return null;
 
   return (
-    <ServerAPIProvider api={SDK.ServerAPI.API.GetAllModuleGraph} body={{}}>
-      {(modules) => (
-        <ModuleAnalyzeComponent
-          cwd={cwd}
-          moduleId={id}
-          modules={modules}
-          show={show}
-          setShow={setShow}
-        />
-      )}
-    </ServerAPIProvider>
+    <>
+      <ServerAPIProvider api={SDK.ServerAPI.API.GetAllModuleGraph} body={{}}>
+        {(modules) => (
+          <ModuleAnalyzeComponent
+            cwd={cwd}
+            moduleId={id}
+            modules={modules}
+            show={show}
+            setShow={setShow}
+          />
+        )}
+      </ServerAPIProvider>
+      <ServerAPIProvider api={SDK.ServerAPI.API.GetChunkGraph}>
+        {(chunks) => {
+          console.log(chunks);
+          return <></>;
+        }}
+      </ServerAPIProvider>
+    </>
   );
 };
 

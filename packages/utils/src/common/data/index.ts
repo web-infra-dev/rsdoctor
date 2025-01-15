@@ -182,6 +182,7 @@ export class APIDataLoader {
           const { modules = [] } = res[1] || {};
           return Graph.getAssetDetails(assetPath, assets, chunks, modules) as R;
         });
+
       case SDK.ServerAPI.API.GetChunksByModuleId:
         return Promise.all([
           this.loader.loadData('chunkGraph'),
@@ -343,6 +344,26 @@ export class APIDataLoader {
       case SDK.ServerAPI.API.GetTileReportHtml:
         return this.loader.loadData('otherReports').then((otherReports) => {
           return otherReports?.tileReportHtml as R;
+        });
+
+      // This apis for AI
+
+      case SDK.ServerAPI.API.GetChunkGraph:
+        return this.loader.loadData('chunkGraph').then((res) => {
+          const { chunks = [] } = res || {};
+          return chunks as R;
+        });
+
+      case SDK.ServerAPI.API.GetAllModuleGraphFilter:
+        return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          return moduleGraph?.modules.map((m) => ({
+            id: m.id,
+            webpackId: m.webpackId,
+            path: m.path,
+            size: m.size,
+            chunks: m.chunks,
+            kind: m.kind,
+          })) as R;
         });
 
       default:
