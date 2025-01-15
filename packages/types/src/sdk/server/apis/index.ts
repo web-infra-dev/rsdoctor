@@ -51,6 +51,7 @@ export enum API {
   GetPluginData = '/api/plugins/data',
 
   /** Graph API */
+  GetChunkGraph = '/api/graph/chunks/graph',
   GetAssetsSummary = '/api/graph/assets/summary',
   GetAssetDetails = '/api/graph/asset/details',
   GetChunksByModuleId = '/api/graph/chunk/module',
@@ -64,6 +65,7 @@ export enum API {
   GetLayers = '/api/graph/layers',
   GetSearchModules = '/api/search/modules',
   GetSearchModuleInChunk = '/api/search/chunk/modules',
+  GetAllModuleGraphFilter = '/api/graph/module/filter',
 
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',
@@ -121,6 +123,8 @@ export interface ResponseTypes
     moduleCodeMap: SDK.ModuleCodeData;
     cloudManifestUrl: string;
   };
+  [API.GetChunkGraph]: SDK.ChunkData[];
+  [API.GetAllModuleGraphFilter]: SDK.ModuleData[];
   [API.GetModuleCodeByModuleId]: SDK.ModuleSource;
   [API.GetModuleCodeByModuleIds]: SDK.ModuleCodeData;
   [API.GetAllModuleGraph]: SDK.ModuleData[];
