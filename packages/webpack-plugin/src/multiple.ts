@@ -35,8 +35,9 @@ export class RsdoctorWebpackMultiplePlugin<
         printLog: normallizedOptions.printLog,
         mode: normallizedOptions.mode ? normallizedOptions.mode : undefined,
         brief: normallizedOptions.brief,
+        compressData: normallizedOptions.output.compressData,
       },
-      type: normallizedOptions.reportCodeType,
+      type: normallizedOptions.output.reportCodeType,
     });
 
     super({

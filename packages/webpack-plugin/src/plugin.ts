@@ -58,15 +58,17 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
         port: this.options.port,
         name: pluginTapName,
         root: process.cwd(),
-        type: this.options.reportCodeType,
+        type: this.options.output.reportCodeType,
         config: {
           disableTOSUpload: this.options.disableTOSUpload,
           innerClientPath: this.options.innerClientPath,
           printLog: this.options.printLog,
-          mode: this.options.mode ? this.options.mode : undefined,
+          mode: this.options.mode,
           brief: this.options.brief,
+          compressData: this.options.output.compressData,
         },
       });
+
     this.modulesGraph = new ModuleGraph();
     this.chunkGraph = new ChunkGraph();
     this.isRsdoctorPlugin = true;
@@ -163,7 +165,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     this.sdk.setOutputDir(
       path.resolve(
-        this.options.reportDir || compiler.outputPath,
+        this.options.output.reportDir || compiler.outputPath,
         `./${Constants.RsdoctorOutputFolder}`,
       ),
     );

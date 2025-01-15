@@ -128,6 +128,7 @@ export type SDKOptionsType = {
   printLog?: IPrintLog;
   mode?: keyof typeof IMode;
   brief?: BriefConfig;
+  compressData?: boolean;
 };
 
 /**
