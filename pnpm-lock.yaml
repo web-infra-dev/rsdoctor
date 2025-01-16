@@ -696,12 +696,18 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
+      '@types/circular-dependency-plugin':
+        specifier: ^5.0.8
+        version: 5.0.8
       axios:
         specifier: ^1.7.9
         version: 1.7.9(debug@4.3.7)
       browserslist-load-config:
         specifier: ^1.0.0
         version: 1.0.0
+      circular-dependency-plugin:
+        specifier: ^5.2.2
+        version: 5.2.2(webpack@5.97.1)
       enhanced-resolve:
         specifier: 5.12.0
         version: 5.12.0
@@ -6495,6 +6501,18 @@ packages:
       '@types/node': 16.18.123
     dev: true
 
+  /@types/circular-dependency-plugin@5.0.8:
+    resolution: {integrity: sha512-P9nspqZxy+9NsoS4KOG5p1JFss0n0pv8UHD8OAP7bz4lAkgtdAnOS0J0ZXlcqzekWdUtmCFwpIuW+AtOhFp8VA==}
+    dependencies:
+      '@types/node': 16.18.123
+      webpack: 5.97.1(webpack-cli@5.1.4)
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+      - webpack-cli
+    dev: false
+
   /@types/configstore@2.1.1:
     resolution: {integrity: sha512-YY+hm3afkDHeSM2rsFXxeZtu0garnusBWNG1+7MknmDWQHqcH2w21/xOU9arJUi8ch4qyFklidANLCu3ihhVwQ==}
     dev: false
@@ -8231,6 +8249,15 @@ packages:
       inherits: 2.0.4
       safe-buffer: 5.2.1
     dev: true
+
+  /circular-dependency-plugin@5.2.2(webpack@5.97.1):
+    resolution: {integrity: sha512-g38K9Cm5WRwlaH6g03B9OEz/0qRizI+2I7n+Gz+L5DxXJAPAiWQvwlYNm1V1jkdpUv95bOe/ASm2vfi/G560jQ==}
+    engines: {node: '>=6.0.0'}
+    peerDependencies:
+      webpack: '>=4.0.1'
+    dependencies:
+      webpack: 5.97.1(webpack-cli@5.1.4)
+    dev: false
 
   /classnames@2.5.1:
     resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
