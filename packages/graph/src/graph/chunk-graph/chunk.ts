@@ -108,4 +108,20 @@ export class Chunk implements SDK.ChunkInstance {
       imported: this._imported.map(({ id }) => id),
     };
   }
+
+  setDependencies(dependencies: SDK.ChunkInstance[]) {
+    this._dependencies = dependencies;
+  }
+
+  setImported(imported: SDK.ChunkInstance[]) {
+    this._imported = imported;
+  }
+
+  setModules(modules: SDK.ModuleInstance[]) {
+    this._modules = modules;
+  }
+
+  setAssets(assets: SDK.AssetInstance[]) {
+    this._assets = assets;
+  }
 }
