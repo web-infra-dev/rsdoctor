@@ -13,6 +13,8 @@ import {
   RsdoctorWebpackPluginOptions,
   RsdoctorPluginOptionsNormalized,
   IReportCodeType,
+  RsdoctorRspackPluginOptions,
+  RsdoctorRspackPluginOptionsNormalized,
 } from '@/types';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 
@@ -235,3 +237,16 @@ export const normalizeReportType = (
   }
   return globalReportCodeType;
 };
+
+export function normalizeRspackUserOptions<
+  Rules extends Linter.ExtendRuleData[],
+>(
+  options: RsdoctorRspackPluginOptions<Rules>,
+): RsdoctorRspackPluginOptionsNormalized<Rules> {
+  const config: RsdoctorRspackPluginOptionsNormalized<Rules> =
+    normalizeUserConfig(options);
+  config.experiments ??= {};
+  config.experiments.enableNativePlugin =
+    options.experiments?.enableNativePlugin ?? false;
+  return config;
+}

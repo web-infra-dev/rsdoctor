@@ -3,6 +3,7 @@ import type {
   Common,
   Plugin,
   SDK,
+  Linter,
 } from '@rsdoctor/types';
 import type { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import { rules } from '@/rules/rules';
@@ -179,6 +180,29 @@ export interface RsdoctorRspackPluginInstance<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends RsdoctorPluginInstance<Plugin.BaseCompilerType<'rspack'>, Rules> {}
 
+export interface RsdoctorRspackPluginExperiments {
+  /**
+   * Whether to enable the native plugin to improve the performance.
+   * @default false
+   */
+  enableNativePlugin?: boolean;
+}
+
+export interface RsdoctorRspackPluginExperimentsNormalized {
+  enableNativePlugin?: boolean;
+}
+
 export interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
-> extends RsdoctorWebpackPluginOptions<Rules> {}
+> extends RsdoctorWebpackPluginOptions<Rules> {
+  /**
+   * The experiments of the Rsdoctor Rspack plugin.
+   */
+  experiments?: RsdoctorRspackPluginExperiments;
+}
+
+export type RsdoctorRspackPluginOptionsNormalized<
+  Rules extends Linter.ExtendRuleData[],
+> = RsdoctorPluginOptionsNormalized<Rules> & {
+  experiments?: RsdoctorRspackPluginExperimentsNormalized;
+};

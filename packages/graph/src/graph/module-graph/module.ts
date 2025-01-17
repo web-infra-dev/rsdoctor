@@ -16,9 +16,9 @@ export class Module implements SDK.ModuleInstance {
     id = 1;
   }
 
-  readonly id: number;
+  id: number;
 
-  readonly renderId: string | undefined;
+  renderId: string | undefined;
 
   readonly webpackId: string;
 
@@ -366,5 +366,33 @@ export class Module implements SDK.ModuleInstance {
     }
 
     return data;
+  }
+
+  setId(id: number) {
+    this.id = id;
+  }
+
+  setRenderId(renderId: string) {
+    this.renderId = renderId;
+  }
+
+  setChunks(chunks: SDK.ChunkInstance[]): void {
+    this.chunks = chunks;
+  }
+
+  setDependencies(dependencies: SDK.DependencyInstance[]): void {
+    this.dependencies = dependencies;
+  }
+
+  setImported(imported: SDK.ModuleInstance[]): void {
+    this.imported = imported;
+  }
+
+  setModules(modules: SDK.ModuleInstance[]): void {
+    this.modules = modules;
+  }
+
+  setConcatenationModules(modules: SDK.ModuleInstance[]): void {
+    this.concatenationModules = modules;
   }
 }
