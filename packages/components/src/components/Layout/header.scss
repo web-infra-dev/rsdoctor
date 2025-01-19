@@ -18,4 +18,8 @@
 .rsdoctor-logo {
   cursor: pointer;
   height: 30px;
+
+  &:active {
+    opacity: 0.8;
+  }
 }
