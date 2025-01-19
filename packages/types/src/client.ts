@@ -4,6 +4,7 @@ export enum RsdoctorClientUrlQuery {
 }
 
 export enum RsdoctorClientRoutes {
+  Home = '/',
   Overall = '/overall',
   WebpackLoaderOverall = '/webpack/loaders/overall',
   WebpackLoaderAnalysis = '/webpack/loaders/analysis',
