@@ -7,10 +7,13 @@ import { OverlayAlertsWithButton } from '../Alerts';
 import { BuilderSelect } from './builder-select';
 import { Menus } from './menus';
 import './header.sass';
+import { Client } from '@rsdoctor/types';
+import { useNavigate } from 'react-router-dom';
 
 export const Header: React.FC = () => {
   const { i18n } = useI18n();
 
+  const navigate = useNavigate();
   const { isLight } = useTheme();
   const iconStyle: React.CSSProperties = {
     display: 'inline-block',
@@ -61,10 +64,12 @@ export const Header: React.FC = () => {
             }}
           >
             <img
-              style={{ height: 30 }}
-              src={'https://assets.rspack.dev/rsdoctor/rsdoctor-title-logo.png'}
+              src="https://assets.rspack.dev/rsdoctor/rsdoctor-title-logo.png"
               className="rsdoctor-logo"
               alt="logo"
+              onClick={() => {
+                navigate(Client.RsdoctorClientRoutes.Home);
+              }}
             />
             <BuilderSelect />
           </div>
