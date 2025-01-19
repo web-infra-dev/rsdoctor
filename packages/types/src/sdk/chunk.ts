@@ -2,6 +2,7 @@ import type { NonFunctionProperties } from '../common';
 import type { ModuleInstance, ToDataType } from './module';
 
 export interface AssetInstance {
+  id: number;
   path: string;
   size: number;
   /** File belongs to Chunk */
@@ -10,6 +11,8 @@ export interface AssetInstance {
   content: string;
   /** Generate data */
   toData(type: ToDataType): AssetData;
+  setId(id: number): void;
+  setChunks(chunks: ChunkInstance[]): void;
 }
 
 export interface ChunkInstance {
@@ -48,6 +51,11 @@ export interface ChunkInstance {
   setParsedSize(size: number): void;
   /** Generate data */
   toData(): ChunkData;
+
+  setAssets(assets: AssetInstance[]): void;
+  setModules(modules: ModuleInstance[]): void;
+  setDependencies(dependencies: ChunkInstance[]): void;
+  setImported(imported: ChunkInstance[]): void;
 }
 
 export interface ChunkGraphInstance {
@@ -61,6 +69,7 @@ export interface ChunkGraphInstance {
   addChunk(...chunks: ChunkInstance[]): void;
   /** Get chunk by identifier */
   getChunkById(id: string): ChunkInstance | undefined;
+  getAssetById(id: number): AssetInstance | undefined;
   /** Get the file according to the path */
   getAssetByPath(path: string): AssetInstance | undefined;
   /**
@@ -70,13 +79,17 @@ export interface ChunkGraphInstance {
   /**
    * get the entry point by id
    */
-  getEntryPointByName(name: string): EntryPointInstance | undefined;
+  getEntryPointById(id: number): EntryPointInstance | undefined;
   /**
    * add the entry point instance to chunk graph
    */
   addEntryPoint(...entrypoint: EntryPointInstance[]): void;
   /** Output pure data */
   toData(type: ToDataType): ChunkGraphData;
+
+  setChunks(chunks: ChunkInstance[]): void;
+  setAssets(assets: AssetInstance[]): void;
+  setEntrypoints(entrypoints: EntryPointInstance[]): void;
 }
 
 export interface AssetData
@@ -112,6 +125,7 @@ export interface ChunkData
 }
 
 export interface EntryPointInstance {
+  id: number;
   name: string;
   /**
    * add asset which contained in this entry point
@@ -122,6 +136,9 @@ export interface EntryPointInstance {
    */
   addChunk(chunk: ChunkInstance): void;
   toData(): EntryPointData;
+  setId(id: number): void;
+  setChunks(chunks: ChunkInstance[]): void;
+  setAssets(assets: AssetInstance[]): void;
 }
 
 export interface EntryPointData

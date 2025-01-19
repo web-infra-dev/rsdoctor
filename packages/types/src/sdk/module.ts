@@ -169,6 +169,14 @@ export interface ModuleInstance {
   addConcatenationModule(module: ModuleInstance): void;
   /** Get all aggregated modules to which the current module belongs */
   getConcatenationModules(): ModuleInstance[];
+
+  setId(id: number): void;
+  setChunks(chunks: ChunkInstance[]): void;
+  setDependencies(dependencies: DependencyInstance[]): void;
+  setImported(imported: ModuleInstance[]): void;
+  setModules(modules: ModuleInstance[]): void;
+  setConcatenationModules(modules: ModuleInstance[]): void;
+  setRenderId(renderId: string): void;
 }
 
 /** Depends on Metadata */
@@ -235,6 +243,7 @@ export interface DependencyInstance {
   isSameWithoutStatements(dep: DependencyInstance): boolean;
 
   setBuildMeta(data: DependencyBuildMeta): void;
+  setId(id: number): void;
 }
 
 export type ModuleGraphToDataArgs = { contextPath: string };
@@ -311,6 +320,9 @@ export interface ModuleGraphInstance {
 
   /** Generate data */
   toCodeData(type?: ToDataType): ModuleCodeData;
+
+  setModules(modules: ModuleInstance[]): void;
+  setDependencies(dependencies: DependencyInstance[]): void;
 }
 
 export interface ModuleData

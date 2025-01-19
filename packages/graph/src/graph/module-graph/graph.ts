@@ -433,4 +433,13 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
     });
     return codeMap;
   }
+
+  setModules(modules: SDK.ModuleInstance[]) {
+    this._moduleIdMap = new Map(modules.map((m) => [m.id, m]));
+    this._moduleWebpackIdMap = new Map(modules.map((m) => [m.webpackId, m]));
+  }
+
+  setDependencies(dependencies: SDK.DependencyInstance[]) {
+    this._dependenciesIdMap = new Map(dependencies.map((d) => [d.id, d]));
+  }
 }
