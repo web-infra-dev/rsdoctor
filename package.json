@@ -21,7 +21,7 @@
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm run ut",
     "test:all": "pnpm run test && pnpm run e2e",
     "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
-    "ut": "vitest run",
+    "ut": "vitest run --pool=forks",
     "ut:watch": "vitest"
   },
   "nano-staged": {
@@ -50,7 +50,8 @@
   },
   "pnpm": {
     "overrides": {
-      "react-dom": "18.3.1"
+      "react-dom": "18.3.1",
+      "@rspack/core": "npm:@rspack-canary/core@1.2.0-canary-82b09c35-20250120060012"
     }
   },
   "packageManager": "pnpm@8.15.9",
