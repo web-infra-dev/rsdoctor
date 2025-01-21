@@ -98,10 +98,10 @@
     "@types/tapable": "2.2.7",
     "babel-loader": "9.1.3",
     "string-loader": "0.0.1",
-    "ts-loader": "^9.5.1",
+    "ts-loader": "^9.5.2",
     "tslib": "2.8.1",
     "typescript": "^5.2.2",
-    "webpack": "^5.95.0"
+    "webpack": "^5.97.1"
   },
   "publishConfig": {
     "access": "public",

@@ -28,11 +28,11 @@
     "dist/"
   ],
   "devDependencies": {
-    "@rsbuild/core": "^1.1.13",
+    "@rsbuild/core": "^1.1.14",
     "@rsbuild/plugin-node-polyfill": "^1.2.0",
     "@rsbuild/plugin-react": "^1.1.0",
     "@rsbuild/plugin-sass": "^1.1.2",
-    "@rsbuild/plugin-type-check": "^1.2.0",
+    "@rsbuild/plugin-type-check": "^1.2.1",
     "@rsdoctor/components": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@types/node": "^16",
