@@ -122,10 +122,13 @@ test('linter rule render check', async () => {
 
   const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
   await ecmaVersionButton?.click();
+  console.log(ecmaVersionButton, 'ecmaVersionButton');
   // ignore output text check because there's no .map file for track the source code
   const [source, , error] = await page.$$('.box_4a48c');
+  console.log(source, error, 'errorElement');
   const sourceText = await source?.textContent();
   const errorText = await error?.textContent();
+  console.log(sourceText, errorText, 'errorText');
   expect(sourceText).toBe(
     '/cases/doctor-rspack/dist/linter-rule-render/main.js:1:2',
   );
