@@ -5,6 +5,7 @@ import { Compiler } from '@rspack/core';
 import path from 'path';
 import fs from 'fs';
 import { createRsdoctorPlugin } from './test-utils';
+import { devtools } from 'vue';
 
 let reportLoaderStartOrEndTimes = 0;
 
@@ -12,31 +13,17 @@ async function rspackCompile(
   _tapName: string,
   compile: typeof compileByRspack,
 ) {
-  const file = path.resolve(__dirname, './fixtures/a.js');
-  const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
-
-  const esmLoader = path.resolve(
-    __dirname,
-    './fixtures/loaders/esm-serialize-query-to-comment.mjs',
-  );
+  const file = path.resolve(__dirname, './fixtures/c.js');
 
   const res = await compile(file, {
     resolve: {
       extensions: ['.ts', '.js'],
     },
     output: {
-      path: path.join(__dirname, '../doctor-rspack/dist/brief'),
+      path: path.join(__dirname, '../doctor-rspack/dist/linter-rule-render'),
     },
     module: {
       rules: [
-        {
-          test: /\.js/,
-          use: loader,
-        },
-        {
-          test: /\.js/,
-          use: esmLoader,
-        },
         {
           test: /\.[jt]s$/,
           use: {
@@ -60,6 +47,16 @@ async function rspackCompile(
       // @ts-ignore
       createRsdoctorPlugin({
         mode: 'brief',
+        linter: {
+          rules: {
+            'ecma-version-check': [
+              'Warn',
+              {
+                ecmaVersion: 3,
+              },
+            ],
+          },
+        },
       }),
       {
         name: 'Foo',
@@ -100,13 +97,13 @@ async function rspackCompile(
   return res;
 }
 
-test('rspack brief mode', async () => {
+test('linter rule render check', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);
 
   const reportPath = path.join(
     __dirname,
-    './dist/brief/.rsdoctor/rsdoctor-report.html',
+    './dist/linter-rule-render/.rsdoctor/rsdoctor-report.html',
   );
 
   fileExists(reportPath);
@@ -122,30 +119,18 @@ test('rspack brief mode', async () => {
   // Navigate to a URL
   await page.goto(`file:///${reportPath}`);
 
-  // Perform actions on the page
-  const title = await page.title();
-  expect(title).toBe('Rsdoctor');
-
-  const titleContent = 'Bundle Overall';
-
-  const bundleTitleExists = await page
-    .locator(`text=${titleContent}`)
-    .first()
-    .isVisible();
-
-  const compileTabExists = await page
-    .locator(`text='Compile Analysis'`)
-    .first()
-    .isVisible();
-
-  const bundleTabExists = await page
-    .locator(`text='Bundle Size'`)
-    .first()
-    .isVisible();
-
-  expect(bundleTitleExists).toBe(true);
-  expect(compileTabExists).toBe(true);
-  expect(bundleTabExists).toBe(true);
+  const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
+  await ecmaVersionButton?.click();
+  // ignore output text check because there's no .map file for track the source code
+  const [source, , error] = await page.$$('.box_4a48c');
+  const sourceText = await source?.textContent();
+  const errorText = await error?.textContent();
+  expect(sourceText).toBe(
+    '/cases/doctor-rspack/dist/linter-rule-render/main.js:1:2',
+  );
+  expect(errorText).toBe(
+    'Find some syntax that does not match "ecmaVersion <= 3"',
+  );
 
   // Close the page
   await page.close();
