@@ -40,7 +40,7 @@ export interface RsdoctorWebpackPluginOptions<
   mode?: keyof typeof SDK.IMode;
 
   /**
-   * configuration of the interceptor for webpack loaders.
+   * configuration of the interceptor for webpack loaders. TODO: delete this options.
    * @description worked when the `features.loader === true`.
    */
   loaderInterceptorOptions?: {
@@ -54,8 +54,9 @@ export interface RsdoctorWebpackPluginOptions<
    * @default false
    */
   disableClientServer?: boolean;
+
   /**
-   * sdk instance of outside
+   * sdk instance of outside. TODO: delete this options
    */
   sdkInstance?: RsdoctorSDK;
 
@@ -63,16 +64,6 @@ export interface RsdoctorWebpackPluginOptions<
    * Whether to turn on some characteristic analysis capabilities, such as: the support for the BannerPlugin.
    */
   supports?: ISupport;
-
-  /**
-   * The directory where the report files will be output.
-   */
-  reportDir?: string;
-
-  /**
-   * Control the Rsdoctor reporter codes records.
-   */
-  reportCodeType?: IReportCodeType | undefined;
 
   /**
    * The port of the Rsdoctor server.
@@ -90,16 +81,34 @@ export interface RsdoctorWebpackPluginOptions<
   brief?: SDK.BriefConfig;
 
   /**
-   * control the Rsdoctor upload data to TOS, used by inner-rsdoctor.
+   * control the Rsdoctor upload data to TOS, used by inner-rsdoctor. TODO: delete this options
    * @default false
    */
   disableTOSUpload?: boolean;
 
   /**
-   * The name of inner rsdoctor's client package, used by inner-rsdoctor.
+   * The name of inner rsdoctor's client package, used by inner-rsdoctor. TODO: delete this options
    * @default false
    */
   innerClientPath?: string;
+
+  output?: {
+    /**
+     * The directory where the report files will be output.
+     */
+    reportDir?: string;
+
+    /**
+     * Control the Rsdoctor reporter codes records.
+     */
+    reportCodeType?: IReportCodeType | undefined;
+
+    /**
+     * Configure whether to compress data.
+     * @default false
+     */
+    compressData?: boolean;
+  };
 }
 
 export interface RsdoctorMultiplePluginOptions<
@@ -123,19 +132,18 @@ export interface RsdoctorPluginOptionsNormalized<
 > extends Common.DeepRequired<
     Omit<
       RsdoctorWebpackPluginOptions<Rules>,
-      | 'sdkInstance'
-      | 'linter'
-      | 'reportCodeType'
-      | 'supports'
-      | 'port'
-      | 'brief'
+      'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief'
     >
   > {
   features: Common.DeepRequired<Plugin.RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: RsdoctorSDK;
+  output: {
+    reportCodeType: SDK.ToDataType;
+    reportDir: string;
+    compressData: boolean;
+  };
   port?: number;
-  reportCodeType: SDK.ToDataType;
   supports: ISupport;
   brief: SDK.BriefConfig;
 }

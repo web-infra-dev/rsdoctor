@@ -17,7 +17,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
 
   protected hash!: string;
 
-  extraConfig: SDK.SDKOptionsType | undefined;
+  public extraConfig: SDK.SDKOptionsType | undefined;
 
   public readonly root: string;
 
@@ -155,11 +155,19 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
 
       if (Array.isArray(jsonStr)) {
         const urls = jsonStr.map((str, index) => {
-          return this.writeToFolder(str, outputDir, key, index + 1);
+          return this.writeToFolder(
+            str,
+            outputDir,
+            key,
+            this.extraConfig,
+            index + 1,
+          );
         });
         urlsPromiseList.push(...urls);
       } else {
-        urlsPromiseList.push(this.writeToFolder(jsonStr, outputDir, key));
+        urlsPromiseList.push(
+          this.writeToFolder(jsonStr, outputDir, key, this.extraConfig),
+        );
       }
     }
 
@@ -212,9 +220,13 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     jsonStr: string,
     dir: string,
     key: string,
+    extraConfig: SDK.SDKOptionsType | undefined,
     index?: number,
   ): Promise<DataWithUrl> {
-    const sharding = new File.FileSharding(Algorithm.compressText(jsonStr));
+    const { compressData } = extraConfig || { compressData: true };
+    const sharding = compressData
+      ? new File.FileSharding(Algorithm.compressText(jsonStr))
+      : new File.FileSharding(jsonStr);
     const folder = path.resolve(dir, key);
     const writer = sharding.writeStringToFolder(folder, '', index);
     return writer.then((item) => {
