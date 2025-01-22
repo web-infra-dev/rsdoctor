@@ -72,13 +72,14 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         port: this.options.port,
         name: pluginTapName,
         root: process.cwd(),
-        type: this.options.reportCodeType,
+        type: this.options.output.reportCodeType,
         config: {
           disableTOSUpload: this.options.disableTOSUpload,
           innerClientPath: this.options.innerClientPath,
           printLog: this.options.printLog,
           mode: this.options.mode ? this.options.mode : undefined,
           brief: this.options.brief,
+          compressData: this.options.output.compressData,
         },
       });
     this.outsideInstance = Boolean(this.options.sdkInstance);
@@ -191,7 +192,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     if (this.outsideInstance && 'parent' in this.sdk) {
       this.sdk.parent.master.setOutputDir(
         path.resolve(
-          this.options.reportDir || compiler.outputPath,
+          this.options.output.reportDir || compiler.outputPath,
           `./${Constants.RsdoctorOutputFolder}`,
         ),
       );
@@ -199,7 +200,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     this.sdk.setOutputDir(
       path.resolve(
-        this.options.reportDir || compiler.outputPath,
+        this.options.output.reportDir || compiler.outputPath,
         `./${Constants.RsdoctorOutputFolder}`,
       ),
     );
@@ -251,7 +252,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     this.sdk.setOutputDir(
       path.resolve(
-        this.options.reportDir || compiler.outputPath,
+        this.options.output.reportDir || compiler.outputPath,
         `./${Constants.RsdoctorOutputFolder}`,
       ),
     );
