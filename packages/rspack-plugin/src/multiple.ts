@@ -36,7 +36,7 @@ export class RsdoctorRspackMultiplePlugin<
         mode: normallizedOptions.mode ? normallizedOptions.mode : undefined,
         brief: normallizedOptions.brief,
       },
-      type: normallizedOptions.reportCodeType,
+      type: normallizedOptions.output.reportCodeType,
     });
 
     super({
