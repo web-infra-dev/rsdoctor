@@ -8,6 +8,7 @@ import { createRsdoctorPlugin } from './test-utils';
 import { devtools } from 'vue';
 
 let reportLoaderStartOrEndTimes = 0;
+const ecmaVersion = 3;
 
 async function rspackCompile(
   _tapName: string,
@@ -52,7 +53,7 @@ async function rspackCompile(
             'ecma-version-check': [
               'Warn',
               {
-                ecmaVersion: 3,
+                ecmaVersion,
               },
             ],
           },
@@ -129,7 +130,7 @@ test('linter rule render check', async () => {
     '/cases/doctor-rspack/dist/linter-rule-render/main.js:1:2',
   );
   expect(errorText).toBe(
-    'Find some syntax that does not match "ecmaVersion <= 3"',
+    `Find some syntax that does not match "ecmaVersion <= ${ecmaVersion}"`,
   );
 
   // Close the page
