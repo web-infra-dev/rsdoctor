@@ -104,7 +104,7 @@ export const ensureModulesChunksGraphFn = (
               ChunksBuildUtils.TileGraphReportName,
             ),
             reportTitle: 'bundle-analyzer',
-            reportDir: _this.options.reportDir,
+            reportDir: _this.options.output.reportDir,
           },
           compiler.outputPath,
         );
