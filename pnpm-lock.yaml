@@ -583,8 +583,8 @@ importers:
         specifier: 4.6.0
         version: 4.6.0(monaco-editor@0.49.0)(react-dom@18.3.1)(react@18.3.1)
       '@rsbuild/plugin-check-syntax':
-        specifier: 1.2.0
-        version: 1.2.0(@rsbuild/core@1.1.13)
+        specifier: 1.2.1
+        version: 1.2.1
       '@rsdoctor/graph':
         specifier: workspace:*
         version: link:../graph
@@ -5552,7 +5552,6 @@ packages:
       htmlparser2: 9.1.0
       picocolors: 1.1.1
       source-map: 0.7.4
-    dev: false
 
   /@rsbuild/plugin-css-minimizer@1.0.2(@rsbuild/core@1.1.13)(esbuild@0.17.19)(webpack@5.97.1):
     resolution: {integrity: sha512-x695i5PHWI9uV9VA1Dun66G0DeJMgxbt3wEk4eHZMz9pi6n8Dah6BHG2WcloYAEi7yVoUcPIGXDdag27s2B+4A==}
