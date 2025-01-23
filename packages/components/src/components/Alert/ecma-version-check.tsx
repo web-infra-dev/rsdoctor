@@ -35,7 +35,7 @@ export const ECMAVersionCheck: React.FC<LinkAlertProps> = ({ data }) => {
             <Icon component={SourceSvg} />
             <Text
               ellipsis={{ tooltip: sourceMessage }}
-              className={styles.content}
+              className={`${styles.content} e2e-ecma-source`}
             >
               {sourceMessage}
             </Text>
@@ -47,7 +47,7 @@ export const ECMAVersionCheck: React.FC<LinkAlertProps> = ({ data }) => {
             <Icon component={OutputSvg} />
             <Text
               ellipsis={{ tooltip: outputMessage }}
-              className={styles.content}
+              className={`${styles.content} e2e-ecma-output`}
             >
               {outputMessage}
             </Text>
@@ -59,7 +59,7 @@ export const ECMAVersionCheck: React.FC<LinkAlertProps> = ({ data }) => {
             <Icon component={ErrorSvg} />
             <Text
               ellipsis={{ tooltip: d.description }}
-              className={styles.content}
+              className={`${styles.content} e2e-ecma-error`}
             >
               {d.description}
             </Text>
