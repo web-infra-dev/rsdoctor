@@ -583,8 +583,8 @@ importers:
         specifier: 4.6.0
         version: 4.6.0(monaco-editor@0.49.0)(react-dom@18.3.1)(react@18.3.1)
       '@rsbuild/plugin-check-syntax':
-        specifier: 1.2.0
-        version: 1.2.0(@rsbuild/core@1.1.13)
+        specifier: 1.2.1
+        version: 1.2.1
       '@rsdoctor/graph':
         specifier: workspace:*
         version: link:../graph
@@ -682,8 +682,8 @@ importers:
   packages/core:
     dependencies:
       '@rsbuild/plugin-check-syntax':
-        specifier: 1.2.0
-        version: 1.2.0(@rsbuild/core@1.1.13)
+        specifier: 1.2.1
+        version: 1.2.1
       '@rsdoctor/graph':
         specifier: workspace:*
         version: link:../graph
@@ -5485,6 +5485,7 @@ packages:
       '@rspack/lite-tapable': 1.0.1
       '@swc/helpers': 0.5.15
       core-js: 3.39.0
+    dev: true
 
   /@rsbuild/core@1.1.14:
     resolution: {integrity: sha512-CHq8LpCMqLLMSq+UeTsmp0keiywovDl2SH521PLG2URWQqcwRn//6VXLYymnyOYELBbc8sVRn++DxqoBrDZ2Zg==}
@@ -5531,6 +5532,21 @@ packages:
         optional: true
     dependencies:
       '@rsbuild/core': 1.1.13
+      acorn: 8.14.0
+      browserslist-to-es-version: 1.0.0
+      htmlparser2: 9.1.0
+      picocolors: 1.1.1
+      source-map: 0.7.4
+    dev: true
+
+  /@rsbuild/plugin-check-syntax@1.2.1:
+    resolution: {integrity: sha512-Ona/YTJPAsY+QGVB0D5lAEgxk/a0TTW6+He2dV7Rew56yW51EjRfEdFbsHdpMEuVA5IK4jjtbgkEHKKaKi+Ojg==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+    peerDependenciesMeta:
+      '@rsbuild/core':
+        optional: true
+    dependencies:
       acorn: 8.14.0
       browserslist-to-es-version: 1.0.0
       htmlparser2: 9.1.0

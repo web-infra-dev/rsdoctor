@@ -91,6 +91,16 @@ const config = {
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
       features: ['bundle', 'plugins', 'loader'],
       mode: 'brief',
+      linter: {
+        rules: {
+          'ecma-version-check': [
+            'Warn',
+            {
+              ecmaVersion: 3,
+            },
+          ],
+        },
+      },
     }),
     new rspack.HtmlRspackPlugin({
       template: './index.html',

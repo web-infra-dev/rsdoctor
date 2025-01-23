@@ -81,7 +81,7 @@
     "semver": "^7.6.3",
     "source-map": "^0.7.4",
     "webpack-bundle-analyzer": "^4.10.2",
-    "@rsbuild/plugin-check-syntax": "1.2.0",
+    "@rsbuild/plugin-check-syntax": "1.2.1",
     "browserslist-load-config": "^1.0.0"
   },
   "devDependencies": {
