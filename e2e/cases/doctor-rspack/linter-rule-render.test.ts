@@ -122,9 +122,9 @@ test('linter rule render check', async () => {
 
   const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
   await ecmaVersionButton?.click();
-  await page.waitForSelector('.box_4a48c');
   // ignore output text check because there's no .map file for track the source code
-  const [source, , error] = await page.$$('.box_4a48c');
+  const source = await page.$('.e2e-ecma-source');
+  const error = await page.$('.e2e-ecma-error');
   const sourceText = await source?.textContent();
   const errorText = await error?.textContent();
   expect(sourceText).toBe(
