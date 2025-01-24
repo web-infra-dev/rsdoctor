@@ -1,15 +1,12 @@
 import { expect, test } from '@playwright/test';
-import { Utils } from '@rsdoctor/core/build-utils';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
-import { BannerPlugin, Compiler } from '@rspack/core';
 import { compileByRspack } from '@scripts/test-helper';
+import { Utils } from '@rsdoctor/core/build-utils';
+import { Compiler } from '@rspack/core';
 import path from 'path';
 import { createRsdoctorPlugin } from './test-utils';
 
 let reportLoaderStartOrEndTimes = 0;
-
-const header = `var header = 11111111; console.log(header)`;
-const footer = `var footer = 22222222; console.log(footer)`;
 
 async function rspackCompile(
   _tapName: string,
@@ -61,7 +58,11 @@ async function rspackCompile(
     },
     plugins: [
       // @ts-ignore
-      createRsdoctorPlugin({}),
+      createRsdoctorPlugin({
+        supports: {
+          banner: true,
+        },
+      }),
       {
         name: 'Foo',
         apply(compiler: Compiler) {
@@ -95,17 +96,6 @@ async function rspackCompile(
           );
         },
       },
-      new BannerPlugin({
-        test: /\.js/,
-        banner: header,
-        raw: true,
-      }),
-      new BannerPlugin({
-        test: /\.js/,
-        banner: footer,
-        raw: true,
-        footer: true,
-      }),
     ],
   });
 
@@ -128,7 +118,6 @@ test('rspack banner plugin', async () => {
     '{"":{"size":313,"sizeConvert":"313 B","content":"function (\\n      __unused_webpack_module,\\n      __webpack_exports__,\\n      __webpack_require__,\\n    ) {\\n      \'use strict\';\\n      __webpack_require__.r(__webpack_exports__);\\n      __webpack_require__.d(__webpack_exports__, {\\n        a: function () {\\n          return a;\\n        },\\n      });\\n      var a = 1;\\n    }"}}',
   );
   const res = sdk.getStoreData().chunkGraph;
-  expect(res.assets[0].content).toContain(header);
   expect(res.assets[0].content).toContain('RSDOCTOR_START');
   expect(res.assets[0].content).toContain('RSDOCTOR_END');
 });
