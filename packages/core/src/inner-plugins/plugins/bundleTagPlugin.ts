@@ -20,9 +20,10 @@ export class InternalBundleTagPlugin<
           },
           async () => {
             if (
-              !compilation.options.plugins
+              (!compilation.options.plugins
                 .map((p) => p && p.constructor.name)
-                .includes('BannerPlugin') ||
+                .includes('BannerPlugin') &&
+                supportBannerPlugin !== true) ||
               supportBannerPlugin === false
             ) {
               return;

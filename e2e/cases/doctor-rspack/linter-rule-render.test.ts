@@ -5,7 +5,6 @@ import { Compiler } from '@rspack/core';
 import path from 'path';
 import fs from 'fs';
 import { createRsdoctorPlugin } from './test-utils';
-import { devtools } from 'vue';
 
 let reportLoaderStartOrEndTimes = 0;
 const ecmaVersion = 3;
