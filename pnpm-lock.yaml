@@ -17378,7 +17378,7 @@ packages:
       '@babel/code-frame': 7.26.2
       '@rspack/lite-tapable': 1.0.1
       chokidar: 3.6.0
-      memfs: 4.15.3
+      memfs: 4.17.0
       minimatch: 9.0.5
       picocolors: 1.1.1
       typescript: 5.7.3
