@@ -19,7 +19,13 @@ export class InternalBundleTagPlugin<
             stage: -2000,
           },
           async () => {
-            if (supportBannerPlugin === false) {
+            if (
+              (!compilation.options.plugins
+                .map((p) => p && p.constructor.name)
+                .includes('BannerPlugin') &&
+                supportBannerPlugin !== true) ||
+              supportBannerPlugin === false
+            ) {
               return;
             }
             logger.info(

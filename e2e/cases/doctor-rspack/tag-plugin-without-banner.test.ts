@@ -1,29 +1,42 @@
-import { expect, test, webkit } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
 import { Compiler } from '@rspack/core';
 import path from 'path';
-import fs from 'fs';
 import { createRsdoctorPlugin } from './test-utils';
+import { parseBundle } from '../../node_modules/@rsdoctor/core/dist/build-utils/build/utils/parseBundle';
 
 let reportLoaderStartOrEndTimes = 0;
-const ecmaVersion = 3;
 
 async function rspackCompile(
   _tapName: string,
   compile: typeof compileByRspack,
 ) {
-  const file = path.resolve(__dirname, './fixtures/c.js');
+  const file = path.resolve(__dirname, './fixtures/a.js');
+  const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
+
+  const esmLoader = path.resolve(
+    __dirname,
+    './fixtures/loaders/esm-serialize-query-to-comment.mjs',
+  );
 
   const res = await compile(file, {
     resolve: {
       extensions: ['.ts', '.js'],
     },
     output: {
-      path: path.join(__dirname, '../doctor-rspack/dist/linter-rule-render'),
+      path: path.join(__dirname, '../doctor-rspack/dist'),
     },
     module: {
       rules: [
+        {
+          test: /\.js/,
+          use: loader,
+        },
+        {
+          test: /\.js/,
+          use: esmLoader,
+        },
         {
           test: /\.[jt]s$/,
           use: {
@@ -46,16 +59,8 @@ async function rspackCompile(
     plugins: [
       // @ts-ignore
       createRsdoctorPlugin({
-        mode: 'brief',
-        linter: {
-          rules: {
-            'ecma-version-check': [
-              'Warn',
-              {
-                ecmaVersion,
-              },
-            ],
-          },
+        supports: {
+          banner: true,
         },
       }),
       {
@@ -97,57 +102,22 @@ async function rspackCompile(
   return res;
 }
 
-test('linter rule render check', async () => {
+test('rspack banner plugin', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);
+  const sdk = getSDK();
 
-  const reportPath = path.join(
-    __dirname,
-    './dist/linter-rule-render/.rsdoctor/rsdoctor-report.html',
+  // @ts-ignore
+  const bundle = parseBundle(
+    path.join(__dirname, './fixtures/rspack-banner-plugin.js'),
+    // @ts-ignore
+    sdk.getStoreData().moduleGraph.modules,
   );
 
-  fileExists(reportPath);
-
-  const browser = await webkit.launch();
-
-  // Create a new browser context
-  const context = await browser.newContext();
-
-  // Open a new page
-  const page = await context.newPage();
-
-  // Navigate to a URL
-  await page.goto(`file:///${reportPath}`);
-
-  const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
-  await ecmaVersionButton?.click();
-  // ignore output text check because there's no .map file for track the source code
-  const source = await page.$('.e2e-ecma-source');
-  const error = await page.$('.e2e-ecma-error');
-  const sourceText = await source?.textContent();
-  const errorText = await error?.textContent();
-  expect(sourceText).toBe(
-    '/cases/doctor-rspack/dist/linter-rule-render/main.js:1:2',
+  expect(JSON.stringify(bundle.modules)).toBe(
+    '{"":{"size":313,"sizeConvert":"313 B","content":"function (\\n      __unused_webpack_module,\\n      __webpack_exports__,\\n      __webpack_require__,\\n    ) {\\n      \'use strict\';\\n      __webpack_require__.r(__webpack_exports__);\\n      __webpack_require__.d(__webpack_exports__, {\\n        a: function () {\\n          return a;\\n        },\\n      });\\n      var a = 1;\\n    }"}}',
   );
-  expect(errorText).toBe(
-    `Find some syntax that does not match "ecmaVersion <= ${ecmaVersion}"`,
-  );
-
-  // Close the page
-  await page.close();
-
-  // Close the browser context
-  await context.close();
-
-  // Close the browser
-  await browser.close();
+  const res = sdk.getStoreData().chunkGraph;
+  expect(res.assets[0].content).toContain('RSDOCTOR_START');
+  expect(res.assets[0].content).toContain('RSDOCTOR_END');
 });
-
-async function fileExists(filePath: string) {
-  try {
-    await fs.existsSync(filePath);
-    return true;
-  } catch {
-    return false;
-  }
-}
