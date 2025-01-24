@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
+import { Utils } from '@rsdoctor/core/build-utils';
 import { Compiler } from '@rspack/core';
 import path from 'path';
 import { createRsdoctorPlugin } from './test-utils';
-import { parseBundle } from '../../node_modules/@rsdoctor/core/dist/build-utils/build/utils/parseBundle';
 
 let reportLoaderStartOrEndTimes = 0;
 
@@ -108,7 +108,7 @@ test('rspack banner plugin', async () => {
   const sdk = getSDK();
 
   // @ts-ignore
-  const bundle = parseBundle(
+  const bundle = Utils.parseBundle(
     path.join(__dirname, './fixtures/rspack-banner-plugin.js'),
     // @ts-ignore
     sdk.getStoreData().moduleGraph.modules,
