@@ -9,6 +9,9 @@ This folder contains the e2e test cases of Rsdoctor.
 ## Commands
 
 ```bash
+# Install playwright browser
+npx playwright install chromium
+
 # Run all test cases, including Rspack and webpack
 pnpm run test
 ```

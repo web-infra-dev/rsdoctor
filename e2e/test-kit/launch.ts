@@ -1,7 +1,7 @@
-import { webkit } from '@playwright/test';
+import { chromium } from '@playwright/test';
 
 export async function launchPlaywright() {
-  const browser = await webkit.launch();
+  const browser = await chromium.launch();
 
   const page = await browser.newPage();
 

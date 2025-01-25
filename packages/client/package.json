@@ -18,15 +18,6 @@
     "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true rsbuild build",
     "preview": "rsbuild preview"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,mjs,cjs}": [
-      "node --max_old_space_size=8192 ./node_modules/eslint/bin/eslint.js --fix --color --cache --quiet"
-    ]
-  },
-  "eslintIgnore": [
-    "node_modules/",
-    "dist/"
-  ],
   "devDependencies": {
     "@rsbuild/core": "^1.2.2",
     "@rsbuild/plugin-node-polyfill": "^1.2.0",

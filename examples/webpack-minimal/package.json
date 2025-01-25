@@ -27,7 +27,6 @@
     "@rsdoctor/webpack-plugin": "workspace:*",
     "@types/node": "14.18.26",
     "bundle-stats": "4.1.7",
-    "eslint": "8.22.0",
     "ts-loader": "9.4.2",
     "tslib": "2.4.1",
     "tsm": "2.3.0",
