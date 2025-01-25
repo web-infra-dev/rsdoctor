@@ -45,10 +45,6 @@
       "default": "./dist/config.js"
     }
   },
-  "eslintIgnore": [
-    "node_modules/",
-    "dist/"
-  ],
   "devDependencies": {
     "@ant-design/icons": "5.5.2",
     "@rsbuild/plugin-check-syntax": "1.2.1",
