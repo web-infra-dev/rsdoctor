@@ -53,7 +53,7 @@ jobs:
 
       - name: Install Dependencies
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-        run: pnpm install
+        run: pnpm install && cd ./e2e && npx playwright install chromium
 
       - name: Unit Test
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}

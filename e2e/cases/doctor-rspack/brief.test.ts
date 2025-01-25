@@ -1,4 +1,4 @@
-import { expect, test, webkit } from '@playwright/test';
+import { expect, test, chromium } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
 import { Compiler } from '@rspack/core';
@@ -111,7 +111,7 @@ test('rspack brief mode', async () => {
 
   fileExists(reportPath);
 
-  const browser = await webkit.launch();
+  const browser = await chromium.launch();
 
   // Create a new browser context
   const context = await browser.newContext();

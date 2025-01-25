@@ -3,8 +3,7 @@
   "name": "@rsdoctor/e2e",
   "version": "0.0.1",
   "scripts": {
-    "test": "pnpm run i:webkit && playwright test",
-    "i:webkit": "playwright install-deps"
+    "test": "playwright test"
   },
   "dependencies": {
     "devcert": "1.2.2",
@@ -15,7 +14,7 @@
     "vue": "^3.5.13"
   },
   "devDependencies": {
-    "@playwright/test": "1.33.0",
+    "@playwright/test": "1.44.1",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
@@ -30,7 +29,7 @@
     "@types/react-dom": "^18.3.5",
     "fast-glob": "^3.3.3",
     "loader-utils": "^2.0.4",
-    "playwright": "1.33.0",
+    "playwright": "1.44.1",
     "typescript": "^5.2.2",
     "webpack": "^5.97.1"
   }
