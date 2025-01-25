@@ -3,8 +3,7 @@
   "name": "@rsdoctor/e2e",
   "version": "0.0.1",
   "scripts": {
-    "test": "pnpm run i:webkit && playwright test",
-    "i:webkit": "playwright install-deps"
+    "test": "playwright test"
   },
   "dependencies": {
     "devcert": "1.2.2",
