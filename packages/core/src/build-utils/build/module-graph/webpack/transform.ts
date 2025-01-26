@@ -1,5 +1,6 @@
 import type { SourceMapConsumer } from 'source-map';
 import * as Webpack from 'webpack';
+import * as Rspack from '@rspack/core';
 import { File } from '@rsdoctor/utils/build';
 import { Node } from '@rsdoctor/utils/ruleUtils';
 import { Plugin, SDK } from '@rsdoctor/types';
@@ -52,6 +53,24 @@ async function readFile(target: string, wbFs: WebpackFs) {
   return File.fse.readFile(target).catch(() => {});
 }
 
+/**
+ * Get the type of dependencies between modules.
+ * This property can determine what runtime webpack has added to the modules.
+ */
+export function getModuleExportsType(
+  module: Webpack.NormalModule | Rspack.NormalModule,
+  moduleGraph?: Webpack.ModuleGraph,
+  strict = false,
+): SDK.DependencyBuildMeta['exportsType'] {
+  // webpack 5
+  // https://github.com/webpack/webpack/blob/v5.75.0/lib/RuntimeTemplate.js#L771
+  if (moduleGraph && 'getExportsType' in module) {
+    return module.getExportsType(moduleGraph, strict);
+  }
+  // Rspack does not support `getExportsType` yet.
+  return strict ? 'default-with-named' : 'dynamic';
+}
+
 function appendDependency(
   webpackDep: Webpack.Dependency,
   module: SDK.ModuleInstance,
@@ -94,7 +113,8 @@ function appendDependency(
 
   if (dependency) {
     dependency.setBuildMeta({
-      exportsType: resolvedWebpackModule.getExportsType(
+      exportsType: getModuleExportsType(
+        resolvedWebpackModule,
         webpackGraph,
         module.meta.strictHarmonyModule,
       ),
