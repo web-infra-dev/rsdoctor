@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/components",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "main": "./dist/index.js",
   "license": "MIT",
   "module": "dist/index.js",
