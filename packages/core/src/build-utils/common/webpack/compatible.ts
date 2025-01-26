@@ -61,7 +61,7 @@ export function getDependencyPosition(
 ): SDK.StatementInstance | undefined {
   const { loc: depLoc } = dep;
 
-  if (!('start' in depLoc)) {
+  if (depLoc === undefined || !('start' in depLoc)) {
     return;
   }
 
