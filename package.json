@@ -12,7 +12,7 @@
     "changeset": "changeset",
     "bump": "changeset version",
     "check-spell": "npx cspell",
-    "check-changeset": "cd ./scripts/check-changeset && pnpm start",
+    "check-changeset": "pnpx disallow-major-changeset",
     "check-dependency-version": "check-dependency-version-consistency .",
     "dev:doc": "cd packages/document && pnpm run dev",
     "e2e": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
