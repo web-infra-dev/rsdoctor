@@ -15,8 +15,8 @@ importers:
         specifier: 1.5.1
         version: 1.5.1
       '@changesets/cli':
-        specifier: ^2.27.11
-        version: 2.27.11
+        specifier: ^2.27.12
+        version: 2.27.12
       '@modern-js/module-tools':
         specifier: ^2.63.7
         version: 2.63.7
@@ -511,20 +511,20 @@ importers:
   packages/client:
     devDependencies:
       '@rsbuild/core':
-        specifier: ^1.2.2
-        version: 1.2.2
+        specifier: ^1.2.3
+        version: 1.2.3
       '@rsbuild/plugin-node-polyfill':
         specifier: ^1.2.0
-        version: 1.2.0(@rsbuild/core@1.2.2)
+        version: 1.2.0(@rsbuild/core@1.2.3)
       '@rsbuild/plugin-react':
         specifier: ^1.1.0
-        version: 1.1.0(@rsbuild/core@1.2.2)
+        version: 1.1.0(@rsbuild/core@1.2.3)
       '@rsbuild/plugin-sass':
         specifier: ^1.2.0
-        version: 1.2.0(@rsbuild/core@1.2.2)
+        version: 1.2.0(@rsbuild/core@1.2.3)
       '@rsbuild/plugin-type-check':
         specifier: ^1.2.1
-        version: 1.2.1(@rsbuild/core@1.2.2)(typescript@5.7.3)
+        version: 1.2.1(@rsbuild/core@1.2.3)(typescript@5.7.3)
       '@rsdoctor/components':
         specifier: workspace:*
         version: link:../components
@@ -1183,8 +1183,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       '@modern-js/generator-utils':
-        specifier: ^3.7.13
-        version: 3.7.13(@modern-js/codesmith@2.6.5)(typescript@5.7.3)
+        specifier: ^3.7.14
+        version: 3.7.14(@modern-js/codesmith@2.6.5)(typescript@5.7.3)
       fs-extra:
         specifier: ^11.1.1
         version: 11.2.0
@@ -2770,8 +2770,8 @@ packages:
       serialize-query-params: 2.0.2
     dev: true
 
-  /@changesets/apply-release-plan@7.0.7:
-    resolution: {integrity: sha512-qnPOcmmmnD0MfMg9DjU1/onORFyRpDXkMMl2IJg9mECY6RnxL3wN0TCCc92b2sXt1jt8DgjAUUsZYGUGTdYIXA==}
+  /@changesets/apply-release-plan@7.0.8:
+    resolution: {integrity: sha512-qjMUj4DYQ1Z6qHawsn7S71SujrExJ+nceyKKyI9iB+M5p9lCL55afuEd6uLBPRpLGWQwkwvWegDHtwHJb1UjpA==}
     dependencies:
       '@changesets/config': 3.0.5
       '@changesets/get-version-range-type': 0.4.0
@@ -2805,11 +2805,11 @@ packages:
       '@changesets/types': 6.0.0
     dev: true
 
-  /@changesets/cli@2.27.11:
-    resolution: {integrity: sha512-1QislpE+nvJgSZZo9+Lj3Lno5pKBgN46dAV8IVxKJy9wX8AOrs9nn5pYVZuDpoxWJJCALmbfOsHkyxujgetQSg==}
+  /@changesets/cli@2.27.12:
+    resolution: {integrity: sha512-9o3fOfHYOvBnyEn0mcahB7wzaA3P4bGJf8PNqGit5PKaMEFdsRixik+txkrJWd2VX+O6wRFXpxQL8j/1ANKE9g==}
     hasBin: true
     dependencies:
-      '@changesets/apply-release-plan': 7.0.7
+      '@changesets/apply-release-plan': 7.0.8
       '@changesets/assemble-release-plan': 6.0.5
       '@changesets/changelog-git': 0.2.0
       '@changesets/config': 3.0.5
@@ -4413,23 +4413,23 @@ packages:
       '@swc/helpers': 0.5.13
     dev: true
 
-  /@modern-js/generator-common@3.7.13(@modern-js/codesmith@2.6.5)(typescript@5.7.3):
-    resolution: {integrity: sha512-uoUoY6VpMO/Q8+581/ci1voYgRQCq1RGqwy7OG8Av8z6JyMxtD3F7awbL5ibEKqT462tyaiIkPHl3e/TISAPvg==}
+  /@modern-js/generator-common@3.7.14(@modern-js/codesmith@2.6.5)(typescript@5.7.3):
+    resolution: {integrity: sha512-yoqO/JY+RPcbJbawbyaErW07LW+FMWeZXDtrrFoxyjQKNz88W0XpNicmg3Ys/+ggJ3dyfHtxSoF1Pr7Ds5AxYA==}
     dependencies:
       '@modern-js/codesmith-formily': 2.6.5(@modern-js/codesmith@2.6.5)(typescript@5.7.3)
-      '@modern-js/plugin-i18n': 2.63.7
+      '@modern-js/plugin-i18n': 2.64.0
       '@swc/helpers': 0.5.13
     transitivePeerDependencies:
       - '@modern-js/codesmith'
       - typescript
     dev: false
 
-  /@modern-js/generator-utils@3.7.13(@modern-js/codesmith@2.6.5)(typescript@5.7.3):
-    resolution: {integrity: sha512-7QSPp/zyFxPE8jysU+K7dIK3sqegkc1RcwGcQ1lNwDuqBnuVom0p3LSDrIGSObdaM0d8V65wcPUZjUByfGgPmA==}
+  /@modern-js/generator-utils@3.7.14(@modern-js/codesmith@2.6.5)(typescript@5.7.3):
+    resolution: {integrity: sha512-XnEChtTR24BrcBwrGax1yl0ZNvzJ++OWDsXsWhy7i7nKYVdzp7de/rxKZgEhKVgts9zgyIlSy4n5lerWdquipg==}
     dependencies:
       '@modern-js/codesmith-utils': 2.6.5
-      '@modern-js/generator-common': 3.7.13(@modern-js/codesmith@2.6.5)(typescript@5.7.3)
-      '@modern-js/plugin-i18n': 2.63.7
+      '@modern-js/generator-common': 3.7.14(@modern-js/codesmith@2.6.5)(typescript@5.7.3)
+      '@modern-js/plugin-i18n': 2.64.0
       '@swc/helpers': 0.5.13
       glob: 7.2.3
       js-yaml: 4.1.0
@@ -4499,7 +4499,7 @@ packages:
   /@modern-js/plugin-changeset@2.63.7:
     resolution: {integrity: sha512-MB16Y38B5iTDTQKdlgZeCUxZ9cxZ9qjAq7+VjMQdWufjUoqanCUXwbaONY1BKlbZp31uM4PCzHzuE1HntM8efg==}
     dependencies:
-      '@changesets/cli': 2.27.11
+      '@changesets/cli': 2.27.12
       '@changesets/git': 2.0.0
       '@changesets/read': 0.6.2
       '@modern-js/plugin-i18n': 2.63.7
@@ -4540,6 +4540,14 @@ packages:
     dependencies:
       '@modern-js/utils': 2.63.7
       '@swc/helpers': 0.5.13
+    dev: true
+
+  /@modern-js/plugin-i18n@2.64.0:
+    resolution: {integrity: sha512-2tbhXPglCCHHxfwAP3Jl7i1dcr9l/RoXyUkkGIK3B6hoZvxo+3Yp4AO/jCAcDU6XAbFkTnqh/nCVF0+b2UDZAw==}
+    dependencies:
+      '@modern-js/utils': 2.64.0
+      '@swc/helpers': 0.5.13
+    dev: false
 
   /@modern-js/plugin-v2@2.63.6:
     resolution: {integrity: sha512-6TRjP7uzgv6pas96+lo1CCADLT4MHet5J+0uieG307PrfIPxxKl+0cIlH49D3CmMLiFy8nYJJWYGevd13buy4w==}
@@ -4927,6 +4935,16 @@ packages:
       caniuse-lite: 1.0.30001692
       lodash: 4.17.21
       rslog: 1.2.3
+    dev: true
+
+  /@modern-js/utils@2.64.0:
+    resolution: {integrity: sha512-WCYAPqfY2mBW1PutqyAIHqIzXnjfYGxeLrffmuuSa/MdNMptn8mXU+6nBCryUHUzy/Ig2CaxPtNAx5TnlYXucQ==}
+    dependencies:
+      '@swc/helpers': 0.5.13
+      caniuse-lite: 1.0.30001692
+      lodash: 4.17.21
+      rslog: 1.2.3
+    dev: false
 
   /@module-federation/error-codes@0.8.4:
     resolution: {integrity: sha512-55LYmrDdKb4jt+qr8qE8U3al62ZANp3FhfVaNPOaAmdTh0jHdD8M3yf5HKFlr5xVkVO4eV/F/J2NCfpbh+pEXQ==}
@@ -5504,6 +5522,19 @@ packages:
       - '@rspack/tracing'
     dev: true
 
+  /@rsbuild/core@1.2.3:
+    resolution: {integrity: sha512-lUCt8gQe9E2PI3srcEJ1Na3GQYmsYuvAqK0f/k00HM0pEjrbOFC9Xq2kR85UoXHFqlTCIw/fLLDe91PKRCbKAw==}
+    engines: {node: '>=16.7.0'}
+    hasBin: true
+    dependencies:
+      '@rspack/core': 1.2.2(@swc/helpers@0.5.15)
+      '@rspack/lite-tapable': 1.0.1
+      '@swc/helpers': 0.5.15
+      core-js: 3.40.0
+    transitivePeerDependencies:
+      - '@rspack/tracing'
+    dev: true
+
   /@rsbuild/plugin-assets-retry@1.0.7(@rsbuild/core@1.1.13):
     resolution: {integrity: sha512-5b3sHIayNKxgB1rr8SJWjTDKNwoBRDcbLuh1gBoNVz0TvNZxow8GsW6Nlfl8YRLyuLwaLQQw/r/vGnTxcIit5Q==}
     peerDependencies:
@@ -5634,7 +5665,7 @@ packages:
       vm-browserify: 1.1.2
     dev: true
 
-  /@rsbuild/plugin-node-polyfill@1.2.0(@rsbuild/core@1.2.2):
+  /@rsbuild/plugin-node-polyfill@1.2.0(@rsbuild/core@1.2.3):
     resolution: {integrity: sha512-mYctpK5Jn2yxTOxQ4rOJ0iFBJNW7sADFtKsLp9dL7MjToMhKiyIs4Mc65piI7B+YOBshdyMqCk3LPjJ+CtSRXQ==}
     peerDependencies:
       '@rsbuild/core': 1.x || ^1.0.1-beta.0
@@ -5642,7 +5673,7 @@ packages:
       '@rsbuild/core':
         optional: true
     dependencies:
-      '@rsbuild/core': 1.2.2
+      '@rsbuild/core': 1.2.3
       assert: 2.1.0
       browserify-zlib: 0.2.0
       buffer: 5.7.1
@@ -5711,6 +5742,16 @@ packages:
       react-refresh: 0.16.0
     dev: true
 
+  /@rsbuild/plugin-react@1.1.0(@rsbuild/core@1.2.3):
+    resolution: {integrity: sha512-uqdRoV2V91G1XIA14dAmxqYTlTDVf0ktpE7TgwG29oQ2j+DerF1kh29WPHK9HvGE34JTfaBrsme2Zmb6bGD0cw==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+    dependencies:
+      '@rsbuild/core': 1.2.3
+      '@rspack/plugin-react-refresh': 1.0.0(react-refresh@0.16.0)
+      react-refresh: 0.16.0
+    dev: true
+
   /@rsbuild/plugin-rem@1.0.2(@rsbuild/core@1.1.13):
     resolution: {integrity: sha512-YI/X4fM4UUmMoCPIukQ40KZ4fPsr9MGW6BRc/+SoLy5dxZVsRuRa568i4znn+X1c8hTihfNn2EtzrVbvNCPzrQ==}
     peerDependencies:
@@ -5749,12 +5790,12 @@ packages:
       reduce-configs: 1.1.0
       sass-embedded: 1.83.1
 
-  /@rsbuild/plugin-sass@1.2.0(@rsbuild/core@1.2.2):
+  /@rsbuild/plugin-sass@1.2.0(@rsbuild/core@1.2.3):
     resolution: {integrity: sha512-Em1OKVJEnheohmxO9SJqfueah+8G1X344j9/CFNfOPIKm45FwdQMuivmUZfXiM8btG0ixbqW1U2qU0rwKJ/TZw==}
     peerDependencies:
       '@rsbuild/core': 1.x
     dependencies:
-      '@rsbuild/core': 1.2.2
+      '@rsbuild/core': 1.2.3
       deepmerge: 4.3.1
       loader-utils: 2.0.4
       postcss: 8.5.1
@@ -5836,7 +5877,7 @@ packages:
       - typescript
     dev: true
 
-  /@rsbuild/plugin-type-check@1.2.1(@rsbuild/core@1.2.2)(typescript@5.7.3):
+  /@rsbuild/plugin-type-check@1.2.1(@rsbuild/core@1.2.3)(typescript@5.7.3):
     resolution: {integrity: sha512-PtbjeMqDQy8IiPDTuaj8ZmvR42b0AsRq6RUF6wxa8dDsOzD0Dl1GcvemVGCto+/Dh8frLUmnlWF+T8riBw5rtA==}
     peerDependencies:
       '@rsbuild/core': 1.x
@@ -5844,7 +5885,7 @@ packages:
       '@rsbuild/core':
         optional: true
     dependencies:
-      '@rsbuild/core': 1.2.2
+      '@rsbuild/core': 1.2.3
       deepmerge: 4.3.1
       json5: 2.2.3
       reduce-configs: 1.1.0
@@ -12150,6 +12191,7 @@ packages:
 
   /lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
     dev: false
 
   /lodash.isfunction@3.0.9:
