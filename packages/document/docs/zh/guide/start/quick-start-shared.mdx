@@ -25,29 +25,7 @@ module.exports = {
 
 ### Rsbuild 项目
 
-在 `rsbuild.config.ts` 的 [tools.rspack](https://rsbuild.dev/config/tools/rspack) 中初始化 RsdoctorRspackPlugin 插件，参考：
-
-```js title="rsbuild.config.ts"
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
-
-export default {
-  // ...
-  tools: {
-    rspack(config, { appendPlugins }) {
-      // 仅在 RSDOCTOR 为 true 时注册插件，因为插件会增加构建耗时
-      if (process.env.RSDOCTOR) {
-        appendPlugins(
-          new RsdoctorRspackPlugin({
-            // 插件选项
-          }),
-        );
-      }
-    },
-  },
-};
-```
-
-- **Options:** 插件提供了一些配置项，请参考 [Options](../../config/options/options)。
+Rsbuild 内置了对 Rsdoctor 的支持，不需要手动注册插件。详见 [Rsbuild - 使用 Rsdoctor](https://rsbuild.dev/zh/guide/debug/rsdoctor)。
 
 ### Webpack 项目
 

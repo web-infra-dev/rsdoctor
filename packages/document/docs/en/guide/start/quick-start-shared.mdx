@@ -25,29 +25,7 @@ module.exports = {
 
 ### Rsbuild
 
-Initialize the RsdoctorRspackPlugin in the [tools.rspack](https://rsbuild.dev/config/tools/rspack) of `rsbuild.config.ts`:
-
-```js title="rsbuild.config.ts"
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
-
-export default {
-  // ...
-  tools: {
-    rspack(config, { appendPlugins }) {
-      // Only register the plugin when RSDOCTOR is true, as the plugin will increase the build time.
-      if (process.env.RSDOCTOR) {
-        appendPlugins(
-          new RsdoctorRspackPlugin({
-            // plugin options
-          }),
-        );
-      }
-    },
-  },
-};
-```
-
-- **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
+Rsbuild has built-in support for Rsdoctor, so you don't need to manually register plugins. See [Rsbuild - Use Rsdoctor](https://rsbuild.dev/guide/debug/rsdoctor) for more details.
 
 ### Webpack
 
