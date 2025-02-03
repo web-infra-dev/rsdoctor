@@ -40,7 +40,9 @@ jobs:
           fetch-depth: 10
 
       - name: Install Pnpm
-        run: corepack enable
+        run: |
+          npm install -g corepack@latest --force
+          corepack enable
 
       - name: Check skip CI
         shell: bash
