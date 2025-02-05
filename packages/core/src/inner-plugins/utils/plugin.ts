@@ -40,7 +40,7 @@ export function interceptPluginHook(
   name: string,
   hook: IHook,
 ) {
-  if (!hook.intercept) {
+  if (!hook?.intercept) {
     return;
   }
 
