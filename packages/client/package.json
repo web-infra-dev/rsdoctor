@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@rsbuild/core": "^1.2.3",
-    "@rsbuild/plugin-node-polyfill": "^1.2.0",
+    "@rsbuild/plugin-node-polyfill": "^1.3.0",
     "@rsbuild/plugin-react": "^1.1.0",
     "@rsbuild/plugin-sass": "^1.2.0",
     "@rsbuild/plugin-type-check": "^1.2.1",
