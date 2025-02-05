@@ -4,7 +4,7 @@ import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import type { Rspack, RsbuildConfig } from '@rsbuild/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import serve from 'serve-static';
+import serve from 'sirv';
 import path from 'path';
 import fs from 'fs';
 
@@ -196,6 +196,7 @@ export default defineConfig(({ env }) => {
         (middlewares) => {
           if (fs.existsSync(WebpackRsdoctorDirPath)) {
             const fn = serve(WebpackRsdoctorDirPath, {
+              dev: true,
               setHeaders(res) {
                 res.setHeader('Content-Type', 'text/plain; charset=utf-8');
               },
