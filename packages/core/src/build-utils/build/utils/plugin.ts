@@ -7,18 +7,18 @@ export type IHook =
 
 export function shouldInterceptPluginHook<T extends IHook>(hook: T) {
   // webpack5 use fakehook for deprecated hook.
-  if ((hook as Common.PlainObject)._fakeHook) {
+  if (hook && (hook as Common.PlainObject)._fakeHook) {
     return false;
   }
 
   // Hook
-  if (typeof hook.isUsed === 'function') {
+  if (hook?.isUsed && typeof hook.isUsed === 'function') {
     return hook.isUsed();
   }
 
   // HookMap
   if (
-    (hook as Common.PlainObject)._map &&
+    (hook as Common.PlainObject)?._map &&
     ((hook as Common.PlainObject)._map as Map<string, unknown>).size === 0
   ) {
     return false;
