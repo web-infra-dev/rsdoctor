@@ -643,8 +643,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1
       react-highlight-words:
-        specifier: ^0.20.0
-        version: 0.20.0(react@18.3.1)
+        specifier: ^0.21.0
+        version: 0.21.0(react@18.3.1)
       react-hyper-tree:
         specifier: 0.3.12
         version: 0.3.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -8341,10 +8341,10 @@ packages:
     peerDependencies:
       react: '>=16.3.0'
 
-  react-highlight-words@0.20.0:
-    resolution: {integrity: sha512-asCxy+jCehDVhusNmCBoxDf2mm1AJ//D+EzDx1m5K7EqsMBIHdZ5G4LdwbSEXqZq1Ros0G0UySWmAtntSph7XA==}
+  react-highlight-words@0.21.0:
+    resolution: {integrity: sha512-SdWEeU9fIINArEPO1rO5OxPyuhdEKZQhHzZZP1ie6UeXQf+CjycT1kWaB+9bwGcVbR0NowuHK3RqgqNg6bgBDQ==}
     peerDependencies:
-      react: ^0.14.0 || ^15.0.0 || ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0 || ^19.0.0-0
 
   react-hyper-tree@0.3.12:
     resolution: {integrity: sha512-g3jtAPoU60P3ZYwO98QQmxaAzeE/BE2p12L7UXTAXytpu4CxnGSPgDFSepLrC1Wsb3iV0gxRB2pdWvksvGrI6A==}
@@ -19220,11 +19220,10 @@ snapshots:
       react-fast-compare: 3.2.2
       react-side-effect: 2.1.2(react@18.3.1)
 
-  react-highlight-words@0.20.0(react@18.3.1):
+  react-highlight-words@0.21.0(react@18.3.1):
     dependencies:
       highlight-words-core: 1.2.3
       memoize-one: 4.0.3
-      prop-types: 15.8.1
       react: 18.3.1
 
   react-hyper-tree@0.3.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
