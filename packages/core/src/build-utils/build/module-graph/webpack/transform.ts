@@ -7,9 +7,8 @@ import { Plugin, SDK } from '@rsdoctor/types';
 import {
   getAllModules,
   getDependencyPosition,
-  getWebpackDependencyRequest,
-  getWebpackModuleId,
-  getWebpackModulePath,
+  getDependencyRequest,
+  getModuleId,
   isExternalModule,
 } from '@/build-utils/common/webpack/compatible';
 import {
@@ -19,17 +18,23 @@ import {
 } from '@/build-utils/common/module-graph';
 import { hasSetEsModuleStatement } from '../parser';
 import { isFunction } from 'lodash';
+import { IDependency, IModuleGraph, INormalModule } from '@/types';
+import { Dependency } from 'node_modules/@rspack/core/dist/Dependency';
+import ModuleGraph from 'node_modules/@rspack/core/dist/ModuleGraph';
+
+type BaseNormalModule = Webpack.NormalModule | Rspack.NormalModule;
 
 export interface TransformContext {
-  astCache?: Map<Webpack.NormalModule, Node.Program>;
+  astCache?: Map<BaseNormalModule, Node.Program>;
   packagePathMap?: Map<string, string>;
   getSourceMap?(module: string): Promise<SourceMapConsumer | undefined>;
 }
 
 type WebpackFs = Webpack.Compilation['fileSystemInfo'];
+type RspackFs = Rspack.Compilation['fileSystemInfo'];
 
-async function readFile(target: string, wbFs: WebpackFs) {
-  if (wbFs?.fs?.readFile) {
+async function readFile(target: string, wbFs: WebpackFs | RspackFs) {
+  if ('fs' in wbFs && wbFs?.fs?.readFile) {
     const result = new Promise<Buffer | void>((resolve, reject) => {
       wbFs.fs.readFile(target, (err, content) => {
         if (err) {
@@ -58,53 +63,56 @@ async function readFile(target: string, wbFs: WebpackFs) {
  * This property can determine what runtime webpack has added to the modules.
  */
 export function getModuleExportsType(
-  module: Webpack.NormalModule | Rspack.NormalModule,
-  moduleGraph?: Webpack.ModuleGraph,
+  module: INormalModule,
+  moduleGraph?: IModuleGraph,
   strict = false,
 ): SDK.DependencyBuildMeta['exportsType'] {
   // webpack 5
   // https://github.com/webpack/webpack/blob/v5.75.0/lib/RuntimeTemplate.js#L771
   if (moduleGraph && 'getExportsType' in module) {
-    return module.getExportsType(moduleGraph, strict);
+    return 'getExportsType' in module
+      ? module.getExportsType(moduleGraph as Webpack.ModuleGraph, strict)
+      : 'default-with-named';
   }
   // Rspack does not support `getExportsType` yet.
   return strict ? 'default-with-named' : 'dynamic';
 }
 
 function appendDependency(
-  webpackDep: Webpack.Dependency,
+  dep: IDependency,
   module: SDK.ModuleInstance,
-  webpackGraph: Webpack.ModuleGraph,
+  builderGraph: IModuleGraph,
   graph: SDK.ModuleGraphInstance,
 ) {
   // Rspack does not support `getResolvedModule` yet.
-  const resolvedWebpackModule = webpackGraph?.getResolvedModule
-    ? (webpackGraph.getResolvedModule(webpackDep) as Webpack.NormalModule)
-    : undefined;
+  const resolvedWebpackModule =
+    'weak' in dep
+      ? ((builderGraph as Webpack.ModuleGraph).getResolvedModule(
+          dep as Webpack.Dependency,
+        ) as Webpack.NormalModule)
+      : ((builderGraph as ModuleGraph).getResolvedModule(
+          dep as Dependency,
+        ) as Rspack.NormalModule);
 
   if (!resolvedWebpackModule) {
     return;
   }
 
-  const rawRequest = getWebpackDependencyRequest(
-    webpackDep,
-    resolvedWebpackModule,
+  const rawRequest = getDependencyRequest(
+    dep,
+    resolvedWebpackModule as INormalModule | undefined,
   );
-  const resolveRequest = getWebpackModulePath(resolvedWebpackModule);
+  const resolveRequest = getModuleId(resolvedWebpackModule);
   const request = rawRequest ?? resolveRequest;
 
   if (!module.getDependencyByRequest(request)) {
     const depModule = graph.getModuleByFile(resolveRequest);
 
     if (depModule) {
-      const dep = module.addDependency(
-        request,
-        depModule,
-        getImportKind(webpackDep),
-      );
+      const _dep = module.addDependency(request, depModule, getImportKind(dep));
 
-      if (dep) {
-        graph.addDependency(dep);
+      if (_dep) {
+        graph.addDependency(_dep);
       }
     }
   }
@@ -115,12 +123,12 @@ function appendDependency(
     dependency.setBuildMeta({
       exportsType: getModuleExportsType(
         resolvedWebpackModule,
-        webpackGraph,
+        builderGraph,
         module.meta.strictHarmonyModule,
       ),
     });
 
-    const statement = getDependencyPosition(webpackDep, module, false);
+    const statement = getDependencyPosition(dep, module, false);
 
     if (statement) {
       dependency.addStatement(statement);
@@ -158,14 +166,14 @@ function getModuleSource(
 }
 
 async function appendModuleData(
-  origin: Webpack.NormalModule,
-  webpackGraph: Webpack.ModuleGraph,
+  origin: INormalModule,
+  webpackGraph: IModuleGraph,
   graph: SDK.ModuleGraphInstance,
   wbFs: WebpackFs,
   features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
 ) {
-  const module = graph.getModuleByWebpackId(getWebpackModuleId(origin));
+  const module = graph.getModuleByWebpackId(getModuleId(origin));
 
   if (!origin || !module) {
     return;
@@ -271,7 +279,7 @@ export async function appendModuleGraphByCompilation(
     const allModules = getAllModules(webpackCompilation);
 
     await Promise.all(
-      allModules.map((module: Webpack.NormalModule) => {
+      allModules.map((module: INormalModule) => {
         return appendModuleData(
           module,
           webpackGraph,

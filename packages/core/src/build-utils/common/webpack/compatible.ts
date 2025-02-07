@@ -1,44 +1,46 @@
 import { unionBy } from 'lodash';
 import { Statement } from '@rsdoctor/graph';
-import {
-  Compilation,
-  Dependency,
-  ExternalModule,
-  Module,
-  ModuleGraph,
-  NormalModule,
-} from 'webpack';
-import type { EntryPoint, ExportInfo } from '@/types/index';
+import { Compilation, ExternalModule, Module } from 'webpack';
+
+import type {
+  EntryPoint,
+  ExportInfo,
+  IDependency,
+  IModuleGraph,
+  INormalModule,
+} from '@/types/index';
 import { SDK } from '@rsdoctor/types';
 
-export function isNormalModule(mod: Module): mod is NormalModule {
+export function isNormalModule(mod: Module): mod is INormalModule {
   return 'request' in mod && 'rawRequest' in mod && 'resource' in mod;
 }
 
-export function getWebpackModuleId(mod: Module): string {
+export function getModuleId(mod: Plugins.StatsModule): string {
   return mod.identifier();
 }
 
-export function getWebpackModulePath(mod: NormalModule): string {
-  return mod.resource ?? mod.nameForCondition?.() ?? getWebpackModuleId(mod);
+export function getModulePath(mod: INormalModule): string {
+  return mod.resource ?? mod.nameForCondition?.() ?? getModuleId(mod);
 }
 
-export function getWebpackDependencyRequest(
-  dep: Dependency,
-  module?: NormalModule,
+export function getDependencyRequest(
+  dep: IDependency,
+  module?: INormalModule,
 ): string {
   return (dep as any).request ?? (dep as any).userRequest ?? module?.rawRequest;
 }
 
-export function getResolveRequest(dep: Dependency, graph: ModuleGraph) {
-  return getWebpackModulePath(graph.getResolvedModule(dep) as NormalModule);
+export function getResolveRequest(dep: IDependency, graph: IModuleGraph) {
+  return getModulePath(
+    graph.getResolvedModule(dep as IDependency) as INormalModule,
+  );
 }
 
 export function isExternalModule(mod: Module): mod is ExternalModule {
   return Boolean((mod as any).externalType);
 }
 
-export function getModuleSource(mod: NormalModule): string {
+export function getModuleSource(mod: INormalModule): string {
   return isExternalModule(mod)
     ? ''
     : (mod.originalSource?.()?.source().toString() ?? '');
@@ -46,7 +48,7 @@ export function getModuleSource(mod: NormalModule): string {
 
 export function getEntryModule(
   entryMap: Map<string, EntryPoint>,
-): NormalModule[] {
+): INormalModule[] {
   return Array.from(entryMap.values())
     .map((entry) => entry.getRuntimeChunk())
     .map((chunk) => (chunk ? chunk.entryModule : null))
@@ -55,7 +57,7 @@ export function getEntryModule(
 }
 
 export function getDependencyPosition(
-  dep: Dependency,
+  dep: IDependency,
   module: SDK.ModuleInstance,
   getSource = true,
 ): SDK.StatementInstance | undefined {
@@ -85,7 +87,7 @@ export function getDependencyPosition(
   return statement;
 }
 
-export function getExportDependency(info: ExportInfo, module: NormalModule) {
+export function getExportDependency(info: ExportInfo, module: INormalModule) {
   let dep = module.dependencies.find((dep) => {
     // TODO: type
     return (
@@ -104,12 +106,12 @@ export function getExportDependency(info: ExportInfo, module: NormalModule) {
 }
 
 export function getSdkDependencyByWebpackDependency(
-  dep: Dependency,
-  module: NormalModule,
+  dep: IDependency,
+  module: INormalModule,
   graph: SDK.ModuleGraphInstance,
 ) {
   const modulePath = getWebpackModulePath(module);
-  const request = getWebpackDependencyRequest(dep);
+  const request = getDependencyRequest(dep);
   return graph
     .getDependencies()
     .find(
@@ -119,7 +121,7 @@ export function getSdkDependencyByWebpackDependency(
 
 export function getExportStatement(
   info: ExportInfo,
-  normalModule: NormalModule,
+  normalModule: INormalModule,
   graph: SDK.ModuleGraphInstance,
 ) {
   const webpackDependency = getExportDependency(info, normalModule);
@@ -128,8 +130,8 @@ export function getExportStatement(
     return;
   }
 
-  const modulePath = getWebpackModulePath(normalModule);
-  const request = getWebpackDependencyRequest(webpackDependency);
+  const modulePath = getModulePath(normalModule);
+  const request = getDependencyRequest(webpackDependency);
   const sdkDependency = graph
     .getDependencies()
     .find(
@@ -141,9 +143,7 @@ export function getExportStatement(
   }
 
   // TODO: When there are multiple statements, the transform position can be matched, and there is no need to calculate it again.
-  const sdkModule = graph.getModuleByWebpackId(
-    getWebpackModuleId(normalModule),
-  );
+  const sdkModule = graph.getModuleByWebpackId(getModuleId(normalModule));
 
   if (sdkModule) {
     return getDependencyPosition(webpackDependency, sdkModule);
@@ -152,32 +152,33 @@ export function getExportStatement(
 
 export function getLastExportInfo(
   info: ExportInfo,
-  webpackGraph: ModuleGraph,
+  graph: IModuleGraph,
 ): ExportInfo | undefined {
-  const target = info.findTarget(webpackGraph, () => true);
+  const target = 'findTarget' in info && info.findTarget(graph, () => true);
 
   if (!target || !target.export) {
     return;
   }
 
-  const exportsInfo = webpackGraph.getExportsInfo(target.module);
-  const lastInfo = exportsInfo.getExportInfo(target.export[0]);
+  const exportsInfo = graph.getExportsInfo(target.module);
+  const lastInfo =
+    'getExportInfo' in exportsInfo
+      ? exportsInfo.getExportInfo(target.export[0])
+      : undefined;
 
   return lastInfo;
 }
 
 export function getAllModules(compilation: Compilation) {
-  const modules: NormalModule[] = [];
+  const modules: INormalModule[] = [];
 
   for (const mod of compilation.modules) {
     modules.push(...((mod as any).modules ?? []));
-    modules.push(mod as NormalModule);
+    modules.push(mod as INormalModule);
   }
 
   return unionBy(
-    modules.filter(
-      (mod) => !getWebpackModuleId(mod).startsWith('webpack/runtime'),
-    ),
-    (mod) => getWebpackModuleId(mod),
+    modules.filter((mod) => !getModuleId(mod).startsWith('webpack/runtime')),
+    (mod) => getModuleId(mod),
   );
 }
