@@ -4,6 +4,17 @@ let extend = require('util')._extend;
 let BASE_ERROR = 'Circular dependency detected:\r\n'
 let PluginTitle = 'CircularDependencyPlugin'
 
+
+/**
+ * The following code is based on
+ * https://github.com/aackerman/circular-dependency-plugin/blob/master/index.js
+ *
+ *
+ * ISC Licensed
+ * Author aackerman
+ * Copyright (c) 2016, Aaron Ackerman <theron17@gmail.com>.
+ * https://github.com/aackerman/circular-dependency-plugin/blob/master/LICENSE
+ */
 export class CircularDependencyPlugin {
   options: {
     exclude: RegExp;

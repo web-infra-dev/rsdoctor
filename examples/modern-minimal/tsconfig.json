@@ -1,6 +1,6 @@
 {
   "extends": "@rsdoctor/tsconfig/base",
-  "include": ["src", "../webpack-minimal/src/deps"],
+  "include": ["src"],
   "compilerOptions": {
     "outDir": "dist",
     "baseUrl": ".",
