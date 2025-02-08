@@ -7,6 +7,10 @@ const defaultSocketUrl =
   process.env.NODE_ENV === 'development'
     ? `${socketProtocol}://${location.hostname}:${process.env.LOCAL_CLI_PORT}`
     : `${socketProtocol}://${location.host}`;
+
+const ipv4Pattern =
+  /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
 function ensureSocket(socketUrl: string = defaultSocketUrl) {
   if (!map.has(socketUrl)) {
     const socket = io(socketUrl, {});
@@ -42,7 +46,9 @@ export function formatURL({
     url.port = String(port);
     url.hostname = hostname;
     url.protocol = location.protocol.includes('https') ? 'wss' : 'ws';
-    return url.toString();
+    return ipv4Pattern.test(hostname)
+      ? url.toString()
+      : `${protocol}//${hostname}`;
   }
 
   // compatible with IE11
