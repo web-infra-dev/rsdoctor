@@ -46,7 +46,7 @@ export function formatURL({
     url.port = String(port);
     url.hostname = hostname;
     url.protocol = location.protocol.includes('https') ? 'wss' : 'ws';
-    return ipv4Pattern.test(hostname)
+    return ipv4Pattern.test(hostname) || hostname.includes('localhost')
       ? url.toString()
       : `${protocol}//${hostname}`;
   }
