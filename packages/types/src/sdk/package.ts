@@ -15,6 +15,13 @@ export interface PackageBasicData extends PackageJSONData {
 
 export interface PackageInstance extends PackageBasicData {
   id: number;
+  duplicates: {
+    module: { id: number; path: string };
+    chunks: string[];
+  }[];
+
+  setDuplicates(module: { id: number; path: string }, chunks: string[]): void;
+
   /** Get all modules contained in the package */
   getModules(): ModuleInstance[];
   /** Get all dependencies */

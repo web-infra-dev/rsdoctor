@@ -83,6 +83,10 @@ export class PackageGraph implements SDK.PackageGraphInstance {
 
     if (meta.packageData) {
       const pkg = getPackageByData(meta.packageData);
+      const chunkIds = module.getChunks().map(({ id }) => id);
+      if (chunkIds.length > 1) {
+        pkg.setDuplicates({ id: module.id, path: module.path }, chunkIds);
+      }
       pkgsMap.set(file, pkg);
       return pkg;
     }

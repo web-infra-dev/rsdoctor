@@ -64,6 +64,11 @@ export interface PackageRelationDiffRuleStoreData extends BaseRuleStoreData {
   packages: PackageRelationData[];
 }
 
+export interface duplicatePackageRuleStoreData extends BaseRuleStoreData {
+  type: 'package-duplicate-chunks';
+  packages: any[];
+}
+
 /**
  * General service to view file relationship detection rules.
  */

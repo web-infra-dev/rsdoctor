@@ -13,6 +13,11 @@ export class Package implements SDK.PackageInstance {
 
   version: string;
 
+  duplicates: {
+    module: { id: number; path: string };
+    chunks: string[];
+  }[];
+
   private _modules: SDK.ModuleInstance[] = [];
 
   private _dependencies: SDK.PackageDependencyInstance[] = [];
@@ -23,6 +28,14 @@ export class Package implements SDK.PackageInstance {
     this.name = name;
     this.root = root;
     this.version = version;
+    this.duplicates = [];
+  }
+
+  setDuplicates(module: { id: number; path: string }, chunks: string[]) {
+    this.duplicates.push({
+      module,
+      chunks,
+    });
   }
 
   getModules(): SDK.ModuleInstance[] {
@@ -134,6 +147,7 @@ export class Package implements SDK.PackageInstance {
       version: this.version,
       modules: this.getModules().map((e) => e.id),
       size: this.getSize(),
+      duplicates: this.duplicates,
     };
   }
 }
