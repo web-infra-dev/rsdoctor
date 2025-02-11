@@ -82,6 +82,10 @@ export function getLoaderCosts(
 ) {
   // between in target loader.startAt and loader.endAt
   const blocked = loaders.filter((e) => {
+    // TODO: Because the loader on the rust side adopts multi-threading, it is necessary to discuss the thread worker ID to make the accuracy of the cold resistance time.
+    if (e.loader.includes('builtin')) {
+      return false;
+    }
     if (e !== loader && e.pid === loader.pid) {
       if (e.startAt >= loader.startAt) {
         // |------|
@@ -221,29 +225,45 @@ export function getLoaderFolderStatistics(
     return path.startsWith(folder);
   });
 
-  const list = getLoadersTransformData(loaders);
+  const filteredLoaders: Pick<
+    SDK.LoaderTransformData,
+    'loader' | 'startAt' | 'endAt' | 'pid'
+  >[] = [];
+  const uniqueLoaders: Map<string, { files: number; path: string }> = new Map();
 
-  return datas.reduce((t, data) => {
-    const { loaders } = data;
-
-    loaders.forEach((l) => {
-      const match = t.find((el) => el.loader === l.loader);
-      const costs = getLoaderCosts(l, list);
-      if (match) {
-        match.files++;
-        match.costs += costs;
-      } else {
-        t.push({
-          loader: l.loader,
-          path: l.path,
-          files: 1,
-          costs,
+  datas.forEach((data) => {
+    data.loaders.forEach((fl) => {
+      const uniqueLoader = uniqueLoaders.get(fl.loader);
+      if (uniqueLoader) {
+        uniqueLoaders.set(fl.loader, {
+          files: uniqueLoader.files + 1,
+          path: fl.path,
         });
+      } else {
+        uniqueLoaders.set(fl.loader, { files: 1, path: fl.path });
       }
+
+      return filteredLoaders.push({
+        loader: fl.loader,
+        startAt: fl.startAt,
+        endAt: fl.endAt,
+        pid: fl.pid,
+      });
+    });
+  });
+  const loaderCosts: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFolderStatistics> =
+    Array.from(uniqueLoaders).map((uniqueLoader) => {
+      const filter = (l: { loader: string }) => l.loader === uniqueLoader[0];
+      const costs = getLoadersCosts(filter, filteredLoaders);
+      return {
+        loader: uniqueLoader[0] as string,
+        files: uniqueLoader[1].files,
+        path: uniqueLoader[1].path,
+        costs,
+      };
     });
 
-    return t;
-  }, [] as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFolderStatistics>);
+  return loaderCosts;
 }
 
 export function getLoaderFileFirstInput(
