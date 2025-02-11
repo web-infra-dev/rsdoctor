@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { get, sumBy } from 'lodash-es';
+import { get } from 'lodash-es';
 import {
   Tag,
   Card,
   Col,
-  Descriptions,
   Divider,
   Drawer,
   Row,
@@ -351,26 +350,6 @@ export const LoaderFiles: React.FC<{
                         },
                       ]}
                       dataSource={tableData!}
-                      footer={() => (
-                        <Descriptions
-                          title="Total"
-                          bordered
-                          layout="vertical"
-                          size="small"
-                        >
-                          <Descriptions.Item label="loaders">
-                            {tableData!.length}
-                          </Descriptions.Item>
-                          <Descriptions.Item label="files">
-                            {sumBy(tableData, (e) => e.files)}
-                          </Descriptions.Item>
-                          <Descriptions.Item label="duration">
-                            <Typography.Text strong>
-                              {formatCosts(sumBy(tableData, (e) => e.costs))}
-                            </Typography.Text>
-                          </Descriptions.Item>
-                        </Descriptions>
-                      )}
                     />
                   )}
                 </ServerAPIProvider>
