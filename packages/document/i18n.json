@@ -24,7 +24,7 @@
     "zh": "框架无关"
   },
   "frameworkAgnosticDesc": {
-    "en": "Rsdoctor support all projects built on Webpack or Rspack.",
+    "en": "Rsdoctor support all projects built on Rspack or webpack.",
     "zh": "Rsdoctor 支持分析用 Rspack 和 webpack 构建的项目。"
   },
   "buildTime": {
