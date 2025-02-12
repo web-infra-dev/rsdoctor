@@ -1,19 +1,6 @@
 import Theme from 'rspress/theme';
 import { NavIcon } from '@rstack-dev/doc-ui/nav-icon';
-import { HomeLayout as BaseHomeLayout } from 'rspress/theme';
-import { ToolStack } from './components/ToolStack';
-
-function HomeLayout() {
-  return (
-    <BaseHomeLayout
-      afterFeatures={
-        <>
-          <ToolStack />
-        </>
-      }
-    />
-  );
-}
+import { HomeLayout } from './pages';
 
 const Layout = () => <Theme.Layout beforeNavTitle={<NavIcon />} />;
 
