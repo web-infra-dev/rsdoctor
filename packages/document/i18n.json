@@ -1,10 +1,70 @@
 {
+  "quickStart": {
+    "en": "Quick Start",
+    "zh": "快速上手"
+  },
+  "subtitle": {
+    "en": "Analyzer for Rspack & webpack",
+    "zh": "Rspack & webpack 构建分析工具"
+  },
+  "slogan": {
+    "en": "Visualize the building process",
+    "zh": "让构建过程可视化"
+  },
   "toolStackTitle": {
-    "en": "Tool Stack",
-    "zh": "工具栈"
+    "en": "Rstack",
+    "zh": "Rstack"
   },
   "toolStackDesc": {
-    "en": "High-performance tool stack built around Rspack to boost modern web development",
-    "zh": "围绕 Rspack 打造的高性能工具栈，助力现代 Web 开发"
+    "en": "High-performance toolchain built around Rspack to boost modern web development",
+    "zh": "围绕 Rspack 打造的高性能工具链，助力现代 Web 开发"
+  },
+  "frameworkAgnostic": {
+    "en": "Unlimited Framework",
+    "zh": "框架无关"
+  },
+  "frameworkAgnosticDesc": {
+    "en": "Rsdoctor support all projects built on Rspack or webpack.",
+    "zh": "Rsdoctor 支持分析用 Rspack 和 webpack 构建的项目。"
+  },
+  "buildTime": {
+    "en": "Compile's Time",
+    "zh": "构建时分析"
+  },
+  "buildTimeDesc": {
+    "en": "To display the compile execution time and process in the form of a timing diagram.",
+    "zh": "以时序图的形式显示编译执行时间和过程。"
+  },
+  "buildActions": {
+    "en": "Compile's Actions",
+    "zh": "构建行为分析"
+  },
+  "buildActionsDesc": {
+    "en": "Visually view the compilation changes of each file in each loader.",
+    "zh": "可视化的查看每个 loader 对每个文件的编译更改。"
+  },
+  "bundleAnalysis": {
+    "en": "Bundle Analysis",
+    "zh": "构建产物分析"
+  },
+  "bundleAnalysisDesc": {
+    "en": "Visually view the bundles & modules relationship, module reference relationship and repeated packages in detail.",
+    "zh": "直观地详细查看 Bundle 和模块关系、模块引用关系和重复包等产物详情。"
+  },
+  "bundleDiff": {
+    "en": "Bundle Diff",
+    "zh": "产物对比"
+  },
+  "bundleDiffDesc": {
+    "en": "Through comparison, the deterioration and change of the product are found.",
+    "zh": "通过对比发现产物劣化及变动。"
+  },
+  "buildScan": {
+    "en": "Build Scan",
+    "zh": "构建扫描"
+  },
+  "buildScanDesc": {
+    "en": "Built-in build rule scanning, and also supports custom rules.",
+    "zh": "内置构建规则扫描，同时支持自定义规则。"
   }
 }
