@@ -4,28 +4,28 @@ export const code = 'E1002';
 
 export const message: RuleMessage = {
   code,
-  title: 'Default Import Check',
+  title: 'Cross Chunks Packages',
   type: 'markdown',
-  category: 'compile',
+  category: 'bundle',
   description: `
 #### Description
 
-Usually webpack will automatically compatible different modules that has different types, but in a special case, the operation of compatibility will fail.
-That is, when you use \`Default Import\` to import a cjs module, and this cjs module do not have the compatible statement, such as \`exports.default = \`.
+there is a same name package which bundled more than one version in your application.
+
+it is not good to the bundle size of your application.
 
 #### General Solution
 
-1. for cjs module, write a \`exports.default = \` statement for default export.
-2. use \`Namespace Import\` for import the cjs module.
+add an entry in \`resolve.alias\` which will configure Webpack to route any package references to a single specified path.
 
-For example, for the package \`htmlparser2@7.2.0\`:
+For example, if \`lodash\` is duplicated in your bundle, the following configuration would render all Lodash imports to always refer to the \`lodash\` instance found at \`./node_modules/lodash\`:
 
-\`\`\`ts
-// you should use this
-import * as Parser from 'htmlparser2';
-
-// can not use this
-import Parser from 'htmlparser2';
+\`\`\`js
+{
+  alias: {
+    lodash: path.resolve(__dirname, 'node_modules/lodash')
+  }
+}
 \`\`\`
 `,
 };

@@ -24,7 +24,7 @@ const Component: React.FC<Props> = ({ project }) => {
   return (
     <div className={style.overall}>
       <Flex style={{ width: '100%' }}>
-        <div style={{ flex: 3, marginRight: '16px' }}>
+        <div style={{ flex: 3, marginRight: '16px', maxWidth: '75%' }}>
           <ResponsiveLayout>
             <ProjectOverall
               configs={configs}

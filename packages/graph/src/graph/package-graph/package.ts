@@ -13,6 +13,8 @@ export class Package implements SDK.PackageInstance {
 
   version: string;
 
+  duplicates: SDK.CrossChunksPackageType[];
+
   private _modules: SDK.ModuleInstance[] = [];
 
   private _dependencies: SDK.PackageDependencyInstance[] = [];
@@ -23,6 +25,14 @@ export class Package implements SDK.PackageInstance {
     this.name = name;
     this.root = root;
     this.version = version;
+    this.duplicates = [];
+  }
+
+  setDuplicates(data: SDK.CrossChunksPackageType) {
+    this.duplicates.push({
+      module: data.module,
+      chunks: data.chunks,
+    });
   }
 
   getModules(): SDK.ModuleInstance[] {
@@ -134,6 +144,7 @@ export class Package implements SDK.PackageInstance {
       version: this.version,
       modules: this.getModules().map((e) => e.id),
       size: this.getSize(),
+      duplicates: this.duplicates,
     };
   }
 }

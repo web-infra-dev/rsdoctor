@@ -13,6 +13,7 @@ import type { Rule } from '@rsdoctor/types';
 
 import styles from './bundle-alert.module.scss';
 import { CSSProperties, useState } from 'react';
+import { CrossChunksAlertCollapse } from './collapse-cross-chunks';
 
 interface BundleAlertProps {
   title: string;
@@ -42,6 +43,11 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
     },
     {
       key: 'E1002',
+      label: 'Cross Chunks Package',
+      data: [],
+    },
+    {
+      key: 'E1005',
       label: 'Default Import Check',
       data: [],
     },
@@ -106,7 +112,9 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
         children = <AlertCollapse data={td.data} extraData={extraData} />;
         break;
       case 'E1002':
-        children = <CommonList data={td.data} />;
+        children = (
+          <CrossChunksAlertCollapse data={td.data} extraData={extraData} />
+        );
         break;
       case 'E1003':
         children = <CommonList data={td.data} />;
@@ -119,6 +127,9 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
           </span>
         );
         children = <ECMAVersionCheck data={td.data} />;
+        break;
+      case 'E1005':
+        children = <CommonList data={td.data} />;
         break;
       default:
         children = null;

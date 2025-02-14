@@ -83,6 +83,8 @@ export class PackageGraph implements SDK.PackageGraphInstance {
 
     if (meta.packageData) {
       const pkg = getPackageByData(meta.packageData);
+
+      this.setDuplicates(module, pkg);
       pkgsMap.set(file, pkg);
       return pkg;
     }
@@ -105,6 +107,7 @@ export class PackageGraph implements SDK.PackageGraphInstance {
 
     const pkg = getPackageByData(data);
 
+    this.setDuplicates(module, pkg);
     this.addPackage(pkg);
     pkgsMap.set(file, pkg);
     return pkg;
@@ -141,6 +144,16 @@ export class PackageGraph implements SDK.PackageGraphInstance {
         arr.push(pkg);
         map.set(pkg.name, arr);
       }
+    }
+  }
+
+  setDuplicates(module: SDK.ModuleInstance, pkg: SDK.PackageInstance) {
+    const chunkIds = module.getChunks().map(({ id, name }) => ({ id, name }));
+    if (chunkIds.length > 1) {
+      pkg.setDuplicates({
+        module: { id: module.id, path: module.path },
+        chunks: chunkIds,
+      });
     }
   }
 

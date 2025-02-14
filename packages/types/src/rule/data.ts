@@ -1,6 +1,10 @@
 import type { RuleMessage, RuleMessageCodeEnumerated } from './code';
 import type { SourceRange } from '../sdk';
-import type { PackageBasicData } from '../sdk/package';
+import type {
+  CrossChunksPackageType,
+  PackageBasicData,
+  PackageInstance,
+} from '../sdk/package';
 
 export interface BaseRuleStoreData
   extends Pick<RuleMessage, 'code' | 'category'> {
@@ -62,6 +66,14 @@ export interface PackageRelationData {
 export interface PackageRelationDiffRuleStoreData extends BaseRuleStoreData {
   type: 'package-relation';
   packages: PackageRelationData[];
+}
+
+export interface CrossChunksPackageRuleStoreData extends BaseRuleStoreData {
+  type: 'cross-chunks-package';
+  chunks: CrossChunksPackageType[];
+  package: Pick<PackageInstance, 'id' | 'name' | 'version'> & {
+    size: ReturnType<PackageInstance['getSize']>;
+  };
 }
 
 /**
@@ -136,6 +148,7 @@ export type RuleStoreDataItem =
   | FileRelationRuleStoreData
   | CodeChangeRuleStoreData
   | PackageRelationDiffRuleStoreData
-  | CodeViewRuleStoreData;
+  | CodeViewRuleStoreData
+  | CrossChunksPackageRuleStoreData;
 
 export type RuleStoreData = RuleStoreDataItem[];
