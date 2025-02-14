@@ -34,7 +34,7 @@ export const CrossChunksAlertCollapse = (props: {
   extraData: Omit<AlertProps, 'data'>;
 }) => {
   const { data } = props;
-  console.log(data);
+
   const items = data.map((d) => {
     const { package: dupPackage, chunks } =
       d as Rule.CrossChunksPackageRuleStoreData;
