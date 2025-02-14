@@ -32,7 +32,7 @@ export const rule = defineRule<typeof title, Config>(() => {
 
   return {
     meta: {
-      code: 'E1002' as const,
+      code: 'E1005' as const,
       title,
       category: 'compile',
       severity: Linter.Severity.Warn,

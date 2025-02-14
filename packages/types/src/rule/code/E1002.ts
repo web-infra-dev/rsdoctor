@@ -4,28 +4,36 @@ export const code = 'E1002';
 
 export const message: RuleMessage = {
   code,
-  title: 'Default Import Check',
+  title: 'Cross Chunks Packages',
   type: 'markdown',
-  category: 'compile',
+  category: 'bundle',
   description: `
 #### Description
 
-Usually webpack will automatically compatible different modules that has different types, but in a special case, the operation of compatibility will fail.
-That is, when you use \`Default Import\` to import a cjs module, and this cjs module do not have the compatible statement, such as \`exports.default = \`.
+There is a package with the same version that is duplicated across different chunks in your application. This redundancy increases the overall bundle size, which is not optimal for performance.
 
 #### General Solution
 
-1. for cjs module, write a \`exports.default = \` statement for default export.
-2. use \`Namespace Import\` for import the cjs module.
+To address this issue, you can use Rspack's **SplitChunksPlugin** to extract common dependencies into a separate chunk. This ensures that the same package is not duplicated across multiple chunks, thereby reducing the bundle size.
 
-For example, for the package \`htmlparser2@7.2.0\`:
+For example, if **lodash** is being duplicated across different chunks, you can configure the **optimization.splitChunks** option in your Webpack configuration to extract **lodash** into a separate chunk:
 
-\`\`\`ts
-// you should use this
-import * as Parser from 'htmlparser2';
-
-// can not use this
-import Parser from 'htmlparser2';
 \`\`\`
+module.exports = {
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]lodash[\\/]/,
+          name: 'lodash',
+          chunks: 'all',
+        },
+      },
+    },
+  },
+};
+\`\`\`
+
+This configuration will automatically split out common dependencies (including those from \`node_modules\`) into separate chunks, ensuring that no package is duplicated across different chunks.
 `,
 };

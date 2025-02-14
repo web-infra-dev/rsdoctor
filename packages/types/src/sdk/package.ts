@@ -13,8 +13,17 @@ export interface PackageBasicData extends PackageJSONData {
   root: string;
 }
 
+export type CrossChunksPackageType = {
+  module: { id: number; path: string };
+  chunks: { name: string }[];
+};
+
 export interface PackageInstance extends PackageBasicData {
   id: number;
+  duplicates: CrossChunksPackageType[];
+
+  setDuplicates(data: CrossChunksPackageType): void;
+
   /** Get all modules contained in the package */
   getModules(): ModuleInstance[];
   /** Get all dependencies */
