@@ -18,8 +18,8 @@ importers:
         specifier: ^2.27.12
         version: 2.27.12
       '@modern-js/module-tools':
-        specifier: ^2.63.7
-        version: 2.63.7(typescript@5.7.3)
+        specifier: ^2.64.1
+        version: 2.64.1(typescript@5.7.3)
       '@rsdoctor/tsconfig':
         specifier: workspace:*
         version: link:scripts/tsconfig
@@ -1219,50 +1219,62 @@ packages:
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
 
-  '@ast-grep/napi-darwin-arm64@0.16.0':
-    resolution: {integrity: sha512-ESjIg03S0ln+8CP43TKqY6+QPL2Kkm+6iMS5kAUMVtH/WNWd2z0oQLg9bmadUNPylYbB42B3zRtuTKwm/nCpdA==}
+  '@ast-grep/napi-darwin-arm64@0.34.4':
+    resolution: {integrity: sha512-igpZwfWZeG/iwa2m7/3RKMg6UnVOt5tPCPKPMfjX2qiD1oHgcNKwTBmUmXhGCyNgwBlW8z06iXnwNIA0i+rJrw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@ast-grep/napi-darwin-x64@0.16.0':
-    resolution: {integrity: sha512-a7cOdfACgmsGyTSMLkVuGiK/v+M8eTgUWew5X/4gcPHX4GcqVbptP82kbtiVVWZW5QXX2j6VYkFCsmJ7knkXBA==}
+  '@ast-grep/napi-darwin-x64@0.34.4':
+    resolution: {integrity: sha512-OqLjev/+IUW7lpLirDx7wb3iAhQkinMx9El8NWV0AipcJsbfJhQmUy2ppDqkglJVcdlh0NIaoTgWOXWya8yXzQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@ast-grep/napi-linux-arm64-gnu@0.16.0':
-    resolution: {integrity: sha512-5BaueDB3ZJxLy/qGDzWO16zSmU02da96ABkp6S210OTlaThDgLpjfztoI10iwu/f3WpTnOvbggjfzOLWUAL3Aw==}
+  '@ast-grep/napi-linux-arm64-gnu@0.34.4':
+    resolution: {integrity: sha512-PtdV6ll45O4iLKsChDLtAdyvG5R+Y/sCsatxT5T4JTptQ5rsbOeA4ZDTU8ZJJ6qBlVkhlpKM6aBBdP3HUU8HLQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@ast-grep/napi-linux-x64-gnu@0.16.0':
-    resolution: {integrity: sha512-QjiY45TvPI50I2UxPlfPuoeDeEYJxGDyLegqYfrLsxtdv+wX2Jdgjew6myiMXCVG9oJWgtmp/z28zpl7H8YLPA==}
+  '@ast-grep/napi-linux-arm64-musl@0.34.4':
+    resolution: {integrity: sha512-Vm+xWUUWkGmv22ov9/D9i0JLds6+46Wj9G6tdByLhlB/R3jJEcWfg2qxnLihEFwJXuk+ic3PdtR0XmLRIx66Rw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@ast-grep/napi-linux-x64-gnu@0.34.4':
+    resolution: {integrity: sha512-O6NMaYIzVFq5uSmo/wPIAZkTqfOERr9biECjoMpMVWbPP1T9NfSoWeuYQu+W/zF/ucZDEDWGjsE/ZDNAG5SZgQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@ast-grep/napi-win32-arm64-msvc@0.16.0':
-    resolution: {integrity: sha512-4OCpEf44h63RVFiNA2InIoRNlTB2XJUq1nUiFacTagSP5L3HwnZQ4URC1+fdmZh1ESedm7KxzvhgByqGeUyzgA==}
+  '@ast-grep/napi-linux-x64-musl@0.34.4':
+    resolution: {integrity: sha512-QAwcB716F84fPXcVjYjKL8sQ0iQONOZ9CkdoEmmY5YW/yxR8uEA6s0bLwWPqHl6QeUuDIlA3+hgHwarWoUrPrA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@ast-grep/napi-win32-arm64-msvc@0.34.4':
+    resolution: {integrity: sha512-dYvmAPo+p/jH6hBIxKd+T2u0STHp02cz4O6cuFFwQG13cIysXYRb4BnF1/wtKM0gFxeSsVZCE/ANoin1O3TJTQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
 
-  '@ast-grep/napi-win32-ia32-msvc@0.16.0':
-    resolution: {integrity: sha512-bJW9w9btdE9OuGKZSNiKkBR+Ax4113VhiJgxC2t9KbhmOsOM9E4l2U570h+DrjWdf+H3Oyb4Cz8so2noh5LQqw==}
+  '@ast-grep/napi-win32-ia32-msvc@0.34.4':
+    resolution: {integrity: sha512-iYk6L8Jxfk/AlUi2Ups2PHkKDwFP3Cl1DrScu9dL+nePNBIZVmyjN122PHdFtgmRFWjff6hGHWINHsESCGwsXg==}
     engines: {node: '>= 10'}
     cpu: [ia32]
     os: [win32]
 
-  '@ast-grep/napi-win32-x64-msvc@0.16.0':
-    resolution: {integrity: sha512-+qUauPADrUIBgSGMmjnCBuy2xuGlG97qjrRAYo9y+Mv9gGnAMpGA5zzLZArHcQwNzXwFB9aIqavtCL+tu28wHg==}
+  '@ast-grep/napi-win32-x64-msvc@0.34.4':
+    resolution: {integrity: sha512-Filq6uuYVHJPPpoNeGgYtbpzt1ElmQvK3CP7OoEoICX3zN3mff6s9fLhMIsO8wm4+PZpT8FrOQTB9XWPLjU4zw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
 
-  '@ast-grep/napi@0.16.0':
-    resolution: {integrity: sha512-qOqQG9o97Q4tIZXZyWI7JuDZGJi3yibTN7LiGLmnzNLaIhmpv26BWj5OYJibUyQLVH/aTjdZSNx4spa7EihUzg==}
+  '@ast-grep/napi@0.34.4':
+    resolution: {integrity: sha512-QesKWYy+DXiRQll5Wi2hDRPQ1fOWp2gdF1TFyvuZQZoPu2kVVTOOGX0ajpMm4D2mS9N5n0NB4fsG14ukGOnAlg==}
     engines: {node: '>= 10'}
 
   '@babel/code-frame@7.26.2':
@@ -2640,11 +2652,11 @@ packages:
   '@modern-js/core@2.63.6':
     resolution: {integrity: sha512-FPTcldbr0CkvoKzsjZv501dsTRFk5a4EyNM1AzPbiwAp4Sb2DDwQ7CIEq+aQUn80kJB0ByUK4GPNs7wFfIc5QA==}
 
-  '@modern-js/core@2.63.7':
-    resolution: {integrity: sha512-84DYrQTmVn/QtL/jzIfq832+rF7VRvj/jTvA6Lr95a0i67R8ileBUTVGRZE6Ic9k2wz+AKsSsf6524m673Es4Q==}
+  '@modern-js/core@2.64.1':
+    resolution: {integrity: sha512-gUuN2nW2kqcJ0E3Cf8IHd1xYwq9vFYMCCCjfC6BK3H72tPp+RTVY0YHXIkAJFX0hdo8z2lBSKOi5yhDU91e+gw==}
 
-  '@modern-js/module-tools@2.63.7':
-    resolution: {integrity: sha512-qy2XWTbm7Gyhu9cP2jecX/y7BdliZgoGYfLzFkHsaq741RmwWaUKfotNhPeOZPzYIaU3slDzF4UDIjj/1CHIbg==}
+  '@modern-js/module-tools@2.64.1':
+    resolution: {integrity: sha512-fO1L08CQHzT5bX9SqWpzFj0IPjbihkKdWu9CNWxsDDth0/1LgkYnw95bvPqcL68DnAmcjKOwuRASAwuDiSi8IA==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     peerDependencies:
@@ -2656,11 +2668,11 @@ packages:
   '@modern-js/node-bundle-require@2.63.6':
     resolution: {integrity: sha512-2TxlZKXLKONCtirwww9ufQtShgPADlUroc9dDVn5MCcA0Xdt4I458ko5yF5AjoIWCCmfqD5FMXxLbNalRYPo+A==}
 
-  '@modern-js/node-bundle-require@2.63.7':
-    resolution: {integrity: sha512-12K9zPuxbfxhqaq3wX9rhb17kxqJ0K8vufUubRGvfXaUxa5Fbcddg2UWovJH44THHVxCd4R5XnvK9FlEM2HhOQ==}
+  '@modern-js/node-bundle-require@2.64.1':
+    resolution: {integrity: sha512-h2iJ8yeDf5ScUEm9UQ4za/6XPSiFwVf4U7lKYxGPic9z6+U9fxmgeYNR1QwF2QhvwXCl6CYP3zfeVPLhh34x0A==}
 
-  '@modern-js/plugin-changeset@2.63.7':
-    resolution: {integrity: sha512-MB16Y38B5iTDTQKdlgZeCUxZ9cxZ9qjAq7+VjMQdWufjUoqanCUXwbaONY1BKlbZp31uM4PCzHzuE1HntM8efg==}
+  '@modern-js/plugin-changeset@2.64.1':
+    resolution: {integrity: sha512-HdYf72lqtHBrgFteLDYz011TzelG+rVkVz0/wpJ2nLmvZBNnWGJgAFHYSxUC+k4BINpyzWf2JEPjuNM/0+nyvw==}
 
   '@modern-js/plugin-data-loader@2.63.6':
     resolution: {integrity: sha512-yjGvqlLtYzZiHxdwzGg2FVdMnNJqueVR0K5Xv1wJRQ1+JW5P9+k+6Gf0/lv1MNicN4Z+xQ7lpyBIqeYPV4n0Ow==}
@@ -2671,8 +2683,8 @@ packages:
   '@modern-js/plugin-i18n@2.63.6':
     resolution: {integrity: sha512-ziSqjEASj2B6Ty4zh1GYmqgKvOxA/ycWQabYiVLWfboCEbM/+R43NBn4Xj6uA/1wn2X1rgHJlc5R57Hp/ThgmA==}
 
-  '@modern-js/plugin-i18n@2.63.7':
-    resolution: {integrity: sha512-juPz4w+ILHNPuSWnvI/KJ7PLFeQPBRqkISFO+DDBb06sL07aIJWhhFpB48VAjNWngPIHg3ijR1sTuflJwZ0eSg==}
+  '@modern-js/plugin-i18n@2.64.1':
+    resolution: {integrity: sha512-L0GmKbAVfjS/W2JnQ5/w3SnRMUN/5Cp2d4X8dYS7zmK7wprboTppwJ75uOGZdt2Q9RtzjMsyiVmTRgIJ7APnOQ==}
 
   '@modern-js/plugin-v2@2.63.6':
     resolution: {integrity: sha512-6TRjP7uzgv6pas96+lo1CCADLT4MHet5J+0uieG307PrfIPxxKl+0cIlH49D3CmMLiFy8nYJJWYGevd13buy4w==}
@@ -2680,8 +2692,8 @@ packages:
   '@modern-js/plugin@2.63.6':
     resolution: {integrity: sha512-BtZONNwQ1rnbYHqqSzknPHN//TM7ULLjJk71RRPJv2YYbQLRprm5U1jkUlpc7sIOkgdzpK6BVghzKjx0rSEPwA==}
 
-  '@modern-js/plugin@2.63.7':
-    resolution: {integrity: sha512-ooKj8wOsvsAj9Xnwe4YgT1U2hcIbjk0FuRsl9skj704BT1rnPF6iseIDfaZC9t/XzL+CQE+qyMzYfXigUEpLVg==}
+  '@modern-js/plugin@2.64.1':
+    resolution: {integrity: sha512-c7sIlUIe7TrmSMFPBja1xcKZYK24Bfkt3ftfhVebB980UWWM94YkpJ5uvbTXMW2/WCm+/HBYVQHf41Aug40F+Q==}
 
   '@modern-js/prod-server@2.63.6':
     resolution: {integrity: sha512-TT2srrhj9rGsDeIcXTrY7yWh+eJxWgszzisMN2YDeoybAkzn1u35/rlIlcSDwRQikDUTSnEQKT6pnSmrSbmlKQ==}
@@ -2789,8 +2801,8 @@ packages:
   '@modern-js/types@2.63.6':
     resolution: {integrity: sha512-442JXTf27r3TFEDarEqaT0sq5ThLGNJlGiccWY6TXu9fDUXUoOznPB7fStxHTeLzbWVeD6JmXOjVNRPoLp4Bzw==}
 
-  '@modern-js/types@2.63.7':
-    resolution: {integrity: sha512-rTiE0req+dT0PCrNZr4FtqvDWdXD2P/AxdflOzv7Cp3hoUgE55pXu+uePN61w/aedK3101Sdt3C07n9yfS1gPA==}
+  '@modern-js/types@2.64.1':
+    resolution: {integrity: sha512-pC1NBU+d52Wqk7205lRi6nHFhj7rjRRH7kFzUBMjOPyZIJqVY6jUz1Ubc9WZrhHIjmHSqGj70iqnmggBCdIjSg==}
 
   '@modern-js/uni-builder@2.63.6':
     resolution: {integrity: sha512-Vs6OwxM/4UoOuj8kaHHRXINaNnoXNFK6yQZR77jzjcTmVBj7OatWLO4sxg6JqURhqyupZw1gGlLcLiEwsnOZDQ==}
@@ -2798,8 +2810,8 @@ packages:
   '@modern-js/utils@2.63.6':
     resolution: {integrity: sha512-wyYdCrkMlUkHGBE931ZnutwEsuNCPpmgCSHkUUQU1+iSapAPHQVp0whbrg50hFxVP4gCTnHElOUSpd600GBsOg==}
 
-  '@modern-js/utils@2.63.7':
-    resolution: {integrity: sha512-w7Vrr3SbgN3hV7sNm9eUleKA+A/HcxxIXDrEdo+g1em9yKZXnY+fFsluVLHY9F0bUMcti5h8rDAvlxX4C6J0mg==}
+  '@modern-js/utils@2.64.1':
+    resolution: {integrity: sha512-8ynko2ZF1cSqqNG5j/+1/m4h0wCn3yIsfS5t6FO3bOLwF7KS2T1VWOsL01b/cItkMbcHnL5yis8bOKVfjYIdNw==}
 
   '@module-federation/error-codes@0.8.4':
     resolution: {integrity: sha512-55LYmrDdKb4jt+qr8qE8U3al62ZANp3FhfVaNPOaAmdTh0jHdD8M3yf5HKFlr5xVkVO4eV/F/J2NCfpbh+pEXQ==}
@@ -4919,8 +4931,8 @@ packages:
     resolution: {integrity: sha512-nTjqfcBFEipKdXCv4YDQWCfmcLZKm81ldF0pAopTvyrFGVbcR6P/VAAd5G7N+0tTr8QqiU0tFadD6FK4NtJwOA==}
     engines: {node: '>= 0.6'}
 
-  convert-source-map@1.8.0:
-    resolution: {integrity: sha512-+OQdjP49zViI/6i7nIJpA8rAl4sV/JdPfU9nZs3VqOwGIgizICvuN2ru6fMd+4llL0tar18UYJXfZ/TWtmhUjA==}
+  convert-source-map@1.9.0:
+    resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -10306,36 +10318,44 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ast-grep/napi-darwin-arm64@0.16.0':
+  '@ast-grep/napi-darwin-arm64@0.34.4':
     optional: true
 
-  '@ast-grep/napi-darwin-x64@0.16.0':
+  '@ast-grep/napi-darwin-x64@0.34.4':
     optional: true
 
-  '@ast-grep/napi-linux-arm64-gnu@0.16.0':
+  '@ast-grep/napi-linux-arm64-gnu@0.34.4':
     optional: true
 
-  '@ast-grep/napi-linux-x64-gnu@0.16.0':
+  '@ast-grep/napi-linux-arm64-musl@0.34.4':
     optional: true
 
-  '@ast-grep/napi-win32-arm64-msvc@0.16.0':
+  '@ast-grep/napi-linux-x64-gnu@0.34.4':
     optional: true
 
-  '@ast-grep/napi-win32-ia32-msvc@0.16.0':
+  '@ast-grep/napi-linux-x64-musl@0.34.4':
     optional: true
 
-  '@ast-grep/napi-win32-x64-msvc@0.16.0':
+  '@ast-grep/napi-win32-arm64-msvc@0.34.4':
     optional: true
 
-  '@ast-grep/napi@0.16.0':
+  '@ast-grep/napi-win32-ia32-msvc@0.34.4':
+    optional: true
+
+  '@ast-grep/napi-win32-x64-msvc@0.34.4':
+    optional: true
+
+  '@ast-grep/napi@0.34.4':
     optionalDependencies:
-      '@ast-grep/napi-darwin-arm64': 0.16.0
-      '@ast-grep/napi-darwin-x64': 0.16.0
-      '@ast-grep/napi-linux-arm64-gnu': 0.16.0
-      '@ast-grep/napi-linux-x64-gnu': 0.16.0
-      '@ast-grep/napi-win32-arm64-msvc': 0.16.0
-      '@ast-grep/napi-win32-ia32-msvc': 0.16.0
-      '@ast-grep/napi-win32-x64-msvc': 0.16.0
+      '@ast-grep/napi-darwin-arm64': 0.34.4
+      '@ast-grep/napi-darwin-x64': 0.34.4
+      '@ast-grep/napi-linux-arm64-gnu': 0.34.4
+      '@ast-grep/napi-linux-arm64-musl': 0.34.4
+      '@ast-grep/napi-linux-x64-gnu': 0.34.4
+      '@ast-grep/napi-linux-x64-musl': 0.34.4
+      '@ast-grep/napi-win32-arm64-msvc': 0.34.4
+      '@ast-grep/napi-win32-ia32-msvc': 0.34.4
+      '@ast-grep/napi-win32-x64-msvc': 0.34.4
 
   '@babel/code-frame@7.26.2':
     dependencies:
@@ -11890,34 +11910,34 @@ snapshots:
       '@modern-js/utils': 2.63.6
       '@swc/helpers': 0.5.13
 
-  '@modern-js/core@2.63.7':
+  '@modern-js/core@2.64.1':
     dependencies:
-      '@modern-js/node-bundle-require': 2.63.7
-      '@modern-js/plugin': 2.63.7
-      '@modern-js/utils': 2.63.7
+      '@modern-js/node-bundle-require': 2.64.1
+      '@modern-js/plugin': 2.64.1
+      '@modern-js/utils': 2.64.1
       '@swc/helpers': 0.5.13
 
-  '@modern-js/module-tools@2.63.7(typescript@5.7.3)':
+  '@modern-js/module-tools@2.64.1(typescript@5.7.3)':
     dependencies:
       '@ampproject/remapping': 2.3.0
-      '@ast-grep/napi': 0.16.0
+      '@ast-grep/napi': 0.34.4
       '@babel/core': 7.26.0
       '@babel/types': 7.26.5
-      '@modern-js/core': 2.63.7
-      '@modern-js/plugin': 2.63.7
-      '@modern-js/plugin-changeset': 2.63.7
-      '@modern-js/plugin-i18n': 2.63.7
+      '@modern-js/core': 2.64.1
+      '@modern-js/plugin': 2.64.1
+      '@modern-js/plugin-changeset': 2.64.1
+      '@modern-js/plugin-i18n': 2.64.1
       '@modern-js/swc-plugins': 0.6.11(@swc/helpers@0.5.13)
-      '@modern-js/types': 2.63.7
-      '@modern-js/utils': 2.63.7
+      '@modern-js/types': 2.64.1
+      '@modern-js/utils': 2.64.1
       '@rollup/pluginutils': 4.2.1
       '@swc/helpers': 0.5.13
-      convert-source-map: 1.8.0
+      convert-source-map: 1.9.0
       enhanced-resolve: 5.17.1
       esbuild: 0.19.2
       magic-string: 0.30.17
-      postcss: 8.4.49
-      postcss-modules: 4.3.1(postcss@8.4.49)
+      postcss: 8.5.1
+      postcss-modules: 4.3.1(postcss@8.5.1)
       safe-identifier: 0.4.2
       source-map: 0.7.4
       style-inject: 0.3.0
@@ -11937,19 +11957,19 @@ snapshots:
       '@swc/helpers': 0.5.13
       esbuild: 0.17.19
 
-  '@modern-js/node-bundle-require@2.63.7':
+  '@modern-js/node-bundle-require@2.64.1':
     dependencies:
-      '@modern-js/utils': 2.63.7
+      '@modern-js/utils': 2.64.1
       '@swc/helpers': 0.5.13
       esbuild: 0.17.19
 
-  '@modern-js/plugin-changeset@2.63.7':
+  '@modern-js/plugin-changeset@2.64.1':
     dependencies:
       '@changesets/cli': 2.27.12
       '@changesets/git': 2.0.0
       '@changesets/read': 0.6.2
-      '@modern-js/plugin-i18n': 2.63.7
-      '@modern-js/utils': 2.63.7
+      '@modern-js/plugin-i18n': 2.64.1
+      '@modern-js/utils': 2.64.1
       '@swc/helpers': 0.5.13
       axios: 1.7.9
       resolve-from: 5.0.0
@@ -11973,9 +11993,9 @@ snapshots:
       '@modern-js/utils': 2.63.6
       '@swc/helpers': 0.5.13
 
-  '@modern-js/plugin-i18n@2.63.7':
+  '@modern-js/plugin-i18n@2.64.1':
     dependencies:
-      '@modern-js/utils': 2.63.7
+      '@modern-js/utils': 2.64.1
       '@swc/helpers': 0.5.13
 
   '@modern-js/plugin-v2@2.63.6':
@@ -11989,9 +12009,9 @@ snapshots:
       '@modern-js/utils': 2.63.6
       '@swc/helpers': 0.5.13
 
-  '@modern-js/plugin@2.63.7':
+  '@modern-js/plugin@2.64.1':
     dependencies:
-      '@modern-js/utils': 2.63.7
+      '@modern-js/utils': 2.64.1
       '@swc/helpers': 0.5.13
 
   '@modern-js/prod-server@2.63.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
@@ -12167,7 +12187,7 @@ snapshots:
 
   '@modern-js/types@2.63.6': {}
 
-  '@modern-js/types@2.63.7': {}
+  '@modern-js/types@2.64.1': {}
 
   '@modern-js/uni-builder@2.63.6(@rspack/core@1.2.3(@swc/helpers@0.5.15))(esbuild@0.17.19)(styled-components@5.3.11(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(type-fest@4.32.0)(typescript@5.7.3)(webpack-dev-server@5.2.0(webpack@5.97.1(esbuild@0.17.19)))':
     dependencies:
@@ -12251,7 +12271,7 @@ snapshots:
       lodash: 4.17.21
       rslog: 1.2.3
 
-  '@modern-js/utils@2.63.7':
+  '@modern-js/utils@2.64.1':
     dependencies:
       '@swc/helpers': 0.5.13
       caniuse-lite: 1.0.30001692
@@ -14795,9 +14815,7 @@ snapshots:
 
   content-type@1.0.5: {}
 
-  convert-source-map@1.8.0:
-    dependencies:
-      safe-buffer: 5.1.2
+  convert-source-map@1.9.0: {}
 
   convert-source-map@2.0.0: {}
 
@@ -16519,6 +16537,10 @@ snapshots:
   icss-utils@5.1.0(postcss@8.4.49):
     dependencies:
       postcss: 8.4.49
+
+  icss-utils@5.1.0(postcss@8.5.1):
+    dependencies:
+      postcss: 8.5.1
 
   ieee754@1.2.1: {}
 
@@ -18434,10 +18456,21 @@ snapshots:
     dependencies:
       postcss: 8.4.49
 
+  postcss-modules-extract-imports@3.1.0(postcss@8.5.1):
+    dependencies:
+      postcss: 8.5.1
+
   postcss-modules-local-by-default@4.2.0(postcss@8.4.49):
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.49)
       postcss: 8.4.49
+      postcss-selector-parser: 7.0.0
+      postcss-value-parser: 4.2.0
+
+  postcss-modules-local-by-default@4.2.0(postcss@8.5.1):
+    dependencies:
+      icss-utils: 5.1.0(postcss@8.5.1)
+      postcss: 8.5.1
       postcss-selector-parser: 7.0.0
       postcss-value-parser: 4.2.0
 
@@ -18446,21 +18479,31 @@ snapshots:
       postcss: 8.4.49
       postcss-selector-parser: 7.0.0
 
+  postcss-modules-scope@3.2.1(postcss@8.5.1):
+    dependencies:
+      postcss: 8.5.1
+      postcss-selector-parser: 7.0.0
+
   postcss-modules-values@4.0.0(postcss@8.4.49):
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.49)
       postcss: 8.4.49
 
-  postcss-modules@4.3.1(postcss@8.4.49):
+  postcss-modules-values@4.0.0(postcss@8.5.1):
+    dependencies:
+      icss-utils: 5.1.0(postcss@8.5.1)
+      postcss: 8.5.1
+
+  postcss-modules@4.3.1(postcss@8.5.1):
     dependencies:
       generic-names: 4.0.0
       icss-replace-symbols: 1.1.0
       lodash.camelcase: 4.3.0
-      postcss: 8.4.49
-      postcss-modules-extract-imports: 3.1.0(postcss@8.4.49)
-      postcss-modules-local-by-default: 4.2.0(postcss@8.4.49)
-      postcss-modules-scope: 3.2.1(postcss@8.4.49)
-      postcss-modules-values: 4.0.0(postcss@8.4.49)
+      postcss: 8.5.1
+      postcss-modules-extract-imports: 3.1.0(postcss@8.5.1)
+      postcss-modules-local-by-default: 4.2.0(postcss@8.5.1)
+      postcss-modules-scope: 3.2.1(postcss@8.5.1)
+      postcss-modules-values: 4.0.0(postcss@8.5.1)
       string-hash: 1.1.3
 
   postcss-nesting@12.1.5(postcss@8.4.49):
