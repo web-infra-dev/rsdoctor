@@ -10,22 +10,30 @@ export const message: RuleMessage = {
   description: `
 #### Description
 
-there is a same name package which bundled more than one version in your application.
-
-it is not good to the bundle size of your application.
+There is a package with the same version that is duplicated across different chunks in your application. This redundancy increases the overall bundle size, which is not optimal for performance.
 
 #### General Solution
 
-add an entry in \`resolve.alias\` which will configure Webpack to route any package references to a single specified path.
+To address this issue, you can use Rspack's **SplitChunksPlugin** to extract common dependencies into a separate chunk. This ensures that the same package is not duplicated across multiple chunks, thereby reducing the bundle size.
 
-For example, if \`lodash\` is duplicated in your bundle, the following configuration would render all Lodash imports to always refer to the \`lodash\` instance found at \`./node_modules/lodash\`:
+For example, if **lodash** is being duplicated across different chunks, you can configure the **optimization.splitChunks** option in your Webpack configuration to extract **lodash** into a separate chunk:
 
-\`\`\`js
-{
-  alias: {
-    lodash: path.resolve(__dirname, 'node_modules/lodash')
-  }
-}
 \`\`\`
+module.exports = {
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]lodash[\\/]/,
+          name: 'lodash',
+          chunks: 'all',
+        },
+      },
+    },
+  },
+};
+\`\`\`
+
+This configuration will automatically split out common dependencies (including those from \`node_modules\`) into separate chunks, ensuring that no package is duplicated across different chunks.
 `,
 };
