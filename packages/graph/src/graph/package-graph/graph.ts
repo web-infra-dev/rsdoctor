@@ -148,11 +148,17 @@ export class PackageGraph implements SDK.PackageGraphInstance {
   }
 
   setDuplicates(module: SDK.ModuleInstance, pkg: SDK.PackageInstance) {
-    const chunkIds = module.getChunks().map(({ id, name }) => ({ id, name }));
-    if (chunkIds.length > 1) {
+    const assetsList: SDK.AssetInstance[] = [];
+    const chunksList = module.getChunks();
+    chunksList.forEach((chunk) =>
+      assetsList.push(
+        ...chunk.getAssets().filter((asset) => asset.path.endsWith('.js')),
+      ),
+    );
+    if (chunksList.length > 1) {
       pkg.setDuplicates({
         module: { id: module.id, path: module.path },
-        chunks: chunkIds,
+        chunks: assetsList.map((asset) => ({ name: asset.path })),
       });
     }
   }

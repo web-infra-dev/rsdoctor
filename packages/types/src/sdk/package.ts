@@ -15,7 +15,7 @@ export interface PackageBasicData extends PackageJSONData {
 
 export type CrossChunksPackageType = {
   module: { id: number; path: string };
-  chunks: { id: string; name: string }[];
+  chunks: { name: string }[];
 };
 
 export interface PackageInstance extends PackageBasicData {
