@@ -35,13 +35,13 @@ export default defineConfig({
     chunkSplit: {
       strategy: 'split-by-size',
       override: {
-        chunks: 'initial', // 处理所有类型的 chunk
+        chunks: 'initial',
         cacheGroups: {
           myapp: {
             test: /[\\/]node_modules[\\/]/,
             name: 'myapp-async',
             reuseExistingChunk: false,
-            filename: 'static/js/myapp/[name].js', // 指定 myapp 的 async chunk 输出路径
+            filename: 'static/js/myapp/[name].js',
             minChunks: 1,
             priority: 10,
           },
@@ -49,14 +49,14 @@ export default defineConfig({
             test: /[\\/]node_modules[\\/]/,
             name: 'myapp2-async',
             reuseExistingChunk: false,
-            filename: 'static/js/myapp2/[name].js', // 指定 myapp2 的 async chunk 输出路径
+            filename: 'static/js/myapp2/[name].js',
             minChunks: 1,
             priority: 10,
           },
           default: {
-            minChunks: 5, // 至少被引入两次的模块
-            reuseExistingChunk: true, // 复用已存在的 chunk
-            name: 'common', // 输出的文件名
+            minChunks: 5,
+            reuseExistingChunk: true,
+            name: 'common',
           },
         },
       },
