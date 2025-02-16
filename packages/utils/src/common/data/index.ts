@@ -250,6 +250,16 @@ export class APIDataLoader {
           return moduleGraph?.modules as R;
         });
 
+      case SDK.ServerAPI.API.GetSearchModules:
+        return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          const { moduleName } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetSearchModules>;
+          const searchedModules = moduleGraph?.modules.filter((module) => {
+            module.path.includes(moduleName);
+          });
+          return searchedModules as R;
+        });
+
       case SDK.ServerAPI.API.GetAllChunkGraph:
         return this.loader.loadData('chunkGraph').then((chunkGraph) => {
           return chunkGraph?.chunks as R;

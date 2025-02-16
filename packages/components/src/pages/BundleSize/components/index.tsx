@@ -418,6 +418,44 @@ export const WebpackModulesOverallBase: React.FC<
               addonAfter={selectAfter('module')}
             />
           </Col>
+          <Col span={7}>
+            <InputNumber
+              min={0}
+              style={{ width: '95%' }}
+              addonBefore={
+                <Space>
+                  <Typography.Text style={{ fontSize: 14, color: 'inherit' }}>
+                    Module Search
+                  </Typography.Text>
+                  <Tooltip
+                    title={t(
+                      'filter the modules which size is greater than the input value',
+                    )}
+                    style={{ marginLeft: 3 }}
+                  >
+                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                  </Tooltip>
+                </Space>
+              }
+              onChange={(value) => {
+                <ServerAPIProvider
+                  api={SDK.ServerAPI.API.GetSearchModules}
+                  body={{ moduleName: String(value) }}
+                >
+                  {(modules) => (
+                    <>
+                      {modules.map((module) => (
+                        <Typography.Text key={module.path}>
+                          {module.path}
+                        </Typography.Text>
+                      ))}
+                    </>
+                  )}
+                </ServerAPIProvider>;
+              }}
+              addonAfter={selectAfter('module')}
+            />
+          </Col>
           <Col span={24}>
             {filteredAssets.length ? (
               <Row gutter={Size.BasePadding}>
