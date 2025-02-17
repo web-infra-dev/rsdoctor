@@ -2,7 +2,7 @@
   {
     "cacheGroups": [
       {
-        "name": "byted-lightcharts",
+        "name": "lightcharts",
         "test": "[\\\\/]node_modules[\\\\/](?:@byted[\\\\+]lightcharts)[\\\\/]"
       },
       {
@@ -74,8 +74,8 @@
         "test": "[\\\\/]node_modules[\\\\/](@ocean-uikit)[\\\\/]"
       },
       {
-        "name": "byted-packages",
-        "test": "[\\\\/]node_modules[\\\\/](@byted)[\\\\/]"
+        "name": "car-packages",
+        "test": "[\\\\/]node_modules[\\\\/](@car)[\\\\/]"
       }
     ],
     "name": "ad"
