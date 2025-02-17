@@ -1,3 +1,3 @@
 export abstract class LLM {
-  abstract chat<T, K>(options: { prompt: string; data: T }): Promise<K>;
+  abstract chat(options: { prompt: string; data: any }): Promise<any>;
 }
