@@ -13,8 +13,8 @@ test('code gen', async () => {
   });
   console.log(res);
   const code = `
-    const chunks = require('./chunks.cjs');
-    const modules = require('./filtered_modules_2.json');
+    const chunks = require('./chunks_client.json');
+    const modules = require('./modules_client.json');
 
     ${res}
 

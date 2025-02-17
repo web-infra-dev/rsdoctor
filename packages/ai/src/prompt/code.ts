@@ -53,14 +53,13 @@ interface FilteredModule {
 The ultimate goal is to split all initial chunks into approximate median sizes, with an error of no more than 5%;
 The judgment condition for oversized chunks is that they are larger than 30% of the median of all initial chunks;
 The splitting method is to analyze the modules contained in the chunk:
-- If the modules belong to the same packageName, then they can be unpacked according to the packageName. Note that modules with null packageName cannot be unpacked
-- Calculate the sum of the sizes of the modules belonging to the same packageName
-- Calculate the size of the chunk after unpacking this packageName size to see if it meets the requirements
-- If it does not meet the requirements, continue to unpack other packageNames until it meets the requirements
-- Output the final packageName that needs to be unpacked
-The final output only outputs the information of oversized initial chunks, and adds the following fields:
-- split: Output all packageNames that need to be unpacked.
-- reducedSize: Output the sum of the volumes of modules contained in the packageName that needs to be split
+- If the modules belong to the same packageName, they can be unpacked according to the packageName. Note that modules with null packageName cannot be unpacked
+- Calculate the modules belonging to the same packageName into a group, and calculate the sum of the sizes in each group, and print out the group results
+- Perform permutations and combinations to divide all group combinations into approximate median sizes
+- Output the permutation and combination results, just output the packageName and size in each group
+The final output only outputs the oversized initial chunk information, and adds the following fields:
+- groups: permutation and combination results
+- reducedSize: Output the sum of the volumes of the modules that need to be split in the packageName
 - splitedSize: original size - reducedSize
 - median: median
 
@@ -81,4 +80,8 @@ function fun(chunks, modules) {
 ## Output
 Output the final javascript code, the code needs to be able to run directly.
 ONLY output the function code, do not include markdown format such as \`\`\`javascript.
+`;
+
+export const groupByPackageName = () => `
+    There are the following npm packages, you need to group them by name, you need to output the grouping regular expression, and a set of included packages
 `;
