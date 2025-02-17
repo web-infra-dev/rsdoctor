@@ -117,3 +117,22 @@ export const extractPackageName = (path: string) => {
   }
   return null;
 };
+
+export const calcPackageSize = (
+  modules: FilteredModule[],
+): { package: string; size: number }[] => {
+  const packageSizeMap: Record<string, number> = {};
+  modules.forEach((m) => {
+    const { packageName } = m;
+    if (packageName) {
+      if (!packageSizeMap[packageName]) {
+        packageSizeMap[packageName] = m.size.sourceSize;
+      } else {
+        packageSizeMap[packageName] += m.size.sourceSize;
+      }
+    }
+  });
+  return Object.entries(packageSizeMap)
+    .map(([name, size]) => ({ package: name, size }))
+    .sort((a, b) => b.size - a.size);
+};
