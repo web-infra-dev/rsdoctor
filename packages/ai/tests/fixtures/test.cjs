@@ -1,8 +1,8 @@
-const chunks = require('./chunks.cjs');
-const modules = require('./filtered_modules_2.json');
+const chunks = require('./chunks_client.json');
+const modules = require('./modules_client.json');
 
 function fun(chunks, modules) {
-  // Helper function to calculate median
+  // Helper function to calculate the median
   function calculateMedian(values) {
     if (values.length === 0) return 0;
     values.sort((a, b) => a - b);
@@ -11,58 +11,65 @@ function fun(chunks, modules) {
     return (values[half - 1] + values[half]) / 2.0;
   }
 
-  // Create a map for quick module lookup by id
-  const moduleMap = new Map();
-  modules.forEach((module) => {
-    moduleMap.set(module.id, module);
-  });
-
-  // Filter initial chunks and calculate their sizes
-  const initialChunks = chunks.filter((chunk) => chunk.initial);
-  const initialChunkSizes = initialChunks.map((chunk) => chunk.size);
-  const median = calculateMedian(initialChunkSizes);
-  const oversizedThreshold = median * 1.3;
-
-  // Analyze oversized initial chunks
-  const oversizedChunks = initialChunks.filter(
-    (chunk) => chunk.size > oversizedThreshold,
-  );
-  const results = oversizedChunks.map((chunk) => {
-    const packageSizeMap = new Map();
-
-    // Calculate package sizes within the chunk
-    chunk.modules.forEach((moduleId) => {
-      const module = moduleMap.get(moduleId);
-      if (module && module.packageName) {
-        const currentSize = packageSizeMap.get(module.packageName) || 0;
-        packageSizeMap.set(
-          module.packageName,
-          currentSize + module.size.sourceSize,
-        );
+  // Helper function to group modules by packageName
+  function groupModulesByPackageName(modules) {
+    const groups = {};
+    modules.forEach((module) => {
+      if (module.packageName) {
+        if (!groups[module.packageName]) {
+          groups[module.packageName] = [];
+        }
+        groups[module.packageName].push(module);
       }
     });
+    return groups;
+  }
 
-    // Determine which packages to split
-    let reducedSize = 0;
-    const splitPackages = [];
-    const sortedPackages = Array.from(packageSizeMap.entries()).sort(
-      (a, b) => b[1] - a[1],
+  // Helper function to calculate the size of a group of modules
+  function calculateGroupSize(group) {
+    return group.reduce((sum, module) => sum + module.size.parsedSize, 0);
+  }
+
+  // Get all initial chunks
+  const initialChunks = chunks.filter((chunk) => chunk.initial);
+
+  // Calculate the median size of all initial chunks
+  const initialChunkSizes = initialChunks.map((chunk) => chunk.size);
+  const medianSize = calculateMedian(initialChunkSizes);
+
+  // Determine oversized chunks
+  const oversizedChunks = initialChunks.filter(
+    (chunk) => chunk.size > 1.3 * medianSize,
+  );
+
+  // Process each oversized chunk
+  const results = oversizedChunks.map((chunk) => {
+    // Get modules in the chunk
+    const chunkModules = chunk.modules
+      .map((moduleId) => modules.find((module) => module.id === moduleId))
+      .filter(Boolean);
+
+    // Group modules by packageName
+    const groupedModules = groupModulesByPackageName(chunkModules);
+
+    // Calculate the size of each group
+    const groupSizes = Object.entries(groupedModules).map(
+      ([packageName, group]) => ({
+        packageName,
+        size: calculateGroupSize(group),
+      }),
     );
 
-    for (const [packageName, packageSize] of sortedPackages) {
-      if (chunk.size - reducedSize <= oversizedThreshold) break;
-      splitPackages.push(packageName);
-      reducedSize += packageSize;
-    }
+    // Calculate reducedSize and splitedSize
+    const reducedSize = groupSizes.reduce((sum, group) => sum + group.size, 0);
+    const splitedSize = chunk.size - reducedSize;
 
     return {
-      id: chunk.id,
-      name: chunk.name,
-      size: chunk.size,
-      split: splitPackages,
-      reducedSize: reducedSize,
-      splitedSize: chunk.size - reducedSize,
-      median: median,
+      ...chunk,
+      groups: groupSizes,
+      reducedSize,
+      splitedSize,
+      median: medianSize,
     };
   });
 

@@ -17,15 +17,19 @@
   ],
   "scripts": {
     "build": "rslib build",
+    "build:mcp": "tsc -p tsconfig.build.json",
+    "dev:mcp": "pnpm run build:mcp && node ./dist/src/mcp/index.js",
     "dev": "rslib build --watch",
     "test": "vitest run"
   },
   "devDependencies": {
     "@rslib/core": "^0.2.2",
+    "@rsdoctor/types": "workspace: *",
     "@types/node": "^22.8.1",
     "dotenv": "^16.4.7",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "socket.io-client": "4.6.1"
   },
   "dependencies": {
     "@coze/api": "^1.0.15",

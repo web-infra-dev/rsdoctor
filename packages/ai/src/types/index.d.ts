@@ -24,6 +24,7 @@ interface FilteredModule {
   size: Size;
   chunks: string[];
   kind: number;
+  packageName: string | null;
 }
 
 export interface SimpleChunk {
