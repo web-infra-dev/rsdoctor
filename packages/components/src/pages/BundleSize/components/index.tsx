@@ -20,6 +20,7 @@ import {
 } from 'antd';
 import { debounce, includes, sumBy } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { SearchModal } from './search-modal';
 import { ServerAPIProvider, withServerAPI } from '../../../components/Manifest';
 import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
@@ -276,275 +277,259 @@ export const WebpackModulesOverallBase: React.FC<
   };
 
   return (
-    <div className="bundle-size-card">
-      <BundleCards cwd={cwd} errors={errors} summary={summary} />
-      <Card
-        className="bundle-size=card"
-        tabList={tabList}
-        activeTabKey={graphType as 'tree' | 'tile'}
-        onTabChange={(e) => setGraphType(e as 'tree' | 'tile')}
-        hidden={graphType === 'tree'}
-        tabProps={{
-          size: 'middle',
-        }}
-      >
-        <Row>
-          <Typography.Text code>From: webpack-bundle-analyzer</Typography.Text>
-        </Row>
-        <ServerAPIProvider api={SDK.ServerAPI.API.GetTileReportHtml} body={{}}>
-          {(data) => {
-            if (data && graphType === 'tile') {
+    <>
+      <div className="bundle-size-card">
+        <BundleCards cwd={cwd} errors={errors} summary={summary} />
+        <Card
+          className="bundle-size=card"
+          tabList={tabList}
+          activeTabKey={graphType as 'tree' | 'tile'}
+          onTabChange={(e) => setGraphType(e as 'tree' | 'tile')}
+          hidden={graphType === 'tree'}
+          tabProps={{
+            size: 'middle',
+          }}
+        >
+          <Row>
+            <Typography.Text code>
+              From: webpack-bundle-analyzer
+            </Typography.Text>
+          </Row>
+          <ServerAPIProvider
+            api={SDK.ServerAPI.API.GetTileReportHtml}
+            body={{}}
+          >
+            {(data) => {
+              if (data && graphType === 'tile') {
+                return (
+                  <iframe
+                    srcDoc={data}
+                    width={'100%'}
+                    height={largeCardBodyHeight}
+                    style={{ border: 'none' }}
+                  />
+                );
+              }
               return (
-                <iframe
-                  srcDoc={data}
-                  width={'100%'}
-                  height={largeCardBodyHeight}
-                  style={{ border: 'none' }}
+                <Empty
+                  description={
+                    <div>
+                      Tile graph is disabled,
+                      <a href="https://rsdoctor.dev/config/options/options#generatetilegraph">
+                        see the documentation to learn how to enable.
+                      </a>
+                    </div>
+                  }
                 />
               );
-            }
-            return (
-              <Empty
-                description={
-                  <div>
-                    Tile graph is disabled,
-                    <a href="https://rsdoctor.dev/config/options/options#generatetilegraph">
-                      see the documentation to learn how to enable.
-                    </a>
-                  </div>
-                }
-              />
-            );
-          }}
-        </ServerAPIProvider>
-      </Card>
+            }}
+          </ServerAPIProvider>
+        </Card>
 
-      <Card
-        hidden={graphType === 'tile'}
-        tabList={tabList}
-        activeTabKey={graphType as 'tree' | 'tile'}
-        onTabChange={(e) => setGraphType(e as 'tree' | 'tile')}
-        tabProps={{
-          size: 'middle',
-        }}
-      >
-        <Row align="middle" gutter={[Size.BasePadding, Size.BasePadding]}>
-          {entryPoints && entryPoints.length ? (
-            <Col>
-              <Select
-                mode="multiple"
-                value={selectedEntryPoints.map((e) => e.name)}
-                style={{ minWidth: 230, width: 'auto', maxWidth: 300 }}
-                placeholder={'filter assets by entry point'}
-                onChange={(name: string[]) => {
-                  setEntryPoints(
-                    name
-                      .map((e) => entryPoints.find((ep) => ep.name === e)!)
-                      .filter(Boolean),
-                  );
-                }}
-                allowClear
-                onClear={() => {
-                  setEntryPoints([]);
-                }}
-              >
-                {entryPoints.map((e) => {
-                  return (
-                    <Select.Option key={e.name} value={e.name}>
-                      <Space>
-                        <Bdg
-                          label={e.name}
-                          value={formatSize(e.size)}
-                          tooltip={e.name}
-                        />
-                      </Space>
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Col>
-          ) : null}
-          <Col>
-            <KeywordInput
-              placeholder="search asset by keyword"
-              onChange={onSearch}
-            />
-          </Col>
-          <Col span={7}>
-            <InputNumber
-              min={0}
-              style={{ width: '95%' }}
-              addonBefore={
-                <Space>
-                  <Typography.Text style={{ fontSize: 14, color: 'inherit' }}>
-                    Asset Size
-                  </Typography.Text>
-                  <Tooltip
-                    title={t(
-                      'filter the output assets which size is greater than the input value',
-                    )}
-                    style={{ marginLeft: 3 }}
-                  >
-                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
-                  </Tooltip>
-                </Space>
-              }
-              onChange={(value) => onChangeAsset(Number(value))}
-              addonAfter={selectAfter('chunk')}
-            />
-          </Col>
-          <Col span={7}>
-            <InputNumber
-              min={0}
-              style={{ width: '95%' }}
-              addonBefore={
-                <Space>
-                  <Typography.Text style={{ fontSize: 14, color: 'inherit' }}>
-                    Module Size
-                  </Typography.Text>
-                  <Tooltip
-                    title={t(
-                      'filter the modules which size is greater than the input value',
-                    )}
-                    style={{ marginLeft: 3 }}
-                  >
-                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
-                  </Tooltip>
-                </Space>
-              }
-              onChange={(value) => {
-                onChangeModule(Number(value));
-              }}
-              addonAfter={selectAfter('module')}
-            />
-          </Col>
-          <Col span={7}>
-            <InputNumber
-              min={0}
-              style={{ width: '95%' }}
-              addonBefore={
-                <Space>
-                  <Typography.Text style={{ fontSize: 14, color: 'inherit' }}>
-                    Module Search
-                  </Typography.Text>
-                  <Tooltip
-                    title={t(
-                      'filter the modules which size is greater than the input value',
-                    )}
-                    style={{ marginLeft: 3 }}
-                  >
-                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
-                  </Tooltip>
-                </Space>
-              }
-              onChange={(value) => {
-                <ServerAPIProvider
-                  api={SDK.ServerAPI.API.GetSearchModules}
-                  body={{ moduleName: String(value) }}
-                >
-                  {(modules) => (
-                    <>
-                      {modules.map((module) => (
-                        <Typography.Text key={module.path}>
-                          {module.path}
-                        </Typography.Text>
-                      ))}
-                    </>
-                  )}
-                </ServerAPIProvider>;
-              }}
-              addonAfter={selectAfter('module')}
-            />
-          </Col>
-          <Col span={24}>
-            {filteredAssets.length ? (
-              <Row gutter={Size.BasePadding}>
-                <Col span={6}>
-                  <Card
-                    title={
-                      <Space>
-                        <Typography.Text>
-                          {t('Output Assets List')}
-                        </Typography.Text>
-                        <Divider type="vertical" />
-                        <Tooltip
-                          title={`total assets count is ${assets.length}, the filtered assets count is ${filteredAssets.length}`}
-                        >
-                          <Typography.Text
-                            type="secondary"
-                            style={{ fontSize: 12, fontWeight: 400 }}
-                          >
-                            {filteredAssets.length} / {assets.length}
-                          </Typography.Text>
-                        </Tooltip>
-                        <Divider type="vertical" />
-                        <Typography.Text
-                          type="secondary"
-                          style={{ fontSize: 12, fontWeight: 400 }}
-                        >
-                          {formatSize(sumBy(filteredAssets, (e) => e.size))}
-                        </Typography.Text>
-                      </Space>
-                    }
-                    size="small"
-                    bodyStyle={{
-                      overflow: 'scroll',
-                      height: cardBodyHeight,
+        <Card
+          hidden={graphType === 'tile'}
+          tabList={tabList}
+          activeTabKey={graphType as 'tree' | 'tile'}
+          onTabChange={(e) => setGraphType(e as 'tree' | 'tile')}
+          tabProps={{
+            size: 'middle',
+          }}
+        >
+          <Space direction="vertical">
+            <Row align="middle" gutter={[Size.BasePadding, Size.BasePadding]}>
+              {entryPoints && entryPoints.length ? (
+                <Col>
+                  <Select
+                    mode="multiple"
+                    value={selectedEntryPoints.map((e) => e.name)}
+                    style={{ minWidth: 230, width: 'auto', maxWidth: 300 }}
+                    placeholder={'filter assets by entry point'}
+                    onChange={(name: string[]) => {
+                      setEntryPoints(
+                        name
+                          .map((e) => entryPoints.find((ep) => ep.name === e)!)
+                          .filter(Boolean),
+                      );
+                    }}
+                    allowClear
+                    onClear={() => {
+                      setEntryPoints([]);
                     }}
                   >
-                    <FileTree
-                      className={styles.assets}
-                      treeData={assetsStructures}
-                      autoExpandParent
-                      defaultExpandAll={
-                        defaultExpandAll || filteredAssets.length <= 20
-                      }
-                      key={`tree_${inputAssetName}_${defaultExpandAll}`}
-                    />
-                  </Card>
+                    {entryPoints.map((e) => {
+                      return (
+                        <Select.Option key={e.name} value={e.name}>
+                          <Space>
+                            <Bdg
+                              label={e.name}
+                              value={formatSize(e.size)}
+                              tooltip={e.name}
+                            />
+                          </Space>
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
                 </Col>
-                <Col span={18}>
-                  {assetPath ? (
-                    <ServerAPIProvider
-                      api={SDK.ServerAPI.API.GetAssetDetails}
-                      body={{ assetPath }}
-                    >
-                      {(details) => (
-                        <AssetDetail
-                          asset={details.asset}
-                          chunks={details.chunks}
-                          modules={details.modules}
-                          height={cardBodyHeight}
-                          moduleSizeLimit={inputModule}
-                          root={cwd}
+              ) : null}
+              <Col>
+                <KeywordInput
+                  placeholder="search asset by keyword"
+                  onChange={onSearch}
+                />
+              </Col>
+              <Col span={6}>
+                <InputNumber
+                  min={0}
+                  style={{ width: '95%' }}
+                  addonBefore={
+                    <Space>
+                      <Typography.Text
+                        style={{ fontSize: 14, color: 'inherit' }}
+                      >
+                        Asset Size
+                      </Typography.Text>
+                      <Tooltip
+                        title={t(
+                          'filter the output assets which size is greater than the input value',
+                        )}
+                        style={{ marginLeft: 3 }}
+                      >
+                        <InfoCircleOutlined
+                          style={{ color: 'rgba(0,0,0,.45)' }}
                         />
-                      )}
-                    </ServerAPIProvider>
-                  ) : (
-                    <Card
-                      bodyStyle={{
-                        height: cardBodyHeight,
-                      }}
-                    >
-                      <Empty
-                        description={
-                          <Typography.Text strong>
-                            Click the file path on the left to show the modules
-                            of the asset
-                          </Typography.Text>
+                      </Tooltip>
+                    </Space>
+                  }
+                  onChange={(value) => onChangeAsset(Number(value))}
+                  addonAfter={selectAfter('chunk')}
+                />
+              </Col>
+              <Col span={6}>
+                <InputNumber
+                  min={0}
+                  style={{ width: '95%' }}
+                  addonBefore={
+                    <Space>
+                      <Typography.Text
+                        style={{ fontSize: 14, color: 'inherit' }}
+                      >
+                        Module Size
+                      </Typography.Text>
+                      <Tooltip
+                        title={t(
+                          'filter the modules which size is greater than the input value',
+                        )}
+                        style={{ marginLeft: 3 }}
+                      >
+                        <InfoCircleOutlined
+                          style={{ color: 'rgba(0,0,0,.45)' }}
+                        />
+                      </Tooltip>
+                    </Space>
+                  }
+                  onChange={(value) => {
+                    onChangeModule(Number(value));
+                  }}
+                  addonAfter={selectAfter('module')}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <SearchModal />
+            </Row>
+            <Row align="middle" gutter={[Size.BasePadding, Size.BasePadding]}>
+              <Col span={24}>
+                {filteredAssets.length ? (
+                  <Row gutter={Size.BasePadding}>
+                    <Col span={6}>
+                      <Card
+                        title={
+                          <Space>
+                            <Typography.Text>
+                              {t('Output Assets List')}
+                            </Typography.Text>
+                            <Divider type="vertical" />
+                            <Tooltip
+                              title={`total assets count is ${assets.length}, the filtered assets count is ${filteredAssets.length}`}
+                            >
+                              <Typography.Text
+                                type="secondary"
+                                style={{ fontSize: 12, fontWeight: 400 }}
+                              >
+                                {filteredAssets.length} / {assets.length}
+                              </Typography.Text>
+                            </Tooltip>
+                            <Divider type="vertical" />
+                            <Typography.Text
+                              type="secondary"
+                              style={{ fontSize: 12, fontWeight: 400 }}
+                            >
+                              {formatSize(sumBy(filteredAssets, (e) => e.size))}
+                            </Typography.Text>
+                          </Space>
                         }
-                      />
-                    </Card>
-                  )}
-                </Col>
-              </Row>
-            ) : (
-              <Empty />
-            )}
-          </Col>
-        </Row>
-      </Card>
-    </div>
+                        size="small"
+                        bodyStyle={{
+                          overflow: 'scroll',
+                          height: cardBodyHeight,
+                        }}
+                      >
+                        <FileTree
+                          className={styles.assets}
+                          treeData={assetsStructures}
+                          autoExpandParent
+                          defaultExpandAll={
+                            defaultExpandAll || filteredAssets.length <= 20
+                          }
+                          key={`tree_${inputAssetName}_${defaultExpandAll}`}
+                        />
+                      </Card>
+                    </Col>
+                    <Col span={18}>
+                      {assetPath ? (
+                        <ServerAPIProvider
+                          api={SDK.ServerAPI.API.GetAssetDetails}
+                          body={{ assetPath }}
+                        >
+                          {(details) => (
+                            <AssetDetail
+                              asset={details.asset}
+                              chunks={details.chunks}
+                              modules={details.modules}
+                              height={cardBodyHeight}
+                              moduleSizeLimit={inputModule}
+                              root={cwd}
+                            />
+                          )}
+                        </ServerAPIProvider>
+                      ) : (
+                        <Card
+                          bodyStyle={{
+                            height: cardBodyHeight,
+                          }}
+                        >
+                          <Empty
+                            description={
+                              <Typography.Text strong>
+                                Click the file path on the left to show the
+                                modules of the asset
+                              </Typography.Text>
+                            }
+                          />
+                        </Card>
+                      )}
+                    </Col>
+                  </Row>
+                ) : (
+                  <Empty />
+                )}
+              </Col>
+            </Row>
+          </Space>
+        </Card>
+      </div>
+    </>
   );
 };
 

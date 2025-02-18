@@ -49,4 +49,8 @@ export interface GraphAPIRequestBody {
   [API.GetSearchModules]: {
     moduleName: string;
   };
+  [API.GetSearchModuleInChunk]: {
+    moduleName: string;
+    chunk: string;
+  };
 }
