@@ -110,6 +110,15 @@
   }
 }
 
+.modal {
+  :global {
+    .ant-input-affix-wrapper {
+      padding: 4px 5px;
+      width: 490px;
+    }
+  }
+}
+
 .search-btn {
   color: white;
 

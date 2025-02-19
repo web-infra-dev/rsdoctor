@@ -1,5 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Modal, Input, Tabs, List, Skeleton, Typography } from 'antd';
+import {
+  Button,
+  Modal,
+  Input,
+  Tabs,
+  List,
+  Skeleton,
+  Typography,
+  Empty,
+} from 'antd';
 import { SearchProps } from 'antd/es/input';
 import { ServerAPIProvider } from 'src/components';
 import { SDK } from '@rsdoctor/types';
@@ -49,6 +58,7 @@ export const SearchModal: React.FC = () => {
           return (
             <>
               <Modal
+                className={styles.modal}
                 title="Search Modules"
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -62,7 +72,7 @@ export const SearchModal: React.FC = () => {
                   onSearch={onSearch}
                   style={{ width: 500 }}
                 />
-                {
+                {defaultChunkId ? (
                   <Tabs
                     defaultActiveKey={defaultChunkId}
                     tabPosition={'top'}
@@ -79,7 +89,9 @@ export const SearchModal: React.FC = () => {
                       };
                     })}
                   />
-                }
+                ) : (
+                  <Empty description={'No modules found.'} />
+                )}
               </Modal>
             </>
           );
@@ -96,64 +108,55 @@ const ModulesModal = (searchModule: string, chunk: string) => {
       body={{ moduleName: String(searchModule), chunk }}
     >
       {(modules) => (
-        <div>
-          {
-            <>
-              <List
-                className={styles['search-modal-list']}
-                loading={!modules.length}
-                itemLayout="horizontal"
-                pagination={{ position: 'bottom', align: 'center' }}
-                dataSource={modules}
-                renderItem={(item) => {
-                  const itemPathArr = item.relativePath.split(searchModule);
-                  return (
-                    <List.Item>
-                      <Skeleton
-                        avatar
-                        title={false}
-                        loading={!item.path}
-                        active
-                      >
-                        <List.Item.Meta
-                          description={
-                            <>
-                              <Typography.Text code>
-                                {'Module:'}
-                              </Typography.Text>
-                              {itemPathArr.map((cur, index) => {
-                                if (index < itemPathArr.length - 1) {
-                                  return (
-                                    <Typography.Text
-                                      style={{ fontWeight: 200 }}
-                                    >
-                                      {cur}
-                                      <Typography.Text
-                                        strong
-                                        style={{ fontWeight: 600 }}
-                                      >
-                                        {searchModule}
-                                      </Typography.Text>
-                                    </Typography.Text>
-                                  );
-                                }
+        <>
+          {modules?.length !== 0 ? (
+            <List
+              className={styles['search-modal-list']}
+              loading={!modules.length}
+              itemLayout="horizontal"
+              pagination={{ position: 'bottom', align: 'center' }}
+              dataSource={modules}
+              renderItem={(item) => {
+                const itemPathArr = item.relativePath.split(searchModule);
+                return (
+                  <List.Item>
+                    <Skeleton avatar title={false} loading={!item.path} active>
+                      <List.Item.Meta
+                        description={
+                          <>
+                            <Typography.Text code>{'Module:'}</Typography.Text>
+                            {itemPathArr.map((cur, index) => {
+                              if (index < itemPathArr.length - 1) {
                                 return (
                                   <Typography.Text style={{ fontWeight: 200 }}>
                                     {cur}
+                                    <Typography.Text
+                                      strong
+                                      style={{ fontWeight: 600 }}
+                                    >
+                                      {searchModule}
+                                    </Typography.Text>
                                   </Typography.Text>
                                 );
-                              })}
-                            </>
-                          }
-                        />
-                      </Skeleton>
-                    </List.Item>
-                  );
-                }}
-              />
-            </>
-          }
-        </div>
+                              }
+                              return (
+                                <Typography.Text style={{ fontWeight: 200 }}>
+                                  {cur}
+                                </Typography.Text>
+                              );
+                            })}
+                          </>
+                        }
+                      />
+                    </Skeleton>
+                  </List.Item>
+                );
+              }}
+            />
+          ) : (
+            <Empty />
+          )}
+        </>
       )}
     </ServerAPIProvider>
   );
