@@ -62,6 +62,8 @@ export enum API {
   GetAllModuleGraph = '/api/graph/module/all',
   GetAllChunkGraph = '/api/graph/chunk/all',
   GetLayers = '/api/graph/layers',
+  GetSearchModules = '/api/search/modules',
+  GetSearchModuleInChunk = '/api/search/chunk/modules',
 
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',
@@ -122,6 +124,12 @@ export interface ResponseTypes
   [API.GetModuleCodeByModuleId]: SDK.ModuleSource;
   [API.GetModuleCodeByModuleIds]: SDK.ModuleCodeData;
   [API.GetAllModuleGraph]: SDK.ModuleData[];
+  [API.GetSearchModules]: Record<string, string>;
+  [API.GetSearchModuleInChunk]: {
+    id: string;
+    path: string;
+    relativePath: string;
+  }[];
   [API.GetAllChunkGraph]: SDK.ChunkData[];
 }
 
