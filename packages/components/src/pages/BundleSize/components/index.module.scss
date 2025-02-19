@@ -131,3 +131,12 @@
     opacity: 0;
   }
 }
+
+.search-modal-list {
+  :global {
+    .ant-spin-container {
+      overflow: auto;
+      max-height: 30rem;
+    }
+  }
+}

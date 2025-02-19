@@ -26,6 +26,14 @@ export const SearchModal: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <Button className={styles['search-btn']} color="cyan" onClick={showModal}>
@@ -40,7 +48,14 @@ export const SearchModal: React.FC = () => {
           const defaultChunkId = Object.keys(assetsChunksList)[0];
           return (
             <>
-              <Modal title="Search Modules" open={isModalOpen} width={700}>
+              <Modal
+                title="Search Modules"
+                onOk={handleOk}
+                onCancel={handleCancel}
+                open={isModalOpen}
+                width={'65rem'}
+                footer=""
+              >
                 <Search
                   placeholder="input search module name"
                   allowClear
@@ -85,25 +100,56 @@ const ModulesModal = (searchModule: string, chunk: string) => {
           {
             <>
               <List
-                className="search-modules-list"
+                className={styles['search-modal-list']}
                 loading={!modules.length}
                 itemLayout="horizontal"
                 pagination={{ position: 'bottom', align: 'center' }}
                 dataSource={modules}
-                renderItem={(item) => (
-                  <List.Item>
-                    <Skeleton avatar title={false} loading={!item.path} active>
-                      <List.Item.Meta
-                        description={
-                          <>
-                            <Typography.Text code>{'Module:'}</Typography.Text>
-                            {`${item.relativePath}`}
-                          </>
-                        }
-                      />
-                    </Skeleton>
-                  </List.Item>
-                )}
+                renderItem={(item) => {
+                  const itemPathArr = item.relativePath.split(searchModule);
+                  return (
+                    <List.Item>
+                      <Skeleton
+                        avatar
+                        title={false}
+                        loading={!item.path}
+                        active
+                      >
+                        <List.Item.Meta
+                          description={
+                            <>
+                              <Typography.Text code>
+                                {'Module:'}
+                              </Typography.Text>
+                              {itemPathArr.map((cur, index) => {
+                                if (index < itemPathArr.length - 1) {
+                                  return (
+                                    <Typography.Text
+                                      style={{ fontWeight: 200 }}
+                                    >
+                                      {cur}
+                                      <Typography.Text
+                                        strong
+                                        style={{ fontWeight: 600 }}
+                                      >
+                                        {searchModule}
+                                      </Typography.Text>
+                                    </Typography.Text>
+                                  );
+                                }
+                                return (
+                                  <Typography.Text style={{ fontWeight: 200 }}>
+                                    {cur}
+                                  </Typography.Text>
+                                );
+                              })}
+                            </>
+                          }
+                        />
+                      </Skeleton>
+                    </List.Item>
+                  );
+                }}
               />
             </>
           }
