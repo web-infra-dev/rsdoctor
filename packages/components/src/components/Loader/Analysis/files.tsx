@@ -105,10 +105,7 @@ export const LoaderFiles: React.FC<{
               }}
             >
               <div className={styles.keywords}>
-                <Keyword
-                  text={basename.replace(/\[.*?\]/g, '')}
-                  keyword={props.filename}
-                />
+                <Keyword text={basename.replace(/\[.*?\]/g, '')} keyword={''} />
               </div>
               <div className={styles.dividerDiv}>
                 <Divider className={styles.divider} dashed />
@@ -209,7 +206,7 @@ export const LoaderFiles: React.FC<{
         );
       },
       dirTitle(_dir, defaultTitle) {
-        return <Keyword text={defaultTitle} keyword={props.filename} />;
+        return <Keyword text={defaultTitle} keyword={''} />;
       },
     });
   }, [filteredFiles]);

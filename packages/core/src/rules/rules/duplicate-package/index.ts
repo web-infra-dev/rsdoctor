@@ -41,7 +41,11 @@ export const rule = defineRule<typeof title, Config>(() => ({
             gt(_packA.version, _packB.version) ? 1 : -1,
           );
       })
-      .filter((pkgs) => pkgs.length > 1);
+      .filter(
+        (pkgs) =>
+          pkgs.length > 1 &&
+          pkgs.filter((pkg) => pkg.getSize().parsedSize > 0).length > 1,
+      );
 
     for (const pkg of packages) {
       const message = getErrorMsg(pkg, root);

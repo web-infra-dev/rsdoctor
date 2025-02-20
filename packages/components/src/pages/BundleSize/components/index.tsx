@@ -38,7 +38,7 @@ import { GraphType } from '../constants';
 
 const { Option } = Select;
 
-const cardBodyHeight = 410;
+const cardBodyHeight = 600;
 
 const largeCardBodyHeight = 800;
 
@@ -241,11 +241,7 @@ export const WebpackModulesOverallBase: React.FC<
               setAssetPath(path);
             }}
           >
-            <Keyword
-              text={basename}
-              keyword={inputAssetName}
-              className={styles.fileText}
-            />
+            <Keyword text={basename} keyword={''} className={styles.fileText} />
             <Space size="small" className={styles.assetsTag}>
               <Divider type="vertical" />
               <Typography.Text style={{ color: '#4FD233' }}>
