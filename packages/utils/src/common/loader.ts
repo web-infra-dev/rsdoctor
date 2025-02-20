@@ -156,7 +156,7 @@ export function getLoaderChartData(
     item.loaders.forEach((el) => {
       res.push({
         layer: item.resource.layer,
-        loader: el.loader,
+        loader: getLoadrName(el.loader),
         isPitch: el.isPitch,
         startAt: el.startAt,
         endAt: el.endAt,
@@ -183,7 +183,7 @@ export function getLoaderFileTree(
       loaders: arr.map((l) => {
         return {
           key: l.path,
-          loader: l.loader,
+          loader: getLoadrName(l.loader),
           path: l.path,
           errors: l.errors,
           costs: getLoaderCosts(l, list),
@@ -210,6 +210,7 @@ export function getLoaderFileDetails(
     loaders: data.loaders.map((el) => {
       return {
         ...el,
+        loader: getLoadrName(el.loader),
         costs: getLoaderCosts(el, list),
       };
     }),
@@ -333,4 +334,11 @@ export const isVue = (compiler: Plugin.BaseCompiler) => {
     return false;
   });
   return hasVueRule;
+};
+
+const getLoadrName = (loader: string) => {
+  const regResults = loader.includes('node_modules')
+    ? loader.split('node_modules')
+    : null;
+  return regResults ? regResults[regResults.length - 1] : loader;
 };
