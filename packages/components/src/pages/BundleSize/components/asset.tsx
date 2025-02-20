@@ -396,7 +396,7 @@ export const AssetDetail: React.FC<{
           <div className={styles['bundle-tree']}>
             <div className={styles.box}>
               <div className={styles.keywords}>
-                <Keyword ellipsis text={basename} keyword={moduleKeyword} />
+                <Keyword ellipsis text={basename} keyword={''} />
               </div>
 
               <div className={styles.dividerDiv}>
@@ -563,7 +563,7 @@ export const AssetDetail: React.FC<{
       <Card
         className={styles.bundle}
         title={`Modules of "${asset.path}"`}
-        bodyStyle={{ overflow: 'scroll', height }}
+        bodyStyle={{ minHeight: height }}
         size="small"
       >
         {includeModules.length ? (
@@ -610,7 +610,8 @@ export const AssetDetail: React.FC<{
                   }
                   treeData={fileStructures as AntdDataNode[]}
                   rootStyle={{
-                    minHeight: '800px',
+                    maxHeight: '500px',
+                    overflow: 'auto',
                     border: '1px solid rgba(235, 237, 241)',
                     padding: '14px 20px',
                   }}
