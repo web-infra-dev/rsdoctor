@@ -127,7 +127,9 @@ export function getLoaderNames(
 ): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderNames> {
   const names: Set<string> = new Set();
 
-  loaders.forEach((e) => e.loaders.forEach((l) => names.add(l.loader)));
+  loaders.forEach((e) =>
+    e.loaders.forEach((l) => names.add(getLoadrName(l.loader))),
+  );
 
   return [...names];
 }
