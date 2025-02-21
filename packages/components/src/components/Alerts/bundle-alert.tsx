@@ -47,11 +47,6 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
       data: [],
     },
     {
-      key: 'E1005',
-      label: 'Default Import Check',
-      data: [],
-    },
-    {
       key: 'E1003',
       label: 'Loader Performance Optimization',
       data: [],
@@ -59,6 +54,11 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
     {
       key: 'E1004',
       label: 'ECMA Version Check',
+      data: [],
+    },
+    {
+      key: 'E1005',
+      label: 'Default Import Check',
       data: [],
     },
   ];
