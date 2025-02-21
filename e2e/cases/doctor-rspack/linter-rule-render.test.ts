@@ -119,7 +119,7 @@ test('linter rule render check', async () => {
   // Navigate to a URL
   await page.goto(`file:///${reportPath}`);
 
-  const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
+  const ecmaVersionButton = await page.$('[data-node-key="E1003"]');
   await ecmaVersionButton?.click();
   // ignore output text check because there's no .map file for track the source code
   const source = await page.$('.e2e-ecma-source');
