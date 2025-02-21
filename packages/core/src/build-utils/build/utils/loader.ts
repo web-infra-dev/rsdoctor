@@ -122,6 +122,7 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
         const newRule = {
           ...rule,
           use: (...args: any) => {
+            // @ts-expect-error TODO: data type is not the same between webpack and rspack
             const rules = funcUse.apply(null, args) as T[];
             return mapEachRules(rules, callback);
           },
