@@ -6,7 +6,6 @@ settings:
 
 overrides:
   react-dom: 18.3.1
-  '@rspack/core': npm:@rspack-canary/core@1.2.0-canary-2c837231-20250117124511
 
 importers:
 
@@ -326,8 +325,8 @@ importers:
         specifier: ^1.2.5
         version: 1.2.5(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/express@4.17.21)(webpack@5.97.1)
       '@rspack/core':
-        specifier: npm:@rspack-canary/core@1.2.0-canary-2c837231-20250117124511
-        version: /@rspack-canary/core@1.2.0-canary-2c837231-20250117124511(@swc/helpers@0.5.15)
+        specifier: ^1.2.5
+        version: 1.2.5(@swc/helpers@0.5.15)
       '@rspack/plugin-react-refresh':
         specifier: ^1.0.1
         version: 1.0.1(react-refresh@0.14.2)
@@ -11824,7 +11823,6 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/css'
       - '@rspack/core'
-      - '@rspack/tracing'
       - '@swc/core'
       - '@swc/css'
       - '@types/webpack'
@@ -12229,7 +12227,6 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/css'
       - '@rspack/core'
-      - '@rspack/tracing'
       - '@swc/core'
       - '@swc/css'
       - '@types/webpack'
@@ -12276,8 +12273,7 @@ snapshots:
 
   '@module-federation/runtime@0.5.1':
     dependencies:
-      '@module-federation/runtime': 0.8.4
-      '@module-federation/webpack-bundler-runtime': 0.8.4
+      '@module-federation/sdk': 0.5.1
 
   '@module-federation/runtime@0.8.4':
     dependencies:
@@ -12292,19 +12288,8 @@ snapshots:
 
   '@module-federation/webpack-bundler-runtime@0.5.1':
     dependencies:
-      '@module-federation/error-codes': 0.8.4
-      '@module-federation/sdk': 0.8.4
-
-  /@module-federation/sdk@0.8.4:
-    resolution: {integrity: sha512-waABomIjg/5m1rPDBWYG4KUhS5r7OUUY7S+avpaVIY/tkPWB3ibRDKy2dNLLAMaLKq0u+B1qIdEp4NIWkqhqpg==}
-    dependencies:
-      isomorphic-rslog: 0.0.6
-
-  /@module-federation/webpack-bundler-runtime@0.8.4:
-    resolution: {integrity: sha512-HggROJhvHPUX7uqBD/XlajGygMNM1DG0+4OAkk8MBQe4a18QzrRNzZt6XQbRTSG4OaEoyRWhQHvYD3Yps405tQ==}
-    dependencies:
-      '@module-federation/runtime': 0.8.4
-      '@module-federation/sdk': 0.8.4
+      '@module-federation/runtime': 0.5.1
+      '@module-federation/sdk': 0.5.1
 
   '@module-federation/webpack-bundler-runtime@0.8.4':
     dependencies:
@@ -12552,12 +12537,10 @@ snapshots:
 
   '@rsbuild/core@1.1.13':
     dependencies:
-      '@rspack/core': /@rspack-canary/core@1.2.0-canary-2c837231-20250117124511(@swc/helpers@0.5.15)
+      '@rspack/core': 1.1.8(@swc/helpers@0.5.15)
       '@rspack/lite-tapable': 1.0.1
       '@swc/helpers': 0.5.15
       core-js: 3.39.0
-    transitivePeerDependencies:
-      - '@rspack/tracing'
 
   '@rsbuild/core@1.2.3':
     dependencies:
@@ -12961,17 +12944,8 @@ snapshots:
   '@rspack/binding-win32-x64-msvc@1.2.3':
     optional: true
 
-  '@rspack/binding@1.0.0':
-    optionalDependencies:
-      '@rspack/binding-darwin-arm64': /@rspack-canary/binding-darwin-arm64@1.2.0-canary-2c837231-20250117124511
-      '@rspack/binding-darwin-x64': /@rspack-canary/binding-darwin-x64@1.2.0-canary-2c837231-20250117124511
-      '@rspack/binding-linux-arm64-gnu': /@rspack-canary/binding-linux-arm64-gnu@1.2.0-canary-2c837231-20250117124511
-      '@rspack/binding-linux-arm64-musl': /@rspack-canary/binding-linux-arm64-musl@1.2.0-canary-2c837231-20250117124511
-      '@rspack/binding-linux-x64-gnu': /@rspack-canary/binding-linux-x64-gnu@1.2.0-canary-2c837231-20250117124511
-      '@rspack/binding-linux-x64-musl': /@rspack-canary/binding-linux-x64-musl@1.2.0-canary-2c837231-20250117124511
-      '@rspack/binding-win32-arm64-msvc': /@rspack-canary/binding-win32-arm64-msvc@1.2.0-canary-2c837231-20250117124511
-      '@rspack/binding-win32-ia32-msvc': /@rspack-canary/binding-win32-ia32-msvc@1.2.0-canary-2c837231-20250117124511
-      '@rspack/binding-win32-x64-msvc': /@rspack-canary/binding-win32-x64-msvc@1.2.0-canary-2c837231-20250117124511
+  '@rspack/binding-win32-x64-msvc@1.2.5':
+    optional: true
 
   '@rspack/binding@1.1.8':
     optionalDependencies:
@@ -13070,23 +13044,12 @@ snapshots:
 
   '@rspack/core@1.2.5(@swc/helpers@0.5.15)':
     dependencies:
-      '@rspack/core': /@rspack-canary/core@1.2.0-canary-2c837231-20250117124511(@swc/helpers@0.5.15)
-      chokidar: 3.6.0
-      connect-history-api-fallback: 2.0.0
-      express: 4.21.2
-      http-proxy-middleware: 2.0.7(@types/express@4.17.21)
-      mime-types: 2.1.35
-      webpack-dev-middleware: 7.4.2(webpack@5.97.1)
-      webpack-dev-server: 5.2.0(webpack@5.97.1)
-      ws: 8.18.0
-    transitivePeerDependencies:
-      - '@types/express'
-      - bufferutil
-      - debug
-      - supports-color
-      - utf-8-validate
-      - webpack
-      - webpack-cli
+      '@module-federation/runtime-tools': 0.8.4
+      '@rspack/binding': 1.2.5
+      '@rspack/lite-tapable': 1.0.1
+      caniuse-lite: 1.0.30001692
+    optionalDependencies:
+      '@swc/helpers': 0.5.15
 
   '@rspack/dev-server@1.0.10(@rspack/core@1.2.5(@swc/helpers@0.5.15))(@types/express@4.17.21)(webpack@5.97.1)':
     dependencies:
