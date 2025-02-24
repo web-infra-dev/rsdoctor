@@ -47,6 +47,7 @@ export function patchNativeModuleGraph(
       module.kind === 'concatenated'
         ? SDK.ModuleKind.Concatenation
         : SDK.ModuleKind.Normal,
+      undefined,
       module.layer,
     );
     res.setId(module.ukey);

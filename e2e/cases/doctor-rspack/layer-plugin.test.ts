@@ -157,10 +157,8 @@ test('rspack data store', async () => {
   const datas = sdk.getStoreData();
   const graphData = datas.moduleGraph;
   const layerList = graphData.modules.map((m) => m.layer);
-  expect(JSON.stringify(layerList)).toMatch(
-    JSON.stringify(['modern', 'legacy', 'modern', 'legacy']),
-  );
-  expect(JSON.stringify(graphData.layers)).toMatch(
-    JSON.stringify(['modern', 'legacy']),
-  );
+  expect(layerList.filter((i) => i === 'modern').length).toBe(2);
+  expect(layerList.filter((i) => i === 'legacy').length).toBe(2);
+  expect(graphData.layers).toContain('modern');
+  expect(graphData.layers).toContain('legacy');
 });

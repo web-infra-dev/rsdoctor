@@ -5,6 +5,8 @@ import { File } from '@rsdoctor/utils/build';
 import { tmpdir } from 'os';
 import path from 'path';
 
+const RSPACK_NATIVE_PLUGIN = process.env.RSPACK_NATIVE_PLUGIN === 'true';
+
 export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
   options: RsdoctorRspackPluginOptions<T>,
 ) {
@@ -14,6 +16,9 @@ export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
       typeof options.disableClientServer === 'boolean'
         ? options.disableClientServer
         : true,
+    experiments: {
+      enableNativePlugin: RSPACK_NATIVE_PLUGIN,
+    },
   });
 
   const outdir = path.resolve(
