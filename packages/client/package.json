@@ -19,10 +19,10 @@
     "preview": "rsbuild preview"
   },
   "devDependencies": {
-    "@rsbuild/core": "^1.2.8",
+    "@rsbuild/core": "^1.2.11",
     "@rsbuild/plugin-node-polyfill": "^1.3.0",
-    "@rsbuild/plugin-react": "^1.1.0",
-    "@rsbuild/plugin-sass": "^1.2.1",
+    "@rsbuild/plugin-react": "^1.1.1",
+    "@rsbuild/plugin-sass": "^1.2.2",
     "@rsbuild/plugin-type-check": "^1.2.1",
     "@rsdoctor/components": "workspace:*",
     "@rsdoctor/types": "workspace:*",
