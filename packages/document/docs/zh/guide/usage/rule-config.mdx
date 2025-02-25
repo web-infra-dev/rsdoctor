@@ -18,97 +18,20 @@
 
 ## 如何使用
 
-诊断规则的使用很简单，它配置在整个插件的`linter`选项下，如下用例：
+目前 Rsdoctor 提供**内置规则**和**自定义规则**两种。
 
-```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+### 内置规则
 
-export default {
-  plugin: [
-    new RsdoctorWebpackPlugin({
-      linter: {
-        level: 'Error',
-        extends: [],
-        rules: {
-          'default-import-check': 'off',
-          'duplicate-package': [
-            'Error',
-            {
-              checkVersion: 'minor',
-              ignore: ['chalk', '@babel/runtime'],
-            },
-          ],
-        },
-      },
-    }),
-  ],
-};
-```
+在现有的诊断器中已经包含了多个规则，默认都已全部开启，它们分别是：
 
-#### 开启 ECMA version check
+1. [[E1001] Duplicate Packages](/guide/rules/rules#e1001-duplicate-packages)
+2. [[E1002] Cross Chunks Package](/guide/rules/rules#e1002-cross-chunks-package)
+3. [[E1003] Loader Performance Optimization](/guide/rules/rules#e1003-loader-performance-optimization)
+4. [[E1004] ECMA Version Check](/guide/rules/rules#e1004-ecma-version-check)
+5. [[E1005] Default Import Check](/guide/rules/rules#e1005-default-import-check)
 
-优先使用 `browserslist` 的配置，如果没有 `browserslist` 则通过以下配置的方式进行检测
+具体可以查看[内置规则](/guide/rules/rules)。
 
-```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+### 自定义规则
 
-export default {
-  plugin: [
-    new RsdoctorWebpackPlugin({
-      linter: {
-        rules: {
-          'ecma-version-check': [
-            'Warn',
-            {
-              ecmaVersion: 2015,
-              // targets: ["chrome >= 53"],
-            },
-          ],
-        },
-      },
-    }),
-  ],
-};
-```
-
-更多 `ECMA Version Check` 配置请参考 [ECMA Version Check Options](https://github.com/rspack-contrib/rsbuild-plugin-check-syntax?tab=readme-ov-file#options)
-
-`linter`字段的类型为：
-
-```ts
-/** 校验器选项 */
-interface Options {
-  rules?: RulesMap;
-  level?: SeverityString;
-  extends?: ExtendRuleData[];
-}
-
-/**
- * 校验等级
- *   - `'Warn'`时只运行类别为`'Warn'`的规则
- *   - `'Error'`时运行全部规则
- */
-type SeverityString = 'Warn' | 'Error';
-
-/** 规则等级 */
-type SeverityInput = SeverityString | 'off' | 'on';
-
-/** 规则配置 */
-type RulesMap = Record<string, RuleConfigItem>;
-
-/** 单规则配置 */
-type RuleConfigItem =
-  // 仅有报错等级，此等级优先级高于规则自身配置
-  | SeverityInput
-  // 数组情况下，第一项为报错等级，后一项是规则配置
-  | [SeverityInput, unknown];
-```
-
-## 内部已有规则
-
-在现有的诊断器中已经包含了三个规则，它们分别是：
-
-1. [[E1001] Duplicate Packages](./bundle-alerts#%E9%87%8D%E5%A4%8D%E7%AC%AC%E4%B8%89%E6%96%B9%E5%8C%85)
-2. [[E1005] Default Import Check](../more/rules)
-3. [[E1003] Loader Performance Optimization](../more/rules)
-4. [[E1004] ECMA Version Check](../more/rules)
+Rsdoctor 还会把分析后的数据收集后，用户可以通过 Linter API 接入自定义规则，自定义规则详情查看[自定义规则](/guide/rules/rule-custom)。

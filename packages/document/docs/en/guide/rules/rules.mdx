@@ -1,0 +1,281 @@
+# Built-in rules
+
+## Introduction
+
+:::tip
+
+Please refer to the [Linter Type](#linter-type) in this document for the type definition of `linter`.
+
+:::
+
+### [E1001] Duplicate Packages
+
+#### Rule Details
+
+- The `Duplicate Packages` card displays the number of duplicate third-party packages in the project. Clicking the image allows you to view the specific details of the duplicate third-party packages. Note: The third-party packages referred to here are all bundled third-party packages.
+
+  <div style={{ display: 'flex' }}>
+    <img
+      src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-1.png"
+      height="200px"
+      width="260px"
+      style={{ margin: 'auto' }}
+    />
+    <img
+      src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-2.png"
+      height="300px"
+      width="340px"
+      style={{ margin: 'auto' }}
+    />
+  </div>
+
+- Duplicate Package Warning Card
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts.png" />
+
+- Clicking the icon to expand the duplicate package details allows you to see: the name, version, size, and reference files of the duplicate package.
+
+  - Clicking the **「Show Relations」** on the far right can view the specific reference chain and the corresponding reference file code position of this third-party package.
+
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-relations.png" />
+
+  - Clicking the **「!（exclamation mark）」** icon on the far right can view the specific explanation of the rule for the duplicate third-party package.
+
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-rule.png" />
+
+#### Configuration
+
+- Configuration Example:
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        level: 'Error',
+        extends: [],
+        rules: {
+          'duplicate-package': [
+            'Error',
+            {
+              checkVersion: 'minor',
+              ignore: ['chalk', '@babel/runtime'],
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
+##### Type
+
+- **ignore**: Configures the packages to be ignored.
+- **checkVersion**: Refers to the maximum version level to be checked, for example: if set to `minor`, then the duplicate package will no longer check the `major` level differences. **Default is `major`**.
+
+```ts
+interface Config {
+  checkVersion: keyof typeof CheckVersion;
+  ignore: string[];
+}
+
+enum CheckVersion {
+  null = 0,
+  prerelease = 0x1,
+  prepatch = 0x10,
+  patch = 0x100,
+  preminor = 0x1000,
+  minor = 0x10000,
+  premajor = 0x100000,
+  major = 0x1000000,
+}
+```
+
+#### Duplicate Package Optimization Problem
+
+Please refer to the [Duplicate Package Optimization Solution](../../blog/topic/duplicate-pkg-problem).
+
+Clicking 「**More**」 can view the corresponding rule explanation.
+
+### [E1002] Cross Chunks Package
+
+The cross chunks duplicate package rule can scan **duplicate packages in different `chunks`**. These duplicate packages may also lead to redundant code in the build artifacts, depending on the business logic and the size of the redundant code.
+
+- Display
+  - Module refers to the module that is repeatedly packaged in multiple chunks.
+  - Chunks are the build artifacts that are repeatedly packaged.
+
+<img src="/cross-chunks-package.png" />
+
+#### Solution
+
+Please refer to [[E1002] Cross Chunks Packages](../more/rules)
+
+### [E1003] Loader Performance Optimization
+
+This module allows you to visually see some warning information about our project's compilation, which can help us further optimize the project's compilation performance.
+
+#### Solution
+
+Please refer to [[E1003] Loader Performance Optimization](../more/rules)
+
+#### Configuration Type
+
+- **ignore**: Can include strings or regular expressions, used to specify the loaders to be ignored.
+- **threshold**: Represents the total time threshold for the loader, in milliseconds. If the loader's execution time exceeds this threshold, it may trigger warnings or errors. The default value is 5000 milliseconds.
+- **extensions**: Strings or regular expressions, used to specify the file extensions that need to be matched in rule checks. By default, it includes common file types such as js, css, jpg, jpeg, png, gif, webp, and svg.
+
+```ts
+interface Config {
+  /**
+   * loaders which should be ignore.
+   */
+  ignore: (string | RegExp)[];
+  /**
+   * threshold which the loader total costs.
+   * @unit millisecond
+   * @default 5000
+   */
+  threshold: number;
+  /**
+   * the file extensions which will be match in rule check.
+   * @default ["js", "css", "jpg", "jpeg", "png", "gif", "webp", "svg"]
+   */
+  extensions: (string | RegExp)[];
+}
+```
+
+### [E1004] ECMA Version Check
+
+This rule is used to detect incompatible advanced syntax. When scanning the rule, the configuration of `browserslist` is prioritized; if `browserslist` is not configured, manual detection is required, as shown below:
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'ecma-version-check': [
+            'Warn',
+            {
+              ecmaVersion: 2015,
+              // targets: ["chrome >= 53"],
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
+#### Type Definitions
+
+```ts
+type CheckSyntaxOptions = {
+  /**
+   * The target browser range of the project.
+   * Its value is a standard browserslist array.
+   */
+  targets?: string[];
+  /**
+   * Used to exclude a portion of source files during detection.
+   * You can pass in one or more regular expressions to match the paths of source files.
+   */
+  exclude?: CheckSyntaxExclude;
+  /**
+   * Used to exclude files by output path before detection.
+   * You can pass in one or more regular expressions to match the paths of source files.
+   */
+  excludeOutput?: CheckSyntaxExclude;
+  /**
+   * The minimum ECMAScript syntax version that can be used in the build artifact.
+   * The priority of `ecmaVersion` is higher than `targets`.
+   */
+  ecmaVersion?: EcmaVersion;
+  /**
+   * Used to ignore specified syntax error messages after detection.
+   * You can pass in one or more error message types to ignore.
+   */
+  excludeErrorLogs?: SyntaxErrorKey[];
+};
+```
+
+For more `ECMA Version Check` configuration options, please refer to [ECMA Version Check Options](https://github.com/rspack-contrib/rsbuild-plugin-check-syntax?tab=readme-ov-file#options)
+
+### [E1005] Default Import Check
+
+Typically, Rspack automatically supports different types of modules, but in some cases, compatibility operations may fail. For example, when using `Default Import` to import a `cjs` module, if the module does not have a compatible statement (such as `exports.default`), issues may arise.
+
+#### Solution
+
+Please refer to [[E1005] Default Import Check](../more/rules)
+
+#### Configuration
+
+- **ignore**：Configure to ignore some imported files.
+
+```ts
+interface Config {
+  /** Packages that need to be ignored */
+  ignore: string[];
+}
+```
+
+## Linter Type
+
+- The type definition for the `linter` field is as follows:
+
+```ts
+/** Linter options */
+interface Options {
+  rules?: RulesMap;
+  level?: SeverityString;
+  extends?: ExtendRuleData[];
+}
+
+/**
+ * Linting level
+ *   - `'Warn'` runs only rules categorized as `'Warn'`
+ *   - `'Error'` runs all rules
+ */
+type SeverityString = 'Warn' | 'Error';
+
+/** Rule level */
+type SeverityInput = SeverityString | 'off' | 'on';
+
+/** Rule configuration */
+type RulesMap = Record<string, RuleConfigItem>;
+
+/** Single rule configuration */
+type RuleConfigItem =
+  // Only error level, this level has higher priority than the rule's own configuration
+  | SeverityInput
+  // In the case of an array, the first item is the error level, and the second item is the rule configuration
+  | [SeverityInput, unknown];
+```
+
+If you want to **disable a rule**, you can set `SeverityInput` to `off`, as shown in the following example:
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        level: 'Error',
+        extends: [],
+        rules: {
+          'duplicate-package': 'off',
+        },
+      },
+    }),
+  ],
+};
+```

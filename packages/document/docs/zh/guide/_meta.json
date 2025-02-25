@@ -11,8 +11,8 @@
   },
   {
     "type": "dir",
-    "name": "custom",
-    "label": "自定义"
+    "name": "rules",
+    "label": "扫描规则"
   },
   {
     "type": "dir",

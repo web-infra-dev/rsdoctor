@@ -1,0 +1,281 @@
+# 内置规则
+
+## 功能介绍
+
+:::tip
+
+`linter` 的类型定义请参见本文档的[Linter 类型定义](#linter-%E7%B1%BB%E5%9E%8B%E5%AE%9A%E4%B9%89)。
+
+:::
+
+### [E1001] Duplicate Packages
+
+#### 规则详情
+
+- `Duplicate Packages` 卡片上展示了项目重复第三方包数目。点击图片可以查看重复第三方包的具体详情。注：这里的第三方都是被打包的第三方包。
+
+  <div style={{ display: 'flex' }}>
+    <img
+      src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-1.png"
+      height="200px"
+      width="260px"
+      style={{ margin: 'auto' }}
+    />
+    <img
+      src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-2.png"
+      height="300px"
+      width="340px"
+      style={{ margin: 'auto' }}
+    />
+  </div>
+
+- 重复包预警卡片
+
+<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts.png" />
+
+- 点击图标展开重复包详情，可以看到：重复包的包名、版本、大小、引用文件。
+
+  - 点击最右侧 **「Show Relations」** 可以查看具体这个第三方的引用链路和对应的引用文件代码位置。
+
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-relations.png" />
+
+  - 点击最右侧 **「!（叹号）」** 图标，可以查看重复第三方包的规则的具体解释。
+
+  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-rule.png" />
+
+#### 配置
+
+- 配置示例：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        level: 'Error',
+        extends: [],
+        rules: {
+          'duplicate-package': [
+            'Error',
+            {
+              checkVersion: 'minor',
+              ignore: ['chalk', '@babel/runtime'],
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
+##### 类型
+
+- **ignore**: 配置需要忽略的 Packages。
+- **checkVersion**: 是指要检查的最大版本级别，例如：如果设置了 `minor`，那么重复包将不再检查 `major` 级别的差异。**默认为 `major`**。
+
+```ts
+interface Config {
+  checkVersion: keyof typeof CheckVersion;
+  ignore: string[];
+}
+
+enum CheckVersion {
+  null = 0,
+  prerelease = 0x1,
+  prepatch = 0x10,
+  patch = 0x100,
+  preminor = 0x1000,
+  minor = 0x10000,
+  premajor = 0x100000,
+  major = 0x1000000,
+}
+```
+
+#### 重复包优化问题
+
+请查看[重复包优化方案](../../blog/topic/duplicate-pkg-problem)。
+
+点击 「**More**」可以查看对应规则解释。
+
+### [E1002] Cross Chunks Package
+
+跨 Chunks 的重复包规则能够扫描**不同 `chunks` 中的重复包**。这些重复包也有可能导致打包代码冗余，具体还要看业务逻辑及冗余代码大小。
+
+- 展示
+  - Module 是指被重复打在多个 chunk 中的 Module。
+  - Chunks 则是被重复打包的产物。
+
+<img src="/cross-chunks-package.png" />
+
+#### 解决方案
+
+可查看 [[E1002] Cross Chunks Packages](../more/rules)
+
+### [E1003] Loader Performance Optimization
+
+通过该模块可以比较直观的看到我们项目在编译方面的一些预警信息，有助于我们可以更进一步优化项目的编译性能。
+
+#### 解决方案
+
+可查看 [[E1003] Loader Performance Optimization](../more/rules)
+
+#### 配置类型
+
+- **ignore**：可以包含字符串或正则表达式，用于指定需要被忽略的 loader 。
+- **threshold**： 表示 Loader 的总耗时阈值，单位为毫秒（millisecond）。如果 Loader 的执行时间超过这个阈值，则可能会触发警告或错误。默认值为5000毫秒。
+- **extensions**：字符串或正则表达式，用于指定在规则检查中需要匹配的文件扩展名。默认情况下，它包括常见的文件类型，如 js、css、jpg、jpeg、png、gif、webp 和 svg。
+
+```ts
+interface Config {
+  /**
+   * loaders which should be ignore.
+   */
+  ignore: (string | RegExp)[];
+  /**
+   * threshold which the loader total costs.
+   * @unit millisecond
+   * @default 5000
+   */
+  threshold: number;
+  /**
+   * the file extensions which will be match in rule check.
+   * @default ["js", "css", "jpg", "jpeg", "png", "gif", "webp", "svg"]
+   */
+  extensions: (string | RegExp)[];
+}
+```
+
+### [E1004] ECMA Version Check
+
+该规则用于检测不兼容的高级语法。在规则扫描时，优先使用 `browserslist` 的配置；如果未配置 `browserslist`，则需要手动进行检测，示例如下：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'ecma-version-check': [
+            'Warn',
+            {
+              ecmaVersion: 2015,
+              // targets: ["chrome >= 53"],
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
+#### 类型定义
+
+```ts
+type CheckSyntaxOptions = {
+  /**
+   * The target browser range of the project.
+   * Its value is a standard browserslist array.
+   */
+  targets?: string[];
+  /**
+   * Used to exclude a portion of source files during detection.
+   * You can pass in one or more regular expressions to match the paths of source files.
+   */
+  exclude?: CheckSyntaxExclude;
+  /**
+   * Used to exclude files by output path before detection.
+   * You can pass in one or more regular expressions to match the paths of source files.
+   */
+  excludeOutput?: CheckSyntaxExclude;
+  /**
+   * The minimum ECMAScript syntax version that can be used in the build artifact.
+   * The priority of `ecmaVersion` is higher than `targets`.
+   */
+  ecmaVersion?: EcmaVersion;
+  /**
+   * Used to ignore specified syntax error messages after detection.
+   * You can pass in one or more error message types to ignore.
+   */
+  excludeErrorLogs?: SyntaxErrorKey[];
+};
+```
+
+更多 `ECMA Version Check` 配置请参考 [ECMA Version Check Options](https://github.com/rspack-contrib/rsbuild-plugin-check-syntax?tab=readme-ov-file#options)
+
+### [E1005] Default Import Check
+
+通常，Rspack 会自动兼容不同类型的模块，但在某些情况下，兼容性操作可能会失败。例如，当使用 `Default Import` 导入一个 `cjs` 模块时，如果该模块没有兼容的语句（如 `exports.default`），则会出现问题。
+
+#### 解决方案
+
+可查看 [[E1005] Default Import Check](../more/rules)
+
+#### 配置
+
+- **ignore**：配置忽略一些引入的文件。
+
+```ts
+interface Config {
+  /** Packages that need to be ignored */
+  ignore: string[];
+}
+```
+
+## Linter 类型定义
+
+- `linter`字段的类型如下：
+
+```ts
+/** 校验器选项 */
+interface Options {
+  rules?: RulesMap;
+  level?: SeverityString;
+  extends?: ExtendRuleData[];
+}
+
+/**
+ * 校验等级
+ *   - `'Warn'`时只运行类别为`'Warn'`的规则
+ *   - `'Error'`时运行全部规则
+ */
+type SeverityString = 'Warn' | 'Error';
+
+/** 规则等级 */
+type SeverityInput = SeverityString | 'off' | 'on';
+
+/** 规则配置 */
+type RulesMap = Record<string, RuleConfigItem>;
+
+/** 单规则配置 */
+type RuleConfigItem =
+  // 仅有报错等级，此等级优先级高于规则自身配置
+  | SeverityInput
+  // 数组情况下，第一项为报错等级，后一项是规则配置
+  | [SeverityInput, unknown];
+```
+
+如果要**关闭某个规则**，则可以 `SeverityInput` 设为 `off`，如下示例：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        level: 'Error',
+        extends: [],
+        rules: {
+          'duplicate-package': 'off',
+        },
+      },
+    }),
+  ],
+};
+```

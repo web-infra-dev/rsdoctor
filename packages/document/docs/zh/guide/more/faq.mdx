@@ -5,9 +5,9 @@
 当我们**只需要** Rsdoctor 内 [Bundle Size](../usage/bundle-size) 分析产物大小的功能时，我们可以在接入 Rsdoctor 插件时配置对应的 [Features](/config/options/options) 配置项，参考下方代码：
 
 ```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
-new RsdoctorWebpackPlugin({
+new RsdoctorRspackPlugin({
   features: ['bundle'], // 代表只开启 bundle size 的功能分析
 });
 ```
@@ -42,13 +42,13 @@ Rsdoctor 提供的 Loader 耗时时间是**预估耗时**，为什么没法统�
 下面示例是开启了 lite 模式以及构建时和构建产物分析：
 
 ```js
-const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
+const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 
 // adding the plugin to your configuration
 module.exports = {
   // ...
   plugins: [
-    new RsdoctorWebpackPlugin({
+    new RsdoctorRspackPlugin({
       disableClientServer: false,
       features: ['lite', 'loader', 'plugins', 'bundle'],
     }),

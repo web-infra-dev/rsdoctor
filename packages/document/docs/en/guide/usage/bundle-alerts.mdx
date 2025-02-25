@@ -1,48 +1,17 @@
-# Bundle alerts
+# Bundle Alerts
 
 ## Introduction
 
-### Duplicate third-party packages
+The `Alerts` section in the `Overall` page is used to display the results of "Build Rules" and "Compilation Rules", as shown in the image below. In addition to being displayed on the page, the rules will also be displayed in the terminal log.
 
-- The `Duplicate Packages` card displays the number of duplicate third-party packages in the project. Click on the image to view the specific details of the duplicate packages. Note: The third-party packages mentioned here are the ones that have been bundled.
+<img src="/bundle-alerts.png" />
 
-<div style={{ display: 'flex' }}>
-  <img
-    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-1.png"
-    width="360px"
-    style={{ margin: 'auto' }}
-  />
-  <img
-    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-2.png"
-    width="360px"
-    style={{ margin: 'auto' }}
-  />
-</div>
+You can check the built-in rules for bundle alerts below to understand the details of each rule.
 
-- Duplicate Package Alerts Card
+### Built-in Rules
 
-<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts.png" />
+1. [[E1001] Duplicate Packages](../../guide/rules/rules#e1001-duplicate-packages)
+2. [[E1002] Cross Chunks Package](../../guide/rules/rules#e1002-cross-chunks-package)
+3. [[E1004] ECMA Version Check](../../guide/rules/rules#e1004-ecma-version-check)
 
-- Click on the icon to expand the details of the duplicate packages, where you can see the package name, version, size, and reference files.
-
-  - Click on the rightmost **"Show Relations"** to view the specific reference chain and corresponding reference file code location for this third-party package.
-
-  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-relations.png" />
-
-  - Click on the rightmost **"!"** icon to view the specific explanation of the rule for the duplicate third-party package.
-
-  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-rule.png" />
-
-### Duplicate package optimization
-
-Please check [Duplicate Package Optimization](../../blog/topic/duplicate-pkg-problem).
-
-### ECMA version check
-
-In the bundle alerts, the ECMA version of the bundle is checked, as shown in the following image:
-
-{' '}
-
-<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts-ecma.png" />
-
-Click on "**More**" to view the corresponding rule explanation.
+For more details, please refer to the [Built-in Rules](../../guide/rules/rules).
