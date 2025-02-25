@@ -48,11 +48,11 @@
 - 配置示例：
 
 ```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 export default {
   plugin: [
-    new RsdoctorWebpackPlugin({
+    new RsdoctorRspackPlugin({
       linter: {
         level: 'Error',
         extends: [],
@@ -153,11 +153,11 @@ interface Config {
 该规则用于检测不兼容的高级语法。在规则扫描时，优先使用 `browserslist` 的配置；如果未配置 `browserslist`，则需要手动进行检测，示例如下：
 
 ```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 export default {
   plugin: [
-    new RsdoctorWebpackPlugin({
+    new RsdoctorRspackPlugin({
       linter: {
         rules: {
           'ecma-version-check': [
@@ -210,7 +210,7 @@ type CheckSyntaxOptions = {
 
 ### [E1005] Default Import Check
 
-通常，webpack 会自动兼容不同类型的模块，但在某些情况下，兼容性操作可能会失败。例如，当使用 `Default Import` 导入一个 `cjs` 模块时，如果该模块没有兼容的语句（如 `exports.default`），则会出现问题。
+通常，Rspack 会自动兼容不同类型的模块，但在某些情况下，兼容性操作可能会失败。例如，当使用 `Default Import` 导入一个 `cjs` 模块时，如果该模块没有兼容的语句（如 `exports.default`），则会出现问题。
 
 #### 解决方案
 

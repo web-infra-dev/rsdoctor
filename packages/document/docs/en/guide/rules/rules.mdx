@@ -1,4 +1,4 @@
-# Built-in Rules
+# Built-in rules
 
 ## Introduction
 
@@ -48,11 +48,11 @@ Please refer to the [Linter Type](#linter-type) in this document for the type de
 - Configuration Example:
 
 ```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 export default {
   plugin: [
-    new RsdoctorWebpackPlugin({
+    new RsdoctorRspackPlugin({
       linter: {
         level: 'Error',
         extends: [],
@@ -153,11 +153,11 @@ interface Config {
 This rule is used to detect incompatible advanced syntax. When scanning the rule, the configuration of `browserslist` is prioritized; if `browserslist` is not configured, manual detection is required, as shown below:
 
 ```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 export default {
   plugin: [
-    new RsdoctorWebpackPlugin({
+    new RsdoctorRspackPlugin({
       linter: {
         rules: {
           'ecma-version-check': [
@@ -174,7 +174,7 @@ export default {
 };
 ```
 
-#### 类型定义
+#### Type Definitions
 
 ```ts
 type CheckSyntaxOptions = {
@@ -210,7 +210,7 @@ For more `ECMA Version Check` configuration options, please refer to [ECMA Versi
 
 ### [E1005] Default Import Check
 
-Typically, webpack automatically supports different types of modules, but in some cases, compatibility operations may fail. For example, when using `Default Import` to import a `cjs` module, if the module does not have a compatible statement (such as `exports.default`), issues may arise.
+Typically, Rspack automatically supports different types of modules, but in some cases, compatibility operations may fail. For example, when using `Default Import` to import a `cjs` module, if the module does not have a compatible statement (such as `exports.default`), issues may arise.
 
 #### Solution
 

@@ -5,9 +5,9 @@
 When we **only need** the [bundle size analysis](../usage/bundle-size) feature of Rsdoctor, we can configure the corresponding [Features](/config/options/options) option when integrating the Rsdoctor plugin. Refer to the code snippet below:
 
 ```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
-new RsdoctorWebpackPlugin({
+new RsdoctorRspackPlugin({
   features: ['bundle'], // Represents enabling only the bundle size analysis feature
 });
 ```
@@ -44,13 +44,13 @@ You can add the `lite` field to the `features` array to use the lite mode. Addit
 The following example enables the lite mode, build-time analysis, and bundle analysis:
 
 ```js
-const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
+const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 
 // adding the plugin to your configuration
 module.exports = {
   // ...
   plugins: [
-    new RsdoctorWebpackPlugin({
+    new RsdoctorRspackPlugin({
       disableClientServer: false,
       features: ['lite', 'loader', 'plugins', 'bundle'],
     }),
