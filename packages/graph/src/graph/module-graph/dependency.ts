@@ -9,7 +9,7 @@ export class Dependency implements SDK.DependencyInstance {
     id = 1;
   }
 
-  readonly id: number;
+  id: number;
 
   readonly request: string;
 
@@ -97,5 +97,9 @@ export class Dependency implements SDK.DependencyInstance {
       originDependency: this.originDependency.id,
       statements: this.statements.map((item) => item.toData()),
     };
+  }
+
+  setId(id: number): void {
+    this.id = id;
   }
 }

@@ -373,7 +373,6 @@ export function getAssetDetails(
   modules: SDK.ModuleData[],
 ): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetAssetDetails> {
   const asset = assets.find((e) => e.path === assetPath)!;
-
   return {
     asset,
     chunks: getChunksByAsset(asset, chunks),

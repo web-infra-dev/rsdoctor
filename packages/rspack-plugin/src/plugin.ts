@@ -5,18 +5,18 @@ import {
   InternalPluginsPlugin,
   InternalSummaryPlugin,
   makeRulesSerializable,
-  normalizeUserConfig,
   setSDK,
   ensureModulesChunksGraphFn,
   InternalBundlePlugin,
   InternalRulesPlugin,
   InternalErrorReporterPlugin,
   InternalBundleTagPlugin,
+  normalizeRspackUserOptions,
 } from '@rsdoctor/core/plugins';
 import type {
   RsdoctorRspackPluginInstance,
-  RsdoctorPluginOptionsNormalized,
   RsdoctorRspackPluginOptions,
+  RsdoctorRspackPluginOptionsNormalized,
 } from '@rsdoctor/core';
 import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
 import {
@@ -50,12 +50,12 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   public modulesGraph: SDK.ModuleGraphInstance;
 
-  public options: RsdoctorPluginOptionsNormalized<Rules>;
+  public options: RsdoctorRspackPluginOptionsNormalized<Rules>;
 
   public outsideInstance: boolean;
 
   constructor(options?: RsdoctorRspackPluginOptions<Rules>) {
-    this.options = normalizeUserConfig<Rules>(
+    this.options = normalizeRspackUserOptions<Rules>(
       Object.assign(options || {}, {
         supports: {
           ...options?.supports,
@@ -162,6 +162,21 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     // InternalErrorReporterPlugin must called before InternalRulesPlugin, to avoid treat Rsdoctor's lint warnings/errors as Webpack's warnings/errors.
     new InternalErrorReporterPlugin(this).apply(compiler);
+
+    // apply Rspack native plugin to improve the performance
+    const RsdoctorRspackNativePlugin =
+      compiler.webpack.experiments?.RsdoctorPlugin;
+    if (
+      this.options.experiments?.enableNativePlugin &&
+      RsdoctorRspackNativePlugin
+    ) {
+      logger.debug('[RspackNativePlugin] Enabled');
+      new RsdoctorRspackNativePlugin({
+        // TODO: more detailed data features based on the rsdoctor options
+        moduleGraphFeatures: true,
+        chunkGraphFeatures: true,
+      }).apply(compiler);
+    }
   }
 
   /**
