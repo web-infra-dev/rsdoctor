@@ -1,8 +1,8 @@
-# Compilation diagnostic rules
+# Compilation Diagnostic Rules
 
-Building diagnostic rules is similar to lint tools like `ESLint`, but with a difference. `ESLint` performs static code scanning and is independent of the build process. On the other hand, the code diagnostics here are closely related to the build process of `Rspack` or `Webpack`. It incorporates various internal parameters generated during the build process to assist in the analysis, such as ModuleGraph, internal markers for each module by Webpack, and runtime added after code transformation, and so on...
+Building diagnostic rules is similar to `ESLint` like lint tools, but different from it in that `ESLint` performs code scanning and is unrelated to the build process. In contrast, the code diagnostics here are closely related to the build process of `Rspack or Webpack`, incorporating many internal parameters generated during the build process to aid judgment, such as ModuleGraph, Webpack's internal markings for each module, and runtime added after code transformation, among others.
 
-If any issues are detected during the build process, they will be displayed in the CLI and the diagnostic summary webpage, as shown in the following image:
+During the build process, if issues are discovered, they will be visible in the CLI and the final diagnostic summary webpage, as shown below:
 
 <img
   width="700"
@@ -16,98 +16,22 @@ If any issues are detected during the build process, they will be displayed in t
   src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/rule-config-1.png"
 />
 
-## How to use
+## How to Use
 
-Using diagnostic rules is simple. They are configured under the `linter` option of the entire plugin, as shown in the following example:
+Currently, Rsdoctor provides **built-in rules** and **custom rules**.
 
-```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+### Built-in Rules
 
-export default {
-  plugin: [
-    new RsdoctorWebpackPlugin({
-      linter: {
-        level: 'Error',
-        extends: [],
-        rules: {
-          'default-import-check': 'off',
-          'duplicate-package': [
-            'Error',
-            {
-              checkVersion: 'minor',
-              ignore: ['chalk', '@babel/runtime'],
-            },
-          ],
-        },
-      },
-    }),
-  ],
-};
-```
+The existing diagnostic tool includes multiple rules, all of which are enabled by default. They are:
 
-#### Enable ECMA version check
+1. [[E1001] Duplicate Packages](/guide/rules/rules#e1001-duplicate-packages)
+2. [[E1002] Cross Chunks Package](/guide/rules/rules#e1002-cross-chunks-package)
+3. [[E1003] Loader Performance Optimization](/guide/rules/rules#e1003-loader-performance-optimization)
+4. [[E1004] ECMA Version Check](/guide/rules/rules#e1004-ecma-version-check)
+5. [[E1005] Default Import Check](/guide/rules/rules#e1005-default-import-check)
 
-The configuration of `browserslist` is used first. If there is no `browserslist`, the following configuration is used for detection
+For specific details, refer to [Built-in Rules](/guide/rules/rules).
 
-```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+### Custom Rules
 
-export default {
-  plugin: [
-    new RsdoctorWebpackPlugin({
-      linter: {
-        rules: {
-          'ecma-version-check': [
-            'Warn',
-            {
-              ecmaVersion: 2015,
-              // targets: ["chrome >= 53"],
-            },
-          ],
-        },
-      },
-    }),
-  ],
-};
-```
-
-For more `ECMA Version Check` configuration, please refer to [ECMA Version Check Options](https://github.com/rspack-contrib/rsbuild-plugin-check-syntax?tab=readme-ov-file#options)
-
-The type of `linter`：
-
-```ts
-interface Options {
-  rules?: RulesMap;
-  level?: SeverityString;
-  extends?: ExtendRuleData[];
-}
-
-/**
- * Validation Level
- *   - When set to `'Warn'`, only rules with the category `'Warn'` will be executed
- *   - When set to `'Error'`, all rules will be executed
- */
-type SeverityString = 'Warn' | 'Error';
-
-/** Rule Level */
-type SeverityInput = SeverityString | 'off' | 'on';
-
-/** Rule Configuration */
-type RulesMap = Record<string, RuleConfigItem>;
-
-/** Individual Rule Configuration */
-type RuleConfigItem =
-  // Only severity level, which takes precedence over the rule's own configuration
-  | SeverityInput
-  // In the case of an array, the first item is the severity level, and the second item is the rule configuration
-  | [SeverityInput, unknown];
-```
-
-## Existing internal rules
-
-There are already three rules included in the existing diagnostic tool, which are:
-
-1. [[E1001] Duplicate Packages](./bundle-alerts#%E9%87%8D%E5%A4%8D%E7%AC%AC%E4%B8%89%E6%96%B9%E5%8C%85)
-2. [[E1005] Default Import Check](../more/rules)
-3. [[E1003] Loader Performance Optimization](../more/rules)
-4. [[E1004] ECMA Version Check](../more/rules)
+Rsdoctor also collects analyzed data and allows users to integrate custom rules through the Linter API. For details on custom rules, refer to [Custom Rules](/guide/rules/rule-custom).

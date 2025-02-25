@@ -2,48 +2,16 @@
 
 ## 功能介绍
 
-### 重复第三方包
+Overall 页面中的 `Alerts` 部分用于展示「构建规则」及「编译规则」结果，如下图。规则展示除了展示在页面中，还会展示在终端日志中。
 
-- `Duplicate Packages` 卡片上展示了项目重复第三方包数目。点击图片可以查看重复第三方包的具体详情。注：这里的第三方都是被打包的第三方包。
+<img src="/bundle-alerts.png" />
 
-  <div style={{ display: 'flex' }}>
-    <img
-      src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-1.png"
-      height="200px"
-      width="360px"
-      style={{ margin: 'auto' }}
-    />
-    <img
-      src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-2.png"
-      height="300px"
-      width="440px"
-      style={{ margin: 'auto' }}
-    />
-  </div>
+可以查看下方的产物预警内置规则了解各个规则详情。
 
-- 重复包预警卡片
+### 内部规则
 
-<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts.png" />
+1. [[E1001] Duplicate Packages](../../guide/rules/rules#e1001-duplicate-packages)
+2. [[E1002] Cross Chunks Package](../../guide/rules/rules#e1002-cross-chunks-package)
+3. [[E1004] ECMA Version Check](../../guide/rules/rules#e1004-ecma-version-check)
 
-- 点击图标展开重复包详情，可以看到：重复包的包名、版本、大小、引用文件。
-
-  - 点击最右侧 **「Show Relations」** 可以查看具体这个第三方的引用链路和对应的引用文件代码位置。
-
-  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-relations.png" />
-
-  - 点击最右侧 **「!（叹号）」** 图标，可以查看重复第三方包的规则的具体解释。
-
-  <img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alters-rule.png" />
-
-### 重复包优化问题
-
-请查看[重复包优化方案](../../blog/topic/duplicate-pkg-problem)。
-
-### ECMA 版本检查
-
-产物预警中会对产物进行 ECMA 版本做检查，如下图：
-
-{' '}
-<img src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/bundle-alerts-ecma.png" />
-
-点击 「**More**」可以查看对应规则解释。
+具体可以查看[内置规则](../../guide/rules/rules)。
