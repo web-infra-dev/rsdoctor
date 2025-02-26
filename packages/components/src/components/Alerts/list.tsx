@@ -18,7 +18,12 @@ export const CommonList = (props: { data: Array<Rule.RuleStoreDataItem> }) => {
         style={{
           background: '#fff',
         }}
-        description={<span className={styles.description}>{description}</span>}
+        description={
+          <div
+            className={styles.description}
+            dangerouslySetInnerHTML={{ __html: description || '' }}
+          />
+        }
         icon={
           <Button onClick={() => navigate} type="link">
             more

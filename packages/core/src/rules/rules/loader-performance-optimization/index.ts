@@ -22,16 +22,18 @@ export const rule = defineRule<typeof title, Config>(() => {
       },
     },
     check({ loader, configs, root, ruleConfig, report }) {
-      const { extensions, ignore, threshold } = ruleConfig;
+      const { extensions, ignore = [], threshold = 5000 } = ruleConfig;
 
-      if (extensions.length === 0) return;
+      if (!extensions || extensions?.length === 0) return;
 
       if (loader.length === 0) return;
-      
-      const { config } = configs.find((e) => e.name === 'webpack')! || { config: undefined } ;
+
+      const { config } = configs.find((e) => e.name === 'webpack')! || {
+        config: undefined,
+      };
 
       if (!config) {
-        return
+        return;
       }
       const cwd = config.context || root;
 
@@ -79,7 +81,7 @@ export const rule = defineRule<typeof title, Config>(() => {
             arr.map((e) => e.endAt),
           ) - Math.min.apply(arr.map((e) => e.startAt));
 
-        if (v2 >= v1) return v1;
+        if (v2 >= v1 || v2 === -Infinity) return v1;
         return v2;
       };
 
@@ -117,8 +119,6 @@ export const rule = defineRule<typeof title, Config>(() => {
             detail: {
               description: message,
               type: 'link',
-              // nodeModulesFiles,
-              // outofCwdFiles,
             },
           });
         }
