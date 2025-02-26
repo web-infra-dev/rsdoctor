@@ -16,7 +16,7 @@ Regardless of the optimization method used for loaders, we need to obtain data i
 With the Loader Analysis module provided by Rsdoctor, we can see **a tree structure composed of all files that pass through the loaders during the entire compilation process**, as shown in the following figure:
 
 <img
-  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-all.png"
+  src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/loader-analysis-all.png"
   width="600px"
   style={{ margin: 'auto' }}
 />
@@ -26,7 +26,7 @@ With the Loader Analysis module provided by Rsdoctor, we can see **a tree struct
 By **clicking on a directory**, you can see the **time-consuming statistics of all loaders** under the currently **selected directory** on the right side of the file tree, such as the number of files processed by a loader and **the estimated time** consumption. The content of the "Statistics of \*\*\*" card is shown in the following figure:
 
 <img
-  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-anlaysis-table.png"
+  src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/loader-analysis-table.png"
   width="300px"
   height="400px"
   style={{ margin: 'auto' }}
@@ -43,18 +43,18 @@ Usually, in the directories of third-party libraries inside **`node_modules`**, 
 By **clicking on a file**, a mask layer will pop up, showing a list of all loaders that have been executed on the currently clicked file. By **clicking on a loader**, you can see the **input**, **output**, and **parameter data information of the target loader** when it is called.
 
 <img
-  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-code-change.png"
+  src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/loader-analysis-code-change.png"
   width="600px"
   style={{ margin: 'auto' }}
-/>{' '}
+/>
 
 - Parameter Data Information: Click on "**show more**" or the expand button in the upper left corner to view the corresponding parameter information.
 
 <img
-  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-analysis-options.png"
+  src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/loader-analysis-options.png"
   width="600px"
   style={{ margin: 'auto' }}
-/>{' '}
+/>
 
 We can use the loader information of individual files here to troubleshoot issues and decide whether to add them to [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude).
 
