@@ -77,6 +77,28 @@ This is the options for the [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin) and 
 - [disableClientServer](#disableclientserver)
 - [features](#features)
 
+### brief
+
+<Badge text="Version: 0.4.0" type="warning" />
+
+- **Type:** [BriefType](#brieftype)
+- **Optional:** `true`
+- **Default:** undefined
+
+More configurations for Brief mode are as follows:
+
+- **reportHtmlName:** Configures the name of the HTML report for Brief mode. The default value is `report-rsdoctor.html`.
+- **writeDataJson:** By default, in Brief mode, the analysis data is injected into the HTML file, so no additional build analysis data is generated. If you want to generate additional local data, you need to configure `writeDataJson: true`.
+
+#### briefType
+
+```ts
+interface BriefConfig {
+  reportHtmlName?: string | undefined;
+  writeDataJson: boolean;
+}
+```
+
 ### disableClientServer
 
 - **Type:** `boolean`
@@ -151,9 +173,11 @@ import ModeIntro from '@en/shared/mode-intro.md';
 
 <ModeIntro />
 
-### reportDir
+### output
 
-<Badge text="Version: 0.4.0" type="warning" />
+<Badge text="Version 1.0.0" type="warning" />
+
+#### reportDir
 
 - **Type:** string
 - **Optional:** `true`
@@ -161,29 +185,7 @@ import ModeIntro from '@en/shared/mode-intro.md';
 
 The output directory for Rsdoctor reports. By default, it is the build output directory.
 
-### brief
-
-<Badge text="Version: 0.4.0" type="warning" />
-
-- **Type:** [BriefType](#brieftype)
-- **Optional:** `true`
-- **Default:** undefined
-
-More configurations for Brief mode are as follows:
-
-- **reportHtmlName:** Configures the name of the HTML report for Brief mode. The default value is `report-rsdoctor.html`.
-- **writeDataJson:** By default, in Brief mode, the analysis data is injected into the HTML file, so no additional build analysis data is generated. If you want to generate additional local data, you need to configure `writeDataJson: true`.
-
-#### briefType
-
-```ts
-interface BriefConfig {
-  reportHtmlName?: string | undefined;
-  writeDataJson: boolean;
-}
-```
-
-### reportCodeType
+#### reportCodeType
 
 - Type: `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
 - Optional: true
@@ -205,6 +207,34 @@ new RsdoctorRspackPlugin({
   reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
 }),
 ```
+
+#### compressData
+
+- **Type:** boolean
+- **Optional:** `true`
+- **Default:** true
+
+compressData is used to configure whether to compress the analysis data under [outputDir]/.rsdoctor.
+
+### port
+
+- **Type:** `number`
+- **Optional:** `true`
+- **Default:** `random(3000, 8999)`
+
+Configure the port for the Rsdoctor server.
+
+### ~~reportCodeType [**Deprecated**]~~
+
+<Badge text="Deprecated" type="warning" />
+
+Please use [output.reportCodeType](#reportcodetype)
+
+### ~~reportDir [**Deprecated**]~~
+
+<Badge text="Deprecated" type="warning" />
+
+Please use [output.reportDir](#reportDir)
 
 ### supports
 
@@ -282,11 +312,3 @@ Whether to enable the ability to generate tile graphs, which affects whether the
   width="500px"
   style={{ margin: 'auto' }}
 />
-
-### port
-
-- **Type:** `number`
-- **Optional:** `true`
-- **Default:** `random(3000, 8999)`
-
-Configure the port for the Rsdoctor server.

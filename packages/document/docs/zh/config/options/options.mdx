@@ -153,15 +153,16 @@ import ModeIntro from '@zh/shared/mode-intro.md';
 
 <ModeIntro />
 
-### reportDir
+#### banner
 
-<Badge text="Version: 0.4.0" type="warning" />
+:::danger
+开启 BannerPlugin 分析时，请勿在生产版本中使用 Rsdoctor。
+:::
 
-- **Type:** string
-- **Optional:** `true`
-- **Default:** undefined
+- default: true.
+- type: boolean.
 
-Rsdoctor 报告输出目录，默认是构建产物输出目录。
+如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
 
 ### brief
 
@@ -185,7 +186,11 @@ interface BriefConfig {
 }
 ```
 
-### reportCodeType
+### output
+
+<Badge text="Version: 1.0.0" type="warning" />
+
+#### reportCodeType
 
 - Type: `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
 - Optional: true
@@ -205,6 +210,42 @@ new RsdoctorRspackPlugin({
 }),
 ```
 
+#### reportDir
+
+- **Type:** string
+- **Optional:** `true`
+- **Default:** undefined
+
+Rsdoctor 报告输出目录，默认是构建产物输出目录。
+
+#### compressData
+
+- **Type:** boolean
+- **Optional:** `true`
+- **Default:** true
+
+compressData 用于配置是否将 [outputDir]/.rsdoctor 下的分析数据进行压缩处理。
+
+### port
+
+- **Type:** `number`
+- **Optional:** `true`
+- **Default:** `random(3000, 8999)`
+
+配置 Rsdoctor 服务的端口。
+
+### ~~reportCodeType [**Deprecated**]~~
+
+<Badge text="Deprecated" type="warning" />
+
+请使用 [output.reportCodeType](#reportcodetype)
+
+### ~~reportDir [**Deprecated**]~~
+
+<Badge text="Deprecated" type="warning" />
+
+请使用 [output.reportDir](#reportDir)
+
 ### supports
 
 - **Type:** [Supports Types](#supports-types)
@@ -222,17 +263,6 @@ type ISupport = {
   generateTileGraph?: boolean;
 };
 ```
-
-#### banner
-
-:::danger
-开启 BannerPlugin 分析时，请勿在生产版本中使用 Rsdoctor。
-:::
-
-- default: true.
-- type: boolean.
-
-如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
 
 #### parseBundle
 
@@ -281,11 +311,3 @@ chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
   width="500px"
   style={{ margin: 'auto' }}
 />
-
-### port
-
-- **Type:** `number`
-- **Optional:** `true`
-- **Default:** `random(3000, 8999)`
-
-配置 Rsdoctor 服务的端口。
