@@ -1,0 +1,92 @@
+# Rsdoctor V1.0.0 发布公告
+
+🎉 我们很高兴地宣布 **Rsdoctor V1.0.0** 的发布！本次更新带来了多项新功能和改进，帮助开发者更好地分析和优化构建过程：
+
+- **全新的报告界面**：更加清晰、美观且易于导航。
+- **Rspack 构建分析提效**：支持 Rspack 的 Rsdoctor 原生插件，让 Rspack 构建分析更加高效。
+- **支持更多分析规则**：新增或增强了 「跨 Chunk 重复包检测」及「ECMA 语法检查」规则。
+
+## 🎨 界面升级
+
+- **整体界面 UI 升级**：我们对 Rsdoctor 的用户界面进行了全面的优化，使其更加清晰、美观且易于导航。新的设计不仅提升了用户体验，还使信息展示更加直观和高效。
+
+<iframe
+  width="560"
+  height="315"
+  src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
+  frameborder="0"
+  allowfullscreen
+></iframe>
+
+## 🚀 Rspack 构建分析提效
+
+通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑前置到 Rspack 的构建阶段。这一改进显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了整体分析时间。以下是配置示例：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      experiments: {
+        enableNativePlugin: true, // 开启 rsdoctor 的 rspack native plugin 特性加速构建分析
+      },
+    }),
+  ],
+};
+```
+
+## 🔍 模块搜索功能
+
+- **Search Module 能力**：在 `Bundle Size` 页面中，我们新增了模块搜索功能。用户可以通过输入模块名称来快速定位和查看模块所在的 `Assets`，从而更方便地分析模块的引用关系和大小。[详情](/guide/usage/bundle-size#%E6%A8%A1%E5%9D%97%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD)
+
+  示例图如下：
+
+  <img src="https://assets.rspack.dev/others/assets/rsdoctor/search-modules.png" />
+
+## 🛠️ 新增构建扫描规则
+
+- **Cross Chunks Package 规则**：新增了跨 Chunks 的重复包检测规则（E1002），该规则能够扫描不同 `chunks` 中的重复包。这些重复包可能导致打包代码冗余。
+
+  解决方案可查看 [[E1002] Cross Chunks Packages](/guide/rules/rules#e1002-cross-chunks-package)
+
+- **ECMA Version Check 规则**：增强了 ECMA 版本检测规则（E1004），用于检测不兼容的高级语法，[详情](/guide/rules/rules#e1004-ecma-version-check)。
+
+  ```ts
+  import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+  export default {
+    plugin: [
+      new RsdoctorRspackPlugin({
+        linter: {
+          rules: {
+            'ecma-version-check': [
+              'Warn',
+              {
+                ecmaVersion: 2015,
+              },
+            ],
+          },
+        },
+      }),
+    ],
+  };
+  ```
+
+## ⚙️ 新增配置项
+
+- **output.compressData 配置**：我们新增了 `output.compressData` 配置项，用于控制是否对分析数据进行压缩处理。默认情况下，该选项为 `true`，即会对分析数据进行压缩。
+
+  ```js
+  new RsdoctorRspackPlugin({
+    output: {
+      compressData: true, // 是否压缩分析数据
+    },
+  });
+  ```
+
+## Breakchange
+
+### Options 变动
+
+插件配置中的 **reportCodeType** 和 **reportDir** 配置项移动到 output 下。[详情](/config/options/options#reportcodetype)。
