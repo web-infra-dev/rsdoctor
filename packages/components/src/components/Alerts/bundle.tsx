@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
 import { Rule, SDK } from '@rsdoctor/types';
-import {
-  hasViewModeFromStorage,
-  useBundleAlertsByErrors,
-  useViewMode,
-  useI18n,
-} from '../../utils';
+import { hasViewModeFromStorage, useViewMode, useI18n } from '../../utils';
 import { BundleAlert } from './bundle-alert';
 import { withServerAPI } from '../Manifest';
 import { ViewMode } from '../../constants';
@@ -22,7 +17,7 @@ export const BundleAlertsBase: React.FC<BundleAlertsProps> = ({
   project,
 }) => {
   const { errors, root: cwd } = project;
-  const bundleAlerts = useBundleAlertsByErrors(errors);
+  const bundleAlerts = errors;
   const { setBundleAlertsViewMode, viewMode, setViewMode } = useViewMode();
   const { t } = useI18n();
 
