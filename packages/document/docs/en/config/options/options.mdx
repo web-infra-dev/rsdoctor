@@ -74,8 +74,14 @@ new RsdoctorWebpackPlugin({
 
 This is the options for the [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin) and [RsdoctorRspackPlugin](#rsdoctorrspackplugin). It contains these properties:
 
+- [brief](#brief)
 - [disableClientServer](#disableclientserver)
+- [experiments](#experiments)
 - [features](#features)
+- [mode](#mode)
+- [output](#output)
+- [port](#port)
+- [supports](#supports)
 
 ### brief
 
@@ -198,6 +204,14 @@ import ModeIntro from '@en/shared/mode-intro.md';
 
 <Badge text="Version 1.0.0" type="warning" />
 
+#### compressData
+
+- **Type:** boolean
+- **Optional:** `true`
+- **Default:** true
+
+compressData is used to configure whether to compress the analysis data under [outputDir]/.rsdoctor.
+
 #### reportDir
 
 - **Type:** string
@@ -229,14 +243,6 @@ new RsdoctorRspackPlugin({
 }),
 ```
 
-#### compressData
-
-- **Type:** boolean
-- **Optional:** `true`
-- **Default:** true
-
-compressData is used to configure whether to compress the analysis data under [outputDir]/.rsdoctor.
-
 ### port
 
 - **Type:** `number`
@@ -249,13 +255,13 @@ Configure the port for the Rsdoctor server.
 
 <Badge text="Deprecated" type="warning" />
 
-Please use [output.reportCodeType](#reportcodetype)
+请看 [output.reportCodeType](#reportcodetype)
 
 ### ~~reportDir [**Deprecated**]~~
 
 <Badge text="Deprecated" type="warning" />
 
-Please use [output.reportDir](#reportDir)
+请看 [output.reportDir](#reportDir)
 
 ### supports
 
@@ -285,6 +291,19 @@ When enabling the analysis of BannerPlugin, Rsdoctor should not be used in produ
 - type: boolean.
 
 If `supports.banner` is enabled, Rsdoctor will enable compatibility logic for BannerPlugin. For more details, please refer to: [Supports BannerPlugin](../../guide/usage/bundle-size#supports-bannerplugin)
+
+#### generateTileGraph
+
+- default: true. The default value in rspack is false.
+- type: boolean.
+
+Whether to enable the ability to generate tile graphs, which affects whether the Bundle Size page has a tile graph from `webpack-bundle-analyzer`.
+
+<img
+  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-tile-graph.png"
+  width="500px"
+  style={{ margin: 'auto' }}
+/>
 
 #### parseBundle
 
@@ -321,15 +340,3 @@ Disabling the Parse Bundle capability will only affect the visibility of the Bun
     style={{ margin: 'auto' }}
   />
 </div>
-#### generateTileGraph
-
-- default: true. The default value in rspack is false.
-- type: boolean.
-
-Whether to enable the ability to generate tile graphs, which affects whether the Bundle Size page has a tile graph from `webpack-bundle-analyzer`.
-
-<img
-  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-tile-graph.png"
-  width="500px"
-  style={{ margin: 'auto' }}
-/>
