@@ -19,7 +19,7 @@ Additionally, the builder will **parallelize the execution** of multiple non-con
 Furthermore, the asynchronous logic within loader functions cannot be recognized, causing a single loader function to potentially span across the execution of multiple other loaders. As a result, there are three possible cases, as shown in the following diagram:
 
 <img
-  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/compile/loader-cases.jpeg"
+  src="https://assets.rspack.dev/others/assets/rsdoctor/loader-cases.jpeg"
   style={{ width: '250px' }}
 />
 
@@ -67,7 +67,7 @@ When using Rsdoctor to analyze the compilation time of Rspack projects, you may 
 
 - Reason: The loader in [CssExtractRspackPlugin](https://rspack.dev/plugins/rspack/css-extract-rspack-plugin) asynchronously calls other loaders during the pitch phase and waits for the callback results after these loaders execute. Therefore, the time taken by CssExtractRspackPlugin actually includes the execution time of other loaders and idle time.
 
-<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/4ffe579c62f6e8d995b7856d608abdef61219155/rsdoctor/css-extract-loader.png" />
+<img src="https://assets.rspack.dev/rsdoctor/css-extract-loader.png" />
 
 ## Next.js
 

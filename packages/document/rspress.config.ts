@@ -67,9 +67,8 @@ export default defineConfig({
   lang: 'en',
   base: '/',
   logo: {
-    light:
-      'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/logo/rsdoctor-logo-light.png',
-    dark: 'https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/logo/rsdoctor-logo-dark.png',
+    light: 'https://assets.rspack.dev/rsdoctor/rsdoctor-logo-light.png',
+    dark: 'https://assets.rspack.dev/rsdoctor/rsdoctor-logo-dark.png',
   },
   head: [
     '<meta name="apple-mobile-web-app-capable" content="yes" />',

@@ -25,6 +25,16 @@ export default defineConfig({
     bundlerChain: (chain) => {
       chain.plugin(pluginName).use(RsdoctorWebpackPlugin, [
         {
+          linter: {
+            rules: {
+              'loader-performance-optimization': [
+                'Error',
+                {
+                  threshold: 100,
+                },
+              ],
+            },
+          },
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
           features: ['bundle', 'plugins', 'loader'],
         },
