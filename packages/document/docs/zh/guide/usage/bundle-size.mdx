@@ -8,7 +8,7 @@
 - **产物分析（`Bundle Analysis`）模块**：分析构建产物资源（**Assets**）以及所包含的 **Modules** 的大小和代码信息。在该模块中，可以查看 Assets 中 **Module 打包后的实际代码大小**，以及模块的原始代码或**打包后的代码段**以及**模块引用关系**。
 
 <img
-  src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/bundle-size-overall.png"
+  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-overall.png"
   width={'700px'}
   style={{ margin: 'auto' }}
 />
@@ -34,7 +34,7 @@
 产物概览显示了 `Total Files` 等文件数目和大小信息。点击卡片图表可以展开资源详情，如下图所示：
 
 <img
-  src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/bundle-size-overall-1.png"
+  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-overall-1.png"
   width={'700px'}
   style={{ margin: 'auto' }}
 />
@@ -42,7 +42,7 @@
 - 点击详情小图标，右侧会展示对应资源树，标明资源大小：
 
 <img
-  src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/bundle-size-tree.png"
+  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-tree.png"
   width={'300px'}
   height={'400px'}
   style={{ margin: 'auto' }}
@@ -69,7 +69,7 @@
 - 左侧是 **Assets** 资源列表，按照资源大小降序排列，可以点击 **「expand all」** 按钮展开全部节点。
 - 右侧是 **Assets** 对应的 **Modules** 列表，同样按照打包后模块大小降序排列。
 
-<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/bundle-size-analysis-tree.png" />
+<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-analysis-tree.png" />
 
 ### 搜索筛选框
 
@@ -80,7 +80,13 @@
 - **Assets Size 筛选工具**：填写数字，单位为：KB、MB，可以过滤掉小于所填 `Size` 的 `Assets` 资源。
 - **Module Size 筛选工具**：填写数字，单位为：KB、MB，可以过滤掉小于所填 `Size` 的 `Module` 资源。
 
-<img src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/bundle-size-analysis-selects.png" />
+<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-analysis-selects.png" />
+
+#### Search Module
+
+搜索 Module 位于哪些 Assets 中。如下图，可以看到匹配搜素 Module 关键字的结果。
+
+<img src="/search-modules.png" />
 
 ### 模块标签说明
 
@@ -88,13 +94,13 @@
 
 <div style={{ display: 'flex' }}>
   <img
-    src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/bundle-size-assets-tags.png"
+    src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-assets-tags.png"
     height="200px"
     width="360px"
     style={{ margin: 'auto' }}
   />
   <img
-    src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/bundle-size-modules-tags.png"
+    src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-modules-tags.png"
     height="300px"
     width="440px"
     style={{ margin: 'auto' }}
@@ -116,7 +122,7 @@
 点击 **「Bundle Size」** 页面的 **「Bundle Analyzer Graph」** 按钮，可以查看经典的瓦片图。
 
 <img
-  src="https://raw.githubusercontent.com/rspack-contrib/rstack-design-resources/567b4a78468e30f5d4abb7c0eede944efeb1a30d/others/assets/rsdoctor/bundle-size-tile-graph.png"
+  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-tile-graph.png"
   width="500px"
   style={{ margin: 'auto' }}
 />
