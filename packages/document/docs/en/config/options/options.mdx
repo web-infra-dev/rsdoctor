@@ -107,6 +107,27 @@ interface BriefConfig {
 
 Whether to automatically open the Rsdoctor report page. If you do not need to view the analysis report provided by Rsdoctor in the browser, you can enable this configuration item.
 
+### experiments
+
+<Badge text="Version: 1.0.0" type="warning" />
+
+#### enableNativePlugin
+
+- Type: `boolean`
+- Optional: true
+- Default: false
+- Description
+
+  - Whether to enable the Rspack native plugin, enabling it can significantly reduce the analysis time of Rsdoctor itself.
+
+- Example
+
+```js
+new RsdoctorRspackPlugin({
+  experiments: { enableNativePlugin: true }
+}),
+```
+
 ### features
 
 - **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)

@@ -186,6 +186,27 @@ interface BriefConfig {
 }
 ```
 
+### experiments
+
+<Badge text="Version: 1.0.0" type="warning" />
+
+#### enableNativePlugin
+
+- Type: `boolean`
+- Optional: true
+- Default: false
+- Description
+
+  - 是否开启 Rspack 原生插件，开启后可大幅降低 Rsdoctor 自身的分析耗时。
+
+- Example
+
+```js
+new RsdoctorRspackPlugin({
+  experiments: { enableNativePlugin: true }
+}),
+```
+
 ### output
 
 <Badge text="Version: 1.0.0" type="warning" />
