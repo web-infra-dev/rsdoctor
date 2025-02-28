@@ -122,9 +122,12 @@ Whether to automatically open the Rsdoctor report page. If you do not need to vi
 - Type: `boolean`
 - Optional: true
 - Default: false
-- Description
 
-  - Whether to enable the Rspack native plugin, enabling it can significantly reduce the analysis time of Rsdoctor itself.
+##### Description
+
+By integrating Rsdoctor's native plugin into Rspack, we move Rsdoctor's time-consuming data processing logic to the Rspack build stage. This feature significantly improves the build analysis efficiency of Rsdoctor in Rspack, reducing the overall analysis time.
+
+- enableNativePlugin: Whether to enable the Rspack native plugin, enabling it can significantly reduce the analysis time of Rsdoctor itself.
 
 - Example
 
@@ -255,13 +258,13 @@ Configure the port for the Rsdoctor server.
 
 <Badge text="Deprecated" type="warning" />
 
-请看 [output.reportCodeType](#reportcodetype)
+Please use [output.reportCodeType](#reportcodetype)
 
 ### ~~reportDir [**Deprecated**]~~
 
 <Badge text="Deprecated" type="warning" />
 
-请看 [output.reportDir](#reportDir)
+Please use [output.reportDir](#reportDir)
 
 ### supports
 
