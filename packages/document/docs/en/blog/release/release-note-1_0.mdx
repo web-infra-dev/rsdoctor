@@ -1,0 +1,157 @@
+# Rsdoctor 1.0 Release Note
+
+We are excited to announce the official release of **Rsdoctor 1.0**!
+
+<img src="/rsdoctor-v1_0.png" width="80%" style={{ margin: 'auto' }} />
+
+After a year of continuous iteration and practice verification, we are officially launching **Rsdoctor 1.0** — a deep analysis tool designed specifically for modern front-end builds. As a full-chain observation tool that supports both [Rspack](https://rspack.dev/) and [webpack](https://webpack.js.org/), Rsdoctor has been fully validated in hundreds of community projects.
+
+## Why Rsdoctor
+
+For a long time, build analysis has faced the following difficulties and pain points:
+
+1. **Insufficient depth of detail**: Traditional tools **cannot delve into the details and changes of the compilation process**, and developers often need to set breakpoints for step-by-step debugging, which is inefficient.
+2. **Data segmentation and isolation**: The analysis data of build artifacts and the build scan rules are often separated, **lacking a unified view** to comprehensively analyze and optimize the build process.
+3. **Insufficient support for modern frameworks**: Existing solutions do not fully support modern frameworks (such as Rspack), especially in analyzing the ability of [**Rspack built-in Loader**](https://rspack.dev/guide/features/builtin-swc-loader).
+
+### Community Related Tools
+
+In the field of build analysis tools, there are some similar tools, such as [**webpack-bundle-analyzer**](https://github.com/webpack-contrib/webpack-bundle-analyzer) and [**Statoscope**](https://github.com/statoscope/statoscope/), which provide a variety of ways to display build artifacts. At the same time, tools like [**speed-measure-webpack-plugin**](https://github.com/stephencookdev/speed-measure-webpack-plugin) also play a role in build compilation.
+However, these tools still have some limitations, such as **unable to provide more detailed display of build details** and **comprehensive build problem analysis ability**, **incompatible with Rspack bundler**, and **lack of build warning scan** function.
+Rsdoctor absorbs the experience and lessons of these tools, combines the advantages of multiple tools, and expands the **Loader tracing ability** to more deeply analyze the compilation stage Loader behavior, **aiming to provide more detailed, more intuitive, and more comprehensive build analysis ability**.
+
+### Birth of Rsdoctor
+
+Based on the current situation of community tools, we decided to develop a tool focused on build artifacts and compilation analysis for the [Rspack](https://rspack.dev/) ecosystem —— **Rsdoctor**.
+
+We designed Rsdoctor with an intuitive user interface and powerful analysis capabilities, enabling it to delve into every detail of the build process. It not only supports [Rspack](https://rspack.dev/) and [webpack](https://webpack.js.org/), but also provides comprehensive support for modern frameworks, such as: [Modern.js](https://modernjs.dev/) and others.
+
+In the process of implementing Rsdoctor, we learned the best practices from excellent tools in the community, and focused on the following use cases to design Rsdoctor:
+
+- **As a comprehensive build analysis tool**: Help developers delve into every link in the build process, and provide detailed compilation and artifact analysis.
+- **As an extensible analysis tool**: Allow developers to customize analysis rules according to project needs, and easily measure and optimize the build process.
+
+Through Rsdoctor, developers can more efficiently identify and solve problems in the build, thereby improving the efficiency and quality of the project build.
+
+### Common Application Scenarios
+
+The specific functional items of Rsdoctor can be viewed in the [Feature Navigation](/guide/start/features), and it can solve common build analysis problems, such as the following case studies:
+
+#### 1. "Build speed is too slow?"
+
+During the build process, if you find that the compilation speed is too slow, you can use the [Loader timeline](/guide/usage/loaders-timeline) to view the time consumption of Loader execution, and understand the compilation time consumption of each file by each Loader. This way, you can find Loaders with excessive time consumption.
+
+<img src="https://assets.rspack.dev/others/assets/rsdoctor/loader-timeline-overall.png" />
+
+#### 2. "Build results do not match expectations?"
+
+During the build, there may be problems where the compilation results do not match expectations, causing the final style to be overridden or other runtime issues. The [Loader Details](/guide/usage/loaders-analysis) page of Rsdoctor can be used to view the changes before and after the compilation of the current file by the Loader.
+
+For example: By comparing the code before and after compilation in the build, it was found that after the compilation by **babel-loader**, the import order of the css file changed, causing the highest priority style to be overridden by the default style configuration, resulting in invalid css styles. It was finally found that the problem was with `babel-plugin-import`: https://github.com/umijs/babel-plugin-import/issues/606.
+
+<img src="/babel-import-error.png" />
+
+#### 3. "How to split the Initial Chunk reasonably?"
+
+We can use the [Artifact Analysis](/guide/usage/bundle-size) page to view the Modules tree of a certain artifact to see which Modules the artifact contains, and then use the (https://rspack.dev/zh/plugins/webpack/split-chunks-plugin) configuration of Rspack to split the artifact reasonably.
+
+<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-overall.png" />
+
+#### 4. "How to analyze the impact of packaging changes on performance?"
+
+When a certain artifact is released, if the size of the artifact increases, causing a deterioration in the performance of the online page, you can use the [Bundle Diff](/guide/usage/bundle-diff) capability of Rsdoctor to compare the details of the differences between the artifacts of two commits, and the differences in the dependent Packages.
+
+<div style={{ display: 'flex', justifyContent: 'space-between', width: '50%' }}>
+  <img
+    style={{ flex: 1 }}
+    src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-assets.png"
+  />
+  <img
+    style={{ flex: 1 }}
+    src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-assets-list.png"
+  />
+</div>
+
+**In the future, Rsdoctor will plan to support the active anti-deterioration capability of Bundle Diff.**
+
+#### 5. "Why is a certain module file packaged?"
+
+During the build process, if you want to know why a certain module file is packaged into the artifact, you can click on the "Module Graph" icon behind the module in the Modules tree on the [Artifact Analysis](/guide/usage/bundle-size) page to view the upstream dependency relationship of the module.
+
+<img
+  style={{ width: 600, margin: 'auto' }}
+  src="https://assets.rspack.dev/others/assets/rsdoctor/module-analysis-tree.png"
+/>
+
+**In the future, we will plan to combine AI capabilities to help users analyze module dependency chain problems more quickly.**
+
+## Who is Using
+
+Rsdoctor currently has **around 120,000 downloads per week on NPM**, and at ByteDance, we use Rsdoctor as a development build analysis tool to support upper-layer build frameworks: [Rspack](https://rspack.dev/), [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rsbuild](https://rsbuild.dev/index) and [Modern.js](https://modernjs.dev/), supporting **700+** projects internally and externally.
+
+<img src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-position.png" />
+
+Related usage links:
+
+- [Rspack](https://rspack.dev/guide/optimization/use-rsdoctor)。
+- [Rsbuild](https://rsbuild.dev/guide/debug/rsdoctor)。
+- [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)。
+
+## 1.0 New Features
+
+### 🎨 UI Upgrade
+
+- **Overall UI Upgrade**: We have comprehensively optimized the user interface of Rsdoctor, making it more clear, beautiful, and easy to navigate. The new design not only improves the user experience, but also makes the information display more intuitive and efficient.
+
+<iframe
+  width="560"
+  height="315"
+  style={{ margin: 'auto' }}
+  src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
+  frameborder="0"
+  allowfullscreen
+></iframe>
+
+### 🚀 Rspack Build Analysis Efficiency
+
+By integrating the native plugin of Rsdoctor into Rspack, we have moved the time-consuming data processing logic of Rsdoctor to the build stage of Rspack. This improvement significantly improves the build analysis efficiency of Rsdoctor in Rspack, reduces the overall analysis time, [details](/config/options/options#enablenativeplugin).
+
+### 🔍 Module Search Function
+
+- **Search Module Capability**: In the `Bundle Size` page, we have added a module search function. Users can quickly locate and view the `Assets` where the module is located by entering the module name, making it more convenient to analyze the reference relationship and size of the module. [details](/guide/usage/bundle-size#%E6%A8%A1%E5%9D%97%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD)
+
+### 🛠️ New Build Scan Rules
+
+- **Cross Chunks Package Rule**: Added a rule for detecting duplicate packages across Chunks (E1002), which can scan for duplicate packages in different `chunks`. These duplicate packages may cause redundant code in the build.
+
+  Solution can be viewed at [[E1002] Cross Chunks Packages](/guide/rules/rules#e1002-cross-chunks-package)
+
+- **ECMA Version Check Rule**: Enhanced the ECMA version detection rule (E1004), used to detect incompatible advanced syntax, [details](/guide/rules/rules#e1004-ecma-version-check).
+
+### ⚙️ New Configuration Item
+
+- **output.compressData Configuration**: We have added the `output.compressData` configuration item, used to control whether to compress the analysis data. By default, this option is `true`, which means that the analysis data will be compressed.
+
+### Incompatible Updates
+
+The **reportCodeType** and **reportDir** configuration items in the plugin configuration have been moved to the output. [details](/config/options/options#reportcodetype).
+
+## How to Use 1.0
+
+- If you have not used Rsdoctor before, you can refer to the [Quick Start](/guide/start/quick-start) to integrate Rsdoctor.
+- If you are using Rsdoctor 0.4 or earlier, please note that the 1.0 version contains some incompatible updates, you can refer to the [Changelog](#10-changelog) below.
+- Rsdoctor also provides ways to integrate with Rspack, Rsbuild, webpack and other projects, please see [Quick Start](/guide/start/quick-start).
+
+> Welcome to give a Star 🌟 to the [Rsdoctor GitHub](https://github.com/web-infra-dev/rsdoctor) repository.
+
+## Next Steps
+
+Rsdoctor v1.0 provides advanced features and custom analysis entry points for large projects, such as: [Rspack Native Plugin](/config/options/options#enablenativeplugin) to improve analysis efficiency, [Custom Rules](/guide/rules/rule-custom) to develop customized build rules, etc. We will continue to improve these features, and provide **more detailed Loader behavior analysis** to support the development of Rsdoctor.
+
+In the next 6 to 12 months, Rsdoctor will **move some of the analysis capabilities to the underlying logic of Rspack**, and support more detailed and accurate Loader analysis on the basis of the existing [Rspack Native Plugin](/config/options/options#enablenativeplugin) and other build stages. At the same time, it will be combined with **AI capabilities**, and help users find the difficulties in build analysis more intelligently, intuitively, and more targeted through **AI Chat Bot**.
+Finally, we will **continue to expand the capabilities on CI**, and provide the [Rsdoctor CI Action](https://github.com/web-infra-dev/rsdoctor/discussions/491) capability to provide deterioration monitoring capability.
+
+**Finally, thank you to all the developers who have contributed to Rsdoctor ❤️**:
+[@charpeni](https://github.com/charpeni)、[@nanianlisao](https://github.com/nanianlisao)、[@ChuHoMan](https://github.com/ChuHoMan)、[@wChenonly](https://github.com/wChenonly)、[@cnryb](https://github.com/cnryb)、[@HigherOrderLogic](https://github.com/HigherOrderLogic)、[@iamleniac](https://github.com/iamleniac)、[@nhducit](https://github.com/nhducit)、[@Gehbt](https://github.com/Gehbt)、[@cairon666](https://github.com/cairon666)、[@bin1357](https://github.com/bin1357)、[@NickBolles](https://github.com/NickBolles)、[@kwonoj](https://github.com/kwonoj)、
+[@cclap2020](https://github.com/cclap2020)、[@tinywaves](https://github.com/tinywaves)、[@trueLoving](https://github.com/trueLoving)、[@gezhicui](https://github.com/gezhicui)、[@sudhakar-s](https://github.com/sudhakar-s)、[@puppet-666](https://github.com/puppet-666)、[@inottn](https://github.com/inottn)、[@chenjiahan](https://github.com/chenjiahan)、[@SoonIter](https://github.com/SoonIter)、[@LingyuCoder](https://github.com/LingyuCoder)、[@nyqykk](https://github.com/nyqykk)、[@9aoy](https://github.com/9aoy)、[@Timeless0911](https://github.com/Timeless0911)、
+[@zllkjc](https://github.com/zllkjc)、[@jkzing](https://github.com/jkzing) and [@KyrieLii](https://github.com/KyrieLii)。
