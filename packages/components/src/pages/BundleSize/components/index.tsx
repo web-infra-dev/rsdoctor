@@ -310,7 +310,7 @@ export const WebpackModulesOverallBase: React.FC<
                 <Empty
                   description={
                     <div>
-                      Tile graph is disabled,
+                      Tile graph is disabled,{' '}
                       <a href="https://rsdoctor.dev/config/options/options#generatetilegraph">
                         see the documentation to learn how to enable.
                       </a>
