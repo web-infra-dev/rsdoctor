@@ -130,9 +130,9 @@ const tabList = [
                 <Col>
                   <Tag color={'purple'}>{'Bundled: 15.77 KB'}</Tag>
                   <Typography.Text>
-                    The final size of the output file(s) after they have
-                    processed, bundled, and potentially optimized. This is what
-                    gets delivered to the browser.
+                    The final size of the output files after processing,
+                    bundling, and optimization. This is what is delivered to the
+                    browser.
                   </Typography.Text>
                 </Col>
               </Row>
