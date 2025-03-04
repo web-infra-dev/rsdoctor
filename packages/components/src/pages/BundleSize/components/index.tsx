@@ -55,44 +55,73 @@ const tabList = [
       <Space>
         <Typography.Text>{'Tree Graph'}</Typography.Text>
         <Tooltip
-          color={'white'}
+          overlayStyle={{ maxWidth: 380 }}
+          overlayInnerStyle={{ marginLeft: 16, padding: 10 }}
+          color="white"
           title={
-            <Space direction="vertical" color="white">
+            <Space direction="vertical" color="white" size="middle">
               <Row>
                 <Col>
                   <Tag color="cyan" style={{ margin: 0 }}>
                     initial
                   </Tag>
-                  <Typography.Text>
-                    : Indignify whether the chunk is the initial chunk.
+                  <Typography.Text style={{ marginLeft: 4 }}>
+                    Identify whether the chunk is an initial chunk.
                   </Typography.Text>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  <Tag color="green">concatenated</Tag>
-                  <Typography.Text>
-                    : Indignify whether the module is the concatenated module.
+                  <Tag color="green" style={{ margin: 0 }}>
+                    concatenated
+                  </Tag>
+                  <Typography.Text style={{ marginLeft: 4 }}>
+                    Identify whether the module is a concatenated module
                   </Typography.Text>
-                  <br />
-                  <Typography.Text strong>Concatenated Module:</Typography.Text>
-                  <Typography.Text>
-                    A series module is to lift or series multiple modules into a
-                    closure when packaging.
-                  </Typography.Text>
+                  <Tooltip
+                    overlayStyle={{ maxWidth: 408 }}
+                    placement="bottom"
+                    color="white"
+                    title={
+                      <Space direction="vertical" color="white">
+                        <Row>
+                          <Col>
+                            <Typography.Text strong>
+                              Concatenated Module
+                            </Typography.Text>
+                            <Typography.Text>
+                              : A performance optimization where multiple
+                              modules are merged (or "hoisted") into a single
+                              scope instead of wrapping each module in separate
+                              function closures. This reduces the bundle size
+                              and improves runtime performance by minimizing
+                              function call overhead.
+                            </Typography.Text>
+                          </Col>
+                        </Row>
+                      </Space>
+                    }
+                  >
+                    <InfoCircleOutlined
+                      style={{ color: 'rgba(0,0,0,.45)', marginLeft: 4 }}
+                    />
+                  </Tooltip>
+                  <Typography.Text>.</Typography.Text>
                 </Col>
               </Row>
               <Row>
                 <Col>
                   <Button size="small" icon={<CodepenCircleOutlined />} />
-                  <Typography.Text>: Open the code.</Typography.Text>
+                  <Typography.Text style={{ marginLeft: 4 }}>
+                    Open the code.
+                  </Typography.Text>
                 </Col>
               </Row>
               <Row>
                 <Col>
                   <Button size="small" icon={<DeploymentUnitOutlined />} />
-                  <Typography.Text>
-                    : View the module dependency, that is, module reasons in
+                  <Typography.Text style={{ marginLeft: 4 }}>
+                    View the module dependency, that is, module reasons in
                     stats.json.
                   </Typography.Text>
                 </Col>
@@ -100,25 +129,25 @@ const tabList = [
               <Row>
                 <Col>
                   <Tag color={'purple'}>{'Bundled: 15.77 KB'}</Tag>
-                  <Typography.Text strong>Bundled Size</Typography.Text>
                   <Typography.Text>
-                    The size of the code which bundled. That is, after bundle
-                    and tree-shaking.
+                    The final size of the output file(s) after they have
+                    processed, bundled, and potentially optimized. This is what
+                    gets delivered to the browser.
                   </Typography.Text>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  <Tag color={'orange'}>{'Source: 15.77 KB'}</Tag>
-                  <Typography.Text strong>Source Size</Typography.Text>
+                  <Tag color={'orange'}>{'Source: 60.46 KB'}</Tag>
                   <Typography.Text>
-                    The size of the code which before bundle and transform.
+                    The original size of your source code files before any
+                    processing or transformations. This is the raw size of your
+                    code as you wrote it.
                   </Typography.Text>
                 </Col>
               </Row>
             </Space>
           }
-          style={{ marginLeft: 3 }}
         >
           <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
         </Tooltip>
