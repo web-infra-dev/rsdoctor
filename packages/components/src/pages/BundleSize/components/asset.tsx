@@ -419,13 +419,13 @@ export const AssetDetail: React.FC<{
                   color={'white'}
                 >
                   <Tag color={'purple'} style={tagStyle}>
-                    {`Bundled: ${formatSize(parsedSize)}`}
+                    {`Bundled Size: ${formatSize(parsedSize)}`}
                   </Tag>
                 </Tooltip>
               ) : sourceSize !== 0 ? (
                 // fallback to display tag for source size
                 <Tag color={'geekblue'}>
-                  {`Source: ${formatSize(sourceSize)}`}
+                  {`Source Size: ${formatSize(sourceSize)}`}
                 </Tag>
               ) : null}
               {isConcatenation ? (
