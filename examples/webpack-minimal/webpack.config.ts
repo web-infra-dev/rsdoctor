@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { Configuration } from 'webpack';
 import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
-import svgToMiniDataURI from "mini-svg-data-uri";
+import svgToMiniDataURI from 'mini-svg-data-uri';
 
 const data: Configuration = {
   entry: './src/index.ts',
@@ -13,29 +13,29 @@ const data: Configuration = {
         loader: 'ts-loader',
       },
       {
-				test: /\.css$/,
-				loader: "css-loader"
-			},
+        test: /\.css$/,
+        loader: 'css-loader',
+      },
       {
-				test: /\.(png|jpg)$/,
-				type: "asset"
-			},
-			{
-				test: /\.svg$/,
-				type: "asset",
-				generator: {
-					dataUrl: (content: any) => {
-						if (typeof content !== "string") {
-							content = content.toString();
-						}
+        test: /\.(png|jpg)$/,
+        type: 'asset',
+      },
+      {
+        test: /\.svg$/,
+        type: 'asset',
+        generator: {
+          dataUrl: (content: any) => {
+            if (typeof content !== 'string') {
+              content = content.toString();
+            }
 
-						return svgToMiniDataURI(content);
-					}
-				}
-			}
+            return svgToMiniDataURI(content);
+          },
+        },
+      },
     ],
   },
-  
+
   resolve: {
     mainFields: ['browser', 'module', 'main'],
     extensions: ['.ts', '.js', '.json', '.wasm'],
@@ -62,7 +62,12 @@ const data: Configuration = {
     ids: true,
   },
   devtool: 'source-map',
-  plugins: [new RsdoctorWebpackPlugin({ disableClientServer: !process.env.ENABLE_CLIENT_SERVER, features: ['bundle', 'plugins', 'loader', 'resolver'] })],
+  plugins: [
+    new RsdoctorWebpackPlugin({
+      disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
+      features: ['bundle', 'plugins', 'loader', 'resolver'],
+    }),
+  ],
 };
 
 export default data;
