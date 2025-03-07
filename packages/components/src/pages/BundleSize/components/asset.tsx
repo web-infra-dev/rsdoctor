@@ -433,7 +433,7 @@ export const AssetDetail: React.FC<{
                   title={
                     <Space>
                       <Typography.Text style={{ color: 'inherit' }}>
-                        this is a concatenated module, it contains
+                        this is a concatenated module, it contains{' '}
                         {mod.modules?.length} modules
                       </Typography.Text>
                     </Space>
