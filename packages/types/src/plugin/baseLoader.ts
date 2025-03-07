@@ -47,6 +47,9 @@ export interface LoaderContext<OptionsType = {}> {
   _module?: {
     layer: string;
   };
+  _compilation?: {
+    name: string;
+  };
   getOptions(schema?: any): OptionsType;
   /**
    * Make this loader result cacheable. By default it's cacheable.
