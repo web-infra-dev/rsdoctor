@@ -41,8 +41,8 @@ export const parseBundle: ParseBundle = (
     const tagMatchResult = getStringBetween(
       content,
       0,
-      /([a-z|A-Z]+\.[a-z]+)\(\SRSDOCTOR_START::(.*?);/,
-      /([a-z|A-Z]+\.[a-z]+)\(\SRSDOCTOR_END::(.*?)\)/,
+      /([a-z|A-Z|_]+\.[a-z]+)\(\SRSDOCTOR_START::(.*?);/,
+      /([a-z|A-Z|_]+\.[a-z]+)\(\SRSDOCTOR_END::(.*?)\)/,
     );
     content = tagMatchResult.result?.trim() || content;
     tagCache.set(bundlePath, tagMatchResult.loc);
