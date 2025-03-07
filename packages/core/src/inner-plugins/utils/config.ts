@@ -134,7 +134,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     brief,
   };
   if (
-    !output.compressData &&
+    output.compressData === false &&
     ((output.reportCodeType &&
       !output.reportCodeType?.noAssetsAndModuleSource) ||
       !output.reportCodeType)
