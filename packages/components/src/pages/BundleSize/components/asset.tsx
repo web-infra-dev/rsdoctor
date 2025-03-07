@@ -409,23 +409,23 @@ export const AssetDetail: React.FC<{
                   title={
                     <Space direction="vertical">
                       <Tag color={'orange'}>
-                        {'Bundled Size:' + formatSize(parsedSize)}
+                        {`Bundled Size: ${formatSize(parsedSize)}`}
                       </Tag>
                       <Tag color={'volcano'}>
-                        {'Source Size:' + formatSize(sourceSize)}
+                        {`Source Size: ${formatSize(sourceSize)}`}
                       </Tag>
                     </Space>
                   }
                   color={'white'}
                 >
                   <Tag color={'purple'} style={tagStyle}>
-                    {'Bundled: ' + formatSize(parsedSize)}
+                    {`Bundled Size: ${formatSize(parsedSize)}`}
                   </Tag>
                 </Tooltip>
               ) : sourceSize !== 0 ? (
                 // fallback to display tag for source size
                 <Tag color={'geekblue'}>
-                  {'Source Size:' + formatSize(sourceSize)}
+                  {`Source Size: ${formatSize(sourceSize)}`}
                 </Tag>
               ) : null}
               {isConcatenation ? (
@@ -433,7 +433,7 @@ export const AssetDetail: React.FC<{
                   title={
                     <Space>
                       <Typography.Text style={{ color: 'inherit' }}>
-                        this is a concatenated module, it contains
+                        this is a concatenated module, it contains{' '}
                         {mod.modules?.length} modules
                       </Typography.Text>
                     </Space>
