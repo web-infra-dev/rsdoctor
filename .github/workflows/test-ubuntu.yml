@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        node-version: [18.x] 
+        node-version: [22.x] 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
