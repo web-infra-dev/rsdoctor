@@ -74,8 +74,36 @@ new RsdoctorWebpackPlugin({
 
 这个 `Options` 是 [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin-%E6%8F%92%E4%BB%B6) 和 [RsdoctorRspackPlugin](#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
 
+- [brief](#brief)
 - [disableClientServer](#disableclientserver)
+- [experiments](#experiments)
 - [features](#features)
+- [mode](#mode)
+- [output](#output)
+- [port](#port)
+- [supports](#supports)
+
+### brief
+
+<Badge text="Version: 0.4.0" type="warning" />
+
+- **Type:** [BriefType](#brieftype)
+- **Optional:** `true`
+- **Default:** undefined
+
+Brief 模式更多配置，如下：
+
+- **reportHtmlName:** 配置 Brief 的 HTML 报告的名称，默认 `report-rsdoctor.html`。
+- **writeDataJson:** 默认 Brief 模式下将分析数据注入到 HTML 文件中，所以不会再产生构建分析数据。如果想要而外本地生成数据则需要配置 `writeDataJson: true`。
+
+#### briefType
+
+```ts
+interface BriefConfig {
+  reportHtmlName?: string | undefined;
+  writeDataJson: boolean;
+}
+```
 
 ### disableClientServer
 
@@ -88,6 +116,30 @@ new RsdoctorWebpackPlugin({
 :::
 
 是否需要自动打开 Rsdoctor 报告页面。如果你不需要在浏览器内查看本次 Rsdoctor 提供的分析报告，则可以开启这个配置项。
+
+### experiments
+
+<Badge text="Version: 1.0.0" type="warning" />
+
+#### enableNativePlugin
+
+- Type: `boolean`
+- Optional: true
+- Default: false
+
+##### Description
+
+通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑前置到 Rspack 的构建阶段。这一特性显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了整体分析时间。
+
+- enableNativePlugin：是否开启 Rspack 原生插件，开启后可大幅降低 Rsdoctor 自身的分析耗时。
+
+- Example
+
+```js
+new RsdoctorRspackPlugin({
+  experiments: { enableNativePlugin: true }
+}),
+```
 
 ### features
 
@@ -153,63 +205,17 @@ import ModeIntro from '@zh/shared/mode-intro.md';
 
 <ModeIntro />
 
-#### banner
-
-:::danger
-开启 BannerPlugin 分析时，请勿在生产版本中使用 Rsdoctor。
-:::
-
-- default: true.
-- type: boolean.
-
-如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
-
-### brief
-
-<Badge text="Version: 0.4.0" type="warning" />
-
-- **Type:** [BriefType](#brieftype)
-- **Optional:** `true`
-- **Default:** undefined
-
-Brief 模式更多配置，如下：
-
-- **reportHtmlName:** 配置 Brief 的 HTML 报告的名称，默认 `report-rsdoctor.html`。
-- **writeDataJson:** 默认 Brief 模式下将分析数据注入到 HTML 文件中，所以不会再产生构建分析数据。如果想要而外本地生成数据则需要配置 `writeDataJson: true`。
-
-#### briefType
-
-```ts
-interface BriefConfig {
-  reportHtmlName?: string | undefined;
-  writeDataJson: boolean;
-}
-```
-
-### experiments
-
-<Badge text="Version: 1.0.0" type="warning" />
-
-#### enableNativePlugin
-
-- Type: `boolean`
-- Optional: true
-- Default: false
-- Description
-
-  - 是否开启 Rspack 原生插件，开启后可大幅降低 Rsdoctor 自身的分析耗时。
-
-- Example
-
-```js
-new RsdoctorRspackPlugin({
-  experiments: { enableNativePlugin: true }
-}),
-```
-
 ### output
 
 <Badge text="Version: 1.0.0" type="warning" />
+
+#### compressData
+
+- **Type:** boolean
+- **Optional:** `true`
+- **Default:** true
+
+compressData 用于配置是否将 [outputDir]/.rsdoctor 下的分析数据进行压缩处理。
 
 #### reportCodeType
 
@@ -239,14 +245,6 @@ new RsdoctorRspackPlugin({
 
 Rsdoctor 报告输出目录，默认是构建产物输出目录。
 
-#### compressData
-
-- **Type:** boolean
-- **Optional:** `true`
-- **Default:** true
-
-compressData 用于配置是否将 [outputDir]/.rsdoctor 下的分析数据进行压缩处理。
-
 ### port
 
 - **Type:** `number`
@@ -259,13 +257,13 @@ compressData 用于配置是否将 [outputDir]/.rsdoctor 下的分析数据进�
 
 <Badge text="Deprecated" type="warning" />
 
-请使用 [output.reportCodeType](#reportcodetype)
+请看 [output.reportCodeType](#reportcodetype)
 
 ### ~~reportDir [**Deprecated**]~~
 
 <Badge text="Deprecated" type="warning" />
 
-请使用 [output.reportDir](#reportDir)
+请看 [output.reportDir](#reportDir)
 
 ### supports
 
@@ -285,6 +283,29 @@ type ISupport = {
 };
 ```
 
+#### banner
+
+:::danger
+开启 BannerPlugin 分析时，请勿在生产版本中使用 Rsdoctor。
+:::
+
+- default: true.
+- type: boolean.
+
+如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
+
+#### generateTileGraph
+
+- default: true. 在 rspack 中默认值是 false。
+- type: boolean.
+
+是否开启生成瓦片图的能力，影响是 Bundle Size 页面中是否有 `webpack-bundle-analyzer` 的瓦片图。
+
+<img
+  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-tile-graph.png"
+  width="500px"
+  style={{ margin: 'auto' }}
+/>
 #### parseBundle
 
 - default: true.
@@ -319,16 +340,3 @@ chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
     style={{ margin: 'auto' }}
   />
 </div>
-
-#### generateTileGraph
-
-- default: true. 在 rspack 中默认值是 false。
-- type: boolean.
-
-是否开启生成瓦片图的能力，影响是 Bundle Size 页面中是否有 `webpack-bundle-analyzer` 的瓦片图。
-
-<img
-  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-tile-graph.png"
-  width="500px"
-  style={{ margin: 'auto' }}
-/>
