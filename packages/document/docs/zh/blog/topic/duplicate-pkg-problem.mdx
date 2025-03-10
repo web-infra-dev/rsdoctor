@@ -37,10 +37,9 @@ Rsdoctor 会在产物预警中报告对同一份产物中含有多个重复依�
 
 #### 使用 [resolve.alias](https://www.rspack.dev/config/resolve.html#resolvealias)
 
-基本所有的构建器都支持对 npm 包解析的路径进行修改。因此我们可以通过在编译时手动指定 package 的 resolve 路径，来达到消除重复依赖的目的，例如：以 **Rspack** 或 **Webpack** 为例，如果 `lodash` 重复打包，我们可以进行如下配置，将所有 `lodash` 的 resolve 路径指定到当前目录的 `node_modules` 中。
+几乎所有的打包工具都提供了自定义 npm 包解析路径的功能。因此我们可以通过在编译时手动指定 package 的 resolve 路径，来达到消除重复依赖的目的，例如：以 **Rspack** 或 **Webpack** 为例，如果 `lodash` 重复打包，我们可以进行如下配置，将所有 `lodash` 的 resolve 路径指定到当前目录的 `node_modules` 中。
 
-```js
-// webpack.config.js/rspack.config.js
+```js title="rspack.config.js"
 const path = require('path');
 
 module.exports = {
@@ -70,7 +69,7 @@ module.exports = {
 │       │   └── react      -> ../../../node_modules/.pnpm/react@18.2.0
 │       ├── src
 │       │   └── index.js
-│       ├── webpack.config.js
+│       ├── rspack.config.js
 │       └── package.json
 └── packages
     └── component
@@ -81,14 +80,14 @@ module.exports = {
         └── package.json
 ```
 
-在 `apps/web` 下执行 `webpack build`，打包 web 下的代码时，会解析到 `react@18.2.0`，接着打包 `component` 下的代码时，会解析到 `react@18.1.0`，这导致 web 项目的产物中同时含有两个版本的 `React`。
+在 `apps/web` 下执行 `rspack build`，打包 web 下的代码时，会解析到 `react@18.2.0`，接着打包 `component` 下的代码时，会解析到 `react@18.1.0`，这导致 web 项目的产物中同时含有两个版本的 `React`。
 
 #### 解决方案
 
-此问题可以通过构建器的 [resolve.alias](https://www.rspack.dev/config/resolve.html#resolvealias) 来解决。让 `Rspack` 或 `Webpack` 解析 `React` 时只解析到 `apps/web/node_modules/react` 这一个版本，示例代码如下：
+此问题可以通过打包工具的 [resolve.alias](https://www.rspack.dev/config/resolve.html#resolvealias) 来解决。让 Rspack 或 webpack 解析 `React` 时只解析到 `apps/web/node_modules/react` 这一个版本，示例代码如下：
 
 ```javascript
-// apps/web/webpack.config.js
+// apps/web/rspack.config.js
 const path = require('path');
 
 module.exports = {
@@ -115,7 +114,7 @@ module.exports = {
 │       │   └── debug      ->  ../../../node_modules/.pnpm/debug@4.3.4
 │       ├── src
 │       │   └── index.js
-│       ├── webpack.config.js
+│       ├── rspack.config.js
 │       └── package.json
 └── packages
     └── component
@@ -126,12 +125,12 @@ module.exports = {
         └── package.json
 ```
 
-在该项目中，在 `apps/web` 下执行 `webpack build`，打包 web 下的代码时，会解析到 `axios@0.27.2_debug@4.3.4`，接着打包 `packages/component` 下的代码时，会解析到 `axios@0.27.2`，它们虽然是同一版本，但路径不同，产物中也会存在两份 `axios`。
+在该项目中，在 `apps/web` 下执行 `rspack build`，打包 web 下的代码时，会解析到 `axios@0.27.2_debug@4.3.4`，接着打包 `packages/component` 下的代码时，会解析到 `axios@0.27.2`，它们虽然是同一版本，但路径不同，产物中也会存在两份 `axios`。
 
 解决方案如下，让 `web` 项目构建时都只解析到 `web` 下 `node_modules` 的 `axios` 包即可。
 
 ```javascript
-// apps/web/webpack.config.js
+// apps/web/rspack.config.js
 alias: {
   'axios': path.resolve(__dirname, 'node_modules/axios')
 }
