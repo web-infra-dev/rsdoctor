@@ -1,4 +1,4 @@
-# Compilation Diagnostic Rules
+# Compilation diagnostic rules
 
 Building diagnostic rules is similar to `ESLint` like lint tools, but different from it in that `ESLint` performs code scanning and is unrelated to the build process. In contrast, the code diagnostics here are closely related to the build process of `Rspack or Webpack`, incorporating many internal parameters generated during the build process to aid judgment, such as ModuleGraph, Webpack's internal markings for each module, and runtime added after code transformation, among others.
 
@@ -16,7 +16,7 @@ During the build process, if issues are discovered, they will be visible in the 
   src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-alerts.png"
 />
 
-## How to Use
+## How to use
 
 Currently, Rsdoctor provides **built-in rules** and **custom rules**.
 
@@ -32,6 +32,6 @@ The existing diagnostic tool includes multiple rules, all of which are enabled b
 
 For specific details, refer to [Built-in Rules](/guide/rules/rules).
 
-### Custom Rules
+### Custom rules
 
 Rsdoctor also collects analyzed data and allows users to integrate custom rules through the Linter API. For details on custom rules, refer to [Custom Rules](/guide/rules/rule-custom).
