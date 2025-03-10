@@ -1,4 +1,4 @@
-# Rsdoctor Website
+# Rsdoctor website
 
 ## Writing style guide
 
