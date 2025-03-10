@@ -2,123 +2,124 @@
 
 我们很高兴地宣布 **Rsdoctor 1.0** 已经正式发布！
 
-<img src="/rsdoctor-v1_0.png" width="80%" style={{ margin: 'auto' }} />
+<img src="/rsdoctor-1_0-banner.png" width="80%" style={{ margin: 'auto' }} />
 
-在经过一年的不断迭代和实践验证后，我们正式推出 **Rsdoctor 1.0** —— 一款专门为现代前端构建而设计的深入分析工具。作为同时支持 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/) 的全链路观测工具，Rsdoctor 已经在数百个社区项目中得到充分验证。
+在经过一年的不断迭代和验证后，我们正式推出 **Rsdoctor 1.0** —— 一款专门为 [Rspack](https://rspack.dev/) 而设计的构建分析工具，同时支持 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/) 的构建全链路分析工具，Rsdoctor 作为构建分析工具已经在社区及字节跳动内的众多项目中得到充分验证及使用。
 
 ## 为什么是 Rsdoctor
-
-长期以来，构建分析一直面临以下难点和痛点：
-
-1. **细节不够深入**：传统工具**无法深入探索编译过程**的细节和变化，开发者常常需要手动设置断点逐步调试，效率低下。
-2. **数据割裂与孤立**：构建产物分析数据与构建扫描规则往往是分离的，**缺乏统一的视图**来综合分析和优化构建流程。
-3. **现代框架支持不足**：现有方案对现代框架（如 Rspack）的支持不够全面，尤其是在分析 [**Rspack 内置 Loader**](https://rspack.dev/guide/features/builtin-swc-loader) 的能力上存在明显不足。
 
 ### 社区相关工具
 
 在构建分析工具领域，存在一些类似工具，例如 [**webpack-bundle-analyzer**](https://github.com/webpack-contrib/webpack-bundle-analyzer) 和 [**Statoscope**](https://github.com/statoscope/statoscope/)，它们提供了多样化的构建产物展示方式。同时，[**speed-measure-webpack-plugin**](https://github.com/stephencookdev/speed-measure-webpack-plugin) 等工具也在构建编译方面发挥着作用。
 然而，这些工具仍然存在一些限制，例如**无法提供更细粒度的构建细节展示**和**全方位的构建问题分析能力**，**对 Rspack 构建器不兼容**，以及**缺少对构建的预警扫描**功能。
-Rsdoctor 通过吸收这些工具的经验教训，并结合多种工具的优点，并拓展了 **Loader 打点能力**以更深入分析编译阶段 Loader 行为，**旨在提供更细粒度、更直观、更全面的构建分析能力**。
+
+总结来说，构建分析工具一直面临以下难点和痛点：
+
+1. **细节不够深入**：传统工具**无法深入探索编译过程**的细节和变化，如果想要查看某个 Loader 编译细节，开发者常常需要手动设置断点逐步调试，效率低下。
+2. **数据割裂与孤立**：现有的产物分析工具通常只提供产物分析数据展示，而不具备构建扫描规则能力，**无法主动为产物提供合理的优化建议，也不支持用户自定义规则**。
+3. **Rspack 支持不足**：现有工具对 [Rspack](https://rspack.dev/) 的支持不够全面，尤其是不支持分析 [**Rspack 内置 Loader**](https://rspack.dev/guide/features/builtin-swc-loader) 。
 
 ### Rsdoctor 诞生
 
 根据以上社区工具现状，我们决定为 [Rspack](https://rspack.dev/) 生态开发一个专注于构建产物及编译分析的工具 —— **Rsdoctor**。
 
-我们为 Rsdoctor 设计了直观的用户界面和强大的分析能力，使其能够深入分析构建过程中的每一个细节。它不仅支持 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/)，还提供了对现代框架的全面支持，例如：[Modern.js](https://modernjs.dev/) 等。
+我们为 Rsdoctor 设计了直观的用户界面，同时，Rsdoctor 通过结合多种工具的优点，扩展了 **Loader 打点能力**以更深入地分析编译阶段的 Loader 行为，**内置了产物及编译的扫描和检测规则**，并支持用户**自定义规则**。
+
+它不仅支持 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/)，还支持基于 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/) 衍生的框架的构建分析，例如：[Rsbuild](https://rsbuild.dev/)、[Rspress](https://rspress.dev/) 及 [Modern.js](https://modernjs.dev/) 等。
 
 在实现 Rsdoctor 的过程中，我们向社区中优秀的工具学习最佳实践，并聚焦于以下使用场景来设计 Rsdoctor：
 
 - **作为一个全面的构建分析工具**：帮助开发者深入了解构建过程中的每一个环节，提供详细的编译和产物分析。
-- **作为一个可扩展的分析工具**：允许开发者根据项目需求自定义分析规则，轻松实现对构建过程的衡量和优化。
 
-通过 Rsdoctor，开发者可以更高效地识别和解决构建中的问题，从而提升项目的构建效率和质量。
-
-### 常见应用场景
-
-Rsdoctor 的具体功能项可以查看[功能导航](/guide/start/features), 它可以解决常见的构建分析问题，例如下面几个问题案例：
-
-#### 1. 「构建速度太慢？」
-
-在构建过程中，如果发现编译速度过慢，可以通过 [Loader 时序图](/guide/usage/loaders-timeline) 查看 Loader 执行的时间消耗，了解每个 Loader 对每个文件的编译时间消耗。这样可以发现时间消耗过大的 Loader。
-
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/loader-timeline-overall.png" />
-
-#### 2. 「构建结果与预期不符？」
-
-在构建时，可能会出现编译结果与预期不一致的问题，导致最终样式被覆盖或其他运行时问题。Rsdoctor 的 [Loader Details](/guide/usage/loaders-analysis) 页面可以查看 Loader 对当前文件编译的前后变化。
-
-例如：通过 Rsdoctor 的构建时编译前后代码对比，发现经过 **babel-loader** 编译后，css 文件的 import 顺序变化，导致优先级最高的样式被默认样式配置覆盖，导致 css 样式无效。最终发现是 `babel-plugin-import` 的问题：https://github.com/umijs/babel-plugin-import/issues/606。
-
-<img src="/babel-import-error.png" />
-
-#### 3.「如何合理拆分 Initial Chunk？」
-
-我们可以通过[产物分析](/guide/usage/bundle-size)页面查看某个产物的 Modules 树来查看该产物资源包含了哪些 Modules，进而通过 Rspack 的 [splitChunks](https://rspack.dev/zh/plugins/webpack/split-chunks-plugin) 配置来进行合理的分包。
-
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-overall.png" />
-
-#### 4.「如何分析打包变动对性能的影响？」
-
-当某个上线后，产物体积增大导致了线上页面性能发生了劣化，则可以通过 Rsdoctor 的 [Bundle Diff](/guide/usage/bundle-diff) 能力来对比两次 commit 的产物差异细节，以及依赖的 Packages 差异。
-
-<div style={{ display: 'flex', justifyContent: 'space-between', width: '50%' }}>
-  <img
-    style={{ flex: 1 }}
-    src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-assets.png"
-  />
-  <img
-    style={{ flex: 1 }}
-    src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-assets-list.png"
-  />
-</div>
-
-**后续 Rsdoctor 将计划支持 Bundle Diff 的主动防劣化能力。**
-
-#### 5.「某个模块文件为什么会被打包进来？」
-
-构建过程中，如果想要知道某个模块文件为什么会被打包到产物中，则可以在[产物分析](/guide/usage/bundle-size)页面中的 Modules 树图中点击该模块后面的 `Module Graph` 图标，查看该模块的上游依赖模块关系。
-
-<img
-  style={{ width: 600, margin: 'auto' }}
-  src="https://assets.rspack.dev/others/assets/rsdoctor/module-analysis-tree.png"
-/>
-
-**后续我们将计划结合 AI 能力，帮助用户更快的分析模块依赖链路问题。**
-
-## 谁在使用
-
-Rsdoctor 目前在 **NPM 上周下载量为 120000 左右**，在字节跳动中，我们将 Rsdoctor 作为研发构建分析工具支持上层构建框架：[Rspack](https://rspack.dev/)、[Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)、[Rsbuild](https://rsbuild.dev/index) 及 [Modern.js](https://modernjs.dev/) 等，支持了公司内外**700+个**项目。
-
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-position.png" />
-
-相关使用链接：
-
-- [Rspack](https://rspack.dev/guide/optimization/use-rsdoctor)。
-- [Rsbuild](https://rsbuild.dev/guide/debug/rsdoctor)。
-- [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)。
-
-## 1.0 新特性
-
-### 🎨 界面升级
-
-- **整体界面 UI 升级**：我们对 Rsdoctor 的用户界面进行了全面的优化，使其更加清晰、美观且易于导航。新的设计不仅提升了用户体验，还使信息展示更加直观和高效。
+- **作为一个可扩展的分析工具**：允许开发者根据项目需求自定义分析规则，实现对构建过程的有针对性的优化。
 
 <iframe
-  width="560"
-  height="315"
+  width="100%"
+  height={460}
   style={{ margin: 'auto' }}
   src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
   frameborder="0"
   allowfullscreen
 ></iframe>
 
+## 常见应用场景
+
+Rsdoctor 的具体功能项可以查看[功能导航](/guide/start/features)，它可以解决常见的构建分析问题，例如下面几个问题案例：
+
+### 1. 「构建速度太慢？」
+
+在构建过程中，如果发现编译速度过慢，可以通过 [Loader 时序图](/guide/usage/loaders-timeline) 查看 Loader 执行的时间消耗，了解每个 Loader 对每个文件的编译时间消耗。这样可以发现时间消耗过大的 Loader。
+
+<img
+  style={{ width: '80%', margin: 'auto' }}
+  src="/loader-timeline-overall.png"
+/>
+
+### 2. 「构建结果与预期不符？」
+
+在构建时，可能会出现编译结果与预期不一致的问题，导致最终样式被覆盖或其他运行时问题。Rsdoctor 的 [Loader Details](/guide/usage/loaders-analysis) 页面可以查看 Loader 对当前文件编译的前后变化。
+
+例如：通过 Rsdoctor 的构建时编译前后代码对比，发现经过 **babel-loader** 编译后，css 文件的 import 顺序变化，导致优先级最高的样式被默认样式配置覆盖，导致 css 样式无效。最终发现是 `babel-plugin-import` 的问题：[#606](https://github.com/umijs/babel-plugin-import/issues/606)。
+
+<img style={{ width: '80%', margin: 'auto' }} src="/babel-import-error.png" />
+
+### 3.「如何合理分包？」
+
+我们可以通过[产物分析](/guide/usage/bundle-size)页面查看某个产物的 Modules 树来查看该产物资源包含了哪些 Modules，进而通过 Rspack 的 [splitChunks](https://rspack.dev/zh/plugins/webpack/split-chunks-plugin) 配置来进行合理的分包。
+
+<img style={{ width: '80%', margin: 'auto' }} src="/bundle-size-overall.png" />
+
+### 4.「如何分析产物增大导致的性能劣化？」
+
+当某个上线后，产物体积增大导致了线上页面性能发生了劣化，则可以通过 Rsdoctor 的 [Bundle Diff](/guide/usage/bundle-diff) 能力来对比两次 commit 的产物差异细节，以及依赖的 Packages 差异。
+
+<img style={{ width: '80%', margin: 'auto' }} src="/bundle-diff-assets.png" />
+
+**后续 Rsdoctor 将计划支持 Bundle Diff 的主动防劣化能力**，例如：提供 Bundle Diff 的 GitHub Actions 以支持在 CI 阶段主动拦截产物不合理的增大。
+
+### 5.「某个模块文件为什么会被打包进来？」
+
+构建过程中，如果想要知道某个模块文件为什么会被打包到产物中，则可以在[产物分析](/guide/usage/bundle-size)页面中的 Modules 树图中点击该模块后面的 `Module Graph` 图标，查看该模块的上游依赖模块关系。
+
+<img style={{ width: 600, margin: 'auto' }} src="/module-analysis-tree.png" />
+
+**后续我们将计划结合 AI 能力，帮助用户更快的分析模块依赖链路问题。**
+
+## 谁在使用
+
+Rsdoctor 目前在 NPM 上周下载量已**超过 10+ 万次**。作为支持 **Rspack 及其衍生框架**（如 Rsbuild 等）的构建分析工具，Rsdoctor 在字节跳动内部应用于支持公司内开发同学进行构建分析。
+
+在社区内，Rsdoctor 插件已被集成到 [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor) 和 [Lynx](https://lynxjs.org/rspeedy/use-rsdoctor.html) 中。同时，Rsdoctor 也被 [Sentry](https://github.com/getsentry/sentry/pull/63865)、[NocoBase](https://github.com/nocobase/nocobase/blob/main/packages/core/build/src/buildPlugin.ts#L493) 和 [Grafana](https://github.com/grafana/grafana/pull/94729) 等项目所采用。
+
+<img src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-position.png" />
+
+## ⭐️ 1.0 新特性
+
+### 🎨 界面升级
+
+- **整体界面 UI 升级**：我们对 Rsdoctor 的用户界面进行了全面的优化，使其更加清晰、美观且易于导航。新的设计不仅提升了用户体验，还使信息展示更加直观和高效。
+
 ### 🚀 Rspack 构建分析提效
 
-通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑前置到 Rspack 的构建阶段。这一改进显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了整体分析时间，[详情](/config/options/options#enablenativeplugin)。
+通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑下沉到 Rspack 的构建阶段。这一优化显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了整体分析时间，[详情](/config/options/options#enablenativeplugin)。
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      experiments: { enableNativePlugin: true },
+    }),
+  ],
+};
+```
 
 ### 🔍 模块搜索功能
 
 - **Search Module 能力**：在 `Bundle Size` 页面中，我们新增了模块搜索功能。用户可以通过输入模块名称来快速定位和查看模块所在的 `Assets`，从而更方便地分析模块的引用关系和大小。[详情](/guide/usage/bundle-size#%E6%A8%A1%E5%9D%97%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD)
+
+<img style={{ width: '80%', margin: 'auto' }} src="/search-modules.png" />
 
 ### 🛠️ 新增构建扫描规则
 
@@ -128,28 +129,44 @@ Rsdoctor 目前在 **NPM 上周下载量为 120000 左右**，在字节跳动中
 
 - **ECMA Version Check 规则**：增强了 ECMA 版本检测规则（E1004），用于检测不兼容的高级语法，[详情](/guide/rules/rules#e1004-ecma-version-check)。
 
-### ⚙️ 新增配置项
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'ecma-version-check': [
+            'Warn',
+            {
+              ecmaVersion: 2015,
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
+### ⚙️ 其他更新
 
 - **output.compressData 配置**：我们新增了 `output.compressData` 配置项，用于控制是否对分析数据进行压缩处理。默认情况下，该选项为 `true`，即会对分析数据进行压缩。
 
-### 不兼容更新
-
-插件配置中的 **reportCodeType** 和 **reportDir** 配置项移动到 output 下。[详情](/config/options/options#reportcodetype)。
-
 ## 如何使用 1.0
 
-- 如果你还未使用过 Rsdoctor，可以参考 [快速上手](/guide/start/quick-start) 来接入 Rsdoctor。
-- 如果你正在使用 Rsdoctor 0.4 或更早的版本，请留意 1.0 版本包含一些不兼容更新，可以参看下方 [Changelog](#10-changelog)。
-- Rsdoctor 也提供了 Rspack、Rsbuild、webpack 等项目接入方式，请详见[快速开始](/guide/start/quick-start)。
+- 如果你正在使用 Rspack、Rsbuild、Rspress、Rslib 等基于 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/) 的框架，可以详见[快速开始](/guide/start/quick-start)来开始使用 Rsdoctor。
+- 如果你正在使用 Rsdoctor 0.4 或更早的版本，请留意 1.0 版本包含一些不兼容更新，可以参照下方不兼容更新：
+  - 插件配置中的 **reportCodeType** 和 **reportDir** 配置项移动到 **output** 下。[详情](/config/options/options#reportcodetype)。
 
 > 欢迎为 [Rsdoctor GitHub](https://github.com/web-infra-dev/rsdoctor) 仓库 点亮一颗 Star 🌟。
 
 ## 下一步
 
-Rsdoctor v1.0 为大型项目提供了高级特性和自定义分析入口，例如：[Rspack Native Plugin](/config/options/options#enablenativeplugin) 提升分析效率，[自定义规则](/guide/rules/rule-custom) 自主开发定制化构建规则等。我们将继续完善这些特性，并提供**更精细的 Loader 行为分析**，以支持 Rsdoctor 的发展。
-
-在接下来的 6 ~ 12 个月时间里，Rsdoctor 将**把一部分分析能力下沉置 Rspack 底层逻辑中**，在现有 [Rspack Native Plugin](/config/options/options#enablenativeplugin) 及其他构建环节的基础上，支持更细粒度更精确的 Loader 分析。同时，将和 **AI 能力结合**，通过 **AI Chat Bot** 更智能更直观且更有针对性的帮助用户查找构建分析中的疑难杂症。
-最后，也会**在 CI 上继续拓展能力**，提供 [Rsdoctor CI Action](https://github.com/web-infra-dev/rsdoctor/discussions/491) 能力，提供劣化监控能力。
+- 由于 Rspack 底层是 Rust 实现的，多线程特性限制了 Rsdoctor 对 Rspack 内置 **Loader** 的分析粒度。为此，我们计划在 [Rspack Native Plugin](/config/options/options#enablenativeplugin) 的基础上，深入 Rspack 内部进行 Loader 分析，提供更细致、更准确的 Loader 数据。
+- Rsdoctor 的构建分析数据非常丰富，但用户可能刚开始不熟悉报告的使用。AI 能力可以理解用户的问题，从大量数据中提取合适的结果。**Rsdoctor 将与 AI 能力集成**，通过 AI 聊天机器人为用户提供更智能且有针对性的构建分析支持。
+- Rsdoctor 会结合之前的 [Bundle Diff](/guide/usage/bundle-diff) 能力**在 CI 上拓展主动防劣化能力**，提供 [Rsdoctor CI Action](https://github.com/web-infra-dev/rsdoctor/discussions/491) 主动劣化监控能力。
 
 **最后，感谢所有为 Rsdoctor 贡献过的开发者 ❤️**：
 [@charpeni](https://github.com/charpeni)、[@nanianlisao](https://github.com/nanianlisao)、[@ChuHoMan](https://github.com/ChuHoMan)、[@wChenonly](https://github.com/wChenonly)、[@cnryb](https://github.com/cnryb)、[@HigherOrderLogic](https://github.com/HigherOrderLogic)、[@iamleniac](https://github.com/iamleniac)、[@nhducit](https://github.com/nhducit)、[@Gehbt](https://github.com/Gehbt)、[@cairon666](https://github.com/cairon666)、[@bin1357](https://github.com/bin1357)、[@NickBolles](https://github.com/NickBolles)、[@kwonoj](https://github.com/kwonoj)、
