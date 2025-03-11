@@ -60,8 +60,8 @@ https://github.com/user-attachments/assets/3400e0a2-a1dc-4a14-9466-6283af9dd9ed
 
 ## 🪐 相关链接
 
-- [Rspack](https://github.com/web-infra-dev/rspack): 基于 rust 的 web 构建器。
-- [Rsbuild](https://github.com/web-infra-dev/rsbuild): 基于 Rspack 的 web 构建工具。
+- [Rspack](https://github.com/web-infra-dev/rspack)：基于 Rust 的高性能打包工具。
+- [Rsbuild](https://github.com/web-infra-dev/rsbuild): 基于 Rspack 的构建工具。
 - [Rslib](https://github.com/web-infra-dev/rslib): 基于 Rsbuild 的 library 开发工具。
 - [Rspress](https://github.com/web-infra-dev/rspress): 基于 Rsbuild 的静态站点生成器。
 - [Modern.js](https://github.com/web-infra-dev/modern.js): 基于 Rsbuild 的渐进式 React 框架。
