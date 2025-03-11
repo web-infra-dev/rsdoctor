@@ -116,12 +116,22 @@ export default defineConfig({
         label: 'English',
         title: 'Rsdoctor',
         description: 'Build analyzer for Rspack and webpack',
+        editLink: {
+          docRepoBaseUrl:
+            'https://github.com/web-infra-dev/rsdoctor/tree/main/packages/document/docs',
+          text: '📝 Edit this page on GitHub',
+        },
       },
       {
         lang: 'zh',
         label: '简体中文',
         title: 'Rsdoctor',
         description: 'Rspack 和 webpack 项目的构建分析工具',
+        editLink: {
+          docRepoBaseUrl:
+            'https://github.com/web-infra-dev/rsdoctor/tree/main/packages/document/docs',
+          text: '📝 在 GitHub 上编辑此页',
+        },
       },
     ],
   },
