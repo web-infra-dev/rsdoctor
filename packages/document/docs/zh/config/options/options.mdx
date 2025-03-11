@@ -87,9 +87,9 @@ new RsdoctorWebpackPlugin({
 
 <Badge text="Version: 0.4.0" type="warning" />
 
-- **Type:** [BriefType](#brieftype)
-- **Optional:** `true`
-- **Default:** undefined
+- **类型：** [BriefType](#brieftype)
+- **可选：** `true`
+- **默认值：** `undefined`
 
 Brief 模式更多配置，如下：
 
@@ -107,9 +107,9 @@ interface BriefConfig {
 
 ### disableClientServer
 
-- **Type:** `boolean`
-- **Optional:** `true`
-- **Default:** `false`
+- **类型：** `boolean`
+- **可选：** `true`
+- **默认值：** `false`
 
 :::tip
 建议在 CI 环境下将 disableClientServer 设置为 true，否则启动的服务会卡住 pipeline 流程.
@@ -123,9 +123,9 @@ interface BriefConfig {
 
 #### enableNativePlugin
 
-- Type: `boolean`
-- Optional: true
-- Default: false
+- **类型：** `boolean`
+- **可选：** `true`
+- **默认值：** `false`
 
 ##### Description
 
@@ -133,7 +133,7 @@ interface BriefConfig {
 
 - enableNativePlugin：是否开启 Rspack 原生插件，开启后可大幅降低 Rsdoctor 自身的分析耗时。
 
-- Example
+- **示例：**
 
 ```js
 new RsdoctorRspackPlugin({
@@ -143,9 +143,9 @@ new RsdoctorRspackPlugin({
 
 ### features
 
-- **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
-- **Optional:** `true`
-- **Default:** `['loader', 'plugins', 'bundle']`
+- **类型：** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **可选：** `true`
+- **默认值：** `['loader', 'plugins', 'bundle']`
 
 #### features values
 
@@ -195,9 +195,9 @@ import FeaturesRspack from '@zh/shared/features-rspack.md';
 
 <Badge text="Version: 0.4.0" type="warning" />
 
-- **Type:** `normal | brief | lite`
-- **Optional:** `true`
-- **Default:** `normal`
+- **类型：** `normal | brief | lite`
+- **可选：** `true`
+- **默认值：** `normal`
 
 选择使用的 Rsdoctor 构建报告模式，有以下几种：
 
@@ -211,25 +211,25 @@ import ModeIntro from '@zh/shared/mode-intro.md';
 
 #### compressData
 
-- **Type:** boolean
-- **Optional:** `true`
-- **Default:** true
+- **类型：** `boolean`
+- **可选：** `true`
+- **默认值：** `true`
 
 compressData 用于配置是否将 [outputDir]/.rsdoctor 下的分析数据进行压缩处理。
 
 #### reportCodeType
 
-- Type: `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
-- Optional: true
-- Default: undefined
-- Description
+- **类型：** `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
+- **可选：** `true`
+- **默认值：** `undefined`
+- **描述：**
 
   - 选择输出的分析数据：
     - 默认是所有完整数据；
     - noModuleSource: true 是输出除了 module 代码之外的数据，Module 代码即 Bundle 内一个一个文件的打包模块代码。
     - noAssetsAndModuleSource: true 是输出除了 module 代码和 Assets 产物代码之外的数据。
 
-- Example
+- **示例：**
 
 ```js
 new RsdoctorRspackPlugin({
@@ -239,17 +239,17 @@ new RsdoctorRspackPlugin({
 
 #### reportDir
 
-- **Type:** string
-- **Optional:** `true`
-- **Default:** undefined
+- **类型：** string
+- **可选：** `true`
+- **默认值：** undefined
 
 Rsdoctor 报告输出目录，默认是构建产物输出目录。
 
 ### port
 
-- **Type:** `number`
-- **Optional:** `true`
-- **Default:** `random(3000, 8999)`
+- **类型：** `number`
+- **可选：** `true`
+- **默认值：** `random(3000, 8999)`
 
 配置 Rsdoctor 服务的端口。
 
@@ -267,9 +267,9 @@ Rsdoctor 报告输出目录，默认是构建产物输出目录。
 
 ### supports
 
-- **Type:** [Supports Types](#supports-types)
-- **Optional:** `true`
-- **Default:** `undefined`
+- **类型：** [Supports Types](#supports-types)
+- **可选：** `true`
+- **默认值：** `undefined`
 
 该选项是配置 Rsdoctor 是否开启某些细节特性分析能力支持的，例如：是否开启对 BannerPlugin 的兼容能力。
 
@@ -289,15 +289,15 @@ type ISupport = {
 开启 BannerPlugin 分析时，请勿在生产版本中使用 Rsdoctor。
 :::
 
-- default: true.
-- type: boolean.
+- **类型：** `boolean`
+- **默认值：** `true`
 
 如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
 
 #### generateTileGraph
 
-- default: true. 在 rspack 中默认值是 false。
-- type: boolean.
+- **默认值：** `true`。 在 rspack 中默认值是 false。
+- **类型：** `boolean`
 
 是否开启生成瓦片图的能力，影响是 Bundle Size 页面中是否有 `webpack-bundle-analyzer` 的瓦片图。
 
@@ -308,8 +308,8 @@ type ISupport = {
 />
 #### parseBundle
 
-- default: true.
-- type: boolean.
+- **类型：** `boolean`
+- **默认值：** `true`
 
 在部分大型仓库中，反解 Bundle 解析执行耗时过大，这是因为 Parse Bundle 的分析利用了 AST 解析与处理。当产物文件过多时，耗时也会增加。如果不需要此功能，可以通过 `supports.parseBundle` 配置进行选择性关闭。示例如下：
 
