@@ -25,7 +25,7 @@ Click on the **"Bundle Size"** option in the navigation bar to view the Bundle a
 - **`Initial Chunk`**: The **initial** chunk is the main chunk of the entry point. This chunk contains all the modules specified by the entry point and their dependencies, unlike the **chunks** for "on-demand loading".
   - For more information about Initial Chunk, please refer to [Initial Chunk Introduction](https://webpack.js.org/concepts/under-the-hood/#chunks).
 - **`Duplicate Packages`**: Duplicate third-party packages bundled into the project. Excludes third-party packages that are not bundled into the artifact. Please refer to [Duplicate Packages](/guide/usage/bundle-alerts).
-- **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. In the past, Webpack would package each module into a separate closure, and this encapsulation function would cause slower execution of JavaScript in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://webpack.js.org/plugins/module-concatenation-plugin/#root) parameter.
+- **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. In the past, Rspack would package each module into a separate closure, and this encapsulation function would cause slower execution of JavaScript in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://webpack.js.org/plugins/module-concatenation-plugin/#root) parameter.
 
 ## Bundle overview
 
@@ -144,7 +144,8 @@ Click the **"Bundle Analyzer Graph"** button on the **"Bundle Size"** page to vi
 When enabling the BannerPlugin analysis, do not use Rsdoctor in the production version.
 :::
 
-Both Rspack and Webpack support the [BannerPlugin](https://www.rspack.dev/plugins/webpack/banner-plugin#bannerplugin), which is a built-in plugin that allows you to add specific content at the top or bottom of the generated chunks.
+Both Rspack and webpack support the [BannerPlugin](https://www.rspack.dev/plugins/webpack/banner-plugin#bannerplugin), which is a built-in plugin that allows you to add specific content at the top or bottom of the generated chunks.
+
 The added code segment will affect the analysis capability of the bundle.
 
 Rsdoctor is compatible with the logic of adding code using the BannerPlugin, but it is not enabled by default because Rsdoctor needs to add tag code. The Rsdoctor BannerPlugin capability is enabled in the following two cases:
