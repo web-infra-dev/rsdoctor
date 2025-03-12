@@ -100,7 +100,7 @@ module.exports = {
   webpack: (config, { isServer }) => {
     config.plugins.push(
       new RsdoctorWebpackPlugin({
-        // 插件选项
+        // plugin options
         features: ['bundle', 'plugins'],
       }),
     );
