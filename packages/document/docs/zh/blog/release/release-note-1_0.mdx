@@ -1,10 +1,10 @@
 # Rsdoctor 1.0 发布公告
 
-我们很高兴地宣布 **Rsdoctor 1.0** 已经正式发布！
-
 <img src="/rsdoctor-1_0-banner.png" width="80%" style={{ margin: 'auto' }} />
 
-在经过一年的迭代和验证后，我们正式推出 **Rsdoctor 1.0** —— 一款专门为 [Rspack](https://rspack.dev/) 设计的构建分析工具，同时支持 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/) 的全链路构建分析，并且已经在社区及字节跳动内部的众多项目中得到充分验证和广泛应用。
+我们很高兴地宣布 **Rsdoctor 1.0** 已经正式发布！
+
+在经过一年的迭代与验证后，我们正式推出 **Rsdoctor 1.0** —— 一款为 [Rspack](https://rspack.dev/) 量身打造的构建分析工具，同时完全兼容 [webpack 5](https://webpack.js.org/)。Rsdoctor 提供全链路构建分析能力，已在字节跳动内部及众多社区项目中得到广泛应用与验证。
 
 ## 为什么是 Rsdoctor
 
@@ -60,19 +60,19 @@ Rsdoctor 的具体功能项可以查看[功能导航](/guide/start/features)，�
 
 在构建时，可能会出现编译结果与预期不一致的问题，导致最终样式被覆盖或其他运行时问题。Rsdoctor 的 [Loader Details](/guide/usage/loaders-analysis) 页面可以查看 Loader 对当前文件编译的前后变化。
 
-例如：通过 Rsdoctor 的构建时编译前后代码对比，发现经过 **babel-loader** 编译后，css 文件的 import 顺序变化，导致优先级最高的样式被默认样式配置覆盖，导致 css 样式无效。最终发现是 `babel-plugin-import` 的问题：[#606](https://github.com/umijs/babel-plugin-import/issues/606)。
+例如：通过 Rsdoctor 的构建时编译前后代码对比，发现经过 **babel-loader** 编译后，CSS 文件的 import 顺序变化，导致优先级最高的样式被默认样式配置覆盖，导致 CSS 样式无效。最终发现是 `babel-plugin-import` 的问题：[#606](https://github.com/umijs/babel-plugin-import/issues/606)。
 
 <img style={{ width: '80%', margin: 'auto' }} src="/babel-import-error.png" />
 
 ### 3.「如何合理分包？」
 
-我们可以通过[产物分析](/guide/usage/bundle-size)页面查看某个产物的 Modules 树来查看该产物资源包含了哪些 Modules，进而通过 Rspack 的 [splitChunks](https://rspack.dev/zh/plugins/webpack/split-chunks-plugin) 配置来进行合理的分包。
+我们可以通过 [产物分析](/guide/usage/bundle-size) 页面查看某个产物的 Modules 树来查看该产物资源包含了哪些 Modules，进而通过 Rspack 的 [splitChunks](https://rspack.dev/zh/plugins/webpack/split-chunks-plugin) 配置来进行合理的分包。
 
 <img style={{ width: '80%', margin: 'auto' }} src="/bundle-size-overall.png" />
 
 ### 4.「如何分析产物增大导致的性能劣化？」
 
-当某个上线后，产物体积增大导致了线上页面性能发生了劣化，则可以通过 Rsdoctor 的 [Bundle Diff](/guide/usage/bundle-diff) 能力来对比两次 commit 的产物差异细节，以及依赖的 Packages 差异。
+当某个版本上线后，由于产物体积增大导致线上页面性能出现劣化，可以通过 Rsdoctor 的 [Bundle Diff](/guide/usage/bundle-diff) 功能来对比两次 commit 的产物细节，以及依赖的 npm 包变化。
 
 <img style={{ width: '80%', margin: 'auto' }} src="/bundle-diff-assets.png" />
 
@@ -88,7 +88,7 @@ Rsdoctor 的具体功能项可以查看[功能导航](/guide/start/features)，�
 
 ## 谁在使用
 
-Rsdoctor 在 npm 上的周下载量已超过 **10 万次**。作为 Rspack 生态的构建分析工具，Rsdoctor 在字节跳动内部被开发人员广泛用于分析构建过程中的各类问题。
+Rsdoctor 在 npm 上的周下载量已超过 **10 万次**。作为 Rspack 生态的构建分析工具，Rsdoctor 已在字节跳动内部得到广泛应用，帮助开发者高效分析和解决构建过程中的各类问题。
 
 在社区内，Rsdoctor 插件已被集成到 [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor) 和 [Lynx](https://lynxjs.org/rspeedy/use-rsdoctor.html) 中。同时，Rsdoctor 也被 [Sentry](https://github.com/getsentry/sentry/pull/63865)、[NocoBase](https://github.com/nocobase/nocobase/blob/main/packages/core/build/src/buildPlugin.ts#L493) 和 [Grafana](https://github.com/grafana/grafana/pull/94729) 等项目所采用。
 
@@ -96,9 +96,9 @@ Rsdoctor 在 npm 上的周下载量已超过 **10 万次**。作为 Rspack 生�
 
 ## ⭐️ 1.0 新特性
 
-### 🎨 界面升级
+### 🎨 UI 界面升级
 
-- **整体界面 UI 升级**：我们对 Rsdoctor 的用户界面进行了全面的优化，使其更加清晰、美观且易于导航。新的设计不仅提升了用户体验，还使信息展示更加直观和高效。
+在 1.0 版本中，我们全面优化了 Rsdoctor 的用户界面，使其更加清晰、优雅和易于导航。新的设计致力于改善用户体验，并让信息展示更加直观和高效。
 
 ### 🚀 Rspack 构建分析提效
 
