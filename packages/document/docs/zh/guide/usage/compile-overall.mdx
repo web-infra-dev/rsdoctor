@@ -19,12 +19,12 @@
 
 以下是卡片内每个阶段名词的含义以及代码实现：
 
-| 阶段名称                                 | 描述说明                                         | 代码实现                                                                                                                                                                                                            |
-| ---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <b><i>Bootstrap -> BeforeCompile</i></b> | 代表项目从启动到开始编译之前的耗时               | <ul><li>`Webpack` or `Rspack` 项目中：在 **compiler.hooks.beforeCompile** 被调用时上报 [process.uptime()](https://nodejs.org/dist/latest-v18.x/docs/api/process.html#processuptime) 作为<b>本阶段耗时</b></li></ul> |
-| <b><i>Compile</i></b>                    | 代表项目的整个编译耗时                           | <ul><li>`Webpack` or `Rspack` 项目中：在 **compiler.hooks.beforeCompile** 被调用时的时间点作为<b>开始时间</b>，在 **compiler.hooks.afterCompile** 被调用时的时间点作为<b>结束时间</b></li></ul>                     |
-| <b><i>AfterCompile -> Done</i></b>       | 代表编译结束到整个流程结束的耗时                 | <ul><li>`Webpack` or `Rspack` 项目中：在 **compiler.hooks.afterCompile** 被调用时的时间点作为<b>开始时间</b>，在 **compiler.hooks.done** 被调用时的时间点作为<b>结束时间</b></li></ul>                              |
-| <b><i>Minify</i></b>                     | 绝大部分情况下，代表项目编译流程内文件压缩的耗时 | <ul><li>`Webpack` or `Rspack` 项目中：统计 **compilation.hooks.optimizeChunkAssets** 和 **compilation.hooks.processAssets** 每次<b>调用时间之和</b></li></ul>                                                       |
+| 阶段名称                                 | 描述说明                                         | 代码实现                                                                                                                                                                              |
+| ---------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <b><i>Bootstrap -> BeforeCompile</i></b> | 代表项目从启动到开始编译之前的耗时               | <ul><li>在 **compiler.hooks.beforeCompile** 被调用时上报 [process.uptime()](https://nodejs.org/dist/latest-v22.x/docs/api/process.html#processuptime) 作为<b>本阶段耗时</b></li></ul> |
+| <b><i>Compile</i></b>                    | 代表项目的整个编译耗时                           | <ul><li>在 **compiler.hooks.beforeCompile** 被调用时的时间点作为<b>开始时间</b>，在 **compiler.hooks.afterCompile** 被调用时的时间点作为<b>结束时间</b></li></ul>                     |
+| <b><i>AfterCompile -> Done</i></b>       | 代表编译结束到整个流程结束的耗时                 | <ul><li>在 **compiler.hooks.afterCompile** 被调用时的时间点作为<b>开始时间</b>，在 **compiler.hooks.done** 被调用时的时间点作为<b>结束时间</b></li></ul>                              |
+| <b><i>Minify</i></b>                     | 绝大部分情况下，代表项目编译流程内文件压缩的耗时 | <ul><li>统计 **compilation.hooks.optimizeChunkAssets** 和 **compilation.hooks.processAssets** 每次<b>调用时间之和</b></li></ul>                                                       |
 
 ## 使用说明
 

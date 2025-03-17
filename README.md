@@ -61,9 +61,9 @@ Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rsdoctor 
 ## 🪐 Link
 
 - [Rspack](https://github.com/web-infra-dev/rspack): A fast Rust-based web bundler.
-- [Rsbuild](https://github.com/web-infra-dev/rsbuild): An Rspack-based build tool for the web, rebranded from Modern.js Builder.
+- [Rsbuild](https://github.com/web-infra-dev/rsbuild): An Rspack-based build tool.
 - [Rslib](https://github.com/web-infra-dev/rslib): A library development tool powered by Rsbuild.
-- [Rspress](https://github.com/web-infra-dev/rspress): A fast Rspack-based static site generator.
+- [Rspress](https://github.com/web-infra-dev/rspress): A fast Rsbuild-based static site generator.
 - [Modern.js](https://github.com/web-infra-dev/modern.js): A progressive React framework based on Rsbuild.
 
 ## 🙌 Code of conduct
