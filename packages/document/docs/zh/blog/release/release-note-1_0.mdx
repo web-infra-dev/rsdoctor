@@ -10,15 +10,15 @@
 
 ### 社区相关工具
 
-在构建分析工具领域，存在一些类似工具，例如 [**webpack-bundle-analyzer**](https://github.com/webpack-contrib/webpack-bundle-analyzer) 和 [**Statoscope**](https://github.com/statoscope/statoscope/)，它们提供了多样化的构建产物展示方式。同时，[**speed-measure-webpack-plugin**](https://github.com/stephencookdev/speed-measure-webpack-plugin) 等工具也在构建编译方面发挥着作用。
+在构建分析领域，社区已有一些成熟的工具，如用于产物体积可视化的 [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer)、提供资源全面分析的 [Statoscope](https://github.com/statoscope/statoscope/)。此外，[speed-measure-webpack-plugin](https://github.com/stephencookdev/speed-measure-webpack-plugin) 可以用于分析插件与 loader 的执行时间，定位构建性能瓶颈。
 
-然而，这些工具均存在一些不足，例如缺乏细粒度的构建细节展示、不具备全方位的构建问题分析能力、不兼容 Rspack、以及缺少构建预警扫描功能。
+然而，这些工具依然存在一些不足，例如缺乏细粒度的构建细节展示、不具备全方位的构建问题分析能力、不兼容 Rspack、以及缺少构建预警扫描功能。
 
 总结来说，构建分析工具一直面临以下难点和痛点：
 
 1. **细节不够深入**：传统工具**无法深入探索编译过程**的细节和变化，如果想要查看某个 Loader 编译细节，开发者常常需要手动设置断点逐步调试，效率低下。
-2. **数据割裂与孤立**：现有的产物分析工具通常只提供产物分析数据展示，而不具备构建扫描规则能力，**无法主动为产物提供合理的优化建议，也不支持用户自定义规则**。
-3. **Rspack 支持不足**：现有工具对 Rspack 的支持不够全面，尤其是不支持分析 [**Rspack 内置 Loader**](https://rspack.dev/guide/features/builtin-swc-loader) 。
+2. **数据割裂与孤立**：现有的产物分析工具通常只提供产物分析数据展示，而不具备构建扫描规则能力，**无法主动为产物提供合理的优化建议，也不支持用户自定义检查规则**。
+3. **Rspack 支持不足**：现有工具对 Rspack 的支持不够全面，例如无法分析 Rspack 的 [内置 Loader](https://rspack.dev/guide/features/builtin-swc-loader) 。
 
 ### Rsdoctor 诞生
 
