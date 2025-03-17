@@ -235,15 +235,13 @@ export const ModuleGraphViewer: React.FC<{
 
 const inlinedResourcePathKey = '__RESOURCEPATH__';
 
-export function getChildrenModule(node: DataNode) {
-  const mods: string[] = [];
-
+export function getChildrenModule(node: DataNode, mods: string[]) {
   node.children &&
     node.children.forEach((n: DataNode) => {
       if (n.isLeaf) {
         mods.push(n[inlinedResourcePathKey]);
       } else {
-        getChildrenModule(n);
+        getChildrenModule(n, mods);
       }
     });
 
@@ -509,18 +507,19 @@ export const AssetDetail: React.FC<{
         );
       },
       dirTitle(dir, defaultTitle) {
-        const paths = getChildrenModule(dir);
+        const mods: string[] = [];
+        const paths = getChildrenModule(dir, mods);
         if (paths.length) {
-          // TODO: this counts need to fixed.
-          // const mods = paths.map(
-          //   (e) => includeModules.find((m) => m.path === e)!,
-          // );
-          // const parsedSize = sumBy(mods, (e) => e.size?.parsedSize || 0);
-          // const sourceSize = sumBy(mods, (e) => e.size?.sourceSize || 0);
+          const mods = paths.map(
+            (e) => includeModules.find((m) => m.path === e)!,
+          );
+
+          const parsedSize = sumBy(mods, (e) => e.size?.parsedSize || 0);
+          const sourceSize = sumBy(mods, (e) => e.size?.sourceSize || 0);
           return (
             <Space>
               <Keyword ellipsis text={defaultTitle} keyword={''} />
-              {/* {parsedSize > 0 ? (
+              {parsedSize > 0 ? (
                 <>
                   <Tag style={tagStyle} color={'orange'}>
                     {'Bundled:' + formatSize(parsedSize)}
@@ -533,7 +532,7 @@ export const AssetDetail: React.FC<{
                 <Tag style={tagStyle} color={'lime'}>
                   {'Source:' + formatSize(sourceSize)}
                 </Tag>
-              )} */}
+              )}
             </Space>
           );
         }
