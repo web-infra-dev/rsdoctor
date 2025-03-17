@@ -4,28 +4,29 @@
 
 <img src="/rsdoctor-1_0-banner.png" width="80%" style={{ margin: 'auto' }} />
 
-在经过一年的不断迭代和验证后，我们正式推出 **Rsdoctor 1.0** —— 一款专门为 [Rspack](https://rspack.dev/) 而设计的构建分析工具，同时支持 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/) 的构建全链路分析工具，Rsdoctor 作为构建分析工具已经在社区及字节跳动内的众多项目中得到充分验证及使用。
+在经过一年的迭代和验证后，我们正式推出 **Rsdoctor 1.0** —— 一款专门为 [Rspack](https://rspack.dev/) 设计的构建分析工具，同时支持 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/) 的全链路构建分析，并且已经在社区及字节跳动内部的众多项目中得到充分验证和广泛应用。
 
 ## 为什么是 Rsdoctor
 
 ### 社区相关工具
 
 在构建分析工具领域，存在一些类似工具，例如 [**webpack-bundle-analyzer**](https://github.com/webpack-contrib/webpack-bundle-analyzer) 和 [**Statoscope**](https://github.com/statoscope/statoscope/)，它们提供了多样化的构建产物展示方式。同时，[**speed-measure-webpack-plugin**](https://github.com/stephencookdev/speed-measure-webpack-plugin) 等工具也在构建编译方面发挥着作用。
-然而，这些工具仍然存在一些限制，例如**无法提供更细粒度的构建细节展示**和**全方位的构建问题分析能力**，**对 Rspack 构建器不兼容**，以及**缺少对构建的预警扫描**功能。
+
+然而，这些工具均存在一些不足，例如缺乏细粒度的构建细节展示、不具备全方位的构建问题分析能力、不兼容 Rspack、以及缺少构建预警扫描功能。
 
 总结来说，构建分析工具一直面临以下难点和痛点：
 
 1. **细节不够深入**：传统工具**无法深入探索编译过程**的细节和变化，如果想要查看某个 Loader 编译细节，开发者常常需要手动设置断点逐步调试，效率低下。
 2. **数据割裂与孤立**：现有的产物分析工具通常只提供产物分析数据展示，而不具备构建扫描规则能力，**无法主动为产物提供合理的优化建议，也不支持用户自定义规则**。
-3. **Rspack 支持不足**：现有工具对 [Rspack](https://rspack.dev/) 的支持不够全面，尤其是不支持分析 [**Rspack 内置 Loader**](https://rspack.dev/guide/features/builtin-swc-loader) 。
+3. **Rspack 支持不足**：现有工具对 Rspack 的支持不够全面，尤其是不支持分析 [**Rspack 内置 Loader**](https://rspack.dev/guide/features/builtin-swc-loader) 。
 
 ### Rsdoctor 诞生
 
-根据以上社区工具现状，我们决定为 [Rspack](https://rspack.dev/) 生态开发一个专注于构建产物及编译分析的工具 —— **Rsdoctor**。
+根据以上社区工具现状，我们决定为 Rspack 生态开发一个专注于构建产物及编译分析的工具 —— **Rsdoctor**。
 
 我们为 Rsdoctor 设计了直观的用户界面，同时，Rsdoctor 通过结合多种工具的优点，扩展了 **Loader 打点能力**以更深入地分析编译阶段的 Loader 行为，**内置了产物及编译的扫描和检测规则**，并支持用户**自定义规则**。
 
-它不仅支持 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/)，还支持基于 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/) 衍生的框架的构建分析，例如：[Rsbuild](https://rsbuild.dev/)、[Rspress](https://rspress.dev/) 及 [Modern.js](https://modernjs.dev/) 等。
+它不仅支持 Rspack 和 webpack，也支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Rsbuild](https://rsbuild.dev/)、[Rspress](https://rspress.dev/) 及 [Modern.js](https://modernjs.dev/) 等。
 
 在实现 Rsdoctor 的过程中，我们向社区中优秀的工具学习最佳实践，并聚焦于以下使用场景来设计 Rsdoctor：
 
@@ -87,7 +88,7 @@ Rsdoctor 的具体功能项可以查看[功能导航](/guide/start/features)，�
 
 ## 谁在使用
 
-Rsdoctor 在 NPM 上的周下载量已超过 **10万次**。作为 Rspack 及其衍生框架（如 Rsbuild 等）的构建分析工具，Rsdoctor 在字节跳动内部被开发人员广泛用于分析构建过程中的各类问题。
+Rsdoctor 在 npm 上的周下载量已超过 **10 万次**。作为 Rspack 生态的构建分析工具，Rsdoctor 在字节跳动内部被开发人员广泛用于分析构建过程中的各类问题。
 
 在社区内，Rsdoctor 插件已被集成到 [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor) 和 [Lynx](https://lynxjs.org/rspeedy/use-rsdoctor.html) 中。同时，Rsdoctor 也被 [Sentry](https://github.com/getsentry/sentry/pull/63865)、[NocoBase](https://github.com/nocobase/nocobase/blob/main/packages/core/build/src/buildPlugin.ts#L493) 和 [Grafana](https://github.com/grafana/grafana/pull/94729) 等项目所采用。
 
@@ -104,15 +105,11 @@ Rsdoctor 在 NPM 上的周下载量已超过 **10万次**。作为 Rspack 及其
 通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑下沉到 Rspack 的构建阶段。这一优化显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了整体分析时间，[详情](/config/options/options#enablenativeplugin)。
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
-
-export default {
-  plugin: [
-    new RsdoctorRspackPlugin({
-      experiments: { enableNativePlugin: true },
-    }),
-  ],
-};
+new RsdoctorRspackPlugin({
+  experiments: {
+    enableNativePlugin: true,
+  },
+});
 ```
 
 ### 🔍 模块搜索功能
@@ -130,24 +127,18 @@ export default {
 - **ECMA Version Check 规则**：增强了 ECMA 版本检测规则（E1004），用于检测不兼容的高级语法，[详情](/guide/rules/rules#e1004-ecma-version-check)。
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
-
-export default {
-  plugin: [
-    new RsdoctorRspackPlugin({
-      linter: {
-        rules: {
-          'ecma-version-check': [
-            'Warn',
-            {
-              ecmaVersion: 2015,
-            },
-          ],
+new RsdoctorRspackPlugin({
+  linter: {
+    rules: {
+      'ecma-version-check': [
+        'Warn',
+        {
+          ecmaVersion: 2015,
         },
-      },
-    }),
-  ],
-};
+      ],
+    },
+  },
+});
 ```
 
 ### ⚙️ 其他更新
@@ -156,8 +147,8 @@ export default {
 
 ## 如何使用 1.0
 
-- 如果你正在使用 Rspack、Rsbuild、Rspress、Rslib 等基于 [Rspack](https://rspack.dev/) 和 [webpack](https://webpack.js.org/) 的框架，可以详见[快速开始](/guide/start/quick-start)来开始使用 Rsdoctor。
-- 如果你正在使用 Rsdoctor 0.4 或更早的版本，请留意 1.0 版本包含一些不兼容更新，可以参照下方不兼容更新：
+- 如果你在使用任何基于 Rspack 和 webpack 的工具或框架，可以参考 [快速开始](/guide/start/quick-start) 来开始使用 Rsdoctor。
+- 如果你在使用 Rsdoctor 0.4 或更早的版本，请留意 v1.0 包含少量不兼容更新：
   - 插件配置中的 **reportCodeType** 和 **reportDir** 配置项移动到 **output** 下。[详情](/config/options/options#reportcodetype)。
 
 > 欢迎为 [Rsdoctor GitHub](https://github.com/web-infra-dev/rsdoctor) 仓库 点亮一颗 Star 🌟。
