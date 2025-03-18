@@ -74,6 +74,15 @@ export default defineConfig({
   head: [
     '<meta name="apple-mobile-web-app-capable" content="yes" />',
     '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />',
+    ({ routePath }) => {
+      const getOgImage = () => {
+        if (routePath.endsWith('release-note-1_0')) {
+          return 'assets/rsdoctor-og-image-v1-0.png';
+        }
+        return 'rsdoctor-og-image.png';
+      };
+      return `<meta property="og:image" content="https://assets.rspack.dev/rsdoctor/${getOgImage()}">`;
+    },
   ],
   markdown: {
     checkDeadLinks: true,
@@ -141,7 +150,6 @@ export default defineConfig({
         title: 'Rsdoctor',
         type: 'website',
         url: 'https://rsdoctor.dev/',
-        image: 'https://rsdoctor.dev/og-image.png',
         description: 'Build analyzer for Rspack and webpack',
         twitter: {
           site: '@rspack_dev',
