@@ -118,13 +118,13 @@ export default nextConfig;
 
 因为 Next.js 在 `build` 执行结束后会终止终端服务，所以 Rsdoctor 在构建过程中打开的报告页面也将失效，则可以通过 [@rsdoctor/cli](/guide/start/cli) 来再次打开页面报告，而无需执行构建操作。
 
-- 首先安装 [@rsdoctor/cli](/guide/start/cli)：
+- 首先，安装 [@rsdoctor/cli](/guide/start/cli)：
 
 import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="add @rsdoctor/cli -D" />
 
-- **package.json** 里添加如下 scripts 命令，执行 **client:rsdoctor** 或者 **server:rsdoctor** 可打开对应构建器的报告：
+- 其次，**package.json** 里添加如下 scripts 命令，执行 **client:rsdoctor** 或者 **server:rsdoctor** 可打开对应构建器的报告：
 
 ```ts
   "scripts": {
