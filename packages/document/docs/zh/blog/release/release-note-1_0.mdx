@@ -88,11 +88,13 @@ Rsdoctor 的具体功能项可以查看[功能导航](/guide/start/features)，�
 
 ## 谁在使用
 
-Rsdoctor 在 npm 上的周下载量已超过 **10 万次**。作为 Rspack 生态的构建分析工具，Rsdoctor 已在字节跳动内部得到广泛应用，帮助开发者高效分析和解决构建过程中的各类问题。
+Rsdoctor 已在字节跳动内部得到广泛应用，帮助开发者高效分析和解决构建过程中的各类问题。
 
-在社区内，Rsdoctor 插件已被集成到 [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor) 和 [Lynx](https://lynxjs.org/rspeedy/use-rsdoctor.html) 中。同时，Rsdoctor 也被 [Sentry](https://github.com/getsentry/sentry/pull/63865)、[NocoBase](https://github.com/nocobase/nocobase/blob/main/packages/core/build/src/buildPlugin.ts#L493) 和 [Grafana](https://github.com/grafana/grafana/pull/94729) 等项目所采用。
+自 2024 年开源以来，Rsdoctor 在 npm 上的周下载量已突破 **10 万**。在社区里，Rsdoctor 已被集成到 [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor) 和 [Lynx](https://lynxjs.org/rspeedy/use-rsdoctor.html) 等框架中。此外，Rsdoctor 也被 [Sentry](https://github.com/getsentry/sentry/pull/63865)、[NocoBase](https://github.com/nocobase/nocobase/blob/main/packages/core/build/src/buildPlugin.ts#L493) 和 [Grafana](https://github.com/grafana/grafana/pull/94729) 等大型项目所采用。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-position.png" />
+未来 Rsdoctor 将持续为 **Rstack**（`Rspack stack` 的缩写）生态的所有工具提供一流的支持：
+
+<img src="https://assets.rspack.dev/rstack/rstack-overview.png" />
 
 ## ⭐️ 1.0 新特性
 
@@ -149,7 +151,7 @@ new RsdoctorRspackPlugin({
 
 - 如果你在使用任何基于 Rspack 和 webpack 的工具或框架，可以参考 [快速开始](/guide/start/quick-start) 来开始使用 Rsdoctor。
 - 如果你在使用 Rsdoctor 0.4 或更早的版本，请留意 1.0 包含少量不兼容更新：
-  - 插件配置中的 **reportCodeType** 和 **reportDir** 配置项移动到 **output** 下。[详情](/config/options/options#reportcodetype)。
+  - 插件配置中的 `reportCodeType` 和 `reportDir` 配置项移动到 [output](/config/options/options#reportcodetype) 下。
 
 > 欢迎为 [Rsdoctor GitHub](https://github.com/web-infra-dev/rsdoctor) 仓库点亮一颗 Star 🌟。
 
