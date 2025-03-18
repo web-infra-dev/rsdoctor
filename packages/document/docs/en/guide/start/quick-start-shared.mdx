@@ -80,36 +80,65 @@ For projects using Modern.js's webpack mode, please register the `RsdoctorWebpac
 
 ### Next.js Framework
 
-Initialize the RsdoctorWebpackPlugin plugin in the [Webpack Config](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) of `next.config.mjs`.
+Initialize the RsdoctorWebpackPlugin plugin in the [Webpack Config](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) of `next.config.ts`.
 
-```ts title="next.config.mjs"
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
 import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
-export default {
-  // ...
-  webpack: (config, { isServer }) => {
-    config.plugins.push(
-      new RsdoctorWebpackPlugin({
-        // plugin options
-      }),
-    );
-
+const nextConfig: NextConfig = {
+  /* config options here */
+  webpack: (config) => {
+    if (config.name === 'client') {
+      config.plugins.push(
+        new RsdoctorWebpackPlugin({
+          disableClientServer: true,
+        }),
+      );
+    } else if (config.name === 'server') {
+      config.plugins.push(
+        new RsdoctorWebpackPlugin({
+          disableClientServer: true,
+          output: {
+            reportDir: './.next/server',
+          },
+        }),
+      );
+    }
     return config;
   },
 };
+
+export default nextConfig;
 ```
 
-- **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
+- **Options:** The plugin provides some configuration options, please refer to [Options](../../config/options/options).
 
-#### 📢 Next.js project notice
+#### 📢 Note for Next.js Projects
 
-1. Next.js Project Reporting Page Issues
+Because Next.js closes the terminal service after the `build` execution is completed, the report page opened by Rsdoctor during the build process will also become invalid. Therefore, you can use [@rsdoctor/cli](/guide/start/cli) to reopen the page report without needing to execute the build operation.
 
-For more details, see: [FAQ](../more/faq#nextjs)
+- First, install [@rsdoctor/cli](/guide/start/cli):
 
-2. Loader Analysis with Rules Overriding Not Supported in Next.js
+import { PackageManagerTabs } from '@theme';
 
-For more details, see: [FAQ](../more/faq#nextjs)
+<PackageManagerTabs command="add @rsdoctor/cli -D" />
+
+- Add the following scripts commands to **package.json**, executing **client:rsdoctor** or **server:rsdoctor** can open the report for the corresponding builder:
+
+```ts
+  "scripts": {
+    "client:rsdoctor": "rsdoctor analyze --profile .next/.rsdoctor/manifest.json",
+    "server:rsdoctor": "rsdoctor analyze --profile .next/server/chunks/.rsdoctor/manifest.json"
+  }
+```
+
+For example, if Rsdoctor's build artifacts are located at the `.next/server/chunks/.rsdoctor/manifest.json` path, you can open the report page by executing the following command:
+
+```bash
+rsdoctor analyze --profile .next/server/chunks/.rsdoctor/manifest.json
+
+```
 
 ### Vue project
 
