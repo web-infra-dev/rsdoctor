@@ -30,7 +30,7 @@ Rsdoctor 致力于成为最强大、最全面的构建分析工具，通过可�
 
 ## 为什么是 Rsdoctor
 
-### 社区相关工具
+### 社区工具
 
 在构建分析领域，社区已有一些成熟的工具，如用于产物体积可视化的 [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer)、提供资源全面分析的 [Statoscope](https://github.com/statoscope/statoscope/)。此外，[speed-measure-webpack-plugin](https://github.com/stephencookdev/speed-measure-webpack-plugin) 可以用于分析插件与 loader 的执行时间，定位构建性能瓶颈。
 
@@ -42,9 +42,9 @@ Rsdoctor 致力于成为最强大、最全面的构建分析工具，通过可�
 2. **数据割裂与孤立**：现有的产物分析工具通常只提供产物分析数据展示，而不具备构建扫描规则能力，**无法主动为产物提供合理的优化建议，也不支持用户自定义检查规则**。
 3. **Rspack 支持不足**：现有工具对 Rspack 的支持不够全面，例如无法分析 Rspack 的 [内置 Loader](https://rspack.dev/guide/features/builtin-swc-loader) 。
 
-### Rsdoctor 诞生
+### Rsdoctor 的诞生
 
-根据以上社区工具现状，我们决定为 Rspack 生态开发一个专注于构建产物及编译分析的工具 —— **Rsdoctor**。
+根据以上现状，我们决定为 Rspack 生态开发一个专注于构建分析的工具 —— **Rsdoctor**。
 
 我们为 Rsdoctor 设计了直观的用户界面，同时，Rsdoctor 通过结合多种工具的优点，扩展了 **Loader 打点能力**以更深入地分析编译阶段的 Loader 行为，**内置了产物及编译的扫描和检测规则**，并支持用户**自定义规则**。
 
