@@ -1,10 +1,26 @@
 # Rsdoctor 1.0 发布公告
 
-<img src="/rsdoctor-1_0-banner.png" width="80%" style={{ margin: 'auto' }} />
-
 我们很高兴地宣布 **Rsdoctor 1.0** 已经正式发布！
 
-在经过一年的迭代与验证后，我们正式推出 **Rsdoctor 1.0** —— 一款为 [Rspack](https://rspack.dev/) 量身打造的构建分析工具，同时完全兼容 [webpack 5](https://webpack.js.org/)。Rsdoctor 提供全链路构建分析能力，已在字节跳动内部及众多社区项目中得到广泛应用与验证。
+在经过一年的迭代与验证后，我们正式推出 **Rsdoctor 1.0** —— 一款为 [Rspack](https://rspack.dev/) 生态量身打造的构建分析工具，同时也完全兼容 [webpack](https://webpack.js.org/) 生态。
+
+Rsdoctor 致力于成为最强大、最全面的构建分析工具，通过可视化与智能分析，使整个构建流程变得透明、可预测和可优化，从而帮助开发团队精准定位瓶颈、优化性能并提升软件质量。
+
+<video
+  src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'contain',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
 
 ## 为什么是 Rsdoctor
 
@@ -34,15 +50,6 @@ Rsdoctor 不仅支持 Rspack 和 webpack，也支持所有基于 Rspack 或 webp
 
 - **作为一个可扩展的分析工具**：允许开发者根据项目需求自定义分析规则，实现对构建过程的有针对性的优化。
 
-<iframe
-  width="100%"
-  height={460}
-  style={{ margin: 'auto' }}
-  src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
-  frameborder="0"
-  allowfullscreen
-></iframe>
-
 ## 常见应用场景
 
 Rsdoctor 的具体功能项可以查看[功能导航](/guide/start/features)，它可以解决常见的构建分析问题，例如下面几个问题案例：
@@ -70,7 +77,7 @@ Rsdoctor 的具体功能项可以查看[功能导航](/guide/start/features)，�
 
 <img style={{ width: '80%', margin: 'auto' }} src="/bundle-size-overall.png" />
 
-### 4.「如何分析产物增大导致的性能劣化？」
+### 4.「如何分析产物增大原因？」
 
 当某个版本上线后，由于产物体积增大导致线上页面性能出现劣化，可以通过 Rsdoctor 的 [Bundle Diff](/guide/usage/bundle-diff) 功能来对比两次 commit 的产物细节，以及依赖的 npm 包变化。
 
@@ -78,13 +85,13 @@ Rsdoctor 的具体功能项可以查看[功能导航](/guide/start/features)，�
 
 **后续 Rsdoctor 将计划支持 Bundle Diff 的主动防劣化能力**，例如：提供 Bundle Diff 的 GitHub Actions 以支持在 CI 阶段主动拦截产物不合理的增大。
 
-### 5.「某个模块文件为什么会被打包进来？」
+### 5.「某个模块为什么会被打包？」
 
 构建过程中，如果想要知道某个模块文件为什么会被打包到产物中，则可以在[产物分析](/guide/usage/bundle-size)页面中的 Modules 树图中点击该模块后面的 `Module Graph` 图标，查看该模块的上游依赖模块关系。
 
 <img style={{ width: 600, margin: 'auto' }} src="/module-analysis-tree.png" />
 
-**后续我们将计划结合 AI 能力，帮助用户更快的分析模块依赖链路问题。**
+**后续我们将计划结合 AI 能力，帮助用户更快地分析模块依赖链路问题。**
 
 ## 谁在使用
 
