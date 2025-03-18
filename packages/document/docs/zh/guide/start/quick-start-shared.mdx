@@ -116,7 +116,7 @@ export default nextConfig;
 
 #### 📢 Next.js 项目使用注意
 
-因为 Next.js 在 `build` 执行结束后会终止终端服务，所以 Rsdoctor 在构建过程中打开的报告页面也将失效，则可以通过 [@rsdoctor/cli](/guide/start/cli) 来再次打开页面报告，而无需执行构建操作。
+由于 Next.js 在 `build` 执行结束后会终止终端服务，因此 Rsdoctor 在构建过程中运行的报告页面服务器也会被关闭。此时，你可以通过 [@rsdoctor/cli](/guide/start/cli) 再次打开页面报告，而无需重新执行构建操作。
 
 - 首先，安装 [@rsdoctor/cli](/guide/start/cli)：
 
