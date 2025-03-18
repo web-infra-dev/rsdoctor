@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { defineConfig } from 'rspress/config';
+import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
@@ -137,6 +138,7 @@ export default defineConfig({
   },
   builderConfig: {
     plugins: [
+      pluginSass(),
       pluginGoogleAnalytics({ id: 'G-9DETE89N4Q' }),
       pluginOpenGraph({
         title: 'Rsdoctor',
