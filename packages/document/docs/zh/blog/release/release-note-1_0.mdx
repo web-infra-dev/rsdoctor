@@ -164,9 +164,9 @@ new RsdoctorRspackPlugin({
 
 ## 下一步
 
-- 由于 Rspack 底层是 Rust 实现的，多线程特性限制了 Rsdoctor 对 Rspack 内置 **Loader** 的分析粒度。为此，我们计划在 [Rspack Native Plugin](/config/options/options#enablenativeplugin) 的基础上，深入 Rspack 内部进行 Loader 分析，提供更细致、更准确的 Loader 数据。
-- Rsdoctor 的构建分析数据非常丰富，但用户可能刚开始不熟悉报告的使用。AI 能力可以理解用户的问题，从大量数据中提取合适的结果。**Rsdoctor 将与 AI 能力集成**，通过 AI 聊天机器人为用户提供更智能且有针对性的构建分析支持。
-- Rsdoctor 会结合之前的 [Bundle Diff](/guide/usage/bundle-diff) 能力**在 CI 上拓展主动防劣化能力**，提供 [Rsdoctor CI Action](https://github.com/web-infra-dev/rsdoctor/discussions/491) 主动劣化监控能力。
+- **AI 智能分析**：Rsdoctor 收集的构建分析数据非常丰富，但对新用户而言可能存在一定的学习成本。为此，我们将整合 AI 能力到 Rsdoctor 中，帮助用户从海量数据中快速提取关键信息，提供智能优化建议，从而降低构建分析的门槛。
+- **CI 主动防劣化**：基于现有的 [Bundle Diff](/guide/usage/bundle-diff) 功能，Rsdoctor 将拓展 CI 环境下的主动防劣化能力，推出 [Rsdoctor CI Action](https://github.com/web-infra-dev/rsdoctor/discussions/491)，实现自动化的产物体积监控、性能劣化预警和问题拦截，为工程质量提供保障。
+- **进一步原生化**：由于 Rspack 基于 Rust 实现且采用多线程架构，当前 Rsdoctor 对 Rspack 内置 Loader 的分析不够精确。我们计划在 [Rspack Native Plugin](/config/options/options#enablenativeplugin) 的基础上优化分析机制，提供更准确的 Loader 性能数据和编译行为洞察。
 
 **最后，感谢所有为 Rsdoctor 贡献过的开发者 ❤️**：
 
