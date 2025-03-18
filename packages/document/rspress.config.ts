@@ -81,9 +81,6 @@ export default defineConfig({
   ssg: {
     strict: true,
   },
-  search: {
-    codeBlocks: true,
-  },
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
