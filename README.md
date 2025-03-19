@@ -19,7 +19,7 @@ Rsdoctor is committed to being a one-stop, intelligent build analysis tool that 
 
 Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rspeedy (Lynx)](https://lynxjs.org/rspeedy/), [Storybook](https://github.com/rspack-contrib/storybook-rsbuild), [Next.js](https://nextjs.org/), [Nuxt](https://nuxt.com/), [Re.Pack](https://re-pack.dev/), [Modern.js](https://modernjs.dev/), [Rsbuild](https://rsbuild.dev/), [Rspress](https://rspress.dev/) and [Rslib](https://lib.rsbuild.dev/).
 
-![Watch the video](https://github.com/user-attachments/assets/3400e0a2-a1dc-4a14-9466-6283af9dd9ed)
+<video src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4" width="100%" />
 
 ## 📚 Getting started
 
