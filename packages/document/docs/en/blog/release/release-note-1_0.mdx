@@ -4,7 +4,7 @@ published_at: 2025-03-19 08:00:00
 
 _March 19, 2025_
 
-# Rsdoctor 1.0 Release Note
+# Announcing Rsdoctor 1.0
 
 We are excited to announce the official release of **Rsdoctor 1.0**!
 
@@ -30,7 +30,7 @@ Rsdoctor aims to be the most powerful and comprehensive build analysis tool avai
 
 ## Why Rsdoctor
 
-### Community Tools
+### Community tools
 
 In the field of build analysis, the community already has some mature tools, such as [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) for visualizing build artifacts, and [Statoscope](https://github.com/statoscope/statoscope/) for comprehensive resource analysis. In addition, [speed-measure-webpack-plugin](https://github.com/stephencookdev/speed-measure-webpack-plugin) can be used to analyze the execution time of plugins and loaders, and locate build performance bottlenecks.
 
@@ -56,7 +56,7 @@ In the process of implementing Rsdoctor, we learned the best practices from exce
 
 - **As an extensible analysis tool**: Allow developers to customize analysis rules according to project requirements, and achieve targeted optimization of the build process.
 
-## Common Application Scenarios
+## Typical use cases
 
 Rsdoctor offers a rich set of features, detailed content can be found in the [Feature Navigation](/guide/start/features). Here are some typical use cases that demonstrate how Rsdoctor effectively solves common build problems:
 
@@ -111,7 +111,7 @@ During the build process, if you want to know why a certain module file is packa
 
 > In the future, we plan to combine AI capabilities to help users analyze module dependency chain problems more quickly.
 
-## Who is Using
+## Who is using
 
 Rsdoctor has been widely used within ByteDance, helping developers efficiently analyze and solve various problems in the build process.
 
@@ -124,13 +124,13 @@ In the future, Rsdoctor will continue to provide first-class support for all too
   src="https://assets.rspack.dev/rstack/rstack-overview.png"
 />
 
-## ⭐️ 1.0 New Features
+## What's new in 1.0
 
-### 🎨 UI Interface Upgrade
+### 🎨 UI interface upgrade
 
 In version 1.0, we have comprehensively optimized the user interface of Rsdoctor, making it more clear, elegant, and easy to navigate. The new design is dedicated to improving the user experience, making information display more intuitive and efficient.
 
-### 🚀 Analysis Efficiency Improvement
+### 🚀 Analysis efficiency improvement
 
 In large projects, enabling Rsdoctor can increase the overall build time. To solve this problem, we rewrote the time-consuming data processing logic in Rsdoctor in Rust, and integrated it into Rspack.
 
@@ -146,7 +146,7 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-### 🔍 Module Search Function
+### 🔍 Module search function
 
 - **Search Module Capability**: In the `Bundle Size` page, we have added a module search function. Users can quickly locate and view the `Assets` where the module is located by entering the module name, making it more convenient to analyze the reference relationship and size of the module. [Details](/guide/usage/bundle-size#%E6%A8%A1%E5%9D%97%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD)
 
@@ -155,7 +155,7 @@ new RsdoctorRspackPlugin({
   src="https://assets.rspack.dev/rsdoctor/assets/search-modules-v1-0.png"
 />
 
-### 🛠️ New Build Scanning Rules
+### 🛠️ New build scanning rules
 
 - **Cross Chunks Package Rule**: Added a rule for detecting duplicate packages across Chunks (E1002), which can scan for duplicate packages in different `chunks`. These duplicate packages may cause redundant code in the build.
 
@@ -178,11 +178,11 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-### ⚙️ Other Updates
+### ⚙️ Other updates
 
 - **New output.compressData Configuration**: Used to control whether to compress the analysis data. By default, this option is `true`, which means that the analysis data will be compressed.
 
-## How to Use 1.0
+## How to use 1.0
 
 - If you are using any tool or framework based on Rspack and webpack, you can refer to the [Quick Start](/guide/start/quick-start) to start using Rsdoctor.
 - If you are using Rsdoctor 0.4 or earlier, please note that 1.0 contains a few incompatible updates:
@@ -190,7 +190,7 @@ new RsdoctorRspackPlugin({
 
 > Welcome to give a Star 🌟 to the [Rsdoctor GitHub](https://github.com/web-infra-dev/rsdoctor) repository.
 
-## Next Steps
+## Next steps
 
 - **AI Intelligent Analysis**: The build analysis data collected by Rsdoctor is very rich, but there may be a certain learning curve for new users. Therefore, we will integrate AI capabilities into Rsdoctor to help users quickly extract key information from massive data, provide intelligent optimization suggestions, and reduce the threshold of build analysis.
 - **CI Active Anti-Deterioration**: Based on the existing [Bundle Diff](/guide/usage/bundle-diff) feature, Rsdoctor will expand the active anti-deterioration capability in the CI environment, and launch [Rsdoctor CI Action](https://github.com/web-infra-dev/rsdoctor/discussions/491), to achieve automated monitoring of artifact size, performance deterioration warning, and problem interception, providing a guarantee for engineering quality.
