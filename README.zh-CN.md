@@ -26,10 +26,12 @@ https://github.com/user-attachments/assets/3400e0a2-a1dc-4a14-9466-6283af9dd9ed
 - **编译可视化**：Rsdoctor 将编译行为及耗时进行可视化展示，方便开发者查看构建问题。
 
 - **多种分析能力**：支持构建产物、构建时分析能力：
+
   - 构建产物支持资源列表及模块依赖等。
   - 构建时分析支持 Loader、Plugin、Resolver 构建过程分析。
   - 支持 Rspack 的 builtin:swc-loader 分析。
   - 构建规则支持重复包检测及 ES Version Check 检查等。
+
 - **支持自定义规则**：除了内置构建扫描规则外，还支持用户根据 Rsdoctor 的构建数据添加自定义构建扫描规则。
 
 ## 📚 快速上手
