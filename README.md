@@ -21,10 +21,6 @@ Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: 
 
 <video src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4" width="100%" />
 
-## 📚 Getting started
-
-To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/start/quick-start).
-
 ## 🔥 Features
 
 - **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.
@@ -38,6 +34,10 @@ To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/s
 - **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
 
 - **Framework-Independent**: Rsdoctor support all projects built on Webpack or Rspack.
+
+## 📚 Getting started
+
+To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/start/quick-start).
 
 ## 🤝 Contribution
 

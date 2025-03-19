@@ -21,10 +21,6 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
 
 <video src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4" width="100%" />
 
-## 📚 快速上手
-
-你可以参考 [快速上手](https://rsdoctor.dev/zh/guide/start/quick-start) 来开始体验 Rsdoctor。
-
 ## 🔥 特性
 
 - **编译可视化**：Rsdoctor 将编译行为及耗时进行可视化展示，方便开发者查看构建问题。
@@ -36,6 +32,10 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
   - 构建规则支持重复包检测及 ES Version Check 检查等。
 - **支持自定义规则**：除了内置构建扫描规则外，还支持用户根据 Rsdoctor 的构建数据添加自定义构建扫描规则。
 - **框架无关**：支持所有基于 Webpack 或 Rspack 构建的项目。
+
+## 📚 快速上手
+
+你可以参考 [快速上手](https://rsdoctor.dev/zh/guide/start/quick-start) 来开始体验 Rsdoctor。
 
 ## 🤝 参与贡献
 
