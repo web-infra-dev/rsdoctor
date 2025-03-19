@@ -517,23 +517,32 @@ export const AssetDetail: React.FC<{
           const parsedSize = sumBy(mods, (e) => e.size?.parsedSize || 0);
           const sourceSize = sumBy(mods, (e) => e.size?.sourceSize || 0);
           return (
-            <Space>
-              <Keyword ellipsis text={defaultTitle} keyword={''} />
-              {parsedSize > 0 ? (
-                <>
-                  <Tag style={tagStyle} color={'orange'}>
-                    {'Bundled:' + formatSize(parsedSize)}
-                  </Tag>
+            <div className={styles['bundle-tree']}>
+              <div className={styles.box}>
+                <div className={styles.keywords}>
+                  <Keyword ellipsis text={defaultTitle} keyword={''} />
+                </div>
+                <div className={styles.dividerDiv}>
+                  <Divider className={styles.divider} dashed />
+                </div>
+              </div>
+              <Space>
+                {parsedSize > 0 ? (
+                  <>
+                    <Tag style={tagStyle} color={'orange'}>
+                      {'Bundled:' + formatSize(parsedSize)}
+                    </Tag>
+                    <Tag style={tagStyle} color={'lime'}>
+                      {'Source:' + formatSize(sourceSize)}
+                    </Tag>
+                  </>
+                ) : (
                   <Tag style={tagStyle} color={'lime'}>
                     {'Source:' + formatSize(sourceSize)}
                   </Tag>
-                </>
-              ) : (
-                <Tag style={tagStyle} color={'lime'}>
-                  {'Source:' + formatSize(sourceSize)}
-                </Tag>
-              )}
-            </Space>
+                )}
+              </Space>
+            </div>
           );
         }
 
