@@ -65,9 +65,9 @@ https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
 Rsdoctor 的一些实现参考了社区中杰出的项目，对他们表示感谢：
 
-- [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme)是一个优秀的构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发。
+- [bundle-stats](https://github.com/relative-ci/bundle-stats/tree/master/packages/cli#readme) 是一个优秀的构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发。
 - [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) 是一个经典的 Webpack 构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发，同时 Rsdoctor 使用了其经典的瓦片图。
-- [Statoscope](https://github.com/statoscope/statoscope/blob/master/README.md)是一个优秀的构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发。
+- [Statoscope](https://github.com/statoscope/statoscope/blob/master/README.md) 是一个优秀的构建产物分析工具，Rsdoctor 在构建产物分析方面受到了它的启发。
 - [Webpack 团队和社区](https://github.com/webpack/webpack/blob/main/README.md) 创建了一个优秀的打包工具和丰富的生态。
 - [vite-plugin-inspect](https://github.com/antfu/vite-plugin-inspect) 启发了 Rsdoctor 对构建过程分析的探索。
 
