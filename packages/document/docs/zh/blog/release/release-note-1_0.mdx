@@ -64,7 +64,10 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 在构建过程中，如果发现编译速度过慢，可以通过 [Loader 时序图](/guide/usage/loaders-timeline) 查看 Loader 执行的时间消耗，了解每个 Loader 对每个文件的编译时间消耗。这样可以发现时间消耗过大的 Loader。
 
-<img src="/loader-timeline-overall.png" />
+<img
+  style={{ borderRadius: 12 }}
+  src="https://assets.rspack.dev/rsdoctor/assets/loader-timeline-overall-v1-0.png"
+/>
 
 ### 2. 「构建结果与预期不符？」
 
@@ -72,19 +75,28 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 例如：通过 Rsdoctor 的构建时编译前后代码对比，发现经过 **babel-loader** 编译后，CSS 文件的 import 顺序变化，导致优先级最高的样式被默认样式配置覆盖，导致 CSS 样式无效。最终发现是 `babel-plugin-import` 的问题：[#606](https://github.com/umijs/babel-plugin-import/issues/606)。
 
-<img src="/babel-import-error.png" />
+<img
+  style={{ borderRadius: 12 }}
+  src="https://assets.rspack.dev/rsdoctor/assets/babel-import-errors-v1-0.png"
+/>
 
 ### 3.「如何合理分包？」
 
 我们可以通过 [产物分析](/guide/usage/bundle-size) 页面查看某个产物的 Modules 树来查看该产物资源包含了哪些 Modules，进而通过 Rspack 的 [splitChunks](https://rspack.dev/zh/plugins/webpack/split-chunks-plugin) 配置来进行合理的分包。
 
-<img src="/bundle-size-overall.png" />
+<img
+  style={{ borderRadius: 12 }}
+  src="https://assets.rspack.dev/rsdoctor/assets/bundle-size-overall-v1-0.png"
+/>
 
 ### 4.「如何分析产物增大原因？」
 
 当某个版本上线后，由于产物体积增大导致线上页面性能出现劣化，可以通过 Rsdoctor 的 [Bundle Diff](/guide/usage/bundle-diff) 功能来对比两次 commit 的产物细节，以及依赖的 npm 包变化。
 
-<img src="/bundle-diff-assets.png" />
+<img
+  style={{ borderRadius: 12 }}
+  src="https://assets.rspack.dev/rsdoctor/assets/bundle-diff-assets-v1-0.png"
+/>
 
 **后续 Rsdoctor 将计划支持 Bundle Diff 的主动防劣化能力**，例如：提供 Bundle Diff 的 GitHub Actions 以支持在 CI 阶段主动拦截产物不合理的增大。
 
@@ -92,7 +104,10 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 构建过程中，如果想要知道某个模块文件为什么会被打包到产物中，则可以在 [产物分析](/guide/usage/bundle-size) 页面中的 Modules 树图中点击该模块后面的 `Module Graph` 图标，查看该模块的上游依赖模块关系。
 
-<img style={{ width: 700, margin: 'auto' }} src="/module-analysis-tree.png" />
+<img
+  style={{ width: 700, margin: 'auto', borderRadius: 12 }}
+  src="https://assets.rspack.dev/rsdoctor/assets/module-analysis-tree-v1-0.png"
+/>
 
 > 后续我们将计划结合 AI 能力，帮助用户更快地分析模块依赖链路问题。
 
@@ -104,7 +119,10 @@ Rsdoctor 已在字节跳动内部得到广泛应用，帮助开发者高效分�
 
 未来 Rsdoctor 将持续为 **Rstack**（`Rspack stack` 的缩写）生态的所有工具提供一流的支持：
 
-<img src="https://assets.rspack.dev/rstack/rstack-overview.png" />
+<img
+  style={{ borderRadius: 12 }}
+  src="https://assets.rspack.dev/rstack/rstack-overview.png"
+/>
 
 ## ⭐️ 1.0 新特性
 
@@ -112,9 +130,11 @@ Rsdoctor 已在字节跳动内部得到广泛应用，帮助开发者高效分�
 
 在 1.0 版本中，我们全面优化了 Rsdoctor 的用户界面，使其更加清晰、优雅和易于导航。新的设计致力于改善用户体验，并让信息展示更加直观和高效。
 
-### 🚀 Rspack 构建分析提效
+### 🚀 分析效率提升
 
-通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑下沉到 Rspack 的构建阶段。这一优化显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了 **17%** 的分析时间，项目的模块数量越大，提升效率越显著，[详情](/config/options/options#enablenativeplugin)。
+在大型项目中，启用 Rsdoctor 会导致整体构建时间增加。为解决这一问题，我们将 Rsdoctor 中耗时较长的数据处理逻辑使用 Rust 重写，并集成到 Rspack 中。这一优化有效提升了 Rsdoctor 的构建分析性能，整体分析时间减少了 20% 以上。后续我们将继续将更多模块原生化来进一步提升分析效率。
+
+这一优化可以通过 [enableNativePlugin](/config/options/options#enablenativeplugin) 选项开启：
 
 ```ts
 new RsdoctorRspackPlugin({
@@ -128,7 +148,10 @@ new RsdoctorRspackPlugin({
 
 - **Search Module 能力**：在 `Bundle Size` 页面中，我们新增了模块搜索功能。用户可以通过输入模块名称来快速定位和查看模块所在的 `Assets`，从而更方便地分析模块的引用关系和大小。[详情](/guide/usage/bundle-size#%E6%A8%A1%E5%9D%97%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD)
 
-<img style={{ width: '80%', margin: 'auto' }} src="/search-modules.png" />
+<img
+  style={{ width: '80%', margin: 'auto', borderRadius: 12 }}
+  src="https://assets.rspack.dev/rsdoctor/assets/search-modules-v1-0.png"
+/>
 
 ### 🛠️ 新增构建扫描规则
 
