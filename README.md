@@ -33,8 +33,6 @@ Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: 
 
 - **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
 
-- **Framework-Independent**: Rsdoctor support all projects built on Webpack or Rspack.
-
 ## 📚 Getting started
 
 To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/start/quick-start).

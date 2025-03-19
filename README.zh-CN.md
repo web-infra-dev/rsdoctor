@@ -31,7 +31,6 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
   - 支持 Rspack 的 builtin:swc-loader 分析。
   - 构建规则支持重复包检测及 ES Version Check 检查等。
 - **支持自定义规则**：除了内置构建扫描规则外，还支持用户根据 Rsdoctor 的构建数据添加自定义构建扫描规则。
-- **框架无关**：支持所有基于 Webpack 或 Rspack 构建的项目。
 
 ## 📚 快速上手
 
