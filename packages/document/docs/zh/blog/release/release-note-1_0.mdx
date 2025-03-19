@@ -36,9 +36,9 @@ Rsdoctor 致力于成为最强大、最全面的构建分析工具，通过可�
 
 然而，这些工具依然存在一些不足，例如缺乏细粒度的构建细节展示、不具备全方位的构建问题分析能力、不兼容 Rspack、以及缺少构建预警扫描功能。
 
-总结来说，构建分析工具一直面临以下难点和痛点：
+总结来说，社区工具有以下可改进的方面：
 
-1. **细节不够深入**：传统工具**无法深入探索编译过程**的细节和变化，如果想要查看某个 Loader 编译细节，开发者常常需要手动设置断点逐步调试，效率低下。
+1. **分析不够深入**：传统工具**无法深入探索编译过程**的细节和变化。例如，如果想要查看某个 Loader 编译细节，开发者常常需要手动设置断点逐步调试，效率低下。
 2. **数据割裂与孤立**：现有的产物分析工具通常只提供产物分析数据展示，而不具备构建扫描规则能力，**无法主动为产物提供合理的优化建议，也不支持用户自定义检查规则**。
 3. **Rspack 支持不足**：现有工具对 Rspack 的支持不够全面，例如无法分析 Rspack 的 [内置 Loader](https://rspack.dev/guide/features/builtin-swc-loader) 。
 
@@ -46,14 +46,13 @@ Rsdoctor 致力于成为最强大、最全面的构建分析工具，通过可�
 
 根据以上现状，我们决定为 Rspack 生态开发一个专注于构建分析的工具 —— **Rsdoctor**。
 
-我们为 Rsdoctor 设计了直观的用户界面，同时，Rsdoctor 通过结合多种工具的优点，扩展了 **Loader 打点能力**以更深入地分析编译阶段的 Loader 行为，**内置了产物及编译的扫描和检测规则**，并支持用户**自定义规则**。
+我们为 Rsdoctor 设计了直观的用户界面，将构建数据可视化。同时，Rsdoctor 在结合多种工具的基础上，额外扩展了 Loader 分析能力以更深入 Loader 的编译行为，内置了产物及编译的扫描和检测规则，并支持用户自定义规则。
 
 Rsdoctor 不仅支持 Rspack 和 webpack，也支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)、[Rspeedy (Lynx)](https://lynxjs.org/rspeedy/)、[Storybook](https://github.com/rspack-contrib/storybook-rsbuild)、[Next.js](https://nextjs.org/)、[Nuxt](https://nuxt.com/)、[Re.Pack](https://re-pack.dev/)、[Modern.js](https://modernjs.dev/)、[Rsbuild](https://rsbuild.dev/)、[Rspress](https://rspress.dev/) 和 [Rslib](https://lib.rsbuild.dev/) 等。
 
-在实现 Rsdoctor 的过程中，我们向社区中优秀的工具学习最佳实践，并聚焦于以下使用场景来设计 Rsdoctor：
+Rsdoctor 可以被用于：
 
 - **作为一个全面的构建分析工具**：帮助开发者深入了解构建过程中的每一个环节，提供详细的编译和产物分析。
-
 - **作为一个可扩展的分析工具**：允许开发者根据项目需求自定义分析规则，实现对构建过程的有针对性的优化。
 
 ## 常见应用场景
@@ -62,7 +61,7 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 ### 1. 「构建速度太慢？」
 
-在构建过程中，如果发现编译速度过慢，可以通过 [Loader 时序图](/guide/usage/loaders-timeline) 查看 Loader 执行的时间消耗，了解每个 Loader 对每个文件的编译时间消耗。这样可以发现时间消耗过大的 Loader。
+在构建过程中，如果发现编译速度过慢，可以通过 [Loader 时序图](/guide/usage/loaders-timeline) 查看 Loader 执行的时间开销，以及每个文件的编译时间开销，从而对性能不足的 Loader 进行针对性优化。
 
 <img
   style={{ borderRadius: 12 }}
@@ -71,9 +70,9 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 ### 2. 「构建结果与预期不符？」
 
-在构建时，可能会出现编译结果与预期不一致的问题，导致最终样式被覆盖或其他运行时问题。Rsdoctor 的 [Loader Details](/guide/usage/loaders-analysis) 页面可以查看 Loader 对当前文件编译的前后变化。
+在构建过程中，可能会遇到编译结果与预期不符的问题，导致出现运行时异常或样式错误等问题。Rsdoctor 的 [Loader Details](/guide/usage/loaders-analysis) 页面可以帮助你检查 Loader 对特定文件的编译前后变化。
 
-例如：通过 Rsdoctor 的构建时编译前后代码对比，发现经过 **babel-loader** 编译后，CSS 文件的 import 顺序变化，导致优先级最高的样式被默认样式配置覆盖，导致 CSS 样式无效。最终发现是 `babel-plugin-import` 的问题：[#606](https://github.com/umijs/babel-plugin-import/issues/606)。
+例如：通过 Rsdoctor 的构建时编译前后代码对比，发现经过 `babel-loader` 编译后，CSS 文件的 import 顺序变化，导致优先级最高的样式被默认样式配置覆盖，CSS 样式失效。最终定位为 `babel-plugin-import` 的 [issue](https://github.com/umijs/babel-plugin-import/issues/606)。
 
 <img
   style={{ borderRadius: 12 }}
@@ -98,8 +97,6 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
   src="https://assets.rspack.dev/rsdoctor/assets/bundle-diff-assets-v1-0.png"
 />
 
-**后续 Rsdoctor 将计划支持 Bundle Diff 的主动防劣化能力**，例如：提供 Bundle Diff 的 GitHub Actions 以支持在 CI 阶段主动拦截产物不合理的增大。
-
 ### 5.「某个模块为什么会被打包？」
 
 构建过程中，如果想要知道某个模块文件为什么会被打包到产物中，则可以在 [产物分析](/guide/usage/bundle-size) 页面中的 Modules 树图中点击该模块后面的 `Module Graph` 图标，查看该模块的上游依赖模块关系。
@@ -108,8 +105,6 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
   style={{ width: 700, margin: 'auto', borderRadius: 12 }}
   src="https://assets.rspack.dev/rsdoctor/assets/module-analysis-tree-v1-0.png"
 />
-
-> 后续我们将计划结合 AI 能力，帮助用户更快地分析模块依赖链路问题。
 
 ## 谁在使用
 
@@ -146,7 +141,7 @@ new RsdoctorRspackPlugin({
 
 ### 🔍 模块搜索功能
 
-- **Search Module 能力**：在 `Bundle Size` 页面中，我们新增了模块搜索功能。用户可以通过输入模块名称来快速定位和查看模块所在的 `Assets`，从而更方便地分析模块的引用关系和大小。[详情](/guide/usage/bundle-size#%E6%A8%A1%E5%9D%97%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD)
+在 `Bundle Size` 页面中，我们新增了 [模块搜索功能](/guide/usage/bundle-size#%E6%A8%A1%E5%9D%97%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD)。用户可以通过输入模块名称来快速定位和查看模块所在的 chunk，从而更方便地分析模块的引用关系和大小。
 
 <img
   style={{ width: '80%', margin: 'auto', borderRadius: 12 }}
@@ -155,11 +150,8 @@ new RsdoctorRspackPlugin({
 
 ### 🛠️ 新增构建扫描规则
 
-- **Cross Chunks Package 规则**：新增了跨 Chunks 的重复包检测规则（E1002），该规则能够扫描不同 `chunks` 中的重复包。这些重复包可能导致打包代码冗余。
-
-  解决方案可查看 [[E1002] Cross Chunks Packages](/guide/rules/rules#e1002-cross-chunks-package)
-
-- **ECMA Version Check 规则**：增强了 ECMA 版本检测规则（E1004），用于检测不兼容的高级语法，[详情](/guide/rules/rules#e1004-ecma-version-check)。
+- [Cross Chunks Package 规则](/guide/rules/rules#e1002-cross-chunks-package)：新增了跨 Chunks 的重复包检测规则，该规则能够扫描不同 `chunks` 中的重复包。这些重复包可能导致产物体积增大。
+- [ECMA Version Check 规则](/guide/rules/rules#e1004-ecma-version-check)：增强了 ECMA 版本检测规则，用于检测不兼容的高级语法。
 
 ```ts
 new RsdoctorRspackPlugin({
@@ -175,10 +167,6 @@ new RsdoctorRspackPlugin({
   },
 });
 ```
-
-### ⚙️ 其他更新
-
-- **新增 output.compressData 配置**：用于控制是否对分析数据进行压缩处理。默认情况下，该选项为 `true`，即会对分析数据进行压缩。
 
 ## 如何使用 1.0
 
