@@ -1,22 +1,35 @@
 # Introduction
 
-## 💡 What is Rsdoctor?
+Rsdoctor is a build analyzer tailored for the [Rspack](https://rspack.dev/) ecosystem and fully compatible with the [webpack](https://webpack.js.org/) ecosystem.
 
-- Rsdoctor is a one-stop tool for diagnosing and analyzing the build process and build artifacts.
-- Rsdoctor is a tool that supports Rspack and webpack build analysis.
-- Rsdoctor is an analysis tool that can display the time-consuming and behavioral details of the compilation.
-- Rsdoctor is a tool that provides bundle diff and other anti-degradation capabilities simultaneously.
+Rsdoctor is committed to being a one-stop, intelligent build analysis tool that makes the entire build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
+
+Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rspeedy (Lynx)](https://lynxjs.org/rspeedy/), [Storybook](https://github.com/rspack-contrib/storybook-rsbuild), [Next.js](https://nextjs.org/), [Nuxt](https://nuxt.com/), [Re.Pack](https://re-pack.dev/), [Modern.js](https://modernjs.dev/), [Rsbuild](https://rsbuild.dev/), [Rspress](https://rspress.dev/) and [Rslib](https://lib.rsbuild.dev/).
+
+<video
+  src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
 
 ## 🔥 Features
 
 - **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.
 - **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
   - Build artifact support for resource lists and module dependencies, etc.
-  - Build-time analysis supports Loader, Plugin, and Resolver building process analysis, including Rspack's builtin loaders.
+  - Build-time analysis supports Loader, Plugin, and Resolver building process analysis.
   - Build rules support duplicate package detection and ES Version Check, etc.
-  - Currently, bundle diff capabilities are also available.
 - **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
-- **Framework-Independent**: Rsdoctor support all projects built on Rspack or webpack.
 
 ## 🛠️ Introduction
 
