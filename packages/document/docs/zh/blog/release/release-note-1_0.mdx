@@ -114,7 +114,7 @@ Rsdoctor 已在字节跳动内部得到广泛应用，帮助开发者高效分�
 
 ### 🚀 Rspack 构建分析提效
 
-通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑下沉到 Rspack 的构建阶段。这一优化显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了整体分析时间，[详情](/config/options/options#enablenativeplugin)。
+通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑下沉到 Rspack 的构建阶段。这一优化显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了大约 **16%** 的分析时间，项目越大，提升效率越显著，[详情](/config/options/options#enablenativeplugin)。
 
 ```ts
 new RsdoctorRspackPlugin({
@@ -123,6 +123,30 @@ new RsdoctorRspackPlugin({
   },
 });
 ```
+
+#### 实验数据
+
+在一个基于 Rspack 的 Arco 项目中，我们根据是否启用 **Rsdoctor Native Plugin** 进行了测试，得到了以下结果：
+
+- 开启 Rsdoctor Native Plugin（单位：秒）
+
+|     | Build End | Open Report |
+| --- | --------- | ----------- |
+| 1   | 6.788     | 8.428       |
+| 2   | 6.727     | 8.222       |
+| 3   | 6.883     | 8.458       |
+| 4   | 6.629     | 8.109       |
+| 5   | 6.549     | 7.99        |
+
+- 未开启 Rsdoctor Native Plugin（单位：秒）
+
+|     | Build End | Open Report |
+| --- | --------- | ----------- |
+| 1   | 7.987     | 9.447       |
+| 2   | 7.81      | 9.256       |
+| 3   | 7.886     | 9.345       |
+| 4   | 7.877     | 9.329       |
+| 5   | 8.072     | 9.54        |
 
 ### 🔍 模块搜索功能
 
