@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-
+import { gzipSync } from 'node:zlib';
 let id = 1;
 
 export class Asset implements SDK.AssetInstance {
@@ -12,6 +12,7 @@ export class Asset implements SDK.AssetInstance {
   size: number;
   content: string;
   chunks: SDK.ChunkInstance[];
+  gzipSize: number | undefined;
 
   constructor(
     path: string,
@@ -31,6 +32,7 @@ export class Asset implements SDK.AssetInstance {
       id: this.id,
       path: this.path,
       size: this.size,
+      gzipSize: this.gzipSize,
       chunks: this.chunks?.map((ck) => ck.id),
       content:
         types === SDK.ToDataType.NoSourceAndAssets ||
@@ -47,5 +49,9 @@ export class Asset implements SDK.AssetInstance {
 
   setId(id: number): void {
     this.id = id;
+  }
+
+  setGzipSize(content: string) {
+    this.gzipSize = gzipSync(content, { level: 9 }).length;
   }
 }
