@@ -13,20 +13,13 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-## 💡 What is Rsdoctor?
+Rsdoctor is a build analyzer tailored for the [Rspack](https://rspack.dev/) ecosystem and fully compatible with the [webpack](https://webpack.js.org/) ecosystem.
 
-- Rsdoctor is a one-stop tool for diagnosing and analyzing the build process and build artifacts.
-- Rsdoctor is a tool that supports Webpack and Rspack build analysis.
-- Rsdoctor is an analysis tool that can display the time-consuming and behavioral details of the compilation.
-- Rsdoctor is a tool that can analyze the time-consuming and compilation process of the rspack builtin:swc-loader.
+Rsdoctor is committed to being a one-stop, intelligent build analysis tool that makes the entire build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
 
-## 📌 Position
+Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rspeedy (Lynx)](https://lynxjs.org/rspeedy/), [Storybook](https://github.com/rspack-contrib/storybook-rsbuild), [Next.js](https://nextjs.org/), [Nuxt](https://nuxt.com/), [Re.Pack](https://re-pack.dev/), [Modern.js](https://modernjs.dev/), [Rsbuild](https://rsbuild.dev/), [Rspress](https://rspress.dev/) and [Rslib](https://lib.rsbuild.dev/).
 
-**Rsdoctor** is a build analysis tool for analyzing projects built with [Rspack](https://www.rspack.dev/) and [Webpack](https://webpack.js.org/). It supports analysis of projects such as [Rsbuild](https://rsbuild.dev/), [Create-react-app](https://create-react-app.dev/), [Modern.js](https://modernjs.dev/), and more.
-
-<div align=center>
- <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/4f28312a-68bf-4f9c-91cb-6fd603a37f53" alt="duplicate packages" />
-</div>
+![Watch the video](https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4)
 
 ## 📚 Getting started
 
@@ -35,8 +28,6 @@ To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/s
 ## 🔥 Features
 
 - **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.
-
-https://github.com/user-attachments/assets/3400e0a2-a1dc-4a14-9466-6283af9dd9ed
 
 - **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
 

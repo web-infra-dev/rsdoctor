@@ -13,20 +13,13 @@
 
 [English](./README.md) | 简体中文
 
-## 💡 什么是 Rsdoctor？
+Rsdoctor 是一款为 [Rspack](https://rspack.dev/) 生态量身打造的构建分析工具，同时也完全兼容 [webpack](https://webpack.js.org/) 生态。
 
-- Rsdoctor 是一个面向构建过程与构建产物提供诊断和分析的一站式工具。
-- Rsdoctor 是一个支持 **Webpack** 及 **Rspack** 构建分析工具。
-- Rsdoctor 是一个可以展示编译耗时及编译行为细节的分析工具。
-- Rsdoctor 是一个可以支持 **Rspack builtin:swc-loader** 构建耗时及构建行为分析的工具
+Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可视化与智能分析，使整个构建流程变得透明、可预测和可优化，从而帮助开发团队精准定位瓶颈、优化性能并提升工程质量。
 
-## 📌 定位
+Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)、[Rspeedy (Lynx)](https://lynxjs.org/rspeedy/)、[Storybook](https://github.com/rspack-contrib/storybook-rsbuild)、[Next.js](https://nextjs.org/)、[Nuxt](https://nuxt.com/)、[Re.Pack](https://re-pack.dev/)、[Modern.js](https://modernjs.dev/)、[Rsbuild](https://rsbuild.dev/)、[Rspress](https://rspress.dev/) 和 [Rslib](https://lib.rsbuild.dev/) 等。
 
-**Rsdoctor** 是一个构建分析工具，用于分析基于 [Rspack](https://www.rspack.dev/) 和 [Webpack](https://webpack.js.org/) 构建的项目。它支持分析的项目包括：[Rsbuild](https://rsbuild.dev/)、[Create-react-app](https://create-react-app.dev/)、[Modern.js](https://modernjs.dev/) 等。
-
-<div align=center>
- <img src="https://github.com/web-infra-dev/rsdoctor/assets/18437716/4f28312a-68bf-4f9c-91cb-6fd603a37f53" alt="duplicate packages" />
-</div>
+![Watch the video](https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4)
 
 ## 📚 快速上手
 
@@ -35,8 +28,6 @@
 ## 🔥 特性
 
 - **编译可视化**：Rsdoctor 将编译行为及耗时进行可视化展示，方便开发者查看构建问题。
-
-https://github.com/user-attachments/assets/3400e0a2-a1dc-4a14-9466-6283af9dd9ed
 
 - **多种分析能力**：支持构建产物、构建时分析能力：
   - 构建产物支持资源列表及模块依赖等。
