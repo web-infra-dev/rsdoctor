@@ -29,7 +29,6 @@ https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
   - 构建产物支持资源列表及模块依赖等。
   - 构建时分析支持 Loader、Plugin、Resolver 构建过程分析。
-  - 支持 Rspack 的 builtin:swc-loader 分析。
   - 构建规则支持重复包检测及 ES Version Check 检查等。
 
 - **支持自定义规则**：除了内置构建扫描规则外，还支持用户根据 Rsdoctor 的构建数据添加自定义构建扫描规则。

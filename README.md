@@ -28,7 +28,7 @@ https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 - **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
 
   - Build artifact support for resource lists and module dependencies, etc.
-  - Build-time analysis supports Loader, Plugin, and Resolver building process analysis, including: **Rspack's builtin:swc-loader**.
+  - Build-time analysis supports Loader, Plugin, and Resolver building process analysis
   - Build rules support duplicate package detection and ES Version Check, etc.
 
 - **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
