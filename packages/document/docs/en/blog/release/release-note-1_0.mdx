@@ -57,7 +57,7 @@ Rsdoctor can be used to:
 
 Rsdoctor has been widely used within ByteDance, helping developers efficiently analyze and solve various problems in the build process.
 
-Since its open source in 2024, Rsdoctor's weekly download volume on npm has exceeded **100,000**. In the community, Rsdoctor has been integrated into frameworks such as [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor) and [Lynx](https://lynxjs.org/rspeedy/use-rsdoctor.html). In addition, Rsdoctor has also been adopted by large projects such as [Sentry](https://github.com/getsentry/sentry/pull/63865), [NocoBase](https://github.com/nocobase/nocobase/blob/main/packages/core/build/src/buildPlugin.ts#L493) and [Grafana](https://github.com/grafana/grafana/pull/94729).
+Since its open source in 2024, Rsdoctor's npm weekly downloads has exceeded **100k**. In the community, Rsdoctor has been integrated into frameworks such as [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor) and [Lynx](https://lynxjs.org/rspeedy/use-rsdoctor.html). In addition, Rsdoctor has also been adopted by large projects such as [Sentry](https://github.com/getsentry/sentry/pull/63865), [NocoBase](https://github.com/nocobase/nocobase/blob/main/packages/core/build/src/buildPlugin.ts#L493) and [Grafana](https://github.com/grafana/grafana/pull/94729).
 
 In the future, Rsdoctor will continue to provide first-class support for all tools in the **Rstack** (`Rspack stack` abbreviation) ecosystem:
 
@@ -148,11 +148,8 @@ new RsdoctorRspackPlugin({
 
 ### 🛠️ New scanning rules
 
-- **Cross Chunks Package Rule**: Added a rule for detecting duplicate packages across Chunks (E1002), which can scan for duplicate packages in different `chunks`. These duplicate packages may cause redundant code in the build.
-
-  Solution details can be found in [[E1002] Cross Chunks Packages](/guide/rules/rules#e1002-cross-chunks-package)
-
-- **ECMA Version Check Rule**: Enhanced the ECMA version detection rule (E1004), used to detect incompatible advanced syntax, [Details](/guide/rules/rules#e1004-ecma-version-check).
+- [Duplicate packages detecting](/guide/rules/rules#e1002-cross-chunks-package): Added a rule for detecting duplicate packages across chunks, which can scan for duplicate packages in different `chunks`. These duplicate packages may cause redundant code in the build.
+- [ECMA version checking](/guide/rules/rules#e1004-ecma-version-check): Enhanced the ECMA version detection rule, used to detect incompatible advanced syntax.
 
 ```ts
 new RsdoctorRspackPlugin({
