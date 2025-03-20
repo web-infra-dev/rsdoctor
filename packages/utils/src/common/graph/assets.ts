@@ -116,6 +116,7 @@ export function getAssetsSizeInfo(
       files: assets.map((e) => ({
         path: e.path,
         size: e.size,
+        gzipSize: e.gzipSize,
         initial: isInitialAsset(e, chunks),
         content: withFileContent ? e.content : undefined,
       })),
