@@ -2,5 +2,6 @@
 dist
 compiled
 doc_build
+pnpm-lock.yaml
 
 **/doctor-core/**/tests

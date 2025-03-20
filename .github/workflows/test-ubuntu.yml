@@ -25,12 +25,12 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        node-version: [18.x] 
+        node-version: [22.x] 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 10
 
@@ -48,7 +48,7 @@ jobs:
 
       - name: Setup Node.js ${{ matrix.node-version }}
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'

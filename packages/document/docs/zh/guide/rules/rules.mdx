@@ -8,7 +8,7 @@
 
 :::
 
-### [E1001] Duplicate Packages
+### [E1001] Duplicate packages
 
 #### 规则详情
 
@@ -94,7 +94,7 @@ enum CheckVersion {
 
 点击 「**More**」可以查看对应规则解释。
 
-### [E1002] Cross Chunks Package
+### [E1002] Cross chunks package
 
 跨 Chunks 的重复包规则能够扫描**不同 `chunks` 中的重复包**。这些重复包也有可能导致打包代码冗余，具体还要看业务逻辑及冗余代码大小。
 
@@ -108,7 +108,7 @@ enum CheckVersion {
 
 可查看 [[E1002] Cross Chunks Packages](../more/rules)
 
-### [E1003] Loader Performance Optimization
+### [E1003] Loader performance optimization
 
 通过该模块可以比较直观的看到我们项目在编译方面的一些预警信息，有助于我们可以更进一步优化项目的编译性能。
 
@@ -142,7 +142,7 @@ interface Config {
 }
 ```
 
-### [E1004] ECMA Version Check
+### [E1004] ECMA version check
 
 该规则用于检测不兼容的高级语法。在规则扫描时，优先使用 `browserslist` 的配置；如果未配置 `browserslist`，则需要手动进行检测，示例如下：
 
@@ -202,7 +202,7 @@ type CheckSyntaxOptions = {
 
 更多 `ECMA Version Check` 配置请参考 [ECMA Version Check Options](https://github.com/rspack-contrib/rsbuild-plugin-check-syntax?tab=readme-ov-file#options)
 
-### [E1005] Default Import Check
+### [E1005] Default import check
 
 通常，Rspack 会自动兼容不同类型的模块，但在某些情况下，兼容性操作可能会失败。例如，当使用 `Default Import` 导入一个 `cjs` 模块时，如果该模块没有兼容的语句（如 `exports.default`），则会出现问题。
 
