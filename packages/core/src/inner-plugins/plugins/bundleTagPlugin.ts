@@ -29,8 +29,8 @@ export class InternalBundleTagPlugin<
               return;
             }
             logger.info(
-              chalk.bgMagenta(
-                'Rsdoctor BannerTagPlugin has open. Do not use Rsdoctor on production version.',
+              chalk.magenta(
+                "Rsdoctor's `supports.banner` option is enabled, this is for debugging only. Do not use it for production.",
               ),
             );
 
