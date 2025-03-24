@@ -126,6 +126,7 @@ interface ISupport {
   banner?: boolean;
   parseBundle?: boolean;
   generateTileGraph?: boolean;
+  gzip?: boolean;
 }
 
 export interface RsdoctorPluginOptionsNormalized<

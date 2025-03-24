@@ -46,6 +46,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       parseBundle: true,
       banner: undefined,
       generateTileGraph: true,
+      gzip: false,
     },
     port,
     printLog = { serverUrls: true },
