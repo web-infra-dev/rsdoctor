@@ -32,7 +32,7 @@
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "axios": "^1.8.3",
+    "axios": "^1.8.4",
     "ora": "^5.4.1",
     "picocolors": "^1.1.1",
     "tslib": "2.8.1",
