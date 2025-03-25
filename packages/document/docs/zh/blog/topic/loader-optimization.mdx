@@ -3,7 +3,7 @@
 import NextSteps from '@components/NextSteps';
 import Step from '@components/Step';
 
-通常来说，优化 Loader 是比较常见的优化 Rspack 或 Webpack 编译性能的方式，而大部分情况下，我们除了通过替换**更快的** `loader` 之外，常见的手段就是给 `loader` 设置 [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude) 来**减少执行**。
+通常来说，优化 Loader 是比较常见的优化 Rspack 或 webpack 编译性能的方式，而大部分情况下，我们除了通过替换**更快的** `loader` 之外，常见的手段就是给 `loader` 设置 [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude) 来**减少执行**。
 
 而 **Rsdoctor** 提供了两个核心模块（[Loader Overall](/guide/usage/loaders-timeline) / [Loader Analysis](/guide/usage/loaders-analysis)）来帮助你根据 Loader 的调用信息进行深度优化。
 

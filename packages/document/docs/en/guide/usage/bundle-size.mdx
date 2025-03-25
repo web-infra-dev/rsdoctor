@@ -19,13 +19,13 @@ Click on the **"Bundle Size"** option in the navigation bar to view the Bundle a
 
 - **`Assets`**: Resources refer to images, fonts, media, and other file types. They are the files that ultimately exist in the output folder. Each Chunk has corresponding [Assets resources](https://webpack.js.org/concepts/under-the-hood/#chunks).
 - **`Module`**: One or more Modules combine to form a Chunk. For more information about Module types, please refer to [Rspack Modules](https://www.rspack.dev/api/modules.html) and [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module).
-- **`Bundle Size`**: The final packaged size of the resource artifact, which is the final size after being processed by the builder.
+- **`Bundle Size`**: The final packaged size of the resource artifact, which is the final size after being processed by the bundler.
 - **`Module Bundled Source & Size`**: **Module Parsed Source** refers to the final code fragment of the **Module** in the packaged artifact, and **Module Parsed Size** refers to the size of the final code fragment of the **Module** in the packaged artifact.
 - **`Package Count`**: The number of third-party packages.
 - **`Initial Chunk`**: The **initial** chunk is the main chunk of the entry point. This chunk contains all the modules specified by the entry point and their dependencies, unlike the **chunks** for "on-demand loading".
   - For more information about Initial Chunk, please refer to [Initial Chunk Introduction](https://webpack.js.org/concepts/under-the-hood/#chunks).
 - **`Duplicate Packages`**: Duplicate third-party packages bundled into the project. Excludes third-party packages that are not bundled into the artifact. Please refer to [Duplicate Packages](/guide/usage/bundle-alerts).
-- **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. In the past, Webpack would package each module into a separate closure, and this encapsulation function would cause slower execution of JavaScript in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://webpack.js.org/plugins/module-concatenation-plugin/#root) parameter.
+- **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. In the past, Rspack would package each module into a separate closure, and this encapsulation function would cause slower execution of JavaScript in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://webpack.js.org/plugins/module-concatenation-plugin/#root) parameter.
 
 ## Bundle overview
 
@@ -82,7 +82,7 @@ The top toolbar from left to right includes: the search tool for **Assets**, the
 
 <img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-analysis-selects.png" />
 
-#### Search Module
+#### Search module
 
 Search for which Assets the Module is located in. As shown in the figure, you can see the results of matching the search Module keyword.
 
@@ -91,7 +91,7 @@ Search for which Assets the Module is located in. As shown in the figure, you ca
   src="https://assets.rspack.dev/others/assets/rsdoctor/search-modules.png"
 />
 
-#### Search Module
+#### Search module
 
 The module search functionality is supported, allowing users to click the "**Search Module**" button to open the module search dialog. By entering the module name, users can quickly locate and view the module's position in the Assets, making it easier to analyze the module's reference relationships and size. The search determines which Assets the Module is located in.
 
@@ -141,25 +141,25 @@ Click the **"Bundle Analyzer Graph"** button on the **"Bundle Size"** page to vi
 ## Supports BannerPlugin
 
 :::danger
-When enabling the BannerPlugin analysis, do not use Rsdoctor in the production version.
+`supports.banner` option is only used for debugging, do not use it in production.
 :::
 
-Both Rspack and Webpack support the [BannerPlugin](https://www.rspack.dev/plugins/webpack/banner-plugin#bannerplugin), which is a built-in plugin that allows you to add specific content at the top or bottom of the generated chunks.
+Both Rspack and webpack support the [BannerPlugin](https://www.rspack.dev/plugins/webpack/banner-plugin#bannerplugin), which is a built-in plugin that allows you to add specific content at the top or bottom of the generated chunks.
+
 The added code segment will affect the analysis capability of the bundle.
 
 Rsdoctor is compatible with the logic of adding code using the BannerPlugin, but it is not enabled by default because Rsdoctor needs to add tag code. The Rsdoctor BannerPlugin capability is enabled in the following two cases:
 
-1. The project uses the BannerPlugin in `rspack.config.j|ts` or `webpack.config.j|ts`.
+1. The project uses the BannerPlugin in `rspack.config.(js|ts)` or `webpack.config.(js|ts)`.
 
 2. Enable Rsdoctor BannerPlugin capability through Rsdoctor options by setting `supports.banner`:
 
 ```ts
-new RsdoctorRspackPlugin (
+new RsdoctorRspackPlugin({
   supports: {
-    banner: true
-  }
-)
-
+    banner: true,
+  },
+});
 ```
 
 - Note: Enabling `drop_console` will affect Rsdoctor's analysis of the BannerPlugin. Therefore, you can disable `drop_console` when `RSDOCTOR = true`.

@@ -6,31 +6,29 @@
 
 <img
   src="https://assets.rspack.dev/others/assets/rsdoctor/project-overall-1.jpg"
-  width="400px"
-  height="600px"
   style={{ margin: 'auto' }}
 />
 
 ## 名词释义
 
-| 名词                  | 描述说明                                                                                                                |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| <b><i>errors</i></b>  | 代表 Rsdoctor 在当次运行中检测出的 **error** 级别的规则                                                                 |
-| <b><i>warns</i></b>   | 代表 Rsdoctor 在当次运行中检测出的 **warn** 级别的规则                                                                  |
-| <b><i>webpack</i></b> | 代表当次运行时获取到的 Webpack 版本                                                                                     |
-| <b><i>cwd</i></b>     | 代表当次运行时的进程执行目录，即 [process.cwd()](https://nodejs.org/dist/latest-v18.x/docs/api/process.html#processcwd) |
-| <b><i>cpu</i></b>     | 代表 cpu 信息                                                                                                           |
-| <b><i>memory</i></b>  | 代表当次运行时的 memory 信息                                                                                            |
-| <b><i>node</i></b>    | 代表 [Node.js](https://nodejs.org/) 版本号                                                                              |
-| <b><i>yarn</i></b>    | 代表 [Yarn](https://yarnpkg.com/) 版本号，如果没有找到则显示为 `Not Found`                                              |
-| <b><i>npm</i></b>     | 代表 [npm](https://www.npmjs.com/) 版本号                                                                               |
-| <b><i>pnpm</i></b>    | 代表 [pnpm](https://pnpm.io/) 版本号，如果没有找到则显示为 `Not Found`                                                  |
+| 名词                 | 描述说明                                                                                                                |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| <b><i>errors</i></b> | 代表 Rsdoctor 在当次运行中检测出的 **error** 级别的规则                                                                 |
+| <b><i>warns</i></b>  | 代表 Rsdoctor 在当次运行中检测出的 **warn** 级别的规则                                                                  |
+| <b><i>rspack</i></b> | 代表当次运行时获取到的 Rspack 版本                                                                                      |
+| <b><i>cwd</i></b>    | 代表当次运行时的进程执行目录，即 [process.cwd()](https://nodejs.org/dist/latest-v22.x/docs/api/process.html#processcwd) |
+| <b><i>cpu</i></b>    | 代表 cpu 信息                                                                                                           |
+| <b><i>memory</i></b> | 代表当次运行时的 memory 信息                                                                                            |
+| <b><i>node</i></b>   | 代表 [Node.js](https://nodejs.org/) 版本号                                                                              |
+| <b><i>yarn</i></b>   | 代表 [Yarn](https://yarnpkg.com/) 版本号，如果没有找到则显示为 `Not Found`                                              |
+| <b><i>npm</i></b>    | 代表 [npm](https://www.npmjs.com/) 版本号                                                                               |
+| <b><i>pnpm</i></b>   | 代表 [pnpm](https://pnpm.io/) 版本号，如果没有找到则显示为 `Not Found`                                                  |
 
 ## 使用说明
 
 ### View bundler config
 
-如果我们需要查看项目的 Rspack 或 Webpack 配置，则可以通过点击卡片右上角的 `View Bundler Config`，页面会弹出一个浮层，其中包含被序列化后的 [Bundler Config](https://webpack.js.org/configuration/)，如下图所示：
+如果我们需要查看项目的 Rspack 或 webpack 配置，则可以通过点击卡片右上角的 `View Bundler Config`，页面会弹出一个浮层，其中包含被序列化后的 [Bundler Config](https://webpack.js.org/configuration/)，如下图所示：
 
 <img
   src="https://assets.rspack.dev/others/assets/rsdoctor/project-overall-config.jpg"

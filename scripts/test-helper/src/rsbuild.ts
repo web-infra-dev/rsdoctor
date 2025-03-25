@@ -1,5 +1,6 @@
 import type {
   CreateRsbuildOptions,
+  RsbuildConfig,
   RsbuildInstance,
   RsbuildPlugin,
   RsbuildPlugins,
@@ -11,6 +12,7 @@ export async function createStubRsbuild({
   plugins,
   ...options
 }: CreateRsbuildOptions & {
+  rsbuildConfig?: RsbuildConfig;
   plugins?: RsbuildPlugins;
 }): Promise<RsbuildInstance> {
   const { createRsbuild } = await import('@rsbuild/core');

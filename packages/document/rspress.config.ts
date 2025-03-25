@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { defineConfig } from 'rspress/config';
+import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
@@ -73,15 +74,21 @@ export default defineConfig({
   head: [
     '<meta name="apple-mobile-web-app-capable" content="yes" />',
     '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />',
+    ({ routePath }) => {
+      const getOgImage = () => {
+        if (routePath.endsWith('release-note-1_0')) {
+          return 'assets/rsdoctor-og-image-v1-0.png';
+        }
+        return 'rsdoctor-og-image.png';
+      };
+      return `<meta property="og:image" content="https://assets.rspack.dev/rsdoctor/${getOgImage()}">`;
+    },
   ],
   markdown: {
     checkDeadLinks: true,
   },
   ssg: {
     strict: true,
-  },
-  search: {
-    codeBlocks: true,
   },
   route: {
     cleanUrls: true,
@@ -116,23 +123,33 @@ export default defineConfig({
         label: 'English',
         title: 'Rsdoctor',
         description: 'Build analyzer for Rspack and webpack',
+        editLink: {
+          docRepoBaseUrl:
+            'https://github.com/web-infra-dev/rsdoctor/tree/main/packages/document/docs',
+          text: '📝 Edit this page on GitHub',
+        },
       },
       {
         lang: 'zh',
         label: '简体中文',
         title: 'Rsdoctor',
         description: 'Rspack 和 webpack 项目的构建分析工具',
+        editLink: {
+          docRepoBaseUrl:
+            'https://github.com/web-infra-dev/rsdoctor/tree/main/packages/document/docs',
+          text: '📝 在 GitHub 上编辑此页',
+        },
       },
     ],
   },
   builderConfig: {
     plugins: [
+      pluginSass(),
       pluginGoogleAnalytics({ id: 'G-9DETE89N4Q' }),
       pluginOpenGraph({
         title: 'Rsdoctor',
         type: 'website',
         url: 'https://rsdoctor.dev/',
-        image: 'https://rsdoctor.dev/og-image.png',
         description: 'Build analyzer for Rspack and webpack',
         twitter: {
           site: '@rspack_dev',

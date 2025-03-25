@@ -1,4 +1,4 @@
-## Step 2: Register plugin
+## Step 2: register plugin
 
 After the dependency installation, you need to integrate the Rsdoctor plugin into your project. Below are some examples of common tools and frameworks:
 
@@ -75,41 +75,70 @@ export default {
 - **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
 
 :::tip
-For projects using Modern.js Webpack mode, please register the `RsdoctorWebpackPlugin` plugin through [tools.webpack](https://modernjs.dev/configure/app/tools/webpack).
+For projects using Modern.js's webpack mode, please register the `RsdoctorWebpackPlugin` plugin through [tools.webpack](https://modernjs.dev/configure/app/tools/webpack).
 :::
 
 ### Next.js Framework
 
-Initialize the RsdoctorWebpackPlugin plugin in the [Webpack Config](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) of `next.config.mjs`.
+Initialize the RsdoctorWebpackPlugin plugin in the [Webpack Config](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) of `next.config.ts`.
 
-```ts title="next.config.mjs"
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
 import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
-export default {
-  // ...
-  webpack: (config, { isServer }) => {
-    config.plugins.push(
-      new RsdoctorWebpackPlugin({
-        // plugin options
-      }),
-    );
-
+const nextConfig: NextConfig = {
+  /* config options here */
+  webpack: (config) => {
+    if (config.name === 'client') {
+      config.plugins.push(
+        new RsdoctorWebpackPlugin({
+          disableClientServer: true,
+        }),
+      );
+    } else if (config.name === 'server') {
+      config.plugins.push(
+        new RsdoctorWebpackPlugin({
+          disableClientServer: true,
+          output: {
+            reportDir: './.next/server',
+          },
+        }),
+      );
+    }
     return config;
   },
 };
+
+export default nextConfig;
 ```
 
-- **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
+- **Options:** The plugin provides some configuration options, please refer to [Options](../../config/options/options).
 
-#### 📢 Next.js project notice
+#### 📢 Note for Next.js projects
 
-1. Next.js Project Reporting Page Issues
+Since Next.js closes the terminal service after the `build` execution is completed, the report page server run by Rsdoctor during the build process will also be shut down. At this point, you can reopen the report page using [@rsdoctor/cli](/guide/start/cli) without having to execute the build operation again.
 
-For more details, see: [FAQ](../more/faq#nextjs)
+- First, install [@rsdoctor/cli](/guide/start/cli):
 
-2. Loader Analysis with Rules Overriding Not Supported in Next.js
+import { PackageManagerTabs } from '@theme';
 
-For more details, see: [FAQ](../more/faq#nextjs)
+<PackageManagerTabs command="add @rsdoctor/cli -D" />
+
+- Second, add the following scripts commands to **package.json**, executing **client:rsdoctor** or **server:rsdoctor** can open the report for the corresponding builder:
+
+```ts
+  "scripts": {
+    "client:rsdoctor": "rsdoctor analyze --profile .next/.rsdoctor/manifest.json",
+    "server:rsdoctor": "rsdoctor analyze --profile .next/server/chunks/.rsdoctor/manifest.json"
+  }
+```
+
+For example, if Rsdoctor's build artifacts are located at the `.next/server/chunks/.rsdoctor/manifest.json` path, you can open the report page by executing the following command:
+
+```bash
+rsdoctor analyze --profile .next/server/chunks/.rsdoctor/manifest.json
+
+```
 
 ### Vue project
 
@@ -141,7 +170,7 @@ export default defineConfig({
 
 ---
 
-## Step 3: Run build
+## Step 3: run build
 
 Now, you can run the **build** command in the project. After the build is complete, Rsdoctor will automatically open the analysis page of this build.
 
