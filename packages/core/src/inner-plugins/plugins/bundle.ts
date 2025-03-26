@@ -67,7 +67,11 @@ export class InternalBundlePlugin<
 
   public done = async (): Promise<void> => {
     if (this.scheduler.chunkGraph) {
-      Chunks.assetsContents(this.map, this.scheduler.chunkGraph);
+      Chunks.assetsContents(
+        this.map,
+        this.scheduler.chunkGraph,
+        this.scheduler.options?.supports,
+      );
     }
 
     this.sdk.addClientRoutes([

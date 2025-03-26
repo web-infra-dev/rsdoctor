@@ -9,10 +9,12 @@ export interface AssetInstance {
   chunks: ChunkInstance[];
   /** File resource content */
   content: string;
+  gzipSize: number | undefined;
   /** Generate data */
   toData(type: ToDataType): AssetData;
   setId(id: number): void;
   setChunks(chunks: ChunkInstance[]): void;
+  setGzipSize(content: string): void;
 }
 
 export interface ChunkInstance {
