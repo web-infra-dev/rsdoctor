@@ -121,7 +121,8 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
     };
     // In the childCompiler of mini-css-extract-plugin, the options[Loader.LoaderInternalPropertyName] of proxy-loader is set to proxy-loader, ultimately causing errors in the compilation of less files.
     opts[Loader.LoaderInternalPropertyName] =
-      /proxy.js/.test(rule.loader!) &&
+      rule.loader &&
+      /proxy.js/.test(rule.loader) &&
       'options' in rule &&
       typeof rule.options === 'object'
         ? rule.options[Loader.LoaderInternalPropertyName]
