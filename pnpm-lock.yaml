@@ -96,18 +96,9 @@ importers:
       '@types/react':
         specifier: ^18.3.19
         version: 18.3.19
-      css-loader:
-        specifier: ^7.1.2
-        version: 7.1.2(@rspack/core@1.2.8(@swc/helpers@0.5.15))(webpack@5.97.1)
-      less-loader:
-        specifier: ^12.2.0
-        version: 12.2.0(@rspack/core@1.2.8(@swc/helpers@0.5.15))(less@4.2.1)(webpack@5.97.1)
       loader-utils:
         specifier: ^2.0.4
         version: 2.0.4
-      mini-css-extract-plugin:
-        specifier: ^2.9.2
-        version: 2.9.2(webpack@5.97.1)
       playwright:
         specifier: 1.44.1
         version: 1.44.1
@@ -5111,18 +5102,6 @@ packages:
     peerDependencies:
       webpack: ^5.0.0
 
-  css-loader@7.1.2:
-    resolution: {integrity: sha512-6WvYYn7l/XEGN8Xu2vWFt9nVzrCn39vKyTEFf/ExEyoksJjjSZV/0/35XPlMbpnr6VGhZIUg5yJrL8tGfes/FA==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@rspack/core': 0.x || 1.x
-      webpack: ^5.27.0
-    peerDependenciesMeta:
-      '@rspack/core':
-        optional: true
-      webpack:
-        optional: true
-
   css-minimizer-webpack-plugin@5.0.1:
     resolution: {integrity: sha512-3caImjKFQkS+ws1TGcFn0V1HyDJFq1Euy589JlD6/3rV2kj+w7r5G9WDMgSHvpvXHNZ2calVypZWuEDQd9wfLg==}
     engines: {node: '>= 14.15.0'}
@@ -6826,19 +6805,6 @@ packages:
     peerDependencies:
       less: ^3.5.0 || ^4.0.0
       webpack: ^5.0.0
-
-  less-loader@12.2.0:
-    resolution: {integrity: sha512-MYUxjSQSBUQmowc0l5nPieOYwMzGPUaTzB6inNW/bdPEG9zOL3eAAD1Qw5ZxSPk7we5dMojHwNODYMV1hq4EVg==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@rspack/core': 0.x || 1.x
-      less: ^3.5.0 || ^4.0.0
-      webpack: ^5.0.0
-    peerDependenciesMeta:
-      '@rspack/core':
-        optional: true
-      webpack:
-        optional: true
 
   less@4.2.1:
     resolution: {integrity: sha512-CasaJidTIhWmjcqv0Uj5vccMI7pJgfD9lMkKtlnTHAdJdYK/7l8pM9tumLyJ0zhbD4KJLo/YvTj+xznQd5NBhg==}
@@ -15403,20 +15369,6 @@ snapshots:
       semver: 7.6.3
       webpack: 5.97.1(webpack-cli@5.1.4)
 
-  css-loader@7.1.2(@rspack/core@1.2.8(@swc/helpers@0.5.15))(webpack@5.97.1):
-    dependencies:
-      icss-utils: 5.1.0(postcss@8.5.3)
-      postcss: 8.5.3
-      postcss-modules-extract-imports: 3.1.0(postcss@8.5.3)
-      postcss-modules-local-by-default: 4.2.0(postcss@8.5.3)
-      postcss-modules-scope: 3.2.1(postcss@8.5.3)
-      postcss-modules-values: 4.0.0(postcss@8.5.3)
-      postcss-value-parser: 4.2.0
-      semver: 7.6.3
-    optionalDependencies:
-      '@rspack/core': 1.2.8(@swc/helpers@0.5.15)
-      webpack: 5.97.1(webpack-cli@5.1.4)
-
   css-minimizer-webpack-plugin@5.0.1(esbuild@0.17.19)(webpack@5.97.1(esbuild@0.17.19)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
@@ -17285,13 +17237,6 @@ snapshots:
       less: 4.2.1
       webpack: 5.97.1(webpack-cli@5.1.4)
 
-  less-loader@12.2.0(@rspack/core@1.2.8(@swc/helpers@0.5.15))(less@4.2.1)(webpack@5.97.1):
-    dependencies:
-      less: 4.2.1
-    optionalDependencies:
-      '@rspack/core': 1.2.8(@swc/helpers@0.5.15)
-      webpack: 5.97.1(webpack-cli@5.1.4)
-
   less@4.2.1:
     dependencies:
       copy-anything: 2.0.6
@@ -18139,12 +18084,6 @@ snapshots:
       schema-utils: 4.3.0
       tapable: 2.2.1
       webpack: 5.97.1(esbuild@0.17.19)
-
-  mini-css-extract-plugin@2.9.2(webpack@5.97.1):
-    dependencies:
-      schema-utils: 4.3.0
-      tapable: 2.2.1
-      webpack: 5.97.1(webpack-cli@5.1.4)
 
   mini-svg-data-uri@1.4.4: {}
 
