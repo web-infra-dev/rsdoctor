@@ -121,7 +121,6 @@ export interface BriefConfig {
 }
 
 export type SDKOptionsType = {
-  disableTOSUpload: boolean;
   innerClientPath?: string;
   disableClientServer?: boolean;
   noServer?: boolean;
