@@ -46,7 +46,7 @@
     "heading-case": "^0.1.4",
     "husky": "^9.1.7",
     "nano-staged": "^0.8.0",
-    "nx": "^20.6.2",
+    "nx": "^20.6.4",
     "prettier": "^3.5.3",
     "vite-tsconfig-paths": "4.3.2",
     "vitest": "3.0.9"
