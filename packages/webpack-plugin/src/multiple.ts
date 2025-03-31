@@ -30,7 +30,6 @@ export class RsdoctorWebpackMultiplePlugin<
       name: options.name || 'Builder',
       stage: options.stage,
       extraConfig: {
-        disableTOSUpload: normallizedOptions.disableTOSUpload || false,
         innerClientPath: normallizedOptions.innerClientPath,
         printLog: normallizedOptions.printLog,
         mode: normallizedOptions.mode ? normallizedOptions.mode : undefined,
