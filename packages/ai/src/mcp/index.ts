@@ -1,19 +1,19 @@
-import { runClient, client } from './client.js';
-import { Tools } from './tools.js';
+import { Model, modelConfigs } from '@/model/index';
+import { logger } from '@rsdoctor/utils/logger';
+import { runClient, client } from './client';
 import dotenv from 'dotenv';
 
 import OpenAI from 'openai';
 dotenv.config();
 
-const main = async () => {
-  const openai = new OpenAI({
-    baseURL: process.env.OPENAI_BASE_URL,
-    apiKey: process.env.OPENAI_API_KEY,
-    ...JSON.parse(process.env.OPENAI_INIT_OPTIONS ?? '{}'),
-  });
+const main = async (options: { model: Model } = { model: 'proxy' }) => {
+  if (!modelConfigs[options.model]) {
+    throw new Error(`Model configuration for ${options.model} not found.`);
+  }
+  const openai = new OpenAI(modelConfigs[options.model]);
   await runClient();
   const { tools } = await client.listTools();
-  console.log('mcp tools', tools);
+  logger.info('mcp tools', tools);
 
   // this is a 'bridge' between openai and mcp
   const openaiTools = tools.map((tool) => {
@@ -38,20 +38,20 @@ const main = async () => {
       content: 'Find the chunk info of chunk 150.',
     },
   ];
-
+  logger.info('round 1');
   // round 1 fetch openai response
   const response = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 16384,
+    max_tokens: 8192,
     messages,
     tools: openaiTools, // tools bridge mcp tools -> openai tools
   });
   const { choices } = response;
-
+  logger.info('[response]', response);
   // round 1: get chunk info
   const toolsCall = choices[0].message?.tool_calls as any;
-  console.log('[mcp call]', toolsCall[0].function.name);
+  logger.info('[mcp call]', toolsCall[0].function.name);
 
   const { content } = (await client.callTool({
     name: toolsCall[0].function.name,
@@ -60,7 +60,7 @@ const main = async () => {
 
   const { text } = content[0] as any;
   const result = JSON.parse(text);
-  console.log('[mcp call] result:', result);
+  logger.info('[mcp call] result:', result);
 
   messages.push(response.choices[0].message);
   messages.push({
@@ -78,21 +78,21 @@ const main = async () => {
   const completion2 = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 16384,
+    max_tokens: 8192,
     messages,
     tools: openaiTools,
     store: true,
   });
 
   const toolsCall2 = completion2.choices[0].message?.tool_calls as any;
-  console.log('[mcp call]', toolsCall2[0].function.name);
+  logger.info('[mcp call]', toolsCall2[0].function.name);
   const { content: content2 } = (await client.callTool({
     name: toolsCall2[0].function.name,
     arguments: JSON.parse(toolsCall2[0].function.arguments),
   })) as { content: any[] };
   const { text: text2 } = content2[0] as any;
   const result2 = JSON.parse(text2);
-  console.log('[mcp call] result:', result2);
+  logger.info('[mcp call] result:', result2);
 
   messages.push(completion2.choices[0].message);
   messages.push({
@@ -109,14 +109,14 @@ const main = async () => {
   const completion3 = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 16384,
+    max_tokens: 8192,
     messages,
     tools: openaiTools,
     store: true,
   });
   //   const toolsCall3 = completion3.choices[0].message?.tool_calls as any;
   const messages3 = completion3.choices[0].message;
-  console.log('[messages3]', JSON.stringify(messages3, null, 2));
+  logger.info('[messages3]', JSON.stringify(messages3, null, 2));
 };
 
-main();
+main({ model: process.env.OPENAI_MODEL_NAME as Model });
