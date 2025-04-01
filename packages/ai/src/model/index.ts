@@ -2,7 +2,7 @@ export abstract class LLM {
   abstract chat(options: { prompt: string; data: any }): Promise<any>;
 }
 
-interface ModelConfig {
+export interface ModelConfig {
   model: string;
   apiKey?: string;
   baseURL: string;

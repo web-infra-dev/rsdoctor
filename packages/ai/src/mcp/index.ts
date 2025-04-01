@@ -1,10 +1,16 @@
-import { Model, modelConfigs } from '@/model/index';
+import { Model, modelConfigs } from '../model/index.js';
 import { logger } from '@rsdoctor/utils/logger';
-import { runClient, client } from './client';
+import { runClient, client } from './client.js';
 import dotenv from 'dotenv';
 
 import OpenAI from 'openai';
 dotenv.config();
+
+type ITools = {
+  name?: string;
+  description?: string;
+  inputSchema: any; // or a more specific type if known
+};
 
 const main = async (options: { model: Model } = { model: 'proxy' }) => {
   if (!modelConfigs[options.model]) {
@@ -16,7 +22,7 @@ const main = async (options: { model: Model } = { model: 'proxy' }) => {
   logger.info('mcp tools', tools);
 
   // this is a 'bridge' between openai and mcp
-  const openaiTools = tools.map((tool) => {
+  const openaiTools = tools.map((tool: ITools) => {
     return {
       type: 'function',
       function: {
