@@ -1,7 +1,6 @@
 {
   "name": "@rsdoctor/ai",
   "version": "0.0.0",
-  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -27,7 +26,7 @@
     "@rslib/core": "^0.2.2",
     "@types/node": "^22.8.1",
     "dotenv": "^16.4.7",
-    "socket.io-client": "4.6.1",
+    "socket.io-client": "4.8.1",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   },
