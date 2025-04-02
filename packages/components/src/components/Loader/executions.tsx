@@ -2,24 +2,25 @@ import { ClockCircleTwoTone } from '@ant-design/icons';
 import Editor from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
 import {
+  Checkbox,
   Col,
   Divider,
   Empty,
+  List,
   Row,
   Space,
+  Tabs,
   Tag,
   Timeline,
   Tooltip,
   Typography,
-  Tabs,
-  List,
 } from 'antd';
 import dayjs from 'dayjs';
 import { PropsWithChildren, useCallback, useState } from 'react';
 
-import StepIcon from 'src/common/svg/loader/step.svg';
 import InputIcon from 'src/common/svg/loader/input.svg';
 import OutputIcon from 'src/common/svg/loader/output.svg';
+import StepIcon from 'src/common/svg/loader/step.svg';
 import { Size } from '../../constants';
 import {
   beautifyPath,
@@ -129,7 +130,7 @@ export const LoaderExecutions = ({
   const leftSpan = 5;
   const hasError = loader.errors && loader.errors.length;
   const [activeKey, setActiveKey] = useState('loaderDetails');
-
+  const [isSideBySide, setIsSideBySide] = useState(true);
   const onChange = useCallback((key: string) => {
     setActiveKey(key);
   }, []);
@@ -258,6 +259,8 @@ export const LoaderExecutions = ({
                     <Col span={24} style={{ height: '53%', minHeight: 400 }}>
                       <div
                         style={{
+                          display: 'flex',
+                          alignItems: 'center',
                           padding: Size.BasePadding,
                           borderTop: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
                           borderBottom: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
@@ -266,6 +269,16 @@ export const LoaderExecutions = ({
                         <Title
                           text={`the result of [${loader.loader}] ${loader.isPitch ? 'pitch' : ''}`}
                         />
+                        <div style={{ flex: 1 }} />
+                        <Checkbox
+                          title="side-by-side"
+                          checked={isSideBySide}
+                          onChange={(evt) => {
+                            setIsSideBySide(evt.target.checked);
+                          }}
+                        >
+                          side-by-side
+                        </Checkbox>
                       </div>
                       {loader.isPitch ? (
                         loader.result ? (
@@ -292,30 +305,36 @@ export const LoaderExecutions = ({
                         )
                       ) : (
                         <div style={{ minHeight: '700px' }}>
-                          <Row>
-                            <Col
-                              span={12}
-                              style={{
-                                padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
-                              }}
-                            >
-                              <Space align="center" className={styles.space}>
-                                <InputIcon />
-                                <Typography.Text strong>Input</Typography.Text>
-                              </Space>
-                            </Col>
-                            <Col
-                              span={12}
-                              style={{
-                                padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
-                              }}
-                            >
-                              <Space align="center" className={styles.space}>
-                                <OutputIcon />
-                                <Typography.Text strong>Output</Typography.Text>
-                              </Space>
-                            </Col>
-                          </Row>
+                          {isSideBySide && (
+                            <Row>
+                              <Col
+                                span={12}
+                                style={{
+                                  padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
+                                }}
+                              >
+                                <Space align="center" className={styles.space}>
+                                  <InputIcon />
+                                  <Typography.Text strong>
+                                    Input
+                                  </Typography.Text>
+                                </Space>
+                              </Col>
+                              <Col
+                                span={12}
+                                style={{
+                                  padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
+                                }}
+                              >
+                                <Space align="center" className={styles.space}>
+                                  <OutputIcon />
+                                  <Typography.Text strong>
+                                    Output
+                                  </Typography.Text>
+                                </Space>
+                              </Col>
+                            </Row>
+                          )}
                           <div style={{ height: '40rem' }}>
                             {!loader.result && !before ? (
                               <Empty
@@ -328,6 +347,12 @@ export const LoaderExecutions = ({
                                 filepath={resource.path}
                                 before={before}
                                 after={loader.result || ''}
+                                editorProps={{
+                                  options: {
+                                    renderSideBySideInlineBreakpoint: 1,
+                                    renderSideBySide: isSideBySide,
+                                  },
+                                }}
                               />
                             )}
                           </div>
