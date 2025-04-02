@@ -12,7 +12,7 @@ type ITools = {
   inputSchema: any; // or a more specific type if known
 };
 
-const main = async (options: { model: Model } = { model: 'proxy' }) => {
+const main = async (options: { model: Model } = { model: 'default' }) => {
   if (!modelConfigs[options.model]) {
     throw new Error(`Model configuration for ${options.model} not found.`);
   }
@@ -49,7 +49,7 @@ const main = async (options: { model: Model } = { model: 'proxy' }) => {
   const response = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 8192,
+    max_tokens: 16384,
     messages,
     tools: openaiTools, // tools bridge mcp tools -> openai tools
   });
@@ -84,7 +84,7 @@ const main = async (options: { model: Model } = { model: 'proxy' }) => {
   const completion2 = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 8192,
+    max_tokens: 16384,
     messages,
     tools: openaiTools,
     store: true,
@@ -115,7 +115,7 @@ const main = async (options: { model: Model } = { model: 'proxy' }) => {
   const completion3 = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 8192,
+    max_tokens: 16384,
     messages,
     tools: openaiTools,
     store: true,

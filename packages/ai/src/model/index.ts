@@ -8,7 +8,7 @@ export interface ModelConfig {
   baseURL: string;
 }
 
-export type Model = 'qwen-plus' | 'proxy';
+export type Model = 'qwen-plus' | 'default';
 
 export const modelConfigs: Record<Model, ModelConfig> = {
   'qwen-plus': {
@@ -17,7 +17,7 @@ export const modelConfigs: Record<Model, ModelConfig> = {
     baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
   },
 
-  proxy: {
+  default: {
     baseURL: process.env.OPENAI_BASE_URL,
     apiKey: process.env.OPENAI_API_KEY,
     ...JSON.parse(process.env.OPENAI_INIT_OPTIONS ?? '{}'),
