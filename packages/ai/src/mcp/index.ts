@@ -12,7 +12,7 @@ type ITools = {
   inputSchema: any; // or a more specific type if known
 };
 
-const main = async (options: { model: Model } = { model: 'proxy' }) => {
+const main = async (options: { model: Model } = { model: 'default' }) => {
   if (!modelConfigs[options.model]) {
     throw new Error(`Model configuration for ${options.model} not found.`);
   }
