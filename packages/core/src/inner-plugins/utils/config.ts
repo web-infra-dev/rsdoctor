@@ -31,7 +31,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     loaderInterceptorOptions = {},
     disableClientServer = false,
     sdkInstance,
-    disableTOSUpload = false,
     innerClientPath = '',
     output = {
       reportCodeType: {
@@ -126,7 +125,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       compressData:
         output.compressData !== undefined ? output.compressData : true,
     },
-    disableTOSUpload,
     innerClientPath,
     supports,
     port,

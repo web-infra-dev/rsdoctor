@@ -57,7 +57,7 @@ export interface RsdoctorWebpackPluginOptions<
   disableClientServer?: boolean;
 
   /**
-   * sdk instance of outside. TODO: delete this options
+   * sdk instance of outside.
    */
   sdkInstance?: RsdoctorSDK;
 
@@ -82,13 +82,7 @@ export interface RsdoctorWebpackPluginOptions<
   brief?: SDK.BriefConfig;
 
   /**
-   * control the Rsdoctor upload data to TOS, used by inner-rsdoctor. TODO: delete this options
-   * @default false
-   */
-  disableTOSUpload?: boolean;
-
-  /**
-   * The name of inner rsdoctor's client package, used by inner-rsdoctor. TODO: delete this options
+   * The name of inner rsdoctor's client package, used by inner-rsdoctor.
    * @default false
    */
   innerClientPath?: string;
