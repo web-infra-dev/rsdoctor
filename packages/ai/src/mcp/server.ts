@@ -1,13 +1,5 @@
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-  ResultSchema,
-  Tool,
-} from '@modelcontextprotocol/sdk/types.js';
-import OpenAI from 'openai';
 import { z } from 'zod';
 import {
   Tools,
@@ -15,7 +7,6 @@ import {
   getChunkById,
   getModuleDetailById,
 } from './tools.js';
-import { text } from 'node:stream/consumers';
 
 // Create an MCP server
 const server = new McpServer({
