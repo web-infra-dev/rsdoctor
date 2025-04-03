@@ -113,12 +113,10 @@ export const LoaderFiles: React.FC<{
               <Divider className={styles.divider} dashed />
             </div>
 
-            {layer ? (
+            {layer && (
               <Tag color="cyan" bordered={false}>
                 {layer}
               </Tag>
-            ) : (
-              <></>
             )}
             <Space>
               {loaders.slice(0, ADDITION_LOADER_NUMBER).map((e, i) => {
