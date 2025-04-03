@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
 import { SDK } from '@rsdoctor/types';
-import { ServerAPIProvider, withServerAPI } from '../../Manifest';
-import { LoaderFiles } from './files';
-import { ISelectLoaderProps, LoaderCommonSelect } from '../../Select';
-import { ConfigContext } from 'src/config';
 import { ConfigProvider } from 'antd';
+import React, { useState } from 'react';
+import { ConfigContext } from 'src/config';
 import { getLocale } from 'src/utils';
+import { ServerAPIProvider, withServerAPI } from '../../Manifest';
+import { ISelectLoaderProps, LoaderCommonSelect } from '../../Select';
+import { LoaderFiles } from './files';
+import styles from './style.module.scss';
 
 export const LoaderAnalysisBase: React.FC<{
   cwd: string;
@@ -29,7 +30,7 @@ export const LoaderAnalysisBase: React.FC<{
               },
             }}
           >
-            <div>
+            <div className={styles.loaderAnalysis}>
               <ServerAPIProvider api={SDK.ServerAPI.API.GetLoaderNames}>
                 {(loaderNames) => (
                   <LoaderCommonSelect
