@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "start:analysis": "ENABLE_CLIENT_SERVER=true modern start",
-    "build:analysis": "LOCAL_CLI_PORT=4796 ENABLE_CLIENT_SERVER=true modern build",
+    "build:analysis": "ENABLE_CLIENT_SERVER=true modern build",
     "build": "modern build"
   },
   "license": "MIT",
