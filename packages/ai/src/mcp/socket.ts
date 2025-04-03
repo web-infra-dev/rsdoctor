@@ -17,7 +17,7 @@ export const createSocket = (url: string): Socket => {
 
 export const getWsUrl = async () => {
   // TODO: get port from rsdoctor server
-  return 'ws://localhost:4796';
+  return 'ws://localhost:4828';
 };
 
 export const sendRequest = async (api: string, params = {}) => {
