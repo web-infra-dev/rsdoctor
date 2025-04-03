@@ -7,6 +7,7 @@ import {
   getChunkById,
   getModuleDetailById,
 } from './tools.js';
+import { registerStaticResources } from './resource.js';
 
 // Create an MCP server
 const server = new McpServer({
@@ -56,6 +57,7 @@ server.tool(
     return {
       content: [
         {
+          prompt: '',
           name: Tools.GetModuleById,
           description: 'get module detail by id',
           type: 'text',
@@ -65,6 +67,9 @@ server.tool(
     };
   },
 );
+
+registerStaticResources(server);
+
 async function runServer() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
