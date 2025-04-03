@@ -1,6 +1,6 @@
-import React from 'react';
 import { DiffEditor, DiffEditorProps } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
+import React, { useEffect, useRef } from 'react';
 import { Size } from '../../constants';
 import { getModifiedLanguage, getOriginalLanguage } from '../../utils';
 
@@ -19,6 +19,17 @@ export const DiffViewer: React.FC<DiffViewerProps> = ({
   className,
   editorProps,
 }) => {
+  const diffEditor = useRef<editor.IStandaloneDiffEditor>();
+
+  useEffect(
+    () => () => {
+      if (diffEditor.current) {
+        diffEditor.current.setModel(null);
+      }
+    },
+    [],
+  );
+
   return (
     <DiffEditor
       className={className}
@@ -44,6 +55,9 @@ export const DiffViewer: React.FC<DiffViewerProps> = ({
           ...editorProps?.options,
         } as editor.IDiffEditorConstructionOptions
       }
+      onMount={(editor) => {
+        diffEditor.current = editor;
+      }}
     />
   );
 };
