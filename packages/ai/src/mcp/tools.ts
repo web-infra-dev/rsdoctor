@@ -8,6 +8,12 @@ export enum Tools {
   GetModuleById = 'get_module_by_id',
 }
 
+// Define the type for the response of getAllChunks
+export type GetAllChunksResponse = {
+  isError: boolean;
+  content: any; // Replace 'any' with the actual type of data if known
+};
+
 export const getAllChunks = async () => {
   return await sendRequest(SDK.ServerAPI.API.GetChunkGraph, {});
 };
