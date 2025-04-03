@@ -10,7 +10,7 @@ import {
 import { registerStaticResources } from './resource.js';
 
 // Create an MCP server
-export const server = new McpServer({
+const server = new McpServer({
   name: 'RsdoctorAnalyticsMCPServer',
   version: '1.0.0',
 });
@@ -68,14 +68,7 @@ server.tool(
   },
 );
 
-const resourcesData = {
-  resources: {
-    static: [],
-    dynamic: [],
-  },
-};
-
-registerStaticResources(server, resourcesData);
+registerStaticResources(server);
 
 async function runServer() {
   const transport = new StdioServerTransport();

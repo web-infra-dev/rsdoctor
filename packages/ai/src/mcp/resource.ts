@@ -37,7 +37,7 @@ const readMarkdownResource: ReadResourceCallback = async (
  * @param {McpServer} server - The server object to register resources with
  * @param {Object} resourcesData - The resources data object containing static resources
  */
-function registerStaticResources(server: McpServer, _resourcesData: any) {
+function registerStaticResources(server: McpServer) {
   const resourcesDir = path.join(__dirname, 'resources');
   fs.readdirSync(resourcesDir).forEach((file) => {
     if (file.endsWith('.md')) {
