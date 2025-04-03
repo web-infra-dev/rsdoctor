@@ -7,9 +7,10 @@ import {
   getChunkById,
   getModuleDetailById,
 } from './tools.js';
+import { registerStaticResources } from './resource.js';
 
 // Create an MCP server
-const server = new McpServer({
+export const server = new McpServer({
   name: 'RsdoctorAnalyticsMCPServer',
   version: '1.0.0',
 });
@@ -56,6 +57,7 @@ server.tool(
     return {
       content: [
         {
+          prompt: '',
           name: Tools.GetModuleById,
           description: 'get module detail by id',
           type: 'text',
@@ -65,6 +67,16 @@ server.tool(
     };
   },
 );
+
+const resourcesData = {
+  resources: {
+    static: [],
+    dynamic: [],
+  },
+};
+
+registerStaticResources(server, resourcesData);
+
 async function runServer() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
