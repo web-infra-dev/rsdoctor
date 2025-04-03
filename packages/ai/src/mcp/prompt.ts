@@ -3,7 +3,6 @@ import { RequestHandlerExtra } from '@modelcontextprotocol/sdk/shared/protocol.j
 import { logger } from '@rsdoctor/utils/logger';
 import { z } from 'zod';
 
-// Define types for better type safety
 interface Argument {
   name: string;
   type: string;
