@@ -13,7 +13,7 @@
       ) {
       .rc-tree-switcher {
         position: relative;
-        bottom: 8px;
+        bottom: 4px;
       }
 
       .rc-tree-node-content-wrapper {
@@ -29,7 +29,7 @@
 
   .assetBox {
     display: flex;
-    flex-direction: row;
+    align-items: center;
 
     .fileText {
       margin-right: 4px;
