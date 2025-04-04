@@ -6,6 +6,8 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
   border: 1px solid transparent;
 
   .#{$treeNodePrefixCls} {
+    display: flex;
+    align-items: center;
     margin: 0;
     padding: 0;
     line-height: 24px;
@@ -13,10 +15,13 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
     list-style: none;
     outline: 0;
 
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
     .#{$treePrefixCls}-node-content-wrapper {
       position: relative;
       display: inline-block;
-      height: 24px;
       margin: 0;
       padding: 0 4px;
       font-size: 14px;
