@@ -6,6 +6,8 @@ import {
   getAllChunks,
   getChunkById,
   getModuleDetailById,
+  getModuleByName,
+  // getModuleIssuerPath,
 } from './tools.js';
 import { registerStaticResources } from './resource.js';
 
@@ -39,7 +41,8 @@ server.tool(
       content: [
         {
           name: Tools.GetChunkById,
-          description: 'get chunk by id',
+          description:
+            'get chunk by id, if chunk not found, return `Chunk not found`, and stop the execution',
           type: 'text',
           text: JSON.stringify(res),
         },
@@ -67,6 +70,47 @@ server.tool(
     };
   },
 );
+
+server.tool(
+  Tools.GetModuleByPath,
+  'get module detail by module name or path, if find multiple modules match the name or path, return all matched modules path, stop execution, and let user select the module path',
+  { modulePath: z.string() },
+  async ({ modulePath }) => {
+    const res = await getModuleByName(modulePath);
+    return {
+      content: [
+        {
+          name: Tools.GetModuleByPath,
+          description:
+            'get module detail by module name or path, if find multiple modules match the name or path, return all matched modules path, stop execution, and let user select the module path',
+          type: 'text',
+          text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
+
+// TODO: Get the module dependency
+// server.tool(
+//   Tools.GetModuleIssuerPath,
+//   'get module issuer path, issuer path is the path of the module that depends on the module.Please draw the returned issuer path as a dependency diagram.',
+//   { moduleId: z.string() },
+//   async ({ moduleId }) => {
+//     const res = await getModuleIssuerPath(moduleId);
+//     return {
+//       content: [
+//         {
+//           name: Tools.GetModuleIssuerPath,
+//           description:
+//             'get module issuer path, issuer path is the path of the module that depends on the module.Please draw the returned issuer path as a dependency diagram.',
+//           type: 'text',
+//           text: JSON.stringify(res),
+//         },
+//       ],
+//     };
+//   },
+// );
 
 registerStaticResources(server);
 
