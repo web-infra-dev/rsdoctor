@@ -32,7 +32,46 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
-          fetch-depth: 10
+          fetch-depth: 1
+
+      - name: Install Pnpm
+        run: corepack enable
+
+      - name: Check skip CI
+        run: echo "RESULT=$(node ./scripts/skipCI.js)" >> "$GITHUB_OUTPUT"
+        id: skip-ci
+
+      - name: Log skip CI result
+        run: echo "${{steps.skip-ci.outputs.RESULT}}"
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        run: pnpm install
+
+      - name: Unit Test
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        run: pnpm run test
+
+  # ======== e2e ========
+  e2e-ubuntu:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node-version: [18.x] 
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Install Pnpm
         run: |
@@ -57,45 +96,6 @@ jobs:
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
         run: pnpm install && cd ./e2e && npx playwright install chromium
 
-      - name: Unit Test
+      - name: E2E Test
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-        run: pnpm run test:all
-
-  # ======== e2e ========
-  # e2e-ubuntu:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [18.x] 
-
-  #   # Steps represent a sequence of tasks that will be executed as part of the job
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 10
-
-  #     - name: Install Pnpm
-  #       run: corepack enable
-
-  #     - name: Check skip CI
-  #       run: echo "RESULT=$(node ./scripts/skipCI.js)" >> "$GITHUB_OUTPUT"
-  #       id: skip-ci
-
-  #     - name: Log skip CI result
-  #       run: echo "${{steps.skip-ci.outputs.RESULT}}"
-
-  #     - name: Setup Node.js ${{ matrix.node-version }}
-  #       if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'pnpm'
-
-  #     - name: Install Dependencies
-  #       if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-  #       run: pnpm install && cd ./e2e && npx playwright install
-
-  #     - name: E2E Test
-  #       if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-  #       run: pnpm run e2e
+        run: pnpm run e2e
