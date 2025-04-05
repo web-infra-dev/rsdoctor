@@ -1,38 +1,38 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { get } from 'lodash-es';
+import { CloseCircleOutlined } from '@ant-design/icons';
+import { SDK } from '@rsdoctor/types';
 import {
-  Tag,
   Card,
   Col,
   Divider,
   Drawer,
+  List,
+  Popover,
   Row,
   Space,
   Table,
+  Tag,
   Tooltip,
   Typography,
-  List,
-  Popover,
 } from 'antd';
-import { CloseCircleOutlined } from '@ant-design/icons';
-import { SDK } from '@rsdoctor/types';
-import styles from './style.module.scss';
-import { ServerAPIProvider } from '../../Manifest';
+import { get } from 'lodash-es';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { drawerWidth, Size } from '../../../constants';
 import {
   createFileStructures,
-  formatCosts,
-  mapFileKey,
   DataNode,
   filterLoader,
+  formatCosts,
+  mapFileKey,
   useMonacoEditor,
 } from '../../../utils';
-import { LoaderExecutions } from '../executions';
 import { FileTree } from '../../FileTree';
 import { Keyword } from '../../Keyword';
+import { ServerAPIProvider } from '../../Manifest';
+import { LoaderExecutions } from '../executions';
+import styles from './style.module.scss';
 
 const ADDITION_LOADER_NUMBER = 3;
-const { innerWidth } = window;
+// const { innerWidth } = window;
 
 export const LoaderFiles: React.FC<{
   filetree: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileTree>;
@@ -81,50 +81,50 @@ export const LoaderFiles: React.FC<{
       cwd,
       fileTitle(file, basename) {
         const { loaders, layer } = filetree.find((e) => e.path === file)!;
+
         const additionalLoaders: (Pick<
           SDK.LoaderTransformData,
           'path' | 'loader' | 'errors'
         > & { costs: number })[] = [];
+
         loaders.forEach(
           (l, i) => i > ADDITION_LOADER_NUMBER && additionalLoaders.push(l),
         );
 
         return (
-          <Space
-            style={{ wordBreak: 'break-all', height: 40 }}
+          <div
+            style={{
+              wordBreak: 'break-all',
+              display: 'flex',
+              cursor: 'pointer',
+            }}
             onClick={() => {
               setLoaderIndex(0);
               setResourcePath(file);
               setDrawerVisible(true);
             }}
           >
-            <div
-              className={styles.box}
-              style={{
-                width: innerWidth < 1500 ? innerWidth * 0.3 : innerWidth * 0.5,
-              }}
-            >
+            <div className={styles.box}>
               <div className={styles.keywords}>
                 <Keyword text={basename.replace(/\[.*?\]/g, '')} keyword={''} />
               </div>
-              <div className={styles.dividerDiv}>
-                <Divider className={styles.divider} dashed />
-              </div>
             </div>
-            {layer ? (
+            <div className={styles.dividerDiv} style={{ flex: 1 }}>
+              <Divider className={styles.divider} dashed />
+            </div>
+
+            {layer && (
               <Tag color="cyan" bordered={false}>
                 {layer}
               </Tag>
-            ) : (
-              <></>
             )}
-            {loaders.slice(0, ADDITION_LOADER_NUMBER).map((e, i) => {
-              const isError = e.errors && e.errors.length;
-              const key = `${file}_${e.loader}_${i}`;
-              if (i <= ADDITION_LOADER_NUMBER) {
-                return (
-                  <Tooltip title={e.path} key={key}>
-                    <div style={{ paddingBottom: 5 }}>
+            <Space>
+              {loaders.slice(0, ADDITION_LOADER_NUMBER).map((e, i) => {
+                const isError = e.errors && e.errors.length;
+                const key = `${file}_${e.loader}_${i}`;
+                if (i <= ADDITION_LOADER_NUMBER) {
+                  return (
+                    <Tooltip title={e.path} key={key}>
                       <Typography.Text
                         className={styles.textBox}
                         style={{ color: isError ? '#f50' : 'inherit' }}
@@ -147,66 +147,72 @@ export const LoaderFiles: React.FC<{
                           </Typography.Text>
                         )}
                       </Typography.Text>
-                    </div>
-                  </Tooltip>
-                );
-              }
-            })}
-            {additionalLoaders?.length ? (
-              <Popover
-                content={
-                  <List
-                    dataSource={additionalLoaders}
-                    renderItem={(e, i) => {
-                      const isError = e.errors && e.errors.length;
-                      const key = `${file}_${e.loader}_${i + ADDITION_LOADER_NUMBER}`;
-
-                      return (
-                        <List.Item>
-                          <Tooltip title={e.path} key={key}>
-                            <div style={{ paddingBottom: 5 }}>
-                              <Typography.Text
-                                className={styles.textBox}
-                                style={{ color: isError ? '#f50' : 'inherit' }}
-                                onClick={(ev) => {
-                                  ev.stopPropagation();
-                                  setResourcePath(file);
-                                  setLoaderIndex(i);
-                                  setDrawerVisible(true);
-                                }}
-                              >
-                                <Typography.Text
-                                  className={styles.text}
-                                  ellipsis
-                                >
-                                  {e.loader.match(/([^/]+-loader)/g)?.[0] ||
-                                    e.loader}
-                                </Typography.Text>
-                                <Divider type="vertical" />
-                                <Typography.Text className={styles.text}>
-                                  {formatCosts(e.costs)}
-                                </Typography.Text>
-                              </Typography.Text>
-                            </div>
-                          </Tooltip>
-                        </List.Item>
-                      );
-                    }}
-                  />
+                    </Tooltip>
+                  );
                 }
-              >
-                <div className={styles.textBox}>
-                  <Typography.Text>···</Typography.Text>
-                </div>
-              </Popover>
-            ) : (
-              <></>
-            )}
-          </Space>
+              })}
+              {additionalLoaders?.length ? (
+                <Popover
+                  content={
+                    <List
+                      dataSource={additionalLoaders}
+                      renderItem={(e, i) => {
+                        const isError = e.errors && e.errors.length;
+                        const key = `${file}_${e.loader}_${i + ADDITION_LOADER_NUMBER}`;
+
+                        return (
+                          <List.Item>
+                            <Tooltip title={e.path} key={key}>
+                              <div style={{ paddingBottom: 5 }}>
+                                <Typography.Text
+                                  className={styles.textBox}
+                                  style={{
+                                    color: isError ? '#f50' : 'inherit',
+                                  }}
+                                  onClick={(ev) => {
+                                    ev.stopPropagation();
+                                    setResourcePath(file);
+                                    setLoaderIndex(i);
+                                    setDrawerVisible(true);
+                                  }}
+                                >
+                                  <Typography.Text
+                                    className={styles.text}
+                                    ellipsis
+                                  >
+                                    {e.loader.match(/([^/]+-loader)/g)?.[0] ||
+                                      e.loader}
+                                  </Typography.Text>
+                                  <Divider type="vertical" />
+                                  <Typography.Text className={styles.text}>
+                                    {formatCosts(e.costs)}
+                                  </Typography.Text>
+                                </Typography.Text>
+                              </div>
+                            </Tooltip>
+                          </List.Item>
+                        );
+                      }}
+                    />
+                  }
+                >
+                  <div className={styles.textBox}>
+                    <Typography.Text>···</Typography.Text>
+                  </div>
+                </Popover>
+              ) : (
+                <></>
+              )}
+            </Space>
+          </div>
         );
       },
       dirTitle(_dir, defaultTitle) {
-        return <Keyword text={defaultTitle} keyword={''} />;
+        return (
+          <div style={{ display: 'flex', cursor: 'pointer' }}>
+            <Keyword text={defaultTitle} keyword={''} />
+          </div>
+        );
       },
     });
   }, [filteredFiles]);
@@ -231,9 +237,9 @@ export const LoaderFiles: React.FC<{
             </Space>
           }
           bodyStyle={{
-            overflow: 'scroll',
+            overflow: 'auto',
             maxHeight,
-            height: '40rem',
+            minHeight: '40rem',
             padding: 14,
           }}
         >
