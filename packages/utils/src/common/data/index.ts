@@ -437,6 +437,21 @@ export class APIDataLoader {
           })) as R;
         });
 
+      case SDK.ServerAPI.API.GetModuleByName:
+        const { moduleName } =
+          body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleByName>;
+        return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          const { modules = [] } = moduleGraph || {};
+          return (
+            (modules
+              .filter((m) => m.path.includes(moduleName))
+              .map((m) => ({
+                id: m.id,
+                path: m.path,
+              })) as R) || ([] as R)
+          );
+        });
+
       default:
         throw new Error(`API not implement: "${api}"`);
     }
