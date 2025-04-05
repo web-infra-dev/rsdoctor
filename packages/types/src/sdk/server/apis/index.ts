@@ -66,6 +66,7 @@ export enum API {
   GetSearchModules = '/api/search/modules',
   GetSearchModuleInChunk = '/api/search/chunk/modules',
   GetAllModuleGraphFilter = '/api/graph/module/filter',
+  GetModuleByName = '/api/graph/module/name',
 
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',
@@ -135,6 +136,7 @@ export interface ResponseTypes
     relativePath: string;
   }[];
   [API.GetAllChunkGraph]: SDK.ChunkData[];
+  [API.GetModuleByName]: { id: number; path: string }[];
 }
 
 export interface RequestBodyTypes
@@ -155,6 +157,9 @@ export interface RequestBodyTypes
      * @example 'moduleGraph.modules'
      */
     key: RsdoctorManifestMappingKeys;
+  };
+  [API.GetModuleByName]: {
+    moduleName: string;
   };
 }
 

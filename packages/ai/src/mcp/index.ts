@@ -49,7 +49,7 @@ const main = async (options: { model: Model } = { model: 'default' }) => {
   const response = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 16384,
+    max_tokens: modelConfigs[options.model].maxTokens,
     messages,
     tools: openaiTools, // tools bridge mcp tools -> openai tools
   });
@@ -84,7 +84,7 @@ const main = async (options: { model: Model } = { model: 'default' }) => {
   const completion2 = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 16384,
+    max_tokens: modelConfigs[options.model].maxTokens,
     messages,
     tools: openaiTools,
     store: true,
@@ -115,7 +115,7 @@ const main = async (options: { model: Model } = { model: 'default' }) => {
   const completion3 = await openai.chat.completions.create({
     model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 16384,
+    max_tokens: modelConfigs[options.model].maxTokens,
     messages,
     tools: openaiTools,
     store: true,

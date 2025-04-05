@@ -22,3 +22,5 @@ tsconfig.tsbuildinfo
 .env.*.local
 
 log/
+
+.cursor/
