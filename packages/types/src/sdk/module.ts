@@ -14,6 +14,7 @@ import type {
   VariableData,
   VariableInstance,
 } from './treeShaking';
+import { StatsModule } from '@/plugin';
 
 export enum DependencyKind {
   Unknown,
@@ -117,6 +118,9 @@ export interface ModuleInstance {
   /** Build properties */
   meta: ModuleBuildMeta;
 
+  /** Issuer paths */
+  issuerPath?: StatsModule['issuerPath'];
+
   /** Get the Chunks instance where the module in.*/
   getChunks(): ChunkInstance[];
   /** Add Chunk instance */
@@ -177,6 +181,8 @@ export interface ModuleInstance {
   setModules(modules: ModuleInstance[]): void;
   setConcatenationModules(modules: ModuleInstance[]): void;
   setRenderId(renderId: string): void;
+  /** Add an issuer path */
+  addIssuerPath(issuerPath: StatsModule['issuerPath']): void;
 }
 
 /** Depends on Metadata */

@@ -96,6 +96,10 @@ export function getModuleGraphByStats(
       data.layer!,
     );
 
+    if (data.issuerPath) {
+      concatenatedModule.addIssuerPath(data.issuerPath);
+    }
+
     data.chunks?.forEach((_chunkId) => {
       const chunk = chunkGraph.getChunkById(String(_chunkId));
       chunk && concatenatedModule.addChunk(chunk);
@@ -126,16 +130,27 @@ export function getModuleGraphByStats(
       allModules.push(normal);
 
       const webpackId = normal.identifier!;
-      const normalModule =
-        moduleGraph.getModuleByWebpackId(webpackId) ??
-        new Module(
-          webpackId,
-          getGetModuleName(root, normal),
-          normal.depth === 0,
-          SDK.ModuleKind.Normal,
-          normal.id ? String(normal.id) : undefined,
-          normal.layer,
-        );
+      const registeredModule = moduleGraph.getModuleByWebpackId(webpackId);
+      let normalModule: SDK.ModuleInstance;
+
+      if (registeredModule) {
+        normalModule = registeredModule;
+      } else {
+        normalModule =
+          moduleGraph.getModuleByWebpackId(webpackId) ??
+          new Module(
+            webpackId,
+            getGetModuleName(root, normal),
+            normal.depth === 0,
+            SDK.ModuleKind.Normal,
+            normal.id ? String(normal.id) : undefined,
+            normal.layer,
+          );
+      }
+
+      if (normal.issuerPath) {
+        normalModule.addIssuerPath(normal.issuerPath);
+      }
 
       if (normal.chunks?.length) {
         normal.chunks?.forEach((_chunkId) => {
@@ -229,6 +244,20 @@ export function getModuleGraphByStats(
       }
     }
   }
+
+  moduleGraph.getModules().forEach((module) => {
+    if (module.issuerPath) {
+      module.issuerPath.forEach((issuer) => {
+        const moduleInstance = moduleGraph.getModuleByWebpackId(
+          issuer.identifier,
+        );
+        if (moduleInstance) {
+          issuer.moduleId = moduleInstance.id;
+          delete issuer.identifier;
+        }
+      });
+    }
+  });
 
   return moduleGraph;
 }
