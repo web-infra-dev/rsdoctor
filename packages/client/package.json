@@ -28,7 +28,7 @@
     "@rsdoctor/types": "workspace:*",
     "@types/node": "^16",
     "@types/react": "^18.3.20",
-    "@types/react-dom": "^18.3.5",
+    "@types/react-dom": "^18.3.6",
     "antd": "5.19.1",
     "normalize.css": "8.0.1",
     "react": "18.3.1",
