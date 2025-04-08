@@ -3,7 +3,7 @@ import {
   moduleTools,
   type PartialBaseBuildConfig,
 } from '@modern-js/module-tools';
-
+import fs from 'node:fs';
 import path from 'path';
 
 const define = {
@@ -11,9 +11,24 @@ const define = {
 };
 
 const BUILD_TARGET = 'es2020' as const;
+// Clean tsc cache to ensure the dts files can be generated correctly
+export const pluginCleanTscCache = {
+  name: 'plugin-clean-tsc-cache',
+  setup(api) {
+    api.onBeforeBuild(() => {
+      const tsbuildinfo = path.join(
+        api.context.rootPath,
+        'tsconfig.tsbuildinfo',
+      );
+      if (fs.existsSync(tsbuildinfo)) {
+        fs.rmSync(tsbuildinfo);
+      }
+    });
+  },
+};
 
 export const baseBuildConfig = {
-  plugins: [moduleTools()],
+  plugins: [moduleTools(), pluginCleanTscCache],
   buildConfig: {
     buildType: 'bundleless' as const,
     format: 'cjs' as const,
@@ -58,12 +73,12 @@ export const buildConfigWithMjs: PartialBaseBuildConfig[] = [
 ];
 
 export const configWithMjs = defineConfig({
-  plugins: [moduleTools()],
+  plugins: [moduleTools(), pluginCleanTscCache],
   buildConfig: buildConfigWithMjs,
 });
 
 export const configWithEsm = defineConfig({
-  plugins: [moduleTools()],
+  plugins: [moduleTools(), pluginCleanTscCache],
   buildConfig: [
     {
       buildType: 'bundleless',
