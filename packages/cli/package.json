@@ -19,8 +19,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "npm run start",
-    "build": "modern build",
-    "start": "modern build -w",
+    "build": "rslib build",
+    "start": "rslib build -w",
     "test": "vitest run"
   },
   "devDependencies": {
