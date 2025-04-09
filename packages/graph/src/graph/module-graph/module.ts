@@ -319,6 +319,10 @@ export class Module implements SDK.ModuleInstance {
     }
   }
 
+  getIssuerPath(): Plugin.StatsModule['issuerPath'] {
+    return this.issuerPath;
+  }
+
   getConcatenationModules(): SDK.ModuleInstance[] {
     return this.concatenationModules.slice();
   }

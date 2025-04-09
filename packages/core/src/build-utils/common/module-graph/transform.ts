@@ -245,15 +245,21 @@ export function getModuleGraphByStats(
     }
   }
 
+  const moduleCache = new Map<string, SDK.ModuleInstance>();
+
   moduleGraph.getModules().forEach((module) => {
     if (module.issuerPath) {
       module.issuerPath.forEach((issuer) => {
-        const moduleInstance = moduleGraph.getModuleByWebpackId(
-          issuer.identifier,
-        );
+        let moduleInstance = moduleCache.get(issuer.identifier);
+        if (!moduleInstance) {
+          moduleInstance = moduleGraph.getModuleByWebpackId(issuer.identifier);
+          if (moduleInstance) {
+            moduleCache.set(issuer.identifier, moduleInstance);
+          }
+        }
         if (moduleInstance) {
           issuer.moduleId = moduleInstance.id;
-          delete issuer.identifier;
+          issuer.identifier = ''; // To prevent data explosion, remove the identifier for modules with moduleInstance.id.
         }
       });
     }

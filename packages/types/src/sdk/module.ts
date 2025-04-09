@@ -183,6 +183,8 @@ export interface ModuleInstance {
   setRenderId(renderId: string): void;
   /** Add an issuer path */
   addIssuerPath(issuerPath: StatsModule['issuerPath']): void;
+  /** Get issuer path */
+  getIssuerPath(): StatsModule['issuerPath'];
 }
 
 /** Depends on Metadata */
