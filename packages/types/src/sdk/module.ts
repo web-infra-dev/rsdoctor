@@ -14,7 +14,7 @@ import type {
   VariableData,
   VariableInstance,
 } from './treeShaking';
-import { StatsModule } from '@/plugin';
+import type { StatsModule } from '@/plugin';
 
 export enum DependencyKind {
   Unknown,
