@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK, Plugin } from '@rsdoctor/types';
 import path from 'path';
 import { Lodash } from '@rsdoctor/utils/common';
 import type { SourceMapConsumer } from 'source-map';
@@ -11,6 +11,8 @@ let id = 1;
 
 export class Module implements SDK.ModuleInstance {
   static kind = SDK.ModuleKind;
+
+  public issuerPath: SDK.ModuleInstance['issuerPath'] = [];
 
   static init() {
     id = 1;
@@ -311,6 +313,16 @@ export class Module implements SDK.ModuleInstance {
     }
   }
 
+  addIssuerPath(issuerPath: Plugin.StatsModule['issuerPath']): void {
+    if (!this.issuerPath?.length) {
+      this.issuerPath = issuerPath;
+    }
+  }
+
+  getIssuerPath(): Plugin.StatsModule['issuerPath'] {
+    return this.issuerPath;
+  }
+
   getConcatenationModules(): SDK.ModuleInstance[] {
     return this.concatenationModules.slice();
   }
@@ -333,6 +345,7 @@ export class Module implements SDK.ModuleInstance {
       size: this.getSize(),
       kind: this.kind,
       ...(this.layer ? { layer: this.layer } : {}),
+      issuerPath: this.issuerPath,
     };
 
     if (this.meta.hasSetEsModuleStatement || this.meta.strictHarmonyModule) {

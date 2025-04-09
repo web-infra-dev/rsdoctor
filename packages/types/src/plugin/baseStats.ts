@@ -43,6 +43,13 @@ interface StatsError {
   formatted?: string;
 }
 
+// From rspack/src/stats/DefaultStatsPrinterPlugin.ts
+type KnownStatsModuleIssuer = {
+  identifier?: string;
+  name?: string;
+  id?: string | number | null;
+};
+
 export interface StatsModule {
   type?: string;
   moduleType?: string;
@@ -61,6 +68,7 @@ export interface StatsModule {
   loc?: string; // rspack is lack of nameForCondition type ? packages/rspack/src/stats/DefaultStatsPrinterPlugin.ts
   modules?: StatsModule[]; // rspack is lack of nameForCondition type
   layer?: string;
+  issuerPath?: Record<string, any>[] | KnownStatsModuleIssuer[];
 }
 
 export interface StatsModuleReason {
