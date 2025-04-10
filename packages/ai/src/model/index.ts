@@ -14,7 +14,7 @@ export type Model = 'qwen' | 'default';
 export const modelConfigs: Record<Model, ModelConfig> = {
   qwen: {
     model: 'qwen-plus',
-    apiKey: process.env.OPENAI_API_KEY, // 这里存储环境变量的 key 名称
+    apiKey: process.env.OPENAI_API_KEY,
     baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
     maxTokens: 8192,
   },

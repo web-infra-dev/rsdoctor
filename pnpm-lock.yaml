@@ -940,9 +940,6 @@ importers:
 
   packages/sdk:
     dependencies:
-      '@rsdoctor/ai':
-        specifier: workspace:*
-        version: link:../ai
       '@rsdoctor/client':
         specifier: workspace:*
         version: link:../client
