@@ -48,7 +48,7 @@ module.exports = {
 
 - **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
 
-### Modern.js Framework
+### Modern.js
 
 Initialize the plugin in the [tools.rspack](https://modernjs.dev/configure/app/tools/rspack) of `modern.config.ts`:
 
@@ -78,9 +78,51 @@ export default {
 For projects using Modern.js's webpack mode, please register the `RsdoctorWebpackPlugin` plugin through [tools.webpack](https://modernjs.dev/configure/app/tools/webpack).
 :::
 
-### Next.js Framework
+### Next.js
 
-Initialize the RsdoctorWebpackPlugin plugin in the [Webpack Config](https://nextjs.org/docs/app/api-reference/next-config-js/webpack) of `next.config.ts`.
+#### Step 1: Register the Rsdoctor plugin
+
+Initialize the [RsdoctorRspackPlugin](#rspack-projects)([RsdoctorWebpackPlugin](#webpack-projects)) plugin in the [Rspack Config](https://rspack.dev/guide/tech/next)([webpack config](https://nextjs.org/docs/pages/api-reference/config/next-config-js/webpack)) of `next.config.ts`.
+
+import { Tab, Tabs } from 'rspress/theme';
+
+<Tabs>
+
+<Tab label="Rspack">
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+const nextConfig: NextConfig = {
+  /* config options here */
+  webpack: (config) => {
+    if (config.name === 'client') {
+      config.plugins.push(
+        new RsdoctorRspackPlugin({
+          disableClientServer: true,
+        }),
+      );
+    } else if (config.name === 'server') {
+      config.plugins.push(
+        new RsdoctorRspackPlugin({
+          disableClientServer: true,
+          output: {
+            reportDir: './.next/server',
+          },
+        }),
+      );
+    }
+    return config;
+  },
+};
+
+export default nextConfig;
+```
+
+</Tab>
+
+<Tab label="webpack">
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
@@ -112,28 +154,37 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
+</Tab>
+</Tabs>
+
 - **Options:** The plugin provides some configuration options, please refer to [Options](../../config/options/options).
 
-#### 📢 Note for Next.js projects
+#### Step 2: Execute build
 
-Since Next.js closes the terminal service after the `build` execution is completed, the report page server run by Rsdoctor during the build process will also be shut down. At this point, you can reopen the report page using [@rsdoctor/cli](/guide/start/cli) without having to execute the build operation again.
-
-- First, install [@rsdoctor/cli](/guide/start/cli):
+Execute the **build** command, Rsdoctor will generate the corresponding report data in the local repository artifacts.
 
 import { PackageManagerTabs } from '@theme';
 
-<PackageManagerTabs command="add @rsdoctor/cli -D" />
+<PackageManagerTabs command="run build" />
 
-- Second, add the following scripts commands to **package.json**, executing **client:rsdoctor** or **server:rsdoctor** can open the report for the corresponding builder:
+#### Step 3: Open the report
+
+After installing [@rsdoctor/cli](/guide/start/cli), add the following scripts commands to **package.json**, executing **client:rsd** or **server:rsd** can open the report of the corresponding builder:
+
+<PackageManagerTabs command="add @rsdoctor/cli -D" />
 
 ```ts
   "scripts": {
-    "client:rsdoctor": "rsdoctor analyze --profile .next/.rsdoctor/manifest.json",
-    "server:rsdoctor": "rsdoctor analyze --profile .next/server/chunks/.rsdoctor/manifest.json"
+    "client:rsd": "rsdoctor analyze --profile .next/.rsdoctor/manifest.json", // Rsdoctor's client report
+    "server:rsd": "rsdoctor analyze --profile .next/server/.rsdoctor/manifest.json" // Rsdoctor's server report
   }
 ```
 
-For example, if Rsdoctor's build artifacts are located at the `.next/server/chunks/.rsdoctor/manifest.json` path, you can open the report page by executing the following command:
+#### 📢 Note for Next.js
+
+After Next.js finishes executing the `build` command, it will terminate the terminal service, causing the report page server run by Rsdoctor during the build process to close. To solve this problem, you can use [@rsdoctor/cli](/guide/start/cli) to reopen the report page without re-executing the build operation. The specific method is shown in the [third step](#step-3-open-the-report) or by locally executing the rsdoctor command:
+
+For example, if Rsdoctor's build output is located at the path `.next/server/chunks/.rsdoctor/manifest.json`, you can open the report page by executing the following command:
 
 ```bash
 rsdoctor analyze --profile .next/server/chunks/.rsdoctor/manifest.json
@@ -170,7 +221,7 @@ export default defineConfig({
 
 ---
 
-## Step 3: run build
+## Step 3: Execute build
 
 Now, you can run the **build** command in the project. After the build is complete, Rsdoctor will automatically open the analysis page of this build.
 
