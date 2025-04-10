@@ -4,7 +4,7 @@
 
 Add to your claude_desktop_config.json or .cursor/mcp.json:
 
-```json
+```js
 {
   "mcpServers": {
     "rsdoctor": {
