@@ -452,6 +452,14 @@ export class APIDataLoader {
           );
         });
 
+      case SDK.ServerAPI.API.GetModuleIssuerPath:
+        return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          const { moduleId } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleIssuerPath>;
+          return (moduleGraph?.modules.find((m) => String(m.id) === moduleId)
+            ?.issuerPath || []) as R;
+        });
+
       default:
         throw new Error(`API not implement: "${api}"`);
     }

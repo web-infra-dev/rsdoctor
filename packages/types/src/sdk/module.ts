@@ -371,6 +371,9 @@ export interface ModuleData
 
   /** Build original attributes */
   meta?: Partial<Omit<ModuleBuildMeta, 'packageData'>>;
+
+  /** Issuer path */
+  issuerPath?: StatsModule['issuerPath'];
 }
 
 export type ModuleCodeData = Record<number, ModuleSource>;

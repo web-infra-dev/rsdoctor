@@ -12,7 +12,7 @@ type ITools = {
   inputSchema: any; // or a more specific type if known
 };
 
-const main = async (options: { model: Model } = { model: 'default' }) => {
+const main = async (options: { model: Model } = { model: 'qwen' }) => {
   if (!modelConfigs[options.model]) {
     throw new Error(`Model configuration for ${options.model} not found.`);
   }
@@ -47,7 +47,7 @@ const main = async (options: { model: Model } = { model: 'default' }) => {
   logger.info('round 1');
   // round 1 fetch openai response
   const response = await openai.chat.completions.create({
-    model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
+    model: modelConfigs[options.model].model ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
     max_tokens: modelConfigs[options.model].maxTokens,
     messages,
@@ -82,7 +82,7 @@ const main = async (options: { model: Model } = { model: 'default' }) => {
 
   // round 2 get module info of the chunk
   const completion2 = await openai.chat.completions.create({
-    model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
+    model: modelConfigs[options.model].model ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
     max_tokens: modelConfigs[options.model].maxTokens,
     messages,
@@ -113,7 +113,7 @@ const main = async (options: { model: Model } = { model: 'default' }) => {
 
   // round 3 get module info of the chunk
   const completion3 = await openai.chat.completions.create({
-    model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
+    model: modelConfigs[options.model].model ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
     max_tokens: modelConfigs[options.model].maxTokens,
     messages,

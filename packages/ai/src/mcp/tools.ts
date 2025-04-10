@@ -50,7 +50,7 @@ export const getModuleDetailById = async (moduleId: number) => {
   });
 };
 
-export const getModuleByName = async (moduleName: string) => {
+export const getModuleByPath = async (moduleName: string) => {
   const modulesRes = (await sendRequest(SDK.ServerAPI.API.GetModuleByName, {
     moduleName,
   })) as { id: string; path: string }[];
@@ -92,6 +92,25 @@ export const getModuleByName = async (moduleName: string) => {
       { tools: Tools.GetModuleByPath, type: 'text', text: 'No module found.' },
     ],
     isError: true,
+  };
+};
+
+export const getModuleIssuerPath = async (moduleId: string) => {
+  const res =
+    ((await sendRequest(SDK.ServerAPI.API.GetModuleIssuerPath, {
+      moduleId,
+    })) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetModuleIssuerPath>) ||
+    [];
+
+  return {
+    content: [
+      {
+        tools: Tools.GetModuleIssuerPath,
+        type: 'text',
+        text: JSON.stringify(res),
+      },
+    ],
+    isError: false,
   };
 };
 
