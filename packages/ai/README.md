@@ -1,9 +1,17 @@
 # @rsdoctor/ai
 
-## Environment Variables
+## Usage with Claude Desktop or other MCP clients
 
-```
-OPENAI_API_KEY="xxx"
-OPENAI_BASE_URL="xxx"
-OPENAI_MODEL_NAME="gpt-4o-2024-08-06"
-```
+Add to your claude_desktop_config.json or .cursor/mcp.json:
+
+{
+"mcpServers": {
+"rsdoctor": {
+"command": "/path/to/rsdoctor/packages/ai/bin/rsdoctor-mcp", // Not yet released, needs to be installed locally and the path specified manually
+"args": [
+"--port",
+"9988" // or any other port you configured in the Rsdoctor plugin. https://rsdoctor.dev/config/options/options#port
+]
+}
+}
+}
