@@ -28,7 +28,7 @@
     "@rspack/core": "^1.2.8",
     "@rsbuild/core": "^1.2.19",
     "@types/lodash": "^4.17.16",
-    "@types/node": "^16",
+    "@types/node": "^22.8.1",
     "lodash": "^4.17.21",
     "memfs": "4.17.0",
     "typescript": "^5.2.2",

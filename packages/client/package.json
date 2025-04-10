@@ -26,7 +26,7 @@
     "@rsbuild/plugin-type-check": "^1.2.1",
     "@rsdoctor/components": "workspace:*",
     "@rsdoctor/types": "workspace:*",
-    "@types/node": "^16",
+    "@types/node": "^22.8.1",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
     "antd": "5.19.1",

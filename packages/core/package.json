@@ -89,7 +89,7 @@
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.16",
-    "@types/node": "^16",
+    "@types/node": "^22.8.1",
     "@types/node-fetch": "^2.6.12",
     "@types/path-browserify": "1.0.3",
     "@types/semver": "^7.5.8",
