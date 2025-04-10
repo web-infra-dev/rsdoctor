@@ -556,6 +556,9 @@ importers:
       sirv:
         specifier: 2.0.4
         version: 2.0.4
+      source-map-loader:
+        specifier: ^5.0.0
+        version: 5.0.0(webpack@5.97.1)
       typescript:
         specifier: ^5.2.2
         version: 5.7.3
@@ -9544,6 +9547,12 @@ packages:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
 
+  source-map-loader@5.0.0:
+    resolution: {integrity: sha512-k2Dur7CbSLcAH73sBcIkV5xjPV4SzqO1NJ7+XaQl8if3VODDUj3FNchNGpqgJSKbvUfJuhVdv8K2Eu8/TNl2eA==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      webpack: ^5.72.1
+
   source-map-support@0.5.21:
     resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
 
@@ -17057,7 +17066,6 @@ snapshots:
   iconv-lite@0.6.3:
     dependencies:
       safer-buffer: 2.1.2
-    optional: true
 
   icss-replace-symbols@1.1.0: {}
 
@@ -20803,6 +20811,12 @@ snapshots:
       websocket-driver: 0.7.4
 
   source-map-js@1.2.1: {}
+
+  source-map-loader@5.0.0(webpack@5.97.1):
+    dependencies:
+      iconv-lite: 0.6.3
+      source-map-js: 1.2.1
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   source-map-support@0.5.21:
     dependencies:

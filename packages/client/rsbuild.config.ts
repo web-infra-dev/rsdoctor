@@ -1,12 +1,12 @@
+import type { RsbuildConfig, Rspack } from '@rsbuild/core';
 import { defineConfig } from '@rsbuild/core';
-import { pluginReact } from '@rsbuild/plugin-react';
-import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
-import type { Rspack, RsbuildConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import serve from 'sirv';
-import path from 'path';
+import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import fs from 'fs';
+import path from 'path';
+import serve from 'sirv';
 
 import {
   ClientEntry,
@@ -178,6 +178,17 @@ export default defineConfig(({ env }) => {
             },
           ]);
         }
+      },
+      rspack: {
+        module: {
+          rules: [
+            {
+              test: /\.js$/,
+              enforce: 'pre',
+              use: ['source-map-loader'],
+            },
+          ],
+        },
       },
     },
 
