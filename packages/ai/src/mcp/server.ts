@@ -6,8 +6,8 @@ import {
   getAllChunks,
   getChunkById,
   getModuleDetailById,
-  getModuleByName,
-  // getModuleIssuerPath,
+  getModuleByPath,
+  getModuleIssuerPath,
 } from './tools.js';
 import { registerStaticResources } from './resource.js';
 
@@ -76,7 +76,8 @@ server.tool(
   'get module detail by module name or path, if find multiple modules match the name or path, return all matched modules path, stop execution, and let user select the module path',
   { modulePath: z.string() },
   async ({ modulePath }) => {
-    const res = await getModuleByName(modulePath);
+    const res = await getModuleByPath(modulePath);
+
     return {
       content: [
         {
@@ -91,26 +92,25 @@ server.tool(
   },
 );
 
-// TODO: Get the module dependency
-// server.tool(
-//   Tools.GetModuleIssuerPath,
-//   'get module issuer path, issuer path is the path of the module that depends on the module.Please draw the returned issuer path as a dependency diagram.',
-//   { moduleId: z.string() },
-//   async ({ moduleId }) => {
-//     const res = await getModuleIssuerPath(moduleId);
-//     return {
-//       content: [
-//         {
-//           name: Tools.GetModuleIssuerPath,
-//           description:
-//             'get module issuer path, issuer path is the path of the module that depends on the module.Please draw the returned issuer path as a dependency diagram.',
-//           type: 'text',
-//           text: JSON.stringify(res),
-//         },
-//       ],
-//     };
-//   },
-// );
+server.tool(
+  Tools.GetModuleIssuerPath,
+  'get module issuer path, issuer path is the path of the module that depends on the module.Please draw the returned issuer path as a dependency diagram.',
+  { moduleId: z.string() },
+  async ({ moduleId }) => {
+    const res = await getModuleIssuerPath(moduleId);
+    return {
+      content: [
+        {
+          name: Tools.GetModuleIssuerPath,
+          description:
+            'get module issuer path, issuer path is the path of the module that depends on the module.Please draw the returned issuer path as a dependency diagram.',
+          type: 'text',
+          text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
 
 registerStaticResources(server);
 

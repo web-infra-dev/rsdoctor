@@ -12,6 +12,7 @@ import { GraphAPIResponse, GraphAPIRequestBody } from './graph';
 import { AlertsAPIResponse, AlertsAPIRequestBody } from './alerts';
 import { RsdoctorManifestMappingKeys } from '../../../manifest';
 import { SDK } from '../../../index';
+import { StatsModule } from '@/plugin';
 
 export * from './pagination';
 
@@ -67,6 +68,7 @@ export enum API {
   GetSearchModuleInChunk = '/api/search/chunk/modules',
   GetAllModuleGraphFilter = '/api/graph/module/filter',
   GetModuleByName = '/api/graph/module/name',
+  GetModuleIssuerPath = '/api/graph/module/issuer_path',
 
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',
@@ -137,6 +139,7 @@ export interface ResponseTypes
   }[];
   [API.GetAllChunkGraph]: SDK.ChunkData[];
   [API.GetModuleByName]: { id: number; path: string }[];
+  [API.GetModuleIssuerPath]: StatsModule['issuerPath'];
 }
 
 export interface RequestBodyTypes
@@ -160,6 +163,9 @@ export interface RequestBodyTypes
   };
   [API.GetModuleByName]: {
     moduleName: string;
+  };
+  [API.GetModuleIssuerPath]: {
+    moduleId: string;
   };
 }
 
