@@ -87,32 +87,34 @@ Initialize the [RsdoctorRspackPlugin](#rspack-projects)([RsdoctorWebpackPlugin](
 import { Tab, Tabs } from 'rspress/theme';
 
 <Tabs>
+
 <Tab label="Rspack">
+
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 const nextConfig: NextConfig = {
-/_ config options here _/
-webpack: (config) => {
-if (config.name === 'client') {
-config.plugins.push(
-new RsdoctorRspackPlugin({
-disableClientServer: true,
-}),
-);
-} else if (config.name === 'server') {
-config.plugins.push(
-new RsdoctorRspackPlugin({
-disableClientServer: true,
-output: {
-reportDir: './.next/server',
-},
-}),
-);
-}
-return config;
-},
+  /* config options here */
+  webpack: (config) => {
+    if (config.name === 'client') {
+      config.plugins.push(
+        new RsdoctorRspackPlugin({
+          disableClientServer: true,
+        }),
+      );
+    } else if (config.name === 'server') {
+      config.plugins.push(
+        new RsdoctorRspackPlugin({
+          disableClientServer: true,
+          output: {
+            reportDir: './.next/server',
+          },
+        }),
+      );
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
@@ -180,7 +182,7 @@ After installing [@rsdoctor/cli](/guide/start/cli), add the following scripts co
 
 #### 📢 Note for Next.js
 
-After Next.js finishes executing the `build` command, it will terminate the terminal service, causing the report page server run by Rsdoctor during the build process to close. To solve this problem, you can use [@rsdoctor/cli](/guide/start/cli) to reopen the report page without re-executing the build operation. The specific method is shown in the third step or by locally executing the rsdoctor command:
+After Next.js finishes executing the `build` command, it will terminate the terminal service, causing the report page server run by Rsdoctor during the build process to close. To solve this problem, you can use [@rsdoctor/cli](/guide/start/cli) to reopen the report page without re-executing the build operation. The specific method is shown in the [third step](#step-3-open-the-report) or by locally executing the rsdoctor command:
 
 For example, if Rsdoctor's build output is located at the path `.next/server/chunks/.rsdoctor/manifest.json`, you can open the report page by executing the following command:
 
