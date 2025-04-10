@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+const { runServer } = require('../dist/server/index.js');
+
+
+runServer().catch((error) => {
+  console.error('Fatal error running server:', error);
+  process.exit(1);
+});
