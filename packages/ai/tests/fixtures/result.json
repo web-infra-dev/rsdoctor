@@ -3,7 +3,7 @@
     "cacheGroups": [
       {
         "name": "lightcharts",
-        "test": "[\\\\/]node_modules[\\\\/](?:@byted[\\\\+]lightcharts)[\\\\/]"
+        "test": "[\\\\/]node_modules[\\\\/](?:@by[\\\\+]lightcharts)[\\\\/]"
       },
       {
         "name": "gulux-bam-ad-report",
