@@ -8,6 +8,9 @@
       "require": "./dist/index.cjs"
     }
   },
+  "bin": {
+    "rsdoctor-mcp": "./dist/server/index.js"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -22,15 +25,15 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@rsdoctor/types": "workspace: *",
     "@rslib/core": "^0.2.2",
     "@types/node": "^22.8.1",
-    "dotenv": "^16.4.7",
-    "socket.io-client": "4.8.1",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "socket.io-client": "4.8.1",
+    "@rsdoctor/types": "workspace: *",
     "@coze/api": "^1.0.15",
     "@modelcontextprotocol/sdk": "^1.4.1",
     "@rsdoctor/utils": "workspace:*",

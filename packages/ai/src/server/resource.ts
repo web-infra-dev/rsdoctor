@@ -15,7 +15,7 @@ const readMarkdownResource: ReadResourceCallback = async (
 ) => {
   // Read the contents of the Markdown file
   const contents = await readFileAsync(
-    path.join(__dirname, '../../../src/resources', uri.pathname),
+    path.join(__dirname, '../resources', uri.pathname),
     'utf-8',
   );
 
@@ -38,7 +38,7 @@ const readMarkdownResource: ReadResourceCallback = async (
  * @param {Object} resourcesData - The resources data object containing static resources
  */
 function registerStaticResources(server: McpServer) {
-  const resourcesDir = path.join(__dirname, '../../../src/resources');
+  const resourcesDir = path.join(__dirname, '../resources/');
   fs.readdirSync(resourcesDir).forEach((file) => {
     if (file.endsWith('.md')) {
       const uri = `file://rsdoctor/${file}`;
