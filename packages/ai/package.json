@@ -1,26 +1,17 @@
 {
   "name": "@rsdoctor/ai",
   "version": "0.0.0",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "bin": {
-    "rsdoctor-mcp": "./dist/server/index.js"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/server/index.js",
+  "types": "./dist/server/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
+  "bin": {
+    "rsdoctor-mcp": "./bin/rsdoctor-mcp"
+  },
   "scripts": {
     "build": "rslib build",
-    "build:mcp": "tsc -p tsconfig.build.json",
-    "dev:mcp": "pnpm run build:mcp && node ./dist/src/mcp/index.js",
     "dev": "rslib build --watch",
     "test": "vitest run"
   },
