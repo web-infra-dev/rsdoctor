@@ -82,24 +82,62 @@ export default {
 
 #### 第一步：注册 Rsdoctor 插件
 
-在 `next.config.ts` 的 [Rspack Config](https://rspack.dev/guide/tech/next) 中初始化 RsdoctorRspackPlugin 插件。
+在 `next.config.ts` 的 [Rspack 配置](https://rspack.dev/guide/tech/next)([webpack 配置](https://nextjs.org/docs/pages/api-reference/config/next-config-js/webpack)) 中初始化 [RsdoctorRspackPlugin](#rspack-%E9%A1%B9%E7%9B%AE)（[RsdoctorWebpackPlugin](#webpack-%E9%A1%B9%E7%9B%AE)） 插件。
 
+import { Tab, Tabs } from 'rspress/theme';
+
+<Tabs>
+<Tab label="Rspack">
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+const nextConfig: NextConfig = {
+/_ config options here _/
+webpack: (config) => {
+if (config.name === 'client') {
+config.plugins.push(
+new RsdoctorRspackPlugin({
+disableClientServer: true,
+}),
+);
+} else if (config.name === 'server') {
+config.plugins.push(
+new RsdoctorRspackPlugin({
+disableClientServer: true,
+output: {
+reportDir: './.next/server',
+},
+}),
+);
+}
+return config;
+},
+};
+
+export default nextConfig;
+```
+
+</Tab>
+
+<Tab label="webpack">
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
+import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
 const nextConfig: NextConfig = {
   /* config options here */
   webpack: (config) => {
     if (config.name === 'client') {
       config.plugins.push(
-        new RsdoctorRspackPlugin({
+        new RsdoctorWebpackPlugin({
           disableClientServer: true,
         }),
       );
     } else if (config.name === 'server') {
       config.plugins.push(
-        new RsdoctorRspackPlugin({
+        new RsdoctorWebpackPlugin({
           disableClientServer: true,
           output: {
             reportDir: './.next/server',
@@ -114,6 +152,9 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
+</Tab>
+</Tabs>
+
 - **Options:** 插件提供了一些配置项，请参考 [Options](../../config/options/options)。
 
 #### 第二步：执行构建
@@ -126,14 +167,14 @@ import { PackageManagerTabs } from '@theme';
 
 #### 第三步：打开报告
 
-安装 @rsdoctor/cli 后，**package.json** 里添加如下 scripts 命令，执行 **client:rsd** 或者 **server:rsd** 可打开对应构建器的报告：
+安装 [@rsdoctor/cli](/guide/start/cli) 后，**package.json** 里添加如下 scripts 命令，执行 **client:rsd** 或者 **server:rsd** 可打开对应构建器的报告：
 
 <PackageManagerTabs command="add @rsdoctor/cli -D" />
 
 ```ts
   "scripts": {
-    "client:rsd": "rsdoctor analyze --profile .next/.rsdoctor/manifest.json", // Rsdoctor's client report
-    "server:rsd": "rsdoctor analyze --profile .next/server/.rsdoctor/manifest.json" // Rsdoctor's server report
+    "client:rsd": "rsdoctor analyze --profile .next/.rsdoctor/manifest.json", // Rsdoctor's client report path
+    "server:rsd": "rsdoctor analyze --profile .next/server/.rsdoctor/manifest.json" // Rsdoctor's server report path
   }
 ```
 

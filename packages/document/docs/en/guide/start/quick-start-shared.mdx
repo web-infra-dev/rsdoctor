@@ -48,7 +48,7 @@ module.exports = {
 
 - **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
 
-### Modern.js Framework
+### Modern.js framework
 
 Initialize the plugin in the [tools.rspack](https://modernjs.dev/configure/app/tools/rspack) of `modern.config.ts`:
 
@@ -78,28 +78,66 @@ export default {
 For projects using Modern.js's webpack mode, please register the `RsdoctorWebpackPlugin` plugin through [tools.webpack](https://modernjs.dev/configure/app/tools/webpack).
 :::
 
-### Next.js Framework
+### Next.js framework
 
-#### Step 1: Register the Rsdoctor Plugin
+#### Step 1: Register the Rsdoctor plugin
 
-Initialize the RsdoctorRspackPlugin plugin in the [Rspack Config](https://rspack.dev/guide/tech/next) of `next.config.ts`.
+Initialize the [RsdoctorRspackPlugin](#rspack-projects)([RsdoctorWebpackPlugin](#webpack-projects)) plugin in the [Rspack Config](https://rspack.dev/guide/tech/next)([webpack config](https://nextjs.org/docs/pages/api-reference/config/next-config-js/webpack)) of `next.config.ts`.
 
+import { Tab, Tabs } from 'rspress/theme';
+
+<Tabs>
+<Tab label="Rspack">
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+const nextConfig: NextConfig = {
+/_ config options here _/
+webpack: (config) => {
+if (config.name === 'client') {
+config.plugins.push(
+new RsdoctorRspackPlugin({
+disableClientServer: true,
+}),
+);
+} else if (config.name === 'server') {
+config.plugins.push(
+new RsdoctorRspackPlugin({
+disableClientServer: true,
+output: {
+reportDir: './.next/server',
+},
+}),
+);
+}
+return config;
+},
+};
+
+export default nextConfig;
+```
+
+</Tab>
+
+<Tab label="webpack">
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
+import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
 const nextConfig: NextConfig = {
   /* config options here */
   webpack: (config) => {
     if (config.name === 'client') {
       config.plugins.push(
-        new RsdoctorRspackPlugin({
+        new RsdoctorWebpackPlugin({
           disableClientServer: true,
         }),
       );
     } else if (config.name === 'server') {
       config.plugins.push(
-        new RsdoctorRspackPlugin({
+        new RsdoctorWebpackPlugin({
           disableClientServer: true,
           output: {
             reportDir: './.next/server',
@@ -114,9 +152,12 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
+</Tab>
+</Tabs>
+
 - **Options:** The plugin provides some configuration options, please refer to [Options](../../config/options/options).
 
-#### Step 2: Execute Build
+#### Step 2: Execute build
 
 Execute the **build** command, Rsdoctor will generate the corresponding report data in the local repository artifacts.
 
@@ -124,9 +165,9 @@ import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="run build" />
 
-#### Step 3: Open the Report
+#### Step 3: Open the report
 
-After installing @rsdoctor/cli, add the following scripts commands to **package.json**, executing **client:rsd** or **server:rsd** can open the report of the corresponding builder:
+After installing [@rsdoctor/cli](/guide/start/cli), add the following scripts commands to **package.json**, executing **client:rsd** or **server:rsd** can open the report of the corresponding builder:
 
 <PackageManagerTabs command="add @rsdoctor/cli -D" />
 
@@ -178,7 +219,7 @@ export default defineConfig({
 
 ---
 
-## Step 3: run build
+## Step 3: Execute build
 
 Now, you can run the **build** command in the project. After the build is complete, Rsdoctor will automatically open the analysis page of this build.
 
