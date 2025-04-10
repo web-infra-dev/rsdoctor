@@ -12,6 +12,7 @@ import { GraphAPIResponse, GraphAPIRequestBody } from './graph';
 import { AlertsAPIResponse, AlertsAPIRequestBody } from './alerts';
 import { RsdoctorManifestMappingKeys } from '../../../manifest';
 import { SDK } from '../../../index';
+import { StatsModule } from '@/plugin';
 
 export * from './pagination';
 
@@ -51,6 +52,7 @@ export enum API {
   GetPluginData = '/api/plugins/data',
 
   /** Graph API */
+  GetChunkGraph = '/api/graph/chunks/graph',
   GetAssetsSummary = '/api/graph/assets/summary',
   GetAssetDetails = '/api/graph/asset/details',
   GetChunksByModuleId = '/api/graph/chunk/module',
@@ -64,6 +66,9 @@ export enum API {
   GetLayers = '/api/graph/layers',
   GetSearchModules = '/api/search/modules',
   GetSearchModuleInChunk = '/api/search/chunk/modules',
+  GetAllModuleGraphFilter = '/api/graph/module/filter',
+  GetModuleByName = '/api/graph/module/name',
+  GetModuleIssuerPath = '/api/graph/module/issuer_path',
 
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',
@@ -121,6 +126,8 @@ export interface ResponseTypes
     moduleCodeMap: SDK.ModuleCodeData;
     cloudManifestUrl: string;
   };
+  [API.GetChunkGraph]: SDK.ChunkData[];
+  [API.GetAllModuleGraphFilter]: SDK.ModuleData[];
   [API.GetModuleCodeByModuleId]: SDK.ModuleSource;
   [API.GetModuleCodeByModuleIds]: SDK.ModuleCodeData;
   [API.GetAllModuleGraph]: SDK.ModuleData[];
@@ -131,6 +138,8 @@ export interface ResponseTypes
     relativePath: string;
   }[];
   [API.GetAllChunkGraph]: SDK.ChunkData[];
+  [API.GetModuleByName]: { id: number; path: string }[];
+  [API.GetModuleIssuerPath]: StatsModule['issuerPath'];
 }
 
 export interface RequestBodyTypes
@@ -151,6 +160,12 @@ export interface RequestBodyTypes
      * @example 'moduleGraph.modules'
      */
     key: RsdoctorManifestMappingKeys;
+  };
+  [API.GetModuleByName]: {
+    moduleName: string;
+  };
+  [API.GetModuleIssuerPath]: {
+    moduleId: string;
   };
 }
 
