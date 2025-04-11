@@ -182,12 +182,12 @@ export default defineConfig(({ env }) => {
       rspack: {
         module: {
           rules: [
-            {
+            !IS_PRODUCTION && {
               test: /\.js$/,
-              enforce: 'pre',
+              enforce: 'pre' as const,
               use: ['source-map-loader'],
             },
-          ],
+          ].filter(Boolean),
         },
       },
     },
