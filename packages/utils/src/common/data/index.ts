@@ -438,9 +438,9 @@ export class APIDataLoader {
         });
 
       case SDK.ServerAPI.API.GetModuleByName:
-        const { moduleName } =
-          body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleByName>;
         return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          const { moduleName } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleByName>;
           const { modules = [] } = moduleGraph || {};
           return (
             (modules

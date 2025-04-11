@@ -1,0 +1,47 @@
+#### Step 1: Register the Rsdoctor Plugin
+
+Initialize the RsdoctorRspackPlugin in the [Rspack Config](https://rspack.dev/guide/tech/next) of `next.config.js`.
+
+```ts title="next.config.ts"
+import type { NextConfig } from 'next';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+const nextConfig: NextConfig = {
+  /* config options here */
+  webpack: (config) => {
+    if (config.name === 'client') {
+      config.plugins.push(
+        new RsdoctorRspackPlugin({
+          disableClientServer: true,
+        }),
+      );
+    } else if (config.name === 'server') {
+      config.plugins.push(
+        new RsdoctorRspackPlugin({
+          disableClientServer: true,
+          output: {
+            reportDir: './.next/server',
+          },
+        }),
+      );
+    }
+    return config;
+  },
+};
+
+export default nextConfig;
+```
+
+- **Options:** The plugin provides some configuration options, please refer to [Options](../../config/options/options).
+
+#### Step 2: Execute the Build
+
+Execute the **build** command, and Rsdoctor will generate the corresponding report data in the local repository.
+
+import { PackageManagerTabs } from '@theme';
+
+<PackageManagerTabs command="run build" />
+
+#### Step 3: Open the Report
+
+After installing @rsdoctor/cli, add the following scripts command in **package.json**. Execute **client:rsd** or **server:rsd** to open the report for the corresponding builder:
