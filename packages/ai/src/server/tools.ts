@@ -8,6 +8,8 @@ export enum Tools {
   GetModuleById = 'get_module_by_id',
   GetModuleByPath = 'get_module_by_path',
   GetModuleIssuerPath = 'get_module_issuer_path',
+  GetPackageInfo = 'get_package_info',
+  GetPackageDependency = 'get_package_dependency',
 }
 
 // Define the type for the response of getAllChunks
@@ -122,4 +124,12 @@ export const getModuleById = async (
   return (await sendRequest(SDK.ServerAPI.API.GetModuleDetails, {
     moduleId,
   })) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetModuleDetails>;
+};
+
+export const getPackageInfo = async () => {
+  return await sendRequest(SDK.ServerAPI.API.GetPackageInfo, {});
+};
+
+export const getPackageDependency = async () => {
+  return await sendRequest(SDK.ServerAPI.API.GetPackageDependency, {});
 };

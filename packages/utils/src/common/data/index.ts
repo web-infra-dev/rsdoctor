@@ -460,6 +460,16 @@ export class APIDataLoader {
             ?.issuerPath || []) as R;
         });
 
+      case SDK.ServerAPI.API.GetPackageInfo:
+        return this.loader.loadData('packageGraph').then((packageGraph) => {
+          return packageGraph?.packages as R;
+        });
+
+      case SDK.ServerAPI.API.GetPackageDependency:
+        return this.loader.loadData('packageGraph').then((packageGraph) => {
+          return (packageGraph?.dependencies || []) as R;
+        });
+
       default:
         throw new Error(`API not implement: "${api}"`);
     }
