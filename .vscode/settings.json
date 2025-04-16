@@ -13,5 +13,8 @@
     "**/.DS_Store": true
   },
   "editor.defaultFormatter": "biomejs.biome",
-  "editor.defaultFoldingRangeProvider": "biomejs.biome"
+  "editor.defaultFoldingRangeProvider": "biomejs.biome",
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
