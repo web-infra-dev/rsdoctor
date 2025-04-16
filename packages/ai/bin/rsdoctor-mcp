@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { runServer } = require('../dist/server/index.js');
+const { runServer } = require('../dist/server/server.js');
 
 
 runServer().catch((error) => {

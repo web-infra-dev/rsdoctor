@@ -7,8 +7,11 @@ import {
   getModuleDetailById,
   getModuleByPath,
   getModuleIssuerPath,
+  getPackageInfo,
+  getPackageDependency,
 } from './tools.js';
 import { registerStaticResources } from './resource.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
 // Create an MCP server
 export const server = new McpServer({
@@ -111,4 +114,59 @@ server.tool(
   },
 );
 
+server.tool(
+  Tools.GetPackageInfo,
+  `get package info, the package info is a Record<{id: number, name: string, version: string, root: string, modules: string[], duplicates: Record<{module: string, chunks: string[]}>}>, where:
+  - id: an incremental sequence mark, the package id.
+  - name: the name of the package
+  - version: the version of the package
+  - modules: the modules of the package
+  - root: the root path of the package
+  - duplicates: the duplicates of the package
+  `,
+  {},
+  async () => {
+    const res = await getPackageInfo();
+    return {
+      content: [
+        {
+          name: Tools.GetPackageInfo,
+          description: 'get package info',
+          type: 'text',
+          text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
+
+server.tool(
+  Tools.GetPackageDependency,
+  `Get package dependencies, which is the package Graph. The dependency structure is a Record<{id: number, dependency: number, package: number, refDependency: number}>, where:
+  - id: an incremental sequence mark
+  - dependency: the upstream dependency of the package
+  - package: the id of the package where the current Module is located
+  - refDependency: the Id of the upstream dependency Module of the current Module`,
+  {},
+  async () => {
+    const res = await getPackageDependency();
+    return {
+      content: [
+        {
+          name: Tools.GetPackageDependency,
+          description: 'get package dependency',
+          type: 'text',
+          text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
+
 registerStaticResources(server);
+
+export async function runServer() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error('Rsdoctor MCP Server running on stdio');
+}

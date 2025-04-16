@@ -438,9 +438,9 @@ export class APIDataLoader {
         });
 
       case SDK.ServerAPI.API.GetModuleByName:
-        const { moduleName } =
-          body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleByName>;
         return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          const { moduleName } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleByName>;
           const { modules = [] } = moduleGraph || {};
           return (
             (modules
@@ -458,6 +458,16 @@ export class APIDataLoader {
             body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleIssuerPath>;
           return (moduleGraph?.modules.find((m) => String(m.id) === moduleId)
             ?.issuerPath || []) as R;
+        });
+
+      case SDK.ServerAPI.API.GetPackageInfo:
+        return this.loader.loadData('packageGraph').then((packageGraph) => {
+          return packageGraph?.packages as R;
+        });
+
+      case SDK.ServerAPI.API.GetPackageDependency:
+        return this.loader.loadData('packageGraph').then((packageGraph) => {
+          return (packageGraph?.dependencies || []) as R;
         });
 
       default:

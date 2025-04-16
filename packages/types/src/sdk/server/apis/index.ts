@@ -70,6 +70,10 @@ export enum API {
   GetModuleByName = '/api/graph/module/name',
   GetModuleIssuerPath = '/api/graph/module/issuer_path',
 
+  /** Package API */
+  GetPackageInfo = '/api/package/info',
+  GetPackageDependency = '/api/package/dependency',
+
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',
   GetOverlayAlerts = '/api/alerts/overlay',
@@ -140,6 +144,8 @@ export interface ResponseTypes
   [API.GetAllChunkGraph]: SDK.ChunkData[];
   [API.GetModuleByName]: { id: number; path: string }[];
   [API.GetModuleIssuerPath]: StatsModule['issuerPath'];
+  [API.GetPackageInfo]: SDK.PackageData[];
+  [API.GetPackageDependency]: SDK.PackageDependencyData[];
 }
 
 export interface RequestBodyTypes
@@ -166,6 +172,9 @@ export interface RequestBodyTypes
   };
   [API.GetModuleIssuerPath]: {
     moduleId: string;
+  };
+  [API.GetPackageDependency]: {
+    packageId: string;
   };
 }
 
