@@ -59,17 +59,17 @@ export type BaseStats = Stats | RspackStatsWrapper;
 
 export interface JsStatsError {
   message: string;
-  formatted: string;
-  title: string;
+  formatted?: string;
+  title?: string;
 }
 
 export interface JsStatsWarning extends JsRspackError {
   message: string;
-  formatted: string;
+  formatted?: string;
 }
 
 export interface JsRspackError {
-  name: string;
+  name?: string;
   message: string;
   moduleIdentifier?: string;
   loc?: string;
