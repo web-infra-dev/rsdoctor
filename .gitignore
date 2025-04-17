@@ -20,5 +20,6 @@ tsconfig.tsbuildinfo
 .history/
 .env.local
 .env.*.local
+**/.env
 
 log/
