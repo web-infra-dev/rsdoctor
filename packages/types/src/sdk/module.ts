@@ -336,7 +336,7 @@ export interface ModuleGraphInstance {
 export interface ModuleData
   extends Omit<
     NonFunctionProperties<ModuleInstance>,
-    'rootModule' | 'isEntry' | 'concatenationModules' | 'meta'
+    'rootModule' | 'isEntry' | 'concatenationModules' | 'meta' | 'issuerPath'
   > {
   /** chunk identifier */
   chunks: string[];
@@ -373,7 +373,7 @@ export interface ModuleData
   meta?: Partial<Omit<ModuleBuildMeta, 'packageData'>>;
 
   /** Issuer path */
-  issuerPath?: StatsModule['issuerPath'];
+  issuerPath?: string[] | number[];
 }
 
 export type ModuleCodeData = Record<number, ModuleSource>;
