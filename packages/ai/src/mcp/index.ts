@@ -4,6 +4,7 @@ import { runClient, client } from './client.js';
 import dotenv from 'dotenv';
 
 import OpenAI from 'openai';
+
 dotenv.config({ path: '.env.local' });
 
 type ITools = {
@@ -13,6 +14,7 @@ type ITools = {
 };
 
 const main = async (options: { model: Model } = { model: 'qwen' }) => {
+
   if (!modelConfigs[options.model]) {
     throw new Error(`Model configuration for ${options.model} not found.`);
   }
