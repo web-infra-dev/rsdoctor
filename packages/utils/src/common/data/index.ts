@@ -437,6 +437,39 @@ export class APIDataLoader {
           })) as R;
         });
 
+      case SDK.ServerAPI.API.GetModuleByName:
+        return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          const { moduleName } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleByName>;
+          const { modules = [] } = moduleGraph || {};
+          return (
+            (modules
+              .filter((m) => m.path.includes(moduleName))
+              .map((m) => ({
+                id: m.id,
+                path: m.path,
+              })) as R) || ([] as R)
+          );
+        });
+
+      case SDK.ServerAPI.API.GetModuleIssuerPath:
+        return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          const { moduleId } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleIssuerPath>;
+          return (moduleGraph?.modules.find((m) => String(m.id) === moduleId)
+            ?.issuerPath || []) as R;
+        });
+
+      case SDK.ServerAPI.API.GetPackageInfo:
+        return this.loader.loadData('packageGraph').then((packageGraph) => {
+          return packageGraph?.packages as R;
+        });
+
+      case SDK.ServerAPI.API.GetPackageDependency:
+        return this.loader.loadData('packageGraph').then((packageGraph) => {
+          return (packageGraph?.dependencies || []) as R;
+        });
+
       default:
         throw new Error(`API not implement: "${api}"`);
     }

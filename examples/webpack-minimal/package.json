@@ -25,7 +25,7 @@
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",
-    "@types/node": "14.18.26",
+    "@types/node": "^22.8.1",
     "bundle-stats": "4.1.7",
     "ts-loader": "9.4.2",
     "tslib": "2.4.1",

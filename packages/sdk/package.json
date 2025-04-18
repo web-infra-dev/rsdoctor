@@ -43,7 +43,7 @@
     "@types/body-parser": "1.19.5",
     "@types/cors": "2.8.17",
     "@types/lodash": "^4.17.16",
-    "@types/node": "^16",
+    "@types/node": "^22.8.1",
     "tslib": "2.8.1",
     "typescript": "^5.2.2"
   },
