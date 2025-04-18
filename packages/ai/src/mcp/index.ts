@@ -4,7 +4,7 @@ import { runClient, client } from './client.js';
 import dotenv from 'dotenv';
 
 import OpenAI from 'openai';
-dotenv.config();
+dotenv.config({ path: '.env.local' });
 
 type ITools = {
   name?: string;
@@ -55,6 +55,7 @@ const main = async (options: { model: Model } = { model: 'qwen' }) => {
   });
   const { choices } = response;
   logger.info('[response]', response);
+
   // round 1: get chunk info
   const toolsCall = choices[0].message?.tool_calls as any;
   logger.info('[mcp call]', toolsCall[0].function.name);

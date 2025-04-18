@@ -116,14 +116,48 @@ export const getModuleIssuerPath = async (moduleId: string) => {
   };
 };
 
+// TODO: Maybe need add the allDependencies infos?
 export const getModuleById = async (
   moduleId: string,
-): Promise<
-  SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetModuleDetails>
-> => {
-  return (await sendRequest(SDK.ServerAPI.API.GetModuleDetails, {
+): Promise<{
+  module: {
+    id: string;
+    renderId: string;
+    webpackId: string | number;
+    path: string;
+    isPreferSource: boolean;
+    imported: number[];
+    dependencies?: SDK.ModuleData[];
+    allDependencies?: SDK.DependencyData[];
+  };
+}> => {
+  const res = (await sendRequest(SDK.ServerAPI.API.GetModuleDetails, {
     moduleId,
   })) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetModuleDetails>;
+
+  const dependencies = await Promise.all(
+    res.module.issuerPath?.map(async (moduleId) => {
+      const moduleInfo = (await sendRequest(
+        SDK.ServerAPI.API.GetModuleDetails,
+        {
+          moduleId,
+        },
+      )) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetModuleDetails>;
+      return moduleInfo.module;
+    }) || [],
+  );
+
+  return {
+    module: {
+      dependencies,
+      id: res.module.id,
+      renderId: res.module.renderId,
+      webpackId: res.module.webpackId,
+      path: res.module.path,
+      isPreferSource: res.module.isPreferSource,
+      imported: res.module.imported,
+    },
+  };
 };
 
 export const getPackageInfo = async () => {

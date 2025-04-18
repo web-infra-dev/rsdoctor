@@ -13,7 +13,8 @@
   "scripts": {
     "build": "rslib build",
     "dev": "rslib build --watch",
-    "test": "vitest run"
+    "test": "vitest run",
+    "client": "npm run build && node dist/mcp/index.js"
   },
   "devDependencies": {
     "@rslib/core": "^0.2.2",
