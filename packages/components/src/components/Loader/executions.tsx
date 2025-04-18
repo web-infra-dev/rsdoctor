@@ -310,7 +310,7 @@ export const LoaderExecutions = ({
                               </Col>
                             </Row>
                           )} */}
-                          <div style={{ height: '40rem' }}>
+                          <div style={{ height: '40rem', padding: 25 }}>
                             {!loader.result && !before ? (
                               <Empty
                                 description={

@@ -29,6 +29,13 @@ const ResolverDetailsPanel: React.FC<
       <Col flex={1}>
         <Card title="Resolve Diff Viewer" styles={{ body: { padding: 0 } }}>
           <DiffViewer
+            style={{
+              borderTopRightRadius: 0,
+              borderTopLeftRadius: 0,
+              borderBottomRightRadius: 8,
+              borderBottomLeftRadius: 8,
+              height: height + 50,
+            }}
             originalFilePath={filepath}
             original={before}
             modified={after}
