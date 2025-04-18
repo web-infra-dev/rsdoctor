@@ -1,5 +1,8 @@
+import { Monaco } from '@monaco-editor/react';
+import { SDK } from '@rsdoctor/types';
 import { editor } from 'monaco-editor';
 import { extname } from 'path';
+import { getSelectionRange } from 'src/utils/monaco';
 
 /**
  * 判断 data 协议文件格式
@@ -154,4 +157,24 @@ export function getFileName(filePath: string): string {
   }
 
   return filePath.split('/').at(-1) || '';
+}
+
+export function editorShowRange(
+  editor: editor.IStandaloneCodeEditor,
+  monaco: Monaco,
+  ranges?: SDK.SourceRange[],
+) {
+  if (!ranges || ranges.length === 0) return;
+
+  const decorations = ranges.map((range) => ({
+    range: getSelectionRange(range, monaco.Range),
+    options: {
+      inlineClassName: 'file-inline-decoration',
+    },
+  }));
+  editor.deltaDecorations([], decorations);
+
+  setTimeout(() => {
+    editor.revealLine(decorations[0].range.startLineNumber);
+  });
 }

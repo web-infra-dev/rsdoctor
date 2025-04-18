@@ -1,3 +1,4 @@
+import { SDK } from '@rsdoctor/types';
 import { Drawer, Empty } from 'antd';
 import { useState } from 'react';
 import { CodeViewer } from '.';
@@ -10,6 +11,8 @@ export function useCodeDrawer(emptyReason: string) {
   const [code, setCode] = useState('');
   const [filePath, setFilePath] = useState('');
   const [visible, setVisible] = useState(false);
+  const [defaultLine, setDefaultLine] = useState<number>();
+  const [ranges, setRanges] = useState<SDK.SourceRange[]>();
 
   const codeDrawerComponent = (
     <Drawer
@@ -22,7 +25,12 @@ export function useCodeDrawer(emptyReason: string) {
       onClose={() => setVisible(false)}
     >
       {code ? (
-        <CodeViewer filePath={filePath} code={code} />
+        <CodeViewer
+          filePath={filePath}
+          code={code}
+          defaultLine={defaultLine}
+          ranges={ranges}
+        />
       ) : (
         <Empty description={emptyReason} />
       )}
@@ -30,9 +38,16 @@ export function useCodeDrawer(emptyReason: string) {
   );
 
   return {
-    showCode(code: string, filePath: string) {
-      setCode(code);
-      setFilePath(filePath);
+    showCode(codeConfig: {
+      code: string;
+      filePath: string;
+      ranges?: SDK.SourceRange[];
+      defaultLine?: number;
+    }) {
+      setCode(codeConfig.code);
+      setFilePath(codeConfig.filePath);
+      setDefaultLine(codeConfig.defaultLine);
+      setRanges(codeConfig.ranges);
       setVisible(true);
     },
     codeDrawerComponent,

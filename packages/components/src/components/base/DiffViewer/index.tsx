@@ -1,13 +1,15 @@
 import { DiffEditor, MonacoDiffEditor } from '@monaco-editor/react';
+import { Checkbox } from 'antd';
+import clsx from 'clsx';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { getFileName, getFilePathFormat } from '../CodeViewer/utils';
+import styles from './index.module.scss';
 import { DiffViewerProps } from './interface';
 import { defineMonacoDiffOptions } from './utils';
 
-import { Checkbox } from 'antd';
-import styles from './index.module.scss';
-
 export function DiffViewer({
+  className,
+  style,
   original = '',
   modified = '',
   originalFilePath = '',
@@ -37,7 +39,10 @@ export function DiffViewer({
   const theme = isLightTheme ? 'vs-light' : 'vs-dark';
 
   return (
-    <div className={styles['diff-viewer'] + ' monaco-component'}>
+    <div
+      className={clsx(styles['diff-viewer'], 'monaco-component', className)}
+      style={style}
+    >
       {headerVisible && (
         <div className={styles['header']}>
           <div>{getFileName(originalFilePath)}</div>

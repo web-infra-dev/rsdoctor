@@ -1,4 +1,8 @@
+import { CSSProperties } from 'react';
+
 export interface DiffViewerProps {
+  className?: string;
+  style?: CSSProperties;
   original: string;
   modified: string;
   originalLang?: string;
