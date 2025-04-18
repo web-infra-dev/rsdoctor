@@ -166,6 +166,7 @@ export default defineConfig(({ env }) => {
           chainConfig.plugin('rsdoctor').use(RsdoctorRspackPlugin, [
             {
               disableClientServer: !ENABLE_CLIENT_SERVER,
+              port: 9988,
               linter: {
                 rules: {
                   'ecma-version-check': [
