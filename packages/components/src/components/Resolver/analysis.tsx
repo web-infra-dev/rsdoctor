@@ -37,6 +37,7 @@ const ResolverDetailsPanel: React.FC<
               height: height + 50,
             }}
             originalFilePath={filepath}
+            modifiedFilePath={filepath}
             original={before}
             modified={after}
           />

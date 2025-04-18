@@ -1,9 +1,8 @@
-import { MenuFoldOutlined } from '@ant-design/icons';
 import { Editor, Monaco, OnMount } from '@monaco-editor/react';
 import clsx from 'clsx';
 import { isNumber } from 'lodash-es';
 import { editor } from 'monaco-editor';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CodeViewerProps } from './interface';
 import {
   defineMonacoOptions,
@@ -12,6 +11,7 @@ import {
   getFilePathFormat,
 } from './utils';
 
+import { Checkbox } from 'antd';
 import styles from './index.module.scss';
 
 export function CodeViewer({
@@ -31,7 +31,11 @@ export function CodeViewer({
     () => lang || getFilePathFormat(filePath) || 'plaintext',
     [lang, filePath],
   );
-  const options = useMemo(() => defineMonacoOptions(), []);
+  const [isWordWrap, setIsWordWrap] = useState(true);
+  const options = useMemo(
+    () => defineMonacoOptions({ wordWrap: isWordWrap ? 'on' : 'off' }),
+    [isWordWrap],
+  );
   const onEditorMount = useCallback<OnMount>((editorInstance, monacoVal) => {
     editor.current = editorInstance;
     monaco.current = monacoVal;
@@ -63,7 +67,16 @@ export function CodeViewer({
           <div>{getFileName(filePath)}</div>
           <div style={{ flex: 1 }} />
           <div>
-            <MenuFoldOutlined />
+            <Checkbox
+              className={styles['text']}
+              title="side-by-side"
+              checked={isWordWrap}
+              onChange={(evt) => {
+                setIsWordWrap(evt.target.checked);
+              }}
+            >
+              word-wrap
+            </Checkbox>
           </div>
         </div>
       )}
