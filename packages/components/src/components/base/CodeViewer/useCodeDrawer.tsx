@@ -15,7 +15,7 @@ export function useCodeDrawer(emptyReason: string) {
     <Drawer
       maskClosable
       zIndex={999}
-      width={'60%'}
+      width={'70%'}
       destroyOnClose
       title={`Code of "${filePath}"`}
       open={visible}

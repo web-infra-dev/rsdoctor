@@ -1,4 +1,21 @@
 .diff-viewer {
-  box-sizing: border-box;
-  height: 300px;
+  height: 70vh;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--vscode-editor-background);
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+  .header {
+    background-color: var(--vscode-textBlockQuote-background);
+    color: var(--vscode-foreground);
+    padding: 4px 16px;
+    display: flex;
+    align-items: center;
+
+    .text {
+      color: var(--vscode-foreground);
+    }
+  }
 }

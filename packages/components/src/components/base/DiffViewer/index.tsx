@@ -1,9 +1,10 @@
 import { DiffEditor, MonacoDiffEditor } from '@monaco-editor/react';
-import { useCallback, useMemo, useRef } from 'react';
-import { getFilePathFormat } from '../CodeViewer/utils';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { getFileName, getFilePathFormat } from '../CodeViewer/utils';
 import { DiffViewerProps } from './interface';
 import { defineMonacoDiffOptions } from './utils';
 
+import { Checkbox } from 'antd';
 import styles from './index.module.scss';
 
 export function DiffViewer({
@@ -13,9 +14,10 @@ export function DiffViewer({
   modifiedFilePath = '',
   originalLang,
   modifiedLang,
-  isLightTheme = false,
-  isSideBySide = true,
+  isLightTheme = true,
+  headerVisible = true,
 }: DiffViewerProps) {
+  const [isSideBySide, setIsSideBySide] = useState(true);
   const editor = useRef<MonacoDiffEditor>();
   const originalLanguage = useMemo(
     () => originalLang || getFilePathFormat(originalFilePath) || 'plaintext',
@@ -35,7 +37,25 @@ export function DiffViewer({
   const theme = isLightTheme ? 'vs-light' : 'vs-dark';
 
   return (
-    <div className={styles['diff-viewer']}>
+    <div className={styles['diff-viewer'] + ' monaco-component'}>
+      {headerVisible && (
+        <div className={styles['header']}>
+          <div>{getFileName(originalFilePath)}</div>
+          <div style={{ flex: 1 }} />
+          <div>
+            <Checkbox
+              className={styles['text']}
+              title="side-by-side"
+              checked={isSideBySide}
+              onChange={(evt) => {
+                setIsSideBySide(evt.target.checked);
+              }}
+            >
+              side-by-side
+            </Checkbox>
+          </div>
+        </div>
+      )}
       <DiffEditor
         theme={theme}
         originalLanguage={originalLanguage}

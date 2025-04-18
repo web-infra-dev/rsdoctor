@@ -1,4 +1,8 @@
 export interface CodeViewerProps {
+  /**
+   * 亮/暗主题配置, 默认 false
+   */
+  isLightTheme?: boolean;
   code?: string;
   /**
    * 指定语言格式, 优先级最高. 如未指定, 会通过 filePath 推断

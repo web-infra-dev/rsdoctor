@@ -1,17 +1,18 @@
 import { Editor } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import styles from './index.module.scss';
 import { CodeViewerProps } from './interface';
 import { defineMonacoOptions, getFileName, getFilePathFormat } from './utils';
+
+import styles from './index.module.scss';
 
 export function CodeViewer({
   code = '',
   lang,
   filePath = '',
   headerVisible = true,
+  isLightTheme = false,
 }: CodeViewerProps) {
-  const container = useRef<HTMLDivElement>(null);
   const editor = useRef<editor.IStandaloneCodeEditor>();
   const language = useMemo(
     () => lang || getFilePathFormat(filePath) || 'plaintext',
@@ -24,6 +25,7 @@ export function CodeViewer({
     },
     [],
   );
+  const theme = isLightTheme ? 'vs-light' : 'vs-dark';
 
   useEffect(
     () => () => {
@@ -33,10 +35,7 @@ export function CodeViewer({
   );
 
   return (
-    <div
-      ref={container}
-      className={styles['code-viewer'] + ' monaco-component'}
-    >
+    <div className={styles['code-viewer'] + ' monaco-component'}>
       {headerVisible && Boolean(filePath) && (
         <div className={styles['header']}>
           <div>{getFileName(filePath)}</div>
@@ -45,7 +44,7 @@ export function CodeViewer({
         </div>
       )}
       <Editor
-        theme="vs-dark"
+        theme={theme}
         language={language}
         value={code}
         options={options}
