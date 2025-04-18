@@ -5,7 +5,7 @@ export interface CodeViewerProps {
   className?: string;
   style?: CSSProperties;
   /**
-   * 亮/暗主题配置, 默认 false
+   * 亮/暗主题配置, 默认 true
    */
   isLightTheme?: boolean;
   code?: string;

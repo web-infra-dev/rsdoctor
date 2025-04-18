@@ -23,7 +23,7 @@ export function CodeViewer({
   defaultLine,
   ranges,
   headerVisible = true,
-  isLightTheme = false,
+  isLightTheme = true,
 }: CodeViewerProps) {
   const editor = useRef<editor.IStandaloneCodeEditor>();
   const monaco = useRef<Monaco>();

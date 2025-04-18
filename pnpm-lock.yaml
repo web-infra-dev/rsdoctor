@@ -564,10 +564,6 @@ importers:
         version: 5.7.3
 
   packages/components:
-    dependencies:
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
     devDependencies:
       '@ant-design/icons':
         specifier: 5.6.1
@@ -614,6 +610,9 @@ importers:
       axios:
         specifier: ^1.8.4
         version: 1.8.4
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       dayjs:
         specifier: 1.11.13
         version: 1.11.13

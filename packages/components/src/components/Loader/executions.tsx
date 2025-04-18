@@ -319,7 +319,6 @@ export const LoaderExecutions = ({
                               />
                             ) : (
                               <DiffViewer
-                                isLightTheme={false}
                                 original={before}
                                 modified={loader.result || ''}
                                 originalFilePath={resource.path}
