@@ -48,6 +48,7 @@ type KnownStatsModuleIssuer = {
   identifier?: string;
   name?: string;
   id?: string | number | null;
+  moduleId?: string | number | null;
 };
 
 export interface StatsModule {

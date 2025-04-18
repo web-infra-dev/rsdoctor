@@ -345,7 +345,10 @@ export class Module implements SDK.ModuleInstance {
       size: this.getSize(),
       kind: this.kind,
       ...(this.layer ? { layer: this.layer } : {}),
-      issuerPath: this.issuerPath,
+      issuerPath:
+        this.issuerPath
+          ?.filter((issuer) => issuer.moduleId)
+          .map((issuer) => issuer.moduleId) || [],
     };
 
     if (this.meta.hasSetEsModuleStatement || this.meta.strictHarmonyModule) {
