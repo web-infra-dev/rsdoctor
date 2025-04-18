@@ -53,7 +53,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@types/lodash-es": "4.17.12",
-    "@types/node": "^16",
+    "@types/node": "^22.8.1",
     "@types/path-browserify": "1.0.3",
     "@types/react": "^18.3.20",
     "@types/react-highlight-words": "^0.20.0",
