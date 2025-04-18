@@ -76,54 +76,56 @@ export function getFilePathFormat(filePath: string): string {
   }
 }
 
-// // 使用示例:
-// const testCases = [
-//   'data:text/javascript;console.log("Hello")',
-//   'data:text/html;<h1>Hello</h1>',
-//   'data:text/css;body { color: red; }',
-//   'data:application/json;{"name": "test"}',
-//   'data:invalid;content',
-//   'invalid content',
-// ];
-
-// testCases.forEach((content) => {
-//   console.log(`Content: ${content}`);
-//   console.log(`Format: ${getDataProtocolFormat(content)}\n`);
-// });
-
 /**
  * 默认编辑器样式, 适合预览代码
  */
-const DefaultEditorConfig: editor.IStandaloneEditorConstructionOptions = {
-  // 设置编辑器为只读模式
-  readOnly: true,
-  // 设置 DOM 元素为只读模式
-  domReadOnly: true,
-  // 设置字体大小为 14px
-  fontSize: 14,
-  // 设置制表符宽度为 2 个空格
-  tabSize: 2,
-  // 设置行高为 24px
-  lineHeight: 24,
-  // 关闭验证装饰器的渲染(如错误、警告标记等)
-  renderValidationDecorations: 'off',
-  // 在概览标尺中隐藏光标
-  hideCursorInOverviewRuler: true,
-  // 启用平滑滚动
-  smoothScrolling: true,
-  // 设置文本换行方式
-  wordWrap: 'on',
-  // 启用颜色装饰器(如显示颜色预览)
-  colorDecorators: true,
-  // 禁用代码镜头功能(如显示引用次数等)
-  codeLens: false,
-  // 设置光标宽度为 0(隐藏光标)
-  cursorWidth: 0,
-  // 禁用右侧的小地图预览
-  minimap: {
-    enabled: false,
-  },
-};
+export const DefaultEditorConfig: editor.IStandaloneEditorConstructionOptions =
+  {
+    // 设置编辑器为只读模式
+    readOnly: true,
+    // 设置 DOM 元素为只读模式
+    domReadOnly: true,
+    // 设置字体大小为 14px
+    fontSize: 14,
+    // 设置制表符宽度为 2 个空格
+    tabSize: 2,
+    // 设置行高为 24px
+    lineHeight: 24,
+    // 关闭验证装饰器的渲染(如错误、警告标记等)
+    renderValidationDecorations: 'off',
+    // 在概览标尺中隐藏光标
+    hideCursorInOverviewRuler: true,
+    // 启用平滑滚动
+    smoothScrolling: true,
+    // 设置文本换行方式
+    wordWrap: 'on',
+    // 启用颜色装饰器(如显示颜色预览)
+    colorDecorators: true,
+    // 禁用代码镜头功能(如显示引用次数等)
+    codeLens: false,
+    // 设置光标宽度为 0(隐藏光标)
+    cursorWidth: 0,
+    // 禁用右侧的小地图预览
+    minimap: {
+      enabled: false,
+    },
+
+    /** 禁用编辑器内置的右键菜单 */
+    contextmenu: false,
+    /** 禁用定义跳转功能 */
+    gotoLocation: {
+      multiple: 'goto',
+      multipleDefinitions: 'goto',
+      multipleTypeDefinitions: 'goto',
+      multipleDeclarations: 'goto',
+      multipleImplementations: 'goto',
+      multipleReferences: 'goto',
+    },
+    /** 禁用悬停提示功能 */
+    hover: { enabled: false },
+    // 禁用链接功能 - 会禁用 Command/Ctrl + 点击
+    links: false,
+  };
 
 /**
  * get monaco options, it'll combine default config
