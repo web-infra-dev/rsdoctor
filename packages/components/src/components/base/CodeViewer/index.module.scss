@@ -1,0 +1,14 @@
+.code-viewer {
+  height: 70vh;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--vscode-editor-background);
+
+  .header {
+    background-color: var(--vscode-textBlockQuote-background);
+    color: var(--vscode-foreground);
+    padding: 4px 16px;
+    display: flex;
+    align-items: center;
+  }
+}
