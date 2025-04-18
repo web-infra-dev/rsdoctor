@@ -12,6 +12,7 @@ import { GraphAPIResponse, GraphAPIRequestBody } from './graph';
 import { AlertsAPIResponse, AlertsAPIRequestBody } from './alerts';
 import { RsdoctorManifestMappingKeys } from '../../../manifest';
 import { SDK } from '../../../index';
+import { StatsModule } from '@/plugin';
 
 export * from './pagination';
 
@@ -66,6 +67,12 @@ export enum API {
   GetSearchModules = '/api/search/modules',
   GetSearchModuleInChunk = '/api/search/chunk/modules',
   GetAllModuleGraphFilter = '/api/graph/module/filter',
+  GetModuleByName = '/api/graph/module/name',
+  GetModuleIssuerPath = '/api/graph/module/issuer_path',
+
+  /** Package API */
+  GetPackageInfo = '/api/package/info',
+  GetPackageDependency = '/api/package/dependency',
 
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',
@@ -135,6 +142,10 @@ export interface ResponseTypes
     relativePath: string;
   }[];
   [API.GetAllChunkGraph]: SDK.ChunkData[];
+  [API.GetModuleByName]: { id: number; path: string }[];
+  [API.GetModuleIssuerPath]: StatsModule['issuerPath'];
+  [API.GetPackageInfo]: SDK.PackageData[];
+  [API.GetPackageDependency]: SDK.PackageDependencyData[];
 }
 
 export interface RequestBodyTypes
@@ -155,6 +166,15 @@ export interface RequestBodyTypes
      * @example 'moduleGraph.modules'
      */
     key: RsdoctorManifestMappingKeys;
+  };
+  [API.GetModuleByName]: {
+    moduleName: string;
+  };
+  [API.GetModuleIssuerPath]: {
+    moduleId: string;
+  };
+  [API.GetPackageDependency]: {
+    packageId: string;
   };
 }
 

@@ -1,10 +1,9 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { Tools } from './tools.js';
 
 const transport = new StdioClientTransport({
   command: 'node',
-  args: ['./dist/src/mcp/server.js'],
+  args: ['./dist/server/index.js'],
 });
 
 export const client = new Client(

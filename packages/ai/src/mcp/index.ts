@@ -4,7 +4,8 @@ import { runClient, client } from './client.js';
 import dotenv from 'dotenv';
 
 import OpenAI from 'openai';
-dotenv.config();
+
+dotenv.config({ path: '.env.local' });
 
 type ITools = {
   name?: string;
@@ -12,7 +13,8 @@ type ITools = {
   inputSchema: any; // or a more specific type if known
 };
 
-const main = async (options: { model: Model } = { model: 'default' }) => {
+const main = async (options: { model: Model } = { model: 'qwen' }) => {
+
   if (!modelConfigs[options.model]) {
     throw new Error(`Model configuration for ${options.model} not found.`);
   }
@@ -47,14 +49,15 @@ const main = async (options: { model: Model } = { model: 'default' }) => {
   logger.info('round 1');
   // round 1 fetch openai response
   const response = await openai.chat.completions.create({
-    model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
+    model: modelConfigs[options.model].model ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 16384,
+    max_tokens: modelConfigs[options.model].maxTokens,
     messages,
     tools: openaiTools, // tools bridge mcp tools -> openai tools
   });
   const { choices } = response;
   logger.info('[response]', response);
+
   // round 1: get chunk info
   const toolsCall = choices[0].message?.tool_calls as any;
   logger.info('[mcp call]', toolsCall[0].function.name);
@@ -82,9 +85,9 @@ const main = async (options: { model: Model } = { model: 'default' }) => {
 
   // round 2 get module info of the chunk
   const completion2 = await openai.chat.completions.create({
-    model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
+    model: modelConfigs[options.model].model ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 16384,
+    max_tokens: modelConfigs[options.model].maxTokens,
     messages,
     tools: openaiTools,
     store: true,
@@ -113,9 +116,9 @@ const main = async (options: { model: Model } = { model: 'default' }) => {
 
   // round 3 get module info of the chunk
   const completion3 = await openai.chat.completions.create({
-    model: process.env.OPENAI_MODEL_NAME ?? 'gpt-4o-2024-08-06', // default model
+    model: modelConfigs[options.model].model ?? 'gpt-4o-2024-08-06', // default model
     temperature: 0,
-    max_tokens: 16384,
+    max_tokens: modelConfigs[options.model].maxTokens,
     messages,
     tools: openaiTools,
     store: true,
