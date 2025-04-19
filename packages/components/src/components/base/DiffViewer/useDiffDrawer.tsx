@@ -1,6 +1,7 @@
 import { Drawer, Empty } from 'antd';
 import { useState } from 'react';
 import { DiffViewer } from '.';
+import { DiffViewerProps } from './interface';
 
 /**
  * 使用抽屉展示代码 diff 内容
@@ -11,6 +12,8 @@ export function useDiffDrawer(emptyReason?: string) {
   const [modified, setModified] = useState('');
   const [originalFilePath, setOriginalFilePath] = useState('');
   const [modifiedFilePath, setModifiedFilePath] = useState('');
+  const [originalLang, setOriginalLang] = useState('');
+  const [modifiedLang, setModifiedLang] = useState('');
   const [visible, setVisible] = useState(false);
 
   const codeDiffDrawerComponent = (
@@ -27,6 +30,8 @@ export function useDiffDrawer(emptyReason?: string) {
         <DiffViewer
           original={original}
           modified={modified}
+          originalLang={originalLang}
+          modifiedLang={modifiedLang}
           originalFilePath={originalFilePath}
           modifiedFilePath={modifiedFilePath}
         />
@@ -37,14 +42,21 @@ export function useDiffDrawer(emptyReason?: string) {
   );
 
   return {
-    showCodeDiff(diffConfig: {
-      original: string;
-      modified: string;
-      originalFilePath?: string;
-      modifiedFilePath?: string;
-    }) {
+    showCodeDiff(
+      diffConfig: Pick<
+        DiffViewerProps,
+        | 'original'
+        | 'modified'
+        | 'originalFilePath'
+        | 'modifiedFilePath'
+        | 'originalLang'
+        | 'modifiedLang'
+      >,
+    ) {
       setOriginal(diffConfig.original);
       setModified(diffConfig.modified);
+      setOriginalLang(diffConfig.originalLang || '');
+      setModifiedLang(diffConfig.modifiedLang || '');
       setOriginalFilePath(diffConfig.originalFilePath || '');
       setModifiedFilePath(diffConfig.modifiedFilePath || '');
       setVisible(true);

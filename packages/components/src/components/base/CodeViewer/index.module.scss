@@ -7,6 +7,12 @@
     0 1px 3px 0 rgb(0 0 0 / 0.1),
     0 1px 2px -1px rgb(0 0 0 / 0.1);
 
+  &.embed {
+    box-shadow: none;
+    border-radius: 0;
+    overflow: auto;
+  }
+
   .header {
     background-color: var(--vscode-textBlockQuote-background);
     color: var(--vscode-foreground);

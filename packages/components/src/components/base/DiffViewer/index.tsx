@@ -16,6 +16,7 @@ export function DiffViewer({
   modifiedFilePath = '',
   originalLang,
   modifiedLang,
+  isEmbed = false,
   isLightTheme = true,
   headerVisible = true,
 }: DiffViewerProps) {
@@ -40,7 +41,12 @@ export function DiffViewer({
 
   return (
     <div
-      className={clsx(styles['diff-viewer'], 'monaco-component', className)}
+      className={clsx(
+        styles['diff-viewer'],
+        isEmbed && styles['embed'],
+        'monaco-component',
+        className,
+      )}
       style={style}
     >
       {headerVisible && (

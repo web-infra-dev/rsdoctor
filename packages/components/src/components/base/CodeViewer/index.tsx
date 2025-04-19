@@ -22,6 +22,7 @@ export function CodeViewer({
   filePath = '',
   defaultLine,
   ranges,
+  isEmbed = false,
   headerVisible = true,
   isLightTheme = true,
 }: CodeViewerProps) {
@@ -59,7 +60,12 @@ export function CodeViewer({
 
   return (
     <div
-      className={clsx(styles['code-viewer'], 'monaco-component', className)}
+      className={clsx(
+        styles['code-viewer'],
+        isEmbed && styles['embed'],
+        'monaco-component',
+        className,
+      )}
       style={style}
     >
       {headerVisible && Boolean(filePath) && (

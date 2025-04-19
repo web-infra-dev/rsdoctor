@@ -2,6 +2,9 @@ import { SDK } from '@rsdoctor/types';
 import { Drawer, Empty } from 'antd';
 import { useState } from 'react';
 import { CodeViewer } from '.';
+import { CodeViewerProps } from './interface';
+
+const defaultEmptyReason = 'No Code';
 
 /**
  * 使用抽屉展示代码内容
@@ -9,6 +12,7 @@ import { CodeViewer } from '.';
  */
 export function useCodeDrawer(emptyReason: string) {
   const [code, setCode] = useState('');
+  const [lang, setLang] = useState('');
   const [filePath, setFilePath] = useState('');
   const [visible, setVisible] = useState(false);
   const [defaultLine, setDefaultLine] = useState<number>();
@@ -26,26 +30,28 @@ export function useCodeDrawer(emptyReason: string) {
     >
       {code ? (
         <CodeViewer
-          filePath={filePath}
           code={code}
+          lang={lang}
+          filePath={filePath}
           defaultLine={defaultLine}
           ranges={ranges}
         />
       ) : (
-        <Empty description={emptyReason} />
+        <Empty description={emptyReason || defaultEmptyReason} />
       )}
     </Drawer>
   );
 
   return {
-    showCode(codeConfig: {
-      code: string;
-      filePath: string;
-      ranges?: SDK.SourceRange[];
-      defaultLine?: number;
-    }) {
-      setCode(codeConfig.code);
-      setFilePath(codeConfig.filePath);
+    showCode(
+      codeConfig: Pick<
+        CodeViewerProps,
+        'code' | 'filePath' | 'ranges' | 'lang' | 'defaultLine'
+      >,
+    ) {
+      setCode(codeConfig.code || '');
+      setLang(codeConfig.lang || '');
+      setFilePath(codeConfig.filePath || '');
       setDefaultLine(codeConfig.defaultLine);
       setRanges(codeConfig.ranges);
       setVisible(true);
