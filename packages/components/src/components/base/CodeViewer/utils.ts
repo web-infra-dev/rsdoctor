@@ -1,7 +1,7 @@
-import { extname } from 'path';
 import { Monaco } from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
 import { editor } from 'monaco-editor';
+import { extname } from 'path';
 import { getSelectionRange } from 'src/utils/monaco';
 
 /**
@@ -127,6 +127,8 @@ export function getFilePathFormat(filePath: string): string {
       case 'ts':
       case 'tsx':
         return 'typescript';
+      case 'md':
+        return 'markdown';
       default:
         return ext;
     }
