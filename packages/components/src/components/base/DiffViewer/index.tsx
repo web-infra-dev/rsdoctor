@@ -42,9 +42,10 @@ export function DiffViewer({
   return (
     <div
       className={clsx(
+        'monaco-component',
+        'diff-viewer',
         styles['diff-viewer'],
         isEmbed && styles['embed'],
-        'monaco-component',
         className,
       )}
       style={style}
@@ -67,16 +68,18 @@ export function DiffViewer({
           </div>
         </div>
       )}
-      <DiffEditor
-        theme={theme}
-        originalLanguage={originalLanguage}
-        modifiedLanguage={modifiedLanguage}
-        original={original}
-        modified={modified}
-        width="100%"
-        options={options}
-        onMount={onEditorMount}
-      />
+      <div className={clsx(styles['content'], 'editor-wrap')}>
+        <DiffEditor
+          theme={theme}
+          originalLanguage={originalLanguage}
+          modifiedLanguage={modifiedLanguage}
+          original={original}
+          modified={modified}
+          width="100%"
+          options={options}
+          onMount={onEditorMount}
+        />
+      </div>
     </div>
   );
 }

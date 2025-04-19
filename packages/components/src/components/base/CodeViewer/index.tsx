@@ -61,9 +61,10 @@ export function CodeViewer({
   return (
     <div
       className={clsx(
+        'monaco-component',
+        'code-viewer',
         styles['code-viewer'],
         isEmbed && styles['embed'],
-        'monaco-component',
         className,
       )}
       style={style}
@@ -86,13 +87,15 @@ export function CodeViewer({
           </div>
         </div>
       )}
-      <Editor
-        theme={theme}
-        language={language}
-        value={code}
-        options={options}
-        onMount={onEditorMount}
-      />
+      <div className={clsx(styles['content'], 'editor-wrap')}>
+        <Editor
+          theme={theme}
+          language={language}
+          value={code}
+          options={options}
+          onMount={onEditorMount}
+        />
+      </div>
     </div>
   );
 }

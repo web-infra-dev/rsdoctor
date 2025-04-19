@@ -1,11 +1,12 @@
+import { extname } from 'path';
 import { Monaco } from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
 import { editor } from 'monaco-editor';
-import { extname } from 'path';
 import { getSelectionRange } from 'src/utils/monaco';
 
 /**
- * 判断 data 协议文件格式
+ * 判断 data 协议文件格式 `data:[<mediatype>][;base64],<data>`
+ * 完整协议: https://www.rfc-editor.org/rfc/rfc2397.html
  * @param {string} content 文件内容
  * @returns {string} 文件格式类型
  */
@@ -22,12 +23,7 @@ function getDataProtocolFormat(content: string): string {
       return '';
     }
 
-    const prefixLength = prefix.length;
-    const endIndex = content.indexOf(';', prefixLength);
-    if (endIndex === -1) return '';
-
-    // 提取 MIME 类型
-    const mimeType = content.substring(prefixLength, endIndex);
+    const { mimeType } = parseDataUrl(content);
 
     // 根据 MIME 类型返回对应的格式
     switch (mimeType) {
@@ -49,6 +45,66 @@ function getDataProtocolFormat(content: string): string {
     console.error('解析 data 协议文件格式失败:', error);
     return '';
   }
+}
+
+/**
+ * 解析 Data URL 并提取 MIME 类型
+ * @param {string} dataUrl - 要解析的 Data URL 字符串
+ * @returns {Object} 包含解析结果的对象
+ */
+function parseDataUrl(dataUrl: string) {
+  // 检查是否是 Data URL
+  if (!dataUrl.startsWith('data:')) {
+    throw new Error('输入不是有效的 Data URL');
+  }
+
+  // 提取内容部分 (去掉 "data:" 前缀)
+  const content = dataUrl.substring(5);
+
+  // 查找分隔数据和元数据的逗号
+  const commaIndex = content.indexOf(',');
+
+  if (commaIndex === -1) {
+    throw new Error('无效的 Data URL 格式: 缺少数据分隔符');
+  }
+
+  // 提取元数据部分
+  const metadataPart = content.substring(0, commaIndex);
+
+  // 提取数据部分
+  const dataPart = content.substring(commaIndex + 1);
+
+  // 解析元数据
+  let mimeType = '';
+  let charset = '';
+  let isBase64 = false;
+
+  // 分割元数据部分
+  const metadataSegments = metadataPart.split(';');
+
+  // 第一部分通常是 MIME 类型
+  if (metadataSegments.length > 0) {
+    mimeType = metadataSegments[0] || 'text/plain'; // 默认为 text/plain
+  }
+
+  // 检查其他元数据参数
+  for (let i = 1; i < metadataSegments.length; i++) {
+    const segment = metadataSegments[i];
+
+    if (segment === 'base64') {
+      isBase64 = true;
+    } else if (segment.startsWith('charset=')) {
+      charset = segment.substring(8);
+    }
+  }
+
+  // 返回解析结果
+  return {
+    mimeType,
+    charset,
+    isBase64,
+    data: dataPart,
+  };
 }
 
 export function getFilePathFormat(filePath: string): string {
