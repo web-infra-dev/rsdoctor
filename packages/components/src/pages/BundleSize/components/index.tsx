@@ -21,6 +21,7 @@ import {
 } from 'antd';
 import { debounce, includes, sumBy } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCodeDrawer } from 'src/components/base/CodeViewer/useCodeDrawer';
 import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
 import { KeywordInput } from '../../../components/Form/keyword';
@@ -28,14 +29,12 @@ import { Keyword } from '../../../components/Keyword';
 import { ServerAPIProvider, withServerAPI } from '../../../components/Manifest';
 import { Size } from '../../../constants';
 import { createFileStructures, formatSize, useI18n } from '../../../utils';
-import { BundleCards } from './cards';
-import { SearchModal } from './search-modal';
-
-import { useCodeDrawer } from 'src/components/base/CodeViewer/useCodeDrawer';
 import { GraphType } from '../constants';
 import { AssetDetail } from './asset';
+import { BundleCards } from './cards';
 import styles from './index.module.scss';
 import './index.sass';
+import { SearchModal } from './search-modal';
 
 const { Option } = Select;
 

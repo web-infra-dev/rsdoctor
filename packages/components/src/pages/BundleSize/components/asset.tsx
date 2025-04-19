@@ -171,11 +171,13 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
                       <a href="#">Explain</a>
                     </Popover>
                   }
+                  styles={{ body: { padding: 0, overflow: 'hidden' } }}
                 >
                   {source['parsedSource'] ||
                   source['source'] ||
                   source['transformed'] ? (
                     <CodeViewer
+                      isEmbed
                       code={
                         tab
                           ? source[tab as keyof SDK.ModuleSource]

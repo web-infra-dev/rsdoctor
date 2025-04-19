@@ -30,12 +30,9 @@ const ResolverDetailsPanel: React.FC<
         <Card title="Resolve Diff Viewer" styles={{ body: { padding: 0 } }}>
           <DiffViewer
             style={{
-              borderTopRightRadius: 0,
-              borderTopLeftRadius: 0,
-              borderBottomRightRadius: 8,
-              borderBottomLeftRadius: 8,
               height: height + 50,
             }}
+            isEmbed
             originalFilePath={filepath}
             modifiedFilePath={filepath}
             original={before}

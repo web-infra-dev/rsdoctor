@@ -1,5 +1,4 @@
 import { ClockCircleTwoTone } from '@ant-design/icons';
-import Editor from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
 import {
   Col,
@@ -233,17 +232,9 @@ export const LoaderExecutions = ({
                         />
                       </div>
                       <div style={{ height: '90%' }}>
-                        <Editor
-                          theme="vs"
-                          options={{
-                            readOnly: true,
-                            domReadOnly: true,
-                            fontSize: 14,
-                            minimap: { enabled: false },
-                            lineNumbers: 'off',
-                          }}
-                          value={loader.errors[0].message}
-                          language="javascript"
+                        <CodeViewer
+                          code={loader.errors[0].message}
+                          lang="javascript"
                         />
                       </div>
                     </Col>
@@ -254,7 +245,6 @@ export const LoaderExecutions = ({
                           display: 'flex',
                           alignItems: 'center',
                           padding: Size.BasePadding,
-                          borderTop: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
                           borderBottom: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
                         }}
                       >
@@ -267,6 +257,7 @@ export const LoaderExecutions = ({
                         loader.result ? (
                           <div style={{ height: '90%' }}>
                             <CodeViewer
+                              isEmbed
                               code={loader.result}
                               filePath={resource.path}
                             />
@@ -310,7 +301,7 @@ export const LoaderExecutions = ({
                               </Col>
                             </Row>
                           )} */}
-                          <div style={{ height: '40rem', padding: 25 }}>
+                          <div style={{ height: '40rem', overflow: 'hidden' }}>
                             {!loader.result && !before ? (
                               <Empty
                                 description={
@@ -319,6 +310,7 @@ export const LoaderExecutions = ({
                               />
                             ) : (
                               <DiffViewer
+                                isEmbed
                                 original={before}
                                 modified={loader.result || ''}
                                 originalFilePath={resource.path}
