@@ -10,6 +10,8 @@ export enum Tools {
   GetModuleIssuerPath = 'get_module_issuer_path',
   GetPackageInfo = 'get_package_info',
   GetPackageDependency = 'get_package_dependency',
+  GetRuleInfo = 'get_rule_info',
+  GetSimilarPackages = 'get_similar_packages',
 }
 
 // Define the type for the response of getAllChunks
@@ -166,4 +168,8 @@ export const getPackageInfo = async () => {
 
 export const getPackageDependency = async () => {
   return await sendRequest(SDK.ServerAPI.API.GetPackageDependency, {});
+};
+
+export const getRuleInfo = async () => {
+  return await sendRequest(SDK.ServerAPI.API.GetOverlayAlerts, {});
 };
