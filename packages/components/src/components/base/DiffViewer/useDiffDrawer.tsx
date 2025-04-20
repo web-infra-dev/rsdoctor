@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { DiffViewer } from '.';
 import { DiffViewerProps } from './interface';
 
+const defaultEmptyReason = 'No diff code';
+
 /**
  * 使用抽屉展示代码 diff 内容
  * @param emptyReason 没有代码内容时展示文案
@@ -36,7 +38,7 @@ export function useDiffDrawer(emptyReason?: string) {
           modifiedFilePath={modifiedFilePath}
         />
       ) : (
-        <Empty description={emptyReason} />
+        <Empty description={emptyReason || defaultEmptyReason} />
       )}
     </Drawer>
   );
