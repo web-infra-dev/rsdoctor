@@ -1,12 +1,12 @@
-import React from 'react';
-import { SDK } from '@rsdoctor/types';
 import Editor, { OnMount } from '@monaco-editor/react';
+import { SDK } from '@rsdoctor/types';
+import { Empty } from 'antd';
 import { Lodash } from '@rsdoctor/utils/common';
 import type { editor } from 'monaco-editor';
+import React from 'react';
 import { getOriginalLanguage, getSelectionRange } from '../../utils';
-import { DefaultEditorConfig } from './config';
 import { TextDrawer } from '../TextDrawer';
-import { Empty } from 'antd';
+import { DefaultEditorConfig } from './config';
 
 interface CodeViewerProps {
   path: string;
@@ -17,6 +17,7 @@ interface CodeViewerProps {
   emptyReason?: string;
 }
 
+/** @deprecated please use CodeViewer in /base/CodeViewer */
 export const CodeViewer: React.FC<CodeViewerProps> = ({
   content,
   ranges,
@@ -58,6 +59,8 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({
   );
 };
 
+///REVIEW - no use, if can delete
+/** @deprecated please use hook useCodeDrawer instead */
 export const CodeViewerWithDrawer: React.FC<CodeViewerProps> = (props) => {
   return (
     <TextDrawer
