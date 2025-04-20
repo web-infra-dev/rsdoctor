@@ -188,6 +188,39 @@ server.tool(
   },
 );
 
+server.tool(Tools.GetRuleInfo, toolDescriptions.getRuleInfo, {}, async () => {
+  const res = await getRuleInfo();
+  return {
+    content: [
+      {
+        name: Tools.GetRuleInfo,
+        description: toolDescriptions.getRuleInfo,
+        type: 'text',
+        text: JSON.stringify(res),
+      },
+    ],
+  };
+});
+
+server.tool(
+  Tools.GetSimilarPackages,
+  toolDescriptions.getSimilarPackages,
+  {},
+  async () => {
+    const res = await getPackageInfo();
+    return {
+      content: [
+        {
+          name: Tools.GetSimilarPackages,
+          description: toolDescriptions.getSimilarPackages,
+          type: 'text',
+          text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
+
 server.tool(Tools.GetDuplicatePackages, {}, async () => {
   const res = await getDuplicatePackages();
   return {
@@ -234,7 +267,6 @@ server.tool(
 );
 
 registerStaticResources(server);
-
 export async function runServer() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
