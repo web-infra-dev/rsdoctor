@@ -15,7 +15,8 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { PropsWithChildren, useCallback, useState } from 'react';
-
+import InputIcon from 'src/common/svg/loader/input.svg';
+import OutputIcon from 'src/common/svg/loader/output.svg';
 import StepIcon from 'src/common/svg/loader/step.svg';
 import { Size } from '../../constants';
 import { beautifyPath, formatCosts, useTheme } from '../../utils';
@@ -249,7 +250,31 @@ export const LoaderExecutions = ({
                         }}
                       >
                         <Title
-                          text={`the result of [${loader.loader}] ${loader.isPitch ? 'pitch' : ''}`}
+                          text={
+                            <>
+                              {`the result of [${loader.loader}] ${loader.isPitch ? 'pitch' : ''}`}
+                              {!loader.isPitch && (
+                                <span style={{ fontWeight: 400 }}>
+                                  (
+                                  <InputIcon
+                                    style={{
+                                      verticalAlign: 'middle',
+                                      margin: '0 2px',
+                                    }}
+                                  />
+                                  Input ⟷
+                                  <OutputIcon
+                                    style={{
+                                      verticalAlign: 'middle',
+                                      position: 'relative',
+                                      top: -2,
+                                    }}
+                                  />
+                                  Output)
+                                </span>
+                              )}
+                            </>
+                          }
                         />
                         <div style={{ flex: 1 }} />
                       </div>
@@ -271,36 +296,6 @@ export const LoaderExecutions = ({
                         )
                       ) : (
                         <div style={{ minHeight: '700px' }}>
-                          {/* {isSideBySide && (
-                            <Row>
-                              <Col
-                                span={12}
-                                style={{
-                                  padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
-                                }}
-                              >
-                                <Space align="center" className={styles.space}>
-                                  <InputIcon />
-                                  <Typography.Text strong>
-                                    Input
-                                  </Typography.Text>
-                                </Space>
-                              </Col>
-                              <Col
-                                span={12}
-                                style={{
-                                  padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
-                                }}
-                              >
-                                <Space align="center" className={styles.space}>
-                                  <OutputIcon />
-                                  <Typography.Text strong>
-                                    Output
-                                  </Typography.Text>
-                                </Space>
-                              </Col>
-                            </Row>
-                          )} */}
                           <div style={{ height: '40rem', overflow: 'hidden' }}>
                             {!loader.result && !before ? (
                               <Empty

@@ -27,7 +27,10 @@ const ResolverDetailsPanel: React.FC<
   return (
     <React.Fragment>
       <Col flex={1}>
-        <Card title="Resolve Diff Viewer" styles={{ body: { padding: 0 } }}>
+        <Card
+          title="Resolve Diff Viewer"
+          styles={{ body: { padding: 0, overflow: 'hidden' } }}
+        >
           <DiffViewer
             style={{
               height: height + 50,
