@@ -42,6 +42,8 @@ describe('module graph transform from stats', () => {
     expect(graph.getDependencies().length).toEqual(2);
     const graphData = graph.toData();
     expect(graphData.modules[0].webpackId.length).toBeTruthy();
+    expect(graphData.modules[2].issuerPath[0].identifier).toBeTruthy();
+    expect(graphData.modules[2].issuerPath[0].moduleId).toBeTruthy();
 
     graphData.modules.forEach((mod) => {
       // prevent ci failed on win32
@@ -49,6 +51,7 @@ describe('module graph transform from stats', () => {
       mod.size.sourceSize = -1;
       mod.size.transformedSize = -1;
       mod.size.parsedSize = -1;
+      mod.issuerPath = [];
     });
     expect(graphData).toMatchSnapshot();
   });
