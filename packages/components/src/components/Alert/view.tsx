@@ -1,12 +1,12 @@
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Alert, Button, Divider, Space, Typography } from 'antd';
 import React from 'react';
 import { Lodash } from '@rsdoctor/utils/common';
-import { Space, Alert, Button, Typography, Divider } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
 import { useRuleIndexNavigate } from '../../utils';
+import { CodeViewer } from '../base/CodeViewer';
+import { CodeOpener } from '../Opener';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
-import { CodeOpener } from '../Opener';
-import { CodeViewer } from '../CodeViewer';
 import { CodeViewAlertProps } from './types';
 
 export const CodeViewDrawerContent: React.FC<CodeViewAlertProps> = ({
@@ -28,8 +28,8 @@ export const CodeViewDrawerContent: React.FC<CodeViewAlertProps> = ({
         disabled
       />
       <CodeViewer
-        path={file.path}
-        content={file.content}
+        filePath={file.path}
+        code={file.content}
         ranges={ranges}
         defaultLine={line}
       />
@@ -37,6 +37,7 @@ export const CodeViewDrawerContent: React.FC<CodeViewAlertProps> = ({
   );
 };
 
+///REVIEW - It's still useful? can't find usage
 export const CodeViewAlert: React.FC<CodeViewAlertProps> = ({ data, cwd }) => {
   const { title, description = '', level, code, file } = data;
   const navigate = useRuleIndexNavigate(code, data.link);

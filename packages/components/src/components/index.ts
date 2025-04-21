@@ -1,10 +1,9 @@
 export * from './Alerts';
 export * from './Badge';
 export * from './Card';
-export * from './CodeViewer';
+export { TimelineCom } from './Charts/TimelineCharts';
 export * from './Form/keyword';
 export * from './Layout';
 export * from './Manifest';
 export * from './Overall';
 export * from './TextDrawer';
-export { TimelineCom } from './Charts/TimelineCharts';
