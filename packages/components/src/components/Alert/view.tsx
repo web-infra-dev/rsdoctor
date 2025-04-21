@@ -3,7 +3,7 @@ import { Alert, Button, Divider, Space, Typography } from 'antd';
 import React from 'react';
 import { Lodash } from '@rsdoctor/utils/common';
 import { useRuleIndexNavigate } from '../../utils';
-import { CodeViewer } from '../base/CodeViewer';
+import { CodeViewer } from '../base';
 import { CodeOpener } from '../Opener';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';

@@ -13,7 +13,7 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useRuleIndexNavigate } from '../../utils';
-import { DiffViewer } from '../base/DiffViewer';
+import { DiffViewer } from '../base';
 import { CodeOpener } from '../Opener';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';

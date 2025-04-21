@@ -83,3 +83,7 @@ export function DiffViewer({
     </div>
   );
 }
+
+export type { DiffViewerProps } from './interface';
+export { useDiffDrawer } from './useDiffDrawer';
+export { defineMonacoDiffOptions } from './utils';

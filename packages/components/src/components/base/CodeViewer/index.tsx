@@ -99,3 +99,7 @@ export function CodeViewer({
     </div>
   );
 }
+
+export type { CodeViewerProps } from './interface';
+export { useCodeDrawer } from './useCodeDrawer';
+export { defineMonacoOptions } from './utils';

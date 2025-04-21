@@ -1,7 +1,7 @@
 import { DiffOutlined } from '@ant-design/icons';
 import { Col, Row, Segmented, Typography } from 'antd';
 import React, { useState } from 'react';
-import { DiffViewer } from 'src/components/base/DiffViewer';
+import { DiffViewer } from 'src/components/base';
 import { TextDrawer } from '../../../../components/TextDrawer';
 import { Size } from '../../../../constants';
 
