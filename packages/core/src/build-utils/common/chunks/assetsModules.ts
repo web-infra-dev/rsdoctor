@@ -1,9 +1,9 @@
-import { isEmpty, pick } from 'lodash';
 import path from 'path';
 
 import { logger } from '@rsdoctor/utils/logger';
 import { SDK } from '@rsdoctor/types';
 import { ParseBundle } from '@/types';
+import { Lodash } from '@rsdoctor/utils/common';
 
 export type ParsedModuleSizeData = {
   [x: string]: { size: number; sizeConvert: string; content: string };
@@ -52,11 +52,14 @@ export async function getAssetsModulesData(
         continue;
       }
 
-      bundlesSources[asset.path] = pick(bundleInfo, 'src', 'runtimeSrc');
+      bundlesSources[asset.path] = Lodash.pick(bundleInfo, [
+        'src',
+        'runtimeSrc',
+      ]);
       Object.assign(parsedModules, bundleInfo?.modules || {});
     }
 
-    if (isEmpty(bundlesSources)) {
+    if (Lodash.isEmpty(bundlesSources)) {
       bundlesSources = null;
       parsedModules = null;
       process.env.DEVTOOLS_DEV &&

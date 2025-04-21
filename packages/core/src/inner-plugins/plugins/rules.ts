@@ -1,7 +1,7 @@
 import { InternalBasePlugin } from '../plugins';
 import { Linter } from '../../rules';
 import { DevToolError } from '@rsdoctor/utils/error';
-import { isArray, pull } from 'lodash';
+import { pull } from 'lodash';
 import { Plugin } from '@rsdoctor/types';
 import { WebpackError } from 'webpack';
 
@@ -35,24 +35,27 @@ export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler>
       err.toError() as unknown as WebpackError & Plugin.JsStatsWarning;
 
     result.replace.forEach((item) => {
-      if (isArray(compilation.errors) && compilation.errors.includes(item)) {
+      if (
+        Array.isArray(compilation.errors) &&
+        compilation.errors.includes(item)
+      ) {
         pull(compilation.errors, item);
       }
       if (
-        isArray(compilation.warnings) &&
+        Array.isArray(compilation.warnings) &&
         compilation.warnings.includes(item)
       ) {
         pull(compilation.warnings, item);
       }
     });
 
-    if (isArray(compilation.errors)) {
+    if (Array.isArray(compilation.errors)) {
       errors.forEach((err) => {
         compilation.warnings.push(toWebpackError(err));
       });
     }
 
-    if (isArray(compilation.warnings)) {
+    if (Array.isArray(compilation.warnings)) {
       warnings.forEach((err) => {
         compilation.warnings.push(toWebpackError(err));
       });

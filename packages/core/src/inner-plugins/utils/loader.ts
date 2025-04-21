@@ -4,19 +4,19 @@ import {
   create as ResolverCreator,
 } from 'enhanced-resolve';
 import fs from 'fs';
-import { isString, omit } from 'lodash';
+import { omit } from 'lodash';
 import path from 'path';
 import { debug } from '@rsdoctor/utils/logger';
 import { Loader } from '@rsdoctor/utils/common';
 import { Time } from '@rsdoctor/utils/common';
 import { SDK, Plugin } from '@rsdoctor/types';
 import { DevToolError } from '@rsdoctor/utils/error';
-
 import { getSDK } from './sdk';
 import { checkCirclePath } from './circleDetect';
 import { ProxyLoaderInternalOptions, ProxyLoaderOptions } from '@/types';
 import { Utils as BuildUtils, Types } from '@/build-utils/build';
 import { isESMLoader, parseQuery } from '@/build-utils/build/utils';
+import { Lodash } from '@rsdoctor/utils/common';
 
 export function getInternalLoaderOptions(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,
@@ -195,7 +195,7 @@ export async function reportLoader(
   ];
   const data: Types.SourceMap = !sourceMap
     ? {}
-    : isString(sourceMap)
+    : Lodash.isString(sourceMap)
       ? JSON.parse(sourceMap)
       : sourceMap;
   const sourceMapData = {

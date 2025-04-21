@@ -13,7 +13,7 @@ import { chalk, logger } from '@rsdoctor/utils/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
 import { getLocalIpAddress } from './utils';
-import { isUndefined } from 'lodash';
+import { Lodash } from '@rsdoctor/utils/common';
 export * from './utils';
 
 export type ISocketType = { port: number; socketUrl: string };
@@ -43,7 +43,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     this.port = port;
     this._router = new Router({ sdk, server: this, apis: Object.values(APIs) });
     this._innerClientPath = config?.innerClientPath || '';
-    this._printServerUrl = isUndefined(config?.printServerUrl)
+    this._printServerUrl = Lodash.isUndefined(config?.printServerUrl)
       ? true
       : config?.printServerUrl;
   }

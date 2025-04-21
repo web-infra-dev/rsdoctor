@@ -1,5 +1,5 @@
 import React from 'react';
-import { isNumber } from 'lodash-es';
+import { Lodash } from '@rsdoctor/utils/common';
 import { Space, Alert, Button, Typography, Divider } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useRuleIndexNavigate } from '../../utils';
@@ -9,7 +9,10 @@ import { CodeOpener } from '../Opener';
 import { CodeViewer } from '../CodeViewer';
 import { CodeViewAlertProps } from './types';
 
-export const CodeViewDrawerContent: React.FC<CodeViewAlertProps> = ({ data, cwd }) => {
+export const CodeViewDrawerContent: React.FC<CodeViewAlertProps> = ({
+  data,
+  cwd,
+}) => {
   const { file } = data;
   const { path, ranges } = file;
   const line = ranges?.[0].start.line;
@@ -17,8 +20,19 @@ export const CodeViewDrawerContent: React.FC<CodeViewAlertProps> = ({ data, cwd 
   return (
     <Space direction="vertical" className="alert-space">
       <Title text="Code Viewer" />
-      <CodeOpener cwd={cwd} url={path} loc={isNumber(line) ? String(line) : undefined} code disabled />
-      <CodeViewer path={file.path} content={file.content} ranges={ranges} defaultLine={line} />
+      <CodeOpener
+        cwd={cwd}
+        url={path}
+        loc={Lodash.isNumber(line) ? String(line) : undefined}
+        code
+        disabled
+      />
+      <CodeViewer
+        path={file.path}
+        content={file.content}
+        ranges={ranges}
+        defaultLine={line}
+      />
     </Space>
   );
 };
@@ -36,7 +50,7 @@ export const CodeViewAlert: React.FC<CodeViewAlertProps> = ({ data, cwd }) => {
         <Typography.Text strong code>
           {file.path}
         </Typography.Text>
-        {isNumber(startLine) ? (
+        {Lodash.isNumber(startLine) ? (
           <>
             <Typography.Text>in line</Typography.Text>
             <Typography.Text strong code>
@@ -55,7 +69,12 @@ export const CodeViewAlert: React.FC<CodeViewAlertProps> = ({ data, cwd }) => {
       showIcon
       message={
         <Space>
-          <Typography.Text code strong onClick={navigate} style={{ cursor: 'pointer' }}>
+          <Typography.Text
+            code
+            strong
+            onClick={navigate}
+            style={{ cursor: 'pointer' }}
+          >
             <a>{code}</a>
           </Typography.Text>
           <Typography.Text strong>{title}</Typography.Text>
@@ -70,7 +89,12 @@ export const CodeViewAlert: React.FC<CodeViewAlertProps> = ({ data, cwd }) => {
           </TextDrawer>
           <>
             <Divider type="vertical" />
-            <Button type="link" onClick={navigate} size="small" icon={<InfoCircleOutlined />} />
+            <Button
+              type="link"
+              onClick={navigate}
+              size="small"
+              icon={<InfoCircleOutlined />}
+            />
           </>
         </Space>
       }

@@ -1,5 +1,5 @@
 import { Linter, SDK, Rule as RuleTypes } from '@rsdoctor/types';
-import { isPlainObject } from 'lodash';
+import { Lodash } from '@rsdoctor/utils/common';
 import { LinterType } from './linter';
 import { noop, toSeverity } from './utils';
 
@@ -76,7 +76,7 @@ export class Rule<Config = DefaultRuleConfig>
     }
 
     this._severity = severity;
-    this._config = isPlainObject(config)
+    this._config = Lodash.isPlainObject(config)
       ? {
           ...this.meta.defaultConfig,
           ...config,
@@ -113,7 +113,9 @@ export class Rule<Config = DefaultRuleConfig>
       if (remove) {
         replace.push(remove);
       }
-      let severity = data.severity ? toSeverity(data.severity, this.severity) : this.severity;
+      let severity = data.severity
+        ? toSeverity(data.severity, this.severity)
+        : this.severity;
       const error: Linter.Diagnostic = {
         ...data,
         code: this.code,
