@@ -259,7 +259,6 @@ export function getModuleGraphByStats(
         }
         if (moduleInstance) {
           issuer.moduleId = moduleInstance.id;
-          issuer.identifier = ''; // To prevent data explosion, remove the identifier for modules with moduleInstance.id.
         }
       });
     }
