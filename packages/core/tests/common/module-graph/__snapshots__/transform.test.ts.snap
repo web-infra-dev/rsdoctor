@@ -964,3 +964,196 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
   "variables": [],
 }
 `;
+
+exports[`module graph transform from stats > normal module in multi concatenation module 1`] = `
+{
+  "dependencies": [
+    {
+      "dependency": 3,
+      "id": 1,
+      "kind": 1,
+      "module": 2,
+      "originDependency": 3,
+      "request": "common",
+      "resolvedRequest": "common.js",
+      "statements": [
+        {
+          "module": 2,
+          "position": {
+            "transformed": {
+              "end": {
+                "column": 38,
+                "line": 1,
+              },
+              "start": {
+                "column": 0,
+                "line": 1,
+              },
+            },
+          },
+        },
+      ],
+    },
+    {
+      "dependency": 3,
+      "id": 2,
+      "kind": 1,
+      "module": 5,
+      "originDependency": 3,
+      "request": "common",
+      "resolvedRequest": "common.js",
+      "statements": [
+        {
+          "module": 5,
+          "position": {
+            "transformed": {
+              "end": {
+                "column": 38,
+                "line": 1,
+              },
+              "start": {
+                "column": 0,
+                "line": 1,
+              },
+            },
+          },
+        },
+      ],
+    },
+  ],
+  "exports": [],
+  "layers": [],
+  "moduleGraphModules": [],
+  "modules": [
+    {
+      "chunks": [
+        "0",
+      ],
+      "dependencies": [],
+      "id": 1,
+      "imported": [],
+      "isEntry": true,
+      "isPreferSource": false,
+      "issuerPath": [],
+      "kind": 1,
+      "modules": [
+        2,
+        3,
+      ],
+      "path": "entry1.js",
+      "renderId": undefined,
+      "rootModule": 2,
+      "size": {
+        "parsedSize": -1,
+        "sourceSize": -1,
+        "transformedSize": -1,
+      },
+      "webpackId": "",
+    },
+    {
+      "chunks": [
+        "0",
+      ],
+      "concatenationModules": [
+        1,
+      ],
+      "dependencies": [
+        1,
+      ],
+      "id": 2,
+      "imported": [],
+      "isEntry": true,
+      "isPreferSource": false,
+      "issuerPath": [],
+      "kind": 0,
+      "path": "entry1.js",
+      "renderId": undefined,
+      "size": {
+        "parsedSize": -1,
+        "sourceSize": -1,
+        "transformedSize": -1,
+      },
+      "webpackId": "",
+    },
+    {
+      "chunks": [
+        "0",
+        "1",
+      ],
+      "concatenationModules": [
+        1,
+        4,
+      ],
+      "dependencies": [],
+      "id": 3,
+      "imported": [
+        2,
+        5,
+      ],
+      "isPreferSource": false,
+      "issuerPath": [],
+      "kind": 0,
+      "path": "common.js",
+      "renderId": undefined,
+      "size": {
+        "parsedSize": -1,
+        "sourceSize": -1,
+        "transformedSize": -1,
+      },
+      "webpackId": "",
+    },
+    {
+      "chunks": [
+        "1",
+      ],
+      "dependencies": [],
+      "id": 4,
+      "imported": [],
+      "isEntry": true,
+      "isPreferSource": false,
+      "issuerPath": [],
+      "kind": 1,
+      "modules": [
+        5,
+        3,
+      ],
+      "path": "entry2.js",
+      "renderId": "1",
+      "rootModule": 5,
+      "size": {
+        "parsedSize": -1,
+        "sourceSize": -1,
+        "transformedSize": -1,
+      },
+      "webpackId": "",
+    },
+    {
+      "chunks": [
+        "1",
+      ],
+      "concatenationModules": [
+        4,
+      ],
+      "dependencies": [
+        2,
+      ],
+      "id": 5,
+      "imported": [],
+      "isEntry": true,
+      "isPreferSource": false,
+      "issuerPath": [],
+      "kind": 0,
+      "path": "entry2.js",
+      "renderId": undefined,
+      "size": {
+        "parsedSize": -1,
+        "sourceSize": -1,
+        "transformedSize": -1,
+      },
+      "webpackId": "",
+    },
+  ],
+  "sideEffects": [],
+  "variables": [],
+}
+`;
