@@ -883,23 +883,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
         2,
       ],
       "isPreferSource": false,
-      "issuerPath": [
-        {
-          "id": null,
-          "identifier": "/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/examples/angular/node_modules/@ngtools/webpack/src/ivy/index.js!/Users/demo/examples/angular/src/main.ts",
-          "name": "src/main.ts",
-        },
-        {
-          "id": null,
-          "identifier": "/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/examples/angular/node_modules/@ngtools/webpack/src/ivy/index.js!/Users/demo/examples/angular/src/app/app.module.ts",
-          "name": "src/app/app.module.ts",
-        },
-        {
-          "id": null,
-          "identifier": "/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/examples/angular/node_modules/@ngtools/webpack/src/ivy/index.js!/Users/demo/examples/angular/src/app/app.component.ts",
-          "name": "src/app/app.component.ts",
-        },
-      ],
+      "issuerPath": [],
       "kind": 0,
       "path": "/Users/demo/node_modules/@angular/common/fesm2022/common.mjs",
       "renderId": undefined,
@@ -921,17 +905,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       ],
       "isPreferSource": false,
       "issuerPath": [
-        {
-          "id": null,
-          "identifier": "/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/examples/angular/node_modules/@ngtools/webpack/src/ivy/index.js!/Users/demo/examples/angular/src/main.ts",
-          "name": "src/main.ts",
-        },
-        {
-          "id": null,
-          "identifier": "",
-          "moduleId": 3,
-          "name": "../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
-        },
+        3,
       ],
       "kind": 0,
       "path": "/Users/demo/node_modules/@angular/common/fesm2022/http.mjs",
@@ -954,13 +928,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
         4,
       ],
       "isPreferSource": false,
-      "issuerPath": [
-        {
-          "id": null,
-          "identifier": "/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/examples/angular/node_modules/@ngtools/webpack/src/ivy/index.js!/Users/demo/examples/angular/src/main.ts",
-          "name": "src/main.ts",
-        },
-      ],
+      "issuerPath": [],
       "kind": 0,
       "path": "/Users/demo/node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "renderId": undefined,
@@ -980,23 +948,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "id": 4,
       "imported": [],
       "isPreferSource": false,
-      "issuerPath": [
-        {
-          "id": null,
-          "identifier": "/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/examples/angular/node_modules/@ngtools/webpack/src/ivy/index.js!/Users/demo/examples/angular/src/main.ts",
-          "name": "src/main.ts",
-        },
-        {
-          "id": null,
-          "identifier": "/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/examples/angular/node_modules/@ngtools/webpack/src/ivy/index.js!/Users/demo/examples/angular/src/app/app.module.ts",
-          "name": "src/app/app.module.ts",
-        },
-        {
-          "id": null,
-          "identifier": "/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/examples/angular/node_modules/@ngtools/webpack/src/ivy/index.js!/Users/demo/examples/angular/src/app/app-routing.module.ts",
-          "name": "src/app/app-routing.module.ts",
-        },
-      ],
+      "issuerPath": [],
       "kind": 0,
       "path": "/Users/demo/node_modules/@angular/router/fesm2022/router.mjs",
       "renderId": undefined,
@@ -1139,14 +1091,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         5,
       ],
       "isPreferSource": false,
-      "issuerPath": [
-        {
-          "id": null,
-          "identifier": "",
-          "moduleId": 2,
-          "name": "packages/core/tests/fixtures/normal-module-in-multi-concatenation/entry1.js",
-        },
-      ],
+      "issuerPath": [],
       "kind": 0,
       "path": "common.js",
       "renderId": undefined,
