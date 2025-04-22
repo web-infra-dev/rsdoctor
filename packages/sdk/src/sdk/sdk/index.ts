@@ -11,7 +11,7 @@ import { RsdoctorFakeServer } from '../server/fakeServer';
 import { RsdoctorWebpackSDKOptions } from './types';
 import { SDKCore } from './core';
 import { Algorithm } from '@rsdoctor/utils/common';
-import { isNumber } from 'lodash';
+import { Lodash } from '@rsdoctor/utils/common';
 const jc = require('json-cycle');
 
 export * from '../utils/openBrowser';
@@ -62,7 +62,9 @@ export class RsdoctorSDK<
           innerClientPath: options.config?.innerClientPath || '',
           printServerUrl: options.config?.printLog?.serverUrls,
         });
-    this.type = isNumber(options.type) ? options.type : SDK.ToDataType.Normal;
+    this.type = Lodash.isNumber(options.type)
+      ? options.type
+      : SDK.ToDataType.Normal;
     this.extraConfig = options.config;
   }
 

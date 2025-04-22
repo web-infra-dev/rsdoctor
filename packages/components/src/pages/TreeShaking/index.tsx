@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Card, Col, Row, Radio } from 'antd';
-import { isNumber } from 'lodash-es';
+import { Lodash } from '@rsdoctor/utils/common';
 import { FileSearchOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
 import path from 'path-browserify';
@@ -71,7 +71,7 @@ const Component: React.FC<{ data: SDK.ModuleGraphData; cwd: string }> = ({
     setSelectedModule(module);
     setRanges(ranges.slice());
 
-    if (isNumber(line)) {
+    if (Lodash.isNumber(line)) {
       setToLine(line);
     }
   };

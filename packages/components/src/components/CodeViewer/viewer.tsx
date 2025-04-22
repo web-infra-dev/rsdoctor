@@ -1,7 +1,7 @@
 import React from 'react';
 import { SDK } from '@rsdoctor/types';
 import Editor, { OnMount } from '@monaco-editor/react';
-import { isNumber } from 'lodash-es';
+import { Lodash } from '@rsdoctor/utils/common';
 import type { editor } from 'monaco-editor';
 import { getOriginalLanguage, getSelectionRange } from '../../utils';
 import { DefaultEditorConfig } from './config';
@@ -26,7 +26,7 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({
   emptyReason,
 }) => {
   const handleEditorDidMount: OnMount = (editor, monaco) => {
-    if (isNumber(defaultLine)) {
+    if (Lodash.isNumber(defaultLine)) {
       editor.revealLine(defaultLine);
     }
 

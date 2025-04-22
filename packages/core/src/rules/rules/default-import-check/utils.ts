@@ -1,10 +1,5 @@
-import {
-  Node,
-  parser,
-  getDocument,
-  Range,
-} from '@rsdoctor/utils/ruleUtils';
-import { isUndefined } from 'lodash';
+import { Node, parser, getDocument, Range } from '@rsdoctor/utils/ruleUtils';
+import { Lodash } from '@rsdoctor/utils/common';
 import type { SDK, Linter } from '@rsdoctor/types';
 
 export function getDefaultImportByRequest(node: Node.Program, request: string) {
@@ -84,10 +79,10 @@ export function getSourceRangeFromTransformedOffset(
   const sourceRange = module.getSourceRange(node.loc!);
 
   if (
-    isUndefined(sourceRange?.start.line) ||
-    isUndefined(sourceRange?.start.column) ||
-    isUndefined(sourceRange?.end?.line) ||
-    isUndefined(sourceRange?.end?.column)
+    Lodash.isUndefined(sourceRange?.start.line) ||
+    Lodash.isUndefined(sourceRange?.start.column) ||
+    Lodash.isUndefined(sourceRange?.end?.line) ||
+    Lodash.isUndefined(sourceRange?.end?.column)
   ) {
     return transformedReport;
   }
