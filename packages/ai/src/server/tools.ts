@@ -1,5 +1,6 @@
 import { SDK } from '@rsdoctor/types';
 import { sendRequest } from './socket.js';
+import { toolDescriptions } from '@/prompt/bundle.js';
 
 export enum Tools {
   GetAllChunks = 'get_chunks',
@@ -10,6 +11,11 @@ export enum Tools {
   GetModuleIssuerPath = 'get_module_issuer_path',
   GetPackageInfo = 'get_package_info',
   GetPackageDependency = 'get_package_dependency',
+  GetRuleInfo = 'get_rule_info',
+  GetSimilarPackages = 'get_similar_packages',
+  GetBundleOptimize = 'get_bundle_optimize',
+  GetLargeChunks = 'get_large_chunks',
+  GetDuplicatePackages = 'get_duplicate_packages',
 }
 
 // Define the type for the response of getAllChunks
@@ -18,13 +24,19 @@ export type GetAllChunksResponse = {
   content: any; // Replace 'any' with the actual type of data if known
 };
 
-export const getAllChunks = async () => {
-  return await sendRequest(SDK.ServerAPI.API.GetChunkGraph, {});
+export const getAllChunks = async (): Promise<
+  SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetChunkGraphAI>
+> => {
+  return (await sendRequest(
+    SDK.ServerAPI.API.GetChunkGraphAI,
+    {},
+  )) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetChunkGraphAI>;
 };
 
 export const getChunkById = async (chunkId: number) => {
-  const chunks = (await getAllChunks()) as any[];
-  const chunk = chunks.find((i: any) => i.id === String(chunkId));
+  const chunk = await sendRequest(SDK.ServerAPI.API.GetChunkByIdAI, {
+    chunkId,
+  });
   if (chunk) {
     return {
       content: [
@@ -160,10 +172,132 @@ export const getModuleById = async (
   };
 };
 
-export const getPackageInfo = async () => {
-  return await sendRequest(SDK.ServerAPI.API.GetPackageInfo, {});
+export const getPackageInfo = async (): Promise<
+  SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetPackageInfo>
+> => {
+  return (await sendRequest(
+    SDK.ServerAPI.API.GetPackageInfo,
+    {},
+  )) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetPackageInfo>;
 };
 
 export const getPackageDependency = async () => {
   return await sendRequest(SDK.ServerAPI.API.GetPackageDependency, {});
+};
+
+export const getRuleInfo = async () => {
+  return await sendRequest(SDK.ServerAPI.API.GetOverlayAlerts, {});
+};
+
+export const getDuplicatePackages = async () => {
+  const ruleInfo =
+    (await getRuleInfo()) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetOverlayAlerts>;
+
+  if (!ruleInfo) {
+    return {
+      content: [
+        { tools: Tools.GetRuleInfo, type: 'text', text: 'No rule info found.' },
+      ],
+      isError: true,
+    };
+  }
+
+  // Assuming ruleInfo contains a 'rules' array
+  // @ts-ignore
+  const e1001Rule = ruleInfo?.find((rule) =>
+    rule.description.includes('E1001'),
+  );
+
+  if (e1001Rule) {
+    return {
+      content: [
+        {
+          tools: Tools.GetRuleInfo,
+          type: 'text',
+          text: JSON.stringify(e1001Rule),
+        },
+      ],
+      isError: false,
+    };
+  }
+
+  return {
+    content: [
+      {
+        tools: Tools.GetRuleInfo,
+        type: 'text',
+        text: 'No duplicate packages found for E1001.',
+      },
+    ],
+    isError: true,
+  };
+};
+
+export const getMediaAssetPrompt = async () => {
+  return toolDescriptions.getMediaAssetPrompt;
+};
+
+export const getSimilarPackages = async () => {
+  const res = await getPackageInfo();
+  const similarPackagesRules = [
+    ['lodash', 'lodash-es', 'string_decode'],
+    ['dayjs', 'moment', 'date-fns', 'js-joda'],
+    ['antd', 'material-ui', 'semantic-ui-react', 'arco-design'],
+    ['axios', 'node-fetch'],
+    ['redux', 'mobx', 'Zustand', 'Recoil', 'Jotai'],
+    ['chalk', 'colors', 'picocolors', 'kleur'],
+    ['fs-extra', 'graceful-fs'],
+  ];
+
+  const foundSimilarPackages = similarPackagesRules
+    .map((rule) => {
+      const found = rule.filter((pkg) => res.some((p) => p.name === pkg));
+      return found.length > 1 ? found : null;
+    })
+    .filter(Boolean);
+
+  return {
+    content: [
+      {
+        tools: Tools.GetSimilarPackages,
+        type: 'text',
+        description: toolDescriptions.getSimilarPackages,
+        text: JSON.stringify(foundSimilarPackages),
+      },
+    ],
+    isError: foundSimilarPackages.length === 0,
+  };
+};
+
+export const getLargeChunks = async () => {
+  const allChunks = await getAllChunks();
+
+  if (!allChunks.length) {
+    return [];
+  }
+
+  // Extract sizes from allChunks
+  const sizes = allChunks.map((chunk) => chunk.size);
+
+  // Sort sizes to find the median
+  sizes.sort((a, b) => a - b);
+  const mid = Math.floor(sizes.length / 2);
+  const median =
+    sizes.length % 2 !== 0 ? sizes[mid] : (sizes[mid - 1] + sizes[mid]) / 2;
+
+  // Find chunks larger than 30% of the median
+  const largeChunks = allChunks.filter((chunk) => chunk.size > median * 1.3);
+
+  return {
+    content: [
+      {
+        tools: Tools.GetLargeChunks,
+        type: 'text',
+        description:
+          'For filtered large resources, provide splitChunks optimization suggestions based on webpack best practices',
+        text: JSON.stringify(largeChunks),
+      },
+    ],
+    isError: false,
+  };
 };

@@ -418,7 +418,6 @@ export class APIDataLoader {
         });
 
       // This apis for AI
-
       case SDK.ServerAPI.API.GetChunkGraph:
         return this.loader.loadData('chunkGraph').then((res) => {
           const { chunks = [] } = res || {};
@@ -468,6 +467,41 @@ export class APIDataLoader {
       case SDK.ServerAPI.API.GetPackageDependency:
         return this.loader.loadData('packageGraph').then((packageGraph) => {
           return (packageGraph?.dependencies || []) as R;
+        });
+
+      case SDK.ServerAPI.API.GetChunkGraphAI:
+        return this.loader.loadData('chunkGraph').then((res) => {
+          const { chunks = [] } = res || {};
+          const filteredChunks = chunks.map(({ modules, ...rest }) => rest);
+          return filteredChunks as R;
+        });
+
+      case SDK.ServerAPI.API.GetChunkByIdAI:
+        return Promise.all([
+          this.loader.loadData('chunkGraph'),
+          this.loader.loadData('moduleGraph'),
+        ]).then(([chunkGraph, moduleGraph]) => {
+          const { chunks = [] } = chunkGraph || {};
+          const { modules = [] } = moduleGraph || {};
+          const { chunkId } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetChunkByIdAI>;
+          const chunkInfo = chunks.find(
+            (c) => c.id === chunkId,
+          ) as SDK.ServerAPI.ExtendedChunkData;
+          const chunkModules = modules
+            .filter((m) => chunkInfo.modules.includes(m.id))
+            .map((module) => {
+              return {
+                id: module.id,
+                path: module.path,
+                size: module.size,
+                chunks: module.chunks,
+                kind: module.kind,
+                issuerPath: module.issuerPath,
+              };
+            });
+          chunkInfo.modulesInfo = chunkModules;
+          return chunkInfo as R;
         });
 
       default:
