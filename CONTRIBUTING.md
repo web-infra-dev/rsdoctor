@@ -1,6 +1,6 @@
 # Rsdoctor contribution guide
 
-Thanks for that you are interested in contributing to Rsdoctor. Before starting your contribution, please take a moment to read the following guidelines.
+Thank you for your interest in contributing to Rsdoctor. Before starting your contribution, please take a moment to read the following guidelines.
 
 ---
 
