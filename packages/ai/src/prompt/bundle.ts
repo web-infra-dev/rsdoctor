@@ -112,4 +112,74 @@ export const toolDescriptions = {
     If there are no similar packages, just return that there are no similar packages, without listing which packages exist.
     Please provide a simple response without listing all packages.
   `,
+
+  getMediaAssetPrompt: `
+    get media chunk prompt
+    
+    The first, for image assets, when using image resources:
+      - Mobile: Ideally, a single image file should not exceed 60KB, and Base64 format SVG should not exceed 7KB.
+      - PC: Ideally, a single image file should not exceed 200KB, and Base64 format SVG should not exceed 20KB.
+
+      Optimization suggestions for oversized media resources:
+      1. Large image resources can be compressed using image compression tools, for example: @rsbuild/plugin-image-compress (SVG are compressed by svgo, other images are compressed by @napi-rs/image.)
+      2. SVG resources
+        - Use SVG optimization tools to optimize SVG paths etc., for example: SVGO
+        - Generate simple SVGs programmatically
+      3. Consider whether using SVG resources is necessary.
+      4. Split by compression characteristics
+        - PNG image compression algorithm is suitable for images with fewer colors and clear boundaries, such as text or patterns composed of a few colors
+        - JPG image compression algorithm is suitable for images with more gradients and natural transitions, such as landscapes, portraits, or irregular gradient patterns
+        - base64 is suitable for important images with small file sizes to reduce network requests and render immediately. After base64 encoding, binary image data will increase by one-third in size, but after gzip compression, the size will increase by no more than 10%.
+
+
+    The second, for font assets, when using font resources:
+      1. Prefer using .woff2 format: .woff2 is a modern web font format with the highest compression ratio and good compatibility (supported by most modern browsers).
+        - Single font file size:
+          It is recommended to keep single font file size under 100KB.
+          If large font files must be used, try to split them into font subsets.
+        - Total font file size:
+          The total font file size for the entire page should be kept under 300KB.
+          For mobile devices, try to keep the total font size under 200KB.
+        - Browser support for different font formats varies, and the size of the same font in different formats is also different. It is recommended not to use fonts other than ttf, woff, woff2.
+      
+      2. Font file optimization techniques
+        - Font subsetting: Use tools (like Glyphhanger or Font Subsetter) to generate font subsets containing only needed characters, significantly reducing file size.
+        - Use system fonts: Prioritize system default fonts (like Arial, Helvetica, Georgia, etc.) to avoid loading custom fonts.
+        - Load fonts on demand: Use font-display: swap or @font-face unicode-range property to load fonts as needed.
+        - Compress font files: Ensure server enables Gzip or Brotli compression to further reduce font file sizes.
+        - Use variable fonts: Variable fonts can replace multiple font weight and width files, reducing the number and size of files.
+
+    The third, for video assets, when using video resources:
+      Lighthouse checks video files loaded in the page and provides the following recommendations:
+        - Video file size: It is recommended that a single video file does not exceed 500KB.
+        - Total video resource size: The total size of all video resources loaded on the page should be kept under 1MB if possible.
+
+      Optimization suggestions for oversized media resources:
+        - Optimization suggestions
+          - Compress video files: Use tools (like HandBrake or FFmpeg) to compress video files and reduce file size.
+          - Choose appropriate formats:
+            - Use MP4 (H.264 codec) as the default format for best compatibility.
+            - Use WebM (VP9 codec) as a modern format for higher compression rates.
+          - Load videos on demand: Use lazy loading (e.g., loading="lazy") for non-critical videos to reduce initial load time.
+          - Streaming technology: For long videos, use streaming technologies (like HLS or DASH) for segmented loading.
+          - Remove unused videos: Detect and remove unused video resources.
+          
+        - Video preloading
+          - The preload attribute has three available options: auto|metadata|none. The default setting is metadata. These settings control how much of the video file is downloaded during page load. You can save data by delaying downloads of less popular videos.
+
+          - Setting preload="none" results in the video not being downloaded until playback begins. This delays startup but can save significant data for videos that are less likely to be played.
+
+          - For more moderate bandwidth savings, you can set preload="metadata", which may download about 3% of the video during page load. This is a useful option for some small or medium-sized files.
+
+          - Changing the setting to auto tells the browser to automatically download the entire video. Only do this when playback is very likely. Otherwise, it will waste a lot of bandwidth.
+      
+  `,
+
+  getBunldeOptimize: `
+    getBundleOptimize calls multiple functions to provide conclusions to users:
+      - getRuleInfo for duplicate packages
+      - GetSimilarPackages to check if there are similar packages that need optimization
+      - getMediaAssetPrompt to check if media assets need optimization
+      - GetAllChunks to check if there are oversized resources and provide splitChunk suggestions
+  `,
 };

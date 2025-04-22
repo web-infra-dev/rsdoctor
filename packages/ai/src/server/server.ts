@@ -10,6 +10,10 @@ import {
   getPackageInfo,
   getPackageDependency,
   getRuleInfo,
+  getMediaAssetPrompt,
+  getLargeChunks,
+  getDuplicatePackages,
+  getSimilarPackages,
 } from './tools.js';
 import { registerStaticResources } from './resource.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -184,7 +188,53 @@ server.tool(
   },
 );
 
+server.tool(Tools.GetDuplicatePackages, {}, async () => {
+  const res = await getDuplicatePackages();
+  return {
+    content: [
+      {
+        name: Tools.GetDuplicatePackages,
+        type: 'text',
+        text: JSON.stringify(res),
+      },
+    ],
+  };
+});
+
+server.tool(
+  Tools.GetBundleOptimize,
+  toolDescriptions.getBunldeOptimize,
+  {},
+  async () => {
+    // Fetch results from all relevant functions
+    const ruleInfo = await getDuplicatePackages();
+    const similarPackages = await getSimilarPackages();
+    const mediaAssetPrompt = await getMediaAssetPrompt();
+    const largeChunks = await getLargeChunks();
+
+    // Analyze and combine results
+    const analysis = {
+      ruleInfo,
+      similarPackages: similarPackages,
+      mediaOptimization: mediaAssetPrompt,
+      largeChunks: largeChunks,
+    };
+
+    return {
+      content: [
+        {
+          name: Tools.GetBundleOptimize,
+          description: toolDescriptions.getBunldeOptimize,
+          type: 'text',
+          text: JSON.stringify(analysis),
+        },
+      ],
+    };
+  },
+);
+
 registerStaticResources(server);
+
 export async function runServer() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
