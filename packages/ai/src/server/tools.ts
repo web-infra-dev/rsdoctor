@@ -16,6 +16,7 @@ export enum Tools {
   GetBundleOptimize = 'get_bundle_optimize',
   GetLargeChunks = 'get_large_chunks',
   GetDuplicatePackages = 'get_duplicate_packages',
+  GetMediaAssetPrompt = 'get_media_asset_prompt',
 }
 
 // Define the type for the response of getAllChunks
@@ -205,7 +206,7 @@ export const getDuplicatePackages = async () => {
   // Assuming ruleInfo contains a 'rules' array
   // @ts-ignore
   const e1001Rule = ruleInfo?.find((rule) =>
-    rule.description.includes('E1001'),
+    rule.description?.includes('E1001'),
   );
 
   if (e1001Rule) {
@@ -234,7 +235,18 @@ export const getDuplicatePackages = async () => {
 };
 
 export const getMediaAssetPrompt = async () => {
-  return toolDescriptions.getMediaAssetPrompt;
+  const res = await getAllChunks();
+  return {
+    content: [
+      {
+        tools: Tools.GetMediaAssetPrompt,
+        type: 'text',
+        description: toolDescriptions.getMediaAssetPrompt,
+        text: JSON.stringify(res),
+      },
+    ],
+    isError: false,
+  };
 };
 
 export const getSimilarPackages = async () => {
