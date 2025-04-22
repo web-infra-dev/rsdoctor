@@ -267,6 +267,7 @@ server.tool(
 );
 
 registerStaticResources(server);
+
 export async function runServer() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
