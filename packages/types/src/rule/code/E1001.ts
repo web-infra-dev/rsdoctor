@@ -10,15 +10,15 @@ export const message: RuleMessage = {
   description: `
 #### Description
 
-there is a same name package which bundled more than one version in your application.
+There is a same name package which is bundled in multiple versions in your application.
 
-it is not good to the bundle size of your application.
+This negatively impacts the bundle size of your application.
 
 #### General Solution
 
-add an entry in \`resolve.alias\` which will configure Webpack to route any package references to a single specified path.
+Add an entry in \`resolve.alias\` to configure Webpack to route any package references to a single specified path.
 
-For example, if \`lodash\` is duplicated in your bundle, the following configuration would render all Lodash imports to always refer to the \`lodash\` instance found at \`./node_modules/lodash\`:
+For example, if \`lodash\` is duplicated in your bundle, the following configuration would make all Lodash imports refer to the \`lodash\` instance found at \`./node_modules/lodash\`:
 
 \`\`\`js
 {
