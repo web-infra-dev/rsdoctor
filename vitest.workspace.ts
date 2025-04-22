@@ -19,7 +19,7 @@ export default defineWorkspace([
       testTimeout: 50000,
       restoreMocks: true,
       include: ['packages/**/*.test.ts'],
-      exclude: ['**/node_modules/**'],
+      exclude: ['**/node_modules/**', 'packages/ai/**/*.test.ts'],
       setupFiles: ['./scripts/vitest.setup.ts'],
     },
   },

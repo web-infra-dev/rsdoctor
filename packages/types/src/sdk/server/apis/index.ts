@@ -83,6 +83,10 @@ export enum API {
   GetBundleDiffSummary = '/api/bundle_diff/summary',
 
   GetTileReportHtml = '/api/tile/report',
+
+  /** AI API */
+  GetChunkGraphAI = '/api/graph/chunks/graph/ai',
+  GetChunkByIdAI = '/api/graph/chunk/id/ai',
 }
 
 /**
@@ -146,6 +150,8 @@ export interface ResponseTypes
   [API.GetModuleIssuerPath]: StatsModule['issuerPath'];
   [API.GetPackageInfo]: SDK.PackageData[];
   [API.GetPackageDependency]: SDK.PackageDependencyData[];
+  [API.GetChunkByIdAI]: ExtendedChunkData[];
+  [API.GetChunkGraphAI]: Omit<SDK.ChunkData, 'modules'>[];
 }
 
 export interface RequestBodyTypes
@@ -176,6 +182,9 @@ export interface RequestBodyTypes
   [API.GetPackageDependency]: {
     packageId: string;
   };
+  [API.GetChunkByIdAI]: {
+    chunkId: string;
+  };
 }
 
 export type InferResponseType<T, F = void> = Get<ResponseTypes, T, F>;
@@ -187,4 +196,15 @@ export interface APIContext {
   sdk: RsdoctorBuilderSDKInstance;
   req: connect.IncomingMessage & { body?: PlainObject };
   res: ServerResponse;
+}
+
+export interface ExtendedChunkData extends SDK.ChunkData {
+  modulesInfo: {
+    id: number;
+    path: string;
+    size: SDK.ModuleSize;
+    chunks: string[];
+    kind: SDK.ModuleKind;
+    issuerPath: string[] | number[] | undefined;
+  }[];
 }

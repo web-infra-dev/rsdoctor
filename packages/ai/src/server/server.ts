@@ -9,9 +9,15 @@ import {
   getModuleIssuerPath,
   getPackageInfo,
   getPackageDependency,
+  getRuleInfo,
+  getMediaAssetPrompt,
+  getLargeChunks,
+  getDuplicatePackages,
+  getSimilarPackages,
 } from './tools.js';
 import { registerStaticResources } from './resource.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { toolDescriptions } from '../prompt/bundle.js';
 
 // Create an MCP server
 export const server = new McpServer({
@@ -25,7 +31,7 @@ server.tool(Tools.GetAllChunks, 'get all chunks', {}, async () => {
     content: [
       {
         name: Tools.GetAllChunks,
-        description: 'get all chunks',
+        description: toolDescriptions.getAllChunks,
         type: 'text',
         text: JSON.stringify(res),
       },
@@ -43,8 +49,7 @@ server.tool(
       content: [
         {
           name: Tools.GetChunkById,
-          description:
-            'get chunk by id, if chunk not found, return `Chunk not found`, and stop the execution',
+          description: toolDescriptions.getChunkById,
           type: 'text',
           text: JSON.stringify(res),
         },
@@ -55,23 +60,7 @@ server.tool(
 
 server.tool(
   Tools.GetModuleById,
-  `get module detail by id：
-    - id: the id of the module
-    - issuerPath: the dependencies of the module, the issuerPath is a array of module id, the module id is the id of the module that depends on the module.
-    - dependencies: the complete dependencies of the module, when user ask the dependencies of the module, 
-      please return the dependencies of the module first, not return the allDependencies of the module. 
-      But if user ask the detail dependencies of the module, please return the allDependencies of the module.
-    - allDependencies: the complete dependencies of the module. 
-      when user ask the dependencies of the module, please return the dependencies of the module first, not return the allDependencies of the module. 
-    - chunks: an array of chunk identifiers associated with the module.
-    - imported: an array of module identifiers on which the module depends.
-    - isEntry: indicates if the module is an entry module.
-    - size: the size of the module.
-    - layer: the layer of the module.
-    - modules: connected base subpackage module numbers.
-    - rootModule: the root module.
-    - webpackId: the module's unique identifier in webpack.
-  `,
+  toolDescriptions.getModuleById,
   { moduleId: z.number() },
   async ({ moduleId }) => {
     const res = await getModuleDetailById(moduleId);
@@ -80,7 +69,7 @@ server.tool(
         {
           prompt: '',
           name: Tools.GetModuleById,
-          description: 'get module detail by id',
+          description: toolDescriptions.getModuleById,
           type: 'text',
           text: JSON.stringify(res),
         },
@@ -91,23 +80,7 @@ server.tool(
 
 server.tool(
   Tools.GetModuleByPath,
-  `get module detail by module name or path, if find multiple modules match the name or path, return all matched modules path, stop execution, and let user select the module path。
-    - id: the id of the module
-    - issuerPath: the dependencies of the module, the issuerPath is a array of module id, the module id is the id of the module that depends on the module.
-    - dependencies: the complete dependencies of the module, when user ask the dependencies of the module, 
-      please return the dependencies of the module first, not return the allDependencies of the module. 
-      But if user ask the detail dependencies of the module, please return the allDependencies of the module.
-    - allDependencies: the complete dependencies of the module. 
-      when user ask the dependencies of the module, please return the dependencies of the module first, not return the allDependencies of the module. 
-    - chunks: an array of chunk identifiers associated with the module.
-    - imported: an array of module identifiers on which the module depends.
-    - isEntry: indicates if the module is an entry module.
-    - size: the size of the module.
-    - layer: the layer of the module.
-    - modules: connected base subpackage module numbers.
-    - rootModule: the root module.
-    - webpackId: the module's unique identifier in webpack.
-  `,
+  toolDescriptions.getModuleByPath,
   { modulePath: z.string() },
   async ({ modulePath }) => {
     const res = await getModuleByPath(modulePath);
@@ -116,8 +89,7 @@ server.tool(
       content: [
         {
           name: Tools.GetModuleByPath,
-          description:
-            'get module detail by module name or path, if find multiple modules match the name or path, return all matched modules path, stop execution, and let user select the module path',
+          description: toolDescriptions.getModuleByPath,
           type: 'text',
           text: JSON.stringify(res),
         },
@@ -128,9 +100,7 @@ server.tool(
 
 server.tool(
   Tools.GetModuleIssuerPath,
-  `get module issuer path, issuer path is the path of the module that depends on the module.Please draw the returned issuer path as a dependency diagram.
-  - The values in the array are module ids, please get the detailed module information based on the module id
-  `,
+  toolDescriptions.getModuleIssuerPath,
   { moduleId: z.string() },
   async ({ moduleId }) => {
     const res = await getModuleIssuerPath(moduleId);
@@ -138,8 +108,7 @@ server.tool(
       content: [
         {
           name: Tools.GetModuleIssuerPath,
-          description:
-            'get module issuer path, issuer path is the path of the module that depends on the module.Please draw the returned issuer path as a dependency diagram.',
+          description: toolDescriptions.getModuleIssuerPath,
           type: 'text',
           text: JSON.stringify(res),
         },
@@ -150,14 +119,7 @@ server.tool(
 
 server.tool(
   Tools.GetPackageInfo,
-  `get package info, the package info is a Record<{id: number, name: string, version: string, root: string, modules: string[], duplicates: Record<{module: string, chunks: string[]}>}>, where:
-  - id: an incremental sequence mark, the package id.
-  - name: the name of the package
-  - version: the version of the package
-  - modules: the modules of the package
-  - root: the root path of the package
-  - duplicates: the duplicates of the package
-  `,
+  toolDescriptions.getPackageInfo,
   {},
   async () => {
     const res = await getPackageInfo();
@@ -165,7 +127,7 @@ server.tool(
       content: [
         {
           name: Tools.GetPackageInfo,
-          description: 'get package info',
+          description: toolDescriptions.getPackageInfo,
           type: 'text',
           text: JSON.stringify(res),
         },
@@ -176,11 +138,7 @@ server.tool(
 
 server.tool(
   Tools.GetPackageDependency,
-  `Get package dependencies, which is the package Graph. The dependency structure is a Record<{id: number, dependency: number, package: number, refDependency: number}>, where:
-  - id: an incremental sequence mark
-  - dependency: the upstream dependency of the package
-  - package: the id of the package where the current Module is located
-  - refDependency: the Id of the upstream dependency Module of the current Module`,
+  toolDescriptions.getPackageDependency,
   {},
   async () => {
     const res = await getPackageDependency();
@@ -188,9 +146,120 @@ server.tool(
       content: [
         {
           name: Tools.GetPackageDependency,
-          description: 'get package dependency',
+          description: toolDescriptions.getPackageDependency,
           type: 'text',
           text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
+
+server.tool(Tools.GetRuleInfo, toolDescriptions.getRuleInfo, {}, async () => {
+  const res = await getRuleInfo();
+  return {
+    content: [
+      {
+        name: Tools.GetRuleInfo,
+        description: toolDescriptions.getRuleInfo,
+        type: 'text',
+        text: JSON.stringify(res),
+      },
+    ],
+  };
+});
+
+server.tool(
+  Tools.GetSimilarPackages,
+  toolDescriptions.getSimilarPackages,
+  {},
+  async () => {
+    const res = await getPackageInfo();
+    return {
+      content: [
+        {
+          name: Tools.GetSimilarPackages,
+          description: toolDescriptions.getSimilarPackages,
+          type: 'text',
+          text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
+
+server.tool(Tools.GetRuleInfo, toolDescriptions.getRuleInfo, {}, async () => {
+  const res = await getRuleInfo();
+  return {
+    content: [
+      {
+        name: Tools.GetRuleInfo,
+        description: toolDescriptions.getRuleInfo,
+        type: 'text',
+        text: JSON.stringify(res),
+      },
+    ],
+  };
+});
+
+server.tool(
+  Tools.GetSimilarPackages,
+  toolDescriptions.getSimilarPackages,
+  {},
+  async () => {
+    const res = await getPackageInfo();
+    return {
+      content: [
+        {
+          name: Tools.GetSimilarPackages,
+          description: toolDescriptions.getSimilarPackages,
+          type: 'text',
+          text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
+
+server.tool(Tools.GetDuplicatePackages, {}, async () => {
+  const res = await getDuplicatePackages();
+  return {
+    content: [
+      {
+        name: Tools.GetDuplicatePackages,
+        type: 'text',
+        text: JSON.stringify(res),
+      },
+    ],
+  };
+});
+
+server.tool(
+  Tools.GetBundleOptimize,
+  toolDescriptions.getBunldeOptimize,
+  {},
+  async () => {
+    // Fetch results from all relevant functions
+    const ruleInfo = await getDuplicatePackages();
+    const similarPackages = await getSimilarPackages();
+    const mediaAssetPrompt = await getMediaAssetPrompt();
+    const largeChunks = await getLargeChunks();
+
+    // Analyze and combine results
+    const analysis = {
+      ruleInfo,
+      similarPackages: similarPackages,
+      mediaOptimization: mediaAssetPrompt,
+      largeChunks: largeChunks,
+    };
+
+    return {
+      content: [
+        {
+          name: Tools.GetBundleOptimize,
+          description: toolDescriptions.getBunldeOptimize,
+          type: 'text',
+          text: JSON.stringify(analysis),
         },
       ],
     };

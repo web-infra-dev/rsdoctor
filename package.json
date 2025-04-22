@@ -24,7 +24,7 @@
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm run ut",
     "test:all": "pnpm run test && pnpm run e2e",
     "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
-    "ut": "vitest run --pool=forks --exclude packages/ai",
+    "ut": "vitest run --pool=forks",
     "ut:watch": "vitest"
   },
   "nano-staged": {
