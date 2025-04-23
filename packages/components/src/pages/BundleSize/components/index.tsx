@@ -1,4 +1,5 @@
 import {
+  CodeOutlined,
   CodepenCircleOutlined,
   DeploymentUnitOutlined,
   InfoCircleOutlined,
@@ -20,21 +21,20 @@ import {
 } from 'antd';
 import { debounce, includes, sumBy } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { SearchModal } from './search-modal';
-import { ServerAPIProvider, withServerAPI } from '../../../components/Manifest';
+import { useCodeDrawer } from 'src/components/base/CodeViewer/useCodeDrawer';
 import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
 import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
+import { ServerAPIProvider, withServerAPI } from '../../../components/Manifest';
 import { Size } from '../../../constants';
 import { createFileStructures, formatSize, useI18n } from '../../../utils';
-import { BundleCards } from './cards';
-import { CodeViewerWithDrawer } from '../../../components/CodeViewer';
-
-import { AssetDetail } from './asset';
-import './index.sass';
-import styles from './index.module.scss';
 import { GraphType } from '../constants';
+import { AssetDetail } from './asset';
+import { BundleCards } from './cards';
+import styles from './index.module.scss';
+import './index.sass';
+import { SearchModal } from './search-modal';
 
 const { Option } = Select;
 
@@ -174,6 +174,9 @@ export const WebpackModulesOverallBase: React.FC<
   const [inputChunkUnit, setChunkUnit] = useState('');
   const [assetPath, setAssetPath] = useState<string | null>(null);
   const [graphType, setGraphType] = useState('tree' as GraphType);
+  const { showCode, codeDrawerComponent } = useCodeDrawer(
+    'Do not have the codes of assets. If you use the lite or brief mode, there will have codes.',
+  );
 
   const { t } = useI18n();
 
@@ -282,11 +285,9 @@ export const WebpackModulesOverallBase: React.FC<
                   initial
                 </Typography.Text>
               ) : null}
-              <CodeViewerWithDrawer
-                path={path}
-                content={content!}
-                editorConfig={{ readOnly: false, domReadOnly: false }}
-                emptyReason="Do not have the codes of assets. If you use the lite or brief mode, there will have codes."
+              <CodeOutlined
+                style={{ fontSize: 14, padding: 0 }}
+                onClick={() => showCode({ code: content!, filePath: path })}
               />
             </Space>
           </div>
@@ -554,6 +555,7 @@ export const WebpackModulesOverallBase: React.FC<
           </Space>
         </Card>
       </div>
+      {codeDrawerComponent}
     </>
   );
 };

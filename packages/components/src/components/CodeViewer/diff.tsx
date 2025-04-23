@@ -12,6 +12,7 @@ interface DiffViewerProps {
   editorProps?: DiffEditorProps;
 }
 
+/** @deprecated please use base/DiffViewer */
 export const DiffViewer: React.FC<DiffViewerProps> = ({
   before,
   after,

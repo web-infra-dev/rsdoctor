@@ -1,32 +1,46 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useMemo, useState } from 'react';
-import { get, map } from 'lodash-es';
-import { Button, Card, Col, Row, Space, Table, Typography } from 'antd';
-import { CloseCircleOutlined, FileSearchOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { Resolver } from '@rsdoctor/utils/common';
+import {
+  CloseCircleOutlined,
+  FileSearchOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+} from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
+import { Resolver } from '@rsdoctor/utils/common';
+import { Button, Card, Col, Row, Space, Table, Typography } from 'antd';
+import { get, map } from 'lodash-es';
+import React, { useMemo, useState } from 'react';
 import { Size } from '../../constants';
 import { createFileStructures, formatCosts, mapFileKey } from '../../utils';
 import { FileTree } from '../FileTree';
 import { KeywordInput } from '../Form/keyword';
-import { DiffViewer } from '../CodeViewer';
 import { ServerAPIProvider, withServerAPI } from '../Manifest';
+import { DiffViewer } from '../base/DiffViewer';
 
 const height = 735;
 
-const ResolverDetailsPanel: React.FC<SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetResolverFileDetails>> = ({
-  filepath,
-  before,
-  after,
-  resolvers,
-}) => {
+const ResolverDetailsPanel: React.FC<
+  SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetResolverFileDetails>
+> = ({ filepath, before, after, resolvers }) => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
     <React.Fragment>
       <Col flex={1}>
-        <Card title="Resolve Diff Viewer">
-          <DiffViewer filepath={filepath} before={before} after={after} editorProps={{ height }} />
+        <Card
+          title="Resolve Diff Viewer"
+          styles={{ body: { padding: 0, overflow: 'hidden' } }}
+        >
+          <DiffViewer
+            style={{
+              height: height + 50,
+            }}
+            isEmbed
+            originalFilePath={filepath}
+            modifiedFilePath={filepath}
+            original={before}
+            modified={after}
+          />
         </Card>
       </Col>
       <Col span={collapsed ? 2 : 7}>
@@ -43,7 +57,12 @@ const ResolverDetailsPanel: React.FC<SDK.ServerAPI.InferResponseType<SDK.ServerA
         >
           {collapsed ? null : (
             <Table
-              style={{ width: '100%', height, overflowY: 'scroll', wordBreak: 'break-all' }}
+              style={{
+                width: '100%',
+                height,
+                overflowY: 'scroll',
+                wordBreak: 'break-all',
+              }}
               size="small"
               pagination={false}
               bordered
@@ -63,14 +82,21 @@ const ResolverDetailsPanel: React.FC<SDK.ServerAPI.InferResponseType<SDK.ServerA
                 {
                   title: 'Duration',
                   width: 80,
-                  render: (_v, r) => <Typography.Text strong>{formatCosts(r.costs)}</Typography.Text>,
+                  render: (_v, r) => (
+                    <Typography.Text strong>
+                      {formatCosts(r.costs)}
+                    </Typography.Text>
+                  ),
                   sorter: (a, b) => a.costs - b.costs,
                   sortDirections: ['descend', 'ascend'],
                 },
                 {
                   title: 'Resolve Result',
                   render: (_v, r) => {
-                    if (Resolver.isResolveSuccessData(r)) return <Typography.Text copyable>{r.result}</Typography.Text>;
+                    if (Resolver.isResolveSuccessData(r))
+                      return (
+                        <Typography.Text copyable>{r.result}</Typography.Text>
+                      );
                     return <CloseCircleOutlined style={{ color: '#f50' }} />;
                   },
                 },
@@ -101,10 +127,13 @@ export const ResolverFiles: React.FC<{
   }, [resolver]);
 
   const filterPaths = useMemo(() => {
-    return paths.filter((e) => (props.filename ? e.indexOf(props.filename) > -1 : true));
+    return paths.filter((e) =>
+      props.filename ? e.indexOf(props.filename) > -1 : true,
+    );
   }, [props.filename, paths]);
 
-  const allNodeModules = filterPaths.length && filterPaths.every((e) => e.indexOf(n) > -1);
+  const allNodeModules =
+    filterPaths.length && filterPaths.every((e) => e.indexOf(n) > -1);
 
   const files = useMemo(() => {
     return createFileStructures({
@@ -129,10 +158,16 @@ export const ResolverFiles: React.FC<{
               allNodeModules
                 ? undefined
                 : (node) => {
-                    const resourcePath: string = get(node, inlinedResourcePathKey)!;
+                    const resourcePath: string = get(
+                      node,
+                      inlinedResourcePathKey,
+                    )!;
                     const isNodeModules = resourcePath.indexOf(n) > -1;
 
-                    if (filterPaths.length && filterPaths.every((e) => e.indexOf(n) > -1)) {
+                    if (
+                      filterPaths.length &&
+                      filterPaths.every((e) => e.indexOf(n) > -1)
+                    ) {
                       return true;
                     }
 
@@ -144,7 +179,10 @@ export const ResolverFiles: React.FC<{
         </Card>
       </Col>
       {filepath && (
-        <ServerAPIProvider api={SDK.ServerAPI.API.GetResolverFileDetails} body={{ filepath }}>
+        <ServerAPIProvider
+          api={SDK.ServerAPI.API.GetResolverFileDetails}
+          body={{ filepath }}
+        >
           {(resolvers) => <ResolverDetailsPanel {...resolvers} />}
         </ServerAPIProvider>
       )}
@@ -160,7 +198,9 @@ export const ResolverAnalysisBase: React.FC<{
 
   return (
     <div style={{ width: '100%' }}>
-      <Space style={{ marginTop: Size.BasePadding, marginBottom: Size.BasePadding }}>
+      <Space
+        style={{ marginTop: Size.BasePadding, marginBottom: Size.BasePadding }}
+      >
         <KeywordInput
           icon={<FileSearchOutlined />}
           label="Filename"
@@ -169,7 +209,9 @@ export const ResolverAnalysisBase: React.FC<{
         />
       </Space>
       <ServerAPIProvider api={SDK.ServerAPI.API.GetResolverFileTree}>
-        {(resolver) => <ResolverFiles filename={filename} resolver={resolver} cwd={cwd} />}
+        {(resolver) => (
+          <ResolverFiles filename={filename} resolver={resolver} cwd={cwd} />
+        )}
       </ServerAPIProvider>
     </div>
   );

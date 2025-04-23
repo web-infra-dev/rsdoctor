@@ -15,7 +15,7 @@ import {
   Typography,
 } from 'antd';
 import { get } from 'lodash-es';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { drawerWidth, Size } from '../../../constants';
 import {
   createFileStructures,
@@ -23,7 +23,6 @@ import {
   filterLoader,
   formatCosts,
   mapFileKey,
-  useMonacoEditor,
 } from '../../../utils';
 import { FileTree } from '../../FileTree';
 import { Keyword } from '../../Keyword';
@@ -32,7 +31,6 @@ import { LoaderExecutions } from '../executions';
 import styles from './style.module.scss';
 
 const ADDITION_LOADER_NUMBER = 3;
-// const { innerWidth } = window;
 
 export const LoaderFiles: React.FC<{
   filetree: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileTree>;
@@ -46,13 +44,6 @@ export const LoaderFiles: React.FC<{
   const [resourcePath, setResourcePath] = useState('');
   const [loaderIndex, setLoaderIndex] = useState(0);
   const [selectedNode, setSelectedNode] = useState<DataNode | null>(null);
-
-  const monacoRef = useRef<HTMLElement>(null);
-  const { initMonaco } = useMonacoEditor();
-
-  const init = useCallback(async () => {
-    await initMonaco(monacoRef);
-  }, []);
 
   const maxHeight = 800;
 
@@ -258,7 +249,6 @@ export const LoaderFiles: React.FC<{
             treeData={files}
             key={`${props.loaders.join('|')}_${props.filename}`}
             onSelect={(_e, info) => {
-              init();
               if (!info.node.isLeaf) {
                 setSelectedNode(info.node);
               }

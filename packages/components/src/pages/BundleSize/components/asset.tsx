@@ -4,7 +4,6 @@ import {
   DeploymentUnitOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons';
-import Editor from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
 import {
   Button,
@@ -17,30 +16,30 @@ import {
   Space,
   Tag,
   Tooltip,
+  Tree,
   Typography,
 } from 'antd';
-import { omitBy, sumBy } from 'lodash-es';
 import { DataNode as AntdDataNode } from 'antd/es/tree';
+import { omitBy, sumBy } from 'lodash-es';
 import { dirname, relative } from 'path';
 import React, { useEffect, useMemo, useState } from 'react';
-import { ServerAPIProvider } from '../../../components/Manifest';
-import { ModuleAnalyzeComponent } from '../../ModuleAnalyze';
+import { CodeViewer } from 'src/components/base/CodeViewer';
 import { Badge as Bdg } from '../../../components/Badge';
 import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
+import { ServerAPIProvider } from '../../../components/Manifest';
 import { TextDrawer } from '../../../components/TextDrawer';
 import { Size } from '../../../constants';
 import {
   DataNode,
   createFileStructures,
   formatSize,
-  getOriginalLanguage,
   isJsDataUrl,
   useI18n,
 } from '../../../utils';
+import { ModuleAnalyzeComponent } from '../../ModuleAnalyze';
 import { ModuleGraphListContext } from '../config';
 import styles from './index.module.scss';
-import { Tree } from 'antd';
 
 const { DirectoryTree } = Tree;
 
@@ -58,7 +57,7 @@ const tagStyle = {
 const EmptyCodeItem = () => (
   <Empty
     description={`Do not have the module code.
-  (1) If you use the brief mode, there will not have any codes to show. 
+  (1) If you use the brief mode, there will not have any codes to show.
   (2) If you use lite mode, there will not have source codes.`}
   />
 );
@@ -172,30 +171,21 @@ export const ModuleCodeViewer: React.FC<{ data: SDK.ModuleData }> = ({
                       <a href="#">Explain</a>
                     </Popover>
                   }
+                  styles={{ body: { padding: 0, overflow: 'hidden' } }}
                 >
                   {source['parsedSource'] ||
                   source['source'] ||
                   source['transformed'] ? (
-                    <Editor
-                      theme="vs-dark"
-                      language={getOriginalLanguage(path)}
-                      height={window.innerHeight / 1.5}
-                      value={
+                    <CodeViewer
+                      isEmbed
+                      code={
                         tab
                           ? source[tab as keyof SDK.ModuleSource]
                           : source['parsedSource']
                             ? source['parsedSource']
                             : source['source']
                       }
-                      options={{
-                        readOnly: true,
-                        domReadOnly: true,
-                        fontSize: 14,
-                        wordWrap: 'bounded',
-                        minimap: {
-                          enabled: false,
-                        },
-                      }}
+                      filePath={path}
                     />
                   ) : (
                     <EmptyCodeItem />

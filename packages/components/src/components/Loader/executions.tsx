@@ -1,8 +1,6 @@
 import { ClockCircleTwoTone } from '@ant-design/icons';
-import Editor from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
 import {
-  Checkbox,
   Col,
   Divider,
   Empty,
@@ -17,19 +15,14 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { PropsWithChildren, useCallback, useState } from 'react';
-
 import InputIcon from 'src/common/svg/loader/input.svg';
 import OutputIcon from 'src/common/svg/loader/output.svg';
 import StepIcon from 'src/common/svg/loader/step.svg';
 import { Size } from '../../constants';
-import {
-  beautifyPath,
-  formatCosts,
-  getModifiedLanguage,
-  useTheme,
-} from '../../utils';
+import { beautifyPath, formatCosts, useTheme } from '../../utils';
+import { CodeViewer } from '../base/CodeViewer';
+import { DiffViewer } from '../base/DiffViewer';
 import { Card } from '../Card';
-import { DiffViewer } from '../CodeViewer';
 import { CodeOpener } from '../Opener';
 import { Title } from '../Title';
 import styles from './Analysis/style.module.scss';
@@ -130,7 +123,6 @@ export const LoaderExecutions = ({
   const leftSpan = 5;
   const hasError = loader.errors && loader.errors.length;
   const [activeKey, setActiveKey] = useState('loaderDetails');
-  const [isSideBySide, setIsSideBySide] = useState(true);
   const onChange = useCallback((key: string) => {
     setActiveKey(key);
   }, []);
@@ -241,17 +233,9 @@ export const LoaderExecutions = ({
                         />
                       </div>
                       <div style={{ height: '90%' }}>
-                        <Editor
-                          theme="vs"
-                          options={{
-                            readOnly: true,
-                            domReadOnly: true,
-                            fontSize: 14,
-                            minimap: { enabled: false },
-                            lineNumbers: 'off',
-                          }}
-                          value={loader.errors[0].message}
-                          language="javascript"
+                        <CodeViewer
+                          code={loader.errors[0].message}
+                          lang="javascript"
                         />
                       </div>
                     </Col>
@@ -262,38 +246,45 @@ export const LoaderExecutions = ({
                           display: 'flex',
                           alignItems: 'center',
                           padding: Size.BasePadding,
-                          borderTop: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
                           borderBottom: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
                         }}
                       >
                         <Title
-                          text={`the result of [${loader.loader}] ${loader.isPitch ? 'pitch' : ''}`}
+                          text={
+                            <>
+                              {`the result of [${loader.loader}] ${loader.isPitch ? 'pitch' : ''}`}
+                              {!loader.isPitch && (
+                                <span style={{ fontWeight: 400 }}>
+                                  (
+                                  <InputIcon
+                                    style={{
+                                      verticalAlign: 'middle',
+                                      margin: '0 2px',
+                                    }}
+                                  />
+                                  Input ⟷
+                                  <OutputIcon
+                                    style={{
+                                      verticalAlign: 'middle',
+                                      position: 'relative',
+                                      top: -2,
+                                    }}
+                                  />
+                                  Output)
+                                </span>
+                              )}
+                            </>
+                          }
                         />
                         <div style={{ flex: 1 }} />
-                        <Checkbox
-                          title="side-by-side"
-                          checked={isSideBySide}
-                          onChange={(evt) => {
-                            setIsSideBySide(evt.target.checked);
-                          }}
-                        >
-                          side-by-side
-                        </Checkbox>
                       </div>
                       {loader.isPitch ? (
                         loader.result ? (
                           <div style={{ height: '90%' }}>
-                            <Editor
-                              theme="vs"
-                              options={{
-                                readOnly: true,
-                                domReadOnly: true,
-                                fontSize: 14,
-                                formatOnType: true,
-                                formatOnPaste: true,
-                              }}
-                              value={loader.result}
-                              language={getModifiedLanguage(resource.path)}
+                            <CodeViewer
+                              isEmbed
+                              code={loader.result}
+                              filePath={resource.path}
                             />
                           </div>
                         ) : (
@@ -305,37 +296,7 @@ export const LoaderExecutions = ({
                         )
                       ) : (
                         <div style={{ minHeight: '700px' }}>
-                          {isSideBySide && (
-                            <Row>
-                              <Col
-                                span={12}
-                                style={{
-                                  padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
-                                }}
-                              >
-                                <Space align="center" className={styles.space}>
-                                  <InputIcon />
-                                  <Typography.Text strong>
-                                    Input
-                                  </Typography.Text>
-                                </Space>
-                              </Col>
-                              <Col
-                                span={12}
-                                style={{
-                                  padding: `${Size.BasePadding / 2}px ${Size.BasePadding}px`,
-                                }}
-                              >
-                                <Space align="center" className={styles.space}>
-                                  <OutputIcon />
-                                  <Typography.Text strong>
-                                    Output
-                                  </Typography.Text>
-                                </Space>
-                              </Col>
-                            </Row>
-                          )}
-                          <div style={{ height: '40rem' }}>
+                          <div style={{ height: '40rem', overflow: 'hidden' }}>
                             {!loader.result && !before ? (
                               <Empty
                                 description={
@@ -344,15 +305,11 @@ export const LoaderExecutions = ({
                               />
                             ) : (
                               <DiffViewer
-                                filepath={resource.path}
-                                before={before}
-                                after={loader.result || ''}
-                                editorProps={{
-                                  options: {
-                                    renderSideBySideInlineBreakpoint: 1,
-                                    renderSideBySide: isSideBySide,
-                                  },
-                                }}
+                                isEmbed
+                                original={before}
+                                modified={loader.result || ''}
+                                originalFilePath={resource.path}
+                                modifiedFilePath={resource.path}
                               />
                             )}
                           </div>

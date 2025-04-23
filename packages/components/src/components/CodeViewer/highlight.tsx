@@ -1,15 +1,15 @@
 /* eslint-disable financial/no-float-calculation */
-import React, { useRef } from 'react';
-import { Space, Card, Tooltip } from 'antd';
-import { SDK } from '@rsdoctor/types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import Editor, { OnMount } from '@monaco-editor/react';
+import { SDK } from '@rsdoctor/types';
+import { Card, Space, Tooltip } from 'antd';
 import type { editor, Range as RangeClass } from 'monaco-editor';
+import React, { useRef } from 'react';
 import {
-  getOriginalLanguage,
   beautifyModulePath,
-  getSelectionRange,
+  getOriginalLanguage,
   getRevealPositionForViewer,
+  getSelectionRange,
 } from '../../utils';
 import { CodeOpener } from '../Opener';
 
@@ -20,6 +20,8 @@ interface FileHightLightViewerProps {
   moduleCode: SDK.ModuleSource;
 }
 
+///REVIEW - if can delete
+/** @deprecated please use CodeViewer in /base/CodeViewer */
 export const FileHightLightViewer: React.FC<FileHightLightViewerProps> = ({
   dependency,
   module,
