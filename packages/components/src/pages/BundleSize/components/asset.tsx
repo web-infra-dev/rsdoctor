@@ -520,15 +520,15 @@ export const AssetDetail: React.FC<{
                 {parsedSize > 0 ? (
                   <>
                     <Tag style={tagStyle} color={'orange'}>
-                      {'Bundled:' + formatSize(parsedSize)}
+                      {`Bundled: ${formatSize(parsedSize)}`}
                     </Tag>
                     <Tag style={tagStyle} color={'lime'}>
-                      {'Source:' + formatSize(sourceSize)}
+                      {`Source: ${formatSize(sourceSize)}`}
                     </Tag>
                   </>
                 ) : (
                   <Tag style={tagStyle} color={'lime'}>
-                    {'Source:' + formatSize(sourceSize)}
+                    {`Source: ${formatSize(sourceSize)}`}
                   </Tag>
                 )}
               </Space>

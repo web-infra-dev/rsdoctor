@@ -1,6 +1,6 @@
 # Rsdoctor contribution guide
 
-Thanks for that you are interested in contributing to Rsdoctor. Before starting your contribution, please take a moment to read the following guidelines.
+Thank you for your interest in contributing to Rsdoctor. Before starting your contribution, please take a moment to read the following guidelines.
 
 ---
 
@@ -56,7 +56,7 @@ What this will do:
 
 ### Set git email
 
-Please make sure you have your email set up in `<https://github.com/settings/emails>`. This will be needed later when you want to submit a pull request.
+Please make sure you have your email set up in https://github.com/settings/emails. This will be needed later when you want to submit a pull request.
 
 Check that your git client is already configured the email:
 
@@ -204,7 +204,7 @@ feat(plugin-swc): Add `newOption` config
 
 ## Benchmarking
 
-You can input `!bench` in the comment area of ​​the PR to do benchmarking on `rsdoctor` (you need to have Collaborator and above permissions).
+You can input `!bench` in the comment area of the PR to do benchmarking on `rsdoctor` (you need to have Collaborator and above permissions).
 
 You can focus on metrics related to build time and bundle size based on the comparison table output by comments to assist you in making relevant performance judgments and decisions.
 
@@ -219,6 +219,6 @@ Repository maintainers can publish a new version of changed packages to npm.
 1. Checkout a new release branch, for example `release_v1.2.0`
 2. Run [changesets](https://github.com/changesets/changesets) to bump changed packages and commit the changes.
 3. Create a pull request, the title should be `release: v1.2.0`.
-4. Run the [release action](https://github.com/web-infra-dev/rsbuild/actions/workflows/release.yml) to publish packages to npm.
+4. Run the [release action](https://github.com/web-infra-dev/rsdoctor/actions/workflows/release.yml) to publish packages to npm.
 5. Merge the release pull request to `main`.
-6. Generate the [release notes](https://github.com/web-infra-dev/rsbuild/releases) via GitHub, see [Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)
+6. Generate the [release notes](https://github.com/web-infra-dev/rsdoctor/releases) via GitHub, see [Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)

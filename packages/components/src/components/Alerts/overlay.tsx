@@ -53,13 +53,15 @@ function getOverlayAlertsMessage(
           Compiled with
         </Typography.Text>
         <Typography.Text strong style={{ color: Color.Red, fontSize }}>
-          {errors} errors
+          {' '}
+          {errors} {errors === 1 ? 'error' : 'errors'}{' '}
         </Typography.Text>
         <Typography.Text style={{ color: 'inherit', fontSize }}>
           and
         </Typography.Text>
         <Typography.Text strong style={{ color: Color.Yellow, fontSize }}>
-          {warns} warnings
+          {' '}
+          {warns} {warns === 1 ? 'warning' : 'warnings'}
         </Typography.Text>
       </Typography.Text>
     ),
