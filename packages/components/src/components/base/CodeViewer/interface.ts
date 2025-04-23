@@ -5,38 +5,41 @@ export interface CodeViewerProps {
   className?: string;
   style?: CSSProperties;
   /**
-   * 是否展示为内嵌模式, 内嵌模式没有边框和 border-radius
+   * Whether to display in embedded mode.
+   * Embedded mode has no border or border-radius
    * @default false
    */
   isEmbed?: boolean;
   /**
-   * 是否使用亮色主题配置
+   * Whether to use light theme configuration
    * @default true
    */
   isLightTheme?: boolean;
   /**
-   * 代码内容
+   * Code content
    */
   code?: string;
   /**
-   * 指定语言格式, 优先级最高. 如未指定, 会通过 filePath 推断
+   * Specify language format, highest priority. If not specified,
+   * it will be inferred from filePath
    */
   lang?: string;
   /**
-   * 文件路径
+   * File path
    */
   filePath?: string;
   /**
-   * 编辑器默认展示第几行
+   * Default line to display in the editor
    */
   defaultLine?: number;
   /**
-   * 编辑器高亮文本配置, 配置后会默认定位到第一个高亮位置,
-   * 定位优先级低于 defaultLine
+   * Editor text highlighting configuration. When configured,
+   * it will automatically position to the first highlighted location.
+   * Positioning priority is lower than defaultLine
    */
   ranges?: SDK.SourceRange[];
   /**
-   * 顶栏是否展示
+   * Whether the top bar is displayed
    * @default true
    */
   headerVisible?: boolean;

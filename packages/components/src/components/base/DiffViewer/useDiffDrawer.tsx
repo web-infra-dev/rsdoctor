@@ -6,8 +6,8 @@ import { DiffViewerProps } from './interface';
 const defaultEmptyReason = 'No diff code';
 
 /**
- * 使用抽屉展示代码 diff 内容
- * @param emptyReason 没有代码内容时展示文案
+ * Use drawer to display code diff content
+ * @param emptyReason Text to display when there is no code content
  */
 export function useDiffDrawer(emptyReason?: string) {
   const [original, setOriginal] = useState('');

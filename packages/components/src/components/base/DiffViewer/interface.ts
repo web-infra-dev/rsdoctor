@@ -4,41 +4,44 @@ export interface DiffViewerProps {
   className?: string;
   style?: CSSProperties;
   /**
-   * 原始文件, 展示在左侧
+   * Original file, displayed on the left
    */
   original: string;
   /**
-   * 更新文件, 展示在右侧
+   * Modified file, displayed on the right
    */
   modified: string;
   /**
-   * 原始文件类型, 优先级最高, 如未配置则从 filePath 进行推断
+   * Original file language, highest priority.
+   * If not configured, it will be inferred from filePath
    */
   originalLang?: string;
   /**
-   * 更新文件类型, 优先级最高, 如未配置则从 filePath 进行推断
+   * Modified file language, highest priority.
+   * If not configured, it will be inferred from filePath
    */
   modifiedLang?: string;
   /**
-   * 原始文件地址
+   * Original file path
    */
   originalFilePath?: string;
   /**
-   * 更新文件地址
+   * Modified file path
    */
   modifiedFilePath?: string;
   /**
-   * 是否展示为内嵌模式, 内嵌模式没有边框和 border-radius
+   * Whether to display in embedded mode.
+   * Embedded mode has no border or border-radius
    * @default false
    */
   isEmbed?: boolean;
   /**
-   * 是否使用亮色主题
+   * Whether to use light theme
    * @default true
    */
   isLightTheme?: boolean;
   /**
-   * 顶栏是否展示
+   * Whether the top bar is displayed
    * @default true
    */
   headerVisible?: boolean;

@@ -7,8 +7,8 @@ import { CodeViewerProps } from './interface';
 const defaultEmptyReason = 'No Code';
 
 /**
- * 使用抽屉展示代码内容
- * @param emptyReason 没有代码内容时展示文案
+ * Use drawer to display code content
+ * @param emptyReason Text to display when there is no code content
  */
 export function useCodeDrawer(emptyReason: string) {
   const [code, setCode] = useState('');
