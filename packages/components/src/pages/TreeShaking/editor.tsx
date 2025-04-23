@@ -5,8 +5,11 @@ import { Card, Space, Tooltip, Typography } from 'antd';
 import type { editor, Range as RangeClass } from 'monaco-editor';
 import path from 'path-browserify';
 import { useEffect, useRef, useState } from 'react';
-import { defineMonacoOptions } from 'src/components/base/CodeViewer/utils';
-import { getOriginalLanguage, getSelectionRange } from '../../utils';
+import {
+  defineMonacoOptions,
+  getFilePathFormat,
+  getSelectionRange,
+} from 'src/components/base/CodeViewer/utils';
 import { parseOpenTag } from './open-tag';
 import { Range } from './range';
 import { SetEditorStatus } from './types';
@@ -140,7 +143,7 @@ export function CodeEditor(props: CodeEditorProps) {
       {/* TODO: change to CodeViewer */}
       <Editor
         theme="vs-dark"
-        language={getOriginalLanguage(module.path)}
+        language={getFilePathFormat(module.path)}
         value={content}
         loading={<LoadingOutlined style={{ fontSize: 30 }} />}
         options={defaultEditOption}
