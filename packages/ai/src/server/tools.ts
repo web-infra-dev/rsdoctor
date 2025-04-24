@@ -17,6 +17,8 @@ export enum Tools {
   GetLargeChunks = 'get_large_chunks',
   GetDuplicatePackages = 'get_duplicate_packages',
   GetMediaAssetPrompt = 'get_media_asset_prompt',
+  getLoaderTimeForAllFiles = 'get_loader_time_all_files',
+  getLoaderTimes = 'get_loader_times',
 }
 
 // Define the type for the response of getAllChunks
@@ -312,4 +314,17 @@ export const getLargeChunks = async () => {
     ],
     isError: false,
   };
+};
+
+export const getLoaderTimeForAllFiles = async (): Promise<
+  SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData>
+> => {
+  return (await sendRequest(
+    SDK.ServerAPI.API.GetLoaderChartData,
+    {},
+  )) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData>;
+};
+
+export const getLoaderTimes = async () => {
+  return await sendRequest(SDK.ServerAPI.API.GetDirectoriesLoaders, {});
 };

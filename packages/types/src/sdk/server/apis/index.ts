@@ -39,6 +39,7 @@ export enum API {
   GetLoaderFolderStatistics = '/api/loader/folder/statics',
   GetLoaderFileFirstInput = '/api/loader/input',
   GetLoaderFileInputAndOutput = '/api/loader/inputandoutput',
+  GetDirectoriesLoaders = '/api/loader/directories',
 
   /** SourceMap API */
   ReportSourceMap = '/api/sourcemap/report',

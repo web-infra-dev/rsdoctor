@@ -504,6 +504,14 @@ export class APIDataLoader {
           return chunkInfo as R;
         });
 
+      case SDK.ServerAPI.API.GetDirectoriesLoaders:
+        return Promise.all([
+          this.loader.loadData('root'),
+          this.loader.loadData('loader'),
+        ]).then(([root, loaders]) => {
+          return Loader.getDirectoriesLoaders(loaders || [], root || '') as R;
+        });
+
       default:
         throw new Error(`API not implement: "${api}"`);
     }

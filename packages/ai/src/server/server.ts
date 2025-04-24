@@ -14,6 +14,8 @@ import {
   getLargeChunks,
   getDuplicatePackages,
   getSimilarPackages,
+  getLoaderTimeForAllFiles,
+  getLoaderTimes,
 } from './tools.js';
 import { registerStaticResources } from './resource.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -188,39 +190,6 @@ server.tool(
   },
 );
 
-server.tool(Tools.GetRuleInfo, toolDescriptions.getRuleInfo, {}, async () => {
-  const res = await getRuleInfo();
-  return {
-    content: [
-      {
-        name: Tools.GetRuleInfo,
-        description: toolDescriptions.getRuleInfo,
-        type: 'text',
-        text: JSON.stringify(res),
-      },
-    ],
-  };
-});
-
-server.tool(
-  Tools.GetSimilarPackages,
-  toolDescriptions.getSimilarPackages,
-  {},
-  async () => {
-    const res = await getPackageInfo();
-    return {
-      content: [
-        {
-          name: Tools.GetSimilarPackages,
-          description: toolDescriptions.getSimilarPackages,
-          type: 'text',
-          text: JSON.stringify(res),
-        },
-      ],
-    };
-  },
-);
-
 server.tool(Tools.GetDuplicatePackages, {}, async () => {
   const res = await getDuplicatePackages();
   return {
@@ -260,6 +229,45 @@ server.tool(
           description: toolDescriptions.getBunldeOptimize,
           type: 'text',
           text: JSON.stringify(analysis),
+        },
+      ],
+    };
+  },
+);
+
+server.tool(
+  Tools.getLoaderTimeForAllFiles,
+  'Get compilation time spent by each loader on individual files',
+  {},
+  async () => {
+    const res = await getLoaderTimeForAllFiles();
+    return {
+      content: [
+        {
+          name: Tools.getLoaderTimeForAllFiles,
+          description:
+            'Get compilation time spent by each loader on individual files',
+          type: 'text',
+          text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
+
+server.tool(
+  Tools.getLoaderTimes,
+  'Get compiled directories loader times',
+  {},
+  async () => {
+    const res = await getLoaderTimes();
+    return {
+      content: [
+        {
+          name: Tools.getLoaderTimes,
+          description: 'Get compiled directories loader times',
+          type: 'text',
+          text: JSON.stringify(res),
         },
       ],
     };
