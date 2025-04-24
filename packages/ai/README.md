@@ -4,17 +4,18 @@
 
 Add to your claude_desktop_config.json or .cursor/mcp.json:
 
-```js
+```json
 {
   "mcpServers": {
     "rsdoctor": {
-      "command": "/path/to/rsdoctor/packages/ai/bin/rsdoctor-mcp", // Not yet released, needs to be installed locally and the path specified manually
-      "args": [
-        "--port",
-        "9988" // or any other port you configured in the Rsdoctor plugin. https://rsdoctor.dev/config/options/options#port
-      ]
+      "command": "/path/to/rsdoctor/packages/ai/bin/rsdoctor-mcp",
+      "args": ["--port", "9988"]
     }
   }
 }
+```
 
+### Note
 
+1. `command`: Specify the path to your locally installed `rsdoctor-mcp` binary since this feature is not yet released
+2. `port`: Match the port number configured in your Rsdoctor plugin settings (see https://rsdoctor.dev/config/options/options#port)

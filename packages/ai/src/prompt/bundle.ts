@@ -4,7 +4,7 @@ export const toolDescriptions = {
     'get chunk by id, if chunk not found, return `Chunk not found`, and stop the execution',
   getModuleById: `get module detail by id：
     - id: the id of the module
-    - issuerPath: the dependencies of the module, the issuerPath is a array of module id, the module id is the id of the module that depends on the module.
+    - issuerPath: the referrer of the module, the issuerPath is a array of module id, the module id is the id of the module that depends on the module.
     - dependencies: the complete dependencies of the module, when user ask the dependencies of the module, 
       please return the dependencies of the module first, not return the allDependencies of the module. 
       But if user ask the detail dependencies of the module, please return the allDependencies of the module.
@@ -21,7 +21,7 @@ export const toolDescriptions = {
   `,
   getModuleByPath: `get module detail by module name or path, if find multiple modules match the name or path, return all matched modules path, stop execution, and let user select the module path。
     - id: the id of the module
-    - issuerPath: the dependencies of the module, the issuerPath is a array of module id, the module id is the id of the module that depends on the module.
+    - issuerPath: the referrer of the module, the issuerPath is a array of module id, the module id is the id of the module that depends on the module.
     - dependencies: the complete dependencies of the module, when user ask the dependencies of the module, 
       please return the dependencies of the module first, not return the allDependencies of the module. 
       But if user ask the detail dependencies of the module, please return the allDependencies of the module.

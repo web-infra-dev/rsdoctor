@@ -258,14 +258,16 @@ export const getSimilarPackages = async () => {
     ['dayjs', 'moment', 'date-fns', 'js-joda'],
     ['antd', 'material-ui', 'semantic-ui-react', 'arco-design'],
     ['axios', 'node-fetch'],
-    ['redux', 'mobx', 'Zustand', 'Recoil', 'Jotai'],
+    ['redux', 'mobx', 'zustand', 'recoil', 'jotai'],
     ['chalk', 'colors', 'picocolors', 'kleur'],
     ['fs-extra', 'graceful-fs'],
   ];
 
   const foundSimilarPackages = similarPackagesRules
     .map((rule) => {
-      const found = rule.filter((pkg) => res.some((p) => p.name === pkg));
+      const found = rule.filter((pkg) =>
+        res.some((p) => p.name.toLowerCase() === pkg.toLowerCase()),
+      );
       return found.length > 1 ? found : null;
     })
     .filter(Boolean);
