@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { ChatGPT } from '@/model/openai';
+import { ChatGPT } from './model/openai';
 
 test('openai chat', async () => {
   const instance = new ChatGPT();

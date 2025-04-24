@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { expect, test } from 'vitest';
 import z from 'zod';
 import { extractPackageName, calcPackageSize } from '@/utils/chunks';
-import { ChatGPT } from '@/model/openai';
+import { ChatGPT } from './model/openai';
 import { groupByPackageName } from '@/prompt/code';
 
 test('extractPackageName', async () => {

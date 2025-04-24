@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { createSocket, sendRequest } from '@/mcp/socket';
+import { createSocket, sendRequest } from '../src/server/socket';
 import { SDK } from '@rsdoctor/types';
 
 test('createSocket', async () => {

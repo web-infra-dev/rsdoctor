@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { expect, test } from 'vitest';
-import { ChatGPT } from '@/model/openai';
+import { ChatGPT } from './model/openai';
 import type { Chunk, SimpleChunk } from '@/types/index';
 import { getOversizedChunks, getSimpleChunk } from '@/utils/index';
 import {

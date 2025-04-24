@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { expect, test } from 'vitest';
-import { ChatGPT } from '@/model/openai';
+import { ChatGPT } from './model/openai';
 import { codePrompt } from '@/prompt/code';
 
 test('code gen', async () => {
