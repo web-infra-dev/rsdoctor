@@ -1,0 +1,37 @@
+{
+  "name": "@rsdoctor/ai",
+  "version": "0.0.0",
+  "main": "./dist/server/index.js",
+  "types": "./dist/server/index.d.ts",
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "bin": {
+    "rsdoctor-mcp": "./bin/rsdoctor-mcp"
+  },
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "test": "vitest run",
+    "client": "npm run build && node dist/mcp/index.js"
+  },
+  "devDependencies": {
+    "@rslib/core": "^0.2.2",
+    "@types/node": "^22.8.1",
+    "typescript": "^5.2.2",
+    "@coze/api": "^1.0.15",
+    "@rsdoctor/types": "workspace:*",
+    "dotenv": "^16.4.7",
+    "langchain": "^0.3.9",
+    "openai": "^4.77.0",
+    "zod": "^3.24.1",
+    "vitest": "3.0.9"
+  },
+  "dependencies": {
+    "socket.io-client": "4.6.1",
+    "@modelcontextprotocol/sdk": "1.4.1",
+    "@rsdoctor/utils": "workspace:*",
+    "axios": "^1.8.4"
+  }
+}

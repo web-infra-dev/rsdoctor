@@ -1,0 +1,200 @@
+{
+  "result": [
+    { "packages": ["@remix-run/router"], "regex": "^@remix-run/router$" },
+    {
+      "packages": ["@ant-design/cssinjs", "@ant-design/colors"],
+      "regex": "^@ant-design/.*$"
+    },
+    {
+      "packages": [
+        "@rc-component/trigger",
+        "@rc-component/async-validator",
+        "@rc-component/mini-decimal",
+        "@rc-component/portal",
+        "@rc-component/context"
+      ],
+      "regex": "^@rc-component/.*$"
+    },
+    { "packages": ["@ctrl/tinycolor"], "regex": "^@ctrl/tinycolor$" },
+    { "packages": ["@babel/runtime"], "regex": "^@babel/runtime$" },
+    {
+      "packages": ["@monaco-editor/loader", "@monaco-editor/react"],
+      "regex": "^@monaco-editor/.*$"
+    },
+    {
+      "packages": ["@ungap/structured-clone"],
+      "regex": "^@ungap/structured-clone$"
+    },
+    {
+      "packages": ["@socket.io/component-emitter"],
+      "regex": "^@socket.io/component-emitter$"
+    },
+    {
+      "packages": ["@emotion/hash", "@emotion/unitless"],
+      "regex": "^@emotion/.*$"
+    },
+    { "packages": ["echarts", "echarts-for-react"], "regex": "^echarts.*$" },
+    { "packages": ["zrender"], "regex": "^zrender$" },
+    { "packages": ["pako"], "regex": "^pako$" },
+    {
+      "packages": [
+        "micromark-core-commonmark",
+        "micromark",
+        "micromark-util-subtokenize",
+        "micromark-util-character",
+        "micromark-factory-destination",
+        "micromark-factory-label",
+        "micromark-util-combine-extensions",
+        "micromark-factory-title",
+        "micromark-util-sanitize-uri",
+        "micromark-util-chunked",
+        "micromark-util-html-tag-name",
+        "micromark-factory-space",
+        "micromark-util-normalize-identifier",
+        "micromark-factory-whitespace",
+        "micromark-util-decode-string",
+        "micromark-util-decode-numeric-character-reference",
+        "micromark-util-resolve-all",
+        "micromark-util-classify-character"
+      ],
+      "regex": "^micromark.*$"
+    },
+    { "packages": ["readable-stream"], "regex": "^readable-stream$" },
+    { "packages": ["assert"], "regex": "^assert$" },
+    {
+      "packages": [
+        "mdast-util-to-hast",
+        "mdast-util-from-markdown",
+        "mdast-util-to-string"
+      ],
+      "regex": "^mdast-util-.*$"
+    },
+    { "packages": ["buffer"], "regex": "^buffer$" },
+    {
+      "packages": ["engine.io-client", "engine.io-parser"],
+      "regex": "^engine.io.*$"
+    },
+    { "packages": ["unified"], "regex": "^unified$" },
+    { "packages": ["property-information"], "regex": "^property-information$" },
+    {
+      "packages": ["resize-observer-polyfill"],
+      "regex": "^resize-observer-polyfill$"
+    },
+    { "packages": ["vfile", "vfile-message"], "regex": "^vfile.*$" },
+    {
+      "packages": ["hast-util-to-jsx-runtime", "hast-util-whitespace"],
+      "regex": "^hast-util.*$"
+    },
+    { "packages": ["util", "util-deprecate"], "regex": "^util.*$" },
+    { "packages": ["browserify-zlib"], "regex": "^browserify-zlib$" },
+    { "packages": ["anser"], "regex": "^anser$" },
+    { "packages": ["tslib"], "regex": "^tslib$" },
+    { "packages": ["color-convert"], "regex": "^color-convert$" },
+    { "packages": ["url-parse"], "regex": "^url-parse$" },
+    { "packages": ["path-browserify"], "regex": "^path-browserify$" },
+    { "packages": ["stylis"], "regex": "^stylis$" },
+    { "packages": ["events"], "regex": "^events$" },
+    { "packages": ["get-intrinsic"], "regex": "^get-intrinsic$" },
+    {
+      "packages": [
+        "unist-util-visit-parents",
+        "unist-util-visit",
+        "unist-util-is",
+        "unist-util-stringify-position",
+        "unist-util-position"
+      ],
+      "regex": "^unist-util.*$",
+      "size": 111
+    },
+    { "packages": ["chalk"], "regex": "^chalk$" },
+    { "packages": ["string_decoder"], "regex": "^string_decoder$" },
+    { "packages": ["size-sensor"], "regex": "^size-sensor$" },
+    { "packages": ["rslog"], "regex": "^rslog$" },
+    { "packages": ["dayjs"], "regex": "^dayjs$" },
+    { "packages": ["throttle-debounce"], "regex": "^throttle-debounce$" },
+    { "packages": ["state-local"], "regex": "^state-local$" },
+    { "packages": ["process"], "regex": "^process$" },
+    { "packages": ["inline-style-parser"], "regex": "^inline-style-parser$" },
+    { "packages": ["trough"], "regex": "^trough$" },
+    { "packages": ["ansi-to-react"], "regex": "^ansi-to-react$" },
+    { "packages": ["color-name"], "regex": "^color-name$" },
+    { "packages": ["object-keys"], "regex": "^object-keys$" },
+    { "packages": ["scheduler"], "regex": "^scheduler$" },
+    { "packages": ["ansi-styles"], "regex": "^ansi-styles$" },
+    { "packages": ["base64-js"], "regex": "^base64-js$" },
+    { "packages": ["stream-browserify"], "regex": "^stream-browserify$" },
+    { "packages": ["which-typed-array"], "regex": "^which-typed-array$" },
+    { "packages": ["copy-to-clipboard"], "regex": "^copy-to-clipboard$" },
+    { "packages": ["extend"], "regex": "^extend$" },
+    { "packages": ["is-callable"], "regex": "^is-callable$" },
+    { "packages": ["object.assign"], "regex": "^object.assign$" },
+    { "packages": ["querystringify"], "regex": "^querystringify$" },
+    { "packages": ["define-data-property"], "regex": "^define-data-property$" },
+    { "packages": ["has-symbols"], "regex": "^has-symbols$" },
+    { "packages": ["function-bind"], "regex": "^function-bind$" },
+    { "packages": ["ieee754"], "regex": "^ieee754$" },
+    { "packages": ["escape-carriage"], "regex": "^escape-carriage$" },
+    {
+      "packages": ["estree-util-is-identifier-name"],
+      "regex": "^estree-util-is-identifier-name$"
+    },
+    { "packages": ["for-each"], "regex": "^for-each$" },
+    { "packages": ["safe-buffer"], "regex": "^safe-buffer$" },
+    {
+      "packages": ["comma-separated-tokens"],
+      "regex": "^comma-separated-tokens$"
+    },
+
+    { "packages": ["style-to-object"], "regex": "^style-to-object$" },
+    { "packages": ["classnames"], "regex": "^classnames$" },
+    { "packages": ["trim-lines"], "regex": "^trim-lines$" },
+    { "packages": ["call-bind"], "regex": "^call-bind$" },
+    { "packages": ["set-function-length"], "regex": "^set-function-length$" },
+    { "packages": ["define-properties"], "regex": "^define-properties$" },
+    { "packages": ["is-nan"], "regex": "^is-nan$" },
+    {
+      "packages": ["decode-named-character-reference"],
+      "regex": "^decode-named-character-reference$"
+    },
+    { "packages": ["fast-deep-equal"], "regex": "^fast-deep-equal$" },
+    { "packages": ["object-is"], "regex": "^object-is$" },
+    { "packages": ["is-arguments"], "regex": "^is-arguments$" },
+    { "packages": ["os-browserify"], "regex": "^os-browserify$" },
+    {
+      "packages": ["is-generator-function"],
+      "regex": "^is-generator-function$"
+    },
+    { "packages": ["toggle-selection"], "regex": "^toggle-selection$" },
+    { "packages": ["requires-port"], "regex": "^requires-port$" },
+    { "packages": ["inherits"], "regex": "^inherits$" },
+    { "packages": ["html-url-attributes"], "regex": "^html-url-attributes$" },
+    {
+      "packages": ["has-property-descriptors"],
+      "regex": "^has-property-descriptors$"
+    },
+    {
+      "packages": ["space-separated-tokens"],
+      "regex": "^space-separated-tokens$"
+    },
+    { "packages": ["es-errors"], "regex": "^es-errors$" },
+    {
+      "packages": ["available-typed-arrays"],
+      "regex": "^available-typed-arrays$"
+    },
+    { "packages": ["es-define-property"], "regex": "^es-define-property$" },
+    { "packages": ["is-plain-obj"], "regex": "^is-plain-obj$" },
+    { "packages": ["has-proto"], "regex": "^has-proto$" },
+    { "packages": ["tty-browserify"], "regex": "^tty-browserify$" },
+    { "packages": ["gopd"], "regex": "^gopd$" },
+    {
+      "packages": ["possible-typed-array-names"],
+      "regex": "^possible-typed-array-names$"
+    },
+    { "packages": ["bail"], "regex": "^bail$" },
+    { "packages": ["hasown"], "regex": "^hasown$" },
+    { "packages": ["has-tostringtag"], "regex": "^has-tostringtag$" },
+    { "packages": ["is-typed-array"], "regex": "^is-typed-array$" },
+    { "packages": ["devlop"], "regex": "^devlop$" },
+    { "packages": ["supports-color"], "regex": "^supports-color$" }
+  ]
+}

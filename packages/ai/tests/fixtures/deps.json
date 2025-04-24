@@ -1,0 +1,72 @@
+[
+  [
+    {
+      "target": {
+        "name": "react-is",
+        "version": "16.13.1",
+        "root": "/ROOT/rsdoctor/node_modules/.pnpm/react-is@16.13.1/node_modules/react-is"
+      },
+      "chunks": ["index.js", "async/1.js"],
+      "targetSize": {
+        "sourceSize": 2750,
+        "parsedSize": 2159
+      },
+      "dependencies": [
+        "node_modules/.modern-js/myapp/index.jsx",
+        "../../node_modules/.pnpm/@modern-js+runtime@2.63.5_@types+react-dom@18.3.5_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1/node_modules/@modern-js/runtime/dist/esm/core/browser/hydrate.js",
+        "../../node_modules/.pnpm/@loadable+component@5.15.3_react@18.3.1/node_modules/@loadable/component/dist/loadable.esm.js"
+      ]
+    },
+    {
+      "target": {
+        "name": "react-is",
+        "version": "18.3.1",
+        "root": "/ROOT/rsdoctor/node_modules/.pnpm/react-is@18.3.1/node_modules/react-is"
+      },
+      "chunks": ["index2.js", "async/2.js"],
+      "targetSize": {
+        "sourceSize": 2461,
+        "parsedSize": 874
+      },
+      "dependencies": [
+        "src/myapp2/routes/layout.tsx",
+        "../../node_modules/.pnpm/antd@5.15.3_react-dom@18.3.1_react@18.3.1/node_modules/antd/es/index.js"
+      ]
+    }
+  ],
+  [
+    {
+      "target": {
+        "name": "react",
+        "version": "16.13.1",
+        "root": "/ROOT/rsdoctor/node_modules/.pnpm/react-is@16.13.1/node_modules/react-is"
+      },
+      "targetSize": {
+        "sourceSize": 2750,
+        "parsedSize": 2159
+      },
+      "chunks": ["index.js", "async/app.js"],
+      "dependencies": [
+        "node_modules/.modern-js/myapp/index.jsx",
+        "../../node_modules/.pnpm/@modern-js+runtime@2.63.5_@types+react-dom@18.3.5_@types+react@18.3.18_react-dom@18.3.1_react@18.3.1/node_modules/@modern-js/runtime/dist/esm/core/browser/hydrate.js",
+        "../../node_modules/.pnpm/@loadable+component@5.15.3_react@18.3.1/node_modules/@loadable/component/dist/loadable.esm.js"
+      ]
+    },
+    {
+      "target": {
+        "name": "react",
+        "version": "18.3.1",
+        "root": "/ROOT/rsdoctor/node_modules/.pnpm/react-is@18.3.1/node_modules/react-is"
+      },
+      "chunks": ["index2.js", "async/lib-react.js"],
+      "targetSize": {
+        "sourceSize": 2461,
+        "parsedSize": 874
+      },
+      "dependencies": [
+        "src/myapp2/routes/layout.tsx",
+        "../../node_modules/.pnpm/antd@5.15.3_react-dom@18.3.1_react@18.3.1/node_modules/antd/es/index.js"
+      ]
+    }
+  ]
+]

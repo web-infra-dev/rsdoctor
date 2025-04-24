@@ -269,6 +269,52 @@ export function getLoaderFolderStatistics(
   return loaderCosts;
 }
 
+function collectResourceDirectories(
+  loaders: SDK.LoaderData,
+  root: string,
+): string[] {
+  const directories = new Set<string>();
+
+  loaders.forEach((item) => {
+    if (item.resource.path.startsWith(root)) {
+      const pathParts = item.resource.path
+        .split(root)
+        .slice(1)
+        .join('/')
+        .split('/');
+      if (pathParts.length >= 2) {
+        const twoLevelDir = pathParts.slice(0, 2).join('/');
+        directories.add(`${root}/${twoLevelDir}`);
+      }
+    } else {
+      const pathParts = item.resource.path.split('/');
+      const twoLevelDir = pathParts.slice(0, pathParts.length - 1).join('/');
+      directories.add(twoLevelDir);
+    }
+  });
+
+  return Array.from(directories);
+}
+
+export function getDirectoriesLoaders(
+  loaders: SDK.LoaderData,
+  root?: string,
+): {
+  directory: string;
+  stats: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFolderStatistics>;
+}[] {
+  const rootPath = root || process.cwd();
+  const directories = collectResourceDirectories(loaders, rootPath);
+
+  return directories.map((directory) => {
+    const stats = getLoaderFolderStatistics(directory, loaders);
+    return {
+      directory,
+      stats,
+    };
+  });
+}
+
 export function getLoaderFileFirstInput(
   file: string,
   loaders: SDK.LoaderData,
