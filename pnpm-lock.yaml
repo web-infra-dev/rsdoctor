@@ -468,21 +468,31 @@ importers:
 
   packages/ai:
     dependencies:
-      '@coze/api':
-        specifier: ^1.0.15
-        version: 1.2.0(axios@1.8.4)
       '@modelcontextprotocol/sdk':
         specifier: 1.4.1
         version: 1.4.1
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
       axios:
         specifier: ^1.8.4
         version: 1.8.4
+      socket.io-client:
+        specifier: 4.6.1
+        version: 4.6.1
+    devDependencies:
+      '@coze/api':
+        specifier: ^1.0.15
+        version: 1.2.0(axios@1.8.4)
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
+      '@rslib/core':
+        specifier: ^0.2.2
+        version: 0.2.2(typescript@5.7.3)
+      '@types/node':
+        specifier: ^22.8.1
+        version: 22.14.1
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
@@ -492,25 +502,15 @@ importers:
       openai:
         specifier: ^4.77.0
         version: 4.95.1(ws@8.18.1)(zod@3.24.3)
-      socket.io-client:
-        specifier: 4.6.1
-        version: 4.6.1
-      zod:
-        specifier: ^3.24.1
-        version: 3.24.3
-    devDependencies:
-      '@rslib/core':
-        specifier: ^0.2.2
-        version: 0.2.2(typescript@5.7.3)
-      '@types/node':
-        specifier: ^22.8.1
-        version: 22.14.1
       typescript:
         specifier: ^5.2.2
         version: 5.7.3
       vitest:
         specifier: 3.0.9
         version: 3.0.9(@types/debug@4.1.12)(@types/node@22.14.1)(less@4.2.1)(sass-embedded@1.85.0)(terser@5.37.0)
+      zod:
+        specifier: ^3.24.1
+        version: 3.24.3
 
   packages/cli:
     dependencies:

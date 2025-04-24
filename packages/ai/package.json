@@ -20,18 +20,18 @@
     "@rslib/core": "^0.2.2",
     "@types/node": "^22.8.1",
     "typescript": "^5.2.2",
+    "@coze/api": "^1.0.15",
+    "@rsdoctor/types": "workspace:*",
+    "dotenv": "^16.4.7",
+    "langchain": "^0.3.9",
+    "openai": "^4.77.0",
+    "zod": "^3.24.1",
     "vitest": "3.0.9"
   },
   "dependencies": {
-    "dotenv": "^16.4.7",
     "socket.io-client": "4.6.1",
-    "@rsdoctor/types": "workspace:*",
-    "@coze/api": "^1.0.15",
     "@modelcontextprotocol/sdk": "1.4.1",
     "@rsdoctor/utils": "workspace:*",
-    "axios": "^1.8.4",
-    "langchain": "^0.3.9",
-    "openai": "^4.77.0",
-    "zod": "^3.24.1"
+    "axios": "^1.8.4"
   }
 }
