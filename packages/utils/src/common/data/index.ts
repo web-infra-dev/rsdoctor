@@ -183,6 +183,7 @@ export class APIDataLoader {
           const { modules = [] } = res[1] || {};
           return Graph.getAssetDetails(assetPath, assets, chunks, modules) as R;
         });
+
       case SDK.ServerAPI.API.GetChunksByModuleId:
         return Promise.all([
           this.loader.loadData('chunkGraph'),
@@ -414,6 +415,101 @@ export class APIDataLoader {
       case SDK.ServerAPI.API.GetTileReportHtml:
         return this.loader.loadData('otherReports').then((otherReports) => {
           return otherReports?.tileReportHtml as R;
+        });
+
+      // This apis for AI
+      case SDK.ServerAPI.API.GetChunkGraph:
+        return this.loader.loadData('chunkGraph').then((res) => {
+          const { chunks = [] } = res || {};
+          return chunks as R;
+        });
+
+      case SDK.ServerAPI.API.GetAllModuleGraphFilter:
+        return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          return moduleGraph?.modules.map((m) => ({
+            id: m.id,
+            webpackId: m.webpackId,
+            path: m.path,
+            size: m.size,
+            chunks: m.chunks,
+            kind: m.kind,
+          })) as R;
+        });
+
+      case SDK.ServerAPI.API.GetModuleByName:
+        return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          const { moduleName } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleByName>;
+          const { modules = [] } = moduleGraph || {};
+          return (
+            (modules
+              .filter((m) => m.path.includes(moduleName))
+              .map((m) => ({
+                id: m.id,
+                path: m.path,
+              })) as R) || ([] as R)
+          );
+        });
+
+      case SDK.ServerAPI.API.GetModuleIssuerPath:
+        return this.loader.loadData('moduleGraph').then((moduleGraph) => {
+          const { moduleId } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleIssuerPath>;
+          return (moduleGraph?.modules.find((m) => String(m.id) === moduleId)
+            ?.issuerPath || []) as R;
+        });
+
+      case SDK.ServerAPI.API.GetPackageInfo:
+        return this.loader.loadData('packageGraph').then((packageGraph) => {
+          return packageGraph?.packages as R;
+        });
+
+      case SDK.ServerAPI.API.GetPackageDependency:
+        return this.loader.loadData('packageGraph').then((packageGraph) => {
+          return (packageGraph?.dependencies || []) as R;
+        });
+
+      case SDK.ServerAPI.API.GetChunkGraphAI:
+        return this.loader.loadData('chunkGraph').then((res) => {
+          const { chunks = [] } = res || {};
+          const filteredChunks = chunks.map(({ modules, ...rest }) => rest);
+          return filteredChunks as R;
+        });
+
+      case SDK.ServerAPI.API.GetChunkByIdAI:
+        return Promise.all([
+          this.loader.loadData('chunkGraph'),
+          this.loader.loadData('moduleGraph'),
+        ]).then(([chunkGraph, moduleGraph]) => {
+          const { chunks = [] } = chunkGraph || {};
+          const { modules = [] } = moduleGraph || {};
+          const { chunkId } =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetChunkByIdAI>;
+          const chunkInfo = chunks.find(
+            (c) => c.id === chunkId,
+          ) as SDK.ServerAPI.ExtendedChunkData;
+          const chunkModules = modules
+            .filter((m) => chunkInfo.modules.includes(m.id))
+            .map((module) => {
+              return {
+                id: module.id,
+                path: module.path,
+                size: module.size,
+                chunks: module.chunks,
+                kind: module.kind,
+                issuerPath: module.issuerPath,
+              };
+            });
+          chunkInfo.modulesInfo = chunkModules;
+          return chunkInfo as R;
+        });
+
+      case SDK.ServerAPI.API.GetDirectoriesLoaders:
+        return Promise.all([
+          this.loader.loadData('root'),
+          this.loader.loadData('loader'),
+        ]).then(([root, loaders]) => {
+          return Loader.getDirectoriesLoaders(loaders || [], root || '') as R;
         });
 
       default:

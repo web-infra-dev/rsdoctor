@@ -42,6 +42,15 @@ export interface LoaderAPIResponse {
   [API.GetLoaderFileFirstInput]: string;
   [API.GetLoaderFileInputAndOutput]: { input: string; output: string };
   [API.GetTileReportHtml]: string;
+  [API.GetDirectoriesLoaders]: Array<{
+    directory: string;
+    stats: Array<
+      Pick<LoaderTransformData, 'loader' | 'path'> & {
+        files: number;
+        costs: number;
+      }
+    >;
+  }>;
 }
 
 export interface LoaderAPIRequestBody {

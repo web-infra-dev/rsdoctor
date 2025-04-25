@@ -12,6 +12,7 @@ import { GraphAPIResponse, GraphAPIRequestBody } from './graph';
 import { AlertsAPIResponse, AlertsAPIRequestBody } from './alerts';
 import { RsdoctorManifestMappingKeys } from '../../../manifest';
 import { SDK } from '../../../index';
+import { StatsModule } from '@/plugin';
 
 export * from './pagination';
 
@@ -38,6 +39,7 @@ export enum API {
   GetLoaderFolderStatistics = '/api/loader/folder/statics',
   GetLoaderFileFirstInput = '/api/loader/input',
   GetLoaderFileInputAndOutput = '/api/loader/inputandoutput',
+  GetDirectoriesLoaders = '/api/loader/directories',
 
   /** SourceMap API */
   ReportSourceMap = '/api/sourcemap/report',
@@ -51,6 +53,7 @@ export enum API {
   GetPluginData = '/api/plugins/data',
 
   /** Graph API */
+  GetChunkGraph = '/api/graph/chunks/graph',
   GetAssetsSummary = '/api/graph/assets/summary',
   GetAssetDetails = '/api/graph/asset/details',
   GetChunksByModuleId = '/api/graph/chunk/module',
@@ -64,6 +67,13 @@ export enum API {
   GetLayers = '/api/graph/layers',
   GetSearchModules = '/api/search/modules',
   GetSearchModuleInChunk = '/api/search/chunk/modules',
+  GetAllModuleGraphFilter = '/api/graph/module/filter',
+  GetModuleByName = '/api/graph/module/name',
+  GetModuleIssuerPath = '/api/graph/module/issuer_path',
+
+  /** Package API */
+  GetPackageInfo = '/api/package/info',
+  GetPackageDependency = '/api/package/dependency',
 
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',
@@ -74,6 +84,10 @@ export enum API {
   GetBundleDiffSummary = '/api/bundle_diff/summary',
 
   GetTileReportHtml = '/api/tile/report',
+
+  /** AI API */
+  GetChunkGraphAI = '/api/graph/chunks/graph/ai',
+  GetChunkByIdAI = '/api/graph/chunk/id/ai',
 }
 
 /**
@@ -121,6 +135,8 @@ export interface ResponseTypes
     moduleCodeMap: SDK.ModuleCodeData;
     cloudManifestUrl: string;
   };
+  [API.GetChunkGraph]: SDK.ChunkData[];
+  [API.GetAllModuleGraphFilter]: SDK.ModuleData[];
   [API.GetModuleCodeByModuleId]: SDK.ModuleSource;
   [API.GetModuleCodeByModuleIds]: SDK.ModuleCodeData;
   [API.GetAllModuleGraph]: SDK.ModuleData[];
@@ -131,6 +147,12 @@ export interface ResponseTypes
     relativePath: string;
   }[];
   [API.GetAllChunkGraph]: SDK.ChunkData[];
+  [API.GetModuleByName]: { id: number; path: string }[];
+  [API.GetModuleIssuerPath]: StatsModule['issuerPath'];
+  [API.GetPackageInfo]: SDK.PackageData[];
+  [API.GetPackageDependency]: SDK.PackageDependencyData[];
+  [API.GetChunkByIdAI]: ExtendedChunkData[];
+  [API.GetChunkGraphAI]: Omit<SDK.ChunkData, 'modules'>[];
 }
 
 export interface RequestBodyTypes
@@ -152,6 +174,18 @@ export interface RequestBodyTypes
      */
     key: RsdoctorManifestMappingKeys;
   };
+  [API.GetModuleByName]: {
+    moduleName: string;
+  };
+  [API.GetModuleIssuerPath]: {
+    moduleId: string;
+  };
+  [API.GetPackageDependency]: {
+    packageId: string;
+  };
+  [API.GetChunkByIdAI]: {
+    chunkId: string;
+  };
 }
 
 export type InferResponseType<T, F = void> = Get<ResponseTypes, T, F>;
@@ -163,4 +197,15 @@ export interface APIContext {
   sdk: RsdoctorBuilderSDKInstance;
   req: connect.IncomingMessage & { body?: PlainObject };
   res: ServerResponse;
+}
+
+export interface ExtendedChunkData extends SDK.ChunkData {
+  modulesInfo: {
+    id: number;
+    path: string;
+    size: SDK.ModuleSize;
+    chunks: string[];
+    kind: SDK.ModuleKind;
+    issuerPath: string[] | number[] | undefined;
+  }[];
 }

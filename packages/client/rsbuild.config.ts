@@ -131,6 +131,7 @@ export default defineConfig(({ env }) => {
     tools: {
       bundlerChain: (chainConfig) => {
         if (ENABLE_DEVTOOLS_PLUGIN) {
+          chainConfig.optimization.set('concatenateModules', false);
           const { RsdoctorRspackPlugin } =
             require('../rspack-plugin/dist') as typeof import('../rspack-plugin/dist');
 
@@ -165,6 +166,7 @@ export default defineConfig(({ env }) => {
           chainConfig.plugin('rsdoctor').use(RsdoctorRspackPlugin, [
             {
               disableClientServer: !ENABLE_CLIENT_SERVER,
+              port: 9988,
               linter: {
                 rules: {
                   'ecma-version-check': [
