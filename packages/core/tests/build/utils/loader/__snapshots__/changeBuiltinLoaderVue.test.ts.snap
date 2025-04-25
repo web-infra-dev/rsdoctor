@@ -134,7 +134,6 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
             "preserveAllComments": false,
           },
           "loader": "builtin:swc-loader",
-          "sourceMap": true,
           "type": "end",
         },
       },
@@ -148,7 +147,6 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
             },
             "preserveAllComments": false,
           },
-          "sourceMap": true,
         },
       },
       {
@@ -164,7 +162,6 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
             "preserveAllComments": false,
           },
           "loader": "builtin:swc-loader",
-          "sourceMap": true,
           "type": "start",
         },
       },

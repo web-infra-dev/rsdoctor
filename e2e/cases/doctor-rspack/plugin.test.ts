@@ -49,7 +49,6 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
           use: {
             loader: 'builtin:swc-loader',
             options: {
-              sourceMap: true,
               jsc: {
                 parser: {
                   syntax: 'typescript',

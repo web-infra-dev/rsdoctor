@@ -25,7 +25,6 @@ const rules = [
       {
         loader: 'builtin:swc-loader',
         options: {
-          sourceMap: true,
           jsc: {
             parser: {
               syntax: 'typescript',
@@ -43,7 +42,6 @@ const rules = [
       {
         loader: 'builtin:swc-loader',
         options: {
-          sourceMap: true,
           jsc: {
             parser: {
               syntax: 'typescript',
@@ -60,7 +58,6 @@ const rules = [
     use: {
       loader: 'builtin:swc-loader',
       options: {
-        sourceMap: true,
         jsc: {
           parser: {
             syntax: 'typescript',
