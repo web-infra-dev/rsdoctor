@@ -1,7 +1,6 @@
 {
   "name": "@rsdoctor/mcp-server",
   "version": "0.0.1-alpha.0",
-  "private": false,
   "main": "./dist/server/index.js",
   "types": "./dist/server/index.d.ts",
   "files": [
@@ -34,5 +33,10 @@
     "@rsdoctor/utils": "workspace:*",
     "axios": "^1.8.4",
     "socket.io-client": "4.6.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
   }
 }
