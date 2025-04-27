@@ -1,6 +1,12 @@
 {
   "name": "@rsdoctor/mcp-server",
   "version": "0.0.1-alpha.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/ai"
+  },
+  "license": "MIT",
   "main": "./dist/server/index.js",
   "types": "./dist/server/index.d.ts",
   "files": [
