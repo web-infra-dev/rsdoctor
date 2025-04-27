@@ -15,8 +15,14 @@ describe('test src/utils/loader.ts', () => {
     const resolvedTsLoader = require.resolve(tsLoader, {
       paths: [exampleWebpackPath],
     });
-    const proxyLoaderPath = path.resolve(__dirname, '../../src/loaders/proxy.ts');
-    const internalOptions: Omit<ProxyLoaderInternalOptions, 'loader' | 'hasOptions'> = {
+    const proxyLoaderPath = path.resolve(
+      __dirname,
+      '../../src/loaders/proxy.ts',
+    );
+    const internalOptions: Omit<
+      ProxyLoaderInternalOptions,
+      'loader' | 'hasOptions'
+    > = {
       cwd: __dirname,
       host: 'http://localhost:3000',
       skipLoaders: ['a', 'b'],
@@ -36,7 +42,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
-          path.join(__dirname, '../../')
+          path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
         {
@@ -72,7 +78,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
-          path.join(__dirname, '../../')
+          path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
         {
@@ -105,7 +111,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
-          path.join(__dirname, '../../')
+          path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
         {
@@ -145,7 +151,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
-          path.join(__dirname, '../../')
+          path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
         {
@@ -193,7 +199,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
-          path.join(__dirname, '../../')
+          path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
         {
@@ -239,7 +245,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
-          path.join(__dirname, '../../')
+          path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
         {
@@ -324,7 +330,6 @@ describe('test src/utils/loader.ts', () => {
               use: {
                 loader: 'builtin:swc-loader',
                 options: {
-                  sourceMap: true,
                   jsc: {
                     parser: {
                       syntax: 'ecmascript',
@@ -354,7 +359,6 @@ describe('test src/utils/loader.ts', () => {
             {
               loader: 'builtin:swc-loader',
               options: {
-                sourceMap: true,
                 jsc: {
                   parser: {
                     syntax: 'ecmascript',
