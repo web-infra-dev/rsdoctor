@@ -12,7 +12,7 @@
     "rspress": "2.0.0-alpha.3"
   },
   "devDependencies": {
-    "@types/node": "^22.8.1",
-    "@rsdoctor/rspack-plugin": "workspace:*"
+    "@rsdoctor/rspack-plugin": "workspace:*",
+    "@types/node": "^22.8.1"
   }
 }
