@@ -1,4 +1,4 @@
-# @rsdoctor/ai
+# @rsdoctor/mcp-server
 
 ## Usage with Claude Desktop or other MCP clients
 

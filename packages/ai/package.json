@@ -1,5 +1,5 @@
 {
-  "name": "@rsdoctor/ai",
+  "name": "@rsdoctor/mcp-server",
   "version": "0.0.1-alpha.0",
   "main": "./dist/server/index.js",
   "types": "./dist/server/index.d.ts",
