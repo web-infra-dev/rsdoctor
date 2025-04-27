@@ -37,6 +37,9 @@
   "peerDependenciesMeta": {
     "@rspack/core": {
       "optional": true
+    },
+    "webpack": {
+      "optional": true
     }
   },
   "publishConfig": {
