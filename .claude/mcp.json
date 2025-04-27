@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "rsdoctor": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "/Users/congzhe/Documents/2_workspace/rsdoctor/packages/ai",
+        "--port",
+        "9988"
+      ]
+    }
+  }
+}
