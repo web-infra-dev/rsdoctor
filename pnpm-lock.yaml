@@ -480,6 +480,9 @@ importers:
       socket.io-client:
         specifier: 4.6.1
         version: 4.6.1
+      zod:
+        specifier: ^3.24.1
+        version: 3.24.3
     devDependencies:
       '@coze/api':
         specifier: ^1.0.15
@@ -508,9 +511,6 @@ importers:
       vitest:
         specifier: 3.0.9
         version: 3.0.9(@types/debug@4.1.12)(@types/node@22.14.1)(less@4.2.1)(sass-embedded@1.87.0)(terser@5.37.0)
-      zod:
-        specifier: ^3.24.1
-        version: 3.24.3
 
   packages/cli:
     dependencies:

@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/mcp-server",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -31,14 +31,14 @@
     "langchain": "^0.3.9",
     "openai": "^4.77.0",
     "typescript": "^5.2.2",
-    "vitest": "3.0.9",
-    "zod": "^3.24.1"
+    "vitest": "3.0.9"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.4.1",
     "@rsdoctor/utils": "workspace:*",
     "axios": "^1.8.4",
-    "socket.io-client": "4.6.1"
+    "socket.io-client": "4.6.1",
+    "zod": "^3.24.1"
   },
   "publishConfig": {
     "access": "public",
