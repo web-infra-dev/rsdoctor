@@ -1,6 +1,7 @@
 {
   "name": "@rsdoctor/mcp-server",
   "version": "0.0.1-alpha.0",
+  "private": false,
   "main": "./dist/server/index.js",
   "types": "./dist/server/index.d.ts",
   "files": [
