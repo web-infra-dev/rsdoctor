@@ -1,9 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Manifest as ManifestShared } from '@rsdoctor/utils/common';
-
 import { cwd, setupSDK } from '../../utils';
-import { getLocalIpAddress } from '@/sdk/server/utils';
+import { getLocalIpAddress } from '../../../src/sdk/server/utils';
 
 vi.setConfig({ testTimeout: 50000 });
 
