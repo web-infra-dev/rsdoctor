@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import c from 'picocolors';
 import { logger } from 'rslog';
 import { Constants } from '@rsdoctor/types';
 
@@ -14,7 +14,7 @@ export function debug(getMsg: () => string, prefix = '') {
   logger.debug(`${prefix} ${getMsg()}`);
 }
 
-export { chalk, logger };
+export { c as chalk, logger };
 
 logger.override({
   log: (message) => {
