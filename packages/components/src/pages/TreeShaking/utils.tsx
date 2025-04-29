@@ -1,18 +1,15 @@
-import { useMemo } from 'react';
-import path from 'path-browserify';
-import { escape, get } from 'lodash-es';
 import { Module } from '@rsdoctor/graph';
-import { Tag, Space } from 'antd';
-import { Range } from './range';
-import type { editor, Range as RangeClass } from 'monaco-editor';
-import { getOpenTagText } from './open-tag';
-import {
-  createFileStructures,
-  mapFileKey,
-  getSelectionRange,
-} from '../../utils';
-import { Keyword } from '../../components/Keyword';
 import { SDK } from '@rsdoctor/types';
+import { Space, Tag } from 'antd';
+import { escape, get } from 'lodash-es';
+import type { editor, Range as RangeClass } from 'monaco-editor';
+import path from 'path-browserify';
+import { useMemo } from 'react';
+import { getSelectionRange } from 'src/components/base/CodeViewer/utils';
+import { Keyword } from '../../components/Keyword';
+import { createFileStructures, mapFileKey } from '../../utils';
+import { getOpenTagText } from './open-tag';
+import { Range } from './range';
 
 export function useFileStructures(
   modules: SDK.ModuleInstance[],
