@@ -29,7 +29,7 @@
     "zod": "^3.24.3"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.4.1",
+    "@modelcontextprotocol/sdk": "1.11.0",
     "@rsdoctor/utils": "workspace:*",
     "axios": "^1.8.4",
     "socket.io-client": "4.6.1"
