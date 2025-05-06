@@ -488,6 +488,9 @@ export class APIDataLoader {
           const chunkInfo = chunks.find(
             (c) => c.id === chunkId,
           ) as SDK.ServerAPI.ExtendedChunkData;
+          if (!chunkInfo) {
+            return null as R;
+          }
           const chunkModules = modules
             .filter((m) => chunkInfo.modules.includes(m.id))
             .map((module) => {

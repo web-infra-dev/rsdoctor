@@ -1,5 +1,7 @@
 import { Socket, io } from 'socket.io-client';
 import { logger } from '@rsdoctor/utils/logger';
+import { GlobalConfig } from '@rsdoctor/utils/common';
+import fs from 'fs';
 
 const map: Record<string, Socket> = {};
 
@@ -19,10 +21,21 @@ export const createSocket = (url: string): Socket => {
 export function getPortFromArgs(): number {
   const args = process.argv.slice(2); // Skip the first two elements
   const portIndex = args.indexOf('--port');
+  const builderIndex = args.indexOf('--builder');
   if (portIndex !== -1 && args[portIndex + 1]) {
     return parseInt(args[portIndex + 1], 10);
   }
-  return 3000; // Default port if not specified
+  if (portIndex === -1) {
+    const port = getMcpPort(
+      builderIndex !== -1 ? args[builderIndex + 1] : undefined,
+    );
+    if (port) {
+      return port;
+    }
+  }
+
+  // If no port is specified, use the default port.
+  return 3000;
 }
 
 export const getWsUrl = async () => {
@@ -41,4 +54,23 @@ export const sendRequest = async (api: string, params = {}) => {
     });
   });
   return res;
+};
+
+export const getMcpPort = (builder?: string) => {
+  const mcpPortFilePath = GlobalConfig.getMcpConfigPath();
+
+  if (!fs.existsSync(mcpPortFilePath)) {
+    return undefined;
+  }
+
+  const mcpJson = JSON.parse(fs.readFileSync(mcpPortFilePath, 'utf8'));
+
+  if (builder) {
+    const builderPort = mcpJson.portList[builder];
+    if (builderPort) {
+      return builderPort;
+    }
+  }
+
+  return mcpJson.port;
 };

@@ -16,6 +16,7 @@ import {
   getSimilarPackages,
   getLoaderTimeForAllFiles,
   getLoaderTimes,
+  getPort,
 } from './tools.js';
 import { registerStaticResources } from './resource.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -273,6 +274,20 @@ server.tool(
     };
   },
 );
+
+server.tool(Tools.getPort, 'Get the port of the MCP server', {}, async () => {
+  const res = await getPort();
+  return {
+    content: [
+      {
+        name: Tools.getPort,
+        description: 'Get the port of the MCP server',
+        type: 'text',
+        text: res,
+      },
+    ],
+  };
+});
 
 registerStaticResources(server);
 

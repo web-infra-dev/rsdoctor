@@ -1,7 +1,7 @@
 import { Common, SDK, Thirdparty, Client } from '@rsdoctor/types';
 import { Server } from '@rsdoctor/utils/build';
 import serve from 'sirv';
-import { Bundle } from '@rsdoctor/utils/common';
+import { Bundle, GlobalConfig } from '@rsdoctor/utils/common';
 import assert from 'assert';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -87,6 +87,11 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       port: this.port,
     });
     await this._socket.bootstrap();
+
+    GlobalConfig.writeMcpPort(this.port, this.sdk.name);
+    logger.info(
+      `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,
+    );
 
     this.disposed = false;
 
@@ -223,9 +228,11 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     const localhostUrl = `http://localhost:${this.port}${relativeUrl}`;
     await openBrowser(localhostUrl, !needEncodeURI);
     if (this._printServerUrl) {
-      logger.info(`Rsdoctor analyze server running on: ${chalk.cyan(url)}`);
       logger.info(
-        `Rsdoctor analyze server running on: ${chalk.cyan(localhostUrl)}`,
+        `Rsdoctor analyze server for ${chalk.bgGreen(`${this.sdk.name} builder`)} running on:  ${chalk.cyan(url)}`,
+      );
+      logger.info(
+        `Rsdoctor analyze server for ${chalk.bgGreen(`${this.sdk.name} builder`)} running on: ${chalk.cyan(localhostUrl)}`,
       );
     }
   }
