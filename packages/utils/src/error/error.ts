@@ -1,6 +1,6 @@
 import { codeFrameColumns } from '@babel/code-frame';
 import { Err, Rule } from '@rsdoctor/types';
-import { Chalk, Instance } from 'chalk';
+import { createColors } from 'picocolors';
 import deepEql from 'deep-eql';
 import stripAnsi from 'strip-ansi';
 import { transform } from './transform';
@@ -87,7 +87,7 @@ export class DevToolError extends Error implements Err.DevToolErrorInstance {
     return this._codeFrame;
   }
 
-  private printCodeFrame(print: Chalk) {
+  private printCodeFrame(print: ReturnType<typeof createColors>) {
     const msgs: string[] = [];
     const { _codeFrame: codeFrameOpt, _controller: controller } = this;
 
@@ -179,17 +179,19 @@ export class DevToolError extends Error implements Err.DevToolErrorInstance {
       referenceUrl,
       _controller: controller,
     } = this;
-    const print = controller.noColor
-      ? new Instance({ level: 0 })
-      : new Instance({ level: 3 });
+
+    const print = createColors(!controller.noColor);
+
     const mainColorPrint =
       this._level === Err.ErrorLevel.Error ? print.red : print.yellow;
-    const codeText = code ? `${mainColorPrint.blue(code)}:` : '';
+
+    const codeText = code ? `${mainColorPrint(print.blue(code))}:` : '';
 
     msgs.push(
-      mainColorPrint.bold(
-        `[${codeText}${this.level}:${title.toUpperCase()}] `,
-      ) + message,
+      mainColorPrint(
+        print.bold(`[${codeText}${this.level}:${title.toUpperCase()}] `) +
+          message,
+      ),
     );
     msgs.push(...this.printCodeFrame(print));
 
@@ -202,11 +204,11 @@ export class DevToolError extends Error implements Err.DevToolErrorInstance {
     }
 
     if (referenceUrl) {
-      msgs.push(print.magenta.bold(` See: ${referenceUrl}`));
+      msgs.push(print.magenta(print.bold(` See: ${referenceUrl}`)));
     }
 
     if (!controller.noStack && this.stack) {
-      msgs.push(print.red.bold(` Error Stack:\n${this.stack}\n`));
+      msgs.push(print.red(print.bold(` Error Stack:\n${this.stack}\n`)));
     }
 
     return msgs.join('\n');
