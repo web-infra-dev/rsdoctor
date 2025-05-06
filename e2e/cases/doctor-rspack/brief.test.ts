@@ -99,6 +99,10 @@ async function rspackCompile(
   return res;
 }
 
+test.afterEach(async ({ page }) => {
+  await page.close();
+});
+
 test('rspack brief mode', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);

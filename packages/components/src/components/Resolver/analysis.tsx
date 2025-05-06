@@ -15,7 +15,7 @@ import { createFileStructures, formatCosts, mapFileKey } from '../../utils';
 import { FileTree } from '../FileTree';
 import { KeywordInput } from '../Form/keyword';
 import { ServerAPIProvider, withServerAPI } from '../Manifest';
-import { DiffViewer } from '../base/DiffViewer';
+import { DiffViewer } from '../base';
 
 const height = 735;
 

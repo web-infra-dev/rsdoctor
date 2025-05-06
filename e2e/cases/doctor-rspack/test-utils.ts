@@ -4,6 +4,11 @@ import { Linter } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
 import { tmpdir } from 'os';
 import path from 'path';
+import events from 'node:events';
+
+const emitter = new events.EventEmitter();
+emitter.setMaxListeners(50);
+events.EventEmitter.defaultMaxListeners = 50;
 
 const RSPACK_NATIVE_PLUGIN = process.env.RSPACK_NATIVE_PLUGIN === 'true';
 

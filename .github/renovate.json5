@@ -67,6 +67,8 @@
 		"@babel/code-frame",
 		"get-port",
 		"chalk",
-		"deep-eql"
+		"deep-eql",
+		"@rspress/plugin-rss",
+		"rspress"
 	]
 }

@@ -1,8 +1,8 @@
 import { Monaco } from '@monaco-editor/react';
 import { SDK } from '@rsdoctor/types';
+import type { Range as RangeClass } from 'monaco-editor';
 import { editor } from 'monaco-editor';
 import { extname } from 'path';
-import { getSelectionRange } from 'src/utils/monaco';
 
 /**
  * 判断 data 协议文件格式 `data:[<mediatype>][;base64],<data>`
@@ -215,6 +215,20 @@ export function getFileName(filePath: string): string {
   }
 
   return filePath.split('/').at(-1) || '';
+}
+
+export function getSelectionRange(
+  source: SDK.SourceRange,
+  Range: typeof RangeClass,
+) {
+  const { start, end } = source;
+  const { line = 1, column = 0 } = start;
+  return new Range(
+    line,
+    column + 1,
+    end?.line ?? line,
+    (end?.column ?? 9999) + 1,
+  );
 }
 
 export function editorShowRange(

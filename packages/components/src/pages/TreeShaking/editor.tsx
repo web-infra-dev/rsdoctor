@@ -1,16 +1,19 @@
-import { useEffect, useState, useRef } from 'react';
-import path from 'path-browserify';
-import { Card, Space, Tooltip, Typography } from 'antd';
 import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import Editor, { OnMount } from '@monaco-editor/react';
-import { Range } from './range';
-import type { editor, Range as RangeClass } from 'monaco-editor';
 import { SDK } from '@rsdoctor/types';
-import { SetEditorStatus } from './types';
+import { Card, Space, Tooltip, Typography } from 'antd';
+import type { editor, Range as RangeClass } from 'monaco-editor';
+import path from 'path-browserify';
+import { useEffect, useRef, useState } from 'react';
+import {
+  defineMonacoOptions,
+  getFilePathFormat,
+  getSelectionRange,
+} from 'src/components/base/CodeViewer/utils';
 import { parseOpenTag } from './open-tag';
+import { Range } from './range';
+import { SetEditorStatus } from './types';
 import { getHoverMessageInModule } from './utils';
-import { getOriginalLanguage, getSelectionRange } from '../../utils';
-import { DefaultEditorConfig } from '../../components/CodeViewer';
 
 export interface CodeEditorProps {
   module: SDK.ModuleInstance;
@@ -20,6 +23,8 @@ export interface CodeEditorProps {
   source: SDK.ModuleSource;
   toLine?: number;
 }
+
+const defaultEditOption = defineMonacoOptions();
 
 export function CodeEditor(props: CodeEditorProps) {
   const { module, moduleGraph, ranges, toLine, setEditorData, source } = props;
@@ -135,12 +140,13 @@ export function CodeEditor(props: CodeEditorProps) {
       }
       className="tree-shaking-editor"
     >
+      {/* TODO: change to CodeViewer */}
       <Editor
         theme="vs-dark"
-        language={getOriginalLanguage(module.path)}
+        language={getFilePathFormat(module.path)}
         value={content}
         loading={<LoadingOutlined style={{ fontSize: 30 }} />}
-        options={DefaultEditorConfig}
+        options={defaultEditOption}
         onMount={handleEditorDidMount}
       />
     </Card>

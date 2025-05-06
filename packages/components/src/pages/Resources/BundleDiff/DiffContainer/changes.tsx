@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Col, Row, Typography, Segmented } from 'antd';
 import { DiffOutlined } from '@ant-design/icons';
-import { DiffViewer } from 'src/components/CodeViewer';
-import { Size } from '../../../../constants';
+import { Col, Row, Segmented, Typography } from 'antd';
+import React, { useState } from 'react';
+import { DiffViewer } from 'src/components/base';
 import { TextDrawer } from '../../../../components/TextDrawer';
+import { Size } from '../../../../constants';
 
 interface ViewChangesContentProps {
   file: string;
@@ -28,12 +28,11 @@ const ViewChangesContent: React.FC<ViewChangesContentProps> = ({
     <Row
       wrap
       gutter={[Size.BasePadding, Size.BasePadding]}
-      style={{ height: '100%' }}
+      style={{ height: '100%', alignContent: 'flex-start' }}
     >
       {data.length > 1 ? (
         <Col span={24}>
           <Segmented
-            style={{ marginTop: Size.BasePadding }}
             value={group}
             options={data.map((e) => e.group)}
             onChange={(e) => setGroup(e as string)}
@@ -42,25 +41,18 @@ const ViewChangesContent: React.FC<ViewChangesContentProps> = ({
       ) : null}
       {match ? (
         <React.Fragment key={group}>
-          <Col span={12}>
+          <Col span={24}>
             <Typography.Text strong>
-              {match.baselineTitle || 'Baseline'}
-            </Typography.Text>
-          </Col>
-          <Col span={12}>
-            <Typography.Text strong>
+              {match.baselineTitle || 'Baseline'} ⟷{' '}
               {match.currentTitle || 'Current'}
             </Typography.Text>
           </Col>
           <Col span={24}>
             <DiffViewer
-              filepath={file}
-              before={match.baseline || ''}
-              after={match.current || ''}
-              editorProps={{
-                // eslint-disable-next-line financial/no-float-calculation
-                height: Math.floor(window.innerHeight / 1.25),
-              }}
+              originalFilePath={file}
+              modifiedFilePath={file}
+              original={match.baseline || ''}
+              modified={match.current || ''}
             />
           </Col>
         </React.Fragment>

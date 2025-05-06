@@ -6,7 +6,7 @@
     "dev": "ENABLE_CLIENT_SERVER=true NODE_ENV=development rspack serve",
     "build:s": "ENABLE_CLIENT_SERVER=false NODE_ENV=production rspack build -c ./rspack.config.js",
     "build:analysis": "ENABLE_CLIENT_SERVER=true NODE_ENV=production rspack build",
-    "build:m": "ENABLE_CLIENT_SERVER=false NODE_ENV=production node -r tsm build.ts",
+    "build:m": "ENABLE_CLIENT_SERVER=false NODE_ENV=production tsx build.ts",
     "build": "npm run build:s && npm run build:m"
   },
   "dependencies": {
@@ -27,7 +27,7 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "react-refresh": "^0.14.0",
-    "tsm": "2.3.0",
+    "tsx": "^4.19.3",
     "web-vitals": "^2.1.4"
   },
   "browserslist": {

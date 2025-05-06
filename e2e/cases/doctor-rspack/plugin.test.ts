@@ -124,6 +124,10 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
   return res;
 }
 
+test.afterEach(async ({ page }) => {
+  await page.close();
+});
+
 test('rspack plugin intercept', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);

@@ -5,6 +5,7 @@ import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginRss } from '@rspress/plugin-rss';
+import { pluginLlms } from '@rspress/plugin-llms';
 import pluginSitemap from 'rspress-plugin-sitemap';
 
 const siteUrl = 'https://rsdoctor.dev';
@@ -14,6 +15,7 @@ export default defineConfig({
     pluginSitemap({
       domain: siteUrl,
     }),
+    pluginLlms(),
     pluginFontOpenSans(),
     pluginRss({
       siteUrl,

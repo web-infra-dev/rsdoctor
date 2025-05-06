@@ -1,10 +1,10 @@
-import { Instance } from 'chalk';
+import { Chalk } from 'chalk';
 import { highlight } from './utils';
 import { getHtmlText } from './html';
 import { key6 } from './utils2';
-import "./style.css";
+import './style.css';
 
-const print = new Instance();
+const print = new Chalk();
 
 print(key6);
 print(getHtmlText('<div>Test Text</div>'));

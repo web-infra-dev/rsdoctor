@@ -1,9 +1,9 @@
 export * from './data';
 export * from './file';
 export * from './hooks';
+export * from './loader';
 export * from './locale';
 export * from './manifest';
-export * from './monaco';
 export * from './request';
 export * from './routes';
 export * from './size';
@@ -13,4 +13,3 @@ export * from './string';
 export * from './time';
 export * from './url';
 export * from './worker';
-export * from './loader';

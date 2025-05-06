@@ -150,6 +150,10 @@ async function rspackCompile(
   return res;
 }
 
+test.afterEach(async ({ page }) => {
+  await page.close();
+});
+
 test('rspack data store', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspackLayers);

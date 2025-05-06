@@ -9,7 +9,7 @@
     "package.json"
   ],
   "scripts": {
-    "build": "node -r tsm build.ts"
+    "build": "tsx build.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,8 +28,7 @@
     "react-dom": "18.2.0",
     "style-loader": "3.3.2",
     "ts-loader": "9.4.2",
-    "tslib": "2.4.1",
-    "tsm": "2.3.0",
+    "tsx": "^4.19.3",
     "typescript": "^5.2.2",
     "webpack": "^5.90.0"
   }

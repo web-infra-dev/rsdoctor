@@ -96,6 +96,10 @@ async function rspackCompile(
   return res;
 }
 
+test.afterEach(async ({ page }) => {
+  await page.close();
+});
+
 test('linter rule render check', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);

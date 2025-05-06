@@ -23,7 +23,7 @@ import { DataNode as AntdDataNode } from 'antd/es/tree';
 import { omitBy, sumBy } from 'lodash-es';
 import { dirname, relative } from 'path';
 import React, { useEffect, useMemo, useState } from 'react';
-import { CodeViewer } from 'src/components/base/CodeViewer';
+import { CodeViewer } from 'src/components/base';
 import { Badge as Bdg } from '../../../components/Badge';
 import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';

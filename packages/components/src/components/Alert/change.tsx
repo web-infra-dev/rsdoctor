@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Space, Alert, Button, Typography, Divider, Popconfirm, Row, Col } from 'antd';
-import { InfoCircleOutlined, CheckOutlined } from '@ant-design/icons';
+import { CheckOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
+import {
+  Alert,
+  Button,
+  Col,
+  Divider,
+  Popconfirm,
+  Row,
+  Space,
+  Typography,
+} from 'antd';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { useRuleIndexNavigate } from '../../utils';
+import { DiffViewer } from '../base';
+import { CodeOpener } from '../Opener';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
-import { CodeOpener } from '../Opener';
-import { DiffViewer } from '../CodeViewer';
 import { CodeChangeAlertProps } from './types';
 
 interface FixedProps {
   setIsFixed(val: boolean): void;
 }
 
-export const CodeChangeDrawerContent: React.FC<CodeChangeAlertProps & FixedProps> = ({ data, setIsFixed, cwd }) => {
+const CodeChangeDrawerContent: React.FC<CodeChangeAlertProps & FixedProps> = ({
+  data,
+  setIsFixed,
+  cwd,
+}) => {
   const { file, id } = data;
   const { path, line, isFixed, actual, expected } = file;
   // const [isFixed, setIsFixed] = useState(file.isFixed ?? false);
@@ -35,7 +48,12 @@ export const CodeChangeDrawerContent: React.FC<CodeChangeAlertProps & FixedProps
         disabled={isFixed}
         placement="bottom"
       >
-        <Button type="primary" size="small" icon={isFixed ? <CheckOutlined /> : undefined} disabled={isFixed}>
+        <Button
+          type="primary"
+          size="small"
+          icon={isFixed ? <CheckOutlined /> : undefined}
+          disabled={isFixed}
+        >
           {isFixed ? 'Fix Applied' : 'Apply Fix'}
         </Button>
       </Popconfirm>
@@ -59,12 +77,22 @@ export const CodeChangeDrawerContent: React.FC<CodeChangeAlertProps & FixedProps
           <Typography.Text strong>After</Typography.Text>
         </Col>
       </Row>
-      <DiffViewer className="full-space" filepath={path} before={actual} after={expected} />
+      <DiffViewer
+        className="full-space"
+        originalFilePath={path}
+        modifiedFilePath={path}
+        original={actual}
+        modified={expected}
+      />
     </Space>
   );
 };
 
-export const CodeChangeAlert: React.FC<CodeChangeAlertProps> = ({ data, cwd }) => {
+///REVIEW - It's still useful? can't find usage
+export const CodeChangeAlert: React.FC<CodeChangeAlertProps> = ({
+  data,
+  cwd,
+}) => {
   const { title, description = '', level, code, file } = data;
   const [isFixed, setIsFixed] = useState(file.isFixed ?? false);
   const navigate = useRuleIndexNavigate(code, data.link);
@@ -93,7 +121,12 @@ export const CodeChangeAlert: React.FC<CodeChangeAlertProps> = ({ data, cwd }) =
       showIcon
       message={
         <Space>
-          <Typography.Text code strong onClick={navigate} style={{ cursor: 'pointer' }}>
+          <Typography.Text
+            code
+            strong
+            onClick={navigate}
+            style={{ cursor: 'pointer' }}
+          >
             <a>{code}</a>
           </Typography.Text>
           <Typography.Text strong>{title}</Typography.Text>
@@ -107,7 +140,11 @@ export const CodeChangeAlert: React.FC<CodeChangeAlertProps> = ({ data, cwd }) =
             text={isFixed ? 'Fixed | Show Fix History' : 'Show Fix Suggestion'}
             buttonProps={{ size: 'small' }}
           >
-            <CodeChangeDrawerContent data={data} setIsFixed={fixFile} cwd={cwd} />
+            <CodeChangeDrawerContent
+              data={data}
+              setIsFixed={fixFile}
+              cwd={cwd}
+            />
           </TextDrawer>
           <Divider type="vertical" />
           <Button type="link" onClick={navigate} size="small">

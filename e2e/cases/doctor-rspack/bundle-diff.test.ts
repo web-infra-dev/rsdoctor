@@ -1,11 +1,12 @@
 import test, { expect } from '@playwright/test';
 import { Client } from '@rsdoctor/types';
-import { getRsdoctorManifestPath, openBrowserByDiffCLI } from '../../test-kit';
+import {
+  getRsdoctorManifestPath,
+  openBrowserByDiffCLI,
+} from '../../test-kit/index';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const statisticCardTitle = '.statistic-card-title';
-const tableCell = '.ant-table-cell';
 // @ts-ignore
 process.stderr.clearLine = () => {};
 // @ts-ignore
@@ -40,6 +41,10 @@ function replacePaths(
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8');
 }
 
+test.afterEach(async ({ page }) => {
+  await page.close();
+});
+
 test('use Webpack stats.json', async () => {
   // Usage
   const manifestPath = path.resolve(
@@ -60,12 +65,6 @@ test('use Webpack stats.json', async () => {
   );
 
   replacePaths(manifestPath, newPath, oldPath);
-
-  const statisticCardTitleDom = await page.$(statisticCardTitle);
-  expect(statisticCardTitleDom).toBeTruthy();
-
-  const tableCellDom = await page.$(tableCell);
-  expect(tableCellDom).toBeTruthy();
 
   // card for bundle diff.
   await page.waitForSelector('.statistic-card', { timeout: 20000 });

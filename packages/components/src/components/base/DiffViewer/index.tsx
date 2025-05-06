@@ -1,7 +1,7 @@
 import { DiffEditor, MonacoDiffEditor } from '@monaco-editor/react';
 import { Checkbox } from 'antd';
 import clsx from 'clsx';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getFileName, getFilePathFormat } from '../CodeViewer/utils';
 import styles from './index.module.scss';
 import { DiffViewerProps } from './interface';
@@ -38,6 +38,13 @@ export function DiffViewer({
     editor.current = editorInstance;
   }, []);
   const theme = isLightTheme ? 'vs-light' : 'vs-dark';
+
+  useEffect(
+    () => () => {
+      editor.current?.setModel(null);
+    },
+    [],
+  );
 
   return (
     <div
@@ -83,3 +90,7 @@ export function DiffViewer({
     </div>
   );
 }
+
+export type { DiffViewerProps } from './interface';
+export { useDiffDrawer } from './useDiffDrawer';
+export { defineMonacoDiffOptions } from './utils';

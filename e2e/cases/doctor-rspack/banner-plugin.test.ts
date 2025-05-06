@@ -111,6 +111,10 @@ async function rspackCompile(
   return res;
 }
 
+test.afterEach(async ({ page }) => {
+  await page.close();
+});
+
 test('rspack banner plugin', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);
