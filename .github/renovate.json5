@@ -66,6 +66,9 @@
 		"playwright",
 		"@babel/code-frame",
 		"get-port",
-		"deep-eql"
+		"chalk",
+		"deep-eql",
+		"@rspress/plugin-rss",
+		"rspress"
 	]
 }

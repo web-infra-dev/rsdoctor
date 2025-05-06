@@ -68,6 +68,10 @@ export async function openBrowserByDiffCLI(
   await page.goto(
     `${origin}/index.html?__bundle_files__=${origin}%2Fapi%2Fbundle_diff%2Fmanifest.json%2C${origin}%2Fapi%2Fbundle_diff%2Fmanifest.json#/resources/bundle/diff`,
   );
+  console.log(
+    'page loaded',
+    `${origin}/index.html?__bundle_files__=${origin}%2Fapi%2Fbundle_diff%2Fmanifest.json%2C${origin}%2Fapi%2Fbundle_diff%2Fmanifest.json#/resources/bundle/diff`,
+  );
 
   console.log('waitForNetworkIdle');
   await waitReload(page);
