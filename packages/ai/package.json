@@ -1,6 +1,12 @@
 {
-  "name": "@rsdoctor/ai",
-  "version": "0.0.0",
+  "name": "@rsdoctor/mcp-server",
+  "version": "0.0.1-beta.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/ai"
+  },
+  "license": "MIT",
   "main": "./dist/server/index.js",
   "types": "./dist/server/index.d.ts",
   "files": [
@@ -25,13 +31,18 @@
     "langchain": "^0.3.24",
     "openai": "^4.77.0",
     "typescript": "^5.2.2",
-    "vitest": "3.0.9",
-    "zod": "^3.24.4"
+    "vitest": "3.0.9"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.4.1",
     "@rsdoctor/utils": "workspace:*",
     "axios": "^1.8.4",
-    "socket.io-client": "4.6.1"
+    "socket.io-client": "4.6.1",
+    "zod": "^3.24.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
   }
 }
