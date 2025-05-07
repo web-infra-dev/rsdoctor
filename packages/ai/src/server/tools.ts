@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { sendRequest } from './socket.js';
+import { getWsUrl, sendRequest } from './socket.js';
 import { toolDescriptions } from '@/prompt/bundle.js';
 
 export enum Tools {
@@ -19,6 +19,7 @@ export enum Tools {
   GetMediaAssetPrompt = 'get_media_asset_prompt',
   getLoaderTimeForAllFiles = 'get_loader_time_all_files',
   getLoaderTimes = 'get_loader_times',
+  getPort = 'get_port',
 }
 
 // Define the type for the response of getAllChunks
@@ -185,7 +186,14 @@ export const getPackageInfo = async (): Promise<
 };
 
 export const getPackageDependency = async () => {
-  return await sendRequest(SDK.ServerAPI.API.GetPackageDependency, {});
+  const res = (await sendRequest(
+    SDK.ServerAPI.API.GetPackageDependency,
+    {},
+  )) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetPackageDependency>;
+  if (res.length > 300) {
+    return res.slice(0, 300);
+  }
+  return res;
 };
 
 export const getRuleInfo = async () => {
@@ -193,8 +201,7 @@ export const getRuleInfo = async () => {
 };
 
 export const getDuplicatePackages = async () => {
-  const ruleInfo =
-    (await getRuleInfo()) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetOverlayAlerts>;
+  const ruleInfo = await sendRequest(SDK.ServerAPI.API.GetOverlayAlerts, {});
 
   if (!ruleInfo) {
     return {
@@ -329,4 +336,8 @@ export const getLoaderTimeForAllFiles = async (): Promise<
 
 export const getLoaderTimes = async () => {
   return await sendRequest(SDK.ServerAPI.API.GetDirectoriesLoaders, {});
+};
+
+export const getPort = async () => {
+  return getWsUrl();
 };
