@@ -455,8 +455,20 @@ export class APIDataLoader {
         return this.loader.loadData('moduleGraph').then((moduleGraph) => {
           const { moduleId } =
             body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleIssuerPath>;
-          return (moduleGraph?.modules.find((m) => String(m.id) === moduleId)
-            ?.issuerPath || []) as R;
+          const modules = moduleGraph?.modules || [];
+          const issuerPath =
+            modules.find((m) => String(m.id) === moduleId)?.issuerPath || [];
+          if (
+            Array.isArray(issuerPath) &&
+            issuerPath.length > 0 &&
+            typeof issuerPath[0] === 'number'
+          ) {
+            return issuerPath
+              .map((id) => modules.find((m) => m.id === id)?.path)
+              .filter(Boolean) as R;
+          }
+
+          return issuerPath as R;
         });
 
       case SDK.ServerAPI.API.GetPackageInfo:

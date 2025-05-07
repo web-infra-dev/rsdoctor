@@ -186,7 +186,14 @@ export const getPackageInfo = async (): Promise<
 };
 
 export const getPackageDependency = async () => {
-  return await sendRequest(SDK.ServerAPI.API.GetPackageDependency, {});
+  const res = (await sendRequest(
+    SDK.ServerAPI.API.GetPackageDependency,
+    {},
+  )) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetPackageDependency>;
+  if (res.length > 300) {
+    return res.slice(0, 300);
+  }
+  return res;
 };
 
 export const getRuleInfo = async () => {
