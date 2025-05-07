@@ -1,7 +1,7 @@
 import { Socket, io } from 'socket.io-client';
 import { logger } from '@rsdoctor/utils/logger';
 import { GlobalConfig } from '@rsdoctor/utils/common';
-import fs from 'fs';
+import fs from 'node:fs';
 
 const map: Record<string, Socket> = {};
 
