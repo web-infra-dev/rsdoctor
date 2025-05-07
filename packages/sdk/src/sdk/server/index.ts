@@ -9,7 +9,7 @@ import { PassThrough } from 'stream';
 import { Socket } from './socket';
 import { Router } from './router';
 import * as APIs from './apis';
-import { chalk, logger } from '@rsdoctor/utils/logger';
+import { chalk, debug, logger } from '@rsdoctor/utils/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
 import { getLocalIpAddress } from './utils';
@@ -89,8 +89,10 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     await this._socket.bootstrap();
 
     GlobalConfig.writeMcpPort(this.port, this.sdk.name);
-    logger.info(
-      `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,
+
+    debug(
+      () =>
+        `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,
     );
 
     this.disposed = false;
@@ -229,10 +231,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     await openBrowser(localhostUrl, !needEncodeURI);
     if (this._printServerUrl) {
       logger.info(
-        `Rsdoctor analyze server for ${chalk.bgGreen(`${this.sdk.name} builder`)} running on:  ${chalk.cyan(url)}`,
-      );
-      logger.info(
-        `Rsdoctor analyze server for ${chalk.bgGreen(`${this.sdk.name} builder`)} running on: ${chalk.cyan(localhostUrl)}`,
+        `${chalk.green(`${this.sdk.name} compiler's`)} analyzer running on: ${chalk.cyan(url)}`,
       );
     }
   }
