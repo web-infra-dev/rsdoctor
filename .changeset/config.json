@@ -5,7 +5,7 @@
   "linked": [],
   "access": "restricted",
   "baseBranch": "main",
-  "fixed": [["@rsdoctor/*", "!@rsdoctor/ai"]],
+  "fixed": [["@rsdoctor/*", "!@rsdoctor/mcp-server"]],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "onlyUpdatePeerDependentsWhenOutOfRange": true,
     "updateInternalDependents": "always"
