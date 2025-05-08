@@ -4,7 +4,7 @@ import type { RsdoctorMultiplePluginOptions } from '@rsdoctor/core';
 
 import { RsdoctorRspackPlugin } from './plugin';
 import { normalizeUserConfig } from '@rsdoctor/core/plugins';
-import { Compiler } from '@rspack/core';
+import type { Compiler } from '@rspack/core';
 
 let globalController: RsdoctorSDKController | undefined;
 
