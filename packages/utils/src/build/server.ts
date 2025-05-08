@@ -6,7 +6,18 @@ import { execSync } from 'child_process';
 import { Thirdparty } from '@rsdoctor/types';
 import { random } from '../common/algorithm';
 
-export const defaultPort = random(3000, 8999);
+// see https://neo4j.com/developer/kb/list-of-restricted-ports-in-browsers
+const RESTRICTED_PORTS = [3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669];
+
+function getRandomPort(min: number, max: number) {
+  let port: number;
+  do {
+    port = random(min, max);
+  } while (RESTRICTED_PORTS.includes(port));
+  return port;
+}
+
+export const defaultPort = getRandomPort(3000, 8999);
 
 export async function getPort(expectPort: number) {
   return gp({ port: expectPort });
