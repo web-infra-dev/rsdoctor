@@ -37,6 +37,11 @@
   "peerDependencies": {
     "@rspack/core": "*"
   },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public",
     "provenance": true,
