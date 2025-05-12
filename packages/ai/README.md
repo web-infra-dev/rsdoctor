@@ -1,5 +1,7 @@
 # @rsdoctor/mcp-server
 
+English | [简体中文](./README.zh-CN.md)
+
 ## Introduction
 
 @rsdoctor/mcp-server is an MCP Server tool designed to help users more conveniently utilize Rsdoctor's build data. It works with Rsdoctor's local build analysis data and helps you quickly obtain build analysis results through a Q&A interface.
@@ -62,20 +64,9 @@ npx -y @rsdoctor/mcp-server@latest --port 1000
 Note: By default, the Rsdoctor local server starts on a random port. Therefore, if you want to use the port parameter, you need to configure the port in the plugin:
 
 ```js
-export default {
-  // ...
-  tools: {
-    bundlerChain: (chain) => {
-      if (process.env.RSDOCTOR) {
-        chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
-          {
-            port: 9988,
-          },
-        ]);
-      }
-    },
-  },
-};
+new RsdoctorRspackPlugin({
+  port: 9988,
+});
 ```
 
 ## Usage

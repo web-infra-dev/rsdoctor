@@ -43,7 +43,7 @@ https://github.com/user-attachments/assets/cc0f5441-4950-420c-bbad-635e21e87492
 
 ### 启动参数
 
-- 配置链接的构建器名【可选】
+- 配置链接的编译器名【可选】
 
 ```linux
 npx @rsdoctor/mcp-server@latest --compiler web
@@ -60,20 +60,9 @@ npx -y @rsdoctor/mcp-server@latest --port 1000
 需要注意的是，Rsdoctor 本地 Server 启动端口默认是随机的，所以如果要使用 port 参数，需要在 plugin 中配置 port 端口：
 
 ```js
-export default {
-  // ...
-  tools: {
-    bundlerChain: (chain) => {
-      if (process.env.RSDOCTOR) {
-        chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
-          {
-            port: 9988,
-          },
-        ]);
-      }
-    },
-  },
-};
+new RsdoctorRspackPlugin({
+  port: 9988,
+});
 ```
 
 ## 用法
@@ -89,13 +78,13 @@ export default {
 
 ### 1. 插件配置
 
-#### 单构建器项目
+#### 单编译器项目
 
-单构建器项目中，无需任何配置，直接配置 MCP Client 即可。
+单编译器项目中，无需任何配置，直接配置 MCP Client 即可。
 
-#### 多构建器项目
+#### 多编译器项目
 
-多构建器项目中，因为每个构建器会有一份 Rsdoctor 构建分析数据，所以需要配置 compiler 参数，来指定 mcp-server 分析某一个构建器的 Rsdoctor 数据。
+多编译器项目中，因为每个编译器会有一份 Rsdoctor 构建分析数据，所以需要配置 compiler 参数，来指定 mcp-server 分析某一个编译器的 Rsdoctor 数据。
 
 ```linux
 npx -y @rsdoctor/mcp-server@latest --compiler [compilerName]
