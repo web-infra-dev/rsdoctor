@@ -25,7 +25,7 @@
   "devDependencies": {
     "@coze/api": "^1.2.0",
     "@rsdoctor/types": "workspace:*",
-    "@rslib/core": "^0.2.2",
+    "@rslib/core": "^0.6.9",
     "@types/node": "^22.8.1",
     "dotenv": "^16.4.7",
     "langchain": "^0.3.24",
