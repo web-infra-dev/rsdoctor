@@ -149,7 +149,7 @@ npm run build
 
 #### Cline
 
-2. 在 Cline 配置文件中添加 MCP Server 配置。
+在 Cline 配置文件中添加 MCP Server 配置。
 
 ```json
 {
