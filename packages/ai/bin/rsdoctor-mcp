@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { runServer } = require('../dist/server/server.js');
+import { runServer } from '../dist/server/server.cjs';
 
 
 runServer().catch((error) => {
