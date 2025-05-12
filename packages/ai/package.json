@@ -16,6 +16,7 @@
   "bin": {
     "rsdoctor-mcp": "./bin/rsdoctor-mcp"
   },
+  "type": "module",
   "scripts": {
     "build": "rslib build",
     "dev": "rslib build --watch",
