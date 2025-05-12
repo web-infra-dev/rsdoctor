@@ -41,11 +41,11 @@ https://github.com/user-attachments/assets/cc0f5441-4950-420c-bbad-635e21e87492
 
 ## Configuration
 
-### Startup Parameters
+### Parameters
 
 #### compiler
 
-- Configure the name of the linked bundler [optional]
+- Configure the name of the linked bundler
 
 ```linux
 npx @rsdoctor/mcp-server@latest --compiler web
@@ -53,7 +53,7 @@ npx @rsdoctor/mcp-server@latest --compiler web
 
 #### port
 
-- Configure the port [optional]
+- Configure the port
 
 ```linux
 npx -y @rsdoctor/mcp-server@latest --port 1000
