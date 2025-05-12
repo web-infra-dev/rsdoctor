@@ -26,7 +26,7 @@
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
     "@rspress/plugin-rss": "2.0.0-beta.3",
-    "@rspress/plugin-llms": "2.0.0-beta.3",
+    "@rspress/plugin-llms": "2.0.0-beta.5",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.21",
     "@types/react-dom": "^18.3.7",
@@ -35,7 +35,7 @@
     "rsbuild-plugin-google-analytics": "^1.0.3",
     "rsbuild-plugin-open-graph": "^1.0.2",
     "rspress-plugin-font-open-sans": "^1.0.0",
-    "rspress-plugin-sitemap": "^1.1.1",
+    "rspress-plugin-sitemap": "^1.1.2",
     "typescript": "^5.2.2"
   },
   "dependencies": {
