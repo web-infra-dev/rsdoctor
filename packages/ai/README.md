@@ -49,8 +49,10 @@ https://github.com/user-attachments/assets/cc0f5441-4950-420c-bbad-635e21e87492
 
 - Configure the name of the linked bundler (optional)
 
+For multi-compiler projects, since each compiler will have its own Rsdoctor build analysis data, you need to configure the compiler parameter to specify which bundler's Rsdoctor data the mcp-server should analyze. Rsdoctor-mcp do not currently support analyzing multiple Rsdoctor data sets simultaneously.
+
 ```linux
-npx @rsdoctor/mcp-server@latest --compiler web
+npx @rsdoctor/mcp-server@latest --compiler [compilerName]
 ```
 
 #### port
@@ -58,7 +60,7 @@ npx @rsdoctor/mcp-server@latest --compiler web
 - Configure the port (optional)
 
 ```linux
-npx -y @rsdoctor/mcp-server@latest --port 1000
+npx -y @rsdoctor/mcp-server@latest --port 9988
 ```
 
 Note: By default, the Rsdoctor local server starts on a random port. Therefore, if you want to use the port parameter, you need to configure the port in the plugin:
@@ -82,21 +84,11 @@ The following Rsdoctor plugins are required (version requirements):
 
 ### 1. Plugin Configuration
 
-#### Single Compiler Project
-
-For single compiler projects, no configuration is required—simply configure the MCP Client directly.
-
-#### Multi-Compiler Project
-
-For multi-compiler projects, since each compiler will have its own Rsdoctor build analysis data, you need to configure the compiler parameter to specify which bundler's Rsdoctor data the mcp-server should analyze.
-
-```linux
-npx -y @rsdoctor/mcp-server@latest --compiler [compilerName]
-```
+If you haven't added the Rsdoctor plugin yet, you'll need to configure it in your project, [👉🏻 Quick Start](https://rsdoctor.dev/guide/start/quick-start).
 
 ### 2. Enable Rsdoctor and Run Local Build
 
-With Rsdoctor enabled, execute the build process. Do not use the **MCP Client** to start the project, as Rsdoctor's local server will block the MCP Client's conversation process.
+With Rsdoctor enabled, execute the build process. **Do not use the MCP Client to start the project, as Rsdoctor's local server will block the MCP Client's conversation process.**
 
 ```linux
 npm run build
