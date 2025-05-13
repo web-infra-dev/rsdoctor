@@ -5,7 +5,7 @@ export default defineConfig({
     {
       source: {
         entry: {
-          index: './src/!(resources)/**/*.ts',
+          index: './src/index.ts',
         },
         tsconfigPath: './tsconfig.build.json',
       },
@@ -14,7 +14,7 @@ export default defineConfig({
           root: './dist/',
         },
       },
-      bundle: false,
+      bundle: true,
       dts: true,
       format: 'cjs',
       syntax: 'es2021',
@@ -26,7 +26,7 @@ export default defineConfig({
       'utf-8-validate': 'utf-8-validate',
     },
     copy: {
-      patterns: [{ from: 'src/resources', to: 'resources' }],
+      patterns: [{ from: 'resources', to: 'resources' }],
     },
   },
 });

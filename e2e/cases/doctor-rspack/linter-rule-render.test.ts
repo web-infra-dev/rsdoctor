@@ -127,8 +127,11 @@ test('linter rule render check', async () => {
   // ignore output text check because there's no .map file for track the source code
   const source = await page.$('.e2e-ecma-source');
   const error = await page.$('.e2e-ecma-error');
+
   const sourceText = await source?.textContent();
   const errorText = await error?.textContent();
+
+  console.log('sourceText::::::::::::::', sourceText);
   expect(sourceText).toBe(
     '/cases/doctor-rspack/dist/linter-rule-render/main.js:1:2',
   );
