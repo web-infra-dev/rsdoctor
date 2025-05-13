@@ -45,6 +45,8 @@ https://github.com/user-attachments/assets/cc0f5441-4950-420c-bbad-635e21e87492
 
 - 配置链接的编译器名【可选】
 
+多编译器项目中，因为每个编译器会有一份 Rsdoctor 构建分析数据，所以需要配置 compiler 参数，来指定 mcp-server 分析某一个编译器的 Rsdoctor 数据。我们暂不支持同时分析多份 Rsdoctor 数据。
+
 ```linux
 npx @rsdoctor/mcp-server@latest --compiler web
 ```
@@ -67,7 +69,7 @@ new RsdoctorRspackPlugin({
 
 ## 用法
 
-### 版本要求
+### 💡 版本要求
 
 需要使用以下 rsdoctor 插件（版本要求）：
 
@@ -78,21 +80,11 @@ new RsdoctorRspackPlugin({
 
 ### 1. 插件配置
 
-#### 单编译器项目
-
-单编译器项目中，无需任何配置，直接配置 MCP Client 即可。
-
-#### 多编译器项目
-
-多编译器项目中，因为每个编译器会有一份 Rsdoctor 构建分析数据，所以需要配置 compiler 参数，来指定 mcp-server 分析某一个编译器的 Rsdoctor 数据。
-
-```linux
-npx -y @rsdoctor/mcp-server@latest --compiler [compilerName]
-```
+如果还没有添加 Rsdoctor 插件，那么需要在项目中配置，[👉🏻 快速开始](https://rsdoctor.dev/guide/start/quick-start)。
 
 ### 2. 开启 Rsdoctor 并执行本地构建
 
-开启 Rsdoctor 的情况下，执行构建。不要使用 **MCP Client** 启动项目，因为 Rsdoctor 的挂载的本地服务会卡住 **MCP Client** 的对话进程。
+开启 Rsdoctor 的情况下，执行构建。**不要使用 MCP Client 启动项目，因为 Rsdoctor 的挂载的本地服务会卡住 MCP Client 的对话进程**。
 
 ```linux
 npm run build
