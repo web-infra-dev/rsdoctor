@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/mcp-server",
-  "version": "0.0.1-beta.2",
+  "version": "0.0.1-beta.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "@coze/api": "^1.2.0",
-    "@rsdoctor/types": "workspace:*",
     "@rslib/core": "^0.2.2",
     "@types/node": "^22.8.1",
     "dotenv": "^16.4.7",
@@ -35,6 +34,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.4.1",
+    "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "axios": "^1.8.4",
     "socket.io-client": "4.6.1",
