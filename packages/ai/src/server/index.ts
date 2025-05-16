@@ -1,4 +1,4 @@
-import { runServer } from './server.ts';
+import { runServer } from './server.js';
 
 runServer().catch((error) => {
   console.error('Fatal error running server:', error);

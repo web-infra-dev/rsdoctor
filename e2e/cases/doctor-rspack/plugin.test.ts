@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
-import { Compiler, RuleSetRule } from '@rspack/core';
+import { Compiler } from '@rspack/core';
+import * as core from '@actions/core';
 import os from 'os';
 import path from 'path';
 import { createRsdoctorPlugin } from './test-utils';
@@ -11,10 +12,7 @@ let reportLoaderStartOrEndTimes = 0;
 async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
   const file = path.resolve(__dirname, './fixtures/a.js');
   const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
-  const esmLoader = path.resolve(
-    __dirname,
-    './fixtures/loaders/esm-serialize-query-to-comment.mjs',
-  );
+
   const esmLoaderJs = path.resolve(
     __dirname,
     './fixtures/loaders/esm/esm-serialize-query-to-comment.js',
@@ -157,6 +155,13 @@ test('rspack data store', async () => {
 
   const ecmaCheckError = datas.errors.some((e) => e.code === 'E1004');
   expect(ecmaCheckError).toBeTruthy();
+
+  core.debug(`graphData.modules: ${graphData.modules}`);
+  core.debug(`graphData.modules[0]: ${graphData.modules[0]}`);
+  core.debug(
+    `graphData.modules[0].webpackId: ${graphData.modules[0].webpackId}`,
+  );
+
   os.EOL === '\n'
     ? expect(
         graphData.modules[0].webpackId.indexOf('/fixtures/a.js'),
