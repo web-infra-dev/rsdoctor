@@ -11,6 +11,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@actions/core": "^1.11.1",
     "@playwright/test": "1.44.1",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",

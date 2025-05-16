@@ -5,7 +5,7 @@ export default defineConfig({
     {
       source: {
         entry: {
-          index: './src/index.ts',
+          index: './src/server/server.ts',
         },
         tsconfigPath: './tsconfig.build.json',
       },
