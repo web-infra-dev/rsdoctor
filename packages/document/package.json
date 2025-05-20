@@ -26,7 +26,7 @@
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
     "@rspress/plugin-rss": "2.0.0-beta.3",
-    "@rspress/plugin-llms": "2.0.0-beta.5",
+    "@rspress/plugin-llms": "2.0.0-beta.6",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.21",
     "@types/react-dom": "^18.3.7",

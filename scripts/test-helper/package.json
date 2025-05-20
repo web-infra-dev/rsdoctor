@@ -25,12 +25,12 @@
     "dev": "modern build --watch"
   },
   "dependencies": {
-    "@rsbuild/core": "^1.3.18",
-    "@rspack/core": "1.3.9",
+    "@rsbuild/core": "^1.3.20",
+    "@rspack/core": "1.3.10",
     "@types/lodash": "^4.17.16",
     "@types/node": "^22.8.1",
     "lodash": "^4.17.21",
-    "memfs": "4.17.1",
+    "memfs": "4.17.2",
     "typescript": "^5.2.2",
     "upath": "2.0.1",
     "webpack": "^5.97.1"
