@@ -463,8 +463,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       axios:
-        specifier: ^1.8.4
-        version: 1.8.4
+        specifier: ^1.9.0
+        version: 1.9.0
       socket.io-client:
         specifier: 4.6.1
         version: 4.6.1
@@ -474,7 +474,7 @@ importers:
     devDependencies:
       '@coze/api':
         specifier: ^1.2.0
-        version: 1.2.0(axios@1.8.4)
+        version: 1.2.0(axios@1.9.0)
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -489,7 +489,7 @@ importers:
         version: 16.4.7
       langchain:
         specifier: ^0.3.26
-        version: 0.3.26(@langchain/core@0.3.46(openai@4.95.1(ws@8.18.1)(zod@3.24.4)))(axios@1.8.4)(openai@4.95.1(ws@8.18.1)(zod@3.24.4))(ws@8.18.1)
+        version: 0.3.26(@langchain/core@0.3.46(openai@4.95.1(ws@8.18.1)(zod@3.24.4)))(axios@1.9.0)(openai@4.95.1(ws@8.18.1)(zod@3.24.4))(ws@8.18.1)
       openai:
         specifier: ^4.77.0
         version: 4.95.1(ws@8.18.1)(zod@3.24.4)
@@ -515,8 +515,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       axios:
-        specifier: ^1.8.4
-        version: 1.8.4
+        specifier: ^1.9.0
+        version: 1.9.0
       ora:
         specifier: ^5.4.1
         version: 5.4.1
@@ -621,8 +621,8 @@ importers:
         specifier: 5.19.1
         version: 5.19.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       axios:
-        specifier: ^1.8.4
-        version: 1.8.4
+        specifier: ^1.9.0
+        version: 1.9.0
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -724,8 +724,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       axios:
-        specifier: ^1.8.4
-        version: 1.8.4
+        specifier: ^1.9.0
+        version: 1.9.0
       browserslist-load-config:
         specifier: ^1.0.0
         version: 1.0.0
@@ -4822,6 +4822,9 @@ packages:
   axios@1.8.4:
     resolution: {integrity: sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==}
 
+  axios@1.9.0:
+    resolution: {integrity: sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==}
+
   b-tween@0.3.3:
     resolution: {integrity: sha512-oEHegcRpA7fAuc9KC4nktucuZn2aS8htymCPcP3qkEGPqiBH+GfqtqoG2l7LxHngg6O0HFM7hOeOYExl1Oz4ZA==}
 
@@ -7143,14 +7146,6 @@ packages:
       peggy:
         optional: true
       typeorm:
-        optional: true
-
-  langsmith@0.3.20:
-    resolution: {integrity: sha512-zwVQos6tjcksCTfdM67QKq7yyED4GmQiZw/sJ6UCMYZxlvTMMg3PeQ9tOePXAWNWoJygOnH+EwGXr7gYOOETDg==}
-    peerDependencies:
-      openai: '*'
-    peerDependenciesMeta:
-      openai:
         optional: true
 
   langsmith@0.3.29:
@@ -12151,12 +12146,12 @@ snapshots:
       human-id: 4.1.1
       prettier: 2.8.8
 
-  '@coze/api@1.2.0(axios@1.8.4)':
+  '@coze/api@1.2.0(axios@1.9.0)':
     dependencies:
       agora-extension-ai-denoiser: 1.1.0(agora-rtc-sdk-ng@4.23.2)
       agora-rtc-sdk-ng: 4.23.2
       agora-rte-extension: 1.2.4
-      axios: 1.8.4
+      axios: 1.9.0
       jsonwebtoken: 9.0.2
       node-fetch: 2.7.0
       reconnecting-websocket: 4.4.0
@@ -12561,7 +12556,7 @@ snapshots:
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.20
-      langsmith: 0.3.20(openai@4.95.1(ws@8.18.1)(zod@3.24.4))
+      langsmith: 0.3.29(openai@4.95.1(ws@8.18.1)(zod@3.24.4))
       mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
@@ -12945,7 +12940,7 @@ snapshots:
       '@modern-js/plugin-i18n': 2.67.5
       '@modern-js/utils': 2.67.5
       '@swc/helpers': 0.5.17
-      axios: 1.8.4
+      axios: 1.9.0
       resolve-from: 5.0.0
     transitivePeerDependencies:
       - debug
@@ -13104,7 +13099,7 @@ snapshots:
       '@modern-js/types': 2.63.6
       '@modern-js/utils': 2.63.6
       '@swc/helpers': 0.5.13
-      axios: 1.8.4
+      axios: 1.9.0
       connect-history-api-fallback: 2.0.0
       http-compression: 1.0.6
       minimatch: 3.1.2
@@ -15463,6 +15458,14 @@ snapshots:
       - debug
 
   axios@1.8.4:
+    dependencies:
+      follow-redirects: 1.15.9
+      form-data: 4.0.2
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.9.0:
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.2
@@ -18115,7 +18118,7 @@ snapshots:
 
   klona@2.0.6: {}
 
-  langchain@0.3.26(@langchain/core@0.3.46(openai@4.95.1(ws@8.18.1)(zod@3.24.4)))(axios@1.8.4)(openai@4.95.1(ws@8.18.1)(zod@3.24.4))(ws@8.18.1):
+  langchain@0.3.26(@langchain/core@0.3.46(openai@4.95.1(ws@8.18.1)(zod@3.24.4)))(axios@1.9.0)(openai@4.95.1(ws@8.18.1)(zod@3.24.4))(ws@8.18.1):
     dependencies:
       '@langchain/core': 0.3.46(openai@4.95.1(ws@8.18.1)(zod@3.24.4))
       '@langchain/openai': 0.5.6(@langchain/core@0.3.46(openai@4.95.1(ws@8.18.1)(zod@3.24.4)))(ws@8.18.1)
@@ -18131,23 +18134,11 @@ snapshots:
       zod: 3.24.4
       zod-to-json-schema: 3.24.5(zod@3.24.4)
     optionalDependencies:
-      axios: 1.8.4
+      axios: 1.9.0
     transitivePeerDependencies:
       - encoding
       - openai
       - ws
-
-  langsmith@0.3.20(openai@4.95.1(ws@8.18.1)(zod@3.24.4)):
-    dependencies:
-      '@types/uuid': 10.0.0
-      chalk: 4.1.2
-      console-table-printer: 2.12.1
-      p-queue: 6.6.2
-      p-retry: 4.6.2
-      semver: 7.6.3
-      uuid: 10.0.0
-    optionalDependencies:
-      openai: 4.95.1(ws@8.18.1)(zod@3.24.4)
 
   langsmith@0.3.29(openai@4.95.1(ws@8.18.1)(zod@3.24.4)):
     dependencies:
