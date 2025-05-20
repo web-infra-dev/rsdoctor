@@ -89,6 +89,7 @@ rslog
 rspack
 rspress
 rstack
+rstest
 selfsign
 sirv
 sokra
