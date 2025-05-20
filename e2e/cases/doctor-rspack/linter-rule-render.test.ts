@@ -1,6 +1,7 @@
 import { expect, test, chromium } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
+import * as core from '@actions/core';
 import { Compiler } from '@rspack/core';
 import path from 'path';
 import fs from 'fs';
@@ -120,15 +121,26 @@ test('linter rule render check', async () => {
   const page = await context.newPage();
 
   // Navigate to a URL
-  await page.goto(`file:///${reportPath}`);
+  await page.goto(`file:///${reportPath}-${process.env.RSPACK_NATIVE_PLUGIN}`);
+  core.debug(`reportPath:: ${reportPath}-${process.env.RSPACK_NATIVE_PLUGIN}`);
 
   const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
+  core.debug(`ecmaVersionButton:: ${ecmaVersionButton}`);
+
   await ecmaVersionButton?.click();
   // ignore output text check because there's no .map file for track the source code
   const source = await page.$('.e2e-ecma-source');
   const error = await page.$('.e2e-ecma-error');
+
+  core.debug(`source:: ${source}`);
+  core.debug(`error:: ${error}`);
+
   const sourceText = await source?.textContent();
   const errorText = await error?.textContent();
+
+  core.debug(`sourceText:: ${sourceText}`);
+  core.debug(`errorText:: ${errorText}`);
+
   expect(sourceText).toBe(
     '/cases/doctor-rspack/dist/linter-rule-render/main.js:1:2',
   );

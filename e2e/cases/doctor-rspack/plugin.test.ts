@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
-import { Compiler, RuleSetRule } from '@rspack/core';
+import { Compiler } from '@rspack/core';
+import * as core from '@actions/core';
 import os from 'os';
 import path from 'path';
 import { createRsdoctorPlugin } from './test-utils';
@@ -157,6 +158,12 @@ test('rspack data store', async () => {
 
   const ecmaCheckError = datas.errors.some((e) => e.code === 'E1004');
   expect(ecmaCheckError).toBeTruthy();
+
+  core.debug(`graphData.modules[0]: ${JSON.stringify(graphData.modules[0])}`);
+  core.debug(
+    `graphData.modules[0].webpackId: ${graphData.modules[0].webpackId}`,
+  );
+
   os.EOL === '\n'
     ? expect(
         graphData.modules[0].webpackId.indexOf('/fixtures/a.js'),
