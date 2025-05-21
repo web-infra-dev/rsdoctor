@@ -45,17 +45,22 @@ https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
 ## 🧑‍💻 社区
 
-欢迎加入我们的 [Discord](https://discord.gg/wrBPBT6rkM) 交流频道！Rsdoctor 团队和用户都在那里活跃，并且我们一直期待着各种贡献。
+欢迎加入我们的 [Discord](https://discord.gg/wrBPBT6rkM) 交流频道！Rstack 团队和用户都在那里活跃，并且我们一直期待着各种贡献。
 
 你也可以加入 [飞书群](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=3c3vca77-bfc0-4ef5-b62b-9c5c9c92f1b4) 与大家一起交流。
 
-## 🪐 相关链接
+## 🦀 Rstack
 
-- [Rspack](https://github.com/web-infra-dev/rspack)：基于 Rust 的高性能打包工具。
-- [Rsbuild](https://github.com/web-infra-dev/rsbuild): 基于 Rspack 的构建工具。
-- [Rslib](https://github.com/web-infra-dev/rslib): 基于 Rsbuild 的 library 开发工具。
-- [Rspress](https://github.com/web-infra-dev/rspress): 基于 Rsbuild 的静态站点生成器。
-- [Modern.js](https://github.com/web-infra-dev/modern.js): 基于 Rsbuild 的渐进式 React 框架。
+Rstack 是一个围绕 Rspack 打造的 JavaScript 统一工具链，具有优秀的性能和一致的架构。
+
+| 名称                                                  | 描述           |
+| ----------------------------------------------------- | -------------- |
+| [Rspack](https://github.com/web-infra-dev/rspack)     | 打包工具       |
+| [Rsbuild](https://github.com/web-infra-dev/rsbuild)   | 构建工具       |
+| [Rslib](https://github.com/web-infra-dev/rslib)       | 库开发工具     |
+| [Rspress](https://github.com/web-infra-dev/rspress)   | 静态站点生成器 |
+| [Rsdoctor](https://github.com/web-infra-dev/rsdoctor) | 构建分析工具   |
+| [Rstest](https://github.com/web-infra-dev/rstest)     | 测试框架       |
 
 ## 🙌 行为准则
 
