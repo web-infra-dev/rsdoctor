@@ -45,15 +45,20 @@ Please read the [Contributing Guide](https://github.com/web-infra-dev/rsdoctor/b
 
 ## 🧑‍💻 Community
 
-Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rsdoctor team and users are active there, and we're always looking for contributions.
+Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rstack team and users are active there, and we're always looking for contributions.
 
-## 🪐 Link
+## 🦀 Rstack
 
-- [Rspack](https://github.com/web-infra-dev/rspack): A fast Rust-based web bundler.
-- [Rsbuild](https://github.com/web-infra-dev/rsbuild): An Rspack-based build tool.
-- [Rslib](https://github.com/web-infra-dev/rslib): A library development tool powered by Rsbuild.
-- [Rspress](https://github.com/web-infra-dev/rspress): A fast Rsbuild-based static site generator.
-- [Modern.js](https://github.com/web-infra-dev/modern.js): A progressive React framework based on Rsbuild.
+Rstack is a unified JavaScript toolchain built around Rspack, with high performance and consistent architecture.
+
+| Name                                                  | Description              |
+| ----------------------------------------------------- | ------------------------ |
+| [Rspack](https://github.com/web-infra-dev/rspack)     | Bundler                  |
+| [Rsbuild](https://github.com/web-infra-dev/rsbuild)   | Build tool               |
+| [Rslib](https://github.com/web-infra-dev/rslib)       | Library development tool |
+| [Rspress](https://github.com/web-infra-dev/rspress)   | Static site generator    |
+| [Rsdoctor](https://github.com/web-infra-dev/rsdoctor) | Build analyzer           |
+| [Rstest](https://github.com/web-infra-dev/rstest)     | Testing framework        |
 
 ## 🙌 Code of conduct
 
