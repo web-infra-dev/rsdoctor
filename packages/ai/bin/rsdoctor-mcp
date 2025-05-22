@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { runServer } from '../dist/index.cjs';
+import { runServer } from '../dist/index.js';
 
 
 runServer().catch((error) => {

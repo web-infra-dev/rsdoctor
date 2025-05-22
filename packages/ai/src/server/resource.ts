@@ -2,12 +2,16 @@ import {
   McpServer,
   ReadResourceCallback,
 } from '@modelcontextprotocol/sdk/server/mcp.js';
-import path from 'path';
+import path, { dirname } from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
 import { RequestHandlerExtra } from '@modelcontextprotocol/sdk/shared/protocol.js';
+import { fileURLToPath } from 'url';
 
 const readFileAsync = promisify(fs.readFile);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const readMarkdownResource: ReadResourceCallback = async (
   uri: URL,

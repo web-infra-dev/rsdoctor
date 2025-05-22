@@ -16,15 +16,11 @@ export default defineConfig({
       },
       bundle: true,
       dts: true,
-      format: 'cjs',
+      format: 'esm',
       syntax: 'es2021',
     },
   ],
   output: {
-    externals: {
-      bufferutil: 'bufferutil',
-      'utf-8-validate': 'utf-8-validate',
-    },
     copy: {
       patterns: [{ from: 'resources', to: 'resources' }],
     },
