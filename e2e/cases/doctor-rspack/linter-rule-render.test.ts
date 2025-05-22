@@ -107,7 +107,7 @@ test('linter rule render check', async () => {
 
   const reportPath = path.join(
     __dirname,
-    './dist/linter-rule-render/.rsdoctor/rsdoctor-report.html',
+    `./dist/linter-rule-render/.rsdoctor/rsdoctor-report-${process.env.RSPACK_NATIVE_PLUGIN || '1'}.html`,
   );
 
   fileExists(reportPath);
@@ -121,8 +121,8 @@ test('linter rule render check', async () => {
   const page = await context.newPage();
 
   // Navigate to a URL
-  await page.goto(`file:///${reportPath}-${process.env.RSPACK_NATIVE_PLUGIN}`);
-  core.debug(`reportPath:: ${reportPath}-${process.env.RSPACK_NATIVE_PLUGIN}`);
+  await page.goto(`file:///${reportPath}`);
+  core.debug(`reportPath:: ${reportPath}`);
 
   const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
   core.debug(`ecmaVersionButton:: ${ecmaVersionButton}`);
