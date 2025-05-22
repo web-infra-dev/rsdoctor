@@ -7,16 +7,17 @@ import {
   getModuleDetailById,
   getModuleByPath,
   getModuleIssuerPath,
-  getPackageInfo,
   getPackageDependency,
   getRuleInfo,
   getMediaAssetPrompt,
   getLargeChunks,
   getDuplicatePackages,
   getSimilarPackages,
-  getLoaderTimeForAllFiles,
   getLoaderTimes,
   getPort,
+  getLongLoadersByCosts,
+  getPackageInfoFiltered,
+  getPackageInfoByPackageName,
 } from './tools.js';
 import { registerStaticResources } from './resource.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -125,7 +126,7 @@ server.tool(
   toolDescriptions.getPackageInfo,
   {},
   async () => {
-    const res = await getPackageInfo();
+    const res = await getPackageInfoFiltered();
     return {
       content: [
         {
@@ -177,7 +178,26 @@ server.tool(
   toolDescriptions.getSimilarPackages,
   {},
   async () => {
-    const res = await getPackageInfo();
+    const res = await getPackageInfoFiltered();
+    return {
+      content: [
+        {
+          name: Tools.GetSimilarPackages,
+          description: toolDescriptions.getSimilarPackages,
+          type: 'text',
+          text: JSON.stringify(res),
+        },
+      ],
+    };
+  },
+);
+
+server.tool(
+  Tools.GetPackagesByPackageName,
+  toolDescriptions.getSimilarPackages,
+  { packageName: z.string() },
+  async ({ packageName }) => {
+    const res = await getPackageInfoByPackageName(packageName);
     return {
       content: [
         {
@@ -241,7 +261,7 @@ server.tool(
   'Get compilation time spent by each loader on individual files',
   {},
   async () => {
-    const res = await getLoaderTimeForAllFiles();
+    const res = await getLongLoadersByCosts();
     return {
       content: [
         {

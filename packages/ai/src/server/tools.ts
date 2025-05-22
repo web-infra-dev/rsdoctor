@@ -20,6 +20,7 @@ export enum Tools {
   getLoaderTimeForAllFiles = 'get_loader_time_all_files',
   getLoaderTimes = 'get_loader_times',
   getPort = 'get_port',
+  GetPackagesByPackageName = 'get_packages_by_package_name',
 }
 
 // Define the type for the response of getAllChunks
@@ -185,6 +186,24 @@ export const getPackageInfo = async (): Promise<
   )) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetPackageInfo>;
 };
 
+export const getPackageInfoFiltered = async () => {
+  const packageInfo = await getPackageInfo();
+  return packageInfo.map((pkg) => ({
+    id: pkg.id,
+    name: pkg.name,
+    version: pkg.version,
+    size: pkg.size,
+    duplicates: pkg.duplicates,
+  }));
+};
+
+export async function getPackageInfoByPackageName(
+  packageName: string,
+): Promise<SDK.PackageData[]> {
+  const packageInfo = await getPackageInfo();
+  return packageInfo.filter((pkg) => pkg.name === packageName);
+}
+
 export const getPackageDependency = async () => {
   const res = (await sendRequest(
     SDK.ServerAPI.API.GetPackageDependency,
@@ -333,6 +352,25 @@ export const getLoaderTimeForAllFiles = async (): Promise<
     {},
   )) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData>;
 };
+
+export const getLongLoadersByCosts = async (): Promise<
+  SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData>
+> => {
+  return getTopThirdLoadersByCosts(await getLoaderTimeForAllFiles());
+};
+
+export function getTopThirdLoadersByCosts(
+  loaders: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData>,
+): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData> {
+  // Sort loaders by costs in descending order
+  const sortedLoaders = [...loaders].sort((a, b) => b.costs - a.costs);
+
+  // Calculate the number of elements to take (top third)
+  const topThirdCount = Math.ceil(sortedLoaders.length / 3);
+
+  // Return the top third elements
+  return sortedLoaders.slice(0, topThirdCount);
+}
 
 export const getLoaderTimes = async () => {
   return await sendRequest(SDK.ServerAPI.API.GetDirectoriesLoaders, {});
