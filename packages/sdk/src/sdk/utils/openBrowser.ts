@@ -10,7 +10,6 @@
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { logger } from '@rsdoctor/utils/logger';
-import open from 'open';
 import { join } from 'node:path';
 
 const execAsync = promisify(exec);
@@ -48,8 +47,7 @@ export async function openBrowser(
   // requested a different browser, we can try opening
   // a Chromium browser with AppleScript. This lets us reuse an
   // existing tab when possible instead of creating a new one.
-  const shouldTryOpenChromeWithAppleScript =
-    process.platform === 'darwin' || process.platform === 'win32';
+  const shouldTryOpenChromeWithAppleScript = process.platform === 'darwin';
   if (shouldTryOpenChromeWithAppleScript) {
     try {
       const targetBrowser = await getTargetBrowser();
@@ -75,6 +73,7 @@ export async function openBrowser(
     // Fallback to open
     // (It will always open new tab)
     try {
+      const { default: open } = await import('open');
       await open(url);
       return true;
     } catch (err) {
