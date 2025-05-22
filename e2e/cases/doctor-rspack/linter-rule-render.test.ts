@@ -107,7 +107,7 @@ test('linter rule render check', async () => {
 
   const reportPath = path.join(
     __dirname,
-    `./dist/linter-rule-render/.rsdoctor/rsdoctor-report-${process.env.RSPACK_NATIVE_PLUGIN || '1'}.html`,
+    `./dist/linter-rule-render/.rsdoctor/rsdoctor-report.html`,
   );
 
   fileExists(reportPath);
