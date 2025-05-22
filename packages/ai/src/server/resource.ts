@@ -2,12 +2,16 @@ import {
   McpServer,
   ReadResourceCallback,
 } from '@modelcontextprotocol/sdk/server/mcp.js';
-import path from 'path';
+import path, { dirname } from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
 import { RequestHandlerExtra } from '@modelcontextprotocol/sdk/shared/protocol.js';
+import { fileURLToPath } from 'url';
 
 const readFileAsync = promisify(fs.readFile);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const readMarkdownResource: ReadResourceCallback = async (
   uri: URL,
@@ -15,7 +19,7 @@ const readMarkdownResource: ReadResourceCallback = async (
 ) => {
   // Read the contents of the Markdown file
   const contents = await readFileAsync(
-    path.join(__dirname, '../resources', uri.pathname),
+    path.join(__dirname, './resources', uri.pathname),
     'utf-8',
   );
 
@@ -38,7 +42,7 @@ const readMarkdownResource: ReadResourceCallback = async (
  * @param {Object} resourcesData - The resources data object containing static resources
  */
 function registerStaticResources(server: McpServer) {
-  const resourcesDir = path.join(__dirname, '../resources/');
+  const resourcesDir = path.join(__dirname, './resources/');
   fs.readdirSync(resourcesDir).forEach((file) => {
     if (file.endsWith('.md')) {
       const uri = `file://rsdoctor/${file}`;

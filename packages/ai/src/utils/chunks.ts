@@ -3,7 +3,7 @@ import type {
   FilteredModule,
   SimpleChunk,
   SimpleModule,
-} from '@/types/index';
+} from '@/types/index.js';
 
 export const getMedianChunkSize = (list: Chunk[]): number => {
   const sortedList = list.sort((a, b) => a.size - b.size);
@@ -69,7 +69,7 @@ export const getSimpleChunk = (
     name: chunk.name,
     size: chunk.size,
     modules: chunk.modules
-      .map((mId) => {
+      .map((mId: number) => {
         const m = modules.find((m) => m.id === mId);
         if (!m) {
           return null;
