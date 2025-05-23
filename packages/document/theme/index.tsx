@@ -14,9 +14,9 @@ const Search = () => {
   return (
     <PluginAlgoliaSearch
       docSearchProps={{
-        appId: 'TQOGCXPBUD', // cspell:disable-line
-        apiKey: '8c30f9d1f12e786a132af15ea30cf997', // cspell:disable-line
-        indexName: 'rspack',
+        appId: 'NHFZKCFYI7', // cspell:disable-line
+        apiKey: 'db98c3a0aa060d3aa4b30f49fee02b16', // cspell:disable-line
+        indexName: 'rstor', // cspell:disable-line
         searchParameters: {
           facetFilters: [`lang:${lang}`],
         },
