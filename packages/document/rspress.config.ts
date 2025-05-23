@@ -6,12 +6,14 @@ import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginRss } from '@rspress/plugin-rss';
 import { pluginLlms } from '@rspress/plugin-llms';
+import { pluginAlgolia } from '@rspress/plugin-algolia';
 import pluginSitemap from 'rspress-plugin-sitemap';
 
 const siteUrl = 'https://rsdoctor.dev';
 
 export default defineConfig({
   plugins: [
+    pluginAlgolia(),
     pluginSitemap({
       domain: siteUrl,
     }),
