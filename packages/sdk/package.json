@@ -36,12 +36,12 @@
     "sirv": "2.0.4",
     "socket.io": "4.8.1",
     "source-map": "^0.7.4",
-    "tapable": "2.2.1"
+    "tapable": "2.2.2"
   },
   "devDependencies": {
     "@types/body-parser": "1.19.5",
     "@types/cors": "2.8.18",
-    "@types/lodash": "^4.17.16",
+    "@types/lodash": "^4.17.17",
     "@types/node": "^22.8.1",
     "tslib": "2.8.1",
     "typescript": "^5.2.2"
