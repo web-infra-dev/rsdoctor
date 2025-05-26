@@ -800,18 +800,21 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0(@types/react@18.3.21)(react@18.3.1)
       rspress:
-        specifier: 2.0.0-beta.3
-        version: 2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)
+        specifier: 2.0.0-beta.6
+        version: 2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)
     devDependencies:
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
+      '@rspress/plugin-algolia':
+        specifier: 2.0.0-beta.6
+        version: 2.0.0-beta.6(@algolia/client-search@5.25.0)(@rspress/runtime@2.0.0-beta.6)(@types/react@18.3.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
       '@rspress/plugin-llms':
         specifier: 2.0.0-beta.6
-        version: 2.0.0-beta.6(@rspress/core@2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1))
+        version: 2.0.0-beta.6(@rspress/core@2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1))
       '@rspress/plugin-rss':
-        specifier: 2.0.0-beta.3
-        version: 2.0.0-beta.3(rspress@2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1))
+        specifier: 2.0.0-beta.6
+        version: 2.0.0-beta.6(rspress@2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1))
       '@types/node':
         specifier: ^22.8.1
         version: 22.14.1
@@ -829,10 +832,10 @@ importers:
         version: 18.3.1(react@18.3.1)
       rsbuild-plugin-google-analytics:
         specifier: ^1.0.3
-        version: 1.0.3(@rsbuild/core@1.3.13)
+        version: 1.0.3(@rsbuild/core@1.3.20)
       rsbuild-plugin-open-graph:
         specifier: ^1.0.2
-        version: 1.0.2(@rsbuild/core@1.3.13)
+        version: 1.0.2(@rsbuild/core@1.3.20)
       rspress-plugin-font-open-sans:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1201,6 +1204,78 @@ packages:
 
   '@actions/io@1.1.3':
     resolution: {integrity: sha512-wi9JjgKLYS7U/z8PPbco+PvTb/nRWjeoFlJ1Qer83k/3C5PHQi28hiVdeE2kHXmIL99mQFawx8qt/JPjZilJ8Q==}
+
+  '@algolia/autocomplete-core@1.17.9':
+    resolution: {integrity: sha512-O7BxrpLDPJWWHv/DLA9DRFWs+iY1uOJZkqUwjS5HSZAGcl0hIVCQ97LTLewiZmZ402JYUrun+8NqFP+hCknlbQ==}
+
+  '@algolia/autocomplete-plugin-algolia-insights@1.17.9':
+    resolution: {integrity: sha512-u1fEHkCbWF92DBeB/KHeMacsjsoI0wFhjZtlCq2ddZbAehshbZST6Hs0Avkc0s+4UyBGbMDnSuXHLuvRWK5iDQ==}
+    peerDependencies:
+      search-insights: '>= 1 < 3'
+
+  '@algolia/autocomplete-preset-algolia@1.17.9':
+    resolution: {integrity: sha512-Na1OuceSJeg8j7ZWn5ssMu/Ax3amtOwk76u4h5J4eK2Nx2KB5qt0Z4cOapCsxot9VcEN11ADV5aUSlQF4RhGjQ==}
+    peerDependencies:
+      '@algolia/client-search': '>= 4.9.1 < 6'
+      algoliasearch: '>= 4.9.1 < 6'
+
+  '@algolia/autocomplete-shared@1.17.9':
+    resolution: {integrity: sha512-iDf05JDQ7I0b7JEA/9IektxN/80a2MZ1ToohfmNS3rfeuQnIKI3IJlIafD0xu4StbtQTghx9T3Maa97ytkXenQ==}
+    peerDependencies:
+      '@algolia/client-search': '>= 4.9.1 < 6'
+      algoliasearch: '>= 4.9.1 < 6'
+
+  '@algolia/client-abtesting@5.25.0':
+    resolution: {integrity: sha512-1pfQulNUYNf1Tk/svbfjfkLBS36zsuph6m+B6gDkPEivFmso/XnRgwDvjAx80WNtiHnmeNjIXdF7Gos8+OLHqQ==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/client-analytics@5.25.0':
+    resolution: {integrity: sha512-AFbG6VDJX/o2vDd9hqncj1B6B4Tulk61mY0pzTtzKClyTDlNP0xaUiEKhl6E7KO9I/x0FJF5tDCm0Hn6v5x18A==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/client-common@5.25.0':
+    resolution: {integrity: sha512-il1zS/+Rc6la6RaCdSZ2YbJnkQC6W1wiBO8+SH+DE6CPMWBU6iDVzH0sCKSAtMWl9WBxoN6MhNjGBnCv9Yy2bA==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/client-insights@5.25.0':
+    resolution: {integrity: sha512-blbjrUH1siZNfyCGeq0iLQu00w3a4fBXm0WRIM0V8alcAPo7rWjLbMJMrfBtzL9X5ic6wgxVpDADXduGtdrnkw==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/client-personalization@5.25.0':
+    resolution: {integrity: sha512-aywoEuu1NxChBcHZ1pWaat0Plw7A8jDMwjgRJ00Mcl7wGlwuPt5dJ/LTNcg3McsEUbs2MBNmw0ignXBw9Tbgow==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/client-query-suggestions@5.25.0':
+    resolution: {integrity: sha512-a/W2z6XWKjKjIW1QQQV8PTTj1TXtaKx79uR3NGBdBdGvVdt24KzGAaN7sCr5oP8DW4D3cJt44wp2OY/fZcPAVA==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/client-search@5.25.0':
+    resolution: {integrity: sha512-9rUYcMIBOrCtYiLX49djyzxqdK9Dya/6Z/8sebPn94BekT+KLOpaZCuc6s0Fpfq7nx5J6YY5LIVFQrtioK9u0g==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/ingestion@1.25.0':
+    resolution: {integrity: sha512-jJeH/Hk+k17Vkokf02lkfYE4A+EJX+UgnMhTLR/Mb+d1ya5WhE+po8p5a/Nxb6lo9OLCRl6w3Hmk1TX1e9gVbQ==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/monitoring@1.25.0':
+    resolution: {integrity: sha512-Ls3i1AehJ0C6xaHe7kK9vPmzImOn5zBg7Kzj8tRYIcmCWVyuuFwCIsbuIIz/qzUf1FPSWmw0TZrGeTumk2fqXg==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/recommend@5.25.0':
+    resolution: {integrity: sha512-79sMdHpiRLXVxSjgw7Pt4R1aNUHxFLHiaTDnN2MQjHwJ1+o3wSseb55T9VXU4kqy3m7TUme3pyRhLk5ip/S4Mw==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/requester-browser-xhr@5.25.0':
+    resolution: {integrity: sha512-JLaF23p1SOPBmfEqozUAgKHQrGl3z/Z5RHbggBu6s07QqXXcazEsub5VLonCxGVqTv6a61AAPr8J1G5HgGGjEw==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/requester-fetch@5.25.0':
+    resolution: {integrity: sha512-rtzXwqzFi1edkOF6sXxq+HhmRKDy7tz84u0o5t1fXwz0cwx+cjpmxu/6OQKTdOJFS92JUYHsG51Iunie7xbqfQ==}
+    engines: {node: '>= 14.0.0'}
+
+  '@algolia/requester-node-http@5.25.0':
+    resolution: {integrity: sha512-ZO0UKvDyEFvyeJQX0gmZDQEvhLZ2X10K+ps6hViMo1HgE2V8em00SwNsQ+7E/52a+YiBkVWX61pJJJE44juDMQ==}
+    engines: {node: '>= 14.0.0'}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -2167,10 +2242,25 @@ packages:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
 
-  '@dr.pogodin/react-helmet@2.0.4':
-    resolution: {integrity: sha512-NXSgzBKiyvHF4UvR40fKRB0gTIlezfnyvmTqJKZy5Gbtv23SXMuneZbtovvG/sKxbOYPVn1lZl211bTKhd5g4w==}
+  '@docsearch/css@3.9.0':
+    resolution: {integrity: sha512-cQbnVbq0rrBwNAKegIac/t6a8nWoUAn8frnkLFW6YARaRmAQr5/Eoe6Ln2fqkUCZ40KpdrKbpSAmgrkviOxuWA==}
+
+  '@docsearch/react@3.9.0':
+    resolution: {integrity: sha512-mb5FOZYZIkRQ6s/NWnM98k879vu5pscWqTLubLFBO87igYYT4VzVazh4h5o/zCvTIZgEt3PvsCOMOswOUo9yHQ==}
     peerDependencies:
-      react: '19'
+      '@types/react': '>= 16.8.0 < 20.0.0'
+      react: '>= 16.8.0 < 20.0.0'
+      react-dom: 18.3.1
+      search-insights: '>= 1 < 3'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      search-insights:
+        optional: true
 
   '@emnapi/core@1.3.1':
     resolution: {integrity: sha512-pVGjBIt1Y6gg3EJN8jTcfpP/+uuRksIo055oE/OBkDNcjZqVbfkWCksG1Jp4yZnj3iKWyWX8fdG/j6UDYPbFog==}
@@ -3462,11 +3552,6 @@ packages:
     engines: {node: '>=16.10.0'}
     hasBin: true
 
-  '@rsbuild/core@1.3.13':
-    resolution: {integrity: sha512-FIRV1ncOYYLCEGJDL8ZPKyH4J15lJS54KfeGf3Eacy5zUhT+dAkI2+0ZWH/s9NlaXA/vlRq6SJF9Z2Y96dO13Q==}
-    engines: {node: '>=16.10.0'}
-    hasBin: true
-
   '@rsbuild/core@1.3.18':
     resolution: {integrity: sha512-ocnz3pVapMTeuoP3zZ1shYcxnAQtRf6RzLl8n7acNi8Hu+ku6SiDGR65foclwcubWF6e9nZPohH94rXnmEVfrw==}
     engines: {node: '>=16.10.0'}
@@ -3991,8 +4076,8 @@ packages:
     resolution: {integrity: sha512-q5/MoIevPRX8KRsnvCZ1ZpYbs1SmPXY0uJcDPm6ChK+0EvnrCOQNRdAeR1Si8sMxCszRDd7jbFwM5aKxlf8AHA==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/core@2.0.0-beta.3':
-    resolution: {integrity: sha512-YVmHK+26by2VTieA6tkdzDQ8GYszGaRCI3COONr4Co0mAFfGn54zxnDLIq29/Ox7oVv8A7ZjfIp40AQr47No1w==}
+  '@rspress/core@2.0.0-beta.6':
+    resolution: {integrity: sha512-1amep6ouXx3Xz/orOeTL3oaXQ7BGYMgZFb0YmnHEhfO/EEEzvoqjn1q82XLBr9qLqSOJG4lA38WgCjLY5iRZYQ==}
     engines: {node: '>=18.0.0'}
 
   '@rspress/mdx-rs-darwin-arm64@0.6.6':
@@ -4047,28 +4132,34 @@ packages:
     resolution: {integrity: sha512-NpNhTKBIlV3O6ADhoZkgHvBFvXMW2TYlIWmIT1ysJESUBqDpaN9H3Teve5fugjU2pQ2ORBZO6SQGKliMw/8m/Q==}
     engines: {node: '>= 10'}
 
+  '@rspress/plugin-algolia@2.0.0-beta.6':
+    resolution: {integrity: sha512-IEmpJVdjauEHkB7kAGQvRDfb1igx8Neeqv7V2+sZks1N3TVWOI2f2ovskF3oDewLvfiZ7CQsVRxHbyCRUstOaA==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      '@rspress/runtime': ^2.0.0-beta.6
+
   '@rspress/plugin-auto-nav-sidebar@2.0.0-alpha.3':
     resolution: {integrity: sha512-U1detSiGlAd+2U6oK1/PEPBulOKUnODsygWvfiY4fydF9FAhcvjeDWanmiAoNWnKBj+bmUMay/e9nR1vtSSpmw==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-auto-nav-sidebar@2.0.0-beta.3':
-    resolution: {integrity: sha512-gN/oIsmjiOw3i1jiq5VVlrHNFfp5eJnSlWaOjEOERXM5OijONo5U+GTHXIao17IylyAYJiLvGiw66eZq5yG+NA==}
+  '@rspress/plugin-auto-nav-sidebar@2.0.0-beta.6':
+    resolution: {integrity: sha512-Vn/vmEpmLUKhbPUZgo3qh+SDYyy4CWBEQEqclJjBSZho0VuQELdJBGXFxsDWoEUCuuYC5fI/qi6p7Lx+p/D66g==}
     engines: {node: '>=18.0.0'}
 
   '@rspress/plugin-container-syntax@2.0.0-alpha.3':
     resolution: {integrity: sha512-//IDlD/BKUkx/TRtxSIlTNomf7cU7Hc9Aeqtl02jk+b/wNbirmpFKQKCU5kvyZTzCLuHMEQSTe+Asf3PWqzlnQ==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-container-syntax@2.0.0-beta.3':
-    resolution: {integrity: sha512-d7oPMbsQb+Wq2yUtuIuJ+hmfZKO1B6gAP2+CyBBmLTKWlJBC9N870MNyuq0aqiajDDnGpBHTzJ/55lQwksw5Lg==}
+  '@rspress/plugin-container-syntax@2.0.0-beta.6':
+    resolution: {integrity: sha512-cFe+pMVtJhqERDUIqZqZzRHKcS/oibGQHwYyZc16sFh2lYkkjWhGZYc6+lxFBRMdp97wICtmhcT9vl1Mmh3N3w==}
     engines: {node: '>=18.0.0'}
 
   '@rspress/plugin-last-updated@2.0.0-alpha.3':
     resolution: {integrity: sha512-6xvPvSnx2wPPnKFjVyHSUspaDWRMrTMXg1HO+YOnruSMjXQGELoagGRObH0FUtXQkmUH8Og8w0Ezf6a7oZZISQ==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-last-updated@2.0.0-beta.3':
-    resolution: {integrity: sha512-8Q169M2SnyJ0U1NIl7SvrUGanBl1J/TGbxihsitp5SOseS7BKWTYm5+lnpPCy7QJsF64GfiLBb1uWD+kg/GzKg==}
+  '@rspress/plugin-last-updated@2.0.0-beta.6':
+    resolution: {integrity: sha512-KiRjJwh1zw8qY9jtBDL2SdZWpRZkxHGzdATkmaURjHanteT7U5XUGNAa0afd0a5N7tveocV1yuOudjUlG4LcYQ==}
     engines: {node: '>=18.0.0'}
 
   '@rspress/plugin-llms@2.0.0-beta.6':
@@ -4083,31 +4174,32 @@ packages:
     peerDependencies:
       '@rspress/runtime': ^2.0.0-alpha.3
 
-  '@rspress/plugin-medium-zoom@2.0.0-beta.3':
-    resolution: {integrity: sha512-2d5MlqU/2bygtZq2ZFFsDY4e7pnHm52wt2Bs+OyoCD/nqFTbaR4OloC2mIxAm+fwpVFnEgLBgTRne/UIzLglZw==}
+  '@rspress/plugin-medium-zoom@2.0.0-beta.6':
+    resolution: {integrity: sha512-B4NBrZpWpdJOi0FLChIIi/fqBa6OPyM5bPw4HHH1qE16w2jiOM7684aPczVC0e4Jkm05suTP9yWeBxPTctappw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@rspress/runtime': ^2.0.0-beta.3
+      '@rspress/runtime': ^2.0.0-beta.6
 
-  '@rspress/plugin-rss@2.0.0-beta.3':
-    resolution: {integrity: sha512-X0cBVXLMgyDq9kkArSWDf3iTIfRLIkusCd0bfGs46KgGYeapveHJeANCfbj5xi/u7XyGws0KVAeCZHfkhpR1+A==}
+  '@rspress/plugin-rss@2.0.0-beta.6':
+    resolution: {integrity: sha512-Z+2tWW43nYEtbeHMtiXiQPLhct9DgLQc701qNvXZ87ZtscDa93Ah4T+h4eRT76a0UghanAkH+cUAtAbTkQdAPw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      rspress: ^2.0.0-beta.3
+      rspress: ^2.0.0-beta.6
+
+  '@rspress/plugin-shiki@2.0.0-beta.6':
+    resolution: {integrity: sha512-1xFfsAgVC6mRun3MO5m8csCawQX7tEaJopBsuIMcSTBFft/Ng65p4/y7SvBp3l2G0ZQs5y91TNs8X4L7FUhVPA==}
+    engines: {node: '>=18.0.0'}
 
   '@rspress/runtime@2.0.0-alpha.3':
     resolution: {integrity: sha512-NFzPc+LsHyFN8DUpXDQJGbJQ8o/YNnDkc4pcntqWMuG5pyAqp8Qe+w9n80w4iM47P0TRDnMkUXv1vS2ZezmksQ==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/runtime@2.0.0-beta.3':
-    resolution: {integrity: sha512-1KF8v75ZIpSwoM75xv9ssyHs1AD2hICjwCXT9ppcd4AagctdAgT+jZMpZGGpx1ioMPi5rjwTY4rOiD6BeTj+1A==}
+  '@rspress/runtime@2.0.0-beta.6':
+    resolution: {integrity: sha512-ZQu+WZG14xLW1B/kbD/TY6ygsbndb6g4ZlCfbyQK5NxN5KSGwcAwBzdyMwhxaJxfzprk4LvFsh+wnACNZ3EA8w==}
     engines: {node: '>=18.0.0'}
 
   '@rspress/shared@2.0.0-alpha.3':
     resolution: {integrity: sha512-h6vOhwwe57pDZWJjbKO4IUCNpYM/8XAIjHWT8NCQKCgNE7lCykXgifvZQtPHTEfQA0EX1BowlruHhsZkIo6Ntw==}
-
-  '@rspress/shared@2.0.0-beta.3':
-    resolution: {integrity: sha512-SX6kNBcn6sWRiWmRzA0JqlXyp+tmmEo2gPBoY5E55E7Od5EjkkNXqAcWsEvgxAufTdrUe0Ek/gwlvKJDH7lqSQ==}
 
   '@rspress/shared@2.0.0-beta.6':
     resolution: {integrity: sha512-EwUKbbz6xymAwqNzQ6v2xdyToQiIAdMOnH2wIhPi+5bsaNX5Y+8kgefP7YMPWj5TAIvSJETaCxkDPZvNVTm5gQ==}
@@ -4116,8 +4208,8 @@ packages:
     resolution: {integrity: sha512-7N+Fwv99t6tPITVsR6D+7DS2kfWA5kdfX7s2GyCnJE1oAuK+idq392xkvsUG2j+bauNvbg2VEQqbOOjurdBeUg==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/theme-default@2.0.0-beta.3':
-    resolution: {integrity: sha512-0hSlQkY02ybmly/hZJddPBGt4KbjR4HXft3uIarjjNtY2s4sbZo7tE2GjyDPdaClBrSCgwzgRIC8PJuizdHQPw==}
+  '@rspress/theme-default@2.0.0-beta.6':
+    resolution: {integrity: sha512-JaIbF2Ohuucx8HirpqvkrF8ap17GobUr02GejowdJ3zK0tR2EkcgjAy6kjBAn4P4gr6cHhbqyFxqRTImVad2rg==}
     engines: {node: '>=18.0.0'}
 
   '@rstack-dev/doc-ui@1.10.1':
@@ -4532,6 +4624,11 @@ packages:
   '@ungap/structured-clone@1.2.1':
     resolution: {integrity: sha512-fEzPV3hSkSMltkw152tJKNARhOupqbH96MZWyRjNaYZOMIzbrTeQDG+MTc6Mr2pgzFQzFxAfmhGDNP5QK++2ZA==}
 
+  '@unhead/react@2.0.10':
+    resolution: {integrity: sha512-U5tqhUYk4qmyLD8YpKOuYwWmbIGFpB7aacOzcGAhjJ59GH3W/BSFOFHj/6dcoYV5yzr1CZrINGGH7stRVMMLjQ==}
+    peerDependencies:
+      react: '>=18'
+
   '@vercel/nft@0.26.5':
     resolution: {integrity: sha512-NHxohEqad6Ra/r4lGknO52uc/GrWILXAMs1BB4401GTqww0fw1bAqzpG1XHuDO+dprg4GvsD9ZLLSsdo78p9hQ==}
     engines: {node: '>=16'}
@@ -4753,6 +4850,10 @@ packages:
 
   ajv@8.17.1:
     resolution: {integrity: sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==}
+
+  algoliasearch@5.25.0:
+    resolution: {integrity: sha512-n73BVorL4HIwKlfJKb4SEzAYkR3Buwfwbh+MYxg2mloFph2fFGV58E90QTzdbfzWrLn4HE5Czx/WTjI8fcHaMg==}
+    engines: {node: '>= 14.0.0'}
 
   anser@1.4.10:
     resolution: {integrity: sha512-hCv9AqTQ8ycjpSd3upOJd7vFwW1JaoYQ7tpham03GJ1ca8/65rqn0RpaWpItOAd6ylW9wAw6luXYPJIyPFVOww==}
@@ -6350,6 +6451,10 @@ packages:
     resolution: {integrity: sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==}
     engines: {node: '>=14.14'}
 
+  fs-extra@11.3.0:
+    resolution: {integrity: sha512-Z4XaCL6dUDHfP/jT25jJKMmtxvuwbkrD1vNSMFlo9lNLY2c5FHYSQgHPRZUjAB26TpDEoW9HCOgplrdbaPV/ew==}
+    engines: {node: '>=14.14'}
+
   fs-extra@7.0.1:
     resolution: {integrity: sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==}
     engines: {node: '>=6 <7 || >=8'}
@@ -6611,6 +6716,9 @@ packages:
   hono@3.12.12:
     resolution: {integrity: sha512-5IAMJOXfpA5nT+K0MNjClchzz0IhBHs2Szl7WFAhrFOsbtQsYmNynFyJRg/a3IPsmCfxcrf8txUGiNShXpK5Rg==}
     engines: {node: '>=16.0.0'}
+
+  hookable@5.5.3:
+    resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
 
   hpack.js@2.1.6:
     resolution: {integrity: sha512-zJxVehUdMGIKsRaNt7apO2Gqp0BdqW5yaiGHXXmbpvxgBYVZnAql+BJb4RO5ad2MgpbZKn5G6nMnegrH1FcNYQ==}
@@ -9482,6 +9590,9 @@ packages:
   rspack-plugin-virtual-module@0.1.13:
     resolution: {integrity: sha512-VC0HiVHH6dtGfTgfpbDgVTt6LlYv+uAg9CWGWAR5lBx9FbKPEZeGz7iRUUP8vMymx+PGI8ps0u4a25dne0rtuQ==}
 
+  rspack-plugin-virtual-module@1.0.0:
+    resolution: {integrity: sha512-v5MDtNEcDwV36gsHf5iIYyH1rYuC2TP3D+xE1Z+pqIWjFR9dpQ4DF4OzGtrBQSPKVhOyL0VW5UyeIbfdFxELmw==}
+
   rspress-plugin-font-open-sans@1.0.0:
     resolution: {integrity: sha512-4GP0pd7h3W8EWdqE0VkA62nzUJZNy4ZnYK7be8+lOKHQKsQ5nZ+22A/VurNssi1eZFx3kjwbmIuoAkgb5W8S9Q==}
 
@@ -9492,8 +9603,8 @@ packages:
     resolution: {integrity: sha512-tJZxBQ21Cp8eUYGm7U9E7N4twYkWVJwR4yEmDSoqiotf5lrS24ft2METvLBwdp90U5OfPD+tRHKXEPpSLay+hQ==}
     hasBin: true
 
-  rspress@2.0.0-beta.3:
-    resolution: {integrity: sha512-D4a+WxtIQr512KkI+v815W4nvxCvLC0VCyq1YFHiOWkAnUrvRFYjetpviyPXzxm4er1IyHPo/6+blVH0/X48xQ==}
+  rspress@2.0.0-beta.6:
+    resolution: {integrity: sha512-YM+4pMHr4yYUMQzlszRYOM4lgfQVmsd+BWTJcPmtJgsHPtpLPiiX25AgcmQDNNtiwVF+d/endH5mB+p7uTbadQ==}
     hasBin: true
 
   run-applescript@7.0.0:
@@ -9673,6 +9784,9 @@ packages:
 
   scroll-into-view-if-needed@3.1.0:
     resolution: {integrity: sha512-49oNpRjWRvnU8NyGVmUaYG4jtTkNonFZI86MmGRDqBphEK2EXT9gdEUoQPZhuBM8yWHxCWbobltqYO5M4XrUvQ==}
+
+  search-insights@2.17.3:
+    resolution: {integrity: sha512-RQPdCYTa8A68uM2jwxoY842xDhvx3E5LFL1LxvxCNMev4o5mLuokczhzjAgGwUZBAmOKZknArSxLKmXtIi2AxQ==}
 
   section-matter@1.0.0:
     resolution: {integrity: sha512-vfD3pmTzGpufjScBh50YHKzEu2lxBWhVEHsNGoEXmCmn2hKGfeNLYMzCJpe8cD7gqX7TJluOVpBkAequ6dgMmA==}
@@ -10329,6 +10443,9 @@ packages:
     resolution: {integrity: sha512-raqeBD6NQK4SkWhQzeYKd1KmIG6dllBOTt55Rmkt4HtI9mwdWtJljnrXjAFUBLTSN67HWrOIZ3EPF4kjUw80Bg==}
     engines: {node: '>=14.0'}
 
+  unhead@2.0.10:
+    resolution: {integrity: sha512-GT188rzTCeSKt55tYyQlHHKfUTtZvgubrXiwzGeXg6UjcKO3FsagaMzQp6TVDrpDY++3i7Qt0t3pnCc/ebg5yQ==}
+
   unicode-canonical-property-names-ecmascript@2.0.1:
     resolution: {integrity: sha512-dA8WbNeb2a6oQzAQ55YlT5vQAWGV9WXOsi3SskE3bcCdM0P4SDd+24zS/OCacdRq5BkdsRj9q3Pg6YyQoxIGqg==}
     engines: {node: '>=4'}
@@ -10913,6 +11030,111 @@ snapshots:
       undici: 5.29.0
 
   '@actions/io@1.1.3': {}
+
+  '@algolia/autocomplete-core@1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)(search-insights@2.17.3)':
+    dependencies:
+      '@algolia/autocomplete-plugin-algolia-insights': 1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)(search-insights@2.17.3)
+      '@algolia/autocomplete-shared': 1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)
+    transitivePeerDependencies:
+      - '@algolia/client-search'
+      - algoliasearch
+      - search-insights
+
+  '@algolia/autocomplete-plugin-algolia-insights@1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)(search-insights@2.17.3)':
+    dependencies:
+      '@algolia/autocomplete-shared': 1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)
+      search-insights: 2.17.3
+    transitivePeerDependencies:
+      - '@algolia/client-search'
+      - algoliasearch
+
+  '@algolia/autocomplete-preset-algolia@1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)':
+    dependencies:
+      '@algolia/autocomplete-shared': 1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)
+      '@algolia/client-search': 5.25.0
+      algoliasearch: 5.25.0
+
+  '@algolia/autocomplete-shared@1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)':
+    dependencies:
+      '@algolia/client-search': 5.25.0
+      algoliasearch: 5.25.0
+
+  '@algolia/client-abtesting@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
+
+  '@algolia/client-analytics@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
+
+  '@algolia/client-common@5.25.0': {}
+
+  '@algolia/client-insights@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
+
+  '@algolia/client-personalization@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
+
+  '@algolia/client-query-suggestions@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
+
+  '@algolia/client-search@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
+
+  '@algolia/ingestion@1.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
+
+  '@algolia/monitoring@1.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
+
+  '@algolia/recommend@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
+
+  '@algolia/requester-browser-xhr@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+
+  '@algolia/requester-fetch@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
+
+  '@algolia/requester-node-http@5.25.0':
+    dependencies:
+      '@algolia/client-common': 5.25.0
 
   '@ampproject/remapping@2.3.0':
     dependencies:
@@ -12152,12 +12374,21 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@dr.pogodin/react-helmet@2.0.4(react@19.1.0)':
+  '@docsearch/css@3.9.0': {}
+
+  '@docsearch/react@3.9.0(@algolia/client-search@5.25.0)(@types/react@18.3.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
     dependencies:
-      invariant: 2.2.4
-      react: 19.1.0
-      react-fast-compare: 3.2.2
-      shallowequal: 1.1.0
+      '@algolia/autocomplete-core': 1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)(search-insights@2.17.3)
+      '@algolia/autocomplete-preset-algolia': 1.17.9(@algolia/client-search@5.25.0)(algoliasearch@5.25.0)
+      '@docsearch/css': 3.9.0
+      algoliasearch: 5.25.0
+    optionalDependencies:
+      '@types/react': 18.3.21
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      search-insights: 2.17.3
+    transitivePeerDependencies:
+      - '@algolia/client-search'
 
   '@emnapi/core@1.3.1':
     dependencies:
@@ -13531,14 +13762,6 @@ snapshots:
       core-js: 3.41.0
       jiti: 2.4.2
 
-  '@rsbuild/core@1.3.13':
-    dependencies:
-      '@rspack/core': 1.3.7(@swc/helpers@0.5.17)
-      '@rspack/lite-tapable': 1.0.1
-      '@swc/helpers': 0.5.17
-      core-js: 3.41.0
-      jiti: 2.4.2
-
   '@rsbuild/core@1.3.18':
     dependencies:
       '@rspack/core': 1.3.9(@swc/helpers@0.5.17)
@@ -13687,12 +13910,6 @@ snapshots:
   '@rsbuild/plugin-react@1.1.1(@rsbuild/core@1.2.19)':
     dependencies:
       '@rsbuild/core': 1.2.19
-      '@rspack/plugin-react-refresh': 1.0.1(react-refresh@0.16.0)
-      react-refresh: 0.16.0
-
-  '@rsbuild/plugin-react@1.1.1(@rsbuild/core@1.3.13)':
-    dependencies:
-      '@rsbuild/core': 1.3.13
       '@rspack/plugin-react-refresh': 1.0.1(react-refresh@0.16.0)
       react-refresh: 0.16.0
 
@@ -14186,22 +14403,24 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rspress/core@2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)':
+  '@rspress/core@2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)':
     dependencies:
-      '@dr.pogodin/react-helmet': 2.0.4(react@19.1.0)
       '@mdx-js/loader': 3.1.0(acorn@8.14.0)(webpack@5.97.1)
       '@mdx-js/mdx': 3.1.0(acorn@8.14.0)
       '@mdx-js/react': 3.1.0(@types/react@18.3.21)(react@19.1.0)
-      '@rsbuild/core': 1.3.13
-      '@rsbuild/plugin-react': 1.1.1(@rsbuild/core@1.3.13)
+      '@rsbuild/core': 1.3.20
+      '@rsbuild/plugin-react': 1.3.1(@rsbuild/core@1.3.20)
       '@rspress/mdx-rs': 0.6.6
-      '@rspress/plugin-auto-nav-sidebar': 2.0.0-beta.3
-      '@rspress/plugin-container-syntax': 2.0.0-beta.3
-      '@rspress/plugin-last-updated': 2.0.0-beta.3
-      '@rspress/plugin-medium-zoom': 2.0.0-beta.3(@rspress/runtime@2.0.0-beta.3)
-      '@rspress/runtime': 2.0.0-beta.3
-      '@rspress/shared': 2.0.0-beta.3
-      '@rspress/theme-default': 2.0.0-beta.3
+      '@rspress/plugin-auto-nav-sidebar': 2.0.0-beta.6
+      '@rspress/plugin-container-syntax': 2.0.0-beta.6
+      '@rspress/plugin-last-updated': 2.0.0-beta.6
+      '@rspress/plugin-medium-zoom': 2.0.0-beta.6(@rspress/runtime@2.0.0-beta.6)
+      '@rspress/plugin-shiki': 2.0.0-beta.6
+      '@rspress/runtime': 2.0.0-beta.6
+      '@rspress/shared': 2.0.0-beta.6
+      '@rspress/theme-default': 2.0.0-beta.6
+      '@types/unist': 3.0.3
+      '@unhead/react': 2.0.10(react@19.1.0)
       enhanced-resolve: 5.18.1
       github-slugger: 2.0.0
       hast-util-from-html: 2.0.3
@@ -14214,11 +14433,10 @@ snapshots:
       react-dom: 18.3.1(react@19.1.0)
       react-lazy-with-preload: 2.2.1
       react-router-dom: 6.29.0(react-dom@18.3.1(react@18.3.1))(react@19.1.0)
-      react-syntax-highlighter: 15.6.1(react@19.1.0)
       rehype-external-links: 3.0.0
       remark: 15.0.1
       remark-gfm: 4.0.1
-      rspack-plugin-virtual-module: 0.1.13
+      rspack-plugin-virtual-module: 1.0.0
       tinyglobby: 0.2.13
       unified: 11.0.5
       unist-util-visit: 5.0.0
@@ -14228,6 +14446,7 @@ snapshots:
       - acorn
       - supports-color
       - webpack
+      - webpack-hot-middleware
 
   '@rspress/mdx-rs-darwin-arm64@0.6.6':
     optional: true
@@ -14264,15 +14483,27 @@ snapshots:
       '@rspress/mdx-rs-win32-arm64-msvc': 0.6.6
       '@rspress/mdx-rs-win32-x64-msvc': 0.6.6
 
+  '@rspress/plugin-algolia@2.0.0-beta.6(@algolia/client-search@5.25.0)(@rspress/runtime@2.0.0-beta.6)(@types/react@18.3.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
+    dependencies:
+      '@docsearch/css': 3.9.0
+      '@docsearch/react': 3.9.0(@algolia/client-search@5.25.0)(@types/react@18.3.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
+      '@rspress/runtime': 2.0.0-beta.6
+    transitivePeerDependencies:
+      - '@algolia/client-search'
+      - '@types/react'
+      - react
+      - react-dom
+      - search-insights
+
   '@rspress/plugin-auto-nav-sidebar@2.0.0-alpha.3':
     dependencies:
       '@rspress/shared': 2.0.0-alpha.3
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/plugin-auto-nav-sidebar@2.0.0-beta.3':
+  '@rspress/plugin-auto-nav-sidebar@2.0.0-beta.6':
     dependencies:
-      '@rspress/shared': 2.0.0-beta.3
+      '@rspress/shared': 2.0.0-beta.6
 
   '@rspress/plugin-container-syntax@2.0.0-alpha.3':
     dependencies:
@@ -14280,9 +14511,9 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/plugin-container-syntax@2.0.0-beta.3':
+  '@rspress/plugin-container-syntax@2.0.0-beta.6':
     dependencies:
-      '@rspress/shared': 2.0.0-beta.3
+      '@rspress/shared': 2.0.0-beta.6
 
   '@rspress/plugin-last-updated@2.0.0-alpha.3':
     dependencies:
@@ -14290,13 +14521,13 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/plugin-last-updated@2.0.0-beta.3':
+  '@rspress/plugin-last-updated@2.0.0-beta.6':
     dependencies:
-      '@rspress/shared': 2.0.0-beta.3
+      '@rspress/shared': 2.0.0-beta.6
 
-  '@rspress/plugin-llms@2.0.0-beta.6(@rspress/core@2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1))':
+  '@rspress/plugin-llms@2.0.0-beta.6(@rspress/core@2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1))':
     dependencies:
-      '@rspress/core': 2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)
+      '@rspress/core': 2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)
       '@rspress/shared': 2.0.0-beta.6
       remark-mdx: 3.1.0
       remark-parse: 11.0.0
@@ -14312,16 +14543,23 @@ snapshots:
       '@rspress/runtime': 2.0.0-alpha.3
       medium-zoom: 1.1.0
 
-  '@rspress/plugin-medium-zoom@2.0.0-beta.3(@rspress/runtime@2.0.0-beta.3)':
+  '@rspress/plugin-medium-zoom@2.0.0-beta.6(@rspress/runtime@2.0.0-beta.6)':
     dependencies:
-      '@rspress/runtime': 2.0.0-beta.3
+      '@rspress/runtime': 2.0.0-beta.6
       medium-zoom: 1.1.0
 
-  '@rspress/plugin-rss@2.0.0-beta.3(rspress@2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1))':
+  '@rspress/plugin-rss@2.0.0-beta.6(rspress@2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1))':
     dependencies:
-      '@rspress/shared': 2.0.0-beta.3
+      '@rspress/shared': 2.0.0-beta.6
       feed: 4.2.2
-      rspress: 2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)
+      rspress: 2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)
+
+  '@rspress/plugin-shiki@2.0.0-beta.6':
+    dependencies:
+      '@rspress/shared': 2.0.0-beta.6
+      '@shikijs/rehype': 3.4.0
+      hast-util-from-html: 2.0.3
+      shiki: 3.4.0
 
   '@rspress/runtime@2.0.0-alpha.3':
     dependencies:
@@ -14333,10 +14571,10 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/runtime@2.0.0-beta.3':
+  '@rspress/runtime@2.0.0-beta.6':
     dependencies:
-      '@dr.pogodin/react-helmet': 2.0.4(react@19.1.0)
-      '@rspress/shared': 2.0.0-beta.3
+      '@rspress/shared': 2.0.0-beta.6
+      '@unhead/react': 2.0.10(react@19.1.0)
       react: 19.1.0
       react-dom: 18.3.1(react@19.1.0)
       react-router-dom: 6.29.0(react-dom@18.3.1(react@18.3.1))(react@19.1.0)
@@ -14349,13 +14587,6 @@ snapshots:
       unified: 10.1.2
     transitivePeerDependencies:
       - '@rspack/tracing'
-
-  '@rspress/shared@2.0.0-beta.3':
-    dependencies:
-      '@rsbuild/core': 1.3.13
-      gray-matter: 4.0.3
-      lodash-es: 4.17.21
-      unified: 11.0.5
 
   '@rspress/shared@2.0.0-beta.6':
     dependencies:
@@ -14384,12 +14615,12 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/theme-default@2.0.0-beta.3':
+  '@rspress/theme-default@2.0.0-beta.6':
     dependencies:
-      '@dr.pogodin/react-helmet': 2.0.4(react@19.1.0)
       '@mdx-js/react': 2.3.0(react@19.1.0)
-      '@rspress/runtime': 2.0.0-beta.3
-      '@rspress/shared': 2.0.0-beta.3
+      '@rspress/runtime': 2.0.0-beta.6
+      '@rspress/shared': 2.0.0-beta.6
+      '@unhead/react': 2.0.10(react@19.1.0)
       body-scroll-lock: 4.0.0-beta.0
       copy-to-clipboard: 3.3.3
       flexsearch: 0.7.43
@@ -14399,7 +14630,6 @@ snapshots:
       nprogress: 0.2.0
       react: 19.1.0
       react-dom: 18.3.1(react@19.1.0)
-      react-syntax-highlighter: 15.6.1(react@19.1.0)
 
   '@rstack-dev/doc-ui@1.10.1(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
@@ -14906,6 +15136,11 @@ snapshots:
 
   '@ungap/structured-clone@1.2.1': {}
 
+  '@unhead/react@2.0.10(react@19.1.0)':
+    dependencies:
+      react: 19.1.0
+      unhead: 2.0.10
+
   '@vercel/nft@0.26.5':
     dependencies:
       '@mapbox/node-pre-gyp': 1.0.11
@@ -15194,6 +15429,22 @@ snapshots:
       fast-uri: 3.0.5
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
+
+  algoliasearch@5.25.0:
+    dependencies:
+      '@algolia/client-abtesting': 5.25.0
+      '@algolia/client-analytics': 5.25.0
+      '@algolia/client-common': 5.25.0
+      '@algolia/client-insights': 5.25.0
+      '@algolia/client-personalization': 5.25.0
+      '@algolia/client-query-suggestions': 5.25.0
+      '@algolia/client-search': 5.25.0
+      '@algolia/ingestion': 1.25.0
+      '@algolia/monitoring': 1.25.0
+      '@algolia/recommend': 5.25.0
+      '@algolia/requester-browser-xhr': 5.25.0
+      '@algolia/requester-fetch': 5.25.0
+      '@algolia/requester-node-http': 5.25.0
 
   anser@1.4.10: {}
 
@@ -17193,6 +17444,12 @@ snapshots:
       jsonfile: 6.1.0
       universalify: 2.0.1
 
+  fs-extra@11.3.0:
+    dependencies:
+      graceful-fs: 4.2.11
+      jsonfile: 6.1.0
+      universalify: 2.0.1
+
   fs-extra@7.0.1:
     dependencies:
       graceful-fs: 4.2.11
@@ -17584,6 +17841,8 @@ snapshots:
       react-is: 16.13.1
 
   hono@3.12.12: {}
+
+  hookable@5.5.3: {}
 
   hpack.js@2.1.6:
     dependencies:
@@ -20929,16 +21188,6 @@ snapshots:
       react: 18.3.1
       refractor: 3.6.0
 
-  react-syntax-highlighter@15.6.1(react@19.1.0):
-    dependencies:
-      '@babel/runtime': 7.26.0
-      highlight.js: 10.7.3
-      highlightjs-vue: 1.0.0
-      lowlight: 1.20.0
-      prismjs: 1.29.0
-      react: 19.1.0
-      refractor: 3.6.0
-
   react-textarea-autosize@8.5.7(@types/react@18.3.21)(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.26.0
@@ -21332,13 +21581,13 @@ snapshots:
     optionalDependencies:
       typescript: 5.7.3
 
-  rsbuild-plugin-google-analytics@1.0.3(@rsbuild/core@1.3.13):
+  rsbuild-plugin-google-analytics@1.0.3(@rsbuild/core@1.3.20):
     optionalDependencies:
-      '@rsbuild/core': 1.3.13
+      '@rsbuild/core': 1.3.20
 
-  rsbuild-plugin-open-graph@1.0.2(@rsbuild/core@1.3.13):
+  rsbuild-plugin-open-graph@1.0.2(@rsbuild/core@1.3.20):
     optionalDependencies:
-      '@rsbuild/core': 1.3.13
+      '@rsbuild/core': 1.3.20
 
   rslog@1.2.3: {}
 
@@ -21351,6 +21600,10 @@ snapshots:
   rspack-plugin-virtual-module@0.1.13:
     dependencies:
       fs-extra: 11.2.0
+
+  rspack-plugin-virtual-module@1.0.0:
+    dependencies:
+      fs-extra: 11.3.0
 
   rspress-plugin-font-open-sans@1.0.0: {}
 
@@ -21369,11 +21622,11 @@ snapshots:
       - supports-color
       - webpack
 
-  rspress@2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1):
+  rspress@2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1):
     dependencies:
-      '@rsbuild/core': 1.3.13
-      '@rspress/core': 2.0.0-beta.3(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)
-      '@rspress/shared': 2.0.0-beta.3
+      '@rsbuild/core': 1.3.20
+      '@rspress/core': 2.0.0-beta.6(@types/react@18.3.21)(acorn@8.14.0)(webpack@5.97.1)
+      '@rspress/shared': 2.0.0-beta.6
       cac: 6.7.14
       chokidar: 3.6.0
       picocolors: 1.1.1
@@ -21382,6 +21635,7 @@ snapshots:
       - acorn
       - supports-color
       - webpack
+      - webpack-hot-middleware
 
   run-applescript@7.0.0: {}
 
@@ -21533,6 +21787,8 @@ snapshots:
   scroll-into-view-if-needed@3.1.0:
     dependencies:
       compute-scroll-into-view: 3.1.1
+
+  search-insights@2.17.3: {}
 
   section-matter@1.0.0:
     dependencies:
@@ -22264,6 +22520,10 @@ snapshots:
   undici@5.29.0:
     dependencies:
       '@fastify/busboy': 2.1.1
+
+  unhead@2.0.10:
+    dependencies:
+      hookable: 5.5.3
 
   unicode-canonical-property-names-ecmascript@2.0.1: {}
 
