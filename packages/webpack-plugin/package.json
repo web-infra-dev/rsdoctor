@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
-    "@types/lodash": "^4.17.16",
+    "@types/lodash": "^4.17.17",
     "@types/node": "^22.8.1",
     "@types/tapable": "2.2.7",
     "tslib": "2.8.1",
