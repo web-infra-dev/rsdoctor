@@ -152,9 +152,7 @@ function getModuleSource(
     }
   }
 
-  return process.env.NODE_ENV === 'test'
-    ? Buffer.from('test code')
-    : readFile(modulePath, wbFs);
+  return readFile(modulePath, wbFs);
 }
 
 async function appendModuleData(
