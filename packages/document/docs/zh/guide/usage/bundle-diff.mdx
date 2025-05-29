@@ -21,7 +21,7 @@ import { Badge } from '@theme';
 
 我们计划提供了一个在线页面用于 Bundle Diff 分析，你可以通过在页面中上传 **2 份** Rsdoctor 产出的[manifest.json](/config/options/term#manifestjson)，其中一份作为基准（Baseline），另一份则作为当前产物结果 (Current)，通过点击 Start Diff 则就可以进入我们的分析页面。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff.png" />
 
 ## 使用指南
 
@@ -77,13 +77,13 @@ import { Badge } from '@theme';
 - **Modules** 代表两次产物中存在的 Modules 数量。
 - **Packages** 代表两次产物中存在的 NPM Packages 总数，以及新增、删除、变更的数量变化。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-cards.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-cards.png" />
 
 #### Overview
 
 在 Overview 模块中，我们可以看到不同**文件类型维度**的**体积**、**数量**以及**变化幅度**。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-all.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-all.png" />
 
 #### Assets
 
@@ -93,17 +93,17 @@ Rsdoctor 在展示 Asset 名称时，会尝试移除产物文件名中的 hash �
 
 在 Assets 模块中，我们可以看到产物文件之间的**体积**以及**变化幅度**。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-assets-list.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-assets-list.png" />
 
 同时**点击**列表项目前的 **"+" 按钮**，则可以展开看到对应 Asset 所**包含的模块列表**（即 `Modules of "***"`），其中则会显示模块之间的**体积**以及**变化幅度**。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-assets.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-assets.png" />
 
 Rsdoctor 会**兼容同名 Assets 文件 hash 不同**的情况，但是对于**拆包产生的命名不同的 Assets**，Rsdoctor 则无法辨别其比较对象。
 
 所以 Rsdoctor Assets 模块**还提供了 select 组件**，你可以**手动选择想要对比的 Assets 资源**。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-select-assets.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-select-assets.png" />
 
 #### Modules
 
@@ -113,7 +113,7 @@ Rsdoctor 会**兼容同名 Assets 文件 hash 不同**的情况，但是对于**
 
 而 `node_modules` 标签则意味着该模块的路径中包含了 `/node_modules/`。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-module-list.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-module-list.png" />
 
 在列表项的右侧，则可以通过对应的「View Changes」按钮来查看模块代码的变更。
 
@@ -122,10 +122,10 @@ Rsdoctor 会**兼容同名 Assets 文件 hash 不同**的情况，但是对于**
 - **Source Code: 源码数据。** `Normal` 模式下存在代码资源，`Lite` 模式下不存在代码资源，`Brief` 模式不存在代码资源。
 - **Bundled Code: 构建后代码。** `Normal` 模式下存在代码资源，`Lite` 模式下存在代码资源，`Brief` 模式不存在代码资源。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-module-changes.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-module-changes.png" />
 
 #### Packages
 
 在 Packages 模块，我们可以看到两次产物中包含的**所有 NPM Packages 列表**，每个列表项则会包含其对应的 **Package Name**、**Version（版本号）**、**Parsed Size（打包后的最终体积）**。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-packages.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-packages.png" />

@@ -4,7 +4,7 @@ This is the core package of Rsdoctor, providing core tools and analysis capabili
 
 ## Documentation
 
-https://rsdoctor.dev/
+https://rsdoctor.rs/
 
 ## Contributing
 

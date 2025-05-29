@@ -84,7 +84,7 @@ The following Rsdoctor plugins are required (version requirements):
 
 ### 1. Plugin Configuration
 
-If you haven't added the Rsdoctor plugin yet, you'll need to configure it in your project, [👉🏻 Quick Start](https://rsdoctor.dev/guide/start/quick-start).
+If you haven't added the Rsdoctor plugin yet, you'll need to configure it in your project, [👉🏻 Quick Start](https://rsdoctor.rs/guide/start/quick-start).
 
 ### 2. Enable Rsdoctor and Run Local Build
 

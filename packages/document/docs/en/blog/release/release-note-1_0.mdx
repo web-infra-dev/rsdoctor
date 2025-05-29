@@ -8,12 +8,12 @@ _March 19, 2025_
 
 We are excited to announce the official release of **Rsdoctor 1.0**!
 
-After a year of development and testing, we are proud to introduce **Rsdoctor 1.0** — a build analyzer tailored for the [Rspack](https://rspack.dev/) ecosystem and fully compatible with the [webpack](https://webpack.js.org/) ecosystem.
+After a year of development and testing, we are proud to introduce **Rsdoctor 1.0** — a build analyzer tailored for the [Rspack](https://rspack.rs/) ecosystem and fully compatible with the [webpack](https://webpack.js.org/) ecosystem.
 
 Rsdoctor is committed to being a one-stop, intelligent build analyzer that makes the build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
 
 <video
-  src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
   style={{
     width: '100%',
     height: 'auto',
@@ -38,7 +38,7 @@ In summary, community tools have the following areas for improvement:
 
 1. **Lack of detail**: Traditional tools cannot delve into the details and changes of the build process, and to view the compilation details of a loader, developers often need to set breakpoints for step-by-step debugging.
 2. **Functional limitations**: Current analyser typically only display bundle data, lacking build scanning capabilities, unable to proactively provide optimization suggestions, and do not support custom scanning rules.
-3. **Support for Rspack**: Existing tools do not fully support Rspack, for example, they cannot analyze Rspack's [builtin loader](https://rspack.dev/guide/features/builtin-swc-loader) of Rspack.
+3. **Support for Rspack**: Existing tools do not fully support Rspack, for example, they cannot analyze Rspack's [builtin loader](https://rspack.rs/guide/features/builtin-swc-loader) of Rspack.
 
 ### Birth of Rsdoctor
 
@@ -46,7 +46,7 @@ Based on the above situation, we decided to develop a build analyzer focused on 
 
 We designed an intuitive user interface for Rsdoctor, and Rsdoctor extends the **loader profiling capability** by combining the advantages of multiple tools to more deeply analyze the loader behavior in the compilation phase, **built-in the scanning and detection rules for artifacts and compilation**, and supports user **custom rules**.
 
-Rsdoctor not only supports Rspack and webpack, but also supports all tools and frameworks based on Rspack or webpack, such as: [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rspeedy (Lynx)](https://lynxjs.org/rspeedy/), [Storybook](https://github.com/rspack-contrib/storybook-rsbuild), [Next.js](https://nextjs.org/), [Nuxt](https://nuxt.com/), [Re.Pack](https://re-pack.dev/), [Modern.js](https://modernjs.dev/), [Rsbuild](https://rsbuild.dev/), [Rspress](https://rspress.dev/) and [Rslib](https://lib.rsbuild.dev/).
+Rsdoctor not only supports Rspack and webpack, but also supports all tools and frameworks based on Rspack or webpack, such as: [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rspeedy (Lynx)](https://lynxjs.org/rspeedy/), [Storybook](https://github.com/rspack-contrib/storybook-rsbuild), [Next.js](https://nextjs.org/), [Nuxt](https://nuxt.com/), [Re.Pack](https://re-pack.dev/), [Modern.js](https://modernjs.dev/), [Rsbuild](https://rsbuild.rs/), [Rspress](https://rspress.rs/) and [Rslib](https://lib.rsbuild.rs/).
 
 Rsdoctor can be used to:
 
@@ -63,7 +63,7 @@ In the future, Rsdoctor will continue to provide first-class support for all too
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rstack/rstack-overview.png"
+  src="https://assets.rspack.rs/rstack/rstack-overview.png"
 />
 
 ## Typical use cases
@@ -76,7 +76,7 @@ During the build process, if you find that the compilation speed is too slow, yo
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/loader-timeline-overall-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/loader-timeline-overall-v1-0.png"
 />
 
 ### 2. "Outputs are not as expected?"
@@ -85,16 +85,16 @@ During the build, there may be problems where the outputs do not match expectati
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/babel-import-errors-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/babel-import-errors-v1-0.png"
 />
 
 ### 3. "How to split the chunks reasonably?"
 
-We can use the [Bundle Analysis](/guide/usage/bundle-size) page to look at the modules tree of a particular artifact to see what modules the chunk contains, and then use the [splitChunks](https://rspack.dev/zh/plugins/webpack/split-chunks-plugin) configuration of Rspack to split the chunks appropriately.
+We can use the [Bundle Analysis](/guide/usage/bundle-size) page to look at the modules tree of a particular artifact to see what modules the chunk contains, and then use the [splitChunks](https://rspack.rs/zh/plugins/webpack/split-chunks-plugin) configuration of Rspack to split the chunks appropriately.
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/bundle-size-overall-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/bundle-size-overall-v1-0.png"
 />
 
 ### 4. "How to analyze the reasons for the increase in bundle size?"
@@ -103,7 +103,7 @@ When a certain version is launched, if the performance of the online page deteri
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/bundle-diff-assets-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/bundle-diff-assets-v1-0.png"
 />
 
 ### 5. "Why is a certain module bundled?"
@@ -112,7 +112,7 @@ During the build process, if you want to know why a certain module file is bundl
 
 <img
   style={{ width: 700, margin: 'auto', borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/module-analysis-tree-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/module-analysis-tree-v1-0.png"
 />
 
 ## What's new in 1.0
@@ -143,7 +143,7 @@ new RsdoctorRspackPlugin({
 
 <img
   style={{ width: '80%', margin: 'auto', borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/search-modules-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/search-modules-v1-0.png"
 />
 
 ### 🛠️ New scanning rules

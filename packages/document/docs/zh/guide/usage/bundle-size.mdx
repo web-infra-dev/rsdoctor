@@ -8,7 +8,7 @@
 - **产物分析（`Bundle Analysis`）模块**：分析构建产物资源（**Assets**）以及所包含的 **Modules** 的大小和代码信息。在该模块中，可以查看 Assets 中 **Module 打包后的实际代码大小**，以及模块的原始代码或**打包后的代码段**以及**模块引用关系**。
 
 <img
-  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-overall.png"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-overall.png"
   width={'700px'}
   style={{ margin: 'auto' }}
 />
@@ -18,7 +18,7 @@
 ### 名词解释
 
 - **`Assets`**：资源是对图像、字体、媒体和其他文件类型的统称，是最终存在于输出文件夹内的文件，同时，每个 Chunk 都有对应的 [Assets 资源](https://webpack.js.org/concepts/under-the-hood/#chunks)。
-- **`Module`**：一个或多个 Module 组合成了 Chunk。有关 Module 类型的详细信息，请参阅 [Rspack Modules](https://www.rspack.dev/api/modules.html) 和 [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module)。
+- **`Module`**：一个或多个 Module 组合成了 Chunk。有关 Module 类型的详细信息，请参阅 [Rspack Modules](https://www.rspack.rs/api/modules.html) 和 [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module)。
 - **`Bundle Size`**：资源产物的最终打包大小，这是打包工具处理后的最终大小。
 - **`Module Bundled Source & Size`**：**Module Parsed Source** 是指 **Module** 在打包产物中的最终代码片段，**Module Parsed Size** 是指 **Module** 在打包产物中的最终代码片段的大小。
 - **`Package Count`**：第三方包的数量。
@@ -34,7 +34,7 @@
 产物概览显示了 `Total Files` 等文件数目和大小信息。点击卡片图表可以展开资源详情，如下图所示：
 
 <img
-  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-overall-1.png"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-overall-1.png"
   width={'700px'}
   style={{ margin: 'auto' }}
 />
@@ -42,7 +42,7 @@
 - 点击详情小图标，右侧会展示对应资源树，标明资源大小：
 
 <img
-  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-tree.png"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-tree.png"
   width={'300px'}
   height={'400px'}
   style={{ margin: 'auto' }}
@@ -69,7 +69,7 @@
 - 左侧是 **Assets** 资源列表，按照资源大小降序排列，可以点击 **「expand all」** 按钮展开全部节点。
 - 右侧是 **Assets** 对应的 **Modules** 列表，同样按照打包后模块大小降序排列。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-analysis-tree.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-analysis-tree.png" />
 
 ### 搜索筛选框
 
@@ -80,7 +80,7 @@
 - **Assets Size 筛选工具**：填写数字，单位为：KB、MB，可以过滤掉小于所填 `Size` 的 `Assets` 资源。
 - **Module Size 筛选工具**：填写数字，单位为：KB、MB，可以过滤掉小于所填 `Size` 的 `Module` 资源。
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-analysis-selects.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-analysis-selects.png" />
 
 #### 模块搜索功能
 
@@ -88,7 +88,7 @@
 
 如下图，可以看到匹配搜素 Module 关键字的结果：
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/search-modules.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/search-modules.png" />
 
 ### 模块标签说明
 
@@ -96,13 +96,13 @@
 
 <div style={{ display: 'flex' }}>
   <img
-    src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-assets-tags.png"
+    src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-assets-tags.png"
     height="200px"
     width="260px"
     style={{ margin: 'auto' }}
   />
   <img
-    src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-modules-tags.png"
+    src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-modules-tags.png"
     height="300px"
     width="340px"
     style={{ margin: 'auto' }}
@@ -124,7 +124,7 @@
 点击 **「Bundle Size」** 页面的 **「Bundle Analyzer Graph」** 按钮，可以查看经典的瓦片图。
 
 <img
-  src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-tile-graph.png"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-tile-graph.png"
   width="500px"
   style={{ margin: 'auto' }}
 />
@@ -135,7 +135,7 @@
 `supports.banner` 选项仅用于调试，请勿将其用于生产。
 :::
 
-由于 Rspack 和 webpack 都支持 [BannerPlugin](https://www.rspack.dev/plugins/webpack/banner-plugin#bannerplugin)，BannerPlugin 是可在生成的 chunk 顶部或尾部添加一段指定的内容的内置插件。
+由于 Rspack 和 webpack 都支持 [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin)，BannerPlugin 是可在生成的 chunk 顶部或尾部添加一段指定的内容的内置插件。
 
 添加的代码段将会影响到对 Bundle 的解析能力。
 

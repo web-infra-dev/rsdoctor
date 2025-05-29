@@ -19,7 +19,7 @@ Additionally, the bundler will **parallelize the execution** of multiple non-con
 Furthermore, the asynchronous logic within loader functions cannot be recognized, causing a single loader function to potentially span across the execution of multiple other loaders. As a result, there are three possible cases, as shown in the following diagram:
 
 <img
-  src="https://assets.rspack.dev/others/assets/rsdoctor/loader-cases.jpeg"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/loader-cases.jpeg"
   style={{ width: '250px' }}
 />
 
@@ -63,8 +63,8 @@ module.exports = {
 
 ## The loader of CssExtractRspackPlugin takes too long
 
-When using Rsdoctor to analyze the compilation time of Rspack projects, you may find that the loader of [CssExtractRspackPlugin](https://rspack.dev/plugins/rspack/css-extract-rspack-plugin) takes a long time. However, this figure does not represent the actual time taken by the CssExtractRspackPlugin's loader; it also includes the time taken by other loaders involved in compiling this module.
+When using Rsdoctor to analyze the compilation time of Rspack projects, you may find that the loader of [CssExtractRspackPlugin](https://rspack.rs/plugins/rspack/css-extract-rspack-plugin) takes a long time. However, this figure does not represent the actual time taken by the CssExtractRspackPlugin's loader; it also includes the time taken by other loaders involved in compiling this module.
 
-- Reason: The loader in [CssExtractRspackPlugin](https://rspack.dev/plugins/rspack/css-extract-rspack-plugin) asynchronously calls other loaders during the pitch phase and waits for the callback results after these loaders execute. Therefore, the time taken by CssExtractRspackPlugin actually includes the execution time of other loaders and idle time.
+- Reason: The loader in [CssExtractRspackPlugin](https://rspack.rs/plugins/rspack/css-extract-rspack-plugin) asynchronously calls other loaders during the pitch phase and waits for the callback results after these loaders execute. Therefore, the time taken by CssExtractRspackPlugin actually includes the execution time of other loaders and idle time.
 
-<img src="https://assets.rspack.dev/rsdoctor/css-extract-loader.png" />
+<img src="https://assets.rspack.rs/rsdoctor/css-extract-loader.png" />

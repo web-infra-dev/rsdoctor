@@ -4,7 +4,7 @@ This package is the Rsdoctor's tools package.
 
 ## Documentation
 
-https://rsdoctor.dev/
+https://rsdoctor.rs/
 
 ## Contributing
 
