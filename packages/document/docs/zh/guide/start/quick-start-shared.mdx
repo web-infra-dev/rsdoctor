@@ -4,7 +4,7 @@
 
 ### Rspack 项目
 
-在 `rspack.config.js` 的 [plugins](https://www.rspack.dev/config/plugins.html#plugins) 中初始化 RsdoctorRspackPlugin 插件，参考：
+在 `rspack.config.js` 的 [plugins](https://www.rspack.rs/config/plugins.html#plugins) 中初始化 RsdoctorRspackPlugin 插件，参考：
 
 ```js title="rspack.config.js"
 const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
@@ -25,7 +25,7 @@ module.exports = {
 
 ### Rsbuild 项目
 
-Rsbuild 内置了对 Rsdoctor 的支持，不需要手动注册插件。详见 [Rsbuild - 使用 Rsdoctor](https://rsbuild.dev/zh/guide/debug/rsdoctor)。
+Rsbuild 内置了对 Rsdoctor 的支持，不需要手动注册插件。详见 [Rsbuild - 使用 Rsdoctor](https://rsbuild.rs/zh/guide/debug/rsdoctor)。
 
 ### Webpack 项目
 
@@ -82,7 +82,7 @@ export default {
 
 #### 第一步：注册 Rsdoctor 插件
 
-在 `next.config.ts` 的 [Rspack 配置](https://rspack.dev/guide/tech/next)([webpack 配置](https://nextjs.org/docs/pages/api-reference/config/next-config-js/webpack)) 中初始化 [RsdoctorRspackPlugin](#rspack-%E9%A1%B9%E7%9B%AE)（[RsdoctorWebpackPlugin](#webpack-%E9%A1%B9%E7%9B%AE)） 插件。
+在 `next.config.ts` 的 [Rspack 配置](https://rspack.rs/guide/tech/next)([webpack 配置](https://nextjs.org/docs/pages/api-reference/config/next-config-js/webpack)) 中初始化 [RsdoctorRspackPlugin](#rspack-%E9%A1%B9%E7%9B%AE)（[RsdoctorWebpackPlugin](#webpack-%E9%A1%B9%E7%9B%AE)） 插件。
 
 import { Tab, Tabs } from 'rspress/theme';
 

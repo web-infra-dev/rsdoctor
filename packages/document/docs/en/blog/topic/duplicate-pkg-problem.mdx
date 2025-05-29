@@ -2,7 +2,7 @@
 
 Rsdoctor will report cases where multiple duplicate dependencies exist in the same bundler's artifact.
 
-<img src="https://assets.rspack.dev/others/assets/rsdoctor/bundle-alerts.png" />
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-alerts.png" />
 
 ## Hazards of duplicate packages
 
@@ -36,7 +36,7 @@ However, before using them, it is important to consider the compatibility betwee
 
 ### Build aspect
 
-#### Use [resolve.alias](https://www.rspack.dev/config/resolve.html#resolvealias)
+#### Use [resolve.alias](https://www.rspack.rs/config/resolve.html#resolvealias)
 
 Almost all bundlers support customizing the resolution paths for npm packages. Therefore, we can eliminate duplicate dependencies by manually specifying the resolve paths for packages during compilation. For example, using **Rspack** or **Webpack**, if `lodash` is duplicated in the build, we can configure it as follows to specify the resolve paths for all `lodash` packages to the `node_modules` directory in the current directory.
 

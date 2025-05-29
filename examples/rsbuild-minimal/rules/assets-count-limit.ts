@@ -17,7 +17,7 @@ export const AssetsCountLimit = defineRule(() => ({
         message: 'The count of assets is bigger than limit',
         detail: {
           type: 'link',
-          link: 'https://rsdoctor.dev/zh/guide/start/quick-start', // This link just for show case.
+          link: 'https://rsdoctor.rs/zh/guide/start/quick-start', // This link just for show case.
         },
       });
     }

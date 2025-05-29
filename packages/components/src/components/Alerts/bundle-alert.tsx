@@ -123,7 +123,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
         description = (
           <span>
             No ECMA Version Check Rules were found. Please refer to
-            「https://rsdoctor.dev/guide/usage/rule-config」.
+            「https://rsdoctor.rs/guide/usage/rule-config」.
           </span>
         );
         children = <ECMAVersionCheck data={td.data} />;

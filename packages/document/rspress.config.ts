@@ -9,7 +9,7 @@ import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import pluginSitemap from 'rspress-plugin-sitemap';
 
-const siteUrl = 'https://rsdoctor.dev';
+const siteUrl = 'https://rsdoctor.rs';
 
 export default defineConfig({
   plugins: [
@@ -68,12 +68,12 @@ export default defineConfig({
   root: path.join(__dirname, 'docs'),
   title: 'Rsdoctor',
   description: 'A one-stop build analyzer for Rspack and webpack.',
-  icon: 'https://assets.rspack.dev/rsdoctor/rsdoctor-logo-960x960.png',
+  icon: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-960x960.png',
   lang: 'en',
   base: '/',
   logo: {
-    light: 'https://assets.rspack.dev/rsdoctor/rsdoctor-logo-light.png',
-    dark: 'https://assets.rspack.dev/rsdoctor/rsdoctor-logo-dark.png',
+    light: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-light.png',
+    dark: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-dark.png',
   },
   head: [
     '<meta name="apple-mobile-web-app-capable" content="yes" />',
@@ -85,7 +85,7 @@ export default defineConfig({
         }
         return 'rsdoctor-og-image.png';
       };
-      return `<meta property="og:image" content="https://assets.rspack.dev/rsdoctor/${getOgImage()}">`;
+      return `<meta property="og:image" content="https://assets.rspack.rs/rsdoctor/${getOgImage()}">`;
     },
   ],
   markdown: {
@@ -153,7 +153,7 @@ export default defineConfig({
       pluginOpenGraph({
         title: 'Rsdoctor',
         type: 'website',
-        url: 'https://rsdoctor.dev/',
+        url: 'https://rsdoctor.rs/',
         description: 'Build analyzer for Rspack and webpack',
         twitter: {
           site: '@rspack_dev',

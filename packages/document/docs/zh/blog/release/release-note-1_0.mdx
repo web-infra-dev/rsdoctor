@@ -8,12 +8,12 @@ _March 19, 2025_
 
 我们很高兴地宣布 **Rsdoctor 1.0** 已经正式发布！
 
-在经过一年的迭代与验证后，我们正式推出 **Rsdoctor 1.0** —— 一款为 [Rspack](https://rspack.dev/) 生态量身打造的构建分析工具，同时也完全兼容 [webpack](https://webpack.js.org/) 生态。
+在经过一年的迭代与验证后，我们正式推出 **Rsdoctor 1.0** —— 一款为 [Rspack](https://rspack.rs/) 生态量身打造的构建分析工具，同时也完全兼容 [webpack](https://webpack.js.org/) 生态。
 
 Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可视化与智能分析，使整个构建流程变得透明、可预测和可优化，从而帮助开发团队精准定位瓶颈、优化性能并提升工程质量。
 
 <video
-  src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
   style={{
     width: '100%',
     height: 'auto',
@@ -38,7 +38,7 @@ Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可�
 
 1. **分析不够深入**：传统工具无法深入探索构建过程的细节和变化。例如，如果想要查看某个 loader 编译细节，开发者常常需要手动设置断点逐步调试。
 2. **功能局限性**：现有的分析工具通常只展示产物数据，缺乏构建扫描功能，无法主动提供优化建议，也不支持自定义检查规则。
-3. **Rspack 支持**：现有工具对 Rspack 的支持不够全面，例如无法分析 Rspack 的 [内置 loader](https://rspack.dev/guide/features/builtin-swc-loader) 。
+3. **Rspack 支持**：现有工具对 Rspack 的支持不够全面，例如无法分析 Rspack 的 [内置 loader](https://rspack.rs/guide/features/builtin-swc-loader) 。
 
 ### Rsdoctor 的诞生
 
@@ -46,7 +46,7 @@ Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可�
 
 我们为 Rsdoctor 设计了直观的用户界面，将构建数据可视化。同时，Rsdoctor 在结合多种工具的基础上，额外扩展了 loader 分析能力以更深入 loader 的编译行为，内置了产物及编译的扫描和检测规则，并支持用户自定义规则。
 
-Rsdoctor 不仅支持 Rspack 和 webpack，也支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)、[Rspeedy (Lynx)](https://lynxjs.org/rspeedy/)、[Storybook](https://github.com/rspack-contrib/storybook-rsbuild)、[Next.js](https://nextjs.org/)、[Nuxt](https://nuxt.com/)、[Re.Pack](https://re-pack.dev/)、[Modern.js](https://modernjs.dev/)、[Rsbuild](https://rsbuild.dev/)、[Rspress](https://rspress.dev/) 和 [Rslib](https://lib.rsbuild.dev/) 等。
+Rsdoctor 不仅支持 Rspack 和 webpack，也支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)、[Rspeedy (Lynx)](https://lynxjs.org/rspeedy/)、[Storybook](https://github.com/rspack-contrib/storybook-rsbuild)、[Next.js](https://nextjs.org/)、[Nuxt](https://nuxt.com/)、[Re.Pack](https://re-pack.dev/)、[Modern.js](https://modernjs.dev/)、[Rsbuild](https://rsbuild.rs/)、[Rspress](https://rspress.rs/) 和 [Rslib](https://lib.rsbuild.rs/) 等。
 
 Rsdoctor 可以被用于：
 
@@ -63,7 +63,7 @@ Rsdoctor 已在字节跳动内部得到广泛应用，帮助开发者高效分�
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rstack/rstack-overview.png"
+  src="https://assets.rspack.rs/rstack/rstack-overview.png"
 />
 
 ## 常见应用场景
@@ -76,7 +76,7 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/loader-timeline-overall-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/loader-timeline-overall-v1-0.png"
 />
 
 ### 2. 「构建结果与预期不符？」
@@ -85,16 +85,16 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/babel-import-errors-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/babel-import-errors-v1-0.png"
 />
 
 ### 3.「如何合理分包？」
 
-我们可以通过 [产物分析](/guide/usage/bundle-size) 页面查看某个产物的 Modules 树来查看该产物资源包含了哪些 Modules，进而通过 Rspack 的 [splitChunks](https://rspack.dev/zh/plugins/webpack/split-chunks-plugin) 配置来进行合理的分包。
+我们可以通过 [产物分析](/guide/usage/bundle-size) 页面查看某个产物的 Modules 树来查看该产物资源包含了哪些 Modules，进而通过 Rspack 的 [splitChunks](https://rspack.rs/zh/plugins/webpack/split-chunks-plugin) 配置来进行合理的分包。
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/bundle-size-overall-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/bundle-size-overall-v1-0.png"
 />
 
 ### 4.「如何分析产物增大原因？」
@@ -103,7 +103,7 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 <img
   style={{ borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/bundle-diff-assets-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/bundle-diff-assets-v1-0.png"
 />
 
 ### 5.「某个模块为什么会被打包？」
@@ -112,7 +112,7 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 <img
   style={{ width: 700, margin: 'auto', borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/module-analysis-tree-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/module-analysis-tree-v1-0.png"
 />
 
 ## 1.0 新特性
@@ -141,7 +141,7 @@ new RsdoctorRspackPlugin({
 
 <img
   style={{ width: '80%', margin: 'auto', borderRadius: 12 }}
-  src="https://assets.rspack.dev/rsdoctor/assets/search-modules-v1-0.png"
+  src="https://assets.rspack.rs/rsdoctor/assets/search-modules-v1-0.png"
 />
 
 ### 🛠️ 新增扫描规则

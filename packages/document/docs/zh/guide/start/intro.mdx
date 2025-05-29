@@ -1,13 +1,13 @@
 # 介绍
 
-Rsdoctor 是一款为 [Rspack](https://rspack.dev/) 生态量身打造的构建分析工具，同时也完全兼容 [webpack](https://webpack.js.org/) 生态。
+Rsdoctor 是一款为 [Rspack](https://rspack.rs/) 生态量身打造的构建分析工具，同时也完全兼容 [webpack](https://webpack.js.org/) 生态。
 
 Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可视化与智能分析，使整个构建流程变得透明、可预测和可优化，从而帮助开发团队精准定位瓶颈、优化性能并提升工程质量。
 
-Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)、[Rspeedy (Lynx)](https://lynxjs.org/rspeedy/)、[Storybook](https://github.com/rspack-contrib/storybook-rsbuild)、[Next.js](https://nextjs.org/)、[Nuxt](https://nuxt.com/)、[Re.Pack](https://re-pack.dev/)、[Modern.js](https://modernjs.dev/)、[Rsbuild](https://rsbuild.dev/)、[Rspress](https://rspress.dev/) 和 [Rslib](https://lib.rsbuild.dev/) 等。
+Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)、[Rspeedy (Lynx)](https://lynxjs.org/rspeedy/)、[Storybook](https://github.com/rspack-contrib/storybook-rsbuild)、[Next.js](https://nextjs.org/)、[Nuxt](https://nuxt.com/)、[Re.Pack](https://re-pack.dev/)、[Modern.js](https://modernjs.dev/)、[Rsbuild](https://rsbuild.rs/)、[Rspress](https://rspress.rs/) 和 [Rslib](https://lib.rsbuild.rs/) 等。
 
 <video
-  src="https://assets.rspack.dev/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
   style={{
     width: '100%',
     height: 'auto',
@@ -37,11 +37,11 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
 
 - 概览页（即首页）能够知道**项目配置、诊断信息、编译信息、产物情况**。
 
-![Overall](https://assets.rspack.dev/others/assets/rsdoctor/project-overall-1.jpg)
+![Overall](https://assets.rspack.rs/others/assets/rsdoctor/project-overall-1.jpg)
 
 - 除了有项目概览之外，我们还提供了诊断模块，分别是编译诊断、重复包诊断等。如果你的编译、产物命中了我们定义的诊断规则，就会在工具首页出现对应的警示模块, **其中重复包可以查看到详细的引用路径**:
 
-![Overall-Alerts](https://assets.rspack.dev/others/assets/rsdoctor/overall-alerts.png)
+![Overall-Alerts](https://assets.rspack.rs/others/assets/rsdoctor/overall-alerts.png)
 
 ### ⭐️ 编译分析
 
@@ -52,11 +52,11 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
 - 该模块主要提供了 **Rspack 或 webpack 的 Loaders** 内的输入输出、预估耗时、参数等数据分析的功能。
 
   <img
-    src="https://assets.rspack.dev/others/assets/rsdoctor/loader-timeline-overall.png"
+    src="https://assets.rspack.rs/others/assets/rsdoctor/loader-timeline-overall.png"
     style={{ margin: 'auto' }}
   />
   <img
-    src="https://assets.rspack.dev/others/assets/rsdoctor/loader-analysis-all.png"
+    src="https://assets.rspack.rs/others/assets/rsdoctor/loader-analysis-all.png"
     style={{ margin: 'auto' }}
   />
 
@@ -67,7 +67,7 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
 <p>
   <img
     alt="bundle"
-    src={'https://assets.rspack.dev/others/assets/rsdoctor/compile-plugin.jpg'}
+    src={'https://assets.rspack.rs/others/assets/rsdoctor/compile-plugin.jpg'}
     width="600px"
     style={{ margin: 'auto' }}
   />
@@ -80,7 +80,7 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
 <p>
   <img
     alt="bundle"
-    src={'https://assets.rspack.dev/others/assets/rsdoctor/resolver.png'}
+    src={'https://assets.rspack.rs/others/assets/rsdoctor/resolver.png'}
     width="700px"
     style={{ margin: 'auto' }}
   />
@@ -96,7 +96,7 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
   <img
     alt="bundle"
     src={
-      'https://assets.rspack.dev/others/assets/rsdoctor/bundle-size-overall.png'
+      'https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-overall.png'
     }
     width="700px"
     style={{ margin: 'auto' }}
@@ -111,8 +111,8 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
 
 使用 Rsdoctor 提供的 Bundle Diff 功能，可以看到产物内的资源体积、重复包、Packages 等数据的变化以及每个资源中的模块文件的大小及代码的变化。
 
-| ![bundle-diff-1](https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-2.png) | ![bundle-diff-2](https://assets.rspack.dev/others/assets/rsdoctor/bundle-diff-1.png) |
-| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| ![bundle-diff-1](https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-2.png) | ![bundle-diff-2](https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-1.png) |
+| ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 
 ## 🧑‍💻 社区
 
