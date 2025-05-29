@@ -4,7 +4,7 @@ After the dependency installation, you need to integrate the Rsdoctor plugin int
 
 ### Rspack
 
-Initialize the RsdoctorRspackPlugin in the [plugins](https://www.rspack.dev/config/plugins.html#plugins) of `rspack.config.js`:
+Initialize the RsdoctorRspackPlugin in the [plugins](https://www.rspack.rs/config/plugins.html#plugins) of `rspack.config.js`:
 
 ```js title="rspack.config.js"
 const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
@@ -25,7 +25,7 @@ module.exports = {
 
 ### Rsbuild
 
-Rsbuild has built-in support for Rsdoctor, so you don't need to manually register plugins. See [Rsbuild - Use Rsdoctor](https://rsbuild.dev/guide/debug/rsdoctor) for more details.
+Rsbuild has built-in support for Rsdoctor, so you don't need to manually register plugins. See [Rsbuild - Use Rsdoctor](https://rsbuild.rs/guide/debug/rsdoctor) for more details.
 
 ### Webpack
 
@@ -82,7 +82,7 @@ For projects using Modern.js's webpack mode, please register the `RsdoctorWebpac
 
 #### Step 1: Register the Rsdoctor plugin
 
-Initialize the [RsdoctorRspackPlugin](#rspack-projects)([RsdoctorWebpackPlugin](#webpack-projects)) plugin in the [Rspack Config](https://rspack.dev/guide/tech/next)([webpack config](https://nextjs.org/docs/pages/api-reference/config/next-config-js/webpack)) of `next.config.ts`.
+Initialize the [RsdoctorRspackPlugin](#rspack-projects)([RsdoctorWebpackPlugin](#webpack-projects)) plugin in the [Rspack Config](https://rspack.rs/guide/tech/next)([webpack config](https://nextjs.org/docs/pages/api-reference/config/next-config-js/webpack)) of `next.config.ts`.
 
 import { Tab, Tabs } from 'rspress/theme';
 

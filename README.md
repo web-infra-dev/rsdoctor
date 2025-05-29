@@ -13,11 +13,11 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-Rsdoctor is a build analyzer tailored for the [Rspack](https://rspack.dev/) ecosystem and fully compatible with the [webpack](https://webpack.js.org/) ecosystem.
+Rsdoctor is a build analyzer tailored for the [Rspack](https://rspack.rs/) ecosystem and fully compatible with the [webpack](https://webpack.js.org/) ecosystem.
 
 Rsdoctor is committed to being a one-stop, intelligent build analyzer that makes the build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
 
-Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rspeedy (Lynx)](https://lynxjs.org/rspeedy/), [Storybook](https://github.com/rspack-contrib/storybook-rsbuild), [Next.js](https://nextjs.org/), [Nuxt](https://nuxt.com/), [Re.Pack](https://re-pack.dev/), [Modern.js](https://modernjs.dev/), [Rsbuild](https://rsbuild.dev/), [Rspress](https://rspress.dev/) and [Rslib](https://lib.rsbuild.dev/).
+Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rspeedy (Lynx)](https://lynxjs.org/rspeedy/), [Storybook](https://github.com/rspack-contrib/storybook-rsbuild), [Next.js](https://nextjs.org/), [Nuxt](https://nuxt.com/), [Re.Pack](https://re-pack.dev/), [Modern.js](https://modernjs.dev/), [Rsbuild](https://rsbuild.rs/), [Rspress](https://rspress.rs/) and [Rslib](https://lib.rsbuild.rs/).
 
 https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
@@ -35,7 +35,7 @@ https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
 ## 📚 Getting started
 
-To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.dev/guide/start/quick-start).
+To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.rs/guide/start/quick-start).
 
 ## 🤝 Contribution
 

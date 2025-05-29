@@ -8,7 +8,7 @@ npx @rsdoctor/cli analyze --profile [.rsdoctor/manifest.json filepath]
 
 ## Documentation
 
-https://rsdoctor.dev/
+https://rsdoctor.rs/
 
 ## Contributing
 

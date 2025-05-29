@@ -4,7 +4,7 @@ This package is the intermediate data layer of Rsdoctor.
 
 ## Documentation
 
-https://rsdoctor.dev/
+https://rsdoctor.rs/
 
 ## Contributing
 

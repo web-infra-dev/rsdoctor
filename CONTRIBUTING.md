@@ -176,7 +176,7 @@ root
 └─ document
 ```
 
-This website is built with Rspress, the document content can be written using markdown or mdx syntax. You can refer to the [Rspress Website](https://rspress.dev/) for detailed usage.
+This website is built with Rspress, the document content can be written using markdown or mdx syntax. You can refer to the [Rspress Website](https://rspress.rs/) for detailed usage.
 
 ---
 

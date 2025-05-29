@@ -80,7 +80,7 @@ new RsdoctorRspackPlugin({
 
 ### 1. 插件配置
 
-如果还没有添加 Rsdoctor 插件，那么需要在项目中配置，[👉🏻 快速开始](https://rsdoctor.dev/guide/start/quick-start)。
+如果还没有添加 Rsdoctor 插件，那么需要在项目中配置，[👉🏻 快速开始](https://rsdoctor.rs/guide/start/quick-start)。
 
 ### 2. 开启 Rsdoctor 并执行本地构建
 

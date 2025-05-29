@@ -17,7 +17,7 @@ export function Hero() {
       title="Rsdoctor"
       subTitle={t('subtitle')}
       description={t('slogan')}
-      logoUrl="https://assets.rspack.dev/rsdoctor/rsdoctor-logo-960x960.png"
+      logoUrl="https://assets.rspack.rs/rsdoctor/rsdoctor-logo-960x960.png"
       getStartedButtonText={t('quickStart')}
       githubURL="https://github.com/web-infra-dev/rsdoctor"
     />

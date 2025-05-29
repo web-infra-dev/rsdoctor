@@ -4,7 +4,7 @@ An Rspack plugin for integrating Rsdoctor.
 
 ## Documentation
 
-https://rsdoctor.dev/
+https://rsdoctor.rs/
 
 ## Contributing
 

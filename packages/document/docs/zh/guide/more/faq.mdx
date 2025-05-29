@@ -17,7 +17,7 @@ new RsdoctorRspackPlugin({
 Rsdoctor 提供的 Loader 耗时时间是**预估耗时**，为什么没法统计到准确耗时？是因为我们知道 Loader 执行可能是**异步**函数也可能是**同步**函数，同时，打包工具会**并行执行多个**不冲突的 Loader 函数，其中 **JS 是单线程**的，多个 Loader 函数均可能**抢占当前的任务队列**，同时 Loader 函数内的**异步逻辑没法识别**，导致单个 Loader 函数在执行过程中，**可能横跨**多个其他 Loader 的执行过程，所以会存在如下图所示的三种 case：
 
 <img
-  src="https://assets.rspack.dev/others/assets/rsdoctor/loader-cases.jpeg"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/loader-cases.jpeg"
   style={{ width: '250px' }}
 />
 
@@ -61,8 +61,8 @@ module.exports = {
 
 ## CssExtractRspackPlugin 的 loader 耗时过长问题
 
-在使用 Rsdoctor 对 Rspack 项目进行编译耗时分析时，可能会发现 [CssExtractRspackPlugin](https://rspack.dev/plugins/rspack/css-extract-rspack-plugin) 的 loader 耗时较长。然而，这个数值并不代表 CssExtractRspackPlugin 的 loader 的真实耗时，它还包含了对本模块编译的其他 loader 的耗时。
+在使用 Rsdoctor 对 Rspack 项目进行编译耗时分析时，可能会发现 [CssExtractRspackPlugin](https://rspack.rs/plugins/rspack/css-extract-rspack-plugin) 的 loader 耗时较长。然而，这个数值并不代表 CssExtractRspackPlugin 的 loader 的真实耗时，它还包含了对本模块编译的其他 loader 的耗时。
 
-- 原因：[CssExtractRspackPlugin](https://rspack.dev/plugins/rspack/css-extract-rspack-plugin) 中的 loader 在 pitch 阶段会异步调用其他 loader，并等待这些 loader 执行后的回调结果。因此，CssExtractRspackPlugin 的耗时实际上包括了其他 loader 的执行时间和空闲时间。
+- 原因：[CssExtractRspackPlugin](https://rspack.rs/plugins/rspack/css-extract-rspack-plugin) 中的 loader 在 pitch 阶段会异步调用其他 loader，并等待这些 loader 执行后的回调结果。因此，CssExtractRspackPlugin 的耗时实际上包括了其他 loader 的执行时间和空闲时间。
 
-<img src="https://assets.rspack.dev/rsdoctor/css-extract-loader.png" />
+<img src="https://assets.rspack.rs/rsdoctor/css-extract-loader.png" />

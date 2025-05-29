@@ -4,7 +4,7 @@ This package is the Rsdoctor reporting platform.
 
 ## Documentation
 
-https://rsdoctor.dev/
+https://rsdoctor.rs/
 
 ## Contributing
 

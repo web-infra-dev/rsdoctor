@@ -9,43 +9,43 @@ import styles from './help-center.module.scss';
 const data = [
   {
     title: 'FAQ',
-    link: 'https://rsdoctor.dev/guide/more/faq',
+    link: 'https://rsdoctor.rs/guide/more/faq',
   },
   {
     title: 'Introduction',
-    link: 'https://rsdoctor.dev/guide/start/intro',
+    link: 'https://rsdoctor.rs/guide/start/intro',
   },
   {
     title: 'Bundle Alerts',
-    link: 'https://rsdoctor.dev/guide/usage/bundle-alerts',
+    link: 'https://rsdoctor.rs/guide/usage/bundle-alerts',
   },
   {
     title: 'Bundle Overall',
-    link: 'https://rsdoctor.dev/guide/usage/bundle-overall',
+    link: 'https://rsdoctor.rs/guide/usage/bundle-overall',
   },
   {
     title: 'Bundle Analysis',
-    link: 'https://rsdoctor.dev/guide/usage/bundle-size',
+    link: 'https://rsdoctor.rs/guide/usage/bundle-size',
   },
   {
     title: 'Compilation Alerts',
-    link: 'https://rsdoctor.dev/guide/usage/compile-alerts',
+    link: 'https://rsdoctor.rs/guide/usage/compile-alerts',
   },
   {
     title: 'Compile Overall',
-    link: 'https://rsdoctor.dev/guide/usage/compile-overall',
+    link: 'https://rsdoctor.rs/guide/usage/compile-overall',
   },
   {
     title: 'Loaders Analysis',
-    link: 'https://rsdoctor.dev/guide/usage/loaders-analysis',
+    link: 'https://rsdoctor.rs/guide/usage/loaders-analysis',
   },
   {
     title: 'Loaders Timeline',
-    link: 'https://rsdoctor.dev/guide/usage/loaders-timeline',
+    link: 'https://rsdoctor.rs/guide/usage/loaders-timeline',
   },
   {
     title: 'Plugin Analysis',
-    link: 'https://rsdoctor.dev/guide/usage/plugins-analysis',
+    link: 'https://rsdoctor.rs/guide/usage/plugins-analysis',
   },
 ];
 
@@ -61,7 +61,7 @@ export const HelpCenter = () => {
             style={{ display: 'flex', alignItems: 'center', padding: 0 }}
             type="link"
             onClick={() => {
-              window.open('https://rsdoctor.dev/index', '_blank');
+              window.open('https://rsdoctor.rs/index', '_blank');
             }}
           >
             <span style={{ marginRight: '3px' }}>More</span>

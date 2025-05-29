@@ -64,7 +64,7 @@ export const Header: React.FC = () => {
             }}
           >
             <img
-              src="https://assets.rspack.dev/rsdoctor/rsdoctor-title-logo.png"
+              src="https://assets.rspack.rs/rsdoctor/rsdoctor-title-logo.png"
               className="rsdoctor-logo"
               alt="logo"
               onClick={() => {
