@@ -1,3 +1,10 @@
+# Redirect rsdoctor.dev to rsdoctor.rs
+[[redirects]]
+from = "https://rsdoctor.dev/*"
+to = "https://rsdoctor.rs/:splat"
+status = 301
+force = true
+
 [[redirects]]
 from = "/*"
 to = "/404.html"
