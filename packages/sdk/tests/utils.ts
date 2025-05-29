@@ -3,11 +3,11 @@ import { File, Server } from '@rsdoctor/utils/build';
 import { Common, SDK } from '@rsdoctor/types';
 import { request } from 'http';
 import { tmpdir } from 'os';
-import path from 'path';
+import * as path from 'path';
 import { RsdoctorSDK } from '../src/sdk';
 
 export interface MockSDKResponse {
-  sdk: RsdoctorSDK;
+  sdk: SDK.RsdoctorSDKInstance;
   server: SDK.RsdoctorServerInstance;
   // get<T extends boolean = false>(pathname: string, toJson?: T): Promise<T extends true ? object : string>;
   get<T extends SDK.ServerAPI.API>(
