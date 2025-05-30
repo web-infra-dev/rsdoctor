@@ -34,6 +34,40 @@ export class InternalBundleTagPlugin<
               ),
             );
 
+            // Check minimizers's drop_console configuration
+            const minimizers = compiler.options.optimization?.minimizer || [];
+            const hasTerserPlugin = minimizers.some(
+              (plugin): boolean => plugin?.constructor?.name === 'TerserPlugin',
+            );
+            const hasSwcJsMinimizer = minimizers.some(
+              (plugin): boolean =>
+                plugin?.constructor?.name === 'SwcJsMinimizerRspackPlugin',
+            );
+
+            if (hasTerserPlugin || hasSwcJsMinimizer) {
+              const terserPlugin = minimizers.find(
+                (plugin): boolean =>
+                  plugin?.constructor?.name === 'TerserPlugin',
+              ) as any;
+              const swcPlugin = minimizers.find(
+                (plugin): boolean =>
+                  plugin?.constructor?.name === 'SwcJsMinimizerRspackPlugin',
+              ) as any;
+
+              const terserDropConsole =
+                terserPlugin?.options?.minimizer?.options?.compress
+                  ?.drop_console;
+              const swcDropConsole =
+                swcPlugin?._args?.[0]?.minimizerOptions?.compress?.drop_console;
+
+              if (terserDropConsole === true || swcDropConsole === true) {
+                logger.warn(
+                  chalk.yellow(
+                    'Warning: BannerPlugin detected in project. Please disable drop_console option in TerserPlugin or SwcJsMinimizerRspackPlugin to enable Rsdoctor analysis for BannerPlugin.',
+                  ),
+                );
+              }
+            }
             const chunks = compilation.chunks;
             for (let chunk of chunks) {
               for (const file of chunk.files) {
