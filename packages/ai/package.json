@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "1.12.0",
-    "@rslib/core": "^0.6.9",
+    "@rslib/core": "^0.9.1",
     "@types/node": "^22.8.1",
     "typescript": "^5.2.2",
     "vitest": "3.0.9",
