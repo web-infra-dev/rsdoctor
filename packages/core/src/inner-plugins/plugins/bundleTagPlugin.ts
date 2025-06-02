@@ -36,24 +36,18 @@ export class InternalBundleTagPlugin<
 
             // Check minimizers's drop_console configuration
             const minimizers = compiler.options.optimization?.minimizer || [];
-            const hasTerserPlugin = minimizers.some(
+            const terserPlugin = minimizers.find(
               (plugin): boolean => plugin?.constructor?.name === 'TerserPlugin',
-            );
-            const hasSwcJsMinimizer = minimizers.some(
+            ) as any;
+            const swcPlugin = minimizers.find(
               (plugin): boolean =>
                 plugin?.constructor?.name === 'SwcJsMinimizerRspackPlugin',
-            );
+            ) as any;
+
+            const hasTerserPlugin = !!terserPlugin;
+            const hasSwcJsMinimizer = !!swcPlugin;
 
             if (hasTerserPlugin || hasSwcJsMinimizer) {
-              const terserPlugin = minimizers.find(
-                (plugin): boolean =>
-                  plugin?.constructor?.name === 'TerserPlugin',
-              ) as any;
-              const swcPlugin = minimizers.find(
-                (plugin): boolean =>
-                  plugin?.constructor?.name === 'SwcJsMinimizerRspackPlugin',
-              ) as any;
-
               const terserDropConsole =
                 terserPlugin?.options?.minimizer?.options?.compress
                   ?.drop_console;
