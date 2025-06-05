@@ -73,7 +73,8 @@ export class InternalBundleTagPlugin<
 
                 compilation.updateAsset(
                   file,
-                  (old: any) => {
+                  // @ts-ignore - webpack/rspack type compatibility issue
+                  (old) => {
                     const concatSource = new ConcatSource();
                     let header = "\n console.log('RSDOCTOR_START::');\n";
                     let footer = "\n console.log('RSDOCTOR_END::');\n";

@@ -4,7 +4,6 @@ import type {
   Stats,
   StatsError,
   RuleSetRule,
-  Asset,
 } from 'webpack';
 import type {
   Compiler as RspackCompiler,
@@ -12,8 +11,8 @@ import type {
   Stats as RspackStats,
   RuleSetRule as RspackRuleSetRule,
   MultiCompiler,
-  Assets as RspackAssets,
 } from '@rspack/core';
+import { Source } from 'node_modules/@rspack/core/compiled/webpack-sources';
 
 type RspackCompilerWrapper = RspackCompiler &
   Pick<
@@ -37,9 +36,7 @@ type RspackRuleSetRuleWrapper = any extends RspackRuleSetRule
 
 type updateAsset = (
   file: string,
-  newSourceOrFunction: (
-    arg0: Asset['source'] | RspackAssets['source'],
-  ) => Asset['source'] | RspackAssets['source'],
+  newSourceOrFunction: Source | ((source: Source) => Source),
   assetInfoUpdateOrFunction?: (arg0?: any) => any,
 ) => void;
 
