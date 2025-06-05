@@ -12,7 +12,6 @@ import type {
   RuleSetRule as RspackRuleSetRule,
   MultiCompiler,
 } from '@rspack/core';
-import { Source } from 'node_modules/@rspack/core/compiled/webpack-sources';
 
 type RspackCompilerWrapper = RspackCompiler &
   Pick<
@@ -30,24 +29,12 @@ type RspackRuleSetRuleWrapper = any extends RspackRuleSetRule
   ? never
   : RspackRuleSetRule;
 
-// type RspackRuleSetRulesWrapper = any extends RspackRuleSetRules
-//   ? never
-//   : (RspackRuleSetRule | '...')[] | RspackRuleSetRules;
-
-type updateAsset = (
-  file: string,
-  newSourceOrFunction: Source | ((source: Source) => Source),
-  assetInfoUpdateOrFunction?: (arg0?: any) => any,
-) => void;
-
 export type BaseCompilerType<T extends 'rspack' | 'webpack' = 'webpack'> =
   T extends 'rspack' ? RspackCompilerWrapper : Compiler;
 export type BaseCompiler = BaseCompilerType | BaseCompilerType<'rspack'>;
 
 export type BaseCompilationType<T extends 'rspack' | 'webpack' = 'webpack'> =
-  T extends 'rspack'
-    ? Compilation
-    : RspackCompilation & { updateAsset: updateAsset };
+  T extends 'rspack' ? Compilation : RspackCompilation;
 export type BaseCompilation =
   | BaseCompilationType
   | BaseCompilationType<'rspack'>;
