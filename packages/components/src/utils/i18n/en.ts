@@ -40,6 +40,9 @@ const en = {
   CodeModeExplain: 'In lite mode or pure stats.json upload, only source code.',
   DuplicatePakCodeExplain:
     'There is no code, when in the case of pure stats.json.',
+  AsyncLoaderInfo:
+    "For async loaders, the time cost of each loader is not accurate. For example: mini-css-extract-plugin's loader.",
+  Details: 'Details',
 };
 
 export default en;
