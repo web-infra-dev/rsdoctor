@@ -26,7 +26,7 @@ export const Page: React.FC = () => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  详情
+                  {t('Details')}
                 </a>
               </div>
             }

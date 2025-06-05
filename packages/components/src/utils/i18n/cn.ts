@@ -43,6 +43,7 @@ const cn: typeof en = {
     '纯 stats.json 输入的情况下没有代码，可使用 Rsdoctor 插件参与构建会有对应代码。',
   AsyncLoaderInfo:
     '对于异步 loader，单个 loader 的耗时可能不准确。例如：mini-css-extract-plugin 的 loader。',
+  Details: '详情',
 };
 
 export default cn;
