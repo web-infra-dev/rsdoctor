@@ -1,7 +1,6 @@
 import {
   CodepenCircleOutlined,
   ColumnHeightOutlined,
-  DeploymentUnitOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
@@ -383,9 +382,20 @@ export const AssetDetail: React.FC<{
         return (
           <div className={styles['bundle-tree']}>
             <div className={styles.box}>
-              <div className={styles.keywords}>
-                <Keyword ellipsis text={basename} keyword={''} />
-              </div>
+              <Popover
+                content={`Open the ${basename}’s module reasons tree.`}
+                placement="bottom"
+              >
+                <div
+                  className={styles.keywords}
+                  onClick={() => {
+                    setModuleJumpList([mod.id]);
+                    setShow(true);
+                  }}
+                >
+                  <Keyword ellipsis text={basename} keyword={''} />
+                </div>
+              </Popover>
 
               <div className={styles.dividerDiv}>
                 <Divider className={styles.divider} dashed />
@@ -483,14 +493,7 @@ export const AssetDetail: React.FC<{
                   <Tag color="green">concatenated</Tag>
                 </Tooltip>
               ) : null}
-              <Popover content="Open the Module Graph Box">
-                <DeploymentUnitOutlined
-                  onClick={() => {
-                    setModuleJumpList([mod.id]);
-                    setShow(true);
-                  }}
-                />
-              </Popover>
+
               <ModuleCodeViewer data={mod} />
             </Space>
           </div>
