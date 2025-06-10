@@ -27,7 +27,7 @@
     "source-map": "^0.7.4"
   },
   "devDependencies": {
-    "@types/body-parser": "1.19.5",
+    "@types/body-parser": "1.19.6",
     "@types/estree": "1.0.5",
     "@types/lodash.unionby": "^4.8.9",
     "@types/node": "^22.8.1",
