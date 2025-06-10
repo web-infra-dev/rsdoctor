@@ -33,6 +33,8 @@ https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
 - **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
 
+- **Support MCP Tools**: Rsdoctor also provides an MCP server tool for build analysis through a question-based approach.[Rsdoctor MCP Server](https://rsdoctor.rs/en/guide/start/mcp)
+
 ## 📚 Getting started
 
 To get started with Rsdoctor, see the [Quick Start](https://rsdoctor.rs/guide/start/quick-start).

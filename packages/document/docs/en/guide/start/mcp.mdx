@@ -1,0 +1,237 @@
+# MCP Server
+
+## Introduction
+
+@rsdoctor/mcp-server is an MCP Server tool designed to help users more conveniently utilize Rsdoctor's build data. It works with Rsdoctor's local build analysis data and helps you quickly obtain build analysis results through a Q&A interface.
+
+## Core features
+
+**@rsdoctor/mcp-server** provides four core analysis capabilities:
+
+- **Bundle Analysis**: Analyzes bundle size, composition and other information
+- **Dependency Analysis**: Analyzes project dependencies and duplicate dependency issues
+- **Bundle Optimization Suggestions**: Provides suggestions for bundle size optimization and code splitting
+- **Compilation Optimization Suggestions**: Analyzes compilation time and provides compilation performance optimization suggestions
+
+## Usage Examples
+
+### 1. Bundle optimization analysis
+
+By asking "Please help me to optimize the bundle or artifacts", the tool will analyze the build output and provide optimization suggestions.
+
+Example video:
+
+<video
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/mcp-bundle-optimize-2.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
+
+### 2. Dependency analysis
+
+By asking "Please investigate the referrer dependency of node_modules/dayjs/index.js", the tool will analyze the dependency relationships of the specified module.
+
+Example video:
+
+<video
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/issuer-path.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
+
+### 3. Compilation performance analysis
+
+By asking "Please help me find files or loaders with high compilation time and provide optimization suggestions", the tool will analyze compilation time and provide optimization suggestions.
+
+Example video:
+
+<video
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/loader-mcp.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
+
+## Quick start
+
+### 💡 Version requirements
+
+:::warning
+The following Rsdoctor plugin versions are required:
+
+- @rsdoctor/rspack-plugin >= 1.1.2
+- @rsdoctor/webpack-plugin >= 1.1.2
+
+Note: Please ensure you are using the latest version for the best experience.
+:::
+
+### 1. Plugin configuration
+
+If you haven't added the Rsdoctor plugin yet, you need to configure it in your project. [👉🏻 Quick Start](https://rsdoctor.rs/guide/start/quick-start).
+
+### 2. Enable Rsdoctor and run local build
+
+Enable Rsdoctor and run the build. **Do not use MCP Client to start the project, as Rsdoctor's local service will block the MCP Client's dialogue process**.
+
+```
+npm run build
+```
+
+- Note: If `disableClientServer: true` is configured, it needs to be modified to `disableClientServer: false`, and `disableClientServer` defaults to false.
+
+### 3. Start MCP Server
+
+#### Cursor
+
+1. Create a `.cursor/mcp.json` file in the project root directory:
+
+```json
+{
+  "mcpServers": {
+    "rsdoctor": {
+      "command": "npx",
+      "args": ["-y", "@rsdoctor/mcp-server@latest"]
+    }
+  }
+}
+```
+
+2. Restart the Cursor editor
+3. Start interaction in the MCP panel
+
+#### Claude
+
+Add configuration in `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "rsdoctor": {
+      "command": "npx",
+      "args": ["-y", "@rsdoctor/mcp-server@latest"]
+    }
+  }
+}
+```
+
+#### Cline
+
+Add configuration in the configuration file:
+
+```json
+{
+  "mcpServers": {
+    "rsdoctor": {
+      "command": "npx",
+      "args": ["-y", "@rsdoctor/mcp-server@latest"]
+    }
+  }
+}
+```
+
+## Configuration instructions
+
+### Command line parameters
+
+| Parameter  | Description                                 | Default                                                       | Example          |
+| ---------- | ------------------------------------------- | ------------------------------------------------------------- | ---------------- |
+| `compiler` | Specify the name of the compiler to analyze | Automatically detected                                        | `--compiler web` |
+| `port`     | Specify the MCP Server port                 | Latest port number (written to ` ~/.cache/rsdoctor/mcp.json`) | `--port 1000`    |
+
+### Multi-compiler project configuration
+
+In a multi-compiler project, each compiler will have a separate Rsdoctor build analysis data. Use the `--compiler` parameter to specify the compiler to analyze:
+
+```bash
+npx @rsdoctor/mcp-server@latest --compiler web
+```
+
+### Port configuration
+
+1. Configure the MCP Server port:
+
+```bash
+npx @rsdoctor/mcp-server@latest --port 1000
+```
+
+2. Configure the Rsdoctor local service port:
+
+```js
+new RsdoctorRspackPlugin({
+  port: 9988,
+});
+```
+
+## Tools list
+
+### Product analysis tool
+
+| Tool                     | Description                                 | Parameters       |
+| ------------------------ | ------------------------------------------- | ---------------- |
+| `get_chunks`             | Get all code block information              | -                |
+| `get_chunk_by_id`        | Get specific code block information         | chunkId (Number) |
+| `get_large_chunks`       | Get code blocks with large volume           | -                |
+| `get_media_asset_prompt` | Get media resource optimization suggestions | -                |
+
+### Dependency analysis tool
+
+| Tool                       | Description                | Parameters          |
+| -------------------------- | -------------------------- | ------------------- |
+| `get_modules`              | Get all module information | -                   |
+| `get_module_by_id`         | Get module information     | moduleId (Number)   |
+| `get_module_by_path`       | Get module by path         | modulePath (String) |
+| `get_module_issuer_path`   | Get module source path     | moduleId (String)   |
+| `get_package_info`         | Get package information    | -                   |
+| `get_package_dependencies` | Get dependency list        | -                   |
+| `get_duplicate_packages`   | Get duplicate package list | -                   |
+| `get_similar_packages`     | Get similar package list   | -                   |
+
+### Performance analysis tool
+
+| Tool                        | Description                           | Parameters |
+| --------------------------- | ------------------------------------- | ---------- |
+| `get_loader_time_all_files` | Get file loader time                  | -          |
+| `get_loader_times`          | Get compilation directory loader time | -          |
+| `get_rule_info`             | Get build rule scan results           | -          |
+
+## Q&A
+
+### 1. Connection issues
+
+**Issue**: Unable to connect to Rsdoctor MCP Server or no data returned successfully
+
+**Solution**:
+
+- Ensure the Rsdoctor local Server has been successfully started.
+  - Manually start the local Server, do not use MCP Client to start the project, as the local service of Rsdoctor will block the dialogue process of MCP Client.
+- If the Rsdoctor MCP server uses the `--port` parameter, please ensure the Rsdoctor startup port configuration is correct.
+- Check if the Rsdoctor plugin version meets the requirements. [Version requirements](/guide/start/mcp#-version-requirements)
