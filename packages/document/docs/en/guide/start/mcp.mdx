@@ -102,8 +102,10 @@ If you haven't added the Rsdoctor plugin yet, you need to configure it in your p
 
 Enable Rsdoctor and run the build. **Do not use MCP Client to start the project, as Rsdoctor's local service will block the MCP Client's dialogue process**.
 
-```
-npm run build
+```bash
+# Enable Rsdoctor
+
+RSDOCTOR=true npm run build
 ```
 
 - Note: If `disableClientServer: true` is configured, it needs to be modified to `disableClientServer: false`, and `disableClientServer` defaults to false.
