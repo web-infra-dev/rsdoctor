@@ -19,8 +19,8 @@ Click on the **"Bundle Size"** option in the navigation bar to view the Bundle a
 
 - **`Assets`**: Resources refer to images, fonts, media, and other file types. They are the files that ultimately exist in the output folder. Each Chunk has corresponding [Assets resources](https://webpack.js.org/concepts/under-the-hood/#chunks).
 - **`Module`**: One or more Modules combine to form a Chunk. For more information about Module types, please refer to [Rspack Modules](https://www.rspack.rs/api/modules.html) and [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module).
-- **`Bundle Size`**: The final packaged size of the resource artifact, which is the final size after being processed by the bundler.
-- **`Module Bundled Source & Size`**: **Module Parsed Source** refers to the final code fragment of the **Module** in the packaged artifact, and **Module Parsed Size** refers to the size of the final code fragment of the **Module** in the packaged artifact.
+- **`Source Size`**: The original size of the file, before any transformations and minification.
+- **`Bundle Size`**: The final output size of the files. If you enabled minification, this value shows the minified size.
 - **`Package Count`**: The number of third-party packages.
 - **`Initial Chunk`**: The **initial** chunk is the main chunk of the entry point. This chunk contains all the modules specified by the entry point and their dependencies, unlike the **chunks** for "on-demand loading".
   - For more information about Initial Chunk, please refer to [Initial Chunk Introduction](https://webpack.js.org/concepts/under-the-hood/#chunks).
