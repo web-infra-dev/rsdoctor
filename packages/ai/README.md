@@ -4,7 +4,7 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Introduction
 
-@rsdoctor/mcp-server is an MCP Server tool designed to help users more conveniently utilize Rsdoctor's build data. It works with Rsdoctor's local build analysis data and helps you quickly obtain build analysis results through a Q&A interface.
+@rsdoctor/mcp-server is an MCP Server designed to help users more conveniently utilize Rsdoctor's build data. It works with Rsdoctor's local build analysis data and helps you quickly obtain build analysis results through a Q&A interface.
 
 ## Features
 

@@ -2,7 +2,7 @@
 
 ## 介绍
 
-@rsdoctor/mcp-server 是一个 MCP Server 工具，旨在帮助用户更便捷地使用 Rsdoctor 的构建数据。它可以与 Rsdoctor 的本地构建分析数据配合使用，通过问答的形式，帮助你快速获取构建分析结果。
+@rsdoctor/mcp-server 是一个 MCP Server，旨在帮助用户更便捷地使用 Rsdoctor 的构建数据。它可以与 Rsdoctor 的本地构建分析数据配合使用，通过问答的形式，帮助你快速获取构建分析结果。
 
 ## 主要功能
 
