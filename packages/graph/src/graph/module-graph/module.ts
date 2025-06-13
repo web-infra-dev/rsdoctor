@@ -22,6 +22,8 @@ export class Module implements SDK.ModuleInstance {
 
   renderId: string | undefined;
 
+  bailoutReason: string[] = [];
+
   readonly webpackId: string;
 
   readonly path: string;
@@ -97,6 +99,14 @@ export class Module implements SDK.ModuleInstance {
       Boolean(this.sourceMap);
     this._isPreferSource = result;
     return result;
+  }
+
+  addBailoutReason(reason: string) {
+    this.bailoutReason.push(reason);
+  }
+
+  getBailoutReason() {
+    return this.bailoutReason;
   }
 
   getChunks(): SDK.ChunkInstance[] {
@@ -349,6 +359,7 @@ export class Module implements SDK.ModuleInstance {
         this.issuerPath
           ?.filter((issuer) => issuer.moduleId)
           .map((issuer) => issuer.moduleId) || [],
+      bailoutReason: this.bailoutReason,
     };
 
     if (this.meta.hasSetEsModuleStatement || this.meta.strictHarmonyModule) {

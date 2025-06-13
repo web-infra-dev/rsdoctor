@@ -121,6 +121,8 @@ export interface ModuleInstance {
   /** Issuer paths */
   issuerPath?: StatsModule['issuerPath'];
 
+  bailoutReason?: string[];
+
   /** Get the Chunks instance where the module in.*/
   getChunks(): ChunkInstance[];
   /** Add Chunk instance */
@@ -185,6 +187,10 @@ export interface ModuleInstance {
   addIssuerPath(issuerPath: StatsModule['issuerPath']): void;
   /** Get issuer path */
   getIssuerPath(): StatsModule['issuerPath'];
+  /** Add bailout reason */
+  addBailoutReason(reason: string): void;
+  /** Get bailout reason */
+  getBailoutReason(): string[];
 }
 
 /** Depends on Metadata */

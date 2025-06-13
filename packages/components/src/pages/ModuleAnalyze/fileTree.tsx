@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { Col, Empty } from 'antd';
+import { Col, Empty, Tag, Popover } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Size } from 'src/constants';
 import { FileTree } from './components/fileTreeCom';
@@ -57,7 +57,7 @@ export const ModuleFilesTree: React.FC<{
             <Empty className={`${clsNamePrefix}-empty`} />
           )}
         </>
-      ) : (
+      ) : activeTabKey === TabList[TabList.Dependencies] ? (
         <div
           className={`${clsNamePrefix}-file-tree`}
           style={{ padding: Size.BasePadding / 2 }}
@@ -73,6 +73,22 @@ export const ModuleFilesTree: React.FC<{
               <Empty className={`${clsNamePrefix}-empty`} />
             )}
           </Col>
+        </div>
+      ) : (
+        <div>
+          {curModule.bailoutReason?.map((reason) => (
+            <div style={{ marginBottom: 10 }}>
+              <Tag key={reason}>
+                <Popover content={reason}>
+                  <span style={{ display: 'inline-block' }}>
+                    {reason.length > 120
+                      ? `${reason.slice(0, 120)}...`
+                      : reason}
+                  </span>
+                </Popover>
+              </Tag>
+            </div>
+          ))}
         </div>
       )}
     </>
