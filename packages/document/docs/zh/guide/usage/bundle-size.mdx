@@ -19,8 +19,8 @@
 
 - **`Assets`**：资源是对图像、字体、媒体和其他文件类型的统称，是最终存在于输出文件夹内的文件，同时，每个 Chunk 都有对应的 [Assets 资源](https://webpack.js.org/concepts/under-the-hood/#chunks)。
 - **`Module`**：一个或多个 Module 组合成了 Chunk。有关 Module 类型的详细信息，请参阅 [Rspack Modules](https://www.rspack.rs/api/modules.html) 和 [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module)。
-- **`Bundle Size`**：资源产物的最终打包大小，这是打包工具处理后的最终大小。
-- **`Module Bundled Source & Size`**：**Module Parsed Source** 是指 **Module** 在打包产物中的最终代码片段，**Module Parsed Size** 是指 **Module** 在打包产物中的最终代码片段的大小。
+- **`Source Size`**：文件的原始大小，未经过任何转换和压缩。
+- **`Bundle Size`**：文件最终输出的大小。如果开启了压缩，这个值代表压缩后的大小。
 - **`Package Count`**：第三方包的数量。
 - **`Initial Chunk`**: **initial(初始化)** 是入口起点的主 Chunk，该 chunk 包含入口起点指定的所有模块及其依赖项，与「**按需加载**」的 **Chunk** 资源不同。
   - 有关 Initial Chunk 的详细信息，请参阅 [Initial Chunk 介绍](https://webpack.js.org/concepts/under-the-hood/#chunks)。
