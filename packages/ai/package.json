@@ -34,7 +34,7 @@
     "vitest": "3.0.9",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/types": "workspace:*",
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "zod": "^3.24.4"
   },
   "publishConfig": {

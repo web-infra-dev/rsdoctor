@@ -482,8 +482,8 @@ importers:
         specifier: ^22.8.1
         version: 22.14.1
       axios:
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.10.0
+        version: 1.10.0
       typescript:
         specifier: ^5.2.2
         version: 5.7.3
@@ -509,8 +509,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       axios:
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.10.0
+        version: 1.10.0
       ora:
         specifier: ^5.4.1
         version: 5.4.1
@@ -615,8 +615,8 @@ importers:
         specifier: 5.19.1
         version: 5.19.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       axios:
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.10.0
+        version: 1.10.0
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -718,8 +718,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       axios:
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.10.0
+        version: 1.10.0
       browserslist-load-config:
         specifier: ^1.0.0
         version: 1.0.0
@@ -5036,8 +5036,8 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  axios@1.9.0:
-    resolution: {integrity: sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==}
+  axios@1.10.0:
+    resolution: {integrity: sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==}
 
   b-tween@0.3.3:
     resolution: {integrity: sha512-oEHegcRpA7fAuc9KC4nktucuZn2aS8htymCPcP3qkEGPqiBH+GfqtqoG2l7LxHngg6O0HFM7hOeOYExl1Oz4ZA==}
@@ -13308,7 +13308,7 @@ snapshots:
       '@modern-js/plugin-i18n': 2.67.8
       '@modern-js/utils': 2.67.8
       '@swc/helpers': 0.5.17
-      axios: 1.9.0
+      axios: 1.10.0
       resolve-from: 5.0.0
     transitivePeerDependencies:
       - debug
@@ -13467,7 +13467,7 @@ snapshots:
       '@modern-js/types': 2.63.6
       '@modern-js/utils': 2.63.6
       '@swc/helpers': 0.5.13
-      axios: 1.9.0
+      axios: 1.10.0
       connect-history-api-fallback: 2.0.0
       http-compression: 1.0.6
       minimatch: 3.1.2
@@ -15938,7 +15938,7 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.0.0
 
-  axios@1.9.0:
+  axios@1.10.0:
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.2
@@ -19878,7 +19878,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.2
       '@zkochan/js-yaml': 0.0.7
-      axios: 1.9.0
+      axios: 1.10.0
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
