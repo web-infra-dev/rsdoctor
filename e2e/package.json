@@ -7,11 +7,11 @@
     "test:native": "RSPACK_NATIVE_PLUGIN=true playwright test",
     "test:local": "npx playwright install chromium && playwright test"
   },
-  "dependencies": {
-    "lodash": "^4.17.21"
-  },
   "devDependencies": {
+    "@lynx-js/rspeedy": "^0.9.9",
+    "lodash": "^4.17.21",
     "@actions/core": "^1.11.1",
+    "@lynx-js/react": "^0.109.2",
     "@playwright/test": "1.44.1",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
