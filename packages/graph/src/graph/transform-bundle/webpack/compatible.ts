@@ -1,4 +1,4 @@
-import unionBy from 'lodash.unionBy';
+import unionBy from 'lodash.unionby';
 
 import {
   Compilation,
