@@ -96,6 +96,12 @@ export function getModuleGraphByStats(
       data.layer!,
     );
 
+    if (data.optimizationBailout) {
+      data.optimizationBailout.forEach((reason) =>
+        concatenatedModule.addBailoutReason(reason),
+      );
+    }
+
     if (data.issuerPath) {
       concatenatedModule.addIssuerPath(data.issuerPath);
     }
@@ -146,6 +152,12 @@ export function getModuleGraphByStats(
             normal.id ? String(normal.id) : undefined,
             normal.layer,
           );
+      }
+
+      if (normal.optimizationBailout) {
+        normal.optimizationBailout.forEach((reason) =>
+          normalModule.addBailoutReason(reason),
+        );
       }
 
       if (normal.issuerPath) {

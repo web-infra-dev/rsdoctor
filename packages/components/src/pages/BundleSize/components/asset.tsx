@@ -474,26 +474,25 @@ export const AssetDetail: React.FC<{
 
         return (
           <div className={styles['bundle-tree']}>
-            <div className={styles.box}>
-              <Popover
-                content={`Open the ${basename}’s module reasons tree.`}
-                placement="bottom"
+            <Popover
+              content={`Open the ${basename}’s module reasons tree.`}
+              placement="bottom"
+            >
+              <div
+                className={styles.box}
+                onClick={() => {
+                  setModuleJumpList([mod.id]);
+                  setShow(true);
+                }}
               >
-                <div
-                  className={styles.keywords}
-                  onClick={() => {
-                    setModuleJumpList([mod.id]);
-                    setShow(true);
-                  }}
-                >
+                <div className={styles.keywords}>
                   <Keyword ellipsis text={basename} keyword={''} />
                 </div>
-              </Popover>
-
-              <div className={styles.dividerDiv}>
-                <Divider className={styles.divider} dashed />
+                <div className={styles.dividerDiv}>
+                  <Divider className={styles.divider} dashed />
+                </div>
               </div>
-            </div>
+            </Popover>
             <Space>
               {parsedSize !== 0 ? (
                 <Tooltip

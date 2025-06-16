@@ -70,6 +70,7 @@ export interface StatsModule {
   modules?: StatsModule[]; // rspack is lack of nameForCondition type
   layer?: string;
   issuerPath?: Record<string, any>[] | KnownStatsModuleIssuer[];
+  optimizationBailout?: string[];
 }
 
 export interface StatsModuleReason {
