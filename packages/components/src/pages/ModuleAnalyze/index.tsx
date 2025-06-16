@@ -25,6 +25,7 @@ import {
 export enum TabList {
   Reasons,
   Dependencies,
+  BailoutReason,
 }
 
 const tabslist = [
@@ -35,6 +36,10 @@ const tabslist = [
   {
     key: TabList[TabList.Dependencies],
     label: TabList[TabList.Dependencies],
+  },
+  {
+    key: TabList[TabList.BailoutReason],
+    label: TabList[TabList.BailoutReason],
   },
 ] as unknown as { key: string; label: string }[];
 

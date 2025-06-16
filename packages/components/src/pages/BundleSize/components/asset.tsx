@@ -1,7 +1,6 @@
 import {
   CodepenCircleOutlined,
   ColumnHeightOutlined,
-  DeploymentUnitOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
@@ -54,6 +53,7 @@ const tagStyle = {
   margin: 'none',
   marginInlineEnd: 0,
 };
+
 const EmptyCodeItem = () => (
   <Empty
     description={`Do not have the module code.
@@ -327,6 +327,98 @@ export const ModulesStatistics: React.FC<{
   );
 };
 
+const ConcatenatedTag = ({ moduleCount }: { moduleCount: number }) => {
+  return (
+    <Tooltip
+      title={
+        <Space>
+          <Typography.Text style={{ color: 'inherit' }}>
+            This is a concatenated container module that includes {moduleCount}{' '}
+            modules
+          </Typography.Text>
+        </Space>
+      }
+    >
+      <Tag color="blue" style={tagStyle}>
+        concatenated container
+      </Tag>
+    </Tooltip>
+  );
+};
+
+const TotalBundledSizeTag = ({ size }: { size: number }) => {
+  return (
+    <Tooltip
+      title={
+        <Space>
+          <Typography.Text style={{ color: 'inherit' }}>
+            The total output size of all the files in this folder. If you
+            enabled minification, this value shows the minified size.
+          </Typography.Text>
+        </Space>
+      }
+    >
+      <Tag style={tagStyle} color={'geekblue'}>
+        {`bundled size: ${formatSize(size)}`}
+      </Tag>
+    </Tooltip>
+  );
+};
+
+const BundledSizeTag = ({ size }: { size: number }) => {
+  return (
+    <Tooltip
+      title={
+        <Space>
+          <Typography.Text style={{ color: 'inherit' }}>
+            The final output size of this file. If you enabled minification,
+            this value shows the minified size.
+          </Typography.Text>
+        </Space>
+      }
+    >
+      <Tag color={'geekblue'}>{`bundled size: ${formatSize(size)}`}</Tag>
+    </Tooltip>
+  );
+};
+
+const TotalSourceSizeTag = ({ size }: { size: number }) => {
+  return (
+    <Tooltip
+      title={
+        <Space>
+          <Typography.Text style={{ color: 'inherit' }}>
+            The total original size of all the files in this folder, before any
+            transformations and minification.
+          </Typography.Text>
+        </Space>
+      }
+    >
+      <Tag
+        style={tagStyle}
+        color={'cyan'}
+      >{`source size: ${formatSize(size)}`}</Tag>
+    </Tooltip>
+  );
+};
+
+const SourceSizeTag = ({ size }: { size: number }) => {
+  return (
+    <Tooltip
+      title={
+        <Space>
+          <Typography.Text style={{ color: 'inherit' }}>
+            The original size of this file, before any transformations and
+            minification.
+          </Typography.Text>
+        </Space>
+      }
+    >
+      <Tag color={'cyan'}>{`source size: ${formatSize(size)}`}</Tag>
+    </Tooltip>
+  );
+};
+
 export const AssetDetail: React.FC<{
   asset: SDK.AssetData;
   chunks: SDK.ChunkData[];
@@ -382,63 +474,52 @@ export const AssetDetail: React.FC<{
 
         return (
           <div className={styles['bundle-tree']}>
-            <div className={styles.box}>
-              <div className={styles.keywords}>
-                <Keyword ellipsis text={basename} keyword={''} />
+            <Popover
+              content={`Open the ${basename}’s module reasons tree.`}
+              placement="bottom"
+            >
+              <div
+                className={styles.box}
+                onClick={() => {
+                  setModuleJumpList([mod.id]);
+                  setShow(true);
+                }}
+              >
+                <div className={styles.keywords}>
+                  <Keyword ellipsis text={basename} keyword={''} />
+                </div>
+                <div className={styles.dividerDiv}>
+                  <Divider className={styles.divider} dashed />
+                </div>
               </div>
-
-              <div className={styles.dividerDiv}>
-                <Divider className={styles.divider} dashed />
-              </div>
-            </div>
+            </Popover>
             <Space>
               {parsedSize !== 0 ? (
                 <Tooltip
                   title={
                     <Space direction="vertical">
-                      <Tag color={'orange'}>
-                        {`Bundled Size: ${formatSize(parsedSize)}`}
-                      </Tag>
-                      <Tag color={'volcano'}>
-                        {`Source Size: ${formatSize(sourceSize)}`}
-                      </Tag>
+                      <BundledSizeTag size={parsedSize} />
+                      <SourceSizeTag size={sourceSize} />
                     </Space>
                   }
                   color={'white'}
                 >
-                  <Tag color={'purple'} style={tagStyle}>
-                    {`Bundled Size: ${formatSize(parsedSize)}`}
-                  </Tag>
+                  <BundledSizeTag size={parsedSize} />
                 </Tooltip>
               ) : sourceSize !== 0 ? (
                 // fallback to display tag for source size
-                <Tag color={'geekblue'}>
-                  {`Source Size: ${formatSize(sourceSize)}`}
-                </Tag>
+                <SourceSizeTag size={sourceSize} />
               ) : null}
               {isConcatenation ? (
-                <Tooltip
-                  title={
-                    <Space>
-                      <Typography.Text style={{ color: 'inherit' }}>
-                        this is a concatenated module, it contains{' '}
-                        {mod.modules?.length} modules
-                      </Typography.Text>
-                    </Space>
-                  }
-                >
-                  <Tag color="green" style={tagStyle}>
-                    concatenated
-                  </Tag>
-                </Tooltip>
+                <ConcatenatedTag moduleCount={mod.modules?.length || 0} />
               ) : null}
               {containedOtherModules && containedOtherModules.length ? (
                 <Tooltip
                   title={
                     <Space direction="vertical">
                       <Typography.Text style={{ color: 'inherit' }}>
-                        this is a concatenated module, it is be contained in
-                        these modules below:
+                        This module is concatenated into another container
+                        module:
                       </Typography.Text>
                       {containedOtherModules.map(({ id, path }) => {
                         if (isJsDataUrl(path)) {
@@ -483,14 +564,7 @@ export const AssetDetail: React.FC<{
                   <Tag color="green">concatenated</Tag>
                 </Tooltip>
               ) : null}
-              <Popover content="Open the Module Graph Box">
-                <DeploymentUnitOutlined
-                  onClick={() => {
-                    setModuleJumpList([mod.id]);
-                    setShow(true);
-                  }}
-                />
-              </Popover>
+
               <ModuleCodeViewer data={mod} />
             </Space>
           </div>
@@ -519,17 +593,11 @@ export const AssetDetail: React.FC<{
               <Space>
                 {parsedSize > 0 ? (
                   <>
-                    <Tag style={tagStyle} color={'orange'}>
-                      {`Bundled: ${formatSize(parsedSize)}`}
-                    </Tag>
-                    <Tag style={tagStyle} color={'lime'}>
-                      {`Source: ${formatSize(sourceSize)}`}
-                    </Tag>
+                    <TotalBundledSizeTag size={parsedSize} />
+                    <TotalSourceSizeTag size={sourceSize} />
                   </>
                 ) : (
-                  <Tag style={tagStyle} color={'lime'}>
-                    {`Source: ${formatSize(sourceSize)}`}
-                  </Tag>
+                  <TotalSourceSizeTag size={sourceSize} />
                 )}
               </Space>
             </div>

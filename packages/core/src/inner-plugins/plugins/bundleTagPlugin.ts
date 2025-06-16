@@ -34,6 +34,34 @@ export class InternalBundleTagPlugin<
               ),
             );
 
+            // Check minimizers's drop_console configuration
+            const minimizers = compiler.options.optimization?.minimizer || [];
+            const terserPlugin = minimizers.find(
+              (plugin): boolean => plugin?.constructor?.name === 'TerserPlugin',
+            ) as any;
+            const swcPlugin = minimizers.find(
+              (plugin): boolean =>
+                plugin?.constructor?.name === 'SwcJsMinimizerRspackPlugin',
+            ) as any;
+
+            const hasTerserPlugin = !!terserPlugin;
+            const hasSwcJsMinimizer = !!swcPlugin;
+
+            if (hasTerserPlugin || hasSwcJsMinimizer) {
+              const terserDropConsole =
+                terserPlugin?.options?.minimizer?.options?.compress
+                  ?.drop_console;
+              const swcDropConsole =
+                swcPlugin?._args?.[0]?.minimizerOptions?.compress?.drop_console;
+
+              if (terserDropConsole === true || swcDropConsole === true) {
+                logger.warn(
+                  chalk.yellow(
+                    'Warning: BannerPlugin detected in project. Please disable drop_console option in TerserPlugin or SwcJsMinimizerRspackPlugin to enable Rsdoctor analysis for BannerPlugin.',
+                  ),
+                );
+              }
+            }
             const chunks = compilation.chunks;
             for (let chunk of chunks) {
               for (const file of chunk.files) {
@@ -45,7 +73,8 @@ export class InternalBundleTagPlugin<
 
                 compilation.updateAsset(
                   file,
-                  (old: any) => {
+                  // @ts-ignore - webpack/rspack type compatibility issue
+                  (old) => {
                     const concatSource = new ConcatSource();
                     let header = "\n console.log('RSDOCTOR_START::');\n";
                     let footer = "\n console.log('RSDOCTOR_END::');\n";

@@ -4,7 +4,6 @@ import type {
   Stats,
   StatsError,
   RuleSetRule,
-  Asset,
 } from 'webpack';
 import type {
   Compiler as RspackCompiler,
@@ -12,7 +11,6 @@ import type {
   Stats as RspackStats,
   RuleSetRule as RspackRuleSetRule,
   MultiCompiler,
-  Assets as RspackAssets,
 } from '@rspack/core';
 
 type RspackCompilerWrapper = RspackCompiler &
@@ -31,26 +29,12 @@ type RspackRuleSetRuleWrapper = any extends RspackRuleSetRule
   ? never
   : RspackRuleSetRule;
 
-// type RspackRuleSetRulesWrapper = any extends RspackRuleSetRules
-//   ? never
-//   : (RspackRuleSetRule | '...')[] | RspackRuleSetRules;
-
-type updateAsset = (
-  file: string,
-  newSourceOrFunction: (
-    arg0: Asset['source'] | RspackAssets['source'],
-  ) => Asset['source'] | RspackAssets['source'],
-  assetInfoUpdateOrFunction?: (arg0?: any) => any,
-) => void;
-
 export type BaseCompilerType<T extends 'rspack' | 'webpack' = 'webpack'> =
   T extends 'rspack' ? RspackCompilerWrapper : Compiler;
 export type BaseCompiler = BaseCompilerType | BaseCompilerType<'rspack'>;
 
 export type BaseCompilationType<T extends 'rspack' | 'webpack' = 'webpack'> =
-  T extends 'rspack'
-    ? Compilation
-    : RspackCompilation & { updateAsset: updateAsset };
+  T extends 'rspack' ? Compilation : RspackCompilation;
 export type BaseCompilation =
   | BaseCompilationType
   | BaseCompilationType<'rspack'>;
