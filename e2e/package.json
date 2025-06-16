@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@actions/core": "^1.11.1",
-    "@playwright/test": "1.44.1",
+    "@playwright/test": "1.53.0",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
