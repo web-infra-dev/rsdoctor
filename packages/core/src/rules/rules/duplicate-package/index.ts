@@ -32,7 +32,10 @@ export const rule = defineRule<typeof title, Config>(() => ({
               // eslint-disable-next-line no-bitwise
               (ans, pkg) =>
                 ans |
-                CheckVersionMap[diff(current.version, pkg.version) ?? 'null'],
+                CheckVersionMap[
+                  (diff(current.version, pkg.version) ??
+                    'null') as keyof typeof CheckVersionMap
+                ],
               0,
             );
             return check <= checkVersion;
