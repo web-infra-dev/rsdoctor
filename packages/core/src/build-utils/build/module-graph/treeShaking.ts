@@ -12,21 +12,18 @@ import type {
   Compilation,
 } from 'webpack';
 
-import type {
-  HarmonyImportSpecifierDependency,
-  ExportInfo as WebExportInfo,
-} from '@/types';
+import type {} from '@rsdoctor/types';
 import {
   getAllModules,
   getLastExportInfo,
-} from '@/build-utils/common/webpack/compatible';
+} from '@rsdoctor/graph/transform-bundle/webpack';
 import {
   getDeclarationIdentifier,
   getExportIdentifierStatement,
 } from './utils';
-import { isWebpack5orRspack } from '@/build-utils/common/module-graph';
+import { isWebpack5orRspack } from '@rsdoctor/graph/transform-bundle/module-graph';
 
-type ExportData = Map<WebExportInfo, SDK.ExportInstance>;
+type ExportData = Map<SDK.ExportInfo, SDK.ExportInstance>;
 
 function transformMgm(
   origin: WebpackNormalModule,
@@ -75,7 +72,7 @@ function transformMgm(
       continue;
     }
 
-    const HISDep = dep as HarmonyImportSpecifierDependency;
+    const HISDep = dep as SDK.HarmonyImportSpecifierDependency;
     const { name, userRequest } = HISDep;
     const originName =
       HISDep.getIds(webpackGraph)[0] ?? SideEffect.NamespaceSymbol;
@@ -165,7 +162,7 @@ export function appendTreeShaking(
   }
 
   if ('moduleGraph' in compilation) {
-    const exportData = new Map<WebExportInfo, SDK.ExportInstance>();
+    const exportData = new Map<SDK.ExportInfo, SDK.ExportInstance>();
     const webpackCompilation = compilation as unknown as Compilation;
     const { moduleGraph: webpackGraph } = webpackCompilation;
     const allModules = getAllModules(webpackCompilation);

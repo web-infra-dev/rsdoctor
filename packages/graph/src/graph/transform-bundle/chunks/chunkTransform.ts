@@ -1,11 +1,6 @@
-import {
-  Asset,
-  Chunk,
-  ChunkGraph,
-  EntryPoint,
-} from '@rsdoctor/graph';
-import { forEach } from 'lodash';
+import forEach from 'lodash.foreach';
 import { Plugin } from '@rsdoctor/types';
+import { Asset, Chunk, ChunkGraph, EntryPoint } from '@/index';
 
 const FILTER_ASSETS_TYPE = 'assets by status';
 

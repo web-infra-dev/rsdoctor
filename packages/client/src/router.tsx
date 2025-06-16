@@ -10,6 +10,7 @@ import {
   RuleIndex,
   TreeShaking,
   BundleDiff,
+  Uploader,
 } from '@rsdoctor/components/pages';
 
 export default function Router(): React.ReactElement {
@@ -52,6 +53,7 @@ export default function Router(): React.ReactElement {
         <Route key={e.path} path={e.path} element={e.element} />
       ))}
       <Route path={BundleDiff.route} element={<BundleDiff.Page />} />
+      <Route path={Uploader.route} element={<Uploader.Page />} />
       {/* <Route path="*" element={<NotFound />} /> TODO:: add page NotFound */}
     </Routes>
   );

@@ -1,5 +1,5 @@
 import type { Common } from '@rsdoctor/types';
-import { isWebpack5orRspack } from '@/build-utils/common/module-graph/compatible';
+import { isWebpack5orRspack } from '@rsdoctor/graph/transform-bundle/module-graph';
 import { Plugin } from '@rsdoctor/types';
 
 export type IHook =

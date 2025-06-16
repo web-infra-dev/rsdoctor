@@ -4,21 +4,22 @@ import * as Rspack from '@rspack/core';
 import { File } from '@rsdoctor/utils/build';
 import { Node } from '@rsdoctor/utils/ruleUtils';
 import { Plugin, SDK } from '@rsdoctor/types';
-import {
-  getAllModules,
-  getDependencyPosition,
-  getWebpackDependencyRequest,
-  getWebpackModuleId,
-  getWebpackModulePath,
-  isExternalModule,
-} from '@/build-utils/common/webpack/compatible';
+
+import { hasSetEsModuleStatement } from '../parser';
+import { isFunction } from 'lodash';
 import {
   getImportKind,
   isImportDependency,
   removeNoImportStyle,
-} from '@/build-utils/common/module-graph';
-import { hasSetEsModuleStatement } from '../parser';
-import { isFunction } from 'lodash';
+} from '@rsdoctor/graph/transform-bundle/module-graph';
+import {
+  getWebpackDependencyRequest,
+  getWebpackModulePath,
+  getDependencyPosition,
+  getWebpackModuleId,
+  isExternalModule,
+  getAllModules,
+} from '@rsdoctor/graph/transform-bundle/webpack';
 
 export interface TransformContext {
   astCache?: Map<Webpack.NormalModule, Node.Program>;

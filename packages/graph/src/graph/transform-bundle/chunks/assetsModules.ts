@@ -1,8 +1,7 @@
 import path from 'path';
 
 import { logger } from '@rsdoctor/utils/logger';
-import { SDK } from '@rsdoctor/types';
-import { ParseBundle } from '@/types';
+import type { SDK } from '@rsdoctor/types';
 import { Lodash } from '@rsdoctor/utils/common';
 
 export type ParsedModuleSizeData = {
@@ -22,10 +21,11 @@ export async function getAssetsModulesData(
   chunkGraph: SDK.ChunkGraphInstance,
   bundleDir: string,
   opts: {
-    parseBundle?: ParseBundle;
+    parseBundle?: SDK.ParseBundle;
   },
 ): Promise<ParsedModuleSizeData | null> {
-  const { parseBundle = () => ({}) as ReturnType<ParseBundle> } = opts || {};
+  const { parseBundle = () => ({}) as ReturnType<SDK.ParseBundle> } =
+    opts || {};
 
   const assets = chunkGraph.getAssets();
   const modules = moduleGraph.getModules();
@@ -40,7 +40,7 @@ export async function getAssetsModulesData(
 
     for (const asset of assets) {
       const assetFile = path.join(bundleDir, asset.path);
-      let bundleInfo: ReturnType<ParseBundle>;
+      let bundleInfo: ReturnType<SDK.ParseBundle>;
       try {
         bundleInfo = parseBundle(assetFile, modules);
       } catch (err: any) {
