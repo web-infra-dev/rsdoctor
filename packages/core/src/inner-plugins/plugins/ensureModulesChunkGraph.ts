@@ -11,7 +11,7 @@ import {
   Chunks as ChunksBuildUtils,
   ModuleGraph as ModuleGraphBuildUtils,
 } from '@/build-utils/build';
-import { Chunks as ChunksUtils } from '@/build-utils/common';
+import { Chunks as ChunksUtils } from '@rsdoctor/graph/transform-bundle';
 import { internalPluginTapPreOptions } from '../constants';
 import { applyRspackNativePlugin } from './rspack';
 

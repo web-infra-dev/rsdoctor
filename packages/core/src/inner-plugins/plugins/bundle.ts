@@ -1,6 +1,6 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
-import { Chunks } from '@/build-utils/common';
+import { TransformBundle } from '@rsdoctor/graph';
 
 export class InternalBundlePlugin<
   T extends Plugin.BaseCompiler,
@@ -67,7 +67,7 @@ export class InternalBundlePlugin<
 
   public done = async (): Promise<void> => {
     if (this.scheduler.chunkGraph) {
-      Chunks.assetsContents(
+      TransformBundle.Chunks.assetsContents(
         this.map,
         this.scheduler.chunkGraph,
         this.scheduler.options?.supports,

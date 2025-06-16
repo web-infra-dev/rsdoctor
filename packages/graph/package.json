@@ -10,6 +10,33 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/type/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/type/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./transform-bundle": {
+      "types": "./dist/type/graph/transform-bundle/index.d.ts",
+      "import": "./dist/esm/graph/transform-bundle/index.js",
+      "require": "./dist/cjs/graph/transform-bundle/index.js"
+    },
+    "./transform-bundle/chunks": {
+      "types": "./dist/type/graph/transform-bundle/chunks/index.d.ts",
+      "import": "./dist/esm/graph/transform-bundle/chunks/index.js",
+      "require": "./dist/cjs/graph/transform-bundle/chunks/index.js"
+    },
+    "./transform-bundle/module-graph": {
+      "types": "./dist/type/graph/transform-bundle/module-graph/index.d.ts",
+      "import": "./dist/esm/graph/transform-bundle/module-graph/index.js",
+      "require": "./dist/cjs/graph/transform-bundle/module-graph/index.js"
+    },
+    "./transform-bundle/webpack": {
+      "types": "./dist/type/graph/transform-bundle/webpack/compatible.d.ts",
+      "import": "./dist/esm/graph/transform-bundle/webpack/compatible.js",
+      "require": "./dist/cjs/graph/transform-bundle/webpack/compatible.js"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -23,16 +50,21 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "lodash.unionby": "^4.8.0",
+    "lodash.foreach": "^4.5.0",
     "socket.io": "4.8.1",
-    "source-map": "^0.7.4"
+    "source-map": "^0.7.4",
+    "path-browserify": "^1.0.1"
   },
   "devDependencies": {
+    "@types/path-browserify": "^1.0.1",
     "@types/body-parser": "1.19.6",
     "@types/estree": "1.0.5",
     "@types/lodash.unionby": "^4.8.9",
     "@types/node": "^22.8.1",
+    "@types/webpack": "^5.28.5",
     "fs-extra": "^11.1.1",
     "tslib": "2.8.1",
+    "webpack": "5.97.1",
     "typescript": "^5.2.2"
   },
   "publishConfig": {

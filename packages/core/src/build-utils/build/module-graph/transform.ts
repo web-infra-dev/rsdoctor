@@ -1,5 +1,5 @@
 import { Plugin } from '@rsdoctor/types';
-import { getModuleGraphByStats as transform } from '@/build-utils/common/module-graph';
+import { getModuleGraphByStats as transform } from '@rsdoctor/graph/transform-bundle/module-graph';
 import { TransformContext, appendModuleGraphByCompilation } from '.';
 import { SDK } from '@rsdoctor/types';
 

@@ -1,8 +1,8 @@
 import { SDK, Plugin } from '@rsdoctor/types';
 import path from 'path-browserify';
-import { ModuleGraph, Module, Statement } from '@rsdoctor/graph';
 import { isImportDependency, getImportKind } from './utils';
 import { getPositionByStatsLocation } from './compatible';
+import { Module, ModuleGraph, Statement } from '@/graph';
 
 function getCanSkip(data: Plugin.StatsModule) {
   if (

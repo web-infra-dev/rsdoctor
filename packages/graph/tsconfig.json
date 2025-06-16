@@ -3,6 +3,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "noUnusedLocals": false,
+    "noImplicitAny": false,
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {

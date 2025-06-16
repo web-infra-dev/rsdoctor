@@ -1,7 +1,7 @@
 import {
   getAssetsModulesData as transform,
   ParsedModuleSizeData,
-} from '@/build-utils/common/chunks';
+} from '@rsdoctor/graph/transform-bundle/chunks';
 import { parseBundle } from '../utils';
 import { SDK } from '@rsdoctor/types';
 

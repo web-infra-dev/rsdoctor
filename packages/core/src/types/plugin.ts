@@ -64,7 +64,7 @@ export interface RsdoctorWebpackPluginOptions<
   /**
    * Whether to turn on some characteristic analysis capabilities, such as: the support for the BannerPlugin.
    */
-  supports?: ISupport;
+  supports?: SDK.ISupport;
 
   /**
    * The port of the Rsdoctor server.
@@ -116,13 +116,6 @@ export interface RsdoctorMultiplePluginOptions<
   name?: string;
 }
 
-interface ISupport {
-  banner?: boolean;
-  parseBundle?: boolean;
-  generateTileGraph?: boolean;
-  gzip?: boolean;
-}
-
 export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends Common.DeepRequired<
@@ -140,7 +133,7 @@ export interface RsdoctorPluginOptionsNormalized<
     compressData: boolean;
   };
   port?: number;
-  supports: ISupport;
+  supports: SDK.ISupport;
   brief: SDK.BriefConfig;
 }
 
