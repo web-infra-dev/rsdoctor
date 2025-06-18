@@ -197,6 +197,15 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   public done = async (
     compiler: Plugin.BaseCompilerType<'rspack'>,
   ): Promise<void> => {
+    if (
+      compiler.name?.toLowerCase() === 'lynx' &&
+      compiler.options.optimization?.concatenateModules !== false
+    ) {
+      logger.info(
+        `${chalk.yellow('Please disable concatenateModules when RSDOCTOR = true to accurately check bundled size.')} Details: https://rsdoctor.rs/guide/more/faq#bundle-analysis-page-nobundled-size`,
+      );
+    }
+
     await this.sdk.bootstrap();
 
     this.sdk.addClientRoutes([
