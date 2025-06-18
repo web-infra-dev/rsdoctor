@@ -4,7 +4,7 @@ import { removeAbsModulePath } from '../common/utils';
 import {
   Chunks,
   ModuleGraph as ModuleGraphBuildUtils,
-} from '../../src/build-utils/build';
+} from '@/build-utils/build';
 import { SDK, Plugin } from '@rsdoctor/types';
 
 export class ModuleGraphTestPlugin {
