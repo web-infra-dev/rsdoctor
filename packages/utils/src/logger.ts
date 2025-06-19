@@ -18,29 +18,29 @@ export { c as chalk, logger };
 
 logger.override({
   log: (message) => {
-    console.log(`[Rsdoctor log] ${message}`);
+    console.log(`${c.green('[RSDOCTOR LOG]')} ${message}`);
   },
   info: (message) => {
-    console.log(`[Rsdoctor info] ${message}`);
+    console.log(`${c.yellow('[RSDOCTOR INFO]')} ${message}`);
   },
   warn: (message) => {
-    console.warn(`[Rsdoctor warn] ${message}`);
+    console.warn(`${c.yellow('[RSDOCTOR WARN]')} ${message}`);
   },
   start: (message) => {
-    console.log(`[Rsdoctor start] ${message}`);
+    console.log(`${c.green('[RSDOCTOR START]')} ${message}`);
   },
   ready: (message) => {
-    console.log(`[Rsdoctor ready] ${message}`);
+    console.log(`${c.green('[RSDOCTOR READY]')} ${message}`);
   },
   error: (message) => {
-    console.error(`[Rsdoctor error] ${message}`);
+    console.error(`${c.red('[RSDOCTOR ERROR]')} ${message}`);
   },
   success: (message) => {
-    console.error(`[Rsdoctor success] ${message}`);
+    console.error(`${c.green('[RSDOCTOR SUCCESS]')} ${message}`);
   },
   debug: (message) => {
     if (process.env.DEBUG) {
-      console.log(`[Rsdoctor debug] ${message}`);
+      console.log(`${c.blue('[RSDOCTOR DEBUG]')} ${message}`);
     }
   },
 });
