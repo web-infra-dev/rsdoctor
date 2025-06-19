@@ -59,6 +59,56 @@ module.exports = {
 - 原因：因为构建过程中，存储了源码信息，超过了内存，所以开启 `lite` 模式可以缓解。
 - 区别：`lite` 模式和普通模式的区别就是不再存储**源码信息**，只存储**打包后的代码**，同时分析报告上的代码也将**只有打包后的代码**。
 
+## 产物分析界面没有 `Bundled Size` 怎么办？
+
+### 问题说明
+
+`Source Size` 和 `Bundled Size` 的区别：
+
+- **Source Size**：Module 文件源码的原始大小（如下图紫色标识）。
+- **Bundled Size**：经过打包及压缩后的 Module 的最终代码大小（如下图青色标识）。
+
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-overall.png" />
+
+### 原因分析
+
+当 [optimization.concatenateModules](https://rspack.rs/zh/config/optimization#optimizationconcatenatemodules) 配置为 `true` 时，Rsdoctor 无法通过 `acorn` 解析产物来分解出每个 **Module** 的实际代码大小，因此无法显示 `Bundled Size`。
+
+### 解决方案
+
+:::danger
+**重要提醒：** 必须判断 `RSDOCTOR` 环境变量，不能直接修改 ConcatenateModules！线上环境默认开启 ConcatenateModules，线上构建环境中关闭会导致产物体积变大。
+:::
+
+**在开启 Rsdoctor 分析时，配置 concatenateModules 为 false**，如下所示。**同时要注意，关闭 concatenateModules 一定会导致产物体积略微变大，与线上环境的体积有一些差异。**
+
+```js rspack.config.mjs
+export default {
+  optimization: {
+    concatenateModules:
+      process.env.NODE_ENV === 'production' && !process.env.RSDOCTOR, // 需要判断 RSDOCTOR 环境变量，不可以直接修改 concatenateModules！
+  },
+};
+```
+
+- rspeedy 项目中，在 `rspeedy.config.ts` 中配置：
+
+```js rspeedy.config.ts
+  export default {
+    tools: {
+      rspack(config, { env }) {
+        if (process.env.RSDOCTOR === 'true') {
+            config.optimization = {
+              ...config.optimization,
+              concatenateModules: false,
+            },
+            return config
+          }
+      },
+    },
+  };
+```
+
 ## CssExtractRspackPlugin 的 loader 耗时过长问题
 
 在使用 Rsdoctor 对 Rspack 项目进行编译耗时分析时，可能会发现 [CssExtractRspackPlugin](https://rspack.rs/plugins/rspack/css-extract-rspack-plugin) 的 loader 耗时较长。然而，这个数值并不代表 CssExtractRspackPlugin 的 loader 的真实耗时，它还包含了对本模块编译的其他 loader 的耗时。
