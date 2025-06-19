@@ -3,7 +3,7 @@ import { File, Server } from '@rsdoctor/utils/build';
 import { Common, SDK } from '@rsdoctor/types';
 import { request } from 'http';
 import { tmpdir } from 'os';
-import * as path from 'path';
+import path from 'node:path';
 import { RsdoctorSDK } from '../src/sdk';
 
 export interface MockSDKResponse {
