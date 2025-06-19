@@ -3,7 +3,6 @@ import fs from 'fs';
 import os from 'os';
 import { describe, it, expect } from 'vitest';
 import { parseBundle } from '@/build-utils/build/utils/parseBundle';
-import { SDK } from '@rsdoctor/types';
 
 const BUNDLES_DIR = `${__dirname}/bundles`;
 
