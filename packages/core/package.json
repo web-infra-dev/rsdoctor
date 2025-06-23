@@ -88,7 +88,7 @@
     "@rspack/core": "1.4.0-beta.1",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
-    "@types/lodash": "^4.17.17",
+    "@types/lodash": "^4.17.18",
     "@types/node": "^22.8.1",
     "@types/node-fetch": "^2.6.12",
     "@types/path-browserify": "1.0.3",
