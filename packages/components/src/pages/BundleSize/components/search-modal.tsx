@@ -18,10 +18,18 @@ const { Search } = Input;
 
 type OnSearchParams = Parameters<NonNullable<SearchProps['onSearch']>>;
 
-export const SearchModal: React.FC = () => {
+export const SearchModal: React.FC<{
+  onModuleClick?: (module: any) => void;
+  onClose?: () => void;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+}> = ({ onModuleClick, onClose, open, setOpen }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchModule, setSearchModule] = useState('');
   const [searchChunk, setSearchChunk] = useState('');
+
+  const modalOpen = open !== undefined ? open : isModalOpen;
+  const setModalOpen = setOpen || setIsModalOpen;
 
   const onSearch: SearchProps['onSearch'] = useCallback(
     (...args: OnSearchParams) => {
@@ -32,15 +40,17 @@ export const SearchModal: React.FC = () => {
   );
 
   const showModal = () => {
-    setIsModalOpen(true);
+    setModalOpen(true);
   };
 
   const handleOk = () => {
-    setIsModalOpen(false);
+    setModalOpen(false);
+    onClose?.();
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setModalOpen(false);
+    onClose?.();
   };
 
   return (
@@ -62,7 +72,7 @@ export const SearchModal: React.FC = () => {
                 title="Search Modules"
                 onOk={handleOk}
                 onCancel={handleCancel}
-                open={isModalOpen}
+                open={modalOpen}
                 width={'65rem'}
                 footer=""
               >
@@ -85,6 +95,11 @@ export const SearchModal: React.FC = () => {
                         children: ModulesModal(
                           searchModule,
                           searchChunk || defaultChunkId,
+                          (item) => {
+                            onModuleClick?.(item);
+                            setModalOpen(false);
+                            onClose?.();
+                          },
                         ),
                       };
                     })}
@@ -101,7 +116,11 @@ export const SearchModal: React.FC = () => {
   );
 };
 
-const ModulesModal = (searchModule: string, chunk: string) => {
+const ModulesModal = (
+  searchModule: string,
+  chunk: string,
+  onModuleClick?: (module: any) => void,
+) => {
   return (
     <ServerAPIProvider
       api={SDK.ServerAPI.API.GetSearchModuleInChunk}
@@ -119,7 +138,10 @@ const ModulesModal = (searchModule: string, chunk: string) => {
               renderItem={(item) => {
                 const itemPathArr = item.relativePath.split(searchModule);
                 return (
-                  <List.Item>
+                  <List.Item
+                    onClick={() => onModuleClick?.(item)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <Skeleton avatar title={false} loading={!item.path} active>
                       <List.Item.Meta
                         description={

@@ -381,6 +381,28 @@ export function getAssetDetails(
   };
 }
 
+export function getAllBundleData(
+  assets: SDK.AssetData[],
+  chunks: SDK.ChunkData[],
+  modules: SDK.ModuleData[],
+  filtersModules?: (keyof SDK.ModuleData)[],
+): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetSummaryBundles> {
+  const result = [];
+  try {
+    for (let i = 0; i < assets.length; i++) {
+      const asset = assets[i];
+      result.push({
+        asset,
+        modules: getModulesByAsset(asset, chunks, modules, filtersModules),
+      });
+    }
+    return result;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
 export function extname(filename: string) {
   // 移除查询参数部分
   const baseName = filename.split('?')[0];

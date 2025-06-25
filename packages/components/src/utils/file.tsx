@@ -1,5 +1,5 @@
 import { get, startsWith } from 'lodash-es';
-import { Common } from '@rsdoctor/types';
+import { Common, SDK } from '@rsdoctor/types';
 import { message, Space, TreeNodeProps, UploadFile } from 'antd';
 import { FieldDataNode } from 'rc-tree';
 import {
@@ -253,4 +253,118 @@ export function getFileIcon(props: TreeNodeProps, addRowIcon = true) {
     return getFileCom(props.eventKey);
   }
   return <FileOutlined />;
+}
+
+type TreeNode = {
+  name: string;
+  value?: number;
+  children?: TreeNode[];
+  path?: string;
+  sourceSize?: number;
+  bundledSize?: number;
+  // Internal helper, not exported
+  _map?: Map<string, TreeNode>;
+};
+
+export function buildTreemapData(
+  modules: SDK.ModuleData[],
+  rootName = 'dist',
+): TreeNode {
+  const root: TreeNode = { name: rootName, children: [], _map: new Map() };
+
+  for (const mod of modules) {
+    const parts = mod.path.split(/[\\/]/).filter(Boolean);
+    let current = root;
+
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      if (i === parts.length - 1) {
+        // File node
+        if (!current.children) current.children = [];
+        current.children.push({
+          name: part,
+          path: mod.path,
+          sourceSize: mod.size?.sourceSize ?? 0,
+          bundledSize: mod.size?.parsedSize ?? 0,
+        });
+      } else {
+        // Directory node
+        if (!current._map) current._map = new Map();
+        let child = current._map.get(part);
+        if (!child) {
+          child = { name: part, children: [], _map: new Map() };
+          current.children!.push(child);
+          current._map.set(part, child);
+        }
+        current = child;
+      }
+    }
+  }
+
+  // Clean up _map property
+  function clean(node: TreeNode) {
+    delete node._map;
+    if (node.children) node.children.forEach(clean);
+  }
+  clean(root);
+
+  return root;
+}
+
+function flattenSingleChildDirs(node: TreeNode): TreeNode {
+  // Return directly if leaf node
+  if (!node.children || node.children.length === 0) return node;
+
+  let current = node;
+  // As long as children has only one child and it's not a leaf, merge
+  while (
+    current.children &&
+    current.children.length === 1 &&
+    !current.children[0].sourceSize // Not a leaf
+  ) {
+    current = {
+      name: current.name + '/' + current.children[0].name,
+      children: current.children[0].children,
+    };
+  }
+
+  // Recursively process all child nodes
+  if (current.children) {
+    current.children = current.children.map(flattenSingleChildDirs);
+  }
+  return current;
+}
+
+function sumDirValue(node: TreeNode): {
+  sourceSize: number;
+  bundledSize: number;
+} {
+  if (!node.children || node.children.length === 0) {
+    // Leaf node, just return value
+    return {
+      sourceSize: node.sourceSize ?? 0,
+      bundledSize: node.bundledSize ?? 0,
+    };
+  }
+  // Recursively sum all child nodes
+  let sourceSum = 0;
+  let bundledSum = 0;
+  for (const child of node.children) {
+    const { sourceSize, bundledSize } = sumDirValue(child);
+    sourceSum += sourceSize;
+    bundledSum += bundledSize;
+  }
+  node.sourceSize = sourceSum;
+  node.bundledSize = bundledSum;
+  return { sourceSize: sourceSum, bundledSize: bundledSum };
+}
+
+export function flattenTreemapData(
+  modules: SDK.ModuleData[],
+  rootName = 'dist',
+): TreeNode {
+  const rawTree = buildTreemapData(modules, rootName);
+  const flattenedTree = flattenSingleChildDirs(rawTree);
+  sumDirValue(flattenedTree); // Recursive sum
+  return flattenedTree;
 }

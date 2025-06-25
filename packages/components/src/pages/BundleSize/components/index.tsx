@@ -28,19 +28,26 @@ import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
 import { ServerAPIProvider, withServerAPI } from '../../../components/Manifest';
 import { Size } from '../../../constants';
-import { createFileStructures, formatSize, useI18n } from '../../../utils';
+import {
+  createFileStructures,
+  flattenTreemapData,
+  formatSize,
+  useI18n,
+} from '../../../utils';
 import { GraphType } from '../constants';
 import { AssetDetail } from './asset';
 import { BundleCards } from './cards';
 import styles from './index.module.scss';
 import './index.sass';
 import { SearchModal } from './search-modal';
+import {
+  AssetTreemapWithFilter,
+  TreeNode,
+} from 'src/components/Charts/TreeMap';
 
 const { Option } = Select;
 
 const cardBodyHeight = 600;
-
-const largeCardBodyHeight = 800;
 
 interface WebpackModulesOverallProps {
   cwd: string;
@@ -316,36 +323,22 @@ export const WebpackModulesOverallBase: React.FC<
             size: 'middle',
           }}
         >
-          <Row>
-            <Typography.Text code>
-              From: webpack-bundle-analyzer
-            </Typography.Text>
-          </Row>
-          <ServerAPIProvider
-            api={SDK.ServerAPI.API.GetTileReportHtml}
-            body={{}}
-          >
+          <ServerAPIProvider api={SDK.ServerAPI.API.GetSummaryBundles}>
             {(data) => {
-              if (data && graphType === 'tile') {
-                return (
-                  <iframe
-                    srcDoc={data}
-                    width={'100%'}
-                    height={largeCardBodyHeight}
-                    style={{ border: 'none' }}
-                  />
-                );
-              }
+              const computedTreeData: TreeNode[] = data.map((item) => {
+                const moduleTree = flattenTreemapData(item.modules);
+                return {
+                  name: item.asset.path,
+                  value: item.asset.size,
+                  children: moduleTree.children,
+                };
+              });
               return (
-                <Empty
-                  description={
-                    <div>
-                      Tile graph is disabled,{' '}
-                      <a href="https://rsdoctor.rs/config/options/options#generatetilegraph">
-                        see the documentation to learn how to enable.
-                      </a>
-                    </div>
-                  }
+                <AssetTreemapWithFilter
+                  treeData={computedTreeData}
+                  onChartClick={(i) => {
+                    console.log('onChartClick', i);
+                  }}
                 />
               );
             }}

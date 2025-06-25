@@ -9,10 +9,11 @@ export function getModulesByAsset(
   asset: SDK.AssetData,
   chunks: SDK.ChunkData[],
   modules: SDK.ModuleData[],
+  filterModules?: (keyof SDK.ModuleData)[],
 ): SDK.ModuleData[] {
   const ids = getChunkIdsByAsset(asset);
   const cks = getChunksByChunkIds(ids, chunks);
-  const res = getModulesByChunks(cks, modules);
+  const res = getModulesByChunks(cks, modules, filterModules);
   return res;
 }
 
@@ -33,22 +34,44 @@ export function getModuleIdsByModulesIds(
 export function getModulesByChunk(
   chunk: SDK.ChunkData,
   modules: SDK.ModuleData[],
+  filterModules?: (keyof SDK.ModuleData)[],
 ): SDK.ModuleData[] {
   const ids = getModuleIdsByChunk(chunk);
-  return ids.map((id) => modules.find((e) => e.id === id)!).filter(Boolean);
+  return ids
+    .map((id) => {
+      const module = modules.find((e) => e.id === id)!;
+      if (filterModules && filterModules.length > 0) {
+        if (!module) {
+          return null as any;
+        }
+        const filtered: Record<string, any> = {};
+        for (const key of filterModules) {
+          if (module[key] !== undefined) {
+            filtered[key] = module[key];
+          }
+        }
+        return filtered as SDK.ModuleData;
+      }
+      return module;
+    })
+    .filter(Boolean);
 }
 
 export function getModulesByChunks(
   chunks: SDK.ChunkData[],
   modules: SDK.ModuleData[],
+  filterModules?: (keyof SDK.ModuleData)[],
 ): SDK.ModuleData[] {
   const res: SDK.ModuleData[] = [];
-
-  chunks.forEach((chunk) => {
-    getModulesByChunk(chunk, modules).forEach((md) => {
-      if (!res.filter((_m) => _m.id === md.id).length) res.push(md);
+  try {
+    chunks.forEach((chunk) => {
+      getModulesByChunk(chunk, modules, filterModules).forEach((md) => {
+        if (!res.filter((_m) => _m.id === md.id).length) res.push(md);
+      });
     });
-  });
+  } catch (error) {
+    console.error(error);
+  }
 
   return res;
 }

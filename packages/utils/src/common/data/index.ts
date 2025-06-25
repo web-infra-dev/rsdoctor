@@ -184,6 +184,21 @@ export class APIDataLoader {
           return Graph.getAssetDetails(assetPath, assets, chunks, modules) as R;
         });
 
+      case SDK.ServerAPI.API.GetSummaryBundles:
+        return Promise.all([
+          this.loader.loadData('chunkGraph'),
+          this.loader.loadData('moduleGraph'),
+        ]).then((res) => {
+          const { assets = [], chunks = [] } = res[0] || {};
+          const { modules = [] } = res[1] || {};
+          return Graph.getAllBundleData(assets, chunks, modules, [
+            'id',
+            'path',
+            'size',
+            'kind',
+          ]) as R;
+        });
+
       case SDK.ServerAPI.API.GetChunksByModuleId:
         return Promise.all([
           this.loader.loadData('chunkGraph'),

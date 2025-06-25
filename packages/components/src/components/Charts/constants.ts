@@ -36,3 +36,60 @@ export enum ChartTypes {
   Loader,
   Normal,
 }
+
+export const BUNDLE_ANALYZER_COLORS = {
+  green: [
+    '#32b26a',
+    '#5fcf92',
+    '#8ee2b6',
+    '#b7e1cd',
+    '#cdeee0',
+    '#e0f7ef',
+    '#c8e6d6',
+  ],
+  blue: [
+    '#3498f7',
+    '#5eb3fa',
+    '#8ccafc',
+    '#b3d8f8',
+    '#cde6fa',
+    '#e0f2fd',
+    '#c8e0ef',
+  ],
+  purple: [
+    '#a04ddb',
+    '#b26ef0',
+    '#c49ff5',
+    '#d1b3e6',
+    '#e0c8f2',
+    '#f0e6fa',
+    '#d6c8e6',
+  ],
+  yellow: [
+    '#ffe066',
+    '#ffec80',
+    '#fff599',
+    '#fff9c4',
+    '#fffbe0',
+    '#fffde7',
+    '#f5f2c8',
+  ],
+  red: [
+    '#e53935',
+    '#f44336',
+    '#f76c6c',
+    '#f8bbd0',
+    '#f9cfdc',
+    '#fde0dc',
+    '#f2c8c8',
+  ],
+} as const;
+
+type ColorGroup = keyof typeof BUNDLE_ANALYZER_COLORS;
+export const COLOR_GROUPS: ColorGroup[] = [
+  'blue',
+  'purple',
+  'yellow',
+  'red',
+  'green',
+];
