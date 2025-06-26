@@ -667,6 +667,7 @@ export const AssetDetail: React.FC<{
                     expandedModulesKeys = expandedKeys;
                   }}
                   defaultExpandParent
+                  // @ts-ignore
                   defaultExpandedKeys={
                     expandedModulesKeys?.length
                       ? expandedModulesKeys
