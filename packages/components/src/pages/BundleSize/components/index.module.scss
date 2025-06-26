@@ -152,5 +152,11 @@
       overflow: auto;
       max-height: 30rem;
     }
+    .search-list-item {
+      &.clickable:hover {
+        background-color: #eee;
+        cursor: pointer;
+      }
+    }
   }
 }

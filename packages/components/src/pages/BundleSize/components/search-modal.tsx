@@ -25,7 +25,13 @@ export const SearchModal: React.FC<{
   open?: boolean;
   setOpen?: (open: boolean) => void;
   isIcon?: boolean;
-}> = ({ onModuleClick, onClose, open, setOpen, isIcon = false }) => {
+}> = ({
+  onModuleClick = undefined,
+  onClose,
+  open,
+  setOpen,
+  isIcon = false,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchModule, setSearchModule] = useState('');
   const [searchChunk, setSearchChunk] = useState('');
@@ -129,7 +135,7 @@ export const SearchModal: React.FC<{
 const ModulesModal = (
   searchModule: string,
   chunk: string,
-  onModuleClick?: (module: any) => void,
+  onModuleClick?: (module: any) => void | undefined,
 ) => {
   return (
     <ServerAPIProvider
@@ -149,8 +155,14 @@ const ModulesModal = (
                 const itemPathArr = item.relativePath.split(searchModule);
                 return (
                   <List.Item
-                    onClick={() => onModuleClick?.(item)}
-                    style={{ cursor: 'pointer' }}
+                    className={
+                      onModuleClick
+                        ? 'search-list-item clickable'
+                        : 'search-list-item'
+                    }
+                    onClick={
+                      onModuleClick ? () => onModuleClick(item) : undefined
+                    }
                   >
                     <Skeleton avatar title={false} loading={!item.path} active>
                       <List.Item.Meta
