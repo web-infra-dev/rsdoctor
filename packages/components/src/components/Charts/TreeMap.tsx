@@ -5,8 +5,11 @@ import { TreemapChart } from 'echarts/charts';
 import { TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { BUNDLE_ANALYZER_COLORS, COLOR_GROUPS } from './constants';
-import { Checkbox, Card, Typography, Space, Row } from 'antd';
-import { CaretRightOutlined, CaretLeftOutlined } from '@ant-design/icons';
+import { Checkbox, Card, Typography, Space } from 'antd';
+import {
+  VerticalAlignBottomOutlined,
+  VerticalAlignTopOutlined,
+} from '@ant-design/icons';
 import { formatSize } from 'src/utils';
 import { SearchModal } from 'src/pages/BundleSize/components/search-modal';
 
@@ -47,7 +50,7 @@ function getLevelOption() {
       },
       emphasis: {
         itemStyle: {
-          borderColor: '#4a4242',
+          borderColor: '#a29f9f',
         },
       },
     },
@@ -116,7 +119,8 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             itemStyle: {
               borderWidth: 2,
               gapWidth: 2,
-              borderColorSaturation: 0.5,
+              borderColorSaturation: 0.2,
+              colorSaturation: 0.2,
               color: groupColors[level % groupColors.length],
               borderColor: groupColors[level % groupColors.length],
             },
@@ -182,7 +186,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
         });
       }, [treeData, valueKey]);
 
-      return option ? ( // TODO
+      return option ? (
         <div>
           <ReactEChartsCore
             ref={chartRef}
@@ -252,14 +256,26 @@ export const AssetTreemapWithFilter: React.FC<{
           title={
             <Space>
               <Typography.Text>{'产物列表'}</Typography.Text>
-              <span
-                style={{ cursor: 'pointer', marginLeft: 8 }}
-                onClick={() => setCollapsed((c) => !c)}
-                aria-label={collapsed ? '展开' : '收起'}
-              >
-                {collapsed ? <CaretRightOutlined /> : <CaretLeftOutlined />}
-              </span>
+              <SearchModal
+                onModuleClick={handleModuleClick}
+                open={searchModalOpen}
+                setOpen={setSearchModalOpen}
+                isIcon={true}
+              />
             </Space>
+          }
+          extra={
+            <span
+              style={{ cursor: 'pointer', marginLeft: 8 }}
+              onClick={() => setCollapsed((c) => !c)}
+              aria-label={collapsed ? '展开' : '收起'}
+            >
+              {collapsed ? (
+                <VerticalAlignBottomOutlined />
+              ) : (
+                <VerticalAlignTopOutlined />
+              )}
+            </span>
           }
           size="small"
           bodyStyle={{
@@ -297,13 +313,6 @@ export const AssetTreemapWithFilter: React.FC<{
             />
           </div>
         </Card>
-        <Row>
-          <SearchModal
-            onModuleClick={handleModuleClick}
-            open={searchModalOpen}
-            setOpen={setSearchModalOpen}
-          />
-        </Row>
         <div style={{ flex: 1 }}>
           <TreeMap
             ref={chartRef}

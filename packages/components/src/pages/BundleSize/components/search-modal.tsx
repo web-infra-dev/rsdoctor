@@ -13,6 +13,7 @@ import { SearchProps } from 'antd/es/input';
 import { ServerAPIProvider } from 'src/components';
 import { SDK } from '@rsdoctor/types';
 import styles from './index.module.scss';
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 
@@ -23,7 +24,8 @@ export const SearchModal: React.FC<{
   onClose?: () => void;
   open?: boolean;
   setOpen?: (open: boolean) => void;
-}> = ({ onModuleClick, onClose, open, setOpen }) => {
+  isIcon?: boolean;
+}> = ({ onModuleClick, onClose, open, setOpen, isIcon = false }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchModule, setSearchModule] = useState('');
   const [searchChunk, setSearchChunk] = useState('');
@@ -55,9 +57,17 @@ export const SearchModal: React.FC<{
 
   return (
     <>
-      <Button className={styles['search-btn']} color="cyan" onClick={showModal}>
-        Search Module
-      </Button>
+      {isIcon ? (
+        <SearchOutlined onClick={showModal} />
+      ) : (
+        <Button
+          className={styles['search-btn']}
+          color="cyan"
+          onClick={showModal}
+        >
+          Search Module
+        </Button>
+      )}
 
       <ServerAPIProvider
         api={SDK.ServerAPI.API.GetSearchModules}

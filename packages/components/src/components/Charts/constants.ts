@@ -39,57 +39,64 @@ export enum ChartTypes {
 
 export const BUNDLE_ANALYZER_COLORS = {
   green: [
-    '#32b26a',
-    '#5fcf92',
-    '#8ee2b6',
-    '#b7e1cd',
-    '#cdeee0',
-    '#e0f7ef',
-    '#c8e6d6',
+    hexToRgba('#32b26a', 0.6),
+    hexToRgba('#5fcf92', 0.6),
+    hexToRgba('#8ee2b6', 0.8),
+    hexToRgba('#b7e1cd', 1),
+    hexToRgba('#cdeee0', 1),
+    hexToRgba('#e0f7ef', 1),
+    hexToRgba('#c8e6d6', 1),
   ],
   blue: [
-    '#3498f7',
-    '#5eb3fa',
-    '#8ccafc',
-    '#b3d8f8',
-    '#cde6fa',
-    '#e0f2fd',
-    '#c8e0ef',
+    hexToRgba('#3498f7', 0.6),
+    hexToRgba('#5eb3fa', 0.6),
+    hexToRgba('#8ccafc', 0.8),
+    hexToRgba('#b3d8f8', 1),
+    hexToRgba('#cde6fa', 1),
+    hexToRgba('#e0f2fd', 1),
+    hexToRgba('#c8e0ef', 1),
   ],
   purple: [
-    '#a04ddb',
-    '#b26ef0',
-    '#c49ff5',
-    '#d1b3e6',
-    '#e0c8f2',
-    '#f0e6fa',
-    '#d6c8e6',
+    hexToRgba('#a04ddb', 0.6),
+    hexToRgba('#b26ef0', 0.6),
+    hexToRgba('#c49ff5', 0.8),
+    hexToRgba('#d1b3e6', 1),
+    hexToRgba('#e0c8f2', 1),
+    hexToRgba('#f0e6fa', 1),
+    hexToRgba('#d6c8e6', 1),
   ],
   yellow: [
-    '#ffe066',
-    '#ffec80',
-    '#fff599',
-    '#fff9c4',
-    '#fffbe0',
-    '#fffde7',
-    '#f5f2c8',
+    hexToRgba('#ffe066', 0.6),
+    hexToRgba('#ffec80', 0.6),
+    hexToRgba('#fff599', 0.8),
+    hexToRgba('#fff9c4', 1),
+    hexToRgba('#fffbe0', 1),
+    hexToRgba('#fffde7', 1),
+    hexToRgba('#f5f2c8', 1),
   ],
-  red: [
-    '#e53935',
-    '#f44336',
-    '#f76c6c',
-    '#f8bbd0',
-    '#f9cfdc',
-    '#fde0dc',
-    '#f2c8c8',
+  grey: [
+    hexToRgba('#7a7a7a', 0.7),
+    hexToRgba('#969696', 0.7),
+    hexToRgba('#b0b0b0', 0.8),
+    hexToRgba('#c8c8c8', 1),
+    hexToRgba('#dcdcdc', 1),
+    hexToRgba('#ededed', 1),
+    hexToRgba('#f7f7f7', 1),
   ],
 } as const;
+
+function hexToRgba(hex: string, alpha = 1) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
 
 type ColorGroup = keyof typeof BUNDLE_ANALYZER_COLORS;
 export const COLOR_GROUPS: ColorGroup[] = [
   'blue',
   'purple',
   'yellow',
-  'red',
+  'grey',
   'green',
 ];
