@@ -169,6 +169,10 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
               id: 'bundle-treemap',
               type: 'treemap',
               visibleMin: 300,
+              left: 10,
+              right: 10,
+              top: 10,
+              bottom: 10,
               label: {
                 show: true,
                 formatter: '{b}',
