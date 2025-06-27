@@ -1,12 +1,10 @@
-import path from 'path';
 import {
   RsdoctorPluginInstance,
   RsdoctorRspackPluginOptionsNormalized,
 } from '@/types';
-import { Linter, Plugin, Constants, Manifest, SDK } from '@rsdoctor/types';
+import { Linter, Plugin, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { chalk, debug, logger } from '@rsdoctor/utils/logger';
-import fse from 'fs-extra';
 import {
   Chunks as ChunksBuildUtils,
   ModuleGraph as ModuleGraphBuildUtils,
@@ -126,24 +124,11 @@ export const ensureModulesChunksGraphFn = (
       await _this.sdk.reportChunkGraph(_this.chunkGraph!);
 
       if (_this.options.supports.generateTileGraph) {
-        /** Generate webpack-bundle-analyzer tile graph */
-        const reportFilePath = await ChunksBuildUtils.generateTileGraph(
-          getStatsJson() as Plugin.BaseStats,
-          {
-            reportFilename: path.join(
-              Constants.RsdoctorOutputFolder,
-              ChunksBuildUtils.TileGraphReportName,
-            ),
-            reportTitle: 'bundle-analyzer',
-            reportDir: _this.options.output.reportDir,
-          },
-          compiler.outputPath,
+        logger.warn(
+          chalk.yellow(
+            'The option generateTileGraph is deprecated. Tile graph is now supported by default.',
+          ),
         );
-
-        reportFilePath &&
-          (await _this.sdk.reportTileHtml(
-            fse.readFileSync(reportFilePath, 'utf-8'),
-          ));
       }
     },
   );

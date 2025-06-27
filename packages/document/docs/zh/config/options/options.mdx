@@ -294,18 +294,12 @@ type ISupport = {
 
 如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
 
-#### generateTileGraph
+#### ~~generateTileGraph [**Deprecated**]~~
 
-- **默认值：** 使用 Rspack 时默认值是 `false`，否则为 `true`
-- **类型：** `boolean`
+<Badge text="Deprecated" type="warning" />
 
-是否开启生成瓦片图的能力，影响是 Bundle Size 页面中是否有 `webpack-bundle-analyzer` 的瓦片图。
+Rsdoctor 默认支持生成 Tree Map 图，所以不需要配置此选项。
 
-<img
-  src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-tile-graph.png"
-  width="500px"
-  style={{ margin: 'auto' }}
-/>
 #### parseBundle
 
 - **类型：** `boolean`

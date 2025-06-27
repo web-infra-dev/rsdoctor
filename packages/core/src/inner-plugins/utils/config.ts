@@ -38,7 +38,6 @@ function getDefaultSupports() {
   return {
     parseBundle: true,
     banner: undefined,
-    generateTileGraph: true,
     gzip: false,
   };
 }

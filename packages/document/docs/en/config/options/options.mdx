@@ -295,18 +295,11 @@ type ISupport = {
 
 If `supports.banner` is enabled, Rsdoctor will enable compatibility logic for BannerPlugin. For more details, please refer to: [Supports BannerPlugin](../../guide/usage/bundle-size#supports-bannerplugin)
 
-#### generateTileGraph
+#### ~~generateTileGraph [**Deprecated**]~~
 
-- default: true. The default value in rspack is false.
-- type: boolean.
+<Badge text="Deprecated" type="warning" />
 
-Whether to enable the ability to generate tile graphs, which affects whether the Bundle Size page has a tile graph from `webpack-bundle-analyzer`.
-
-<img
-  src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-tile-graph.png"
-  width="500px"
-  style={{ margin: 'auto' }}
-/>
+Rsdoctor supports generating Tree Map graphs by default, so this option does not need to be configured.
 
 #### parseBundle
 
