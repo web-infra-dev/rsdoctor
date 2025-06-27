@@ -13,15 +13,31 @@ import { SearchProps } from 'antd/es/input';
 import { ServerAPIProvider } from 'src/components';
 import { SDK } from '@rsdoctor/types';
 import styles from './index.module.scss';
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 
 type OnSearchParams = Parameters<NonNullable<SearchProps['onSearch']>>;
 
-export const SearchModal: React.FC = () => {
+export const SearchModal: React.FC<{
+  onModuleClick?: (module: any) => void;
+  onClose?: () => void;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+  isIcon?: boolean;
+}> = ({
+  onModuleClick = undefined,
+  onClose,
+  open,
+  setOpen,
+  isIcon = false,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchModule, setSearchModule] = useState('');
   const [searchChunk, setSearchChunk] = useState('');
+
+  const modalOpen = open !== undefined ? open : isModalOpen;
+  const setModalOpen = setOpen || setIsModalOpen;
 
   const onSearch: SearchProps['onSearch'] = useCallback(
     (...args: OnSearchParams) => {
@@ -32,22 +48,32 @@ export const SearchModal: React.FC = () => {
   );
 
   const showModal = () => {
-    setIsModalOpen(true);
+    setModalOpen(true);
   };
 
   const handleOk = () => {
-    setIsModalOpen(false);
+    setModalOpen(false);
+    onClose?.();
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setModalOpen(false);
+    onClose?.();
   };
 
   return (
     <>
-      <Button className={styles['search-btn']} color="cyan" onClick={showModal}>
-        Search Module
-      </Button>
+      {isIcon ? (
+        <SearchOutlined onClick={showModal} />
+      ) : (
+        <Button
+          className={styles['search-btn']}
+          color="cyan"
+          onClick={showModal}
+        >
+          Search Module
+        </Button>
+      )}
 
       <ServerAPIProvider
         api={SDK.ServerAPI.API.GetSearchModules}
@@ -62,7 +88,7 @@ export const SearchModal: React.FC = () => {
                 title="Search Modules"
                 onOk={handleOk}
                 onCancel={handleCancel}
-                open={isModalOpen}
+                open={modalOpen}
                 width={'65rem'}
                 footer=""
               >
@@ -85,6 +111,11 @@ export const SearchModal: React.FC = () => {
                         children: ModulesModal(
                           searchModule,
                           searchChunk || defaultChunkId,
+                          (item) => {
+                            onModuleClick?.(item);
+                            setModalOpen(false);
+                            onClose?.();
+                          },
                         ),
                       };
                     })}
@@ -101,7 +132,11 @@ export const SearchModal: React.FC = () => {
   );
 };
 
-const ModulesModal = (searchModule: string, chunk: string) => {
+const ModulesModal = (
+  searchModule: string,
+  chunk: string,
+  onModuleClick?: (module: any) => void | undefined,
+) => {
   return (
     <ServerAPIProvider
       api={SDK.ServerAPI.API.GetSearchModuleInChunk}
@@ -119,7 +154,16 @@ const ModulesModal = (searchModule: string, chunk: string) => {
               renderItem={(item) => {
                 const itemPathArr = item.relativePath.split(searchModule);
                 return (
-                  <List.Item>
+                  <List.Item
+                    className={
+                      onModuleClick
+                        ? 'search-list-item clickable'
+                        : 'search-list-item'
+                    }
+                    onClick={
+                      onModuleClick ? () => onModuleClick(item) : undefined
+                    }
+                  >
                     <Skeleton avatar title={false} loading={!item.path} active>
                       <List.Item.Meta
                         description={

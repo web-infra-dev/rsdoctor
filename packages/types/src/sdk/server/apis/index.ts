@@ -53,6 +53,7 @@ export enum API {
   GetPluginData = '/api/plugins/data',
 
   /** Graph API */
+  GetSummaryBundles = '/api/graph/bundles/summary',
   GetChunkGraph = '/api/graph/chunks/graph',
   GetAssetsSummary = '/api/graph/assets/summary',
   GetAssetDetails = '/api/graph/asset/details',
@@ -153,6 +154,10 @@ export interface ResponseTypes
   [API.GetPackageDependency]: SDK.PackageDependencyData[];
   [API.GetChunkByIdAI]: ExtendedChunkData[];
   [API.GetChunkGraphAI]: Omit<SDK.ChunkData, 'modules'>[];
+  [API.GetSummaryBundles]: {
+    asset: SDK.AssetData;
+    modules: SDK.ModuleData[];
+  }[];
 }
 
 export interface RequestBodyTypes

@@ -28,18 +28,33 @@ export function getChunkByChunkId(
 export function getChunksByChunkIds(
   chunkIds: string[],
   chunks: SDK.ChunkData[],
+  filters?: (keyof SDK.ChunkData)[],
 ): SDK.ChunkData[] {
-  if (chunkIds.length) {
-    return chunkIds.map((id) => getChunkByChunkId(id, chunks)).filter(Boolean);
-  }
-  return [];
+  if (!chunkIds.length) return [];
+  const result = chunkIds
+    .map((id) => chunks.find((e) => e.id === id))
+    .filter(Boolean)
+    .map((chunk) => {
+      if (filters && filters.length > 0) {
+        const filtered: Record<string, any> = {};
+        for (const key of filters) {
+          if (chunk![key] !== undefined) {
+            filtered[key] = chunk![key];
+          }
+        }
+        return filtered;
+      }
+      return chunk!;
+    });
+  return result as SDK.ChunkData[];
 }
 
 export function getChunksByAsset(
   asset: SDK.AssetData,
   chunks: SDK.ChunkData[],
+  filters?: (keyof SDK.ChunkData)[],
 ): SDK.ChunkData[] {
-  return getChunksByChunkIds(getChunkIdsByAsset(asset), chunks);
+  return getChunksByChunkIds(getChunkIdsByAsset(asset), chunks, filters);
 }
 
 export function getChunksByModuleId(

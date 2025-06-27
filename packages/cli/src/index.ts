@@ -5,6 +5,7 @@ import { Common } from '@rsdoctor/types';
 import { analyze, bundleDiff } from './commands';
 import { Command, CommandContext, GetCommandArgumentsType } from './types';
 import { Commands, pkg, bin } from './constants';
+import { logger } from '@rsdoctor/utils/logger';
 
 export async function execute<
   T extends GetCommandArgumentsType<typeof analyze>,
@@ -67,8 +68,7 @@ export async function execute(
           await action(args);
         } catch (error) {
           const { message, stack } = error as Error;
-          console.log('');
-          console.error(red(stack || message));
+          logger.error(red(stack || message));
           process.exit(1);
         }
       },
