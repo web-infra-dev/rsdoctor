@@ -44,6 +44,8 @@ const cn: typeof en = {
   AsyncLoaderInfo:
     '对于异步 loader，单个 loader 的耗时可能不准确。例如：mini-css-extract-plugin 的 loader。',
   Details: '详情',
+  Expand: '展开',
+  Collapse: '收起',
 };
 
 export default cn;

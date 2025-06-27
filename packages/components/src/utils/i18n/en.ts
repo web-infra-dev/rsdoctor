@@ -43,6 +43,8 @@ const en = {
   AsyncLoaderInfo:
     "For async loaders, the time cost of each loader is not accurate. For example: mini-css-extract-plugin's loader.",
   Details: 'Details',
+  Expand: 'Expand',
+  Collapse: 'Collapse',
 };
 
 export default en;

@@ -10,7 +10,7 @@ import {
   VerticalAlignBottomOutlined,
   VerticalAlignTopOutlined,
 } from '@ant-design/icons';
-import { formatSize } from 'src/utils';
+import { formatSize, useI18n } from 'src/utils';
 import { SearchModal } from 'src/pages/BundleSize/components/search-modal';
 
 // TreeNode type should match the output of flattenTreemapData
@@ -227,6 +227,7 @@ export const AssetTreemapWithFilter: React.FC<{
   const [collapsed, setCollapsed] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const chartRef = React.useRef<any>(null);
+  const { t } = useI18n();
 
   const filteredTreeData = useMemo(
     () => treeData.filter((item) => checkedAssets.includes(item.name)),
@@ -259,7 +260,7 @@ export const AssetTreemapWithFilter: React.FC<{
         <Card
           title={
             <Space>
-              <Typography.Text>{'产物列表'}</Typography.Text>
+              <Typography.Text>{t('Output Assets List')}</Typography.Text>
               <SearchModal
                 onModuleClick={handleModuleClick}
                 open={searchModalOpen}
@@ -272,7 +273,7 @@ export const AssetTreemapWithFilter: React.FC<{
             <span
               style={{ cursor: 'pointer', marginLeft: 8 }}
               onClick={() => setCollapsed((c) => !c)}
-              aria-label={collapsed ? '展开' : '收起'}
+              aria-label={collapsed ? t('Expand') : t('Collapse')}
             >
               {collapsed ? (
                 <VerticalAlignBottomOutlined />
