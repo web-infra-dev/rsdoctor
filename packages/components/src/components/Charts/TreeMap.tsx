@@ -245,11 +245,6 @@ export const AssetTreemapWithFilter: React.FC<{
         seriesId: 'bundle-treemap',
         targetNodeId: nodeId.toString(),
       });
-      echartsInstance.dispatchAction({
-        type: 'highlight',
-        seriesId: 'bundle-treemap',
-        targetNodeId: nodeId.toString(),
-      });
     }
     setSearchModalOpen(false);
   };
@@ -298,6 +293,7 @@ export const AssetTreemapWithFilter: React.FC<{
             }}
           >
             <Checkbox
+              key="all-none-checkbox"
               indeterminate={
                 checkedAssets.length > 0 &&
                 checkedAssets.length < assetNames.length
@@ -311,6 +307,7 @@ export const AssetTreemapWithFilter: React.FC<{
               {'ALL / NONE'}
             </Checkbox>
             <Checkbox.Group
+              key="asset-checkbox-group"
               options={assetNames}
               value={checkedAssets}
               onChange={setCheckedAssets}

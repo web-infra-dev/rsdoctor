@@ -160,22 +160,28 @@ const ModulesModal = (
                         ? 'search-list-item clickable'
                         : 'search-list-item'
                     }
+                    key={`${item.path}-${item.relativePath}`}
                     onClick={
                       onModuleClick ? () => onModuleClick(item) : undefined
                     }
                   >
                     <Skeleton avatar title={false} loading={!item.path} active>
                       <List.Item.Meta
+                        key={`${item.path}-${item.relativePath}-meta`}
                         description={
                           <>
                             <Typography.Text code>{'Module:'}</Typography.Text>
                             {itemPathArr.map((cur, index) => {
                               if (index < itemPathArr.length - 1) {
                                 return (
-                                  <Typography.Text style={{ fontWeight: 200 }}>
+                                  <Typography.Text
+                                    key={`${cur}-${index}`}
+                                    style={{ fontWeight: 200 }}
+                                  >
                                     {cur}
                                     <Typography.Text
                                       strong
+                                      key={`${cur}-${index}-strong`}
                                       style={{ fontWeight: 600 }}
                                     >
                                       {searchModule}
