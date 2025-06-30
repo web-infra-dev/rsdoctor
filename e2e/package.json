@@ -12,7 +12,7 @@
     "lodash": "^4.17.21",
     "@actions/core": "^1.11.1",
     "@lynx-js/react": "^0.110.0",
-    "@playwright/test": "1.44.1",
+    "@playwright/test": "1.53.2",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",

@@ -72,8 +72,8 @@ importers:
         specifier: ^0.9.10
         version: 0.9.10(@rspack/core@1.4.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@playwright/test':
-        specifier: 1.44.1
-        version: 1.44.1
+        specifier: 1.53.2
+        version: 1.53.2
       '@rsdoctor/cli':
         specifier: workspace:*
         version: link:../packages/cli
@@ -3445,9 +3445,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@playwright/test@1.44.1':
-    resolution: {integrity: sha512-1hZ4TNvD5z9VuhNJ/walIjvMVvYkZKf71axoF/uiAqpntQJXpG64dlXhoDXE3OczPuTuvjf/M5KWFg5VAVUS3Q==}
-    engines: {node: '>=16'}
+  '@playwright/test@1.53.2':
+    resolution: {integrity: sha512-tEB2U5z74ebBeyfGNZ3Jfg29AnW+5HlWhvHtb/Mqco9pFdZU1ZLNdVb2UtB5CvmiilNr2ZfVH/qMmAROG/XTzw==}
+    engines: {node: '>=18'}
     hasBin: true
 
   '@pmmmwh/react-refresh-webpack-plugin@0.5.15':
@@ -8699,9 +8699,19 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
+  playwright-core@1.53.2:
+    resolution: {integrity: sha512-ox/OytMy+2w1jcYEYlOo1Hhp8hZkLCximMTUTMBXjGUA1KoFfiSZ+DU+3a739jsPY0yoKH2TFy9S2fsJas8yAw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   playwright@1.44.1:
     resolution: {integrity: sha512-qr/0UJ5CFAtloI3avF95Y0L1xQo6r3LQArLIg/z/PoGJ6xa+EwzrwO5lpNr/09STxdHuUoP2mvuELJS+hLdtgg==}
     engines: {node: '>=16'}
+    hasBin: true
+
+  playwright@1.53.2:
+    resolution: {integrity: sha512-6K/qQxVFuVQhRQhFsVZ9fGeatxirtrpPgxzBYWyZLEXJzqYwuL4fuNmfOfD5et1tJE4GScKyPNeLhZeRwuTU3A==}
+    engines: {node: '>=18'}
     hasBin: true
 
   possible-typed-array-names@1.0.0:
@@ -14198,9 +14208,9 @@ snapshots:
   '@nx/nx-win32-x64-msvc@20.8.2':
     optional: true
 
-  '@playwright/test@1.44.1':
+  '@playwright/test@1.53.2':
     dependencies:
-      playwright: 1.44.1
+      playwright: 1.53.2
 
   '@pmmmwh/react-refresh-webpack-plugin@0.5.15(react-refresh@0.14.2)(type-fest@4.32.0)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))(webpack@5.97.1(esbuild@0.17.19))':
     dependencies:
@@ -20990,9 +21000,17 @@ snapshots:
 
   playwright-core@1.44.1: {}
 
+  playwright-core@1.53.2: {}
+
   playwright@1.44.1:
     dependencies:
       playwright-core: 1.44.1
+    optionalDependencies:
+      fsevents: 2.3.2
+
+  playwright@1.53.2:
+    dependencies:
+      playwright-core: 1.53.2
     optionalDependencies:
       fsevents: 2.3.2
 
