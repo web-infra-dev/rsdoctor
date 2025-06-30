@@ -9,7 +9,7 @@
 **@rsdoctor/mcp-server** provides four core analysis capabilities:
 
 - **Bundle Analysis**: Analyzes bundle size, composition and other information
-- **Dependency Analysis**: Analyzes project dependencies and duplicate dependency issues
+- **Dependency Analysis**: Analyzes project dependency relationships, duplicate dependencies, and Tree Shaking issues.
 - **Bundle Optimization Suggestions**: Provides suggestions for bundle size optimization and code splitting
 - **Compilation Optimization Suggestions**: Analyzes compilation time and provides compilation performance optimization suggestions
 
@@ -79,6 +79,17 @@ Example video:
   controls={true}
   loop={true}
   playsInline
+/>
+
+### 4. Tree Shaking Issues
+
+By asking "Please help me to check why react-dom/client.js can not be tree-shaken?", the tool will help analyze why this module cannot be tree-shaken.
+
+> Note: Please use Rsdoctor plugin version 1.1.5 or above.
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/tree-shake-mcp.png"
+  alt="tree-shaking"
 />
 
 ## Quick start

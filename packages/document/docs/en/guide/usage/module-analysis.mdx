@@ -27,6 +27,7 @@ Clicking on an **Assets** in the **[Bundle Size](./bundle-size)** page will disp
 
 - **`Reasons`**: As the name suggests, it means the reasons why a `Module` exists. Reasons indicate which other `Module`s import this `Module`, and the entire `Reasons Tree` represents the upstream reference chain of this `Module`, including both direct and indirect parent `Module`s. [Similar to Webpack's stats.reasons.](https://webpack.js.org/configuration/stats/#statsreasons)
 - **`Dependencies`**: The `Module`s that this `Module` depends on.
+- **`Bailout Reason`** : The reason why this `Module` failed Tree Shaking.
 
 ## Reasons dependency tree
 
@@ -56,3 +57,24 @@ The `Reasons Tree` displays the dependency chain of this `Module`, showing which
   width="600px"
   style={{ margin: 'auto' }}
 />
+
+## Bailout Reason
+
+### Usage
+
+`Bailout Reason` shows the reason why this `Module` failed Tree Shaking.
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/bailout-reason.gif"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+You can also use MCP for analysis. By asking "Please help me to check why react-dom/client.js can not be tree-shaken?", the tool will help analyze why this module cannot be tree-shaken.
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/tree-shake-mcp.png"
+  alt="tree-shaking"
+/>
+
+> For MCP analysis, see [MCP Analysis](/guide/start/mcp)

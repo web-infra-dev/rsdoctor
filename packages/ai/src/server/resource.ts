@@ -5,7 +5,6 @@ import {
 import path, { dirname } from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
-import { RequestHandlerExtra } from '@modelcontextprotocol/sdk/shared/protocol.js';
 import { fileURLToPath } from 'url';
 
 const readFileAsync = promisify(fs.readFile);
@@ -13,10 +12,7 @@ const readFileAsync = promisify(fs.readFile);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const readMarkdownResource: ReadResourceCallback = async (
-  uri: URL,
-  extra: RequestHandlerExtra,
-) => {
+const readMarkdownResource: ReadResourceCallback = async (uri: URL) => {
   // Read the contents of the Markdown file
   const contents = await readFileAsync(
     path.join(__dirname, './resources', uri.pathname),

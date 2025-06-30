@@ -29,6 +29,7 @@
 
 - **`Reasons`** : 顾名思义是 `[原因]` 的意思，即某个 `Module` 存在的原因。Reasons 就是该 `Module` 被哪些 `Module` 们引入，而整个 `Reasons Tree` 就是这个 `Module` 的整个上游引用链，包括了直接父级和间接父级们。[即 Rspack 的 stats.reasons。](https://webpack.js.org/configuration/stats/#statsreasons)
 - **`Dependencies`** : 是该 `Module` 依赖了哪些 `Module`。
+- **`Bailout Reason`** : Tree shaking 时，该 `Module` Tree shaking 失败的原因。
 
 ## Reasons 依赖树
 
@@ -58,3 +59,24 @@
   width="600px"
   style={{ margin: 'auto' }}
 />
+
+## Bailout Reason
+
+### 使用介绍
+
+`Bailout Reason` 展示了该 `Module` 在 Tree shaking 时失败的原因。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/bailout-reason.gif"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+还可以使用 MCP 进行分析，通过提问 "Please help me to check why react-dom/client.js can not be tree-shaken?"，工具会帮忙分析该模块没有被 Tree shaking 的原因。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/tree-shake-mcp.png"
+  alt="tree-shaking"
+/>
+
+> MCP 分析请查看 [MCP 分析](/guide/start/mcp)
