@@ -72,6 +72,7 @@ export const HelpCenter = () => {
           {data.map(({ title, link }, idx) => {
             return (
               <div
+                key={idx}
                 className={styles.content}
                 style={{
                   marginBottom: idx < data.length - 2 ? '16px' : 0,

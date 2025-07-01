@@ -263,7 +263,11 @@ export const BundleCards: React.FC<{
                     {e}
                   </div>
                   {idx !== arr.length - 1 ? (
-                    <Divider style={{ height: '200px' }} type="vertical" />
+                    <Divider
+                      key={`${idx}-divider`}
+                      style={{ height: '200px' }}
+                      type="vertical"
+                    />
                   ) : null}
                 </>
               ))}
