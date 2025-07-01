@@ -2,42 +2,36 @@ export const toolDescriptions = {
   getAllChunks: 'get all chunks',
   getChunkById:
     'get chunk by id, if chunk not found, return `Chunk not found`, and stop the execution',
-  getModuleById: `get module detail by id：
-    - id: the id of the module
-    - issuerPath: the referrer of the module, the issuerPath is a array of module id, the module id is the id of the module that depends on the module.
-    - dependencies: the complete dependencies of the module, when user ask the dependencies of the module, 
-      please return the dependencies of the module first, not return the allDependencies of the module. 
-      But if user ask the detail dependencies of the module, please return the allDependencies of the module.
-    - allDependencies: the complete dependencies of the module. 
-      when user ask the dependencies of the module, please return the dependencies of the module first, not return the allDependencies of the module. 
-    - chunks: an array of chunk identifiers associated with the module.
-    - imported: an array of module identifiers on which the module depends.
-    - isEntry: indicates if the module is an entry module.
-    - size: the size of the module.
-    - layer: the layer of the module.
-    - modules: connected base subpackage module numbers.
-    - rootModule: the root module.
-    - webpackId: the module's unique identifier in webpack.
+  getModuleById: `
+    get module detail by id (Rspack or Webpack module id)：
+    - id: the id of the module (corresponds to Rspack or Webpack's internal module id)
+    - issuerPath: the referrer chain (array of module ids, from entry to this module)
+    - dependencies: direct dependencies (array of module ids this module imports/requires)
+    - allDependencies: all transitive dependencies (if user asks for detail)
+    - chunks: array of chunk ids this module belongs to
+    - imported: array of module ids that import this module
+    - isEntry: whether this module is an entry point
+    - size: { sourceSize, transformedSize, parsedSize }
+    - layer, modules, rootModule, webpackId: advanced info
+    - bailoutReason: if present, the reason why this module is not tree-shaken or optimized away (e.g. "side effects", "dynamic import", "unknown exports", etc.)
+    - Please use Rspack or Webpack's terminology for all fields.
+    - If user asks for "why not tree-shaken", always return bailoutReason and explain in plain language.
+    - If user asks for "who imported this module", return issuerPath as a dependency chain.
+    - If user asks for "all dependencies", return allDependencies.
   `,
-  getModuleByPath: `get module detail by module name or path, if find multiple modules match the name or path, return all matched modules path, stop execution, and let user select the module path。
-    - id: the id of the module
-    - issuerPath: the referrer of the module, the issuerPath is a array of module id, the module id is the id of the module that depends on the module.
-    - dependencies: the complete dependencies of the module, when user ask the dependencies of the module, 
-      please return the dependencies of the module first, not return the allDependencies of the module. 
-      But if user ask the detail dependencies of the module, please return the allDependencies of the module.
-    - allDependencies: the complete dependencies of the module. 
-      when user ask the dependencies of the module, please return the dependencies of the module first, not return the allDependencies of the module. 
-    - chunks: an array of chunk identifiers associated with the module.
-    - imported: an array of module identifiers on which the module depends.
-    - isEntry: indicates if the module is an entry module.
-    - size: the size of the module.
-    - layer: the layer of the module.
-    - modules: connected base subpackage module numbers.
-    - rootModule: the root module.
-    - webpackId: the module's unique identifier in webpack.
+  getModuleByPath: `
+    get module detail by module name or path (absolute or relative, as in Rspack or Webpack stats)
+    - If multiple modules match, return all matched module paths and stop, let user select.
+    - Otherwise, return the same fields as getModuleById.
+    - Always include bailoutReason if present.
+    - If user asks for "why is this module in the bundle", show the full issuerPath chain.
+    - If user asks for "why not tree-shaken", show bailoutReason and explain.
   `,
-  getModuleIssuerPath: `get module issuer path, issuer path is the path of the module that depends on the module.Please draw the returned issuer path as a dependency diagram.
-  - The values in the array are module ids, please get the detailed module information based on the module id
+  getModuleIssuerPath: `
+    get module issuer path (who imported this module, recursively)
+    - Return as a dependency chain (array of module ids from entry to this module)
+    - If possible, render as a tree or graph for clarity.
+    - For each module in the chain, show its path and (if present) bailoutReason.
   `,
   getPackageInfo: 'get package info',
   getPackageDependency: 'get package dependency',
@@ -181,5 +175,33 @@ export const toolDescriptions = {
       - GetSimilarPackages to check if there are similar packages that need optimization
       - getMediaAssetPrompt to check if media assets need optimization
       - GetAllChunks to check if there are oversized resources and provide splitChunk suggestions
+  `,
+
+  analysisExamples: `
+    # Rspack or Webpack Analysis Examples
+
+    1. "Why is node_modules/rc-tree/lib/util.js not tree-shaken?"
+      - Return the module's bailoutReason, explain it in plain language.
+      - Show the issuerPath (import chain) to this module.
+
+    2. "Who imported lodash-es/constant.js?"
+      - Show the issuerPath as a dependency chain.
+
+    3. "List all modules in chunk 123"
+      - Use getChunkById, then list all module paths.
+
+    4. "Show all modules with side effects"
+      - List all modules with non-empty bailoutReason containing 'side_effects'.
+
+    5. "Why is package X duplicated?"
+      - Use getRuleInfo to explain E1001/E1002, show which chunks and modules contain the duplicates.
+
+    6. "Which modules are not tree-shaken due to side effects?"
+      - List modules with bailoutReason containing 'side_effects', and show their paths and issuerPath.
+
+    # Output format
+    - For dependency chains, use a tree or arrow notation.
+    - For module details, use a table or key-value list.
+    - For explanations, use concise, plain language.
   `,
 };

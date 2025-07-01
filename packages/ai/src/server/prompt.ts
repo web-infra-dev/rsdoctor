@@ -1,5 +1,4 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { RequestHandlerExtra } from '@modelcontextprotocol/sdk/shared/protocol.js';
 import { logger } from '@rsdoctor/utils/logger';
 import { z } from 'zod';
 
@@ -55,29 +54,25 @@ function registerPredefinedPrompts(
     });
 
     // Register the prompt with the server
-    server.prompt(
-      prompt.name,
-      schemaObj,
-      (args: Record<string, any>, extra: RequestHandlerExtra) => ({
-        messages: prompt.messages.map((message: Message) => {
-          let text = message.text;
-          prompt.arguments.forEach((arg: Argument) => {
-            const regex = new RegExp(`\\$\\{${arg.name}\\}`, 'g');
-            text = text.replace(regex, args[arg.name]);
-          });
+    server.prompt(prompt.name, schemaObj, (args: Record<string, any>) => ({
+      messages: prompt.messages.map((message: Message) => {
+        let text = message.text;
+        prompt.arguments.forEach((arg: Argument) => {
+          const regex = new RegExp(`\\$\\{${arg.name}\\}`, 'g');
+          text = text.replace(regex, args[arg.name]);
+        });
 
-          return {
-            role: message.role as 'user' | 'assistant',
-            content: {
-              type: 'text',
-              text: text,
-            },
-          };
-        }),
-        _meta: {},
-        description: prompt.description,
+        return {
+          role: message.role as 'user' | 'assistant',
+          content: {
+            type: 'text',
+            text: text,
+          },
+        };
       }),
-    );
+      _meta: {},
+      description: prompt.description,
+    }));
 
     logger.info(`✅ Registered prompt: ${prompt.name}`);
   });

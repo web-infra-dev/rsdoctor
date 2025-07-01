@@ -9,7 +9,7 @@
 **@rsdoctor/mcp-server** 提供四大类核心分析能力：
 
 - **产物信息分析**: 分析构建产物的体积、组成等信息
-- **依赖问题分析**: 分析项目依赖关系、重复依赖等问题
+- **依赖问题分析**: 分析项目依赖关系、重复依赖、Tree Shaking 等问题
 - **产物优化建议**: 提供产物体积优化、代码分割等建议
 - **编译优化建议**: 分析编译耗时，提供编译性能优化建议
 
@@ -79,6 +79,17 @@
   controls={true}
   loop={true}
   playsInline
+/>
+
+### 4. Tree shaking 问题
+
+通过提问 "Please help me to check why react-dom/client.js can not be tree-shaken?"，工具会帮忙分析该模块没有被 Tree shaking 的原因。
+
+> 注意：请使用 1.1.5 及以上版本的 Rsdoctor 插件。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/tree-shake-mcp.png"
+  alt="tree-shaking"
 />
 
 ## 快速开始

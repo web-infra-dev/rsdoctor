@@ -128,12 +128,24 @@ The **Modules** tag is shown in the right image, from left to right representing
 - **Module Explorer** tag: Click to open the dependency analysis page between `Modules`.
 - **Code View** tag: Click to expand code segments, including `Source` (source code), `Transformed` (compiled code), and `Bundled` (bundled code).
 
+### Module details
+
+Click the module tag to view module details, as shown below:
+
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bailout-reason.gif" />
+
+- **Reasons**: This refers to the reason why a Module exists, i.e., which Modules import this Module. The entire Reasons Tree shows the upstream reference chain of this Module, including both direct and indirect parents. This corresponds to Rspack's `stats.reasons`.
+- **Dependencies**: The Modules that this Module depends on.
+- **Bailout Reason**: The reason why this Module failed Tree Shaking during the build process.
+
+> For more details, see: [Module details](/guide/usage/module-analysis)
+
 ## Bundle tile graph
 
 Click the **"Tile Graph"** label on the **"Bundle Size"** page to view the tile graph. The tile graph clearly shows the proportion and relationship between resources and modules, as shown in the following image:
 
 <img
-  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/treemap.png"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.png"
   width="500px"
   style={{ margin: 'auto' }}
 />
@@ -141,7 +153,7 @@ Click the **"Tile Graph"** label on the **"Bundle Size"** page to view the tile 
 You can also click the 🔍 button on the card title to search for Module resources, click the Module resource, and zoom in to the Module area, as shown in the following image:
 
 <img
-  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/treemap.gif"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.gif"
   width="500px"
   style={{ margin: 'auto' }}
 />

@@ -119,12 +119,24 @@
 - **Module Explorer** 标签：点击可打开 `Module` 之间的依赖关系分析页面。
 - **代码查看** 标签，点击可展开代码段，包括 `Source`（源码）、`Transformed`（编译后代码）和 `Bundled`（打包后代码）。
 
+### Module 详情
+
+点击模块标签，可以查看模块详情，如下图所示：
+
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bailout-reason.gif" />
+
+- Reasons : 顾名思义是 [原因] 的意思，即某个 Module 存在的原因。Reasons 就是该 Module 被哪些 Module 们引入，而整个 Reasons Tree 就是这个 Module 的整个上游引用链，包括了直接父级和间接父级们。即 Rspack 的 stats.reasons。
+- Dependencies : 是该 Module 依赖了哪些 Module。
+- Bailout Reason : Tree shaking 时，该 Module Tree shaking 失败的原因。
+
+> 更多可查看详情：[Module 详情](/guide/usage/module-analysis)
+
 ## 产物总览瓦片图
 
 点击 **「Bundle Size」** 页面的 **「Tile Graph」** 标签，可以查看瓦片图。通过瓦片图可以清晰的看到各个资源和模块之间的占比和关系，如下图所示：
 
 <img
-  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/treemap.png"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.png"
   width="500px"
   style={{ margin: 'auto' }}
 />
@@ -132,7 +144,7 @@
 同时可以点击卡片标题侧的 🔍 按钮，搜索 Module 资源，点击 Module 资源，可以放大到该 Module 区域，如下图所示：
 
 <img
-  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/usage/bundle/treemap.gif"
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.gif"
   width="500px"
   style={{ margin: 'auto' }}
 />
