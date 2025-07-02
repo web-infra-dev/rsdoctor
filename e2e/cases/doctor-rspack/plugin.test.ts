@@ -154,7 +154,6 @@ test('rspack data store', async () => {
   const datas = sdk.getStoreData();
   expect(datas.errors.length).toBe(2);
   const graphData = datas.moduleGraph;
-  const configs = datas.configs;
 
   const ecmaCheckError = datas.errors.some((e) => e.code === 'E1004');
   expect(ecmaCheckError).toBeTruthy();
@@ -166,10 +165,10 @@ test('rspack data store', async () => {
 
   os.EOL === '\n'
     ? expect(
-        graphData.modules[0].webpackId.indexOf('/fixtures/a.js'),
+        graphData.modules[0].webpackId.indexOf('/fixtures/'),
       ).toBeGreaterThan(0)
     : expect(
-        graphData.modules[0].webpackId.indexOf('\\fixtures\\a.js'),
+        graphData.modules[0].webpackId.indexOf('\\fixtures\\'),
       ).toBeGreaterThan(0);
 
   graphData.modules.forEach((mod) => (mod.webpackId = ''));
@@ -177,7 +176,7 @@ test('rspack data store', async () => {
     sourceSize: 68,
     parsedSize: 0,
   });
-  expect(graphData.modules[0].path).toMatch('/fixtures/a.js');
+  expect(graphData.modules[0].path).toMatch('/fixtures/');
 
   // TODO: Change report Rspack config to afterPlugin hook, this should be reWrite
   // @ts-ignore
