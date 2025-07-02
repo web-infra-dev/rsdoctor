@@ -77,11 +77,14 @@ const config = {
   optimization: {
     minimize: false,
   },
+  experiments: {
+    css: true,
+  },
   plugins: [
     new ReactRefreshPlugin(),
     new RsdoctorRspackPlugin({
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
-      features: ['bundle', 'plugins', 'loader', 'treeShaking', 'resolver'],
+      features: ['bundle', 'plugins', 'loader', 'resolver'],
     }),
     new rspack.BannerPlugin({
       test: /\.js/,
