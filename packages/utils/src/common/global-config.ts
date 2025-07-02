@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import { logger } from '../logger';
 
 /**
  * @description Writes the builder port information to mcp.json.
@@ -30,8 +31,13 @@ export function writeMcpPort(port: number, builderName?: string) {
     portList: {},
     port: 0,
   };
+
   if (fs.existsSync(mcpPortFilePath)) {
-    mcpJson = JSON.parse(fs.readFileSync(mcpPortFilePath, 'utf8'));
+    try {
+      mcpJson = JSON.parse(fs.readFileSync(mcpPortFilePath, 'utf8'));
+    } catch (error) {
+      logger.debug('Failed to parse mcp.json', error);
+    }
   }
 
   if (!mcpJson.portList) mcpJson.portList = {};
