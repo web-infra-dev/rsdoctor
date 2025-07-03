@@ -167,8 +167,9 @@ export const LoaderExecutions = ({
                         >
                           <div>
                             <Typography.Text style={{ color: '#000' }}>
-                              {costs.match(/[0-9]+/g)}
-                            </Typography.Text>{' '}
+                              {costs.match(/[0-9]*\.?[0-9]+/g)?.[0]}
+                            </Typography.Text>
+                            {` `}
                             <Typography.Text
                               style={{ color: 'rgba(0,0,0,0.45)' }}
                             >
