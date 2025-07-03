@@ -66,6 +66,9 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
     plugins: [
       // @ts-ignore
       createRsdoctorPlugin({
+        features: {
+          treeShaking: true,
+        },
         linter: {
           rules: {
             'ecma-version-check': [
