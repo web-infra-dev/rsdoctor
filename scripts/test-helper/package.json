@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@rsbuild/core": "^1.4.2",
-    "@rspack/core": "1.4.1",
+    "@rspack/core": "1.4.3",
     "@types/lodash": "^4.17.19",
     "@types/node": "^22.8.1",
     "lodash": "^4.17.21",
