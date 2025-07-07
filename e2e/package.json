@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@actions/core": "^1.11.1",
-    "@lynx-js/react": "^0.110.0",
+    "@lynx-js/react": "^0.111.0",
     "@lynx-js/rspeedy": "^0.9.10",
     "@playwright/test": "1.44.1",
     "@rsdoctor/cli": "workspace:*",
