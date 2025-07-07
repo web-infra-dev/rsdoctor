@@ -41,7 +41,7 @@
   "devDependencies": {
     "@types/body-parser": "1.19.6",
     "@types/cors": "2.8.19",
-    "@types/lodash": "^4.17.19",
+    "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "tslib": "2.8.1",
     "typescript": "^5.2.2"

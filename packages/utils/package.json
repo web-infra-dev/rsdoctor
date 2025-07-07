@@ -88,7 +88,7 @@
     "json-stream-stringify": "3.0.1",
     "lines-and-columns": "2.0.4",
     "picocolors": "^1.1.1",
-    "rslog": "^1.2.8",
+    "rslog": "^1.2.9",
     "strip-ansi": "^6.0.1"
   },
   "devDependencies": {
