@@ -4,7 +4,7 @@ import {
 } from '@/types';
 import { Linter, Plugin, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
-import { chalk, debug, logger } from '@rsdoctor/utils/logger';
+import { chalk, debug, logger, time, timeEnd } from '@rsdoctor/utils/logger';
 import {
   Chunks as ChunksBuildUtils,
   ModuleGraph as ModuleGraphBuildUtils,
@@ -159,18 +159,18 @@ const afterEmit = async (
   compilation: Plugin.BaseCompilation,
   _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
 ): Promise<void> => {
-  console.time('afterEmit:::::');
-
+  time('ensureModulesChunkGraph.afterEmit.start');
   const assets = compilation.getAssets();
 
   // Map<source, string>
   const sourceMapSets = new Map<string, string>();
 
   for (const asset of assets) {
-    // 只处理 .js || .ts 文件，跳过非 .js 和 .ts 文件
-    if (!asset.name.endsWith('.js') && !asset.name.endsWith('.ts')) continue;
-    // 1. 读取 asset 文件内容
-    // 优先用 info.sourceFilename，否则用输出目录+asset.name
+    // Only process .js or .css files, skip non-.js and non-.css files
+    if (!asset.name.endsWith('.js') && !asset.name.endsWith('.css')) continue;
+
+    //  Read asset file content
+    // Prefer info.sourceFilename, otherwise use output directory + asset.name
     let assetPath = asset.info?.sourceFilename;
     if (!assetPath) {
       assetPath = path.join(compilation.outputOptions.path || '', asset.name);
@@ -179,13 +179,12 @@ const afterEmit = async (
     const assetContent = fs.readFileSync(assetPath, 'utf-8');
     const assetLinesCodeList = assetContent.split(/\r?\n/);
 
-    // 2. 解析 source map
-    // TODO: sourceAndMap 返回的 map.sources 里，source 会被 Rsdoctor 的 probe loader 所修改。
+    // Parse source map
     const { map } = asset.source.sourceAndMap();
     if (map) {
       const consumer = new SourceMapConsumer(map as unknown as RawSourceMap);
 
-      // 1. 收集所有 mapping，按行分组
+      // Collect all mappings, grouped by line
       const lineMappings = new Map<number, Array<MappingItem>>();
       consumer.eachMapping((m: MappingItem) => {
         if (!lineMappings.has(m.generatedLine)) {
@@ -194,7 +193,7 @@ const afterEmit = async (
         lineMappings.get(m.generatedLine)!.push(m);
       });
 
-      // 2. 对每一行的 mapping，按 generatedColumn 升序
+      // 2. For each line's mappings, sort by generatedColumn in ascending order
       for (const [lineNum, mappings] of lineMappings.entries()) {
         mappings.sort((a, b) => a.generatedColumn - b.generatedColumn);
         const lineIdx = lineNum - 1;
@@ -203,8 +202,9 @@ const afterEmit = async (
 
         for (let i = 0; i < mappings.length; i++) {
           const m = mappings[i];
-          // 如果 source 是 null，则跳过
+          // Skip if source is null
           if (!m.source) continue;
+          // The source in map.sources returned by sourceAndMap will be modified by Rsdoctor's loader.
           const realSource = m.source.split('!').pop();
 
           if (!realSource) continue;
@@ -213,7 +213,7 @@ const afterEmit = async (
           const start = m.generatedColumn;
           const end = next ? next.generatedColumn : line.length;
           const codeSegment = line.slice(start, end);
-          // 用 concat 拼接 codeSegment
+          // Use concat to join codeSegment
           const prev = sourceMapSets.get(realSource) || '';
           sourceMapSets.set(realSource, prev.concat(codeSegment));
         }
@@ -221,7 +221,7 @@ const afterEmit = async (
     }
   }
   _this.sourceMapSets = sourceMapSets;
-  console.timeEnd('afterEmit:::::'); // TODO: 需要优化 换成 debug
+  timeEnd('ensureModulesChunkGraph.afterEmit.start');
 };
 
 /**
