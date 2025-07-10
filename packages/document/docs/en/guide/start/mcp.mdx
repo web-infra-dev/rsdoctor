@@ -141,6 +141,23 @@ RSDOCTOR=true npm run build
 2. Restart the Cursor editor
 3. Start interaction in the MCP panel
 
+#### GitHub Copilot
+
+1. Create `.vscode/mcp.json` in your project root directory. GitHub Copilot will automatically load the MCP Server configuration.
+
+```json
+{
+  "mcpServers": {
+    "rsdoctor": {
+      "command": "npx",
+      "args": ["-y", "@rsdoctor/mcp-server@latest"]
+    }
+  }
+}
+```
+
+2. In the Copilot Chat view, select [Agent mode](https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode#_use-agent-mode), then start interacting.
+
 #### Claude
 
 Add configuration in `claude_desktop_config.json`:
