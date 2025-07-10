@@ -4,14 +4,28 @@ import {
 } from '@/types';
 import { Linter, Plugin, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
-import { chalk, debug, logger } from '@rsdoctor/utils/logger';
+import { chalk, debug, logger, time, timeEnd } from '@rsdoctor/utils/logger';
 import {
   Chunks as ChunksBuildUtils,
   ModuleGraph as ModuleGraphBuildUtils,
 } from '@/build-utils/build';
-import { Chunks as ChunksUtils } from '@/build-utils/common';
-import { internalPluginTapPreOptions } from '../constants';
+import {
+  internalPluginTapPreOptions,
+  pluginTapPostOptions,
+} from '../constants';
 import { applyRspackNativePlugin } from './rspack';
+import { RawSourceMap, SourceMapConsumer } from 'source-map-js';
+import fs from 'fs';
+import path from 'path';
+
+export interface MappingItem {
+  source: string | null;
+  generatedLine: number;
+  generatedColumn: number;
+  originalLine: number | null;
+  originalColumn: number | null;
+  name: string | null;
+}
 
 /**
  * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
@@ -113,6 +127,7 @@ export const ensureModulesChunksGraphFn = (
         _this.modulesGraph,
         _this.chunkGraph!,
         shouldParseBundle,
+        _this.sourceMapSets,
       );
 
       debug(Process.getMemoryUsageMessage, '[After Transform ModuleGraph]');
@@ -130,6 +145,83 @@ export const ensureModulesChunksGraphFn = (
       }
     },
   );
+
+  compiler.hooks.afterEmit.tapPromise(
+    {
+      ...pluginTapPostOptions,
+      stage: pluginTapPostOptions.stage! + 100,
+    },
+    (compilation) => afterEmit(compilation, _this),
+  );
+};
+
+const afterEmit = async (
+  compilation: Plugin.BaseCompilation,
+  _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
+): Promise<void> => {
+  time('ensureModulesChunkGraph.afterEmit.start');
+  const assets = compilation.getAssets();
+
+  // Map<source, string>
+  const sourceMapSets = new Map<string, string>();
+
+  for (const asset of assets) {
+    // Only process .js or .css files, skip non-.js and non-.css files
+    if (!asset.name.endsWith('.js') && !asset.name.endsWith('.css')) continue;
+
+    //  Read asset file content
+    // Prefer info.sourceFilename, otherwise use output directory + asset.name
+    let assetPath = asset.info?.sourceFilename;
+    if (!assetPath) {
+      assetPath = path.join(compilation.outputOptions.path || '', asset.name);
+    }
+    if (!assetPath || !fs.existsSync(assetPath)) continue;
+    const assetContent = fs.readFileSync(assetPath, 'utf-8');
+    const assetLinesCodeList = assetContent.split(/\r?\n/);
+
+    // Parse source map
+    const { map } = asset.source.sourceAndMap();
+    if (map) {
+      const consumer = new SourceMapConsumer(map as unknown as RawSourceMap);
+
+      // Collect all mappings, grouped by line
+      const lineMappings = new Map<number, Array<MappingItem>>();
+      consumer.eachMapping((m: MappingItem) => {
+        if (!lineMappings.has(m.generatedLine)) {
+          lineMappings.set(m.generatedLine, []);
+        }
+        lineMappings.get(m.generatedLine)!.push(m);
+      });
+
+      // 2. For each line's mappings, sort by generatedColumn in ascending order
+      for (const [lineNum, mappings] of lineMappings.entries()) {
+        mappings.sort((a, b) => a.generatedColumn - b.generatedColumn);
+        const lineIdx = lineNum - 1;
+        if (lineIdx < 0 || lineIdx >= assetLinesCodeList.length) continue;
+        const line = assetLinesCodeList[lineIdx];
+
+        for (let i = 0; i < mappings.length; i++) {
+          const m = mappings[i];
+          // Skip if source is null
+          if (!m.source) continue;
+          // The source in map.sources returned by sourceAndMap will be modified by Rsdoctor's loader.
+          const realSource = m.source.split('!').pop();
+
+          if (!realSource) continue;
+
+          const next = mappings[i + 1];
+          const start = m.generatedColumn;
+          const end = next ? next.generatedColumn : line.length;
+          const codeSegment = line.slice(start, end);
+          // Use concat to join codeSegment
+          const prev = sourceMapSets.get(realSource) || '';
+          sourceMapSets.set(realSource, prev.concat(codeSegment));
+        }
+      }
+    }
+  }
+  _this.sourceMapSets = sourceMapSets;
+  timeEnd('ensureModulesChunkGraph.afterEmit.start');
 };
 
 /**
@@ -146,18 +238,18 @@ async function getModulesInfos(
   moduleGraph: SDK.ModuleGraphInstance,
   chunkGraph: SDK.ChunkGraphInstance,
   parseBundle: boolean,
+  sourceMapSets: Map<string, string>,
 ) {
   if (!moduleGraph) {
     return;
   }
   try {
-    const parsedModulesData =
-      (await ChunksBuildUtils.getAssetsModulesData(
-        moduleGraph,
-        chunkGraph,
-        compiler.outputPath,
-        parseBundle,
-      )) || {};
-    ChunksUtils.transformAssetsModulesData(parsedModulesData, moduleGraph);
+    await ChunksBuildUtils.getAssetsModulesData(
+      moduleGraph,
+      chunkGraph,
+      compiler.outputPath,
+      sourceMapSets,
+      parseBundle,
+    );
   } catch (e) {}
 }

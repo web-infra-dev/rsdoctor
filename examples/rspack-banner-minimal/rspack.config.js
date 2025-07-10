@@ -1,6 +1,7 @@
 const rspack = require('@rspack/core');
 const ReactRefreshPlugin = require('@rspack/plugin-react-refresh');
 const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+const Sonda = require('sonda/rspack');
 
 const banner = `var a = 111111111111111; console.log(a)`;
 
@@ -9,6 +10,7 @@ const config = {
   entry: {
     main: './src/index.tsx',
   },
+  devtool: 'cheap-source-map',
   module: {
     rules: [
       {
@@ -101,6 +103,9 @@ const config = {
         },
       ],
     }),
+    // new Sonda.default( {
+    // 	format: 'html'
+    // } ),
   ],
 };
 module.exports = config;
