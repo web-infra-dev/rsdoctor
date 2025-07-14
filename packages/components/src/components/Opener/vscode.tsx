@@ -1,4 +1,4 @@
-import { isNil } from 'lodash-es';
+import { Lodash } from '@rsdoctor/utils/common';
 import React from 'react';
 
 interface VSCodeProps {
@@ -9,14 +9,19 @@ interface VSCodeProps {
   style?: React.CSSProperties;
 }
 
-export function openVSCode({ file, line = 1, column = 1, windowId }: VSCodeProps) {
+export function openVSCode({
+  file,
+  line = 1,
+  column = 1,
+  windowId,
+}: VSCodeProps) {
   const query: Record<string, unknown> = {
     windowId,
   };
   const queryString = Object.keys(query)
     .map((k) => {
       const v = query[k];
-      if (isNil(v) || v === '') {
+      if (Lodash.isNil(v) || v === '') {
         return null;
       }
       return `${k}=${v}`;

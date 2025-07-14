@@ -1,4 +1,4 @@
-import { get, startsWith } from 'lodash-es';
+import { get } from 'lodash-es';
 import { Common, SDK } from '@rsdoctor/types';
 import { message, Space, TreeNodeProps, UploadFile } from 'antd';
 import { FieldDataNode } from 'rc-tree';
@@ -171,7 +171,7 @@ export function createFileStructures({
 }
 
 export function beautifyPath(path: string, cwd: string) {
-  if (startsWith(path, cwd)) {
+  if (path.startsWith(cwd)) {
     return path.replace(cwd, '.');
   }
 

@@ -1,7 +1,6 @@
 import { SDK } from '@rsdoctor/types';
 import { Divider, Row, Select, Space, Typography } from 'antd';
 import { RightOutlined } from '@ant-design/icons';
-import { pick } from 'lodash-es';
 import React, { useState } from 'react';
 import ReactJson from 'react-json-view';
 import { useWebpackConfigurationByConfigs } from '../../utils';
@@ -10,6 +9,7 @@ import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 
 import styles from './builder.module.scss';
+import { Lodash } from '@rsdoctor/utils/common';
 
 interface WebpackConfigurationViewerBaseProps {
   defaultKeys?: string[];
@@ -73,7 +73,11 @@ export const WebpackConfigurationViewerBase: React.FC<
             : `webpack.config`
         }
         theme="monokai"
-        src={selectKeys.length === 0 ? config : pick(config, selectKeys)}
+        src={
+          selectKeys.length === 0
+            ? config
+            : Lodash.pick(config, selectKeys as (keyof typeof config)[])
+        }
         displayDataTypes={false}
         displayObjectSize={false}
         style={{ overflowX: 'auto' }}

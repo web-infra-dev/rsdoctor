@@ -1,12 +1,15 @@
 import { SDK } from '@rsdoctor/types';
-import { compact, find } from 'lodash-es';
+import { Lodash } from '@rsdoctor/utils/common';
 
-export const getImporteds = (curModule: SDK.ModuleData, modules: SDK.ModuleData[]) => {
+export const getImporteds = (
+  curModule: SDK.ModuleData,
+  modules: SDK.ModuleData[],
+) => {
   if (curModule?.imported?.length) {
     const _importeds = curModule.imported.map((_importedModule) =>
-      find(modules, (m) => m.id === Number(_importedModule)),
+      modules.find((m) => m.id === Number(_importedModule)),
     );
-    const importeds: SDK.ModuleData[] = compact(_importeds);
+    const importeds: SDK.ModuleData[] = Lodash.compact(_importeds);
     return importeds;
   }
   return [];

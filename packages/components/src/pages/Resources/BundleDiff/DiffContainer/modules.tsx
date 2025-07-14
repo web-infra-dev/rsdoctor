@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { includes, uniq, values } from 'lodash-es';
+import { uniq } from 'lodash-es';
 import { InfoCircleOutlined, FileSearchOutlined } from '@ant-design/icons';
 import {
   BundleDiffComponentCardProps,
@@ -138,7 +138,7 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
       res[modPath].current = mod;
     });
 
-    return values(res);
+    return Object.values(res);
   }, [bModules, cModules]);
 
   const filteredDataSource = useMemo(() => {
@@ -150,7 +150,7 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
 
     if (selectedUpdateTypes.length) {
       list = list.filter((e) => {
-        return includes(selectedUpdateTypes, getUpdateType(e));
+        return selectedUpdateTypes.includes(getUpdateType(e));
       });
     }
 
@@ -183,7 +183,10 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
             mode="multiple"
             placeholder="Filter by changed type"
             style={{ width: 200 }}
-            options={values(UpdateType).map((e) => ({ label: e, value: e }))}
+            options={Object.values(UpdateType).map((e) => ({
+              label: e,
+              value: e,
+            }))}
             allowClear
             onChange={(e) => {
               setSelectedUpdateTypes(e);

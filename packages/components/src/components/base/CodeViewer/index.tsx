@@ -1,6 +1,5 @@
 import { Editor, Monaco, OnMount } from '@monaco-editor/react';
 import clsx from 'clsx';
-import { isNumber } from 'lodash-es';
 import { editor } from 'monaco-editor';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CodeViewerProps } from './interface';
@@ -13,6 +12,7 @@ import {
 
 import { Checkbox } from 'antd';
 import styles from './index.module.scss';
+import { Lodash } from '@rsdoctor/utils/common';
 
 export function CodeViewer({
   className,
@@ -42,7 +42,7 @@ export function CodeViewer({
     monaco.current = monacoVal;
 
     editorShowRange(editorInstance, monacoVal, ranges);
-    if (isNumber(defaultLine)) {
+    if (Lodash.isNumber(defaultLine)) {
       setTimeout(() => {
         editorInstance.revealLine(defaultLine);
       });

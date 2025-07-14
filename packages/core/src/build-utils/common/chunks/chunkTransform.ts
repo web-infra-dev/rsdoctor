@@ -1,10 +1,4 @@
-import {
-  Asset,
-  Chunk,
-  ChunkGraph,
-  EntryPoint,
-} from '@rsdoctor/graph';
-import { forEach } from 'lodash';
+import { Asset, Chunk, ChunkGraph, EntryPoint } from '@rsdoctor/graph';
 import { Plugin } from '@rsdoctor/types';
 
 const FILTER_ASSETS_TYPE = 'assets by status';
@@ -15,7 +9,7 @@ export function chunkTransform(
 ) {
   const chunkGraph = new ChunkGraph();
 
-  forEach(bundleStats.chunks, (_chunk) => {
+  bundleStats.chunks?.forEach((_chunk) => {
     const parsedSize = 0;
 
     const chunk = new Chunk(
@@ -30,7 +24,7 @@ export function chunkTransform(
     chunkGraph.addChunk(chunk);
   });
 
-  forEach(bundleStats.assets, (_asset) => {
+  bundleStats.assets?.forEach((_asset) => {
     if (_asset.type === FILTER_ASSETS_TYPE) {
       /**  Filter assets with type = 'assets by status',
        * which are the assets that are initially pushed when generating assets groups to record asset size info.
@@ -54,19 +48,19 @@ export function chunkTransform(
 
   // build the entrypoints in Chunk Graph
   // must called after chunk and asset created end in chunk graph!
-  forEach(bundleStats.entrypoints, (_entrypoint, key) => {
-    const entrypoint = new EntryPoint(_entrypoint.name || key);
-
-    forEach(_entrypoint.chunks, (chunkId) => {
-      const ck = chunkGraph.getChunkById(`${chunkId}`);
-      if (ck) entrypoint.addChunk(ck);
-    });
-    forEach(_entrypoint.assets, (_asset) => {
-      const asset = chunkGraph.getAssetByPath(_asset.name);
-      if (asset) entrypoint.addAsset(asset);
-    });
-    chunkGraph.addEntryPoint(entrypoint);
-  });
-
+  if (bundleStats.entrypoints) {
+    for (const [key, _entrypoint] of Object.entries(bundleStats.entrypoints)) {
+      const entrypoint = new EntryPoint(_entrypoint.name || key);
+      _entrypoint.chunks?.forEach((chunkId) => {
+        const ck = chunkGraph.getChunkById(`${chunkId}`);
+        if (ck) entrypoint.addChunk(ck);
+      });
+      _entrypoint.assets?.forEach((_asset) => {
+        const asset = chunkGraph.getAssetByPath(_asset.name);
+        if (asset) entrypoint.addAsset(asset);
+      });
+      chunkGraph.addEntryPoint(entrypoint);
+    }
+  }
   return chunkGraph;
 }
