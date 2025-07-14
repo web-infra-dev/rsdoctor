@@ -12,9 +12,8 @@ export const Page: React.FC = () => {
   const defaultErrorCode =
     query[Rule.RsdoctorRuleClientConstant.UrlQueryForErrorCode] || '';
 
-  // @ts-ignore
   const [ruleMessage, setRuleMessage] = useState<Rule.RuleMessage>(
-    Rule.RuleErrorMap[defaultErrorCode],
+    Rule.RuleErrorMap[defaultErrorCode as keyof typeof Rule.RuleErrorMap],
   );
 
   const dataSource = Object.values(Rule.RuleErrorMap)!;
