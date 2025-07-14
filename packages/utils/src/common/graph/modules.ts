@@ -5,6 +5,7 @@ import {
   getDependencyByPackageData,
 } from './dependency';
 import { logger } from 'src/logger';
+import { isStyleExt, isJsExt } from '../file';
 
 export function getModulesByAsset(
   asset: SDK.AssetData,
@@ -14,7 +15,7 @@ export function getModulesByAsset(
 ): SDK.ModuleData[] {
   const ids = getChunkIdsByAsset(asset);
   const cks = getChunksByChunkIds(ids, chunks);
-  const res = getModulesByChunks(cks, modules, filterModules);
+  const res = getModulesByChunks(asset.path, cks, modules, filterModules);
   return res;
 }
 
@@ -58,15 +59,28 @@ export function getModulesByChunk(
     .filter(Boolean);
 }
 
+function getTypeChecker(assetPath: string) {
+  if (isStyleExt(assetPath)) return isStyleExt;
+  if (isJsExt(assetPath)) return isJsExt;
+  return () => true; // 其他类型不过滤
+}
+
 export function getModulesByChunks(
+  assetPath: string,
   chunks: SDK.ChunkData[],
   modules: SDK.ModuleData[],
   filterModules?: (keyof SDK.ModuleData)[],
 ): SDK.ModuleData[] {
   const res: SDK.ModuleData[] = [];
+
+  const typeChecker = getTypeChecker(assetPath);
+
   try {
     chunks.forEach((chunk) => {
       getModulesByChunk(chunk, modules, filterModules).forEach((md) => {
+        const name = md.path || '';
+        if (!typeChecker(name)) return;
+
         if (!res.filter((_m) => _m.id === md.id).length) res.push(md);
       });
     });
