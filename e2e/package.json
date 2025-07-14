@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@actions/core": "^1.11.1",
-    "@lynx-js/react": "^0.111.0",
+    "@lynx-js/react": "^0.111.1",
     "@lynx-js/rspeedy": "^0.9.10",
     "@playwright/test": "1.44.1",
     "@rsdoctor/cli": "workspace:*",
@@ -19,7 +19,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",
-    "@rspack/core": "1.4.4",
+    "@rspack/core": "1.4.6",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.23",
