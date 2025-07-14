@@ -10,7 +10,7 @@
   "devDependencies": {
     "@actions/core": "^1.11.1",
     "@lynx-js/react": "^0.111.1",
-    "@lynx-js/rspeedy": "^0.9.10",
+    "@lynx-js/rspeedy": "^0.10.1",
     "@playwright/test": "1.44.1",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
