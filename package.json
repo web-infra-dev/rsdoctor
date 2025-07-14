@@ -38,7 +38,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.5.1",
     "@changesets/cli": "^2.29.5",
-    "@modern-js/module-tools": "^2.67.11",
+    "@modern-js/module-tools": "^2.68.2",
     "@rsdoctor/tsconfig": "workspace:*",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "^7.0.3",
