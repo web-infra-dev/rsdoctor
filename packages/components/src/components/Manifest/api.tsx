@@ -1,11 +1,12 @@
 import { Constants, Manifest, SDK } from '@rsdoctor/types';
 import { Skeleton, Spin } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { includes, isEqual, isNil, values } from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { fetchManifest, useDataLoader } from '../../utils';
 import { ComponentState } from '../../constants';
 import { FailedStatus } from '../Status';
 import { BaseDataLoader } from '../../utils/data/base';
+import { Lodash } from '@rsdoctor/utils/common';
 
 export type InferServerAPIBody<T> =
   SDK.ServerAPI.InferRequestBodyType<T> extends void
@@ -77,7 +78,10 @@ export const ServerAPIProvider = <
       if (req.api === api) {
         // body is equal.
         // both two body are null or undefined.
-        if (isEqual(req.body, body) || (isNil(req.body) && isNil(body))) {
+        if (
+          isEqual(req.body, body) ||
+          (Lodash.isNil(req.body) && Lodash.isNil(body))
+        ) {
           if (!isEqual(res, response)) {
             setRes(response);
           }
@@ -119,10 +123,10 @@ export const ServerAPIProvider = <
   function executeLoader(loader: BaseDataLoader | void) {
     if (!loader) return;
 
-    const exts = values(SDK.ServerAPI.APIExtends);
+    const exts = Object.values(SDK.ServerAPI.APIExtends);
 
     // extends api will wait for update only.
-    if (includes(exts, api as SDK.ServerAPI.APIExtends)) {
+    if (exts.includes(api as SDK.ServerAPI.APIExtends)) {
       // extends api need to handle "undefined" response inside component.
       setState(ComponentState.Success);
       return;
@@ -135,7 +139,7 @@ export const ServerAPIProvider = <
         //   console.log('[ServerAPIProvider] props: ', e, api, loader);
         // }
         // maybe the data not prepared.
-        if (isNil(e)) {
+        if (Lodash.isNil(e)) {
           return;
         }
         setRes(e as SDK.ServerAPI.InferResponseType<T>);

@@ -1,12 +1,11 @@
 import { Loader } from '@rsdoctor/utils/common';
 import { SDK } from '@rsdoctor/types';
-import { flatten, includes } from 'lodash-es';
 
 const { findLoaderTotalTiming, getLoaderCosts } = Loader;
 export { findLoaderTotalTiming, getLoaderCosts };
 
 export function flattenLoaderData(loaderData: SDK.LoaderData) {
-  return flatten(loaderData.map((e) => e.loaders));
+  return loaderData.flatMap((e) => e.loaders);
 }
 
 export function filterLoaders(
@@ -44,7 +43,7 @@ export function filterLoader(
   }
 
   if (loaderNames?.length) {
-    if (!includes(loaderNames, loader)) return false;
+    if (!loaderNames.includes(loader)) return false;
   }
 
   return true;

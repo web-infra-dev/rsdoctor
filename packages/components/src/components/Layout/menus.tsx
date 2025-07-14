@@ -7,10 +7,8 @@ import {
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Menu, MenuProps } from 'antd';
-import { includes } from 'lodash-es';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import { Size } from '../../constants';
 import * as OverallConstants from '../../pages/Overall/constants';
 import { useI18n, hasBundle, hasCompile } from '../../utils';
@@ -71,7 +69,7 @@ const MenusBase: React.FC<{
   };
   const items: MenuProps['items'] = [];
 
-  if (includes(enableRoutes, Manifest.RsdoctorManifestClientRoutes.Overall)) {
+  if (enableRoutes.includes(Manifest.RsdoctorManifestClientRoutes.Overall)) {
     items.push({
       label: t(OverallConstants.name),
       key: OverallConstants.route,
@@ -89,32 +87,28 @@ const MenusBase: React.FC<{
       key: CompileName,
       icon: navIcon.webpack,
       children: [
-        includes(
-          enableRoutes,
+        enableRoutes.includes(
           Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
         ) && {
           label: t(LoaderTimeline.name),
           key: LoaderTimeline.route,
           icon: <BoxPlotFilled style={iconStyle} />,
         },
-        includes(
-          enableRoutes,
+        enableRoutes.includes(
           Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
         ) && {
           label: t(LoaderFiles.name),
           key: LoaderFiles.route,
           icon: <FundFilled style={iconStyle} />,
         },
-        includes(
-          enableRoutes,
+        enableRoutes.includes(
           Manifest.RsdoctorManifestClientRoutes.ModuleResolve,
         ) && {
           label: t(ModuleResolve.name),
           key: ModuleResolve.route,
           icon: <NodeIndexOutlined style={iconStyle} />,
         },
-        includes(
-          enableRoutes,
+        enableRoutes.includes(
           Manifest.RsdoctorManifestClientRoutes.WebpackPlugins,
         ) && {
           label: t(PluginsAnalyze.name),

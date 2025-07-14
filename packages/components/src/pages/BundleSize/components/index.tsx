@@ -19,7 +19,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { debounce, includes, sumBy } from 'lodash-es';
+import { debounce, sumBy } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useCodeDrawer } from 'src/components/base/CodeViewer/useCodeDrawer';
 import { Badge as Bdg } from '../../../components/Badge';
@@ -237,7 +237,7 @@ export const WebpackModulesOverallBase: React.FC<
 
     if (selectedEntryPoints.length) {
       res = res.filter((e) => {
-        if (selectedEntryPoints.some((ep) => includes(ep.assets, e.path))) {
+        if (selectedEntryPoints.some((ep) => ep.assets.includes(e.path))) {
           return true;
         }
         return false;

@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { Typography } from 'antd';
 import path from 'path';
-import { startsWith } from 'lodash-es';
 import { VSCode, openVSCode } from './vscode';
 import { getShortPath } from 'src/utils';
 
@@ -29,7 +28,7 @@ function parseUrl(url: string) {
   if (strs.length === 1) {
     [res] = strs;
   } else {
-    [res] = strs.filter((e) => path.isAbsolute(e) || startsWith(e, './'));
+    [res] = strs.filter((e) => path.isAbsolute(e) || e.startsWith('./'));
   }
 
   return res || url;

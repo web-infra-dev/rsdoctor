@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { flatten, includes, keys, sumBy, values } from 'lodash-es';
+import { sumBy } from 'lodash-es';
 import {
   CheckSquareOutlined,
   InfoCircleOutlined,
@@ -43,7 +43,7 @@ const fileTypes = {
   Others: [],
 };
 
-const definedExtensions = flatten(values(fileTypes));
+const definedExtensions = Object.values(fileTypes).flat();
 
 const Name: React.FC<{ data: BundleDiffTableAssetsData }> = ({ data: r }) => {
   const name = (
@@ -132,7 +132,7 @@ export const Assets: React.FC<{
         current: cAssets.find((c: SDK.AssetData) => c.path === selectedCAsset),
         baseline: bAssets.find((b: SDK.AssetData) => b.path === selectedBAsset),
       };
-      return values(res);
+      return Object.values(res);
     }
 
     bAssets.forEach((asset: SDK.AssetData) => {
@@ -155,7 +155,7 @@ export const Assets: React.FC<{
       res[alias].current = asset;
     });
 
-    return values(res);
+    return Object.values(res);
   }, [bAssets, cAssets, selectedBAsset, selectedCAsset]);
 
   const filteredDataSource = useMemo(() => {
@@ -166,9 +166,10 @@ export const Assets: React.FC<{
     }
 
     if (selectedFileTypes.length) {
-      const exts = flatten(
-        selectedFileTypes.map((e) => fileTypes[e as keyof typeof fileTypes]),
-      );
+      const exts = selectedFileTypes
+        .map((e) => fileTypes[e as keyof typeof fileTypes])
+        .flat();
+
       const hasOthers = selectedFileTypes.indexOf('Others') > -1;
 
       list = list.filter((e) => {
@@ -189,21 +190,21 @@ export const Assets: React.FC<{
       list = list.filter((e) => {
         if (e.baseline && !e.current) {
           // deleted
-          return includes(selectedUpdateTypes, UpdateType.Deleted);
+          return selectedUpdateTypes.includes(UpdateType.Deleted);
         }
 
         if (!e.baseline && e.current) {
           // new
-          return includes(selectedUpdateTypes, UpdateType.New);
+          return selectedUpdateTypes.includes(UpdateType.New);
         }
 
         if (e.baseline && e.current) {
           if (e.baseline.size === e.current.size) {
             // not changed
-            return includes(selectedUpdateTypes, UpdateType.NotChanged);
+            return selectedUpdateTypes.includes(UpdateType.NotChanged);
           }
           // changed
-          return includes(selectedUpdateTypes, UpdateType.Changed);
+          return selectedUpdateTypes.includes(UpdateType.Changed);
         }
 
         return false;
@@ -301,7 +302,10 @@ export const Assets: React.FC<{
             mode="multiple"
             placeholder="Filter by file type"
             style={{ width: 250 }}
-            options={keys(fileTypes).map((e) => ({ label: e, value: e }))}
+            options={Object.keys(fileTypes).map((e) => ({
+              label: e,
+              value: e,
+            }))}
             allowClear
             onChange={(e) => {
               setSelectedFileTypes(e);
@@ -311,7 +315,10 @@ export const Assets: React.FC<{
             mode="multiple"
             placeholder="Filter by file changed type"
             style={{ width: 200 }}
-            options={values(UpdateType).map((e) => ({ label: e, value: e }))}
+            options={Object.values(UpdateType).map((e) => ({
+              label: e,
+              value: e,
+            }))}
             allowClear
             onChange={(e) => {
               setSelectedUpdateTypes(e);
@@ -320,7 +327,10 @@ export const Assets: React.FC<{
           <Select
             suffixIcon={<SortAscendingOutlined />}
             // style={{ width: 150 }}
-            options={values(SortType).map((e) => ({ label: e, value: e }))}
+            options={Object.values(SortType).map((e) => ({
+              label: e,
+              value: e,
+            }))}
             value={selectedSortType}
             onChange={(e) => {
               setSelectedSortType(e);
@@ -337,7 +347,7 @@ export const Assets: React.FC<{
               placeholder="select baseline assets"
               showSearch
               style={{ width: 300 }}
-              options={values(baseline.chunkGraph.assets).map((e) => ({
+              options={Object.values(baseline.chunkGraph.assets).map((e) => ({
                 label: e.path,
                 value: e.path,
               }))}
@@ -350,7 +360,7 @@ export const Assets: React.FC<{
               placeholder="select current assets"
               showSearch
               style={{ width: 300 }}
-              options={values(current.chunkGraph.assets).map((e) => ({
+              options={Object.values(current.chunkGraph.assets).map((e) => ({
                 label: e.path,
                 value: e.path,
               }))}
