@@ -478,8 +478,8 @@ importers:
         version: 4.6.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     devDependencies:
       '@modelcontextprotocol/sdk':
-        specifier: 1.13.2
-        version: 1.13.2
+        specifier: 1.15.1
+        version: 1.15.1
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -3017,8 +3017,8 @@ packages:
       '@types/react': '>=16'
       react: '>=16'
 
-  '@modelcontextprotocol/sdk@1.13.2':
-    resolution: {integrity: sha512-Vx7qOcmoKkR3qhaQ9qf3GxiVKCEu+zfJddHv6x3dY/9P6+uIwJnmuAur5aB+4FDXf41rRrDnOEGkviX5oYZ67w==}
+  '@modelcontextprotocol/sdk@1.15.1':
+    resolution: {integrity: sha512-W/XlN9c528yYn+9MQkVjxiTPgPxoxt+oczfjHBDsJx0+59+O7B75Zhsp0B16Xbwbz8ANISDajh6+V7nIcPMc5w==}
     engines: {node: '>=18'}
 
   '@modern-js-reduck/plugin-auto-actions@1.1.11':
@@ -13482,13 +13482,14 @@ snapshots:
       '@types/react': 18.3.23
       react: 19.1.0
 
-  '@modelcontextprotocol/sdk@1.13.2':
+  '@modelcontextprotocol/sdk@1.15.1':
     dependencies:
       ajv: 6.12.6
       content-type: 1.0.5
       cors: 2.8.5
       cross-spawn: 7.0.6
       eventsource: 3.0.6
+      eventsource-parser: 3.0.1
       express: 5.1.0
       express-rate-limit: 7.5.0(express@5.1.0)
       pkce-challenge: 5.0.0
