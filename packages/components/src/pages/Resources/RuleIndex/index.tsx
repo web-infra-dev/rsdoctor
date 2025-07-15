@@ -75,7 +75,7 @@ export const Page: React.FC = () => {
           >
             <Typography.Paragraph>
               {ruleMessage.type === 'markdown' ? (
-                // TODO: ReactMarkdown 将带来体积增大 100 KB，需用其他组件或方案优化掉
+                // TODO: ReactMarkdown will increase the bundle size by 100 KB. Need to optimize with another component or solution.
                 <ReactMarkdown>{ruleMessage.description}</ReactMarkdown>
               ) : (
                 <Typography.Text>{ruleMessage.description}</Typography.Text>

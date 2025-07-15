@@ -1,7 +1,6 @@
 const rspack = require('@rspack/core');
 const ReactRefreshPlugin = require('@rspack/plugin-react-refresh');
 const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
-const Sonda = require('sonda/rspack');
 
 const banner = `var a = 111111111111111; console.log(a)`;
 
@@ -10,7 +9,7 @@ const config = {
   entry: {
     main: './src/index.tsx',
   },
-  devtool: 'cheap-source-map',
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -77,16 +76,20 @@ const config = {
     extensions: ['...', '.tsx', '.ts', '.jsx'], // "..." means to extend from the default extensions
   },
   optimization: {
-    minimize: false,
+    minimize: true,
   },
   experiments: {
     css: true,
   },
+  // stats: 'verbose',
   plugins: [
     new ReactRefreshPlugin(),
     new RsdoctorRspackPlugin({
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
-      features: ['bundle', 'plugins', 'loader', 'resolver'],
+      features: ['bundle', 'plugins', 'resolver'],
+      supports: {
+        banner: false,
+      },
     }),
     new rspack.BannerPlugin({
       test: /\.js/,
@@ -96,16 +99,6 @@ const config = {
     new rspack.HtmlRspackPlugin({
       template: './index.html',
     }),
-    new rspack.CopyRspackPlugin({
-      patterns: [
-        {
-          from: 'public',
-        },
-      ],
-    }),
-    // new Sonda.default( {
-    // 	format: 'html'
-    // } ),
   ],
 };
 module.exports = config;
