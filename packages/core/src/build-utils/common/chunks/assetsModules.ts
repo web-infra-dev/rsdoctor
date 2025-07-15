@@ -25,7 +25,7 @@ export async function getAssetsModulesData(
   },
   sourceMapSets: Map<string, string> = new Map(),
 ) {
-  if (opts.parseBundle) {
+  if (opts.parseBundle && sourceMapSets.size < 1) {
     const { parseBundle = () => ({}) as ReturnType<ParseBundle> } = opts || {};
 
     const assets = chunkGraph.getAssets();

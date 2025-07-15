@@ -4,7 +4,7 @@ import {
 } from '@/types';
 import { Linter, Plugin, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
-import { chalk, debug, logger, time, timeEnd } from '@rsdoctor/utils/logger';
+import { chalk, debug, logger } from '@rsdoctor/utils/logger';
 import {
   Chunks as ChunksBuildUtils,
   ModuleGraph as ModuleGraphBuildUtils,
@@ -14,32 +14,38 @@ import {
   pluginTapPostOptions,
 } from '../constants';
 import { applyRspackNativePlugin } from './rspack';
-import { RawSourceMap, SourceMapConsumer } from 'source-map-js';
-import fs from 'fs';
-import path from 'path';
-
-export interface MappingItem {
-  source: string | null;
-  generatedLine: number;
-  generatedColumn: number;
-  originalLine: number | null;
-  originalColumn: number | null;
-  name: string | null;
-}
+import { handleEmitAssets, handleAfterEmitAssets } from './sourcemapTool';
+import type { TransformContext } from '@/build-utils/build/module-graph/webpack/transform';
 
 /**
- * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
- * @param {Compiler} compiler
- * @return {*}
- * @memberof RsdoctorWebpackPlugin
+ * Represents a mapping item from a source map.
+ */
+export interface MappingItem {
+  source: string | null; // The original source file
+  generatedLine: number; // The line number in the generated file
+  generatedColumn: number; // The column number in the generated file
+  originalLine: number | null; // The line number in the original source
+  originalColumn: number | null; // The column number in the original source
+  name: string | null; // The symbol name (if any)
+}
+
+let hasConsole = false;
+
+/**
+ * Main function to generate ModuleGraph and ChunkGraph from stats and Webpack module APIs.
+ * Sets up hooks to process stats, generate graphs, handle tree shaking, and collect source maps.
+ * @param compiler - The Webpack or Rspack compiler instance.
+ * @param _this - The Rsdoctor plugin instance.
  */
 export const ensureModulesChunksGraphFn = (
   compiler: Plugin.BaseCompiler,
   _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
 ) => {
+  // Prevent duplicate application
   if (_this._modulesGraphApplied) return;
   _this._modulesGraphApplied = true;
 
+  // Context for module graph transformation
   const context: Required<ModuleGraphBuildUtils.TransformContext> = {
     astCache: new Map(),
     packagePathMap: new Map(),
@@ -48,6 +54,7 @@ export const ensureModulesChunksGraphFn = (
     },
   };
 
+  // Check for Rspack native plugin support
   const RsdoctorRspackPlugin = (
     compiler.webpack.experiments as Plugin.RspackExportsExperiments
   )?.RsdoctorPlugin;
@@ -60,178 +67,184 @@ export const ensureModulesChunksGraphFn = (
     applyRspackNativePlugin(compiler, _this, RsdoctorRspackPlugin);
   }
 
+  // Initialize real source path cache if not present
+  if (!_this._realSourcePathCache) {
+    _this._realSourcePathCache = new Map();
+  }
+
+  // Hook: After compilation is done, generate graphs and process stats
   compiler.hooks.done.tapPromise(
     internalPluginTapPreOptions('moduleGraph'),
     async (_stats: any) => {
-      const stats = _stats as Plugin.Stats;
-      const getStatsJson = (() => {
-        let cached: Plugin.StatsCompilation | null = null;
-        return () => {
-          if (cached) return cached as Plugin.StatsCompilation;
-          // TODO: need optimize this stats.toJSON 's stats options.
-          cached = stats.toJson();
-          return cached;
-        };
-      })();
-      debug(Process.getMemoryUsageMessage, '[Before Generate ModuleGraph]');
-
-      if (!_this.chunkGraph?.getChunks().length) {
-        _this.chunkGraph = ChunksBuildUtils.chunkTransform(
-          new Map(),
-          getStatsJson(),
-        );
-      }
-
-      if (!_this.modulesGraph.getModules().length) {
-        /** generate module graph */
-        _this.modulesGraph = await ModuleGraphBuildUtils.getModuleGraphByStats(
-          stats.compilation,
-          getStatsJson(),
-          process.cwd(),
-          _this.chunkGraph!,
-          _this.options.features,
-          context,
-        );
-      }
-
-      debug(Process.getMemoryUsageMessage, '[After Generate ModuleGraph]');
-
-      /** Tree Shaking */
-      if (_this.options.features.treeShaking) {
-        if ('rspackVersion' in compiler.webpack) {
-          logger.info(
-            chalk.yellow(
-              'Rspack currently does not support treeShaking capabilities.',
-            ),
-          );
-        } else {
-          _this.modulesGraph =
-            ModuleGraphBuildUtils.appendTreeShaking(
-              _this.modulesGraph,
-              stats.compilation,
-            ) || _this.modulesGraph;
-          _this.sdk.addClientRoutes([
-            Manifest.RsdoctorManifestClientRoutes.TreeShaking,
-          ]);
-        }
-        debug(
-          Process.getMemoryUsageMessage,
-          '[After AppendTreeShaking to ModuleGraph]',
-        );
-      }
-
-      /** transform modules graph */
-      const shouldParseBundle = _this.options.supports.parseBundle !== false;
-      await getModulesInfos(
-        compiler,
-        _this.modulesGraph,
-        _this.chunkGraph!,
-        shouldParseBundle,
-        _this.sourceMapSets,
-      );
-
-      debug(Process.getMemoryUsageMessage, '[After Transform ModuleGraph]');
-
-      _this.modulesGraph &&
-        (await _this.sdk.reportModuleGraph(_this.modulesGraph));
-      await _this.sdk.reportChunkGraph(_this.chunkGraph!);
-
-      if (_this.options.supports.generateTileGraph) {
-        logger.warn(
-          chalk.yellow(
-            'The option generateTileGraph is deprecated. Tile graph is now supported by default.',
-          ),
-        );
-      }
+      await doneHandler(_stats, _this, context, compiler);
     },
   );
 
+  // Hook: After assets are emitted, collect source maps (Rspack only)
   compiler.hooks.afterEmit.tapPromise(
     {
       ...pluginTapPostOptions,
       stage: pluginTapPostOptions.stage! + 100,
     },
-    (compilation) => afterEmit(compilation, _this),
+    async (compilation) => {
+      if (!ensureDevtools(compiler)) {
+        return;
+      }
+      await handleAfterEmitAssets(compilation, _this);
+    },
+  );
+
+  // Hook: During emit, collect source maps (Webpack only)
+  compiler.hooks.emit.tapAsync(
+    {
+      ...pluginTapPostOptions,
+      stage: pluginTapPostOptions.stage! + 100,
+    },
+    emitHandler.bind(null, _this, compiler),
   );
 };
 
-const afterEmit = async (
-  compilation: Plugin.BaseCompilation,
+/**
+ * Handler function for the done hook. Generates graphs, processes stats, handles tree shaking, and reports results.
+ * @param _stats - The stats object from the compiler.
+ * @param _this - The Rsdoctor plugin instance.
+ * @param context - The module graph transformation context.
+ * @param compiler - The Webpack or Rspack compiler instance.
+ */
+async function doneHandler(
+  _stats: any,
   _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
-): Promise<void> => {
-  time('ensureModulesChunkGraph.afterEmit.start');
-  const assets = compilation.getAssets();
+  context: Required<TransformContext>,
+  compiler: Plugin.BaseCompiler,
+) {
+  const stats = _stats as Plugin.Stats;
+  // Lazy getter for stats JSON, with caching
+  const getStatsJson = (() => {
+    let cached: Plugin.StatsCompilation | null = null;
+    return () => {
+      if (cached) return cached as Plugin.StatsCompilation;
+      // TODO: Optimize stats.toJSON options for performance
+      cached = stats.toJson();
+      return cached;
+    };
+  })();
+  debug(Process.getMemoryUsageMessage, '[Before Generate ModuleGraph]');
 
-  // Map<source, string>
-  const sourceMapSets = new Map<string, string>();
-
-  for (const asset of assets) {
-    // Only process .js or .css files, skip non-.js and non-.css files
-    if (!asset.name.endsWith('.js') && !asset.name.endsWith('.css')) continue;
-
-    //  Read asset file content
-    // Prefer info.sourceFilename, otherwise use output directory + asset.name
-    let assetPath = asset.info?.sourceFilename;
-    if (!assetPath) {
-      assetPath = path.join(compilation.outputOptions.path || '', asset.name);
-    }
-    if (!assetPath || !fs.existsSync(assetPath)) continue;
-    const assetContent = fs.readFileSync(assetPath, 'utf-8');
-    const assetLinesCodeList = assetContent.split(/\r?\n/);
-
-    // Parse source map
-    const { map } = asset.source.sourceAndMap();
-    if (map) {
-      const consumer = new SourceMapConsumer(map as unknown as RawSourceMap);
-
-      // Collect all mappings, grouped by line
-      const lineMappings = new Map<number, Array<MappingItem>>();
-      consumer.eachMapping((m: MappingItem) => {
-        if (!lineMappings.has(m.generatedLine)) {
-          lineMappings.set(m.generatedLine, []);
-        }
-        lineMappings.get(m.generatedLine)!.push(m);
-      });
-
-      // 2. For each line's mappings, sort by generatedColumn in ascending order
-      for (const [lineNum, mappings] of lineMappings.entries()) {
-        mappings.sort((a, b) => a.generatedColumn - b.generatedColumn);
-        const lineIdx = lineNum - 1;
-        if (lineIdx < 0 || lineIdx >= assetLinesCodeList.length) continue;
-        const line = assetLinesCodeList[lineIdx];
-
-        for (let i = 0; i < mappings.length; i++) {
-          const m = mappings[i];
-          // Skip if source is null
-          if (!m.source) continue;
-          // The source in map.sources returned by sourceAndMap will be modified by Rsdoctor's loader.
-          const realSource = m.source.split('!').pop();
-
-          if (!realSource) continue;
-
-          const next = mappings[i + 1];
-          const start = m.generatedColumn;
-          const end = next ? next.generatedColumn : line.length;
-          const codeSegment = line.slice(start, end);
-          // Use concat to join codeSegment
-          const prev = sourceMapSets.get(realSource) || '';
-          sourceMapSets.set(realSource, prev.concat(codeSegment));
-        }
-      }
-    }
+  // Generate chunk graph if not already present
+  if (!_this.chunkGraph?.getChunks().length) {
+    _this.chunkGraph = ChunksBuildUtils.chunkTransform(
+      new Map(),
+      getStatsJson(),
+    );
   }
-  _this.sourceMapSets = sourceMapSets;
-  timeEnd('ensureModulesChunkGraph.afterEmit.start');
+
+  // Generate module graph if not already present
+  if (!_this.modulesGraph.getModules().length) {
+    /** generate module graph */
+    _this.modulesGraph = await ModuleGraphBuildUtils.getModuleGraphByStats(
+      stats.compilation,
+      getStatsJson(),
+      process.cwd(),
+      _this.chunkGraph!,
+      _this.options.features,
+      context,
+    );
+  }
+
+  debug(Process.getMemoryUsageMessage, '[After Generate ModuleGraph]');
+
+  /**
+   * Tree Shaking: If enabled, attempt to append tree shaking info to the module graph.
+   * Note: Rspack currently does not support tree shaking.
+   */
+  if (_this.options.features.treeShaking) {
+    if ('rspackVersion' in compiler.webpack) {
+      logger.info(
+        chalk.yellow(
+          'Rspack currently does not support treeShaking capabilities.',
+        ),
+      );
+    } else {
+      _this.modulesGraph =
+        ModuleGraphBuildUtils.appendTreeShaking(
+          _this.modulesGraph,
+          stats.compilation,
+        ) || _this.modulesGraph;
+      _this.sdk.addClientRoutes([
+        Manifest.RsdoctorManifestClientRoutes.TreeShaking,
+      ]);
+    }
+    debug(
+      Process.getMemoryUsageMessage,
+      '[After AppendTreeShaking to ModuleGraph]',
+    );
+  }
+
+  /**
+   * Transform modules graph: collect additional module info, such as parsed code and size.
+   * Optionally parses bundle if enabled in options.
+   */
+  const shouldParseBundle = _this.options.supports.parseBundle !== false;
+  await getModulesInfos(
+    compiler,
+    _this.modulesGraph,
+    _this.chunkGraph!,
+    shouldParseBundle,
+    _this.sourceMapSets,
+  );
+
+  debug(Process.getMemoryUsageMessage, '[After Transform ModuleGraph]');
+
+  // Report graphs to SDK for further processing or client display
+  _this.modulesGraph && (await _this.sdk.reportModuleGraph(_this.modulesGraph));
+  await _this.sdk.reportChunkGraph(_this.chunkGraph!);
+
+  // Warn if deprecated tile graph option is enabled
+  if (_this.options.supports.generateTileGraph) {
+    logger.warn(
+      chalk.yellow(
+        'The option generateTileGraph is deprecated. Tile graph is now supported by default.',
+      ),
+    );
+  }
+}
+
+/**
+ * Checks if source map processing is enabled and supported by the current compiler configuration.
+ * Warns if eval-based source maps are used (unsupported).
+ * @param compiler - The Webpack or Rspack compiler instance.
+ * @returns true if source maps are enabled and supported, false otherwise.
+ */
+export const ensureDevtools = (compiler: Plugin.BaseCompiler) => {
+  const devtool = compiler.options.devtool;
+  const sourceMapEnabled =
+    typeof devtool === 'string' && /source-?map/i.test(devtool);
+
+  if (!sourceMapEnabled) {
+    debug(() => 'SourceMap is not enabled. Skipping sourcemap processing.');
+    return false;
+  }
+
+  if (typeof devtool === 'string' && /eval/i.test(devtool)) {
+    !hasConsole &&
+      logger.warn(
+        'SourceMap with eval is not supported. Please use other sourcemap options.',
+      );
+    hasConsole = true;
+    return false;
+  }
+
+  return true;
 };
 
 /**
- * @protected
- * @description This function to get module parsed code and size;
- * @param {Compiler} compiler
- * @param {StatsCompilation} stats
- * @param {ModuleGraph} moduleGraph
- * @return {*}
- * @memberof RsdoctorWebpackPlugin
+ * Collects parsed code and size information for all modules in the module graph.
+ * Used to enrich the module graph with additional data for analysis and reporting.
+ * @param compiler - The Webpack or Rspack compiler instance.
+ * @param moduleGraph - The module graph instance.
+ * @param chunkGraph - The chunk graph instance.
+ * @param parseBundle - Whether to parse the bundle for additional info.
+ * @param sourceMapSets - Map of source file to code segments from source maps.
  */
 async function getModulesInfos(
   compiler: Plugin.BaseCompiler,
@@ -252,4 +265,58 @@ async function getModulesInfos(
       parseBundle,
     );
   } catch (e) {}
+}
+
+/**
+ * Escapes special characters in a string for use in a regular expression.
+ * @param str - The string to escape.
+ * @returns The escaped string.
+ */
+function escapeRegExp(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Handler function for the emit hook. Collects source maps for Webpack assets.
+ * @param _this - The Rsdoctor plugin instance.
+ * @param compiler - The Webpack compiler instance.
+ * @param compilation - The current compilation object.
+ * @param callback - The callback to signal completion.
+ */
+async function emitHandler(
+  _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
+  compiler: Plugin.BaseCompiler,
+  compilation: Plugin.BaseCompilation,
+  callback: () => void,
+) {
+  if (!ensureDevtools(compiler)) {
+    callback();
+    return;
+  }
+
+  // Determine namespace for source map resolution
+  let namespace =
+    compiler.options.output.devtoolNamespace ||
+    compiler.options.output.library?.name ||
+    '[^/]+/';
+
+  if (Array.isArray(namespace)) {
+    namespace = namespace[0];
+  } else if (typeof namespace === 'object' && 'name' in namespace) {
+    namespace = (namespace as { name: string }).name;
+  }
+
+  // Build regex for extracting file paths from source map sources
+  const safeNamespace = escapeRegExp(namespace as string);
+  const sourceMapFilenameRegex = new RegExp(
+    `(?:webpack://)?(?:${safeNamespace})?([^?]*)`,
+  );
+
+  await handleEmitAssets({
+    compilation,
+    pluginInstance: _this,
+    sourceMapFilenameRegex,
+    namespace: namespace as string,
+  });
+  callback();
 }
