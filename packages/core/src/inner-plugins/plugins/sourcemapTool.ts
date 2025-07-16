@@ -32,7 +32,7 @@ interface SourceMapAssetOptions {
  * @param namespace - Optional namespace for webpack sources.
  * @param cache - Optional cache map to store resolved paths.
  */
-function bindContextCache(
+export function bindContextCache(
   context: string,
   namespace?: string,
   cache?: Map<string, string>,
@@ -231,7 +231,7 @@ function parseAsset(
     const bundledAsset = assets.find(
       (asset2) => asset2.source.name === map.file,
     );
-    const bundledCode = bundledAsset ? bundledAsset.source.source.source() : '';
+    const bundledCode = bundledAsset ? bundledAsset.source.source() : '';
     assetLinesCodeList = bundledCode.split(/\r?\n/);
   } else if (
     type === 'js/css' &&
