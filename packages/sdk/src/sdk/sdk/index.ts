@@ -12,6 +12,7 @@ import { RsdoctorWebpackSDKOptions } from './types';
 import { SDKCore } from './core';
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Lodash } from '@rsdoctor/utils/common';
+import { findRoot } from '../utils';
 const jc = require('json-cycle');
 
 export * from '../utils/openBrowser';
@@ -54,6 +55,8 @@ export class RsdoctorSDK<
 
   private _tileReportHtml: string | undefined;
 
+  private _root: any;
+
   constructor(options: T) {
     super(options);
     this.server = options.config?.noServer
@@ -66,6 +69,7 @@ export class RsdoctorSDK<
       ? options.type
       : SDK.ToDataType.Normal;
     this.extraConfig = options.config;
+    this._root = findRoot();
   }
 
   async bootstrap() {
@@ -175,6 +179,7 @@ export class RsdoctorSDK<
   }
 
   reportConfiguration(config: SDK.ConfigData[0]) {
+    config.root = this._root;
     this._configs.push(config);
     this.onDataReport();
   }
