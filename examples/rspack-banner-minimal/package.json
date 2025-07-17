@@ -3,9 +3,9 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "dev": "ENABLE_CLIENT_SERVER=true NODE_ENV=development rspack serve",
-    "build": "ENABLE_CLIENT_SERVER=false NODE_ENV=production rspack build -c ./rspack.config.js",
-    "build:analysis": "ENABLE_CLIENT_SERVER=true NODE_ENV=production rspack build"
+    "dev": "cross-env ENABLE_CLIENT_SERVER=true NODE_ENV=development rspack serve",
+    "build": "cross-env ENABLE_CLIENT_SERVER=false NODE_ENV=production rspack build -c ./rspack.config.js",
+    "build:analysis": "cross-env ENABLE_CLIENT_SERVER=true NODE_ENV=production rspack build"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.58.3",
