@@ -49,7 +49,7 @@ export class ChatGPT extends LLM {
           // ...
         ],
       });
-      const { content, tool_calls } = completion.choices[0].message;
+      const { content } = completion.choices[0].message;
       return content;
     } catch (e) {
       console.error(e);

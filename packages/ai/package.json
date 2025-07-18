@@ -27,6 +27,7 @@
     "socket.io-client": "4.6.1"
   },
   "devDependencies": {
+    "openai": "^5.10.1",
     "@modelcontextprotocol/sdk": "1.15.1",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
