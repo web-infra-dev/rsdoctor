@@ -496,7 +496,7 @@ importers:
         specifier: ^1.10.0
         version: 1.10.0
       openai:
-        specifier: 5.10.1
+        specifier: ^5.10.1
         version: 5.10.1(ws@8.18.1(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.4)
       typescript:
         specifier: ^5.2.2

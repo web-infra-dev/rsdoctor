@@ -17,7 +17,7 @@ import type {
   RsdoctorWebpackPluginOptions,
 } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
-import { openBrowser, RsdoctorSDK } from '@rsdoctor/sdk';
+import { findRoot, openBrowser, RsdoctorSDK } from '@rsdoctor/sdk';
 import { Constants, Linter, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { chalk, debug } from '@rsdoctor/utils/logger';
@@ -160,6 +160,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
       name: rspackVersion ? 'rspack' : 'webpack',
       version: rspackVersion || webpackVersion || 'unknown',
       config: configuration,
+      root: findRoot() || '',
     });
 
     this.sdk.setOutputDir(
