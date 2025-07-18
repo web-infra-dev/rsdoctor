@@ -1,5 +1,10 @@
 import type { Configuration, RuleSetRule } from '@rspack/core';
-import { openBrowser, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
+import {
+  findRoot,
+  openBrowser,
+  RsdoctorPrimarySDK,
+  RsdoctorSDK,
+} from '@rsdoctor/sdk';
 import {
   InternalLoaderPlugin,
   InternalPluginsPlugin,
@@ -271,6 +276,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       name: rspackVersion ? 'rspack' : 'webpack',
       version: rspackVersion || webpackVersion || 'unknown',
       config: configuration,
+      root: findRoot() || '',
     });
 
     this.sdk.setOutputDir(

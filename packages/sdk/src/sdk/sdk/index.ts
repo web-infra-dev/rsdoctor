@@ -16,6 +16,7 @@ import { findRoot } from '../utils';
 const jc = require('json-cycle');
 
 export * from '../utils/openBrowser';
+export * from '../utils/base';
 
 export class RsdoctorSDK<
     T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
@@ -179,7 +180,7 @@ export class RsdoctorSDK<
   }
 
   reportConfiguration(config: SDK.ConfigData[0]) {
-    config.root = this._root;
+    config.root ??= this._root;
     this._configs.push(config);
     this.onDataReport();
   }
