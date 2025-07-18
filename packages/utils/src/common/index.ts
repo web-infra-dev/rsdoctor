@@ -15,3 +15,4 @@ export * as Rspack from './rspack';
 export * as Package from './package';
 export * as Lodash from './lodash';
 export * as GlobalConfig from './global-config';
+export * as File from './file';
