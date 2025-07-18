@@ -1,8 +1,6 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.5.1/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "vcs": {
     "enabled": true,
     "defaultBranch": "main",
@@ -10,7 +8,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": ["*.test.ts", "*.js", "*.tsx", "*.cjs"],
+    "includes": ["**", "!**/*.test.ts", "!**/*.js", "!**/*.tsx", "!**/*.cjs"],
     "ignoreUnknown": true
   },
   "linter": {
@@ -23,7 +21,8 @@
         "useEnumInitializers": "off",
         "useConst": "off",
         "noUnusedTemplateLiteral": "off",
-        "noArguments": "off"
+        "useImportType": "off",
+        "useExportType": "error"
       },
       "suspicious": {
         "noExplicitAny": "off",
@@ -36,15 +35,13 @@
       "complexity": {
         "noForEach": "off",
         "noBannedTypes": "off",
-        "useOptionalChain": "off"
+        "useOptionalChain": "off",
+        "noArguments": "off"
       },
       "performance": {
         "noDelete": "off"
       },
-      "nursery": {
-        "useImportType": "off",
-        "useExportType": "error"
-      },
+      "nursery": {},
       "correctness": {
         "noSwitchDeclarations": "off"
       },
