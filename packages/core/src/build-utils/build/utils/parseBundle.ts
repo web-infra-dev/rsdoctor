@@ -36,7 +36,6 @@ export const parseBundle: ParseBundle = (
   const tagCache = new Map();
 
   let hasBannerPlugin = content.indexOf('RSDOCTOR_START::') > 0;
-
   if (hasBannerPlugin && !tagCache.get(bundlePath)) {
     const tagMatchResult = getStringBetween(
       content,
@@ -47,6 +46,7 @@ export const parseBundle: ParseBundle = (
     content = tagMatchResult.result?.trim() || content;
     tagCache.set(bundlePath, tagMatchResult.loc);
     hasBannerPlugin = true;
+    // biome-ignore lint/suspicious/noDuplicateElseIf: waiting for confirmation
   } else if (hasBannerPlugin && !tagCache.get(bundlePath)) {
     const loc = tagCache.get(bundlePath);
     content = content.slice(loc.start, loc.end);
