@@ -4,7 +4,7 @@ import {
 } from '@/types';
 import { Linter, Plugin, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
-import { chalk, debug, logger } from '@rsdoctor/utils/logger';
+import { chalk, logger } from '@rsdoctor/utils/logger';
 import {
   Chunks as ChunksBuildUtils,
   ModuleGraph as ModuleGraphBuildUtils,
@@ -128,7 +128,9 @@ async function doneHandler(
       return cached;
     };
   })();
-  debug(Process.getMemoryUsageMessage, '[Before Generate ModuleGraph]');
+  logger.debug(
+    `${(Process.getMemoryUsageMessage, '[Before Generate ModuleGraph]')}`,
+  );
 
   // Generate chunk graph if not already present
   if (!_this.chunkGraph?.getChunks().length) {
@@ -151,7 +153,9 @@ async function doneHandler(
     );
   }
 
-  debug(Process.getMemoryUsageMessage, '[After Generate ModuleGraph]');
+  logger.debug(
+    `${(Process.getMemoryUsageMessage, '[After Generate ModuleGraph]')}`,
+  );
 
   /**
    * Tree Shaking: If enabled, attempt to append tree shaking info to the module graph.
@@ -174,9 +178,11 @@ async function doneHandler(
         Manifest.RsdoctorManifestClientRoutes.TreeShaking,
       ]);
     }
-    debug(
-      Process.getMemoryUsageMessage,
-      '[After AppendTreeShaking to ModuleGraph]',
+    logger.debug(
+      `${
+        (Process.getMemoryUsageMessage,
+        '[After AppendTreeShaking to ModuleGraph]')
+      }`,
     );
   }
 
@@ -193,7 +199,9 @@ async function doneHandler(
     _this.sourceMapSets,
   );
 
-  debug(Process.getMemoryUsageMessage, '[After Transform ModuleGraph]');
+  logger.debug(
+    `${(Process.getMemoryUsageMessage, '[After Transform ModuleGraph]')}`,
+  );
 
   // Report graphs to SDK for further processing or client display
   _this.modulesGraph && (await _this.sdk.reportModuleGraph(_this.modulesGraph));
@@ -221,7 +229,7 @@ export const ensureDevtools = (compiler: Plugin.BaseCompiler) => {
     typeof devtool === 'string' && /source-?map/i.test(devtool);
 
   if (!sourceMapEnabled) {
-    debug(() => 'SourceMap is not enabled. Skipping sourcemap processing.');
+    logger.debug('SourceMap is not enabled. Skipping sourcemap processing.');
     return false;
   }
 

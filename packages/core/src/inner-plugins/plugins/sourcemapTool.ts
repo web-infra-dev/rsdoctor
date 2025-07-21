@@ -225,25 +225,47 @@ function parseAsset(
   let assetContent = '';
   let assetLinesCodeList: string[] = [];
   let map: any = null;
-  if (
-    type === 'map' &&
-    assetName.endsWith('.map') &&
-    !asset.name.includes('d.ts')
-  ) {
-    assetContent = asset.source.source.source();
-    map = JSON.parse(assetContent);
-    const bundledAsset = assets.find(
-      (asset2) => asset2.source.name === map.file,
-    );
-    const bundledCode = bundledAsset ? bundledAsset.source.source.source() : '';
-    assetLinesCodeList = bundledCode.split(/\r?\n/);
-  } else if (
-    type === 'js/css' &&
-    (assetName.endsWith('.js') || assetName.endsWith('.css'))
-  ) {
-    assetContent = asset.source.source();
-    assetLinesCodeList = assetContent.split(/\r?\n/);
-    map = asset.source.sourceAndMap().map;
+
+  try {
+    if (
+      type === 'map' &&
+      assetName.endsWith('.map') &&
+      !asset.name.includes('d.ts')
+    ) {
+      // Add defensive checks for the source chain
+      assetContent = asset.source?.source?.source?.() || '';
+      if (!assetContent) {
+        logger.error(`Failed to get source content for asset: ${assetName}`);
+        return {
+          assetName,
+          assetContent: '',
+          assetLinesCodeList: [],
+          map: null,
+        };
+      }
+
+      map = JSON.parse(assetContent);
+      const bundledAsset = assets.find(
+        (asset2) => asset2.source?.name === map.file,
+      );
+      const bundledCode = bundledAsset?.source?.source?.source?.() || '';
+      if (!bundledCode) {
+        logger.error(`Failed to get bundled code for asset: ${map.file}`);
+        return { assetName, assetContent, assetLinesCodeList: [], map };
+      }
+      assetLinesCodeList = bundledCode.split(/\r?\n/);
+    } else if (
+      type === 'js/css' &&
+      (assetName.endsWith('.js') || assetName.endsWith('.css'))
+    ) {
+      assetContent = asset.source?.source?.() || '';
+      assetLinesCodeList = assetContent.split(/\r?\n/);
+      map = asset.source?.sourceAndMap?.()?.map || null;
+    }
+  } catch (error) {
+    logger.error(`Error parsing asset ${assetName}:`, error);
+    return { assetName, assetContent: '', assetLinesCodeList: [], map: null };
   }
+
   return { assetName, assetContent, assetLinesCodeList, map };
 }
