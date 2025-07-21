@@ -25,7 +25,7 @@ const jsLines = jsContent.split(/\r?\n/);
 // Add mock source map before createMockPluginInstance
 const mockJsMap = {
   version: 3,
-  sources: ['webpack://@examples/test/src/index.js'],
+  sources: ['src/index.js'],
   names: [],
   mappings: 'AAAA;AACA',
   file: 'main.js',
@@ -47,11 +47,14 @@ function createMockCompilation() {
     getAssets: () => [
       {
         name: 'main.js',
-        source: { source: () => 'console.log("test");\n', name: 'main.js' },
-        sourceAndMap: () => ({
-          source: 'console.log("test");\n',
-          map: mockJsMap,
-        }),
+        source: {
+          source: () => 'console.log("test");\n',
+          name: 'main.js',
+          sourceAndMap: () => ({
+            source: 'console.log("test");\n',
+            map: mockJsMap,
+          }),
+        },
         info: {},
       },
       {
@@ -96,14 +99,7 @@ describe('sourcemapTool', () => {
       const compilation = createMockCompilation();
       const regex =
         /webpack:\/\/(?:@examples\/rsdoctor-rspack-banner\/)?([^?]*)/;
-      await collectSourceMaps(
-        jsMap,
-        jsLines,
-        compilation,
-        plugin,
-        regex,
-        '@examples/rsdoctor-rspack-banner',
-      );
+      await collectSourceMaps(jsMap, jsLines, compilation, plugin, regex);
       // Assert that sourceMapSets is filled
       expect(plugin.sourceMapSets.size).toBeGreaterThan(0);
       // Assert that there is a key related to dayjs.min.js
@@ -118,16 +114,11 @@ describe('sourcemapTool', () => {
     it('should process assets and fill sourceMapSets', async () => {
       const plugin = createMockPluginInstance();
       const compilation = createMockCompilation();
-      await handleAfterEmitAssets(
-        compilation,
-        plugin,
-        /@examples\/rsdoctor-rspack-banner/,
-      );
+      await handleAfterEmitAssets(compilation, plugin);
 
       expect(plugin.sourceMapSets.size).toBe(1);
       const sourceMap = plugin.sourceMapSets.get('src/index.js');
-      expect(sourceMap).toBeDefined();
-      expect(sourceMap.source).toBe('console.log("test");\n');
+      expect(sourceMap).toBe('console.log("test");');
     });
   });
 });
