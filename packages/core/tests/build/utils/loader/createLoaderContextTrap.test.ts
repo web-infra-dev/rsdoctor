@@ -1,11 +1,11 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, rs } from '@rstest/core';
 import { Loader } from '@rsdoctor/utils/common';
 import { createLoaderContextTrap } from '@/build-utils/build/utils';
 
 describe('test utils/loader.ts createLoaderContextTrap()', () => {
   it('this.callback', () => {
-    const fn = vi.fn();
-    const final = vi.fn();
+    const fn = rs.fn();
+    const final = rs.fn();
     // @ts-ignore
     const trap = createLoaderContextTrap.call({ async: () => fn }, final);
 
@@ -22,8 +22,8 @@ describe('test utils/loader.ts createLoaderContextTrap()', () => {
   });
 
   it('this.async', () => {
-    const fn = vi.fn();
-    const final = vi.fn();
+    const fn = rs.fn();
+    const final = rs.fn();
     // @ts-ignore
     const trap = createLoaderContextTrap.call({ callback: fn }, final);
 
@@ -39,7 +39,7 @@ describe('test utils/loader.ts createLoaderContextTrap()', () => {
   });
 
   it('this.query is string', () => {
-    const final = vi.fn();
+    const final = rs.fn();
     const trap = createLoaderContextTrap.call(
       // @ts-ignore
       { query: `?a=1&"${Loader.LoaderInternalPropertyName}":{aa:1,b:4}` },
@@ -49,7 +49,7 @@ describe('test utils/loader.ts createLoaderContextTrap()', () => {
   });
 
   it('this.query is object', () => {
-    const final = vi.fn();
+    const final = rs.fn();
     const trap1 = createLoaderContextTrap.call(
       // @ts-ignore
       {
@@ -79,7 +79,7 @@ describe('test utils/loader.ts createLoaderContextTrap()', () => {
   });
 
   it('this.query is neither string or object', () => {
-    const final = vi.fn();
+    const final = rs.fn();
     // @ts-ignore
     const trap1 = createLoaderContextTrap.call({}, final);
     expect(trap1.query).toBeUndefined();
@@ -90,7 +90,7 @@ describe('test utils/loader.ts createLoaderContextTrap()', () => {
   });
 
   it('this.getOptions', () => {
-    const final = vi.fn();
+    const final = rs.fn();
     // @ts-ignore
     const trap1 = createLoaderContextTrap.call({}, final);
     expect(trap1.getOptions).toBeUndefined();

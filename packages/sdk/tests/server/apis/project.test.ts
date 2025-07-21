@@ -1,10 +1,10 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, rs } from '@rstest/core';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Manifest as ManifestShared } from '@rsdoctor/utils/common';
 import { cwd, setupSDK } from '../../utils';
 import { getLocalIpAddress } from '../../../src/sdk/server/utils';
 
-vi.setConfig({ testTimeout: 50000 });
+rs.setConfig({ testTimeout: 50000 });
 
 describe('test server/apis/project.ts', () => {
   const target = setupSDK();

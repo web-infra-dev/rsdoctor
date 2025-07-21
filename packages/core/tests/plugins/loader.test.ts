@@ -1,5 +1,5 @@
 import { Loader } from '@rsdoctor/utils/common';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import path from 'path';
 import { ProxyLoaderInternalOptions } from '@/types';
 import { interceptLoader } from '@/inner-plugins/utils';

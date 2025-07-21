@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, rs } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 
 import { APIDataLoader } from '../../src/common/data';
@@ -19,11 +19,11 @@ describe('test src/common/data/index.ts', () => {
   );
 
   it('ensure implement api with server and client', () => {
-    const fn = vi.fn().mockImplementation(() => new Promise(() => {}));
+    const fn = rs.fn().mockImplementation(() => new Promise(() => {}));
 
     const loader = new APIDataLoader({
       loadData: fn,
-      loadManifest: vi.fn().mockImplementation(() => new Promise(() => {})),
+      loadManifest: rs.fn().mockImplementation(() => new Promise(() => {})),
     });
 
     testAPIs.forEach((api) => {
@@ -37,11 +37,11 @@ describe('test src/common/data/index.ts', () => {
   });
 
   it('ensure api not implement with server and client', () => {
-    const fn = vi.fn();
+    const fn = rs.fn();
 
     const loader = new APIDataLoader({
       loadData: fn,
-      loadManifest: vi.fn().mockImplementation(() => new Promise(() => {})),
+      loadManifest: rs.fn().mockImplementation(() => new Promise(() => {})),
     });
 
     excludeAPIs.forEach((api) => {

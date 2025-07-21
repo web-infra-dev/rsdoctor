@@ -1,5 +1,5 @@
 import { File } from '@rsdoctor/utils/build';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 import { setupSDK } from '../../utils';
 

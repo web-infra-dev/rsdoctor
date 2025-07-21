@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 import { Router } from '../../../src/sdk/server/router';
 

@@ -1,6 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs';
-import { expect, test } from 'vitest';
+import { expect, test } from '@rstest/core';
 import z from 'zod';
 import { extractPackageName, calcPackageSize } from '@/utils/chunks';
 import { ChatGPT } from './model/openai';

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, rs } from '@rstest/core';
 import {
   interceptCompilationHooks,
   interceptCompilerHooks,
@@ -22,7 +22,7 @@ describe('test src/build/utils/plugin.ts', () => {
   });
 
   it('interceptCompilerHooks()', () => {
-    const fn = vi.fn();
+    const fn = rs.fn();
     // @ts-ignore
     interceptCompilerHooks({ hooks: { a: 1 } }, fn);
     expect(fn).toBeCalledTimes(1);
@@ -30,7 +30,7 @@ describe('test src/build/utils/plugin.ts', () => {
   });
 
   it('interceptCompilationHooks(): basic', () => {
-    const fn = vi.fn();
+    const fn = rs.fn();
     // @ts-ignore
     interceptCompilationHooks({ hooks: { a: 1 } }, fn);
     expect(fn).toBeCalledTimes(1);
@@ -38,7 +38,7 @@ describe('test src/build/utils/plugin.ts', () => {
   });
 
   it('interceptCompilationHooks(): normalModuleLoader && webpack5 ', () => {
-    const fn = vi.fn();
+    const fn = rs.fn();
     interceptCompilationHooks(
       // @ts-ignore
       { hooks: { normalModuleLoader: 1 }, moduleGraph: {} },

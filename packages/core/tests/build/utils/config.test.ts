@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from '@rstest/core';
 import { normalizeUserConfig } from '../../../src/inner-plugins/utils/config';
 import { SDK } from '@rsdoctor/types';
 

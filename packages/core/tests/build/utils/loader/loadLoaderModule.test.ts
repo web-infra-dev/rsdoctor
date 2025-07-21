@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import { resolve } from 'path';
 import { loadLoaderModule } from '@/build-utils/build/utils';
 

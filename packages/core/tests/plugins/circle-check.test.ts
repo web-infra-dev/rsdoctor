@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import { checkCirclePath } from '@/inner-plugins/utils'
 
 describe('test checkCirclePath function', () => {

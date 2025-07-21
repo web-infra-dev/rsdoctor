@@ -121,7 +121,7 @@ unplugin
 unshift
 upath
 Viorel
-vitest
+rstest
 watchpack
 webm
 webp

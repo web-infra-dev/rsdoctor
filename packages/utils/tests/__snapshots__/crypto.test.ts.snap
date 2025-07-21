@@ -1,4 +1,4 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+// Rstest Snapshot v1
 
 exports[`test src/crypto.ts > encode & decode > encode() 1`] = `
 ""00123sdfdkfkskfk" -> "48!48!49!50!51!115!100!102!100!107!102!107!115!107!102!107"

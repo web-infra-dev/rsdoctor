@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, rs } from '@rstest/core';
 import { hrtime } from 'process';
 import { Time } from '../../src/common';
 
-vi.setConfig({ testTimeout: 100000 });
+rs.setConfig({ testTimeout: 100000 });
 
 describe('test src/build/time.ts', () => {
   it('getCurrentTimestamp', async () => {

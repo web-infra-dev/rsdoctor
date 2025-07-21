@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import path from 'path';
 import fs from 'fs';
 import { ModuleGraph } from '@/build-utils/common';

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import { Server } from '../src/build';
 import { getPortSync } from '../src/build/server';
 
