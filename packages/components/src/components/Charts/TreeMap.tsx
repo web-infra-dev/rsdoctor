@@ -183,7 +183,6 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
                   '</div>'
                 );
               }
-
               return [
                 '<div style="' +
                   pathStyle +
