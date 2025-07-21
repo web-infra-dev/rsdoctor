@@ -310,7 +310,7 @@ export const BundleOverall: React.FC<{
                 >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <span style={{ marginRight: '8px', fontSize: '13px' }}>
-                      View Bundler Size
+                      {t('ViewBundleSize')}
                     </span>
                     <RightOutlined style={{ fontSize: '10px' }} />
                   </div>

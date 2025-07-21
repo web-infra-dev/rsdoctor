@@ -15,6 +15,7 @@ const cn: typeof en = {
   ModuleResolve: 'Module Resolve 分析',
   'Bundle Analysis': '产物分析',
   BundleSize: '产物体积分析',
+  ViewBundleSize: '查看包大小',
   'Module Graph': 'Module Graph',
   TreeShaking: 'Tree Shaking',
   'Rule Index': '错误索引信息',
