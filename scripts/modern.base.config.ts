@@ -4,8 +4,6 @@ import {
   type PartialBaseBuildConfig,
 } from '@modern-js/module-tools';
 
-import path from 'path';
-
 const define = {
   RSDOCTOR_VERSION: require('../packages/core/package.json').version,
 };
@@ -23,44 +21,6 @@ export const baseBuildConfig = {
 };
 
 export default defineConfig(baseBuildConfig);
-
-export const buildConfigWithMjs: PartialBaseBuildConfig[] = [
-  {
-    format: 'cjs',
-    target: BUILD_TARGET,
-    define,
-    autoExtension: true,
-    dts: {
-      respectExternal: false,
-    },
-  },
-  {
-    format: 'esm',
-    target: BUILD_TARGET,
-    dts: false,
-    define,
-    autoExtension: true,
-    shims: true,
-    esbuildOptions: (option) => {
-      let { inject } = option;
-      const filepath = path.join(__dirname, 'requireShims.js');
-      if (inject) {
-        inject.push(filepath);
-      } else {
-        inject = [filepath];
-      }
-      return {
-        ...option,
-        inject,
-      };
-    },
-  },
-];
-
-export const configWithMjs = defineConfig({
-  plugins: [moduleTools()],
-  buildConfig: buildConfigWithMjs,
-});
 
 export const configWithEsm = defineConfig({
   plugins: [moduleTools()],

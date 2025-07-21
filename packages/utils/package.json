@@ -11,32 +11,32 @@
     ".": {
       "types": "./dist/type/index.d.ts",
       "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js"
+      "import": "./dist/esm/index.mjs"
     },
     "./common": {
       "types": "./dist/type/common/index.d.ts",
       "require": "./dist/cjs/common/index.js",
-      "import": "./dist/esm/common/index.js"
+      "import": "./dist/esm/common/index.mjs"
     },
     "./build": {
       "types": "./dist/type/build/index.d.ts",
       "require": "./dist/cjs/build/index.js",
-      "import": "./dist/esm/build/index.js"
+      "import": "./dist/esm/build/index.mjs"
     },
     "./error": {
       "types": "./dist/type/error/index.d.ts",
       "require": "./dist/cjs/error/index.js",
-      "import": "./dist/esm/error/index.js"
+      "import": "./dist/esm/error/index.mjs"
     },
     "./ruleUtils": {
       "types": "./dist/type/rule-utils/index.d.ts",
       "require": "./dist/cjs/rule-utils/index.js",
-      "import": "./dist/esm/rule-utils/index.js"
+      "import": "./dist/esm/rule-utils/index.mjs"
     },
     "./logger": {
       "types": "./dist/type/logger.d.ts",
       "require": "./dist/cjs/logger.js",
-      "import": "./dist/esm/logger.js"
+      "import": "./dist/esm/logger.mjs"
     }
   },
   "typesVersions": {
@@ -67,9 +67,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "modern build",
+    "build": "rslib build",
     "dev": "npm run start",
-    "start": "modern build -w",
+    "start": "rslib build -w",
     "test": "rstest run"
   },
   "dependencies": {
@@ -92,6 +92,7 @@
     "strip-ansi": "^6.0.1"
   },
   "devDependencies": {
+    "@rslib/core": "^0.10.6",
     "@types/babel__code-frame": "7.0.6",
     "@types/connect": "3.4.38",
     "@types/deep-eql": "4.0.2",
