@@ -1,0 +1,23 @@
+{
+  "extends": "@rsdoctor/tsconfig/base",
+  "compilerOptions": {
+    "experimentalDecorators": true
+  },
+  "references": [
+    {
+      "path": "./packages/core/tsconfig.json"
+    },
+    {
+      "path": "./packages/types/tsconfig.json"
+    },
+    {
+      "path": "./packages/utils/tsconfig.json"
+    },
+    {
+      "path": "./packages/graph/tsconfig.json"
+    },
+    {
+      "path": "./packages/sdk/tsconfig.json"
+    }
+  ]
+}

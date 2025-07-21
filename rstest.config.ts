@@ -9,9 +9,9 @@ export default defineConfig({
   restoreMocks: true,
   source: {
     decorators: {
-      version: 'legacy'
+      version: 'legacy',
     },
-    tsconfigPath: 'packages/core/tsconfig.json',
+    tsconfigPath: './tsconfig.test.json',
   },
   include: ['packages/**/*.test.ts'],
   exclude: ['**/node_modules/**', 'packages/ai/**/*.test.ts'],
