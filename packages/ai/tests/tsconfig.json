@@ -1,5 +1,5 @@
 {
   "extends": "../tsconfig.json",
-  "include": [".", "../vitest.setup.ts"],
+  "include": [".", "../rstest.setup.ts"],
   "exclude": ["fixtures/**/*"]
 }

@@ -1,12 +1,12 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, rs } from '@rstest/core';
 import { setupSDK } from '../../utils';
 
 describe('test hooks of sdk/core.ts', () => {
   const target = setupSDK();
 
   it(`test hook: afterSaveManifest`, async () => {
-    const fn1 = vi.fn();
-    const fn2 = vi.fn();
+    const fn1 = rs.fn();
+    const fn2 = rs.fn();
 
     target.sdk.hooks.afterSaveManifest.tapPromise('AAA', async (arg) =>
       fn1(arg),

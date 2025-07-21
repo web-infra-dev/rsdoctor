@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import { Crypto } from '../src/common';
 
 describe('test src/crypto.ts', () => {

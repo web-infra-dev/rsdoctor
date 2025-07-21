@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { expect, test } from 'vitest';
+import { expect, test } from '@rstest/core';
 import { ChatGPT } from './model/openai';
 import type { Chunk, SimpleChunk } from '@/types/index';
 import { getOversizedChunks, getSimpleChunk } from '@/utils/index';

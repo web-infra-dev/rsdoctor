@@ -1,14 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, rs } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 import { setupSDK } from '../../utils';
 
-vi.setConfig({ testTimeout: 50000 });
+rs.setConfig({ testTimeout: 50000 });
 
 describe('test server/apis/data.ts', () => {
   const target = setupSDK();
 
   it(`test api: ${SDK.ServerAPI.API.ReportLoader}`, async () => {
-    const spy = vi
+    const spy = rs
       .spyOn(target.sdk, 'reportLoader')
       .mockImplementation(() => {});
 

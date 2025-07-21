@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import { Algorithm, Manifest } from '../../src/common';
 
 describe('test src/common/manifest.ts', () => {

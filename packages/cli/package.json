@@ -21,7 +21,7 @@
     "dev": "npm run start",
     "build": "modern build",
     "start": "modern build -w",
-    "test": "vitest run"
+    "test": "rstest run"
   },
   "devDependencies": {
     "@types/yargs": "17.0.33",

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 import { Resolver } from '../../src/common';
 
