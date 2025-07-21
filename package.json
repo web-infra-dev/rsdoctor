@@ -7,13 +7,13 @@
     ]
   },
   "scripts": {
-    "build": "cross-env NX_DAEMON=false nx run-many -t build --exclude @examples/* @scripts/* @e2e/* --parallel=10",
+    "build": "cross-env NX_DAEMON=false nx run-many -t build --projects=@rsdoctor/*,@examples/rsdoctor-rspack-banner --parallel=10",
     "change": "changeset",
     "changeset": "changeset",
     "bump": "changeset version",
     "check-spell": "pnpx cspell && heading-case",
     "check-changeset": "pnpx disallow-major-changeset",
-    "check-dependency-version": "pnpx check-dependency-version-consistency .",
+    "check-dependency-version": "pnpx check-dependency-version-consistency . && echo",
     "dev:doc": "cd packages/document && pnpm run dev",
     "e2e": "pnpm run e2e:base && pnpm run e2e:native",
     "e2e:base": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
@@ -36,9 +36,9 @@
     "package.json": "pnpm run check-dependency-version"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.1",
+    "@biomejs/biome": "^2.1.1",
     "@changesets/cli": "^2.29.5",
-    "@modern-js/module-tools": "^2.67.11",
+    "@modern-js/module-tools": "^2.68.3",
     "@rsdoctor/tsconfig": "workspace:*",
     "@rstest/core": "0.0.9",
     "@scripts/test-helper": "workspace:*",

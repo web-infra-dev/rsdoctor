@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -14,7 +14,7 @@
     "bin"
   ],
   "bin": {
-    "rsdoctor-mcp": "./bin/rsdoctor-mcp"
+    "rsdoctor-mcp": "./bin/rsdoctor-mcp.js"
   },
   "type": "module",
   "scripts": {
@@ -27,7 +27,7 @@
     "socket.io-client": "4.6.1"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "1.13.2",
+    "@modelcontextprotocol/sdk": "1.16.0",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rslib/core": "^0.9.2",

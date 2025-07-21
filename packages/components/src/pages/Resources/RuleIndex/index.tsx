@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Rule } from '@rsdoctor/types';
 import { Badge, Card, Space, Typography, Col, Row, Tag } from 'antd';
 import ReactMarkdown from 'react-markdown';
-import { values } from 'lodash-es';
 import { Title } from '../../../components/Title';
 import { Size } from '../../../constants';
 import { useUrlQuery } from '../../../utils';
@@ -10,12 +9,14 @@ import { useUrlQuery } from '../../../utils';
 export const Page: React.FC = () => {
   const query = useUrlQuery();
 
-  const defaultErrorCode = query[Rule.RsdoctorRuleClientConstant.UrlQueryForErrorCode] || '';
+  const defaultErrorCode =
+    query[Rule.RsdoctorRuleClientConstant.UrlQueryForErrorCode] || '';
 
-  // @ts-ignore
-  const [ruleMessage, setRuleMessage] = useState<Rule.RuleMessage>(Rule.RuleErrorMap[defaultErrorCode]);
+  const [ruleMessage, setRuleMessage] = useState<Rule.RuleMessage>(
+    Rule.RuleErrorMap[defaultErrorCode as keyof typeof Rule.RuleErrorMap],
+  );
 
-  const dataSource = values(Rule.RuleErrorMap)!;
+  const dataSource = Object.values(Rule.RuleErrorMap)!;
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -28,7 +29,10 @@ export const Page: React.FC = () => {
           <Space direction="vertical">
             {dataSource.map((e, i) => (
               <Space
-                style={{ marginTop: i === 0 ? 0 : Size.BasePadding / 2, cursor: 'pointer' }}
+                style={{
+                  marginTop: i === 0 ? 0 : Size.BasePadding / 2,
+                  cursor: 'pointer',
+                }}
                 onClick={() => setRuleMessage(e)}
                 key={e.code}
                 align="center"
@@ -37,7 +41,14 @@ export const Page: React.FC = () => {
                 <Typography.Text code>
                   <a>{e.code}</a>
                 </Typography.Text>
-                <Typography.Text style={{ color: ruleMessage && ruleMessage.code === e.code ? '#1890ff' : undefined }}>
+                <Typography.Text
+                  style={{
+                    color:
+                      ruleMessage && ruleMessage.code === e.code
+                        ? '#1890ff'
+                        : undefined,
+                  }}
+                >
                   {e.title}
                 </Typography.Text>
               </Space>
@@ -64,6 +75,7 @@ export const Page: React.FC = () => {
           >
             <Typography.Paragraph>
               {ruleMessage.type === 'markdown' ? (
+                // TODO: ReactMarkdown will increase the bundle size by 100 KB. Need to optimize with another component or solution.
                 <ReactMarkdown>{ruleMessage.description}</ReactMarkdown>
               ) : (
                 <Typography.Text>{ruleMessage.description}</Typography.Text>
@@ -71,8 +83,15 @@ export const Page: React.FC = () => {
             </Typography.Paragraph>
           </Card>
         ) : (
-          <Card title={'This page lists all the error codes emitted by the Rsdoctor.'} bordered>
-            <Typography.Text>click the error code in left bar to show more details.</Typography.Text>
+          <Card
+            title={
+              'This page lists all the error codes emitted by the Rsdoctor.'
+            }
+            bordered
+          >
+            <Typography.Text>
+              click the error code in left bar to show more details.
+            </Typography.Text>
           </Card>
         )}
       </Col>
@@ -80,4 +99,4 @@ export const Page: React.FC = () => {
   );
 };
 
-export * from './constants'
+export * from './constants';

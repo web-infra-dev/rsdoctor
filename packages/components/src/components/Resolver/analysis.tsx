@@ -8,7 +8,7 @@ import {
 import { SDK } from '@rsdoctor/types';
 import { Resolver } from '@rsdoctor/utils/common';
 import { Button, Card, Col, Row, Space, Table, Typography } from 'antd';
-import { get, map } from 'lodash-es';
+import { get } from 'lodash-es';
 import React, { useMemo, useState } from 'react';
 import { Size } from '../../constants';
 import { createFileStructures, formatCosts, mapFileKey } from '../../utils';
@@ -123,7 +123,7 @@ export const ResolverFiles: React.FC<{
   const n = '/node_modules/';
 
   const paths = useMemo(() => {
-    return map(resolver, (e) => e.issuerPath).filter(Boolean);
+    return resolver.map((e) => e.issuerPath).filter(Boolean);
   }, [resolver]);
 
   const filterPaths = useMemo(() => {

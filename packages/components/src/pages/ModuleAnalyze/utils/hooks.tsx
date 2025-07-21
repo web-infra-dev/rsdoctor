@@ -1,8 +1,8 @@
 import { SDK } from '@rsdoctor/types';
-import { compact } from 'lodash-es';
 import { useMemo } from 'react';
 import { formatSize, getShortPath } from 'src/utils';
 import { getImporteds } from '.';
+import { Lodash } from '@rsdoctor/utils/common';
 
 export type NewTreeNodeType = {
   __RESOURCEPATH__: string;
@@ -30,7 +30,7 @@ export function useCreateFileTreeData(
     if (!importedModules || !importedModules?.length) {
       return { filterData: [], data: [] };
     }
-    const root = compact(
+    const root = Lodash.compact(
       importedModules?.map((imported, index) => {
         return {
           key: `0-${index}`,

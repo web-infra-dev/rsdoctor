@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Table, Tooltip } from 'antd';
-import { flatten, includes, map, sumBy, uniq, values } from 'lodash-es';
+import { sumBy, uniq } from 'lodash-es';
 import { SDK } from '@rsdoctor/types';
 import { formatCosts } from '../../utils';
 
@@ -19,19 +19,28 @@ export function useWebpackPluginsDataSource(
   selectedTapNames: string[],
   selectedHooks: string[],
 ) {
-  const tapNames = useMemo(() => uniq(map(flatten(values(plugin)), (e) => e.tapName)), [plugin]);
+  const tapNames = useMemo(
+    () =>
+      uniq(
+        Object.values(plugin)
+          .flat()
+          .map((e) => e.tapName),
+      ),
+    [plugin],
+  );
+
   const hooks = useMemo(() => Object.keys(plugin), [plugin]);
 
   const dataSource = useMemo(() => {
     if (!tapNames.length) return [];
 
     return tapNames.reduce((total, tapName) => {
-      if (selectedTapNames.length && !includes(selectedTapNames, tapName)) {
+      if (selectedTapNames.length && !selectedTapNames.includes(tapName)) {
         return total;
       }
 
       hooks.forEach((hook) => {
-        if (selectedHooks.length && !includes(selectedHooks, hook)) {
+        if (selectedHooks.length && !selectedHooks.includes(hook)) {
           return;
         }
 
@@ -56,7 +65,9 @@ export function useWebpackPluginsDataSource(
   };
 }
 
-export const WebpackPluginsDataTable: React.FC<WebpackPluginsDataTableProps> = ({ dataSource }) => {
+export const WebpackPluginsDataTable: React.FC<
+  WebpackPluginsDataTableProps
+> = ({ dataSource }) => {
   return (
     <Table
       dataSource={dataSource}
@@ -73,7 +84,9 @@ export const WebpackPluginsDataTable: React.FC<WebpackPluginsDataTableProps> = (
         {
           title: 'calls',
           render: (_v, r) => (
-            <Tooltip title={`"${r.hook}" has been called ${r.data.length} times by "${r.tapName}"`}>
+            <Tooltip
+              title={`"${r.hook}" has been called ${r.data.length} times by "${r.tapName}"`}
+            >
               {r.data.length}
             </Tooltip>
           ),
@@ -85,7 +98,9 @@ export const WebpackPluginsDataTable: React.FC<WebpackPluginsDataTableProps> = (
           title: 'duration(total)',
           render: (_v, r) => formatCosts(sumBy(r.data, (e) => e.costs)),
           sorter(a, b) {
-            return sumBy(a.data, (e) => e.costs) - sumBy(b.data, (e) => e.costs);
+            return (
+              sumBy(a.data, (e) => e.costs) - sumBy(b.data, (e) => e.costs)
+            );
           },
           defaultSortOrder: 'descend',
         },

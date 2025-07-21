@@ -10,6 +10,7 @@ export interface WebpackConfigData {
   version: string | number;
   bin?: string;
   config: Configuration | RspackConfigurationWrapper;
+  root: string;
 }
 
 export type ConfigData = WebpackConfigData[];

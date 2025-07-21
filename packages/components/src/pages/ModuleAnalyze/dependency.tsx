@@ -1,10 +1,10 @@
 import { SDK } from '@rsdoctor/types';
 import { Col, Empty, Row } from 'antd';
-import { compact, find } from 'lodash-es';
 import React, { memo, useMemo } from 'react';
 import { getShortPath } from '../../utils';
 import { FileTree } from './components/fileTreeCom';
 import './index.sass';
+import { Lodash } from '@rsdoctor/utils/common';
 
 const DependencyTree: React.FC<{
   module: SDK.ModuleData;
@@ -13,7 +13,7 @@ const DependencyTree: React.FC<{
 }> = ({ dependencies, cwd, module }) => {
   const treedata = useMemo(() => {
     const dpTreeData = module.dependencies.map((dpId) => {
-      const dp = find(dependencies, (_dp) => _dp.id === dpId);
+      const dp = dependencies.find((_dp) => _dp.id === dpId);
       if (!dp) return;
       return {
         __RESOURCEPATH__: dp.resolvedRequest || '',
@@ -25,7 +25,7 @@ const DependencyTree: React.FC<{
         concatModules: undefined,
       };
     });
-    return compact(dpTreeData);
+    return Lodash.compact(dpTreeData);
   }, [module]);
 
   return (

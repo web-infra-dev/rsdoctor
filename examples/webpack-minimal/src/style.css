@@ -1,4 +1,5 @@
 body {
-	background: green;
-	font-family: "Open Sans";
+  background: green;
+  /* biome-ignore lint/a11y/useGenericFontNames: use generic font names */
+  font-family: 'Open Sans';
 }

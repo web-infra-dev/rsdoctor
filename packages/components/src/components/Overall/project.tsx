@@ -5,7 +5,6 @@ import {
   FileFilled,
   ExperimentFilled,
 } from '@ant-design/icons';
-import { filter } from 'lodash-es';
 
 import { ServerAPIProvider } from '../Manifest';
 import { useI18n, formatSize } from '../../utils';
@@ -28,7 +27,7 @@ export const ProjectOverall: React.FC<{
 }> = ({ configs = [], cwd, envinfo, alerts = [] }) => {
   const { t } = useI18n();
 
-  const warns = filter(alerts, (e) => e.level === 'warn').length;
+  const warns = alerts.filter((e) => e.level === 'warn').length;
 
   const errors = alerts.length - warns;
 

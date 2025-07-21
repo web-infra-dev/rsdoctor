@@ -14,6 +14,7 @@ const en = {
   ModuleResolve: 'Module Resolve',
   'Bundle Analysis': 'Bundle Analysis',
   BundleSize: 'Bundle Size',
+  ViewBundleSize: 'View Bundle Size',
   'Module Graph': 'Module Graph',
   TreeShaking: 'Tree Shaking',
   'Rule Index': 'Rule Index',

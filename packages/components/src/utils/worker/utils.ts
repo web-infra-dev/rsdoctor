@@ -1,10 +1,17 @@
-import { NativeWorkerMessage, UserWorkerEventHandler, WorkerMessage } from './types';
+import {
+  NativeWorkerMessage,
+  UserWorkerEventHandler,
+  WorkerMessage,
+} from './types';
 
 export function sendMessageInClient<T>(msg: WorkerMessage<T>, worker: Worker) {
   return worker.postMessage(msg);
 }
 
-export function sendMessageInWorker<T>(receivedMsg: NativeWorkerMessage, response: T) {
+export function sendMessageInWorker<T>(
+  receivedMsg: NativeWorkerMessage,
+  response: T,
+) {
   const msg: WorkerMessage<T> = {
     id: receivedMsg.data.id,
     data: response,
@@ -18,7 +25,7 @@ export function handleMessageInWorker<T, R>({
   workerName: string;
   handler: UserWorkerEventHandler<T, R>;
 }) {
-  onmessage = (e: NativeWorkerMessage<T>) => {
+  self.onmessage = (e: NativeWorkerMessage<T>) => {
     const res = handler(e.data.data);
     // const prefix = `[${workerName} worker]`;
     // const start = Date.now();

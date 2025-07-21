@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { sumBy, uniq, values } from 'lodash-es';
+import { sumBy, uniq } from 'lodash-es';
 import { SDK } from '@rsdoctor/types';
 import { BundleDiffTablePackagesData } from './types';
 import { formatSize } from '../../../../utils';
@@ -117,7 +117,7 @@ export const getPackagesTableDataSource = ({
   const pre: BundleDiffTablePackagesData[] = [];
   const post: BundleDiffTablePackagesData[] = [];
 
-  values(res).forEach((a) => {
+  Object.values(res).forEach((a) => {
     if (isChanged(a)) {
       pre.push(a);
     } else {
@@ -208,7 +208,10 @@ export const Packages: React.FC<{
             mode="multiple"
             placeholder="Filter by changed type"
             style={{ width: 200 }}
-            options={values(UpdateType).map((e) => ({ label: e, value: e }))}
+            options={Object.values(UpdateType).map((e) => ({
+              label: e,
+              value: e,
+            }))}
             allowClear
             onChange={(e) => {
               setSelectedUpdateTypes(e);

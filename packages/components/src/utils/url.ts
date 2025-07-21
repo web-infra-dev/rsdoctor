@@ -1,6 +1,5 @@
 import parse from 'url-parse';
 import { Constants, Client } from '@rsdoctor/types';
-import { endsWith } from 'lodash-es';
 
 function setDefaultUrl(url: parse<Record<string, string | undefined>>) {
   if (process.env.NODE_ENV !== 'development') {
@@ -13,7 +12,7 @@ function setDefaultUrl(url: parse<Record<string, string | undefined>>) {
 }
 
 function setUploaderHash(url: parse<Record<string, string | undefined>>) {
-  if (endsWith(url.hash, Client.RsdoctorClientRoutes.Uploader)) {
+  if (url.hash.endsWith(Client.RsdoctorClientRoutes.Uploader)) {
     url.set('hash', Client.RsdoctorClientRoutes.Overall);
   }
 }

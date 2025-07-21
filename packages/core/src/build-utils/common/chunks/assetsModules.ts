@@ -1,5 +1,4 @@
 import path from 'path';
-
 import { logger } from '@rsdoctor/utils/logger';
 import { SDK } from '@rsdoctor/types';
 import { ParseBundle } from '@/types';
@@ -24,52 +23,66 @@ export async function getAssetsModulesData(
   opts: {
     parseBundle?: ParseBundle;
   },
-): Promise<ParsedModuleSizeData | null> {
-  const { parseBundle = () => ({}) as ReturnType<ParseBundle> } = opts || {};
+  sourceMapSets: Map<string, string> = new Map(),
+) {
+  if (opts.parseBundle && sourceMapSets.size < 1) {
+    const { parseBundle = () => ({}) as ReturnType<ParseBundle> } = opts || {};
 
-  const assets = chunkGraph.getAssets();
-  const modules = moduleGraph.getModules();
+    const assets = chunkGraph.getAssets();
+    const modules = moduleGraph.getModules();
 
-  // Trying to parse bundle assets and get real module sizes if `bundleDir` is provided
-  let bundlesSources: Record<string, unknown> | null = null;
-  let parsedModules: ParsedModuleSizeData | null = null;
+    // Trying to parse bundle assets and get real module sizes if `bundleDir` is provided
+    let bundlesSources: Record<string, unknown> | null = null;
+    let parsedModules: ParsedModuleSizeData | null = null;
 
-  if (bundleDir && assets.length) {
-    bundlesSources = {};
-    parsedModules = {};
+    if (bundleDir && assets.length) {
+      bundlesSources = {};
+      parsedModules = {};
 
-    for (const asset of assets) {
-      const assetFile = path.join(bundleDir, asset.path);
-      let bundleInfo: ReturnType<ParseBundle>;
-      try {
-        bundleInfo = parseBundle(assetFile, modules);
-      } catch (err: any) {
-        const { code = '', message } = err;
-        const msg = code === 'ENOENT' ? 'no such file' : message;
-        process.env.DEVTOOLS_NODE_DEV === '1' &&
-          logger.warn(`Error parsing bundle asset "${assetFile}": ${msg}`);
+      for (const asset of assets) {
+        const assetFile = path.join(bundleDir, asset.path);
+        let bundleInfo: ReturnType<ParseBundle>;
+        try {
+          bundleInfo = parseBundle(assetFile, modules);
+        } catch (err: any) {
+          const { code = '', message } = err;
+          const msg = code === 'ENOENT' ? 'no such file' : message;
+          process.env.DEVTOOLS_NODE_DEV === '1' &&
+            logger.warn(`Error parsing bundle asset "${assetFile}": ${msg}`);
 
-        continue;
+          continue;
+        }
+
+        bundlesSources[asset.path] = Lodash.pick(bundleInfo, [
+          'src',
+          'runtimeSrc',
+        ]);
+        Object.assign(parsedModules, bundleInfo?.modules || {});
       }
 
-      bundlesSources[asset.path] = Lodash.pick(bundleInfo, [
-        'src',
-        'runtimeSrc',
-      ]);
-      Object.assign(parsedModules, bundleInfo?.modules || {});
-    }
+      if (Lodash.isEmpty(bundlesSources)) {
+        bundlesSources = null;
+        parsedModules = null;
+        process.env.DEVTOOLS_DEV &&
+          logger.warn(
+            '\nNo bundles were parsed. Analyzer will show only original module sizes from stats file.\n',
+          );
+      }
 
-    if (Lodash.isEmpty(bundlesSources)) {
-      bundlesSources = null;
-      parsedModules = null;
-      process.env.DEVTOOLS_DEV &&
-        logger.warn(
-          '\nNo bundles were parsed. Analyzer will show only original module sizes from stats file.\n',
-        );
+      if (parsedModules) {
+        transformAssetsModulesData(parsedModules, moduleGraph);
+      }
     }
   }
 
-  return parsedModules;
+  for (const [modulePath, codes] of sourceMapSets.entries()) {
+    const module = moduleGraph.getModuleByFile(modulePath);
+    if (!module) continue;
+    module?.setSize({
+      parsedSize: codes.length,
+    });
+    module?.setSource({ parsedSource: codes });
+  }
 }
 
 export function transformAssetsModulesData(

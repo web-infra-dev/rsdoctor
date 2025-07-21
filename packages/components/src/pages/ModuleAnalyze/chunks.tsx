@@ -1,9 +1,10 @@
 import { SDK } from '@rsdoctor/types';
 import { Empty, Table, Tag } from 'antd';
-import { compact, orderBy } from 'lodash-es';
+import { orderBy } from 'lodash-es';
 import React, { useMemo } from 'react';
 import { formatSize } from 'src/utils';
 import './index.sass';
+import { Lodash } from '@rsdoctor/utils/common';
 
 type ChunksDataType = {
   key: string | number;
@@ -54,12 +55,21 @@ export const ChunksTable: React.FC<{
         )),
       };
     });
-    return orderBy(compact(_chunksData), ['size'], ['desc']);
+    return orderBy(Lodash.compact(_chunksData), ['size'], ['desc']);
   }, [chunks]);
 
   return (
     <>
-      {chunksData?.length ? <Table bordered pagination={false} dataSource={chunksData} columns={columns} /> : <Empty />}
+      {chunksData?.length ? (
+        <Table
+          bordered
+          pagination={false}
+          dataSource={chunksData}
+          columns={columns}
+        />
+      ) : (
+        <Empty />
+      )}
     </>
   );
 };

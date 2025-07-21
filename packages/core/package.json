@@ -82,10 +82,11 @@
     "path-browserify": "1.0.1",
     "semver": "^7.7.2",
     "source-map": "^0.7.4",
+    "source-map-js": "^1.2.1",
     "webpack-bundle-analyzer": "^4.10.2"
   },
   "devDependencies": {
-    "@rspack/core": "1.4.4",
+    "@rspack/core": "1.4.8",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.20",
