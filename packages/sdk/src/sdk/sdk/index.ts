@@ -30,6 +30,8 @@ export class RsdoctorSDK<
 
   public type: SDK.ToDataType;
 
+  public _root: string;
+
   private _summary: SDK.SummaryData = { costs: [] };
 
   private _configs: SDK.ConfigData = [];
@@ -56,8 +58,6 @@ export class RsdoctorSDK<
 
   private _tileReportHtml: string | undefined;
 
-  private _root: any;
-
   constructor(options: T) {
     super(options);
     this.server = options.config?.noServer
@@ -70,7 +70,7 @@ export class RsdoctorSDK<
       ? options.type
       : SDK.ToDataType.Normal;
     this.extraConfig = options.config;
-    this._root = findRoot();
+    this._root = findRoot() ?? '';
   }
 
   async bootstrap() {

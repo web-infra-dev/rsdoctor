@@ -86,7 +86,7 @@ export async function collectSourceMaps(
     );
     // Function to resolve real source file paths
     const getRealSourcePath = bindContextCache(
-      _this.sdk.root || process.cwd(),
+      _this.sdk._root || process.cwd(),
       namespace,
       _this._realSourcePathCache,
     );
@@ -225,13 +225,17 @@ function parseAsset(
   let assetContent = '';
   let assetLinesCodeList: string[] = [];
   let map: any = null;
-  if (type === 'map' && assetName.endsWith('.map')) {
+  if (
+    type === 'map' &&
+    assetName.endsWith('.map') &&
+    !asset.name.includes('d.ts')
+  ) {
     assetContent = asset.source.source.source();
     map = JSON.parse(assetContent);
     const bundledAsset = assets.find(
       (asset2) => asset2.source.name === map.file,
     );
-    const bundledCode = bundledAsset ? bundledAsset.source.source() : '';
+    const bundledCode = bundledAsset ? bundledAsset.source.source.source() : '';
     assetLinesCodeList = bundledCode.split(/\r?\n/);
   } else if (
     type === 'js/css' &&
