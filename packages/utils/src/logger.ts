@@ -49,20 +49,32 @@ logger.override({
 const _timers = new Map<string, number>();
 
 function time(label: string) {
+  // Early return if debug is not enabled
+  if (!process.env[Constants.RsdoctorProcessEnvDebugKey]) {
+    return;
+  }
+
   if (_timers.has(label)) {
     logger.warn(`Timer '${label}' already exists.`);
     return;
   }
+
   _timers.set(label, Date.now());
   logger.info(`Timer '${label}' started.`);
 }
 
 function timeEnd(label: string) {
+  // Early return if debug is not enabled
+  if (!process.env[Constants.RsdoctorProcessEnvDebugKey]) {
+    return;
+  }
+
   const start = _timers.get(label);
   if (start == null) {
     logger.warn(`Timer '${label}' does not exist.`);
     return;
   }
+
   const duration = Date.now() - start;
   logger.info(`Timer '${label}' ended: ${duration}ms`);
   _timers.delete(label);
