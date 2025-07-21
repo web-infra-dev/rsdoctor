@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import { expect } from '@rstest/core';
 import { createSnapshotSerializer } from '@scripts/test-helper';
 
