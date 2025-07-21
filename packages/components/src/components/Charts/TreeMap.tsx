@@ -150,16 +150,23 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
               var path = node.path || treePath.join('/');
               var sourceSize = node.sourceSize;
               var bundledSize = node.bundledSize;
+              var level = node.level;
               return [
                 '<div class="tooltip-title">' +
                   echarts.format.encodeHTML(path) +
                   '</div>',
-                '<div><b>Source Size:</b> <b>' +
+                '<div><b>' +
+                  (level === 0 ? 'Asset Size' : 'Source Size') +
+                  ':</b> <b>' +
                   (sourceSize !== undefined ? formatSize(sourceSize) : '-') +
                   '</b></div>',
-                '<div><b>Bundled Size:</b> <b>' +
-                  (bundledSize !== undefined ? formatSize(bundledSize) : '-') +
-                  '</b></div>',
+                !bundledSize
+                  ? ''
+                  : '<div><b>Bundled Size:</b> <b>' +
+                    (bundledSize !== undefined
+                      ? formatSize(bundledSize)
+                      : '-') +
+                    '</b></div>',
               ].join('');
             },
           },
