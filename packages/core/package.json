@@ -65,7 +65,7 @@
     "dev": "npm run start",
     "build": "modern build",
     "start": "modern build -w",
-    "test": "vitest run"
+    "test": "rstest run"
   },
   "dependencies": {
     "@rsbuild/plugin-check-syntax": "1.3.0",

@@ -1,4 +1,4 @@
-import { describe, it, expect, afterAll } from 'vitest';
+import { describe, it, expect, afterAll } from '@rstest/core';
 import os from 'os';
 import fse from 'fs-extra';
 import path from 'path';

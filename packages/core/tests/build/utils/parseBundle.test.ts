@@ -1,7 +1,7 @@
 import { lowerCase } from 'lodash';
 import fs from 'fs';
 import os from 'os';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import { parseBundle } from '@/build-utils/build/utils/parseBundle';
 
 const BUNDLES_DIR = `${__dirname}/bundles`;

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from '@rstest/core';
 import { mapEachRules } from '@/build-utils/build/utils';
 
 describe('test src/build/utils/loader.ts mapEachRules()', () => {

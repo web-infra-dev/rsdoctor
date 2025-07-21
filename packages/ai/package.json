@@ -20,7 +20,7 @@
   "scripts": {
     "build": "rslib build",
     "dev": "rslib build --watch",
-    "test": "vitest run",
+    "test": "rstest run",
     "client": "npm run build && node dist/mcp/index.js"
   },
   "dependencies": {
@@ -34,7 +34,7 @@
     "@types/node": "^22.8.1",
     "axios": "^1.10.0",
     "typescript": "^5.2.2",
-    "vitest": "3.0.9",
+    "@rstest/core": "0.0.9",
     "zod": "^3.24.4"
   },
   "publishConfig": {

@@ -70,7 +70,7 @@
     "build": "modern build",
     "dev": "npm run start",
     "start": "modern build -w",
-    "test": "vitest run"
+    "test": "rstest run"
   },
   "dependencies": {
     "@babel/code-frame": "7.26.2",

@@ -1,5 +1,5 @@
 import path from 'path';
-import { expect, describe, it } from 'vitest';
+import { expect, describe, it } from '@rstest/core';
 import type { SDK } from '@rsdoctor/types';
 import { Module, ModuleGraph, PackageGraph } from '@rsdoctor/graph';
 

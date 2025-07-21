@@ -1,4 +1,4 @@
-import { describe, it, vi, expect } from 'vitest';
+import { describe, it, rs, expect } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 import { setupSDK } from '../../utils';
 
@@ -6,7 +6,7 @@ describe('test server/apis/fs.ts', () => {
   const target = setupSDK();
 
   it(`test api: ${SDK.ServerAPI.API.ApplyErrorFix}`, async () => {
-    const spy = vi
+    const spy = rs
       .spyOn(target.sdk, 'applyErrorFix')
       .mockImplementation(async () => {});
 

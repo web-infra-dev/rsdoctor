@@ -16,7 +16,7 @@
     "dev": "npm run start",
     "start": "modern build -w",
     "build": "modern build",
-    "test": "vitest run"
+    "test": "rstest run"
   },
   "dependencies": {
     "@rsdoctor/core": "workspace:*",

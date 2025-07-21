@@ -1,4 +1,4 @@
-import { expect, describe, it } from 'vitest';
+import { expect, describe, it } from '@rstest/core';
 import { getModuleName } from '../src/graph/module-graph/utils';
 import { readPackageJson } from '../src/graph/package-graph/utils';
 import { join } from 'path';

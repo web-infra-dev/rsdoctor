@@ -1,5 +1,5 @@
-import path from 'path';
-import { expect } from 'vitest';
+import path from 'node:path';
+import { expect } from '@rstest/core';
 import { createSnapshotSerializer } from '@scripts/test-helper';
 
 expect.addSnapshotSerializer(
