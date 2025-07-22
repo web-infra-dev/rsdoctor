@@ -2,6 +2,7 @@ import { Summary } from '@rsdoctor/utils/common';
 import { minBy, sumBy } from 'lodash';
 import type { Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
+import { time, timeEnd } from '@rsdoctor/utils/logger';
 
 export class InternalSummaryPlugin<
   T extends Plugin.BaseCompiler,
@@ -15,20 +16,25 @@ export class InternalSummaryPlugin<
   private postTimes: Map<Summary.SummaryCostsDataName, number> = new Map();
 
   public apply(compiler: T) {
-    compiler.hooks.beforeCompile.tapPromise(
-      this.tapPostOptions,
-      this.beforeCompile,
-    );
+    time('InternalSummaryPlugin.apply');
+    try {
+      compiler.hooks.beforeCompile.tapPromise(
+        this.tapPostOptions,
+        this.beforeCompile,
+      );
 
-    compiler.hooks.afterCompile.tapPromise(
-      this.tapPreOptions,
-      this.afterCompile,
-    );
+      compiler.hooks.afterCompile.tapPromise(
+        this.tapPreOptions,
+        this.afterCompile,
+      );
 
-    compiler.hooks.done.tapPromise(
-      this.tapPostOptions,
-      this.done.bind(this, compiler),
-    );
+      compiler.hooks.done.tapPromise(
+        this.tapPostOptions,
+        this.done.bind(this, compiler),
+      );
+    } finally {
+      timeEnd('InternalSummaryPlugin.apply');
+    }
   }
 
   private mark(key: Summary.SummaryCostsDataName, type: 'pre' | 'post') {
@@ -47,49 +53,66 @@ export class InternalSummaryPlugin<
   }
 
   public beforeCompile = async (): Promise<void> => {
-    // report bootstrap -> compile
-    if (!this.times.has(Summary.SummaryCostsDataName.Bootstrap)) {
-      const costs = Math.floor(process.uptime() * 1000);
-      const startAt = Date.now() - costs;
-      this.report(Summary.SummaryCostsDataName.Bootstrap, startAt);
-      this.mark(Summary.SummaryCostsDataName.Bootstrap, 'post');
+    time('InternalSummaryPlugin.beforeCompile');
+    try {
+      // report bootstrap -> compile
+      if (!this.times.has(Summary.SummaryCostsDataName.Bootstrap)) {
+        const costs = Math.floor(process.uptime() * 1000);
+        const startAt = Date.now() - costs;
+        this.report(Summary.SummaryCostsDataName.Bootstrap, startAt);
+        this.mark(Summary.SummaryCostsDataName.Bootstrap, 'post');
+      }
+    } finally {
+      timeEnd('InternalSummaryPlugin.beforeCompile');
     }
   };
 
   public afterCompile = async (
     compilation: Plugin.BaseCompilation,
   ): Promise<void> => {
-    // child Compiler hook time cannot use as main compile's.
-    if (
-      !this.times.has(Summary.SummaryCostsDataName.Compile) &&
-      !compilation.compiler.isChild()
-    ) {
-      // report compile -> after compile
-      const start = this.postTimes.get(Summary.SummaryCostsDataName.Bootstrap)!;
-      this.report(Summary.SummaryCostsDataName.Compile, start);
-      this.mark(Summary.SummaryCostsDataName.Compile, 'post');
+    time('InternalSummaryPlugin.afterCompile');
+    try {
+      // child Compiler hook time cannot use as main compile's.
+      if (
+        !this.times.has(Summary.SummaryCostsDataName.Compile) &&
+        !compilation.compiler.isChild()
+      ) {
+        // report compile -> after compile
+        const start = this.postTimes.get(
+          Summary.SummaryCostsDataName.Bootstrap,
+        )!;
+        this.report(Summary.SummaryCostsDataName.Compile, start);
+        this.mark(Summary.SummaryCostsDataName.Compile, 'post');
+      }
+    } finally {
+      timeEnd('InternalSummaryPlugin.afterCompile');
     }
   };
 
   public done = async (compiler: T): Promise<void> => {
-    // report compile -> done
-    const start = this.postTimes.get(Summary.SummaryCostsDataName.Compile)!;
-    this.report(Summary.SummaryCostsDataName.Done, start);
+    time('InternalSummaryPlugin.done');
+    try {
+      // report compile -> done
+      const start = this.postTimes.get(Summary.SummaryCostsDataName.Compile)!;
+      this.report(Summary.SummaryCostsDataName.Done, start);
 
-    // report minify costs
-    if (compiler.options.optimization.minimize !== false) {
-      const pluginData = this.sdk.getStoreData().plugin;
-      const minifyHookData = [...(pluginData.processAssets || [])];
-      minifyHookData.length &&
-        this.sdk.reportSummaryData({
-          costs: [
-            {
-              name: Summary.SummaryCostsDataName.Minify,
-              startAt: minBy(minifyHookData, (e) => e.startAt)!.startAt,
-              costs: sumBy(minifyHookData, (e) => e.costs),
-            },
-          ],
-        });
+      // report minify costs
+      if (compiler.options.optimization.minimize !== false) {
+        const pluginData = this.sdk.getStoreData().plugin;
+        const minifyHookData = [...(pluginData.processAssets || [])];
+        minifyHookData.length &&
+          this.sdk.reportSummaryData({
+            costs: [
+              {
+                name: Summary.SummaryCostsDataName.Minify,
+                startAt: minBy(minifyHookData, (e) => e.startAt)!.startAt,
+                costs: sumBy(minifyHookData, (e) => e.costs),
+              },
+            ],
+          });
+      }
+    } finally {
+      timeEnd('InternalSummaryPlugin.done');
     }
   };
 

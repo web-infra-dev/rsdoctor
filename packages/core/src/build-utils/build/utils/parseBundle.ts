@@ -7,7 +7,7 @@ import { extname } from 'path';
 
 import { SDK } from '@rsdoctor/types';
 import { ParseBundle } from '@/types';
-import { debug } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/utils/logger';
 
 /**
  * The following code is based on
@@ -110,7 +110,7 @@ export const parseBundle: ParseBundle = (
           c(node.expression, state);
         }
       } catch (e: any) {
-        debug(() => e);
+        logger.debug(e);
       }
 
       state.expressionStatementDepth--;
@@ -153,7 +153,7 @@ export const parseBundle: ParseBundle = (
           node.body.forEach((n: any) => _c(n, state));
         }
       } catch (e: any) {
-        debug(() => e);
+        logger.debug(e);
       }
 
       state.expressionStatementDepth--;
@@ -570,7 +570,7 @@ function getStringBetween(
       },
     };
   } catch (e: any) {
-    debug(() => e);
+    logger.debug(() => e);
     return {
       result: null,
       remain: position,

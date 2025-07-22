@@ -129,7 +129,7 @@ async function doneHandler(
     };
   })();
   logger.debug(
-    `${(Process.getMemoryUsageMessage, '[Before Generate ModuleGraph]')}`,
+    `${(Process.getMemoryUsageMessage(), '[Before Generate ModuleGraph]')}`,
   );
 
   // Generate chunk graph if not already present
@@ -154,7 +154,7 @@ async function doneHandler(
   }
 
   logger.debug(
-    `${(Process.getMemoryUsageMessage, '[After Generate ModuleGraph]')}`,
+    `${(Process.getMemoryUsageMessage(), '[After Generate ModuleGraph]')}`,
   );
 
   /**
@@ -180,7 +180,7 @@ async function doneHandler(
     }
     logger.debug(
       `${
-        (Process.getMemoryUsageMessage,
+        (Process.getMemoryUsageMessage(),
         '[After AppendTreeShaking to ModuleGraph]')
       }`,
     );
@@ -200,7 +200,7 @@ async function doneHandler(
   );
 
   logger.debug(
-    `${(Process.getMemoryUsageMessage, '[After Transform ModuleGraph]')}`,
+    `${Process.getMemoryUsageMessage()}, '[After Transform ModuleGraph]'`,
   );
 
   // Report graphs to SDK for further processing or client display

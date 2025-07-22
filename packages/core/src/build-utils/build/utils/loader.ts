@@ -7,7 +7,7 @@ import { Rule, SourceMapInput as WebpackSourceMapInput } from '../../../types';
 import { readPackageJson } from '@rsdoctor/graph';
 import { RuleSetUseItem } from '@rspack/core';
 import { RuleSetUseItem as WebpackRuleSetUseItem } from 'webpack';
-import { debug } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/utils/logger';
 
 // webpack https://github.com/webpack/webpack/blob/2953d23a87d89b3bd07cf73336ee34731196c62e/lib/util/identifier.js#L311
 // rspack https://github.com/web-infra-dev/rspack/blob/d22f049d4bce4f8ac20c1cbabeab3706eddaecc1/packages/rspack/src/loader-runner/index.ts#L47
@@ -180,7 +180,7 @@ export function isESMLoader(r: Plugin.BuildRuleSetRule) {
       try {
         return fse.readJsonSync(file, { encoding: 'utf8' });
       } catch (e) {
-        debug(() => `isESMLoader function error：${e}`);
+        logger.debug(`isESMLoader function error：${e}`);
       }
     });
 
