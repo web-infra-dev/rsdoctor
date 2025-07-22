@@ -1,5 +1,5 @@
 import path from 'path';
-import { logger } from '@rsdoctor/utils/logger';
+import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 import { SDK } from '@rsdoctor/types';
 import { ParseBundle } from '@/types';
 import { Lodash } from '@rsdoctor/utils/common';
@@ -26,6 +26,7 @@ export async function getAssetsModulesData(
   sourceMapSets: Map<string, string> = new Map(),
 ) {
   if (opts.parseBundle && sourceMapSets.size < 1) {
+    time(`Start Parse bundle by AST.`);
     const { parseBundle = () => ({}) as ReturnType<ParseBundle> } = opts || {};
 
     const assets = chunkGraph.getAssets();
@@ -73,15 +74,18 @@ export async function getAssetsModulesData(
         transformAssetsModulesData(parsedModules, moduleGraph);
       }
     }
-  }
-
-  for (const [modulePath, codes] of sourceMapSets.entries()) {
-    const module = moduleGraph.getModuleByFile(modulePath);
-    if (!module) continue;
-    module?.setSize({
-      parsedSize: codes.length,
-    });
-    module?.setSource({ parsedSource: codes });
+    timeEnd(`Start Parse bundle by AST.`);
+  } else {
+    time(`Start Parse bundle by sourcemap.`);
+    for (const [modulePath, codes] of sourceMapSets.entries()) {
+      const module = moduleGraph.getModuleByFile(modulePath);
+      if (!module) continue;
+      module?.setSize({
+        parsedSize: codes.length,
+      });
+      module?.setSource({ parsedSource: codes });
+    }
+    timeEnd(`Start Parse bundle by sourcemap.`);
   }
 }
 

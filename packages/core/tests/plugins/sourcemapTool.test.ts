@@ -5,7 +5,7 @@ import os from 'os';
 import {
   bindContextCache,
   collectSourceMaps,
-  handleEmitAssets,
+  handleAfterEmitAssets,
 } from '../../src/inner-plugins/plugins/sourcemapTool';
 
 // Read the real source map and bundle as test fixtures
@@ -22,6 +22,16 @@ const jsMap = JSON.parse(fs.readFileSync(jsMapPath, 'utf-8'));
 const jsContent = fs.readFileSync(jsPath, 'utf-8');
 const jsLines = jsContent.split(/\r?\n/);
 
+// Add mock source map before createMockPluginInstance
+const mockJsMap = {
+  version: 3,
+  sources: ['src/index.js'],
+  names: [],
+  mappings: 'AAAA;AACA',
+  file: 'main.js',
+  sourcesContent: ['console.log("test");\n'],
+};
+
 // mock RsdoctorPluginInstance and Compilation
 function createMockPluginInstance() {
   return {
@@ -33,20 +43,29 @@ function createMockPluginInstance() {
 }
 function createMockCompilation() {
   return {
-    compiler: { webpack: {} },
-    getAssets: () => ({
-      'main.js': {
+    compiler: { rspack: {} },
+    getAssets: () => [
+      {
         name: 'main.js',
-        source: () => jsContent,
-        sourceAndMap: () => ({ source: jsContent, map: jsMap }),
+        source: {
+          source: () => 'console.log("test");\n',
+          name: 'main.js',
+          sourceAndMap: () => ({
+            source: 'console.log("test");\n',
+            map: mockJsMap,
+          }),
+        },
         info: {},
       },
-      'main.js.map': {
+      {
         name: 'main.js.map',
-        source: { source: () => JSON.stringify(jsMap) },
+        source: {
+          source: () => JSON.stringify(mockJsMap),
+          name: 'main.js.map',
+        },
         info: {},
       },
-    }),
+    ],
   } as any;
 }
 
@@ -80,14 +99,7 @@ describe('sourcemapTool', () => {
       const compilation = createMockCompilation();
       const regex =
         /webpack:\/\/(?:@examples\/rsdoctor-rspack-banner\/)?([^?]*)/;
-      await collectSourceMaps(
-        jsMap,
-        jsLines,
-        compilation,
-        plugin,
-        regex,
-        '@examples/rsdoctor-rspack-banner',
-      );
+      await collectSourceMaps(jsMap, jsLines, compilation, plugin, regex);
       // Assert that sourceMapSets is filled
       expect(plugin.sourceMapSets.size).toBeGreaterThan(0);
       // Assert that there is a key related to dayjs.min.js
@@ -102,16 +114,11 @@ describe('sourcemapTool', () => {
     it('should process assets and fill sourceMapSets', async () => {
       const plugin = createMockPluginInstance();
       const compilation = createMockCompilation();
-      const regex =
-        /webpack:\/\/(?:@examples\/rsdoctor-rspack-banner\/)?([^?]*)/;
-      await handleEmitAssets({
-        compilation,
-        pluginInstance: plugin,
-        sourceMapFilenameRegex: regex,
-        namespace: '@examples/rsdoctor-rspack-banner',
-      });
-      // Assert that sourceMapSets is filled
-      expect(plugin.sourceMapSets.size).toBeGreaterThan(0);
+      await handleAfterEmitAssets(compilation, plugin);
+
+      expect(plugin.sourceMapSets.size).toBe(1);
+      const sourceMap = plugin.sourceMapSets.get('src/index.js');
+      expect(sourceMap).toBe('console.log("test");');
     });
   });
 });
