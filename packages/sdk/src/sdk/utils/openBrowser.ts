@@ -12,6 +12,9 @@ import { promisify } from 'node:util';
 import { logger } from '@rsdoctor/utils/logger';
 import { join } from 'node:path';
 
+// TODO: update to 10.x after pure esm
+import open from 'open';
+
 const execAsync = promisify(exec);
 
 const supportedChromiumBrowsers = [
@@ -47,7 +50,8 @@ export async function openBrowser(
   // requested a different browser, we can try opening
   // a Chromium browser with AppleScript. This lets us reuse an
   // existing tab when possible instead of creating a new one.
-  const shouldTryOpenChromeWithAppleScript = process.platform === 'darwin';
+  const shouldTryOpenChromeWithAppleScript =
+    process.platform === 'darwin' || process.platform === 'win32';
   if (shouldTryOpenChromeWithAppleScript) {
     try {
       const targetBrowser = await getTargetBrowser();
@@ -73,7 +77,7 @@ export async function openBrowser(
     // Fallback to open
     // (It will always open new tab)
     try {
-      const { default: open } = await import('open');
+      // TODO: delay import of open, https://github.com/web-infra-dev/rsdoctor/pull/1091
       await open(url);
       return true;
     } catch (err) {
