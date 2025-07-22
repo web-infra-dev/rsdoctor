@@ -9,7 +9,7 @@ import { PassThrough } from 'stream';
 import { Socket } from './socket';
 import { Router } from './router';
 import * as APIs from './apis';
-import { chalk, debug, logger } from '@rsdoctor/utils/logger';
+import { chalk, logger } from '@rsdoctor/utils/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
 import { getLocalIpAddress } from './utils';
@@ -90,9 +90,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
     GlobalConfig.writeMcpPort(this.port, this.sdk.name);
 
-    debug(
-      () =>
-        `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,
+    logger.debug(
+      `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,
     );
 
     this.disposed = false;

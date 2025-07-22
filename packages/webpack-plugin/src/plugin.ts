@@ -20,7 +20,7 @@ import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { findRoot, openBrowser, RsdoctorSDK } from '@rsdoctor/sdk';
 import { Constants, Linter, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
-import { chalk, debug } from '@rsdoctor/utils/logger';
+import { chalk, logger } from '@rsdoctor/utils/logger';
 import { cloneDeep } from 'lodash';
 import path from 'path';
 import type { Compiler, Configuration, RuleSetRule } from 'webpack';
@@ -201,13 +201,19 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   public done = async (): Promise<void> => {
     try {
       this.sdk.server.broadcast();
-      debug(Process.getMemoryUsageMessage, '[Before Write Manifest]');
+      logger.debug(
+        `${Process.getMemoryUsageMessage()}, '[Before Write Manifest]'`,
+      );
       await this.sdk.writeStore();
-      debug(Process.getMemoryUsageMessage, '[After Write Manifest]');
+      logger.debug(
+        `${Process.getMemoryUsageMessage()}, '[After Write Manifest]'`,
+      );
 
       if (this.options.disableClientServer) {
         await this.sdk.dispose();
-        debug(Process.getMemoryUsageMessage, '[After SDK Dispose]');
+        logger.debug(
+          `${Process.getMemoryUsageMessage()}, '[After SDK Dispose]'`,
+        );
       } else if (
         this.options.mode === SDK.IMode[SDK.IMode.brief] &&
         !this.options.disableClientServer

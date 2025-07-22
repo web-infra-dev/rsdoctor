@@ -6,7 +6,7 @@ import { createHash } from 'crypto';
 import process from 'process';
 import { AsyncSeriesHook } from 'tapable';
 const jc = require('json-cycle');
-import { debug } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/utils/logger';
 import { transformDataUrls } from '../utils';
 import { RsdoctorSDKOptions, DataWithUrl } from './types';
 
@@ -174,9 +174,8 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     /** write sharding files and get disk result */
     const dataUrls: DataWithUrl[] = await Promise.all(urlsPromiseList);
 
-    debug(
-      () =>
-        `SDKCore.writePieces extraConfig: ${JSON.stringify(this.extraConfig)}`,
+    logger.debug(
+      `SDKCore.writePieces extraConfig: ${JSON.stringify(this.extraConfig)}`,
       '[SDKCore.writePieces]',
     );
     this.cloudData = {
@@ -191,8 +190,8 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
   protected async writeManifest(): Promise<string> {
     const { cloudData: data, diskManifestPath } = this;
     const dataStr = JSON.stringify(data, null, 2);
-    debug(
-      () => `SDKCore.writeManifest extraConfig: ${this.extraConfig}`,
+    logger.debug(
+      `SDKCore.writeManifest extraConfig: ${this.extraConfig}`,
       '[SDKCore.writeManifest]',
     );
 

@@ -6,7 +6,7 @@ import {
 import fs from 'fs';
 import { omit } from 'lodash';
 import path from 'path';
-import { debug } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/utils/logger';
 import { Loader } from '@rsdoctor/utils/common';
 import { Time } from '@rsdoctor/utils/common';
 import { SDK, Plugin } from '@rsdoctor/types';
@@ -224,14 +224,17 @@ export async function reportLoader(
         timeout: 8888,
       })
       .catch((err: Error) => {
-        debug(() => `${err.message}`, '[WebpackPlugin.ReportLoader][error]');
+        logger.debug(`${err.message}`, '[WebpackPlugin.ReportLoader][error]');
       }),
     axios
       .post(`${host}${SDK.ServerAPI.API.ReportSourceMap}`, sourceMapData, {
         timeout: 8888,
       })
       .catch((err: Error) => {
-        debug(() => `${err.message}`, '[WebpackPlugin.ReportSourceMap][error]');
+        logger.debug(
+          `${err.message}`,
+          '[WebpackPlugin.ReportSourceMap][error]',
+        );
       }),
   ]);
 
