@@ -1,0 +1,86 @@
+.treemap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  :global {
+    .ant-checkbox-wrapper {
+      font-weight: 200;
+      font-size: 12px;
+    }
+
+    .all-none-checkbox {
+      margin-bottom: 4px;
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    .asset-checkbox-group {
+      display: flex;
+      gap: 8px;
+      font-weight: 200;
+    }
+
+    .chart-container {
+      width: 100%;
+      min-height: 500px;
+      max-height: 1000px;
+      border: 5px solid white;
+      border-radius: 10px;
+    }
+
+    .card-body {
+      overflow: hidden;
+      transition:
+        height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        padding 0.3s;
+
+      &.collapsed {
+        height: 0;
+        padding: 0;
+      }
+    }
+
+    .checkbox-container {
+      opacity: 1;
+      transition: opacity 0.3s;
+      gap: 8px;
+
+      &.collapsed {
+        opacity: 0;
+      }
+    }
+
+    .statistics-space {
+      width: 100%;
+    }
+  }
+}
+
+.tooltip {
+  &-row {
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &-label {
+    color: #999;
+  }
+
+  &-path {
+    font-size: 12px;
+    margin-bottom: 8px;
+    width: 280px;
+    word-wrap: break-word;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+  }
+}
+
+.collapse-icon {
+  cursor: pointer;
+  margin-left: 8px;
+}

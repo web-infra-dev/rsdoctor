@@ -45,6 +45,7 @@ export class Module implements SDK.ModuleInstance {
     sourceSize: 0,
     transformedSize: 0,
     parsedSize: 0,
+    gzipSize: 0,
   };
 
   private sourceMap: SourceMapConsumer | undefined;
@@ -258,7 +259,7 @@ export class Module implements SDK.ModuleInstance {
         try {
           size.gzipSize = gzipSync(code, { level: 9 }).length;
         } catch (e) {
-          size.gzipSize = undefined;
+          size.gzipSize = 0;
         }
       }
     }

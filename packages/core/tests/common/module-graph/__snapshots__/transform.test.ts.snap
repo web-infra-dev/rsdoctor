@@ -891,6 +891,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "path": "/Users/demo/node_modules/@angular/common/fesm2022/common.mjs",
       "renderId": undefined,
       "size": {
+        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 267758,
         "transformedSize": 267758,
@@ -918,6 +919,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "path": "/Users/demo/node_modules/@angular/common/fesm2022/http.mjs",
       "renderId": undefined,
       "size": {
+        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 94775,
         "transformedSize": 94775,
@@ -943,6 +945,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "path": "/Users/demo/node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "renderId": undefined,
       "size": {
+        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 76943,
         "transformedSize": 76943,
@@ -966,6 +969,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "path": "/Users/demo/node_modules/@angular/router/fesm2022/router.mjs",
       "renderId": undefined,
       "size": {
+        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 268651,
         "transformedSize": 268651,
@@ -1058,6 +1062,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "renderId": undefined,
       "rootModule": 2,
       "size": {
+        "gzipSize": 0,
         "parsedSize": -1,
         "sourceSize": -1,
         "transformedSize": -1,
@@ -1084,6 +1089,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "path": "entry1.js",
       "renderId": undefined,
       "size": {
+        "gzipSize": 0,
         "parsedSize": -1,
         "sourceSize": -1,
         "transformedSize": -1,
@@ -1112,6 +1118,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "path": "common.js",
       "renderId": undefined,
       "size": {
+        "gzipSize": 0,
         "parsedSize": -1,
         "sourceSize": -1,
         "transformedSize": -1,
@@ -1138,6 +1145,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "renderId": "1",
       "rootModule": 5,
       "size": {
+        "gzipSize": 0,
         "parsedSize": -1,
         "sourceSize": -1,
         "transformedSize": -1,
@@ -1164,6 +1172,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "path": "entry2.js",
       "renderId": undefined,
       "size": {
+        "gzipSize": 0,
         "parsedSize": -1,
         "sourceSize": -1,
         "transformedSize": -1,
