@@ -51,7 +51,7 @@ describe('normalizeUserConfig', () => {
     const result = normalizeUserConfig();
     expect(result.supports.banner).toEqual(undefined);
     expect(result.supports.generateTileGraph).toEqual(undefined);
-    expect(result.supports.gzip).toEqual(false);
+    expect(result.supports.gzip).toEqual(true);
     expect(result.supports.parseBundle).toEqual(true);
   });
 
