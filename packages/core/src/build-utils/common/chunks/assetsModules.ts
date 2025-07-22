@@ -80,8 +80,16 @@ export async function getAssetsModulesData(
     for (const [modulePath, codes] of sourceMapSets.entries()) {
       const module = moduleGraph.getModuleByFile(modulePath);
       if (!module) continue;
+      let gzipSize = undefined;
+      try {
+        if (codes && typeof codes === 'string' && codes.length > 0) {
+          const { gzipSync } = await import('node:zlib');
+          gzipSize = gzipSync(codes, { level: 9 }).length;
+        }
+      } catch {}
       module?.setSize({
         parsedSize: codes.length,
+        gzipSize,
       });
       module?.setSource({ parsedSource: codes });
     }
@@ -96,8 +104,21 @@ export function transformAssetsModulesData(
   if (!moduleGraph) return;
   Object.entries(parsedModulesData).forEach(([moduleId, parsedData]) => {
     const module = moduleGraph.getModuleByWebpackId(moduleId ?? '');
+    // 计算 gzip size
+    let gzipSize = undefined;
+    try {
+      if (
+        parsedData?.content &&
+        typeof parsedData.content === 'string' &&
+        parsedData.content.length > 0
+      ) {
+        const { gzipSync } = require('node:zlib');
+        gzipSize = gzipSync(parsedData.content, { level: 9 }).length;
+      }
+    } catch {}
     module?.setSize({
       parsedSize: parsedData?.size,
+      gzipSize,
     });
     module?.setSource({ parsedSource: parsedData?.content || '' });
   });

@@ -21,6 +21,7 @@ export type TreeNode = {
   path?: string;
   sourceSize?: number;
   bundledSize?: number;
+  gzipSize?: number;
 };
 
 interface TreeMapProps {
@@ -115,6 +116,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             path: node.path,
             sourceSize: node.sourceSize ?? node.value,
             bundledSize: node.bundledSize,
+            gzipSize: node.gzipSize,
             children: children && children.length > 0 ? children : undefined,
             itemStyle: {
               borderWidth: 2,
@@ -150,16 +152,54 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
               var path = node.path || treePath.join('/');
               var sourceSize = node.sourceSize;
               var bundledSize = node.bundledSize;
+              var gzipSize = node.gzipSize;
+              var level = node.level;
+
+              const rowStyle =
+                'font-size: 12px; display: flex; justify-content: space-between;';
+              const labelStyle = 'color: #999;';
+              const pathStyle =
+                'font-size: 12px; margin-bottom: 8px; width: 280px; word-wrap: break-word; white-space: normal; word-break: break-all; line-height: 1.4; overflow-wrap: break-word;';
+
+              function makeRow(
+                label: string,
+                value: string,
+                valueColor?: string,
+              ) {
+                return (
+                  '<div style="' +
+                  rowStyle +
+                  '">' +
+                  '<span style="' +
+                  labelStyle +
+                  '">' +
+                  label +
+                  '</span>' +
+                  '<span' +
+                  (valueColor ? ' style="color: ' + valueColor + '"' : '') +
+                  '>' +
+                  value +
+                  '</span>' +
+                  '</div>'
+                );
+              }
+
               return [
-                '<div class="tooltip-title">' +
+                '<div style="' +
+                  pathStyle +
+                  '">' +
                   echarts.format.encodeHTML(path) +
                   '</div>',
-                '<div><b>Source Size:</b> <b>' +
-                  (sourceSize !== undefined ? formatSize(sourceSize) : '-') +
-                  '</b></div>',
-                '<div><b>Bundled Size:</b> <b>' +
-                  (bundledSize !== undefined ? formatSize(bundledSize) : '-') +
-                  '</b></div>',
+                makeRow(
+                  level === 0 ? 'Asset' : 'Source',
+                  sourceSize !== undefined ? formatSize(sourceSize) : '-',
+                ),
+                !bundledSize
+                  ? ''
+                  : makeRow('Bundled', formatSize(bundledSize), '#1890ff'),
+                !gzipSize
+                  ? ''
+                  : makeRow('Gzipped', formatSize(gzipSize), '#52c41a'),
               ].join('');
             },
           },
