@@ -37,7 +37,11 @@ describe('module graph', () => {
       const module = moduleGraph.getModuleById(item.id)!;
       expect(module).toBeTruthy();
       expect(module.kind).toBe(item.kind);
-      expect(module.getSize()).toStrictEqual(item.size);
+      expect(module.getSize().sourceSize).toStrictEqual(item.size.sourceSize);
+      expect(module.getSize().transformedSize).toStrictEqual(
+        item.size.transformedSize,
+      );
+      expect(module.getSize().parsedSize).toStrictEqual(item.size.parsedSize);
       arrayEq(
         module.getDependencies().map((item) => item.id),
         item.dependencies,
