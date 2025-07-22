@@ -340,7 +340,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 841,
         "transformedSize": 0,
@@ -358,7 +357,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "chalk",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 10477,
         "transformedSize": 0,
@@ -374,7 +372,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "ansi-styles",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 4139,
         "transformedSize": 0,
@@ -390,7 +387,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "supports-color",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 67,
         "transformedSize": 0,
@@ -406,7 +402,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "@babel/highlight",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 2719,
         "transformedSize": 0,
@@ -425,7 +420,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "htmlparser2",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 53921,
         "transformedSize": 0,
@@ -443,7 +437,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "color-convert",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 21005,
         "transformedSize": 0,
@@ -459,7 +452,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "js-tokens",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 1448,
         "transformedSize": 0,
@@ -477,7 +469,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "@babel/helper-validator-identifier",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 15147,
         "transformedSize": 0,
@@ -494,7 +485,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "chalk",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 9572,
         "transformedSize": 0,
@@ -511,7 +501,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "domhandler",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 21324,
         "transformedSize": 0,
@@ -527,7 +516,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "domelementtype",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 1978,
         "transformedSize": 0,
@@ -550,7 +538,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "domutils",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 31488,
         "transformedSize": 0,
@@ -566,7 +553,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "escape-string-regexp",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 226,
         "transformedSize": 0,
@@ -582,7 +568,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "ansi-styles",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 3574,
         "transformedSize": 0,
@@ -598,7 +583,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "supports-color",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 67,
         "transformedSize": 0,
@@ -615,7 +599,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "entities",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 7514,
         "transformedSize": 0,
@@ -631,7 +614,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "color-name",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 4617,
         "transformedSize": 0,
@@ -649,7 +631,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "color-convert",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 20802,
         "transformedSize": 0,
@@ -666,7 +647,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "entities",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 99389,
         "transformedSize": 0,
@@ -683,7 +663,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "dom-serializer",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 10115,
         "transformedSize": 0,
@@ -702,7 +681,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "entities",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 12123,
         "transformedSize": 0,
@@ -718,7 +696,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "color-name",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 4617,
         "transformedSize": 0,
@@ -737,7 +714,6 @@ exports[`module graph > from data basic 1`] = `
       "name": "entities",
       "root": "",
       "size": {
-        "gzipSize": 0,
         "parsedSize": 0,
         "sourceSize": 34685,
         "transformedSize": 0,

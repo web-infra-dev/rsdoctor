@@ -12,7 +12,6 @@ import {
 } from '@ant-design/icons';
 import { formatSize, useI18n } from 'src/utils';
 import { SearchModal } from 'src/pages/BundleSize/components/search-modal';
-import Styles from './treemap.module.scss';
 
 // TreeNode type should match the output of flattenTreemapData
 export type TreeNode = {
@@ -151,23 +150,8 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
               var path = node.path || treePath.join('/');
               var sourceSize = node.sourceSize;
               var bundledSize = node.bundledSize;
-              var gzipSize = node.gzipSize;
-              var level = node.level;
-
-              function makeRow(
-                label: string,
-                value: string,
-                valueColor?: string,
-              ) {
-                return (
-                  `<div class="${Styles['tooltip-row']}">` +
-                  `<span class="${Styles['tooltip-label']}">${label}</span>` +
-                  `<span${valueColor ? ` style="color: ${valueColor}"` : ''}>${value}</span>` +
-                  '</div>'
-                );
-              }
               return [
-                `<div class="${Styles['tooltip-path']}">` +
+                '<div class="tooltip-title">' +
                   echarts.format.encodeHTML(path) +
                   '</div>',
                 '<div><b>Source Size:</b> <b>' +
@@ -221,7 +205,6 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
               borderRadius: '10px',
               ...style,
             }}
-            className={Styles['chart-container']}
           />
         </div>
       ) : null;
@@ -267,10 +250,7 @@ export const AssetTreemapWithFilter: React.FC<{
   };
 
   return (
-    <div
-      style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
-      className={Styles.treemap}
-    >
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Card
           title={
@@ -286,7 +266,7 @@ export const AssetTreemapWithFilter: React.FC<{
           }
           extra={
             <span
-              className={Styles['collapse-icon']}
+              style={{ cursor: 'pointer', marginLeft: 8 }}
               onClick={() => setCollapsed((c) => !c)}
               aria-label={collapsed ? t('Expand') : t('Collapse')}
             >
@@ -298,9 +278,20 @@ export const AssetTreemapWithFilter: React.FC<{
             </span>
           }
           size="small"
-          className={`card-body ${collapsed ? 'collapsed' : ''}`}
+          bodyStyle={{
+            overflow: 'hidden',
+            height: collapsed ? 0 : undefined,
+            padding: collapsed ? 0 : undefined,
+            transition: 'height 0.3s cubic-bezier(.4,0,.2,1), padding 0.3s',
+          }}
         >
-          <div className={`checkbox-container ${collapsed ? 'collapsed' : ''}`}>
+          <div
+            style={{
+              opacity: collapsed ? 0 : 1,
+              transition: 'opacity 0.3s',
+              gap: 8,
+            }}
+          >
             <Checkbox
               key="all-none-checkbox"
               indeterminate={
@@ -311,7 +302,7 @@ export const AssetTreemapWithFilter: React.FC<{
               onChange={(e) =>
                 setCheckedAssets(e.target.checked ? assetNames : [])
               }
-              className={Styles['all-none-checkbox']}
+              style={{ marginBottom: 4 }}
             >
               {'ALL / NONE'}
             </Checkbox>
@@ -320,7 +311,7 @@ export const AssetTreemapWithFilter: React.FC<{
               options={assetNames}
               value={checkedAssets}
               onChange={setCheckedAssets}
-              className={Styles['asset-checkbox-group']}
+              style={{ display: 'flex', gap: 8, fontWeight: 500 }}
             />
           </div>
         </Card>
