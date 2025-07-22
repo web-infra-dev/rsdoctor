@@ -38,7 +38,7 @@ function getDefaultSupports() {
   return {
     parseBundle: true,
     banner: undefined,
-    gzip: false,
+    gzip: true, // change the gzip to true by default.
   };
 }
 

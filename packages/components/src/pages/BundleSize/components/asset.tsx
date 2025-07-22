@@ -382,6 +382,23 @@ const BundledSizeTag = ({ size }: { size: number }) => {
   );
 };
 
+const GzippedSizeTag = ({ size }: { size: number }) => {
+  return (
+    <Tooltip
+      title={
+        <Space>
+          <Typography.Text style={{ color: 'inherit' }}>
+            The compressed file size that users actually download, as most web
+            servers use gzip compression.
+          </Typography.Text>
+        </Space>
+      }
+    >
+      <Tag color={'orange'}>{`gzipped: ${formatSize(size)}`}</Tag>
+    </Tooltip>
+  );
+};
+
 const TotalSourceSizeTag = ({ size }: { size: number }) => {
   return (
     <Tooltip
@@ -462,7 +479,7 @@ export const AssetDetail: React.FC<{
 
         if (!mod) return basename;
 
-        const { parsedSize = 0, sourceSize = 0 } = mod.size;
+        const { parsedSize = 0, sourceSize = 0, gzipSize = 0 } = mod.size;
         const isConcatenation = mod.kind === SDK.ModuleKind.Concatenation;
 
         const containedOtherModules =
@@ -495,17 +512,24 @@ export const AssetDetail: React.FC<{
             </Popover>
             <Space>
               {parsedSize !== 0 ? (
-                <Tooltip
-                  title={
-                    <Space direction="vertical">
+                <>
+                  {typeof gzipSize === 'number' ? (
+                    <Popover
+                      placement="bottom"
+                      content={<SourceSizeTag size={sourceSize} />}
+                    >
+                      <Space direction="horizontal">
+                        <BundledSizeTag size={parsedSize} />
+                        <GzippedSizeTag size={gzipSize} />
+                      </Space>
+                    </Popover>
+                  ) : (
+                    <Space direction="horizontal">
                       <BundledSizeTag size={parsedSize} />
                       <SourceSizeTag size={sourceSize} />
                     </Space>
-                  }
-                  color={'white'}
-                >
-                  <BundledSizeTag size={parsedSize} />
-                </Tooltip>
+                  )}
+                </>
               ) : sourceSize !== 0 ? (
                 // fallback to display tag for source size
                 <SourceSizeTag size={sourceSize} />

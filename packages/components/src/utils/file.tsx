@@ -262,6 +262,7 @@ type TreeNode = {
   path?: string;
   sourceSize?: number;
   bundledSize?: number;
+  gzipSize?: number;
   // Internal helper, not exported
   _map?: Map<string, TreeNode>;
 };
@@ -286,6 +287,7 @@ export function buildTreemapData(
           path: mod.path,
           sourceSize: mod.size?.sourceSize ?? 0,
           bundledSize: mod.size?.parsedSize ?? 0,
+          gzipSize: mod.size?.gzipSize ?? 0,
         });
       } else {
         // Directory node
@@ -338,25 +340,30 @@ function flattenSingleChildDirs(node: TreeNode): TreeNode {
 function sumDirValue(node: TreeNode): {
   sourceSize: number;
   bundledSize: number;
+  gzipSize: number;
 } {
   if (!node.children || node.children.length === 0) {
     // Leaf node, just return value
     return {
       sourceSize: node.sourceSize ?? 0,
       bundledSize: node.bundledSize ?? 0,
+      gzipSize: node.gzipSize ?? 0,
     };
   }
   // Recursively sum all child nodes
   let sourceSum = 0;
   let bundledSum = 0;
+  let gzipSum = 0;
   for (const child of node.children) {
-    const { sourceSize, bundledSize } = sumDirValue(child);
+    const { sourceSize, bundledSize, gzipSize } = sumDirValue(child);
     sourceSum += sourceSize;
     bundledSum += bundledSize;
+    gzipSum += gzipSize;
   }
   node.sourceSize = sourceSum;
   node.bundledSize = bundledSum;
-  return { sourceSize: sourceSum, bundledSize: bundledSum };
+  node.gzipSize = gzipSum;
+  return { sourceSize: sourceSum, bundledSize: bundledSum, gzipSize: gzipSum };
 }
 
 export function flattenTreemapData(
