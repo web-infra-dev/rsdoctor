@@ -39,7 +39,7 @@
     "tapable": "2.2.2"
   },
   "devDependencies": {
-    "@rslib/core": "^0.10.6",
+    "@rslib/core": "^0.11.0",
     "@types/body-parser": "1.19.6",
     "@types/cors": "2.8.19",
     "@types/lodash": "^4.17.20",

@@ -148,6 +148,3 @@ loaderModule.pitch = function (
 // set `raw: true` for every resources, so that can control the result for the correct loader.
 // @ts-ignore
 loaderModule.raw = true;
-
-// @ts-ignore
-export = loaderModule;

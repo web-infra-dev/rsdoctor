@@ -28,7 +28,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@rslib/core": "^0.10.6",
+    "@rslib/core": "^0.11.0",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
