@@ -50,7 +50,7 @@ export interface ModuleSize {
   /**
    * Gzipped size of the module source (optional)
    */
-  gzipSize?: number;
+  gzipSize: number;
 }
 
 /** Module source code */
