@@ -126,12 +126,14 @@ export class Package implements SDK.PackageInstance {
         ans.sourceSize += size.sourceSize;
         ans.transformedSize += size.transformedSize;
         ans.parsedSize += size.parsedSize;
+        ans.gzipSize += size.gzipSize;
         return ans;
       },
       {
         sourceSize: 0,
         transformedSize: 0,
         parsedSize: 0,
+        gzipSize: 0,
       },
     );
   }

@@ -47,6 +47,10 @@ export interface ModuleSize {
    *   - The size the module occupies in the product after packing.
    */
   parsedSize: number;
+  /**
+   * Gzipped size of the module source (optional)
+   */
+  gzipSize: number;
 }
 
 /** Module source code */
