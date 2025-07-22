@@ -304,7 +304,7 @@ export const AssetTreemapWithFilter: React.FC<{
             </span>
           }
           size="small"
-          className={`${Styles.card} ${collapsed ? Styles['card-body-collapsed'] : ''}`}
+          className={`card-body ${collapsed ? 'collapsed' : ''}`}
         >
           <div className={`checkbox-container ${collapsed ? 'collapsed' : ''}`}>
             <Checkbox

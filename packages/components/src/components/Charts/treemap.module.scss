@@ -84,17 +84,3 @@
   cursor: pointer;
   margin-left: 8px;
 }
-
-.card {
-  &-body {
-    overflow: hidden;
-    transition:
-      height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      padding 0.3s;
-  }
-
-  &-body-collapsed {
-    height: 0;
-    padding: 0;
-  }
-}
