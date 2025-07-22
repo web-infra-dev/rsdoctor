@@ -1,6 +1,7 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
 import { Chunks } from '@/build-utils/common';
+import { time, timeEnd } from '@rsdoctor/utils/logger';
 
 export class InternalBundlePlugin<
   T extends Plugin.BaseCompiler,
@@ -10,10 +11,15 @@ export class InternalBundlePlugin<
   public map: Map<string, { content: string }> = new Map();
 
   public apply(compiler: T) {
-    // bundle depends on module graph
-    this.scheduler.ensureModulesChunksGraphApplied(compiler);
-    compiler.hooks.compilation.tap(this.tapPostOptions, this.thisCompilation);
-    compiler.hooks.done.tapPromise(this.tapPreOptions, this.done.bind(this));
+    time('InternalBundlePlugin.apply');
+    try {
+      // bundle depends on module graph
+      this.scheduler.ensureModulesChunksGraphApplied(compiler);
+      compiler.hooks.compilation.tap(this.tapPostOptions, this.thisCompilation);
+      compiler.hooks.done.tapPromise(this.tapPreOptions, this.done.bind(this));
+    } finally {
+      timeEnd('InternalBundlePlugin.apply');
+    }
   }
 
   public ensureAssetContent(name: string) {
@@ -25,58 +31,68 @@ export class InternalBundlePlugin<
   }
 
   public thisCompilation = (compilation: Plugin.BaseCompilation) => {
-    // save asset content to map
-    if (
-      compilation.hooks.processAssets &&
-      'afterOptimizeAssets' in compilation.hooks
-    ) {
-      compilation.hooks.afterOptimizeAssets.tap(
-        this.tapPostOptions,
-        (assets: any) => {
-          Object.keys(assets).forEach((file) => {
-            const v = this.ensureAssetContent(file);
-            v.content = assets[file].source().toString();
-          });
-        },
-      );
-    } else if (
-      compilation.hooks.processAssets &&
-      'afterProcessAssets' in compilation.hooks
-    ) {
-      // This is for rspack hooks.
-      compilation.hooks.afterProcessAssets.tap(this.tapPostOptions, () => {
-        Object.keys(compilation.assets).forEach((file) => {
-          const v = this.ensureAssetContent(file);
-          v.content = compilation.assets[file].source().toString();
-        });
-      });
-    } else if ('afterOptimizeChunkAssets' in compilation.hooks) {
-      compilation.hooks.afterOptimizeChunkAssets.tap(
-        this.tapPostOptions,
-        (chunks) => {
-          [...chunks]
-            .reduce<string[]>((t, chunk) => t.concat([...chunk.files]), [])
-            .forEach((file) => {
+    time('InternalBundlePlugin.thisCompilation');
+    try {
+      // save asset content to map
+      if (
+        compilation.hooks.processAssets &&
+        'afterOptimizeAssets' in compilation.hooks
+      ) {
+        compilation.hooks.afterOptimizeAssets.tap(
+          this.tapPostOptions,
+          (assets: any) => {
+            Object.keys(assets).forEach((file) => {
               const v = this.ensureAssetContent(file);
-              v.content = compilation.assets[file].source().toString();
+              v.content = assets[file].source().toString();
             });
-        },
-      );
+          },
+        );
+      } else if (
+        compilation.hooks.processAssets &&
+        'afterProcessAssets' in compilation.hooks
+      ) {
+        // This is for rspack hooks.
+        compilation.hooks.afterProcessAssets.tap(this.tapPostOptions, () => {
+          Object.keys(compilation.assets).forEach((file) => {
+            const v = this.ensureAssetContent(file);
+            v.content = compilation.assets[file].source().toString();
+          });
+        });
+      } else if ('afterOptimizeChunkAssets' in compilation.hooks) {
+        compilation.hooks.afterOptimizeChunkAssets.tap(
+          this.tapPostOptions,
+          (chunks) => {
+            [...chunks]
+              .reduce<string[]>((t, chunk) => t.concat([...chunk.files]), [])
+              .forEach((file) => {
+                const v = this.ensureAssetContent(file);
+                v.content = compilation.assets[file].source().toString();
+              });
+          },
+        );
+      }
+    } finally {
+      timeEnd('InternalBundlePlugin.thisCompilation');
     }
   };
 
   public done = async (): Promise<void> => {
-    if (this.scheduler.chunkGraph) {
-      Chunks.assetsContents(
-        this.map,
-        this.scheduler.chunkGraph,
-        this.scheduler.options?.supports,
-      );
-    }
+    time('InternalBundlePlugin.done');
+    try {
+      if (this.scheduler.chunkGraph) {
+        Chunks.assetsContents(
+          this.map,
+          this.scheduler.chunkGraph,
+          this.scheduler.options?.supports,
+        );
+      }
 
-    this.sdk.addClientRoutes([
-      Manifest.RsdoctorManifestClientRoutes.ModuleGraph,
-      Manifest.RsdoctorManifestClientRoutes.BundleSize,
-    ]);
+      this.sdk.addClientRoutes([
+        Manifest.RsdoctorManifestClientRoutes.ModuleGraph,
+        Manifest.RsdoctorManifestClientRoutes.BundleSize,
+      ]);
+    } finally {
+      timeEnd('InternalBundlePlugin.done');
+    }
   };
 }

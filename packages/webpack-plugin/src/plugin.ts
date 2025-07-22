@@ -202,17 +202,17 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     try {
       this.sdk.server.broadcast();
       logger.debug(
-        `${Process.getMemoryUsageMessage}, '[Before Write Manifest]'`,
+        `${Process.getMemoryUsageMessage()}, '[Before Write Manifest]'`,
       );
       await this.sdk.writeStore();
       logger.debug(
-        `${(Process.getMemoryUsageMessage, '[After Write Manifest]')}`,
+        `${Process.getMemoryUsageMessage()}, '[After Write Manifest]'`,
       );
 
       if (this.options.disableClientServer) {
         await this.sdk.dispose();
         logger.debug(
-          `${(Process.getMemoryUsageMessage, '[After SDK Dispose]')}`,
+          `${Process.getMemoryUsageMessage()}, '[After SDK Dispose]'`,
         );
       } else if (
         this.options.mode === SDK.IMode[SDK.IMode.brief] &&

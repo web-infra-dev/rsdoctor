@@ -352,10 +352,11 @@ export class RsdoctorSDK<
           try {
             const exists = File.fse.existsSync(path);
             if (exists) {
-              logger.debug(
-                `sdk.PackageGraph package.json exists: ${exists}, path: ${path}`,
-                '[SDK.createPackageGraph][load]',
-              );
+              // TODO: it's too much logs, this needs to be optimized
+              // logger.debug(
+              //   `sdk.PackageGraph package.json exists: ${exists}, path: ${path}`,
+              //   '[SDK.createPackageGraph][load]',
+              // );
               return File.fse.readJSONSync(path);
             }
           } catch (error) {
