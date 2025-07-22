@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Divider, Segmented, theme, Avatar, Tree } from 'antd';
 import { Client, SDK } from '@rsdoctor/types';
 import { RightOutlined, FileFilled, GoldenFilled } from '@ant-design/icons';
@@ -53,9 +53,18 @@ const AssetCardContainer: React.FC<{
   bgColor?: bgColorType;
 }> = ({ titles, datas, bgColor, type }) => {
   const [selectedTitle, setSelectedTitle] = useState(titles[0]);
-  const idx = titles.indexOf(selectedTitle);
+  const idx = useMemo(
+    () => titles.indexOf(selectedTitle),
+    [titles, selectedTitle],
+  );
   const currentIdx = idx >= 0 ? idx : 0;
   const fileType = type || selectedTitle || titles[0];
+
+  // Add bounds checking to prevent accessing undefined data
+  const currentData =
+    currentIdx >= 0 && currentIdx < datas.length
+      ? datas[currentIdx]
+      : datas[0] || {};
 
   return (
     <StatisticCard
@@ -79,7 +88,7 @@ const AssetCardContainer: React.FC<{
       value={
         <AssetCard
           type={fileType}
-          {...datas[currentIdx]}
+          {...currentData}
           tagBgColor={bgColor?.tagBgColor}
         />
       }
