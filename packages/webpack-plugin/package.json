@@ -14,8 +14,8 @@
   ],
   "scripts": {
     "dev": "npm run start",
-    "build": "modern build",
-    "start": "modern build -w",
+    "build": "rslib build",
+    "start": "rslib build -w",
     "test": "rstest run"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@rslib/core": "^0.10.6",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",

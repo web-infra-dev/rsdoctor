@@ -15,9 +15,9 @@
     "static"
   ],
   "scripts": {
-    "build": "modern build",
+    "build": "rslib build",
     "dev": "npm run start",
-    "start": "modern build -w",
+    "start": "rslib build -w",
     "test": "rstest run"
   },
   "dependencies": {
@@ -39,6 +39,7 @@
     "tapable": "2.2.2"
   },
   "devDependencies": {
+    "@rslib/core": "^0.10.6",
     "@types/body-parser": "1.19.6",
     "@types/cors": "2.8.19",
     "@types/lodash": "^4.17.20",

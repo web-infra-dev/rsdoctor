@@ -21,10 +21,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "modern build",
-    "dev": "modern build --watch"
+    "build": "rslib build",
+    "dev": "rslib build --watch"
   },
   "dependencies": {
+    "@rslib/core": "^0.10.6",
     "@rsbuild/core": "^1.4.8",
     "@rspack/core": "1.4.8",
     "@types/lodash": "^4.17.20",
