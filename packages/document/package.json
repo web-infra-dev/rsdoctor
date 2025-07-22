@@ -25,8 +25,8 @@
   },
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
-    "@rspress/plugin-algolia": "2.0.0-beta.20",
-    "@rspress/plugin-llms": "2.0.0-beta.20",
+    "@rspress/plugin-algolia": "2.0.0-beta.21",
+    "@rspress/plugin-llms": "2.0.0-beta.21",
     "@rspress/plugin-rss": "2.0.0-beta.6",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.23",

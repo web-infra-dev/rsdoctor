@@ -67,7 +67,7 @@ importers:
         version: 0.111.2(@types/react@18.3.23)
       '@lynx-js/rspeedy':
         specifier: ^0.10.2
-        version: 0.10.2(@rspack/core@1.4.8(@swc/helpers@0.5.17))(typescript@5.7.3)(webpack@5.97.1)
+        version: 0.10.2(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@playwright/test':
         specifier: 1.44.1
         version: 1.44.1
@@ -545,8 +545,8 @@ importers:
         specifier: ^1.4.8
         version: 1.4.8
       '@rsbuild/plugin-node-polyfill':
-        specifier: ^1.3.1
-        version: 1.3.1(@rsbuild/core@1.4.8)
+        specifier: ^1.3.2
+        version: 1.3.2(@rsbuild/core@1.4.8)
       '@rsbuild/plugin-react':
         specifier: ^1.3.4
         version: 1.3.4(@rsbuild/core@1.4.8)
@@ -821,11 +821,11 @@ importers:
         specifier: workspace:*
         version: link:../types
       '@rspress/plugin-algolia':
-        specifier: 2.0.0-beta.20
-        version: 2.0.0-beta.20(@algolia/client-search@5.25.0)(@rspress/runtime@2.0.0-beta.6)(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
+        specifier: 2.0.0-beta.21
+        version: 2.0.0-beta.21(@algolia/client-search@5.25.0)(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rspress@2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1))(search-insights@2.17.3)
       '@rspress/plugin-llms':
-        specifier: 2.0.0-beta.20
-        version: 2.0.0-beta.20(@rspress/core@2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1))
+        specifier: 2.0.0-beta.21
+        version: 2.0.0-beta.21(rspress@2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1))
       '@rspress/plugin-rss':
         specifier: 2.0.0-beta.6
         version: 2.0.0-beta.6(rspress@2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1))
@@ -3662,8 +3662,8 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rsbuild/plugin-node-polyfill@1.3.1':
-    resolution: {integrity: sha512-FhEMjaFr5X3ojTJgSOG5XbtySLDtfkX0sgXTs0ymQj1ETzPj4pVoVCwDrYHCmKahgEz/0PoeBDX380RAkcnneQ==}
+  '@rsbuild/plugin-node-polyfill@1.3.2':
+    resolution: {integrity: sha512-r3a0w+5G0fUteEfjkuNh0YXjpIqM48mawtaVhCH4eyXWDU9Pp46MIzB+IYV+gWyzkb8rU4Xrq61QV1bb+FCdfA==}
     peerDependencies:
       '@rsbuild/core': 1.x
     peerDependenciesMeta:
@@ -4341,11 +4341,11 @@ packages:
     resolution: {integrity: sha512-NpNhTKBIlV3O6ADhoZkgHvBFvXMW2TYlIWmIT1ysJESUBqDpaN9H3Teve5fugjU2pQ2ORBZO6SQGKliMw/8m/Q==}
     engines: {node: '>= 10'}
 
-  '@rspress/plugin-algolia@2.0.0-beta.20':
-    resolution: {integrity: sha512-vuRDlm2wx6XBpwR6un6L8WKEPWQozsLqA0uuVwPzl0t4QdR3btu/1eO1mbCmrU60nAhTiPU/7rKNdpS5bkAT3A==}
+  '@rspress/plugin-algolia@2.0.0-beta.21':
+    resolution: {integrity: sha512-lHGyJV5DfU/Y6a+2Ss7sl4eDbNpHvkAzo+RfJxvfhGT8ovAPmLkO8rsIMOErhKvTplzlvK31npNYivBoWLTb3Q==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@rspress/runtime': ^2.0.0-beta.20
+      rspress: ^2.0.0-beta.21
 
   '@rspress/plugin-auto-nav-sidebar@2.0.0-alpha.3':
     resolution: {integrity: sha512-U1detSiGlAd+2U6oK1/PEPBulOKUnODsygWvfiY4fydF9FAhcvjeDWanmiAoNWnKBj+bmUMay/e9nR1vtSSpmw==}
@@ -4371,11 +4371,11 @@ packages:
     resolution: {integrity: sha512-KiRjJwh1zw8qY9jtBDL2SdZWpRZkxHGzdATkmaURjHanteT7U5XUGNAa0afd0a5N7tveocV1yuOudjUlG4LcYQ==}
     engines: {node: '>=18.0.0'}
 
-  '@rspress/plugin-llms@2.0.0-beta.20':
-    resolution: {integrity: sha512-G2FqZcfU8wU191rQFRvaeKPbBDCmuD5R+mnSV1Uzexz5tuN0iBPQnhYhbMrnMG2SHhfw8HMRlqYiVTxsH2hOmQ==}
+  '@rspress/plugin-llms@2.0.0-beta.21':
+    resolution: {integrity: sha512-Uv8jF7qrV4UIJA4tE1ZN9gEOdE9LUfScC9sUXQHK882++qC12ETYz5/tBM2Jt5klEjlOSR2Bhy9Qq4igs4GsWQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@rspress/core': ^2.0.0-beta.20
+      rspress: ^2.0.0-beta.21
 
   '@rspress/plugin-medium-zoom@2.0.0-alpha.3':
     resolution: {integrity: sha512-3mInIGNIdMD5g+AdLAEHuN+xPHH/Wn58xWcyH4MKlvvZRhfhBd3xwWQbWB1tNlCelwNfREuqcaq65HITRJBQxg==}
@@ -4409,9 +4409,6 @@ packages:
 
   '@rspress/shared@2.0.0-alpha.3':
     resolution: {integrity: sha512-h6vOhwwe57pDZWJjbKO4IUCNpYM/8XAIjHWT8NCQKCgNE7lCykXgifvZQtPHTEfQA0EX1BowlruHhsZkIo6Ntw==}
-
-  '@rspress/shared@2.0.0-beta.20':
-    resolution: {integrity: sha512-lGmw9AgsOsLOMJlAunwyTULroevqEzRxLVNWeyjl2ZEMZ82vWCFRKWak5mrc/cZsXi5riRodSyQe9OMdYYsgYw==}
 
   '@rspress/shared@2.0.0-beta.6':
     resolution: {integrity: sha512-EwUKbbz6xymAwqNzQ6v2xdyToQiIAdMOnH2wIhPi+5bsaNX5Y+8kgefP7YMPWj5TAIvSJETaCxkDPZvNVTm5gQ==}
@@ -13034,14 +13031,14 @@ snapshots:
       '@types/react': 18.3.23
       preact: '@hongzhiyuan/preact@10.24.0-319c684e'
 
-  '@lynx-js/rspeedy@0.10.2(@rspack/core@1.4.8(@swc/helpers@0.5.17))(typescript@5.7.3)(webpack@5.97.1)':
+  '@lynx-js/rspeedy@0.10.2(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.0(@rspack/core@1.4.8(@swc/helpers@0.5.17))
       '@lynx-js/webpack-dev-transport': 0.2.0
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 1.4.7
       '@rsbuild/plugin-css-minimizer': 1.0.2(@rsbuild/core@1.4.7)(webpack@5.97.1)
-      '@rsdoctor/rspack-plugin': 1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/rspack-plugin': 1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
     optionalDependencies:
       typescript: 5.7.3
     transitivePeerDependencies:
@@ -14241,7 +14238,7 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.1.13
 
-  '@rsbuild/plugin-node-polyfill@1.3.1(@rsbuild/core@1.4.8)':
+  '@rsbuild/plugin-node-polyfill@1.3.2(@rsbuild/core@1.4.8)':
     dependencies:
       assert: 2.1.0
       browserify-zlib: 0.2.0
@@ -14423,11 +14420,11 @@ snapshots:
 
   '@rsdoctor/client@1.1.8': {}
 
-  '@rsdoctor/core@1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/core@1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.3.0(@rsbuild/core@1.4.7)
-      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
       axios: 1.10.0
@@ -14449,7 +14446,7 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/graph@1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/graph@1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/types': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
@@ -14463,11 +14460,11 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/rspack-plugin@1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
-      '@rsdoctor/core': 1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/core': 1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
       lodash: 4.17.21
@@ -14481,10 +14478,10 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/sdk@1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/sdk@1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/client': 1.1.8
-      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack/core@1.4.8(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@types/fs-extra': 11.0.4
@@ -15079,11 +15076,11 @@ snapshots:
       '@rspress/mdx-rs-win32-arm64-msvc': 0.6.6
       '@rspress/mdx-rs-win32-x64-msvc': 0.6.6
 
-  '@rspress/plugin-algolia@2.0.0-beta.20(@algolia/client-search@5.25.0)(@rspress/runtime@2.0.0-beta.6)(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
+  '@rspress/plugin-algolia@2.0.0-beta.21(@algolia/client-search@5.25.0)(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rspress@2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1))(search-insights@2.17.3)':
     dependencies:
       '@docsearch/css': 3.9.0
       '@docsearch/react': 3.9.0(@algolia/client-search@5.25.0)(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
-      '@rspress/runtime': 2.0.0-beta.6
+      rspress: 2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1)
     transitivePeerDependencies:
       - '@algolia/client-search'
       - '@types/react'
@@ -15121,13 +15118,12 @@ snapshots:
     dependencies:
       '@rspress/shared': 2.0.0-beta.6
 
-  '@rspress/plugin-llms@2.0.0-beta.20(@rspress/core@2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1))':
+  '@rspress/plugin-llms@2.0.0-beta.21(rspress@2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1))':
     dependencies:
-      '@rspress/core': 2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1)
-      '@rspress/shared': 2.0.0-beta.20
       remark-mdx: 3.1.0
       remark-parse: 11.0.0
       remark-stringify: 11.0.0
+      rspress: 2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1)
       unified: 11.0.5
       unist-util-visit: 5.0.0
       unist-util-visit-children: 3.0.0
@@ -15183,14 +15179,6 @@ snapshots:
       unified: 10.1.2
     transitivePeerDependencies:
       - '@rspack/tracing'
-
-  '@rspress/shared@2.0.0-beta.20':
-    dependencies:
-      '@rsbuild/core': 1.4.8
-      '@shikijs/rehype': 3.4.2
-      gray-matter: 4.0.3
-      lodash-es: 4.17.21
-      unified: 11.0.5
 
   '@rspress/shared@2.0.0-beta.6':
     dependencies:
