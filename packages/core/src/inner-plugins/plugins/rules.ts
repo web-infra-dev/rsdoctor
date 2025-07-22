@@ -1,4 +1,4 @@
-import { InternalBasePlugin } from '../plugins';
+import { InternalBasePlugin } from './base';
 import { Linter } from '../../rules';
 import { DevToolError } from '@rsdoctor/utils/error';
 import { pull } from 'lodash';
