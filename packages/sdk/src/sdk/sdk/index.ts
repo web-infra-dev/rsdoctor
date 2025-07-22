@@ -5,7 +5,7 @@ import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/graph';
-import { debug } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/utils/logger';
 import { RsdoctorServer } from '../server';
 import { RsdoctorFakeServer } from '../server/fakeServer';
 import { RsdoctorWebpackSDKOptions } from './types';
@@ -74,20 +74,20 @@ export class RsdoctorSDK<
   }
 
   async bootstrap() {
-    debug(() => `${Date.now()}`, '[RsdoctorSDK][bootstrap start]');
+    logger.debug(`${Date.now()}`, '[RsdoctorSDK][bootstrap start]');
     this.server && (await this.server.bootstrap());
     await super.bootstrap();
-    debug(
-      () => `${Date.now()} ${this.server.origin}`,
+    logger.debug(
+      `${Date.now()} ${this.server.origin}`,
       '[RsdoctorSDK][bootstrap end]',
     );
   }
 
   async dispose() {
-    debug(() => `${Date.now()}`, '[RsdoctorSDK][dispose start]');
+    logger.debug(`${Date.now()}`, '[RsdoctorSDK][dispose start]');
     this.server && (await this.server.dispose());
     await super.dispose();
-    debug(() => `${Date.now()}`, '[RsdoctorSDK][dispose end]');
+    logger.debug(`${Date.now()}`, '[RsdoctorSDK][dispose end]');
   }
 
   async applyErrorFix(id: number) {
@@ -280,24 +280,24 @@ export class RsdoctorSDK<
   }
 
   reportModuleGraph(data: SDK.ModuleGraphInstance): void {
-    debug(() => `data size: ${data.size()}`, '[SDK.reportModuleGraph][start]');
+    logger.debug(`data size: ${data.size()}`, '[SDK.reportModuleGraph][start]');
     this._moduleGraph.fromInstance(data as ModuleGraph);
     this.createPackageGraph();
     this.onDataReport();
-    debug(
-      () => `sdk._moduleGraph size: ${this._moduleGraph.size()}`,
+    logger.debug(
+      `sdk._moduleGraph size: ${this._moduleGraph.size()}`,
       '[SDK reportModuleGraph][end]',
     );
   }
 
   reportPackageGraph(data: SDK.PackageGraphInstance): void {
-    debug(() => '[SDK.reportPackageGraph][start]');
+    logger.debug('[SDK.reportPackageGraph][start]');
     if (!this._packageGraph) {
       this._packageGraph = data;
     }
     this.onDataReport();
-    debug(
-      () => `sdk._moduleGraph size: ${this._moduleGraph.size()}`,
+    logger.debug(
+      `sdk._moduleGraph size: ${this._moduleGraph.size()}`,
       '[SDK reportPackageGraph][end]',
     );
   }
@@ -340,8 +340,8 @@ export class RsdoctorSDK<
   }
 
   createPackageGraph() {
-    debug(
-      () => `sdk._moduleGraph size: ${this._moduleGraph.size()}`,
+    logger.debug(
+      `sdk._moduleGraph size: ${this._moduleGraph.size()}`,
       '[SDK.createPackageGraph][start]',
     );
     if (!this._packageGraph) {
@@ -352,16 +352,15 @@ export class RsdoctorSDK<
           try {
             const exists = File.fse.existsSync(path);
             if (exists) {
-              debug(
-                () =>
-                  `sdk.PackageGraph package.json exists: ${exists}, path: ${path}`,
+              logger.debug(
+                `sdk.PackageGraph package.json exists: ${exists}, path: ${path}`,
                 '[SDK.createPackageGraph][load]',
               );
               return File.fse.readJSONSync(path);
             }
           } catch (error) {
             const { message, stack } = error as Error;
-            debug(
+            logger.debug(
               () =>
                 `sdk.createPackageGraph error, path: ${path}, error message: ${
                   stack || message
@@ -372,18 +371,17 @@ export class RsdoctorSDK<
         },
       );
       this._packageGraph = pkgGraph;
-      debug(
-        () =>
-          `sdk._packageGraph packages: ${
-            this._packageGraph.getPackages().length
-          }`,
+      logger.debug(
+        `sdk._packageGraph packages: ${
+          this._packageGraph.getPackages().length
+        }`,
         '[SDK.createPackageGraph][end]',
       );
     }
   }
 
   public async writeStore(options?: SDK.WriteStoreOptionsType) {
-    debug(() => `sdk.writeStore has run.`, '[SDK.writeStore][end]');
+    logger.debug(`sdk.writeStore has run.`, '[SDK.writeStore][end]');
     if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
       const clientHtmlPath = this.extraConfig.innerClientPath
         ? this.extraConfig.innerClientPath

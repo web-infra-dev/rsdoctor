@@ -1,7 +1,7 @@
 import { SDK } from '@rsdoctor/types';
 import type { Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
-import { debug } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/utils/logger';
 
 export class InternalProgressPlugin<
   T extends Plugin.BaseCompilerType<'webpack'>,
@@ -32,7 +32,7 @@ export class InternalProgressPlugin<
               res: currentProgress,
             });
           } catch (e: any) {
-            debug(() => e);
+            logger.debug(e);
           }
         },
       });
