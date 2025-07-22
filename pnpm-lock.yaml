@@ -755,9 +755,6 @@ importers:
       source-map-js:
         specifier: ^1.2.1
         version: 1.2.1
-      webpack-bundle-analyzer:
-        specifier: ^4.10.2
-        version: 4.10.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     devDependencies:
       '@rspack/core':
         specifier: 1.4.8
