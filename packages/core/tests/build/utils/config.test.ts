@@ -27,7 +27,7 @@ describe('normalizeUserConfig', () => {
     expect(result.features.plugins).toBe(true);
     expect(result.features.lite).toBe(true);
     expect(result.features.resolver).toBe(false);
-    expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoSource);
+    expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoSourceAndAssets);
   });
 
   it('should respect custom features object', () => {
@@ -43,6 +43,14 @@ describe('normalizeUserConfig', () => {
     const result = normalizeUserConfig({
       output: { reportCodeType: { noCode: true } },
       mode: 'brief',
+    });
+    expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
+  });
+
+  it('should normalize output.reportCodeType and mode:lite', () => {
+    const result = normalizeUserConfig({
+      output: { reportCodeType: { noCode: true } },
+      mode: 'lite',
     });
     expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
   });
@@ -92,7 +100,9 @@ describe('normalizeUserConfig', () => {
           },
         },
       });
-      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoSource);
+      expect(result.output.reportCodeType).toBe(
+        SDK.ToDataType.NoSourceAndAssets,
+      );
     });
 
     it('should return NoSourceAndAssets when mode is lite and noAssetsAndModuleSource is true', () => {
