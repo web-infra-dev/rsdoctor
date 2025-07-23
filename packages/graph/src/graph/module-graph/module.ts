@@ -256,7 +256,8 @@ export class Module implements SDK.ModuleInstance {
       const code = this.source.parsedSource || this.source.source;
       if (code && typeof code === 'string' && code.length > 0) {
         try {
-          size.gzipSize = gzipSync(code, { level: 9 }).length;
+          const compressionLevel = this.compressionLevel ?? 6; // Default to level 6
+          size.gzipSize = gzipSync(code, { level: compressionLevel }).length;
         } catch (e) {
           size.gzipSize = 0;
         }
