@@ -1,5 +1,5 @@
 import c from 'picocolors';
-import { logger } from 'rslog';
+import { createLogger, logger } from 'rslog';
 import { Constants } from '@rsdoctor/types';
 
 /**
@@ -13,10 +13,9 @@ export function debug(getMsg: () => string, prefix = '') {
   logger.level = 'verbose';
   logger.debug(`${prefix} ${getMsg()}`);
 }
+const rsdoctorLogger = createLogger();
 
-export { c as chalk, logger };
-
-logger.override({
+rsdoctorLogger.override({
   log: (message) => {
     console.log(`${c.green('[RSDOCTOR LOG]')} ${message}`);
   },
@@ -44,3 +43,5 @@ logger.override({
     }
   },
 });
+
+export { c as chalk, rsdoctorLogger as logger };
