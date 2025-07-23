@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import fse from 'fs-extra';
 import { omit } from 'lodash';
 import { Loader } from '@rsdoctor/utils/common';
@@ -171,7 +171,7 @@ export function isESMLoader(r: Plugin.BuildRuleSetRule) {
         : '';
   if (!_loaderName) return false;
   const isPath =
-    _loaderName.startsWith('/') ||
+    path.isAbsolute(_loaderName) ||
     _loaderName.startsWith('./') ||
     _loaderName.startsWith('../');
   if (isPath) {
