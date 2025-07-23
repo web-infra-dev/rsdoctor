@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Divider, Segmented, theme, Avatar, Tree } from 'antd';
 import { Client, SDK } from '@rsdoctor/types';
 import { RightOutlined, FileFilled, GoldenFilled } from '@ant-design/icons';
@@ -52,8 +52,19 @@ const AssetCardContainer: React.FC<{
   datas: CardProps[];
   bgColor?: bgColorType;
 }> = ({ titles, datas, bgColor, type }) => {
-  const [idx, setIdx] = useState(0);
-  const fileType = type || titles[idx] || titles[0];
+  const [selectedTitle, setSelectedTitle] = useState(titles[0]);
+  const idx = useMemo(
+    () => titles.indexOf(selectedTitle),
+    [titles, selectedTitle],
+  );
+  const currentIdx = idx >= 0 ? idx : 0;
+  const fileType = type || selectedTitle || titles[0];
+
+  // Add bounds checking to prevent accessing undefined data
+  const currentData =
+    currentIdx >= 0 && currentIdx < datas.length
+      ? datas[currentIdx]
+      : datas[0] || {};
 
   return (
     <StatisticCard
@@ -62,27 +73,24 @@ const AssetCardContainer: React.FC<{
           <div className={styles.title}>{fileType}</div>
           {titles.length > 1 ? (
             <Segmented
-              defaultValue={titles[idx]}
+              defaultValue={titles[0]}
               options={titles}
-              onChange={(e) => {
-                setIdx(titles.indexOf(e as string));
+              onChange={(value) => {
+                setSelectedTitle(value as string);
               }}
               size="small"
               style={{ transition: 'transform 0.3s ease' }}
-              value={titles[idx] || titles[0]}
+              value={selectedTitle}
             />
           ) : null}
         </div>
       }
       value={
-        datas.map((e, i) => (
-          <AssetCard
-            type={fileType}
-            {...e}
-            key={i}
-            tagBgColor={bgColor?.tagBgColor}
-          />
-        ))[idx]
+        <AssetCard
+          type={fileType}
+          {...currentData}
+          tagBgColor={bgColor?.tagBgColor}
+        />
       }
       boxProps={{
         style: {
