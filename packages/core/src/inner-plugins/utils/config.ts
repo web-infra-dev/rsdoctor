@@ -215,25 +215,26 @@ export const normalizeReportType = (
   reportCodeType: IReportCodeType,
   mode: keyof typeof SDK.IMode,
 ): SDK.ToDataType => {
+  if (reportCodeType.noCode) {
+    return SDK.ToDataType.NoCode;
+  }
+
   if (mode === SDK.IMode[SDK.IMode.brief]) {
     return SDK.ToDataType.NoCode;
   }
 
   if (mode === SDK.IMode[SDK.IMode.lite]) {
-    return reportCodeType.noAssetsAndModuleSource
-      ? SDK.ToDataType.NoSourceAndAssets
-      : SDK.ToDataType.NoSource;
+    return SDK.ToDataType.NoSourceAndAssets;
   }
 
-  if (reportCodeType.noCode) {
-    return SDK.ToDataType.NoCode;
-  }
   if (reportCodeType.noAssetsAndModuleSource) {
     return SDK.ToDataType.NoSourceAndAssets;
   }
+
   if (reportCodeType.noModuleSource) {
     return SDK.ToDataType.NoSource;
   }
+
   return SDK.ToDataType.Normal;
 };
 
