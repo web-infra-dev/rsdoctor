@@ -171,7 +171,7 @@ export function isESMLoader(r: Plugin.BuildRuleSetRule) {
         : '';
   if (!_loaderName) return false;
   const isPath =
-    _loaderName.startsWith('/') ||
+    path.isAbsolute(_loaderName) ||
     _loaderName.startsWith('./') ||
     _loaderName.startsWith('../');
   if (isPath) {
