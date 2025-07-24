@@ -77,7 +77,7 @@ export function getCurrentTimestamp(
   const end =
     start +
     endHRTime[0] * 1000 +
-    (process.env.VITEST
+    (process.env.RSTEST
       ? Math.round(endHRTime[1] / 1000000)
       : endHRTime[1] / 1000000);
 

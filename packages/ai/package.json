@@ -34,7 +34,7 @@
     "@types/node": "^22.8.1",
     "axios": "^1.11.0",
     "typescript": "^5.2.2",
-    "@rstest/core": "0.0.9",
+    "@rstest/core": "0.0.10",
     "zod": "^3.24.4"
   },
   "publishConfig": {
