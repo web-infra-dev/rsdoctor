@@ -686,6 +686,18 @@ importers:
       '@rsbuild/plugin-check-syntax':
         specifier: 1.3.0
         version: 1.3.0(@rsbuild/core@1.4.8)
+      '@rsbuild/plugin-react':
+        specifier: ^1.3.4
+        version: 1.3.4(@rsbuild/core@1.4.8)
+      '@rsbuild/plugin-sass':
+        specifier: ^1.3.3
+        version: 1.3.3(@rsbuild/core@1.4.8)
+      '@rsbuild/plugin-svgr':
+        specifier: ^1.2.1
+        version: 1.2.1(@rsbuild/core@1.4.8)(typescript@5.7.3)
+      '@rslib/core':
+        specifier: ^0.10.6
+        version: 0.10.6(typescript@5.7.3)
       '@types/lodash-es':
         specifier: 4.17.12
         version: 4.17.12
@@ -759,6 +771,9 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1
     devDependencies:
+      '@rslib/core':
+        specifier: ^0.10.6
+        version: 0.10.6(typescript@5.7.3)
       '@rspack/core':
         specifier: 1.4.8
         version: 1.4.8(@swc/helpers@0.5.17)
@@ -3544,6 +3559,11 @@ packages:
 
   '@rsbuild/plugin-svgr@1.0.6':
     resolution: {integrity: sha512-znLFk2fumNObMntkjrpZhO3guXmaQZbqv0JjhqBVng63bNdsJAmfZGXX5He8Avp4VDlv6EJI6BC5SIEs8XspTg==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+
+  '@rsbuild/plugin-svgr@1.2.1':
+    resolution: {integrity: sha512-UERUQmyGHx0B2mvSvdyuGyUFG2U94ogwpDRF+d6BRw4Yzm+OAktSjREoqvi/snwQZwZkRdHfdOkqI/jhPnPA/Q==}
     peerDependencies:
       '@rsbuild/core': 1.x
 
@@ -13657,6 +13677,20 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
+
+  '@rsbuild/plugin-svgr@1.2.1(@rsbuild/core@1.4.8)(typescript@5.7.3)':
+    dependencies:
+      '@rsbuild/core': 1.4.8
+      '@rsbuild/plugin-react': 1.3.4(@rsbuild/core@1.4.8)
+      '@svgr/core': 8.1.0(typescript@5.7.3)
+      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.7.3))
+      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.7.3))(typescript@5.7.3)
+      deepmerge: 4.3.1
+      loader-utils: 3.3.1
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+      - webpack-hot-middleware
 
   '@rsbuild/plugin-toml@1.0.1(@rsbuild/core@1.1.13)':
     dependencies:

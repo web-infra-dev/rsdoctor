@@ -150,4 +150,4 @@ loaderModule.pitch = function (
 loaderModule.raw = true;
 
 // @ts-ignore
-export = loaderModule;
+// export = loaderModule;
