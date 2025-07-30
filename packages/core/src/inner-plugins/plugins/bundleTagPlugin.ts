@@ -27,7 +27,9 @@ export class InternalBundleTagPlugin<
                   .map((p) => p && p.constructor.name)
                   .includes('BannerPlugin') &&
                   supportBannerPlugin !== true) ||
-                supportBannerPlugin === false
+                supportBannerPlugin === false ||
+                // rspack no need to use this plugin
+                'rspack' in compiler
               ) {
                 return;
               }

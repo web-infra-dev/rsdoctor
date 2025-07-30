@@ -8,7 +8,6 @@ async function rspackCompile(_tapName: string) {
   const file = path.resolve(__dirname, './fixtures/a.js');
 
   await compileByRspack(file, {
-    devtool: 'source-map',
     output: {
       path: path.join(__dirname, 'dist'),
     },

@@ -1,7 +1,4 @@
-import {
-  RsdoctorPluginInstance,
-  RsdoctorRspackPluginOptionsNormalized,
-} from '@/types';
+import { RsdoctorPluginInstance } from '@/types';
 import { Linter, Plugin, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { chalk, logger } from '@rsdoctor/utils/logger';
@@ -58,12 +55,8 @@ export const ensureModulesChunksGraphFn = (
   const RsdoctorRspackPlugin = (
     compiler.webpack.experiments as Plugin.RspackExportsExperiments
   )?.RsdoctorPlugin;
-  const enableRspackNativePlugin = (
-    _this.options as RsdoctorRspackPluginOptionsNormalized<
-      Linter.ExtendRuleData[]
-    >
-  ).experiments?.enableNativePlugin;
-  if (enableRspackNativePlugin && RsdoctorRspackPlugin) {
+
+  if (RsdoctorRspackPlugin) {
     applyRspackNativePlugin(compiler, _this, RsdoctorRspackPlugin);
   }
 
@@ -100,6 +93,7 @@ export const ensureModulesChunksGraphFn = (
       ...pluginTapPostOptions,
       stage: pluginTapPostOptions.stage! + 100,
     },
+    // webpack only, webpack use emitHandler to collect source maps
     emitHandler.bind(null, _this, compiler),
   );
 };
@@ -225,13 +219,6 @@ async function doneHandler(
  */
 export const ensureDevtools = (compiler: Plugin.BaseCompiler) => {
   const devtool = compiler.options.devtool;
-  const sourceMapEnabled =
-    typeof devtool === 'string' && /source-?map/i.test(devtool);
-
-  if (!sourceMapEnabled) {
-    logger.debug('SourceMap is not enabled. Skipping sourcemap processing.');
-    return false;
-  }
 
   if (typeof devtool === 'string' && /eval/i.test(devtool)) {
     !hasConsole &&
@@ -239,6 +226,19 @@ export const ensureDevtools = (compiler: Plugin.BaseCompiler) => {
         'SourceMap with eval is not supported. Please use other sourcemap options.',
       );
     hasConsole = true;
+    return false;
+  }
+
+  // rspack no need open the sourcemap options
+  if ('rspack' in compiler) {
+    return true;
+  }
+
+  const sourceMapEnabled =
+    typeof devtool === 'string' && /source-?map/i.test(devtool);
+
+  if (!sourceMapEnabled) {
+    logger.debug('SourceMap is not enabled. Skipping sourcemap processing.');
     return false;
   }
 
