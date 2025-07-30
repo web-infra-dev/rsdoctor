@@ -245,8 +245,31 @@ export function normalizeRspackUserOptions<
 ): RsdoctorRspackPluginOptionsNormalized<Rules> {
   const config: RsdoctorRspackPluginOptionsNormalized<Rules> =
     normalizeUserConfig(options);
+
   config.experiments ??= {};
-  config.experiments.enableNativePlugin =
-    options.experiments?.enableNativePlugin ?? false;
+
+  if (
+    typeof options.experiments?.enableNativePlugin === 'object' ||
+    typeof options.experiments?.enableNativePlugin === 'undefined'
+  ) {
+    const userConfig = options.experiments?.enableNativePlugin;
+    config.experiments.enableNativePlugin = userConfig
+      ? {
+          moduleGraph: true,
+          chunkGraph: true,
+          sourceMap: {
+            cheap: true,
+            ...userConfig.sourceMap,
+          },
+          ...userConfig,
+        }
+      : {
+          moduleGraph: false,
+          chunkGraph: false,
+          sourceMap: {
+            cheap: true,
+          },
+        };
+  }
   return config;
 }

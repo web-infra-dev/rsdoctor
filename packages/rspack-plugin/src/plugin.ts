@@ -172,15 +172,17 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       // apply Rspack native plugin to improve the performance
       const RsdoctorRspackNativePlugin =
         compiler.webpack.experiments?.RsdoctorPlugin;
-      if (
-        this.options.experiments?.enableNativePlugin &&
-        RsdoctorRspackNativePlugin
-      ) {
+      if (RsdoctorRspackNativePlugin) {
         logger.debug('[RspackNativePlugin] Enabled');
+        const enableNativePlugin = this.options.experiments?.enableNativePlugin;
         new RsdoctorRspackNativePlugin({
           // TODO: more detailed data features based on the rsdoctor options
-          moduleGraphFeatures: true,
-          chunkGraphFeatures: true,
+          moduleGraphFeatures: enableNativePlugin?.moduleGraph || false,
+          chunkGraphFeatures: enableNativePlugin?.chunkGraph || false,
+          sourceMapFeatures: {
+            cheap: enableNativePlugin?.sourceMap?.cheap || false,
+            module: true,
+          },
         }).apply(compiler);
       }
     } finally {
