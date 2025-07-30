@@ -188,6 +188,35 @@ RSDOCTOR=true npm run build
 }
 ```
 
+#### Trae
+
+可在「创建智能体」- 「MCP」-「添加」-「手动添加」中配置添加：
+
+```json
+{
+  "mcpServers": {
+    "rsdoctor": {
+      "command": "npx",
+      "args": ["-y", "@rsdoctor/mcp-server@latest"]
+    }
+  }
+}
+```
+
+目前已在 Trae CN MCP 市场中发布，除了手动配置外，也可以通过市场搜索 「rsdoctor-mcp」进行添加并使用。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/trae-mcp.png"
+  alt="trae-mcp"
+  style={{
+    width: '90%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+/>
+
 ## 配置说明
 
 ### 命令行参数
