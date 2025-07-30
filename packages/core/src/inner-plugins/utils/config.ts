@@ -253,7 +253,6 @@ export function normalizeRspackUserOptions<
     typeof options.experiments?.enableNativePlugin === 'undefined'
   ) {
     const userConfig = options.experiments?.enableNativePlugin;
-    //
     config.experiments.enableNativePlugin = userConfig
       ? {
           moduleGraph: true,
