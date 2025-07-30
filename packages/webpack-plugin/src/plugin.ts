@@ -65,6 +65,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
           mode: this.options.mode,
           brief: this.options.brief,
           compressData: this.options.output.compressData,
+          noServer: this.options.disableClientServer,
         },
       });
 

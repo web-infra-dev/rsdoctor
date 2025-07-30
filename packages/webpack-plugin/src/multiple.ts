@@ -35,6 +35,7 @@ export class RsdoctorWebpackMultiplePlugin<
         mode: normallizedOptions.mode ? normallizedOptions.mode : undefined,
         brief: normallizedOptions.brief,
         compressData: normallizedOptions.output.compressData,
+        noServer: normallizedOptions.disableClientServer,
       },
       type: normallizedOptions.output.reportCodeType,
     });

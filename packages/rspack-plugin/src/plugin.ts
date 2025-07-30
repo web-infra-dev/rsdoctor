@@ -84,6 +84,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
           mode: this.options.mode ? this.options.mode : undefined,
           brief: this.options.brief,
           compressData: this.options.output.compressData,
+          noServer: this.options.disableClientServer,
         },
       });
     this.outsideInstance = Boolean(this.options.sdkInstance);
@@ -262,10 +263,6 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         } else {
           await this.sdk.server.openClientPage('homepage');
         }
-      }
-
-      if (this.options.disableClientServer) {
-        await this.sdk.dispose();
       }
     } finally {
       timeEnd('RsdoctorRspackPlugin.done');
