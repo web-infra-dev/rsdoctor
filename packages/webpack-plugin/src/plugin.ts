@@ -210,12 +210,8 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
         `${Process.getMemoryUsageMessage()}, '[After Write Manifest]'`,
       );
 
-      if (this.options.disableClientServer) {
-        await this.sdk.dispose();
-        logger.debug(
-          `${Process.getMemoryUsageMessage()}, '[After SDK Dispose]'`,
-        );
-      } else if (
+      if (
+        !this.options.disableClientServer &&
         this.options.mode === SDK.IMode[SDK.IMode.brief] &&
         !this.options.disableClientServer
       ) {
