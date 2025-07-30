@@ -9,7 +9,7 @@ const config = {
   entry: {
     main: './src/index.tsx',
   },
-  devtool: false,
+  devtool: 'source-map',
   module: {
     rules: [
       {
