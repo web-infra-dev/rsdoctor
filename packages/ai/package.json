@@ -30,7 +30,7 @@
     "@modelcontextprotocol/sdk": "1.17.0",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "@rslib/core": "^0.10.6",
+    "@rslib/core": "^0.11.0",
     "@types/node": "^22.8.1",
     "axios": "^1.11.0",
     "typescript": "^5.2.2",
