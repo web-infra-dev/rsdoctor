@@ -326,13 +326,14 @@ export const WebpackModulesOverallBase: React.FC<
           <ServerAPIProvider api={SDK.ServerAPI.API.GetProjectInfo}>
             {(data) => {
               const configs = data.configs;
-              const isRspack = Array.isArray(configs) && configs[0]?.name === 'rspack';
+              const isRspack =
+                Array.isArray(configs) && configs[0]?.name === 'rspack';
               const suitableDevtoolConfig =
                 Array.isArray(configs) &&
                 configs[0]?.config?.devtool &&
-                typeof configs[0.config.devtool] === 'string' &&
-                configs[0.config.devtool.includes('source-map') &&
-                !configs[0.config.devtool.includes('eval');
+                typeof configs[0].config.devtool === 'string' &&
+                configs[0].config.devtool.includes('source-map') &&
+                !configs[0].config.devtool.includes('eval');
               return (
                 <ServerAPIProvider api={SDK.ServerAPI.API.GetSummaryBundles}>
                   {(data) => {
