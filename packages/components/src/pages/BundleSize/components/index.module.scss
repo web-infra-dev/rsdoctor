@@ -102,7 +102,10 @@
       margin-right: 2px;
     }
 
-    .ant-tree-node-content-wrapper-open,
+    .ant-tree-node-content-wrapper-open {
+      display: flex;
+    }
+
     .ant-tree-node-content-wrapper-close {
       display: flex;
     }
