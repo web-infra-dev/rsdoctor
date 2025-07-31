@@ -323,23 +323,39 @@ export const WebpackModulesOverallBase: React.FC<
             size: 'middle',
           }}
         >
-          <ServerAPIProvider api={SDK.ServerAPI.API.GetSummaryBundles}>
+          <ServerAPIProvider api={SDK.ServerAPI.API.GetProjectInfo}>
             {(data) => {
-              const computedTreeData: TreeNode[] = data.map((item) => {
-                const moduleTree = flattenTreemapData(item.modules);
-                return {
-                  name: item.asset.path,
-                  value: item.asset.size,
-                  children: moduleTree.children,
-                };
-              });
+              const configs = data.configs;
+              const isRspack =
+                Array.isArray(configs) && configs[0]?.name === 'rspack';
+              const suitableDevtoolConfig =
+                Array.isArray(configs) &&
+                configs[0]?.config?.devtool &&
+                typeof configs[0].config.devtool === 'string' &&
+                configs[0].config.devtool.includes('source-map') &&
+                !configs[0].config.devtool.includes('eval');
               return (
-                <AssetTreemapWithFilter
-                  treeData={computedTreeData}
-                  onChartClick={(i) => {
-                    console.log('onChartClick', i);
+                <ServerAPIProvider api={SDK.ServerAPI.API.GetSummaryBundles}>
+                  {(data) => {
+                    const computedTreeData: TreeNode[] = data.map((item) => {
+                      const moduleTree = flattenTreemapData(item.modules);
+                      return {
+                        name: item.asset.path,
+                        value: item.asset.size,
+                        children: moduleTree.children,
+                      };
+                    });
+                    return (
+                      <AssetTreemapWithFilter
+                        treeData={computedTreeData}
+                        bundledSize={suitableDevtoolConfig || isRspack}
+                        onChartClick={(i) => {
+                          console.log('onChartClick', i);
+                        }}
+                      />
+                    );
                   }}
-                />
+                </ServerAPIProvider>
               );
             }}
           </ServerAPIProvider>
