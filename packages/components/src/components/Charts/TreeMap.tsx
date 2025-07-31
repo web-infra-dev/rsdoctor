@@ -5,10 +5,11 @@ import { TreemapChart } from 'echarts/charts';
 import { TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { BUNDLE_ANALYZER_COLORS, COLOR_GROUPS } from './constants';
-import { Checkbox, Card, Typography, Space } from 'antd';
+import { Checkbox, Card, Typography, Space, Tooltip, Tag } from 'antd';
 import {
   VerticalAlignBottomOutlined,
   VerticalAlignTopOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons';
 import { formatSize, useI18n } from 'src/utils';
 import { SearchModal } from 'src/pages/BundleSize/components/search-modal';
@@ -241,7 +242,8 @@ export const TreeMap = React.forwardRef<any, TreeMapProps>((props, ref) => (
 export const AssetTreemapWithFilter: React.FC<{
   treeData: TreeNode[];
   onChartClick?: (params: any) => void;
-}> = ({ treeData, onChartClick }) => {
+  bundledSize?: boolean;
+}> = ({ treeData, onChartClick, bundledSize = false }) => {
   const assetNames = useMemo(
     () => treeData.map((item) => item.name),
     [treeData],
@@ -288,6 +290,36 @@ export const AssetTreemapWithFilter: React.FC<{
                 setOpen={setSearchModalOpen}
                 isIcon={true}
               />
+              <Tooltip
+                color={'white'}
+                title={
+                  <span>
+                    ✨ In Rspack, TreeMap proportions are always based on
+                    Bundled Size by default.
+                    <br />
+                    ✨ In Webpack, TreeMap proportions are based on Bundled Size
+                    only when SourceMap is enabled.
+                    <br />✨ <b>Bundled Size</b>: The size of a module after
+                    bundling and minification.
+                    <br />✨ <b>Source Size</b>: The size of a module after
+                    compilation (e.g., TypeScript/JSX to JS), but before
+                    bundling and minification.
+                    <br />✨ <b>Gzipped Size</b>: The compressed file size that
+                    users actually download, as most web servers use gzip
+                    compression.
+                    <br />
+                  </span>
+                }
+                overlayInnerStyle={{ width: 620, color: 'black' }}
+              >
+                <InfoCircleOutlined
+                  style={{ color: '#1890ff', marginLeft: 8 }}
+                />
+              </Tooltip>
+              <Tag color="blue">
+                TreeMap area based on{' '}
+                {bundledSize ? 'Bundled Size' : 'Source Size'}
+              </Tag>
             </Space>
           }
           extra={
@@ -334,6 +366,7 @@ export const AssetTreemapWithFilter: React.FC<{
           <TreeMap
             ref={chartRef}
             treeData={filteredTreeData}
+            valueKey={bundledSize ? 'bundledSize' : 'sourceSize'}
             onChartClick={onChartClick}
           />
         </div>
