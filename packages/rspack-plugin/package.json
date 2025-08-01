@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@rslib/core": "^0.11.0",
-    "@rspack/core": "1.4.8",
+    "@rspack/core": "1.4.11",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "@types/tapable": "2.2.7",
