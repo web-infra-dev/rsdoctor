@@ -25,9 +25,9 @@
     "dev": "rslib build --watch"
   },
   "dependencies": {
-    "@rslib/core": "^0.11.0",
-    "@rsbuild/core": "^1.4.10",
-    "@rspack/core": "1.4.8",
+    "@rslib/core": "^0.11.1",
+    "@rsbuild/core": "^1.4.12",
+    "@rspack/core": "1.4.11",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "lodash": "^4.17.21",
