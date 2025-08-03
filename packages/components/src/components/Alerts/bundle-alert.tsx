@@ -30,7 +30,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   dataSource,
   extraData,
 }) => {
-  const [activekey, setActiveKey] = useState('E1001');
+  const [activeKey, setActiveKey] = useState('E1001');
   const tabData: Array<{
     key: string;
     label: string;
@@ -70,7 +70,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
 
   const tabItems = tabData.map((td) => {
     const tagStyle =
-      activekey === td.key
+      activeKey === td.key
         ? ({
             border: '1px solid #91D5FF',
             backgroundColor: '#E6F7FF',
@@ -78,7 +78,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
         : {};
 
     const tagTextStyle =
-      activekey === td.key
+      activeKey === td.key
         ? {
             color: '#1890FF',
           }
