@@ -44,6 +44,7 @@ import {
   AssetTreemapWithFilter,
   TreeNode,
 } from 'src/components/Charts/TreeMap';
+import { Rspack } from '@rsdoctor/utils/common';
 
 const { Option } = Select;
 
@@ -325,33 +326,21 @@ export const WebpackModulesOverallBase: React.FC<
         >
           <ServerAPIProvider api={SDK.ServerAPI.API.GetProjectInfo}>
             {(data) => {
-              const configs = data.configs;
-              const isRspack =
-                Array.isArray(configs) && configs[0]?.name === 'rspack';
-              const suitableDevtoolConfig =
-                Array.isArray(configs) &&
-                configs[0]?.config?.devtool &&
-                typeof configs[0].config.devtool === 'string' &&
-                configs[0].config.devtool.includes('source-map') &&
-                !configs[0].config.devtool.includes('eval');
+              const { isRspack, hasSourceMap } = Rspack.checkSourceMapSupport(
+                data.configs,
+              );
               return (
                 <ServerAPIProvider api={SDK.ServerAPI.API.GetSummaryBundles}>
                   {(data) => {
-                    const computedTreeData: TreeNode[] = data.map((item) => {
-                      const moduleTree = flattenTreemapData(item.modules);
-                      return {
-                        name: item.asset.path,
-                        value: item.asset.size,
-                        children: moduleTree.children,
-                      };
-                    });
+                    const computedTreeData: TreeNode[] = data.map((item) => ({
+                      name: item.asset.path,
+                      value: item.asset.size,
+                      children: flattenTreemapData(item.modules).children,
+                    }));
                     return (
                       <AssetTreemapWithFilter
                         treeData={computedTreeData}
-                        bundledSize={suitableDevtoolConfig || isRspack}
-                        onChartClick={(i) => {
-                          console.log('onChartClick', i);
-                        }}
+                        bundledSize={hasSourceMap || isRspack}
                       />
                     );
                   }}

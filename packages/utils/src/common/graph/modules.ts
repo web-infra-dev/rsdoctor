@@ -12,10 +12,17 @@ export function getModulesByAsset(
   chunks: SDK.ChunkData[],
   modules: SDK.ModuleData[],
   filterModules?: (keyof SDK.ModuleData)[],
+  checkModules?: (module: SDK.ModuleData) => boolean,
 ): SDK.ModuleData[] {
   const ids = getChunkIdsByAsset(asset);
   const cks = getChunksByChunkIds(ids, chunks);
-  const res = getModulesByChunks(asset.path, cks, modules, filterModules);
+  const res = getModulesByChunks(
+    asset.path,
+    cks,
+    modules,
+    filterModules,
+    checkModules,
+  );
   return res;
 }
 
@@ -62,7 +69,7 @@ export function getModulesByChunk(
 function getTypeChecker(assetPath: string) {
   if (isStyleExt(assetPath)) return isStyleExt;
   if (isJsExt(assetPath)) return isJsExt;
-  return () => true; // 其他类型不过滤
+  return () => true;
 }
 
 export function getModulesByChunks(
@@ -70,6 +77,7 @@ export function getModulesByChunks(
   chunks: SDK.ChunkData[],
   modules: SDK.ModuleData[],
   filterModules?: (keyof SDK.ModuleData)[],
+  checkModules?: (module: SDK.ModuleData) => boolean,
 ): SDK.ModuleData[] {
   const res: SDK.ModuleData[] = [];
 
@@ -81,7 +89,12 @@ export function getModulesByChunks(
         const name = md.path || '';
         if (!typeChecker(name)) return;
 
-        if (!res.filter((_m) => _m.id === md.id).length) res.push(md);
+        if (
+          !res.filter((_m) => _m.id === md.id).length &&
+          checkModules &&
+          checkModules(md)
+        )
+          res.push(md);
       });
     });
   } catch (error) {

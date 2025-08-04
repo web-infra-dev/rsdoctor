@@ -83,7 +83,14 @@ export const ensureModulesChunksGraphFn = (
       if (!ensureDevtools(compiler)) {
         return;
       }
-      await handleAfterEmitAssets(compilation, _this);
+      const { namespace, sourceMapFilenameRegex } =
+        calculateNamespaceAndRegex(compiler);
+      await handleAfterEmitAssets(
+        compilation,
+        _this,
+        sourceMapFilenameRegex,
+        namespace,
+      );
     },
   );
 
@@ -285,23 +292,11 @@ function escapeRegExp(str: string) {
 }
 
 /**
- * Handler function for the emit hook. Collects source maps for Webpack assets.
- * @param _this - The Rsdoctor plugin instance.
- * @param compiler - The Webpack compiler instance.
- * @param compilation - The current compilation object.
- * @param callback - The callback to signal completion.
+ * Calculates namespace and source map filename regex for source map resolution.
+ * @param compiler - The Webpack or Rspack compiler instance.
+ * @returns An object containing namespace and sourceMapFilenameRegex.
  */
-async function emitHandler(
-  _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
-  compiler: Plugin.BaseCompiler,
-  compilation: Plugin.BaseCompilation,
-  callback: () => void,
-) {
-  if (!ensureDevtools(compiler)) {
-    callback();
-    return;
-  }
-
+export function calculateNamespaceAndRegex(compiler: Plugin.BaseCompiler) {
   // Determine namespace for source map resolution
   let namespace =
     compiler.options.output.devtoolNamespace ||
@@ -320,11 +315,38 @@ async function emitHandler(
     `(?:webpack://)?(?:${safeNamespace})?([^?]*)`,
   );
 
+  return {
+    namespace: namespace as string,
+    sourceMapFilenameRegex,
+  };
+}
+
+/**
+ * Handler function for the emit hook. Collects source maps for Webpack assets.
+ * @param _this - The Rsdoctor plugin instance.
+ * @param compiler - The Webpack compiler instance.
+ * @param compilation - The current compilation object.
+ * @param callback - The callback to signal completion.
+ */
+async function emitHandler(
+  _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
+  compiler: Plugin.BaseCompiler,
+  compilation: Plugin.BaseCompilation,
+  callback: () => void,
+) {
+  if (!ensureDevtools(compiler)) {
+    callback();
+    return;
+  }
+
+  const { namespace, sourceMapFilenameRegex } =
+    calculateNamespaceAndRegex(compiler);
+
   await handleEmitAssets({
     compilation,
     pluginInstance: _this,
     sourceMapFilenameRegex,
-    namespace: namespace as string,
+    namespace,
   });
   callback();
 }
