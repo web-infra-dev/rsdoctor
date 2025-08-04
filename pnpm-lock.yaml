@@ -62,11 +62,11 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
       '@lynx-js/react':
-        specifier: ^0.111.2
-        version: 0.111.2(@types/react@18.3.23)
+        specifier: ^0.112.1
+        version: 0.112.1(@types/react@18.3.23)
       '@lynx-js/rspeedy':
         specifier: ^0.10.2
-        version: 0.10.2(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(typescript@5.7.3)(webpack@5.97.1)
+        version: 0.10.2(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@playwright/test':
         specifier: 1.44.1
         version: 1.44.1
@@ -2551,8 +2551,8 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
-  '@hongzhiyuan/preact@10.24.0-319c684e':
-    resolution: {integrity: sha512-weWzMUnmXk7gynEpOo/iIyfq95pRoFO2+18eiwD0hk/TeIQUeHbyG4W/S3lCEjB54jvft/itXwhkF+vz623BEg==}
+  '@hongzhiyuan/preact@10.24.0-27dc9d8f':
+    resolution: {integrity: sha512-NpUD1p4NIh+vpN5+YMvtF8CqtO7tS7VwTKxpdoI58Fp3SOmtv0Xr9Bzg+vWitn1K/jBscsonqDX4qZ4qvVd2PA==}
 
   '@isaacs/balanced-match@4.0.1':
     resolution: {integrity: sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==}
@@ -2637,8 +2637,8 @@ packages:
     peerDependencies:
       '@rspack/core': ^1.3.10
 
-  '@lynx-js/react@0.111.2':
-    resolution: {integrity: sha512-R8XK1MWs799VbXxn1wEw5DTcaOll+xWwoUVecNf1WJxTdCtxpMb5VviZDZrFuLEosA25IXZ+JsmBUPAczwxNbQ==}
+  '@lynx-js/react@0.112.1':
+    resolution: {integrity: sha512-y0RQbeiK3pu7Iz+BjWfx3RWt14z1EkSEWBYh3x080gKdWzBe4Naig5GYua8CTAAPZ5NnH7wyMrJaMQesM1wJDw==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18
@@ -11603,7 +11603,7 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
-  '@hongzhiyuan/preact@10.24.0-319c684e': {}
+  '@hongzhiyuan/preact@10.24.0-27dc9d8f': {}
 
   '@isaacs/balanced-match@4.0.1':
     optional: true
@@ -11689,19 +11689,19 @@ snapshots:
       '@lynx-js/webpack-runtime-globals': 0.0.5
       '@rspack/core': '@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17)'
 
-  '@lynx-js/react@0.111.2(@types/react@18.3.23)':
+  '@lynx-js/react@0.112.1(@types/react@18.3.23)':
     dependencies:
       '@types/react': 18.3.23
-      preact: '@hongzhiyuan/preact@10.24.0-319c684e'
+      preact: '@hongzhiyuan/preact@10.24.0-27dc9d8f'
 
-  '@lynx-js/rspeedy@0.10.2(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(typescript@5.7.3)(webpack@5.97.1)':
+  '@lynx-js/rspeedy@0.10.2(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.0(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))
       '@lynx-js/webpack-dev-transport': 0.2.0
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 1.4.7
       '@rsbuild/plugin-css-minimizer': 1.0.2(@rsbuild/core@1.4.7)(webpack@5.97.1)
-      '@rsdoctor/rspack-plugin': 1.1.8(@rsbuild/core@1.4.7)(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/rspack-plugin': 1.1.8(@rsbuild/core@1.4.7)(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
     optionalDependencies:
       typescript: 5.7.3
     transitivePeerDependencies:
@@ -12851,11 +12851,11 @@ snapshots:
 
   '@rsdoctor/client@1.1.8': {}
 
-  '@rsdoctor/core@1.1.8(@rsbuild/core@1.4.7)(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/core@1.1.8(@rsbuild/core@1.4.7)(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.3.0(@rsbuild/core@1.4.7)
-      '@rsdoctor/graph': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/graph': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
       axios: 1.11.0
@@ -12877,7 +12877,7 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/graph@1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/graph@1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/types': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
@@ -12891,11 +12891,11 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.1.8(@rsbuild/core@1.4.7)(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/rspack-plugin@1.1.8(@rsbuild/core@1.4.7)(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
-      '@rsdoctor/core': 1.1.8(@rsbuild/core@1.4.7)(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/graph': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/core': 1.1.8(@rsbuild/core@1.4.7)(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/graph': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
       lodash: 4.17.21
@@ -12909,10 +12909,10 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/sdk@1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/sdk@1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/client': 1.1.8
-      '@rsdoctor/graph': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/graph': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack-canary/core@1.4.11-canary-2c5a4f43-20250729092238(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@types/fs-extra': 11.0.4
