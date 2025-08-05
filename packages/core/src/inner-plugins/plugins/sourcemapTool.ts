@@ -46,7 +46,6 @@ export function bindContextCache(
     let resolved = UNASSIGNED;
 
     if (source.startsWith('file://')) {
-      // 处理 file:// 路径，去掉前缀并 resolve
       resolved = resolve(context, source.replace(/^file:\/\//, ''));
     } else if (!source.startsWith('webpack://')) {
       resolved = resolve(context, source);
