@@ -90,11 +90,11 @@ export function getModulesByChunks(
         if (!typeChecker(name)) return;
 
         if (
-          !res.filter((_m) => _m.id === md.id).length &&
-          checkModules &&
-          checkModules(md)
-        )
+          (checkModules ? checkModules(md) : true) &&
+          !res.filter((_m) => _m.id === md.id).length
+        ) {
           res.push(md);
+        }
       });
     });
   } catch (error) {
