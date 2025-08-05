@@ -16,7 +16,7 @@
     "check-dependency-version": "pnpx check-dependency-version-consistency . && echo",
     "dev:doc": "cd packages/document && pnpm run dev",
     "e2e": "pnpm run e2e:base && pnpm run e2e:native",
-    "e2e:base": "cd ./e2e && pnpm test",
+    "e2e:base": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
     "e2e:native": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test:native",
     "format": "prettier --write . && heading-case --write",
     "lint": "biome lint . --diagnostic-level=error",
