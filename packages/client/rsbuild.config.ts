@@ -135,16 +135,6 @@ export default defineConfig(({ env }) => {
           const { RsdoctorRspackPlugin } =
             require('../rspack-plugin/dist') as typeof import('../rspack-plugin/dist');
 
-          // Configure source map to use webpack:// namespace
-          chainConfig.output.set('devtoolNamespace', '@rsdoctor/client');
-          chainConfig.output.set(
-            'devtoolModuleFilenameTemplate',
-            (info: any) => {
-              // 使用 webpack:// 命名空间格式
-              return `webpack://@rsdoctor/client/${info.resourcePath}`;
-            },
-          );
-
           class StatsWriter {
             apply(compiler: Rspack.Compiler) {
               compiler.hooks.done.tapPromise(
