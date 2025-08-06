@@ -214,7 +214,7 @@ export async function handleAfterEmitAssets(
           namespace,
         );
       } catch (e) {
-        logger.error(e);
+        logger.debug(e);
       }
     }
     timeEnd('ensureModulesChunkGraph.afterEmit.start');
@@ -252,7 +252,7 @@ export async function handleEmitAssets(options: SourceMapAssetOptions) {
           namespace,
         );
       } catch (e) {
-        logger.error(e);
+        logger.debug(e);
       }
     }
     timeEnd('ensureModulesChunkGraph.afterEmit.start');
@@ -286,7 +286,7 @@ function parseAsset(
       // Add defensive checks for the source chain
       assetContent = asset.source?.source?.source?.() || '';
       if (!assetContent) {
-        logger.error(`Failed to get source content for asset: ${assetName}`);
+        logger.debug(`Failed to get source content for asset: ${assetName}`);
         return {
           assetName,
           assetContent: '',
@@ -301,7 +301,7 @@ function parseAsset(
       );
       const bundledCode = bundledAsset?.source?.source?.source?.() || '';
       if (!bundledCode) {
-        logger.error(`Failed to get bundled code for asset: ${map.file}`);
+        logger.debug(`Failed to get bundled code for asset: ${map.file}`);
         return { assetName, assetContent, assetLinesCodeList: [], map };
       }
       assetLinesCodeList = bundledCode.split(/\r?\n/);
@@ -314,7 +314,7 @@ function parseAsset(
       map = asset.source?.sourceAndMap?.()?.map || null;
     }
   } catch (error) {
-    logger.error(`Error parsing asset ${assetName}:`, error);
+    logger.debug(`Error parsing asset ${assetName}:`, error);
     return { assetName, assetContent: '', assetLinesCodeList: [], map: null };
   }
 
