@@ -85,6 +85,7 @@ rsbuild
 rsdoctor
 rsfamily
 rslib
+rslint
 rslog
 rspack
 rspress
@@ -121,7 +122,6 @@ unplugin
 unshift
 upath
 Viorel
-rstest
 watchpack
 webm
 webp
