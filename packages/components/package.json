@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/components",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "main": "./dist/index.js",
   "license": "MIT",
   "module": "dist/index.js",
@@ -83,6 +83,10 @@
     "react-router-dom": "6.4.3",
     "socket.io-client": "4.6.1",
     "url-parse": "1.5.10"
+  },
+  "peerDependencies": {
+    "react": ">=18.3.1",
+    "react-dom": ">=18.3.1"
   },
   "publishConfig": {
     "access": "public",
