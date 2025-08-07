@@ -113,6 +113,8 @@ npm run build
 
 #### Cursor
 
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=rsdoctor&config=eyJjb21tYW5kIjoibnB4IC15IEByc2RvY3Rvci9tY3Atc2VydmVyQGxhdGVzdCJ9)
+
 在 Cursor 编辑器中集成 @rsdoctor/mcp-server，通常只需在 .cursor/mcp.json 文件中添加服务器配置。
 
 ```json
@@ -127,6 +129,25 @@ npm run build
 ```
 
 连接成功后，此时你可以在 Cursor 的 MCP 面板中直接与 Rsdoctor 构建分析数据进行交互，提问产物、依赖、优化等相关问题。
+
+#### VS Code / GitHub Copilot
+
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Rsdoctor_MCP-0098FF?style=flat-square&logo=visualstudiocode&logoColor=ffffff)](vscode:mcp/install?%7B%22name%22%3A%22rsdoctor%22%2C%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40rsdoctor%2Fmcp-server%40latest%22%5D%7D)
+
+1. 在项目根目录创建 `.vscode/mcp.json`，GitHub Copilot 默认会自动加载 MCP Server 配置
+
+```json
+{
+  "mcpServers": {
+    "rsdoctor": {
+      "command": "npx",
+      "args": ["-y", "@rsdoctor/mcp-server@latest"]
+    }
+  }
+}
+```
+
+2. 在 Copilot Chat 面板中选择 [Agent 模式](https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode#_use-agent-mode)，然后开始交互。
 
 #### Cline
 
