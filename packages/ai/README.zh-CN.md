@@ -130,7 +130,7 @@ npm run build
 
 连接成功后，此时你可以在 Cursor 的 MCP 面板中直接与 Rsdoctor 构建分析数据进行交互，提问产物、依赖、优化等相关问题。
 
-#### VS Code / GitHub Copilot
+### VS Code / GitHub Copilot
 
 [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Rsdoctor_MCP-0098FF?style=flat-square&logo=visualstudiocode&logoColor=ffffff)](vscode:mcp/install?%7B%22name%22%3A%22rsdoctor%22%2C%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40rsdoctor%2Fmcp-server%40latest%22%5D%7D)
 
