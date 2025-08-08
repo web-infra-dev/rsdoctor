@@ -13,6 +13,7 @@ export default defineConfig({
           index: ['./src/**'],
         },
       },
+      dts: true,
       output: {
         target: 'web',
         sourceMap: true,
