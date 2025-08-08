@@ -119,7 +119,7 @@
 - **Module Explorer** 标签：点击可打开 `Module` 之间的依赖关系分析页面。
 - **代码查看** 标签，点击可展开代码段，包括 `Source`（源码）、`Transformed`（编译后代码）和 `Bundled`（打包后代码）。
 
-### 支持 Concatenated Module 分析
+### 支持 concatenated module 分析
 
 首先，**[Concatenated Module](https://webpack.js.org/plugins/module-concatenation-plugin/#root)** 是多个 Modules 被合并在了一个闭包中，无法通过 AST 语法分析拆解，但 concatenated module 中可能包含不同 Package 的代码，分析 concatenated module 内部子 Modules 也成为了重点，尤其是采用 ["all-in-one"](https://rsbuild.rs/guide/optimization/code-splitting#all-in-one) 方式打包的项目。
 
@@ -127,13 +127,17 @@ Rsdoctor 支持了对 **[Concatenated Module](https://webpack.js.org/plugins/mod
 
 - **Rspack 项目**，Rspack（>=1.4.11）内部的 Rsdoctor native 插件也增强了 sourcemap 相关能力，可以在不开启 source map 的情况下，无痛分析 concatenate module。
 
-> 可以看到下图，是 'all-in-one' 的打包分析，左图为之前无法分析的情况，右图为可分析情况
+> 可以看到下图，是 'all-in-one' 的打包分析，上图为之前无法分析的情况，下图为可分析情况
+
+- 不支持分析
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
   width="600px"
   style={{ margin: 'auto' }}
 />
+
+- 支持分析
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-after.png"

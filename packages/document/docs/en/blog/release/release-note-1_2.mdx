@@ -8,20 +8,20 @@ _August 2025_
 
 Rsdoctor 1.2 has been released! 🎉
 
-- **Concatenated Module Size Analysis**: Added the ability to analyze the size of concatenated modules, helping developers more accurately identify the actual build size after Tree Shaking.
+- **Deep concatenated module analysis**: Added the ability to analyze the size of concatenated modules, helping developers more accurately identify the actual build size after Tree Shaking.
 - **Bundle Size Analysis with Gzip Support**: Bundle size analysis now displays the size after gzip compression, making it easier for developers to understand the real size of production assets.
 - **Enhanced Treemap Visualization**: Introduced and improved the Treemap (rectangle tree map) feature, allowing developers to gain more intuitive insights into bundle composition and resource distribution.
 - **Rsdoctor MCP**: Rsdoctor MCP is an LLM-powered build analysis tool that helps developers quickly obtain build analysis results through Q&A interactions.
 
-## Concatenated Module Size Analysis
+## Deep concatenated module analysis
 
-During the Rspack build process, certain modules are hoisted or aggregated into a single closure, forming a concatenated module to improve browser execution efficiency and reduce artifact size. Previously, Rsdoctor could not further decompose and analyze the internal structure of these concatenated modules, as they cannot be further broken down through AST parsing.
+During the Rspack build process, certain modules are hoisted or aggregated into a single closure, forming a concatenated module to improve browser execution efficiency and reduce artifact size. Previously, Rsdoctor could not further decompose and analyze the internal structure of these concatenated modules, as they cannot be further split through AST parsing.
 
-**Rsdoctor 1.2** introduces the ability to analyze concatenated module sizes, helping developers accurately understand the actual build size of sub-modules (aggregated modules) after Tree Shaking and compression, facilitating analysis of how concatenated modules affect final bundle size and optimization of code splitting strategies.
+**Rsdoctor 1.2** supports the ability to analyze concatenated module sizes, helping developers accurately understand the actual build size of sub-modules (aggregated modules) after **tree shaking and compression**, facilitating analysis of how concatenated modules affect final bundle size and optimization of code splitting strategies.
 
-Additionally, the Rsdoctor plugin built into Rspack (>=1.4.11) has enhanced source map capabilities, allowing seamless analysis of concatenated modules without enabling source maps. However, Webpack projects still require source maps to be enabled.
+Additionally, **the Rsdoctor plugin built into Rspack (>=1.4.11)** has enhanced source map capabilities, allowing seamless analysis of concatenated modules **without enabling source maps**. **However, Webpack projects still require source maps to be enabled.**
 
-> [View usage details](/guide/usage/bundle-size#%E6%94%AF%E6%8C%81-concatenated-module-%E5%88%86%E6%9E%90)
+> [View usage details](/guide/usage/bundle-size#support-for-concatenated-module-analysis)
 
 <video
   src="https://assets.rspack.rs/others/assets/rsdoctor/concatenate.mp4"
@@ -53,7 +53,7 @@ This shows a comparison between original size and gzip compressed size, providin
 
 ## Enhanced Treemap Visualization
 
-Treemap (rectangle tree map) is a classic artifact analysis view that helps developers more intuitively visualize and analyze bundle composition and the proportion of Assets and Modules.
+Treemap is a classic artifact analysis view that helps developers more intuitively visualize and analyze bundle composition and the proportion of Assets and Modules.
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.gif"
@@ -63,7 +63,7 @@ Treemap (rectangle tree map) is a classic artifact analysis view that helps deve
 
 ## Rsdoctor MCP
 
-Rsdoctor MCP is a tool supported since version 1.1.0, an LLM-powered build analysis tool that helps developers quickly obtain build analysis results through Q&A interactions. Its main features include obtaining artifact information, dependency analysis, optimization suggestions, compilation performance, and Tree Shaking analysis among other core analytical capabilities.
+Rsdoctor MCP is a tool supported since version 1.1.0, an LLM-powered build analysis tool that helps developers quickly obtain build analysis results through Q&A interactions. Its main features include obtaining artifact information, dependency analysis, optimization suggestions, compilation performance, and tree shaking analysis among other core analytical capabilities.
 
 > [View usage details](/guide/start/mcp)
 
@@ -85,4 +85,4 @@ Rsdoctor MCP is a tool supported since version 1.1.0, an LLM-powered build analy
 
 ---
 
-In addition, the 1.1-1.2 period also included numerous bug fixes, dependency upgrades, UI optimizations, and documentation improvements. For complete update details, please refer to: [Release page](https://github.com/web-infra-dev/rsdoctor/releases)
+In addition, the 1.1-1.2 versions also included other capability changes. For complete update details, please refer to: [Release page](https://github.com/web-infra-dev/rsdoctor/releases)
