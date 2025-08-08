@@ -117,6 +117,8 @@ Once connected, you can interact directly with Rsdoctor's build analysis data in
 
 ### Cursor
 
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=rsdoctor&config=eyJjb21tYW5kIjoibnB4IC15IEByc2RvY3Rvci9tY3Atc2VydmVyQGxhdGVzdCJ9)
+
 To integrate @rsdoctor/mcp-server in the Cursor editor, usually you only need to add the server configuration in the `.cursor/mcp.json` file.
 
 ```json
@@ -131,6 +133,25 @@ To integrate @rsdoctor/mcp-server in the Cursor editor, usually you only need to
 ```
 
 Once connected, you can interact directly with Rsdoctor's build analysis data in the MCP panel of Cursor, asking questions about artifacts, dependencies, optimizations, and more.
+
+### VS Code / GitHub Copilot
+
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Rsdoctor_MCP-0098FF?style=flat-square&logo=visualstudiocode&logoColor=ffffff)](vscode:mcp/install?%7B%22name%22%3A%22rsdoctor%22%2C%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40rsdoctor%2Fmcp-server%40latest%22%5D%7D)
+
+1. Create `.vscode/mcp.json` in your project root directory. GitHub Copilot will automatically load the MCP Server configuration.
+
+```json
+{
+  "mcpServers": {
+    "rsdoctor": {
+      "command": "npx",
+      "args": ["-y", "@rsdoctor/mcp-server@latest"]
+    }
+  }
+}
+```
+
+2. In the Copilot Chat view, select [Agent mode](https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode#_use-agent-mode), then start interacting.
 
 ### Cline
 
