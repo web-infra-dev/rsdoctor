@@ -372,12 +372,13 @@ export function getAssetDetails(
   assets: SDK.AssetData[],
   chunks: SDK.ChunkData[],
   modules: SDK.ModuleData[],
+  checkModules: (module: SDK.ModuleData) => boolean,
 ): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetAssetDetails> {
   const asset = assets.find((e) => e.path === assetPath)!;
   return {
     asset,
     chunks: getChunksByAsset(asset, chunks),
-    modules: getModulesByAsset(asset, chunks, modules),
+    modules: getModulesByAsset(asset, chunks, modules, undefined, checkModules),
   };
 }
 

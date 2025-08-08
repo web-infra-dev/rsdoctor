@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/rspack-plugin",
-  "version": "1.1.8",
+  "version": "1.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@rslib/core": "^0.11.0",
-    "@rspack/core": "1.4.8",
+    "@rspack/core": "1.4.11",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "@types/tapable": "2.2.7",
@@ -45,7 +45,6 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true,
     "registry": "https://registry.npmjs.org/"
   }
 }

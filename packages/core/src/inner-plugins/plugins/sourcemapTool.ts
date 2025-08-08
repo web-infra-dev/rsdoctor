@@ -1,5 +1,6 @@
 import { RsdoctorPluginInstance } from '@/types';
 import { Linter, Plugin } from '@rsdoctor/types';
+import { Graph } from '@rsdoctor/utils/common';
 import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 import { Asset } from '@rspack/core';
 import { resolve } from 'path';
@@ -44,15 +45,17 @@ export function bindContextCache(
     }
     let resolved = UNASSIGNED;
 
-    // If not a webpack:// source, resolve normally
-    if (!source.startsWith('webpack://')) {
+    if (source.startsWith('file://')) {
+      resolved = resolve(context, source.replace(/^file:\/\//, ''));
+    } else if (!source.startsWith('webpack://')) {
       resolved = resolve(context, source);
     } else {
       // For webpack:// sources, extract file path and resolve
       const match = source.match(sourceMapFilenameRegex);
       const filePath = match?.[1];
       const hasNamespace =
-        namespace && source.startsWith(`webpack://${namespace}`);
+        (namespace && source.startsWith(`webpack://${namespace}`)) ||
+        (namespace && source.startsWith(`file://${namespace}`));
       const baseDir = hasNamespace ? process.cwd() : context;
       resolved = filePath ? resolve(baseDir, `./${filePath}`) : UNASSIGNED;
     }
@@ -114,7 +117,11 @@ export async function collectSourceMaps(
 
         // The source in map.sources returned by sourceAndMap may be modified by Rsdoctor's loader
         let realSource = m.source.split('!').pop();
-        if (realSource?.startsWith('webpack://') && sourceMapFilenameRegex) {
+        if (
+          (realSource?.startsWith('webpack://') ||
+            realSource?.startsWith('file://')) &&
+          sourceMapFilenameRegex
+        ) {
           realSource = getRealSourcePath(realSource, sourceMapFilenameRegex);
         }
 
@@ -146,14 +153,57 @@ export async function handleAfterEmitAssets(
     Linter.ExtendRuleData<any, string>[]
   >,
   sourceMapFilenameRegex?: RegExp,
+  namespace?: string,
 ) {
   if ('rspack' in compilation.compiler) {
     _this.sourceMapSets = new Map();
     time('ensureModulesChunkGraph.afterEmit.start');
     const assets = [...compilation.getAssets()] as Asset[];
     for (const asset of assets) {
-      const { assetLinesCodeList, map } = parseAsset(asset, assets, 'js/css');
-      if (!map) continue;
+      const { assetLinesCodeList, map: mapFromAsset } = parseAsset(
+        asset,
+        assets,
+        'js/css',
+      );
+      let map = mapFromAsset;
+      if (!map) {
+        let sourceMapFile = asset.info.related?.sourceMap;
+        sourceMapFile = sourceMapFile?.replace(/(\.[^.]+)(\.[^.]+)?$/, '$1');
+        if (sourceMapFile) {
+          // Try to find the source map asset by exact name first
+          let sourceMapAsset = assets.find(
+            (asset) => asset.name === sourceMapFile,
+          );
+
+          // If not found by exact name, try to match by base name without hash
+          if (!sourceMapAsset) {
+            const baseNameWithoutHash = Graph.formatAssetName(
+              sourceMapFile,
+              typeof compilation.options.output.filename === 'string'
+                ? compilation.options.output.filename
+                : undefined,
+            );
+            sourceMapAsset = assets.find((asset) => {
+              const assetBaseName = Graph.formatAssetName(
+                asset.name,
+                typeof compilation.options.output.filename === 'string'
+                  ? compilation.options.output.filename
+                  : undefined,
+              );
+              return (
+                assetBaseName.includes(baseNameWithoutHash) &&
+                asset.name.endsWith('.map')
+              );
+            });
+          }
+
+          if (sourceMapAsset) {
+            map = JSON.parse(sourceMapAsset.source.source().toString());
+          }
+        } else {
+          continue;
+        }
+      }
       try {
         await collectSourceMaps(
           map,
@@ -161,9 +211,10 @@ export async function handleAfterEmitAssets(
           compilation,
           _this,
           sourceMapFilenameRegex,
+          namespace,
         );
       } catch (e) {
-        logger.error(e);
+        logger.debug(e);
       }
     }
     timeEnd('ensureModulesChunkGraph.afterEmit.start');
@@ -201,7 +252,7 @@ export async function handleEmitAssets(options: SourceMapAssetOptions) {
           namespace,
         );
       } catch (e) {
-        logger.error(e);
+        logger.debug(e);
       }
     }
     timeEnd('ensureModulesChunkGraph.afterEmit.start');
@@ -235,7 +286,7 @@ function parseAsset(
       // Add defensive checks for the source chain
       assetContent = asset.source?.source?.source?.() || '';
       if (!assetContent) {
-        logger.error(`Failed to get source content for asset: ${assetName}`);
+        logger.debug(`Failed to get source content for asset: ${assetName}`);
         return {
           assetName,
           assetContent: '',
@@ -250,7 +301,7 @@ function parseAsset(
       );
       const bundledCode = bundledAsset?.source?.source?.source?.() || '';
       if (!bundledCode) {
-        logger.error(`Failed to get bundled code for asset: ${map.file}`);
+        logger.debug(`Failed to get bundled code for asset: ${map.file}`);
         return { assetName, assetContent, assetLinesCodeList: [], map };
       }
       assetLinesCodeList = bundledCode.split(/\r?\n/);
@@ -263,7 +314,7 @@ function parseAsset(
       map = asset.source?.sourceAndMap?.()?.map || null;
     }
   } catch (error) {
-    logger.error(`Error parsing asset ${assetName}:`, error);
+    logger.debug(`Error parsing asset ${assetName}:`, error);
     return { assetName, assetContent: '', assetLinesCodeList: [], map: null };
   }
 

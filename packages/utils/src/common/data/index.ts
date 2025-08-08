@@ -6,6 +6,7 @@ import * as Plugin from '../plugin';
 import * as Graph from '../graph';
 import * as Alerts from '../alerts';
 import { relative } from 'path';
+import { checkSourceMapSupport } from '../rspack';
 
 /**
  * this class will run at both browser and node environment.
@@ -176,12 +177,28 @@ export class APIDataLoader {
         return Promise.all([
           this.loader.loadData('chunkGraph'),
           this.loader.loadData('moduleGraph'),
+          this.loader.loadData('configs'),
         ]).then((res) => {
           const { assetPath } =
             body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetAssetDetails>;
+          const configs = res[2] || [];
+          const { isRspack, hasSourceMap } = checkSourceMapSupport(configs);
           const { assets = [], chunks = [] } = res[0] || {};
           const { modules = [] } = res[1] || {};
-          return Graph.getAssetDetails(assetPath, assets, chunks, modules) as R;
+          const checkModules = (module: SDK.ModuleData) => {
+            if (module.size.parsedSize === 0) {
+              return false;
+            }
+            return true;
+          };
+
+          return Graph.getAssetDetails(
+            assetPath,
+            assets,
+            chunks,
+            modules,
+            isRspack || hasSourceMap ? checkModules : () => true,
+          ) as R;
         });
 
       case SDK.ServerAPI.API.GetSummaryBundles:
