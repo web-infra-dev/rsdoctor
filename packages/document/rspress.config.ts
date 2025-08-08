@@ -169,4 +169,8 @@ export default defineConfig({
       },
     },
   },
+  mediumZoom: {
+    // Select all images that are NOT descendants of an anchor
+    selector: '.rspress-doc img:not(a img)',
+  },
 });
