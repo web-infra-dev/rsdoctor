@@ -25,7 +25,7 @@
 - **`Initial Chunk`**: **initial(初始化)** 是入口起点的主 Chunk，该 chunk 包含入口起点指定的所有模块及其依赖项，与「**按需加载**」的 **Chunk** 资源不同。
   - 有关 Initial Chunk 的详细信息，请参阅 [Initial Chunk 介绍](https://webpack.js.org/concepts/under-the-hood/#chunks)。
 - **`Duplicate Packages`**: 打包到项目中的重复的第三方包。不包括未打包进产物的第三方包，请参阅[重复第三方包](/guide/usage/bundle-alerts)。
-- **`Concatenated Module`**: 串联模块是将多个模块在打包时提升或串联到一个闭包中。在过去，Webpack 在打包时会将每个模块都打包到单独的闭包中，这种封装函数会导致 JavaScript 在浏览器中执行时较慢。可以通过打开 [`optimization.concatenateModules`](https://webpack.js.org/plugins/module-concatenation-plugin/#root) 参数来进行优化。
+- **`Concatenated Module`**: 串联模块是将多个模块在打包时提升或串联到一个闭包中。在过去，Webpack 在打包时会将每个模块都打包到单独的闭包中，这种封装函数会导致 JavaScript 在浏览器中执行时较慢。可以通过打开 [`optimization.concatenateModules`](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6) 参数来进行优化。
 
 ## 产物概览
 
@@ -113,11 +113,54 @@
 
 - **Bundled Size**
   - 模块打包进产物的最终大小。一些标有 `concatenated` 的模块是串联模块，对此值有一定影响，请参阅下方的 `concatenated module` 解释。
-- **[Concatenated Module](https://webpack.js.org/plugins/module-concatenation-plugin/#root)** 串联模块，串联模块是将多个模块在打包时提升或串联到一个闭包中。有两种类型：
+- **[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 串联模块，串联模块是将多个模块在打包时提升或串联到一个闭包中。有两种类型：
   - 一种是串联主模块，标明串联了多少个 `Modules`；
   - 另一种是被串联的子模块，标明被聚合到了哪个 `Module` 内。这种子模块无法继续拆解打包后的代码，因此无法得知具体的 `Bundled Size`，只能得知整个串联模块的大小，该大小标注在主模块尾部。
 - **Module Explorer** 标签：点击可打开 `Module` 之间的依赖关系分析页面。
 - **代码查看** 标签，点击可展开代码段，包括 `Source`（源码）、`Transformed`（编译后代码）和 `Bundled`（打包后代码）。
+
+### 支持 concatenated module 分析
+
+首先，**[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 是多个 Modules 被合并在了一个闭包中，无法通过 AST 语法分析拆解，但 concatenated module 中可能包含不同 Package 的代码，分析 concatenated module 内部子 Modules 也成为了重点，尤其是采用 ["all-in-one"](https://rsbuild.rs/guide/optimization/code-splitting#all-in-one) 方式打包的项目。
+
+Rsdoctor 支持了对 **[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 的拆解并精确计算 concatenated module 中子 modules 的真实的打包后的体积，帮助开发者准确识别 Tree Shaking 后的实际构建体积，分析合并模块对最终 bundle 大小的影响以及优化分包策略。
+
+- **Rspack 项目**，Rspack（>=1.4.11）内部的 Rsdoctor native 插件也增强了 sourcemap 相关能力，可以在不开启 source map 的情况下，无痛分析 concatenate module。
+
+> 可以看到下图，是 'all-in-one' 的打包分析，上图为之前无法分析的情况，下图为可分析情况
+
+- 不支持分析
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+- 支持分析
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-after.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+- **webpack 项目**，则需要开启 sourcemap，才可以准确拆解并分析 concatenated module，如下配置。
+
+```js
+export default {
+  // ...
+  devtool: 'cheap-source-map', // 或其他 devtool 配置
+};
+```
+
+- Rsdoctor 对 Concatenated Module 分析支持如下 Sourcemap 配置：
+  - source-map
+  - hidden-source-map
+  - inline-source-map
+  - cheap-source-map
+  - cheap-module-source-map
+  - nosources-source-map
 
 ### Module 详情
 
@@ -133,7 +176,7 @@
 
 ## 产物总览瓦片图
 
-点击 **「Bundle Size」** 页面的 **「Tile Graph」** 标签，可以查看瓦片图。通过瓦片图可以清晰的看到各个资源和模块之间的占比和关系，如下图所示：
+点击 **「Bundle Size」** 页面的 **「Treemap Graph」** 标签，可以查看瓦片图。通过瓦片图可以清晰的看到各个资源和模块之间的占比和关系，如下图所示：
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.png"
