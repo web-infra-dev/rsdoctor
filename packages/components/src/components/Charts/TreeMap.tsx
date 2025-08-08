@@ -358,7 +358,7 @@ export const AssetTreemapWithFilter: React.FC<{
               options={assetNames}
               value={checkedAssets}
               onChange={setCheckedAssets}
-              className={Styles['asset-checkbox-group']}
+              className={`checkbox-container ${collapsed ? 'collapsed' : ''} ${Styles['asset-checkbox-group']}`}
             />
           </div>
         </Card>

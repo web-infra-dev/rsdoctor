@@ -36,8 +36,10 @@
         padding 0.3s;
 
       &.collapsed {
-        height: 0;
-        padding: 0;
+        .ant-card-body {
+          height: 0;
+          padding: 0;
+        }
       }
     }
 
