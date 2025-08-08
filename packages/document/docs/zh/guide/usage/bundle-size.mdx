@@ -119,6 +119,45 @@
 - **Module Explorer** 标签：点击可打开 `Module` 之间的依赖关系分析页面。
 - **代码查看** 标签，点击可展开代码段，包括 `Source`（源码）、`Transformed`（编译后代码）和 `Bundled`（打包后代码）。
 
+### 支持 Concatenated Module 分析
+
+首先，**[Concatenated Module](https://webpack.js.org/plugins/module-concatenation-plugin/#root)** 是多个 Modules 被合并在了一个闭包中，无法通过 AST 语法分析拆解，但 concatenated module 中可能包含不同 Package 的代码，分析 concatenated module 内部子 Modules 也成为了重点，尤其是采用 ["all-in-one"](https://rsbuild.rs/guide/optimization/code-splitting#all-in-one) 方式打包的项目。
+
+Rsdoctor 支持了对 **[Concatenated Module](https://webpack.js.org/plugins/module-concatenation-plugin/#root)** 的拆解并精确计算 concatenated module 中子 modules 的真实的打包后的体积，帮助开发者准确识别 Tree Shaking 后的实际构建体积，分析合并模块对最终 bundle 大小的影响以及优化分包策略。
+
+- **Rspack 项目**，Rspack（>=1.4.11）内部的 Rsdoctor native 插件也增强了 sourcemap 相关能力，可以在不开启 source map 的情况下，无痛分析 concatenate module。
+
+> 可以看到下图，是 'all-in-one' 的打包分析，左图为之前无法分析的情况，右图为可分析情况
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-after.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+- **webpack 项目**，则需要开启 sourcemap，才可以准确拆解并分析 concatenated module，如下配置。
+
+```js
+export default {
+  // ...
+  devtool: 'cheap-source-map', // 或其他 devtool 配置
+};
+```
+
+- Rsdoctor 对 Concatenated Module 分析支持如下 Sourcemap 配置：
+  - source-map
+  - hidden-source-map
+  - inline-source-map
+  - cheap-source-map
+  - cheap-module-source-map
+  - nosources-source-map
+
 ### Module 详情
 
 点击模块标签，可以查看模块详情，如下图所示：

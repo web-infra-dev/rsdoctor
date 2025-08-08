@@ -1,0 +1,88 @@
+---
+published_at: 2025-08
+---
+
+_August 2025_
+
+# Rsdoctor 1.2 发布公告
+
+Rsdoctor 1.2 版本已经发布啦 🎉
+
+- **合并模块体积统计**：新增对 concatenate module（聚合模块）体积的分析能力，帮助开发者更精确地识别 Tree Shaking 后的实际打包体积。
+- **Bundle 体积分析支持 Gzip**：Bundle 体积分析新增对 gzip 压缩体积的展示，让开发者能方便了解产物上线后的真实体积表现。
+- **Treemap 可视化增强**：新增并优化了 Treemap（矩形树图）功能，帮助开发者以更直观方式洞察 bundle 组成和资源分布。
+- **Rsdoctor MCP** Rsdoctor MCP 是一个借助 LLM 的构建分析工具，通过问答形式帮助开发者快速获取构建分析结果。
+
+## 合并模块体积统计
+
+在 Rspack 构建过程中，某些 Modules 会被提升或聚合到一个闭包中，从而合成一个 concatenated module，用来提升浏览器中的执行效率以及减少产物体积。此前，Rsdoctor 无法进一步分解和分析这些 Concatenated Module 的内部结构，因为它们无法通过 AST 继续拆解。
+
+**Rsdoctor 1.2 版本**新增了对 concatenated module 的分析能力，帮助开发者准确获知 Tree Shaking 及压缩后的子 Modules（被聚合的 Modules）的实际构建体积，便于分析 Concatenated Module 对最终 bundle 大小的影响以及优化分包策略。
+
+此外，Rspack（>=1.4.11）内部的 Rsdoctor 插件也增强了 source map 相关能力，可以在不开启 source map 的情况下，可无痛分析 concatenate module。然而，Webpack 项目中则要开启 source map。
+
+> [查看使用详情](/guide/usage/bundle-size#%E6%94%AF%E6%8C%81-concatenated-module-%E5%88%86%E6%9E%90)
+
+<video
+  src="https://assets.rspack.rs/others/assets/rsdoctor/concatenate.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
+
+## Bundle 体积分析支持 Gzip
+
+为了更真实地反映生产环境的体积表现，Rsdoctor 新增了对 gzip 压缩体积的分析支持，可在 Bundle Size 页面和 TreeMap 页面查看到，如下图：
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap-gzip.png"
+  width="500px"
+  style={{ margin: 'auto' }}
+/>
+
+可以看到原始体积和 gzip 压缩后的体积对比，同时为生产环境优化提供更准确的参考数据。
+
+## Treemap 可视化增强
+
+Treemap（矩形树图）经典产物分析视图，，帮助开发者更直观地及可视化分析 bundle 组成和 Assets 和 Modules 占比。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.gif"
+  width="500px"
+  style={{ margin: 'auto' }}
+/>
+
+## Rsdoctor MCP
+
+Rsdoctor MCP 是 1.1.0 版本支持的工具，是一个借助 LLM 的构建分析工具，通过问答形式帮助开发者快速获取构建分析结果。主要功能包括获取产物信息、依赖分析、优化建议、编译性能及 Tree Shaking 分析等核心分析能力。
+
+> [查看使用详情](/guide/start/mcp)
+
+<video
+  src="https://lf3-static.bytednsdoc.com/obj/eden-cn/lognuvj/rsdoctor/docs/mcp-bundle-optimize-2.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
+
+---
+
+除此之外，1.1-1.2 期间还包括大量 bugfix、依赖升级、UI 优化和文档完善等改进。完整更新内容请参考：[Release 页面](https://github.com/web-infra-dev/rsdoctor/releases)
