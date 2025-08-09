@@ -27,10 +27,10 @@
     "socket.io-client": "4.6.1"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "1.17.0",
+    "@modelcontextprotocol/sdk": "1.17.2",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "@rslib/core": "^0.11.0",
+    "@rslib/core": "^0.11.2",
     "@types/node": "^22.8.1",
     "axios": "^1.11.0",
     "typescript": "^5.2.2",
