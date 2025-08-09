@@ -88,11 +88,11 @@
     "json-stream-stringify": "3.0.1",
     "lines-and-columns": "2.0.4",
     "picocolors": "^1.1.1",
-    "rslog": "^1.2.9",
+    "rslog": "^1.2.11",
     "strip-ansi": "^6.0.1"
   },
   "devDependencies": {
-    "@rslib/core": "^0.11.0",
+    "@rslib/core": "^0.11.2",
     "@types/babel__code-frame": "7.0.6",
     "@types/connect": "3.4.38",
     "@types/deep-eql": "4.0.2",
