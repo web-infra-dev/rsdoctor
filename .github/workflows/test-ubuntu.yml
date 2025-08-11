@@ -2,7 +2,7 @@ name: Test (Ubuntu)
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on pull request events but only for the main branch
+  # Triggers the workflow on pull request events for main and release branches
   pull_request:
     branches: [main, release_*, release-*]
 
