@@ -31,7 +31,7 @@
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "lodash": "^4.17.21",
-    "memfs": "4.17.2",
+    "memfs": "4.36.0",
     "typescript": "^5.2.2",
     "upath": "2.0.1",
     "webpack": "^5.97.1"
