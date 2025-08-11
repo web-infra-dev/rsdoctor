@@ -40,7 +40,6 @@ export async function execute(
     );
   }
 
-  console.log('command', command);
 
   if (command === Commands.StatsAnalyze) {
     const { action } = statsAnalyze(ctx);
