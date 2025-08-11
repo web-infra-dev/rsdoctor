@@ -247,7 +247,10 @@ export function normalizeRspackUserOptions<
     normalizeUserConfig(options);
 
   config.experiments ??= {
-    enableNativePlugin: false,
+    enableNativePlugin: {
+      moduleGraph: false,
+      chunkGraph: false,
+    },
   };
 
   if (
