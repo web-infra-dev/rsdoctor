@@ -1,0 +1,80 @@
+import { RsdoctorSDK } from '@rsdoctor/sdk';
+import { Constants, Manifest as ManifestType, SDK } from '@rsdoctor/types';
+import { cyan } from 'picocolors';
+import ora from 'ora';
+import { Commands } from '../constants';
+import { Command } from '../types';
+import { enhanceCommand, readFile } from '../utils';
+import { StatsCompilation } from '@rsdoctor/types/src/plugin';
+import { TransUtils } from '@rsdoctor/core/common-utils';
+
+interface Options {
+  profile: string;
+  open?: boolean;
+  port?: number;
+  type?: SDK.ToDataType;
+}
+
+export const statsAnalyze: Command<
+  Commands.StatsAnalyze,
+  Options,
+  RsdoctorSDK
+> = enhanceCommand(({ cwd, name, bin }) => ({
+  command: Commands.StatsAnalyze,
+  description:
+    `use ${name} to open "${Constants.RsdoctorOutputManifestPath}" in browser for analysis.example: ${bin} ${Commands.StatsAnalyze} --profile "${Constants.StatsFilePath}"`.trim(),
+  options(yargs) {
+    yargs
+      .option('profile', {
+        type: 'string',
+        description: 'profile for Web Doctor server',
+        demandOption: true,
+      })
+      .option('port', {
+        type: 'number',
+        description: 'port for Web Doctor Server',
+      })
+      .option('type', {
+        type: 'boolean',
+        description: 'if need lite bundle mode',
+      });
+  },
+  async action({ profile, open = true, type = SDK.ToDataType.Normal }) {
+    const spinner = ora({ prefixText: cyan(`[${name}]`) }).start(
+      `start to loading "${profile}"`,
+    );
+    const statsStrings = await readFile(profile, cwd);
+    const json = JSON.parse(statsStrings) as StatsCompilation;
+
+    spinner.text = `start server`;
+    const { chunkGraph, moduleGraph } = await TransUtils.transStats(json);
+
+    const sdk = new RsdoctorSDK({
+      name: 'bundle-diff',
+      root: process.cwd(),
+      type,
+      noServer: false,
+    });
+
+    await sdk.bootstrap();
+    sdk.reportChunkGraph(chunkGraph);
+    sdk.reportModuleGraph(moduleGraph);
+    sdk.addClientRoutes([
+      ManifestType.RsdoctorManifestClientRoutes.Overall,
+      ManifestType.RsdoctorManifestClientRoutes.BundleSize,
+      ManifestType.RsdoctorManifestClientRoutes.ModuleGraph,
+    ]);
+
+    if (open) {
+      spinner.text = `open browser automatically`;
+
+      await sdk.server.openClientPage('homepage');
+    }
+
+    spinner.succeed(
+      `the local url: ${cyan(sdk.server.getClientUrl('homepage'))}`,
+    );
+
+    return sdk;
+  },
+}));
