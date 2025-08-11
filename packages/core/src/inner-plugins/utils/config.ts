@@ -246,9 +246,7 @@ export function normalizeRspackUserOptions<
   const config: RsdoctorRspackPluginOptionsNormalized<Rules> =
     normalizeUserConfig(options);
 
-  config.experiments ??= {
-    enableNativePlugin: false,
-  };
+  config.experiments ??= {};
 
   if (
     typeof options.experiments?.enableNativePlugin === 'boolean' &&
