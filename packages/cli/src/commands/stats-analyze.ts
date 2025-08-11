@@ -50,7 +50,7 @@ export const statsAnalyze: Command<
     const { chunkGraph, moduleGraph } = await TransUtils.transStats(json);
 
     const sdk = new RsdoctorSDK({
-      name: 'bundle-diff',
+      name: 'stats-analyze',
       root: process.cwd(),
       type,
       noServer: false,
