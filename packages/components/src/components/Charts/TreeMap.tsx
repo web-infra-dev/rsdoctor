@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo, useMemo } from 'react';
-import ReactEChartsCore from 'echarts-for-react/lib/core';
+import EChartsReactCore from 'echarts-for-react/esm/core';
 import * as echarts from 'echarts/core';
 import { TreemapChart } from 'echarts/charts';
 import { TooltipComponent } from 'echarts/components';
@@ -215,7 +215,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
 
       return option ? (
         <div>
-          <ReactEChartsCore
+          <EChartsReactCore
             ref={chartRef}
             option={option}
             echarts={echarts}
