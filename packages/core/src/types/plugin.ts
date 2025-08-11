@@ -189,7 +189,7 @@ export interface RsdoctorRspackPluginExperiments {
 }
 
 export interface RsdoctorRspackPluginExperimentsNormalized {
-  enableNativePlugin?: boolean | NativePluginConfig;
+  enableNativePlugin?: NativePluginConfig;
 }
 
 export interface RsdoctorRspackPluginOptions<
