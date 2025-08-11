@@ -178,9 +178,6 @@ export interface RsdoctorRspackPluginInstance<
 export interface NativePluginConfig {
   moduleGraph?: boolean;
   chunkGraph?: boolean;
-  sourceMap?: {
-    cheap?: boolean;
-  };
 }
 
 export interface RsdoctorRspackPluginExperiments {
@@ -188,11 +185,11 @@ export interface RsdoctorRspackPluginExperiments {
    * Whether to enable the native plugin to improve the performance.
    * @default false
    */
-  enableNativePlugin?: boolean | NativePluginConfig;
+  enableNativePlugin?: boolean;
 }
 
 export interface RsdoctorRspackPluginExperimentsNormalized {
-  enableNativePlugin?: NativePluginConfig;
+  enableNativePlugin?: boolean | NativePluginConfig;
 }
 
 export interface RsdoctorRspackPluginOptions<
