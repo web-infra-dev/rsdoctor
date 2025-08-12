@@ -176,12 +176,17 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         logger.debug('[RspackNativePlugin] Enabled');
         const enableNativePlugin = this.options.experiments?.enableNativePlugin;
         new RsdoctorRspackNativePlugin({
-          // TODO: more detailed data features based on the rsdoctor options
-          moduleGraphFeatures: enableNativePlugin?.moduleGraph || false,
-          chunkGraphFeatures: enableNativePlugin?.chunkGraph || false,
+          moduleGraphFeatures:
+            typeof enableNativePlugin === 'boolean'
+              ? enableNativePlugin
+              : enableNativePlugin?.moduleGraph || false,
+          chunkGraphFeatures:
+            typeof enableNativePlugin === 'boolean'
+              ? enableNativePlugin
+              : enableNativePlugin?.chunkGraph || false,
           sourceMapFeatures: {
-            cheap: enableNativePlugin?.sourceMap?.cheap || false,
-            module: true,
+            cheap: false,
+            module: false,
           },
         }).apply(compiler);
       }

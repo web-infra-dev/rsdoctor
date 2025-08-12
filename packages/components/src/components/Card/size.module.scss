@@ -13,14 +13,13 @@
 
 .description {
   font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #000000d9;
 
   @media (max-width: 1500px) {
     font-size: 14px;
   }
-
-  font-weight: 500;
-  line-height: 28px;
-  color: #000000d9;
 }
 
 .percentContainer {

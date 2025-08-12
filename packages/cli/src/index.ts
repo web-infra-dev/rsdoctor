@@ -6,6 +6,7 @@ import { analyze, bundleDiff } from './commands';
 import { Command, CommandContext, GetCommandArgumentsType } from './types';
 import { Commands, pkg, bin } from './constants';
 import { logger } from '@rsdoctor/utils/logger';
+import { statsAnalyze } from './commands/stats-analyze';
 
 export async function execute<
   T extends GetCommandArgumentsType<typeof analyze>,
@@ -39,6 +40,15 @@ export async function execute(
     );
   }
 
+
+  if (command === Commands.StatsAnalyze) {
+    const { action } = statsAnalyze(ctx);
+
+    return action(
+      options as GetCommandArgumentsType<typeof statsAnalyze>['options'],
+    );
+  }
+
   if (command === Commands.BundleDiff) {
     const { action } = bundleDiff(ctx);
 
@@ -52,7 +62,7 @@ export async function execute(
 
   args.version(version);
 
-  const commands: Command<string>[] = [analyze, bundleDiff];
+  const commands: Command<string>[] = [analyze, bundleDiff, statsAnalyze];
 
   commands.forEach((cmd) => {
     const { command, description, options, action } = cmd(ctx);

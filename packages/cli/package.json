@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -33,6 +33,7 @@
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
+    "@rsdoctor/core": "workspace:*",
     "axios": "^1.11.0",
     "ora": "^5.4.1",
     "picocolors": "^1.1.1",
