@@ -104,11 +104,4 @@ export class LoaderAPI extends BaseAPI {
       { file, loader, loaderIndex },
     );
   }
-
-  @Router.post(SDK.ServerAPI.API.GetTreemapReportHtml)
-  public async GetTreemapReportHtml(): Promise<
-    SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetTreemapReportHtml>
-  > {
-    return this.dataLoader.loadAPI(SDK.ServerAPI.API.GetTreemapReportHtml, {});
-  }
 }

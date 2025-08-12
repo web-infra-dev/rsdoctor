@@ -45,8 +45,6 @@ export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   reportSummaryData(part: Partial<SummaryData>): void;
   /** Report sourceMap data */
   reportSourceMap(data: RawSourceMap): void;
-  /** report treemap graph like webpack bundle analyzer data */
-  reportTreemapHtml(data: string): void;
 
   getClientRoutes(): RsdoctorManifestClientRoutes[];
   addClientRoutes(routes: RsdoctorManifestClientRoutes[]): void;

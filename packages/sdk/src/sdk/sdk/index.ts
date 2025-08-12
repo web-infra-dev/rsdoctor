@@ -56,8 +56,6 @@ export class RsdoctorSDK<
 
   private _packageGraph!: SDK.PackageGraphInstance;
 
-  private _treemapReportHtml: string | undefined;
-
   constructor(options: T) {
     super(options);
     this.server = options.config?.noServer
@@ -335,10 +333,6 @@ export class RsdoctorSDK<
     this.onDataReport();
   }
 
-  reportTreemapHtml(treemapReportHtml: string): void {
-    this._treemapReportHtml = treemapReportHtml;
-  }
-
   createPackageGraph() {
     logger.debug(
       `sdk._moduleGraph size: ${this._moduleGraph.size()}`,
@@ -450,7 +444,7 @@ export class RsdoctorSDK<
             };
       },
       get otherReports() {
-        return { treemapReportHtml: ctx._treemapReportHtml || '' };
+        return { treemapReportHtml: '' };
       },
     };
   }
@@ -494,7 +488,7 @@ export class RsdoctorSDK<
       chunkGraph: this._chunkGraph,
       packageGraph: this._packageGraph,
       loader: this._loader.slice(),
-      otherReports: { treemapReportHtml: this._treemapReportHtml || '' },
+      otherReports: { treemapReportHtml: '' },
     };
   }
 

@@ -41,7 +41,6 @@ export interface LoaderAPIResponse {
   >;
   [API.GetLoaderFileFirstInput]: string;
   [API.GetLoaderFileInputAndOutput]: { input: string; output: string };
-  [API.GetTreemapReportHtml]: string;
   [API.GetDirectoriesLoaders]: Array<{
     directory: string;
     stats: Array<
@@ -62,6 +61,4 @@ export interface LoaderAPIRequestBody {
     loader: string;
     loaderIndex: number;
   };
-
-  [API.GetTreemapReportHtml]: {};
 }

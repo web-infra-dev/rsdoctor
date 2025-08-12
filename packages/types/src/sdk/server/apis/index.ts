@@ -84,8 +84,6 @@ export enum API {
   BundleDiffManifest = '/api/bundle_diff/manifest.json',
   GetBundleDiffSummary = '/api/bundle_diff/summary',
 
-  GetTreemapReportHtml = '/api/treemap/report',
-
   /** AI API */
   GetChunkGraphAI = '/api/graph/chunks/graph/ai',
   GetChunkByIdAI = '/api/graph/chunk/id/ai',

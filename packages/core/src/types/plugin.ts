@@ -119,7 +119,7 @@ export interface RsdoctorMultiplePluginOptions<
 interface ISupport {
   banner?: boolean;
   parseBundle?: boolean;
-  generateTreemapGraph?: boolean;
+  generateTileGraph?: boolean;
   gzip?: boolean;
 }
 

@@ -148,6 +148,4 @@ export interface PackageGraphData {
   dependencies: PackageDependencyData[];
 }
 
-export interface OtherReports {
-  treemapReportHtml?: string;
-}
+export interface OtherReports {}

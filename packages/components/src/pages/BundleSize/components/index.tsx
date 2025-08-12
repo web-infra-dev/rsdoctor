@@ -164,7 +164,7 @@ const tabList = [
   },
   {
     key: 'treemap',
-    label: 'Treemap Graph',
+    label: 'Treemap',
   },
 ];
 
