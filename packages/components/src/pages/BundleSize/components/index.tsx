@@ -332,11 +332,25 @@ export const WebpackModulesOverallBase: React.FC<
               return (
                 <ServerAPIProvider api={SDK.ServerAPI.API.GetSummaryBundles}>
                   {(data) => {
-                    const computedTreeData: TreeNode[] = data.map((item) => ({
-                      name: item.asset.path,
-                      value: item.asset.size,
-                      children: flattenTreemapData(item.modules).children,
-                    }));
+                    // Filter assets to only show JS (js, cjs, mjs), CSS, and HTML files
+                    const isTargetFileType = (filePath: string): boolean => {
+                      const ext = filePath.toLowerCase().split('.').pop();
+                      return (
+                        ext === 'js' ||
+                        ext === 'cjs' ||
+                        ext === 'mjs' ||
+                        ext === 'css' ||
+                        ext === 'html'
+                      );
+                    };
+
+                    const computedTreeData: TreeNode[] = data
+                      .filter((item) => isTargetFileType(item.asset.path))
+                      .map((item) => ({
+                        name: item.asset.path,
+                        value: item.asset.size,
+                        children: flattenTreemapData(item.modules).children,
+                      }));
                     return (
                       <AssetTreemapWithFilter
                         treeData={computedTreeData}
