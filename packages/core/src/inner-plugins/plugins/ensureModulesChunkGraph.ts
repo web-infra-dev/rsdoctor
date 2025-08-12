@@ -207,6 +207,15 @@ async function doneHandler(
   // Report graphs to SDK for further processing or client display
   _this.modulesGraph && (await _this.sdk.reportModuleGraph(_this.modulesGraph));
   await _this.sdk.reportChunkGraph(_this.chunkGraph!);
+
+  // Warn if deprecated treemap option is enabled
+  if (_this.options.supports.generateTileGraph) {
+    logger.warn(
+      chalk.yellow(
+        'The option generateTileGraph is deprecated. Treemap (i.e. Tile Graph) is now supported by default.',
+      ),
+    );
+  }
 }
 
 /**
