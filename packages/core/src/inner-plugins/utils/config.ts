@@ -246,30 +246,26 @@ export function normalizeRspackUserOptions<
   const config: RsdoctorRspackPluginOptionsNormalized<Rules> =
     normalizeUserConfig(options);
 
-  config.experiments ??= {};
+  config.experiments ??= {
+    enableNativePlugin: {
+      moduleGraph: false,
+      chunkGraph: false,
+    },
+  };
 
   if (
-    typeof options.experiments?.enableNativePlugin === 'object' ||
-    typeof options.experiments?.enableNativePlugin === 'undefined'
+    typeof options.experiments?.enableNativePlugin === 'boolean' &&
+    options.experiments?.enableNativePlugin === true
   ) {
-    const userConfig = options.experiments?.enableNativePlugin;
-    config.experiments.enableNativePlugin = userConfig
-      ? {
-          moduleGraph: true,
-          chunkGraph: true,
-          sourceMap: {
-            cheap: true,
-            ...userConfig.sourceMap,
-          },
-          ...userConfig,
-        }
-      : {
-          moduleGraph: false,
-          chunkGraph: false,
-          sourceMap: {
-            cheap: true,
-          },
-        };
+    config.experiments.enableNativePlugin = {
+      moduleGraph: true,
+      chunkGraph: true,
+    };
+  } else {
+    config.experiments.enableNativePlugin = {
+      moduleGraph: false,
+      chunkGraph: false,
+    };
   }
   return config;
 }
