@@ -27,7 +27,7 @@ export const statsAnalyze: Command<
     yargs
       .option('profile', {
         type: 'string',
-        description: 'profile for Web Doctor server',
+        description: 'Path to webpack stats.json file for analysis',
         demandOption: true,
       })
       .option('port', {
