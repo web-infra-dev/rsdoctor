@@ -58,7 +58,6 @@ describe('normalizeUserConfig', () => {
   it('should use default supports when not provided', () => {
     const result = normalizeUserConfig();
     expect(result.supports.banner).toEqual(undefined);
-    expect(result.supports.generateTileGraph).toEqual(undefined);
     expect(result.supports.gzip).toEqual(true);
     expect(result.supports.parseBundle).toEqual(true);
   });
@@ -67,7 +66,6 @@ describe('normalizeUserConfig', () => {
     const customSupports = {
       parseBundle: false,
       banner: true,
-      generateTileGraph: false,
       gzip: true,
     };
     const result = normalizeUserConfig({ supports: customSupports });

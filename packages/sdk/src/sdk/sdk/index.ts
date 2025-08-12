@@ -56,8 +56,6 @@ export class RsdoctorSDK<
 
   private _packageGraph!: SDK.PackageGraphInstance;
 
-  private _tileReportHtml: string | undefined;
-
   constructor(options: T) {
     super(options);
     this.server = options.config?.noServer
@@ -335,10 +333,6 @@ export class RsdoctorSDK<
     this.onDataReport();
   }
 
-  reportTileHtml(tileReportHtml: string): void {
-    this._tileReportHtml = tileReportHtml;
-  }
-
   createPackageGraph() {
     logger.debug(
       `sdk._moduleGraph size: ${this._moduleGraph.size()}`,
@@ -450,7 +444,7 @@ export class RsdoctorSDK<
             };
       },
       get otherReports() {
-        return { tileReportHtml: ctx._tileReportHtml || '' };
+        return { treemapReportHtml: '' };
       },
     };
   }
@@ -494,7 +488,7 @@ export class RsdoctorSDK<
       chunkGraph: this._chunkGraph,
       packageGraph: this._packageGraph,
       loader: this._loader.slice(),
-      otherReports: { tileReportHtml: this._tileReportHtml || '' },
+      otherReports: { treemapReportHtml: '' },
     };
   }
 

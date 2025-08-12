@@ -208,11 +208,11 @@ async function doneHandler(
   _this.modulesGraph && (await _this.sdk.reportModuleGraph(_this.modulesGraph));
   await _this.sdk.reportChunkGraph(_this.chunkGraph!);
 
-  // Warn if deprecated tile graph option is enabled
+  // Warn if deprecated treemap option is enabled
   if (_this.options.supports.generateTileGraph) {
     logger.warn(
       chalk.yellow(
-        'The option generateTileGraph is deprecated. Tile graph is now supported by default.',
+        'The option generateTileGraph is deprecated. Treemap (i.e. Tile Graph) is now supported by default.',
       ),
     );
   }

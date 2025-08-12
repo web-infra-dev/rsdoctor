@@ -6,4 +6,4 @@ export const name = 'BundleSize';
 
 export const route = Client.RsdoctorClientRoutes.BundleSize;
 
-export type GraphType = 'tile' | 'tree';
+export type GraphType = 'treemap' | 'tree';

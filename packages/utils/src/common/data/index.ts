@@ -444,11 +444,6 @@ export class APIDataLoader {
           },
         );
 
-      case SDK.ServerAPI.API.GetTileReportHtml:
-        return this.loader.loadData('otherReports').then((otherReports) => {
-          return otherReports?.tileReportHtml as R;
-        });
-
       // This apis for AI
       case SDK.ServerAPI.API.GetChunkGraph:
         return this.loader.loadData('chunkGraph').then((res) => {

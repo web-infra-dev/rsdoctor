@@ -104,11 +104,4 @@ export class LoaderAPI extends BaseAPI {
       { file, loader, loaderIndex },
     );
   }
-
-  @Router.post(SDK.ServerAPI.API.GetTileReportHtml)
-  public async getTileReportHtml(): Promise<
-    SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetTileReportHtml>
-  > {
-    return this.dataLoader.loadAPI(SDK.ServerAPI.API.GetTileReportHtml, {});
-  }
 }

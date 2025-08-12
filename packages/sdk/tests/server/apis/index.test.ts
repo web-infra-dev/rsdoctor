@@ -16,6 +16,7 @@ describe('ensure all of the apis implementation for server', () => {
     list.forEach((api) => {
       expect(apis).toContain(api);
     });
-    expect(list.length).toBeGreaterThan(30);
+
+    expect(list.length).toBeGreaterThanOrEqual(30);
   });
 });
