@@ -36,7 +36,7 @@ export const statsAnalyze: Command<
       })
       .option('type', {
         type: 'boolean',
-        description: 'if need lite bundle mode',
+        description: 'Bundle analysis mode (normal or lite)',
       });
   },
   async action({ profile, open = true, type = SDK.ToDataType.Normal }) {
