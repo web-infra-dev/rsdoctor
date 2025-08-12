@@ -334,7 +334,7 @@ export const WebpackModulesOverallBase: React.FC<
                   {(data) => {
                     // Filter assets to only show JS (js, cjs, mjs), CSS, and HTML files
                     const isTargetFileType = (filePath: string): boolean => {
-                      const ext = filePath.toLowerCase().split('.').pop();
+                      const ext = filePath.toLowerCase().split('.').pop() || '';
                       return (
                         ext === 'js' ||
                         ext === 'cjs' ||
