@@ -35,7 +35,7 @@ export const statsAnalyze: Command<
         description: 'port for Web Doctor Server',
       })
       .option('type', {
-        type: 'boolean',
+        type: 'string',
         description: 'Bundle analysis mode (normal or lite)',
       });
   },
