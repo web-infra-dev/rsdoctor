@@ -163,8 +163,8 @@ const tabList = [
     ),
   },
   {
-    key: 'tile',
-    label: 'Tile Graph',
+    key: 'treemap',
+    label: 'Treemap Graph',
   },
 ];
 
@@ -317,8 +317,8 @@ export const WebpackModulesOverallBase: React.FC<
         <Card
           className="bundle-size=card"
           tabList={tabList}
-          activeTabKey={graphType as 'tree' | 'tile'}
-          onTabChange={(e) => setGraphType(e as 'tree' | 'tile')}
+          activeTabKey={graphType as 'tree' | 'treemap'}
+          onTabChange={(e) => setGraphType(e as 'tree' | 'treemap')}
           hidden={graphType === 'tree'}
           tabProps={{
             size: 'middle',
@@ -351,10 +351,10 @@ export const WebpackModulesOverallBase: React.FC<
         </Card>
 
         <Card
-          hidden={graphType === 'tile'}
+          hidden={graphType === 'treemap'}
           tabList={tabList}
-          activeTabKey={graphType as 'tree' | 'tile'}
-          onTabChange={(e) => setGraphType(e as 'tree' | 'tile')}
+          activeTabKey={graphType as 'tree' | 'treemap'}
+          onTabChange={(e) => setGraphType(e as 'tree' | 'treemap')}
           tabProps={{
             size: 'middle',
           }}

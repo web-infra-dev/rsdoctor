@@ -64,9 +64,9 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       Object.assign(options || {}, {
         supports: {
           ...options?.supports,
-          // Generate Tile Graph default false in rspack builder.
-          generateTileGraph: options?.supports?.generateTileGraph
-            ? options?.supports?.generateTileGraph
+          // Generate Treemap Graph default false in rspack builder.
+          generateTreemapGraph: options?.supports?.generateTreemapGraph
+            ? options?.supports?.generateTreemapGraph
             : false,
         },
       }),

@@ -149,5 +149,5 @@ export interface PackageGraphData {
 }
 
 export interface OtherReports {
-  tileReportHtml?: string;
+  treemapReportHtml?: string;
 }

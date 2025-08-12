@@ -444,9 +444,9 @@ export class APIDataLoader {
           },
         );
 
-      case SDK.ServerAPI.API.GetTileReportHtml:
+      case SDK.ServerAPI.API.GetTreemapReportHtml:
         return this.loader.loadData('otherReports').then((otherReports) => {
-          return otherReports?.tileReportHtml as R;
+          return otherReports?.treemapReportHtml as R;
         });
 
       // This apis for AI
