@@ -33,6 +33,7 @@
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
+    "@rsdoctor/core": "workspace:*",
     "axios": "^1.11.0",
     "ora": "^5.4.1",
     "picocolors": "^1.1.1",

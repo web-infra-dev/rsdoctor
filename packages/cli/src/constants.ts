@@ -1,6 +1,7 @@
 export enum Commands {
   Analyze = 'analyze',
   BundleDiff = 'bundle-diff',
+  StatsAnalyze = 'stats-analyze',
 }
 
 export const pkg: {
