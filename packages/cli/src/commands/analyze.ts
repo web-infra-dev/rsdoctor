@@ -44,7 +44,7 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
           description: 'port for Rsdoctor Server',
         })
         .option('type', {
-          type: 'boolean',
+          type: 'string',
           description: 'if need lite bundle mode',
         });
     },
