@@ -25,7 +25,7 @@ Click on the **"Bundle Size"** option in the navigation bar to view the Bundle a
 - **`Initial Chunk`**: The **initial** chunk is the main chunk of the entry point. This chunk contains all the modules specified by the entry point and their dependencies, unlike the **chunks** for "on-demand loading".
   - For more information about Initial Chunk, please refer to [Initial Chunk Introduction](https://webpack.js.org/concepts/under-the-hood/#chunks).
 - **`Duplicate Packages`**: Duplicate third-party packages bundled into the project. Excludes third-party packages that are not bundled into the artifact. Please refer to [Duplicate Packages](/guide/usage/bundle-alerts).
-- **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. In the past, Rspack would package each module into a separate closure, and this encapsulation function would cause slower execution of JavaScript in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://webpack.js.org/plugins/module-concatenation-plugin/#root) parameter.
+- **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. In the past, Rspack would package each module into a separate closure, and this encapsulation function would cause slower execution of JavaScript in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://rspack.rs/misc/glossary#scope-hoisting) parameter.
 
 ## Bundle overview
 
@@ -122,11 +122,54 @@ The **Modules** tag is shown in the right image, from left to right representing
 
 - **Bundled Size**
   - The final size of the module bundled into the artifact. Some modules labeled as `concatenated` are concatenated modules, which have a certain impact on this value. Please refer to the explanation of `concatenated module` below.
-- **[Concatenated Module](https://webpack.js.org/plugins/module-concatenation-plugin/#root)**: Concatenated modules are modules that are optimized or concatenated into one closure during bundling. There are two types:
+- **[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)**: Concatenated modules are modules that are optimized or concatenated into one closure during bundling. There are two types:
   - One is the concatenated main module, indicating how many `Modules` are concatenated.
   - The other is the concatenated sub-module, indicating which `Module` it is aggregated into. This sub-module cannot be further unpacked after bundling, so the specific `Bundled Size` cannot be determined. Only the size of the entire concatenated module is known, which is marked at the end of the main module.
 - **Module Explorer** tag: Click to open the dependency analysis page between `Modules`.
 - **Code View** tag: Click to expand code segments, including `Source` (source code), `Transformed` (compiled code), and `Bundled` (bundled code).
+
+### Support for concatenated module analysis
+
+First, **[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** refers to multiple modules that are merged into a single closure, which cannot be analyzed through AST syntax analysis. However, concatenated modules may contain code from different packages, making the analysis of sub-modules within concatenated modules a key focus, especially for projects using the ["all-in-one"](https://rsbuild.rs/guide/optimization/code-splitting#all-in-one) bundling approach.
+
+Rsdoctor supports the analyze of **[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** and accurately calculates the real bundled size of sub-modules within concatenated modules, helping developers accurately identify the actual build size after Tree Shaking, analyze the impact of merged modules on final bundle size, and optimize code splitting strategies.
+
+- **For Rspack projects**, the Rsdoctor native plugin built into Rspack (>=1.4.11) has enhanced sourcemap capabilities, allowing seamless analysis of concatenated modules without enabling source maps.
+
+> As shown in the figure below, this is the analysis of 'all-in-one' bundling. The first image shows the previous inability to analyze, while the second image shows the analyzable situation.
+
+- Not support concatenated module
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+- Support concatenated module
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-after.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+- **For webpack projects**, source maps must be enabled to accurately decompose and analyze concatenated modules, as shown in the following configuration.
+
+```js
+export default {
+  // ...
+  devtool: 'cheap-source-map', // or other devtool configuration
+};
+```
+
+- Rsdoctor supports the following sourcemap configurations for Concatenated Module analysis:
+  - source-map
+  - hidden-source-map
+  - inline-source-map
+  - cheap-source-map
+  - cheap-module-source-map
+  - nosources-source-map
 
 ### Module details
 
@@ -140,9 +183,9 @@ Click the module tag to view module details, as shown below:
 
 > For more details, see: [Module details](/guide/usage/module-analysis)
 
-## Bundle tile graph
+## Bundle treemap graph
 
-Click the **"Tile Graph"** label on the **"Bundle Size"** page to view the tile graph. The tile graph clearly shows the proportion and relationship between resources and modules, as shown in the following image:
+Click the **"Treemap Graph"** label on the **"Bundle Size"** page to view the treemap. The treemap clearly shows the proportion and relationship between resources and modules, as shown in the following image:
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.png"
