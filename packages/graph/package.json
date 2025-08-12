@@ -23,7 +23,6 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "lodash.unionby": "^4.8.0",
-    "socket.io": "4.8.1",
     "source-map": "^0.7.4"
   },
   "devDependencies": {
