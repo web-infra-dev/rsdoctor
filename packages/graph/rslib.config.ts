@@ -1,3 +1,11 @@
-import { configWithEsm } from '../../scripts/rslib.base.config';
+import { defineConfig } from '@rslib/core';
+import { esmConfig } from '../../scripts/rslib.base.config';
 
-export default configWithEsm;
+export default defineConfig({
+  lib: [esmConfig],
+  source: {
+    entry: {
+      index: './src/index.ts',
+    },
+  },
+});

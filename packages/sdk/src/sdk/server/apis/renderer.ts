@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { File } from '@rsdoctor/utils/build';
+import fs from 'node:fs';
 import { BaseAPI } from './base';
 import { Router } from '../router';
 
@@ -17,7 +17,7 @@ export class RendererAPI extends BaseAPI {
       ? server.innerClientPath
       : require.resolve('@rsdoctor/client');
 
-    const clientHtml = await File.fse.readFile(clientHtmlPath, 'utf-8');
+    const clientHtml = fs.readFileSync(clientHtmlPath, 'utf-8');
 
     res.setHeader('Content-Type', 'text/html');
     res.setHeader('Cache-Control', 'no-store');

@@ -1,4 +1,4 @@
-import { defineConfig } from '@rslib/core';
+import { defineConfig, type LibConfig } from '@rslib/core';
 
 const BUILD_TARGET = 'es2020' as const;
 
@@ -40,6 +40,55 @@ export const configWithEsm = defineConfig({
         },
       },
       dts: false,
+    },
+  ],
+});
+
+export const nodeMinifyConfig = {
+  js: true,
+  css: false,
+  jsOptions: {
+    minimizerOptions: {
+      // preserve variable name and disable minify for easier debugging
+      mangle: false,
+      minify: false,
+      compress: true,
+    },
+  },
+};
+
+export const esmConfig: LibConfig = {
+  format: 'esm',
+  syntax: 'es2021',
+  dts: {
+    build: true,
+  },
+  output: {
+    minify: nodeMinifyConfig,
+  },
+};
+
+export const cjsConfig: LibConfig = {
+  format: 'cjs',
+  syntax: 'es2021',
+  output: {
+    minify: nodeMinifyConfig,
+  },
+};
+
+export const dualPackage = defineConfig({
+  lib: [esmConfig, cjsConfig],
+});
+
+export const dualPackageBundleless = defineConfig({
+  lib: [
+    {
+      ...esmConfig,
+      bundle: false,
+    },
+    {
+      ...cjsConfig,
+      bundle: false,
     },
   ],
 });

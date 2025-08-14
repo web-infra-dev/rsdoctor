@@ -1,7 +1,7 @@
 import type { SourceMapConsumer } from 'source-map';
+import fs from 'node:fs';
 import * as Webpack from 'webpack';
 import * as Rspack from '@rspack/core';
-import { File } from '@rsdoctor/utils/build';
 import { Node } from '@rsdoctor/utils/ruleUtils';
 import { Plugin, SDK } from '@rsdoctor/types';
 import {
@@ -19,6 +19,7 @@ import {
 } from '@/build-utils/common/module-graph';
 import { hasSetEsModuleStatement } from '../parser';
 import { isFunction } from 'lodash';
+import { logger } from '@rsdoctor/utils/logger';
 
 export interface TransformContext {
   astCache?: Map<Webpack.NormalModule, Node.Program>;
@@ -50,7 +51,13 @@ async function readFile(target: string, wbFs: WebpackFs) {
     }
   }
 
-  return File.fse.readFile(target).catch(() => {});
+  try {
+    return await fs.promises.readFile(target);
+  } catch {
+    // Swallow errors to match the .catch(() => {}) above
+    logger.debug(`readFile error: ${target}`);
+    return;
+  }
 }
 
 /**
@@ -149,6 +156,7 @@ function getModuleSource(
       }
     } catch (e) {
       // ..
+      logger.debug(`getModuleSource error: ${e}`);
     }
   }
 
@@ -219,7 +227,9 @@ async function appendModuleData(
         if (packagePathMap.has(root)) {
           root = packagePathMap.get(root)!;
         } else {
-          const realpath = await File.fse.realpath(root);
+          const realpath = await fs.promises.realpath(root, {
+            encoding: 'utf-8',
+          });
           root = realpath;
           packagePathMap.set(root, realpath);
         }

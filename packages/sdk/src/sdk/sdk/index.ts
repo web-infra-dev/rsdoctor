@@ -1,4 +1,4 @@
-import fse from 'fs-extra';
+import fs from 'node:fs';
 import path from 'path';
 import { DevToolError } from '@rsdoctor/utils/error';
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
@@ -100,7 +100,7 @@ export class RsdoctorSDK<
     const sameFileErrors = errors.filter(
       (item) => item.path === filePath && item !== error,
     );
-    let content = (await File.fse.readFile(filePath, 'utf-8')).toString();
+    let content = (await fs.promises.readFile(filePath, 'utf-8')).toString();
 
     // Application of current modification.
     const startTxt = content.substring(0, fixData.start);
@@ -127,7 +127,7 @@ export class RsdoctorSDK<
     }
 
     // Modify the write to the hard disk.
-    await File.fse.writeFile(filePath, content);
+    await fsPromises.writeFile(filePath, content);
   }
 
   clear() {
@@ -344,7 +344,7 @@ export class RsdoctorSDK<
         this.root,
         (path: string) => {
           try {
-            const exists = File.fse.existsSync(path);
+            const exists = fs.existsSync(path);
             if (exists) {
               // TODO: it's too much logs, this needs to be optimized
               // logger.debug(
@@ -533,7 +533,7 @@ export class RsdoctorSDK<
         .map((src) => {
           const scriptPath = path.resolve(basePath, src);
           try {
-            const scriptContent = fse.readFileSync(scriptPath, 'utf-8');
+            const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
             return `<script>${scriptContent}</script>`;
           } catch (error) {
             console.error(`Could not read script at ${scriptPath}:`, error);
@@ -549,7 +549,7 @@ export class RsdoctorSDK<
         .map((href) => {
           const cssPath = path.resolve(basePath, href);
           try {
-            const cssContent = fse.readFileSync(cssPath, 'utf-8');
+            const cssContent = fs.readFileSync(cssPath, 'utf-8');
             return `<style>${cssContent}</style>`;
           } catch (error) {
             console.error(`Could not read CSS at ${cssPath}:`, error);
@@ -560,7 +560,7 @@ export class RsdoctorSDK<
     }
 
     // Path to your HTML file
-    let htmlContent = fse.readFileSync(htmlFilePath, 'utf-8');
+    let htmlContent = fs.readFileSync(htmlFilePath, 'utf-8');
 
     // Base path to the resources
     const basePath = path.dirname(htmlFilePath);
@@ -607,7 +607,7 @@ export class RsdoctorSDK<
       this.extraConfig?.brief?.reportHtmlName || 'rsdoctor-report.html',
     );
 
-    fse.outputFileSync(outputFilePath, htmlContent, {
+    File.fse.outputFileSync(outputFilePath, htmlContent, {
       encoding: 'utf-8',
       flag: 'w',
     });

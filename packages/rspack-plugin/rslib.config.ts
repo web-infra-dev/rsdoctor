@@ -1,7 +1,7 @@
-import { baseBuildConfig } from '../../scripts/rslib.base.config';
+import { dualPackage } from '../../scripts/rslib.base.config';
 
 const rslibConfig = {
-  ...baseBuildConfig,
+  ...dualPackage,
   ...{
     source: {
       tsconfigPath: 'tsconfig.build.json',

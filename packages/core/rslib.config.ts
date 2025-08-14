@@ -1,7 +1,7 @@
 import { rsbuild, rspack } from '@rslib/core';
-import { baseBuildConfig } from '../../scripts/rslib.base.config';
+import { dualPackageBundleless } from '../../scripts/rslib.base.config';
 
-export default rsbuild.mergeRsbuildConfig(baseBuildConfig, {
+export default rsbuild.mergeRsbuildConfig(dualPackageBundleless, {
   tools: {
     rspack: {
       plugins: [

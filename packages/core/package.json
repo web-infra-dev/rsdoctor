@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "main": "dist/index.js",
-  "module": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
@@ -16,27 +16,33 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./build-utils": {
       "types": "./dist/build-utils/build/index.d.ts",
-      "default": "./dist/build-utils/build/index.js"
+      "import": "./dist/build-utils/build/index.mjs",
+      "require": "./dist/build-utils/build/index.js"
     },
     "./common-utils": {
       "types": "./dist/build-utils/common/index.d.ts",
-      "default": "./dist/build-utils/common/index.js"
+      "import": "./dist/build-utils/common/index.mjs",
+      "require": "./dist/build-utils/common/index.js"
     },
     "./plugins": {
       "types": "./dist/inner-plugins/index.d.ts",
-      "default": "./dist/inner-plugins/index.js"
+      "import": "./dist/inner-plugins/index.mjs",
+      "require": "./dist/inner-plugins/index.js"
     },
     "./rules": {
       "types": "./dist/rules/index.d.ts",
-      "default": "./dist/rules/index.js"
+      "import": "./dist/rules/index.mjs",
+      "require": "./dist/rules/index.js"
     },
     "./types": {
       "types": "./dist/types/index.d.ts",
-      "default": "./dist/types/index.js"
+      "import": "./dist/types/index.mjs",
+      "require": "./dist/types/index.js"
     }
   },
   "typesVersions": {
