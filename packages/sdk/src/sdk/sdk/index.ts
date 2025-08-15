@@ -127,7 +127,7 @@ export class RsdoctorSDK<
     }
 
     // Modify the write to the hard disk.
-    await fsPromises.writeFile(filePath, content);
+    await fs.promises.writeFile(filePath, content);
   }
 
   clear() {
