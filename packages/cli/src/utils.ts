@@ -1,10 +1,10 @@
 import axios from 'axios';
 import path from 'path';
+import fs from 'node:fs';
 import { Ora } from 'ora';
 import { Command } from './types';
 import { Common } from '@rsdoctor/types';
 import { Url } from '@rsdoctor/utils/common';
-import { File } from '@rsdoctor/utils/build';
 
 export function enhanceCommand<CMD extends string, Options, Result>(
   fn: Command<CMD, Options, Result>,
@@ -29,7 +29,7 @@ export async function fetchText(url: string) {
 export async function readFile(url: string, cwd: string) {
   const file = path.resolve(cwd, url);
 
-  return File.fse.readFile(file, 'utf-8');
+  return fs.readFileSync(file, 'utf-8');
 }
 
 export async function loadJSON<T extends Common.PlainObject>(

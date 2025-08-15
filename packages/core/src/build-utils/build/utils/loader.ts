@@ -1,5 +1,5 @@
 import path from 'node:path';
-import fse from 'fs-extra';
+import fse from 'fs-extra/esm';
 import { omit } from 'lodash';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';

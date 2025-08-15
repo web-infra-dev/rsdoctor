@@ -22,7 +22,7 @@ import type {
   RsdoctorRspackPluginInstance,
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
-} from '@rsdoctor/core';
+} from '@rsdoctor/core/types';
 import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
 import {
   Constants,

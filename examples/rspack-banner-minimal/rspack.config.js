@@ -86,7 +86,7 @@ const config = {
     new ReactRefreshPlugin(),
     new RsdoctorRspackPlugin({
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
-      features: ['bundle', 'plugins', 'resolver'],
+      features: ['bundle', 'plugins', 'resolver', 'loader'],
       supports: {
         banner: false,
       },

@@ -3,11 +3,12 @@
   "compilerOptions": {
     "baseUrl": "./",
     "jsx": "react-jsx",
-    "isolatedModules": true,
     "declaration": true,
+    "isolatedModules": true,
     "declarationMap": false,
     "composite": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "skipLibCheck": true
   },
   "include": ["src", "config"],
   "exclude": ["**/node_modules"],

@@ -47,7 +47,8 @@ export async function openBrowser(
   // requested a different browser, we can try opening
   // a Chromium browser with AppleScript. This lets us reuse an
   // existing tab when possible instead of creating a new one.
-  const shouldTryOpenChromeWithAppleScript = process.platform === 'darwin';
+  const shouldTryOpenChromeWithAppleScript =
+    process.platform === 'darwin' || process.platform === 'win32';
   if (shouldTryOpenChromeWithAppleScript) {
     try {
       const targetBrowser = await getTargetBrowser();
@@ -58,7 +59,7 @@ export async function openBrowser(
             needEncodeURI ? encodeURI(url) : url
           }" "${targetBrowser}"`,
           {
-            cwd: join(__dirname, '../../../../static'),
+            cwd: join(__dirname, '../static'),
           },
         );
         return true;

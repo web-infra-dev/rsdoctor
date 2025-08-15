@@ -16,7 +16,8 @@
     "start": "NODE_ENV=development rsbuild build -w",
     "build": "rsbuild build",
     "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true rsbuild build",
-    "preview": "rsbuild preview"
+    "preview": "rsbuild preview",
+    "inspect": "rsbuild inspect"
   },
   "devDependencies": {
     "@rsbuild/core": "^1.4.10",

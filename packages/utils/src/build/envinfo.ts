@@ -1,5 +1,7 @@
-import { helpers, run } from 'envinfo';
+import envinfo from 'envinfo';
 import { exec } from 'child_process';
+const helpers = envinfo.helpers;
+const run = envinfo.run;
 
 export const getCPUInfo = () => helpers.getCPUInfo().then((res) => res[1]);
 
