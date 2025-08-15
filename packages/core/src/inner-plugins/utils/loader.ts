@@ -1,10 +1,8 @@
 import axios from 'axios';
-import {
-  CachedInputFileSystem,
-  create as ResolverCreator,
-} from 'enhanced-resolve';
+import enhancedResolve from 'enhanced-resolve';
+const { CachedInputFileSystem, create: ResolverCreator } = enhancedResolve;
 import fs from 'fs';
-import { omit } from 'lodash';
+import { omit } from 'lodash-es';
 import path from 'path';
 import { logger } from '@rsdoctor/utils/logger';
 import { Loader } from '@rsdoctor/utils/common';
@@ -28,7 +26,7 @@ export function getInternalLoaderOptions(
 
 export function getLoaderOptionsWithoutInternalKeys(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,
-) {
+): Omit<ProxyLoaderOptions, typeof Loader.LoaderInternalPropertyName> {
   const options = loaderContext.getOptions();
   const circlePaths: string[][] = [];
   const loaderOptions = omit(options, [Loader.LoaderInternalPropertyName]);
@@ -122,7 +120,8 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
     // In the childCompiler of mini-css-extract-plugin, the options[Loader.LoaderInternalPropertyName] of proxy-loader is set to proxy-loader, ultimately causing errors in the compilation of less files.
     opts[Loader.LoaderInternalPropertyName] =
       rule.loader &&
-      /proxy.js/.test(rule.loader) &&
+      // compatible with proxy.cjs and proxy.js
+      /proxy\.(js|cjs)/.test(rule.loader) &&
       'options' in rule &&
       typeof rule.options === 'object'
         ? rule.options[Loader.LoaderInternalPropertyName]

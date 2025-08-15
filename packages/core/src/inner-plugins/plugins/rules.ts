@@ -1,7 +1,7 @@
 import { InternalBasePlugin } from './base';
 import { Linter } from '../../rules';
 import { DevToolError } from '@rsdoctor/utils/error';
-import { pull } from 'lodash';
+import { pull } from 'lodash-es';
 import { Plugin } from '@rsdoctor/types';
 import type { WebpackError } from 'webpack';
 import type { RspackError } from '@rspack/core';

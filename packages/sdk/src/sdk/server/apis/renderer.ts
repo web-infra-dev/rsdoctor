@@ -1,7 +1,10 @@
 import { SDK } from '@rsdoctor/types';
 import fs from 'node:fs';
+import { createRequire } from 'module';
 import { BaseAPI } from './base';
 import { Router } from '../router';
+
+const require = createRequire(import.meta.url);
 
 export class RendererAPI extends BaseAPI {
   /** sdk manifest api */

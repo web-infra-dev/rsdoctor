@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { getSDK } from '@rsdoctor/core/plugins';
 import { compileByWebpack5 } from '@scripts/test-helper';
 import path from 'path';
 import { Compiler } from 'webpack';
@@ -45,6 +44,7 @@ async function webpack(tapName: string, compile: typeof compileByWebpack5) {
 test('webpack5 treeShaking tests', async () => {
   const tapName = 'Foo';
   await webpack(tapName, compileByWebpack5);
+  const { getSDK } = await import('@rsdoctor/core/plugins');
   const sdk = getSDK();
   const { moduleGraphModules } = sdk.getStoreData().moduleGraph;
   expect(moduleGraphModules.length).toBe(1);

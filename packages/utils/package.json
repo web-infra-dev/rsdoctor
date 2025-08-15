@@ -6,27 +6,33 @@
     "url": "https://github.com/web-infra-dev/rsdoctor",
     "directory": "packages/utils"
   },
+  "type": "module",
   "license": "MIT",
   "exports": {
     "./common": {
       "types": "./dist/common/index.d.ts",
-      "default": "./dist/common.mjs"
+      "import": "./dist/common.js",
+      "require": "./dist/common.cjs"
     },
     "./build": {
       "types": "./dist/build/index.d.ts",
-      "default": "./dist/build.mjs"
+      "import": "./dist/build.js",
+      "require": "./dist/build.cjs"
     },
     "./error": {
       "types": "./dist/error/index.d.ts",
-      "default": "./dist/error.mjs"
+      "import": "./dist/error.js",
+      "require": "./dist/error.cjs"
     },
     "./ruleUtils": {
       "types": "./dist/rule-utils/index.d.ts",
-      "default": "./dist/ruleUtils.mjs"
+      "import": "./dist/ruleUtils.js",
+      "require": "./dist/ruleUtils.cjs"
     },
     "./logger": {
       "types": "./dist/logger.d.ts",
-      "default": "./dist/logger.mjs"
+      "import": "./dist/logger.js",
+      "require": "./dist/logger.cjs"
     }
   },
   "typesVersions": {
@@ -48,7 +54,8 @@
       ]
     }
   },
-  "main": "dist/build.mjs",
+  "main": "dist/build.cjs",
+  "module": "dist/build.js",
   "types": "dist/build/index.d.ts",
   "files": [
     "dist"

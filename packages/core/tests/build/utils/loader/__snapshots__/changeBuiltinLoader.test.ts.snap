@@ -36,7 +36,7 @@ exports[`test src/build/utils/loader.ts addProbeLoader2Rules > addProbeLoader2Ru
         "type": "javascript/auto",
         "use": [
           {
-            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
             "options": {
               "builderName": "test-compiler",
               "ident": undefined,
@@ -63,7 +63,7 @@ exports[`test src/build/utils/loader.ts addProbeLoader2Rules > addProbeLoader2Ru
             },
           },
           {
-            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
             "options": {
               "builderName": "test-compiler",
               "ident": undefined,
@@ -90,7 +90,7 @@ exports[`test src/build/utils/loader.ts addProbeLoader2Rules > addProbeLoader2Ru
         "type": "javascript/auto",
         "use": [
           {
-            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
             "options": {
               "builderName": "test-compiler",
               "ident": undefined,
@@ -117,7 +117,7 @@ exports[`test src/build/utils/loader.ts addProbeLoader2Rules > addProbeLoader2Ru
             },
           },
           {
-            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
             "options": {
               "builderName": "test-compiler",
               "ident": undefined,
@@ -141,7 +141,7 @@ exports[`test src/build/utils/loader.ts addProbeLoader2Rules > addProbeLoader2Ru
     "type": "javascript/auto",
     "use": [
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -169,7 +169,7 @@ exports[`test src/build/utils/loader.ts addProbeLoader2Rules > addProbeLoader2Ru
         },
       },
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,

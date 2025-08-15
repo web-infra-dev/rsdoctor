@@ -1,4 +1,4 @@
-import { lowerCase } from 'lodash';
+import { lowerCase } from 'lodash-es';
 import fs from 'fs';
 import os from 'os';
 import { describe, it, expect } from '@rstest/core';

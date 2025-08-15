@@ -3,6 +3,7 @@ import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 import { SDK } from '@rsdoctor/types';
 import { ParseBundle } from '@/types';
 import { Lodash } from '@rsdoctor/utils/common';
+import { gzipSync } from 'node:zlib';
 
 export type ParsedModuleSizeData = {
   [x: string]: { size: number; sizeConvert: string; content: string };
@@ -112,7 +113,6 @@ export function transformAssetsModulesData(
         typeof parsedData.content === 'string' &&
         parsedData.content.length > 0
       ) {
-        const { gzipSync } = require('node:zlib');
         gzipSize = gzipSync(parsedData.content, { level: 9 }).length;
       }
     } catch {}

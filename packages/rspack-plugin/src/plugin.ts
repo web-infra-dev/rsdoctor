@@ -34,7 +34,7 @@ import {
 } from '@rsdoctor/types';
 import path from 'path';
 import { pluginTapName, pluginTapPostOptions } from './constants';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 
 import { Loader } from '@rsdoctor/utils/common';
 import { chalk, logger, time, timeEnd } from '@rsdoctor/utils/logger';

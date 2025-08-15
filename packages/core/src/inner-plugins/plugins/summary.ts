@@ -1,5 +1,5 @@
 import { Summary } from '@rsdoctor/utils/common';
-import { minBy, sumBy } from 'lodash';
+import { minBy, sumBy } from 'lodash-es';
 import type { Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
 import { time, timeEnd } from '@rsdoctor/utils/logger';

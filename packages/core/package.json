@@ -7,42 +7,43 @@
     "directory": "packages/core"
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./build-utils": {
       "types": "./dist/build-utils/build/index.d.ts",
-      "import": "./dist/build-utils/build/index.mjs",
-      "require": "./dist/build-utils/build/index.js"
+      "import": "./dist/build-utils/build/index.js",
+      "require": "./dist/build-utils/build/index.cjs"
     },
     "./common-utils": {
       "types": "./dist/build-utils/common/index.d.ts",
-      "import": "./dist/build-utils/common/index.mjs",
-      "require": "./dist/build-utils/common/index.js"
+      "import": "./dist/build-utils/common/index.js",
+      "require": "./dist/build-utils/common/index.cjs"
     },
     "./plugins": {
       "types": "./dist/inner-plugins/index.d.ts",
-      "import": "./dist/inner-plugins/index.mjs",
-      "require": "./dist/inner-plugins/index.js"
+      "import": "./dist/inner-plugins/index.js",
+      "require": "./dist/inner-plugins/index.cjs"
     },
     "./rules": {
       "types": "./dist/rules/index.d.ts",
-      "import": "./dist/rules/index.mjs",
-      "require": "./dist/rules/index.js"
+      "import": "./dist/rules/index.js",
+      "require": "./dist/rules/index.cjs"
     },
     "./types": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.mjs",
-      "require": "./dist/types/index.js"
+      "import": "./dist/types/index.js",
+      "require": "./dist/types/index.cjs"
     }
   },
   "typesVersions": {
@@ -84,7 +85,7 @@
     "enhanced-resolve": "5.12.0",
     "filesize": "^10.1.6",
     "fs-extra": "^11.1.1",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "path-browserify": "1.0.1",
     "semver": "^7.7.2",
     "source-map": "^0.7.4"
@@ -94,7 +95,7 @@
     "@rspack/core": "1.4.11",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
-    "@types/lodash": "^4.17.20",
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.8.1",
     "@types/node-fetch": "^2.6.12",
     "@types/path-browserify": "1.0.3",

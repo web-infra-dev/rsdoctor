@@ -16,8 +16,8 @@ describe('module graph transform from stats', () => {
     const fixtureName = 'normal-module-in-multi-concatenation';
     const stats = (await compileByWebpack5(
       {
-        entry1: resolveFixture(fixtureName, 'entry1'),
-        entry2: resolveFixture(fixtureName, 'entry2'),
+        entry1: resolveFixture(fixtureName, 'entry1.js'),
+        entry2: resolveFixture(fixtureName, 'entry2.js'),
       },
       {
         output: {
@@ -32,7 +32,7 @@ describe('module graph transform from stats', () => {
 
     const graph = ModuleGraph.getModuleGraphByStats(
       stats,
-      resolveFixture(fixtureName),
+      resolveFixture(fixtureName, 'dist'),
       chunkGraph,
     );
 

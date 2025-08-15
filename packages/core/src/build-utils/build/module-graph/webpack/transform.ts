@@ -18,7 +18,7 @@ import {
   removeNoImportStyle,
 } from '@/build-utils/common/module-graph';
 import { hasSetEsModuleStatement } from '../parser';
-import { isFunction } from 'lodash';
+import { isFunction } from 'lodash-es';
 import { logger } from '@rsdoctor/utils/logger';
 
 export interface TransformContext {

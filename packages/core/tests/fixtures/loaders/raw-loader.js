@@ -1,6 +1,6 @@
-module.exports = loader;
+export default loader;
 
-module.exports.raw = true;
+export const raw = true;
 
 function loader(code) {
   return code;

@@ -65,6 +65,9 @@ export const esmConfig: LibConfig = {
   },
   output: {
     minify: nodeMinifyConfig,
+    filename: {
+      js: '[name].js',
+    },
   },
 };
 
@@ -73,6 +76,9 @@ export const cjsConfig: LibConfig = {
   syntax: 'es2021',
   output: {
     minify: nodeMinifyConfig,
+    filename: {
+      js: '[name].cjs',
+    },
   },
 };
 

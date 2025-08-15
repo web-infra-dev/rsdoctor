@@ -3,6 +3,8 @@ import os from 'os';
 import { Plugin } from '@rsdoctor/types';
 import { addProbeLoader2Rules } from '@/build-utils/build/utils';
 
+process.env.DOCTOR_TEST = 'true';
+
 const rules = [
   {
     test: /\.less$/,

@@ -1,8 +1,8 @@
 import { defineConfig } from '@rslib/core';
-import { esmConfig } from '../../scripts/rslib.base.config';
+import { cjsConfig, esmConfig } from '../../scripts/rslib.base.config';
 
 export default defineConfig({
-  lib: [esmConfig],
+  lib: [esmConfig, cjsConfig],
   source: {
     entry: {
       common: './src/common/index.ts',

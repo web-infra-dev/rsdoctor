@@ -2,7 +2,7 @@ import { Build } from '@/build-utils';
 import { getSDK } from '@/inner-plugins';
 import { Plugin, SDK } from '@rsdoctor/types';
 import type { LoaderDefinitionFunction } from '@rspack/core';
-import { omit } from 'lodash';
+import { omit } from 'lodash-es';
 import path from 'path';
 
 export const loaderModule: Plugin.LoaderDefinition<
@@ -48,7 +48,7 @@ export const loaderModule: Plugin.LoaderDefinition<
     ],
   };
 
-  sdk.reportLoaderStartOrEnd(loaderData);
+  sdk?.reportLoaderStartOrEnd(loaderData);
   this.callback(null, ...args);
 };
 

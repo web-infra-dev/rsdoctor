@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'path';
+import { createRequire } from 'module';
 import { DevToolError } from '@rsdoctor/utils/error';
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
@@ -13,6 +14,8 @@ import { SDKCore } from './core';
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Lodash } from '@rsdoctor/utils/common';
 import { findRoot } from '../utils';
+
+const require = createRequire(import.meta.url);
 const jc = require('json-cycle');
 
 export * from '../utils/openBrowser';
@@ -127,7 +130,7 @@ export class RsdoctorSDK<
     }
 
     // Modify the write to the hard disk.
-    await fsPromises.writeFile(filePath, content);
+    await fs.promises.writeFile(filePath, content);
   }
 
   clear() {

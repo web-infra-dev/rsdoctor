@@ -1,8 +1,6 @@
-Object.defineProperty(exports, '__esModule', { value: true });
+export default loader;
 
-exports.default = loader;
-
-exports.default.pitch = pitch;
+export { pitch };
 
 function loader(code) {
   return code;

@@ -1,19 +1,33 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import type { HookInterceptor } from 'tapable';
 import { Loader } from '@rsdoctor/utils/common';
-import { cloneDeep, isEqual, omit } from 'lodash';
+import { cloneDeep, isEqual, omit } from 'lodash-es';
 import { LoaderContext, NormalModule } from 'webpack';
 import { interceptLoader } from '../utils';
 import { InternalBasePlugin } from './base';
 import { ProxyLoaderOptions } from '@/types';
 import { time, timeEnd } from '@rsdoctor/utils/logger';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ESM equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Determine the proxy file extension based on current file extension
+const getProxyExtension = () => {
+  const currentExt = path.extname(__filename);
+  return currentExt === '.cjs' ? '.cjs' : '.js';
+};
 
 export class InternalLoaderPlugin<
   T extends Plugin.BaseCompiler,
 > extends InternalBasePlugin<T> {
   public readonly name = 'loader';
 
-  public readonly internalLoaderPath = require.resolve('../loaders/proxy');
+  public readonly internalLoaderPath: string = require.resolve(
+    path.join(__dirname, `../loaders/proxy${getProxyExtension()}`),
+  );
 
   public apply(compiler: T) {
     time('InternalLoaderPlugin.apply');

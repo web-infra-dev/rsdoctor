@@ -4,6 +4,8 @@ import { Plugin } from '@rsdoctor/types';
 import { Utils } from '@/build-utils/build';
 import { addProbeLoader2Rules } from '@/build-utils/build/utils';
 
+process.env.DOCTOR_TEST = 'true';
+
 const rules = [
   {
     test: /\.less$/,

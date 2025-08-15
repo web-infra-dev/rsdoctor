@@ -5,7 +5,7 @@ import { describe, expect, it } from '@rstest/core';
  */
 async function loadMultipleFile() {
   // @ts-ignore
-  let multiple = await import('../dist/index.mjs');
+  let multiple = await import('../dist/index.js');
   return multiple!;
 }
 
