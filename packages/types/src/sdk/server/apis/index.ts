@@ -12,7 +12,7 @@ import { GraphAPIResponse, GraphAPIRequestBody } from './graph';
 import { AlertsAPIResponse, AlertsAPIRequestBody } from './alerts';
 import { RsdoctorManifestMappingKeys } from '../../../manifest';
 import { SDK } from '../../../index';
-import { StatsModule } from '@/plugin';
+import { StatsModule } from '../../../plugin';
 
 export * from './pagination';
 
