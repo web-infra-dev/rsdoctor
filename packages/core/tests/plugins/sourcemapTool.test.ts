@@ -121,4 +121,214 @@ describe('sourcemapTool', () => {
       expect(sourceMap).toBe('console.log("test");');
     });
   });
+
+  describe('source map file lookup logic', () => {
+    it('should find source map by exact name match', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            filename: '[name].[contenthash].js',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'main.abc123.js',
+            source: {
+              source: () => 'console.log("test");\n',
+              name: 'main.abc123.js',
+              sourceAndMap: () => ({
+                source: 'console.log("test");\n',
+                map: null, // No inline source map
+              }),
+            },
+            info: {
+              related: {
+                sourceMap: 'main.abc123.js.map',
+              },
+            },
+          },
+          {
+            name: 'main.abc123.js.map',
+            source: {
+              source: () => JSON.stringify(mockJsMap),
+              name: 'main.abc123.js.map',
+            },
+            info: {},
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+      expect(plugin.sourceMapSets.size).toBe(1);
+      const sourceMap = plugin.sourceMapSets.get('src/index.js');
+      expect(sourceMap).toBe('console.log("test");');
+    });
+
+    it('should find source map by base name without hash when exact match fails', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            filename: '[name].[contenthash].js',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'main.abc123.js',
+            source: {
+              source: () => 'console.log("test");\n',
+              name: 'main.abc123.js',
+              sourceAndMap: () => ({
+                source: 'console.log("test");\n',
+                map: null, // No inline source map
+              }),
+            },
+            info: {
+              related: {
+                sourceMap: 'main.js.map', // Different hash in source map reference
+              },
+            },
+          },
+          {
+            name: 'main.def456.js.map', // Different hash in actual file
+            source: {
+              source: () => JSON.stringify(mockJsMap),
+              name: 'main.def456.js.map',
+            },
+            info: {},
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+      expect(plugin.sourceMapSets.size).toBe(1);
+      const sourceMap = plugin.sourceMapSets.get('src/index.js');
+      expect(sourceMap).toBe('console.log("test");');
+    });
+
+    it('should handle source map file name extraction correctly', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            filename: '[name].[contenthash].js',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'app.abc123.js',
+            source: {
+              source: () => 'console.log("app");\n',
+              name: 'app.abc123.js',
+              sourceAndMap: () => ({
+                source: 'console.log("app");\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {
+                sourceMap: 'app.abc123.js.map',
+              },
+            },
+          },
+          {
+            name: 'app.def456.js.map', // Different hash
+            source: {
+              source: () =>
+                JSON.stringify({
+                  ...mockJsMap,
+                  file: 'app.def456.js',
+                  sources: ['src/app.js'],
+                }),
+              name: 'app.def456.js.map',
+            },
+            info: {},
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+      expect(plugin.sourceMapSets.size).toBe(1);
+      const sourceMap = plugin.sourceMapSets.get('src/app.js');
+      expect(sourceMap).toBe('console.log("app");');
+    });
+
+    it('should skip processing when no source map file is referenced', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            filename: '[name].[contenthash].js',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'main.abc123.js',
+            source: {
+              source: () => 'console.log("test");\n',
+              name: 'main.abc123.js',
+              sourceAndMap: () => ({
+                source: 'console.log("test");\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {}, // No source map reference
+            },
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+      expect(plugin.sourceMapSets.size).toBe(0);
+    });
+
+    it('should handle multiple file extensions in source map filename', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            filename: '[name].[contenthash].js',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'main.abc123.js',
+            source: {
+              source: () => 'console.log("test");\n',
+              name: 'main.abc123.js',
+              sourceAndMap: () => ({
+                source: 'console.log("test");\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {
+                sourceMap: 'main.abc123.js.map', // Multiple extensions
+              },
+            },
+          },
+          {
+            name: 'main.def456.js.map',
+            source: {
+              source: () => JSON.stringify(mockJsMap),
+              name: 'main.def456.js.map',
+            },
+            info: {},
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+      expect(plugin.sourceMapSets.size).toBe(1);
+      const sourceMap = plugin.sourceMapSets.get('src/index.js');
+      expect(sourceMap).toBe('console.log("test");');
+    });
+  });
 });

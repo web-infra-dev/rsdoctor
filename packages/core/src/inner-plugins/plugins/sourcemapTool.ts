@@ -168,7 +168,10 @@ export async function handleAfterEmitAssets(
       let map = mapFromAsset;
       if (!map) {
         let sourceMapFile = asset.info.related?.sourceMap;
-        sourceMapFile = sourceMapFile?.replace(/(\.[^.]+)(\.[^.]+)?$/, '$1');
+        let sourceMapFileAssetName = sourceMapFile?.replace(
+          /(\.[^.]+)(\.[^.]+)?$/,
+          '$1',
+        );
         if (sourceMapFile) {
           // Try to find the source map asset by exact name first
           let sourceMapAsset = assets.find(
@@ -176,9 +179,9 @@ export async function handleAfterEmitAssets(
           );
 
           // If not found by exact name, try to match by base name without hash
-          if (!sourceMapAsset) {
+          if (!sourceMapAsset && sourceMapFileAssetName) {
             const baseNameWithoutHash = Graph.formatAssetName(
-              sourceMapFile,
+              sourceMapFileAssetName ?? '',
               typeof compilation.options.output.filename === 'string'
                 ? compilation.options.output.filename
                 : undefined,
