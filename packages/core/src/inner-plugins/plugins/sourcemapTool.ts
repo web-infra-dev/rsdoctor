@@ -181,7 +181,7 @@ export async function handleAfterEmitAssets(
           // If not found by exact name, try to match by base name without hash
           if (!sourceMapAsset && sourceMapFileAssetName) {
             const baseNameWithoutHash = Graph.formatAssetName(
-              sourceMapFileAssetName ?? '',
+              sourceMapFileAssetName,
               typeof compilation.options.output.filename === 'string'
                 ? compilation.options.output.filename
                 : undefined,
