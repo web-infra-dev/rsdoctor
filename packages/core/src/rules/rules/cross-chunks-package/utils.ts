@@ -1,8 +1,8 @@
 export function getErrorMsgForDupPckChunks(
-  chunks: String[],
-  pkgName: String,
+  chunks: string[],
+  pkgName: string,
 ): string {
-  let message = `The same module of Package ${pkgName} was bundled into different chunks:\n`;
+  let message = `The same package ${pkgName} was bundled into different chunks:\n`;
 
   for (const chunkName of chunks) {
     message += ` ${chunkName}\n`;
