@@ -15,10 +15,41 @@ export class InternalBundlePlugin<
     try {
       // bundle depends on module graph
       this.scheduler.ensureModulesChunksGraphApplied(compiler);
+
+      compiler.hooks.compilation.tap(
+        {
+          name: 'ChangeDevtoolModuleFilename',
+          stage: -100,
+        },
+        () => {
+          this.changeDevtoolModuleFilename(compiler);
+        },
+      );
+
       compiler.hooks.compilation.tap(this.tapPostOptions, this.thisCompilation);
       compiler.hooks.done.tapPromise(this.tapPreOptions, this.done.bind(this));
     } finally {
       timeEnd('InternalBundlePlugin.apply');
+    }
+  }
+  changeDevtoolModuleFilename(compiler: Plugin.BaseCompiler) {
+    if ('rspack' in compiler) {
+      return;
+    }
+
+    const devtool = compiler.options.devtool;
+    if (devtool) {
+      if (!compiler.options.output) {
+        compiler.options.output = {} as any;
+      }
+
+      compiler.options.output.devtoolModuleFilenameTemplate =
+        '[absolute-resource-path]';
+
+      if (devtool.includes('source-map')) {
+        compiler.options.output.devtoolFallbackModuleFilenameTemplate =
+          '[absolute-resource-path]';
+      }
     }
   }
 
