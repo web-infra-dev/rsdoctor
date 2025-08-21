@@ -12,9 +12,9 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-## Loader time-consuming data is inaccurate?
+## Loader timing data is inaccurate?
 
-The time-consuming data provided by Rsdoctor for loaders is an **estimated time**. Why can't it accurately measure the timing? It's because we know that loader execution can be both **asynchronous** and **synchronous**.
+The timing data provided by Rsdoctor for loaders is an **estimated time**. Why can't it accurately measure the timing? It's because we know that loader execution can be both **asynchronous** and **synchronous**.
 Additionally, the bundler will **parallelize the execution** of multiple non-conflicting loader functions. Since JavaScript is single-threaded, multiple loader functions can **compete for the current task queue**.
 Furthermore, the asynchronous logic within loader functions cannot be recognized, causing a single loader function to potentially span across the execution of multiple other loaders. As a result, there are three possible cases, as shown in the following diagram:
 
@@ -96,19 +96,19 @@ export default {
 - In the rspeedy project, configure it in `rspeedy.config.ts`:
 
 ```js rspeedy.config.ts
-  export default {
-    tools: {
-      rspack(config, { env }) {
-        if (process.env.RSDOCTOR === 'true') {
-            config.optimization = {
-              ...config.optimization,
-              concatenateModules: false,
-            },
-            return config
-          }
-      },
+export default {
+  tools: {
+    rspack(config, { env }) {
+      if (process.env.RSDOCTOR === 'true') {
+        config.optimization = {
+          ...config.optimization,
+          concatenateModules: false,
+        };
+        return config;
+      }
     },
-  };
+  },
+};
 ```
 
 ## The loader of CssExtractRspackPlugin takes too long
