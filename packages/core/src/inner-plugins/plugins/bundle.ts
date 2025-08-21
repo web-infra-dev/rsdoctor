@@ -1,7 +1,7 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
 import { Chunks } from '@/build-utils/common';
-import { time, timeEnd } from '@rsdoctor/utils/logger';
+import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 
 export class InternalBundlePlugin<
   T extends Plugin.BaseCompiler,
@@ -45,6 +45,10 @@ export class InternalBundlePlugin<
 
       compiler.options.output.devtoolModuleFilenameTemplate =
         '[absolute-resource-path]';
+
+      logger.warn(
+        `output.devtoolModuleFilenameTemplate has been changed to [absolute-resource-path], this is for bundle analysis.`,
+      );
 
       if (devtool.includes('source-map')) {
         compiler.options.output.devtoolFallbackModuleFilenameTemplate =
