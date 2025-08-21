@@ -40,7 +40,7 @@ export class InternalBundlePlugin<
     const devtool = compiler.options.devtool;
     if (devtool) {
       if (!compiler.options.output) {
-        compiler.options.output = {} as any;
+        compiler.options.output = {} as typeof compiler.options.output;
       }
 
       compiler.options.output.devtoolModuleFilenameTemplate =
