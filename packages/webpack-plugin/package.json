@@ -35,7 +35,6 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@rslib/core": "^0.12.2",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "@types/tapable": "2.2.7",

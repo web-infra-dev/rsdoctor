@@ -46,7 +46,6 @@
     "tapable": "2.2.2"
   },
   "devDependencies": {
-    "@rslib/core": "^0.12.2",
     "@types/body-parser": "1.19.6",
     "@types/cors": "2.8.19",
     "@types/node": "^22.8.1",
