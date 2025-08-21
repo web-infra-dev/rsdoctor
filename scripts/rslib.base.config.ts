@@ -1,6 +1,9 @@
 import { defineConfig, type LibConfig } from '@rslib/core';
+import { pluginPublint } from 'rsbuild-plugin-publint';
 
 const BUILD_TARGET = 'es2020' as const;
+
+export const pluginsConfig = [pluginPublint()];
 
 export const baseBuildConfig = defineConfig({
   lib: [
@@ -82,10 +85,6 @@ export const cjsConfig: LibConfig = {
   },
 };
 
-export const dualPackage = defineConfig({
-  lib: [esmConfig, cjsConfig],
-});
-
 export const dualPackageBundleless = defineConfig({
   lib: [
     {
@@ -97,4 +96,10 @@ export const dualPackageBundleless = defineConfig({
       bundle: false,
     },
   ],
+  plugins: pluginsConfig,
+});
+
+export const dualPackage = defineConfig({
+  lib: [esmConfig, cjsConfig],
+  plugins: pluginsConfig,
 });

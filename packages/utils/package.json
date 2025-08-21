@@ -12,27 +12,27 @@
     "./common": {
       "types": "./dist/common/index.d.ts",
       "import": "./dist/common.js",
-      "require": "./dist/common.cjs"
+      "default": "./dist/common.cjs"
     },
     "./build": {
       "types": "./dist/build/index.d.ts",
       "import": "./dist/build.js",
-      "require": "./dist/build.cjs"
+      "default": "./dist/build.cjs"
     },
     "./error": {
       "types": "./dist/error/index.d.ts",
       "import": "./dist/error.js",
-      "require": "./dist/error.cjs"
+      "default": "./dist/error.cjs"
     },
     "./ruleUtils": {
       "types": "./dist/rule-utils/index.d.ts",
       "import": "./dist/ruleUtils.js",
-      "require": "./dist/ruleUtils.cjs"
+      "default": "./dist/ruleUtils.cjs"
     },
     "./logger": {
       "types": "./dist/logger.d.ts",
       "import": "./dist/logger.js",
-      "require": "./dist/logger.cjs"
+      "default": "./dist/logger.cjs"
     }
   },
   "typesVersions": {
@@ -86,7 +86,7 @@
     "strip-ansi": "^6.0.1"
   },
   "devDependencies": {
-    "@rslib/core": "^0.11.0",
+    "@rslib/core": "^0.12.2",
     "@types/babel__code-frame": "7.0.6",
     "@types/connect": "3.4.38",
     "@types/deep-eql": "4.0.2",

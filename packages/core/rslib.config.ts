@@ -1,6 +1,8 @@
 import { defineConfig, rspack } from '@rslib/core';
+import { dualPackageBundleless } from '../../scripts/rslib.base.config';
 
 export default defineConfig({
+  ...dualPackageBundleless,
   lib: [
     {
       bundle: false,

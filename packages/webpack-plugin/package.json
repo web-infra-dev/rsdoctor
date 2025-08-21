@@ -17,7 +17,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.cjs"
     }
   },
   "scripts": {
@@ -35,7 +35,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@rslib/core": "^0.11.0",
+    "@rslib/core": "^0.12.2",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "@types/tapable": "2.2.7",

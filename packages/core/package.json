@@ -18,32 +18,32 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.cjs"
     },
     "./build-utils": {
       "types": "./dist/build-utils/build/index.d.ts",
       "import": "./dist/build-utils/build/index.js",
-      "require": "./dist/build-utils/build/index.cjs"
+      "default": "./dist/build-utils/build/index.cjs"
     },
     "./common-utils": {
       "types": "./dist/build-utils/common/index.d.ts",
       "import": "./dist/build-utils/common/index.js",
-      "require": "./dist/build-utils/common/index.cjs"
+      "default": "./dist/build-utils/common/index.cjs"
     },
     "./plugins": {
       "types": "./dist/inner-plugins/index.d.ts",
       "import": "./dist/inner-plugins/index.js",
-      "require": "./dist/inner-plugins/index.cjs"
+      "default": "./dist/inner-plugins/index.cjs"
     },
     "./rules": {
       "types": "./dist/rules/index.d.ts",
       "import": "./dist/rules/index.js",
-      "require": "./dist/rules/index.cjs"
+      "default": "./dist/rules/index.cjs"
     },
     "./types": {
       "types": "./dist/types/index.d.ts",
       "import": "./dist/types/index.js",
-      "require": "./dist/types/index.cjs"
+      "default": "./dist/types/index.cjs"
     }
   },
   "typesVersions": {
@@ -91,7 +91,7 @@
     "source-map": "^0.7.4"
   },
   "devDependencies": {
-    "@rslib/core": "^0.11.0",
+    "@rslib/core": "^0.12.2",
     "@rspack/core": "1.4.11",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
