@@ -87,7 +87,7 @@ export interface ControllerOption {
 export interface FixData {
   /** Modify the starting position of string in the original text. */
   start: number;
-  /** Modify string in the key position of the original text */
+  /** Modify the ending position of string in the original text */
   end: number;
   /**
    * Replaced new text
@@ -102,7 +102,7 @@ export interface FixData {
 export interface DevToolErrorData {
   /** Error number */
   id: number;
-  /** Wrong code */
+  /** Error code */
   code?: string;
   /** Error category */
   category?: string;

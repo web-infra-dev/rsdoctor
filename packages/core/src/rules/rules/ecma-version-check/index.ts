@@ -55,7 +55,7 @@ export const rule = defineRule<typeof title, Config>(() => {
         await checkSyntax.check(assetPath, asset.content);
         checkSyntax.errors.forEach((err) => {
           report({
-            message: `Find some syntax that does not match "ecmaVersion <= ${checkSyntax.ecmaVersion}"`,
+            message: `Found syntax that does not match "ecmaVersion <= ${checkSyntax.ecmaVersion}"`,
             detail: {
               error: err,
               type: 'link',

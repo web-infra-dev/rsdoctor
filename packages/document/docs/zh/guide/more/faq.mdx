@@ -94,19 +94,19 @@ export default {
 - rspeedy 项目中，在 `rspeedy.config.ts` 中配置：
 
 ```js rspeedy.config.ts
-  export default {
-    tools: {
-      rspack(config, { env }) {
-        if (process.env.RSDOCTOR === 'true') {
-            config.optimization = {
-              ...config.optimization,
-              concatenateModules: false,
-            },
-            return config
-          }
-      },
+export default {
+  tools: {
+    rspack(config, { env }) {
+      if (process.env.RSDOCTOR === 'true') {
+        config.optimization = {
+          ...config.optimization,
+          concatenateModules: false,
+        };
+        return config;
+      }
     },
-  };
+  },
+};
 ```
 
 ## CssExtractRspackPlugin 的 loader 耗时过长问题
