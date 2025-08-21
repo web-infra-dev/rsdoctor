@@ -1,7 +1,7 @@
 import { defineConfig, type LibConfig } from '@rslib/core';
 import { pluginPublint } from 'rsbuild-plugin-publint';
 
-const BUILD_TARGET = 'es2020' as const;
+const BUILD_TARGET = 'node 16' as const;
 
 export const pluginsConfig = [pluginPublint()];
 
@@ -10,7 +10,7 @@ export const baseBuildConfig = defineConfig({
     {
       bundle: false,
       format: 'cjs' as const,
-      syntax: BUILD_TARGET,
+      syntax: [BUILD_TARGET],
       dts: true,
     },
   ],
@@ -23,7 +23,7 @@ export const configWithEsm = defineConfig({
     {
       bundle: false,
       format: 'cjs',
-      syntax: BUILD_TARGET,
+      syntax: [BUILD_TARGET],
       output: {
         distPath: {
           root: './dist/cjs',
@@ -36,7 +36,7 @@ export const configWithEsm = defineConfig({
     {
       bundle: false,
       format: 'esm',
-      syntax: BUILD_TARGET,
+      syntax: [BUILD_TARGET],
       output: {
         distPath: {
           root: './dist/esm',
@@ -62,7 +62,7 @@ export const nodeMinifyConfig = {
 
 export const esmConfig: LibConfig = {
   format: 'esm',
-  syntax: ['node16'],
+  syntax: [BUILD_TARGET],
   dts: {
     build: true,
   },
@@ -76,7 +76,7 @@ export const esmConfig: LibConfig = {
 
 export const cjsConfig: LibConfig = {
   format: 'cjs',
-  syntax: ['node16'],
+  syntax: [BUILD_TARGET],
   output: {
     minify: nodeMinifyConfig,
     filename: {
