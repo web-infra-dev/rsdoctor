@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/docs",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "scripts": {
     "dev": "rspress dev",
     "build": "rspress build",
