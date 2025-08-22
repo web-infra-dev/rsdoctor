@@ -1,4 +1,4 @@
-import { isNumber } from 'lodash';
+import { isNumber } from 'lodash-es';
 import { parser, Node } from '@rsdoctor/utils/ruleUtils';
 import { SDK } from '@rsdoctor/types';
 function getDefaultExportIdentifier(

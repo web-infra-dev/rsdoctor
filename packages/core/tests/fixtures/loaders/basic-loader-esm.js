@@ -1,6 +1,4 @@
-Object.defineProperty(exports, '__esModule', { value: true });
-
-exports.default = loader;
+export default loader;
 
 function loader(code) {
   return code;

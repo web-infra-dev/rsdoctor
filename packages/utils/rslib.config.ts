@@ -1,3 +1,15 @@
-import { configWithEsm } from '../../scripts/rslib.base.config';
+import { defineConfig } from '@rslib/core';
+import { dualPackage } from '../../scripts/rslib.base.config';
 
-export default configWithEsm;
+export default defineConfig({
+  ...dualPackage,
+  source: {
+    entry: {
+      common: './src/common/index.ts',
+      build: './src/build/index.ts',
+      error: './src/error/index.ts',
+      ruleUtils: './src/rule-utils/index.ts',
+      logger: './src/logger.ts',
+    },
+  },
+});

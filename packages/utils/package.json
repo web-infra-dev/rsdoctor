@@ -6,63 +6,57 @@
     "url": "https://github.com/web-infra-dev/rsdoctor",
     "directory": "packages/utils"
   },
+  "type": "module",
   "license": "MIT",
   "exports": {
-    ".": {
-      "types": "./dist/type/index.d.ts",
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.mjs"
-    },
     "./common": {
-      "types": "./dist/type/common/index.d.ts",
-      "require": "./dist/cjs/common/index.js",
-      "import": "./dist/esm/common/index.mjs"
+      "types": "./dist/common/index.d.ts",
+      "import": "./dist/common.js",
+      "default": "./dist/common.cjs"
     },
     "./build": {
-      "types": "./dist/type/build/index.d.ts",
-      "require": "./dist/cjs/build/index.js",
-      "import": "./dist/esm/build/index.mjs"
+      "types": "./dist/build/index.d.ts",
+      "import": "./dist/build.js",
+      "default": "./dist/build.cjs"
     },
     "./error": {
-      "types": "./dist/type/error/index.d.ts",
-      "require": "./dist/cjs/error/index.js",
-      "import": "./dist/esm/error/index.mjs"
+      "types": "./dist/error/index.d.ts",
+      "import": "./dist/error.js",
+      "default": "./dist/error.cjs"
     },
     "./ruleUtils": {
-      "types": "./dist/type/rule-utils/index.d.ts",
-      "require": "./dist/cjs/rule-utils/index.js",
-      "import": "./dist/esm/rule-utils/index.mjs"
+      "types": "./dist/rule-utils/index.d.ts",
+      "import": "./dist/ruleUtils.js",
+      "default": "./dist/ruleUtils.cjs"
     },
     "./logger": {
-      "types": "./dist/type/logger.d.ts",
-      "require": "./dist/cjs/logger.js",
-      "import": "./dist/esm/logger.mjs"
+      "types": "./dist/logger.d.ts",
+      "import": "./dist/logger.js",
+      "default": "./dist/logger.cjs"
     }
   },
   "typesVersions": {
     "*": {
-      ".": [
-        "./dist/type/index.d.ts"
-      ],
       "common": [
-        "./dist/type/common/index.d.ts"
+        "./dist/common/index.d.ts"
       ],
       "build": [
-        "./dist/type/build/index.d.ts"
+        "./dist/build/index.d.ts"
       ],
       "error": [
-        "./dist/type/error/index.d.ts"
+        "./dist/error/index.d.ts"
       ],
       "ruleUtils": [
-        "./dist/type/rule-utils/index.d.ts"
+        "./dist/rule-utils/index.d.ts"
       ],
       "logger": [
-        "./dist/type/logger.d.ts"
+        "./dist/logger.d.ts"
       ]
     }
   },
-  "main": "dist/index.js",
-  "types": "dist/type/index.d.ts",
+  "main": "dist/build.cjs",
+  "module": "dist/build.js",
+  "types": "dist/build/index.d.ts",
   "files": [
     "dist"
   ],
@@ -92,7 +86,6 @@
     "strip-ansi": "^6.0.1"
   },
   "devDependencies": {
-    "@rslib/core": "^0.11.0",
     "@types/babel__code-frame": "7.0.6",
     "@types/connect": "3.4.38",
     "@types/deep-eql": "4.0.2",

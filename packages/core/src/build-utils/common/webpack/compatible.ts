@@ -1,4 +1,4 @@
-import { unionBy } from 'lodash';
+import { unionBy } from 'lodash-es';
 import { Statement } from '@rsdoctor/graph';
 import {
   Compilation,

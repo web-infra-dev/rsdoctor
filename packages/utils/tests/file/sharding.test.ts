@@ -1,6 +1,7 @@
 import { describe, it, expect, afterAll } from '@rstest/core';
 import os from 'os';
-import fse from 'fs-extra';
+import fse from 'fs-extra/esm';
+import fs from 'node:fs';
 import path from 'path';
 import { File } from '../../src/build';
 
@@ -39,15 +40,15 @@ describe('test src/file/sharding.ts', () => {
     tmpFolders.push(tmpFolder);
 
     const files = await sharding.writeStringToFolder(tmpFolder);
-    const dir = await fse.readdir(tmpFolder);
+    const dir = await fs.readdirSync(tmpFolder, { withFileTypes: true });
 
     expect(dir).toHaveLength(2);
     expect(dir.length).toEqual(files.length);
 
     dir.forEach((e) => {
-      const absPath = path.resolve(tmpFolder, e);
-      const file = fse.readFileSync(absPath, 'utf-8');
-      const match = files.filter((f) => f.filename === e);
+      const absPath = path.resolve(tmpFolder, e.name);
+      const file = fs.readFileSync(absPath, 'utf-8');
+      const match = files.filter((f) => f.filename === e.name);
 
       expect(match).toHaveLength(1);
       expect(match![0].content.toString()).toStrictEqual(file);

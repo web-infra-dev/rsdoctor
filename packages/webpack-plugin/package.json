@@ -7,11 +7,19 @@
     "directory": "packages/webpack-plugin"
   },
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
+    }
+  },
   "scripts": {
     "dev": "npm run start",
     "build": "rslib build",
@@ -27,7 +35,6 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@rslib/core": "^0.11.0",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "@types/tapable": "2.2.7",

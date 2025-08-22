@@ -15,7 +15,6 @@
   ],
   "license": "MIT",
   "main": "dist/index.js",
-  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "npm run start",
@@ -24,7 +23,6 @@
     "test": "rstest run"
   },
   "devDependencies": {
-    "@rslib/core": "^0.11.0",
     "@types/yargs": "17.0.33",
     "typescript": "^5.2.2"
   },

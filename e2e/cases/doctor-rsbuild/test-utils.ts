@@ -1,4 +1,4 @@
-import { RsdoctorWebpackPluginOptions } from '@rsdoctor/core/types';
+import type { RsdoctorWebpackPluginOptions } from '@rsdoctor/core/types';
 import {
   RsdoctorWebpackPlugin,
   RsdoctorWebpackMultiplePlugin,

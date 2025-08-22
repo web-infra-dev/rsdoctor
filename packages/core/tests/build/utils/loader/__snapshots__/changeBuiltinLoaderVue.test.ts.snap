@@ -7,7 +7,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
     "type": "css",
     "use": [
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -19,7 +19,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
         "loader": "less-loader",
       },
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -34,7 +34,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
     "type": "css/module",
     "use": [
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -46,7 +46,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
         "loader": "less-loader",
       },
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -60,7 +60,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
     "test": /\\\\\\.svg\\$/,
     "use": [
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -72,7 +72,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
         "loader": "@svgr/webpack",
       },
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -90,7 +90,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
         "options": undefined,
         "use": [
           {
-            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
             "options": {
               "builderName": "test-compiler",
               "ident": undefined,
@@ -104,7 +104,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
             "options": undefined,
           },
           {
-            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+            "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
             "options": {
               "builderName": "test-compiler",
               "ident": undefined,
@@ -122,7 +122,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
     "type": "javascript/auto",
     "use": [
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -150,7 +150,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
         },
       },
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -174,7 +174,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
     "type": "asset/resource",
     "use": [
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,
@@ -188,7 +188,7 @@ exports[`test addProbeLoader2Rules for vue-loader > addProbeLoader2Rules() 1`] =
         "options": undefined,
       },
       {
-        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.js",
+        "loader": "<ROOT>/packages/core/src/build-utils/build/loader/probeLoader.ts",
         "options": {
           "builderName": "test-compiler",
           "ident": undefined,

@@ -7,9 +7,16 @@
     "directory": "packages/sdk"
   },
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/type/index.d.ts",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
+    }
+  },
   "files": [
     "dist",
     "static"
@@ -31,14 +38,13 @@
     "dayjs": "1.11.13",
     "fs-extra": "^11.1.1",
     "json-cycle": "^1.5.0",
-    "open": "^8.4.2",
+    "open": "^10.2.0",
     "sirv": "2.0.4",
     "socket.io": "4.8.1",
     "source-map": "^0.7.4",
     "tapable": "2.2.2"
   },
   "devDependencies": {
-    "@rslib/core": "^0.11.0",
     "@types/body-parser": "1.19.6",
     "@types/cors": "2.8.19",
     "@types/node": "^22.8.1",

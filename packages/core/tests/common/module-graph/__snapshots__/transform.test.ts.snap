@@ -991,7 +991,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "kind": 1,
       "module": 2,
       "originDependency": 3,
-      "request": "common",
+      "request": "common.js",
       "resolvedRequest": "common.js",
       "statements": [
         {
@@ -999,7 +999,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
           "position": {
             "transformed": {
               "end": {
-                "column": 38,
+                "column": 41,
                 "line": 1,
               },
               "start": {
@@ -1017,7 +1017,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       "kind": 1,
       "module": 5,
       "originDependency": 3,
-      "request": "common",
+      "request": "common.js",
       "resolvedRequest": "common.js",
       "statements": [
         {
@@ -1025,7 +1025,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
           "position": {
             "transformed": {
               "end": {
-                "column": 38,
+                "column": 41,
                 "line": 1,
               },
               "start": {

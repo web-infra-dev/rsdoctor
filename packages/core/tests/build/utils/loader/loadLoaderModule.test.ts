@@ -2,14 +2,13 @@ import { describe, it, expect } from '@rstest/core';
 import { resolve } from 'path';
 import { loadLoaderModule } from '@/build-utils/build/utils';
 
-
 describe('test src/build/utils/loader.ts loadLoaderModule()', () => {
   process.env.DOCTOR_TEST = 'true';
 
   const loaderDirectory = resolve(__dirname, '../../../fixtures/loaders');
 
   it('basic loader', () => {
-    const cjs = loadLoaderModule('./basic-loader.js', loaderDirectory);
+    const cjs = loadLoaderModule('./basic-loader.cjs', loaderDirectory);
 
     expect(cjs.default).toBeInstanceOf(Function);
     expect(cjs.pitch).toBeUndefined();
@@ -22,7 +21,7 @@ describe('test src/build/utils/loader.ts loadLoaderModule()', () => {
   });
 
   it('pitch loader', () => {
-    const cjs = loadLoaderModule('pitch-loader', loaderDirectory);
+    const cjs = loadLoaderModule('pitch-loader.cjs', loaderDirectory);
 
     expect(cjs.default).toBeInstanceOf(Function);
     expect(cjs.pitch).toBeInstanceOf(Function);
@@ -35,7 +34,7 @@ describe('test src/build/utils/loader.ts loadLoaderModule()', () => {
   });
 
   it('raw loader', () => {
-    const cjs = loadLoaderModule('raw-loader', loaderDirectory);
+    const cjs = loadLoaderModule('raw-loader.cjs', loaderDirectory);
     expect(cjs.default).toBeInstanceOf(Function);
     expect(cjs.pitch).toBeUndefined();
     expect(cjs.raw).toBeTruthy();

@@ -1,6 +1,7 @@
 import path from 'node:path';
-import fse from 'fs-extra';
-import { omit } from 'lodash';
+import { fileURLToPath } from 'node:url';
+import fse from 'fs-extra/esm';
+import { omit } from 'lodash-es';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule, SourceMapInput as WebpackSourceMapInput } from '../../../types';
@@ -8,6 +9,10 @@ import { readPackageJson } from '@rsdoctor/graph';
 import { RuleSetUseItem } from '@rspack/core';
 import { RuleSetUseItem as WebpackRuleSetUseItem } from 'webpack';
 import { logger } from '@rsdoctor/utils/logger';
+
+// ESM equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // webpack https://github.com/webpack/webpack/blob/2953d23a87d89b3bd07cf73336ee34731196c62e/lib/util/identifier.js#L311
 // rspack https://github.com/web-infra-dev/rspack/blob/d22f049d4bce4f8ac20c1cbabeab3706eddaecc1/packages/rspack/src/loader-runner/index.ts#L47
@@ -36,10 +41,15 @@ export function loadLoaderModule(
   raw: boolean | void;
 } {
   const cleanLoaderPath = parsePathQueryFragment(loaderPath).path;
-  const mod = require(
+
+  // Use createRequire for ESM compatibility
+  const { createRequire } = require('module');
+  const requireFn = createRequire(import.meta.url);
+
+  const mod = requireFn(
     process.env.DOCTOR_TEST
       ? path.resolve(cwd, cleanLoaderPath)
-      : require.resolve(cleanLoaderPath, {
+      : requireFn.resolve(cleanLoaderPath, {
           paths: [cwd, path.resolve(cwd, 'node_modules')],
         }),
   );
@@ -184,7 +194,12 @@ export function isESMLoader(r: Plugin.BuildRuleSetRule) {
       }
     });
 
-    if (packageJsonData?.type === 'module') return true;
+    // Exclude @rsdoctor's own loader
+    if (
+      packageJsonData?.type === 'module' &&
+      !packageJsonData?.name.includes('@rsdoctor/')
+    )
+      return true;
   }
 
   // Code to handle loaderName as a loader name
@@ -201,7 +216,10 @@ function appendProbeLoaders(
         ? { options: loaderConfig.options }
         : loaderConfig.options
       : {};
-  const loaderPath = path.join(__dirname, '../loader/probeLoader.js');
+  const loaderPath = process.env.DOCTOR_TEST
+    ? path.resolve(__dirname, '../loader/probeLoader.ts')
+    : require.resolve(path.join(__dirname, '../loader/probeLoader'));
+
   const loader =
     typeof loaderConfig === 'string'
       ? loaderConfig

@@ -14,6 +14,9 @@ import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
 import { getLocalIpAddress } from './utils';
 import { Lodash } from '@rsdoctor/utils/common';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 export * from './utils';
 
 export type ISocketType = { port: number; socketUrl: string };
