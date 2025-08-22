@@ -1,7 +1,7 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
 import { Chunks } from '@/build-utils/common';
-import { time, timeEnd } from '@rsdoctor/utils/logger';
+import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 
 export class InternalBundlePlugin<
   T extends Plugin.BaseCompiler,
@@ -15,10 +15,45 @@ export class InternalBundlePlugin<
     try {
       // bundle depends on module graph
       this.scheduler.ensureModulesChunksGraphApplied(compiler);
+
+      compiler.hooks.compilation.tap(
+        {
+          name: 'ChangeDevtoolModuleFilename',
+          stage: -100,
+        },
+        () => {
+          this.changeDevtoolModuleFilename(compiler);
+        },
+      );
+
       compiler.hooks.compilation.tap(this.tapPostOptions, this.thisCompilation);
       compiler.hooks.done.tapPromise(this.tapPreOptions, this.done.bind(this));
     } finally {
       timeEnd('InternalBundlePlugin.apply');
+    }
+  }
+  changeDevtoolModuleFilename(compiler: Plugin.BaseCompiler) {
+    if ('rspack' in compiler) {
+      return;
+    }
+
+    const devtool = compiler.options.devtool;
+    if (devtool) {
+      if (!compiler.options.output) {
+        compiler.options.output = {} as typeof compiler.options.output;
+      }
+
+      compiler.options.output.devtoolModuleFilenameTemplate =
+        '[absolute-resource-path]';
+
+      logger.warn(
+        `output.devtoolModuleFilenameTemplate has been changed to [absolute-resource-path], this is for bundle analysis.`,
+      );
+
+      if (devtool.includes('source-map')) {
+        compiler.options.output.devtoolFallbackModuleFilenameTemplate =
+          '[absolute-resource-path]';
+      }
     }
   }
 
