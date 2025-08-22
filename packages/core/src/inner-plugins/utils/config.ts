@@ -111,6 +111,12 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     _mode = SDK.IMode[SDK.IMode.lite] as keyof typeof SDK.IMode;
   }
 
+  let _disableClientServer = disableClientServer;
+
+  if (_mode === SDK.IMode[SDK.IMode.brief]) {
+    _disableClientServer = true;
+  }
+
   const reportCodeType = output.reportCodeType
     ? normalizeReportType(output.reportCodeType, _mode)
     : normalizeReportType(getDefaultOutput().reportCodeType, _mode);
@@ -123,7 +129,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         ? loaderInterceptorOptions.skipLoaders
         : [],
     },
-    disableClientServer,
+    disableClientServer: _disableClientServer,
     sdkInstance,
     output: {
       reportCodeType,

@@ -34,6 +34,7 @@ export class RsdoctorRspackMultiplePlugin<
         printLog: normallizedOptions.printLog,
         mode: normallizedOptions.mode ? normallizedOptions.mode : undefined,
         brief: normallizedOptions.brief,
+        noServer: normallizedOptions.disableClientServer,
       },
       type: normallizedOptions.output.reportCodeType,
     });
