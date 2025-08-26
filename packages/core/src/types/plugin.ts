@@ -31,12 +31,11 @@ export interface RsdoctorWebpackPluginOptions<
     | Array<keyof Plugin.RsdoctorWebpackPluginFeatures>;
 
   /**
+   * @deprecated Now need to use output.mode.
    * Rsdoctor mode option:
    * - normal: Refers to the normal mode.
    * - brief: Refers to the brief mode, which only displays the results of the duration analysis and build artifact analysis
    *    and does not display any part of the code.
-   * - lite: Refers to the lightweight mode,
-   *   which is a lightweight analysis report in the normal mode with the source code display removed.
    */
   mode?: keyof typeof SDK.IMode;
 
@@ -94,6 +93,14 @@ export interface RsdoctorWebpackPluginOptions<
     reportDir?: string;
 
     /**
+     * Rsdoctor mode option:
+     * - normal: Refers to the normal mode.
+     * - brief: Refers to the brief mode, which only displays the results of the duration analysis and build artifact analysis
+     *    and does not display any part of the code.
+     */
+    mode?: keyof typeof SDK.IMode;
+
+    /**
      * Control the Rsdoctor reporter codes records.
      */
     reportCodeType?: IReportCodeType | undefined;
@@ -128,13 +135,20 @@ export interface RsdoctorPluginOptionsNormalized<
 > extends Common.DeepRequired<
     Omit<
       RsdoctorWebpackPluginOptions<Rules>,
-      'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief'
+      | 'sdkInstance'
+      | 'linter'
+      | 'output'
+      | 'supports'
+      | 'port'
+      | 'brief'
+      | 'mode'
     >
   > {
   features: Common.DeepRequired<Plugin.RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: RsdoctorSDK;
   output: {
+    mode: keyof typeof SDK.IMode;
     reportCodeType: SDK.ToDataType;
     reportDir: string;
     compressData: boolean;

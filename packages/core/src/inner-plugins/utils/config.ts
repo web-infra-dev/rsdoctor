@@ -24,6 +24,7 @@ function defaultBoolean(v: unknown, dft: boolean): boolean {
 
 function getDefaultOutput() {
   return {
+    mode: undefined,
     reportCodeType: {
       noModuleSource: false,
       noAssetsAndModuleSource: false,
@@ -88,7 +89,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     supports = getDefaultSupports(),
     port,
     printLog = { serverUrls: true },
-    mode = 'normal',
+    mode = undefined,
     brief = {
       reportHtmlDir: undefined,
       reportHtmlName: undefined,
@@ -101,12 +102,31 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   assert(typeof loaderInterceptorOptions === 'object');
   assert(typeof disableClientServer === 'boolean');
 
-  const _features = normalizeFeatures(features, mode);
+  let _mode: keyof typeof SDK.IMode =
+    (output.mode as keyof typeof SDK.IMode) ||
+    mode ||
+    SDK.IMode[SDK.IMode.normal];
+
+  if (mode) {
+    logger.info(
+      chalk.yellow(
+        `[RSDOCTOR]: The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.`,
+      ),
+    );
+  }
+
+  const _features = normalizeFeatures(features, _mode);
   const _linter = normalizeLinter(linter);
 
-  // If lite mode is enabled and mode is not brief, set mode to lite
-  let _mode: keyof typeof SDK.IMode = mode;
+  if (_features.lite || _mode === SDK.IMode[SDK.IMode.lite]) {
+    logger.info(
+      chalk.yellow(
+        `[RSDOCTOR]: lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.`,
+      ),
+    );
+  }
 
+  // If lite mode is enabled and mode is not brief, set mode to lite
   if (_features.lite && _mode !== SDK.IMode[SDK.IMode.brief]) {
     _mode = SDK.IMode[SDK.IMode.lite] as keyof typeof SDK.IMode;
   }
@@ -126,6 +146,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     disableClientServer,
     sdkInstance,
     output: {
+      mode: _mode,
       reportCodeType,
       reportDir: output.reportDir || '',
       compressData:
@@ -135,7 +156,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     supports,
     port,
     printLog,
-    mode,
     brief,
   };
 

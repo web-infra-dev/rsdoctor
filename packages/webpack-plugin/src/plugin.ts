@@ -56,19 +56,22 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   constructor(options?: RsdoctorWebpackPluginOptions<Rules>) {
     this.options = normalizeUserConfig<Rules>(options);
+    const { port, output, innerClientPath, printLog, brief, sdkInstance } =
+      this.options;
+
     this.sdk =
-      this.options.sdkInstance ??
+      sdkInstance ??
       new RsdoctorSDK({
-        port: this.options.port,
+        port: port,
         name: pluginTapName,
         root: process.cwd(),
-        type: this.options.output.reportCodeType,
+        type: output.reportCodeType,
         config: {
-          innerClientPath: this.options.innerClientPath,
-          printLog: this.options.printLog,
-          mode: this.options.mode,
-          brief: this.options.brief,
-          compressData: this.options.output.compressData,
+          innerClientPath: innerClientPath,
+          printLog: printLog,
+          mode: output.mode,
+          brief: brief,
+          compressData: output.compressData,
         },
       });
 
@@ -175,7 +178,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
     await this._bootstrapTask.then(() => {
       if (!this.options.disableClientServer && !this.browserIsOpened) {
-        if (this.options.mode !== SDK.IMode[SDK.IMode.brief]) {
+        if (this.options.output.mode !== SDK.IMode[SDK.IMode.brief]) {
           this.browserIsOpened = true;
           this.sdk.server.openClientPage();
         }
@@ -210,7 +213,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
           `${Process.getMemoryUsageMessage()}, '[After SDK Dispose]'`,
         );
       } else if (
-        this.options.mode === SDK.IMode[SDK.IMode.brief] &&
+        this.options.output.mode === SDK.IMode[SDK.IMode.brief] &&
         !this.options.disableClientServer
       ) {
         // Use extracted common function to handle brief mode
