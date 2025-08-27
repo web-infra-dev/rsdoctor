@@ -68,7 +68,7 @@ const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, {}> = function (
         }
       }
 
-      return result;
+      return result || '';
     } catch (error) {
       reportLoader(
         this,
