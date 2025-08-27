@@ -12,7 +12,7 @@ interface StatsOptionsObj {
   errors?: boolean;
   errorsCount?: boolean;
   colors?: boolean;
-  chunkModules: boolean;
+  chunkModules?: boolean;
   hash?: boolean;
   ids?: boolean;
 
