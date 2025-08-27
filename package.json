@@ -7,7 +7,7 @@
     ]
   },
   "scripts": {
-    "build": "cross-env NX_DAEMON=false nx run-many -t build --projects=@rsdoctor/*,@examples/rsdoctor-rspack-banner --parallel=10",
+    "build": "cross-env NX_DAEMON=false nx run-many -t build --projects=@rsdoctor/*,@examples/rsdoctor-rspack-banner,@examples/doctor-rsbuild-minimal --parallel=10",
     "change": "changeset",
     "changeset": "changeset",
     "bump": "changeset version",

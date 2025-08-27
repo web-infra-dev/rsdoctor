@@ -25,6 +25,7 @@ export class InternalLoaderPlugin<
 > extends InternalBasePlugin<T> {
   public readonly name = 'loader';
 
+  // TODO: find the reason why  using loader/proxy.js causes this problem https://github.com/web-infra-dev/rsdoctor/pull/1271.
   public readonly internalLoaderPath: string =
     getProxyExtension() === '.cjs'
       ? require.resolve(path.join(__dirname, `../loaders/proxy.cjs`))
