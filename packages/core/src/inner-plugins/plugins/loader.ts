@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const dirname = path.dirname(__filename);
 
 // Determine the proxy file extension based on current file extension
 const getProxyExtension = () => {
@@ -25,9 +25,10 @@ export class InternalLoaderPlugin<
 > extends InternalBasePlugin<T> {
   public readonly name = 'loader';
 
-  public readonly internalLoaderPath: string = require.resolve(
-    path.join(__dirname, `../loaders/proxy${getProxyExtension()}`),
-  );
+  public readonly internalLoaderPath: string =
+    getProxyExtension() === '.cjs'
+      ? require.resolve(path.join(__dirname, `../loaders/proxy.cjs`))
+      : require.resolve(path.join(dirname, `../loaders/proxy.cjs`));
 
   public apply(compiler: T) {
     time('InternalLoaderPlugin.apply');
