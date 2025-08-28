@@ -1,15 +1,8 @@
-import type { Configuration, RuleSetRule } from '@rspack/core';
-import {
-  findRoot,
-  openBrowser,
-  RsdoctorPrimarySDK,
-  RsdoctorSDK,
-} from '@rsdoctor/sdk';
+import { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import {
   InternalLoaderPlugin,
   InternalPluginsPlugin,
   InternalSummaryPlugin,
-  makeRulesSerializable,
   setSDK,
   ensureModulesChunksGraphFn,
   InternalBundlePlugin,
@@ -34,7 +27,13 @@ import {
 } from '@rsdoctor/types';
 import path from 'path';
 import { pluginTapName, pluginTapPostOptions } from './constants';
-import { cloneDeep } from 'lodash-es';
+
+import {
+  processCompilerConfig,
+  reportConfiguration,
+  setOutputDirectory,
+  handleBriefModeReport,
+} from '@rsdoctor/core/plugins';
 
 import { Loader } from '@rsdoctor/utils/common';
 import { chalk, logger, time, timeEnd } from '@rsdoctor/utils/logger';
@@ -240,17 +239,14 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       );
       await this.sdk.writeStore();
       if (!this.options.disableClientServer) {
+        // If it's brief mode, open the static report page instead of the local server page.
         if (this.options.mode === SDK.IMode[SDK.IMode.brief]) {
-          const outputFilePath = path.resolve(
-            this.sdk.outputDir,
-            this.options.brief.reportHtmlName || 'rsdoctor-report.html',
+          // Use extracted common function to handle brief mode
+          handleBriefModeReport(
+            this.sdk,
+            this.options,
+            this.options.disableClientServer,
           );
-
-          console.log(
-            `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
-          );
-
-          openBrowser(`file:///${outputFilePath}`);
         } else {
           await this.sdk.server.openClientPage('homepage');
         }
@@ -268,33 +264,26 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
     time('RsdoctorRspackPlugin.getRspackConfig');
     try {
       if (compiler.isChild()) return;
-      const { plugins, infrastructureLogging, ...rest } = compiler.options;
-      const _rest = cloneDeep(rest);
 
-      makeRulesSerializable(_rest.module.defaultRules as RuleSetRule[]);
-      makeRulesSerializable(_rest.module.rules as RuleSetRule[]);
-
-      const configuration = {
-        ..._rest,
-        plugins: plugins.map((e) => e?.constructor.name),
-      } as unknown as Configuration;
+      // Use extracted common function to process configuration
+      const configuration = processCompilerConfig(compiler.options);
 
       const rspackVersion = compiler.webpack?.rspackVersion;
       const webpackVersion = compiler.webpack?.version;
 
-      // save webpack or rspack configuration to sdk
-      this.sdk.reportConfiguration({
-        name: rspackVersion ? 'rspack' : 'webpack',
-        version: rspackVersion || webpackVersion || 'unknown',
-        config: configuration,
-        root: findRoot() || '',
-      });
+      // Use extracted common function to report configuration
+      reportConfiguration(
+        this.sdk,
+        rspackVersion ? 'rspack' : 'webpack',
+        rspackVersion || webpackVersion || 'unknown',
+        configuration,
+      );
 
-      this.sdk.setOutputDir(
-        path.resolve(
-          this.options.output.reportDir || compiler.outputPath,
-          `./${Constants.RsdoctorOutputFolder}`,
-        ),
+      // Use extracted common function to set output directory
+      setOutputDirectory(
+        this.sdk,
+        this.options.output.reportDir,
+        compiler.outputPath,
       );
     } finally {
       timeEnd('RsdoctorRspackPlugin.getRspackConfig');
