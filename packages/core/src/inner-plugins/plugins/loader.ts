@@ -14,19 +14,14 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Determine the proxy file extension based on current file extension
-const getProxyExtension = () => {
-  const currentExt = path.extname(__filename);
-  return currentExt === '.cjs' ? '.cjs' : '.js';
-};
-
 export class InternalLoaderPlugin<
   T extends Plugin.BaseCompiler,
 > extends InternalBasePlugin<T> {
   public readonly name = 'loader';
 
+  // TODO: find the reason why using loader/proxy.js causes this problem https://github.com/web-infra-dev/rsdoctor/pull/1271.
   public readonly internalLoaderPath: string = require.resolve(
-    path.join(__dirname, `../loaders/proxy${getProxyExtension()}`),
+    path.join(__dirname, `../loaders/proxy.cjs`),
   );
 
   public apply(compiler: T) {
