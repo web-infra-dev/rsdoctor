@@ -12,6 +12,9 @@ interface StatsOptionsObj {
   errors?: boolean;
   errorsCount?: boolean;
   colors?: boolean;
+  chunkModules?: boolean;
+  hash?: boolean;
+  ids?: boolean;
 
   /** Rspack not support below opts */
   cachedAssets?: boolean;
