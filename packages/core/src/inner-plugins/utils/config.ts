@@ -1,27 +1,22 @@
-import { Common, Linter, Plugin, SDK } from '@rsdoctor/types';
+import { Linter, SDK } from '@rsdoctor/types';
+import { chalk, logger } from '@rsdoctor/utils/logger';
 import assert from 'assert';
-import type {
-  RuleSetCondition as RspackRuleSetCondition,
-  RuleSetRule as RspackRuleSetRule,
-} from '@rspack/core';
 import {
-  RuleSetCondition as WebpackRuleSetCondition,
-  RuleSetConditionAbsolute as WebpackRuleSetConditionAbsolute,
-  RuleSetRule as WebpackRuleSetRule,
-} from 'webpack';
-import {
-  RsdoctorWebpackPluginOptions,
-  RsdoctorPluginOptionsNormalized,
   IReportCodeType,
+  NewReportCodeType,
+  RsdoctorPluginOptionsNormalized,
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
+  RsdoctorWebpackPluginOptions,
 } from '@/types';
-import { chalk, logger } from '@rsdoctor/utils/logger';
+import {
+  convertReportCodeTypeObject,
+  processModeConfigurations,
+} from './normalize-config';
 
 function defaultBoolean(v: unknown, dft: boolean): boolean {
   return typeof v === 'boolean' ? v : dft;
 }
-
 function getDefaultOutput() {
   return {
     mode: undefined,
@@ -30,11 +25,11 @@ function getDefaultOutput() {
       noAssetsAndModuleSource: false,
       noCode: false,
     },
+    options: undefined,
     reportDir: '',
-    compressData: true,
+    compressData: undefined,
   };
 }
-
 function getDefaultSupports() {
   return {
     parseBundle: true,
@@ -42,7 +37,6 @@ function getDefaultSupports() {
     gzip: true, // change the gzip to true by default.
   };
 }
-
 function normalizeFeatures(features: any, mode: keyof typeof SDK.IMode) {
   if (Array.isArray(features)) {
     return {
@@ -65,7 +59,6 @@ function normalizeFeatures(features: any, mode: keyof typeof SDK.IMode) {
       mode === SDK.IMode[SDK.IMode.lite],
   };
 }
-
 function normalizeLinter(linter: any) {
   return {
     rules: {} as any,
@@ -73,6 +66,10 @@ function normalizeLinter(linter: any) {
     level: 'Error',
     ...linter,
   };
+}
+
+function isValidMode(mode: any): mode is keyof typeof SDK.IMode {
+  return typeof mode === 'string' && ['brief', 'normal', 'lite'].includes(mode);
 }
 
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
@@ -90,51 +87,50 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     port,
     printLog = { serverUrls: true },
     mode = undefined,
-    brief = {
-      reportHtmlDir: undefined,
-      reportHtmlName: undefined,
-      writeDataJson: false,
-    },
+    brief = undefined,
   } = config;
-
   assert(typeof linter === 'object');
   assert(typeof features === 'object' || Array.isArray(features));
   assert(typeof loaderInterceptorOptions === 'object');
   assert(typeof disableClientServer === 'boolean');
-
-  let _mode: keyof typeof SDK.IMode =
-    (output.mode as keyof typeof SDK.IMode) ||
+  let finalMode: keyof typeof SDK.IMode =
+    ('mode' in output && isValidMode(output.mode)
+      ? output.mode === ('lite' as SDK.IMode.normal)
+        ? SDK.IMode[SDK.IMode.normal]
+        : output.mode
+      : undefined) ||
     mode ||
     SDK.IMode[SDK.IMode.normal];
 
   if (mode) {
     logger.info(
       chalk.yellow(
-        `[RSDOCTOR]: The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.`,
+        `The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.`,
       ),
     );
   }
-
-  const _features = normalizeFeatures(features, _mode);
+  const _features = normalizeFeatures(features, finalMode);
   const _linter = normalizeLinter(linter);
-
-  if (_features.lite || _mode === SDK.IMode[SDK.IMode.lite]) {
+  if (_features.lite || finalMode === SDK.IMode[SDK.IMode.lite]) {
     logger.info(
       chalk.yellow(
-        `[RSDOCTOR]: lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.`,
+        `Lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.`,
       ),
     );
   }
-
-  // If lite mode is enabled and mode is not brief, set mode to lite
-  if (_features.lite && _mode !== SDK.IMode[SDK.IMode.brief]) {
-    _mode = SDK.IMode[SDK.IMode.lite] as keyof typeof SDK.IMode;
+  // Process mode-specific configurations
+  const { finalBrief, finalNormalOptions } = processModeConfigurations(
+    finalMode,
+    output,
+    brief,
+  );
+  // If lite mode is enabled and mode is not brief: finalBrief, set mode to lite
+  if (_features.lite && finalMode !== SDK.IMode[SDK.IMode.brief]) {
+    finalMode = SDK.IMode[SDK.IMode.lite] as keyof typeof SDK.IMode;
   }
-
   const reportCodeType = output.reportCodeType
-    ? normalizeReportType(output.reportCodeType, _mode)
-    : normalizeReportType(getDefaultOutput().reportCodeType, _mode);
-
+    ? normalizeReportType(output.reportCodeType, finalMode)
+    : normalizeReportType(getDefaultOutput().reportCodeType, finalMode);
   const res: RsdoctorPluginOptionsNormalized<Rules> = {
     linter: _linter,
     features: _features,
@@ -146,26 +142,22 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     disableClientServer,
     sdkInstance,
     output: {
-      mode: _mode,
+      mode: finalMode,
+      options: finalMode === 'brief' ? finalBrief : finalNormalOptions,
       reportCodeType,
       reportDir: output.reportDir || '',
-      compressData:
-        output.compressData !== undefined ? output.compressData : true,
     },
     innerClientPath,
     supports,
     port,
     printLog,
-    brief,
   };
 
-  if (
-    res.output.compressData === false &&
-    (!output.reportCodeType || !output.reportCodeType.noAssetsAndModuleSource)
-  ) {
+  // Add deprecation warning for compressData
+  if (output.compressData !== undefined) {
     logger.info(
       chalk.yellow(
-        `[RSDOCTOR]: When you use compressData: false, it is recommended to set output.reportCodeType to { noAssetsAndModuleSource: true }.`,
+        `The 'compressData' configuration will be deprecated in a future version.`,
       ),
     );
   }
@@ -173,88 +165,29 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   return res;
 }
 
-export function makeRuleSetSerializable(
-  item:
-    | RspackRuleSetCondition
-    | WebpackRuleSetConditionAbsolute
-    | WebpackRuleSetCondition
-    | void,
-) {
-  if (!item) return;
-
-  if (item instanceof RegExp) {
-    // Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.
-    (item as Common.PlainObject).toJSON = item.toString;
-  } else if (Array.isArray(item)) {
-    item.forEach((i) => makeRuleSetSerializable(i));
-  } else if (typeof item === 'object') {
-    makeRuleSetSerializable(item.and);
-    makeRuleSetSerializable(item.or);
-    makeRuleSetSerializable(item.not);
-  }
-}
-
-export function makeRulesSerializable(
-  rules:
-    | Plugin.RuleSetRule[]
-    | RspackRuleSetRule['oneOf']
-    | WebpackRuleSetRule['oneOf'],
-) {
-  if (!Array.isArray(rules)) return;
-
-  if (!rules.length) return;
-
-  rules.forEach((rule) => {
-    if (!rule) return;
-
-    makeRuleSetSerializable(rule.test);
-    makeRuleSetSerializable(rule.resourceQuery);
-    makeRuleSetSerializable(rule.resource);
-    makeRuleSetSerializable(rule.resourceFragment);
-    makeRuleSetSerializable(rule.scheme);
-    makeRuleSetSerializable(rule.issuer);
-
-    if ('issuerLayer' in rule) {
-      makeRuleSetSerializable(rule.issuerLayer);
-    }
-
-    makeRuleSetSerializable(rule.include);
-    makeRuleSetSerializable(rule.exclude);
-
-    if (rule.oneOf) {
-      makeRulesSerializable(rule.oneOf);
-    }
-
-    if ('rules' in rule && rule.rules) {
-      makeRulesSerializable(rule.rules);
-    }
-  });
-}
-
 export const normalizeReportType = (
-  reportCodeType: IReportCodeType,
+  reportCodeType: IReportCodeType | NewReportCodeType,
   mode: keyof typeof SDK.IMode,
 ): SDK.ToDataType => {
-  if (reportCodeType.noCode) {
+  const convertedReportCodeType =
+    typeof reportCodeType === 'object'
+      ? convertReportCodeTypeObject(reportCodeType)
+      : reportCodeType;
+  if (convertedReportCodeType === 'noCode') {
     return SDK.ToDataType.NoCode;
   }
-
   if (mode === SDK.IMode[SDK.IMode.brief]) {
     return SDK.ToDataType.NoCode;
   }
-
   if (mode === SDK.IMode[SDK.IMode.lite]) {
     return SDK.ToDataType.NoSourceAndAssets;
   }
-
-  if (reportCodeType.noAssetsAndModuleSource) {
+  if (convertedReportCodeType === 'noAssetsAndModuleSource') {
     return SDK.ToDataType.NoSourceAndAssets;
   }
-
-  if (reportCodeType.noModuleSource) {
+  if (convertedReportCodeType === 'noModuleSource') {
     return SDK.ToDataType.NoSource;
   }
-
   return SDK.ToDataType.Normal;
 };
 
@@ -265,14 +198,12 @@ export function normalizeRspackUserOptions<
 ): RsdoctorRspackPluginOptionsNormalized<Rules> {
   const config: RsdoctorRspackPluginOptionsNormalized<Rules> =
     normalizeUserConfig(options);
-
   config.experiments ??= {
     enableNativePlugin: {
       moduleGraph: false,
       chunkGraph: false,
     },
   };
-
   if (
     typeof options.experiments?.enableNativePlugin === 'boolean' &&
     options.experiments?.enableNativePlugin === true

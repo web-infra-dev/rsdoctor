@@ -35,8 +35,10 @@ export class RsdoctorWebpackMultiplePlugin<
         mode: normallizedOptions.output.mode
           ? normallizedOptions.output.mode
           : undefined,
-        brief: normallizedOptions.brief,
-        compressData: normallizedOptions.output.compressData,
+        brief:
+          'htmlOptions' in normallizedOptions.output.options
+            ? normallizedOptions.output.options.htmlOptions
+            : undefined,
       },
       type: normallizedOptions.output.reportCodeType,
     });

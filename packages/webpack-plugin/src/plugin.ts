@@ -56,7 +56,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   constructor(options?: RsdoctorWebpackPluginOptions<Rules>) {
     this.options = normalizeUserConfig<Rules>(options);
-    const { port, output, innerClientPath, printLog, brief, sdkInstance } =
+    const { port, output, innerClientPath, printLog, sdkInstance } =
       this.options;
 
     this.sdk =
@@ -70,8 +70,10 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
           innerClientPath: innerClientPath,
           printLog: printLog,
           mode: output.mode,
-          brief: brief,
-          compressData: output.compressData,
+          brief:
+            'htmlOptions' in output.options
+              ? output.options.htmlOptions
+              : undefined,
         },
       });
 

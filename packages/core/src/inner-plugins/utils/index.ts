@@ -4,3 +4,4 @@ export * from './sdk';
 export * from './config';
 export * from './circleDetect';
 export * from './plugin-common';
+export * from './normalize-config';

@@ -66,7 +66,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         },
       }),
     );
-    const { port, output, innerClientPath, printLog, brief, sdkInstance } =
+    const { port, output, innerClientPath, printLog, sdkInstance } =
       this.options;
 
     this.sdk =
@@ -80,8 +80,10 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
           innerClientPath,
           printLog,
           mode: output.mode ? output.mode : undefined,
-          brief,
-          compressData: output.compressData,
+          brief:
+            'htmlOptions' in output.options
+              ? output.options.htmlOptions
+              : undefined,
         },
       });
     this.outsideInstance = Boolean(sdkInstance);

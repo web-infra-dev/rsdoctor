@@ -30,8 +30,20 @@ describe('normalizeUserConfig', () => {
       treeShaking: false,
     });
     expect(result.output.reportCodeType).toBeDefined();
-    expect(result.output.compressData).toBe(true);
+    // @ts-ignore
+    expect(result.output.compressData).toBe(undefined);
     expect(result.output.mode).toBe('normal');
+  });
+
+  it('should handle compressData configuration correctly', () => {
+    const result = normalizeUserConfig({
+      output: {
+        compressData: true,
+      },
+    });
+
+    // compressData is deprecated and not included in final output
+    expect(result.output).not.toHaveProperty('compressData');
   });
 
   it('should respect custom features array', () => {
@@ -96,42 +108,69 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "[RSDOCTOR]: The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.",
+            "The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.",
           ),
         ),
       ).toBe(true);
     });
 
-    it('should not show warning when using output.mode instead of mode', () => {
+    it('should show warning when using deprecated compressData configuration', () => {
       normalizeUserConfig({
         output: {
-          mode: 'lite',
+          compressData: false,
         },
       });
 
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "[RSDOCTOR]: The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.",
+            "The 'compressData' configuration will be deprecated in a future version.",
+          ),
+        ),
+      ).toBe(true);
+    });
+
+    it('should not show compressData warning when compressData is undefined', () => {
+      normalizeUserConfig({
+        output: {
+          compressData: undefined,
+        },
+      });
+
+      expect(
+        consoleOutput.some((output) =>
+          output.includes(
+            "The 'compressData' configuration will be deprecated in a future version.",
           ),
         ),
       ).toBe(false);
     });
 
-    it('should show warning when lite mode is enabled', () => {
+    it('should not show warning when using output.mode instead of mode', () => {
       normalizeUserConfig({
         output: {
-          mode: 'lite',
+          mode: 'brief',
         },
       });
 
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "[RSDOCTOR]: lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
+            "The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.",
           ),
         ),
-      ).toBe(true);
+      ).toBe(false);
+    });
+
+    it('should handle invalid mode values gracefully', () => {
+      const result = normalizeUserConfig({
+        output: {
+          mode: 'invalid' as any,
+        },
+      });
+
+      // Should fall back to default mode
+      expect(result.output.mode).toBe('normal');
     });
 
     it('should show warning when lite features are enabled', () => {
@@ -144,7 +183,7 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "[RSDOCTOR]: lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
+            "Lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
           ),
         ),
       ).toBe(true);
@@ -160,12 +199,12 @@ describe('normalizeUserConfig', () => {
 
       const modeWarning = consoleOutput.some((output) =>
         output.includes(
-          "[RSDOCTOR]: The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.",
+          "The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.",
         ),
       );
       const liteWarning = consoleOutput.some((output) =>
         output.includes(
-          "[RSDOCTOR]: lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
+          "Lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
         ),
       );
 
@@ -179,19 +218,30 @@ describe('normalizeUserConfig', () => {
       const result = normalizeUserConfig({
         mode: 'normal',
         output: {
-          mode: 'lite',
+          mode: 'brief',
         },
       });
 
-      expect(result.output.mode).toBe('lite');
+      expect(result.output.mode).toBe('brief');
     });
 
     it('should use mode when output.mode is not provided', () => {
       const result = normalizeUserConfig({
-        mode: 'lite',
+        mode: 'brief',
       });
 
-      expect(result.output.mode).toBe('lite');
+      expect(result.output.mode).toBe('brief');
+    });
+
+    it('should handle output.mode with invalid value and fall back to mode', () => {
+      const result = normalizeUserConfig({
+        mode: 'brief',
+        output: {
+          mode: 'invalid' as any,
+        },
+      });
+
+      expect(result.output.mode).toBe('brief');
     });
 
     it('should use normal as default when neither mode nor output.mode is provided', () => {
@@ -343,6 +393,110 @@ describe('normalizeUserConfig', () => {
         },
       });
       expect(result.output.reportCodeType).toBe(SDK.ToDataType.Normal);
+    });
+
+    it('should handle NewReportCodeType string values - noCode', () => {
+      const result = normalizeUserConfig({
+        mode: 'normal',
+        output: {
+          reportCodeType: 'noCode',
+        },
+      });
+      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
+    });
+
+    it('should handle NewReportCodeType string values - noAssetsAndModuleSource', () => {
+      const result = normalizeUserConfig({
+        mode: 'normal',
+        output: {
+          reportCodeType: 'noAssetsAndModuleSource',
+        },
+      });
+      expect(result.output.reportCodeType).toBe(
+        SDK.ToDataType.NoSourceAndAssets,
+      );
+    });
+
+    it('should handle NewReportCodeType string values - noModuleSource', () => {
+      const result = normalizeUserConfig({
+        mode: 'normal',
+        output: {
+          reportCodeType: 'noModuleSource',
+        },
+      });
+      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoSource);
+    });
+
+    it('should handle undefined reportCodeType and use default', () => {
+      const result = normalizeUserConfig({
+        mode: 'normal',
+        output: {
+          reportCodeType: undefined,
+        },
+      });
+      expect(result.output.reportCodeType).toBe(SDK.ToDataType.Normal);
+    });
+
+    it('should handle empty object reportCodeType and use default', () => {
+      const result = normalizeUserConfig({
+        mode: 'normal',
+        output: {
+          reportCodeType: {},
+        },
+      });
+      expect(result.output.reportCodeType).toBe(SDK.ToDataType.Normal);
+    });
+
+    it('should prioritize noCode over other flags in normal mode', () => {
+      const result = normalizeUserConfig({
+        mode: 'normal',
+        output: {
+          reportCodeType: {
+            noCode: true,
+            noModuleSource: true,
+            noAssetsAndModuleSource: true,
+          },
+        },
+      });
+      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
+    });
+
+    it('should prioritize noAssetsAndModuleSource over noModuleSource in normal mode', () => {
+      const result = normalizeUserConfig({
+        mode: 'normal',
+        output: {
+          reportCodeType: {
+            noCode: false,
+            noModuleSource: true,
+            noAssetsAndModuleSource: true,
+          },
+        },
+      });
+      expect(result.output.reportCodeType).toBe(
+        SDK.ToDataType.NoSourceAndAssets,
+      );
+    });
+
+    it('should handle brief mode with valid NewReportCodeType string', () => {
+      const result = normalizeUserConfig({
+        output: {
+          mode: 'brief',
+          reportCodeType: 'noCode',
+        },
+      });
+      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
+    });
+
+    it('should handle lite mode via features with NewReportCodeType string', () => {
+      const result = normalizeUserConfig({
+        features: {
+          lite: true,
+        },
+        output: {
+          reportCodeType: 'noCode',
+        },
+      });
+      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
     });
   });
 });

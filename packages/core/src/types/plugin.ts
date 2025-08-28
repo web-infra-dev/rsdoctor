@@ -1,11 +1,11 @@
+import type { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import type {
-  Linter as LinterType,
   Common,
+  Linter,
+  Linter as LinterType,
   Plugin,
   SDK,
-  Linter,
 } from '@rsdoctor/types';
-import type { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import { rules } from '@/rules/rules';
 
 type InternalRules = Common.UnionToTuple<(typeof rules)[number]>;
@@ -16,85 +16,71 @@ export type IReportCodeType = {
   noCode?: boolean;
 };
 
-export type IOutput = {};
-
-enum ReportCodeType {
-  NoModuleSource = 'noModuleSource',
-  NoAssetsAndModuleSource = 'noAssetsAndModuleSource',
-  NoCode = 'noCode',
+// Conditional output type based on mode
+export type IOutput<T extends 'brief' | 'normal' | undefined = undefined> =
+  T extends 'brief'
+    ? BriefModeConfig
+    : T extends 'normal'
+      ? NormalModeConfig
+      : BriefModeConfig | NormalModeConfig | OutputBaseConfig;
+export type NewReportCodeType =
+  | 'noModuleSource'
+  | 'noAssetsAndModuleSource'
+  | 'noCode';
+export interface NormalModeOptions {
+  // Normal mode doesn't have type field, it's only available in brief mode
+  type?: never;
 }
 
-interface NormalModeOptions {
-  reportCodeType?: ReportCodeType;
+export interface BriefModeOptions {
+  /** Output type, supports HTML and JSON */
+  type?: Array<'html'>;
+  /** HTML output related configuration */
+  // jsonOptions?: {};
+  htmlOptions?: SDK.BriefConfig;
 }
 
-// 输出模式枚举
-enum RsdoctorOutputMode {
-  Brief = 'brief',
-  Normal = 'normal', // default
+interface OutputBaseConfig {
+  /**
+   * The directory where the report files will be output.
+   */
+  reportDir?: string;
+
+  /**
+   * Control the Rsdoctor reporter codes records.
+   */
+  reportCodeType?: IReportCodeType | undefined | NewReportCodeType;
+
+  /**
+   * @deprecated
+   * Configure whether to compress data.
+   * @default false
+   *
+   */
+  compressData?: boolean;
 }
 
-// 输出格式枚举
-enum RsdoctorOutputType {
-  HTML = 'html',
-  JSON = 'json',
-}
+// Conditional type for reportCodeType based on mode
+type ReportCodeTypeByMode<T extends 'brief' | 'normal' | undefined> =
+  T extends 'brief'
+    ? undefined | 'noCode' | { noCode?: boolean }
+    : T extends 'normal'
+      ? IReportCodeType | undefined | NewReportCodeType
+      : IReportCodeType | undefined | NewReportCodeType;
 
-// JSON 输出预设
-enum JsonPresetType {
-  Minimal = 'minimal',
-  Normal = 'normal', // default
-}
-
-// JSON 输出配置
-interface JsonOptions {
-  /** 输出预设类型 */
-  preset?: JsonPresetType; // default: 'normal'
-  /** 细粒度的数据输出控制 */
-  sections?: JsonSectionOptions;
-}
-
-// JSON 输出的细粒度控制选项
-interface JsonSectionOptions {
-  /** 模块依赖图数据 */
-  moduleGraph?: boolean; // default: true
-  /** 代码块依赖图数据 */
-  chunkGraph?: boolean; // default: true
-  /** 规则相关数据 */
-  rules?: boolean; // default: true
-}
-
-interface HtmlOptions {
-  /** 自定义报告HTML文件名 */
-  reportHtmlName?: string;
-  /** 是否同时输出数据JSON文件 */
-  writeDataJson?: boolean;
-}
-
-interface BriefModeOptions {
-  /** 输出类型，支持HTML和JSON */
-  type?: RsdoctorOutputType[]; // default: ['html']
-  /** JSON输出相关配置 */
-  jsonOptions?: JsonOptions;
-  /** HTML输出相关配置 */
-  htmlOptions?: HtmlOptions;
-}
-
-// 基础配置接口
-interface BaseConfig {
-  /** 输出目录路径 */
-  outputDir: string;
-}
-
-// Brief 模式完整配置
-interface BriefModeConfig extends BaseConfig {
-  mode: RsdoctorOutputMode.Brief;
+// Brief Mode Type
+export interface BriefModeConfig
+  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+  mode?: 'brief';
+  reportCodeType?: ReportCodeTypeByMode<'brief'>;
   options?: BriefModeOptions;
 }
 
-// Normal 模式完整配置
-interface NormalModeConfig extends BaseConfig {
-  mode: RsdoctorOutputMode.Normal;
+// Normal Mode Type
+interface NormalModeConfig
+  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+  mode?: 'normal';
+  reportCodeType?: ReportCodeTypeByMode<'normal'>;
   options?: NormalModeOptions;
 }
 
@@ -117,7 +103,7 @@ export interface RsdoctorWebpackPluginOptions<
    * - brief: Refers to the brief mode, which only displays the results of the duration analysis and build artifact analysis
    *    and does not display any part of the code.
    */
-  mode?: keyof typeof SDK.IMode;
+  mode?: 'brief' | 'normal' | 'lite';
 
   /**
    * configuration of the interceptor for webpack loaders. TODO: delete this options.
@@ -156,6 +142,8 @@ export interface RsdoctorWebpackPluginOptions<
   printLog?: SDK.IPrintLog;
 
   /**
+   * @deprecated
+   * Please use the output.options to set the brief options, BriefModeOptions.
    * Options to control brief mode reports.
    */
   brief?: SDK.BriefConfig;
@@ -166,33 +154,7 @@ export interface RsdoctorWebpackPluginOptions<
    */
   innerClientPath?: string;
 
-  output?:
-    | ({
-        /**
-         * The directory where the report files will be output.
-         */
-        reportDir?: string;
-
-        /**
-         * Rsdoctor mode option:
-         * - normal: Refers to the normal mode.
-         * - brief: Refers to the brief mode, which only displays the results of the duration analysis and build artifact analysis
-         *    and does not display any part of the code.
-         */
-        mode?: keyof typeof SDK.IMode;
-
-        /**
-         * Control the Rsdoctor reporter codes records.
-         */
-        reportCodeType?: IReportCodeType | undefined;
-
-        /**
-         * Configure whether to compress data.
-         * @default false
-         */
-        compressData?: boolean;
-      } & BriefModeConfig)
-    | NormalModeConfig;
+  output?: IOutput<'brief' | 'normal'>;
 }
 
 export interface RsdoctorMultiplePluginOptions<
@@ -233,11 +195,10 @@ export interface RsdoctorPluginOptionsNormalized<
     mode: keyof typeof SDK.IMode;
     reportCodeType: SDK.ToDataType;
     reportDir: string;
-    compressData: boolean;
+    options: BriefModeOptions | NormalModeOptions;
   };
   port?: number;
   supports: ISupport;
-  brief: SDK.BriefConfig;
 }
 
 export interface BasePluginInstance<T extends Plugin.BaseCompiler> {
