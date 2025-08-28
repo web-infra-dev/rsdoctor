@@ -6,7 +6,6 @@ import {
   InternalSummaryPlugin,
   InternalRulesPlugin,
   InternalBundlePlugin,
-  makeRulesSerializable,
   normalizeUserConfig,
   setSDK,
   InternalBundleTagPlugin,
@@ -17,19 +16,24 @@ import type {
   RsdoctorWebpackPluginOptions,
 } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
-import { findRoot, openBrowser, RsdoctorSDK } from '@rsdoctor/sdk';
-import { Constants, Linter, Manifest, SDK } from '@rsdoctor/types';
+import { RsdoctorSDK } from '@rsdoctor/sdk';
+import { Linter, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
-import { chalk, logger } from '@rsdoctor/utils/logger';
-import { cloneDeep } from 'lodash';
-import path from 'path';
-import type { Compiler, Configuration, RuleSetRule } from 'webpack';
+import { logger } from '@rsdoctor/utils/logger';
+
+import type { Compiler } from 'webpack';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 
 import { InternalResolverPlugin } from './plugins/resolver';
 import { ensureModulesChunksGraphFn } from '@rsdoctor/core/plugins';
 import { Loader } from '@rsdoctor/utils/common';
 import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
+import {
+  processCompilerConfig,
+  reportConfiguration,
+  setOutputDirectory,
+  handleBriefModeReport,
+} from '@rsdoctor/core/plugins';
 
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorPluginInstance<Compiler, Rules>
@@ -139,35 +143,26 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   public afterPlugins = (compiler: Compiler): void => {
     if (compiler.isChild()) return;
 
-    // deep clone before intercept
-    const { plugins, infrastructureLogging, ...rest } = compiler.options;
-    const _rest = cloneDeep(rest);
-
-    makeRulesSerializable(_rest.module.defaultRules as RuleSetRule[]);
-    makeRulesSerializable(_rest.module.rules as RuleSetRule[]);
-
-    const configuration = {
-      ..._rest,
-      plugins: plugins.map((e) => e?.constructor.name),
-    } as unknown as Configuration;
+    // Use extracted common function to process configuration
+    const configuration = processCompilerConfig(compiler.options);
 
     // @ts-expect-error
     const rspackVersion = compiler.webpack?.rspackVersion;
     const webpackVersion = compiler.webpack?.version;
 
-    // save webpack or rspack configuration to sdk
-    this.sdk.reportConfiguration({
-      name: rspackVersion ? 'rspack' : 'webpack',
-      version: rspackVersion || webpackVersion || 'unknown',
-      config: configuration,
-      root: findRoot() || '',
-    });
+    // Use extracted common function to report configuration
+    reportConfiguration(
+      this.sdk,
+      rspackVersion ? 'rspack' : 'webpack',
+      rspackVersion || webpackVersion || 'unknown',
+      configuration,
+    );
 
-    this.sdk.setOutputDir(
-      path.resolve(
-        this.options.output.reportDir || compiler.outputPath,
-        `./${Constants.RsdoctorOutputFolder}`,
-      ),
+    // Use extracted common function to set output directory
+    setOutputDirectory(
+      this.sdk,
+      this.options.output.reportDir,
+      compiler.outputPath,
     );
 
     if (configuration.name) {
@@ -218,14 +213,12 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
         this.options.mode === SDK.IMode[SDK.IMode.brief] &&
         !this.options.disableClientServer
       ) {
-        const outputFilePath = path.resolve(
-          this.sdk.outputDir,
-          this.options.brief.reportHtmlName || 'rsdoctor-report.html',
+        // Use extracted common function to handle brief mode
+        handleBriefModeReport(
+          this.sdk,
+          this.options,
+          this.options.disableClientServer,
         );
-        console.log(
-          `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
-        );
-        openBrowser(`file:///${outputFilePath}`);
       }
     } catch (e) {
       console.error(`[Rsdoctor] Webpack plugin this.done error`, e);
