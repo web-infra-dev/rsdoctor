@@ -6,3 +6,4 @@ export * from './circleDetect';
 export * from './plugin-common';
 export * from './normalize-config';
 export * from './plugin-common';
+export * from './normalize-config';
