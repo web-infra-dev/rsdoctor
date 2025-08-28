@@ -44,19 +44,6 @@ export function reportConfiguration(
   });
 }
 
-export function setOutputDirectory(
-  sdk: any,
-  reportDir: string,
-  compilerOutputPath: string,
-): void {
-  sdk.setOutputDir(
-    path.resolve(
-      reportDir || compilerOutputPath,
-      `./${Constants.RsdoctorOutputFolder}`,
-    ),
-  );
-}
-
 export function handleBriefModeReport(
   sdk: any,
   options: any,

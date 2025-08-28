@@ -1,14 +1,19 @@
+import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
 import {
+  ensureModulesChunksGraphFn,
+  handleBriefModeReport,
+  InternalBundlePlugin,
+  InternalBundleTagPlugin,
   InternalErrorReporterPlugin,
   InternalLoaderPlugin,
   InternalPluginsPlugin,
   InternalProgressPlugin,
-  InternalSummaryPlugin,
   InternalRulesPlugin,
-  InternalBundlePlugin,
+  InternalSummaryPlugin,
   normalizeUserConfig,
+  processCompilerConfig,
+  reportConfiguration,
   setSDK,
-  InternalBundleTagPlugin,
 } from '@rsdoctor/core/plugins';
 import type {
   RsdoctorPluginInstance,
@@ -16,24 +21,14 @@ import type {
   RsdoctorWebpackPluginOptions,
 } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
-import { RsdoctorSDK } from '@rsdoctor/sdk';
+import { findRoot, RsdoctorSDK } from '@rsdoctor/sdk';
 import { Linter, Manifest, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
+import { Loader } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
-
 import type { Compiler } from 'webpack';
 import { pluginTapName, pluginTapPostOptions } from './constants';
-
 import { InternalResolverPlugin } from './plugins/resolver';
-import { ensureModulesChunksGraphFn } from '@rsdoctor/core/plugins';
-import { Loader } from '@rsdoctor/utils/common';
-import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
-import {
-  processCompilerConfig,
-  reportConfiguration,
-  setOutputDirectory,
-  handleBriefModeReport,
-} from '@rsdoctor/core/plugins';
 
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorPluginInstance<Compiler, Rules>
@@ -158,12 +153,13 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
       configuration,
     );
 
-    // Use extracted common function to set output directory
-    setOutputDirectory(
-      this.sdk,
-      this.options.output.reportDir,
-      compiler.outputPath,
-    );
+    // save webpack or rspack configuration to sdk
+    this.sdk.reportConfiguration({
+      name: rspackVersion ? 'rspack' : 'webpack',
+      version: rspackVersion || webpackVersion || 'unknown',
+      config: configuration,
+      root: findRoot() || '',
+    });
 
     if (configuration.name) {
       this.sdk.setName(configuration.name);
