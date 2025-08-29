@@ -37,9 +37,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.1",
-    "@changesets/cli": "^2.29.5",
+    "@changesets/cli": "^2.29.6",
     "@rsdoctor/tsconfig": "workspace:*",
-    "@rslib/core": "^0.12.2",
+    "@rslib/core": "^0.12.4",
     "@rstest/core": "0.2.2",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "^7.0.3",

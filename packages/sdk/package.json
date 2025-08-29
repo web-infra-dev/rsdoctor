@@ -35,14 +35,14 @@
     "@types/fs-extra": "^11.0.4",
     "body-parser": "1.20.3",
     "cors": "2.8.5",
-    "dayjs": "1.11.13",
+    "dayjs": "1.11.17",
     "fs-extra": "^11.1.1",
     "json-cycle": "^1.5.0",
     "open": "^10.2.0",
     "sirv": "2.0.4",
     "socket.io": "4.8.1",
-    "source-map": "^0.7.4",
-    "tapable": "2.2.2"
+    "source-map": "^0.7.6",
+    "tapable": "2.2.3"
   },
   "devDependencies": {
     "@types/body-parser": "1.19.6",
