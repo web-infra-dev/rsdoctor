@@ -61,12 +61,11 @@ interface OutputBaseConfig {
 }
 
 // Conditional type for reportCodeType based on mode
-type ReportCodeTypeByMode<T extends 'brief' | 'normal' | undefined> =
-  T extends 'brief'
-    ? undefined | 'noCode' | { noCode?: boolean }
-    : T extends 'normal'
-      ? IReportCodeType | undefined | NewReportCodeType
-      : IReportCodeType | undefined | NewReportCodeType;
+type ReportCodeTypeByMode<T extends 'brief' | 'normal'> = T extends 'brief'
+  ? undefined | 'noCode' | { noCode?: boolean }
+  : T extends 'normal'
+    ? IReportCodeType | undefined | NewReportCodeType
+    : IReportCodeType | undefined | NewReportCodeType;
 
 // Brief Mode Type
 export interface BriefModeConfig
@@ -97,7 +96,7 @@ export interface RsdoctorWebpackPluginOptions<
     | Array<keyof Plugin.RsdoctorWebpackPluginFeatures>;
 
   /**
-   * @deprecated Now need to use output.mode.
+   * @deprecated  Use `output.mode` instead, if you're using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead.
    * Rsdoctor mode option:
    * - normal: Refers to the normal mode.
    * - brief: Refers to the brief mode, which only displays the results of the duration analysis and build artifact analysis
@@ -142,7 +141,7 @@ export interface RsdoctorWebpackPluginOptions<
   printLog?: SDK.IPrintLog;
 
   /**
-   * @deprecated
+   * @deprecated  Use `output.options.htmlOptions` instead.
    * Please use the output.options to set the brief options, BriefModeOptions.
    * Options to control brief mode reports.
    */
