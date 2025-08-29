@@ -1,7 +1,7 @@
 import type { Configuration, RuleSetRule } from '@rspack/core';
 import { findRoot, openBrowser } from '@rsdoctor/sdk';
 import { makeRulesSerializable } from '@rsdoctor/core/plugins';
-import { Constants, SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/types';
 import { chalk } from '@rsdoctor/utils/logger';
 import { cloneDeep } from 'lodash-es';
 import path from 'path';
@@ -42,19 +42,6 @@ export function reportConfiguration(
     config: configuration,
     root: findRoot() || '',
   });
-}
-
-export function setOutputDirectory(
-  sdk: any,
-  reportDir: string,
-  compilerOutputPath: string,
-): void {
-  sdk.setOutputDir(
-    path.resolve(
-      reportDir || compilerOutputPath,
-      `./${Constants.RsdoctorOutputFolder}`,
-    ),
-  );
 }
 
 export function handleBriefModeReport(

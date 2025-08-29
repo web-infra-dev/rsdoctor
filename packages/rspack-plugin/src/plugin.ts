@@ -1,4 +1,4 @@
-import { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
+import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import {
   InternalLoaderPlugin,
   InternalPluginsPlugin,
@@ -31,7 +31,6 @@ import { pluginTapName, pluginTapPostOptions } from './constants';
 import {
   processCompilerConfig,
   reportConfiguration,
-  setOutputDirectory,
   handleBriefModeReport,
 } from '@rsdoctor/core/plugins';
 
@@ -284,12 +283,13 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         configuration,
       );
 
-      // Use extracted common function to set output directory
-      setOutputDirectory(
-        this.sdk,
-        this.options.output.reportDir,
-        compiler.outputPath,
-      );
+      // save webpack or rspack configuration to sdk
+      this.sdk.reportConfiguration({
+        name: rspackVersion ? 'rspack' : 'webpack',
+        version: rspackVersion || webpackVersion || 'unknown',
+        config: configuration,
+        root: findRoot() || '',
+      });
     } finally {
       timeEnd('RsdoctorRspackPlugin.getRspackConfig');
     }
