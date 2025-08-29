@@ -38,7 +38,7 @@
     "react-router-dom": "6.4.3",
     "sirv": "2.0.4",
     "source-map-loader": "^5.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.9.2"
   },
   "publishConfig": {
     "access": "public",
