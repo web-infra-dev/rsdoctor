@@ -32,9 +32,13 @@ export class RsdoctorWebpackMultiplePlugin<
       extraConfig: {
         innerClientPath: normallizedOptions.innerClientPath,
         printLog: normallizedOptions.printLog,
-        mode: normallizedOptions.mode ? normallizedOptions.mode : undefined,
-        brief: normallizedOptions.brief,
-        compressData: normallizedOptions.output.compressData,
+        mode: normallizedOptions.output.mode
+          ? normallizedOptions.output.mode
+          : undefined,
+        brief:
+          'htmlOptions' in normallizedOptions.output.options
+            ? normallizedOptions.output.options.htmlOptions
+            : undefined,
       },
       type: normallizedOptions.output.reportCodeType,
     });

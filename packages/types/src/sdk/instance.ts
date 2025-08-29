@@ -20,9 +20,9 @@ import { Hooks } from './hooks';
 export type WriteStoreOptionsType = {};
 
 export enum IMode {
-  brief,
-  lite,
-  normal,
+  brief = 'brief',
+  lite = 'lite',
+  normal = 'normal',
 }
 
 export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
@@ -114,7 +114,7 @@ export interface IPrintLog {
 }
 
 export interface BriefConfig {
-  reportHtmlName?: string | undefined;
+  reportHtmlName?: string;
   writeDataJson: boolean;
 }
 
@@ -125,7 +125,6 @@ export type SDKOptionsType = {
   printLog?: IPrintLog;
   mode?: keyof typeof IMode;
   brief?: BriefConfig;
-  compressData?: boolean;
 };
 
 /**

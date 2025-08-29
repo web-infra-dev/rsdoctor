@@ -66,22 +66,27 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         },
       }),
     );
+    const { port, output, innerClientPath, printLog, sdkInstance } =
+      this.options;
+
     this.sdk =
       this.options.sdkInstance ??
       new RsdoctorSDK({
-        port: this.options.port,
+        port,
         name: pluginTapName,
         root: process.cwd(),
-        type: this.options.output.reportCodeType,
+        type: output.reportCodeType,
         config: {
-          innerClientPath: this.options.innerClientPath,
-          printLog: this.options.printLog,
-          mode: this.options.mode ? this.options.mode : undefined,
-          brief: this.options.brief,
-          compressData: this.options.output.compressData,
+          innerClientPath,
+          printLog,
+          mode: output.mode ? output.mode : undefined,
+          brief:
+            'htmlOptions' in output.options
+              ? output.options.htmlOptions
+              : undefined,
         },
       });
-    this.outsideInstance = Boolean(this.options.sdkInstance);
+    this.outsideInstance = Boolean(sdkInstance);
     this.modulesGraph = new ModuleGraph();
     this.isRsdoctorPlugin = true;
   }
@@ -240,7 +245,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       await this.sdk.writeStore();
       if (!this.options.disableClientServer) {
         // If it's brief mode, open the static report page instead of the local server page.
-        if (this.options.mode === SDK.IMode[SDK.IMode.brief]) {
+        if (this.options.output.mode === SDK.IMode[SDK.IMode.brief]) {
           // Use extracted common function to handle brief mode
           handleBriefModeReport(
             this.sdk,

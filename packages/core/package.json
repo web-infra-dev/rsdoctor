@@ -63,7 +63,7 @@
         "./dist/rules/index.d.ts"
       ],
       "types": [
-        "./dist/types/types.d.ts"
+        "./dist/types/index.d.ts"
       ]
     }
   },

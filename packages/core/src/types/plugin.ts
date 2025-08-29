@@ -1,11 +1,11 @@
+import type { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import type {
-  Linter as LinterType,
   Common,
+  Linter,
+  Linter as LinterType,
   Plugin,
   SDK,
-  Linter,
 } from '@rsdoctor/types';
-import type { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import { rules } from '@/rules/rules';
 
 type InternalRules = Common.UnionToTuple<(typeof rules)[number]>;
@@ -16,7 +16,72 @@ export type IReportCodeType = {
   noCode?: boolean;
 };
 
-export type IOutput = {};
+// Conditional output type based on mode
+export type IOutput<T extends 'brief' | 'normal' | undefined = undefined> =
+  T extends 'brief'
+    ? BriefModeConfig
+    : T extends 'normal'
+      ? NormalModeConfig
+      : BriefModeConfig | NormalModeConfig | OutputBaseConfig;
+export type NewReportCodeType =
+  | 'noModuleSource'
+  | 'noAssetsAndModuleSource'
+  | 'noCode';
+export interface NormalModeOptions {
+  // Normal mode doesn't have type field, it's only available in brief mode
+  type?: never;
+}
+
+export interface BriefModeOptions {
+  /** Output type, supports HTML and JSON */
+  type?: Array<'html'>;
+  /** HTML output related configuration */
+  // jsonOptions?: {};
+  htmlOptions?: SDK.BriefConfig;
+}
+
+interface OutputBaseConfig {
+  /**
+   * The directory where the report files will be output.
+   */
+  reportDir?: string;
+
+  /**
+   * Control the Rsdoctor reporter codes records.
+   */
+  reportCodeType?: IReportCodeType | undefined | NewReportCodeType;
+
+  /**
+   * @deprecated
+   * Configure whether to compress data.
+   * @default false
+   *
+   */
+  compressData?: boolean;
+}
+
+// Conditional type for reportCodeType based on mode
+type ReportCodeTypeByMode<T extends 'brief' | 'normal'> = T extends 'brief'
+  ? undefined | 'noCode' | { noCode?: boolean }
+  : T extends 'normal'
+    ? IReportCodeType | undefined | NewReportCodeType
+    : IReportCodeType | undefined | NewReportCodeType;
+
+// Brief Mode Type
+export interface BriefModeConfig
+  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+  mode?: 'brief';
+  reportCodeType?: ReportCodeTypeByMode<'brief'>;
+  options?: BriefModeOptions;
+}
+
+// Normal Mode Type
+interface NormalModeConfig
+  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+  mode?: 'normal';
+  reportCodeType?: ReportCodeTypeByMode<'normal'>;
+  options?: NormalModeOptions;
+}
 
 export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
@@ -31,14 +96,13 @@ export interface RsdoctorWebpackPluginOptions<
     | Array<keyof Plugin.RsdoctorWebpackPluginFeatures>;
 
   /**
+   * @deprecated  Use `output.mode` instead, if you're using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead.
    * Rsdoctor mode option:
    * - normal: Refers to the normal mode.
    * - brief: Refers to the brief mode, which only displays the results of the duration analysis and build artifact analysis
    *    and does not display any part of the code.
-   * - lite: Refers to the lightweight mode,
-   *   which is a lightweight analysis report in the normal mode with the source code display removed.
    */
-  mode?: keyof typeof SDK.IMode;
+  mode?: 'brief' | 'normal' | 'lite';
 
   /**
    * configuration of the interceptor for webpack loaders. TODO: delete this options.
@@ -77,6 +141,8 @@ export interface RsdoctorWebpackPluginOptions<
   printLog?: SDK.IPrintLog;
 
   /**
+   * @deprecated  Use `output.options.htmlOptions` instead.
+   * Please use the output.options to set the brief options, BriefModeOptions.
    * Options to control brief mode reports.
    */
   brief?: SDK.BriefConfig;
@@ -87,23 +153,7 @@ export interface RsdoctorWebpackPluginOptions<
    */
   innerClientPath?: string;
 
-  output?: {
-    /**
-     * The directory where the report files will be output.
-     */
-    reportDir?: string;
-
-    /**
-     * Control the Rsdoctor reporter codes records.
-     */
-    reportCodeType?: IReportCodeType | undefined;
-
-    /**
-     * Configure whether to compress data.
-     * @default false
-     */
-    compressData?: boolean;
-  };
+  output?: IOutput<'brief' | 'normal'>;
 }
 
 export interface RsdoctorMultiplePluginOptions<
@@ -128,20 +178,26 @@ export interface RsdoctorPluginOptionsNormalized<
 > extends Common.DeepRequired<
     Omit<
       RsdoctorWebpackPluginOptions<Rules>,
-      'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief'
+      | 'sdkInstance'
+      | 'linter'
+      | 'output'
+      | 'supports'
+      | 'port'
+      | 'brief'
+      | 'mode'
     >
   > {
   features: Common.DeepRequired<Plugin.RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: RsdoctorSDK;
   output: {
+    mode: keyof typeof SDK.IMode;
     reportCodeType: SDK.ToDataType;
     reportDir: string;
-    compressData: boolean;
+    options: BriefModeOptions | NormalModeOptions;
   };
   port?: number;
   supports: ISupport;
-  brief: SDK.BriefConfig;
 }
 
 export interface BasePluginInstance<T extends Plugin.BaseCompiler> {

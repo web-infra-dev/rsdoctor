@@ -42,10 +42,6 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
         .option('port', {
           type: 'number',
           description: 'port for Rsdoctor Server',
-        })
-        .option('type', {
-          type: 'string',
-          description: 'if need lite bundle mode',
         });
     },
     async action({ profile, open = true, port, type = SDK.ToDataType.Normal }) {

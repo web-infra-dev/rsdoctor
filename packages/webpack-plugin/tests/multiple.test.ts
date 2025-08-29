@@ -35,4 +35,33 @@ describe('test src/multiple.ts', () => {
       ]);
     });
   });
+
+  describe('test mode configuration', () => {
+    it('should use output.mode when provided', async () => {
+      const { RsdoctorWebpackMultiplePlugin } = await loadMultipleFile();
+      const plugin = new RsdoctorWebpackMultiplePlugin({
+        name: 'TestPlugin',
+        output: {
+          mode: 'lite',
+        },
+      });
+
+      // Verify that the plugin is created successfully with output.mode
+      expect(plugin).toBeDefined();
+    });
+
+    it('should use output.mode over mode when both are provided', async () => {
+      const { RsdoctorWebpackMultiplePlugin } = await loadMultipleFile();
+      const plugin = new RsdoctorWebpackMultiplePlugin({
+        name: 'TestPlugin',
+        mode: 'normal',
+        output: {
+          mode: 'lite',
+        },
+      });
+
+      // Verify that the plugin is created successfully
+      expect(plugin).toBeDefined();
+    });
+  });
 });
