@@ -24,13 +24,13 @@
   },
   "devDependencies": {
     "@types/yargs": "17.0.33",
-    "typescript": "^5.2.2"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@rsdoctor/core": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "@rsdoctor/core": "workspace:*",
     "axios": "^1.11.0",
     "ora": "^5.4.1",
     "picocolors": "^1.1.1",

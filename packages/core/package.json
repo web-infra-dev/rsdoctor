@@ -103,7 +103,7 @@
     "string-loader": "0.0.1",
     "ts-loader": "^9.5.2",
     "tslib": "2.8.1",
-    "typescript": "^5.2.2",
+    "typescript": "^5.9.2",
     "webpack": "^5.97.1"
   },
   "publishConfig": {

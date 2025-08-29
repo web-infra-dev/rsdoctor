@@ -36,7 +36,7 @@
     "rsbuild-plugin-open-graph": "^1.0.2",
     "rspress-plugin-font-open-sans": "^1.0.0",
     "rspress-plugin-sitemap": "^1.1.4",
-    "typescript": "^5.2.2"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "@rstack-dev/doc-ui": "1.11.0",
