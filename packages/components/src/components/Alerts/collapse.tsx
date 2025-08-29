@@ -144,7 +144,7 @@ export const AlertCollapse = (props: {
       };
 
       return {
-        key: data.code,
+        key: name,
         label: (
           <LabelComponent
             title={
