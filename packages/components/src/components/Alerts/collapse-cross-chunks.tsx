@@ -81,7 +81,7 @@ export const CrossChunksAlertCollapse = (props: {
     };
 
     return {
-      key: d.code,
+      key: `${dupPackage.name}@${dupPackage.version}`,
       label: (
         <LabelComponent
           title={
