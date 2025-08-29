@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { Config, SDK } from '@rsdoctor/types';
 import { Dependency } from './dependency';
 import { Module } from './module';
 import { Statement } from './statement';
@@ -405,23 +405,30 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
   }
 
   toData(configs?: SDK.ModuleGraphToDataArgs): SDK.ModuleGraphData {
+    const isBrief = !!(
+      configs?.briefOptions?.type && configs.briefOptions.type.length
+    );
     return {
       dependencies: this.getDependencies().map((item) => item.toData()),
       modules: this.getModules().map((item) =>
-        item.toData(configs?.contextPath),
+        item.toData(configs?.contextPath, isBrief),
       ),
-      moduleGraphModules: Array.from(this._moduleGraphModules.values()).map(
-        (item) => item.toData(),
-      ),
-      exports: Array.from(this._exportIdMap.values()).map((item) =>
-        item.toData(),
-      ),
-      sideEffects: Array.from(this._sideEffectIdMap.values()).map((item) =>
-        item.toData(),
-      ),
-      variables: Array.from(this._varIdMap.values()).map((item) =>
-        item.toData(),
-      ),
+      moduleGraphModules: !isBrief
+        ? Array.from(this._moduleGraphModules.values()).map((item) =>
+            item.toData(),
+          )
+        : [],
+      exports: !isBrief
+        ? Array.from(this._exportIdMap.values()).map((item) => item.toData())
+        : [],
+      sideEffects: !isBrief
+        ? Array.from(this._sideEffectIdMap.values()).map((item) =>
+            item.toData(),
+          )
+        : [],
+      variables: !isBrief
+        ? Array.from(this._varIdMap.values()).map((item) => item.toData())
+        : [],
       layers: Array.from(this._layers.keys()),
     };
   }

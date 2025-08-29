@@ -1,4 +1,4 @@
-import { Common, Plugin, SDK } from '@rsdoctor/types';
+import { Common, Config, Plugin, SDK } from '@rsdoctor/types';
 import type {
   RuleSetCondition as RspackRuleSetCondition,
   RuleSetRule as RspackRuleSetRule,
@@ -8,27 +8,23 @@ import {
   RuleSetConditionAbsolute as WebpackRuleSetConditionAbsolute,
   RuleSetRule as WebpackRuleSetRule,
 } from 'webpack';
-import {
-  BriefModeConfig,
-  BriefModeOptions,
-  IOutput,
-  NewReportCodeType,
-  NormalModeOptions,
-} from '@/types';
 
 /**
  * Process mode-specific configurations with priority logic
  */
 export function processModeConfigurations(
   finalMode: keyof typeof SDK.IMode,
-  output: IOutput,
-  brief: SDK.BriefConfig | undefined,
+  output: Config.IOutput<'brief' | 'normal'>,
+  brief: Config.BriefConfig | undefined,
 ) {
   let finalBrief = {};
-  let finalNormalOptions: NormalModeOptions = {};
+  let finalNormalOptions: Config.NormalModeOptions = {};
 
   if (finalMode === 'brief') {
-    finalBrief = processBriefHtmlModeConfig(output as BriefModeConfig, brief);
+    finalBrief = processBriefHtmlModeConfig(
+      output as Config.BriefModeConfig,
+      brief,
+    );
   } else if (finalMode === 'normal') {
     finalNormalOptions = {};
   }
@@ -41,22 +37,48 @@ export function processModeConfigurations(
  * Priority: output.options.briefOptions > output.brief > default
  */
 export function processBriefHtmlModeConfig(
-  output: BriefModeConfig,
-  brief: SDK.BriefConfig | undefined,
-): BriefModeOptions {
-  const briefOptions = output?.options as BriefModeOptions;
-  const outputBriefOptions = briefOptions?.htmlOptions;
-  const outputBrief = brief;
+  output: Config.BriefModeConfig,
+  brief: Config.BriefConfig | undefined,
+): Config.BriefModeOptions {
+  let htmlOptions: Config.BriefConfig = {
+    reportHtmlName: undefined,
+    writeDataJson: false,
+  };
+  let jsonOptions: Config.JsonOptions = {};
+  const briefOptions = output?.options || {};
 
-  const finalBriefOptions = outputBriefOptions ||
-    outputBrief || {
-      reportHtmlName: undefined,
-      writeDataJson: false,
+  if ('type' in briefOptions && briefOptions.type?.includes('json')) {
+    jsonOptions = briefOptions.jsonOptions || {
+      sections: {
+        moduleGraph: true,
+        chunkGraph: true,
+        rules: true,
+      },
     };
+  }
+
+  if (
+    ('type' in briefOptions && briefOptions.type?.includes('html')) ||
+    !briefOptions.type
+  ) {
+    const outputBriefOptions = briefOptions?.htmlOptions;
+    const outputBrief = brief;
+    htmlOptions = {
+      reportHtmlName:
+        outputBriefOptions?.reportHtmlName ||
+        outputBrief?.reportHtmlName ||
+        undefined,
+      writeDataJson:
+        outputBriefOptions?.writeDataJson ||
+        outputBrief?.writeDataJson ||
+        false,
+    };
+  }
 
   return {
-    type: ['html'],
-    htmlOptions: finalBriefOptions,
+    type: output.options?.type || ['html'],
+    htmlOptions,
+    jsonOptions,
   };
 }
 
@@ -65,7 +87,7 @@ export function processBriefHtmlModeConfig(
  */
 export function convertReportCodeTypeObject(
   reportCodeType: any,
-): NewReportCodeType | undefined {
+): Config.NewReportCodeType | undefined {
   if (!reportCodeType) return undefined;
 
   if (reportCodeType.noCode) {

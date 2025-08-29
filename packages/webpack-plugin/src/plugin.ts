@@ -12,7 +12,6 @@ import {
   InternalSummaryPlugin,
   normalizeUserConfig,
   processCompilerConfig,
-  reportConfiguration,
   setSDK,
 } from '@rsdoctor/core/plugins';
 import type {
@@ -66,8 +65,8 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
           printLog: printLog,
           mode: output.mode,
           brief:
-            'htmlOptions' in output.options
-              ? output.options.htmlOptions
+            output.mode === SDK.IMode[SDK.IMode.brief]
+              ? output.options || undefined
               : undefined,
         },
       });
@@ -146,17 +145,11 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     // Use extracted common function to process configuration
     const configuration = processCompilerConfig(compiler.options);
 
-    // @ts-expect-error
-    const rspackVersion = compiler.webpack?.rspackVersion;
+    const rspackVersion =
+      'rspackVersion' in compiler.webpack
+        ? (compiler.webpack.rspackVersion as string)
+        : undefined;
     const webpackVersion = compiler.webpack?.version;
-
-    // Use extracted common function to report configuration
-    reportConfiguration(
-      this.sdk,
-      rspackVersion ? 'rspack' : 'webpack',
-      rspackVersion || webpackVersion || 'unknown',
-      configuration,
-    );
 
     // save webpack or rspack configuration to sdk
     this.sdk.reportConfiguration({

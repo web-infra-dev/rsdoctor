@@ -2,6 +2,7 @@ import type { Program } from 'estree';
 import type { SourceMapConsumer } from 'source-map';
 import type { NonFunctionProperties } from '../common';
 import type { ChunkInstance } from './chunk';
+import type { BriefModeOptions } from '../config';
 import type { StatementInstance, StatementData } from './statement';
 import type { PackageData } from './package';
 import type {
@@ -148,7 +149,7 @@ export interface ModuleInstance {
     kind: DependencyKind,
     statements?: StatementInstance[],
   ): DependencyInstance | undefined;
-  toData(contextPath?: string): ModuleData;
+  toData(contextPath?: string, isBrief?: boolean): ModuleData;
   setSource(source: Partial<ModuleSource>): void;
   getSource(type?: ToDataType): ModuleSource;
   /**Set code AST after transform */
@@ -264,7 +265,10 @@ export interface DependencyInstance {
   setId(id: number): void;
 }
 
-export type ModuleGraphToDataArgs = { contextPath: string };
+export type ModuleGraphToDataArgs = {
+  contextPath: string;
+  briefOptions?: BriefModeOptions;
+};
 
 export interface ModuleGraphInstance {
   /** Clear data */

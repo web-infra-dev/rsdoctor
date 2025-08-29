@@ -201,8 +201,8 @@ export class RsdoctorSDK<
     data.forEach((item) => {
       if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
         item.loaders.forEach((_loader) => {
-          _loader.input = '';
-          _loader.result = '';
+          _loader.input = undefined;
+          _loader.result = undefined;
         });
       }
 
@@ -273,7 +273,7 @@ export class RsdoctorSDK<
         this._plugin[hook] = data[hook];
       } else {
         data[hook].forEach((item) => {
-          this._plugin[hook].push(item);
+          this._plugin[hook].push(item || undefined);
         });
       }
     });
@@ -380,15 +380,24 @@ export class RsdoctorSDK<
 
   public async writeStore(options?: SDK.WriteStoreOptionsType) {
     logger.debug(`sdk.writeStore has run.`, '[SDK.writeStore][end]');
+    let htmlPath = '';
     if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
       const clientHtmlPath = this.extraConfig.innerClientPath
         ? this.extraConfig.innerClientPath
         : require.resolve('@rsdoctor/client');
 
-      if (this.extraConfig.brief?.writeDataJson) {
-        await this.saveManifest(this.getStoreData(), options || {});
+      if (this.extraConfig?.brief?.type?.includes('json')) {
+        const jsonData = this.getStoreData();
+        fs.mkdirSync(this.outputDir, { recursive: true });
+        fs.writeFileSync(
+          path.resolve(this.outputDir, 'rsdoctor-data.json'),
+          JSON.stringify(jsonData, null, 2),
+        );
       }
-      return this.inlineScriptsAndStyles(clientHtmlPath);
+      if (this.extraConfig.brief?.type?.includes('html')) {
+        htmlPath = this.inlineScriptsAndStyles(clientHtmlPath);
+      }
+      return htmlPath;
     }
     return this.saveManifest(this.getStoreData(), options || {});
   }
@@ -396,6 +405,8 @@ export class RsdoctorSDK<
   public getStoreData(): SDK.BuilderStoreData {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const ctx = this;
+    const briefOptions = this.extraConfig?.brief;
+    // const mode = this.extraConfig?.mode;
     return {
       get hash() {
         return ctx.hash;
@@ -427,12 +438,16 @@ export class RsdoctorSDK<
       get moduleGraph() {
         return ctx._moduleGraph.toData({
           contextPath: ctx._configs?.[0]?.config?.context || '',
+          briefOptions,
         });
       },
       get chunkGraph() {
         return ctx._chunkGraph.toData(ctx.type);
       },
       get moduleCodeMap() {
+        if (ctx.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
+          return {};
+        }
         return ctx._moduleGraph.toCodeData(ctx.type);
       },
       get plugin() {
@@ -607,7 +622,8 @@ export class RsdoctorSDK<
     // Output the processed HTML content
     const outputFilePath = path.resolve(
       this.outputDir,
-      this.extraConfig?.brief?.reportHtmlName || 'rsdoctor-report.html',
+      this.extraConfig?.brief?.htmlOptions?.reportHtmlName ||
+        'rsdoctor-report.html',
     );
 
     File.fse.outputFileSync(outputFilePath, htmlContent, {
