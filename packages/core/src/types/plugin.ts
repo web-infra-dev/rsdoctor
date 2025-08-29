@@ -17,12 +17,11 @@ export type IReportCodeType = {
 };
 
 // Conditional output type based on mode
-export type IOutput<T extends 'brief' | 'normal' | undefined = undefined> =
-  T extends 'brief'
-    ? BriefModeConfig
-    : T extends 'normal'
-      ? NormalModeConfig
-      : BriefModeConfig | NormalModeConfig | OutputBaseConfig;
+export type IOutput<T extends 'brief' | 'normal'> = T extends 'brief'
+  ? BriefModeConfig
+  : T extends 'normal'
+    ? NormalModeConfig
+    : BriefModeConfig | NormalModeConfig | OutputBaseConfig;
 export type NewReportCodeType =
   | 'noModuleSource'
   | 'noAssetsAndModuleSource'
@@ -32,12 +31,23 @@ export interface NormalModeOptions {
   type?: never;
 }
 
+// Fine-grained control options for JSON output
+interface JsonSectionOptions {
+  moduleGraph?: boolean; // default: true
+  chunkGraph?: boolean; // default: true
+  rules?: boolean; // default: true
+}
+
+export interface JsonOptions {
+  sections?: JsonSectionOptions;
+}
+
 export interface BriefModeOptions {
   /** Output type, supports HTML and JSON */
-  type?: Array<'html'>;
+  type?: Array<'html' | 'json'>;
   /** HTML output related configuration */
-  // jsonOptions?: {};
   htmlOptions?: SDK.BriefConfig;
+  jsonOptions?: JsonOptions;
 }
 
 interface OutputBaseConfig {

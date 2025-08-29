@@ -12,6 +12,7 @@ import {
   BriefModeConfig,
   BriefModeOptions,
   IOutput,
+  JsonOptions,
   NewReportCodeType,
   NormalModeOptions,
 } from '@/types';
@@ -21,7 +22,7 @@ import {
  */
 export function processModeConfigurations(
   finalMode: keyof typeof SDK.IMode,
-  output: IOutput,
+  output: IOutput<'brief' | 'normal'>,
   brief: SDK.BriefConfig | undefined,
 ) {
   let finalBrief = {};
@@ -44,19 +45,36 @@ export function processBriefHtmlModeConfig(
   output: BriefModeConfig,
   brief: SDK.BriefConfig | undefined,
 ): BriefModeOptions {
+  let htmlOptions: SDK.BriefConfig = {
+    reportHtmlName: undefined,
+    writeDataJson: false,
+  };
+  let jsonOptions: JsonOptions = {};
   const briefOptions = output?.options as BriefModeOptions;
-  const outputBriefOptions = briefOptions?.htmlOptions;
-  const outputBrief = brief;
 
-  const finalBriefOptions = outputBriefOptions ||
-    outputBrief || {
-      reportHtmlName: undefined,
-      writeDataJson: false,
+  if (briefOptions.type?.includes('json')) {
+    jsonOptions = briefOptions.jsonOptions || {
+      sections: {
+        moduleGraph: true,
+        chunkGraph: true,
+        rules: true,
+      },
     };
+  }
+  if (briefOptions.type?.includes('html')) {
+    const outputBriefOptions = briefOptions?.htmlOptions;
+    const outputBrief = brief;
+    htmlOptions = outputBriefOptions ||
+      outputBrief || {
+        reportHtmlName: undefined,
+        writeDataJson: false,
+      };
+  }
 
   return {
-    type: ['html'],
-    htmlOptions: finalBriefOptions,
+    type: output.options?.type || ['html'],
+    htmlOptions,
+    jsonOptions,
   };
 }
 
