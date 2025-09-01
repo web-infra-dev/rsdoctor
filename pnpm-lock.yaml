@@ -28,7 +28,7 @@ importers:
         version: link:scripts/tsconfig
       '@rslib/core':
         specifier: ^0.12.2
-        version: 0.12.2(typescript@5.7.3)
+        version: 0.12.2(typescript@5.9.2)
       '@rstest/core':
         specifier: 0.2.2
         version: 0.2.2
@@ -70,7 +70,7 @@ importers:
         version: 0.112.1(@types/react@18.3.23)
       '@lynx-js/rspeedy':
         specifier: ^0.10.2
-        version: 0.10.2(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(webpack@5.97.1)
+        version: 0.10.2(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.9.2)(webpack@5.97.1)
       '@playwright/test':
         specifier: 1.54.2
         version: 1.54.2
@@ -120,8 +120,8 @@ importers:
         specifier: ^5.3.14
         version: 5.3.14(webpack@5.97.1)
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
       webpack:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
@@ -142,7 +142,7 @@ importers:
     devDependencies:
       '@modern-js/app-tools':
         specifier: ^2.60.3
-        version: 2.63.6(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(devcert@1.2.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@5.3.11(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(tsconfig-paths@4.2.0)(type-fest@4.32.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))
+        version: 2.63.6(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(devcert@1.2.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@5.3.11(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(tsconfig-paths@4.2.0)(type-fest@4.32.0)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))
       '@modern-js/runtime':
         specifier: ^2.60.3
         version: 2.63.6(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -159,8 +159,8 @@ importers:
         specifier: ^18
         version: 18.3.7(@types/react@18.3.23)
       typescript:
-        specifier: ^5.3.0
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   examples/multiple-minimal:
     devDependencies:
@@ -202,13 +202,13 @@ importers:
         version: 3.3.2(webpack@5.97.1)
       ts-loader:
         specifier: 9.4.2
-        version: 9.4.2(typescript@5.7.3)(webpack@5.97.1)
+        version: 9.4.2(typescript@5.9.2)(webpack@5.97.1)
       tsx:
         specifier: ^4.19.3
         version: 4.19.3
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
       webpack:
         specifier: ^5.90.0
         version: 5.97.1(webpack-cli@5.1.4)
@@ -250,8 +250,8 @@ importers:
         specifier: npm:@types/semver@7.5.6
         version: '@types/semver@7.5.6'
       typescript:
-        specifier: ^5.3.0
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   examples/rspack-banner-minimal:
     dependencies:
@@ -260,7 +260,7 @@ importers:
         version: 2.65.0(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@svgr/webpack':
         specifier: ^8.1.0
-        version: 8.1.0(typescript@5.7.3)
+        version: 8.1.0(typescript@5.9.2)
       '@swc/helpers':
         specifier: ^0.5.3
         version: 0.5.17
@@ -312,7 +312,7 @@ importers:
         version: 2.65.0(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@svgr/webpack':
         specifier: ^8.1.0
-        version: 8.1.0(typescript@5.7.3)
+        version: 8.1.0(typescript@5.9.2)
       '@swc/helpers':
         specifier: ^0.5.3
         version: 0.5.17
@@ -364,7 +364,7 @@ importers:
         version: 2.65.0(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@svgr/webpack':
         specifier: ^8.1.0
-        version: 8.1.0(typescript@5.7.3)
+        version: 8.1.0(typescript@5.9.2)
       '@swc/helpers':
         specifier: ^0.5.3
         version: 0.5.17
@@ -457,13 +457,13 @@ importers:
         version: 4.1.7(enquirer@2.4.1)
       ts-loader:
         specifier: 9.4.2
-        version: 9.4.2(typescript@5.7.3)(webpack@5.97.1)
+        version: 9.4.2(typescript@5.9.2)(webpack@5.97.1)
       tsx:
         specifier: ^4.19.3
         version: 4.19.3
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
       webpack:
         specifier: ^5.90.0
         version: 5.97.1(webpack-cli@5.1.4)
@@ -496,8 +496,8 @@ importers:
         specifier: ^1.11.0
         version: 1.11.0
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
       zod:
         specifier: ^3.24.4
         version: 3.24.4
@@ -533,8 +533,8 @@ importers:
         specifier: 17.0.33
         version: 17.0.33
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/client:
     devDependencies:
@@ -552,7 +552,7 @@ importers:
         version: 1.3.3(@rsbuild/core@1.4.11)
       '@rsbuild/plugin-type-check':
         specifier: ^1.2.3
-        version: 1.2.3(@rsbuild/core@1.4.11)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.7.3)
+        version: 1.2.3(@rsbuild/core@1.4.11)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.9.2)
       '@rsdoctor/components':
         specifier: workspace:*
         version: link:../components
@@ -593,8 +593,8 @@ importers:
         specifier: ^5.0.0
         version: 5.0.0(webpack@5.97.1)
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/components:
     dependencies:
@@ -691,7 +691,7 @@ importers:
         version: 1.3.3(@rsbuild/core@1.5.0-beta.4)
       '@rsbuild/plugin-svgr':
         specifier: ^1.2.1
-        version: 1.2.1(@rsbuild/core@1.5.0-beta.4)(typescript@5.7.3)
+        version: 1.2.1(@rsbuild/core@1.5.0-beta.4)(typescript@5.9.2)
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -714,8 +714,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/core:
     dependencies:
@@ -797,13 +797,13 @@ importers:
         version: 0.0.1
       ts-loader:
         specifier: ^9.5.2
-        version: 9.5.2(typescript@5.7.3)(webpack@5.97.1)
+        version: 9.5.2(typescript@5.9.2)(webpack@5.97.1)
       tslib:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
       webpack:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
@@ -860,8 +860,8 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/graph:
     dependencies:
@@ -897,8 +897,8 @@ importers:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/graph/tests/fixture: {}
 
@@ -941,8 +941,8 @@ importers:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/sdk:
     dependencies:
@@ -1005,8 +1005,8 @@ importers:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/types:
     dependencies:
@@ -1039,8 +1039,8 @@ importers:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/utils:
     dependencies:
@@ -1118,8 +1118,8 @@ importers:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/webpack-plugin:
     dependencies:
@@ -1155,8 +1155,8 @@ importers:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
       webpack:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
@@ -1182,8 +1182,8 @@ importers:
         specifier: 4.36.0
         version: 4.36.0
       typescript:
-        specifier: ^5.2.2
-        version: 5.7.3
+        specifier: ^5.9.2
+        version: 5.9.2
       upath:
         specifier: 2.0.1
         version: 2.0.1
@@ -4302,6 +4302,9 @@ packages:
 
   '@types/node@22.16.5':
     resolution: {integrity: sha512-bJFoMATwIGaxxx8VJPeM8TonI8t579oRvgAuT8zFugJsJZgzqv0Fu8Mhp68iecjzG7cnN3mO2dJQ5uUM2EFrgQ==}
+
+  '@types/node@22.18.0':
+    resolution: {integrity: sha512-m5ObIqwsUp6BZzyiy4RdZpzWGub9bqLJMvZDD0QMXhxjqMHMENlj+SqF5QxoUwaQNFe+8kz8XM8ZQhqkQPTgMQ==}
 
   '@types/node@8.10.66':
     resolution: {integrity: sha512-tktOkFUA4kXx2hhhrB8bIFb5TbwzS4uOhKEmwiD+NoiL0qtP2OQ9mFldbgD4dV1djrlBYP6eBuQZiWjuHUpqFw==}
@@ -9965,8 +9968,8 @@ packages:
   typedarray-to-buffer@3.1.5:
     resolution: {integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==}
 
-  typescript@5.7.3:
-    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
+  typescript@5.9.2:
+    resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -12043,16 +12046,16 @@ snapshots:
       '@types/react': 18.3.23
       preact: '@hongzhiyuan/preact@10.24.0-27dc9d8f'
 
-  '@lynx-js/rspeedy@0.10.2(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@lynx-js/rspeedy@0.10.2(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.9.2)(webpack@5.97.1)':
     dependencies:
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.0(@rspack/core@1.4.11(@swc/helpers@0.5.17))
       '@lynx-js/webpack-dev-transport': 0.2.0
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 1.4.7
       '@rsbuild/plugin-css-minimizer': 1.0.2(@rsbuild/core@1.4.7)(webpack@5.97.1)
-      '@rsdoctor/rspack-plugin': 1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/rspack-plugin': 1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
     optionalDependencies:
-      typescript: 5.7.3
+      typescript: 5.9.2
     transitivePeerDependencies:
       - '@parcel/css'
       - '@rspack/core'
@@ -12257,7 +12260,7 @@ snapshots:
       '@swc/helpers': 0.5.1
       redux: 4.2.1
 
-  '@modern-js/app-tools@2.63.6(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(devcert@1.2.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@5.3.11(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(tsconfig-paths@4.2.0)(type-fest@4.32.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))':
+  '@modern-js/app-tools@2.63.6(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(devcert@1.2.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@5.3.11(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(tsconfig-paths@4.2.0)(type-fest@4.32.0)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))':
     dependencies:
       '@babel/parser': 7.26.5
       '@babel/traverse': 7.26.5(supports-color@5.5.0)
@@ -12274,7 +12277,7 @@ snapshots:
       '@modern-js/server-core': 2.63.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@modern-js/server-utils': 2.63.6(@babel/traverse@7.26.5)(@rsbuild/core@1.1.13)
       '@modern-js/types': 2.63.6
-      '@modern-js/uni-builder': 2.63.6(@rspack/core@1.4.11(@swc/helpers@0.5.17))(esbuild@0.17.19)(styled-components@5.3.11(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(type-fest@4.32.0)(typescript@5.7.3)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))
+      '@modern-js/uni-builder': 2.63.6(@rspack/core@1.4.11(@swc/helpers@0.5.17))(esbuild@0.17.19)(styled-components@5.3.11(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(type-fest@4.32.0)(typescript@5.9.2)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))
       '@modern-js/utils': 2.63.6
       '@rsbuild/core': 1.1.13
       '@rsbuild/plugin-node-polyfill': 1.2.0(@rsbuild/core@1.1.13)
@@ -12532,7 +12535,7 @@ snapshots:
 
   '@modern-js/types@2.63.6': {}
 
-  '@modern-js/uni-builder@2.63.6(@rspack/core@1.4.11(@swc/helpers@0.5.17))(esbuild@0.17.19)(styled-components@5.3.11(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(type-fest@4.32.0)(typescript@5.7.3)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))':
+  '@modern-js/uni-builder@2.63.6(@rspack/core@1.4.11(@swc/helpers@0.5.17))(esbuild@0.17.19)(styled-components@5.3.11(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(type-fest@4.32.0)(typescript@5.9.2)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/preset-react': 7.26.3(@babel/core@7.26.0)
@@ -12552,9 +12555,9 @@ snapshots:
       '@rsbuild/plugin-sass': 1.1.2(@rsbuild/core@1.1.13)
       '@rsbuild/plugin-source-build': 1.0.2(@rsbuild/core@1.1.13)
       '@rsbuild/plugin-styled-components': 1.1.0(@rsbuild/core@1.1.13)
-      '@rsbuild/plugin-svgr': 1.0.6(@rsbuild/core@1.1.13)(typescript@5.7.3)
+      '@rsbuild/plugin-svgr': 1.0.6(@rsbuild/core@1.1.13)(typescript@5.9.2)
       '@rsbuild/plugin-toml': 1.0.1(@rsbuild/core@1.1.13)
-      '@rsbuild/plugin-type-check': 1.2.0(@rsbuild/core@1.1.13)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.7.3)
+      '@rsbuild/plugin-type-check': 1.2.0(@rsbuild/core@1.1.13)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.9.2)
       '@rsbuild/plugin-typed-css-modules': 1.0.2(@rsbuild/core@1.1.13)
       '@rsbuild/plugin-yaml': 1.0.2(@rsbuild/core@1.1.13)
       '@rsbuild/webpack': 1.1.6(@rsbuild/core@1.1.13)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(esbuild@0.17.19)
@@ -12583,7 +12586,7 @@ snapshots:
       rspack-manifest-plugin: 5.0.3(@rspack/core@1.4.11(@swc/helpers@0.5.17))
       terser-webpack-plugin: 5.3.11(esbuild@0.17.19)(webpack@5.97.1(esbuild@0.17.19))
       ts-deepmerge: 7.0.2
-      ts-loader: 9.4.4(typescript@5.7.3)(webpack@5.97.1(esbuild@0.17.19))
+      ts-loader: 9.4.4(typescript@5.9.2)(webpack@5.97.1(esbuild@0.17.19))
       webpack: 5.97.1(esbuild@0.17.19)
       webpack-subresource-integrity: 5.1.0(html-webpack-plugin@5.6.3(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1(esbuild@0.17.19)))(webpack@5.97.1(esbuild@0.17.19))
     transitivePeerDependencies:
@@ -13268,26 +13271,26 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.1.13
 
-  '@rsbuild/plugin-svgr@1.0.6(@rsbuild/core@1.1.13)(typescript@5.7.3)':
+  '@rsbuild/plugin-svgr@1.0.6(@rsbuild/core@1.1.13)(typescript@5.9.2)':
     dependencies:
       '@rsbuild/core': 1.1.13
       '@rsbuild/plugin-react': 1.1.0(@rsbuild/core@1.1.13)
-      '@svgr/core': 8.1.0(typescript@5.7.3)
-      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.7.3))
-      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.7.3))(typescript@5.7.3)
+      '@svgr/core': 8.1.0(typescript@5.9.2)
+      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))
+      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))(typescript@5.9.2)
       deepmerge: 4.3.1
       loader-utils: 2.0.4
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  '@rsbuild/plugin-svgr@1.2.1(@rsbuild/core@1.5.0-beta.4)(typescript@5.7.3)':
+  '@rsbuild/plugin-svgr@1.2.1(@rsbuild/core@1.5.0-beta.4)(typescript@5.9.2)':
     dependencies:
       '@rsbuild/core': 1.5.0-beta.4
       '@rsbuild/plugin-react': 1.3.4(@rsbuild/core@1.5.0-beta.4)
-      '@svgr/core': 8.1.0(typescript@5.7.3)
-      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.7.3))
-      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.7.3))(typescript@5.7.3)
+      '@svgr/core': 8.1.0(typescript@5.9.2)
+      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))
+      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))(typescript@5.9.2)
       deepmerge: 4.3.1
       loader-utils: 3.3.1
     transitivePeerDependencies:
@@ -13301,24 +13304,24 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.1.13
 
-  '@rsbuild/plugin-type-check@1.2.0(@rsbuild/core@1.1.13)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.7.3)':
+  '@rsbuild/plugin-type-check@1.2.0(@rsbuild/core@1.1.13)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.9.2)':
     dependencies:
       deepmerge: 4.3.1
       json5: 2.2.3
       reduce-configs: 1.1.0
-      ts-checker-rspack-plugin: 1.1.4(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.7.3)
+      ts-checker-rspack-plugin: 1.1.4(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.9.2)
     optionalDependencies:
       '@rsbuild/core': 1.1.13
     transitivePeerDependencies:
       - '@rspack/core'
       - typescript
 
-  '@rsbuild/plugin-type-check@1.2.3(@rsbuild/core@1.4.11)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.7.3)':
+  '@rsbuild/plugin-type-check@1.2.3(@rsbuild/core@1.4.11)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.9.2)':
     dependencies:
       deepmerge: 4.3.1
       json5: 2.2.3
       reduce-configs: 1.1.0
-      ts-checker-rspack-plugin: 1.1.4(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.7.3)
+      ts-checker-rspack-plugin: 1.1.4(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.9.2)
     optionalDependencies:
       '@rsbuild/core': 1.4.11
     transitivePeerDependencies:
@@ -13352,11 +13355,11 @@ snapshots:
 
   '@rsdoctor/client@1.1.8': {}
 
-  '@rsdoctor/core@1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/core@1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.3.0(@rsbuild/core@1.4.7)
-      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/types': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       axios: 1.11.0
@@ -13378,7 +13381,7 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/graph@1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/graph@1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/types': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
@@ -13392,11 +13395,11 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/rspack-plugin@1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)':
     dependencies:
-      '@rsdoctor/core': 1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
-      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/core': 1.1.8(@rsbuild/core@1.4.7)(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/types': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       lodash: 4.17.21
@@ -13410,10 +13413,10 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/sdk@1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/sdk@1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/client': 1.1.8
-      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/graph': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/types': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.1.8(@rspack/core@1.4.11(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@types/fs-extra': 11.0.4
@@ -13469,13 +13472,13 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rslib/core@0.12.2(typescript@5.7.3)':
+  '@rslib/core@0.12.2(typescript@5.9.2)':
     dependencies:
       '@rsbuild/core': 1.5.0-beta.4
-      rsbuild-plugin-dts: 0.12.2(@rsbuild/core@1.5.0-beta.4)(typescript@5.7.3)
+      rsbuild-plugin-dts: 0.12.2(@rsbuild/core@1.5.0-beta.4)(typescript@5.9.2)
       tinyglobby: 0.2.14
     optionalDependencies:
-      typescript: 5.7.3
+      typescript: 5.9.2
 
   '@rspack/binding-darwin-arm64@1.1.8':
     optional: true
@@ -14284,12 +14287,12 @@ snapshots:
       '@svgr/babel-plugin-transform-react-native-svg': 8.1.0(@babel/core@7.26.0)
       '@svgr/babel-plugin-transform-svg-component': 8.0.0(@babel/core@7.26.0)
 
-  '@svgr/core@8.1.0(typescript@5.7.3)':
+  '@svgr/core@8.1.0(typescript@5.9.2)':
     dependencies:
       '@babel/core': 7.26.0
       '@svgr/babel-preset': 8.1.0(@babel/core@7.26.0)
       camelcase: 6.3.0
-      cosmiconfig: 8.3.6(typescript@5.7.3)
+      cosmiconfig: 8.3.6(typescript@5.9.2)
       snake-case: 3.0.4
     transitivePeerDependencies:
       - supports-color
@@ -14300,35 +14303,35 @@ snapshots:
       '@babel/types': 7.26.5
       entities: 4.5.0
 
-  '@svgr/plugin-jsx@8.1.0(@svgr/core@8.1.0(typescript@5.7.3))':
+  '@svgr/plugin-jsx@8.1.0(@svgr/core@8.1.0(typescript@5.9.2))':
     dependencies:
       '@babel/core': 7.26.0
       '@svgr/babel-preset': 8.1.0(@babel/core@7.26.0)
-      '@svgr/core': 8.1.0(typescript@5.7.3)
+      '@svgr/core': 8.1.0(typescript@5.9.2)
       '@svgr/hast-util-to-babel-ast': 8.0.0
       svg-parser: 2.0.4
     transitivePeerDependencies:
       - supports-color
 
-  '@svgr/plugin-svgo@8.1.0(@svgr/core@8.1.0(typescript@5.7.3))(typescript@5.7.3)':
+  '@svgr/plugin-svgo@8.1.0(@svgr/core@8.1.0(typescript@5.9.2))(typescript@5.9.2)':
     dependencies:
-      '@svgr/core': 8.1.0(typescript@5.7.3)
-      cosmiconfig: 8.3.6(typescript@5.7.3)
+      '@svgr/core': 8.1.0(typescript@5.9.2)
+      cosmiconfig: 8.3.6(typescript@5.9.2)
       deepmerge: 4.3.1
       svgo: 3.3.2
     transitivePeerDependencies:
       - typescript
 
-  '@svgr/webpack@8.1.0(typescript@5.7.3)':
+  '@svgr/webpack@8.1.0(typescript@5.9.2)':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-react-constant-elements': 7.25.9(@babel/core@7.26.0)
       '@babel/preset-env': 7.26.0(@babel/core@7.26.0)
       '@babel/preset-react': 7.26.3(@babel/core@7.26.0)
       '@babel/preset-typescript': 7.26.0(@babel/core@7.26.0)
-      '@svgr/core': 8.1.0(typescript@5.7.3)
-      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.7.3))
-      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.7.3))(typescript@5.7.3)
+      '@svgr/core': 8.1.0(typescript@5.9.2)
+      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))
+      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))(typescript@5.9.2)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -14485,7 +14488,7 @@ snapshots:
   '@types/glob@5.0.38':
     dependencies:
       '@types/minimatch': 6.0.0
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
     optional: true
 
   '@types/hast@2.3.10':
@@ -14562,7 +14565,7 @@ snapshots:
 
   '@types/mkdirp@0.5.2':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
     optional: true
 
   '@types/ms@0.7.34': {}
@@ -14581,6 +14584,11 @@ snapshots:
   '@types/node@22.16.5':
     dependencies:
       undici-types: 6.21.0
+
+  '@types/node@22.18.0':
+    dependencies:
+      undici-types: 6.21.0
+    optional: true
 
   '@types/node@8.10.66':
     optional: true
@@ -14625,7 +14633,7 @@ snapshots:
   '@types/rimraf@2.0.5':
     dependencies:
       '@types/glob': 5.0.38
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
     optional: true
 
   '@types/semver@7.5.6': {}
@@ -15817,14 +15825,14 @@ snapshots:
       object-assign: 4.1.1
       vary: 1.1.2
 
-  cosmiconfig@8.3.6(typescript@5.7.3):
+  cosmiconfig@8.3.6(typescript@5.9.2):
     dependencies:
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
     optionalDependencies:
-      typescript: 5.7.3
+      typescript: 5.9.2
 
   create-ecdh@4.0.4:
     dependencies:
@@ -20832,7 +20840,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.12.2(@rsbuild/core@1.5.0-beta.4)(typescript@5.7.3):
+  rsbuild-plugin-dts@0.12.2(@rsbuild/core@1.5.0-beta.4)(typescript@5.9.2):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 1.5.0-beta.4
@@ -20841,7 +20849,7 @@ snapshots:
       tinyglobby: 0.2.14
       tsconfig-paths: 4.2.0
     optionalDependencies:
-      typescript: 5.7.3
+      typescript: 5.9.2
 
   rsbuild-plugin-google-analytics@1.0.3(@rsbuild/core@1.3.22):
     optionalDependencies:
@@ -21603,7 +21611,7 @@ snapshots:
 
   trough@2.2.0: {}
 
-  ts-checker-rspack-plugin@1.1.4(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.7.3):
+  ts-checker-rspack-plugin@1.1.4(@rspack/core@1.4.11(@swc/helpers@0.5.17))(typescript@5.9.2):
     dependencies:
       '@babel/code-frame': 7.26.2
       '@rspack/lite-tapable': 1.0.1
@@ -21612,38 +21620,38 @@ snapshots:
       memfs: 4.36.0
       minimatch: 9.0.5
       picocolors: 1.1.1
-      typescript: 5.7.3
+      typescript: 5.9.2
     optionalDependencies:
       '@rspack/core': 1.4.11(@swc/helpers@0.5.17)
 
   ts-deepmerge@7.0.2: {}
 
-  ts-loader@9.4.2(typescript@5.7.3)(webpack@5.97.1):
+  ts-loader@9.4.2(typescript@5.9.2)(webpack@5.97.1):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.12.0
       micromatch: 4.0.8
       semver: 7.7.2
-      typescript: 5.7.3
+      typescript: 5.9.2
       webpack: 5.97.1(webpack-cli@5.1.4)
 
-  ts-loader@9.4.4(typescript@5.7.3)(webpack@5.97.1(esbuild@0.17.19)):
+  ts-loader@9.4.4(typescript@5.9.2)(webpack@5.97.1(esbuild@0.17.19)):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.12.0
       micromatch: 4.0.8
       semver: 7.7.2
-      typescript: 5.7.3
+      typescript: 5.9.2
       webpack: 5.97.1(esbuild@0.17.19)
 
-  ts-loader@9.5.2(typescript@5.7.3)(webpack@5.97.1):
+  ts-loader@9.5.2(typescript@5.9.2)(webpack@5.97.1):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.12.0
       micromatch: 4.0.8
       semver: 7.7.2
       source-map: 0.7.4
-      typescript: 5.7.3
+      typescript: 5.9.2
       webpack: 5.97.1(webpack-cli@5.1.4)
 
   tsconfig-paths-webpack-plugin@4.2.0:
@@ -21698,7 +21706,7 @@ snapshots:
     dependencies:
       is-typedarray: 1.0.0
 
-  typescript@5.7.3: {}
+  typescript@5.9.2: {}
 
   ua-parser-js@1.0.40: {}
 
