@@ -18,7 +18,7 @@ for (const item of prebundleConfig.dependencies) {
     continue;
   }
 
-  regexpMap[depName] = new RegExp(`prebundle[\\/]${depName}(?:[\\/]|$)`);
+  regexpMap[depName] = new RegExp(`compiled[\\/]${depName}(?:[\\/]|$)`);
 }
 
 // Define externals configuration
@@ -29,14 +29,14 @@ const externals = [
       // Check if the request is a prebundled dependency
       if (prebundleConfig.dependencies.includes(request)) {
         // Return the path to the prebundled file
-        return callback(undefined, `../compiled/${request}.cjs`);
+        return callback(undefined, `../compiled/${request}/index.js`);
       }
 
       // Check if the request matches any regexp patterns
       const entries = Object.entries(regexpMap);
       for (const [name, test] of entries) {
         if (test.test(request)) {
-          return callback(undefined, `../compiled/${name}.cjs`);
+          return callback(undefined, `../compiled/${name}/index.js`);
         }
       }
     }

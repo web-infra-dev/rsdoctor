@@ -1,14 +1,9 @@
 export default {
   // Dependencies to prebundle for better performance
-  dependencies: ['body-parser', 'cors', 'dayjs', 'fs-extra', 'json-cycle'],
+  dependencies: ['connect', 'filesize'],
 
   // Exclude workspace packages from prebundling
-  exclude: [
-    '@rsdoctor/client',
-    '@rsdoctor/graph',
-    '@rsdoctor/types',
-    '@rsdoctor/utils',
-  ],
+  exclude: ['@rsdoctor/types'],
 
   // Build configuration
   build: {
@@ -19,14 +14,6 @@ export default {
     sourcemap: false,
     metafile: false,
     write: true,
-    // 添加明确的输出格式配置
-    output: {
-      chunkFormat: 'commonjs',
-    },
-    // 添加环境配置
-    environment: {
-      node: true,
-    },
   },
 
   // Output configuration

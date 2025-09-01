@@ -27,7 +27,7 @@
     "dev": "npm run start",
     "start": "rslib build -w",
     "test": "rstest run",
-    "prebundle": "prebundle prebundle.config.mjs"
+    "prebundle": "prebundle"
   },
   "dependencies": {
     "@rsdoctor/client": "workspace:*",
@@ -35,6 +35,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@types/fs-extra": "^11.0.4",
+    "socket.io": "4.8.1",
     "tapable": "2.2.2"
   },
   "devDependencies": {
@@ -45,7 +46,6 @@
     "json-cycle": "^1.5.0",
     "open": "^10.2.0",
     "sirv": "2.0.4",
-    "socket.io": "4.8.1",
     "source-map": "^0.7.4",
     "@types/body-parser": "1.19.6",
     "@types/cors": "2.8.19",
