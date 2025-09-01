@@ -29,14 +29,14 @@ const externals = [
       // Check if the request is a prebundled dependency
       if (prebundleConfig.dependencies.includes(request)) {
         // Return the path to the prebundled file
-        return callback(undefined, `../compiled/${request}.js`);
+        return callback(undefined, `../compiled/${request}.cjs`);
       }
 
       // Check if the request matches any regexp patterns
       const entries = Object.entries(regexpMap);
       for (const [name, test] of entries) {
         if (test.test(request)) {
-          return callback(undefined, `../compiled/${name}.js`);
+          return callback(undefined, `../compiled/${name}.cjs`);
         }
       }
     }

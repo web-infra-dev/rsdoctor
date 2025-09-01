@@ -28,13 +28,14 @@ async function prebundle() {
 
       const outfile = path.join(
         path.join(__dirname, '../compiled'),
-        output.filename.replace('[name]', dep),
+        output.filename.replace('[name].js', `${dep}.cjs`),
       );
 
       const result = await build({
         entryPoints: [dep],
         bundle: true,
         outfile,
+        format: 'cjs',
         external: exclude,
         ...buildConfig,
       });

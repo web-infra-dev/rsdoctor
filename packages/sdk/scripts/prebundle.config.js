@@ -16,7 +16,6 @@ export default {
     'sirv',
     'socket.io',
     'source-map',
-    'tapable',
   ],
 
   // Exclude workspace packages from prebundling
