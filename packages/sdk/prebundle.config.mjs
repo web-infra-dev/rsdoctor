@@ -1,9 +1,3 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 export default {
   // Dependencies to prebundle for better performance
   dependencies: [
@@ -39,8 +33,8 @@ export default {
 
   // Output configuration
   output: {
-    dir: path.join(__dirname, '../dist/prebundle'),
-    filename: '[name].js',
+    dir: './compiled',
+    filename: '[name].cjs',
   },
 
   // Resolve configuration

@@ -3,7 +3,7 @@ import { join } from 'path';
 import { dualPackage } from '../../scripts/rslib.base.config';
 
 // Load prebundle configuration
-const prebundleConfigPath = join(__dirname, 'scripts/prebundle.config.js');
+const prebundleConfigPath = join(__dirname, './prebundle.config.mjs');
 const prebundleConfigModule = await import(prebundleConfigPath);
 const prebundleConfig = prebundleConfigModule.default;
 
