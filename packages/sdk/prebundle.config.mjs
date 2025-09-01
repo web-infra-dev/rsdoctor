@@ -1,8 +1,5 @@
 export default {
-  // Dependencies to prebundle for better performance
   dependencies: ['body-parser', 'cors', 'dayjs', 'fs-extra', 'json-cycle'],
-
-  // Exclude workspace packages from prebundling
   exclude: [
     '@rsdoctor/client',
     '@rsdoctor/graph',
@@ -10,7 +7,6 @@ export default {
     '@rsdoctor/utils',
   ],
 
-  // Build configuration
   build: {
     platform: 'node',
     target: 'node16',
@@ -19,23 +15,19 @@ export default {
     sourcemap: false,
     metafile: false,
     write: true,
-    // 添加明确的输出格式配置
     output: {
       chunkFormat: 'commonjs',
     },
-    // 添加环境配置
     environment: {
       node: true,
     },
   },
 
-  // Output configuration
   output: {
     dir: './compiled',
     filename: '[name].cjs',
   },
 
-  // Resolve configuration
   resolve: {
     extensions: ['.js', '.json', '.ts', '.tsx'],
   },
