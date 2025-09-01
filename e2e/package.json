@@ -19,7 +19,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",
-    "@rspack/core": "1.4.11",
+    "@rspack/core": "1.5.1",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.23",
@@ -27,7 +27,7 @@
     "lodash": "^4.17.21",
     "playwright": "1.54.2",
     "terser-webpack-plugin": "^5.3.14",
-    "typescript": "^5.2.2",
+    "typescript": "^5.9.2",
     "webpack": "^5.97.1"
   }
 }
