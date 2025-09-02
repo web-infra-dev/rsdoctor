@@ -1,6 +1,14 @@
 import { defineConfig, rspack } from '@rslib/core';
 import { dualPackageBundleless } from '../../scripts/rslib.base.config';
 
+const externals = [
+  // Externalize workspace packages
+  '@rsdoctor/graph',
+  '@rsdoctor/sdk',
+  '@rsdoctor/types',
+  '@rsdoctor/utils',
+];
+
 export default defineConfig({
   ...dualPackageBundleless,
   lib: [
@@ -15,6 +23,7 @@ export default defineConfig({
         filename: {
           js: '[name].js',
         },
+        externals,
       },
       shims: {
         esm: {
@@ -33,6 +42,7 @@ export default defineConfig({
         filename: {
           js: '[name].cjs',
         },
+        externals,
       },
       shims: {
         cjs: {

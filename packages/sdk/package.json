@@ -19,13 +19,15 @@
   },
   "files": [
     "dist",
-    "static"
+    "static",
+    "compiled"
   ],
   "scripts": {
-    "build": "rslib build",
+    "build": "npm run prebundle && rslib build",
     "dev": "npm run start",
     "start": "rslib build -w",
-    "test": "rstest run"
+    "test": "rstest run",
+    "prebundle": "prebundle"
   },
   "dependencies": {
     "@rsdoctor/client": "workspace:*",
@@ -33,6 +35,10 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@types/fs-extra": "^11.0.4",
+    "socket.io": "4.8.1",
+    "tapable": "2.2.2"
+  },
+  "devDependencies": {
     "body-parser": "1.20.3",
     "cors": "2.8.5",
     "dayjs": "1.11.13",
@@ -40,14 +46,11 @@
     "json-cycle": "^1.5.0",
     "open": "^10.2.0",
     "sirv": "2.0.4",
-    "socket.io": "4.8.1",
     "source-map": "^0.7.4",
-    "tapable": "2.2.2"
-  },
-  "devDependencies": {
     "@types/body-parser": "1.19.6",
     "@types/cors": "2.8.19",
     "@types/node": "^22.8.1",
+    "prebundle": "1.4.1",
     "tslib": "2.8.1",
     "typescript": "^5.9.2"
   },
