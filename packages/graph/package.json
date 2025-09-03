@@ -31,7 +31,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "lodash.unionby": "^4.8.0",
-    "source-map": "^0.7.4"
+    "source-map": "^0.7.6"
   },
   "devDependencies": {
     "@types/body-parser": "1.19.6",
