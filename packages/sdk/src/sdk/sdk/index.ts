@@ -403,10 +403,11 @@ export class RsdoctorSDK<
   }
 
   public getStoreData(): SDK.BuilderStoreData {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const ctx = this;
     const briefOptions = this.extraConfig?.brief;
-    // const mode = this.extraConfig?.mode;
+    const sections = briefOptions?.jsonOptions?.sections;
+    const isJsonType = briefOptions?.type?.includes('json');
+
     return {
       get hash() {
         return ctx.hash;
@@ -421,6 +422,10 @@ export class RsdoctorSDK<
         return ctx.pid;
       },
       get errors() {
+        // In brief mode with sections control, check if rules section is enabled
+        if (isJsonType && sections && !sections.rules) {
+          return [];
+        }
         return ctx._errors.map((err) => err.toData());
       },
       get configs() {
@@ -436,12 +441,32 @@ export class RsdoctorSDK<
         return ctx._loader.slice();
       },
       get moduleGraph() {
+        // In brief mode with sections control, check if moduleGraph section is enabled
+        if (isJsonType && sections && !sections.moduleGraph) {
+          return {
+            dependencies: [],
+            modules: [],
+            moduleGraphModules: [],
+            exports: [],
+            sideEffects: [],
+            variables: [],
+            layers: [],
+          };
+        }
         return ctx._moduleGraph.toData({
           contextPath: ctx._configs?.[0]?.config?.context || '',
           briefOptions,
         });
       },
       get chunkGraph() {
+        // In brief mode with sections control, check if chunkGraph section is enabled
+        if (isJsonType && sections && !sections.chunkGraph) {
+          return {
+            assets: [],
+            chunks: [],
+            entrypoints: [],
+          };
+        }
         return ctx._chunkGraph.toData(ctx.type);
       },
       get moduleCodeMap() {
