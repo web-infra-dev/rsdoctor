@@ -196,57 +196,6 @@ test('brief mode with JSON type and custom sections should generate selective da
   }
 });
 
-test('brief mode with JSON type should respect sections configuration', async () => {
-  const sectionsOptions = {
-    sections: {
-      moduleGraph: false,
-      chunkGraph: true,
-      rules: false,
-    },
-  };
-
-  const { outputDir } = await compileWithBriefJsonMode(sectionsOptions);
-
-  const sdk = getSDK();
-  expect(sdk?.extraConfig?.brief).toMatchObject({
-    type: ['json'],
-    jsonOptions: sectionsOptions,
-  });
-
-  // Wait for files to be written
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Check if JSON data file exists
-  const jsonDataPath = path.join(outputDir, 'rsdoctor-data.json');
-  const jsonDataExists = await File.fse.pathExists(jsonDataPath);
-  expect(jsonDataExists).toBeTruthy();
-
-  if (jsonDataExists) {
-    const jsonData = await File.fse.readJson(jsonDataPath);
-    expect(jsonData).toBeDefined();
-
-    // moduleGraph is disabled, should return empty structure
-    expect(jsonData.moduleGraph).toBeDefined();
-    expect(jsonData.moduleGraph.modules).toEqual([]);
-    expect(jsonData.moduleGraph.dependencies).toEqual([]);
-
-    // chunkGraph is enabled, should have data
-    expect(jsonData.chunkGraph).toBeDefined();
-    expect(jsonData.chunkGraph.chunks.length).toBeGreaterThan(0);
-
-    // rules (errors) is disabled, should be empty
-    expect(jsonData.errors).toBeDefined();
-    expect(jsonData.errors).toEqual([]);
-  }
-
-  // Cleanup
-  try {
-    await File.fse.remove(outputDir);
-  } catch (e) {
-    console.warn('Failed to cleanup test directory:', e);
-  }
-});
-
 test('brief mode with both HTML and JSON types should generate both outputs', async () => {
   const file = path.resolve(__dirname, '../fixtures/a.js');
   const loader = path.resolve(__dirname, '../fixtures/loaders/comment.js');
