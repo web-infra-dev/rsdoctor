@@ -1,5 +1,5 @@
 import { RsdoctorPrimarySDK, RsdoctorSDKController } from '@rsdoctor/sdk';
-import type { Linter } from '@rsdoctor/types';
+import { SDK, type Linter } from '@rsdoctor/types';
 import type { RsdoctorMultiplePluginOptions } from '@rsdoctor/core/types';
 
 import { RsdoctorWebpackPlugin } from './plugin';
@@ -36,8 +36,8 @@ export class RsdoctorWebpackMultiplePlugin<
           ? normallizedOptions.output.mode
           : undefined,
         brief:
-          'htmlOptions' in normallizedOptions.output.options
-            ? normallizedOptions.output.options.htmlOptions
+          normallizedOptions.output.mode === SDK.IMode[SDK.IMode.brief]
+            ? normallizedOptions.output.options || undefined
             : undefined,
       },
       type: normallizedOptions.output.reportCodeType,

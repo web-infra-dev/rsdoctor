@@ -353,7 +353,7 @@ export class Module implements SDK.ModuleInstance {
     return this.concatenationModules.slice();
   }
 
-  toData(contextPath?: string): SDK.ModuleData {
+  toData(contextPath?: string, isBrief?: boolean): SDK.ModuleData {
     const { isPreferSource } = this;
     const moduleName = getModuleName(this.webpackId);
     const data: SDK.ModuleData = {
@@ -371,11 +371,12 @@ export class Module implements SDK.ModuleInstance {
       size: this.getSize(),
       kind: this.kind,
       ...(this.layer ? { layer: this.layer } : {}),
-      issuerPath:
-        this.issuerPath
-          ?.filter((issuer) => issuer.moduleId)
-          .map((issuer) => issuer.moduleId) || [],
-      bailoutReason: this.bailoutReason,
+      issuerPath: isBrief
+        ? undefined
+        : this.issuerPath
+            ?.filter((issuer) => issuer.moduleId)
+            .map((issuer) => issuer.moduleId) || [],
+      bailoutReason: isBrief ? undefined : this.bailoutReason,
     };
 
     if (this.meta.hasSetEsModuleStatement || this.meta.strictHarmonyModule) {

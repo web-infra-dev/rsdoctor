@@ -1,6 +1,7 @@
 import type { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import type {
   Common,
+  Config,
   Linter,
   Linter as LinterType,
   Plugin,
@@ -9,79 +10,6 @@ import type {
 import { rules } from '@/rules/rules';
 
 type InternalRules = Common.UnionToTuple<(typeof rules)[number]>;
-
-export type IReportCodeType = {
-  noModuleSource?: boolean;
-  noAssetsAndModuleSource?: boolean;
-  noCode?: boolean;
-};
-
-// Conditional output type based on mode
-export type IOutput<T extends 'brief' | 'normal' | undefined = undefined> =
-  T extends 'brief'
-    ? BriefModeConfig
-    : T extends 'normal'
-      ? NormalModeConfig
-      : BriefModeConfig | NormalModeConfig | OutputBaseConfig;
-export type NewReportCodeType =
-  | 'noModuleSource'
-  | 'noAssetsAndModuleSource'
-  | 'noCode';
-export interface NormalModeOptions {
-  // Normal mode doesn't have type field, it's only available in brief mode
-  type?: never;
-}
-
-export interface BriefModeOptions {
-  /** Output type, supports HTML and JSON */
-  type?: Array<'html'>;
-  /** HTML output related configuration */
-  // jsonOptions?: {};
-  htmlOptions?: SDK.BriefConfig;
-}
-
-interface OutputBaseConfig {
-  /**
-   * The directory where the report files will be output.
-   */
-  reportDir?: string;
-
-  /**
-   * Control the Rsdoctor reporter codes records.
-   */
-  reportCodeType?: IReportCodeType | undefined | NewReportCodeType;
-
-  /**
-   * @deprecated
-   * Configure whether to compress data.
-   * @default false
-   *
-   */
-  compressData?: boolean;
-}
-
-// Conditional type for reportCodeType based on mode
-type ReportCodeTypeByMode<T extends 'brief' | 'normal'> = T extends 'brief'
-  ? undefined | 'noCode' | { noCode?: boolean }
-  : T extends 'normal'
-    ? IReportCodeType | undefined | NewReportCodeType
-    : IReportCodeType | undefined | NewReportCodeType;
-
-// Brief Mode Type
-export interface BriefModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
-  mode?: 'brief';
-  reportCodeType?: ReportCodeTypeByMode<'brief'>;
-  options?: BriefModeOptions;
-}
-
-// Normal Mode Type
-interface NormalModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
-  mode?: 'normal';
-  reportCodeType?: ReportCodeTypeByMode<'normal'>;
-  options?: NormalModeOptions;
-}
 
 export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
@@ -145,7 +73,7 @@ export interface RsdoctorWebpackPluginOptions<
    * Please use the output.options to set the brief options, BriefModeOptions.
    * Options to control brief mode reports.
    */
-  brief?: SDK.BriefConfig;
+  brief?: Config.BriefConfig;
 
   /**
    * The name of inner rsdoctor's client package, used by inner-rsdoctor.
@@ -153,7 +81,7 @@ export interface RsdoctorWebpackPluginOptions<
    */
   innerClientPath?: string;
 
-  output?: IOutput<'brief' | 'normal'>;
+  output?: Config.IOutput<'brief' | 'normal'>;
 }
 
 export interface RsdoctorMultiplePluginOptions<
@@ -194,7 +122,7 @@ export interface RsdoctorPluginOptionsNormalized<
     mode: keyof typeof SDK.IMode;
     reportCodeType: SDK.ToDataType;
     reportDir: string;
-    options: BriefModeOptions | NormalModeOptions;
+    options: Config.BriefModeOptions | Config.NormalModeOptions;
   };
   port?: number;
   supports: ISupport;

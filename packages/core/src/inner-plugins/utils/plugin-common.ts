@@ -1,5 +1,5 @@
 import type { Configuration, RuleSetRule } from '@rspack/core';
-import { findRoot, openBrowser } from '@rsdoctor/sdk';
+import { openBrowser } from '@rsdoctor/sdk';
 import { makeRulesSerializable } from '@rsdoctor/core/plugins';
 import { SDK } from '@rsdoctor/types';
 import { chalk } from '@rsdoctor/utils/logger';
@@ -25,23 +25,6 @@ export function processCompilerConfig(config: any): Configuration {
     ..._rest,
     plugins: plugins.map((e: any) => e?.constructor.name),
   } as unknown as Configuration;
-}
-
-/**
- * Report configuration to SDK
- */
-export function reportConfiguration(
-  sdk: any,
-  name: string,
-  version: string,
-  configuration: Configuration,
-): void {
-  sdk.reportConfiguration({
-    name,
-    version,
-    config: configuration,
-    root: findRoot() || '',
-  });
 }
 
 export function handleBriefModeReport(

@@ -13,13 +13,12 @@ export interface LoaderTransformData extends ProcessData {
 
   /** loader path */
   path: string;
-  input: string | null;
+  input: string | null | undefined;
   /**
    * - isPitch: true: the result of loader.pitch()
    * - isPitch: false: the code result of loader()
    */
-  result: string | null;
-
+  result: string | null | undefined;
   /** Timestamp when called */
   startAt: number;
   endAt: number;

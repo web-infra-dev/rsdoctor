@@ -50,7 +50,11 @@ test('rsdoctor webpack5 multi-plugins options tests', async () => {
   expect(sdk.type).toBe(0);
   expect(sdk.extraConfig?.mode).toBe('brief');
   expect(sdk.extraConfig?.brief).toMatchObject({
-    reportHtmlName: '111.html',
-    writeDataJson: false,
+    htmlOptions: {
+      reportHtmlName: '111.html',
+      writeDataJson: false,
+    },
+    jsonOptions: {},
+    type: ['html'],
   });
 });

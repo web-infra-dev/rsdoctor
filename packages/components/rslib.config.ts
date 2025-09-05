@@ -1,7 +1,7 @@
-import { defineConfig } from '@rslib/core';
-import { pluginSvgr } from '@rsbuild/plugin-svgr';
-import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginSvgr } from '@rsbuild/plugin-svgr';
+import { defineConfig } from '@rslib/core';
 
 export default defineConfig({
   lib: [

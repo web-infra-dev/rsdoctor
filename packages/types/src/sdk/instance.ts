@@ -1,21 +1,21 @@
+import type { RawSourceMap, SourceMapConsumer } from 'source-map';
 import type { Configuration } from 'webpack';
-import type { SourceMapConsumer, RawSourceMap } from 'source-map';
-
-import { LoaderData, ResourceLoaderData } from './loader';
-import { ResolverData } from './resolver';
-import { PluginData } from './plugin';
-import { BuilderStoreData, EMOStoreData, StoreData } from './result';
-import { ModuleGraphInstance } from './module';
+import { PlainObject } from '../common';
+import { EmoCheckData } from '../emo';
 import {
   RsdoctorManifestClientRoutes,
   RsdoctorManifestWithShardingFiles,
 } from '../manifest';
-import { SummaryData } from './summary';
 import { RuntimeContext, RuntimeContextOptions } from './context';
-import { RsdoctorServerInstance } from './server';
-import { PlainObject } from '../common';
-import { EmoCheckData } from '../emo';
 import { Hooks } from './hooks';
+import { LoaderData, ResourceLoaderData } from './loader';
+import { ModuleGraphInstance } from './module';
+import { PluginData } from './plugin';
+import { ResolverData } from './resolver';
+import { BuilderStoreData, EMOStoreData, StoreData } from './result';
+import { RsdoctorServerInstance } from './server';
+import { SummaryData } from './summary';
+import { BriefModeOptions } from '@/config';
 
 export type WriteStoreOptionsType = {};
 
@@ -113,18 +113,13 @@ export interface IPrintLog {
   serverUrls: boolean;
 }
 
-export interface BriefConfig {
-  reportHtmlName?: string;
-  writeDataJson: boolean;
-}
-
 export type SDKOptionsType = {
   innerClientPath?: string;
   disableClientServer?: boolean;
   noServer?: boolean;
   printLog?: IPrintLog;
   mode?: keyof typeof IMode;
-  brief?: BriefConfig;
+  brief?: BriefModeOptions;
 };
 
 /**

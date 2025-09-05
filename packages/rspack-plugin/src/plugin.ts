@@ -1,22 +1,22 @@
-import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
+import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
 import {
-  InternalLoaderPlugin,
-  InternalPluginsPlugin,
-  InternalSummaryPlugin,
-  setSDK,
   ensureModulesChunksGraphFn,
   InternalBundlePlugin,
-  InternalRulesPlugin,
-  InternalErrorReporterPlugin,
   InternalBundleTagPlugin,
+  InternalErrorReporterPlugin,
+  InternalLoaderPlugin,
+  InternalPluginsPlugin,
+  InternalRulesPlugin,
+  InternalSummaryPlugin,
   normalizeRspackUserOptions,
+  setSDK,
 } from '@rsdoctor/core/plugins';
 import type {
   RsdoctorRspackPluginInstance,
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
 } from '@rsdoctor/core/types';
-import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
+import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
 import {
   Constants,
   Linter,
@@ -29,14 +29,13 @@ import path from 'path';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 
 import {
-  processCompilerConfig,
-  reportConfiguration,
   handleBriefModeReport,
+  processCompilerConfig,
 } from '@rsdoctor/core/plugins';
 
+import { ModuleGraph } from '@rsdoctor/graph';
 import { Loader } from '@rsdoctor/utils/common';
 import { chalk, logger, time, timeEnd } from '@rsdoctor/utils/logger';
-import { ModuleGraph } from '@rsdoctor/graph';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorRspackPluginInstance<Rules>
@@ -80,8 +79,8 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
           printLog,
           mode: output.mode ? output.mode : undefined,
           brief:
-            'htmlOptions' in output.options
-              ? output.options.htmlOptions
+            output.mode === SDK.IMode[SDK.IMode.brief]
+              ? output.options || undefined
               : undefined,
         },
       });
@@ -274,14 +273,6 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
       const rspackVersion = compiler.webpack?.rspackVersion;
       const webpackVersion = compiler.webpack?.version;
-
-      // Use extracted common function to report configuration
-      reportConfiguration(
-        this.sdk,
-        rspackVersion ? 'rspack' : 'webpack',
-        rspackVersion || webpackVersion || 'unknown',
-        configuration,
-      );
 
       // save webpack or rspack configuration to sdk
       this.sdk.reportConfiguration({

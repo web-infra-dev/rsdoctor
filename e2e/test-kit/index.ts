@@ -10,7 +10,7 @@ const callbacks: Array<() => unknown> = [];
 
 export async function waitReload(page: Page) {
   // await page.waitForNetworkIdle();
-  await page.waitForSelector('#root', { timeout: 10000 });
+  await page.waitForSelector('#root', { timeout: 20000 });
 }
 
 export async function openBrowserByCLI(

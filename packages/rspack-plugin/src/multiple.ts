@@ -1,10 +1,10 @@
-import { RsdoctorPrimarySDK, RsdoctorSDKController } from '@rsdoctor/sdk';
-import type { Linter } from '@rsdoctor/types';
 import type { RsdoctorMultiplePluginOptions } from '@rsdoctor/core/types';
+import { RsdoctorPrimarySDK, RsdoctorSDKController } from '@rsdoctor/sdk';
+import { SDK, type Linter } from '@rsdoctor/types';
 
-import { RsdoctorRspackPlugin } from './plugin';
 import { normalizeUserConfig } from '@rsdoctor/core/plugins';
 import type { Compiler } from '@rspack/core';
+import { RsdoctorRspackPlugin } from './plugin';
 
 let globalController: RsdoctorSDKController | undefined;
 
@@ -36,8 +36,8 @@ export class RsdoctorRspackMultiplePlugin<
           ? normallizedOptions.output.mode
           : undefined,
         brief:
-          'htmlOptions' in normallizedOptions.output.options
-            ? normallizedOptions.output.options.htmlOptions
+          normallizedOptions.output.mode === SDK.IMode[SDK.IMode.brief]
+            ? normallizedOptions.output.options || undefined
             : undefined,
       },
       type: normallizedOptions.output.reportCodeType,

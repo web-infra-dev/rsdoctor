@@ -1,9 +1,7 @@
-import { Linter, SDK } from '@rsdoctor/types';
+import { Config, Linter, SDK } from '@rsdoctor/types';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 import assert from 'assert';
 import {
-  IReportCodeType,
-  NewReportCodeType,
   RsdoctorPluginOptionsNormalized,
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
@@ -166,7 +164,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
 }
 
 export const normalizeReportType = (
-  reportCodeType: IReportCodeType | NewReportCodeType,
+  reportCodeType: Config.IReportCodeType | Config.NewReportCodeType,
   mode: keyof typeof SDK.IMode,
 ): SDK.ToDataType => {
   const convertedReportCodeType =
