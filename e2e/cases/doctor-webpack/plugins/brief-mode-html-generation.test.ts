@@ -185,6 +185,12 @@ test('brief mode with default HTML configuration should use default values', asy
     },
   });
 
+  // Set the output directory immediately
+  plugin.sdk.setOutputDir(outputDir);
+
+  // Ensure the output directory exists
+  await File.fse.ensureDir(outputDir);
+
   await compileByWebpack5(file, {
     module: {
       rules: [
@@ -196,12 +202,6 @@ test('brief mode with default HTML configuration should use default values', asy
     },
     plugins: [plugin],
   });
-
-  // Set the output directory immediately
-  plugin.sdk.setOutputDir(outputDir);
-
-  // Ensure the output directory exists
-  await File.fse.ensureDir(outputDir);
 
   const sdk = getSDK();
   expect(sdk?.extraConfig?.brief).toMatchObject({
