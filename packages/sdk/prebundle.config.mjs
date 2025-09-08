@@ -1,12 +1,11 @@
 export default {
-  dependencies: ['body-parser', 'cors', 'dayjs', 'fs-extra', 'json-cycle'],
+  dependencies: ['cors', 'dayjs', 'fs-extra', 'json-cycle'],
   exclude: [
     '@rsdoctor/client',
     '@rsdoctor/graph',
     '@rsdoctor/types',
     '@rsdoctor/utils',
-    '@types/body-parser',
-    '@types/connect',
+    'safer-buffer',
   ],
 
   build: {

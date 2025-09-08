@@ -1,4 +1,4 @@
-import { PropsWithChildren, useContext, useEffect } from 'react';
+import { PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { FloatButton, Layout as L } from 'antd';
 import { Language, MAIN_BG, Size } from '../../constants';
 import { Header } from './header';
@@ -8,6 +8,8 @@ import {
   getFirstVisitFromStorage,
   setFirstVisitToStorage,
   getLanguage,
+  useUrlQuery,
+  getEnableRoutesFromUrlQuery,
 } from '../../utils';
 import { Progress } from './progress';
 import { ConfigContext } from '../../config';
@@ -20,6 +22,10 @@ export const Layout = (props: PropsWithChildren<LayoutProps>): JSX.Element => {
   const locale = useLocale();
   const { i18n } = useI18n();
   const { children } = props;
+  const query = useUrlQuery();
+  const [enableRoutes, setEnableRoutes] = useState<string[] | undefined>(
+    () => getEnableRoutesFromUrlQuery() || undefined,
+  );
 
   useEffect(() => {
     let currentLocale = locale;
@@ -40,10 +46,16 @@ export const Layout = (props: PropsWithChildren<LayoutProps>): JSX.Element => {
     }
   }, [locale]);
 
+  // Listen for enableRoutes changes in URL query parameters
+  useEffect(() => {
+    const newEnableRoutes = getEnableRoutesFromUrlQuery();
+    setEnableRoutes(newEnableRoutes || undefined);
+  }, [query]);
+
   const ctx = useContext(ConfigContext);
   return (
     <L>
-      {!ctx.embedded ? <Header /> : null}
+      {!ctx.embedded ? <Header enableRoutes={enableRoutes} /> : null}
       <Progress />
       <L.Content
         style={{

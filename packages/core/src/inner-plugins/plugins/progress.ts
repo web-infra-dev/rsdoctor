@@ -22,7 +22,8 @@ export class InternalProgressPlugin<
           currentProgress.percentage = percentage;
           currentProgress.message = msg || '';
 
-          const api = SDK.ServerAPI.APIExtends.GetCompileProgress;
+          const api = SDK.ServerAPI.APIExtends
+            .GetCompileProgress as unknown as SDK.ServerAPI.API;
           try {
             sdk.server.sendAPIDataToClient(api, {
               req: {

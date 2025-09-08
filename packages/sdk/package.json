@@ -35,6 +35,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@types/fs-extra": "^11.0.4",
+    "safer-buffer": "2.1.2",
     "socket.io": "4.8.1",
     "tapable": "2.2.2"
   },

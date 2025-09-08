@@ -29,6 +29,39 @@ export function getManifestUrlFromUrlQuery(): string | void {
   }
 }
 
+export function getEnableRoutesFromUrlQuery(): string[] | void {
+  const { query } = parse(location.href, true);
+  let enableRoutesStr = query[Client.RsdoctorClientUrlQuery.EnableRoutes];
+
+  if (!enableRoutesStr && location.hash) {
+    const hashUrl = parse(location.hash, true);
+    enableRoutesStr = hashUrl.query[Client.RsdoctorClientUrlQuery.EnableRoutes];
+  }
+
+  // If still not found, try manual parsing of hash fragment
+  if (!enableRoutesStr && location.hash) {
+    const hashFragment = location.hash;
+    const queryIndex = hashFragment.indexOf('?');
+    if (queryIndex !== -1) {
+      const queryString = hashFragment.substring(queryIndex + 1);
+      const urlParams = new URLSearchParams(queryString);
+      enableRoutesStr =
+        urlParams.get(Client.RsdoctorClientUrlQuery.EnableRoutes) || undefined;
+    }
+  }
+
+  if (enableRoutesStr) {
+    try {
+      const result = JSON.parse(decodeURIComponent(enableRoutesStr));
+      return result;
+    } catch (err) {
+      console.warn('Failed to parse enableRoutes from URL query:', err);
+      return undefined;
+    }
+  }
+  return undefined;
+}
+
 export function changeOrigin(origin: string) {
   const url = parse(location.href, true);
   const newUrl = parse(origin, true);
@@ -43,16 +76,27 @@ export function changeOrigin(origin: string) {
   return url.toString();
 }
 
-export function getSharingUrl(manifestCloudUrl: string) {
+export function getSharingUrl(
+  manifestCloudUrl: string,
+  enableRoutes?: string[],
+) {
   const url = parse(location.href, true);
 
   setDefaultUrl(url);
   setUploaderHash(url);
 
-  url.set('query', {
+  const query: Record<string, string> = {
     ...url.query,
     [Client.RsdoctorClientUrlQuery.ManifestFile]: manifestCloudUrl,
-  });
+  };
+
+  // Add enableRoutes to query if provided
+  if (enableRoutes && enableRoutes.length > 0) {
+    query[Client.RsdoctorClientUrlQuery.EnableRoutes] =
+      JSON.stringify(enableRoutes);
+  }
+
+  url.set('query', query);
 
   return url.toString();
 }

@@ -13,3 +13,4 @@ export * from './string';
 export * from './time';
 export * from './url';
 export * from './worker';
+export * from './stats';

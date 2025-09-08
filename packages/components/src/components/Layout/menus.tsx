@@ -11,7 +11,12 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Size } from '../../constants';
 import * as OverallConstants from '../../pages/Overall/constants';
-import { useI18n, hasBundle, hasCompile } from '../../utils';
+import {
+  useI18n,
+  hasBundle,
+  hasCompile,
+  getEnableRoutesFromUrlQuery,
+} from '../../utils';
 import { withServerAPI } from '../Manifest';
 import OverallActive from 'src/common/svg/navbar/overall-active.svg';
 import OverallInActive from 'src/common/svg/navbar/overall-inactive.svg';
@@ -43,7 +48,14 @@ const MenusBase: React.FC<{
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [navIcon, setNavIcon] = useState(defaultInActive);
-  const { routes: enableRoutes } = props;
+  const { routes: apiRoutes } = props;
+
+  // Get enableRoutes from URL query as fallback
+  const urlEnableRoutes = getEnableRoutesFromUrlQuery();
+  const enableRoutes =
+    apiRoutes && apiRoutes.length > 0
+      ? apiRoutes
+      : (urlEnableRoutes as Manifest.RsdoctorManifestClientRoutes[]) || [];
 
   useEffect(() => {
     if (pathname.includes('webpack')) {
