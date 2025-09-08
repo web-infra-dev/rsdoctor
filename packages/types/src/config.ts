@@ -15,9 +15,12 @@ export interface NormalModeOptions {
 }
 
 interface JsonSectionOptions {
-  moduleGraph?: boolean; // default: true
-  chunkGraph?: boolean; // default: true
-  rules?: boolean; // default: true
+  /** default: true */
+  moduleGraph?: boolean;
+  /** default: true */
+  chunkGraph?: boolean;
+  /** default: true */
+  rules?: boolean;
 }
 
 export interface JsonOptions {
