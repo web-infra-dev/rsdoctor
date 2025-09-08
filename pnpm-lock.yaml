@@ -30,8 +30,8 @@ importers:
         specifier: ^0.12.2
         version: 0.12.2(typescript@5.9.2)
       '@rstest/core':
-        specifier: 0.2.2
-        version: 0.2.2
+        specifier: 0.3.2
+        version: 0.3.2
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:scripts/test-helper
@@ -487,8 +487,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@rstest/core':
-        specifier: 0.2.2
-        version: 0.2.2
+        specifier: 0.3.2
+        version: 0.3.2
       '@types/node':
         specifier: ^22.8.1
         version: 22.16.5
@@ -4169,8 +4169,8 @@ packages:
   '@rstack-dev/doc-ui@1.11.0':
     resolution: {integrity: sha512-5GZ8EwvmKj8LXomEElC4GhDlDW2SazCeHbA+ieacJrlcGduuiJXGTBzVA2rNnPLjAb41H0esuy0aH0skRIQAqA==}
 
-  '@rstest/core@0.2.2':
-    resolution: {integrity: sha512-eP8V9PT6X/MIeLWmDn4v4r10yVlLzyB29/0esGLajjDRCzBFFN9eiqiPulHLER0Kehy5aYhifCC2u1FXQaO8Tg==}
+  '@rstest/core@0.3.2':
+    resolution: {integrity: sha512-bb6hciMqE9S0XYerYc9gA5oJq9RvS3Kdr8/wU/K++ZQumy35A8NOJno7L7/MudyQPTqTuHzPXQjKk4mOAlsCww==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
@@ -5198,8 +5198,8 @@ packages:
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
 
-  chai@5.2.1:
-    resolution: {integrity: sha512-5nFxhUrX0PqtyogoYOA8IPswy5sZFTOsBFl/9bNsmDLgsxYTzSZQJDPppDnZPTQbzSEm0hqGjWPzRemQCYbD6A==}
+  chai@5.3.3:
+    resolution: {integrity: sha512-4zNhdJD/iOjSH0A05ea+Ke6MU5mmpQcbQsSOkgdaUMJ9zTlDTD/GYlwohmIE2u0gaxHYiVHEn1Fw9mZ/ktJWgw==}
     engines: {node: '>=18'}
 
   chalk@2.4.2:
@@ -14507,12 +14507,12 @@ snapshots:
       - react
       - react-dom
 
-  '@rstest/core@0.2.2':
+  '@rstest/core@0.3.2':
     dependencies:
-      '@rsbuild/core': 1.5.0-beta.4
+      '@rsbuild/core': 1.5.0
       '@types/chai': 5.2.2
       birpc: 2.5.0
-      chai: 5.2.1
+      chai: 5.3.3
       pathe: 2.0.3
       std-env: 3.9.0
       tinypool: 1.1.1
@@ -15869,7 +15869,7 @@ snapshots:
 
   ccount@2.0.1: {}
 
-  chai@5.2.1:
+  chai@5.3.3:
     dependencies:
       assertion-error: 2.0.1
       check-error: 2.1.1
