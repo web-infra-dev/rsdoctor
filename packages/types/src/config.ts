@@ -3,7 +3,10 @@ export interface BriefConfig {
   writeDataJson: boolean;
 }
 
-/**  @deprecated */
+/**
+ * @deprecated This type is deprecated and will be removed in a future version.
+ * Use {@link NewReportCodeType} instead for better type safety and consistency.
+ */
 export type IReportCodeType = {
   noModuleSource?: boolean;
   noAssetsAndModuleSource?: boolean;
