@@ -3,6 +3,7 @@ export interface BriefConfig {
   writeDataJson: boolean;
 }
 
+/**  @deprecated */
 export type IReportCodeType = {
   noModuleSource?: boolean;
   noAssetsAndModuleSource?: boolean;
