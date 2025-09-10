@@ -1,5 +1,4 @@
-import { SDK } from '@rsdoctor/types';
-import { RsdoctorPluginOptionsNormalized } from '@rsdoctor/core/types';
+import { SDK, Plugin } from '@rsdoctor/types';
 
 const COMPRESSIBLE_REGEX =
   /\.(?:js|css|html|json|svg|txt|xml|xhtml|wasm|manifest)$/i;
@@ -7,7 +6,7 @@ const COMPRESSIBLE_REGEX =
 export function assetsContents(
   assetMap: Map<string, { content: string }>,
   chunkGraph: SDK.ChunkGraphInstance,
-  supports: RsdoctorPluginOptionsNormalized['supports'],
+  supports: Plugin.RsdoctorPluginOptionsNormalized['supports'],
 ) {
   const assets = chunkGraph.getAssets();
   assets.forEach((asset) => {

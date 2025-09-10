@@ -4,6 +4,8 @@ import {
   SideEffect,
   ModuleGraphModule,
   Statement,
+  Webpack,
+  ModuleGraphTrans,
 } from '@rsdoctor/graph';
 import type { SDK, Plugin } from '@rsdoctor/types';
 import type {
@@ -12,21 +14,12 @@ import type {
   Compilation,
 } from 'webpack';
 
-import type {
-  HarmonyImportSpecifierDependency,
-  ExportInfo as WebExportInfo,
-} from '@/types';
-import {
-  getAllModules,
-  getLastExportInfo,
-} from '@/build-utils/common/webpack/compatible';
 import {
   getDeclarationIdentifier,
   getExportIdentifierStatement,
 } from './utils';
-import { isWebpack5orRspack } from '@/build-utils/common/module-graph';
 
-type ExportData = Map<WebExportInfo, SDK.ExportInstance>;
+type ExportData = Map<Plugin.ExportInfo, SDK.ExportInstance>;
 
 function transformMgm(
   origin: WebpackNormalModule,
@@ -75,7 +68,7 @@ function transformMgm(
       continue;
     }
 
-    const HISDep = dep as HarmonyImportSpecifierDependency;
+    const HISDep = dep as Plugin.HarmonyImportSpecifierDependency;
     const { name, userRequest } = HISDep;
     const originName =
       HISDep.getIds(webpackGraph)[0] ?? SideEffect.NamespaceSymbol;
@@ -112,7 +105,7 @@ function appendExportConnection(
       continue;
     }
 
-    const lastExport = getLastExportInfo(info, webpackGraph);
+    const lastExport = Webpack.getLastExportInfo(info, webpackGraph);
     const lastSdkExport = cache.get(lastExport!);
     const sdkExport = cache.get(info);
 
@@ -160,15 +153,15 @@ export function appendTreeShaking(
   moduleGraph: SDK.ModuleGraphInstance,
   compilation: Plugin.BaseCompilation,
 ) {
-  if (!isWebpack5orRspack(compilation)) {
+  if (!ModuleGraphTrans.isWebpack5orRspack(compilation)) {
     return moduleGraph;
   }
 
   if ('moduleGraph' in compilation) {
-    const exportData = new Map<WebExportInfo, SDK.ExportInstance>();
+    const exportData = new Map<Plugin.ExportInfo, SDK.ExportInstance>();
     const webpackCompilation = compilation as unknown as Compilation;
     const { moduleGraph: webpackGraph } = webpackCompilation;
-    const allModules = getAllModules(webpackCompilation);
+    const allModules = Webpack.getAllModules(webpackCompilation);
 
     allModules.forEach((origin) =>
       transformMgm(origin, webpackGraph, moduleGraph, exportData),

@@ -1,6 +1,6 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import { InternalBasePlugin } from './base';
-import { Chunks } from '@/build-utils/common';
+import { Chunks } from '@rsdoctor/graph';
 import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 
 export class InternalBundlePlugin<

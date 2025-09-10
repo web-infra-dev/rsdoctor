@@ -1,5 +1,4 @@
-import { unionBy } from 'lodash-es';
-import { Statement } from '@rsdoctor/graph';
+import unionBy from 'lodash.unionby';
 import {
   Compilation,
   Dependency,
@@ -8,8 +7,8 @@ import {
   ModuleGraph,
   NormalModule,
 } from 'webpack';
-import type { EntryPoint, ExportInfo } from '@/types/index';
-import { SDK } from '@rsdoctor/types';
+import { SDK, Plugin } from '@rsdoctor/types';
+import { Statement } from '@/graph';
 
 export function isNormalModule(mod: Module): mod is NormalModule {
   return 'request' in mod && 'rawRequest' in mod && 'resource' in mod;
@@ -45,7 +44,7 @@ export function getModuleSource(mod: NormalModule): string {
 }
 
 export function getEntryModule(
-  entryMap: Map<string, EntryPoint>,
+  entryMap: Map<string, Plugin.EntryPoint>,
 ): NormalModule[] {
   return Array.from(entryMap.values())
     .map((entry) => entry.getRuntimeChunk())
@@ -85,7 +84,10 @@ export function getDependencyPosition(
   return statement;
 }
 
-export function getExportDependency(info: ExportInfo, module: NormalModule) {
+export function getExportDependency(
+  info: Plugin.ExportInfo,
+  module: NormalModule,
+) {
   let dep = module.dependencies.find((dep) => {
     // TODO: type
     return (
@@ -118,7 +120,7 @@ export function getSdkDependencyByWebpackDependency(
 }
 
 export function getExportStatement(
-  info: ExportInfo,
+  info: Plugin.ExportInfo,
   normalModule: NormalModule,
   graph: SDK.ModuleGraphInstance,
 ) {
@@ -151,9 +153,9 @@ export function getExportStatement(
 }
 
 export function getLastExportInfo(
-  info: ExportInfo,
+  info: Plugin.ExportInfo,
   webpackGraph: ModuleGraph,
-): ExportInfo | undefined {
+): Plugin.ExportInfo | undefined {
   const target = info.findTarget(webpackGraph, () => true);
 
   if (!target || !target.export) {

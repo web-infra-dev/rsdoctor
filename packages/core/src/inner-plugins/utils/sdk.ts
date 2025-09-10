@@ -1,14 +1,15 @@
-import { RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
+import { RsdoctorPrimarySDK } from '@rsdoctor/sdk';
+import { SDK } from '@rsdoctor/types';
 
 const globalKey = '__rsdoctor_sdks__';
 
 // Extend the globalThis type to avoid TS errors for dynamic properties
 declare global {
-  var __rsdoctor_sdks__: RsdoctorSDK[] | undefined;
-  var __rsdoctor_sdk__: RsdoctorSDK | undefined;
+  var __rsdoctor_sdks__: SDK.RsdoctorBuilderSDKInstance[] | undefined;
+  var __rsdoctor_sdk__: SDK.RsdoctorBuilderSDKInstance | undefined;
 }
 
-export function setSDK(t: RsdoctorSDK) {
+export function setSDK(t: SDK.RsdoctorBuilderSDKInstance) {
   if (!globalThis.__rsdoctor_sdks__) {
     globalThis.__rsdoctor_sdks__ = [];
   }

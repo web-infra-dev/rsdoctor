@@ -1,10 +1,9 @@
 import type { SDK } from '@rsdoctor/types';
-import type { RsdoctorSDK } from '@rsdoctor/sdk';
 import { DevToolError } from '@rsdoctor/utils/error';
 import { IHook } from '@/build-utils/build/utils';
 
 export function reportPluginData(
-  sdk: RsdoctorSDK,
+  sdk: SDK.RsdoctorBuilderSDKInstance,
   hook: string,
   tapName: string,
   start: number,
@@ -36,7 +35,7 @@ export function reportPluginData(
 }
 
 export function interceptPluginHook(
-  sdk: RsdoctorSDK,
+  sdk: SDK.RsdoctorBuilderSDKInstance,
   name: string,
   hook: IHook,
 ) {

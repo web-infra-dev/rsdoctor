@@ -1,5 +1,5 @@
+import type { Plugin } from '@rsdoctor/types';
 import type { RspackPluginInstance } from '@rspack/core';
-import type { RsdoctorWebpackPluginOptions } from '@rsdoctor/core/types';
 
 export interface RsdoctorRspackPluginOptions {
   /**
@@ -10,17 +10,16 @@ export interface RsdoctorRspackPluginOptions {
   /**
    * the switch for the Rsdoctor features.
    */
-  features?: RsdoctorWebpackPluginOptions<[]>['features'];
+  features?: Plugin.RsdoctorWebpackPluginOptions<[]>['features'];
   /**
    * configuration of the interceptor for webpack loaders.
    * @description worked when the `features.loader === true`.
    */
-  loaderInterceptorOptions?: RsdoctorWebpackPluginOptions<
+  loaderInterceptorOptions?: Plugin.RsdoctorWebpackPluginOptions<
     []
   >['loaderInterceptorOptions'];
 }
 
-export interface RsdoctorRspackPluginInstance
-  extends RspackPluginInstance {
+export interface RsdoctorRspackPluginInstance extends RspackPluginInstance {
   readonly name: string;
 }

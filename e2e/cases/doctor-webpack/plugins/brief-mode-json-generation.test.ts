@@ -81,8 +81,8 @@ test('brief mode with JSON type should generate JSON data files', async () => {
   if (jsonDataExists) {
     const jsonData = await File.fse.readJson(jsonDataPath);
     expect(jsonData).toBeDefined();
-    expect(jsonData.moduleGraph).toBeDefined();
-    expect(jsonData.chunkGraph).toBeDefined();
+    expect(jsonData.data.moduleGraph).toBeDefined();
+    expect(jsonData.data.chunkGraph).toBeDefined();
   }
 
   // Cleanup
@@ -123,17 +123,17 @@ test('brief mode with JSON type should respect sections configuration', async ()
     expect(jsonData).toBeDefined();
 
     // moduleGraph is disabled, should return empty structure
-    expect(jsonData.moduleGraph).toBeDefined();
-    expect(jsonData.moduleGraph.modules).toEqual([]);
-    expect(jsonData.moduleGraph.dependencies).toEqual([]);
+    expect(jsonData.data.moduleGraph).toBeDefined();
+    expect(jsonData.data.moduleGraph.modules).toEqual([]);
+    expect(jsonData.data.moduleGraph.dependencies).toEqual([]);
 
     // chunkGraph is enabled, should have data
-    expect(jsonData.chunkGraph).toBeDefined();
-    expect(jsonData.chunkGraph.chunks.length).toBeGreaterThan(0);
+    expect(jsonData.data.chunkGraph).toBeDefined();
+    expect(jsonData.data.chunkGraph.chunks.length).toBeGreaterThan(0);
 
     // rules (errors) is disabled, should be empty
-    expect(jsonData.errors).toBeDefined();
-    expect(jsonData.errors).toEqual([]);
+    expect(jsonData.data.errors).toBeDefined();
+    expect(jsonData.data.errors).toEqual([]);
   }
 
   // Cleanup
@@ -175,17 +175,17 @@ test('brief mode with JSON type and custom sections should generate selective da
   if (jsonDataExists) {
     const jsonData = await File.fse.readJson(jsonDataPath);
     expect(jsonData).toBeDefined();
-
+    const data = jsonData.data;
     // Since chunkGraph is disabled in sections, it should return empty arrays
-    expect(jsonData.moduleGraph).toBeDefined();
-    expect(jsonData.moduleGraph.modules.length).toBeGreaterThan(0); // moduleGraph is enabled
+    expect(data.moduleGraph).toBeDefined();
+    expect(data.moduleGraph.modules.length).toBeGreaterThan(0); // moduleGraph is enabled
 
-    expect(jsonData.chunkGraph).toBeDefined();
-    expect(jsonData.chunkGraph.chunks).toEqual([]); // chunkGraph is disabled, should be empty
-    expect(jsonData.chunkGraph.assets).toEqual([]); // chunkGraph is disabled, should be empty
+    expect(data.chunkGraph).toBeDefined();
+    expect(data.chunkGraph.chunks).toEqual([]); // chunkGraph is disabled, should be empty
+    expect(data.chunkGraph.assets).toEqual([]); // chunkGraph is disabled, should be empty
 
-    expect(jsonData.errors).toBeDefined();
-    expect(Array.isArray(jsonData.errors)).toBe(true); // rules is enabled
+    expect(data.errors).toBeDefined();
+    expect(Array.isArray(data.errors)).toBe(true); // rules is enabled
   }
 
   // Cleanup

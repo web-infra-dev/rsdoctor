@@ -1,7 +1,7 @@
 import { PlainObject } from '../../common';
 import { connect } from '../../thirdparty';
 import { RsdoctorClientRoutes } from '../../client';
-import { API } from './apis';
+import { API, APIExtends } from './apis';
 
 export * as ServerAPI from './apis';
 
@@ -47,7 +47,9 @@ export interface RsdoctorServerInstance {
 
   openClientPage: ClientUrlFunctionWithRouteDefined<Promise<void>>;
 
-  sendAPIDataToClient(api: API, msg: unknown): void | never;
+  sendAPIDataToClient(api: API | APIExtends, msg: unknown): void | never;
+
+  broadcast(): void;
 
   bootstrap(): Promise<void>;
   dispose(): Promise<void>;

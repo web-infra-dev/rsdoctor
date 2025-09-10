@@ -1,11 +1,12 @@
 import { describe, it, expect } from '@rstest/core';
 import path from 'path';
 import fs from 'fs';
-import { ModuleGraph } from '@/build-utils/common';
+
 import { Chunks } from '@/build-utils/build';
 import { removeAbsModulePath } from '../utils';
 import { compileByWebpack5 } from '@scripts/test-helper';
 import type { Plugin } from '@rsdoctor/types';
+import { ModuleGraphTrans } from '@rsdoctor/graph';
 
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, '../../fixtures', ...paths);
@@ -30,7 +31,7 @@ describe('module graph transform from stats', () => {
 
     const chunkGraph = Chunks.chunkTransform(new Map(), stats);
 
-    const graph = ModuleGraph.getModuleGraphByStats(
+    const graph = ModuleGraphTrans.getModuleGraphByStats(
       stats,
       resolveFixture(fixtureName, 'dist'),
       chunkGraph,
@@ -64,7 +65,7 @@ describe('module graph transform from stats', () => {
     );
     const statsData = JSON.parse(json);
     const chunkGraph = Chunks.chunkTransform(new Map(), statsData);
-    const moduleGraph = ModuleGraph.getModuleGraphByStats(
+    const moduleGraph = ModuleGraphTrans.getModuleGraphByStats(
       statsData,
       '.',
       chunkGraph,

@@ -1,12 +1,10 @@
-import { Config, Linter, SDK } from '@rsdoctor/types';
-import { chalk, logger } from '@rsdoctor/utils/logger';
-import assert from 'assert';
 import {
-  RsdoctorPluginOptionsNormalized,
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
-  RsdoctorWebpackPluginOptions,
 } from '@/types';
+import { Linter, Plugin, SDK } from '@rsdoctor/types';
+import { chalk, logger } from '@rsdoctor/utils/logger';
+import assert from 'assert';
 import {
   convertReportCodeTypeObject,
   processModeConfigurations,
@@ -71,8 +69,8 @@ function isValidMode(mode: any): mode is keyof typeof SDK.IMode {
 }
 
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
-  config: RsdoctorWebpackPluginOptions<Rules> = {},
-): RsdoctorPluginOptionsNormalized<Rules> {
+  config: Plugin.RsdoctorWebpackPluginOptions<Rules> = {},
+): Plugin.RsdoctorPluginOptionsNormalized<Rules> {
   const {
     linter = {},
     features = {},
@@ -129,7 +127,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   const reportCodeType = output.reportCodeType
     ? normalizeReportType(output.reportCodeType, finalMode)
     : normalizeReportType(getDefaultOutput().reportCodeType, finalMode);
-  const res: RsdoctorPluginOptionsNormalized<Rules> = {
+  const res: Plugin.RsdoctorPluginOptionsNormalized<Rules> = {
     linter: _linter,
     features: _features,
     loaderInterceptorOptions: {
@@ -164,7 +162,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
 }
 
 export const normalizeReportType = (
-  reportCodeType: Config.IReportCodeType | Config.NewReportCodeType,
+  reportCodeType: Plugin.IReportCodeType | Plugin.NewReportCodeType,
   mode: keyof typeof SDK.IMode,
 ): SDK.ToDataType => {
   const convertedReportCodeType =

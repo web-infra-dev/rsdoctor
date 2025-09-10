@@ -89,7 +89,7 @@ export async function collectSourceMaps(
     );
     // Function to resolve real source file paths
     const getRealSourcePath = bindContextCache(
-      _this.sdk._root || process.cwd(),
+      _this.sdk.root || process.cwd(),
       namespace,
       _this._realSourcePathCache,
     );

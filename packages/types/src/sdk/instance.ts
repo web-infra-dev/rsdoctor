@@ -1,21 +1,23 @@
-import type { RawSourceMap, SourceMapConsumer } from 'source-map';
-import type { Configuration } from 'webpack';
-import { PlainObject } from '../common';
-import { EmoCheckData } from '../emo';
+import type { SourceMapConsumer, RawSourceMap } from 'source-map';
+
+import { LoaderData, ResourceLoaderData } from './loader';
+import { ResolverData } from './resolver';
+import { PluginData } from './plugin';
+import { BuilderStoreData, EMOStoreData } from './result';
+import { ModuleGraphInstance, ToDataType } from './module';
 import {
   RsdoctorManifestClientRoutes,
   RsdoctorManifestWithShardingFiles,
 } from '../manifest';
 import { RuntimeContext, RuntimeContextOptions } from './context';
 import { Hooks } from './hooks';
-import { LoaderData, ResourceLoaderData } from './loader';
-import { ModuleGraphInstance } from './module';
-import { PluginData } from './plugin';
-import { ResolverData } from './resolver';
-import { BuilderStoreData, EMOStoreData, StoreData } from './result';
+import { ChunkGraphInstance } from './chunk';
 import { RsdoctorServerInstance } from './server';
-import { SummaryData } from './summary';
+import { PlainObject } from '@/common';
 import { BriefModeOptions } from '@/config';
+import { EmoCheckData } from '@/emo';
+import { SummaryData } from './summary';
+import { ConfigData } from './config';
 
 export type WriteStoreOptionsType = {};
 
@@ -27,8 +29,11 @@ export enum IMode {
 
 export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   readonly server: RsdoctorServerInstance;
+  type: ToDataType;
+
   /** Report configuration information */
-  reportConfiguration(config: Configuration): void;
+  reportConfiguration(config: ConfigData[0]): void;
+
   /** Report error message */
   reportError(errors: Error[]): void;
   /** Report error message */
@@ -41,6 +46,7 @@ export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   reportPlugin(data: PluginData): void;
   /** Report module chart data */
   reportModuleGraph(data: ModuleGraphInstance): void;
+  reportChunkGraph(data: ChunkGraphInstance): void;
   /** report the data of summary */
   reportSummaryData(part: Partial<SummaryData>): void;
   /** Report sourceMap data */
@@ -63,6 +69,8 @@ export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   clearSourceMapCache(): void;
   /** Clear all data */
   clear(): void;
+  /** Write store data to files */
+  writeStore(options?: WriteStoreOptionsType): Promise<string>;
 }
 
 export interface RsdoctorEMOSDKInstance extends RsdoctorSDKInstance {
@@ -121,88 +129,3 @@ export type SDKOptionsType = {
   mode?: keyof typeof IMode;
   brief?: BriefModeOptions;
 };
-
-/**
- * @deprecated
- */
-export interface RsdoctorSdkInstance {
-  readonly name: string;
-  readonly root: string;
-  readonly server: RsdoctorServerInstance;
-
-  /**
-   * folder of manifest
-   *   - used to save the manifest.json and sharding files.
-   * @default ".rsdoctor"
-   */
-  readonly outputDir: string;
-
-  /** manifest local path */
-  diskManifestPath: string;
-
-  /** start */
-  bootstrap(): Promise<void>;
-
-  /** Close */
-  dispose(): Promise<void>;
-
-  /** Clear all data */
-  clear(): void;
-
-  /** Change output path */
-  setOutputDir(outputDir: string): void;
-
-  /** Change build name */
-  setName(name: string): void;
-
-  /** Report configuration information */
-  reportConfiguration(config: Configuration): void;
-
-  /** Report error message */
-  reportError(errors: Error[]): void;
-
-  /** Report error message */
-  reportLoader(data: LoaderData): void;
-
-  /** Report path request information */
-  reportResolver(data: ResolverData): void;
-
-  /** Report plugin information */
-  reportPlugin(data: PluginData): void;
-
-  /** Report module chart data */
-  reportModuleGraph(data: ModuleGraphInstance): void;
-  /** report the data of summary */
-  reportSummaryData(part: Partial<SummaryData>): void;
-
-  /** Report sourceMap data */
-  reportSourceMap(data: RawSourceMap): void;
-
-  getClientRoutes(): RsdoctorManifestClientRoutes[];
-  addClientRoutes(routes: RsdoctorManifestClientRoutes[]): void;
-
-  /**
-   * write the manifest to a folder
-   *   - use this.outputDir
-   * @returns the absolute path of manifest.json.
-   */
-  writeStore(options?: WriteStoreOptionsType): Promise<string>;
-
-  /** Application error modification */
-  applyErrorFix(id: number): Promise<void>;
-
-  /** Get build result data */
-  getStoreData(): StoreData;
-
-  /** Get build resource entry file */
-  getManifestData(): RsdoctorManifestWithShardingFiles;
-
-  /** Get rule context */
-  getRuleContext(options: RuntimeContextOptions): RuntimeContext;
-
-  /** Get SourceMap from cache */
-  getSourceMap(file: string): Promise<SourceMapConsumer | undefined>;
-
-  /** clear cache */
-  clearSourceMapCache(): void;
-}

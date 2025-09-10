@@ -8,7 +8,6 @@ import {
   RuleSetConditionAbsolute as WebpackRuleSetConditionAbsolute,
   RuleSetRule as WebpackRuleSetRule,
 } from 'webpack';
-
 /**
  * Process mode-specific configurations with priority logic
  */

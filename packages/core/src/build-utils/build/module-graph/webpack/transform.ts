@@ -4,19 +4,7 @@ import * as Webpack from 'webpack';
 import * as Rspack from '@rspack/core';
 import { Node } from '@rsdoctor/utils/ruleUtils';
 import { Plugin, SDK } from '@rsdoctor/types';
-import {
-  getAllModules,
-  getDependencyPosition,
-  getWebpackDependencyRequest,
-  getWebpackModuleId,
-  getWebpackModulePath,
-  isExternalModule,
-} from '@/build-utils/common/webpack/compatible';
-import {
-  getImportKind,
-  isImportDependency,
-  removeNoImportStyle,
-} from '@/build-utils/common/module-graph';
+import { ModuleGraphTrans, Webpack as WebpackGraph } from '@rsdoctor/graph';
 import { hasSetEsModuleStatement } from '../parser';
 import { isFunction } from 'lodash-es';
 import { logger } from '@rsdoctor/utils/logger';
@@ -93,11 +81,13 @@ function appendDependency(
     return;
   }
 
-  const rawRequest = getWebpackDependencyRequest(
+  const rawRequest = WebpackGraph.getWebpackDependencyRequest(
     webpackDep,
     resolvedWebpackModule,
   );
-  const resolveRequest = getWebpackModulePath(resolvedWebpackModule);
+  const resolveRequest = WebpackGraph.getWebpackModulePath(
+    resolvedWebpackModule,
+  );
   const request = rawRequest ?? resolveRequest;
 
   if (!module.getDependencyByRequest(request)) {
@@ -107,7 +97,7 @@ function appendDependency(
       const dep = module.addDependency(
         request,
         depModule,
-        getImportKind(webpackDep),
+        ModuleGraphTrans.getImportKind(webpackDep),
       );
 
       if (dep) {
@@ -127,7 +117,11 @@ function appendDependency(
       ),
     });
 
-    const statement = getDependencyPosition(webpackDep, module, false);
+    const statement = WebpackGraph.getDependencyPosition(
+      webpackDep,
+      module,
+      false,
+    );
 
     if (statement) {
       dependency.addStatement(statement);
@@ -171,7 +165,9 @@ async function appendModuleData(
   features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
 ) {
-  const module = graph.getModuleByWebpackId(getWebpackModuleId(origin));
+  const module = graph.getModuleByWebpackId(
+    WebpackGraph.getWebpackModuleId(origin),
+  );
 
   if (!origin || !module) {
     return;
@@ -194,14 +190,14 @@ async function appendModuleData(
       module.meta.hasSetEsModuleStatement = hasSetEsModuleStatement(program);
     }
 
-    const transformed = isExternalModule(origin)
+    const transformed = WebpackGraph.isExternalModule(origin)
       ? ''
       : module.getSource().transformed.length > 0
         ? module.getSource().transformed
         : isFunction(origin?.originalSource)
           ? (origin.originalSource()?.source()?.toString() ?? '')
           : '';
-    const transformedSize = isExternalModule(origin)
+    const transformedSize = WebpackGraph.isExternalModule(origin)
       ? 0
       : module.getSize().transformedSize > 0
         ? module.getSize().transformedSize
@@ -250,7 +246,7 @@ async function appendModuleData(
       // Record dependent data.
       Array.from(origin.dependencies)
         // Filter self-dependence and empty dependencies.
-        .filter((item) => isImportDependency(item))
+        .filter((item) => ModuleGraphTrans.isImportDependency(item))
         // Merge asynchronous dependencies.
         .concat(
           origin.blocks.reduce(
@@ -276,7 +272,7 @@ export async function appendModuleGraphByCompilation(
     // Only webpack will execute the following logic.
     const webpackCompilation = compilation as unknown as Webpack.Compilation;
     const { moduleGraph: webpackGraph, fileSystemInfo } = webpackCompilation;
-    const allModules = getAllModules(webpackCompilation);
+    const allModules = WebpackGraph.getAllModules(webpackCompilation);
 
     await Promise.all(
       allModules.map((module: Webpack.NormalModule) => {
@@ -291,7 +287,7 @@ export async function appendModuleGraphByCompilation(
       }),
     );
 
-    removeNoImportStyle(graph);
+    ModuleGraphTrans.removeNoImportStyle(graph);
     return graph;
   } catch (e) {
     return graph;
