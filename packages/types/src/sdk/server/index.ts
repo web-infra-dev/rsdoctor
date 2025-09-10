@@ -49,6 +49,8 @@ export interface RsdoctorServerInstance {
 
   sendAPIDataToClient(api: API, msg: unknown): void | never;
 
+  broadcast(): void;
+
   bootstrap(): Promise<void>;
   dispose(): Promise<void>;
 }

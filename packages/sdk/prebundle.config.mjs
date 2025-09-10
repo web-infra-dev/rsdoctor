@@ -5,6 +5,8 @@ export default {
     '@rsdoctor/graph',
     '@rsdoctor/types',
     '@rsdoctor/utils',
+    '@types/body-parser',
+    '@types/connect',
   ],
 
   build: {

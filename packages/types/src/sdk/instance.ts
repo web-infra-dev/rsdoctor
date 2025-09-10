@@ -1,21 +1,23 @@
-import type { RawSourceMap, SourceMapConsumer } from 'source-map';
-import type { Configuration } from 'webpack';
-import { PlainObject } from '../common';
-import { EmoCheckData } from '../emo';
+import type { Configuration } from '@rspack/core';
+import type { SourceMapConsumer, RawSourceMap } from 'source-map';
+
+import { LoaderData, ResourceLoaderData } from './loader';
+import { ResolverData } from './resolver';
+import { PluginData } from './plugin';
+import { BuilderStoreData, EMOStoreData, StoreData } from './result';
+import { ModuleGraphInstance } from './module';
 import {
   RsdoctorManifestClientRoutes,
   RsdoctorManifestWithShardingFiles,
 } from '../manifest';
 import { RuntimeContext, RuntimeContextOptions } from './context';
 import { Hooks } from './hooks';
-import { LoaderData, ResourceLoaderData } from './loader';
-import { ModuleGraphInstance } from './module';
-import { PluginData } from './plugin';
-import { ResolverData } from './resolver';
-import { BuilderStoreData, EMOStoreData, StoreData } from './result';
+import { ChunkGraphInstance } from './chunk';
 import { RsdoctorServerInstance } from './server';
-import { SummaryData } from './summary';
+import { PlainObject } from '@/common';
 import { BriefModeOptions } from '@/config';
+import { EmoCheckData } from '@/emo';
+import { SummaryData } from './summary';
 
 export type WriteStoreOptionsType = {};
 
@@ -28,7 +30,18 @@ export enum IMode {
 export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   readonly server: RsdoctorServerInstance;
   /** Report configuration information */
-  reportConfiguration(config: Configuration): void;
+  reportConfiguration({
+    name,
+    version,
+    config,
+    root,
+  }: {
+    name: string;
+    version: string;
+    config: Configuration;
+    root: string;
+  }): void;
+
   /** Report error message */
   reportError(errors: Error[]): void;
   /** Report error message */
@@ -41,6 +54,7 @@ export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   reportPlugin(data: PluginData): void;
   /** Report module chart data */
   reportModuleGraph(data: ModuleGraphInstance): void;
+  reportChunkGraph(data: ChunkGraphInstance): void;
   /** report the data of summary */
   reportSummaryData(part: Partial<SummaryData>): void;
   /** Report sourceMap data */
@@ -63,6 +77,8 @@ export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   clearSourceMapCache(): void;
   /** Clear all data */
   clear(): void;
+  /** Write store data to files */
+  writeStore(options?: WriteStoreOptionsType): Promise<string>;
 }
 
 export interface RsdoctorEMOSDKInstance extends RsdoctorSDKInstance {

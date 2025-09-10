@@ -33,7 +33,7 @@ export class RsdoctorSDK<
 
   public type: SDK.ToDataType;
 
-  public _root: string;
+  public root: string;
 
   private _summary: SDK.SummaryData = { costs: [] };
 
@@ -71,7 +71,7 @@ export class RsdoctorSDK<
       ? options.type
       : SDK.ToDataType.Normal;
     this.extraConfig = options.config;
-    this._root = findRoot() ?? '';
+    this.root = findRoot() ?? '';
   }
 
   async bootstrap() {
@@ -181,7 +181,7 @@ export class RsdoctorSDK<
   }
 
   reportConfiguration(config: SDK.ConfigData[0]) {
-    config.root ??= this._root;
+    config.root ??= this.root;
     this._configs.push(config);
     this.onDataReport();
   }
@@ -387,7 +387,13 @@ export class RsdoctorSDK<
         : require.resolve('@rsdoctor/client');
 
       if (this.extraConfig?.brief?.type?.includes('json')) {
-        const jsonData = this.getStoreData();
+        const data = this.getStoreData();
+        const clientRoutes = this.getClientRoutes();
+        const jsonData = {
+          data,
+          clientRoutes,
+        };
+
         fs.mkdirSync(this.outputDir, { recursive: true });
         fs.writeFileSync(
           path.resolve(this.outputDir, 'rsdoctor-data.json'),

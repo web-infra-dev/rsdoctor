@@ -4,7 +4,7 @@ import fse from 'fs-extra/esm';
 import { omit } from 'lodash-es';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
-import { Rule, SourceMapInput as WebpackSourceMapInput } from '../../../types';
+import { Rule } from '../../../types';
 import { readPackageJson } from '@rsdoctor/graph';
 import { RuleSetUseItem } from '@rspack/core';
 import { RuleSetUseItem as WebpackRuleSetUseItem } from 'webpack';
@@ -350,7 +350,7 @@ export function createLoaderContextTrap(
   final: (
     err: Error | null | undefined,
     res: string | Buffer | null,
-    sourceMap?: WebpackSourceMapInput,
+    sourceMap?: Plugin.SourceMapInput,
   ) => void,
 ) {
   // callback

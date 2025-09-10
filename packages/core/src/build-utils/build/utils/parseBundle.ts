@@ -6,8 +6,8 @@ import { parser } from '@rsdoctor/utils/ruleUtils';
 import { extname } from 'path';
 
 import { SDK } from '@rsdoctor/types';
-import { ParseBundle } from '@/types';
 import { logger } from '@rsdoctor/utils/logger';
+import type { ParseBundle } from '@rsdoctor/graph';
 
 /**
  * The following code is based on

@@ -19,7 +19,10 @@ interface RsdoctorSlaveSDKOptions {
   type: SDK.ToDataType;
 }
 
-export class RsdoctorPrimarySDK extends RsdoctorSDK {
+export class RsdoctorPrimarySDK
+  extends RsdoctorSDK
+  implements SDK.RsdoctorBuilderSDKInstance
+{
   id: number;
 
   parent: RsdoctorSDKController;

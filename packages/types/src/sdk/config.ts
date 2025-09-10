@@ -6,7 +6,7 @@ type RspackConfigurationWrapper = any extends RspackConfiguration
   : RspackConfiguration;
 
 export interface WebpackConfigData {
-  name: 'webpack' | 'rspack';
+  name: string;
   version: string | number;
   bin?: string;
   config: Configuration | RspackConfigurationWrapper;

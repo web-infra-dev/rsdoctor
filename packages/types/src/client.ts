@@ -1,6 +1,7 @@
 export enum RsdoctorClientUrlQuery {
   BundleDiffFiles = '__bundle_files__',
   ManifestFile = 'manifest',
+  EnableRoutes = 'enableRoutes',
 }
 
 export enum RsdoctorClientRoutes {

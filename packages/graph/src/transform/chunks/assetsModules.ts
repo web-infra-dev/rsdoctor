@@ -1,9 +1,9 @@
 import path from 'path';
 import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 import { SDK } from '@rsdoctor/types';
-import { ParseBundle } from '@/types';
 import { Lodash } from '@rsdoctor/utils/common';
 import { gzipSync } from 'node:zlib';
+import { ParseBundle } from '@/types/transform';
 
 export type ParsedModuleSizeData = {
   [x: string]: { size: number; sizeConvert: string; content: string };

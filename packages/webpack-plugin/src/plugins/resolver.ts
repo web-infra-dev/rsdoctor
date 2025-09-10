@@ -1,5 +1,4 @@
 import { InternalBasePlugin } from '@rsdoctor/core/plugins';
-import { RsdoctorSDK } from '@rsdoctor/sdk';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Time } from '@rsdoctor/utils/common';
 import path from 'path';
@@ -37,7 +36,7 @@ export class RsdoctorResolverPlugin implements ResolvePluginInstance {
 
   constructor(
     protected options: RsdoctorResolverPluginOptions,
-    protected sdk: RsdoctorSDK,
+    protected sdk: SDK.RsdoctorBuilderSDKInstance,
   ) {}
 
   protected getResolverData(

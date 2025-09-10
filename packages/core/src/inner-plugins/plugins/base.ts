@@ -1,5 +1,4 @@
-import type { RsdoctorSDK } from '@rsdoctor/sdk';
-import type { Linter, Plugin } from '@rsdoctor/types';
+import type { Linter, Plugin, SDK } from '@rsdoctor/types';
 import {
   internalPluginTapPostOptions,
   internalPluginTapPreOptions,
@@ -24,7 +23,7 @@ export abstract class InternalBasePlugin<T extends Plugin.BaseCompiler>
     return this.scheduler.options;
   }
 
-  get sdk(): RsdoctorSDK {
+  get sdk(): SDK.RsdoctorBuilderSDKInstance {
     return this.scheduler.sdk;
   }
 

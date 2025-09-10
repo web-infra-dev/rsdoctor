@@ -12,7 +12,7 @@ import { DevToolError } from '@rsdoctor/utils/error';
 import { getSDK } from './sdk';
 import { checkCirclePath } from './circleDetect';
 import { ProxyLoaderInternalOptions, ProxyLoaderOptions } from '@/types';
-import { Utils as BuildUtils, Types } from '@/build-utils/build';
+import { Utils as BuildUtils } from '@/build-utils/build';
 import { isESMLoader, parseQuery } from '@/build-utils/build/utils';
 import { Lodash } from '@rsdoctor/utils/common';
 
@@ -148,7 +148,7 @@ export async function reportLoader(
   code: string,
   err: Error | null | undefined,
   res: string | Buffer | null,
-  sourceMap?: Types.SourceMapInput,
+  sourceMap?: Plugin.SourceMapInput,
 ) {
   const end = Time.getCurrentTimestamp(start, startHRTime);
   const { loader, host } = getInternalLoaderOptions(ctx);
@@ -192,7 +192,7 @@ export async function reportLoader(
       ],
     },
   ];
-  const data: Types.SourceMap = !sourceMap
+  const data: Plugin.SourceMap = !sourceMap
     ? {}
     : Lodash.isString(sourceMap)
       ? JSON.parse(sourceMap)

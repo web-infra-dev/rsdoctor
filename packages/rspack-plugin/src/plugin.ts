@@ -42,7 +42,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 {
   public readonly name = pluginTapName;
 
-  public readonly sdk: RsdoctorSDK | RsdoctorPrimarySDK;
+  public readonly sdk: SDK.RsdoctorBuilderSDKInstance | RsdoctorPrimarySDK;
 
   public readonly isRsdoctorPlugin: boolean;
 
