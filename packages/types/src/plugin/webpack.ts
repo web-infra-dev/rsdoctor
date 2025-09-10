@@ -13,7 +13,6 @@ export type NormalModuleFactory = ReturnType<
   Compiler['createNormalModuleFactory']
 >;
 export type SourceMapInput = Parameters<LoaderDefinitionFunction>[1];
-// export type SourceMap = Exclude<SourceMapInput, string | undefined>;
 export type EntryPoint = GetMapValue<Compilation['entrypoints']>;
 export type ExportInfo = ReturnType<ModuleGraph['getExportInfo']>;
 export type ExportsInfo = ReturnType<ModuleGraph['getExportsInfo']>;
