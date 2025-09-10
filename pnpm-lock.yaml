@@ -70,7 +70,7 @@ importers:
         version: 0.112.1(@types/react@18.3.23)
       '@lynx-js/rspeedy':
         specifier: ^0.11.0
-        version: 0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)
+        version: 0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(typescript@5.9.2)(webpack@5.97.1)
       '@playwright/test':
         specifier: 1.54.2
         version: 1.54.2
@@ -507,6 +507,9 @@ importers:
       '@rsdoctor/core':
         specifier: workspace:*
         version: link:../core
+      '@rsdoctor/graph':
+        specifier: workspace:*
+        version: link:../graph
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk
@@ -768,9 +771,6 @@ importers:
       '@types/node-fetch':
         specifier: ^2.6.12
         version: 2.6.12
-      '@types/path-browserify':
-        specifier: 1.0.3
-        version: 1.0.3
       '@types/semver':
         specifier: ^7.7.0
         version: 7.7.0
@@ -789,9 +789,6 @@ importers:
       filesize:
         specifier: ^10.1.6
         version: 10.1.6
-      path-browserify:
-        specifier: 1.0.1
-        version: 1.0.1
       prebundle:
         specifier: 1.4.1
         version: 1.4.1(typescript@5.9.2)
@@ -811,6 +808,16 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
+  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
+
+  packages/core/compiled/axios: {}
+
+  packages/core/compiled/enhanced-resolve: {}
+
+  packages/core/compiled/filesize: {}
+
+  packages/core/compiled/path-browserify: {}
+
   packages/document:
     dependencies:
       '@rstack-dev/doc-ui':
@@ -823,6 +830,9 @@ importers:
         specifier: 2.0.0-beta.6
         version: 2.0.0-beta.6(@types/react@18.3.23)(acorn@8.14.0)(webpack@5.97.1)
     devDependencies:
+      '@rsbuild/plugin-sass':
+        specifier: ^1.3.3
+        version: 1.3.3(@rsbuild/core@1.5.0)
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -852,15 +862,15 @@ importers:
         version: 18.3.1(react@18.3.1)
       rsbuild-plugin-google-analytics:
         specifier: ^1.0.3
-        version: 1.0.3(@rsbuild/core@1.3.22)
+        version: 1.0.3(@rsbuild/core@1.5.0)
       rsbuild-plugin-open-graph:
         specifier: ^1.0.2
-        version: 1.0.2(@rsbuild/core@1.3.22)
+        version: 1.0.2(@rsbuild/core@1.5.0)
       rspress-plugin-font-open-sans:
         specifier: ^1.0.0
         version: 1.0.0
       rspress-plugin-sitemap:
-        specifier: ^1.2.1
+        specifier: ^1.1.4
         version: 1.2.1
       typescript:
         specifier: ^5.9.2
@@ -877,6 +887,9 @@ importers:
       lodash.unionby:
         specifier: ^4.8.0
         version: 4.8.0
+      path-browserify:
+        specifier: 1.0.1
+        version: 1.0.1
       source-map:
         specifier: ^0.7.4
         version: 0.7.4
@@ -893,6 +906,9 @@ importers:
       '@types/node':
         specifier: ^22.8.1
         version: 22.16.5
+      '@types/path-browserify':
+        specifier: 1.0.3
+        version: 1.0.3
       fs-extra:
         specifier: ^11.1.1
         version: 11.3.0
@@ -902,6 +918,9 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
+      webpack:
+        specifier: ^5.97.1
+        version: 5.97.1(webpack-cli@5.1.4)
 
   packages/graph/tests/fixture: {}
 
@@ -974,6 +993,9 @@ importers:
       '@types/body-parser':
         specifier: 1.19.6
         version: 1.19.6
+      '@types/connect':
+        specifier: 3.4.38
+        version: 3.4.38
       '@types/cors':
         specifier: 2.8.19
         version: 2.8.19
@@ -1013,6 +1035,20 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
+
+  packages/sdk/compiled/body-parser: {}
+
+  packages/sdk/compiled/cors: {}
+
+  packages/sdk/compiled/dayjs: {}
+
+  packages/sdk/compiled/fs-extra: {}
+
+  packages/sdk/compiled/json-cycle: {}
+
+  packages/sdk/compiled/sirv: {}
+
+  packages/sdk/compiled/socket.io: {}
 
   packages/types:
     dependencies:
@@ -1129,6 +1165,10 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
+
+  packages/utils/compiled/connect: {}
+
+  packages/utils/compiled/filesize: {}
 
   packages/webpack-plugin:
     dependencies:
@@ -12308,7 +12348,7 @@ snapshots:
       '@types/react': 18.3.23
       preact: '@hongzhiyuan/preact@10.24.0-27dc9d8f'
 
-  '@lynx-js/rspeedy@0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@lynx-js/rspeedy@0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(typescript@5.9.2)(webpack@5.97.1)':
     dependencies:
       '@lynx-js/cache-events-webpack-plugin': 0.0.2
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.2(@rspack/core@1.5.1(@swc/helpers@0.5.17))
@@ -12316,7 +12356,7 @@ snapshots:
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 1.5.0
       '@rsbuild/plugin-css-minimizer': 1.0.3(@rsbuild/core@1.5.0)(webpack@5.97.1)
-      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
     optionalDependencies:
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -13629,11 +13669,11 @@ snapshots:
 
   '@rsdoctor/client@1.2.3': {}
 
-  '@rsdoctor/core@1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/core@1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.3.0(@rsbuild/core@1.5.0)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       axios: 1.11.0
@@ -13665,11 +13705,11 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)':
     dependencies:
-      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       lodash: 4.17.21
@@ -13683,7 +13723,7 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/sdk@1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/sdk@1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/client': 1.2.3
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
@@ -14725,7 +14765,7 @@ snapshots:
 
   '@types/bonjour@3.5.13':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
 
   '@types/chai@5.2.2':
     dependencies:
@@ -14737,11 +14777,11 @@ snapshots:
   '@types/connect-history-api-fallback@1.5.4':
     dependencies:
       '@types/express-serve-static-core': 5.0.4
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
 
   '@types/cookie@0.4.1': {}
 
@@ -14782,14 +14822,14 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.6':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
       '@types/qs': 6.9.17
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
 
   '@types/express-serve-static-core@5.0.4':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
       '@types/qs': 6.9.17
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -14834,7 +14874,7 @@ snapshots:
 
   '@types/http-proxy@1.17.15':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
 
   '@types/istanbul-lib-coverage@2.0.6': {}
 
@@ -14901,7 +14941,7 @@ snapshots:
 
   '@types/node-forge@1.3.11':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
 
   '@types/node@12.20.55': {}
 
@@ -14966,7 +15006,7 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
 
   '@types/serve-index@1.9.4':
     dependencies:
@@ -14975,12 +15015,12 @@ snapshots:
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
       '@types/send': 0.17.4
 
   '@types/sockjs@0.3.36':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
 
   '@types/styled-components@5.1.34':
     dependencies:
@@ -15003,7 +15043,7 @@ snapshots:
 
   '@types/ws@8.18.0':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 22.18.0
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -21243,13 +21283,13 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.2
 
-  rsbuild-plugin-google-analytics@1.0.3(@rsbuild/core@1.3.22):
+  rsbuild-plugin-google-analytics@1.0.3(@rsbuild/core@1.5.0):
     optionalDependencies:
-      '@rsbuild/core': 1.3.22
+      '@rsbuild/core': 1.5.0
 
-  rsbuild-plugin-open-graph@1.0.2(@rsbuild/core@1.3.22):
+  rsbuild-plugin-open-graph@1.0.2(@rsbuild/core@1.5.0):
     optionalDependencies:
-      '@rsbuild/core': 1.3.22
+      '@rsbuild/core': 1.5.0
 
   rsbuild-plugin-publint@0.3.3(@rsbuild/core@1.5.0-beta.4):
     dependencies:

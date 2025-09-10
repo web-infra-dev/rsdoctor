@@ -1,4 +1,4 @@
-import type { RsdoctorWebpackPluginOptions } from '@rsdoctor/core/types';
+import type { Plugin } from '@rsdoctor/types';
 import {
   RsdoctorWebpackPlugin,
   RsdoctorWebpackMultiplePlugin,
@@ -9,7 +9,7 @@ import { tmpdir } from 'os';
 import path from 'path';
 
 export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
-  options: RsdoctorWebpackPluginOptions<T> = {},
+  options: Plugin.RsdoctorWebpackPluginOptions<T> = {},
 ) {
   const plugin = new RsdoctorWebpackPlugin({
     ...options,
@@ -40,7 +40,7 @@ export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
 }
 
 export function createRsdoctorMultiPlugin<T extends Linter.ExtendRuleData[]>(
-  options: RsdoctorWebpackPluginOptions<T> = {},
+  options: Plugin.RsdoctorWebpackPluginOptions<T> = {},
 ) {
   const plugin = new RsdoctorWebpackMultiplePlugin({
     ...options,

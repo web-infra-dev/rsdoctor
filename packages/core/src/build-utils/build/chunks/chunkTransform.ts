@@ -1,9 +1,9 @@
 import { Plugin } from '@rsdoctor/types';
-import { chunkTransform as transform } from '@/build-utils/common/chunks';
+import { Chunks } from '@rsdoctor/graph';
 
 export function chunkTransform(
   assetMap: Map<string, { content: string }>,
   bundleStats: Plugin.StatsCompilation,
 ) {
-  return transform(assetMap, bundleStats);
+  return Chunks.chunkTransform(assetMap, bundleStats);
 }

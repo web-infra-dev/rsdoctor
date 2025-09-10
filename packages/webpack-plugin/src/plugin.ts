@@ -14,14 +14,10 @@ import {
   processCompilerConfig,
   setSDK,
 } from '@rsdoctor/core/plugins';
-import type {
-  RsdoctorPluginInstance,
-  RsdoctorPluginOptionsNormalized,
-  RsdoctorWebpackPluginOptions,
-} from '@rsdoctor/core/types';
+import type { RsdoctorPluginInstance } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
 import { findRoot, RsdoctorSDK } from '@rsdoctor/sdk';
-import { Linter, Manifest, SDK } from '@rsdoctor/types';
+import { Linter, Manifest, SDK, Plugin } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { Loader } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
@@ -34,9 +30,9 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 {
   public readonly name = pluginTapName;
 
-  public readonly options: RsdoctorPluginOptionsNormalized<Rules>;
+  public readonly options: Plugin.RsdoctorPluginOptionsNormalized<Rules>;
 
-  public readonly sdk: RsdoctorSDK;
+  public readonly sdk: SDK.RsdoctorBuilderSDKInstance;
 
   public readonly isRsdoctorPlugin: boolean;
 
@@ -48,7 +44,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   public chunkGraph: ChunkGraph;
 
-  constructor(options?: RsdoctorWebpackPluginOptions<Rules>) {
+  constructor(options?: Plugin.RsdoctorWebpackPluginOptions<Rules>) {
     this.options = normalizeUserConfig<Rules>(options);
     const { port, output, innerClientPath, printLog, sdkInstance } =
       this.options;

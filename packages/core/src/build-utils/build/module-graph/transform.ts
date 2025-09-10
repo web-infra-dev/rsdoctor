@@ -1,5 +1,5 @@
 import { Plugin } from '@rsdoctor/types';
-import { getModuleGraphByStats as transform } from '@/build-utils/common/module-graph';
+import { ModuleGraphTrans } from '@rsdoctor/graph';
 import { TransformContext, appendModuleGraphByCompilation } from '.';
 import { SDK } from '@rsdoctor/types';
 
@@ -13,7 +13,7 @@ export function getModuleGraphByStats(
 ) {
   return appendModuleGraphByCompilation(
     compilation,
-    transform(stats, root, chunkGraph),
+    ModuleGraphTrans.getModuleGraphByStats(stats, root, chunkGraph),
     features,
     context,
   );

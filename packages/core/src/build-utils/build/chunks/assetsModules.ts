@@ -1,4 +1,4 @@
-import { getAssetsModulesData as transform } from '@/build-utils/common/chunks';
+import { Chunks } from '@rsdoctor/graph';
 import { parseBundle } from '../utils';
 import { SDK } from '@rsdoctor/types';
 
@@ -9,7 +9,7 @@ export async function getAssetsModulesData(
   sourceMapSets: Map<string, string>,
   hasParseBundle = true,
 ) {
-  return transform(
+  return Chunks.getAssetsModulesData(
     moduleGraph,
     chunkGraph,
     bundleDir,

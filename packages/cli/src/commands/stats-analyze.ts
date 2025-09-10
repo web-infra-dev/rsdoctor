@@ -6,7 +6,7 @@ import { Commands } from '../constants';
 import { Command } from '../types';
 import { enhanceCommand, readFile } from '../utils';
 import { StatsCompilation } from '@rsdoctor/types/src/plugin';
-import { TransUtils } from '@rsdoctor/core/common-utils';
+import { TransUtils } from '@rsdoctor/graph';
 
 interface Options {
   profile: string;
