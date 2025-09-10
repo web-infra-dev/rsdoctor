@@ -19,11 +19,17 @@ export interface NormalModeOptions {
 }
 
 interface JsonSectionOptions {
-  /** default: true */
+  /**
+   * @default: true
+   * */
   moduleGraph?: boolean;
-  /** default: true */
+  /**
+   * @default: true
+   * */
   chunkGraph?: boolean;
-  /** default: true */
+  /**
+   * @default: true
+   * */
   rules?: boolean;
 }
 
