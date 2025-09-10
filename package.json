@@ -40,7 +40,7 @@
     "@changesets/cli": "^2.29.5",
     "@rsdoctor/tsconfig": "workspace:*",
     "@rslib/core": "^0.12.2",
-    "@rstest/core": "0.2.2",
+    "@rstest/core": "0.3.2",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "^7.0.3",
     "cspell-ban-words": "^0.0.4",
@@ -48,7 +48,7 @@
     "husky": "^9.1.7",
     "nano-staged": "^0.8.0",
     "nx": "^20.8.2",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "rsbuild-plugin-publint": "^0.3.3"
   },
   "pnpm": {
