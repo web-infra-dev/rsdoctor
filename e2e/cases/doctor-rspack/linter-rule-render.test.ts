@@ -65,8 +65,11 @@ async function rspackCompile(
             { name: 'Foo', stage: 99999 },
             async () => {
               const sdk = getSDK();
+              if (!sdk) {
+                throw new Error('SDK is undefined');
+              }
               setSDK(
-                new Proxy(sdk, {
+                new Proxy(sdk as object, {
                   get(target, key, receiver) {
                     switch (key) {
                       case 'reportLoader':
@@ -85,7 +88,7 @@ async function rspackCompile(
                   defineProperty(target, p, attrs) {
                     return Reflect.defineProperty(target, p, attrs);
                   },
-                }),
+                }) as any,
               );
             },
           );

@@ -16,3 +16,4 @@ export * as Client from './client';
 export * as Constants from './constants';
 
 export * as Plugin from './plugin';
+export * as Config from './config';

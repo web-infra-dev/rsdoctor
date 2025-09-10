@@ -20,7 +20,7 @@ interface Options {
 export const bundleDiff: Command<
   Commands.BundleDiff,
   Options,
-  SDK.RsdoctorSdkInstance
+  RsdoctorSDK<{ name: string; root: string }>
 > = enhanceCommand(({ cwd, bin, name }) => ({
   command: Commands.BundleDiff,
   description: `
