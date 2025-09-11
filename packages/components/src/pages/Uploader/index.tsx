@@ -78,8 +78,8 @@ const Component: React.FC = () => {
           profile json
         </p>
         <p className="ant-upload-hint">
-          By default, Web Doctor will emit the profile json(manifest.json) to
-          the output folder.
+          By default, Rsdoctor will emit the profile json(manifest.json) to the
+          output folder.
         </p>
       </Upload.Dragger>
     </Spin>
