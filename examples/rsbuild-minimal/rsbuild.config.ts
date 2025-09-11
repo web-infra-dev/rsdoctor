@@ -10,12 +10,11 @@ export default defineConfig({
       chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
         {
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
-          mode: 'brief',
           output: {
-            // mode: 'brief',
-            // options: {
-            //   type: ['json', 'html'],
-            // },
+            mode: 'brief',
+            options: {
+              type: ['json', 'html'],
+            },
             reportCodeType: {
               noCode: true,
             },

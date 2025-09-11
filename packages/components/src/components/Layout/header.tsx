@@ -10,7 +10,11 @@ import './header.sass';
 import { Client } from '@rsdoctor/types';
 import { useNavigate } from 'react-router-dom';
 
-export const Header: React.FC = () => {
+export interface HeaderProps {
+  enableRoutes?: string[];
+}
+
+export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
   const { i18n } = useI18n();
 
   const navigate = useNavigate();
@@ -74,7 +78,10 @@ export const Header: React.FC = () => {
             <BuilderSelect />
           </div>
         </Col>
-        <Menus style={{ transition: 'none' }} />
+        <Menus
+          key={enableRoutes ? JSON.stringify(enableRoutes) : 'default'}
+          style={{ transition: 'none' }}
+        />
 
         <Col flex={1}>
           <Row

@@ -25,12 +25,9 @@ export class BriefDataLoader extends BaseDataLoader {
 
     // only cache by the root key in data
     if (!this.shardingDataMap.has(scope)) {
-      const scopeData =
-        typeof res === 'object'
-          ? res
-          : JSON.parse(Algorithm.decompressText(res));
+      const scopeData = this.parseData(res);
 
-      this.shardingDataMap.set(scope, scopeData);
+      this.shardingDataMap.set(scope, Promise.resolve(scopeData));
     }
 
     res = await this.shardingDataMap.get(scope);
@@ -40,6 +37,22 @@ export class BriefDataLoader extends BaseDataLoader {
   public getData(scope: keyof Manifest.RsdoctorManifestData) {
     console.log(`[getData]-[scope]: ${scope}`);
     return window[Constants.WINDOW_RSDOCTOR_TAG][scope];
+  }
+
+  private parseData(data: unknown): unknown {
+    if (typeof data === 'object' && data !== null) {
+      return data;
+    }
+
+    if (typeof data !== 'string') {
+      return data;
+    }
+
+    try {
+      return JSON.parse(Algorithm.decompressText(data));
+    } catch {
+      return data;
+    }
   }
 
   public async loadAPI<

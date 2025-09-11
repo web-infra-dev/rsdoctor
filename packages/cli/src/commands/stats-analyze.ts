@@ -32,7 +32,7 @@ export const statsAnalyze: Command<
       })
       .option('port', {
         type: 'number',
-        description: 'port for Web Doctor Server',
+        description: 'port for Rsdoctor Server',
       })
       .option('type', {
         type: 'string',
