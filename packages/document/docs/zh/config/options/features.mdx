@@ -1,0 +1,70 @@
+# features
+
+- **类型：** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **可选：** `true`
+- **默认值：** `["loader", "plugins", "bundle"]`
+
+## 配置项说明
+
+features 属性是用于分析功能开关的，具体的功能项如下：
+
+- **loader**：Loaders 耗时及代码编译变化分析，默认开启。
+- **plugins**：Plugins 调用以及耗时分析，默认开启。
+- **bundle**：构建产物分析，默认开启。
+- **resolver**：resolver 分析，默认关闭。
+- **lite**: **(lite 模式即将在 V2 废弃，参考[lite 模式废弃说明](/config/options/options-v2#lite))** lite 模式。lite 模式和普通模式的区别就是不再展示源码信息，只展示打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
+
+所以，**默认配置是开启了 Bundle 分析能力、 Loader 和 Plugin 构建时分析**。没有开启 Resolver 分析能力， Rspack 暂不支持 Resolver 分析能力。
+
+### 类型
+
+- 如果你将 `features` 设置为**数组**类型，该插件**只会开启**你在 `features` 数组中定义的功能。
+- 如果你将 `features` 设置为**简单对象**类型，该插件**只会关闭**你在 `features` 对象中值为 `false` 的功能。
+
+### 示例
+
+```js
+new RsdoctorRspackPlugin({
+  // 只开启 bundle、loader、plugins 的特性分析，数组形式会覆盖默认配置。
+  features: ['bundle', 'loader', 'plugins'],
+});
+```
+
+```js
+new RsdoctorRspackPlugin({
+  features: {
+    // 关闭 bundle 分析，其他特性分析保持默认
+    bundle: false,
+  },
+});
+```
+
+### 注意事项
+
+:::tip
+
+**如果出现了 out of memory 的报错，可以尝试：**
+
+1. 打开 **lite** 模式。
+2. 增大 node 内存上限，例如：NODE_OPTIONS=--max-old-space-size=8096。
+
+- 原因：因为构建过程中，缓存了源码信息，超过了内存，所以开启 `lite` 模式可以缓解。
+- 区别：`lite` 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。
+
+:::
+
+## RsdoctorWebpackPluginFeatures
+
+`features` 类型如下：
+
+import Features from '@zh/shared/features.md';
+
+<Features />
+
+## RsdoctorRspackPluginFeatures
+
+`features` 类型如下：
+
+import FeaturesRspack from '@zh/shared/features-rspack.md';
+
+<FeaturesRspack />

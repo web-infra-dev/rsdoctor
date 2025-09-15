@@ -1,1 +1,13 @@
-["options", "term"]
+[
+  "options",
+  "options-v2",
+  "output",
+  "mode",
+  "brief",
+  "supports",
+  "port",
+  "features",
+  "experiments",
+  "disableClientServer",
+  "term"
+]

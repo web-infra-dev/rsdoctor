@@ -8,10 +8,10 @@ import { Badge } from '@theme';
 
 <Tabs>
 
-<Tab label="cjs">
+<Tab label="esm">
 
-```js
-const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 new RsdoctorRspackPlugin({
   /** RsdoctorRspackPluginOptions */
@@ -20,10 +20,10 @@ new RsdoctorRspackPlugin({
 
 </Tab>
 
-<Tab label="esm">
+<Tab label="cjs">
 
-```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+```js
+const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 
 new RsdoctorRspackPlugin({
   /** RsdoctorRspackPluginOptions */
@@ -42,10 +42,10 @@ import { Tab, Tabs } from '@theme';
 
 <Tabs>
 
-<Tab label="cjs">
+<Tab label="esm">
 
-```js
-const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
+```ts
+import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
 new RsdoctorWebpackPlugin({
   /** RsdoctorWebpackPluginOptions */
@@ -54,10 +54,10 @@ new RsdoctorWebpackPlugin({
 
 </Tab>
 
-<Tab label="esm">
+<Tab label="cjs">
 
-```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+```js
+const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
 
 new RsdoctorWebpackPlugin({
   /** RsdoctorWebpackPluginOptions */
@@ -229,9 +229,7 @@ The output directory for Rsdoctor reports. By default, it is the build output di
 - Optional: true
 - Default: undefined
 - Description
-
   - Select the output analysis data:
-
     - default is all complete data;
 
     - noModuleSource: true is the output of data other than module code; Module code is the packaged module code of a file disassembled in the Bundle.

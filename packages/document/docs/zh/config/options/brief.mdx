@@ -1,0 +1,35 @@
+# brief
+
+import { Badge } from '@theme';
+
+:::warning
+V2 中即将废弃，请使用 [output.mode: 'brief'](/config/options/output#mode) 代替。参考 [brief 配置迁移](/config/options/options-v2#brief)。
+:::
+
+- **类型：** [BriefType](#brieftype)
+- **可选：** `true`
+- **默认值：** `undefined`
+
+Brief 模式的详细配置选项如下：
+
+- **reportHtmlName:** 配置 Brief 模式下 HTML 报告的文件名称，默认值为 `report-rsdoctor.html`。
+- **writeDataJson:** (已废弃，请使用 `output.options.type: ['json', 'html']`, 参考 [output.options.type](/config/options/options-v2#options)。)默认情况下，Brief 模式会将分析数据直接注入到 HTML 文件中，因此不会额外生成构建分析数据文件。如果需要额外在本地生成 JSON 数据文件，则需要配置 `writeDataJson: true`。
+
+## briefType
+
+```ts
+interface BriefConfig {
+  reportHtmlName?: string | undefined;
+  writeDataJson: boolean;
+}
+```
+
+- **示例：**
+
+```js
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+  },
+});
+```

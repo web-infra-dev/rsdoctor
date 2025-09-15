@@ -1,0 +1,30 @@
+# V2 Configuration Upgrade Guide
+
+The following table shows the comparison between the original `rsdoctor` plugin configuration and the new migrated configuration items:
+
+| Original Configuration             | New Configuration                                      |
+| ---------------------------------- | ------------------------------------------------------ |
+| `mode`                             | `output.mode`                                          |
+| `brief`                            | `mode: 'brief'` + `output.options`                     |
+| `output.compressData`              | `mode: 'brief'` + `output.options.type: 'json'`        |
+| `Mode: 'lite'` & `feature: 'lite'` | `mode: 'normal'` + `output.reportCodeType`             |
+| None                               | New `output.options.jsonOptions.section` configuration |
+
+## Configuration Changes Details
+
+1. **`mode` Configuration Migration**:
+   The `mode` in the original configuration is migrated to the nested `output.mode` for better integration with other output-related configurations.
+
+2. **`brief` Configuration Migration**:
+   The original `brief` configuration is changed to be implemented by setting `mode: 'brief'` and `output.options`.
+
+3. **`output.compressData` Configuration Migration**:
+   The original `output.compressData` configuration is migrated to setting `mode: 'brief'` and `output.options.type: 'json'`.
+
+4. **`lite` Mode Configuration Migration**:
+   The original `Mode: 'lite'` and `feature: 'lite'` configurations are migrated to setting `mode: 'normal'` and `output.options.reportCodeType`.
+
+5. **New `output.options.jsonOptions.section` Configuration**:
+   Support for the new `output.options.jsonOptions.section` configuration for more granular JSON output option customization.
+
+Through these changes, the configuration structure is clearer and easier to extend and maintain.

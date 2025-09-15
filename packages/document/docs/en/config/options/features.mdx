@@ -1,0 +1,51 @@
+# features
+
+- **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **Optional:** `true`
+- **Default:** `['loader', 'plugins', 'bundle']`
+
+## features values
+
+The `features` attribute is used to analyze the function switches, and the specific functional items are as follows:
+
+- **loader**: Analysis of Loader time consumption and code compilation changes, enabled by default.
+- **plugins**: Analysis of Plugins calls and time consumption, enabled by default.
+- **bundle**: Analysis of build bundles, enabled by default.
+- **resolver**: resolver analysis, disabled by default.
+- **lite**: [**deprecated, please use [mode.lite](./mode.mdx)**]
+  lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
+
+Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.
+
+:::tip
+
+**If an "out of memory" error occurs, you can try the following:**
+
+1. Open the **lite** mode.
+2. Increase the node memory limit, for example: NODE_OPTIONS=--max-old-space-size=8096.
+
+- Reason: During the build process, source code information is cached, which exceeds memory. Therefore, enabling the **"lite" mode** can help alleviate the problem.
+- Difference: The difference between the "lite" mode and the normal mode is that source code information is no longer cached, only packaged code information is cached. Thus, the code analyzed on the page will also only be packaged.
+
+:::
+
+## features types
+
+- if the `features` is set as an `Array`, it will **open** the features which you define in this array **only**.
+- if the `features` is set as an `Object`, it will **close** the features which you set the value is `false`.
+
+## RsdoctorWebpackPluginFeatures
+
+`features` type:
+
+import Features from '@en/shared/features.md';
+
+<Features />
+
+## RsdoctorRspackPluginFeatures
+
+`features` type:
+
+import FeaturesRspack from '@en/shared/features-rspack.md';
+
+<FeaturesRspack />

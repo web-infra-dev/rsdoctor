@@ -1,0 +1,40 @@
+import { Badge } from '@theme';
+
+# output
+
+<Badge text="Version: 1.0.0" type="warning" />
+
+## compressData
+
+- **Type:** `boolean`
+- **Optional:** `true`
+- **Default:** `true`
+
+compressData is used to configure whether to compress the analysis data under [outputDir]/.rsdoctor.
+
+## reportCodeType
+
+- **Type:** `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
+- **Optional:** `true`
+- **Default:** `undefined`
+- **Description:**
+  - Select the output analysis data:
+    - Default is all complete data;
+    - noModuleSource: true outputs data other than module code. Module code refers to the packaged module code of individual files in the Bundle.
+    - noAssetsAndModuleSource: true outputs data other than module code and Assets product code.
+
+- **Example:**
+
+```js
+new RsdoctorRspackPlugin({
+  reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
+}),
+```
+
+## reportDir
+
+- **Type:** `string`
+- **Optional:** `true`
+- **Default:** `undefined`
+
+The output directory for Rsdoctor reports. By default, it is the build output directory.

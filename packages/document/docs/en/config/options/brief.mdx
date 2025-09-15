@@ -1,0 +1,23 @@
+import { Badge } from '@theme';
+
+# brief
+
+<Badge text="Version: 0.4.0" type="warning" />
+
+- **Type:** [BriefType](#brieftype)
+- **Optional:** `true`
+- **Default:** `undefined`
+
+Detailed configuration options for Brief mode are as follows:
+
+- **reportHtmlName:** Configures the filename of the HTML report in Brief mode. The default value is `report-rsdoctor.html`.
+- **writeDataJson:** By default, Brief mode injects the analysis data directly into the HTML file, so no additional build analysis data files are generated. If you need to generate additional local JSON data files, you need to configure `writeDataJson: true`.
+
+## briefType
+
+```ts
+interface BriefConfig {
+  reportHtmlName?: string | undefined;
+  writeDataJson: boolean;
+}
+```
