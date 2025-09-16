@@ -1,10 +1,10 @@
-import { Badge } from '@theme';
+import { Badge, Tab, Tabs } from '@theme';
 
-# Options
+# Overview
 
 ## RsdoctorRspackPlugin
 
-`RsdoctorRspackPlugin` class are exported by `@rsdoctor/rspack-plugin`, and the option is [RsdoctorRspackPluginOptions](#options-1).
+The **RsdoctorRspackPlugin** class is exported by `@rsdoctor/rspack-plugin`, and the configuration options are [RsdoctorRspackPluginOptions](#rsdoctorrspackpluginoptions).
 
 <Tabs>
 
@@ -36,9 +36,7 @@ new RsdoctorRspackPlugin({
 
 ## RsdoctorWebpackPlugin
 
-`RsdoctorWebpackPlugin` class are exported by `@rsdoctor/webpack-plugin`, and the option is [RsdoctorWebpackPluginOptions](#options-1).
-
-import { Tab, Tabs } from '@theme';
+The **RsdoctorWebpackPlugin** class is exported by `@rsdoctor/webpack-plugin`, and the configuration options are [RsdoctorWebpackPluginOptions](#rsdoctorwebpackpluginoptions).
 
 <Tabs>
 
@@ -72,265 +70,62 @@ new RsdoctorWebpackPlugin({
 
 **Type:** `Object`
 
-This is the options for the [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin) and [RsdoctorRspackPlugin](#rsdoctorrspackplugin). It contains these properties:
+This `Options` object is the configuration for [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin) and [RsdoctorRspackPlugin](#rsdoctorrspackplugin). It contains the following properties:
 
-- [brief](#brief)
-- [disableClientServer](#disableclientserver)
-- [experiments](#experiments)
-- [features](#features)
-- [mode](#mode)
-- [output](#output)
-- [port](#port)
-- [supports](#supports)
+- [disableClientServer](./disableClientServer.mdx) - **Client Service Control**: Whether to not automatically open the Rsdoctor report service after analysis is complete.
+- [experiments](./experiments.mdx) - **Experimental Features Configuration**: Enable experimental features for Rspack plugins, such as native plugin performance optimization.
+- [features](./features.mdx) - **Feature Toggle Configuration**: Control various analysis features of Rsdoctor, such as loader analysis, bundle analysis, rule checking, etc.
+- [output](./output.mdx) - **Output Related Configuration**: Control report output format, directory and other options, including mode, options, reportCodeType, etc.
+- [port](./port.mdx) - **Service Port Configuration**: Set the port number for the Rsdoctor development server, used for report preview during local development.
+- [supports](./supports.mdx) - **Feature Support Configuration**: Enable compatibility support for specific build tools, such as BannerPlugin, etc.
+- [brief](./brief.mdx) - **Brief Mode Configuration**: Control the generation of brief mode reports, including HTML filename and whether to generate JSON data files.
+- [mode](./mode.mdx) - **Build Report Data Output Mode**: Select the output mode for reports, supporting normal (normal mode) and brief (brief mode).
 
-### brief
+### RsdoctorRspackPluginOptions
 
-<Badge text="Version: 0.4.0" type="warning" />
-
-- **Type:** [BriefType](#brieftype)
-- **Optional:** `true`
-- **Default:** undefined
-
-More configurations for Brief mode are as follows:
-
-- **reportHtmlName:** Configures the name of the HTML report for Brief mode. The default value is `report-rsdoctor.html`.
-- **writeDataJson:** By default, in Brief mode, the analysis data is injected into the HTML file, so no additional build analysis data is generated. If you want to generate additional local data, you need to configure `writeDataJson: true`.
-
-#### briefType
+> RsdoctorWebpackPlugin is equivalent to `Omit<RsdoctorRspackPluginOptions, 'experiments'>` type.
 
 ```ts
-interface BriefConfig {
-  reportHtmlName?: string | undefined;
-  writeDataJson: boolean;
+interface RsdoctorWebpackPluginOptions<
+  Rules extends LinterType.ExtendRuleData[],
+> {
+  /** Linter configuration */
+  linter?: LinterType.Options<Rules, InternalRules>;
+
+  /** Rsdoctor feature toggles */
+  features?:
+    | Plugin.RsdoctorWebpackPluginFeatures
+    | Array<keyof Plugin.RsdoctorWebpackPluginFeatures>;
+
+  /**
+   * @deprecated Use `output.mode` instead. If using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead
+   * Rsdoctor mode options:
+   * - normal: Normal mode
+   * - brief: Brief mode, only displays duration analysis and build artifact analysis results, does not display any code parts
+   */
+  mode?: 'brief' | 'normal' | 'lite';
+
+  disableClientServer?: boolean;
+
+  supports?: ISupport;
+
+  port?: number;
+
+  /**
+   * @deprecated Use `output.options.htmlOptions` instead
+   */
+  brief?: Config.BriefConfig;
+
+  output?: Config.IOutput<'brief' | 'normal'>;
+
+  experiments?: RsdoctorRspackPluginExperiments;
+}
+
+interface RsdoctorRspackPluginExperiments {
+  /**
+   * Whether to enable native plugin to improve performance
+   * @default false
+   */
+  enableNativePlugin?: boolean;
 }
 ```
-
-### disableClientServer
-
-- **Type:** `boolean`
-- **Optional:** `true`
-- **Default:** `false`
-
-Whether to automatically open the Rsdoctor report page. If you do not need to view the analysis report provided by Rsdoctor in the browser, you can enable this configuration item.
-
-### experiments
-
-<Badge text="Version: 1.0.0" type="warning" />
-
-#### enableNativePlugin
-
-- Type: `boolean`
-- Optional: true
-- Default: false
-
-##### Description
-
-By integrating Rsdoctor's native plugin into Rspack, we move Rsdoctor's time-consuming data processing logic to the Rspack build stage. This feature significantly improves the build analysis efficiency of Rsdoctor in Rspack, reducing the overall analysis time.
-
-- enableNativePlugin: Whether to enable the Rspack native plugin, enabling it can significantly reduce the analysis time of Rsdoctor itself.
-
-- Example
-
-```js
-new RsdoctorRspackPlugin({
-  experiments: { enableNativePlugin: true }
-}),
-```
-
-### features
-
-- **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
-- **Optional:** `true`
-- **Default:** `['loader', 'plugins', 'bundle']`
-
-#### features values
-
-The `features` attribute is used to analyze the function switches, and the specific functional items are as follows:
-
-- **loader**: Analysis of Loader time consumption and code compilation changes, enabled by default.
-- **plugins**: Analysis of Plugins calls and time consumption, enabled by default.
-- **bundle**: Analysis of build bundles, enabled by default.
-- **resolver**: resolver analysis, disabled by default.
-- **lite**: [**deprecated, please use [mode.lite](#mode)**]
-  lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
-
-Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.
-
-:::tip
-
-**If an "out of memory" error occurs, you can try the following:**
-
-1. Open the **lite** mode.[mode.lite](#mode)
-2. Increase the node memory limit, for example: NODE_OPTIONS=--max-old-space-size=8096.
-
-- Reason: During the build process, source code information is cached, which exceeds memory. Therefore, enabling the **"lite" mode** can help alleviate the problem.
-- Difference: The difference between the "lite" mode and the normal mode is that source code information is no longer cached, only packaged code information is cached. Thus, the code analyzed on the page will also only be packaged.
-
-:::
-
-#### features types
-
-- if the `features` is set as an `Array`, it will **open** the features which you define in this array **only**.
-- if the `features` is set as an `Object`, it will **close** the features which you set the value is `false`.
-
-#### RsdoctorWebpackPluginFeatures
-
-`features` type:
-
-import Features from '@en/shared/features.md';
-
-<Features />
-
-#### RsdoctorRspackPluginFeatures
-
-`features` type:
-
-import FeaturesRspack from '@en/shared/features-rspack.md';
-
-<FeaturesRspack />
-
-### mode
-
-<Badge text="Version: 0.4.0" type="warning" />
-
-- **Type:** `normal | brief | lite`
-- **Optional:** `true`
-- **Default:** `normal`
-
-Choose the Rsdoctor build report mode to use, which includes the following options:
-
-import ModeIntro from '@en/shared/mode-intro.md';
-
-<ModeIntro />
-
-### output
-
-<Badge text="Version 1.0.0" type="warning" />
-
-#### compressData
-
-- **Type:** boolean
-- **Optional:** `true`
-- **Default:** true
-
-compressData is used to configure whether to compress the analysis data under [outputDir]/.rsdoctor.
-
-#### reportDir
-
-- **Type:** string
-- **Optional:** `true`
-- **Default:** undefined
-
-The output directory for Rsdoctor reports. By default, it is the build output directory.
-
-#### reportCodeType
-
-- Type: `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
-- Optional: true
-- Default: undefined
-- Description
-  - Select the output analysis data:
-    - default is all complete data;
-
-    - noModuleSource: true is the output of data other than module code; Module code is the packaged module code of a file disassembled in the Bundle.
-
-    - noAssetsAndModuleSource: true is the output of data other than module code and Assets product code.
-
-- Example
-
-```js
-new RsdoctorRspackPlugin({
-  reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
-}),
-```
-
-### port
-
-- **Type:** `number`
-- **Optional:** `true`
-- **Default:** `random(3000, 8999)`
-
-Configure the port for the Rsdoctor server.
-
-### ~~reportCodeType [**Deprecated**]~~
-
-<Badge text="Deprecated" type="warning" />
-
-Please use [output.reportCodeType](#reportcodetype)
-
-### ~~reportDir [**Deprecated**]~~
-
-<Badge text="Deprecated" type="warning" />
-
-Please use [output.reportDir](#reportDir)
-
-### supports
-
-- **Type:** [Supports Types](#supports-types)
-- **Optional:** `true`
-- **Default:** `undefined`
-
-This option is used to configure whether Rsdoctor enables support for certain detailed feature analysis capabilities, such as whether to enable compatibility with BannerPlugin.
-
-#### Supports types
-
-```ts
-type ISupport = {
-  banner?: boolean;
-  parseBundle?: boolean;
-  generateTileGraph?: boolean;
-};
-```
-
-#### banner
-
-:::danger
-`supports.banner` option is only used for debugging, do not use it in production.
-:::
-
-- default: false.
-- type: boolean.
-
-If `supports.banner` is enabled, Rsdoctor will enable compatibility logic for BannerPlugin. For more details, please refer to: [Supports BannerPlugin](../../guide/usage/bundle-size#supports-bannerplugin)
-
-#### ~~generateTileGraph [**Deprecated**]~~
-
-<Badge text="Deprecated" type="warning" />
-
-Rsdoctor supports generating Tree Map graphs by default, so this option does not need to be configured.
-
-#### parseBundle
-
-- default: true.
-- type: boolean.
-
-In some large repositories, the execution time of parsing the bundle is too long. Since the Parse Bundle analysis utilizes AST parsing and processing, it can be time-consuming when there are a large number of output files.
-If this capability is not necessary, it can be selectively disabled using the supports.parseBundle configuration. An example is shown below:
-
-```ts
-chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
-  {
-    supports: {
-      parseBundle: false,
-    },
-  },
-]);
-```
-
-Disabling the Parse Bundle capability will only affect the visibility of the Bundled Size and Bundled Code of the modules in the bundle:
-
-<div style={{ display: 'flex' }}>
-  <img
-    src="https://assets.rspack.rs/others/assets/rsdoctor/bundled-size.jpeg"
-    height="300px"
-    width="300px"
-    style={{ margin: 'auto' }}
-  />
-
-  <img
-    src="https://assets.rspack.rs/others/assets/rsdoctor/bundled-code.png"
-    height="300px"
-    width="400px"
-    style={{ margin: 'auto' }}
-  />
-</div>

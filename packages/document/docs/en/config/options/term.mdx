@@ -1,10 +1,43 @@
 # Terminology
 
-## Common terminology
+## Common Terminology
 
 ### manifest.json
 
-When your project integrates with plugins provided by **Rsdoctor** (such as `@rsdoctor/webpack-plugin`, etc.), Rsdoctor will write **build-related data** into a local JSON file:
+When your project integrates with plugins provided by **Rsdoctor** (such as `@rsdoctor/webpack-plugin`, etc.), Rsdoctor will write **build-related data information** into a local JSON file:
 
 - The **filename is `manifest.json`**
-- The output path of this file is `output directory of the project/.rsdoctor/manifest.json`
+- The output **path is `project output directory/.rsdoctor/manifest.json`**
+
+### Artifact Terminology Definitions
+
+### 1. **assets (Resources | Artifact Files)**
+
+**Definition:**  
+Refers to all static files in the project, such as images, fonts, CSS, JS, SVG, etc. They are files that are output to the target directory after build and will eventually be loaded and used by the browser.
+
+**Examples:**
+
+- `logo.png`, `main.css`, `app.js` are all assets.
+
+### 2. **chunk**
+
+**Definition:**  
+Rspack will package multiple modules (JS, CSS, etc.) into one or more files, and these files are bundles. A chunk may contain multiple Assets, for example: a chunk named index may contain two artifacts: index.js and index.css.
+
+### 3. **module**
+
+**Definition:**  
+In Rspack, any file can be considered a module. The most common are JS modules (via `import` or `require`), but they can also be CSS, images, etc. Modules are the smallest units in the build process, and Rspack organizes them through a dependency graph. Assets are composed of collections of Modules.
+
+**Examples:**
+
+- Third-party files or source files, such as `index.js`, `button.js`, `style.css`, are all modules. These files are not artifact files, but they participate in the packaging process of artifact files and may eventually be packaged into artifact files.
+
+#### Summary Comparison
+
+| English Name | Role in Rspack                                             |
+| ------------ | ---------------------------------------------------------- |
+| assets       | Final artifacts, static files                              |
+| chunk        | Output packaged files, a chunk may contain multiple assets |
+| module       | Smallest unit in build, source files                       |

@@ -2,13 +2,18 @@ import { Badge } from '@theme';
 
 # mode
 
-<Badge text="Version: 0.4.0" type="warning" />
+:::warning
 
-- **Type:** `normal | brief | lite`
+- Deprecated in V2, please use [output.mode: 'brief'](/config/options/output#mode) instead. Refer to [mode configuration migration](/config/options/options-v2#mode).
+
+:::
+
+- **Type:** `"normal" | "brief" | "lite"`
+  - lite mode will be deprecated in V2, refer to [lite mode deprecation notice](/config/options/options-v2#lite)
 - **Optional:** `true`
 - **Default:** `normal`
 
-Choose the Rsdoctor build report mode to use, which includes the following options:
+Select the Rsdoctor build report mode to use, which includes the following options:
 
 import ModeIntro from '@en/shared/mode-intro.md';
 

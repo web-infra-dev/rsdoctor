@@ -2,7 +2,7 @@
 
 - **Type:** `boolean`
 - **Optional:** `true`
-- **Default:** `false`
+- **Default:** `false`, when `process.CI` is true, the default value is true, meaning the report service is disabled by default in CI environments.
 
 :::tip
 It is recommended to set disableClientServer to true in CI environments, otherwise the started service will block the pipeline process.

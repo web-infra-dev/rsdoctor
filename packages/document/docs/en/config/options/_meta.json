@@ -1,13 +1,13 @@
 [
   "options",
-  "options-v2",
-  "output",
-  "mode",
-  "brief",
-  "supports",
-  "port",
-  "features",
-  "experiments",
+  "term",
   "disableClientServer",
-  "term"
+  "experiments",
+  "features",
+  "output",
+  "port",
+  "supports",
+  "brief",
+  "mode",
+  "options-v2"
 ]

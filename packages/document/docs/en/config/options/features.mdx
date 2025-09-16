@@ -4,35 +4,54 @@
 - **Optional:** `true`
 - **Default:** `['loader', 'plugins', 'bundle']`
 
-## features values
+## Configuration Description
 
-The `features` attribute is used to analyze the function switches, and the specific functional items are as follows:
+The `features` attribute is used for analysis feature toggles, and the specific functional items are as follows:
 
-- **loader**: Analysis of Loader time consumption and code compilation changes, enabled by default.
-- **plugins**: Analysis of Plugins calls and time consumption, enabled by default.
-- **bundle**: Analysis of build bundles, enabled by default.
-- **resolver**: resolver analysis, disabled by default.
-- **lite**: [**deprecated, please use [mode.lite](./mode.mdx)**]
-  lite mode. The difference between lite mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged. The default is normal mode.
+- **loader**: Loader time consumption and code compilation change analysis, enabled by default.
+- **plugins**: Plugin calls and time consumption analysis, enabled by default.
+- **bundle**: Build artifact analysis, enabled by default.
+- **resolver**: Resolver analysis, disabled by default.
+- **lite**: **(lite mode will be deprecated in V2, refer to [lite mode deprecation notice](/config/options/options-v2#lite))** lite mode. The difference between lite mode and normal mode is that source code information is no longer displayed, only packaged code information is displayed, so the code analyzed on the page will also be packaged. Default is normal mode.
 
-Therefore, **the default configuration enables bundle analysis capabilities and Loader and Plugin build-time analysis**. The Resolver analysis capability is not enabled, and Rspack does not currently support Resolver analysis capabilities.
+Therefore, **the default configuration enables Bundle analysis capabilities, Loader and Plugin build-time analysis**. Resolver analysis capability is not enabled, and Rspack currently does not support Resolver analysis capabilities.
+
+### Types
+
+- If you set `features` as an **array** type, the plugin will **only enable** the features you define in the `features` array.
+- If you set `features` as a **simple object** type, the plugin will **only disable** the features you set to `false` in the `features` object.
+
+### Examples
+
+```js
+new RsdoctorRspackPlugin({
+  // Only enable bundle, loader, plugins feature analysis, array form will override default configuration.
+  features: ['bundle', 'loader', 'plugins'],
+});
+```
+
+```js
+new RsdoctorRspackPlugin({
+  features: {
+    // Disable bundle analysis, other feature analysis remains default
+    bundle: false,
+  },
+});
+```
+
+### Notes
 
 :::tip
 
 **If an "out of memory" error occurs, you can try the following:**
 
-1. Open the **lite** mode.
+1. Enable **lite** mode.
 2. Increase the node memory limit, for example: NODE_OPTIONS=--max-old-space-size=8096.
 
-- Reason: During the build process, source code information is cached, which exceeds memory. Therefore, enabling the **"lite" mode** can help alleviate the problem.
-- Difference: The difference between the "lite" mode and the normal mode is that source code information is no longer cached, only packaged code information is cached. Thus, the code analyzed on the page will also only be packaged.
+- Reason: Because during the build process, source code information is cached, which exceeds memory, so enabling `lite` mode can help alleviate this.
+- Difference: The difference between `lite` mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged.
 
 :::
-
-## features types
-
-- if the `features` is set as an `Array`, it will **open** the features which you define in this array **only**.
-- if the `features` is set as an `Object`, it will **close** the features which you set the value is `false`.
 
 ## RsdoctorWebpackPluginFeatures
 
