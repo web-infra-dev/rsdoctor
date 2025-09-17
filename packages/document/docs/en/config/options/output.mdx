@@ -120,7 +120,18 @@ NormalModeOptions currently has an empty Object type.
   - **`noAssetsAndModuleSource`**: Output data excluding module ([Module](https://rspack.rs/config/module#module)) code and Assets product code
   - **`noCode`**: Output data excluding code, i.e., no code is output
 
-  Data output order from rich to simple: `noModuleSource` > `noAssetsAndModuleSource` > `noCode`.
+### Output Data Comparison Table
+
+| Configuration               | Included Data                                                                                                            | Excluded Data                                                     | Use Cases                                                                                   | File Size |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------- |
+| **Default** (No Config)     | **Complete build information:**<br/>• Module graph data and its bundled code<br/>• Assets code<br/>• Other analysis data | None                                                              | • Development debugging<br/>• Complete analysis                                             | Largest   |
+| **noModuleSource**          | • Build information<br/>• Module graph data and its bundled code<br/>• Assets code<br/>• Other analysis data             | Module source code                                                | • No need to view source code<br/>• Memory leak issues                                      | Medium    |
+| **noAssetsAndModuleSource** | • Build information<br/>• Module graph data and its bundled code<br/>• Other analysis data                               | Module source code, Assets code                                   | • Large projects<br/>• No need to view source code and Assets code<br/>• Memory leak issues | Smaller   |
+| **noCode**                  | • Build information<br/>• Module graph data<br/>• Other analysis data                                                    | All code (Module source code + Module bundled code + Assets code) | • Large projects<br/>• CI/CD<br/>• Memory leak issues                                       | Smallest  |
+
+**Data output order from rich to simple:** `Default` > `noModuleSource` > `noAssetsAndModuleSource` > `noCode`
+
+> For the explanation of Asset and Module, see [Term](./term).
 
 - **Example:**
 

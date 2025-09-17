@@ -120,7 +120,18 @@ NormalModeOptions 目前类型为空 Object。
   - **`noAssetsAndModuleSource`**：输出除模块（[Module](https://rspack.rs/config/module#module)）代码和 Assets 产物代码外的数据
   - **`noCode`**：输出除代码外的数据，即不输出任何代码
 
-  数据输出从丰富到简的排序：`noModuleSource` > `noAssetsAndModuleSource` > `noCode`。
+### 输出数据对比表
+
+| 配置项                      | 包含的数据                                                                               | 不包含数据                                                  | 适用场景                                                               | 文件大小 |
+| --------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------- | -------- |
+| **默认** (不配置)           | **完整构建信息：**<br/>• Modules 数据及其打包后代码<br/>• Assets 代码<br/>• 其他分析数据 | 无                                                          | • 开发调试<br/>• 完整分析                                              | 最大     |
+| **noModuleSource**          | • 构建信息<br/>• Modules 数据及其打包后代码<br/>• Assets 代码<br/>• 其他分析数据         | Modules 源代码                                              | • 不需要查看源代码<br/>• 发生内存泄漏问题                              | 中等     |
+| **noAssetsAndModuleSource** | • 构建信息<br/>• Modules 数据及其打包后代码<br/>• 其他分析数据                           | Module 源代码、Assets 代码                                  | • 大型项目<br/>• 不需要查看源代码和 Assets 代码<br/>• 发生内存泄漏问题 | 较小     |
+| **noCode**                  | • 构建信息<br/>• Modules 数据<br/>• 其他分析数据                                         | 所有代码（Module 源代码 + Module 打包后代码 + Assets 代码） | • 大型项目<br/>• CI/CD<br/>• 发生内存泄漏问题                          | 最小     |
+
+**数据输出从丰富到简的排序：** `默认` > `noModuleSource` > `noAssetsAndModuleSource` > `noCode`
+
+> Asset 和 Module 解释，见[术语](./term)
 
 - **示例：**
 
