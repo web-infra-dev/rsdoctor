@@ -1,12 +1,40 @@
-import React, { useState } from 'react';
-import { message, Spin, Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import { Constants, Client, Common } from '@rsdoctor/types';
-import { isWebpackStats, loadWebpackStats } from '../../utils/stats';
-import { getSharingUrl, readJSONByFileReader } from '../../utils';
+import { Common } from '@rsdoctor/types';
+import { message, Spin, Upload, UploadFile } from 'antd';
+import React, { useState } from 'react';
+import { readJSONByFileReader } from '../../utils';
+import { isRspackStats } from '../../utils/stats';
+import { handleRspackStats, handleRsdoctorManifest } from './utils';
 
 const Component: React.FC = () => {
   const [loading, setLoading] = useState(false);
+
+  // Main file upload processing function
+  const handleFileUpload = async (file: UploadFile) => {
+    if (!file || !file) return;
+
+    setLoading(true);
+
+    try {
+      const json = await readJSONByFileReader<Common.PlainObject>(file);
+
+      if (!json || typeof json !== 'object') {
+        throw new Error('Invalid JSON format');
+      }
+
+      if (isRspackStats(json)) {
+        await handleRspackStats(json);
+      } else {
+        handleRsdoctorManifest(json);
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      message.error(`Upload failed: ${errorMessage}`);
+      console.error('Upload error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Spin spinning={loading} tip="uploading...">
@@ -15,57 +43,7 @@ const Component: React.FC = () => {
         showUploadList={false}
         accept=".json"
         onChange={({ file }) => {
-          setLoading(true);
-          readJSONByFileReader<Common.PlainObject>(file)
-            .then(async (json) => {
-              // Check if it's a valid JSON object
-              if (json && typeof json === 'object') {
-                try {
-                  // Mount the JSON data to window object for HTML page to use
-                  window[Constants.WINDOW_RSDOCTOR_TAG] = json.data;
-                  window[Constants.WINDOW_RSDOCTOR_TAG].enableRoutes =
-                    json.clientRoutes;
-
-                  // Redirect to the analysis page with enableRoutes in query
-                  const enableRoutes = json.clientRoutes;
-                  const baseUrl = `http://${location.host}/#/overall`;
-                  const queryParams =
-                    enableRoutes && enableRoutes.length > 0
-                      ? `?${Client.RsdoctorClientUrlQuery.EnableRoutes}=${encodeURIComponent(JSON.stringify(enableRoutes))}`
-                      : '';
-                  location.href = `${baseUrl}${queryParams}`;
-
-                  message.success('JSON data loaded successfully!');
-                } catch (err) {
-                  message.error(
-                    `Failed to load JSON data: ${(err as Error).message}`,
-                  );
-                  console.error('Failed to load JSON data:', err);
-                }
-              } else if (isWebpackStats(json)) {
-                const manifestJson = await loadWebpackStats([json])
-                  .then((manifests) => {
-                    return manifests[0];
-                  })
-                  .catch((err: Error) => {
-                    message.error(`load json error: ${err.message}`);
-                    throw err;
-                  });
-                if (manifestJson) {
-                  location.href = getSharingUrl(
-                    manifestJson?.cloudManifestUrl || '',
-                  );
-                } else {
-                  message.error('json is invalid');
-                }
-              } else {
-                message.error('Invalid JSON format');
-                console.warn('Invalid JSON format:', json);
-              }
-            })
-            .finally(() => {
-              setLoading(false);
-            });
+          handleFileUpload(file);
         }}
         style={{ width: '100%' }}
         beforeUpload={() => false}
