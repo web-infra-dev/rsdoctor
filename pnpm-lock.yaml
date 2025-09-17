@@ -808,6 +808,16 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
+  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
+
+  packages/core/compiled/axios: {}
+
+  packages/core/compiled/enhanced-resolve: {}
+
+  packages/core/compiled/filesize: {}
+
+  packages/core/compiled/path-browserify: {}
+
   packages/document:
     dependencies:
       '@rstack-dev/doc-ui':
@@ -1038,6 +1048,10 @@ importers:
   packages/sdk/compiled/fs-extra: {}
 
   packages/sdk/compiled/json-cycle: {}
+
+  packages/sdk/compiled/sirv: {}
+
+  packages/sdk/compiled/socket.io: {}
 
   packages/types:
     dependencies:
