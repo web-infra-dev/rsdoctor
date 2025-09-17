@@ -36,7 +36,7 @@ new RsdoctorRspackPlugin({
 
 ## RsdoctorWebpackPlugin 插件
 
-**RsdoctorWebpackPlugin** 类由 `@rsdoctor/webpack-plugin` 导出，配置项是 [RsdoctorWebpackPluginOptions](#rsdoctorrspackpluginoptions)。
+**RsdoctorWebpackPlugin** 类由 `@rsdoctor/webpack-plugin` 导出，配置项是 [RsdoctorWebpackPluginOptions](#rsdoctorwebpackpluginoptions)。
 
 <Tabs>
 
@@ -70,7 +70,7 @@ new RsdoctorWebpackPlugin({
 
 **类型：** `Object`
 
-这个 `Options` 是 [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin-%E6%8F%92%E4%BB%B6) 和 [RsdoctorRspackPlugin](#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
+这个 `Options` 是 [RsdoctorRspackPlugin](#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 和 [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
 
 - [disableClientServer](./disableClientServer.mdx) - **客户端服务控制**：是否在分析完成后不自动打开 Rsdoctor 报告服务。
 - [experiments](./experiments.mdx) - **实验性功能配置**：启用 Rspack 插件的实验性功能，如原生插件性能优化。
@@ -82,8 +82,6 @@ new RsdoctorWebpackPlugin({
 - [mode](./mode.mdx) - **构建报告数据输出模式**：选择报告的输出模式，支持 normal（普通模式）和 brief（简要模式）
 
 ### RsdoctorRspackPluginOptions
-
-> RsdoctorWebpackPlugin 同 `Omit<RsdoctorRspackPluginOptions, 'experiments'>` 类型。
 
 ```ts
 interface RsdoctorWebpackPluginOptions<
@@ -128,3 +126,7 @@ interface RsdoctorRspackPluginExperiments {
   enableNativePlugin?: boolean;
 }
 ```
+
+### RsdoctorWebpackPluginOptions
+
+RsdoctorWebpackPlugin 同 `Omit<RsdoctorRspackPluginOptions, 'experiments'>` 类型。

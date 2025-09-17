@@ -70,7 +70,7 @@ new RsdoctorWebpackPlugin({
 
 **Type:** `Object`
 
-This `Options` object is the configuration for [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin) and [RsdoctorRspackPlugin](#rsdoctorrspackplugin). It contains the following properties:
+This `Options` object is the configuration for [RsdoctorRspackPlugin](#rsdoctorrspackplugin) and [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin) . It contains the following properties:
 
 - [disableClientServer](./disableClientServer.mdx) - **Client Service Control**: Whether to not automatically open the Rsdoctor report service after analysis is complete.
 - [experiments](./experiments.mdx) - **Experimental Features Configuration**: Enable experimental features for Rspack plugins, such as native plugin performance optimization.
@@ -82,8 +82,6 @@ This `Options` object is the configuration for [RsdoctorWebpackPlugin](#rsdoctor
 - [mode](./mode.mdx) - **Build Report Data Output Mode**: Select the output mode for reports, supporting normal (normal mode) and brief (brief mode).
 
 ### RsdoctorRspackPluginOptions
-
-> RsdoctorWebpackPlugin is equivalent to `Omit<RsdoctorRspackPluginOptions, 'experiments'>` type.
 
 ```ts
 interface RsdoctorWebpackPluginOptions<
@@ -129,3 +127,7 @@ interface RsdoctorRspackPluginExperiments {
   enableNativePlugin?: boolean;
 }
 ```
+
+### RsdoctorWebpackPluginOptions
+
+RsdoctorWebpackPlugin is equivalent to `Omit<RsdoctorRspackPluginOptions, 'experiments'>` type.

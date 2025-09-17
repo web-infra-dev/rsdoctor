@@ -1,6 +1,6 @@
 # Configuration Migration Guide
 
-The following table shows the comparison between the original `rsdoctor` plugin configuration (≤ 1.2.3) and the new migrated configuration items (> 1.2.3). **The original configuration will remain logically compatible, but will be completely deprecated in Rsdoctor V2**:
+Rsdoctor introduced new configuration options in version 1.2.4. These new configuration options are easier to configure, more extensible, and compatible with the upcoming v2.0 release. Configuration options from version 1.2.3 and earlier will still be supported, but will be completely deprecated in Rsdoctor v2\*\*, so we recommend migrating to the new configuration options in `1.2.4`.
 
 | Original Configuration              | New Configuration                                                                                                              |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
@@ -12,21 +12,20 @@ The following table shows the comparison between the original `rsdoctor` plugin 
 
 ## Configuration Changes Details
 
-### **mode**
+### mode
 
-Since mode and configuration items like reportCodeType in output are all used to control the form or classification of output report data, it is more reasonable to place them all in the output configuration item.
 The `mode` in the original configuration is migrated to the nested `output.mode` for better integration with other output-related configurations.
 
-### **brief**
+### brief
 
 The current brief report mode outputs an HTML file as the report page. The new brief mode still supports JSON format, and for unified management of the same configuration, the brief configuration is moved to output.options.
 The original `brief` configuration is changed to configure `output.mode: 'brief'`, and configure `output.options` `type` as `html`.
 
-### **`output.compressData`**
+### output.compressData
 
 The original `output.compressData` configuration is changed to configure `mode: 'brief'`, and configure `output.options.type` as `json`.
 
-### **lite**
+### lite
 
 The internal logic of lite mode is equivalent to `output.options.reportCodeType` being `noCode` or `noAssetsAndModuleSource`, mainly to solve the problem of large projects being too slow when opening reports or OOM during build.
 
@@ -34,6 +33,6 @@ Considering that users cannot clearly distinguish the actual meaning of lite mod
 
 The original `mode: 'lite'` and `feature: 'lite'` configurations are changed to configure `mode: 'normal'`, and configure `output.options.reportCodeType` as `noCode` or `noAssetsAndModuleSource`.
 
-### **New `output.options.jsonOptions.section`**
+### output.options.jsonOptions.section
 
 Support for the new `output.options.jsonOptions.section` configuration for more granular JSON output option customization. For specific sections configuration items, refer to [output.options.jsonOptions.section](/config/options/output#jsonoptionssection).

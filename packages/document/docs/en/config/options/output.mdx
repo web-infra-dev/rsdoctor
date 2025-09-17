@@ -2,21 +2,9 @@ import { Badge } from '@theme';
 
 # output
 
-## compressData
-
-:::warning
-Deprecated in V2, please use `output.mode: 'brief'` and `output.options.type: 'json'` instead. Refer to [compressData configuration migration](/config/options/options-v2#compressdata).
-:::
-
-- **Type:** `boolean`
-- **Optional:** `true`
-- **Default:** `true`
-
-compressData is used to configure whether to compress the analysis data under `[outputDir]/.rsdoctor`.
-
 ## mode
 
-<Badge text="V1.2.4 New API" type="tip" />
+<Badge text="V1.2.4 Added" type="tip" />
 
 - **Type:** `"normal" | "brief"`
 
@@ -25,11 +13,13 @@ Rsdoctor report mode, default is `normal`.
 - **normal:** Generates a `.rsdoctor` folder in the build output directory, containing various data files and displaying code in the report page. The output directory can be configured via [reportDir](#reportdir).
 - **brief:** Generates an HTML report file in the `.rsdoctor` folder of the build output directory. All build analysis data is integrated and injected into this HTML file, which can be opened in a browser to view the report. Brief mode has more configuration options, see [brief](#brief) for details.
 
-> This mode does not have a lite configuration option. The lite mode will be deprecated. Refer to [lite mode deprecation notice](./options-v2.mdx#lite-mode-deprecation-notice).
+:::tip
+Mode does not have a lite configuration option. The lite mode will be deprecated. Refer to [lite mode deprecation notice](./options-v2.mdx#lite-mode-deprecation-notice).
+:::
 
 ## options
 
-<Badge text="V1.2.4 New API" type="tip" />
+<Badge text="V1.2.4 Added" type="tip" />
 
 - **Type:** `BriefModeOptions | NormalModeOptions`
 - **Optional:** `true`
@@ -147,3 +137,15 @@ new RsdoctorRspackPlugin({
 - **Default:** `undefined`
 
 The output directory for Rsdoctor reports. By default, it is the build output directory.
+
+## compressData
+
+:::warning
+Deprecated in V2, please use `output.mode: 'brief'` and `output.options.type: 'json'` instead. Refer to [compressData configuration migration](/config/options/options-v2#compressdata).
+:::
+
+- **Type:** `boolean`
+- **Optional:** `true`
+- **Default:** `true`
+
+compressData is used to configure whether to compress the analysis data under `[outputDir]/.rsdoctor`.

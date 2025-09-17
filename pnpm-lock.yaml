@@ -808,6 +808,16 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
+  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
+
+  packages/core/compiled/axios: {}
+
+  packages/core/compiled/enhanced-resolve: {}
+
+  packages/core/compiled/filesize: {}
+
+  packages/core/compiled/path-browserify: {}
+
   packages/document:
     dependencies:
       '@rstack-dev/doc-ui':
@@ -1029,6 +1039,20 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
+  packages/sdk/compiled/body-parser: {}
+
+  packages/sdk/compiled/cors: {}
+
+  packages/sdk/compiled/dayjs: {}
+
+  packages/sdk/compiled/fs-extra: {}
+
+  packages/sdk/compiled/json-cycle: {}
+
+  packages/sdk/compiled/sirv: {}
+
+  packages/sdk/compiled/socket.io: {}
+
   packages/types:
     dependencies:
       '@types/connect':
@@ -1144,6 +1168,10 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
+
+  packages/utils/compiled/connect: {}
+
+  packages/utils/compiled/filesize: {}
 
   packages/webpack-plugin:
     dependencies:

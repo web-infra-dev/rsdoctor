@@ -2,21 +2,9 @@ import { Badge } from '@theme';
 
 # output
 
-## compressData
-
-:::warning
-V2 中即将废弃，请使用 `output.mode: 'brief'` 和 `output.options.type: 'json'` 代替。参考 [compressData 配置迁移](/config/options/options-v2#compressdata)。
-:::
-
-- **类型：** `boolean`
-- **可选：** `true`
-- **默认值：** `true`
-
-compressData 用于配置是否将 `[outputDir]/.rsdoctor` 下的分析数据进行压缩处理。
-
 ## mode
 
-<Badge text="V1.2.4 新增 API" type="tip" />
+<Badge text="V1.2.4 新增" type="tip" />
 
 - **类型：** `"normal" | "brief"`
 
@@ -25,11 +13,13 @@ Rsdoctor 报告模式，默认是 `normal`。
 - **normal:** 在构建产物目录中生成一个 `.rsdoctor` 文件夹，其中包含各种数据文件，并在报告页面中展示代码。输出目录可以通过 [reportDir](#reportdir) 进行配置。
 - **brief:** 在构建产物目录的 `.rsdoctor` 文件夹中生成一个 HTML 报告文件，所有构建分析数据会整合注入到这个 HTML 文件中，可以通过浏览器打开该 HTML 文件查看报告。brief 模式还有更多配置项，详细信息请参阅：[brief](#brief)。
 
-> 这个 mode 是没有 lite 配置项的，lite 模式即将废弃，参考 [lite 模式废弃说明](./options-v2.mdx#lite-模式废弃说明)。
+:::tip
+mode 是没有 lite 配置项的，lite 模式即将废弃，参考 [lite 模式废弃说明](./options-v2.mdx#lite-模式废弃说明)。
+:::
 
 ## options
 
-<Badge text="V1.2.4 新增 API" type="tip" />
+<Badge text="V1.2.4 新增" type="tip" />
 
 - **类型：** `BriefModeOptions | NormalModeOptions`
 - **可选：** `true`
@@ -147,3 +137,15 @@ new RsdoctorRspackPlugin({
 - **默认值：** `undefined`
 
 Rsdoctor 报告输出目录，默认是构建产物输出目录。
+
+## compressData
+
+:::warning
+V2 中即将废弃，请使用 `output.mode: 'brief'` 和 `output.options.type: 'json'` 代替。参考 [compressData 配置迁移](/config/options/options-v2#compressdata)。
+:::
+
+- **类型：** `boolean`
+- **可选：** `true`
+- **默认值：** `true`
+
+compressData 用于配置是否将 `[outputDir]/.rsdoctor` 下的分析数据进行压缩处理。
