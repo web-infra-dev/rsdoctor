@@ -11,7 +11,7 @@ const Component: React.FC = () => {
 
   // Main file upload processing function
   const handleFileUpload = async (file: UploadFile) => {
-    if (!file || !file) return;
+    if (!file) return;
 
     setLoading(true);
 
