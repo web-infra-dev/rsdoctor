@@ -3,7 +3,7 @@ import { PackageGraph } from '@rsdoctor/graph';
 import { Chunks, ModuleGraphTrans } from '@rsdoctor/graph';
 import { isArray } from 'lodash-es';
 
-export function isWebpackStats(
+export function isRspackStats(
   json: Common.PlainObject,
 ): json is Plugin.StatsCompilation {
   return (
@@ -14,7 +14,7 @@ export function isWebpackStats(
   );
 }
 
-export async function loadWebpackStats(
+export async function loadRspackStats(
   jsons: Plugin.StatsCompilation[],
 ): Promise<Manifest.RsdoctorManifest[]> {
   const res = await Promise.all(

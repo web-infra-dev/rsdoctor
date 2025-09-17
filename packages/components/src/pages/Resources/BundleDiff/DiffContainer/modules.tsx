@@ -341,30 +341,33 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
                         ]}
                       />
                     ) : null}
-                    <ViewChanges
-                      text="Current Result Viewer"
-                      file={r.path}
-                      data={[
-                        {
-                          baseline:
-                            current.moduleCodeMap[r.current!.id]?.source,
-                          current:
-                            current.moduleCodeMap[r.current!.id]?.transformed,
-                          baselineTitle: 'Current Source',
-                          currentTitle: 'Current Transformed Source',
-                          group: 'Transformed Source',
-                        },
-                        {
-                          baseline:
-                            current.moduleCodeMap[r.current!.id]?.source,
-                          current:
-                            current.moduleCodeMap[r.current!.id]?.parsedSource,
-                          baselineTitle: 'Current Source',
-                          currentTitle: 'Current Parsed Source',
-                          group: 'Parsed Source',
-                        },
-                      ]}
-                    />
+                    {r?.current ? (
+                      <ViewChanges
+                        text="Current Result Viewer"
+                        file={r.path}
+                        data={[
+                          {
+                            baseline:
+                              current.moduleCodeMap[r.current!.id]?.source,
+                            current:
+                              current.moduleCodeMap[r.current!.id]?.transformed,
+                            baselineTitle: 'Current Source',
+                            currentTitle: 'Current Transformed Source',
+                            group: 'Transformed Source',
+                          },
+                          {
+                            baseline:
+                              current.moduleCodeMap[r.current!.id]?.source,
+                            current:
+                              current.moduleCodeMap[r.current!.id]
+                                ?.parsedSource,
+                            baselineTitle: 'Current Source',
+                            currentTitle: 'Current Parsed Source',
+                            group: 'Parsed Source',
+                          },
+                        ]}
+                      />
+                    ) : null}
                   </Space>
                 );
               },
