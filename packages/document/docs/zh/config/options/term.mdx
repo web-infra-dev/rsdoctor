@@ -11,7 +11,7 @@
 
 ### 产物中的名词释义
 
-### 1. **assets（资源|产物文件）**
+### assets（资源|产物文件）
 
 **定义：**  
 指的是项目中所有静态文件，例如图片、字体、CSS、JS、SVG 等。它们是构建后被输出到目标目录的文件，最终会被浏览器加载和使用。
@@ -20,12 +20,12 @@
 
 - `logo.png`、`main.css`、`app.js` 都属于资源。
 
-### 2. **chunk**
+### chunk
 
 **定义：**  
 Rspack 会把多个模块（JS、CSS 等）打包成一个或多个文件，这些文件就是 bundle。一个 chunk 可能包含多个 Assets，例如：name 为 index 的 chunk 可能包含 index.js 和 index.css 两个产物。
 
-### 3. **module（模块）**
+### module（模块）
 
 **定义：**  
 在 Rspack 中，任何文件都可以被视为模块。最常见的是 JS 模块（通过 `import` 或 `require`），但也可以是 CSS、图片等。模块是构建中的最小单元，Rspack 通过依赖图将它们组织起来。Assets 是由 Modules 集合组成的。

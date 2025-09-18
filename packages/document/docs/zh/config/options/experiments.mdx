@@ -10,9 +10,7 @@ import { Badge } from '@theme';
 - **可选：** `true`
 - **默认值：** `false`
 
-通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑前置到 Rspack 的构建阶段。这一特性显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了整体分析时间。
-
-- enableNativePlugin：是否开启 Rspack 原生插件，开启后可大幅降低 Rsdoctor 自身的分析耗时。
+通过 enableNativePlugin 选项开启 Rspack 原生插件，将 Rsdoctor 中耗时较大的数据处理逻辑前置到 Rspack 构建阶段，从而显著提升构建分析效率并大幅降低 Rsdoctor 自身的分析耗时。
 
 - **示例：**
 

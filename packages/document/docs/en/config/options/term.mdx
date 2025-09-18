@@ -11,7 +11,7 @@ When your project integrates with plugins provided by **Rsdoctor** (such as `@rs
 
 ### Artifact Terminology Definitions
 
-### 1. **assets (Resources | Artifact Files)**
+### assets (Resources | Artifact Files)
 
 **Definition:**  
 Refers to all static files in the project, such as images, fonts, CSS, JS, SVG, etc. They are files that are output to the target directory after build and will eventually be loaded and used by the browser.
@@ -20,12 +20,12 @@ Refers to all static files in the project, such as images, fonts, CSS, JS, SVG, 
 
 - `logo.png`, `main.css`, `app.js` are all assets.
 
-### 2. **chunk**
+### chunk
 
 **Definition:**  
 Rspack will package multiple modules (JS, CSS, etc.) into one or more files, and these files are bundles. A chunk may contain multiple Assets, for example: a chunk named index may contain two artifacts: index.js and index.css.
 
-### 3. **module**
+### module
 
 **Definition:**  
 In Rspack, any file can be considered a module. The most common are JS modules (via `import` or `require`), but they can also be CSS, images, etc. Modules are the smallest units in the build process, and Rspack organizes them through a dependency graph. Assets are composed of collections of Modules.
