@@ -1,0 +1,40 @@
+# 配置迁移说明
+
+**Rsdoctor 在 1.2.4 版本中引入了新的配置项，新的配置项更易于配置，更好扩展，与以后发布的 v2.0 版本兼容**。
+
+1.2.3 及之前版本的配置项仍会保留，**但在 Rsdoctor v2 时会完全废弃掉**，推荐迁移到 `1.2.4` 的新版配置。
+
+| 原配置                              | 新配置                                                                                                           |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| mode                                | 改为配置 `output.mode`。                                                                                         |
+| brief                               | 改为配置 `mode: 'brief'`，同时，配置 `output.options` 的 `type` 为 `html`。                                      |
+| output.compressData                 | 改为配置 `mode: 'brief'`，同时，配置 `output.options.type` 为 `json`。                                           |
+| `mode: 'lite'` 或 `feature: 'lite'` | 改为配置 `mode: 'normal'`，同时，配置 `output.options.reportCodeType` 为 `noCode` 或 `noAssetsAndModuleSource`。 |
+| 无                                  | 新增 `output.options.jsonOptions.section` 配置                                                                   |
+
+## 配置改动详情
+
+### mode
+
+原有配置中的 `mode` 迁移为嵌套的 `output.mode`，便于与其他输出相关的配置整合。
+
+### brief
+
+目前的 brief 简报模式输出一个 html 文件为报告页，新增的 brief 模式还是支持 JSON 格式，同时也为了相同配置统一管理，所以 brief 配置前移到了 output.options 中。
+原有的 `brief` 配置改为配置 `output.mode: 'brief'`，同时配置 `output.options` 的 `type` 为 `html`。
+
+### output.compressData
+
+原有的 `output.compressData` 配置改为配置 `mode: 'brief'`，同时配置 `output.options.type` 为 `json`。
+
+### lite
+
+lite 模式的内部逻辑等同于 `output.options.reportCodeType` 为 `noCode` 或 `noAssetsAndModuleSource`，主要是为了解决大项目在打开报告时过慢或者构建时 OOM 的问题。
+
+考虑到用户并不能清楚分辨 lite 模式的实际含义，mode 太多也不利于管理和配置，同时，`output.options.reportCodeType` 配置更加清晰，所以未来 V2 版本中会废弃掉 `mode: 'lite'`。
+
+原有的 `mode: 'lite'` 和 `feature: 'lite'` 配置改为配置 `mode: 'normal'`，同时配置 `output.options.reportCodeType` 为 `noCode` 或 `noAssetsAndModuleSource`。
+
+### 新增 output.options.jsonOptions.section
+
+支持新增的 `output.options.jsonOptions.section` 配置，用于更细粒度的 JSON 输出选项定制。具体 sections 配置项参考[output.options.jsonOptions.section](/config/options/output#jsonoptionssection)。

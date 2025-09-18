@@ -1,0 +1,71 @@
+import { Badge } from '@theme';
+
+# supports
+
+- **类型：** [Supports Types](#supports-types)
+- **可选：** `true`
+- **默认值：** `undefined`
+
+该选项是配置 Rsdoctor 是否开启某些细节特性分析能力支持的，例如：是否开启对 BannerPlugin 的兼容能力。
+
+## supportsTypes
+
+```ts
+type ISupport = {
+  banner?: boolean;
+  parseBundle?: boolean;
+  generateTileGraph?: boolean;
+};
+```
+
+## banner
+
+:::danger
+`supports.banner` 分析仅用于调试，请勿将其用于生产。
+:::
+
+- **类型：** `boolean`
+- **默认值：** `true`
+
+如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
+
+## ~~generateTileGraph [**Deprecated**]~~
+
+<Badge text="Deprecated" type="warning" />
+
+Rsdoctor 默认支持生成 Tree Map 图，所以不需要配置此选项。
+
+## parseBundle
+
+- **类型：** `boolean`
+- **默认值：** `true`
+
+在部分大型仓库中，反解 Bundle 解析执行耗时过大，这是因为 Parse Bundle 的分析利用了 AST 解析与处理。当产物文件过多时，耗时也会增加。如果不需要此功能，可以通过 `supports.parseBundle` 配置进行选择性关闭。示例如下：
+
+```ts
+chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
+  {
+    supports: {
+      parseBundle: false,
+    },
+  },
+]);
+```
+
+关闭 Parse Bundle 能力只会影响是否能查看到 Bundle 中 Module 的最终打包大小（Bundled Size）及最终打包代码（Bundled Code）:
+
+<div style={{ display: 'flex' }}>
+  <img
+    src="https://assets.rspack.rs/others/assets/rsdoctor/bundled-size.jpeg"
+    height="300px"
+    width="300px"
+    style={{ margin: 'auto' }}
+  />
+
+  <img
+    src="https://assets.rspack.rs/others/assets/rsdoctor/bundled-code.png"
+    height="300px"
+    width="400px"
+    style={{ margin: 'auto' }}
+  />
+</div>

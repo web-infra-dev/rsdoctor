@@ -1,0 +1,70 @@
+# features
+
+- **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **Optional:** `true`
+- **Default:** `['loader', 'plugins', 'bundle']`
+
+## Configuration Description
+
+The `features` attribute is used for analysis feature toggles, and the specific functional items are as follows:
+
+- **loader**: Loader time consumption and code compilation change analysis, enabled by default.
+- **plugins**: Plugin calls and time consumption analysis, enabled by default.
+- **bundle**: Build artifact analysis, enabled by default.
+- **resolver**: Resolver analysis, disabled by default.
+- **lite**: **(lite mode will be deprecated in V2, refer to [lite mode deprecation notice](/config/options/options-v2#lite))** lite mode. The difference between lite mode and normal mode is that source code information is no longer displayed, only packaged code information is displayed, so the code analyzed on the page will also be packaged. Default is normal mode.
+
+Therefore, **the default configuration enables Bundle analysis capabilities, Loader and Plugin build-time analysis**. Resolver analysis capability is not enabled, and Rspack currently does not support Resolver analysis capabilities.
+
+### Types
+
+- If you set `features` as an **array** type, the plugin will **only enable** the features you define in the `features` array.
+- If you set `features` as a **simple object** type, the plugin will **only disable** the features you set to `false` in the `features` object.
+
+### Examples
+
+```js
+new RsdoctorRspackPlugin({
+  // Only enable bundle, loader, plugins feature analysis, array form will override default configuration.
+  features: ['bundle', 'loader', 'plugins'],
+});
+```
+
+```js
+new RsdoctorRspackPlugin({
+  features: {
+    // Disable bundle analysis, other feature analysis remains default
+    bundle: false,
+  },
+});
+```
+
+### Notes
+
+:::tip
+
+**If an "out of memory" error occurs, you can try the following:**
+
+1. Enable **lite** mode.
+2. Increase the node memory limit, for example: NODE_OPTIONS=--max-old-space-size=8096.
+
+- Reason: Because during the build process, source code information is cached, which exceeds memory, so enabling `lite` mode can help alleviate this.
+- Difference: The difference between `lite` mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged.
+
+:::
+
+## RsdoctorWebpackPluginFeatures
+
+`features` type:
+
+import Features from '@en/shared/features.md';
+
+<Features />
+
+## RsdoctorRspackPluginFeatures
+
+`features` type:
+
+import FeaturesRspack from '@en/shared/features-rspack.md';
+
+<FeaturesRspack />
