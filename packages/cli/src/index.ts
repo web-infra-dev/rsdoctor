@@ -7,6 +7,100 @@ import { Commands, pkg, bin } from './constants';
 import { logger } from '@rsdoctor/utils/logger';
 import { statsAnalyze } from './commands/stats-analyze';
 
+interface AnalyzeArgs {
+  profile: string;
+  open?: boolean;
+  port?: number;
+  type?: string;
+}
+
+interface BundleDiffArgs {
+  current: string;
+  baseline: string;
+  open?: boolean;
+}
+
+interface StatsAnalyzeArgs {
+  profile: string;
+  open?: boolean;
+  port?: number;
+  type?: string;
+}
+
+type CommandArgs = AnalyzeArgs | BundleDiffArgs | StatsAnalyzeArgs;
+
+function isAnalyzeCommand(command: string): command is Commands.Analyze {
+  return command === Commands.Analyze;
+}
+
+function isBundleDiffCommand(command: string): command is Commands.BundleDiff {
+  return command === Commands.BundleDiff;
+}
+
+function isStatsAnalyzeCommand(
+  command: string,
+): command is Commands.StatsAnalyze {
+  return command === Commands.StatsAnalyze;
+}
+
+// Validation function with proper typing
+function validateRequiredArgs(command: string, args: CommandArgs): void {
+  if (isAnalyzeCommand(command)) {
+    const analyzeArgs = args as AnalyzeArgs;
+    if (!analyzeArgs.profile) {
+      logger.error(red(`❌ Missing required argument: --profile`));
+      logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
+      logger.info(`💡 Use --help to see all available options`);
+      process.exit(1);
+    }
+  }
+
+  if (isBundleDiffCommand(command)) {
+    const bundleDiffArgs = args as BundleDiffArgs;
+    if (!bundleDiffArgs.current || !bundleDiffArgs.baseline) {
+      logger.error(
+        red(`❌ Missing required arguments: --current and --baseline`),
+      );
+      logger.info(
+        `💡 Usage: ${bin} ${command} --current <path> --baseline <path>`,
+      );
+      logger.info(`💡 Use --help to see all available options`);
+      process.exit(1);
+    }
+  }
+
+  if (isStatsAnalyzeCommand(command)) {
+    const statsAnalyzeArgs = args as StatsAnalyzeArgs;
+    if (!statsAnalyzeArgs.profile) {
+      logger.error(red(`❌ Missing required argument: --profile`));
+      logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
+      logger.info(`💡 Use --help to see all available options`);
+      process.exit(1);
+    }
+  }
+}
+
+// Error handling function for cac errors
+function handleCacError(error: Error): void {
+  const { message } = error;
+
+  if (message.includes('value is missing')) {
+    logger.error(
+      red(
+        `❌ Missing required argument. Please provide a value for the option.`,
+      ),
+    );
+    logger.info(`💡 Use --help to see available options`);
+  } else if (message.includes('Unknown option')) {
+    logger.error(red(`❌ Unknown option. Please check your command.`));
+    logger.info(`💡 Use --help to see available options`);
+  } else {
+    logger.error(red(`❌ ${message}`));
+  }
+
+  process.exit(1);
+}
+
 export async function execute<
   T extends GetCommandArgumentsType<typeof analyze>,
 >(
@@ -69,35 +163,10 @@ export async function execute(
 
     options(commandCli);
 
-    commandCli.action(async (args: any) => {
+    commandCli.action(async (args: CommandArgs) => {
       try {
-        if (command === Commands.Analyze && !args.profile) {
-          logger.error(red(`❌ Missing required argument: --profile`));
-          logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
-          logger.info(`💡 Use --help to see all available options`);
-          process.exit(1);
-        }
-
-        if (
-          command === Commands.BundleDiff &&
-          (!args.current || !args.baseline)
-        ) {
-          logger.error(
-            red(`❌ Missing required arguments: --current and --baseline`),
-          );
-          logger.info(
-            `💡 Usage: ${bin} ${command} --current <path> --baseline <path>`,
-          );
-          logger.info(`💡 Use --help to see all available options`);
-          process.exit(1);
-        }
-
-        if (command === Commands.StatsAnalyze && !args.profile) {
-          logger.error(red(`❌ Missing required argument: --profile`));
-          logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
-          logger.info(`💡 Use --help to see all available options`);
-          process.exit(1);
-        }
+        // Validate required arguments with proper typing
+        validateRequiredArgs(command, args);
 
         await action(args);
       } catch (error) {
@@ -116,22 +185,6 @@ export async function execute(
   try {
     cli.parse();
   } catch (error) {
-    const { message } = error as Error;
-
-    if (message.includes('value is missing')) {
-      logger.error(
-        red(
-          `❌ Missing required argument. Please provide a value for the option.`,
-        ),
-      );
-      logger.info(`💡 Use --help to see available options`);
-    } else if (message.includes('Unknown option')) {
-      logger.error(red(`❌ Unknown option. Please check your command.`));
-      logger.info(`💡 Use --help to see available options`);
-    } else {
-      logger.error(red(`❌ ${message}`));
-    }
-
-    process.exit(1);
+    handleCacError(error as Error);
   }
 }
