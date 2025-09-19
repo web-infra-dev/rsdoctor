@@ -13,5 +13,10 @@
     "text": "Blog",
     "link": "/blog/release/release-note-1_2",
     "activeMatch": "/blog/"
+  },
+  {
+    "text": "Playground",
+    "link": "https://rsdoctor.rs/preview/#/resources/uploader",
+    "activeMatch": "/preview/"
   }
 ]
