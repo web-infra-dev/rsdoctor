@@ -1,5 +1,4 @@
-import yargs from 'yargs/yargs';
-import { hideBin } from 'yargs/helpers';
+import { cac } from 'cac';
 import { red } from 'picocolors';
 import { Common } from '@rsdoctor/types';
 import { analyze, bundleDiff } from './commands';
@@ -40,7 +39,6 @@ export async function execute(
     );
   }
 
-
   if (command === Commands.StatsAnalyze) {
     const { action } = statsAnalyze(ctx);
 
@@ -57,37 +55,83 @@ export async function execute(
     );
   }
 
-  const argv = hideBin(process.argv);
-  const args = yargs(argv).usage(`${bin} <command> [options]`);
+  const cli = cac(bin);
 
-  args.version(version);
+  cli.version(version);
+  cli.help();
 
   const commands: Command<string>[] = [analyze, bundleDiff, statsAnalyze];
 
   commands.forEach((cmd) => {
     const { command, description, options, action } = cmd(ctx);
 
-    args.command(
-      command,
-      description,
-      (yargs) => {
-        return options(yargs.usage(`${bin} ${command} [options]`));
-      },
-      async (args) => {
-        try {
-          await action(args);
-        } catch (error) {
-          const { message, stack } = error as Error;
-          logger.error(red(stack || message));
+    const commandCli = cli.command(command, description);
+
+    options(commandCli);
+
+    commandCli.action(async (args: any) => {
+      try {
+        if (command === Commands.Analyze && !args.profile) {
+          logger.error(red(`❌ Missing required argument: --profile`));
+          logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
+          logger.info(`💡 Use --help to see all available options`);
           process.exit(1);
         }
-      },
-    );
+
+        if (
+          command === Commands.BundleDiff &&
+          (!args.current || !args.baseline)
+        ) {
+          logger.error(
+            red(`❌ Missing required arguments: --current and --baseline`),
+          );
+          logger.info(
+            `💡 Usage: ${bin} ${command} --current <path> --baseline <path>`,
+          );
+          logger.info(`💡 Use --help to see all available options`);
+          process.exit(1);
+        }
+
+        if (command === Commands.StatsAnalyze && !args.profile) {
+          logger.error(red(`❌ Missing required argument: --profile`));
+          logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
+          logger.info(`💡 Use --help to see all available options`);
+          process.exit(1);
+        }
+
+        await action(args);
+      } catch (error) {
+        const { message, stack } = error as Error;
+        logger.error(red(stack || message));
+        process.exit(1);
+      }
+    });
   });
 
-  if (!argv.length) {
-    args.showHelp();
+  if (process.argv.length <= 2) {
+    cli.outputHelp();
+    return;
   }
 
-  await args.parse();
+  try {
+    cli.parse();
+  } catch (error) {
+    const { message } = error as Error;
+
+    if (message.includes('value is missing')) {
+      logger.error(
+        red(
+          `❌ Missing required argument. Please provide a value for the option.`,
+        ),
+      );
+      logger.info(`💡 Use --help to see available options`);
+    } else if (message.includes('Unknown option')) {
+      logger.error(red(`❌ Unknown option. Please check your command.`));
+      logger.info(`💡 Use --help to see available options`);
+    } else {
+      logger.error(red(`❌ ${message}`));
+    }
+
+    process.exit(1);
+  }
 }
