@@ -27,22 +27,14 @@ use ${name} to open "${Constants.RsdoctorOutputManifestPath}" in browser for ana
 example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifestPath}"
 
 `.trim(),
-    options(yargs) {
-      yargs
-        .option('profile', {
-          type: 'string',
-          description: 'profile for Rsdoctor server',
-          demandOption: true,
-        })
-        .option('open', {
-          type: 'boolean',
-          description: 'turn off it if you need not open browser automatically',
-          default: true,
-        })
-        .option('port', {
-          type: 'number',
-          description: 'port for Rsdoctor Server',
-        });
+    options(cli) {
+      cli
+        .option('--profile <path>', 'profile for Rsdoctor server')
+        .option(
+          '--no-open',
+          'turn off it if you need not open browser automatically',
+        )
+        .option('--port <number>', 'port for Rsdoctor Server');
     },
     async action({ profile, open = true, port, type = SDK.ToDataType.Normal }) {
       const spinner = ora({ prefixText: cyan(`[${name}]`) }).start(
@@ -92,7 +84,7 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
       sdk.server.proxy(SDK.ServerAPI.API.Manifest, 'GET', () => manifestBuffer);
 
       if (open) {
-        spinner.text = `open browser automatically`;
+        spinner.succeed(`open browser automatically`);
 
         await sdk.server.openClientPage('homepage');
       }

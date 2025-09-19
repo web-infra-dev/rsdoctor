@@ -1,3 +1,3 @@
-import { baseBuildConfig } from '../../scripts/rslib.base.config';
+import { dualPackage } from '../../scripts/rslib.base.config';
 
-export default baseBuildConfig;
+export default dualPackage;

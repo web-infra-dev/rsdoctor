@@ -1,5 +1,4 @@
-import yargs from 'yargs/yargs';
-import { hideBin } from 'yargs/helpers';
+import { cac } from 'cac';
 import { red } from 'picocolors';
 import { Common } from '@rsdoctor/types';
 import { analyze, bundleDiff } from './commands';
@@ -7,6 +6,100 @@ import { Command, CommandContext, GetCommandArgumentsType } from './types';
 import { Commands, pkg, bin } from './constants';
 import { logger } from '@rsdoctor/utils/logger';
 import { statsAnalyze } from './commands/stats-analyze';
+
+interface AnalyzeArgs {
+  profile: string;
+  open?: boolean;
+  port?: number;
+  type?: string;
+}
+
+interface BundleDiffArgs {
+  current: string;
+  baseline: string;
+  open?: boolean;
+}
+
+interface StatsAnalyzeArgs {
+  profile: string;
+  open?: boolean;
+  port?: number;
+  type?: string;
+}
+
+type CommandArgs = AnalyzeArgs | BundleDiffArgs | StatsAnalyzeArgs;
+
+function isAnalyzeCommand(command: string): command is Commands.Analyze {
+  return command === Commands.Analyze;
+}
+
+function isBundleDiffCommand(command: string): command is Commands.BundleDiff {
+  return command === Commands.BundleDiff;
+}
+
+function isStatsAnalyzeCommand(
+  command: string,
+): command is Commands.StatsAnalyze {
+  return command === Commands.StatsAnalyze;
+}
+
+// Validation function with proper typing
+function validateRequiredArgs(command: string, args: CommandArgs): void {
+  if (isAnalyzeCommand(command)) {
+    const analyzeArgs = args as AnalyzeArgs;
+    if (!analyzeArgs.profile) {
+      logger.error(red(`❌ Missing required argument: --profile`));
+      logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
+      logger.info(`💡 Use --help to see all available options`);
+      process.exit(1);
+    }
+  }
+
+  if (isBundleDiffCommand(command)) {
+    const bundleDiffArgs = args as BundleDiffArgs;
+    if (!bundleDiffArgs.current || !bundleDiffArgs.baseline) {
+      logger.error(
+        red(`❌ Missing required arguments: --current and --baseline`),
+      );
+      logger.info(
+        `💡 Usage: ${bin} ${command} --current <path> --baseline <path>`,
+      );
+      logger.info(`💡 Use --help to see all available options`);
+      process.exit(1);
+    }
+  }
+
+  if (isStatsAnalyzeCommand(command)) {
+    const statsAnalyzeArgs = args as StatsAnalyzeArgs;
+    if (!statsAnalyzeArgs.profile) {
+      logger.error(red(`❌ Missing required argument: --profile`));
+      logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
+      logger.info(`💡 Use --help to see all available options`);
+      process.exit(1);
+    }
+  }
+}
+
+// Error handling function for cac errors
+function handleCacError(error: Error): void {
+  const { message } = error;
+
+  if (message.includes('value is missing')) {
+    logger.error(
+      red(
+        `❌ Missing required argument. Please provide a value for the option.`,
+      ),
+    );
+    logger.info(`💡 Use --help to see available options`);
+  } else if (message.includes('Unknown option')) {
+    logger.error(red(`❌ Unknown option. Please check your command.`));
+    logger.info(`💡 Use --help to see available options`);
+  } else {
+    logger.error(red(`❌ ${message}`));
+  }
+
+  process.exit(1);
+}
 
 export async function execute<
   T extends GetCommandArgumentsType<typeof analyze>,
@@ -40,7 +133,6 @@ export async function execute(
     );
   }
 
-
   if (command === Commands.StatsAnalyze) {
     const { action } = statsAnalyze(ctx);
 
@@ -57,37 +149,42 @@ export async function execute(
     );
   }
 
-  const argv = hideBin(process.argv);
-  const args = yargs(argv).usage(`${bin} <command> [options]`);
+  const cli = cac(bin);
 
-  args.version(version);
+  cli.version(version);
+  cli.help();
 
   const commands: Command<string>[] = [analyze, bundleDiff, statsAnalyze];
 
   commands.forEach((cmd) => {
     const { command, description, options, action } = cmd(ctx);
 
-    args.command(
-      command,
-      description,
-      (yargs) => {
-        return options(yargs.usage(`${bin} ${command} [options]`));
-      },
-      async (args) => {
-        try {
-          await action(args);
-        } catch (error) {
-          const { message, stack } = error as Error;
-          logger.error(red(stack || message));
-          process.exit(1);
-        }
-      },
-    );
+    const commandCli = cli.command(command, description);
+
+    options(commandCli);
+
+    commandCli.action(async (args: CommandArgs) => {
+      try {
+        // Validate required arguments with proper typing
+        validateRequiredArgs(command, args);
+
+        await action(args);
+      } catch (error) {
+        const { message, stack } = error as Error;
+        logger.error(red(stack || message));
+        process.exit(1);
+      }
+    });
   });
 
-  if (!argv.length) {
-    args.showHelp();
+  if (process.argv.length <= 2) {
+    cli.outputHelp();
+    return;
   }
 
-  await args.parse();
+  try {
+    cli.parse();
+  } catch (error) {
+    handleCacError(error as Error);
+  }
 }
