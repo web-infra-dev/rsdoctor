@@ -973,9 +973,6 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
-      '@types/fs-extra':
-        specifier: ^11.0.4
-        version: 11.0.4
       safer-buffer:
         specifier: 2.1.2
         version: 2.1.2
@@ -995,6 +992,9 @@ importers:
       '@types/cors':
         specifier: 2.8.19
         version: 2.8.19
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
