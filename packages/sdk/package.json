@@ -34,7 +34,6 @@
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "@types/fs-extra": "^11.0.4",
     "safer-buffer": "2.1.2",
     "socket.io": "4.8.1",
     "tapable": "2.2.2"
@@ -43,6 +42,7 @@
     "@types/body-parser": "1.19.6",
     "@types/connect": "3.4.38",
     "@types/cors": "2.8.19",
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",
     "body-parser": "1.20.3",
     "cors": "2.8.5",
