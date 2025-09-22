@@ -13,7 +13,7 @@ export interface CommandContext {
 export interface CommandOutput<CMD, Options, Result> {
   command: CMD;
   description: string;
-  options(cli: any): void;
+  options(cli: Record<string, any>): void;
   action(args: Options): Result | Promise<Result>;
 }
 
