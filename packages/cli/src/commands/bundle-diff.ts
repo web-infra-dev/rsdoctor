@@ -28,18 +28,16 @@ use ${name} to open the bundle diff result in browser for analysis.
 
 example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
 `.trim(),
-  options(yargs) {
-    yargs
-      .option('current', {
-        type: 'string',
-        description: 'the url or file path of the profile json as the current',
-        demandOption: true,
-      })
-      .option('baseline', {
-        type: 'string',
-        description: 'the url or file path of the profile json as the baseline',
-        demandOption: true,
-      });
+  options(cli) {
+    cli
+      .option(
+        '--current <path>',
+        'the url or file path of the profile json as the current',
+      )
+      .option(
+        '--baseline <path>',
+        'the url or file path of the profile json as the baseline',
+      );
   },
   async action({ baseline, current, open = true }) {
     const spinner = ora({ prefixText: cyan(`[${name}]`) }).start();

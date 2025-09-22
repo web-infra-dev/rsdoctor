@@ -519,22 +519,19 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
-      axios:
-        specifier: ^1.12.0
-        version: 1.12.0
       ora:
         specifier: ^5.4.1
         version: 5.4.1
+    devDependencies:
+      axios:
+        specifier: ^1.12.0
+        version: 1.12.0
+      cac:
+        specifier: ^6.7.14
+        version: 6.7.14
       picocolors:
         specifier: ^1.1.1
         version: 1.1.1
-      yargs:
-        specifier: 17.7.2
-        version: 17.7.2
-    devDependencies:
-      '@types/yargs':
-        specifier: 17.0.33
-        version: 17.0.33
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
