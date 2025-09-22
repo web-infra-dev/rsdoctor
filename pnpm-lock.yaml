@@ -853,6 +853,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.24)
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
       react:
         specifier: 18.3.1
         version: 18.3.1
