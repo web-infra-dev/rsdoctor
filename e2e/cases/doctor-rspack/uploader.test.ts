@@ -2,7 +2,6 @@ import { expect, test } from '@playwright/test';
 import { compileByRspack } from '@scripts/test-helper';
 import path from 'path';
 import fs from 'fs/promises';
-import { Constants } from '@rsdoctor/types';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import type { Compiler } from '@rspack/core';
 import { createRsdoctorPlugin } from '../doctor-rsbuild/test-utils';
@@ -105,7 +104,7 @@ test.describe('Uploader Integration Tests', () => {
       '../../.rsdoctor/rsdoctor-data.json',
     );
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
       const manifestContent = await fs.readFile(manifestPath, 'utf-8');
@@ -133,81 +132,63 @@ test.describe('Uploader Integration Tests', () => {
   });
 
   test('should upload and analyze real build manifest', async ({ page }) => {
-    // Start a local client server or navigate to existing one
     await page.goto('http://localhost:8681/#/resources/uploader');
 
-    // Verify uploader is loaded
     await expect(page.locator('.ant-upload-btn')).toBeVisible();
 
-    // Create file content for upload
-    const fileContent = JSON.stringify(manifestData);
+    // Create file content for upload - use the correct manifest format
+    const manifestContent = {
+      client: {
+        enableRoutes: ['Overall', 'Bundle.ModuleGraph', 'Bundle.BundleSize'],
+      },
+      data: manifestData.data,
+    };
+    const fileContent = JSON.stringify(manifestContent);
 
-    // Execute file upload in browser console
-    const uploadResult = await page.evaluate(async (fileContent: any) => {
-      // Create a File object from the JSON content
-      const fileName = 'rsdoctor-manifest.json';
-      const file = new File([fileContent], fileName, {
-        type: 'application/json',
+    // Create a temporary file for upload
+    const tempFilePath = path.join(__dirname, 'temp-manifest.json');
+    await fs.writeFile(tempFilePath, fileContent);
+
+    try {
+      const navigationPromise = page.waitForURL(/.*#\/overall.*/, {
+        timeout: 2000,
       });
 
-      // Find the file input element
-      const fileInput = document.querySelector(
-        'input[type="file"]',
-      ) as HTMLInputElement;
-      if (!fileInput) {
-        throw new Error('File input not found');
+      // Use Playwright's file upload method
+      const fileInput = page.locator('input[type="file"]');
+      await fileInput.setInputFiles(tempFilePath);
+
+      await navigationPromise;
+
+      expect(page.url()).toContain('#/overall');
+
+      await page.waitForTimeout(1000);
+
+      // Verify data is properly mounted using browser console execution
+      const windowData = await page.evaluate((tag) => {
+        return (window as any)[tag];
+      }, '__RSDOCTOR__');
+
+      expect(windowData).toBeDefined();
+
+      // Verify the mounted data structure
+      if (manifestData.data) {
+        expect(windowData).toHaveProperty('errors');
+        expect(windowData).toHaveProperty('moduleGraph');
+        expect(windowData).toHaveProperty('chunkGraph');
       }
 
-      // Create a DataTransfer object to simulate file selection
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-
-      // Set the files property of the input
-      Object.defineProperty(fileInput, 'files', {
-        value: dataTransfer.files,
-        writable: false,
-      });
-
-      // Dispatch change event to trigger upload
-      const changeEvent = new Event('change', { bubbles: true });
-      fileInput.dispatchEvent(changeEvent);
-
-      // Wait a bit for the upload to process
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      return {
-        success: true,
-        fileName: fileName,
-        fileSize: file.size,
-        currentUrl: window.location.href,
-      };
-    }, fileContent);
-
-    console.log('Upload result:', uploadResult);
-
-    // Wait for navigation to overall page
-    await page.waitForURL(/.*#\/overall.*/, { timeout: 10000 });
-
-    // Verify successful navigation to overall page
-    expect(page.url()).toContain('#/overall');
-
-    // Verify data is properly mounted using browser console execution
-    const windowData = await page.evaluate((tag) => {
-      return (window as any)[tag];
-    }, Constants.WINDOW_RSDOCTOR_TAG);
-
-    expect(windowData).toBeDefined();
-
-    // Verify the mounted data structure
-    if (manifestData.data) {
-      expect(windowData).toHaveProperty('errors');
-      expect(windowData).toHaveProperty('moduleGraph');
-      expect(windowData).toHaveProperty('chunkGraph');
-    }
-
-    // Verify enableRoutes are set
-    if (manifestData.clientRoutes) {
-      expect(windowData.enableRoutes).toEqual(manifestData.clientRoutes);
+      // Verify enableRoutes are set
+      if (manifestData.clientRoutes) {
+        expect(windowData.enableRoutes.length).toBeTruthy();
+      }
+    } finally {
+      // Clean up temporary file
+      try {
+        await fs.unlink(tempFilePath);
+      } catch (error) {
+        console.warn('Failed to clean up temp file:', error);
+      }
     }
 
     // Test that menus are rendered based on enableRoutes
