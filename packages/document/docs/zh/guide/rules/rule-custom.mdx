@@ -73,7 +73,7 @@ export default {
 
 import { PackageManagerTabs } from '@theme';
 
-import { Tab, Tabs } from 'rspress/theme';
+import { Tab, Tabs } from '@rspress/core/theme';
 
 <PackageManagerTabs command="add @rsdoctor/core -D" />
 
@@ -200,19 +200,15 @@ const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
   [LinkRule Type](#linkrulestoredata)
 
 - 组件输入
-
   - type
-
     - 使用组件类型。
     - value： 'link'。
 
   - title
-
     - 规则标题。
     - type： string。
 
   - description
-
     - 规则描述。数据来源为 report 中的 message 或 detail.description:
       ```js
       report({
@@ -226,7 +222,6 @@ const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
     - type： string。
 
   - level
-
     - 规则级别。
     - type：warn | error。
 
@@ -267,19 +262,15 @@ report({
   [CodeViewRule Type](#codeviewrule)
 
 - 组件输入
-
   - type
-
     - 使用组件类型。
     - value： 'code-view'。
 
   - title
-
     - 规则标题。
     - type： string。
 
   - description
-
     - 规则描述。数据来源为 report 中的 message 或 detail.description:
       ```js
       report({
@@ -293,7 +284,6 @@ report({
     - type： string。
 
   - level
-
     - 规则级别。
     - type：warn | error。
 
