@@ -1,0 +1,21 @@
+{
+  "name": "@rsdoctor/action",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "rslib build"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@rslib/core": "^0.13.2"
+  },
+  "dependencies": {
+    "@actions/artifact": "^2.3.2",
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "size-plugin-core": "0.0.9"
+  }
+}
