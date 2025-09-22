@@ -40,7 +40,7 @@
     "@types/tapable": "2.2.7",
     "tslib": "2.8.1",
     "typescript": "^5.9.2",
-    "webpack": "^5.97.1"
+    "webpack": "^5.101.3"
   },
   "peerDependencies": {
     "webpack": "5.x"
