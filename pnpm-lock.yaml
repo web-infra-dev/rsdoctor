@@ -30,8 +30,8 @@ importers:
         specifier: ^0.13.2
         version: 0.13.2(typescript@5.9.2)
       '@rstest/core':
-        specifier: 0.3.2
-        version: 0.3.2
+        specifier: 0.4.1
+        version: 0.4.1
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:scripts/test-helper
@@ -487,8 +487,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@rstest/core':
-        specifier: 0.3.2
-        version: 0.3.2
+        specifier: 0.4.1
+        version: 0.4.1
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -4111,8 +4111,8 @@ packages:
   '@rstack-dev/doc-ui@1.11.0':
     resolution: {integrity: sha512-5GZ8EwvmKj8LXomEElC4GhDlDW2SazCeHbA+ieacJrlcGduuiJXGTBzVA2rNnPLjAb41H0esuy0aH0skRIQAqA==}
 
-  '@rstest/core@0.3.2':
-    resolution: {integrity: sha512-bb6hciMqE9S0XYerYc9gA5oJq9RvS3Kdr8/wU/K++ZQumy35A8NOJno7L7/MudyQPTqTuHzPXQjKk4mOAlsCww==}
+  '@rstest/core@0.4.1':
+    resolution: {integrity: sha512-EJwdpxPHabmBkAUunDy8JXFE7fr6BW5+9826IBPWKDoni6HZGvgkVjkuoiELwIWnwptDOXe/OD21aoNdV8V+yw==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
@@ -14383,7 +14383,7 @@ snapshots:
       - react
       - react-dom
 
-  '@rstest/core@0.3.2':
+  '@rstest/core@0.4.1':
     dependencies:
       '@rsbuild/core': 1.5.0
       '@types/chai': 5.2.2
