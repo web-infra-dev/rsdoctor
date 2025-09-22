@@ -1,4 +1,5 @@
 import { Common } from '@rsdoctor/types';
+import type { Command as CACCommand } from 'cac';
 
 export interface Command<CMD, Options = Common.PlainObject, Result = unknown> {
   (ctx: CommandContext): CommandOutput<CMD, Options, Result>;
@@ -13,7 +14,7 @@ export interface CommandContext {
 export interface CommandOutput<CMD, Options, Result> {
   command: CMD;
   description: string;
-  options(cli: Record<string, any>): void;
+  options(cli: CACCommand): void;
   action(args: Options): Result | Promise<Result>;
 }
 
