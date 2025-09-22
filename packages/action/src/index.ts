@@ -1,6 +1,6 @@
 import { setFailed, getInput } from '@actions/core';
 import { uploadArtifact } from './upload';
-import { downloadArtifact, downloadArtifactByCommitHash } from './download';
+import { downloadArtifactByCommitHash } from './download';
 import { GitHubService } from './github';
 import {
   loadSizeData,
@@ -51,7 +51,6 @@ function isPullRequestEvent(): boolean {
     console.log(`Artifact name pattern: ${artifactNamePattern}`);
 
     if (isMergeEvent()) {
-      // MR 合入时：只上传当前分支的工件
       console.log(
         '🔄 Detected merge event - uploading current branch artifact only',
       );
@@ -129,7 +128,6 @@ function isPullRequestEvent(): boolean {
       // Generate report card
       await generateSizeReport(currentSizeData, baselineSizeData || undefined);
     } else {
-      // 其他情况：默认行为（上传并尝试下载）
       console.log('🔄 Default behavior - uploading and downloading artifacts');
 
       const uploadResponse = await uploadArtifact(currentCommitHash, fullPath);
