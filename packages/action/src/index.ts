@@ -9,7 +9,6 @@ import {
 } from './report';
 import path from 'path';
 
-// Helper function to determine if this is a merge event
 function isMergeEvent(): boolean {
   const { context } = require('@actions/github');
   return (
@@ -19,7 +18,6 @@ function isMergeEvent(): boolean {
   );
 }
 
-// Helper function to determine if this is a PR event
 function isPullRequestEvent(): boolean {
   const { context } = require('@actions/github');
   return context.eventName === 'pull_request';
@@ -71,7 +69,6 @@ function isPullRequestEvent(): boolean {
         await generateSizeReport(currentSizeData);
       }
     } else if (isPullRequestEvent()) {
-      // MR 提交时：只下载目标分支的工件（如果存在）并生成比较报告
       console.log(
         '📥 Detected pull request event - downloading target branch artifact if exists',
       );
@@ -90,7 +87,6 @@ function isPullRequestEvent(): boolean {
           await githubService.getTargetBranchLatestCommit();
         console.log(`Target branch commit hash: ${targetCommitHash}`);
 
-        // Create artifact name for target branch (same naming pattern)
         const targetArtifactName = `${pathParts.join('-')}-${fileNameWithoutExt}-${targetCommitHash}${fileExt}`;
         console.log(`Looking for target artifact: ${targetArtifactName}`);
 
@@ -125,7 +121,6 @@ function isPullRequestEvent(): boolean {
         console.log('✅ Successfully loaded demo baseline data');
       }
 
-      // Generate report card
       await generateSizeReport(currentSizeData, baselineSizeData || undefined);
     } else {
       console.log('🔄 Default behavior - uploading and downloading artifacts');
@@ -140,7 +135,6 @@ function isPullRequestEvent(): boolean {
         `✅ Successfully uploaded artifact with ID: ${uploadResponse.id}`,
       );
 
-      // Try to download target branch artifact
       try {
         const targetCommitHash =
           await githubService.getTargetBranchLatestCommit();
@@ -173,7 +167,6 @@ function isPullRequestEvent(): boolean {
         console.warn(`⚠️  Failed to download target branch artifact: ${error}`);
         console.log('📝 Using demo baseline data for comparison');
 
-        // Generate report card with demo baseline
         const currentSizeData = loadSizeData(fullPath);
         if (currentSizeData) {
           const demoBaseline = getDemoBaselineData();
