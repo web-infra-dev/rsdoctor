@@ -52,12 +52,23 @@ const Component: React.FC = () => {
           <InboxOutlined />
         </p>
         <p className="ant-upload-text">
-          Click or drag json file to this area to upload and analyze your
-          profile json
+          Click or drag JSON file to this area to upload and analyze your
+          stats.json or rsdoctor's rsdoctor-data.json.
         </p>
         <p className="ant-upload-hint">
-          By default, Rsdoctor will emit the profile json(manifest.json) to the
-          output folder.
+          The rsdoctor's rsdoctor-data.json is in brief mode, and use the file
+          type: ['json'].
+          <a
+            href="https://rsdoctor.rs/zh/config/options/output#mode-brief"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Check the details.
+          </a>
+        </p>
+        <p className="ant-upload-hint">
+          By default, Rsdoctor will emit the rsdoctor-data.json to the output
+          folder.
         </p>
       </Upload.Dragger>
     </Spin>
