@@ -70,7 +70,7 @@ importers:
         version: 0.112.1(@types/react@18.3.23)
       '@lynx-js/rspeedy':
         specifier: ^0.11.0
-        version: 0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(typescript@5.9.2)(webpack@5.97.1)
+        version: 0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@playwright/test':
         specifier: 1.54.2
         version: 1.54.2
@@ -499,8 +499,8 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
       zod:
-        specifier: ^3.24.4
-        version: 3.24.4
+        specifier: ^3.25.76
+        version: 3.25.76
 
   packages/cli:
     dependencies:
@@ -1032,16 +1032,6 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/sdk/compiled/body-parser: {}
-
-  packages/sdk/compiled/cors: {}
-
-  packages/sdk/compiled/dayjs: {}
-
-  packages/sdk/compiled/fs-extra: {}
-
-  packages/sdk/compiled/json-cycle: {}
-
   packages/types:
     dependencies:
       '@types/connect':
@@ -1157,10 +1147,6 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
-
-  packages/utils/compiled/connect: {}
-
-  packages/utils/compiled/filesize: {}
 
   packages/webpack-plugin:
     dependencies:
@@ -10648,8 +10634,8 @@ packages:
     peerDependencies:
       zod: ^3.24.1
 
-  zod@3.24.4:
-    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
   zrender@5.6.1:
     resolution: {integrity: sha512-OFXkDJKcrlx5su2XbzJvj/34Q3m6PvyCZkVPHGYpcCJ52ek4U/ymZyfuV1nKE23AyBJ51E/6Yr0mhZ7xGTO4ag==}
@@ -12277,7 +12263,7 @@ snapshots:
       '@types/react': 18.3.23
       preact: '@hongzhiyuan/preact@10.24.0-27dc9d8f'
 
-  '@lynx-js/rspeedy@0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(typescript@5.9.2)(webpack@5.97.1)':
+  '@lynx-js/rspeedy@0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@lynx-js/cache-events-webpack-plugin': 0.0.2
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.2(@rspack/core@1.5.1(@swc/helpers@0.5.17))
@@ -12285,7 +12271,7 @@ snapshots:
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 1.5.0
       '@rsbuild/plugin-css-minimizer': 1.0.3(@rsbuild/core@1.5.0)(webpack@5.97.1)
-      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
     optionalDependencies:
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -12441,8 +12427,8 @@ snapshots:
       express-rate-limit: 7.5.0(express@5.1.0)
       pkce-challenge: 5.0.0
       raw-body: 3.0.0
-      zod: 3.24.4
-      zod-to-json-schema: 3.24.5(zod@3.24.4)
+      zod: 3.25.76
+      zod-to-json-schema: 3.24.5(zod@3.25.76)
     transitivePeerDependencies:
       - supports-color
 
@@ -13575,11 +13561,11 @@ snapshots:
 
   '@rsdoctor/client@1.2.3': {}
 
-  '@rsdoctor/core@1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/core@1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.3.0(@rsbuild/core@1.5.0)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       axios: 1.12.0
@@ -13611,11 +13597,11 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
-      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.5.0)(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
       lodash: 4.17.21
@@ -13629,7 +13615,7 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/sdk@1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)':
+  '@rsdoctor/sdk@1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/client': 1.2.3
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.5.1(@swc/helpers@0.5.17))(webpack@5.97.1)
@@ -22669,11 +22655,11 @@ snapshots:
 
   yocto-queue@1.1.1: {}
 
-  zod-to-json-schema@3.24.5(zod@3.24.4):
+  zod-to-json-schema@3.24.5(zod@3.25.76):
     dependencies:
-      zod: 3.24.4
+      zod: 3.25.76
 
-  zod@3.24.4: {}
+  zod@3.25.76: {}
 
   zrender@5.6.1:
     dependencies:
