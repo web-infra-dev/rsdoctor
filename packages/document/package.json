@@ -2,8 +2,8 @@
   "name": "@rsdoctor/docs",
   "version": "1.2.3",
   "scripts": {
-    "dev": "RSPRESS_PERSIST_CACHE=false rspress dev",
-    "build": "RSPRESS_PERSIST_CACHE=false rspress build",
+    "dev": "cross-env RSPRESS_PERSIST_CACHE=false rspress dev",
+    "build": "cross-env RSPRESS_PERSIST_CACHE=false rspress build",
     "preview": "rspress preview"
   },
   "repository": {
@@ -30,6 +30,7 @@
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.24",
     "@types/react-dom": "^18.3.7",
+    "cross-env": "^7.0.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "rsbuild-plugin-google-analytics": "^1.0.4",
