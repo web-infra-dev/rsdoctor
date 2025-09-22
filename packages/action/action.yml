@@ -1,0 +1,21 @@
+name: 'compressed-size-action-demo'
+description: 'A simple demo for checking compressed size differences'
+branding:
+  icon: 'archive'
+  color: 'purple'
+inputs:
+  github_token:
+    description: 'The GITHUB_TOKEN secret'
+    required: false
+    default: ${{ github.token }}
+  file_path:
+    description: 'Path to the file to upload (relative to project root)'
+    required: true
+  target_branch:
+    description: 'The target branch to compare against (defaults to main)'
+    required: false
+    default: 'main'
+
+runs:
+  using: 'node20'
+  main: 'index.js'

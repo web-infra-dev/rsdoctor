@@ -1,0 +1,23 @@
+{
+  "totalSize": 103809024,
+  "files": [
+    {
+      "path": "dist/main.js",
+      "size": 51380224,
+      "gzipSize": 10276045,
+      "brotliSize": 8220836
+    },
+    {
+      "path": "dist/vendor.js",
+      "size": 41943040,
+      "gzipSize": 8388608,
+      "brotliSize": 6291456
+    },
+    {
+      "path": "dist/styles.css",
+      "size": 10485760,
+      "gzipSize": 2097152,
+      "brotliSize": 1572864
+    }
+  ]
+}
