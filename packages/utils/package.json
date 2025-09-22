@@ -82,7 +82,7 @@
     "json-stream-stringify": "3.0.1",
     "lines-and-columns": "2.0.4",
     "picocolors": "^1.1.1",
-    "rslog": "^1.2.9",
+    "rslog": "^1.2.11",
     "strip-ansi": "^6.0.1"
   },
   "devDependencies": {
@@ -92,7 +92,7 @@
     "@types/envinfo": "7.8.4",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",
-    "prebundle": "1.4.1",
+    "prebundle": "1.4.2",
     "filesize": "^10.1.6",
     "connect": "3.7.0",
     "tslib": "2.8.1",

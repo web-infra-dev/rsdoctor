@@ -1,4 +1,4 @@
-import { NoSSR } from 'rspress/runtime';
+import { NoSSR } from '@rspress/core/runtime';
 import { useUrl } from '../utils';
 import styles from './Overview.module.scss';
 

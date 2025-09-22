@@ -2,7 +2,7 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Rule } from '@rsdoctor/types';
 import styles from './RuleIndex.module.scss';
-const themeDefault = require('@rspress/core/theme');
+import { getCustomMDXComponent } from '@rspress/core/theme';
 
 const RuleIndex = () => {
   const rules = Object.values(Rule.RuleErrorMap);
@@ -50,7 +50,7 @@ const RuleIndex = () => {
           <div className={styles['card-body']} style={{ paddingTop: 0 }}>
             <ReactMarkdown
               components={{
-                ...themeDefault.getCustomMDXComponent(),
+                ...getCustomMDXComponent(),
                 code: (props) => <code {...props} />,
               }}
             >
