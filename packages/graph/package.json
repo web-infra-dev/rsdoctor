@@ -32,7 +32,7 @@
     "@rsdoctor/utils": "workspace:*",
     "lodash.unionby": "^4.8.0",
     "path-browserify": "1.0.1",
-    "source-map": "^0.7.4"
+    "source-map": "^0.7.6"
   },
   "devDependencies": {
     "@types/body-parser": "1.19.6",

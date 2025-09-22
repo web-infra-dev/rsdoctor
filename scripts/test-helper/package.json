@@ -26,11 +26,11 @@
   },
   "dependencies": {
     "@rsbuild/core": "^1.4.10",
-    "@rspack/core": "1.5.1",
+    "@rspack/core": "1.5.2",
     "@types/lodash": "^4.17.20",
     "@types/node": "^22.8.1",
     "lodash": "^4.17.21",
-    "memfs": "4.39.0",
+    "memfs": "4.43.0",
     "typescript": "^5.9.2",
     "upath": "2.0.1",
     "webpack": "^5.97.1"
