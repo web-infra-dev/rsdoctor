@@ -1,7 +1,5 @@
-import { setFailed, summary } from '@actions/core';
 import { DefaultArtifactClient } from '@actions/artifact';
 import path from 'path';
-import * as fs from 'fs';
 import { execSync } from 'child_process';
 
 export async function uploadArtifact(commitHash?: string, filePath?: string) {
