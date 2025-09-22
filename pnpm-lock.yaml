@@ -30,8 +30,8 @@ importers:
         specifier: ^0.13.2
         version: 0.13.2(typescript@5.9.2)
       '@rstest/core':
-        specifier: 0.3.2
-        version: 0.3.2
+        specifier: 0.4.1
+        version: 0.4.1
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:scripts/test-helper
@@ -66,8 +66,8 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
       '@lynx-js/react':
-        specifier: ^0.112.1
-        version: 0.112.1(@types/react@18.3.23)
+        specifier: ^0.114.0
+        version: 0.114.0(@types/react@18.3.23)
       '@lynx-js/rspeedy':
         specifier: ^0.11.0
         version: 0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)
@@ -487,8 +487,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@rstest/core':
-        specifier: 0.3.2
-        version: 0.3.2
+        specifier: 0.4.1
+        version: 0.4.1
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -973,9 +973,6 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
-      '@types/fs-extra':
-        specifier: ^11.0.4
-        version: 11.0.4
       safer-buffer:
         specifier: 2.1.2
         version: 2.1.2
@@ -995,6 +992,9 @@ importers:
       '@types/cors':
         specifier: 2.8.19
         version: 2.8.19
+      '@types/fs-extra':
+        specifier: ^11.0.4
+        version: 11.0.4
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -2538,8 +2538,8 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
-  '@hongzhiyuan/preact@10.24.0-27dc9d8f':
-    resolution: {integrity: sha512-NpUD1p4NIh+vpN5+YMvtF8CqtO7tS7VwTKxpdoI58Fp3SOmtv0Xr9Bzg+vWitn1K/jBscsonqDX4qZ4qvVd2PA==}
+  '@hongzhiyuan/preact@10.24.0-00213bad':
+    resolution: {integrity: sha512-bHWp4ZDK5ZimcY+bTWw3S3xGiB8eROpZj0RK3FClNIaTOajb0b11CsT3K+pdeakgPgq1jWN3T2e2rfrPm40JsQ==}
 
   '@inquirer/external-editor@1.0.1':
     resolution: {integrity: sha512-Oau4yL24d2B5IL4ma4UpbQigkVhzPDXLoqy1ggK4gnHg/stmkffJE4oOXHXF3uz0UEpywG68KcyXsyYpA1Re/Q==}
@@ -2658,8 +2658,8 @@ packages:
     peerDependencies:
       '@rspack/core': ^1.3.10
 
-  '@lynx-js/react@0.112.1':
-    resolution: {integrity: sha512-y0RQbeiK3pu7Iz+BjWfx3RWt14z1EkSEWBYh3x080gKdWzBe4Naig5GYua8CTAAPZ5NnH7wyMrJaMQesM1wJDw==}
+  '@lynx-js/react@0.114.0':
+    resolution: {integrity: sha512-Tjys/FUGcOjBkdd1qm/1xUmwcHPDSBxIu2nX/wKWdxq7DkMQSn+LDidUDMxV2shB3HB3ZFslHM+FvcTwys+EZA==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18
@@ -4111,8 +4111,8 @@ packages:
   '@rstack-dev/doc-ui@1.11.0':
     resolution: {integrity: sha512-5GZ8EwvmKj8LXomEElC4GhDlDW2SazCeHbA+ieacJrlcGduuiJXGTBzVA2rNnPLjAb41H0esuy0aH0skRIQAqA==}
 
-  '@rstest/core@0.3.2':
-    resolution: {integrity: sha512-bb6hciMqE9S0XYerYc9gA5oJq9RvS3Kdr8/wU/K++ZQumy35A8NOJno7L7/MudyQPTqTuHzPXQjKk4mOAlsCww==}
+  '@rstest/core@0.4.1':
+    resolution: {integrity: sha512-EJwdpxPHabmBkAUunDy8JXFE7fr6BW5+9826IBPWKDoni6HZGvgkVjkuoiELwIWnwptDOXe/OD21aoNdV8V+yw==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
@@ -12140,7 +12140,7 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
-  '@hongzhiyuan/preact@10.24.0-27dc9d8f': {}
+  '@hongzhiyuan/preact@10.24.0-00213bad': {}
 
   '@inquirer/external-editor@1.0.1(@types/node@22.18.1)':
     dependencies:
@@ -12258,10 +12258,10 @@ snapshots:
       '@lynx-js/webpack-runtime-globals': 0.0.6
       '@rspack/core': 1.5.1(@swc/helpers@0.5.17)
 
-  '@lynx-js/react@0.112.1(@types/react@18.3.23)':
+  '@lynx-js/react@0.114.0(@types/react@18.3.23)':
     dependencies:
       '@types/react': 18.3.23
-      preact: '@hongzhiyuan/preact@10.24.0-27dc9d8f'
+      preact: '@hongzhiyuan/preact@10.24.0-00213bad'
 
   '@lynx-js/rspeedy@0.11.0(@rspack/core@1.5.1(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
@@ -14383,7 +14383,7 @@ snapshots:
       - react
       - react-dom
 
-  '@rstest/core@0.3.2':
+  '@rstest/core@0.4.1':
     dependencies:
       '@rsbuild/core': 1.5.0
       '@types/chai': 5.2.2
