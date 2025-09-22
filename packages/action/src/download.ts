@@ -1,7 +1,7 @@
-import { setFailed, summary } from '@actions/core';
 import { DefaultArtifactClient } from '@actions/artifact';
-import path from 'path';
+import { summary } from '@actions/core';
 import * as fs from 'fs';
+import path from 'path';
 import { GitHubService } from './github';
 
 export async function downloadArtifact(artifactId: number, fileName: string) {
