@@ -4,7 +4,7 @@ import path from 'path';
 import { createHash } from 'crypto';
 import process from 'process';
 import { AsyncSeriesHook } from 'tapable';
-const jc = require('json-cycle');
+import { decycle } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
 import { transformDataUrls } from '../utils';
 import { RsdoctorSDKOptions, DataWithUrl } from './types';
@@ -143,7 +143,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
       const jsonStr: string | string[] = await (async () => {
         try {
           if (key === 'configs') {
-            return JSON.stringify(jc.decycle(data));
+            return JSON.stringify(decycle(data));
           }
           return JSON.stringify(data);
         } catch (error) {
