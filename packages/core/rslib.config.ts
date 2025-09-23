@@ -1,5 +1,37 @@
 import { defineConfig, rspack } from '@rslib/core';
 import { dualPackageBundleless } from '../../scripts/rslib.base.config';
+import { join } from 'path';
+
+const prebundleConfigPath = join(__dirname, './prebundle.config.mjs');
+const prebundleConfigModule = await import(prebundleConfigPath);
+const prebundleConfig = prebundleConfigModule.default;
+const regexpMap: Record<string, RegExp> = {};
+
+for (const item of prebundleConfig.dependencies) {
+  const depName = typeof item === 'string' ? item : item.name;
+  if (typeof item !== 'string' && item.dtsOnly) {
+    continue;
+  }
+
+  regexpMap[depName] = new RegExp(`compiled[\\/]${depName}(?:[\\/]|$)`);
+}
+
+const externalsPrebundle = [
+  ({ request }: { request?: string }, callback: any) => {
+    if (request) {
+      if (prebundleConfig.dependencies.includes(request)) {
+        return callback(undefined, `../../../compiled/${request}/index.js`);
+      }
+      const entries = Object.entries(regexpMap);
+      for (const [name, test] of entries) {
+        if (test.test(request)) {
+          return callback(undefined, `../compiled/${name}/index.js`);
+        }
+      }
+    }
+    callback();
+  },
+];
 
 const externals = [
   // Externalize workspace packages
@@ -7,6 +39,10 @@ const externals = [
   '@rsdoctor/sdk',
   '@rsdoctor/types',
   '@rsdoctor/utils',
+  'lodash-es',
+  'semver',
+  'source-map',
+  ...externalsPrebundle,
 ];
 
 export default defineConfig({
