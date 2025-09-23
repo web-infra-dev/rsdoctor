@@ -1,10 +1,7 @@
 import { defineConfig, rspack } from '@rslib/core';
 import { dualPackageBundleless } from '../../scripts/rslib.base.config';
-import { join } from 'path';
+import prebundleConfig from './prebundle.config.mjs';
 
-const prebundleConfigPath = join(__dirname, './prebundle.config.mjs');
-const prebundleConfigModule = await import(prebundleConfigPath);
-const prebundleConfig = prebundleConfigModule.default;
 const regexpMap: Record<string, RegExp> = {};
 
 for (const item of prebundleConfig.dependencies) {

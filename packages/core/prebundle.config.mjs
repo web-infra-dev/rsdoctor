@@ -1,3 +1,4 @@
+/** @type {import('prebundle').Config} */
 export default {
   dependencies: ['axios'],
   exclude: [
