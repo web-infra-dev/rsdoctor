@@ -1012,9 +1012,6 @@ importers:
       fs-extra:
         specifier: ^11.1.1
         version: 11.3.0
-      json-cycle:
-        specifier: ^1.5.0
-        version: 1.5.0
       open:
         specifier: ^10.2.0
         version: 10.2.0
