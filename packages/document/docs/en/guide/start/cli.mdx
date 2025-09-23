@@ -17,7 +17,7 @@ We provide `@rsdoctor/cli` for you to use Rsdoctor's features locally through th
 
 import { PackageManagerTabs } from '@theme';
 
-import { Tab, Tabs } from 'rspress/theme';
+import { Tab, Tabs } from '@rspress/core/theme';
 
 <PackageManagerTabs command="add @rsdoctor/cli -D" />
 
@@ -76,18 +76,18 @@ We provide a Node.js API in `@rsdoctor/cli` that allows you to make calls during
 
 <Tabs>
 
-<Tab label="cjs">
-
-```js
-const { execute } = require('@rsdoctor/cli');
-```
-
-</Tab>
-
 <Tab label="esm">
 
 ```js
 import { execute } from '@rsdoctor/cli';
+```
+
+</Tab>
+
+<Tab label="cjs">
+
+```js
+const { execute } = require('@rsdoctor/cli');
 ```
 
 </Tab>

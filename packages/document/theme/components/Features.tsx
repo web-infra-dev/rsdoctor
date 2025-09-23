@@ -2,8 +2,8 @@ import {
   containerStyle,
   innerContainerStyle,
 } from '@rstack-dev/doc-ui/section-style';
-import { useI18n } from 'rspress/runtime';
-import { HomeFeature } from 'rspress/theme';
+import { useI18n } from '@rspress/core/runtime';
+import { HomeFeature } from '@rspress/core/theme';
 import './Features.module.scss';
 
 export function Features() {

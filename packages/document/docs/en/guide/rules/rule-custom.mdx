@@ -72,7 +72,7 @@ When writing custom rules, in addition to installing the basic `@rsdoctor/rspack
 
 import { PackageManagerTabs } from '@theme';
 
-import { Tab, Tabs } from 'rspress/theme';
+import { Tab, Tabs } from '@rspress/core/theme';
 
 <PackageManagerTabs command="add @rsdoctor/core -D" />
 
@@ -199,19 +199,15 @@ At the same time, Rsdoctor also has two components that can be used to display r
   [LinkRule Type](#linkrulestoredata)
 
 - Component Input
-
   - type
-
     - The type of the component.
     - value: 'link'.
 
   - title
-
     - The title of the rule.
     - type: string.
 
   - description
-
     - The description of the rule. The data comes from the `message` or `detail.description` in the `report` function:
       ```js
       report({
@@ -225,7 +221,6 @@ At the same time, Rsdoctor also has two components that can be used to display r
     - type: string.
 
   - level
-
     - The level of the rule.
     - type: warn | error.
 
@@ -266,19 +261,15 @@ report({
   [CodeViewRule Type](#codeviewrule)
 
 - Component Input
-
   - type
-
     - The type of the component.
     - value: 'code-view'.
 
   - title
-
     - The title of the rule.
     - type: string.
 
   - description
-
     - The description of the rule. The data comes from the `message` or `detail.description` in the `report` function:
       ```js
       report({
@@ -292,7 +283,6 @@ report({
     - type: string.
 
   - level
-
     - The level of the rule.
     - type: warn | error.
 

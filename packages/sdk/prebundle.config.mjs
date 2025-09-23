@@ -1,5 +1,5 @@
 export default {
-  dependencies: ['cors', 'dayjs', 'fs-extra', 'json-cycle'],
+  dependencies: ['cors', 'dayjs', 'fs-extra'],
   exclude: [
     '@rsdoctor/client',
     '@rsdoctor/graph',

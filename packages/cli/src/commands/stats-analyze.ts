@@ -23,21 +23,14 @@ export const statsAnalyze: Command<
   command: Commands.StatsAnalyze,
   description:
     `use ${name} to open "${Constants.RsdoctorOutputManifestPath}" in browser for analysis.example: ${bin} ${Commands.StatsAnalyze} --profile "${Constants.StatsFilePath}"`.trim(),
-  options(yargs) {
-    yargs
-      .option('profile', {
-        type: 'string',
-        description: 'Path to webpack stats.json file for analysis',
-        demandOption: true,
-      })
-      .option('port', {
-        type: 'number',
-        description: 'port for Rsdoctor Server',
-      })
-      .option('type', {
-        type: 'string',
-        description: 'Bundle analysis mode (normal or lite)',
-      });
+  options(cli) {
+    cli
+      .option(
+        '--profile <path>',
+        'Path to webpack stats.json file for analysis',
+      )
+      .option('--port <number>', 'port for Rsdoctor Server')
+      .option('--type <mode>', 'Bundle analysis mode (normal or lite)');
   },
   async action({ profile, open = true, type = SDK.ToDataType.Normal }) {
     const spinner = ora({ prefixText: cyan(`[${name}]`) }).start(
@@ -66,7 +59,7 @@ export const statsAnalyze: Command<
     ]);
 
     if (open) {
-      spinner.text = `open browser automatically`;
+      spinner.succeed(`open browser automatically`);
 
       await sdk.server.openClientPage('homepage');
     }

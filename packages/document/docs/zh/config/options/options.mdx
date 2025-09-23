@@ -1,24 +1,12 @@
-import { Badge } from '@theme';
+import { Badge, Tab, Tabs } from '@theme';
 
-# Options 配置
+# 总览
 
 ## RsdoctorRspackPlugin 插件
 
-**RsdoctorRspackPlugin** 类由 `@rsdoctor/rspack-plugin` 导出，配置项是 [RsdoctorRspackPluginOptions](#options-1)。
+**RsdoctorRspackPlugin** 类由 `@rsdoctor/rspack-plugin` 导出，配置项是 [RsdoctorRspackPluginOptions](#rsdoctorrspackpluginoptions)。
 
 <Tabs>
-
-<Tab label="cjs">
-
-```js
-const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
-
-new RsdoctorRspackPlugin({
-  /** RsdoctorRspackPluginOptions */
-});
-```
-
-</Tab>
 
 <Tab label="esm">
 
@@ -32,27 +20,25 @@ new RsdoctorRspackPlugin({
 
 </Tab>
 
-</Tabs>
-
-## RsdoctorWebpackPlugin 插件
-
-**RsdoctorWebpackPlugin** 类由 `@rsdoctor/webpack-plugin` 导出，配置项是 [RsdoctorWebpackPluginOptions](#options-1)。
-
-import { Tab, Tabs } from '@theme';
-
-<Tabs>
-
 <Tab label="cjs">
 
 ```js
-const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
+const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 
-new RsdoctorWebpackPlugin({
-  /** RsdoctorWebpackPluginOptions */
+new RsdoctorRspackPlugin({
+  /** RsdoctorRspackPluginOptions */
 });
 ```
 
 </Tab>
+
+</Tabs>
+
+## RsdoctorWebpackPlugin 插件
+
+**RsdoctorWebpackPlugin** 类由 `@rsdoctor/webpack-plugin` 导出，配置项是 [RsdoctorWebpackPluginOptions](#rsdoctorwebpackpluginoptions)。
+
+<Tabs>
 
 <Tab label="esm">
 
@@ -66,271 +52,81 @@ new RsdoctorWebpackPlugin({
 
 </Tab>
 
+<Tab label="cjs">
+
+```js
+const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
+
+new RsdoctorWebpackPlugin({
+  /** RsdoctorWebpackPluginOptions */
+});
+```
+
+</Tab>
+
 </Tabs>
 
-## Options
+## 配置项
 
 **类型：** `Object`
 
-这个 `Options` 是 [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin-%E6%8F%92%E4%BB%B6) 和 [RsdoctorRspackPlugin](#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
+这个 `Options` 是 [RsdoctorRspackPlugin](#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 和 [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
 
-- [brief](#brief)
-- [disableClientServer](#disableclientserver)
-- [experiments](#experiments)
-- [features](#features)
-- [mode](#mode)
-- [output](#output)
-- [port](#port)
-- [supports](#supports)
+- [disableClientServer](./disableClientServer.mdx) - **客户端服务控制**：是否在分析完成后不自动打开 Rsdoctor 报告服务。
+- [experiments](./experiments.mdx) - **实验性功能配置**：启用 Rspack 插件的实验性功能，如原生插件性能优化。
+- [features](./features.mdx) - **特性开关配置**：控制 Rsdoctor 的各项分析功能，如 loader 分析、bundle 分析、规则检查等
+- [output](./output.mdx) - **输出相关配置**：控制报告的输出格式、目录等选项，包括 mode、options、reportCodeType 等
+- [port](./port.mdx) - **服务端口配置**：设置 Rsdoctor 开发服务器的端口号，用于本地开发时的报告预览
+- [supports](./supports.mdx) - **特性支持配置**：启用特定构建工具的兼容性支持，如 BannerPlugin 等
+- [brief](./brief.mdx) - **Brief 模式的配置**：控制简要模式报告的生成，包括 HTML 文件名和是否生成 JSON 数据文件
+- [mode](./mode.mdx) - **构建报告数据输出模式**：选择报告的输出模式，支持 normal（普通模式）和 brief（简要模式）
 
-### brief
-
-<Badge text="Version: 0.4.0" type="warning" />
-
-- **类型：** [BriefType](#brieftype)
-- **可选：** `true`
-- **默认值：** `undefined`
-
-Brief 模式更多配置，如下：
-
-- **reportHtmlName:** 配置 Brief 的 HTML 报告的名称，默认 `report-rsdoctor.html`。
-- **writeDataJson:** 默认 Brief 模式下将分析数据注入到 HTML 文件中，所以不会再产生构建分析数据。如果想要而外本地生成数据则需要配置 `writeDataJson: true`。
-
-#### briefType
+### RsdoctorRspackPluginOptions
 
 ```ts
-interface BriefConfig {
-  reportHtmlName?: string | undefined;
-  writeDataJson: boolean;
+interface RsdoctorWebpackPluginOptions<
+  Rules extends LinterType.ExtendRuleData[],
+> {
+  linter?: LinterType.Options<Rules, InternalRules>;
+
+  /** Rsdoctor 功能开关 */
+  features?:
+    | Plugin.RsdoctorWebpackPluginFeatures
+    | Array<keyof Plugin.RsdoctorWebpackPluginFeatures>;
+
+  /**
+   * @deprecated 使用 `output.mode` 代替，如果使用 `lite` 模式，请使用 `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` 代替
+   * Rsdoctor 模式选项：
+   * - normal: 普通模式
+   * - brief: 简要模式，仅显示持续时间分析和构建产物分析结果，不显示任何代码部分
+   */
+  mode?: 'brief' | 'normal' | 'lite';
+
+  disableClientServer?: boolean;
+
+  supports?: ISupport;
+
+  port?: number;
+
+  /**
+   * @deprecated 使用 `output.options.htmlOptions` 代替
+   */
+  brief?: Config.BriefConfig;
+
+  output?: Config.IOutput<'brief' | 'normal'>;
+
+  experiments?: RsdoctorRspackPluginExperiments;
+}
+
+interface RsdoctorRspackPluginExperiments {
+  /**
+   * 是否启用原生插件以提高性能
+   * @default false
+   */
+  enableNativePlugin?: boolean;
 }
 ```
 
-### disableClientServer
+### RsdoctorWebpackPluginOptions
 
-- **类型：** `boolean`
-- **可选：** `true`
-- **默认值：** `false`
-
-:::tip
-建议在 CI 环境下将 disableClientServer 设置为 true，否则启动的服务会卡住 pipeline 流程.
-:::
-
-是否需要自动打开 Rsdoctor 报告页面。如果你不需要在浏览器内查看本次 Rsdoctor 提供的分析报告，则可以开启这个配置项。
-
-### experiments
-
-<Badge text="Version: 1.0.0" type="warning" />
-
-#### enableNativePlugin
-
-- **类型：** `boolean`
-- **可选：** `true`
-- **默认值：** `false`
-
-##### Description
-
-通过在 Rspack 中集成 Rsdoctor 的原生插件，我们将 Rsdoctor 中耗时较大的数据处理逻辑前置到 Rspack 的构建阶段。这一特性显著提升了 Rspack 中 Rsdoctor 的构建分析效率，减少了整体分析时间。
-
-- enableNativePlugin：是否开启 Rspack 原生插件，开启后可大幅降低 Rsdoctor 自身的分析耗时。
-
-- **示例：**
-
-```js
-new RsdoctorRspackPlugin({
-  experiments: { enableNativePlugin: true }
-}),
-```
-
-### features
-
-- **类型：** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
-- **可选：** `true`
-- **默认值：** `['loader', 'plugins', 'bundle']`
-
-#### features values
-
-features 属性是用于分析功能开关的，具体的功能项如下：
-
-- **loader**：Loaders 耗时及代码编译变化分析，默认开启。
-- **plugins**：Plugins 调用以及耗时分析，默认开启。
-- **bundle**：构建产物分析，默认开启。
-- **resolver**：resolver 分析，默认关闭。
-- **lite**: **(废弃，使用 [mode.lite](#mode))** lite 模式。lite 模式和普通模式的区别就是不再展示源码信息，只展示打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
-
-所以，**默认配置是开启了 Bundle 分析能力、 Loader 和 Plugin 构建时分析**。没有开启 Resolver 分析能力， Rspack 暂不支持 Resolver 分析能力。
-
-:::tip
-**如果出现了 out of memory 的报错，可以尝试：**
-
-1. 打开 **lite** 模式。
-2. 增大 node 内存上限，例如：NODE_OPTIONS=--max-old-space-size=8096。
-
-- 原因：因为构建过程中，缓存了源码信息，超过了内存，所以开启 `lite` 模式可以缓解。
-- 区别：`lite` 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。
-
-:::
-
-#### features types
-
-- 如果你将 `features` 设置为**数组**类型，该插件**只会开启**你在 `features` 数组中定义的功能。
-- 如果你将 `features` 设置为**简单对象**类型，该插件**只会关闭**你在 `features` 对象中值为 `false` 的功能。
-
-#### RsdoctorWebpackPluginFeatures
-
-`features` 类型如下：
-
-import Features from '@zh/shared/features.md';
-
-<Features />
-
-#### RsdoctorRspackPluginFeatures
-
-`features` 类型如下：
-
-import FeaturesRspack from '@zh/shared/features-rspack.md';
-
-<FeaturesRspack />
-
-### mode
-
-<Badge text="Version: 0.4.0" type="warning" />
-
-- **类型：** `normal | brief | lite`
-- **可选：** `true`
-- **默认值：** `normal`
-
-选择使用的 Rsdoctor 构建报告模式，有以下几种：
-
-import ModeIntro from '@zh/shared/mode-intro.md';
-
-<ModeIntro />
-
-### output
-
-<Badge text="Version: 1.0.0" type="warning" />
-
-#### compressData
-
-- **类型：** `boolean`
-- **可选：** `true`
-- **默认值：** `true`
-
-compressData 用于配置是否将 [outputDir]/.rsdoctor 下的分析数据进行压缩处理。
-
-#### reportCodeType
-
-- **类型：** `{ noModuleSource?: boolean; noAssetsAndModuleSource?: boolean }`
-- **可选：** `true`
-- **默认值：** `undefined`
-- **描述：**
-
-  - 选择输出的分析数据：
-    - 默认是所有完整数据；
-    - noModuleSource: true 是输出除了 module 代码之外的数据，Module 代码即 Bundle 内一个一个文件的打包模块代码。
-    - noAssetsAndModuleSource: true 是输出除了 module 代码和 Assets 产物代码之外的数据。
-
-- **示例：**
-
-```js
-new RsdoctorRspackPlugin({
-  reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
-}),
-```
-
-#### reportDir
-
-- **类型：** `string`
-- **可选：** `true`
-- **默认值：** `undefined`
-
-Rsdoctor 报告输出目录，默认是构建产物输出目录。
-
-### port
-
-- **类型：** `number`
-- **可选：** `true`
-- **默认值：** `random(3000, 8999)`
-
-配置 Rsdoctor 服务的端口。
-
-### ~~reportCodeType [**Deprecated**]~~
-
-<Badge text="Deprecated" type="warning" />
-
-请看 [output.reportCodeType](#reportcodetype)
-
-### ~~reportDir [**Deprecated**]~~
-
-<Badge text="Deprecated" type="warning" />
-
-请看 [output.reportDir](#reportdir)
-
-### supports
-
-- **类型：** [Supports Types](#supports-types)
-- **可选：** `true`
-- **默认值：** `undefined`
-
-该选项是配置 Rsdoctor 是否开启某些细节特性分析能力支持的，例如：是否开启对 BannerPlugin 的兼容能力。
-
-#### supportsTypes
-
-```ts
-type ISupport = {
-  banner?: boolean;
-  parseBundle?: boolean;
-  generateTileGraph?: boolean;
-};
-```
-
-#### banner
-
-:::danger
-`supports.banner` 分析仅用于调试，请勿将其用于生产。
-:::
-
-- **类型：** `boolean`
-- **默认值：** `true`
-
-如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#%E6%94%AF%E6%8C%81-bannerplugin)
-
-#### ~~generateTileGraph [**Deprecated**]~~
-
-<Badge text="Deprecated" type="warning" />
-
-Rsdoctor 默认支持生成 Tree Map 图，所以不需要配置此选项。
-
-#### parseBundle
-
-- **类型：** `boolean`
-- **默认值：** `true`
-
-在部分大型仓库中，反解 Bundle 解析执行耗时过大，这是因为 Parse Bundle 的分析利用了 AST 解析与处理。当产物文件过多时，耗时也会增加。如果不需要此功能，可以通过 `supports.parseBundle` 配置进行选择性关闭。示例如下：
-
-```ts
-chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
-  {
-    supports: {
-      parseBundle: false,
-    },
-  },
-]);
-```
-
-关闭 Parse Bundle 能力只会影响是否能查看到 Bundle 中 Module 的最终打包大小（Bundled Size）及最终打包代码（Bundled Code）:
-
-<div style={{ display: 'flex' }}>
-  <img
-    src="https://assets.rspack.rs/others/assets/rsdoctor/bundled-size.jpeg"
-    height="300px"
-    width="300px"
-    style={{ margin: 'auto' }}
-  />
-
-  <img
-    src="https://assets.rspack.rs/others/assets/rsdoctor/bundled-code.png"
-    height="300px"
-    width="400px"
-    style={{ margin: 'auto' }}
-  />
-</div>
+RsdoctorWebpackPlugin 同 `Omit<RsdoctorRspackPluginOptions, 'experiments'>` 类型。

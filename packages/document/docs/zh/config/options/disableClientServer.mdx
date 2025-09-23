@@ -1,0 +1,11 @@
+# disableClientServer
+
+- **类型：** `boolean`
+- **可选：** `true`
+- **默认值：** `false`，当 `process.CI` 为 true 时，默认值为 true，即在 CI 环境中默认不启动报告服务。
+
+:::tip
+建议在 CI 环境下将 disableClientServer 设置为 true，否则启动的服务会卡住 pipeline 流程。
+:::
+
+是否需要自动打开 Rsdoctor 报告页面。如果你不需要在浏览器内查看本次 Rsdoctor 提供的分析报告，则可以开启这个配置项。

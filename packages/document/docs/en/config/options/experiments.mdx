@@ -1,0 +1,21 @@
+import { Badge } from '@theme';
+
+# experiments
+
+<Badge text="Version: 1.0.0" type="warning" />
+
+## enableNativePlugin
+
+- **Type:** `boolean`
+- **Optional:** `true`
+- **Default:** `false`
+
+By enabling the enableNativePlugin option, the Rspack native plugin moves the time-consuming data processing logic from Rsdoctor to the Rspack build stage, significantly improving build analysis efficiency and greatly reducing Rsdoctor's own analysis time.
+
+- **Example:**
+
+```js
+new RsdoctorRspackPlugin({
+  experiments: { enableNativePlugin: true }
+}),
+```

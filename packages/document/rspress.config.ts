@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { defineConfig } from 'rspress/config';
+import { defineConfig } from '@rspress/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
@@ -17,7 +17,7 @@ export default defineConfig({
     pluginSitemap({
       domain: siteUrl,
     }),
-    pluginLlms(),
+    pluginLlms() as any,
     pluginFontOpenSans(),
     pluginRss({
       siteUrl,
@@ -91,9 +91,7 @@ export default defineConfig({
   markdown: {
     checkDeadLinks: true,
   },
-  ssg: {
-    strict: true,
-  },
+  ssg: false,
   route: {
     cleanUrls: true,
     // exclude document fragments from routes

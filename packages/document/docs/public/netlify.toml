@@ -6,6 +6,18 @@ status = 301
 force = true
 
 [[redirects]]
+from = "/preview/#/"
+to = "https://rsdoctor.rs"
+status = 302
+force = true
+
+[[redirects]]
+from = "/zh/preview/#/"
+to = "https://rsdoctor.rs"
+status = 302
+force = true
+
+[[redirects]]
 from = "/*"
 to = "/404.html"
 status = 404

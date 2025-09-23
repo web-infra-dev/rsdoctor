@@ -72,7 +72,10 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
               className="rsdoctor-logo"
               alt="logo"
               onClick={() => {
-                navigate(Client.RsdoctorClientRoutes.Home);
+                location.hash.includes(Client.RsdoctorClientRoutes.Uploader) &&
+                location.pathname.includes('/preview')
+                  ? (location.href = 'http://rsdoctor.rs')
+                  : navigate(Client.RsdoctorClientRoutes.Home);
               }}
             />
             <BuilderSelect />

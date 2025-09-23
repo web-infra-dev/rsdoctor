@@ -1,0 +1,162 @@
+import { Badge } from '@theme';
+
+# output
+
+## mode
+
+<Badge text="V1.2.4 Added" type="tip" />
+
+- **Type:** `"normal" | "brief"`
+
+Rsdoctor report mode, default is `normal`.
+
+- **normal:** Generates a `.rsdoctor` folder in the build output directory, containing various data files and displaying code in the report page. The output directory can be configured via [reportDir](#reportdir).
+- **brief:** Generates an HTML report file in the `.rsdoctor` folder of the build output directory. All build analysis data is integrated and injected into this HTML file, which can be opened in a browser to view the report. Brief mode has more configuration options, see [brief](#brief) for details.
+
+:::tip
+Mode does not have a lite configuration option. The lite mode will be deprecated. Refer to [lite mode deprecation notice](./options-v2.mdx#lite-mode-deprecation-notice).
+:::
+
+## options
+
+<Badge text="V1.2.4 Added" type="tip" />
+
+- **Type:** `BriefModeOptions | NormalModeOptions`
+- **Optional:** `true`
+- **Default:** `undefined`
+- **Description:**
+  Based on different `mode` configurations, `options` supports different configuration items:
+
+### mode: 'brief'
+
+Brief mode is used to generate lightweight analysis reports, supporting both HTML and JSON output formats.
+
+- **`type`**: Output type, supports `'html'` and `'json'` arrays, allowing multiple formats to be selected simultaneously
+- **`htmlOptions`**: HTML output related configuration
+  - **`reportHtmlName`**: HTML report filename, defaults to `report-rsdoctor.html`
+- **`jsonOptions`**: JSON output related configuration
+  - **`sections`**: Module configuration for JSON output
+    - **`moduleGraph`**: Whether to include module graph data, defaults to `true`
+    - **`chunkGraph`**: Whether to include Chunk graph data, defaults to `true`
+    - **`rules`**: Whether to include rules data, defaults to `true`
+
+**Configuration Example:**
+
+```js
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      // Output both HTML and JSON formats
+      type: ['html', 'json'],
+      htmlOptions: {
+        reportHtmlName: 'my-report.html',
+      },
+    },
+  },
+});
+```
+
+**Notes:**
+
+- In Brief mode, the **`reportCodeType`** configuration item is invalid because only **`'noCode'`** is supported.
+- In Brief mode, when **type is 'html'**, analysis data is directly injected into the HTML file, making it convenient for single-file sharing.
+- In Brief mode, when **type is 'json'**, structured data files are generated, making it convenient for programmatic processing.
+
+### mode: 'normal'
+
+In Normal mode, `options` is an empty object with no additional configuration items.
+
+### Type Definitions
+
+#### BriefModeOptions
+
+```ts
+interface BriefModeOptions {
+  /** Output type, supports HTML and JSON */
+  type?: Array<'html' | 'json'>;
+  /** HTML output related configuration */
+  htmlOptions?: BriefConfig;
+  /** JSON output related configuration */
+  jsonOptions?: JsonOptions;
+}
+
+interface BriefConfig {
+  /** HTML report filename, defaults to report-rsdoctor.html */
+  reportHtmlName?: string;
+  /** Whether to additionally generate JSON data files, defaults to false */
+  writeDataJson: boolean;
+}
+
+interface JsonOptions {
+  /** Module configuration for JSON output */
+  sections?: JsonSectionOptions;
+}
+
+interface JsonSectionOptions {
+  /** Whether to include module graph data, defaults to true */
+  moduleGraph?: boolean;
+  /** Whether to include Chunk graph data, defaults to true */
+  chunkGraph?: boolean;
+  /** Whether to include rules data, defaults to true */
+  rules?: boolean;
+}
+```
+
+#### NormalModeOptions
+
+NormalModeOptions currently has an empty Object type.
+
+## reportCodeType
+
+- **Type:** `"noModuleSource" | "noAssetsAndModuleSource" | "noCode" | { noModuleSource?: boolean; noAssetsAndModuleSource?: boolean; noCode?: boolean }`
+  - **In V2, only String type will be supported.**
+- **Optional:** `true`
+- **Default:** `undefined`, when undefined, outputs all complete data.
+- **Description:**
+  Select the scope of output analysis data:
+  - **Default**: Output all complete data
+  - **`noModuleSource`**: Output data excluding module ([Module](https://rspack.rs/config/module#module)) code. Module code refers to the packaged module code of individual files within the Bundle.
+  - **`noAssetsAndModuleSource`**: Output data excluding module ([Module](https://rspack.rs/config/module#module)) code and Assets product code
+  - **`noCode`**: Output data excluding code, i.e., no code is output
+
+### Output Data Comparison Table
+
+| Configuration               | Included Data                                                                                                            | Excluded Data                                                     | Use Cases                                                                                   | File Size |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------- |
+| **Default** (No Config)     | **Complete build information:**<br/>• Module graph data and its bundled code<br/>• Assets code<br/>• Other analysis data | None                                                              | • Development debugging<br/>• Complete analysis                                             | Largest   |
+| **noModuleSource**          | • Build information<br/>• Module graph data and its bundled code<br/>• Assets code<br/>• Other analysis data             | Module source code                                                | • No need to view source code<br/>• Memory leak issues                                      | Medium    |
+| **noAssetsAndModuleSource** | • Build information<br/>• Module graph data and its bundled code<br/>• Other analysis data                               | Module source code, Assets code                                   | • Large projects<br/>• No need to view source code and Assets code<br/>• Memory leak issues | Smaller   |
+| **noCode**                  | • Build information<br/>• Module graph data<br/>• Other analysis data                                                    | All code (Module source code + Module bundled code + Assets code) | • Large projects<br/>• CI/CD<br/>• Memory leak issues                                       | Smallest  |
+
+**Data output order from rich to simple:** `Default` > `noModuleSource` > `noAssetsAndModuleSource` > `noCode`
+
+> For the explanation of Asset and Module, see [Term](./term).
+
+- **Example:**
+
+```js
+new RsdoctorRspackPlugin({
+  reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
+}),
+```
+
+## reportDir
+
+- **Type:** `string`
+- **Optional:** `true`
+- **Default:** `undefined`
+
+The output directory for Rsdoctor reports. By default, it is the build output directory.
+
+## compressData
+
+:::warning
+Deprecated in V2, please use `output.mode: 'brief'` and `output.options.type: 'json'` instead. Refer to [compressData configuration migration](/config/options/options-v2#compressdata).
+:::
+
+- **Type:** `boolean`
+- **Optional:** `true`
+- **Default:** `true`
+
+compressData is used to configure whether to compress the analysis data under `[outputDir]/.rsdoctor`.
