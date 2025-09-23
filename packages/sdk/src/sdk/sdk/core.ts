@@ -8,6 +8,7 @@ const jc = require('json-cycle');
 import { logger } from '@rsdoctor/utils/logger';
 import { transformDataUrls } from '../utils';
 import { RsdoctorSDKOptions, DataWithUrl } from './types';
+import { Algorithm } from '@rsdoctor/utils/common';
 
 export abstract class SDKCore<T extends RsdoctorSDKOptions>
   implements SDK.RsdoctorSDKInstance
@@ -212,7 +213,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     key: string,
     index?: number,
   ): Promise<DataWithUrl> {
-    const sharding = new File.FileSharding(jsonStr);
+    const sharding = new File.FileSharding(Algorithm.compressText(jsonStr));
     const folder = path.resolve(dir, key);
     const writer = sharding.writeStringToFolder(folder, '', index);
     return writer.then((item) => {
