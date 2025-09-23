@@ -14,13 +14,12 @@ import { SDKCore } from './core';
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Lodash } from '@rsdoctor/utils/common';
 import { findRoot } from '../utils';
-
-const require = createRequire(import.meta.url);
-const jc = require('json-cycle');
+import { decycle } from '@rsdoctor/utils/common';
 
 export * from '../utils/openBrowser';
 export * from '../utils/base';
 
+const require = createRequire(import.meta.url);
 export class RsdoctorSDK<
     T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
   >
@@ -556,7 +555,7 @@ export class RsdoctorSDK<
       const jsonStrFn = () => {
         try {
           if (key === 'configs') {
-            return JSON.stringify(jc.decycle(data));
+            return JSON.stringify(decycle(data));
           }
           return JSON.stringify(data);
         } catch (error) {
