@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/docs",
-  "version": "1.2.3",
+  "version": "1.2.4-beta.2",
   "scripts": {
     "dev": "cross-env RSPRESS_PERSIST_CACHE=false rspress dev",
     "build": "cross-env RSPRESS_PERSIST_CACHE=false rspress build && sh build.sh",

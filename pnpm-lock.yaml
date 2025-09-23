@@ -734,6 +734,9 @@ importers:
       browserslist-load-config:
         specifier: ^1.0.1
         version: 1.0.1
+      filesize:
+        specifier: ^10.1.6
+        version: 10.1.6
       fs-extra:
         specifier: ^11.1.1
         version: 11.3.0
@@ -768,9 +771,6 @@ importers:
       '@types/node-fetch':
         specifier: ^2.6.12
         version: 2.6.12
-      '@types/path-browserify':
-        specifier: 1.0.3
-        version: 1.0.3
       '@types/semver':
         specifier: ^7.7.0
         version: 7.7.0
@@ -786,12 +786,6 @@ importers:
       enhanced-resolve:
         specifier: 5.12.0
         version: 5.12.0
-      filesize:
-        specifier: ^10.1.6
-        version: 10.1.6
-      path-browserify:
-        specifier: 1.0.1
-        version: 1.0.1
       prebundle:
         specifier: 1.4.2
         version: 1.4.2(typescript@5.9.2)
@@ -810,6 +804,8 @@ importers:
       webpack:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
+
+  packages/core/compiled/axios: {}
 
   packages/document:
     dependencies:
@@ -1047,6 +1043,10 @@ importers:
   packages/sdk/compiled/fs-extra: {}
 
   packages/sdk/compiled/json-cycle: {}
+
+  packages/sdk/compiled/sirv: {}
+
+  packages/sdk/compiled/socket.io: {}
 
   packages/types:
     dependencies:
