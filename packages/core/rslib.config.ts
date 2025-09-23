@@ -16,8 +16,13 @@ for (const item of prebundleConfig.dependencies) {
 const externalsPrebundle = [
   ({ request }: { request?: string }, callback: any) => {
     if (request) {
-      if (prebundleConfig.dependencies.includes(request)) {
+      if (
+        prebundleConfig.dependencies.includes(request) &&
+        request !== '@rsbuild/plugin-check-syntax'
+      ) {
         return callback(undefined, `../../../compiled/${request}/index.js`);
+      } else if (request === '@rsbuild/plugin-check-syntax') {
+        return callback(undefined, `../../../../compiled/${request}/index.js`);
       }
       const entries = Object.entries(regexpMap);
       for (const [name, test] of entries) {
