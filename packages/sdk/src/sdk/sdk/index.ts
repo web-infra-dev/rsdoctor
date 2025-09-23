@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'path';
-import { createRequire } from 'module';
 import { DevToolError } from '@rsdoctor/utils/error';
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
@@ -15,8 +14,24 @@ import { Algorithm } from '@rsdoctor/utils/common';
 import { Lodash } from '@rsdoctor/utils/common';
 import { findRoot } from '../utils';
 
-const require = createRequire(import.meta.url);
-const jc = require('json-cycle');
+import { decycle } from '@rsdoctor/utils/common';
+
+async function resolveModule(moduleName: string): Promise<string> {
+  try {
+    if (
+      typeof globalThis.require !== 'undefined' &&
+      globalThis.require.resolve
+    ) {
+      return globalThis.require.resolve(moduleName);
+    }
+  } catch {
+    // Fallback for ESM environments
+  }
+
+  const { createRequire } = await import('module');
+  const requireFn = createRequire(import.meta.url);
+  return requireFn.resolve(moduleName);
+}
 
 export * from '../utils/openBrowser';
 export * from '../utils/base';
@@ -384,7 +399,7 @@ export class RsdoctorSDK<
     if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
       const clientHtmlPath = this.extraConfig.innerClientPath
         ? this.extraConfig.innerClientPath
-        : require.resolve('@rsdoctor/client');
+        : await resolveModule('@rsdoctor/client');
 
       if (this.extraConfig?.brief?.type?.includes('json')) {
         const data = this.getStoreData();
@@ -556,7 +571,7 @@ export class RsdoctorSDK<
       const jsonStrFn = () => {
         try {
           if (key === 'configs') {
-            return JSON.stringify(jc.decycle(data));
+            return JSON.stringify(decycle(data));
           }
           return JSON.stringify(data);
         } catch (error) {
