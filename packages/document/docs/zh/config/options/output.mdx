@@ -32,6 +32,9 @@ mode 是没有 lite 配置项的，lite 模式即将废弃，参考 [lite 模式
 Brief 模式用于生成轻量级的分析报告，支持 HTML 和 JSON 两种输出格式。
 
 - **`type`**：输出类型，支持 `'html'` 和 `'json'` 数组，可同时选择多种格式
+  - 如果配置了 `['html', 'json']`，则会生成一个 html 文件，同时生成一个 json 文件。
+  - 如果配置了 `['json']`，则会生成一个 json 文件。文件名为 `rsdoctor-data.json`。
+  - 如果配置了 `['html']`，则会生成一个 html 文件。文件名可通过 `htmlOptions.reportHtmlName` 配置。
 - **`htmlOptions`**：HTML 输出相关配置
   - **`reportHtmlName`**：HTML 报告文件名，默认为 `report-rsdoctor.html`
 - **`jsonOptions`**：JSON 输出相关配置
@@ -39,6 +42,10 @@ Brief 模式用于生成轻量级的分析报告，支持 HTML 和 JSON 两种�
     - **`moduleGraph`**：是否包含模块图数据，默认为 `true`
     - **`chunkGraph`**：是否包含 Chunk 图数据，默认为 `true`
     - **`rules`**：是否包含规则数据，默认为 `true`
+
+**注意事项：**
+
+- Brief 模式下，**`reportCodeType`** 配置项无效，因为只支持 **`'noCode'`**。
 
 **配置示例：**
 
@@ -57,11 +64,58 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-**注意事项：**
+#### HTML 与 JSON 输出格式的区别
 
-- Brief 模式下，**`reportCodeType`** 配置项无效，因为只支持 **`'noCode'`**。
-- Brief 模式下，**type 为 'html' 时**，分析数据会直接注入到 HTML 文件中，便于单文件分享。
-- Brief 模式下，**type 为 'json' 时**，会生成结构化的数据文件，便于程序化处理。
+| 特性           | HTML 格式                                                | JSON 格式                                                 |
+| -------------- | -------------------------------------------------------- | --------------------------------------------------------- |
+| **文件结构**   | 单文件，包含完整的分析报告页面                           | 纯数据文件，需要配合客户端使用                            |
+| **使用方式**   | 可直接在浏览器中打开查看                                 | 需要上传到 Playground 或配合客户端解析                    |
+| **数据完整性** | 包含所有分析数据和可视化界面                             | 仅包含原始分析数据                                        |
+| **文件大小**   | 较大（包含样式和脚本）                                   | 较小（仅数据）                                            |
+| **适用场景**   | • 离线查看报告<br/>• 直接分享给他人<br/>• 不需要二次处理 | • 上传到 Playground<br/>• 程序化处理<br/>• 数据分析和集成 |
+| **依赖关系**   | 无外部依赖，自包含                                       | 需要 Rsdoctor 客户端支持                                  |
+
+> Playground 查看分析报告，详见 [Playground](/guide/start/playground)。
+
+**配置示例对比：**
+
+```js
+// 仅生成 HTML 报告（适合离线查看）
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      type: ['html'],
+      htmlOptions: {
+        reportHtmlName: 'build-report.html',
+      },
+    },
+  },
+});
+
+// 仅生成 JSON 数据（适合上传到 Playground）
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      type: ['json'],
+    },
+  },
+});
+
+// 同时生成两种格式（适合不同使用场景）
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      type: ['html', 'json'],
+      htmlOptions: {
+        reportHtmlName: 'build-report.html',
+      },
+    },
+  },
+});
+```
 
 ### mode: 'normal'
 
