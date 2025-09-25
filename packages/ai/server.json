@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-16/server.schema.json",
+  "name": "io.github.yifancong/rsdoctor",
+  "description": "An MCP server that provides build analysis and optimization recommendations for Rspack projects.",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@rsdoctor/mcp-server",
+      "runtimeHint": "node",
+      "version": "0.1.2-beta.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
