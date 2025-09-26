@@ -2,7 +2,7 @@
 
 ## 介绍
 
-Playground 是 Rsdoctor 提供的在线分析工具，支持上传构建分析数据并在线查看分析报告。无需本地安装 Rsdoctor，即可快速体验构建分析功能。
+Playground 是 Rsdoctor 提供的在线分析工具，支持上传构建分析数据并在线查看分析报告。无需本地安装 Rsdoctor，即可快速体验构建分析功能，支持完整报告展示。
 
 ## 支持的数据格式
 
@@ -16,8 +16,8 @@ Playground 是 Rsdoctor 提供的在线分析工具，支持上传构建分析�
 
 > 具体配置可查看 [output 配置](/config/options/output)。
 
-```js title="rspack.config.js 或 webpack.config.js"
-module.exports = {
+```js title="rspack.config.mjs 或 webpack.config.mjs"
+export default {
   plugins: [
     new RsdoctorRspackPlugin({
       output: {
@@ -57,16 +57,16 @@ Brief 模式与 Normal 模式的区别：
 
 **方式一：使用 verbose 模式**
 
-```js title="rspack.config.js 或 webpack.config.js"
-module.exports = {
+```js title="rspack.config.mjs 或 webpack.config.mjs"
+export default {
   stats: 'verbose',
 };
 ```
 
 **方式二：自定义 stats 配置**
 
-```js
-module.exports = {
+```js title="rspack.config.mjs 或 webpack.config.mjs"
+export default {
   stats: {
     all: false,
     chunks: true,
@@ -76,11 +76,13 @@ module.exports = {
     hash: true,
     ids: true,
     version: true,
-    entrypoints: true,
-    optimizationBailout: true,
+    optimizationBailout: true, // 可选配置
   },
 };
 ```
+
+- 可选配置
+  - `optimizationBailout`：可选配置，如果不开启该配置，只会影响每个 Module 的 [Bailout Reason](/guide/usage/module-analysis#bailout-reason) 的展示。
 
 #### 使用步骤
 
@@ -89,10 +91,3 @@ module.exports = {
 3. 访问 [Playground 页面](https://rsdoctor.rs/preview/#/resources/uploader)
 4. 上传 `stats.json` 文件
 5. 查看自动生成的分析报告
-
-## 功能特性
-
-- **无需安装**：直接在浏览器中使用，无需本地环境
-- **快速分析**：上传文件即可快速查看构建分析结果
-- **完整报告**：支持查看模块依赖、构建时间、包大小等完整分析
-- **数据分享**：便于团队间分享构建分析结果
