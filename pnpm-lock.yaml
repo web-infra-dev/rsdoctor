@@ -805,6 +805,10 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
+  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
+
+  packages/core/compiled/axios: {}
+
   packages/document:
     dependencies:
       '@rspress/core':
