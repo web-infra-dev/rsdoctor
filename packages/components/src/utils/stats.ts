@@ -6,12 +6,7 @@ import { isArray } from 'lodash-es';
 export function isRspackStats(
   json: Common.PlainObject,
 ): json is Plugin.StatsCompilation {
-  return (
-    json.hash &&
-    isArray(json.assets) &&
-    isArray(json.chunks) &&
-    isArray(json.modules)
-  );
+  return isArray(json.assets) && isArray(json.chunks);
 }
 
 export async function loadRspackStats(
