@@ -10,7 +10,7 @@ const defaultEnableRoutes = [
 
 // Build redirect URL
 const buildRedirectUrl = (enableRoutes: string[]) => {
-  const baseUrl = `http://${location.host}${location.pathname}#/overall`;
+  const baseUrl = `//${location.host}${location.pathname}#/overall`;
   const queryParams =
     enableRoutes && enableRoutes.length > 0
       ? `?${Client.RsdoctorClientUrlQuery.EnableRoutes}=${encodeURIComponent(JSON.stringify(enableRoutes))}`

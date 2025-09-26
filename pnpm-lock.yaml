@@ -805,8 +805,6 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
-  packages/core/compiled/axios: {}
-
   packages/document:
     dependencies:
       '@rspress/core':
@@ -1040,10 +1038,6 @@ importers:
   packages/sdk/compiled/fs-extra: {}
 
   packages/sdk/compiled/json-cycle: {}
-
-  packages/sdk/compiled/sirv: {}
-
-  packages/sdk/compiled/socket.io: {}
 
   packages/types:
     dependencies:
