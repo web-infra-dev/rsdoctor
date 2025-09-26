@@ -1,0 +1,97 @@
+# Playground
+
+## 介绍
+
+Playground 是 Rsdoctor 提供的在线分析工具，支持上传构建分析数据并在线查看分析报告。无需本地安装 Rsdoctor，即可快速体验构建分析功能，支持完整报告展示。
+
+## 支持的数据格式
+
+### 1. Rsdoctor 分析数据
+
+支持上传 Rsdoctor 生成的 JSON 格式分析数据，重新展示完整的分析报告。
+
+#### 配置要求
+
+需要配置 `output.mode: 'brief'` 并设置 `output.options.type` 为 `['json']` 或 `['html', 'json']`：
+
+> 具体配置可查看 [output 配置](/config/options/output)。
+
+```js title="rspack.config.mjs 或 webpack.config.mjs"
+export default {
+  plugins: [
+    new RsdoctorRspackPlugin({
+      output: {
+        mode: 'brief',
+        options: {
+          type: ['json'], // 或 ['html', 'json']
+        },
+      },
+    }),
+  ],
+};
+```
+
+#### 使用步骤
+
+1. 构建项目后，在输出目录中找到 `rsdoctor-data.json` 文件
+2. 访问 [Playground 页面](https://rsdoctor.rs/preview/#/resources/uploader)
+3. 上传 `rsdoctor-data.json` 文件
+4. 查看完整的分析报告
+
+:::tip
+
+Brief 模式与 Normal 模式的区别：
+
+- **Brief 模式**：生成单一文件（HTML 或 JSON），便于分享和上传
+- **Normal 模式**：生成包含多个文件的文件夹，适合本地查看
+
+:::
+
+### 2. Rspack Stats 数据
+
+支持上传 Rspack 或 webpack 的 `stats.json` 文件，自动生成分析报告。
+
+#### 配置要求
+
+需要配置详细的 stats 选项以获取完整的构建信息：
+
+**方式一：使用 verbose 模式**
+
+`verbose` 模式会输出所有构建信息（除调试信息外），自动包含 Rsdoctor 所需的数据。如想精简 stats 的输出数据，可参考下方示例。详细说明请查看 [Rspack stats](https://rspack.dev/config/stats)。
+
+```js title="rspack.config.mjs 或 webpack.config.mjs"
+export default {
+  stats: 'verbose',
+};
+```
+
+**方式二：stats 配置**
+
+需要按照下面的 Stats options 进行配置。
+
+```js title="rspack.config.mjs 或 webpack.config.mjs"
+export default {
+  stats: {
+    all: false,
+    chunks: true,
+    assets: true,
+    modules: true,
+    chunkModules: true,
+    hash: true,
+    ids: true,
+    version: true,
+    optimizationBailout: true, // 可选配置
+  },
+};
+```
+
+- 可选配置
+  - `optimizationBailout`：可选配置，如果不开启该配置，只会影响每个 Module 的 [Bailout Reason](/guide/usage/module-analysis#bailout-reason) 的展示。
+
+#### 使用步骤
+
+1. 在构建配置中设置上述 stats 选项
+2. 构建项目，生成 `stats.json` 文件
+3. 访问 [Playground 页面](https://rsdoctor.rs/preview/#/resources/uploader)
+4. 上传 `stats.json` 文件
+5. 查看自动生成的分析报告

@@ -32,6 +32,9 @@ Mode does not have a lite configuration option. The lite mode will be deprecated
 Brief mode is used to generate lightweight analysis reports, supporting both HTML and JSON output formats.
 
 - **`type`**: Output type, supports `'html'` and `'json'` arrays, allowing multiple formats to be selected simultaneously
+  - If configured with `['html', 'json']`, it will generate both an HTML file and a JSON file.
+  - If configured with `['json']`, it will generate a JSON file named `rsdoctor-data.json`.
+  - If configured with `['html']`, it will generate an HTML file. The filename can be configured via `htmlOptions.reportHtmlName`.
 - **`htmlOptions`**: HTML output related configuration
   - **`reportHtmlName`**: HTML report filename, defaults to `report-rsdoctor.html`
 - **`jsonOptions`**: JSON output related configuration
@@ -39,6 +42,10 @@ Brief mode is used to generate lightweight analysis reports, supporting both HTM
     - **`moduleGraph`**: Whether to include module graph data, defaults to `true`
     - **`chunkGraph`**: Whether to include Chunk graph data, defaults to `true`
     - **`rules`**: Whether to include rules data, defaults to `true`
+
+**Notes:**
+
+- In Brief mode, the **`reportCodeType`** configuration item is invalid because only **`'noCode'`** is supported.
 
 **Configuration Example:**
 
@@ -57,11 +64,58 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-**Notes:**
+#### HTML vs JSON Output Format Differences
 
-- In Brief mode, the **`reportCodeType`** configuration item is invalid because only **`'noCode'`** is supported.
-- In Brief mode, when **type is 'html'**, analysis data is directly injected into the HTML file, making it convenient for single-file sharing.
-- In Brief mode, when **type is 'json'**, structured data files are generated, making it convenient for programmatic processing.
+| Feature               | HTML Format                                                                                    | JSON Format                                                                              |
+| --------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| **File Structure**    | Single file containing complete analysis report page                                           | Pure data file requiring client support                                                  |
+| **Usage**             | Can be opened directly in browser for viewing                                                  | Needs to be uploaded to Playground or parsed with client                                 |
+| **Data Completeness** | Contains all analysis data and visualization interface                                         | Contains only raw analysis data                                                          |
+| **File Size**         | Larger (includes styles and scripts)                                                           | Smaller (data only)                                                                      |
+| **Use Cases**         | • Offline report viewing<br/>• Direct sharing with others<br/>• No secondary processing needed | • Upload to Playground<br/>• Programmatic processing<br/>• Data analysis and integration |
+| **Dependencies**      | Self-contained, no external dependencies                                                       | Requires Rsdoctor client support                                                         |
+
+> For viewing analysis reports in Playground, see [Playground](/guide/start/playground).
+
+**Configuration Example Comparison:**
+
+```js
+// Generate HTML report only (suitable for offline viewing)
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      type: ['html'],
+      htmlOptions: {
+        reportHtmlName: 'build-report.html',
+      },
+    },
+  },
+});
+
+// Generate JSON data only (suitable for uploading to Playground)
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      type: ['json'],
+    },
+  },
+});
+
+// Generate both formats (suitable for different use cases)
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      type: ['html', 'json'],
+      htmlOptions: {
+        reportHtmlName: 'build-report.html',
+      },
+    },
+  },
+});
+```
 
 ### mode: 'normal'
 
