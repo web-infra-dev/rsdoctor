@@ -56,13 +56,17 @@ Need to configure detailed stats options to get complete build information:
 
 **Method 1: Use verbose mode**
 
+`verbose` mode outputs all build information (except debug info) and automatically includes all data required by Rsdoctor. For custom configuration, refer to the example below. See [Rspack stats](https://rspack.dev/config/stats) for detailed information.
+
 ```js title="rspack.config.mjs/webpack.config.mjs"
 export default {
   stats: 'verbose',
 };
 ```
 
-**Method 2: Custom stats configuration**
+**Method 2: Stats configuration**
+
+Configure according to the Stats options below.
 
 ```js title="rspack.config.mjs/webpack.config.mjs"
 export default {

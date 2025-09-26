@@ -57,13 +57,17 @@ Brief 模式与 Normal 模式的区别：
 
 **方式一：使用 verbose 模式**
 
+`verbose` 模式会输出所有构建信息（除调试信息外），自动包含 Rsdoctor 所需的数据。如想精简 stats 的输出数据，可参考下方示例。详细说明请查看 [Rspack stats](https://rspack.dev/config/stats)。
+
 ```js title="rspack.config.mjs 或 webpack.config.mjs"
 export default {
   stats: 'verbose',
 };
 ```
 
-**方式二：自定义 stats 配置**
+**方式二：stats 配置**
+
+需要按照下面的 Stats options 进行配置。
 
 ```js title="rspack.config.mjs 或 webpack.config.mjs"
 export default {

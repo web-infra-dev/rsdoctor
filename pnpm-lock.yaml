@@ -1043,6 +1043,10 @@ importers:
 
   packages/sdk/compiled/json-cycle: {}
 
+  packages/sdk/compiled/sirv: {}
+
+  packages/sdk/compiled/socket.io: {}
+
   packages/types:
     dependencies:
       '@types/connect':
