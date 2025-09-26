@@ -24,27 +24,50 @@ export function chunkTransform(
     chunkGraph.addChunk(chunk);
   });
 
-  bundleStats.assets?.forEach((_asset) => {
-    if (_asset.type === FILTER_ASSETS_TYPE) {
-      /**  Filter assets with type = 'assets by status',
-       * which are the assets that are initially pushed when generating assets groups to record asset size info.
-       * This feature is only available in webpack@5.xx and later versions.
-       **/
-      return;
-    }
+  // Check if all assets are of FILTER_ASSETS_TYPE
+  const hasOnlyFilterAssets =
+    bundleStats.assets?.every((asset) => asset.type === FILTER_ASSETS_TYPE) ||
+    false;
 
-    const chunks =
-      _asset.chunks
-        ?.map((ck) => {
-          const chunk = chunkGraph.getChunkById(String(ck));
-          return chunk;
-        })
-        .filter(<T>(chunk: T): chunk is NonNullable<T> => !!chunk) || [];
-    const { content = '' } = assetMap.get(_asset.name) || {};
-    const asset = new Asset(_asset.name, _asset.size, chunks, content);
-    chunks.forEach((chunk) => chunk?.addAsset(asset));
-    chunkGraph.addAsset(asset);
-  });
+  if (hasOnlyFilterAssets) {
+    // If only FILTER_ASSETS_TYPE assets exist, create assets from chunk files
+    bundleStats.chunks?.forEach((_chunk) => {
+      const chunk = chunkGraph.getChunkById(String(_chunk.id));
+      if (chunk && _chunk.files) {
+        _chunk.files.forEach((fileName) => {
+          if (!chunkGraph.getAssetByPath(fileName)) {
+            const { content = '' } = assetMap.get(fileName) || {};
+            const asset = new Asset(fileName, 0, [chunk], content); // size is 0 since we don't have it from stats
+            chunk.addAsset(asset);
+            chunkGraph.addAsset(asset);
+          }
+        });
+      }
+    });
+  } else {
+    // Normal asset processing
+    bundleStats.assets?.forEach((_asset) => {
+      if (_asset.type === FILTER_ASSETS_TYPE) {
+        /**  Filter assets with type = 'assets by status',
+         * which are the assets that are initially pushed when generating assets groups to record asset size info.
+         * This feature is only available in webpack@5.xx and later versions.
+         **/
+        return;
+      }
+
+      const chunks =
+        _asset.chunks
+          ?.map((ck) => {
+            const chunk = chunkGraph.getChunkById(String(ck));
+            return chunk;
+          })
+          .filter(<T>(chunk: T): chunk is NonNullable<T> => !!chunk) || [];
+      const { content = '' } = assetMap.get(_asset.name) || {};
+      const asset = new Asset(_asset.name, _asset.size, chunks, content);
+      chunks.forEach((chunk) => chunk?.addAsset(asset));
+      chunkGraph.addAsset(asset);
+    });
+  }
 
   // build the entrypoints in Chunk Graph
   // must called after chunk and asset created end in chunk graph!
