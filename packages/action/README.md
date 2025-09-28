@@ -1,56 +1,56 @@
 # Compressed Size Action Demo
 
-这是一个简化版的 GitHub Action，用于检查代码变更前后的文件压缩大小差异。
+This is a simplified GitHub Action for checking file compression size differences before and after code changes.
 
-## 功能
+## Features
 
-- 智能检测 GitHub 事件类型，自动执行相应操作
-- **MR 提交时**：只下载目标分支的工件（如果存在）
-- **MR 合入时**：只上传当前分支的工件
-- 支持自定义文件路径
-- 通过 GitHub API 查找目标分支的最新 commit
-- 工件按 commit hash 命名，避免冲突
+- Intelligently detects GitHub event types and automatically executes corresponding operations
+- **On MR submission**: Only downloads artifacts from the target branch (if they exist)
+- **On MR merge**: Only uploads artifacts from the current branch
+- Supports custom file paths
+- Finds the latest commit of the target branch through GitHub API
+- Artifacts are named by commit hash to avoid conflicts
 
-## 智能行为
+## Smart Behavior
 
-### 🔄 MR 合入时（push 到主分支）
+### 🔄 On MR Merge (push to main branch)
 
-- 只上传当前分支的工件
-- 工件命名：`路径-文件名-commithash.扩展名`
-- 用于保存最新的基准数据
+- Only uploads artifacts from the current branch
+- Artifact naming: `path-filename-commithash.extension`
+- Used to save the latest baseline data
 
-### 📥 MR 提交时（pull_request 事件）
+### 📥 On MR Submission (pull_request event)
 
-- 只下载目标分支的工件（如果存在）
-- 如果找到目标分支工件，则下载并比较
-- 如果没有找到，则打印 "No baseline data found"
-- 用于比较当前变更与基准数据
+- Only downloads artifacts from the target branch (if they exist)
+- If target branch artifacts are found, downloads and compares them
+- If not found, prints "No baseline data found"
+- Used to compare current changes with baseline data
 
-## 配置
+## Configuration
 
 ```yaml
 - uses: ./
   with:
-    # GitHub token，用于访问 API
+    # GitHub token for API access
     github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    # 要上传的文件路径（相对于项目根目录）
+    # File path to upload (relative to project root)
     file_path: 'artifacts/1.json'
 
-    # 目标分支（默认为 main）
+    # Target branch (defaults to main)
     target_branch: 'main'
 ```
 
-## 工件命名规则
+## Artifact Naming Rules
 
-工件将使用以下格式命名：
+Artifacts will be named using the following format:
 
-- 格式：`路径-文件名-commithash.扩展名`
-- 示例：`artifacts-1-f18c5686ba.json`
+- Format: `path-filename-commithash.extension`
+- Example: `artifacts-1-f18c5686ba.json`
 
-## 使用场景
+## Usage Scenarios
 
-### 场景 1：MR 提交时
+### Scenario 1: On MR Submission
 
 ```yaml
 on:
@@ -58,15 +58,15 @@ on:
     types: [opened, synchronize]
 ```
 
-Action 会：
+The Action will:
 
-1. 查找目标分支最新 commit
-2. 尝试下载对应的工件
-3. 如果找到真实基准数据，则使用真实数据进行比较
-4. 如果没找到，则使用内置的 demo 数据作为基准进行对比展示
-5. 生成 Bundle Size Report 卡片
+1. Find the latest commit of the target branch
+2. Attempt to download the corresponding artifacts
+3. If real baseline data is found, use real data for comparison
+4. If not found, use built-in demo data as baseline for comparison display
+5. Generate a Bundle Size Report card
 
-### 场景 2：MR 合入时
+### Scenario 2: On MR Merge
 
 ```yaml
 on:
@@ -74,15 +74,15 @@ on:
     branches: [main]
 ```
 
-Action 会：
+The Action will:
 
-1. 上传当前分支的工件
-2. 生成简单的 Bundle Size Report 卡片
-3. 工件将作为后续 MR 的基准数据
+1. Upload artifacts from the current branch
+2. Generate a simple Bundle Size Report card
+3. Artifacts will serve as baseline data for subsequent MRs
 
-## 报告卡片示例
+## Report Card Example
 
-Action 会在 GitHub CI 中生成如下格式的报告卡片：
+The Action will generate a report card in the following format in GitHub CI:
 
 ### 📦 Bundle Size Report
 
@@ -99,9 +99,9 @@ Action 会在 GitHub CI 中生成如下格式的报告卡片：
 | dist/vendor.js  | 40.0 MB |
 | dist/styles.css | 10.0 MB |
 
-## JSON 文件格式
+## JSON File Format
 
-您的 `file_path` 指向的 JSON 文件应包含以下格式的数据：
+The JSON file pointed to by your `file_path` should contain data in the following format:
 
 ```json
 {
@@ -121,12 +121,12 @@ Action 会在 GitHub CI 中生成如下格式的报告卡片：
 }
 ```
 
-- `totalSize`: 总大小（字节）
-- `files`: 文件列表，每个文件包含路径和大小信息
+- `totalSize`: Total size (in bytes)
+- `files`: List of files, each containing path and size information
 
-## Demo 基准数据
+## Demo Baseline Data
 
-当无法找到目标分支的真实工件时，Action 会自动使用内置的 demo 数据作为基准进行对比：
+When real artifacts from the target branch cannot be found, the Action will automatically use built-in demo data as baseline for comparison:
 
 ```json
 {
@@ -148,14 +148,14 @@ Action 会在 GitHub CI 中生成如下格式的报告卡片：
 }
 ```
 
-这样即使是首次运行或没有历史数据时，也能生成有意义的对比报告，帮助开发者了解当前构建的大小情况。
+This way, even on first run or when there's no historical data, meaningful comparison reports can be generated to help developers understand the current build size situation.
 
-## 开发
+## Development
 
 ```bash
-# 安装依赖
+# Install dependencies
 npm install
 
-# 构建
+# Build
 npm run build
 ```
