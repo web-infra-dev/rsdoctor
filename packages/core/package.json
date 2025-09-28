@@ -73,6 +73,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "browserslist-load-config": "^1.0.1",
+    "enhanced-resolve": "5.12.0",
     "filesize": "^10.1.6",
     "fs-extra": "^11.1.1",
     "lodash-es": "^4.17.21",
@@ -82,7 +83,6 @@
   "devDependencies": {
     "@rsbuild/plugin-check-syntax": "1.4.0",
     "axios": "^1.12.0",
-    "enhanced-resolve": "5.12.0",
     "@rspack/core": "1.5.2",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
