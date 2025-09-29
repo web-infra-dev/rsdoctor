@@ -24,8 +24,8 @@
   },
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
-    "@rspress/plugin-algolia": "2.0.0-beta.29",
-    "@rspress/plugin-llms": "2.0.0-beta.29",
+    "@rspress/plugin-algolia": "2.0.0-beta.34",
+    "@rspress/plugin-llms": "2.0.0-beta.34",
     "@rspress/plugin-rss": "2.0.0-beta.29",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.24",
@@ -36,7 +36,7 @@
     "rsbuild-plugin-google-analytics": "^1.0.4",
     "rsbuild-plugin-open-graph": "^1.1.0",
     "rspress-plugin-font-open-sans": "^1.0.3",
-    "rspress-plugin-sitemap": "^1.1.4",
+    "rspress-plugin-sitemap": "^1.2.1",
     "typescript": "^5.9.2",
     "@rsbuild/plugin-sass": "^1.4.0"
   },
@@ -44,6 +44,6 @@
     "@rstack-dev/doc-ui": "1.11.0",
     "clsx": "^2.1.1",
     "react-markdown": "^9.1.0",
-    "@rspress/core": "2.0.0-beta.29"
+    "@rspress/core": "2.0.0-beta.34"
   }
 }
