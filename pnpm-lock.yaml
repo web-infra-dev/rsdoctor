@@ -30,8 +30,8 @@ importers:
         specifier: ^0.14.0
         version: 0.14.0(typescript@5.9.2)
       '@rstest/core':
-        specifier: 0.4.1
-        version: 0.4.1
+        specifier: 0.5.1
+        version: 0.5.1
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:scripts/test-helper
@@ -487,8 +487,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@rstest/core':
-        specifier: 0.4.1
-        version: 0.4.1
+        specifier: 0.5.1
+        version: 0.5.1
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -4072,8 +4072,8 @@ packages:
   '@rstack-dev/doc-ui@1.11.0':
     resolution: {integrity: sha512-5GZ8EwvmKj8LXomEElC4GhDlDW2SazCeHbA+ieacJrlcGduuiJXGTBzVA2rNnPLjAb41H0esuy0aH0skRIQAqA==}
 
-  '@rstest/core@0.4.1':
-    resolution: {integrity: sha512-EJwdpxPHabmBkAUunDy8JXFE7fr6BW5+9826IBPWKDoni6HZGvgkVjkuoiELwIWnwptDOXe/OD21aoNdV8V+yw==}
+  '@rstest/core@0.5.1':
+    resolution: {integrity: sha512-CCAGIApl5613tj18fyNTNg9GoDOukkZdnhINa7elcYkQhaMdB7qQx/w04UpdJDh9OyTy+qPPJ8oMVehq88Tj8A==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
@@ -4817,10 +4817,6 @@ packages:
   assert@2.1.0:
     resolution: {integrity: sha512-eLHpSK/Y4nhMJ07gDaAzoX/XAKS8PSaojml3M0DM4JpV1LAi5JOJ/p6H/XWrl8L+DzVEvVCW1z3vWAaB9oTsQw==}
 
-  assertion-error@2.0.1:
-    resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
-    engines: {node: '>=12'}
-
   astral-regex@2.0.0:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
@@ -4958,9 +4954,6 @@ packages:
 
   bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
-
-  birpc@2.5.0:
-    resolution: {integrity: sha512-VSWO/W6nNQdyP520F1mhf+Lc2f8pjGQOtoHHm7Ze8Go1kX7akpVIrtTa0fn+HB0QJEDVacl6aO08YE0PgXfdnQ==}
 
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -5130,10 +5123,6 @@ packages:
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
 
-  chai@5.3.3:
-    resolution: {integrity: sha512-4zNhdJD/iOjSH0A05ea+Ke6MU5mmpQcbQsSOkgdaUMJ9zTlDTD/GYlwohmIE2u0gaxHYiVHEn1Fw9mZ/ktJWgw==}
-    engines: {node: '>=18'}
-
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
     engines: {node: '>=4'}
@@ -5172,10 +5161,6 @@ packages:
 
   chardet@2.1.0:
     resolution: {integrity: sha512-bNFETTG/pM5ryzQ9Ad0lJOTa6HWD/YsScAR3EnCPZRPlQh77JocYktSHOUHelyhm8IARL+o4c4F1bP5KVOjiRA==}
-
-  check-error@2.1.1:
-    resolution: {integrity: sha512-OAlb+T7V4Op9OwdkjmguYRqncdlx5JiofwOAUkmTF+jNdHwzTaTs4sRAGpzLF3oOz5xAyDGrPgeIDFQmDOTiJw==}
-    engines: {node: '>= 16'}
 
   chokidar@3.6.0:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
@@ -5641,10 +5626,6 @@ packages:
 
   deep-eql@4.1.4:
     resolution: {integrity: sha512-SUwdGfqdKOwxCPeVYjwSyRpJ7Z+fhpwIAtmCUdZIWZ/YP5R9WAsyuSgpLVDi9bjWoN2LXHNss/dk3urXtdQxGg==}
-    engines: {node: '>=6'}
-
-  deep-eql@5.0.2:
-    resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
     engines: {node: '>=6'}
 
   deep-extend@0.6.0:
@@ -7223,9 +7204,6 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
-  loupe@3.1.4:
-    resolution: {integrity: sha512-wJzkKwJrheKtknCOKNEtDK4iqg/MxmZheEMtSTYvnzRdEYaZzmgH976nenp8WdJRdx5Vc1X/9MO0Oszl6ezeXg==}
-
   lower-case@2.0.2:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
 
@@ -8127,10 +8105,6 @@ packages:
 
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
-
-  pathval@2.0.0:
-    resolution: {integrity: sha512-vE7JKRyES09KiunauX7nd2Q9/L7lhok4smP9RZTDeD4MVs72Dp2qNFVz39Nz5a0FVEW0BJR6C0DYrq6unoziZA==}
-    engines: {node: '>= 14.16'}
 
   pbkdf2@3.1.3:
     resolution: {integrity: sha512-wfRLBZ0feWRhCIkoMB6ete7czJcnNnqRpcoWQBLqatqXXmelSRqfdDK4F3u9T2s2cXas/hQJcryI/4lAL+XTlA==}
@@ -14469,14 +14443,10 @@ snapshots:
       - react
       - react-dom
 
-  '@rstest/core@0.4.1':
+  '@rstest/core@0.5.1':
     dependencies:
       '@rsbuild/core': 1.5.0
       '@types/chai': 5.2.2
-      birpc: 2.5.0
-      chai: 5.3.3
-      pathe: 2.0.3
-      std-env: 3.9.0
       tinypool: 1.1.1
 
   '@selderee/plugin-htmlparser2@0.11.0':
@@ -15471,8 +15441,6 @@ snapshots:
       object.assign: 4.1.7
       util: 0.12.5
 
-  assertion-error@2.0.1: {}
-
   astral-regex@2.0.0: {}
 
   astring@1.9.0: {}
@@ -15618,8 +15586,6 @@ snapshots:
   bindings@1.5.0:
     dependencies:
       file-uri-to-path: 1.0.0
-
-  birpc@2.5.0: {}
 
   bl@4.1.0:
     dependencies:
@@ -15872,14 +15838,6 @@ snapshots:
 
   ccount@2.0.1: {}
 
-  chai@5.3.3:
-    dependencies:
-      assertion-error: 2.0.1
-      check-error: 2.1.1
-      deep-eql: 5.0.2
-      loupe: 3.1.4
-      pathval: 2.0.0
-
   chalk@2.4.2:
     dependencies:
       ansi-styles: 3.2.1
@@ -15912,8 +15870,6 @@ snapshots:
   character-reference-invalid@2.0.1: {}
 
   chardet@2.1.0: {}
-
-  check-error@2.1.1: {}
 
   chokidar@3.6.0:
     dependencies:
@@ -16424,8 +16380,6 @@ snapshots:
   deep-eql@4.1.4:
     dependencies:
       type-detect: 4.1.0
-
-  deep-eql@5.0.2: {}
 
   deep-extend@0.6.0: {}
 
@@ -18254,8 +18208,6 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  loupe@3.1.4: {}
-
   lower-case@2.0.2:
     dependencies:
       tslib: 2.8.1
@@ -19698,8 +19650,6 @@ snapshots:
   pathe@1.1.2: {}
 
   pathe@2.0.3: {}
-
-  pathval@2.0.0: {}
 
   pbkdf2@3.1.3:
     dependencies:
