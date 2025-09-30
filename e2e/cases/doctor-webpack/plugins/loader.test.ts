@@ -8,7 +8,7 @@ import { createRsdoctorPlugin } from '../test-utils';
 
 const testLoaderPath = path.resolve(
   __dirname,
-  '../fixtures/loaders/comment.js',
+  '../fixtures/loaders/comment.cjs',
 );
 
 async function webpack(
