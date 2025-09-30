@@ -439,6 +439,9 @@ importers:
       htmlparser2:
         specifier: 7.2.0
         version: 7.2.0
+      mini-css-extract-plugin:
+        specifier: ^2.9.2
+        version: 2.9.2(webpack@5.97.1)
       mini-svg-data-uri:
         specifier: ^1.4.4
         version: 1.4.4
@@ -804,6 +807,8 @@ importers:
       webpack:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
+
+  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
 
   packages/core/compiled/axios: {}
 
@@ -19235,6 +19240,12 @@ snapshots:
       schema-utils: 4.3.0
       tapable: 2.2.3
       webpack: 5.97.1(esbuild@0.17.19)
+
+  mini-css-extract-plugin@2.9.2(webpack@5.97.1):
+    dependencies:
+      schema-utils: 4.3.0
+      tapable: 2.2.3
+      webpack: 5.97.1(webpack-cli@5.1.4)
 
   mini-svg-data-uri@1.4.4: {}
 

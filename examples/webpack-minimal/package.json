@@ -20,6 +20,7 @@
     "chalk": "^5.4.1",
     "css-loader": "^6.9.0",
     "htmlparser2": "7.2.0",
+    "mini-css-extract-plugin": "^2.9.2",
     "mini-svg-data-uri": "^1.4.4"
   },
   "devDependencies": {
