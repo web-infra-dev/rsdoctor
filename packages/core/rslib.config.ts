@@ -97,6 +97,7 @@ export default defineConfig({
             if (args.filename === 'inner-plugins/loaders/proxy.cjs') {
               return 'module.exports = loaderModule; // This is a proxy loader, do not remove this line';
             }
+            // For ESM files, we don't need to add export since it's already exported
             return '';
           },
           footer: true,

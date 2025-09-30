@@ -1,6 +1,6 @@
 /** @type {import('prebundle').Config} */
 export default {
-  dependencies: ['axios', '@rsbuild/plugin-check-syntax'],
+  dependencies: ['axios'],
   exclude: [
     '@rsdoctor/client',
     '@rsdoctor/graph',

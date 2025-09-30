@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import fse from 'fs-extra/esm';
+import fse from 'fs-extra';
 import { omit } from 'lodash-es';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
