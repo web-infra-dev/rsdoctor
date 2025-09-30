@@ -187,7 +187,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
       '[SDKCore.writeManifest]',
     );
 
-    await Promise.all([File.fse.outputFileSync(diskManifestPath, dataStr)]);
+    await Promise.all([File.fse.outputFile(diskManifestPath, dataStr)]);
 
     return diskManifestPath;
   }

@@ -656,7 +656,9 @@ export class RsdoctorSDK<
         'rsdoctor-report.html',
     );
 
-    File.fse.outputFileSync(outputFilePath, htmlContent, {
+    fs.mkdirSync(path.dirname(outputFilePath), { recursive: true });
+
+    fs.writeFileSync(outputFilePath, htmlContent, {
       encoding: 'utf-8',
       flag: 'w',
     });
