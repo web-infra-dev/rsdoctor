@@ -28,7 +28,7 @@
     "@rspress/plugin-llms": "2.0.0-beta.34",
     "@rspress/plugin-rss": "2.0.0-beta.29",
     "@types/node": "^22.8.1",
-    "@types/react": "^18.3.24",
+    "@types/react": "^18.3.26",
     "@types/react-dom": "^18.3.7",
     "cross-env": "^7.0.3",
     "react": "18.3.1",

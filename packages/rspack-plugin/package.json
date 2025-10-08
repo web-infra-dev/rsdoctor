@@ -35,7 +35,7 @@
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
-    "@rspack/core": "1.5.7",
+    "@rspack/core": "1.5.8",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.8.1",
     "@types/tapable": "2.2.7",

@@ -77,13 +77,13 @@
     "filesize": "^10.1.6",
     "fs-extra": "^11.1.1",
     "lodash-es": "^4.17.21",
-    "semver": "^7.7.2",
+    "semver": "^7.7.3",
     "source-map": "^0.7.6"
   },
   "devDependencies": {
     "@rsbuild/plugin-check-syntax": "1.4.0",
     "axios": "^1.12.2",
-    "@rspack/core": "1.5.7",
+    "@rspack/core": "1.5.8",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash-es": "^4.17.12",
