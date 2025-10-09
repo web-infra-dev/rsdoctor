@@ -8,7 +8,7 @@ import { createRsdoctorPlugin } from '../test-utils';
 const file = path.resolve(__dirname, '../fixtures/a.js');
 const loaderPath = path.resolve(
   __dirname,
-  '../fixtures/loaders/serialize-query-to-comment.js',
+  '../fixtures/loaders/serialize-query-to-comment.cjs',
 );
 
 async function webpack5(query?: string) {
@@ -40,8 +40,10 @@ test('webpack5 loader rule.use maybe empty array with oneOf', async () => {
 
   await webpack5();
 
-  const { loader } = getSDK().getStoreData();
-  expect(loader).toHaveLength(1);
+  const storeData = getSDK()
+    ? getSDK()?.getStoreData() || { loader: [] }
+    : { loader: [] };
+  expect(storeData?.loader).toHaveLength(1);
   os.EOL === '\n' &&
-    expect(loader[0].loaders[0].result).toEqual(codeTransformed);
+    expect(storeData?.loader?.[0].loaders[0].result).toEqual(codeTransformed);
 });

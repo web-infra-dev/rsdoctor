@@ -7,7 +7,7 @@ import { createRsdoctorPlugin } from './test-utils';
 
 async function webpack(compile: typeof compileByWebpack5) {
   const file = path.resolve(__dirname, './fixtures/b.js');
-  const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
+  const loader = path.resolve(__dirname, './fixtures/loaders/comment.cjs');
   const res = await compile(file, {
     module: {
       rules: [
@@ -35,8 +35,8 @@ const costsNames = [
 test('webpack5', async () => {
   await webpack(compileByWebpack5);
   const sdk = getSDK();
-  const { configs } = sdk.getStoreData();
-  const { costs } = sdk.getStoreData().summary;
+  const { configs } = sdk?.getStoreData() || { configs: [] };
+  const { costs } = sdk?.getStoreData()?.summary || { costs: [] };
 
   expect(configs[0]).toBeInstanceOf(Object);
   expect(configs[0].name).toEqual('webpack');

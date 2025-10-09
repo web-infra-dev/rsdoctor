@@ -8,7 +8,7 @@ import { createRsdoctorMultiPlugin } from '../test-utils';
 
 async function compileWithBriefJsonMode(jsonOptions?: any) {
   const file = path.resolve(__dirname, '../fixtures/a.js');
-  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.js');
+  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.cjs');
 
   const outputDir = path.resolve(
     tmpdir(),
@@ -198,7 +198,7 @@ test('brief mode with JSON type and custom sections should generate selective da
 
 test('brief mode with both HTML and JSON types should generate both outputs', async () => {
   const file = path.resolve(__dirname, '../fixtures/a.js');
-  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.js');
+  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.cjs');
 
   const outputDir = path.resolve(
     tmpdir(),

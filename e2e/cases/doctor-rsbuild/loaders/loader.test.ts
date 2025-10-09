@@ -47,7 +47,7 @@ test('rsbuild environments tests', async () => {
   const rsdbuildInstance = await rsbuild();
   await rsdbuildInstance.build();
   const sdk = getSDK('web');
-  expect(sdk.name).toBe('web');
+  expect(sdk?.name).toBe('web');
   const sdk1 = getSDK('web1');
-  expect(sdk1.name).toBe('web1');
+  expect(sdk1?.name).toBe('web1');
 });
