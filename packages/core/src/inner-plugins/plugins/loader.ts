@@ -21,11 +21,17 @@ export class InternalLoaderPlugin<
 
   // TODO: find the reason why using loader/proxy.js causes this problem https://github.com/web-infra-dev/rsdoctor/pull/1271.
   public readonly internalLoaderPath: string = (() => {
-    // Try to resolve proxy-esm.js first (ESM), fallback to proxy.cjs (CJS)
-    try {
-      return require.resolve(path.join(__dirname, `../loaders/proxy-esm.js`));
-    } catch {
+    const isCJS = typeof __filename !== 'undefined';
+
+    if (isCJS) {
+      // CJS environment: only use proxy.cjs
       return require.resolve(path.join(__dirname, `../loaders/proxy.cjs`));
+    } else {
+      try {
+        return require.resolve(path.join(__dirname, `../loaders/proxy-esm.js`));
+      } catch {
+        return require.resolve(path.join(__dirname, `../loaders/proxy.cjs`));
+      }
     }
   })();
 

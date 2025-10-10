@@ -12,6 +12,7 @@
     "@lynx-js/react": "^0.114.1",
     "@lynx-js/rspeedy": "^0.11.5",
     "@playwright/test": "1.54.2",
+    "@rsbuild/plugin-less": "1.5.0",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",

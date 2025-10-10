@@ -74,6 +74,9 @@ importers:
       '@playwright/test':
         specifier: 1.54.2
         version: 1.54.2
+      '@rsbuild/plugin-less':
+        specifier: 1.5.0
+        version: 1.5.0(@rsbuild/core@1.5.14)
       '@rsdoctor/cli':
         specifier: workspace:*
         version: link:../packages/cli
@@ -3455,6 +3458,11 @@ packages:
 
   '@rsbuild/plugin-less@1.1.0':
     resolution: {integrity: sha512-F834dobNDIdyGj5trMxIqzm/qf54Kj5KVDxeuB3TTj64mzq5fHJnR4aI/iYIliUwICG1/l2MliKr5sR34Kb7eA==}
+    peerDependencies:
+      '@rsbuild/core': 1.x
+
+  '@rsbuild/plugin-less@1.5.0':
+    resolution: {integrity: sha512-l+/J4/ZQl6UtCUqAaymo9H917ZJiqX8uxTYesG/xdyYJP2H3dn7fznjDP3d29eQhoY0wc3rcCvvjTYtpYG9OxQ==}
     peerDependencies:
       '@rsbuild/core': 1.x
 
@@ -13577,6 +13585,12 @@ snapshots:
   '@rsbuild/plugin-less@1.1.0(@rsbuild/core@1.1.13)':
     dependencies:
       '@rsbuild/core': 1.1.13
+      deepmerge: 4.3.1
+      reduce-configs: 1.1.1
+
+  '@rsbuild/plugin-less@1.5.0(@rsbuild/core@1.5.14)':
+    dependencies:
+      '@rsbuild/core': 1.5.14
       deepmerge: 4.3.1
       reduce-configs: 1.1.1
 
