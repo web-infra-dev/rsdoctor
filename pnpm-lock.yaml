@@ -490,11 +490,11 @@ importers:
         version: 3.2.0
     devDependencies:
       '@rslib/core':
-        specifier: ^0.13.2
-        version: 0.13.3(typescript@5.4.5)
+        specifier: ^0.14.0
+        version: 0.14.0(typescript@5.4.5)
       '@types/node':
-        specifier: ^24.5.2
-        version: 24.7.1
+        specifier: ^22.8.1
+        version: 22.18.1
 
   packages/ai:
     dependencies:
@@ -3795,19 +3795,6 @@ packages:
 
   '@rsdoctor/utils@1.2.3':
     resolution: {integrity: sha512-HawWrcqXeqdhj4dKhdjJg4BXvstcQauYSRx0cnYH78f7z9PW60Smr6vYpByXC87rK3JKpa6CNiZi+qhI5yTAog==}
-
-  '@rslib/core@0.13.3':
-    resolution: {integrity: sha512-W9U3KBC3VZbpJSfceRi6UpHFqbwuNGXjrwCuAErxS1YHi1fM0K15xIjQDNMsYoWsAQg0kazFZ5HHAxYUuEkiyA==}
-    engines: {node: '>=18.12.0'}
-    hasBin: true
-    peerDependencies:
-      '@microsoft/api-extractor': ^7
-      typescript: ^5
-    peerDependenciesMeta:
-      '@microsoft/api-extractor':
-        optional: true
-      typescript:
-        optional: true
 
   '@rslib/core@0.14.0':
     resolution: {integrity: sha512-N8FP813mteNeWVo0HrwOXfy0gaz222chu3ZMEaqR1AKxH7HD3i3rRvm8sQ7yQXQ27wyLHl1/Fttxa9MG/dnHeA==}
@@ -9913,22 +9900,6 @@ packages:
     resolution: {integrity: sha512-nLTrUKm2UyiL7rlhapu/Zl45FwNgkZGaCpZbIHajDYgwlJCOzLSk+cIPAnsEqV955GjILJnKbdQC1nVPz+gAYQ==}
     engines: {node: '>= 18'}
 
-  rsbuild-plugin-dts@0.13.3:
-    resolution: {integrity: sha512-clPsUpLq4URqntM0xCF6WMBBx+iTxU0z2mkdJNLnWEx7qPjxAEiHOqFYPQsvaHxNkKRan6Yb75I7XhRMjo0Vrg==}
-    engines: {node: '>=18.12.0'}
-    peerDependencies:
-      '@microsoft/api-extractor': ^7
-      '@rsbuild/core': 1.x
-      '@typescript/native-preview': 7.x
-      typescript: ^5
-    peerDependenciesMeta:
-      '@microsoft/api-extractor':
-        optional: true
-      '@typescript/native-preview':
-        optional: true
-      typescript:
-        optional: true
-
   rsbuild-plugin-dts@0.14.0:
     resolution: {integrity: sha512-PHnixNk1mLYEa5VFz3cx9AvqCuU8I+FlENpl2AY2X0E9kND7ZIAmZKhzArIT6KLSJLpiYp3ZNnXyBGpGP7KJmQ==}
     engines: {node: '>=18.12.0'}
@@ -14859,10 +14830,10 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rslib/core@0.13.3(typescript@5.4.5)':
+  '@rslib/core@0.14.0(typescript@5.4.5)':
     dependencies:
       '@rsbuild/core': 1.5.14
-      rsbuild-plugin-dts: 0.13.3(@rsbuild/core@1.5.14)(typescript@5.4.5)
+      rsbuild-plugin-dts: 0.14.0(@rsbuild/core@1.5.14)(typescript@5.4.5)
     optionalDependencies:
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -15857,6 +15828,7 @@ snapshots:
   '@types/node@24.7.1':
     dependencies:
       undici-types: 7.14.0
+    optional: true
 
   '@types/node@8.10.66':
     optional: true
@@ -22719,7 +22691,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.13.3(@rsbuild/core@1.5.14)(typescript@5.4.5):
+  rsbuild-plugin-dts@0.14.0(@rsbuild/core@1.5.14)(typescript@5.4.5):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 1.5.14
@@ -23856,7 +23828,8 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@7.14.0: {}
+  undici-types@7.14.0:
+    optional: true
 
   undici@5.29.0:
     dependencies:
