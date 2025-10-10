@@ -5,7 +5,9 @@ import { GitHubService } from './github';
 import {
   loadSizeData,
   generateSizeReport,
-  getDemoBaselineData,
+  parseRsdoctorData,
+  generateBundleAnalysisReport,
+  BundleAnalysis,
 } from './report';
 import path from 'path';
 
@@ -27,6 +29,15 @@ function isPullRequestEvent(): boolean {
   try {
     const githubService = new GitHubService();
 
+    try {
+      await githubService.verifyTokenPermissions();
+    } catch (permissionError) {
+      console.warn(
+        `⚠️  Token permission check failed: ${permissionError.message}`,
+      );
+      console.log(`🔄 Continuing with limited functionality...`);
+    }
+
     const filePath = getInput('file_path');
     if (!filePath) {
       throw new Error('file_path is required');
@@ -40,11 +51,9 @@ function isPullRequestEvent(): boolean {
     const fileNameWithoutExt = path.parse(fileName).name;
     const fileExt = path.parse(fileName).ext;
 
-    // Get current commit hash
     const currentCommitHash = githubService.getCurrentCommitHash();
     console.log(`Current commit hash: ${currentCommitHash}`);
 
-    // Create artifact name pattern
     const artifactNamePattern = `${pathParts.join('-')}-${fileNameWithoutExt}-`;
     console.log(`Artifact name pattern: ${artifactNamePattern}`);
 
@@ -63,35 +72,40 @@ function isPullRequestEvent(): boolean {
         `✅ Successfully uploaded artifact with ID: ${uploadResponse.id}`,
       );
 
-      // Generate simple report for uploaded data
-      const currentSizeData = loadSizeData(fullPath);
-      if (currentSizeData) {
-        await generateSizeReport(currentSizeData);
+      const currentBundleAnalysis = parseRsdoctorData(fullPath);
+      if (currentBundleAnalysis) {
+        await generateBundleAnalysisReport(currentBundleAnalysis);
+      } else {
+        const currentSizeData = loadSizeData(fullPath);
+        if (currentSizeData) {
+          await generateSizeReport(currentSizeData);
+        }
       }
     } else if (isPullRequestEvent()) {
       console.log(
         '📥 Detected pull request event - downloading target branch artifact if exists',
       );
 
-      // Load current size data
-      const currentSizeData = loadSizeData(fullPath);
-      if (!currentSizeData) {
-        throw new Error(`Failed to load current size data from: ${fullPath}`);
+      const currentBundleAnalysis = parseRsdoctorData(fullPath);
+      if (!currentBundleAnalysis) {
+        throw new Error(
+          `Failed to load current bundle analysis from: ${fullPath}`,
+        );
       }
 
-      let baselineSizeData: any = null;
+      let baselineBundleAnalysis: BundleAnalysis | null = null;
 
       try {
-        // Get target branch latest commit hash
+        console.log('🔍 Getting target branch commit hash...');
         const targetCommitHash =
           await githubService.getTargetBranchLatestCommit();
-        console.log(`Target branch commit hash: ${targetCommitHash}`);
+        console.log(`✅ Target branch commit hash: ${targetCommitHash}`);
 
         const targetArtifactName = `${pathParts.join('-')}-${fileNameWithoutExt}-${targetCommitHash}${fileExt}`;
-        console.log(`Looking for target artifact: ${targetArtifactName}`);
+        console.log(`🔍 Looking for target artifact: ${targetArtifactName}`);
 
-        // Try to find and download target branch artifact
         try {
+          console.log('📥 Attempting to download target branch artifact...');
           const downloadResult = await downloadArtifactByCommitHash(
             targetCommitHash,
             fileName,
@@ -100,28 +114,39 @@ function isPullRequestEvent(): boolean {
             downloadResult.downloadPath,
             fileName,
           );
-          baselineSizeData = loadSizeData(downloadedBaselinePath);
-          console.log('✅ Successfully downloaded target branch artifact');
+
+          console.log(
+            `📁 Downloaded baseline file path: ${downloadedBaselinePath}`,
+          );
+          console.log(`📊 Parsing baseline rsdoctor data...`);
+
+          baselineBundleAnalysis = parseRsdoctorData(downloadedBaselinePath);
+          if (!baselineBundleAnalysis) {
+            throw new Error('Failed to parse baseline rsdoctor data');
+          }
+          console.log(
+            '✅ Successfully downloaded and parsed target branch artifact',
+          );
         } catch (downloadError) {
+          console.log(
+            `❌ Failed to download target branch artifact: ${downloadError}`,
+          );
           console.log(
             'ℹ️  No baseline data found - target branch artifact does not exist',
           );
-          console.log('📝 Using demo baseline data for comparison');
-
-          // Use built-in demo data as baseline for comparison
-          baselineSizeData = getDemoBaselineData();
-          console.log('✅ Successfully loaded demo baseline data');
+          console.log('📝 No baseline data available for comparison');
+          baselineBundleAnalysis = null;
         }
       } catch (error) {
-        console.warn(`⚠️  Failed to get target branch commit: ${error}`);
-        console.log('📝 Using demo baseline data for comparison');
-
-        // Use built-in demo data as baseline for comparison
-        baselineSizeData = getDemoBaselineData();
-        console.log('✅ Successfully loaded demo baseline data');
+        console.error(`❌ Failed to get target branch commit: ${error}`);
+        console.log('📝 No baseline data available for comparison');
+        baselineBundleAnalysis = null;
       }
 
-      await generateSizeReport(currentSizeData, baselineSizeData || undefined);
+      await generateBundleAnalysisReport(
+        currentBundleAnalysis,
+        baselineBundleAnalysis || undefined,
+      );
     } else {
       console.log('🔄 Default behavior - uploading and downloading artifacts');
 
@@ -151,15 +176,25 @@ function isPullRequestEvent(): boolean {
           downloadResult.downloadPath,
           fileName,
         );
-        const baselineSizeData = loadSizeData(downloadedBaselinePath);
+        const baselineBundleAnalysis = parseRsdoctorData(
+          downloadedBaselinePath,
+        );
 
-        // Generate report card
-        const currentSizeData = loadSizeData(fullPath);
-        if (currentSizeData) {
-          await generateSizeReport(
-            currentSizeData,
-            baselineSizeData || undefined,
+        const currentBundleAnalysis = parseRsdoctorData(fullPath);
+        if (currentBundleAnalysis) {
+          await generateBundleAnalysisReport(
+            currentBundleAnalysis,
+            baselineBundleAnalysis || undefined,
           );
+        } else {
+          const currentSizeData = loadSizeData(fullPath);
+          const baselineSizeData = loadSizeData(downloadedBaselinePath);
+          if (currentSizeData) {
+            await generateSizeReport(
+              currentSizeData,
+              baselineSizeData || undefined,
+            );
+          }
         }
 
         console.log('✅ Successfully downloaded target branch artifact');
@@ -167,10 +202,14 @@ function isPullRequestEvent(): boolean {
         console.warn(`⚠️  Failed to download target branch artifact: ${error}`);
         console.log('📝 Using demo baseline data for comparison');
 
-        const currentSizeData = loadSizeData(fullPath);
-        if (currentSizeData) {
-          const demoBaseline = getDemoBaselineData();
-          await generateSizeReport(currentSizeData, demoBaseline);
+        const currentBundleAnalysis = parseRsdoctorData(fullPath);
+        if (currentBundleAnalysis) {
+          await generateBundleAnalysisReport(currentBundleAnalysis);
+        } else {
+          const currentSizeData = loadSizeData(fullPath);
+          if (currentSizeData) {
+            await generateSizeReport(currentSizeData);
+          }
         }
       }
     }
