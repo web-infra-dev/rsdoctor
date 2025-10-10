@@ -1,21 +1,40 @@
 {
   "name": "@rsdoctor/action",
   "version": "0.0.1",
-  "main": "index.js",
+  "license": "MIT",
+  "description": "A GitHub Action for bundle size analysis and reporting",
+  "main": "./index.js",
   "scripts": {
     "build": "rslib build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/actions"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
-    "dist"
+    "index.js",
+    "action.yml",
+    "README.md"
   ],
-  "license": "MIT",
+  "keywords": [
+    "github-action",
+    "bundle-size",
+    "performance",
+    "analysis"
+  ],
   "devDependencies": {
-    "@rslib/core": "^0.13.2"
+    "@rslib/core": "^0.13.2",
+    "@types/node": "^24.5.2"
   },
   "dependencies": {
     "@actions/artifact": "^2.3.2",
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
-    "size-plugin-core": "0.0.9"
+    "size-plugin-core": "0.0.9",
+    "yauzl": "^3.2.0"
   }
 }
