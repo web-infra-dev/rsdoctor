@@ -11,7 +11,7 @@ async function rsbuild(_query?: string) {
     rsbuildConfig: {
       source: {
         entry: {
-          index: path.join(__dirname, '../fixtures/a.js'),
+          index: path.join(__dirname, '../fixtures/b.js'),
         },
       },
       environments: {
