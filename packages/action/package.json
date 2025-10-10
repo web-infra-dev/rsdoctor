@@ -27,8 +27,8 @@
     "analysis"
   ],
   "devDependencies": {
-    "@rslib/core": "^0.13.2",
-    "@types/node": "^24.5.2"
+    "@rslib/core": "^0.14.0",
+    "@types/node": "^22.8.1"
   },
   "dependencies": {
     "@actions/artifact": "^2.3.2",
