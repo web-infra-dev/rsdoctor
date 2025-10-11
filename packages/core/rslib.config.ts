@@ -21,8 +21,6 @@ const externalsPrebundle = [
         request !== '@rsbuild/plugin-check-syntax'
       ) {
         return callback(undefined, `../../../compiled/${request}/index.js`);
-      } else if (request === '@rsbuild/plugin-check-syntax') {
-        return callback(undefined, `../../../../compiled/${request}/index.js`);
       }
       const entries = Object.entries(regexpMap);
       for (const [name, test] of entries) {
@@ -97,6 +95,7 @@ export default defineConfig({
             if (args.filename === 'inner-plugins/loaders/proxy.cjs') {
               return 'module.exports = loaderModule; // This is a proxy loader, do not remove this line';
             }
+            // For ESM files, we don't need to add export since it's already exported
             return '';
           },
           footer: true,

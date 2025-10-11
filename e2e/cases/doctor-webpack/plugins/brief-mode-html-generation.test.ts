@@ -9,7 +9,7 @@ import { createRsdoctorMultiPlugin } from '../test-utils';
 
 async function compileWithBriefHtmlMode(htmlOptions?: any) {
   const file = path.resolve(__dirname, '../fixtures/a.js');
-  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.js');
+  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.cjs');
 
   const outputDir = path.resolve(
     tmpdir(),
@@ -169,7 +169,7 @@ test('brief mode with HTML type and writeDataJson should generate both HTML and 
 
 test('brief mode with default HTML configuration should use default values', async () => {
   const file = path.resolve(__dirname, '../fixtures/a.js');
-  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.js');
+  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.cjs');
 
   const outputDir = path.resolve(
     tmpdir(),

@@ -43,7 +43,9 @@ test('webpack5', async () => {
   expect(modules!.length).toEqual(1);
   expect(getSDK()).toBeInstanceOf(RsdoctorSDK);
 
-  const { loader } = getSDK().getStoreData();
+  const { loader } = getSDK()
+    ? getSDK()?.getStoreData() || { loader: [] }
+    : { loader: [] };
 
   expect(loader).toHaveLength(1);
   expect(loader[0].resource).toStrictEqual({
@@ -99,7 +101,9 @@ test('test callback', async () => {
   expect(modules!.length).toEqual(1);
   expect(getSDK()).toBeInstanceOf(RsdoctorSDK);
 
-  const { loader } = getSDK().getStoreData();
+  const { loader } = getSDK()
+    ? getSDK()?.getStoreData() || { loader: [] }
+    : { loader: [] };
 
   expect(loader).toHaveLength(1);
   expect(loader[0].resource).toStrictEqual({
@@ -128,7 +132,9 @@ test('test pitch', async () => {
   expect(modules!.length).toEqual(1);
   expect(getSDK()).toBeInstanceOf(RsdoctorSDK);
 
-  const { loader } = getSDK().getStoreData();
+  const { loader } = getSDK()
+    ? getSDK()?.getStoreData() || { loader: [] }
+    : { loader: [] };
 
   expect(loader).toHaveLength(1);
   expect(loader[0].resource).toStrictEqual({
@@ -202,7 +208,7 @@ test('set sdk.reportLoader as null to mock this scene', async () => {
   });
 
   expect(modules!.length).toEqual(1);
-  expect(getSDK().reportLoader).toEqual(null);
+  expect(getSDK()?.reportLoader).toEqual(null);
 
   // @ts-ignore
   const { loader } = plugin.sdk.getStoreData();

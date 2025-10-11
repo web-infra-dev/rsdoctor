@@ -8,7 +8,7 @@ import { createRsdoctorPlugin } from '../test-utils';
 
 async function webpack(tapName: string, compile: typeof compileByWebpack5) {
   const file = path.resolve(__dirname, '../fixtures/a.js');
-  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.js');
+  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.cjs');
   const res = await compile(file, {
     module: {
       rules: [

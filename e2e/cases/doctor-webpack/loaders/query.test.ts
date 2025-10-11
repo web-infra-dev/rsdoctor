@@ -9,7 +9,7 @@ import { createRsdoctorPlugin } from '../test-utils';
 const file = path.resolve(__dirname, '../fixtures/a.js');
 const loaderPath = path.resolve(
   __dirname,
-  '../fixtures/loaders/serialize-query-to-comment.js',
+  '../fixtures/loaders/serialize-query-to-comment.cjs',
 );
 
 async function webpack5(query?: string) {
@@ -40,7 +40,9 @@ test('webpack5', async () => {
 
   await webpack5();
 
-  const { loader } = getSDK().getStoreData();
+  const { loader } = getSDK()
+    ? getSDK()?.getStoreData() || { loader: [] }
+    : { loader: [] };
   expect(loader).toHaveLength(1);
   os.EOL === '\n' &&
     expect(loader[0].loaders[0].result).toEqual(codeTransformed);
@@ -61,7 +63,9 @@ test('query exists', async () => {
 
   await webpack5(querystring);
 
-  const { loader } = getSDK().getStoreData();
+  const { loader } = getSDK()
+    ? getSDK()?.getStoreData() || { loader: [] }
+    : { loader: [] };
   expect(loader).toHaveLength(1);
   expect(loader[0].loaders[0].result).toEqual(codeTransformed);
 });

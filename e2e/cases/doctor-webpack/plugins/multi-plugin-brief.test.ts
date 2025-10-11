@@ -7,7 +7,7 @@ import { createRsdoctorMultiPlugin } from '../test-utils';
 
 async function webpack(tapName: string, compile: typeof compileByWebpack5) {
   const file = path.resolve(__dirname, '../fixtures/a.js');
-  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.js');
+  const loader = path.resolve(__dirname, '../fixtures/loaders/comment.cjs');
   const res = await compile(file, {
     module: {
       rules: [
@@ -47,9 +47,9 @@ test('rsdoctor webpack5 multi-plugins options tests', async () => {
   const tapName = 'Foo';
   await webpack(tapName, compileByWebpack5);
   const sdk = getSDK();
-  expect(sdk.type).toBe(0);
-  expect(sdk.extraConfig?.mode).toBe('brief');
-  expect(sdk.extraConfig?.brief).toMatchObject({
+  expect(sdk?.type).toBe(0);
+  expect(sdk?.extraConfig?.mode).toBe('brief');
+  expect(sdk?.extraConfig?.brief).toMatchObject({
     htmlOptions: {
       reportHtmlName: '111.html',
       writeDataJson: false,

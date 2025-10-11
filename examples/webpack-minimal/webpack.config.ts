@@ -1,11 +1,12 @@
 import { resolve } from 'path';
 import { Configuration } from 'webpack';
 import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import svgToMiniDataURI from 'mini-svg-data-uri';
 
 const data: Configuration = {
   entry: './src/index.ts',
-  mode: 'none',
+  mode: 'development',
   module: {
     rules: [
       {
@@ -14,7 +15,7 @@ const data: Configuration = {
       },
       {
         test: /\.css$/,
-        loader: 'css-loader',
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.(png|jpg)$/,
@@ -63,6 +64,10 @@ const data: Configuration = {
   },
   devtool: 'source-map',
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[name].chunk.css',
+    }),
     new RsdoctorWebpackPlugin({
       disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
       features: ['bundle', 'plugins', 'loader', 'resolver'],
