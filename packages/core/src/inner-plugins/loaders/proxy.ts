@@ -86,7 +86,7 @@ const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, {}> = function (
   this.callback(null, ...args);
 };
 
-loaderModule.pitch = function (
+export const pitch = function (
   this: PluginType.LoaderContext<ProxyLoaderOptions>,
 ) {
   if (shouldSkipLoader(this)) {
@@ -148,5 +148,7 @@ loaderModule.pitch = function (
 // set `raw: true` for every resources, so that can control the result for the correct loader.
 // @ts-ignore
 loaderModule.raw = true;
+loaderModule.pitch = pitch;
+export const raw = true;
 
 export default loaderModule;
