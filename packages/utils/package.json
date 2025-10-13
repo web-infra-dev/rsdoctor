@@ -76,7 +76,7 @@
     "acorn-import-attributes": "^1.9.5",
     "acorn-walk": "8.3.4",
     "deep-eql": "4.1.4",
-    "envinfo": "7.14.0",
+    "envinfo": "7.18.0",
     "fs-extra": "^11.1.1",
     "get-port": "5.1.1",
     "json-stream-stringify": "3.0.1",
