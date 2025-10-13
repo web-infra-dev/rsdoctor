@@ -38,6 +38,7 @@ export default defineConfig(({ env }) => {
     source: {
       entry: {
         index: ClientEntry,
+        diff: './src/diff.tsx',
       },
       define: {
         'process.env.NODE_DEBUG': JSON.stringify(false),
@@ -86,7 +87,7 @@ export default defineConfig(({ env }) => {
             monaco: {
               test: /node_modules\/monaco-editor\/*/,
               name: 'monaco',
-              chunks: 'all',
+              chunks: (chunk) => chunk.name === 'index',
               maxSize: 1000000,
               minSize: 500000,
             },
@@ -98,21 +99,21 @@ export default defineConfig(({ env }) => {
             rc: {
               test: /node_modules\/rc-*/,
               name: 'rc',
-              chunks: 'all',
+              chunks: (chunk) => chunk.name === 'index',
               maxSize: 1000000,
               minSize: 500000,
             },
             antDesign: {
-              chunks: 'all',
+              chunks: (chunk) => chunk.name === 'index',
               name: 'ant-design',
               test: /node_modules\/antd\//,
               maxSize: 1000000,
               minSize: 500000,
             },
             antDesignIcons: {
-              chunks: 'all',
               name: 'ant-design-icons',
               test: /node_modules\/@ant-design\/icons/,
+              chunks: (chunk) => chunk.name === 'index',
               maxSize: 1000000,
               minSize: 200000,
             },

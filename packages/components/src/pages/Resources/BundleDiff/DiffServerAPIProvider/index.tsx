@@ -1,6 +1,7 @@
-import { Client, SDK } from '@rsdoctor/types';
+import { Client, SDK, Constants } from '@rsdoctor/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
 import { fetchManifest, useUrlQuery } from 'src/utils';
+import { Algorithm } from '@rsdoctor/utils/common';
 import { BundleDiffServerAPIProviderComponentCommonProps } from '../DiffContainer/types';
 
 export const DiffServerAPIProvider = <
@@ -10,13 +11,20 @@ export const DiffServerAPIProvider = <
 ): JSX.Element => {
   const { api, body, children, manifests } = props;
   const query = useUrlQuery();
-  const [baselineFile, currentFile] =
-    query[Client.RsdoctorClientUrlQuery.BundleDiffFiles]?.split(',') || [];
+
+  const windowData = (window as any)[Constants.WINDOW_RSDOCTOR_TAG];
+  if (windowData?.baseline && windowData?.current) {
+    const baseline = JSON.parse(Algorithm.decompressText(windowData.baseline));
+    const current = JSON.parse(Algorithm.decompressText(windowData.current));
+    return <>{children(baseline, current)}</>;
+  }
 
   if (manifests?.length) {
-    // 兼容 webpack stats 场景
     return <>{children(manifests[0].data as any, manifests[1].data as any)}</>;
   }
+
+  const [baselineFile, currentFile] =
+    query[Client.RsdoctorClientUrlQuery.BundleDiffFiles]?.split(',') || [];
 
   return (
     <ServerAPIProvider
