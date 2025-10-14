@@ -478,10 +478,6 @@ importers:
         version: 5.1.4(webpack@5.97.1)
 
   packages/ai:
-    dependencies:
-      socket.io-client:
-        specifier: 4.8.1
-        version: 4.8.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     devDependencies:
       '@modelcontextprotocol/sdk':
         specifier: 1.19.1
@@ -501,6 +497,9 @@ importers:
       axios:
         specifier: ^1.12.2
         version: 1.12.2
+      socket.io-client:
+        specifier: 4.8.1
+        version: 4.8.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
