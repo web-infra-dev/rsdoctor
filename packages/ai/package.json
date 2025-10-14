@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/mcp-server",
-  "version": "0.1.1",
+  "version": "0.1.2-beta.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -23,15 +23,13 @@
     "test": "rstest run",
     "client": "npm run build && node dist/mcp/index.js"
   },
-  "dependencies": {
-    "socket.io-client": "4.8.1"
-  },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "1.19.1",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rstest/core": "0.5.1",
     "@types/node": "^22.8.1",
+    "socket.io-client": "4.8.1",
     "axios": "^1.12.2",
     "typescript": "^5.9.2",
     "zod": "^3.25.76"
