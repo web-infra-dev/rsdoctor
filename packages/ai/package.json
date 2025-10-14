@@ -27,7 +27,7 @@
     "socket.io-client": "4.8.1"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "1.19.1",
+    "@modelcontextprotocol/sdk": "1.20.0",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rstest/core": "0.5.1",
