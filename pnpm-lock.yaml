@@ -1093,8 +1093,8 @@ importers:
         specifier: 4.1.4
         version: 4.1.4
       envinfo:
-        specifier: 7.14.0
-        version: 7.14.0
+        specifier: 7.18.0
+        version: 7.18.0
       fs-extra:
         specifier: ^11.1.1
         version: 11.3.0
@@ -5897,6 +5897,11 @@ packages:
 
   envinfo@7.14.0:
     resolution: {integrity: sha512-CO40UI41xDQzhLB1hWyqUKgFhs250pNcGbyGKe1l/e4FSaI/+YE4IMG76GDt0In67WLPACIITC+sOi08x4wIvg==}
+    engines: {node: '>=4'}
+    hasBin: true
+
+  envinfo@7.18.0:
+    resolution: {integrity: sha512-02QGCLRW+Jb8PC270ic02lat+N57iBaWsvHjcJViqp6UVupRB+Vsg7brYPTqEFXvsdTql3KnSczv5ModZFpl8Q==}
     engines: {node: '>=4'}
     hasBin: true
 
@@ -16699,6 +16704,8 @@ snapshots:
   entities@6.0.0: {}
 
   envinfo@7.14.0: {}
+
+  envinfo@7.18.0: {}
 
   eol@0.9.1:
     optional: true
