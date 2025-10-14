@@ -66,11 +66,11 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
       '@lynx-js/react':
-        specifier: ^0.114.1
-        version: 0.114.1(@types/react@18.3.26)
+        specifier: ^0.114.2
+        version: 0.114.2(@types/react@18.3.26)
       '@lynx-js/rspeedy':
-        specifier: ^0.11.5
-        version: 0.11.5(@rspack/core@1.5.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)
+        specifier: ^0.11.6
+        version: 0.11.6(@rspack/core@1.5.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@playwright/test':
         specifier: 1.54.2
         version: 1.54.2
@@ -545,20 +545,20 @@ importers:
   packages/client:
     devDependencies:
       '@rsbuild/core':
-        specifier: ^1.5.14
-        version: 1.5.14
+        specifier: ^1.5.17
+        version: 1.5.17
       '@rsbuild/plugin-node-polyfill':
         specifier: ^1.4.2
-        version: 1.4.2(@rsbuild/core@1.5.14)
+        version: 1.4.2(@rsbuild/core@1.5.17)
       '@rsbuild/plugin-react':
         specifier: ^1.4.1
-        version: 1.4.1(@rsbuild/core@1.5.14)
+        version: 1.4.1(@rsbuild/core@1.5.17)
       '@rsbuild/plugin-sass':
         specifier: ^1.4.0
-        version: 1.4.0(@rsbuild/core@1.5.14)
+        version: 1.4.0(@rsbuild/core@1.5.17)
       '@rsbuild/plugin-type-check':
         specifier: ^1.2.4
-        version: 1.2.4(@rsbuild/core@1.5.14)(@rspack/core@1.5.8(@swc/helpers@0.5.17))(typescript@5.9.2)
+        version: 1.2.4(@rsbuild/core@1.5.17)(@rspack/core@1.5.8(@swc/helpers@0.5.17))(typescript@5.9.2)
       '@rsdoctor/components':
         specifier: workspace:*
         version: link:../components
@@ -1194,8 +1194,8 @@ importers:
   scripts/test-helper:
     dependencies:
       '@rsbuild/core':
-        specifier: ^1.5.14
-        version: 1.5.14
+        specifier: ^1.5.17
+        version: 1.5.17
       '@rspack/core':
         specifier: 1.5.8
         version: 1.5.8(@swc/helpers@0.5.17)
@@ -2692,8 +2692,8 @@ packages:
     resolution: {integrity: sha512-RS399O/03gpBFbztnsRlwarkMoS2bSVWL8YUnEwy/w9rKewO7CqhX0IUFUZXrzRv0JR17eZJ+YN+14ga+g5FyA==}
     engines: {node: '>=18'}
 
-  '@lynx-js/react@0.114.1':
-    resolution: {integrity: sha512-ZRv6OCkSPw/7z3DUXy/tlMig72EYAB9GvW9aODB+ZBUn2l1dXNdgynFXwCGKBpwYzksTT4uPm+9Cl6pYNvPBDw==}
+  '@lynx-js/react@0.114.2':
+    resolution: {integrity: sha512-j+yhObPAd4nZrx5rkm/AnAPacQxdmmO4Ccdvgzyhs6sV7QiIlgrnL0w9Bh5sbO7oAwND9EhlOtk2tmgpjVYoPA==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18
@@ -2701,8 +2701,8 @@ packages:
       '@lynx-js/types':
         optional: true
 
-  '@lynx-js/rspeedy@0.11.5':
-    resolution: {integrity: sha512-oSy7kgxjYs5mvCjav7Ba+pAskPW59doLZfL+ofZZdC3R09beUuNzsFHpi5EV2NSUR++PBS6aq+qzbP7UJ5c6IA==}
+  '@lynx-js/rspeedy@0.11.6':
+    resolution: {integrity: sha512-kUhAC0aUbS9Krv6buVT8L3VqdCW9ggHamBI4YQgxAptCrg7/1/StJ5wMZwX+PRljpfqTCZPSAegpmOFWEQkWqw==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
@@ -3376,11 +3376,6 @@ packages:
 
   '@rsbuild/core@1.5.13':
     resolution: {integrity: sha512-P+TCvZCVpBYZ3GDdnzR/tZKicE41khJIqIRlJYnEc9dwUfX1/eqRf8lA8yrsbB5iZbSfj1iOoH1N25cCQ3hhuA==}
-    engines: {node: '>=18.12.0'}
-    hasBin: true
-
-  '@rsbuild/core@1.5.14':
-    resolution: {integrity: sha512-fWxuvqaCnyl/t3mROMF33vrFy9lX5NXNTDpF4hOJ4X0ajTYOKHFk2BYiUfVTJbtDGig+S+NeWwD31su204XwAg==}
     engines: {node: '>=18.12.0'}
     hasBin: true
 
@@ -7019,10 +7014,6 @@ packages:
 
   jiti@2.5.1:
     resolution: {integrity: sha512-twQoecYPiVA5K/h6SxtORw/Bs3ar+mLUtoPSc7iMXzQzK8d7eJ/R09wmTwAjiamETn1cXYPGfNnu7DMoHgu12w==}
-    hasBin: true
-
-  jiti@2.6.0:
-    resolution: {integrity: sha512-VXe6RjJkBPj0ohtqaO8vSWP3ZhAKo66fKrFNCll4BTcwljPLz03pCbaNKfzGP5MbrCYcbJ7v0nOYYwUzTEIdXQ==}
     hasBin: true
 
   jiti@2.6.1:
@@ -12488,12 +12479,12 @@ snapshots:
     dependencies:
       '@lynx-js/webpack-runtime-globals': 0.0.6
 
-  '@lynx-js/react@0.114.1(@types/react@18.3.26)':
+  '@lynx-js/react@0.114.2(@types/react@18.3.26)':
     dependencies:
       '@types/react': 18.3.26
       preact: '@hongzhiyuan/preact@10.24.0-00213bad'
 
-  '@lynx-js/rspeedy@0.11.5(@rspack/core@1.5.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@lynx-js/rspeedy@0.11.6(@rspack/core@1.5.8(@swc/helpers@0.5.17))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@lynx-js/cache-events-webpack-plugin': 0.0.2
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.3
@@ -13467,7 +13458,7 @@ snapshots:
       '@rspack/lite-tapable': 1.0.1
       '@swc/helpers': 0.5.17
       core-js: 3.41.0
-      jiti: 2.5.1
+      jiti: 2.6.1
     transitivePeerDependencies:
       - '@rspack/tracing'
 
@@ -13480,14 +13471,6 @@ snapshots:
       jiti: 2.5.1
 
   '@rsbuild/core@1.5.13':
-    dependencies:
-      '@rspack/core': 1.5.8(@swc/helpers@0.5.17)
-      '@rspack/lite-tapable': 1.0.1
-      '@swc/helpers': 0.5.17
-      core-js: 3.45.1
-      jiti: 2.6.0
-
-  '@rsbuild/core@1.5.14':
     dependencies:
       '@rspack/core': 1.5.8(@swc/helpers@0.5.17)
       '@rspack/lite-tapable': 1.0.1
@@ -13621,7 +13604,7 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.1.13
 
-  '@rsbuild/plugin-node-polyfill@1.4.2(@rsbuild/core@1.5.14)':
+  '@rsbuild/plugin-node-polyfill@1.4.2(@rsbuild/core@1.5.17)':
     dependencies:
       assert: 2.1.0
       browserify-zlib: 0.2.0
@@ -13647,7 +13630,7 @@ snapshots:
       util: 0.12.5
       vm-browserify: 1.1.2
     optionalDependencies:
-      '@rsbuild/core': 1.5.14
+      '@rsbuild/core': 1.5.17
 
   '@rsbuild/plugin-pug@1.0.2(@rsbuild/core@1.1.13)':
     dependencies:
@@ -13677,14 +13660,6 @@ snapshots:
     transitivePeerDependencies:
       - webpack-hot-middleware
 
-  '@rsbuild/plugin-react@1.4.1(@rsbuild/core@1.5.14)':
-    dependencies:
-      '@rsbuild/core': 1.5.14
-      '@rspack/plugin-react-refresh': 1.5.1(react-refresh@0.17.0)
-      react-refresh: 0.17.0
-    transitivePeerDependencies:
-      - webpack-hot-middleware
-
   '@rsbuild/plugin-react@1.4.1(@rsbuild/core@1.5.17)':
     dependencies:
       '@rsbuild/core': 1.5.17
@@ -13708,15 +13683,6 @@ snapshots:
       postcss: 8.5.6
       reduce-configs: 1.1.1
       sass-embedded: 1.89.2
-
-  '@rsbuild/plugin-sass@1.4.0(@rsbuild/core@1.5.14)':
-    dependencies:
-      '@rsbuild/core': 1.5.14
-      deepmerge: 4.3.1
-      loader-utils: 2.0.4
-      postcss: 8.5.6
-      reduce-configs: 1.1.1
-      sass-embedded: 1.93.0
 
   '@rsbuild/plugin-sass@1.4.0(@rsbuild/core@1.5.17)':
     dependencies:
@@ -13787,14 +13753,14 @@ snapshots:
       - '@rspack/core'
       - typescript
 
-  '@rsbuild/plugin-type-check@1.2.4(@rsbuild/core@1.5.14)(@rspack/core@1.5.8(@swc/helpers@0.5.17))(typescript@5.9.2)':
+  '@rsbuild/plugin-type-check@1.2.4(@rsbuild/core@1.5.17)(@rspack/core@1.5.8(@swc/helpers@0.5.17))(typescript@5.9.2)':
     dependencies:
       deepmerge: 4.3.1
       json5: 2.2.3
       reduce-configs: 1.1.1
       ts-checker-rspack-plugin: 1.1.4(@rspack/core@1.5.8(@swc/helpers@0.5.17))(typescript@5.9.2)
     optionalDependencies:
-      '@rsbuild/core': 1.5.14
+      '@rsbuild/core': 1.5.17
     transitivePeerDependencies:
       - '@rspack/core'
       - typescript
@@ -14312,8 +14278,8 @@ snapshots:
     dependencies:
       '@mdx-js/mdx': 3.1.1
       '@mdx-js/react': 3.1.1(@types/react@18.3.26)(react@19.1.1)
-      '@rsbuild/core': 1.5.14
-      '@rsbuild/plugin-react': 1.4.1(@rsbuild/core@1.5.14)
+      '@rsbuild/core': 1.5.17
+      '@rsbuild/plugin-react': 1.4.1(@rsbuild/core@1.5.17)
       '@rspress/mdx-rs': 0.6.6
       '@rspress/runtime': 2.0.0-beta.34
       '@rspress/shared': 2.0.0-beta.34
@@ -14463,7 +14429,7 @@ snapshots:
 
   '@rspress/shared@2.0.0-beta.34':
     dependencies:
-      '@rsbuild/core': 1.5.14
+      '@rsbuild/core': 1.5.17
       '@shikijs/rehype': 3.13.0
       gray-matter: 4.0.3
       lodash-es: 4.17.21
@@ -18096,8 +18062,6 @@ snapshots:
       supports-color: 8.1.1
 
   jiti@2.5.1: {}
-
-  jiti@2.6.0: {}
 
   jiti@2.6.1: {}
 
