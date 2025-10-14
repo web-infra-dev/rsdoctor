@@ -27,8 +27,8 @@ importers:
         specifier: workspace:*
         version: link:scripts/tsconfig
       '@rslib/core':
-        specifier: ^0.14.0
-        version: 0.14.0(typescript@5.9.2)
+        specifier: ^0.15.1
+        version: 0.15.1(typescript@5.9.2)
       '@rstest/core':
         specifier: 0.5.1
         version: 0.5.1
@@ -58,7 +58,7 @@ importers:
         version: 3.6.2
       rsbuild-plugin-publint:
         specifier: ^0.3.3
-        version: 0.3.3(@rsbuild/core@1.5.14)
+        version: 0.3.3(@rsbuild/core@1.5.17)
 
   e2e:
     devDependencies:
@@ -76,7 +76,7 @@ importers:
         version: 1.54.2
       '@rsbuild/plugin-less':
         specifier: 1.5.0
-        version: 1.5.0(@rsbuild/core@1.5.14)
+        version: 1.5.0(@rsbuild/core@1.5.17)
       '@rsdoctor/cli':
         specifier: workspace:*
         version: link:../packages/cli
@@ -688,16 +688,16 @@ importers:
     devDependencies:
       '@rsbuild/plugin-check-syntax':
         specifier: 1.4.0
-        version: 1.4.0(@rsbuild/core@1.5.14)
+        version: 1.4.0(@rsbuild/core@1.5.17)
       '@rsbuild/plugin-react':
         specifier: ^1.4.1
-        version: 1.4.1(@rsbuild/core@1.5.14)
+        version: 1.4.1(@rsbuild/core@1.5.17)
       '@rsbuild/plugin-sass':
         specifier: ^1.4.0
-        version: 1.4.0(@rsbuild/core@1.5.14)
+        version: 1.4.0(@rsbuild/core@1.5.17)
       '@rsbuild/plugin-svgr':
         specifier: ^1.2.2
-        version: 1.2.2(@rsbuild/core@1.5.14)(typescript@5.9.2)
+        version: 1.2.2(@rsbuild/core@1.5.17)(typescript@5.9.2)
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -727,7 +727,7 @@ importers:
     dependencies:
       '@rsbuild/plugin-check-syntax':
         specifier: 1.4.0
-        version: 1.4.0(@rsbuild/core@1.5.14)
+        version: 1.4.0(@rsbuild/core@1.5.17)
       '@rsdoctor/graph':
         specifier: workspace:*
         version: link:../graph
@@ -828,7 +828,7 @@ importers:
     devDependencies:
       '@rsbuild/plugin-sass':
         specifier: ^1.4.0
-        version: 1.4.0(@rsbuild/core@1.5.14)
+        version: 1.4.0(@rsbuild/core@1.5.17)
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -861,10 +861,10 @@ importers:
         version: 18.3.1(react@18.3.1)
       rsbuild-plugin-google-analytics:
         specifier: ^1.0.4
-        version: 1.0.4(@rsbuild/core@1.5.14)
+        version: 1.0.4(@rsbuild/core@1.5.17)
       rsbuild-plugin-open-graph:
         specifier: ^1.1.0
-        version: 1.1.0(@rsbuild/core@1.5.14)
+        version: 1.1.0(@rsbuild/core@1.5.17)
       rspress-plugin-font-open-sans:
         specifier: ^1.0.3
         version: 1.0.3(@rspress/core@2.0.0-beta.34(@types/react@18.3.26))
@@ -3384,6 +3384,11 @@ packages:
     engines: {node: '>=18.12.0'}
     hasBin: true
 
+  '@rsbuild/core@1.5.17':
+    resolution: {integrity: sha512-tHa4puv+pEooQvSewu/K5sm270nkVPcP07Ioz1c+fbFCrFpiZWV5XumgznilS80097glUrieN+9xTbIHGXjThQ==}
+    engines: {node: '>=18.12.0'}
+    hasBin: true
+
   '@rsbuild/plugin-assets-retry@1.0.7':
     resolution: {integrity: sha512-5b3sHIayNKxgB1rr8SJWjTDKNwoBRDcbLuh1gBoNVz0TvNZxow8GsW6Nlfl8YRLyuLwaLQQw/r/vGnTxcIit5Q==}
     peerDependencies:
@@ -3611,8 +3616,8 @@ packages:
   '@rsdoctor/utils@1.2.3':
     resolution: {integrity: sha512-HawWrcqXeqdhj4dKhdjJg4BXvstcQauYSRx0cnYH78f7z9PW60Smr6vYpByXC87rK3JKpa6CNiZi+qhI5yTAog==}
 
-  '@rslib/core@0.14.0':
-    resolution: {integrity: sha512-N8FP813mteNeWVo0HrwOXfy0gaz222chu3ZMEaqR1AKxH7HD3i3rRvm8sQ7yQXQ27wyLHl1/Fttxa9MG/dnHeA==}
+  '@rslib/core@0.15.1':
+    resolution: {integrity: sha512-rNGGHJwxU1g6u2op5Jf2JMgbRCRmMZGCNPU099Ebp5ZgjmknyaU88YMJc8L6trfBU7M6yIYlqgepqg/0L8evew==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
@@ -5430,6 +5435,9 @@ packages:
 
   core-js@3.45.1:
     resolution: {integrity: sha512-L4NPsJlCfZsPeXukyzHFlg/i7IIVwHSItR0wg0FLNqYClJ4MQYTYLbC7EkjKYRLZF2iof2MUgN0EGy7MdQFChg==}
+
+  core-js@3.46.0:
+    resolution: {integrity: sha512-vDMm9B0xnqqZ8uSBpZ8sNtRtOdmfShrvT6h2TuQGLs0Is+cR0DYbj/KWP6ALVNbWPpqA/qPLoOuppJN07humpA==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -9384,8 +9392,8 @@ packages:
     resolution: {integrity: sha512-nLTrUKm2UyiL7rlhapu/Zl45FwNgkZGaCpZbIHajDYgwlJCOzLSk+cIPAnsEqV955GjILJnKbdQC1nVPz+gAYQ==}
     engines: {node: '>= 18'}
 
-  rsbuild-plugin-dts@0.14.0:
-    resolution: {integrity: sha512-PHnixNk1mLYEa5VFz3cx9AvqCuU8I+FlENpl2AY2X0E9kND7ZIAmZKhzArIT6KLSJLpiYp3ZNnXyBGpGP7KJmQ==}
+  rsbuild-plugin-dts@0.15.1:
+    resolution: {integrity: sha512-RPJK/ycEYECstXYmg1vfboB4oa/yC23J4HzLkhhF8iyNYwHNxC/fSPuHkfikhGbvYyxw4pq52xHO/Y4FqcW+yA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       '@microsoft/api-extractor': ^7
@@ -13487,6 +13495,14 @@ snapshots:
       core-js: 3.45.1
       jiti: 2.6.1
 
+  '@rsbuild/core@1.5.17':
+    dependencies:
+      '@rspack/core': 1.5.8(@swc/helpers@0.5.17)
+      '@rspack/lite-tapable': 1.0.1
+      '@swc/helpers': 0.5.17
+      core-js: 3.46.0
+      jiti: 2.6.1
+
   '@rsbuild/plugin-assets-retry@1.0.7(@rsbuild/core@1.1.13)':
     dependencies:
       '@rsbuild/core': 1.1.13
@@ -13525,7 +13541,7 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.5.13
 
-  '@rsbuild/plugin-check-syntax@1.4.0(@rsbuild/core@1.5.14)':
+  '@rsbuild/plugin-check-syntax@1.4.0(@rsbuild/core@1.5.17)':
     dependencies:
       acorn: 8.15.0
       browserslist-to-es-version: 1.1.1
@@ -13533,7 +13549,7 @@ snapshots:
       picocolors: 1.1.1
       source-map: 0.7.6
     optionalDependencies:
-      '@rsbuild/core': 1.5.14
+      '@rsbuild/core': 1.5.17
 
   '@rsbuild/plugin-css-minimizer@1.0.2(@rsbuild/core@1.1.13)(esbuild@0.17.19)(webpack@5.97.1(esbuild@0.17.19))':
     dependencies:
@@ -13571,9 +13587,9 @@ snapshots:
       deepmerge: 4.3.1
       reduce-configs: 1.1.1
 
-  '@rsbuild/plugin-less@1.5.0(@rsbuild/core@1.5.14)':
+  '@rsbuild/plugin-less@1.5.0(@rsbuild/core@1.5.17)':
     dependencies:
-      '@rsbuild/core': 1.5.14
+      '@rsbuild/core': 1.5.17
       deepmerge: 4.3.1
       reduce-configs: 1.1.1
 
@@ -13669,6 +13685,14 @@ snapshots:
     transitivePeerDependencies:
       - webpack-hot-middleware
 
+  '@rsbuild/plugin-react@1.4.1(@rsbuild/core@1.5.17)':
+    dependencies:
+      '@rsbuild/core': 1.5.17
+      '@rspack/plugin-react-refresh': 1.5.1(react-refresh@0.17.0)
+      react-refresh: 0.17.0
+    transitivePeerDependencies:
+      - webpack-hot-middleware
+
   '@rsbuild/plugin-rem@1.0.2(@rsbuild/core@1.1.13)':
     dependencies:
       deepmerge: 4.3.1
@@ -13688,6 +13712,15 @@ snapshots:
   '@rsbuild/plugin-sass@1.4.0(@rsbuild/core@1.5.14)':
     dependencies:
       '@rsbuild/core': 1.5.14
+      deepmerge: 4.3.1
+      loader-utils: 2.0.4
+      postcss: 8.5.6
+      reduce-configs: 1.1.1
+      sass-embedded: 1.93.0
+
+  '@rsbuild/plugin-sass@1.4.0(@rsbuild/core@1.5.17)':
+    dependencies:
+      '@rsbuild/core': 1.5.17
       deepmerge: 4.3.1
       loader-utils: 2.0.4
       postcss: 8.5.6
@@ -13722,10 +13755,10 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rsbuild/plugin-svgr@1.2.2(@rsbuild/core@1.5.14)(typescript@5.9.2)':
+  '@rsbuild/plugin-svgr@1.2.2(@rsbuild/core@1.5.17)(typescript@5.9.2)':
     dependencies:
-      '@rsbuild/core': 1.5.14
-      '@rsbuild/plugin-react': 1.4.1(@rsbuild/core@1.5.14)
+      '@rsbuild/core': 1.5.17
+      '@rsbuild/plugin-react': 1.4.1(@rsbuild/core@1.5.17)
       '@svgr/core': 8.1.0(typescript@5.9.2)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))
       '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))(typescript@5.9.2)
@@ -13905,10 +13938,10 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rslib/core@0.14.0(typescript@5.9.2)':
+  '@rslib/core@0.15.1(typescript@5.9.2)':
     dependencies:
-      '@rsbuild/core': 1.5.14
-      rsbuild-plugin-dts: 0.14.0(@rsbuild/core@1.5.14)(typescript@5.9.2)
+      '@rsbuild/core': 1.5.17
+      rsbuild-plugin-dts: 0.15.1(@rsbuild/core@1.5.17)(typescript@5.9.2)
     optionalDependencies:
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -16147,6 +16180,8 @@ snapshots:
   core-js@3.41.0: {}
 
   core-js@3.45.1: {}
+
+  core-js@3.46.0: {}
 
   core-util-is@1.0.3: {}
 
@@ -21317,27 +21352,27 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.14.0(@rsbuild/core@1.5.14)(typescript@5.9.2):
+  rsbuild-plugin-dts@0.15.1(@rsbuild/core@1.5.17)(typescript@5.9.2):
     dependencies:
       '@ast-grep/napi': 0.37.0
-      '@rsbuild/core': 1.5.14
+      '@rsbuild/core': 1.5.17
     optionalDependencies:
       typescript: 5.9.2
 
-  rsbuild-plugin-google-analytics@1.0.4(@rsbuild/core@1.5.14):
+  rsbuild-plugin-google-analytics@1.0.4(@rsbuild/core@1.5.17):
     optionalDependencies:
-      '@rsbuild/core': 1.5.14
+      '@rsbuild/core': 1.5.17
 
-  rsbuild-plugin-open-graph@1.1.0(@rsbuild/core@1.5.14):
+  rsbuild-plugin-open-graph@1.1.0(@rsbuild/core@1.5.17):
     optionalDependencies:
-      '@rsbuild/core': 1.5.14
+      '@rsbuild/core': 1.5.17
 
-  rsbuild-plugin-publint@0.3.3(@rsbuild/core@1.5.14):
+  rsbuild-plugin-publint@0.3.3(@rsbuild/core@1.5.17):
     dependencies:
       picocolors: 1.1.1
       publint: 0.3.12
     optionalDependencies:
-      '@rsbuild/core': 1.5.14
+      '@rsbuild/core': 1.5.17
 
   rslog@1.2.11: {}
 
