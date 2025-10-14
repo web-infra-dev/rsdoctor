@@ -1,6 +1,6 @@
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import { AssetsCountLimit } from './rules/assets-count-limit';
 
 export default defineConfig({
@@ -26,13 +26,20 @@ export default defineConfig({
               'assets-count-limit': [
                 'on',
                 {
-                  limit: 1,
+                  limit: 1, // rule custom configs
                 },
               ],
-              'ecma-version-check': [
-                'Warn',
+            },
+            // Dynamic rules configuration
+            dynamicRules: {
+              packages: [
                 {
-                  ecmaVersion: 3,
+                  package: './rules/dynamic-rules-example',
+                  enabled: true,
+                  rules: {
+                    'bundle-size-limit': ['on', { maxSize: 1024 * 1024 }], // 1MB
+                    'unused-dependencies': 'warn',
+                  },
                 },
               ],
             },

@@ -1,0 +1,19 @@
+{
+  "name": "@rsdoctor/rules-example",
+  "version": "1.0.0",
+  "description": "Example dynamic rules package for rsdoctor",
+  "main": "index.js",
+  "type": "module",
+  "peerDependencies": {
+    "@rsdoctor/core": "^1.0.0"
+  },
+  "keywords": [
+    "rsdoctor",
+    "rules",
+    "linting",
+    "webpack",
+    "rspack"
+  ],
+  "author": "rsdoctor team",
+  "license": "MIT"
+}

@@ -32,7 +32,11 @@ export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler>
     time('InternalRulesPlugin.lint');
     try {
       const options = this.options ?? {};
-      const linter = new Linter(options.linter);
+      const linterOptions = options.linter ?? {};
+      const linter = new Linter({
+        ...linterOptions,
+        dynamicRules: linterOptions.dynamicRules,
+      });
       const result = await linter.validate(this.sdk.getRuleContext({}));
       const validateErrors = result.errors.map((err) =>
         DevToolError.from(err, {

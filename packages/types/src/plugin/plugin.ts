@@ -103,7 +103,10 @@ export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
   /** Checker configuration */
-  linter?: LinterType.Options<Rules, InternalRules>;
+  linter?: LinterType.Options<Rules, InternalRules> & {
+    /** Dynamic rule packages configuration */
+    dynamicRules?: LinterType.DynamicRuleLoaderOptions;
+  };
   /**
    * the switch for the Rsdoctor features.
    */
