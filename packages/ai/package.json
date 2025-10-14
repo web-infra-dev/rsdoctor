@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/mcp-server",
-  "version": "0.1.2-beta.1",
+  "version": "0.1.2-beta.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -18,7 +18,7 @@
   },
   "type": "module",
   "scripts": {
-    "build": "rslib build",
+    "build": "rslib build && prebundle",
     "dev": "rslib build --watch",
     "test": "rstest run",
     "client": "npm run build && node dist/mcp/index.js"
@@ -29,6 +29,7 @@
     "@rsdoctor/utils": "workspace:*",
     "@rstest/core": "0.5.1",
     "@types/node": "^22.8.1",
+    "prebundle": "1.4.2",
     "socket.io-client": "4.8.1",
     "axios": "^1.12.2",
     "typescript": "^5.9.2",
