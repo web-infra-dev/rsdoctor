@@ -10,4 +10,6 @@ export const pkg: {
   bin: Record<string, string>;
 } = require('../package.json');
 
+console.log(pkg.bin);
+
 export const bin = Object.keys(pkg.bin)[0];
