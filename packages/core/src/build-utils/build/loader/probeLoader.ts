@@ -2,7 +2,7 @@ import { Build } from '@/build-utils';
 import { getSDK } from '@/inner-plugins';
 import { Plugin, SDK } from '@rsdoctor/types';
 import type { LoaderDefinitionFunction } from '@rspack/core';
-import { omit } from 'lodash-es';
+import omit from 'lodash/omit.js';
 import path from 'path';
 
 export const loaderModule: Plugin.LoaderDefinition<

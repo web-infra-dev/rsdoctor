@@ -39,7 +39,7 @@ const externals = [
   '@rsdoctor/sdk',
   '@rsdoctor/types',
   '@rsdoctor/utils',
-  'lodash-es',
+  'lodash',
   'semver',
   'source-map',
   ...externalsPrebundle,

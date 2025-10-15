@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fse from 'fs-extra';
-import { omit } from 'lodash-es';
+import omit from 'lodash/omit.js';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule } from '../../../types';
