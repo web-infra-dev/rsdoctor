@@ -33,6 +33,9 @@ async function rsbuild(_query?: string) {
             appendPlugins(
               new RsdoctorRspackPlugin({
                 disableClientServer: true,
+                output: {
+                  reportDir: path.join(__dirname, './doc_build/node/'),
+                },
               }),
             );
           }
