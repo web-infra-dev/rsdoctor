@@ -510,6 +510,8 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
 
+  packages/ai/compiled/socket.io-client: {}
+
   packages/cli:
     dependencies:
       '@rsdoctor/core':
@@ -774,7 +776,7 @@ importers:
         specifier: ^11.0.4
         version: 11.0.4
       '@types/lodash':
-        specifier: ^4.17.12
+        specifier: ^4.17.20
         version: 4.17.20
       '@types/node':
         specifier: ^22.8.1
