@@ -18,13 +18,10 @@
   },
   "type": "module",
   "scripts": {
-    "build": "rslib build",
+    "build": "rslib build && prebundle",
     "dev": "rslib build --watch",
     "test": "rstest run",
     "client": "npm run build && node dist/mcp/index.js"
-  },
-  "dependencies": {
-    "socket.io-client": "4.8.1"
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "1.20.0",
@@ -32,6 +29,8 @@
     "@rsdoctor/utils": "workspace:*",
     "@rstest/core": "0.5.1",
     "@types/node": "^22.8.1",
+    "prebundle": "1.4.2",
+    "socket.io-client": "4.8.1",
     "axios": "^1.12.2",
     "typescript": "^5.9.2",
     "zod": "^3.25.76"
