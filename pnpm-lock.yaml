@@ -514,6 +514,28 @@ importers:
 
   packages/cli:
     dependencies:
+      '@rsdoctor/client':
+        specifier: workspace:*
+        version: link:../client
+      '@rsdoctor/types':
+        specifier: workspace:*
+        version: link:../types
+      fs-extra:
+        specifier: ^11.1.1
+        version: 11.3.0
+      graceful-fs:
+        specifier: ^4.2.11
+        version: 4.2.11
+      readable-stream:
+        specifier: ^3.6.2
+        version: 3.6.2
+      safer-buffer:
+        specifier: 2.1.2
+        version: 2.1.2
+      socket.io:
+        specifier: 4.8.1
+        version: 4.8.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+    devDependencies:
       '@rsdoctor/core':
         specifier: workspace:*
         version: link:../core
@@ -523,22 +545,18 @@ importers:
       '@rsdoctor/sdk':
         specifier: workspace:*
         version: link:../sdk
-      '@rsdoctor/types':
-        specifier: workspace:*
-        version: link:../types
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
-      ora:
-        specifier: ^5.4.1
-        version: 5.4.1
-    devDependencies:
       axios:
         specifier: ^1.12.2
         version: 1.12.2
       cac:
         specifier: ^6.7.14
         version: 6.7.14
+      ora:
+        specifier: ^5.4.1
+        version: 5.4.1
       picocolors:
         specifier: ^1.1.1
         version: 1.1.1
