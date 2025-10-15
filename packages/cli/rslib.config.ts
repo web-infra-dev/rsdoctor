@@ -9,10 +9,21 @@ export default defineConfig({
       ...config.output,
       externals: [
         'readable-stream',
+        'graceful-fs',
+        'fs-extra',
+        '@rsdoctor/client',
+        'safer-buffer',
+        'socket.io',
         ...(Array.isArray(config.output?.externals)
           ? config.output.externals
           : []),
       ],
+    },
+    shims: {
+      esm: {
+        __filename: true,
+        __dirname: true,
+      },
     },
   })),
 });

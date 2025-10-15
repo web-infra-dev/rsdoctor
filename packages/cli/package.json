@@ -31,12 +31,17 @@
   },
   "type": "module",
   "dependencies": {
-    "@rsdoctor/sdk": "workspace:*",
+    "@rsdoctor/client": "workspace:*",
+    "safer-buffer": "2.1.2",
+    "socket.io": "4.8.1",
     "@rsdoctor/types": "workspace:*",
-    "readable-stream": "^3.6.2"
+    "readable-stream": "^3.6.2",
+    "graceful-fs": "^4.2.11",
+    "fs-extra": "^11.3.2"
   },
   "devDependencies": {
     "ora": "^5.4.1",
+    "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/graph": "workspace:*",
