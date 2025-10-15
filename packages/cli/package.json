@@ -32,11 +32,12 @@
   "type": "module",
   "dependencies": {
     "@rsdoctor/sdk": "workspace:*",
-    "@rsdoctor/core": "workspace:*",
-    "@rsdoctor/types": "workspace:*"
+    "@rsdoctor/types": "workspace:*",
+    "readable-stream": "^3.6.2"
   },
   "devDependencies": {
     "ora": "^5.4.1",
+    "@rsdoctor/core": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/graph": "workspace:*",
     "cac": "^6.7.14",
