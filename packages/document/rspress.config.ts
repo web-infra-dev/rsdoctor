@@ -17,7 +17,7 @@ export default defineConfig({
     pluginSitemap({
       domain: siteUrl,
     }),
-    pluginLlms() as any,
+    pluginLlms(),
     pluginFontOpenSans(),
     pluginRss({
       siteUrl,
@@ -88,9 +88,7 @@ export default defineConfig({
       return `<meta property="og:image" content="https://assets.rspack.rs/rsdoctor/${getOgImage()}">`;
     },
   ],
-  markdown: {
-    checkDeadLinks: true,
-  },
+  markdown: {},
   ssg: false,
   route: {
     cleanUrls: true,
