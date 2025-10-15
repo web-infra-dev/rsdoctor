@@ -1,7 +1,9 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import type { HookInterceptor } from 'tapable';
 import { Loader } from '@rsdoctor/utils/common';
-import { cloneDeep, isEqual, omit } from 'lodash-es';
+import cloneDeep from 'lodash/cloneDeep.js';
+import isEqual from 'lodash/isEqual.js';
+import omit from 'lodash/omit.js';
 import { LoaderContext, NormalModule } from 'webpack';
 import { interceptLoader } from '../utils';
 import { InternalBasePlugin } from './base';

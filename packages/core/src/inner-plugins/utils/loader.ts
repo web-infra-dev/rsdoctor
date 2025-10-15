@@ -2,7 +2,7 @@ import axios from 'axios';
 import enhancedResolve from 'enhanced-resolve';
 const { CachedInputFileSystem, create: ResolverCreator } = enhancedResolve;
 import fs from 'fs';
-import { omit } from 'lodash-es';
+import omit from 'lodash/omit.js';
 import path from 'path';
 import { logger } from '@rsdoctor/utils/logger';
 import { Loader } from '@rsdoctor/utils/common';
