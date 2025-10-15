@@ -1,7 +1,7 @@
 import { Constants, Manifest, SDK } from '@rsdoctor/types';
 import { Skeleton, Spin } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { isEqual } from 'lodash-es';
+import { isEqual } from 'es-toolkit/compat';
 import { fetchManifest, useDataLoader } from '../../utils';
 import { ComponentState } from '../../constants';
 import { FailedStatus } from '../Status';

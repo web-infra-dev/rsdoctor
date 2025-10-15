@@ -1,6 +1,6 @@
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Manifest as ManifestShared } from '@rsdoctor/utils/common';
-import { get } from 'lodash-es';
+import { get } from 'es-toolkit/compat';
 import { BaseDataLoader } from './base';
 import { fetchShardingFile } from '../request';
 

@@ -1,6 +1,6 @@
 import { Manifest as ManifestShared } from '@rsdoctor/utils/common';
 import { Common, Manifest, SDK } from '@rsdoctor/types';
-import { get } from 'lodash-es';
+import { get } from 'es-toolkit/compat';
 import { BaseDataLoader } from './base';
 import { getSocket } from '../socket';
 

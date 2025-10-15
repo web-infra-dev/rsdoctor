@@ -1,4 +1,4 @@
-import unionBy from 'lodash.unionby';
+import { unionBy } from 'es-toolkit/compat';
 import { resolve } from 'path';
 import { SDK } from '@rsdoctor/types';
 import { Package } from './package';

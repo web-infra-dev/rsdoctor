@@ -6,7 +6,7 @@ import { Node } from '@rsdoctor/utils/ruleUtils';
 import { Plugin, SDK } from '@rsdoctor/types';
 import { ModuleGraphTrans, Webpack as WebpackGraph } from '@rsdoctor/graph';
 import { hasSetEsModuleStatement } from '../parser';
-import isFunction from 'lodash/isFunction.js';
+import { isFunction } from 'es-toolkit/compat';
 import { logger } from '@rsdoctor/utils/logger';
 
 export interface TransformContext {

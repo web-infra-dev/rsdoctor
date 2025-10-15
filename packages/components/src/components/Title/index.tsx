@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { Typography } from 'antd';
-import { upperFirst as upf } from 'lodash-es';
+import { upperFirst as upf } from 'es-toolkit/compat';
 
 interface TitleProps {
   /**

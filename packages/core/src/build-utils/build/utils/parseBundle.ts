@@ -1,6 +1,5 @@
 import fs from 'fs';
-import find from 'lodash/find.js';
-import mapValues from 'lodash/mapValues.js';
+import { find, mapValues } from 'es-toolkit/compat';
 import { filesize } from 'filesize';
 
 import { parser } from '@rsdoctor/utils/ruleUtils';

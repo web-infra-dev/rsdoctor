@@ -8,7 +8,7 @@ import {
 import { SDK } from '@rsdoctor/types';
 import { Resolver } from '@rsdoctor/utils/common';
 import { Button, Card, Col, Row, Space, Table, Typography } from 'antd';
-import { get } from 'lodash-es';
+import { get } from 'es-toolkit/compat';
 import React, { useMemo, useState } from 'react';
 import { Size } from '../../constants';
 import { createFileStructures, formatCosts, mapFileKey } from '../../utils';

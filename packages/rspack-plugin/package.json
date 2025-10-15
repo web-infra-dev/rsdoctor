@@ -31,12 +31,10 @@
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
-    "@rsdoctor/utils": "workspace:*",
-    "lodash-es": "^4.17.21"
+    "@rsdoctor/utils": "workspace:*"
   },
   "devDependencies": {
     "@rspack/core": "1.5.8",
-    "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.8.1",
     "@types/tapable": "2.2.7",
     "tslib": "2.8.1",

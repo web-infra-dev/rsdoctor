@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { sumBy, uniq } from 'lodash-es';
+import { sumBy, uniq } from 'es-toolkit/compat';
 import { SDK } from '@rsdoctor/types';
 import { BundleDiffTablePackagesData } from './types';
 import { formatSize } from '../../../../utils';
