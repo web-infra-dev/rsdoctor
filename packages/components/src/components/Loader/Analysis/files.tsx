@@ -14,7 +14,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { get } from 'lodash-es';
+import { get } from 'es-toolkit/compat';
 import React, { useMemo, useState } from 'react';
 import { drawerWidth, Size } from '../../../constants';
 import {

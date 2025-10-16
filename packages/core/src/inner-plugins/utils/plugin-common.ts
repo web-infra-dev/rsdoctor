@@ -3,7 +3,7 @@ import { openBrowser } from '@rsdoctor/sdk';
 import { makeRulesSerializable } from '@rsdoctor/core/plugins';
 import { SDK } from '@rsdoctor/types';
 import { chalk } from '@rsdoctor/utils/logger';
-import cloneDeep from 'lodash/cloneDeep.js';
+import { cloneDeep } from 'es-toolkit/compat';
 import path from 'path';
 
 /**

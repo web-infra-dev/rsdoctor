@@ -15,7 +15,7 @@ import {
   ColumnType,
   FilterConfirmProps,
 } from 'antd/es/table/interface';
-import { upperFirst } from 'lodash-es';
+import { upperFirst } from 'es-toolkit/compat';
 import React, { useMemo, useRef, useState } from 'react';
 import { Client } from '@rsdoctor/types';
 import { CompareFn } from 'antd/lib/table/interface';

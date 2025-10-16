@@ -13,7 +13,7 @@ import {
   Empty,
   Grid,
 } from 'antd';
-import { sumBy } from 'lodash-es';
+import { sumBy } from 'es-toolkit/compat';
 import {
   ExpandAltOutlined,
   InfoCircleOutlined,

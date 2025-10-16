@@ -1,7 +1,7 @@
 import path from 'path';
 import os from 'os';
 import fs from 'fs';
-import _ from 'lodash';
+import { escapeRegExp } from 'es-toolkit/compat';
 import upath from 'upath';
 
 export const isPathString = (test: string): boolean =>
@@ -25,7 +25,7 @@ export function compilePathMatcherRegExp(match: string | RegExp) {
   if (typeof match !== 'string') {
     return match;
   }
-  const escaped = _.escapeRegExp(match);
+  const escaped = escapeRegExp(match);
   return new RegExp(`(?<=\\W|^)${escaped}(?=\\W|$)`);
 }
 

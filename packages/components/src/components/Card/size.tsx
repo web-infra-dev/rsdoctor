@@ -1,5 +1,5 @@
 import { Empty, Progress, Space, Tree } from 'antd';
-import { sumBy } from 'lodash-es';
+import { sumBy } from 'es-toolkit/compat';
 import React, { useMemo } from 'react';
 import { RightOutlined } from '@ant-design/icons';
 

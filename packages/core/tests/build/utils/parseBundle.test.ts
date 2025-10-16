@@ -1,4 +1,4 @@
-import lowerCase from 'lodash/lowerCase.js';
+import { lowerCase } from 'es-toolkit/compat';
 import fs from 'fs';
 import os from 'os';
 import { describe, it, expect } from '@rstest/core';

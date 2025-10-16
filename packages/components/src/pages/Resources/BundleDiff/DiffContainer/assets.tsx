@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { sumBy } from 'lodash-es';
+import { sumBy } from 'es-toolkit/compat';
 import {
   CheckSquareOutlined,
   InfoCircleOutlined,

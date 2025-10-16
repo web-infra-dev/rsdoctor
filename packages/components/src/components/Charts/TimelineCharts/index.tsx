@@ -11,7 +11,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 import dayjs from 'dayjs';
 import { ChartProps, DurationMetric, ITraceEventData } from '../types';
-import { groupBy } from 'lodash-es';
+import { groupBy } from 'es-toolkit/compat';
 import { ChartTypes, PALETTE_COLORS } from '../constants';
 
 interface CoordSysType {

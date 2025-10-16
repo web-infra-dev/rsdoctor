@@ -19,7 +19,7 @@ import {
   Typography,
 } from 'antd';
 import { DataNode as AntdDataNode } from 'antd/es/tree';
-import { omitBy, sumBy } from 'lodash-es';
+import { omitBy, sumBy } from 'es-toolkit/compat';
 import { dirname, relative } from 'path';
 import React, { useEffect, useMemo, useState } from 'react';
 import { CodeViewer } from 'src/components/base';

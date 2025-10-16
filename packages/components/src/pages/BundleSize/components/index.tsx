@@ -19,7 +19,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { debounce, sumBy } from 'lodash-es';
+import { debounce, sumBy } from 'es-toolkit/compat';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useCodeDrawer } from 'src/components/base/CodeViewer/useCodeDrawer';
 import { Badge as Bdg } from '../../../components/Badge';
