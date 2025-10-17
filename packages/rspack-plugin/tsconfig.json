@@ -1,7 +1,6 @@
 {
   "extends": "@rsdoctor/tsconfig/base",
   "compilerOptions": {
-    "baseUrl": ".",
     "outDir": "./dist",
     "rootDir": "src"
   },

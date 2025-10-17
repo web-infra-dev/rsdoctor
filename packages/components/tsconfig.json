@@ -14,7 +14,7 @@
     }
   },
   "include": ["src"],
-  "exclude": ["**/node_modules"],
+  "exclude": ["**/node_modules", "**/*/.DS_Store"],
   "references": [
     {
       "path": "../types/tsconfig.json"

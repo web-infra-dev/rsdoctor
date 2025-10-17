@@ -530,6 +530,9 @@ importers:
         specifier: ^5.4.1
         version: 5.4.1
     devDependencies:
+      '@rsdoctor/client':
+        specifier: workspace:*
+        version: link:../client
       axios:
         specifier: ^1.12.2
         version: 1.12.2
@@ -806,6 +809,8 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
+  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
+
   packages/core/compiled/axios: {}
 
   packages/document:
@@ -1022,6 +1027,8 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
+
+  packages/sdk/compiled/body-parser: {}
 
   packages/sdk/compiled/cors: {}
 
