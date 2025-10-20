@@ -41,5 +41,14 @@ export default defineConfig({
       ...libConfig.output,
       externals,
     },
+    shims: {
+      esm: {
+        __filename: true,
+        __dirname: true,
+      },
+      cjs: {
+        'import.meta.url': true,
+      },
+    },
   })),
 });

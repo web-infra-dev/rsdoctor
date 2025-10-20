@@ -11,6 +11,7 @@ import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { logger } from '@rsdoctor/utils/logger';
 import { join } from 'node:path';
+import open from 'open';
 
 const execAsync = promisify(exec);
 
@@ -74,7 +75,6 @@ export async function openBrowser(
     // Fallback to open
     // (It will always open new tab)
     try {
-      const { default: open } = await import('open');
       await open(url);
       return true;
     } catch (err) {
