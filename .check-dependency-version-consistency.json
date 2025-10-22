@@ -1,0 +1,17 @@
+{
+  "skip": [
+    "@types/*",
+    "typescript",
+    "eslint*",
+    "prettier*",
+    "@babel/*",
+    "babel-*",
+    "@rsdoctor/client",
+    "@rsdoctor/cli"
+  ],
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**"
+  ]
+}
