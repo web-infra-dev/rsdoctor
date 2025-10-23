@@ -5,7 +5,6 @@ import {
   getDependencyByPackageData,
 } from './dependency';
 import { logger } from 'src/logger';
-import { isStyleExt, isJsExt } from '../file';
 
 export function getModulesByAsset(
   asset: SDK.AssetData,
@@ -16,13 +15,7 @@ export function getModulesByAsset(
 ): SDK.ModuleData[] {
   const ids = getChunkIdsByAsset(asset);
   const cks = getChunksByChunkIds(ids, chunks);
-  const res = getModulesByChunks(
-    asset.path,
-    cks,
-    modules,
-    filterModules,
-    checkModules,
-  );
+  const res = getModulesByChunks(cks, modules, filterModules, checkModules);
   return res;
 }
 
@@ -66,29 +59,16 @@ export function getModulesByChunk(
     .filter(Boolean);
 }
 
-function getTypeChecker(assetPath: string) {
-  if (isStyleExt(assetPath)) return isStyleExt;
-  if (isJsExt(assetPath)) return isJsExt;
-  return () => true;
-}
-
 export function getModulesByChunks(
-  assetPath: string,
   chunks: SDK.ChunkData[],
   modules: SDK.ModuleData[],
   filterModules?: (keyof SDK.ModuleData)[],
   checkModules?: (module: SDK.ModuleData) => boolean,
 ): SDK.ModuleData[] {
   const res: SDK.ModuleData[] = [];
-
-  const typeChecker = getTypeChecker(assetPath);
-
   try {
     chunks.forEach((chunk) => {
       getModulesByChunk(chunk, modules, filterModules).forEach((md) => {
-        const name = md.path || '';
-        if (!typeChecker(name)) return;
-
         if (
           (checkModules ? checkModules(md) : true) &&
           !res.filter((_m) => _m.id === md.id).length

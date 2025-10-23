@@ -42,7 +42,7 @@ function getDataProtocolFormat(content: string): string {
         return '';
     }
   } catch (error) {
-    console.error('解析 data 协议文件格式失败:', error);
+    console.error('解析 data 协议文件格式失败::', error);
     return '';
   }
 }
