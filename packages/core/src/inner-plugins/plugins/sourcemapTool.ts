@@ -81,6 +81,7 @@ export async function collectSourceMaps(
   _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
   sourceMapFilenameRegex?: RegExp,
   namespace?: string,
+  skipSources?: Set<string>,
 ) {
   if (map) {
     // Create a SourceMapConsumer to iterate mappings
@@ -127,6 +128,11 @@ export async function collectSourceMaps(
 
         if (!realSource) continue;
 
+        // Skip if this source has already been processed in a previous asset
+        if (skipSources && skipSources.has(realSource)) {
+          continue;
+        }
+
         const next = mappings[i + 1];
         const start = m.generatedColumn;
         const end = next ? next.generatedColumn : line.length;
@@ -159,6 +165,8 @@ export async function handleAfterEmitAssets(
     _this.sourceMapSets = new Map();
     time('ensureModulesChunkGraph.afterEmit.start');
     const assets = [...compilation.getAssets()] as Asset[];
+    const skipSources = new Set<string>();
+
     for (const asset of assets) {
       const { assetLinesCodeList, map: mapFromAsset } = parseAsset(
         asset,
@@ -215,10 +223,19 @@ export async function handleAfterEmitAssets(
           _this,
           sourceMapFilenameRegex,
           namespace,
+          skipSources,
         );
       } catch (e) {
         logger.debug(e);
       }
+
+      // After processing this asset, mark newly processed sources
+      // to prevent processing them again in subsequent assets
+      _this.sourceMapSets.forEach((_value: string, key: string) => {
+        if (!skipSources.has(key)) {
+          skipSources.add(key);
+        }
+      });
     }
     timeEnd('ensureModulesChunkGraph.afterEmit.start');
   }
