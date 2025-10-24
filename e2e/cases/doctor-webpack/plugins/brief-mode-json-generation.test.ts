@@ -278,3 +278,36 @@ test('brief mode with both HTML and JSON types should generate both outputs', as
     console.warn('Failed to cleanup test directory:', e);
   }
 });
+
+test('brief mode with JSON type and custom name should generate JSON file with custom name', async () => {
+  const fileName = 'rsdoctor-server-data.json';
+  const customOptions = {
+    fileName,
+  };
+
+  const { outputDir, plugin } = await compileWithBriefJsonMode(customOptions);
+
+  // Set the output directory
+  plugin.sdk.setOutputDir(outputDir);
+
+  const sdk = getSDK();
+  expect(sdk?.extraConfig?.brief).toMatchObject({
+    type: ['json'],
+    jsonOptions: customOptions,
+  });
+
+  // Wait for files to be written
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Check if JSON data file exists
+  const jsonDataPath = path.join(outputDir, fileName);
+  const jsonDataExists = await File.fse.pathExists(jsonDataPath);
+  expect(jsonDataExists).toBeTruthy();
+
+  // Cleanup
+  try {
+    await File.fse.remove(outputDir);
+  } catch (e) {
+    console.warn('Failed to cleanup test directory:', e);
+  }
+});

@@ -38,6 +38,7 @@ Brief mode is used to generate lightweight analysis reports, supporting both HTM
 - **`htmlOptions`**: HTML output related configuration
   - **`reportHtmlName`**: HTML report filename, defaults to `report-rsdoctor.html`
 - **`jsonOptions`**: JSON output related configuration
+  - **`fileName`**: JSON stats filename, defaults to `rsdoctor-data.json`
   - **`sections`**: Module configuration for JSON output
     - **`moduleGraph`**: Whether to include module graph data, defaults to `true`
     - **`chunkGraph`**: Whether to include Chunk graph data, defaults to `true`
@@ -143,6 +144,8 @@ interface BriefConfig {
 }
 
 interface JsonOptions {
+  /** JSON stats filename, defaults to rsdoctor-data.json */
+  fileName?: string;
   /** Module configuration for JSON output */
   sections?: JsonSectionOptions;
 }
