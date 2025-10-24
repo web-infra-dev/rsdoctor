@@ -48,6 +48,7 @@ export function processBriefHtmlModeConfig(
 
   if ('type' in briefOptions && briefOptions.type?.includes('json')) {
     jsonOptions = briefOptions.jsonOptions || {
+      fileName: 'rsdoctor-data.json',
       sections: {
         moduleGraph: true,
         chunkGraph: true,

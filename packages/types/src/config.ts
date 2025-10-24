@@ -34,6 +34,7 @@ interface JsonSectionOptions {
 }
 
 export interface JsonOptions {
+  fileName?: string;
   sections?: JsonSectionOptions;
 }
 
