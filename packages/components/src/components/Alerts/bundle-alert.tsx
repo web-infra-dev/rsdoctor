@@ -193,7 +193,6 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
         ) : (
           <Tabs
             onChange={setActiveKey}
-            tabBarGutter={10}
             type="card"
             defaultActiveKey="E1001"
             items={tabItems}
