@@ -199,7 +199,9 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
         (this.sdk as RsdoctorPrimarySDK).parent.master.setOutputDir(
           path.resolve(
             this.options.output.reportDir || compiler.outputPath,
-            `./${Constants.RsdoctorOutputFolder}`,
+            this.options.output.mode === SDK.IMode[SDK.IMode.brief]
+              ? ''
+              : `./${Constants.RsdoctorOutputFolder}`,
           ),
         );
       }
@@ -207,7 +209,9 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
       this.sdk.setOutputDir(
         path.resolve(
           this.options.output.reportDir || compiler.outputPath,
-          `./${Constants.RsdoctorOutputFolder}`,
+          this.options.output.mode === SDK.IMode[SDK.IMode.brief]
+            ? ''
+            : `./${Constants.RsdoctorOutputFolder}`,
         ),
       );
 
