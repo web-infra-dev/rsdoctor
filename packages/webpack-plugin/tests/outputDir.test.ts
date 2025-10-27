@@ -2,7 +2,7 @@ import { describe, expect, it } from '@rstest/core';
 import { File } from '@rsdoctor/utils/build';
 import { tmpdir } from 'os';
 import path from 'path';
-import { RsdoctorWebpackPlugin } from '../src';
+const { RsdoctorWebpackPlugin } = require('../src');
 
 describe('RsdoctorWebpackPlugin outputDir tests', () => {
   it('should set outputDir correctly for single instance', async () => {
