@@ -1207,8 +1207,8 @@ importers:
         specifier: ^1.41.0
         version: 1.41.0
       memfs:
-        specifier: 4.43.0
-        version: 4.43.0
+        specifier: 4.49.0
+        version: 4.49.0
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -7478,9 +7478,8 @@ packages:
   medium-zoom@1.1.0:
     resolution: {integrity: sha512-ewyDsp7k4InCUp3jRmwHBRFGyjBimKps/AJLjRSox+2q/2H4p/PNpQf+pwONWlJiOudkBXtbdmVbFjqyybfTmQ==}
 
-  memfs@4.43.0:
-    resolution: {integrity: sha512-XCdhMy33sgxCwJ4JgjSasLGgOjFm9/i+IEhO03gPHroJeTBhM7ZQ1+v3j7di9nNKtcLGjVvKjHVOkTbVop/R/Q==}
-    engines: {node: '>= 4.0.0'}
+  memfs@4.49.0:
+    resolution: {integrity: sha512-L9uC9vGuc4xFybbdOpRLoOAOq1YEBBsocCs5NVW32DfU+CZWWIn3OVF+lB8Gp4ttBVSMazwrTrjv8ussX/e3VQ==}
 
   memoize-one@4.0.3:
     resolution: {integrity: sha512-QmpUu4KqDmX0plH4u+tf0riMc1KHE1+lw95cMrLlXQAFOx/xnBtwhZ52XJxd9X2O6kwKBqX32kmhbhlobD0cuw==}
@@ -18816,7 +18815,7 @@ snapshots:
 
   medium-zoom@1.1.0: {}
 
-  memfs@4.43.0:
+  memfs@4.49.0:
     dependencies:
       '@jsonjoy.com/json-pack': 1.11.0(tslib@2.8.1)
       '@jsonjoy.com/util': 1.9.0(tslib@2.8.1)
@@ -22384,7 +22383,7 @@ snapshots:
       '@rspack/lite-tapable': 1.0.1
       chokidar: 3.6.0
       is-glob: 4.0.3
-      memfs: 4.43.0
+      memfs: 4.49.0
       minimatch: 9.0.5
       picocolors: 1.1.1
       typescript: 5.9.2
@@ -22841,7 +22840,7 @@ snapshots:
   webpack-dev-middleware@7.4.2(webpack@5.97.1(esbuild@0.17.19)):
     dependencies:
       colorette: 2.0.20
-      memfs: 4.43.0
+      memfs: 4.49.0
       mime-types: 2.1.35
       on-finished: 2.4.1
       range-parser: 1.2.1
@@ -22853,7 +22852,7 @@ snapshots:
   webpack-dev-middleware@7.4.2(webpack@5.97.1):
     dependencies:
       colorette: 2.0.20
-      memfs: 4.43.0
+      memfs: 4.49.0
       mime-types: 2.1.35
       on-finished: 2.4.1
       range-parser: 1.2.1
