@@ -107,10 +107,7 @@ test('rspack brief mode', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);
 
-  const reportPath = path.join(
-    __dirname,
-    './dist/brief/.rsdoctor/rsdoctor-report.html',
-  );
+  const reportPath = path.join(__dirname, './dist/brief/rsdoctor-report.html');
 
   fileExists(reportPath);
 
