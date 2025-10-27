@@ -24,7 +24,7 @@
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.26",
     "loader-utils": "^2.0.4",
-    "es-toolkit": "^1.40.0",
+    "es-toolkit": "^1.41.0",
     "playwright": "1.54.2",
     "terser-webpack-plugin": "^5.3.14",
     "typescript": "^5.9.2",

@@ -108,8 +108,8 @@ importers:
         specifier: ^18.3.26
         version: 18.3.26
       es-toolkit:
-        specifier: ^1.40.0
-        version: 1.40.0
+        specifier: ^1.41.0
+        version: 1.41.0
       loader-utils:
         specifier: ^2.0.4
         version: 2.0.4
@@ -645,8 +645,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3(echarts@5.6.0)(react@18.3.1)
       es-toolkit:
-        specifier: ^1.40.0
-        version: 1.40.0
+        specifier: ^1.41.0
+        version: 1.41.0
       i18next:
         specifier: 22.0.4
         version: 22.0.4
@@ -691,8 +691,8 @@ importers:
         version: 1.5.10
     devDependencies:
       '@rsbuild/plugin-check-syntax':
-        specifier: 1.4.0
-        version: 1.4.0(@rsbuild/core@1.6.0-beta.1)
+        specifier: 1.5.0
+        version: 1.5.0(@rsbuild/core@1.6.0-beta.1)
       '@rsbuild/plugin-react':
         specifier: ^1.4.1
         version: 1.4.1(@rsbuild/core@1.6.0-beta.1)
@@ -727,8 +727,8 @@ importers:
   packages/core:
     dependencies:
       '@rsbuild/plugin-check-syntax':
-        specifier: 1.4.0
-        version: 1.4.0(@rsbuild/core@1.5.17)
+        specifier: 1.5.0
+        version: 1.5.0(@rsbuild/core@1.5.17)
       '@rsdoctor/graph':
         specifier: workspace:*
         version: link:../graph
@@ -748,8 +748,8 @@ importers:
         specifier: 5.12.0
         version: 5.12.0
       es-toolkit:
-        specifier: ^1.40.0
-        version: 1.40.0
+        specifier: ^1.41.0
+        version: 1.41.0
       filesize:
         specifier: ^10.1.6
         version: 10.1.6
@@ -886,8 +886,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       es-toolkit:
-        specifier: ^1.40.0
-        version: 1.40.0
+        specifier: ^1.41.0
+        version: 1.41.0
       path-browserify:
         specifier: 1.0.1
         version: 1.0.1
@@ -1204,8 +1204,8 @@ importers:
         specifier: ^22.8.1
         version: 22.18.1
       es-toolkit:
-        specifier: ^1.40.0
-        version: 1.40.0
+        specifier: ^1.41.0
+        version: 1.41.0
       memfs:
         specifier: 4.49.0
         version: 4.49.0
@@ -3432,8 +3432,8 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rsbuild/plugin-check-syntax@1.4.0':
-    resolution: {integrity: sha512-Lq3Dg4fcONeSHeCOUNeNr2cRUoZMHG49NHpHWCFc8eB7rELICUA4k/CQtVBVoU8Ahz/4HjmD8C25ilE2PmfXBQ==}
+  '@rsbuild/plugin-check-syntax@1.5.0':
+    resolution: {integrity: sha512-/JutNle3wI67q/WOYcneyjUSAjZDJIycfpoJ04PWFh+qQ68Pwg4/Be1kU7GiVVklMwmEScoCd9S+gXWk+27YSg==}
     peerDependencies:
       '@rsbuild/core': 1.x
     peerDependenciesMeta:
@@ -6017,8 +6017,8 @@ packages:
     resolution: {integrity: sha512-j6vWzfrGVfyXxge+O0x5sh6cvxAog0a/4Rdd2K36zCMV5eJ+/+tOAngRO8cODMNWbVRdVlmGZQL2YS3yR8bIUA==}
     engines: {node: '>= 0.4'}
 
-  es-toolkit@1.40.0:
-    resolution: {integrity: sha512-8o6w0KFmU0CiIl0/Q/BCEOabF2IJaELM1T2PWj6e8KqzHv1gdx+7JtFnDwOx1kJH/isJ5NwlDG1nCr1HrRF94Q==}
+  es-toolkit@1.41.0:
+    resolution: {integrity: sha512-bDd3oRmbVgqZCJS6WmeQieOrzpl3URcWBUVDXxOELlUW2FuW+0glPOz1n0KnRie+PdyvUZcXz2sOn00c6pPRIA==}
 
   esast-util-from-estree@2.0.0:
     resolution: {integrity: sha512-4CyanoAudUSBAn5K13H4JhsMH6L9ZP7XbLVe/dKybkxMO7eDyLsT8UHl9TRNrU2Gr9nz+FovfSIjuXWJ81uVwQ==}
@@ -13638,7 +13638,7 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.5.17
 
-  '@rsbuild/plugin-check-syntax@1.4.0(@rsbuild/core@1.5.17)':
+  '@rsbuild/plugin-check-syntax@1.5.0(@rsbuild/core@1.5.17)':
     dependencies:
       acorn: 8.15.0
       browserslist-to-es-version: 1.1.1
@@ -13648,7 +13648,7 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.5.17
 
-  '@rsbuild/plugin-check-syntax@1.4.0(@rsbuild/core@1.6.0-beta.1)':
+  '@rsbuild/plugin-check-syntax@1.5.0(@rsbuild/core@1.6.0-beta.1)':
     dependencies:
       acorn: 8.15.0
       browserslist-to-es-version: 1.1.1
@@ -16928,7 +16928,7 @@ snapshots:
       has-tostringtag: 1.0.2
       hasown: 2.0.2
 
-  es-toolkit@1.40.0: {}
+  es-toolkit@1.41.0: {}
 
   esast-util-from-estree@2.0.0:
     dependencies:
