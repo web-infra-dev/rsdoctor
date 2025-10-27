@@ -1,8 +1,9 @@
-import { RsdoctorWebpackPluginOptions } from '@rsdoctor/core/types';
 import { Linter } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
 import { tmpdir } from 'os';
 import path from 'path';
+import { RsdoctorWebpackPluginOptions } from '@rsdoctor/types/dist/plugin';
+// @ts-ignore
 import { RsdoctorWebpackPlugin } from '../src';
 
 export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
