@@ -16,14 +16,15 @@ import {
 } from '@rsdoctor/core/plugins';
 import type { RsdoctorPluginInstance } from '@rsdoctor/core/types';
 import { ChunkGraph, ModuleGraph } from '@rsdoctor/graph';
-import { findRoot, RsdoctorSDK } from '@rsdoctor/sdk';
-import { Linter, Manifest, SDK, Plugin } from '@rsdoctor/types';
+import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
+import { Linter, Manifest, SDK, Plugin, Constants } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { Loader } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
 import type { Compiler } from 'webpack';
 import { pluginTapName, pluginTapPostOptions } from './constants';
 import { InternalResolverPlugin } from './plugins/resolver';
+import path from 'path';
 
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorPluginInstance<Compiler, Rules>
@@ -32,7 +33,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   public readonly options: Plugin.RsdoctorPluginOptionsNormalized<Rules>;
 
-  public readonly sdk: SDK.RsdoctorBuilderSDKInstance;
+  public readonly sdk: SDK.RsdoctorBuilderSDKInstance | RsdoctorPrimarySDK;
 
   public readonly isRsdoctorPlugin: boolean;
 
@@ -43,6 +44,8 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   protected browserIsOpened = false;
 
   public chunkGraph: ChunkGraph;
+
+  public outsideInstance: boolean | undefined;
 
   constructor(options?: Plugin.RsdoctorWebpackPluginOptions<Rules>) {
     this.options = normalizeUserConfig<Rules>(options);
@@ -131,7 +134,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
         ...pluginTapPostOptions,
         stage: pluginTapPostOptions.stage! + 100,
       },
-      this.done.bind(this),
+      this.done.bind(this, compiler),
     );
   }
 
@@ -183,12 +186,35 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     ensureModulesChunksGraphFn(compiler, this);
   }
 
-  public done = async (): Promise<void> => {
+  public done = async (
+    compiler: Plugin.BaseCompilerType<'webpack'>,
+  ): Promise<void> => {
     try {
       this.sdk.server.broadcast();
       logger.debug(
         `${Process.getMemoryUsageMessage()}, '[Before Write Manifest]'`,
       );
+
+      if (this.outsideInstance && 'parent' in this.sdk) {
+        (this.sdk as RsdoctorPrimarySDK).parent.master.setOutputDir(
+          path.resolve(
+            this.options.output.reportDir || compiler.outputPath,
+            this.options.output.mode === SDK.IMode[SDK.IMode.brief]
+              ? ''
+              : `./${Constants.RsdoctorOutputFolder}`,
+          ),
+        );
+      }
+
+      this.sdk.setOutputDir(
+        path.resolve(
+          this.options.output.reportDir || compiler.outputPath,
+          this.options.output.mode === SDK.IMode[SDK.IMode.brief]
+            ? ''
+            : `./${Constants.RsdoctorOutputFolder}`,
+        ),
+      );
+
       await this.sdk.writeStore();
       logger.debug(
         `${Process.getMemoryUsageMessage()}, '[After Write Manifest]'`,

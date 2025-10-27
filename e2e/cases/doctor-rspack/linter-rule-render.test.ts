@@ -110,7 +110,7 @@ test('linter rule render check', async () => {
 
   const reportPath = path.join(
     __dirname,
-    `./dist/linter-rule-render/.rsdoctor/rsdoctor-report.html`,
+    `./dist/linter-rule-render/rsdoctor-report.html`,
   );
 
   fileExists(reportPath);

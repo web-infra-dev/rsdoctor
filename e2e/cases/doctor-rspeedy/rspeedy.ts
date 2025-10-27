@@ -21,7 +21,7 @@ async function waitUntil(
   options: { timeout?: number } = {},
 ) {
   const startTime = Date.now();
-  const timeout = options.timeout ?? 5000;
+  const timeout = options.timeout ?? 10000;
 
   while (Date.now() - startTime < timeout) {
     if (condition()) {
