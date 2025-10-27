@@ -395,7 +395,11 @@ export class RsdoctorSDK<
 
         fs.mkdirSync(this.outputDir, { recursive: true });
         fs.writeFileSync(
-          path.resolve(this.outputDir, 'rsdoctor-data.json'),
+          path.resolve(
+            this.outputDir,
+            this.extraConfig.brief.jsonOptions?.fileName ??
+              'rsdoctor-data.json',
+          ),
           JSON.stringify(jsonData, null, 2),
         );
       }

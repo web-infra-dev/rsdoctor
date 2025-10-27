@@ -148,6 +148,7 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
           writeDataJson: false,
         },
         jsonOptions: {
+          fileName: 'rsdoctor-data.json',
           sections: {
             moduleGraph: true,
             chunkGraph: true,
