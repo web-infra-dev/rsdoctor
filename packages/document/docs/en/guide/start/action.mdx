@@ -5,7 +5,7 @@ description: Integrate Rsdoctor analysis in CI/CD workflows using rsdoctor-actio
 
 # GitHub Action Integration
 
-Rsdoctor provides an official GitHub [rsdoctor-action](https://github.com/web-infra-dev/rsdoctor-action) for easy integration of Rsdoctor analysis functionality in CI/CD workflows. Through GitHub Action, you can automatically generate and perform bundle diff analysis on every build on GitHub, enabling bundle degradation monitoring and continuous project performance optimization.
+Rsdoctor provides an official GitHub [rsdoctor-action](https://github.com/web-infra-dev/rsdoctor-action) for easy integration of Rsdoctor analysis functionality in CI/CD workflows. Through GitHub Action, you can automatically perform bundle diff analysis on the build output and monitor and prevent bundle degradation, continuously optimizing project performance.
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/github-actions-opt.png"
@@ -18,7 +18,7 @@ Rsdoctor provides an official GitHub [rsdoctor-action](https://github.com/web-in
 
 **1. Follow the [Quick Start](/guide/start/quick-start) guide to install the Rsdoctor plugin in your project and configure it according to your project type.**
 
-**2. You need to use Brief mode and enable 'json' in the type array for uploading analysis data in subsequent GitHub Actions.** For specific configuration, see [output configuration](/config/options/output).
+**2. You need to use Brief mode and add `'json'` to the `type` array so that the analysis data can be uploaded in the subsequent GitHub Action.** For detailed configuration, see [output options](/config/options/output).
 
 - Example below, Rsbuild integration example:
 
@@ -135,11 +135,9 @@ Additionally, clicking "Download Bundle Diff Report" allows you to download Rsdo
 - Check if file_path points to the correct location
 - Verify that the Rsdoctor plugin is properly configured in your build tool
 
-**Q: Baseline data not found**
+**Q: If you see the message "No baseline data found", what does it mean?**
 
-- This is normal for first-time runs or new repositories
-- The Action will still generate current bundle analysis
-- Baseline data will be created after the first merge to the main branch
+- This is normal for the first run or for new repositories, because no baseline has been uploaded yet. The baseline data will be created after the first merge into the main branch.
 
 ## More Resources
 
