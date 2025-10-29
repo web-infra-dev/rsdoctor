@@ -53,7 +53,9 @@ export default defineConfig({
 
 - `file_path`：必需，Rsdoctor JSON 数据文件路径。
 - `target_branch`：非必需，目标分支名称，默认是 'main'。
-- `on` 是指运行的时机，需要在 pull_request 和 push 时，pull_request 时 Rsdoctor Action 会拉取 baseline 和 current 进行 bundle diff，push 也就是 PR 合并时，会进行 baseline 更新上传的操作。
+- `on` 是指 workflow 运行的时机，通常设置为 `pull_request` 和 `push`。
+  - 在 `pull_request` 时，Rsdoctor Action 会拉取 baseline 和 current，进行 bundle diff 分析。
+  - 在 `push`（即 PR 合并）时，会进行 baseline 的更新和上传操作。
 - 在执行 rsdoctor-action 之前，需要先将项目进行构建，构建时需要开启 Rsdoctor 插件，并生成 Rsdoctor JSON 数据文件。
 
 ```yaml
