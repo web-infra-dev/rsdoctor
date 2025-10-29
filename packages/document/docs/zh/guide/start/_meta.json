@@ -1,1 +1,10 @@
-["intro", "quick-start", "features", "cicd", "cli", "mcp", "playground"]
+[
+  "intro",
+  "quick-start",
+  "features",
+  "cicd",
+  "action",
+  "cli",
+  "mcp",
+  "playground"
+]

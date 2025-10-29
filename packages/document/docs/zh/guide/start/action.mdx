@@ -1,0 +1,139 @@
+---
+title: GitHub Action 集成
+description: 使用 rsdoctor-action 在 CI/CD 流程中集成 Rsdoctor 分析
+---
+
+# GitHub Action 集成
+
+Rsdoctor 提供了官方的 GitHub [rsdoctor-action](https://github.com/web-infra-dev/rsdoctor-action) CI/CD 流程中轻松集成 Rsdoctor 分析功能。通过 GitHub Action，你可以在 Github 上每次构建时自动生成和对 Bundle 进行差异分析，进行 Bundle 劣化监控，持续优化项目性能。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/github-actions-opt.png"
+  style={{ width: '80%', margin: 'auto' }}
+/>
+
+## 快速开始
+
+### 第一步：项目中安装 Rsdoctor 插件
+
+**1. 项目中参考 [快速开始](/guide/start/quick-start) 安装 Rsdoctor 插件，同时按照项目类型进行配置。**
+
+**2. 需要使用 Brief 模式，同时开启 type 数组中添加 'json'，用于后续 GitHub Action 中上传分析数据。** 具体配置可查看 [output 配置](/config/options/output)。
+
+- 示例如下，Rsbuild 集成示例：
+
+```typescript
+// rsbuild.config.ts
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default defineConfig({
+  plugins: [pluginReact()],
+  tools: {
+    rspack: {
+      plugins: [
+        new RsdoctorRspackPlugin({
+          output: {
+            mode: 'brief',
+            options: {
+              type: ['json'],
+            },
+          },
+        }),
+      ],
+    },
+  },
+});
+```
+
+### 第二步：Github workflow 中配置
+
+在你的 GitHub 仓库中创建 `.github/workflows/ci.yml` 文件，如下示例。需要注意以下几点：
+
+- `file_path`：必需，Rsdoctor JSON 数据文件路径。
+- `target_branch`：非必需，目标分支名称，默认是 'main'。
+- `on` 是指运行的时机，需要在 pull_request 和 push 时，pull_request 时 Rsdoctor Action 会拉取 baseline 和 current 进行 bundle diff，push 也就是 PR 合并时，会进行 baseline 更新上传的操作。
+- 在执行 rsdoctor-action 之前，需要先将项目进行构建，构建时需要开启 Rsdoctor 插件，并生成 Rsdoctor JSON 数据文件。
+
+```yaml
+name: Bundle Analysis
+
+on: [pull_request, push]
+
+jobs:
+  bundle-analysis:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Allow commenting on commits
+      contents: write
+      # Allow commenting on issues
+      issues: write
+      # Allow commenting on pull requests
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Pnpm
+        run: |
+          npm install -g corepack@latest --force
+          corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies and Build
+        run: |
+          pnpm install
+          pnpm run build
+
+      - name: Bundle Analysis
+        uses: web-infra-dev/rsdoctor-action@main
+        with:
+          file_path: 'dist/.rsdoctor/rsdoctor-data.json'
+          target_branch: ${{ github.ref_name }}
+```
+
+## 查看报告
+
+将上述配置文件提交到你的仓库后，GitHub Actions 将在指定的触发条件下自动运行，生成 Rsdoctor 的分析报告。你将在 GitHub CI 中看到 Bundle 大小变化的对比提示，如下图：
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/github-actions-opt.png"
+  style={{ width: '80%', margin: 'auto' }}
+/>
+
+同时，点击 「Download Bundle Diff Report」可以下载 Rsdoctor 的 diff 报告，详细查看 diff 数据。
+
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-all.png" />
+
+> Bundle Diff 报告详细内容可查看 [Bundle Diff 使用指南](/guide/usage/bundle-diff)。
+
+## 故障排除
+
+### 常见问题
+
+**Q: Action 失败，提示"未找到 Rsdoctor 数据文件"**
+
+- 确保您的构建过程生成 Rsdoctor JSON 数据
+- 检查 file_path 是否指向正确位置
+- 验证 Rsdoctor 插件在您的构建工具中正确配置
+
+**Q: 未找到基线数据**
+
+- 这对于首次运行或新仓库是正常的
+- Action 仍会生成当前打包分析
+- 基线数据将在首次合并到主分支后创建
+
+## 更多资源
+
+- [rsdoctor-action GitHub 仓库](https://github.com/web-infra-dev/rsdoctor-action)
