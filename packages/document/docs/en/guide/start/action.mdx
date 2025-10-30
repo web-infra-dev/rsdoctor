@@ -1,0 +1,144 @@
+---
+title: GitHub Action Integration
+description: Integrate Rsdoctor analysis in CI/CD workflows using rsdoctor-action
+---
+
+# GitHub Action Integration
+
+Rsdoctor provides an official GitHub [rsdoctor-action](https://github.com/web-infra-dev/rsdoctor-action) for easy integration of Rsdoctor analysis functionality in CI/CD workflows. Through GitHub Action, you can automatically perform bundle diff analysis on the build output and monitor and prevent bundle degradation, continuously optimizing project performance.
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/github-actions-opt.png"
+  style={{ width: '80%', margin: 'auto' }}
+/>
+
+## Quick Start
+
+### Step 1: Install Rsdoctor Plugin in Your Project
+
+**1. Follow the [Quick Start](/guide/start/quick-start) guide to install the Rsdoctor plugin in your project and configure it according to your project type.**
+
+**2. You need to use Brief mode and add `'json'` to the `type` array so that the analysis data can be uploaded in the subsequent GitHub Action.** For detailed configuration, see [output options](/config/options/output).
+
+- Example below, Rsbuild integration example:
+
+```typescript
+// rsbuild.config.ts
+import { defineConfig } from '@rsbuild/core';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default defineConfig({
+  plugins: [pluginReact()],
+  tools: {
+    rspack: {
+      plugins: [
+        new RsdoctorRspackPlugin({
+          output: {
+            mode: 'brief',
+            options: {
+              type: ['json'],
+            },
+          },
+        }),
+      ],
+    },
+  },
+});
+```
+
+### Step 2: Configure GitHub Workflow
+
+Create a `.github/workflows/ci.yml` file in your GitHub repository as shown in the example below. Please note the following points:
+
+- `file_path`: Required, path to the Rsdoctor JSON data file.
+- `target_branch`: Optional, target branch name, defaults to 'main'.
+- `on` refers to the timing of execution. It needs to run on both `pull_request` and `push`. During `pull_request`, Rsdoctor Action will pull baseline and current data for bundle diff analysis. During `push` (i.e., when PR is merged), it will perform baseline update and upload operations.
+- Before executing rsdoctor-action, you need to build the project first. During the build process, you need to enable the Rsdoctor plugin and generate the Rsdoctor JSON data file.
+
+```yaml
+name: Bundle Analysis
+
+on: [pull_request, push]
+
+jobs:
+  bundle-analysis:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Allow commenting on commits
+      contents: write
+      # Allow commenting on issues
+      issues: write
+      # Allow commenting on pull requests
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Pnpm
+        run: |
+          npm install -g corepack@latest --force
+          corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies and Build
+        run: |
+          pnpm install
+          pnpm run build
+
+      - name: Bundle Analysis
+        uses: web-infra-dev/rsdoctor-action@main
+        with:
+          file_path: 'dist/.rsdoctor/rsdoctor-data.json'
+          target_branch: ${{ github.ref_name }}
+```
+
+#### Configuration Options
+
+In the above configuration:
+
+- `file_path`: Required, path to the Rsdoctor JSON data file.
+- `target_branch`: Optional, target branch name, defaults to 'main'.
+
+## View Reports
+
+After submitting the above configuration file to your repository, GitHub Actions will automatically run under the specified trigger conditions and generate Rsdoctor analysis reports. You will see bundle size change comparison prompts in GitHub CI, as shown below:
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/github-actions-opt.png"
+  style={{ width: '80%', margin: 'auto' }}
+/>
+
+Additionally, clicking "Download Bundle Diff Report" allows you to download Rsdoctor's diff report for detailed diff data viewing.
+
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-all.png" />
+
+> For detailed Bundle Diff report content, see [Bundle Diff Usage Guide](/guide/usage/bundle-diff).
+
+## Troubleshooting
+
+### Common Issues
+
+**Q: Action fails with "❌ Rsdoctor data file not found"**
+
+- Ensure your build process generates Rsdoctor JSON data, the default path is `/rsdoctor-data.json`.
+- Check if file_path points to the correct location
+- Verify that the Rsdoctor plugin is properly configured in your build tool
+
+**Q: If you see the message "No baseline data found", what does it mean?**
+
+- This is normal for the first run or for new repositories, because no baseline has been uploaded yet. The baseline data will be created after the first merge into the main branch.
+
+## More Resources
+
+- [rsdoctor-action GitHub Repository](https://github.com/web-infra-dev/rsdoctor-action)
