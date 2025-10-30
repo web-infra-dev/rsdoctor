@@ -114,7 +114,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
           return {
             id: node.path ? hashString(node.path) : undefined,
             name: node.name,
-            value: node[valueKey] ?? node.value ?? 0,
+            value: node[valueKey] || node.value || node['sourceSize'] || 0,
             path: node.path,
             sourceSize: node.sourceSize ?? node.value,
             bundledSize: node.bundledSize,
