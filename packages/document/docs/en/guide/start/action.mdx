@@ -52,14 +52,23 @@ export default defineConfig({
 Create a `.github/workflows/ci.yml` file in your GitHub repository as shown in the example below. Please note the following points:
 
 - `file_path`: Required, path to the Rsdoctor JSON data file.
-- `target_branch`: Optional, target branch name, defaults to 'main'.
-- `on` refers to the timing of execution. It needs to run on both `pull_request` and `push`. During `pull_request`, Rsdoctor Action will pull baseline and current data for bundle diff analysis. During `push` (i.e., when PR is merged), it will perform baseline update and upload operations.
-- Before executing rsdoctor-action, you need to build the project first. During the build process, you need to enable the Rsdoctor plugin and generate the Rsdoctor JSON data file.
+- `target_branch`: Optional, target branch name, defaults to 'main'. If you want to use a dynamic target branch (not just the default branch), use the following configuration:
+
+```yaml
+target_branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
+```
+
+- `on` indicates when the workflow runs, commonly set to `pull_request` and `push`.
+  - On `pull_request`, Rsdoctor Action fetches baseline and current and performs bundle diff analysis.
+  - On `push` (i.e., after PR merge), it updates and uploads the baseline.
+- Before executing rsdoctor-action, build your project with the Rsdoctor plugin enabled to generate the Rsdoctor JSON data file.
 
 ```yaml
 name: Bundle Analysis
 
-on: [pull_request, push]
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
 
 jobs:
   bundle-analysis:
@@ -100,15 +109,10 @@ jobs:
         uses: web-infra-dev/rsdoctor-action@main
         with:
           file_path: 'dist/.rsdoctor/rsdoctor-data.json'
-          target_branch: ${{ github.ref_name }}
+          # Default 'main'. To use a dynamic target branch instead of only the default branch, use:
+          # ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
+          target_branch: 'main'
 ```
-
-#### Configuration Options
-
-In the above configuration:
-
-- `file_path`: Required, path to the Rsdoctor JSON data file.
-- `target_branch`: Optional, target branch name, defaults to 'main'.
 
 ## View Reports
 

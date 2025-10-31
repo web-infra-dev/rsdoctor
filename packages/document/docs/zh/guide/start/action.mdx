@@ -52,7 +52,12 @@ export default defineConfig({
 在你的 GitHub 仓库中创建 `.github/workflows/ci.yml` 文件，如下示例。需要注意以下几点：
 
 - `file_path`：必需，Rsdoctor JSON 数据文件路径。
-- `target_branch`：非必需，目标分支名称，默认是 'main'。
+- `target_branch`：非必需，目标分支名称，默认是 'main'。如果想用动态目标分支，而不仅仅是主分支，则可以使用下方配置：
+
+```yaml
+target_branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
+```
+
 - `on` 是指 workflow 运行的时机，通常设置为 `pull_request` 和 `push`。
   - 在 `pull_request` 时，Rsdoctor Action 会拉取 baseline 和 current，进行 bundle diff 分析。
   - 在 `push`（即 PR 合并）时，会进行 baseline 的更新和上传操作。
@@ -61,7 +66,9 @@ export default defineConfig({
 ```yaml
 name: Bundle Analysis
 
-on: [pull_request, push]
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
 
 jobs:
   bundle-analysis:
@@ -102,7 +109,9 @@ jobs:
         uses: web-infra-dev/rsdoctor-action@main
         with:
           file_path: 'dist/.rsdoctor/rsdoctor-data.json'
-          target_branch: ${{ github.ref_name }}
+          # 默认 'main'，如果想用动态目标分支，而不仅仅是主分支，则可以使用下方配置：
+          # ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
+          target_branch: 'main'
 ```
 
 ## 查看报告
