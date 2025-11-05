@@ -55,6 +55,11 @@ export default defineConfig({
       dts: {
         build: true,
       },
+      redirect: {
+        dts: {
+          extension: true,
+        },
+      },
       output: {
         filename: {
           js: '[name].js',
