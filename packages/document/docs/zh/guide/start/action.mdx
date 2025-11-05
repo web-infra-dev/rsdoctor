@@ -109,7 +109,7 @@ jobs:
         uses: web-infra-dev/rsdoctor-action@main
         with:
           file_path: 'dist/.rsdoctor/rsdoctor-data.json'
-          # 默认 'main'，如果想用不固定的目标分支，即自动获取当前 MR 的 target branch，则可以使用下方配置：
+          # 默认 'main'，如果想用不固定的目标分支，即自动获取当前 pull request 的 target branch，则可以使用下方配置：
           # ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
           target_branch: 'main'
 ```
