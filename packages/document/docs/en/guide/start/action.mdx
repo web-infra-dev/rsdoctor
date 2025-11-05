@@ -52,7 +52,7 @@ export default defineConfig({
 Create a `.github/workflows/ci.yml` file in your GitHub repository as shown in the example below. Please note the following points:
 
 - `file_path`: Required, path to the Rsdoctor JSON data file.
-- `target_branch`: Optional, target branch name, defaults to 'main'. If you want to use a dynamic target branch, i.e., automatically get the target branch of the current MR instead of a fixed main branch, you can use the following configuration:
+- `target_branch`: Optional, target branch name, defaults to 'main'. If you want to use a dynamic target branch, i.e., automatically get the target branch of the current pull request instead of a fixed main branch, you can use the following configuration:
 
 ```yaml
 target_branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
