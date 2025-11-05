@@ -5,16 +5,30 @@ import { SDK } from '@rsdoctor/types';
 // Mock console.log to capture warning messages
 const originalConsoleLog = console.log;
 let consoleOutput: string[] = [];
+const originalEnvCI = process.env.CI;
+const originalEnvRSTEST = process.env.RSTEST;
 
 beforeEach(() => {
   consoleOutput = [];
   console.log = (...args: any[]) => {
     consoleOutput.push(args.join(' '));
   };
+  delete process.env.CI;
+  delete process.env.RSTEST;
 });
 
 afterEach(() => {
   console.log = originalConsoleLog;
+  if (originalEnvCI !== undefined) {
+    process.env.CI = originalEnvCI;
+  } else {
+    delete process.env.CI;
+  }
+  if (originalEnvRSTEST !== undefined) {
+    process.env.RSTEST = originalEnvRSTEST;
+  } else {
+    delete process.env.RSTEST;
+  }
 });
 
 describe('normalizeUserConfig', () => {
@@ -497,6 +511,35 @@ describe('normalizeUserConfig', () => {
         },
       });
       expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
+    });
+  });
+
+  describe('disableClientServer with CI environment variable', () => {
+    it('should set disableClientServer to true when process.env.CI is set', () => {
+      process.env.CI = 'true';
+      const result = normalizeUserConfig();
+      expect(result.disableClientServer).toBe(true);
+    });
+
+    it('should set disableClientServer to true when process.env.CI is set to any value', () => {
+      process.env.CI = '1';
+      const result = normalizeUserConfig();
+      expect(result.disableClientServer).toBe(true);
+    });
+
+    it('should set disableClientServer to true when process.env.CI is set to empty string', () => {
+      process.env.CI = '';
+      const result = normalizeUserConfig();
+      // Empty string is falsy, so it should use default
+      expect(result.disableClientServer).toBe(false);
+    });
+
+    it('should set disableClientServer to true when process.env.CI is set to non-empty string', () => {
+      process.env.CI = 'ci';
+      const result = normalizeUserConfig({
+        disableClientServer: false,
+      });
+      expect(result.disableClientServer).toBe(true);
     });
   });
 });

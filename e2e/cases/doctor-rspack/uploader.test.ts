@@ -7,6 +7,7 @@ import { createRsdoctorPlugin } from '../doctor-rsbuild/test-utils';
 // Dynamic imports to avoid rspack binding issues
 let compileByRspack: any;
 let Compiler: any;
+const originalEnvRSTEST = process.env.RSTEST;
 
 try {
   const testHelper = require('@scripts/test-helper');
@@ -104,6 +105,9 @@ test.describe('Uploader Integration Tests', () => {
   let manifestData: any;
 
   test.beforeAll(async () => {
+    // Set RSTEST to true to disable client server
+    process.env.RSTEST = 'true';
+
     // Skip test if rspack binding is not available
     if (!compileByRspack || !Compiler) {
       test.skip(true, 'Rspack binding not available, skipping test');
@@ -265,6 +269,9 @@ test.describe('Uploader Integration Tests', () => {
   });
 
   test.afterAll(async () => {
+    // Set RSTEST to false
+    process.env.RSTEST = originalEnvRSTEST;
+
     try {
       await fs.rm(path.resolve(__dirname, './dist'), {
         recursive: true,
