@@ -55,6 +55,11 @@ export default defineConfig({
       dts: {
         build: true,
       },
+      redirect: {
+        dts: {
+          extension: true,
+        },
+      },
       output: {
         filename: {
           js: '[name].js',
@@ -73,6 +78,11 @@ export default defineConfig({
       syntax: 'es2021',
       dts: {
         build: false,
+      },
+      redirect: {
+        dts: {
+          extension: true,
+        },
       },
       output: {
         filename: {

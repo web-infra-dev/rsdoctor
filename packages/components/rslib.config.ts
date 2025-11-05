@@ -18,6 +18,11 @@ export default defineConfig({
         target: 'web',
         sourceMap: true,
       },
+      redirect: {
+        dts: {
+          extension: true,
+        },
+      },
       plugins: [
         pluginReact(),
         pluginSvgr({
