@@ -6,6 +6,7 @@ import { SDK } from '@rsdoctor/types';
 const originalConsoleLog = console.log;
 let consoleOutput: string[] = [];
 const originalEnvCI = process.env.CI;
+const originalEnvRSTEST = process.env.RSTEST;
 
 beforeEach(() => {
   consoleOutput = [];
@@ -13,6 +14,7 @@ beforeEach(() => {
     consoleOutput.push(args.join(' '));
   };
   delete process.env.CI;
+  delete process.env.RSTEST;
 });
 
 afterEach(() => {
@@ -21,6 +23,11 @@ afterEach(() => {
     process.env.CI = originalEnvCI;
   } else {
     delete process.env.CI;
+  }
+  if (originalEnvRSTEST !== undefined) {
+    process.env.RSTEST = originalEnvRSTEST;
+  } else {
+    delete process.env.RSTEST;
   }
 });
 
