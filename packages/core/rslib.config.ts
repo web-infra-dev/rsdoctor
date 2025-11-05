@@ -79,11 +79,6 @@ export default defineConfig({
       dts: {
         build: false,
       },
-      redirect: {
-        dts: {
-          extension: true,
-        },
-      },
       output: {
         filename: {
           js: '[name].cjs',
