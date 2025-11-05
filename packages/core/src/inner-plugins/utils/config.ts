@@ -75,7 +75,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     linter = {},
     features = {},
     loaderInterceptorOptions = {},
-    disableClientServer = false,
+    disableClientServer: userDisableClientServer = false,
     sdkInstance,
     innerClientPath = '',
     output = getDefaultOutput(),
@@ -85,6 +85,14 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     mode = undefined,
     brief = undefined,
   } = config;
+  // If process.env.RSTEST is set to true, disableClientServer should be false
+  // Otherwise, if process.env.CI is set, disableClientServer should be true
+  const disableClientServer =
+    process.env.RSTEST === 'true'
+      ? false
+      : process.env.CI
+        ? true
+        : userDisableClientServer;
   assert(typeof linter === 'object');
   assert(typeof features === 'object' || Array.isArray(features));
   assert(typeof loaderInterceptorOptions === 'object');
