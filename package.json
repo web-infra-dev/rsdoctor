@@ -39,7 +39,7 @@
     "@biomejs/biome": "^2.1.1",
     "@changesets/cli": "^2.29.7",
     "@rsdoctor/tsconfig": "workspace:*",
-    "@rslib/core": "^0.17.0",
+    "@rslib/core": "^0.17.1",
     "@rstest/core": "0.5.4",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "^7.0.3",
