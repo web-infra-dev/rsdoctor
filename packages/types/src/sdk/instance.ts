@@ -13,9 +13,9 @@ import { RuntimeContext, RuntimeContextOptions } from './context';
 import { Hooks } from './hooks';
 import { ChunkGraphInstance } from './chunk';
 import { RsdoctorServerInstance } from './server';
-import { PlainObject } from '@/common';
-import { BriefModeOptions } from '@/config';
-import { EmoCheckData } from '@/emo';
+import { PlainObject } from '../common';
+import { BriefModeOptions } from '../config';
+import { EmoCheckData } from '../emo';
 import { SummaryData } from './summary';
 import { ConfigData } from './config';
 

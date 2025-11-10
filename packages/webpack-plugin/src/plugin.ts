@@ -8,6 +8,7 @@ import {
   InternalLoaderPlugin,
   InternalPluginsPlugin,
   InternalProgressPlugin,
+  InternalResolverPlugin,
   InternalRulesPlugin,
   InternalSummaryPlugin,
   normalizeUserConfig,
@@ -23,7 +24,6 @@ import { Loader } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
 import type { Compiler } from 'webpack';
 import { pluginTapName, pluginTapPostOptions } from './constants';
-import { InternalResolverPlugin } from './plugins/resolver';
 import path from 'path';
 
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
@@ -105,7 +105,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
     }
 
     if (this.options.features.resolver) {
-      new InternalResolverPlugin(this).apply(compiler);
+      new InternalResolverPlugin<Compiler>(this).apply(compiler);
     }
 
     if (this.options.features.plugins) {

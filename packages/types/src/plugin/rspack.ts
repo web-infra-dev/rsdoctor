@@ -1,4 +1,12 @@
-import type { RsdoctorPluginData } from '@rspack/core';
+// biome-ignore assist/source/organizeImports: <explanation>
+import type {
+  RsdoctorPluginData,
+  NormalModuleFactory,
+  LoaderDefinitionFunction,
+  ModuleGraph,
+  Dependency,
+} from '@rspack/core';
+export type RspackNormalModuleFactory = NormalModuleFactory;
 
 export type RspackNativeAsset = RsdoctorPluginData.RsdoctorAsset;
 export type RspackNativeChunkGraph = RsdoctorPluginData.RsdoctorChunkGraph;
@@ -28,3 +36,21 @@ export type RspackNativeModuleSourcePatch =
 import rspack from '@rspack/core';
 
 export type RspackExportsExperiments = typeof rspack.experiments;
+
+export type RspackSourceMapInput = Parameters<LoaderDefinitionFunction>[1];
+// export type SourceMap = Exclude<SourceMapInput, string | undefined>;
+export type RspackEntryPoint = boolean | 'auto';
+export interface RspackExportInfo {
+  used: boolean;
+  provideInfo: boolean | null | undefined;
+  useInfo: boolean | null | undefined;
+  canMangle: boolean;
+}
+
+export type RspackExportsInfo = ReturnType<ModuleGraph['getExportsInfo']>;
+
+export interface RspackHarmonyImportSpecifierDependency extends Dependency {
+  getIds(graph: ModuleGraph): string[];
+  name: string;
+  userRequest: string;
+}
