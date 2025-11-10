@@ -1,7 +1,7 @@
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
 import { uniqBy, defaults } from 'es-toolkit/compat';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import parse from 'url-parse';
@@ -47,8 +47,8 @@ export function useRuleIndexNavigate(code: string, link?: string | undefined) {
 
 export function useUrlQuery() {
   const search = useLocation().search || location.search;
-  const { query } = parse(search, true);
-  return query;
+
+  return useMemo(() => parse(search, true).query, [search]);
 }
 
 export function useLoading(defaultLoading = false) {
