@@ -477,8 +477,8 @@ importers:
   packages/ai:
     devDependencies:
       '@modelcontextprotocol/sdk':
-        specifier: 1.20.2
-        version: 1.20.2
+        specifier: 1.21.1
+        version: 1.21.1
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -506,8 +506,6 @@ importers:
       zod:
         specifier: ^3.25.76
         version: 3.25.76
-
-  packages/ai/compiled/socket.io-client: {}
 
   packages/cli:
     dependencies:
@@ -809,10 +807,6 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
-  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
-
-  packages/core/compiled/axios: {}
-
   packages/document:
     dependencies:
       '@rspress/core':
@@ -1028,16 +1022,6 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/sdk/compiled/body-parser: {}
-
-  packages/sdk/compiled/cors: {}
-
-  packages/sdk/compiled/dayjs: {}
-
-  packages/sdk/compiled/fs-extra: {}
-
-  packages/sdk/compiled/json-cycle: {}
-
   packages/types:
     dependencies:
       '@types/connect':
@@ -1153,10 +1137,6 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
-
-  packages/utils/compiled/connect: {}
-
-  packages/utils/compiled/filesize: {}
 
   packages/webpack-plugin:
     dependencies:
@@ -2756,9 +2736,14 @@ packages:
       '@types/react': '>=16'
       react: '>=16'
 
-  '@modelcontextprotocol/sdk@1.20.2':
-    resolution: {integrity: sha512-6rqTdFt67AAAzln3NOKsXRmv5ZzPkgbfaebKBqUbts7vK1GZudqnrun5a8d3M/h955cam9RHZ6Jb4Y1XhnmFPg==}
+  '@modelcontextprotocol/sdk@1.21.1':
+    resolution: {integrity: sha512-UyLFcJLDvUuZbGnaQqXFT32CpPpGj7VS19roLut6gkQVhb439xUzYWbsUvdI3ZPL+2hnFosuugtYWE0Mcs1rmQ==}
     engines: {node: '>=18'}
+    peerDependencies:
+      '@cfworker/json-schema': ^4.1.1
+    peerDependenciesMeta:
+      '@cfworker/json-schema':
+        optional: true
 
   '@modern-js-reduck/plugin-auto-actions@1.1.11':
     resolution: {integrity: sha512-Xn13uPuFh+UnV3BC6tO4N1sC5+aITX2zj5QDwU0wJgc/5zBz9fcElfQ8B+kvQe0/0VlY0ENArmFIl2h1N5TIkQ==}
@@ -4783,6 +4768,14 @@ packages:
 
   ajv-formats@2.1.1:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
+    peerDependencies:
+      ajv: ^8.0.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
+
+  ajv-formats@3.0.1:
+    resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
     peerDependencies:
       ajv: ^8.0.0
     peerDependenciesMeta:
@@ -12699,9 +12692,10 @@ snapshots:
       '@types/react': 18.3.26
       react: 19.1.1
 
-  '@modelcontextprotocol/sdk@1.20.2':
+  '@modelcontextprotocol/sdk@1.21.1':
     dependencies:
-      ajv: 6.12.6
+      ajv: 8.17.1
+      ajv-formats: 3.0.1(ajv@8.17.1)
       content-type: 1.0.5
       cors: 2.8.5
       cross-spawn: 7.0.6
@@ -15420,6 +15414,10 @@ snapshots:
       zod: 4.1.11
 
   ajv-formats@2.1.1(ajv@8.17.1):
+    optionalDependencies:
+      ajv: 8.17.1
+
+  ajv-formats@3.0.1(ajv@8.17.1):
     optionalDependencies:
       ajv: 8.17.1
 
