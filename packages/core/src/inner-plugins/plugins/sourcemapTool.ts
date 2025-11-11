@@ -134,11 +134,7 @@ export async function collectSourceMaps(
             }
 
             // Check if it looks like a file path (absolute path starting with '/' or relative path)
-            if (
-              cleanPart.startsWith('/') ||
-              cleanPart.includes('/') ||
-              cleanPart.includes('\\')
-            ) {
+            if (cleanPart.startsWith('/') || cleanPart.includes('\\')) {
               realSource = cleanPart;
               break;
             }
