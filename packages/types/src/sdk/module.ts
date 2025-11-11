@@ -311,7 +311,7 @@ export interface ModuleGraphInstance {
   getModuleByWebpackId(webpackId: string): ModuleInstance | undefined;
 
   /** Get module by path */
-  getModuleByFile(file: string): ModuleInstance | undefined;
+  getModuleByFile(file: string): ModuleInstance[] | [];
 
   /** Add Module */
   addModule(module: ModuleInstance): void;

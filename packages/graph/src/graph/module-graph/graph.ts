@@ -325,7 +325,10 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
   }
 
   getModuleByFile(file: string) {
-    return this.getModules().find((item) => item.path === file);
+    const similarModules = this.getModules().filter(
+      (item) => item.path === file,
+    );
+    return similarModules || [];
   }
 
   addModule(...modules: SDK.ModuleInstance[]) {

@@ -79,8 +79,7 @@ export async function getAssetsModulesData(
   } else {
     time(`Start Parse bundle by sourcemap.`);
     for (const [modulePath, codes] of sourceMapSets.entries()) {
-      const module = moduleGraph.getModuleByFile(modulePath);
-      if (!module) continue;
+      const modules = moduleGraph.getModuleByFile(modulePath);
       let gzipSize = undefined;
       try {
         if (codes && typeof codes === 'string' && codes.length > 0) {
@@ -88,11 +87,13 @@ export async function getAssetsModulesData(
           gzipSize = gzipSync(codes, { level: 9 }).length;
         }
       } catch {}
-      module?.setSize({
-        parsedSize: codes.length,
-        gzipSize,
-      });
-      module?.setSource({ parsedSource: codes });
+      for (const module of modules) {
+        module?.setSize({
+          parsedSize: codes.length,
+          gzipSize,
+        });
+        module?.setSource({ parsedSource: codes });
+      }
     }
     timeEnd(`Start Parse bundle by sourcemap.`);
   }

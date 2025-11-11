@@ -91,7 +91,7 @@ function appendDependency(
   const request = rawRequest ?? resolveRequest;
 
   if (!module.getDependencyByRequest(request)) {
-    const depModule = graph.getModuleByFile(resolveRequest);
+    const depModule = graph.getModuleByFile(resolveRequest)[0];
 
     if (depModule) {
       const dep = module.addDependency(
