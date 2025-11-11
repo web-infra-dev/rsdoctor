@@ -117,7 +117,41 @@ export async function collectSourceMaps(
         if (!m.source) continue;
 
         // The source in map.sources returned by sourceAndMap may be modified by Rsdoctor's loader
-        let realSource = m.source.split('!').pop();
+        // Handle loader chain paths (e.g., "loader1!loader2!/path/to/file.js")
+        // Extract the actual source file path by splitting on '!' and taking the last part
+        let realSource = m.source;
+
+        if (realSource.includes('!')) {
+          const parts = realSource.split('!');
+          for (let j = parts.length - 1; j >= 0; j--) {
+            const part = parts[j];
+            if (!part) continue;
+
+            const cleanPart = part.split('??')[0];
+
+            if (cleanPart.startsWith('builtin:')) {
+              continue;
+            }
+
+            // Check if it looks like a file path (absolute path starting with '/' or relative path)
+            if (
+              cleanPart.startsWith('/') ||
+              cleanPart.includes('/') ||
+              cleanPart.includes('\\')
+            ) {
+              realSource = cleanPart;
+              break;
+            }
+          }
+
+          if (realSource === m.source) {
+            const lastPart = parts[parts.length - 1];
+            realSource = lastPart ? lastPart.split('??')[0] : lastPart;
+          }
+        } else if (realSource.includes('??')) {
+          realSource = realSource.split('??')[0];
+        }
+
         if (
           (realSource?.startsWith('webpack://') ||
             realSource?.startsWith('file://')) &&
