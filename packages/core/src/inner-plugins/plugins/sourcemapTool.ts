@@ -97,6 +97,9 @@ export async function collectSourceMaps(
 
     // Group all mappings by generated line number
     const lineMappings = new Map<number, Array<MappingItem>>();
+    // @ts-ignore consumer._absoluteSources maybe has problem.
+    consumer._absoluteSources = consumer._sources;
+
     consumer.eachMapping((m: MappingItem) => {
       if (!lineMappings.has(m.generatedLine)) {
         lineMappings.set(m.generatedLine, []);
