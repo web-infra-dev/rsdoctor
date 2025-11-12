@@ -15,16 +15,7 @@ export class InternalBundlePlugin<
     try {
       // bundle depends on module graph
       this.scheduler.ensureModulesChunksGraphApplied(compiler);
-
-      compiler.hooks.compilation.tap(
-        {
-          name: 'ChangeDevtoolModuleFilename',
-          stage: -100,
-        },
-        () => {
-          this.changeDevtoolModuleFilename(compiler);
-        },
-      );
+      this.changeDevtoolModuleFilename(compiler);
 
       compiler.hooks.compilation.tap(this.tapPostOptions, this.thisCompilation);
       compiler.hooks.done.tapPromise(this.tapPreOptions, this.done.bind(this));
@@ -51,7 +42,7 @@ export class InternalBundlePlugin<
       );
 
       if (devtool.includes('source-map')) {
-        compiler.options.output.devtoolFallbackModuleFilenameTemplate =
+        compiler.options.output.devtoolFallbackModuleFilenameTemplate = () =>
           '[absolute-resource-path]';
       }
     }

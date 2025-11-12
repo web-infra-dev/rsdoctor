@@ -58,7 +58,9 @@ export interface StatsModule {
   type?: string;
   moduleType?: string;
   identifier?: string;
+  moduleIdentifier?: string;
   name?: string;
+  moduleName?: string;
   id?: string | number;
   chunks?: Array<string | number>;
   size?: number;
