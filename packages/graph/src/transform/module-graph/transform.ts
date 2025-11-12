@@ -52,7 +52,13 @@ function getModulesFromChunks(
 ) {
   chunks?.forEach((chunk) => {
     if (chunk.modules?.length) {
-      collectedModules.push(...chunk.modules);
+      collectedModules.push(
+        ...chunk.modules.map((module) => ({
+          ...module,
+          identifier: module.identifier ?? module.moduleIdentifier,
+          name: module.name ?? module.moduleName,
+        })),
+      );
     }
   });
 }
@@ -88,7 +94,7 @@ export function getModuleGraphByStats(
 
     const isConcatenated = Boolean(data.modules && data.modules.length > 0);
     const concatenatedModule = new Module(
-      data.identifier!,
+      data.identifier ?? data.moduleIdentifier!,
       getGetModuleName(root, data),
       data.depth === 0,
       isConcatenated ? SDK.ModuleKind.Concatenation : SDK.ModuleKind.Normal,
