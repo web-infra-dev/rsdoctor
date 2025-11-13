@@ -124,7 +124,20 @@ async function doneHandler(
     let cached: Plugin.StatsCompilation | null = null;
     return () => {
       if (cached) return cached as Plugin.StatsCompilation;
-      cached = stats.toJson();
+      cached =
+        compiler.options.name === 'lynx'
+          ? stats.toJson()
+          : stats.toJson({
+              all: false,
+              chunks: true,
+              modules: true,
+              chunkModules: true,
+              assets: true,
+              ids: true,
+              hash: true,
+              errors: true,
+              warnings: true,
+            });
       return cached;
     };
   })();
