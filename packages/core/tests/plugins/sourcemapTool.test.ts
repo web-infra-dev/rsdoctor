@@ -108,6 +108,58 @@ describe('sourcemapTool', () => {
       );
       expect(hasDayjs).toBe(true);
     });
+
+    it('should extract absolute file path from loader chain', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = createMockCompilation();
+      const sourceMap = {
+        version: 3,
+        sources: ['babel-loader!ts-loader!/absolute/path/to/file.ts'],
+        names: [],
+        mappings: 'AAAA',
+        file: 'main.js',
+        sourcesContent: ['const x = 1;'],
+      };
+      const codeLines = ['const x = 1;'];
+
+      await collectSourceMaps(
+        sourceMap,
+        codeLines,
+        compilation,
+        plugin,
+        undefined,
+      );
+
+      // Should extract the absolute path
+      expect(plugin.sourceMapSets.has('/absolute/path/to/file.ts')).toBe(true);
+    });
+
+    it('should extract file path with query parameters (??)', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = createMockCompilation();
+      const sourceMap = {
+        version: 3,
+        sources: [
+          'babel-loader!ts-loader!/absolute/path/to/file.ts??query1?query2',
+        ],
+        names: [],
+        mappings: 'AAAA',
+        file: 'main.js',
+        sourcesContent: ['const x = 1;'],
+      };
+      const codeLines = ['const x = 1;'];
+
+      await collectSourceMaps(
+        sourceMap,
+        codeLines,
+        compilation,
+        plugin,
+        undefined,
+      );
+
+      // Should extract path without query parameters
+      expect(plugin.sourceMapSets.has('/absolute/path/to/file.ts')).toBe(true);
+    });
   });
 
   describe('handleEmitAssets', () => {
