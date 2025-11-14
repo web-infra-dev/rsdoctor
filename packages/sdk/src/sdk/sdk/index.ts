@@ -1,9 +1,9 @@
 import fs from 'node:fs';
+import fse from 'fs-extra';
 import path from 'path';
 import { createRequire } from 'module';
 import { DevToolError } from '@rsdoctor/utils/error';
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
-import { File } from '@rsdoctor/utils/build';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/graph';
 import { logger } from '@rsdoctor/utils/logger';
@@ -353,7 +353,8 @@ export class RsdoctorSDK<
               //   `sdk.PackageGraph package.json exists: ${exists}, path: ${path}`,
               //   '[SDK.createPackageGraph][load]',
               // );
-              return File.fse.readJSONSync(path);
+              const res = fse.readJsonSync(path);
+              return res;
             }
           } catch (error) {
             const { message, stack } = error as Error;
