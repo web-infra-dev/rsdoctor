@@ -1,6 +1,6 @@
 [
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "options",
     "label": "配置说明"
   }
