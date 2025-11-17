@@ -1,21 +1,21 @@
 [
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "start",
     "label": "Getting Started"
   },
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "usage",
     "label": "Usage"
   },
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "rules",
     "label": "Scan Rules"
   },
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "more",
     "label": "More"
   }

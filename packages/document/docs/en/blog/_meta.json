@@ -1,11 +1,11 @@
 [
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "release",
     "label": "Release Note"
   },
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "topic",
     "label": "Topic"
   }

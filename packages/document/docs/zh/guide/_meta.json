@@ -1,21 +1,21 @@
 [
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "start",
     "label": "快速开始"
   },
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "usage",
     "label": "功能介绍"
   },
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "rules",
     "label": "扫描规则"
   },
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "more",
     "label": "更多"
   }

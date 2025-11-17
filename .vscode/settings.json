@@ -12,6 +12,16 @@
   "files.exclude": {
     "**/.DS_Store": true
   },
+  "json.schemas": [
+    {
+      "fileMatch": ["**/_meta.json"],
+      "url": "./packages/document/node_modules/@rspress/core/meta-json-schema.json"
+    },
+    {
+      "fileMatch": ["**/_nav.json"],
+      "url": "./packages/document/node_modules/@rspress/core/nav-json-schema.json"
+    }
+  ],
   "editor.defaultFormatter": "biomejs.biome",
   "editor.defaultFoldingRangeProvider": "biomejs.biome",
   "[yaml]": {
