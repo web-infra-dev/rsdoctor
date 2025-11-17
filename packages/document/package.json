@@ -24,8 +24,8 @@
   },
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
-    "@rspress/plugin-algolia": "2.0.0-beta.35",
-    "@rspress/plugin-llms": "2.0.0-beta.35",
+    "@rspress/plugin-algolia": "2.0.0-rc.0",
+    "@rspress/plugin-llms": "2.0.0-rc.0",
     "@rspress/plugin-rss": "2.0.0-beta.29",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.26",
@@ -44,6 +44,6 @@
     "@rstack-dev/doc-ui": "1.11.0",
     "clsx": "^2.1.1",
     "react-markdown": "^9.1.0",
-    "@rspress/core": "2.0.0-beta.35"
+    "@rspress/core": "2.0.0-rc.0"
   }
 }
