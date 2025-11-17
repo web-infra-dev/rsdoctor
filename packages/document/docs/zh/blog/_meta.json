@@ -1,11 +1,11 @@
 [
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "release",
     "label": "Release 公告"
   },
   {
-    "type": "dir",
+    "type": "dir-section-header",
     "name": "topic",
     "label": "专题"
   }
