@@ -214,9 +214,9 @@ export class APIDataLoader {
 
           // Filter out */template.js assets when config name is "lynx"
           let filteredAssets = assets;
-          if (configs[0]?.config?.name === 'lynx') {
+          if (Array.isArray(configs) && configs[0]?.config?.name === 'lynx') {
             filteredAssets = assets.filter(
-              (asset) => !asset.path.endsWith('template.js'),
+              (asset) => !asset.path.endsWith('/template.js'),
             );
           }
 
