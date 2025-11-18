@@ -13,7 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "rm ./tsconfig.tsbuildinfo && tsc -p tsconfig.json",
     "dev": "npm run start",
     "start": "npm run build -- -w"
   },

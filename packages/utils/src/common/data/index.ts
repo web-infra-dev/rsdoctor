@@ -206,10 +206,21 @@ export class APIDataLoader {
         return Promise.all([
           this.loader.loadData('chunkGraph'),
           this.loader.loadData('moduleGraph'),
+          this.loader.loadData('configs'),
         ]).then((res) => {
           const { assets = [], chunks = [] } = res[0] || {};
           const { modules = [] } = res[1] || {};
-          return Graph.getAllBundleData(assets, chunks, modules, [
+          const configs = res[2] || [];
+
+          // Filter out */template.js assets when config name is "lynx"
+          let filteredAssets = assets;
+          if (configs[0]?.config?.name === 'lynx') {
+            filteredAssets = assets.filter(
+              (asset) => !asset.path.endsWith('template.js'),
+            );
+          }
+
+          return Graph.getAllBundleData(filteredAssets, chunks, modules, [
             'id',
             'path',
             'size',
