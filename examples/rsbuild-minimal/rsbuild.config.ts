@@ -10,6 +10,7 @@ export default defineConfig({
       chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
         {
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
+          features: ['resolver', 'bundle', 'plugins', 'loader'],
           output: {
             mode: 'brief',
             options: {

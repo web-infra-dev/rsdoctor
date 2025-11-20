@@ -6,6 +6,7 @@ import {
   InternalErrorReporterPlugin,
   InternalLoaderPlugin,
   InternalPluginsPlugin,
+  InternalResolverPlugin,
   InternalRulesPlugin,
   InternalSummaryPlugin,
   normalizeRspackUserOptions,
@@ -150,6 +151,12 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
           compiler,
         );
         new InternalBundleTagPlugin<Plugin.BaseCompilerType<'rspack'>>(
+          this,
+        ).apply(compiler);
+      }
+
+      if (this.options.features.resolver) {
+        new InternalResolverPlugin<Plugin.BaseCompilerType<'rspack'>>(
           this,
         ).apply(compiler);
       }

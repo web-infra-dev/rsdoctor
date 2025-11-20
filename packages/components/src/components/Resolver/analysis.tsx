@@ -1,13 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
-import {
-  CloseCircleOutlined,
-  FileSearchOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-} from '@ant-design/icons';
+import { CloseCircleOutlined, FileSearchOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
 import { Resolver } from '@rsdoctor/utils/common';
-import { Button, Card, Col, Row, Space, Table, Typography } from 'antd';
+import { Card, Col, Row, Space, Table, Tabs, Typography } from 'antd';
 import { get } from 'es-toolkit/compat';
 import React, { useMemo, useState } from 'react';
 import { Size } from '../../constants';
@@ -22,91 +17,91 @@ const height = 735;
 const ResolverDetailsPanel: React.FC<
   SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetResolverFileDetails>
 > = ({ filepath, before, after, resolvers }) => {
-  const [collapsed, setCollapsed] = useState(false);
-
   return (
-    <React.Fragment>
-      <Col flex={1}>
-        <Card
-          title="Resolve Diff Viewer"
-          styles={{ body: { padding: 0, overflow: 'hidden' } }}
-        >
-          <DiffViewer
-            style={{
-              height: height + 50,
-            }}
-            isEmbed
-            originalFilePath={filepath}
-            modifiedFilePath={filepath}
-            original={before}
-            modified={after}
-          />
-        </Card>
-      </Col>
-      <Col span={collapsed ? 2 : 7}>
-        <Card
-          title={collapsed ? '...' : 'Resolve Details'}
-          extra={
-            <Button
-              onClick={() => setCollapsed(!collapsed)}
-              size="small"
-              icon={collapsed ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
-            ></Button>
-          }
-          style={collapsed ? { width: 80 } : undefined}
-        >
-          {collapsed ? null : (
-            <Table
-              style={{
-                width: '100%',
-                height,
-                overflowY: 'scroll',
-                wordBreak: 'break-all',
-              }}
-              size="small"
-              pagination={false}
-              bordered
-              rowKey={(e) => e.request}
-              columns={[
-                {
-                  title: 'Source Code',
-                  width: 200,
-                  render: (_v, r) => (
-                    <Typography.Text copyable>
-                      <Typography.Text code strong>
-                        {r.request}
-                      </Typography.Text>
-                    </Typography.Text>
-                  ),
-                },
-                {
-                  title: 'Duration',
-                  width: 80,
-                  render: (_v, r) => (
-                    <Typography.Text strong>
-                      {formatCosts(r.costs)}
-                    </Typography.Text>
-                  ),
-                  sorter: (a, b) => a.costs - b.costs,
-                  sortDirections: ['descend', 'ascend'],
-                },
-                {
-                  title: 'Resolve Result',
-                  render: (_v, r) => {
-                    if (Resolver.isResolveSuccessData(r))
-                      return (
-                        <Typography.Text copyable>{r.result}</Typography.Text>
-                      );
-                    return <CloseCircleOutlined style={{ color: '#f50' }} />;
-                  },
-                },
-              ]}
-              dataSource={resolvers}
-            />
-          )}
-        </Card>
-      </Col>
-    </React.Fragment>
+    <Col flex={1}>
+      <Tabs
+        defaultActiveKey="diff"
+        items={[
+          {
+            key: 'diff',
+            label: 'Resolve Diff Viewer',
+            children: (
+              <Card styles={{ body: { padding: 0, overflow: 'hidden' } }}>
+                <DiffViewer
+                  style={{
+                    height: height + 50,
+                  }}
+                  isEmbed
+                  originalFilePath={filepath}
+                  modifiedFilePath={filepath}
+                  original={before}
+                  modified={after}
+                />
+              </Card>
+            ),
+          },
+          {
+            key: 'details',
+            label: 'Resolve Details',
+            children: (
+              <Card>
+                <Table
+                  style={{
+                    width: '100%',
+                    height,
+                    overflowY: 'scroll',
+                    wordBreak: 'break-all',
+                  }}
+                  size="small"
+                  pagination={false}
+                  bordered
+                  rowKey={(e) => e.request}
+                  columns={[
+                    {
+                      title: 'Source Code',
+                      width: 200,
+                      render: (_v, r) => (
+                        <Typography.Text copyable>
+                          <Typography.Text code strong>
+                            {r.request}
+                          </Typography.Text>
+                        </Typography.Text>
+                      ),
+                    },
+                    {
+                      title: 'Duration',
+                      width: 80,
+                      render: (_v, r) => (
+                        <Typography.Text strong>
+                          {formatCosts(r.costs)}
+                        </Typography.Text>
+                      ),
+                      sorter: (a, b) => a.costs - b.costs,
+                      sortDirections: ['descend', 'ascend'],
+                    },
+                    {
+                      title: 'Resolve Result',
+                      render: (_v, r) => {
+                        if (Resolver.isResolveSuccessData(r))
+                          return (
+                            <Typography.Text copyable>
+                              {r.result}
+                            </Typography.Text>
+                          );
+                        return (
+                          <CloseCircleOutlined style={{ color: '#f50' }} />
+                        );
+                      },
+                    },
+                  ]}
+                  dataSource={resolvers}
+                />
+              </Card>
+            ),
+          },
+        ]}
+      />
+    </Col>
   );
 };
 
