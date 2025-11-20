@@ -6,4 +6,4 @@ packages:
 
 trustPolicy: no-downgrade
 trustPolicyExclude:
-  - ua-parser-js@1.0.41
+  - 'ua-parser-js@1.0.41'
