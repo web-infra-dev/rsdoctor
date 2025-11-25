@@ -216,9 +216,26 @@ function appendProbeLoaders(
         ? { options: loaderConfig.options }
         : loaderConfig.options
       : {};
+  const isCJS = __filename.endsWith('.cjs');
   const loaderPath = process.env.DOCTOR_TEST
     ? path.resolve(__dirname, '../loader/probeLoader.ts')
-    : require.resolve(path.join(__dirname, '../loader/probeLoader'));
+    : (() => {
+        if (isCJS) {
+          return require.resolve(
+            path.join(__dirname, '../loader/probeLoader.cjs'),
+          );
+        } else {
+          try {
+            return require.resolve(
+              path.join(__dirname, '../loader/probeLoader.js'),
+            );
+          } catch {
+            return require.resolve(
+              path.join(__dirname, '../loader/probeLoader.cjs'),
+            );
+          }
+        }
+      })();
 
   const loader =
     typeof loaderConfig === 'string'
