@@ -334,7 +334,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
       }
       return true;
     });
-    return similarModules || [];
+    return similarModules;
   }
 
   addModule(...modules: SDK.ModuleInstance[]) {
