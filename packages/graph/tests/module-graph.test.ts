@@ -200,7 +200,7 @@ describe('module graph', () => {
     const resultNoLayer = moduleGraph.getModuleByFile(filePath, '');
     expect(resultNoLayer.length).toBe(1);
     expect(resultNoLayer[0].id).toBe(moduleNoLayer.id);
-    expect(resultNoLayer[0].layer).toBeUndefined();
+    expect(resultNoLayer[0].layer).toBe('');
   });
 
   it('getModuleByFile should return empty array when no matching modules found', async () => {
