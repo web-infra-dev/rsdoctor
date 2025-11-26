@@ -324,11 +324,17 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
     return this._moduleWebpackIdMap.get(id);
   }
 
-  getModuleByFile(file: string) {
-    const similarModules = this.getModules().filter(
-      (item) => item.path === file,
-    );
-    return similarModules || [];
+  getModuleByFile(file: string, layer?: string) {
+    const similarModules = this.getModules().filter((item) => {
+      if (item.path !== file) {
+        return false;
+      }
+      if (layer !== undefined) {
+        return item.layer === layer;
+      }
+      return true;
+    });
+    return similarModules;
   }
 
   addModule(...modules: SDK.ModuleInstance[]) {
