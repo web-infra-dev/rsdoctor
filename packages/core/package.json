@@ -83,7 +83,7 @@
   },
   "devDependencies": {
     "axios": "^1.12.2",
-    "@rspack/core": "1.6.3",
+    "@rspack/core": "1.6.5",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",
