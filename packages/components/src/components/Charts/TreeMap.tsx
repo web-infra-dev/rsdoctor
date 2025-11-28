@@ -5,11 +5,12 @@ import { TreemapChart } from 'echarts/charts';
 import { TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { BUNDLE_ANALYZER_COLORS, COLOR_GROUPS } from './constants';
-import { Checkbox, Card, Typography, Space, Tooltip, Tag } from 'antd';
+import { Checkbox, Typography, Space, Tooltip, Tag, Input } from 'antd';
 import {
-  VerticalAlignBottomOutlined,
-  VerticalAlignTopOutlined,
   InfoCircleOutlined,
+  SearchOutlined,
+  LeftOutlined,
+  RightOutlined,
 } from '@ant-design/icons';
 import { formatSize, useI18n } from 'src/utils';
 import { SearchModal } from 'src/pages/BundleSize/components/search-modal';
@@ -196,6 +197,9 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
               right: 10,
               top: 10,
               bottom: 10,
+              emphasis: {
+                focus: 'self',
+              },
               label: {
                 show: true,
                 formatter: '{b}',
@@ -214,21 +218,23 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
       }, [treeData, valueKey]);
 
       return option ? (
-        <div>
+        <div
+          style={{
+            width: '100%',
+            minHeight: '500px',
+            maxHeight: '1000px',
+            border: '5px solid white',
+            borderRadius: '10px',
+            ...style,
+          }}
+          className={Styles['chart-container']}
+        >
           <EChartsReactCore
             ref={chartRef}
             option={option}
             echarts={echarts}
             onEvents={onChartClick ? { click: onChartClick } : undefined}
-            style={{
-              width: '100%',
-              minHeight: '500px',
-              maxHeight: '1000px',
-              border: '5px solid white',
-              borderRadius: '10px',
-              ...style,
-            }}
-            className={Styles['chart-container']}
+            style={{ width: '100%', height: '100%' }}
           />
         </div>
       ) : null;
@@ -251,6 +257,7 @@ export const AssetTreemapWithFilter: React.FC<{
   const [checkedAssets, setCheckedAssets] = useState<string[]>(assetNames);
   const [collapsed, setCollapsed] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [filterKeyword, setFilterKeyword] = useState('');
   const chartRef = React.useRef<any>(null);
   const { t } = useI18n();
 
@@ -258,6 +265,13 @@ export const AssetTreemapWithFilter: React.FC<{
     () => treeData.filter((item) => checkedAssets.includes(item.name)),
     [treeData, checkedAssets],
   );
+
+  const visibleAssetNames = useMemo(() => {
+    if (!filterKeyword) return assetNames;
+    return assetNames.filter((name) =>
+      name.toLowerCase().includes(filterKeyword.toLowerCase()),
+    );
+  }, [assetNames, filterKeyword]);
 
   // Handler for search modal click
   const handleModuleClick = (module: any) => {
@@ -270,107 +284,260 @@ export const AssetTreemapWithFilter: React.FC<{
         seriesId: 'bundle-treemap',
         targetNodeId: nodeId.toString(),
       });
+
+      // Clear previous highlight and set new highlight with a delay
+      echartsInstance.dispatchAction({
+        type: 'downplay',
+        seriesId: 'bundle-treemap',
+      });
+
+      setTimeout(() => {
+        echartsInstance.dispatchAction({
+          type: 'highlight',
+          seriesId: 'bundle-treemap',
+          targetNodeId: nodeId.toString(),
+        });
+      }, 500);
     }
     setSearchModalOpen(false);
   };
 
+  const onAssetCheck = (name: string, checked: boolean) => {
+    if (checked) {
+      setCheckedAssets((prev) => [...prev, name]);
+    } else {
+      setCheckedAssets((prev) => prev.filter((n) => n !== name));
+    }
+  };
+
+  const onAllCheck = (e: any) => {
+    if (e.target.checked) {
+      if (!filterKeyword) {
+        setCheckedAssets(assetNames);
+      } else {
+        const newAssets = new Set([...checkedAssets, ...visibleAssetNames]);
+        setCheckedAssets(Array.from(newAssets));
+      }
+    } else {
+      if (!filterKeyword) {
+        setCheckedAssets([]);
+      } else {
+        setCheckedAssets(
+          checkedAssets.filter((a) => !visibleAssetNames.includes(a)),
+        );
+      }
+    }
+  };
+
+  const isAllChecked =
+    visibleAssetNames.length > 0 &&
+    visibleAssetNames.every((name) => checkedAssets.includes(name));
+  const isIndeterminate =
+    visibleAssetNames.some((name) => checkedAssets.includes(name)) &&
+    !isAllChecked;
+
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
       className={Styles.treemap}
+      style={{
+        position: 'relative',
+        height: 'calc(100vh - 200px)',
+        minHeight: '600px',
+        border: '1px solid #f0f0f0',
+        borderRadius: 8,
+        overflow: 'hidden',
+        background: '#fff',
+      }}
     >
-      <Space direction="vertical" style={{ width: '100%' }}>
-        <Card
-          title={
-            <Space>
-              <Typography.Text>{t('Output Assets List')}</Typography.Text>
-              <SearchModal
-                onModuleClick={handleModuleClick}
-                open={searchModalOpen}
-                setOpen={setSearchModalOpen}
-                isIcon={true}
-              />
-              <Tooltip
-                color={'white'}
-                title={
-                  <span>
-                    ✨ In Rspack, TreeMap proportions are always based on
-                    Bundled Size by default.
-                    <br />
-                    ✨ In Webpack, TreeMap proportions are based on Bundled Size
-                    only when SourceMap is enabled.
-                    <br />✨ <b>Bundled Size</b>: The size of a module after
-                    bundling and minification.
-                    <br />✨ <b>Source Size</b>: The size of a module after
-                    compilation (e.g., TypeScript/JSX to JS), but before
-                    bundling and minification.
-                    <br />✨ <b>Gzipped Size</b>: The compressed file size that
-                    users actually download, as most web servers use gzip
-                    compression.
-                    <br />
-                  </span>
-                }
-                overlayInnerStyle={{ width: 620, color: 'black' }}
-              >
-                <InfoCircleOutlined
-                  style={{ color: '#1890ff', marginLeft: 8 }}
-                />
-              </Tooltip>
-              <Tag color="blue">
-                TreeMap area based on{' '}
-                {bundledSize ? 'Bundled Size' : 'Source Size'}
-              </Tag>
-            </Space>
-          }
-          extra={
-            <span
-              className={Styles['collapse-icon']}
-              onClick={() => setCollapsed((c) => !c)}
-              aria-label={collapsed ? t('Expand') : t('Collapse')}
-            >
-              {collapsed ? (
-                <VerticalAlignBottomOutlined />
-              ) : (
-                <VerticalAlignTopOutlined />
-              )}
-            </span>
-          }
-          size="small"
-          className={`card-body ${collapsed ? 'collapsed' : ''}`}
+      {/* Sidebar Container (Floating) */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          zIndex: 10,
+          display: 'flex',
+          pointerEvents: 'none', // Allow clicks to pass through container
+        }}
+      >
+        {/* Sidebar Content */}
+        <div
+          style={{
+            width: collapsed ? 0 : 280,
+            display: 'flex',
+            flexDirection: 'column',
+            transition: 'width 0.2s ease',
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(4px)',
+            boxShadow: collapsed ? 'none' : '4px 0 8px rgba(0,0,0,0.1)',
+            overflow: 'hidden',
+            pointerEvents: 'auto', // Re-enable clicks for sidebar
+            borderRight: collapsed ? 'none' : '1px solid #f0f0f0',
+          }}
         >
-          <div className={`checkbox-container ${collapsed ? 'collapsed' : ''}`}>
-            <Checkbox
-              key="all-none-checkbox"
-              indeterminate={
-                checkedAssets.length > 0 &&
-                checkedAssets.length < assetNames.length
-              }
-              checked={checkedAssets.length === assetNames.length}
-              onChange={(e) =>
-                setCheckedAssets(e.target.checked ? assetNames : [])
-              }
-              className={Styles['all-none-checkbox']}
-            >
-              {'ALL / NONE'}
-            </Checkbox>
-            <Checkbox.Group
-              key="asset-checkbox-group"
-              options={assetNames}
-              value={checkedAssets}
-              onChange={setCheckedAssets}
-              className={`checkbox-container ${collapsed ? 'collapsed' : ''} ${Styles['asset-checkbox-group']}`}
+          <div
+            style={{
+              padding: '12px',
+              borderBottom: '1px solid #f0f0f0',
+            }}
+          >
+            <div style={{ marginBottom: 8, fontWeight: 600 }}>
+              {t('Show chunks')}
+            </div>
+            <Input
+              placeholder={t('Filter chunks...')}
+              prefix={<SearchOutlined style={{ color: '#ccc' }} />}
+              value={filterKeyword}
+              onChange={(e) => setFilterKeyword(e.target.value)}
+              allowClear
+              size="small"
             />
+            <div style={{ marginTop: 8 }}>
+              <Checkbox
+                checked={isAllChecked}
+                indeterminate={isIndeterminate}
+                onChange={onAllCheck}
+              >
+                {t('All')}
+              </Checkbox>
+            </div>
           </div>
-        </Card>
-        <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '8px 12px' }}>
+            {visibleAssetNames.map((name) => (
+              <div
+                key={name}
+                style={{
+                  marginBottom: 6,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                <Checkbox
+                  checked={checkedAssets.includes(name)}
+                  onChange={(e) => onAssetCheck(name, e.target.checked)}
+                >
+                  <Tooltip title={name} placement="right">
+                    {name}
+                  </Tooltip>
+                </Checkbox>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Toggle Button */}
+        <div
+          style={{
+            width: 16,
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            pointerEvents: 'auto',
+          }}
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          <div
+            style={{
+              width: 16,
+              height: 48,
+              background: '#fff',
+              border: '1px solid #f0f0f0',
+              borderLeft: 'none',
+              borderRadius: '0 4px 4px 0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '2px 0 4px rgba(0,0,0,0.05)',
+            }}
+          >
+            {collapsed ? (
+              <RightOutlined style={{ fontSize: 10 }} />
+            ) : (
+              <LeftOutlined style={{ fontSize: 10 }} />
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <div
+          style={{
+            padding: '12px 16px',
+            borderBottom: '1px solid #f0f0f0',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            background: '#fff',
+            paddingLeft: collapsed ? 32 : 300, // Add padding to avoid overlap with sidebar
+            transition: 'padding-left 0.2s ease',
+          }}
+        >
+          <Space>
+            <Typography.Text strong>{t('Assets Treemap')}</Typography.Text>
+            <Tag color="blue">
+              {bundledSize ? 'Bundled Size' : 'Source Size'}
+            </Tag>
+            <Tooltip
+              title={
+                <span>
+                  ✨ In Rspack, TreeMap proportions are always based on Bundled
+                  Size by default.
+                  <br />
+                  ✨ In Webpack, TreeMap proportions are based on Bundled Size
+                  only when SourceMap is enabled.
+                  <br />✨ <b>Bundled Size</b>: The size of a module after
+                  bundling and minification.
+                  <br />✨ <b>Source Size</b>: The size of a module after
+                  compilation (e.g., TypeScript/JSX to JS), but before bundling
+                  and minification.
+                  <br />✨ <b>Gzipped Size</b>: The compressed file size that
+                  users actually download, as most web servers use gzip
+                  compression.
+                  <br />
+                </span>
+              }
+              overlayInnerStyle={{ width: 620, color: 'black' }}
+              color="white"
+            >
+              <InfoCircleOutlined style={{ color: '#1890ff' }} />
+            </Tooltip>
+          </Space>
+          <Space>
+            <SearchModal
+              onModuleClick={handleModuleClick}
+              open={searchModalOpen}
+              setOpen={setSearchModalOpen}
+              isIcon={false}
+            />
+          </Space>
+        </div>
+        <div style={{ flex: 1, padding: 16, overflow: 'hidden' }}>
           <TreeMap
             ref={chartRef}
             treeData={filteredTreeData}
             valueKey={bundledSize ? 'bundledSize' : 'sourceSize'}
             onChartClick={onChartClick}
+            style={{
+              height: '100%',
+              minHeight: 'auto',
+              maxHeight: 'none',
+              border: 'none',
+            }}
           />
         </div>
-      </Space>
+      </div>
     </div>
   );
 };
