@@ -44,7 +44,7 @@
     "@types/cors": "2.8.19",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",
-    "body-parser": "1.20.3",
+    "body-parser": "2.2.1",
     "cors": "2.8.5",
     "dayjs": "1.11.19",
     "fs-extra": "^11.1.1",
