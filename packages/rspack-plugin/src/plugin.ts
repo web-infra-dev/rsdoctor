@@ -36,7 +36,7 @@ import {
 
 import { ModuleGraph } from '@rsdoctor/graph';
 import { Loader } from '@rsdoctor/utils/common';
-import { chalk, logger, time, timeEnd } from '@rsdoctor/utils/logger';
+import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorRspackPluginInstance<Rules>
@@ -159,14 +159,6 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         new InternalResolverPlugin<Plugin.BaseCompilerType<'rspack'>>(
           this,
         ).apply(compiler);
-      }
-
-      if (this.options.features.resolver) {
-        logger.info(
-          chalk.yellow(
-            'Rspack currently does not support Resolver capabilities.',
-          ),
-        );
       }
 
       new InternalRulesPlugin(this).apply(compiler);
