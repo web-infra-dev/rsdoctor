@@ -136,12 +136,11 @@ export function getModuleGraphByStats(
         sourceSize: data.size,
         transformedSize: data.size,
       });
-      const moduleName = getGetModuleName(root, data);
       const sizeData: Partial<SDK.ModuleSize> = {
         sourceSize: data.size,
         transformedSize: data.size,
       };
-      if (isJsonFile(moduleName)) {
+      if (isJsonFile(concatenatedModule.path)) {
         sizeData.parsedSize = data.size;
       }
       concatenatedModule.setSize(sizeData);
@@ -207,12 +206,12 @@ export function getModuleGraphByStats(
           sourceSize: normal.size,
           transformedSize: normal.size,
         });
-        const moduleName = getGetModuleName(root, normal);
         const sizeData: Partial<SDK.ModuleSize> = {
           sourceSize: normal.size,
           transformedSize: normal.size,
         };
-        if (isJsonFile(moduleName)) {
+        // Since JSON modules do not generate sourcemaps, the parsedSize for JSON modules can only be added from the stats JSON.
+        if (isJsonFile(normalModule.path)) {
           sizeData.parsedSize = normal.size;
         }
         normalModule.setSize(sizeData);
