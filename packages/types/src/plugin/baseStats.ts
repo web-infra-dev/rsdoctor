@@ -15,7 +15,10 @@ interface StatsOptionsObj {
   chunkModules?: boolean;
   hash?: boolean;
   ids?: boolean;
-
+  orphanModules?: boolean;
+  runtimeModules?: boolean;
+  cachedModules?: boolean;
+  nestedModules?: boolean;
   /** Rspack not support below opts */
   cachedAssets?: boolean;
   groupAssetsByInfo?: boolean;
@@ -69,6 +72,10 @@ export interface StatsModule {
   assets?: Array<string | number>;
   reasons?: Array<StatsModuleReason>;
   source?: string | Buffer;
+  orphanModules?: Array<StatsModule>;
+  runtimeModules?: Array<StatsModule>;
+  cachedModules?: Array<StatsModule>;
+  nestedModules?: Array<StatsModule>;
   nameForCondition?: string; // rspack is lack of nameForCondition type
   depth?: number | string; // rspack is lack of nameForCondition type ? packages/rspack/src/stats/DefaultStatsPrinterPlugin.ts , impact tree-shaking analysis ability.
   loc?: string; // rspack is lack of nameForCondition type ? packages/rspack/src/stats/DefaultStatsPrinterPlugin.ts

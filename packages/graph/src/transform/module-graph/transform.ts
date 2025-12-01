@@ -23,6 +23,10 @@ function getGetModuleName(root: string, data: Plugin.StatsModule) {
   return path.isAbsolute(name) ? name : path.join(root, name);
 }
 
+function isJsonFile(filePath: string): boolean {
+  return path.extname(filePath).toLowerCase() === '.json';
+}
+
 function getModuleFromChildren(
   module: Plugin.StatsModule,
   collectedModules: Plugin.StatsModule[],
@@ -132,6 +136,15 @@ export function getModuleGraphByStats(
         sourceSize: data.size,
         transformedSize: data.size,
       });
+      const moduleName = getGetModuleName(root, data);
+      const sizeData: Partial<SDK.ModuleSize> = {
+        sourceSize: data.size,
+        transformedSize: data.size,
+      };
+      if (isJsonFile(moduleName)) {
+        sizeData.parsedSize = data.size;
+      }
+      concatenatedModule.setSize(sizeData);
     }
 
     for (const normal of data.modules ?? []) {
@@ -194,6 +207,15 @@ export function getModuleGraphByStats(
           sourceSize: normal.size,
           transformedSize: normal.size,
         });
+        const moduleName = getGetModuleName(root, normal);
+        const sizeData: Partial<SDK.ModuleSize> = {
+          sourceSize: normal.size,
+          transformedSize: normal.size,
+        };
+        if (isJsonFile(moduleName)) {
+          sizeData.parsedSize = normal.size;
+        }
+        normalModule.setSize(sizeData);
       }
 
       moduleGraph.addModule(normalModule);

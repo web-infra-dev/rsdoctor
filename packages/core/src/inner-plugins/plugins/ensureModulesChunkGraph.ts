@@ -137,6 +137,10 @@ async function doneHandler(
               hash: true,
               errors: true,
               warnings: true,
+              nestedModules: true,
+              cachedModules: true,
+              orphanModules: true,
+              runtimeModules: true,
             });
       return cached;
     };
