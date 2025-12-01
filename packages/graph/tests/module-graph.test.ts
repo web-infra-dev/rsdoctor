@@ -1,7 +1,9 @@
 import path from 'path';
 import { expect, describe, it } from '@rstest/core';
-import { SDK } from '@rsdoctor/types';
+import { SDK, Plugin } from '@rsdoctor/types';
 import { Module, ModuleGraph, PackageGraph } from '../src/graph';
+import { getModuleGraphByStats } from '../src/transform/module-graph/transform';
+import { chunkTransform } from '../src/transform/chunks/chunkTransform';
 // TODO: simplify the module-graph-basic.json data size.
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, 'fixture', ...paths);
@@ -230,5 +232,169 @@ describe('module graph', () => {
     // Query for 'modern' layer should return empty array
     const result = moduleGraph.getModuleByFile(filePath, 'modern');
     expect(result).toEqual([]);
+  });
+
+  describe('JSON file parsedSize handling', () => {
+    it('should set parsedSize for JSON files from stats size', () => {
+      const root = '/test/root';
+      const stats: Plugin.StatsCompilation = {
+        modules: [
+          {
+            identifier: 'json-module-1',
+            name: './data.json',
+            nameForCondition: './data.json',
+            size: 1024,
+            type: 'module',
+            id: 1,
+          },
+          {
+            identifier: 'js-module-1',
+            name: './script.js',
+            nameForCondition: './script.js',
+            size: 2048,
+            type: 'module',
+            id: 2,
+          },
+          {
+            identifier: 'json-module-2',
+            name: './config.JSON',
+            nameForCondition: './config.JSON',
+            size: 512,
+            type: 'module',
+            id: 3,
+          },
+        ],
+        chunks: [],
+        assets: [],
+      };
+
+      const chunkGraph = chunkTransform(new Map(), stats);
+      const moduleGraph = getModuleGraphByStats(stats, root, chunkGraph);
+
+      // Check JSON file with lowercase extension
+      const jsonModule1 = moduleGraph.getModuleByWebpackId('json-module-1');
+      expect(jsonModule1).toBeTruthy();
+      expect(jsonModule1?.getSize().parsedSize).toBe(1024);
+      expect(jsonModule1?.getSize().sourceSize).toBe(1024);
+      expect(jsonModule1?.getSize().transformedSize).toBe(1024);
+
+      // Check JSON file with uppercase extension
+      const jsonModule2 = moduleGraph.getModuleByWebpackId('json-module-2');
+      expect(jsonModule2).toBeTruthy();
+      expect(jsonModule2?.getSize().parsedSize).toBe(512);
+      expect(jsonModule2?.getSize().sourceSize).toBe(512);
+      expect(jsonModule2?.getSize().transformedSize).toBe(512);
+
+      // Check non-JSON file should not have parsedSize set by this logic
+      const jsModule = moduleGraph.getModuleByWebpackId('js-module-1');
+      expect(jsModule).toBeTruthy();
+      expect(jsModule?.getSize().sourceSize).toBe(2048);
+      expect(jsModule?.getSize().transformedSize).toBe(2048);
+      // parsedSize should be 0 (default) for non-JSON files
+      expect(jsModule?.getSize().parsedSize).toBe(0);
+    });
+
+    it('should handle JSON files in concatenated modules', () => {
+      const root = '/test/root';
+      const stats: Plugin.StatsCompilation = {
+        modules: [
+          {
+            identifier: 'concatenated-module',
+            name: './concatenated.js',
+            nameForCondition: './concatenated.js',
+            size: 3072,
+            type: 'module',
+            id: 1,
+            modules: [
+              {
+                identifier: 'json-in-concat',
+                name: './nested.json',
+                nameForCondition: './nested.json',
+                size: 1024,
+                type: 'module',
+                id: 2,
+              },
+              {
+                identifier: 'js-in-concat',
+                name: './nested.js',
+                nameForCondition: './nested.js',
+                size: 2048,
+                type: 'module',
+                id: 3,
+              },
+            ],
+          },
+        ],
+        chunks: [],
+        assets: [],
+      };
+
+      const chunkGraph = chunkTransform(new Map(), stats);
+      const moduleGraph = getModuleGraphByStats(stats, root, chunkGraph);
+
+      // Check JSON file inside concatenated module
+      const jsonModule = moduleGraph.getModuleByWebpackId('json-in-concat');
+      expect(jsonModule).toBeTruthy();
+      expect(jsonModule?.getSize().parsedSize).toBe(1024);
+      expect(jsonModule?.getSize().sourceSize).toBe(1024);
+      expect(jsonModule?.getSize().transformedSize).toBe(1024);
+
+      // Check non-JSON file inside concatenated module
+      const jsModule = moduleGraph.getModuleByWebpackId('js-in-concat');
+      expect(jsModule).toBeTruthy();
+      expect(jsModule?.getSize().sourceSize).toBe(2048);
+      expect(jsModule?.getSize().transformedSize).toBe(2048);
+      expect(jsModule?.getSize().parsedSize).toBe(0);
+    });
+
+    it('should handle files without size property', () => {
+      const root = '/test/root';
+      const stats: Plugin.StatsCompilation = {
+        modules: [
+          {
+            identifier: 'json-no-size',
+            name: './data.json',
+            nameForCondition: './data.json',
+            type: 'module',
+            id: 1,
+          },
+        ],
+        chunks: [],
+        assets: [],
+      };
+
+      const chunkGraph = chunkTransform(new Map(), stats);
+      const moduleGraph = getModuleGraphByStats(stats, root, chunkGraph);
+
+      const jsonModule = moduleGraph.getModuleByWebpackId('json-no-size');
+      expect(jsonModule).toBeTruthy();
+      // When size is not provided, parsedSize should remain 0 (default)
+      expect(jsonModule?.getSize().parsedSize).toBe(0);
+    });
+
+    it('should handle JSON files with absolute paths', () => {
+      const root = '/test/root';
+      const stats: Plugin.StatsCompilation = {
+        modules: [
+          {
+            identifier: 'json-absolute',
+            name: '/absolute/path/to/data.json',
+            nameForCondition: '/absolute/path/to/data.json',
+            size: 256,
+            type: 'module',
+            id: 1,
+          },
+        ],
+        chunks: [],
+        assets: [],
+      };
+
+      const chunkGraph = chunkTransform(new Map(), stats);
+      const moduleGraph = getModuleGraphByStats(stats, root, chunkGraph);
+
+      const jsonModule = moduleGraph.getModuleByWebpackId('json-absolute');
+      expect(jsonModule).toBeTruthy();
+      expect(jsonModule?.getSize().parsedSize).toBe(256);
+    });
   });
 });
