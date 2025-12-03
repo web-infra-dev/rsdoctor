@@ -1,21 +1,25 @@
-import React, { useEffect, useState, memo, useMemo } from 'react';
+import React, { useEffect, useState, memo, useMemo, useCallback } from 'react';
 import EChartsReactCore from 'echarts-for-react/esm/core';
 import * as echarts from 'echarts/core';
 import { TreemapChart } from 'echarts/charts';
 import { TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { BUNDLE_ANALYZER_COLORS, COLOR_GROUPS } from './constants';
-import { Checkbox, Card, Typography, Space, Tooltip, Tag } from 'antd';
+import { Checkbox, Radio, Input } from 'antd';
 import {
-  VerticalAlignBottomOutlined,
-  VerticalAlignTopOutlined,
-  InfoCircleOutlined,
+  LeftOutlined,
+  RightOutlined,
+  SearchOutlined,
+  FullscreenOutlined,
+  FullscreenExitOutlined,
 } from '@ant-design/icons';
-import { formatSize, useI18n } from 'src/utils';
-import { SearchModal } from 'src/pages/BundleSize/components/search-modal';
+import { formatSize } from 'src/utils';
+import { SDK } from '@rsdoctor/types';
+import { ServerAPIProvider } from 'src/components/Manifest';
 import Styles from './treemap.module.scss';
+import { TREE_COLORS } from './constants';
 
-// TreeNode type should match the output of flattenTreemapData
+echarts.use([TreemapChart, TooltipComponent, CanvasRenderer]);
+
 export type TreeNode = {
   name: string;
   value?: number;
@@ -26,44 +30,62 @@ export type TreeNode = {
   gzipSize?: number;
 };
 
+export type SizeType = 'stat' | 'parsed' | 'gzip' | 'value';
+
 interface TreeMapProps {
   treeData: TreeNode[];
-  valueKey?: 'sourceSize' | 'bundledSize'; // which value to show as area
+  sizeType: SizeType;
   style?: React.CSSProperties;
   onChartClick?: (params: any) => void;
+  highlightNodeId?: number;
+  centerNodeId?: number;
+  rootPath?: string;
 }
 
-// Simple hash function for string (djb2)
 function hashString(str: string): number {
   let hash = 5381;
   for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) + hash + str.charCodeAt(i); /* hash * 33 + c */
+    hash = (hash << 5) + hash + str.charCodeAt(i);
   }
-  return hash >>> 0; // Ensure unsigned
+  return hash >>> 0;
+}
+
+function blendWithWhite(hex: string, ratio: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  const blendedR = Math.round(r * ratio + 255 * (1 - ratio));
+  const blendedG = Math.round(g * ratio + 255 * (1 - ratio));
+  const blendedB = Math.round(b * ratio + 255 * (1 - ratio));
+
+  return `#${blendedR.toString(16).padStart(2, '0')}${blendedG.toString(16).padStart(2, '0')}${blendedB.toString(16).padStart(2, '0')}`;
 }
 
 function getLevelOption() {
   return [
     {
       itemStyle: {
-        color: 'white',
-        borderColor: '#eee',
-        borderWidth: 5,
-        gapWidth: 5,
-      },
-      emphasis: {
-        itemStyle: {
-          borderColor: '#a29f9f',
-        },
+        borderWidth: 0,
+        gapWidth: 2,
       },
     },
     {
-      colorSaturation: [0.25, 0.5],
       itemStyle: {
+        borderColorAlpha: [1, 0.3],
         borderWidth: 5,
-        gapWidth: 5,
-        borderColorSaturation: 0.5,
-        borderColor: '#eee',
+        gapWidth: 1,
+      },
+      upperLabel: {
+        show: true,
+        color: '#ffffff',
+        fontSize: 14,
+        height: 30,
+      },
+      emphasis: {
+        itemStyle: {
+          borderColor: '#ccc',
+        },
       },
     },
   ];
@@ -73,15 +95,18 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
   memo(
     ({
       treeData,
-      valueKey = 'sourceSize',
+      sizeType,
       style,
       onChartClick,
       forwardedRef,
+      highlightNodeId,
+      centerNodeId,
+      rootPath,
     }) => {
       const [option, setOption] = useState<any>(null);
       const chartRef = React.useRef<any>(null);
+      const chartDataRef = React.useRef<any[]>([]);
 
-      // Expose chartRef to parent if forwardedRef is provided
       useEffect(() => {
         if (forwardedRef && chartRef.current) {
           if (typeof forwardedRef === 'function') {
@@ -92,143 +117,381 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
           }
         }
       }, [forwardedRef, chartRef.current]);
-
-      // Register ECharts components
-      useEffect(() => {
-        echarts.use([TreemapChart, TooltipComponent, CanvasRenderer]);
-      }, []);
-
       useEffect(() => {
         if (!treeData) return;
-        // Helper to recursively add value field for ECharts
         function convert(
           node: TreeNode,
-          colorGroup: keyof typeof BUNDLE_ANALYZER_COLORS,
+          index = 0,
           level = 0,
+          parentColor?: string,
+          siblingIndex = 0,
+          siblingCount = 1,
         ): any {
-          const groupColors = BUNDLE_ANALYZER_COLORS[colorGroup];
-          const children = node.children?.map((c, _i) =>
-            convert(c, colorGroup, level + 1),
+          const baseColor =
+            parentColor || TREE_COLORS[index % TREE_COLORS.length];
+
+          const children = node.children?.map((c, childIndex) =>
+            convert(
+              c,
+              index,
+              level + 1,
+              baseColor,
+              childIndex,
+              node.children?.length || 0,
+            ),
           );
 
-          return {
-            id: node.path ? hashString(node.path) : undefined,
+          let val = 0;
+          if (sizeType === 'stat') val = node.sourceSize || 0;
+          else if (sizeType === 'parsed') val = node.bundledSize || 0;
+          else if (sizeType === 'gzip') val = node.gzipSize || 0;
+          else if (sizeType === 'value') val = node.value || 0;
+
+          if (!val && node.value) val = node.value;
+
+          const nodeId = node.path
+            ? hashString(node.path)
+            : hashString(node.name || '');
+          const isHighlighted = highlightNodeId === nodeId;
+
+          const baseColorRatio =
+            level === 0 ? 1 : Math.max(0.2, 1 - level * 0.2);
+          const baseBorderRatio =
+            level === 0 ? 1 : Math.max(0.3, 1 - level * 0.25);
+
+          const siblingGradientRange = 0.15;
+          const siblingRatio =
+            siblingCount > 1
+              ? 1 - (siblingIndex / (siblingCount - 1)) * siblingGradientRange
+              : 1;
+
+          const colorRatio = baseColorRatio * siblingRatio;
+          const borderRatio = baseBorderRatio * siblingRatio;
+
+          const nodeColor = isHighlighted
+            ? '#fff5f5'
+            : level === 0
+              ? blendWithWhite(baseColor, 0.8)
+              : blendWithWhite(baseColor, colorRatio);
+
+          const nodeBorderColor = isHighlighted
+            ? '#ff4d4f'
+            : level === 0
+              ? baseColor
+              : blendWithWhite(baseColor, borderRatio);
+
+          const result: any = {
+            id: nodeId,
             name: node.name,
-            value: node[valueKey] || node.value || node['sourceSize'] || 0,
-            path: node.path,
-            sourceSize: node.sourceSize ?? node.value,
-            bundledSize: node.bundledSize,
-            gzipSize: node.gzipSize,
-            children: children && children.length > 0 ? children : undefined,
+            value: val,
+            path: node.path || node.name,
+            sourceSize: node.sourceSize ?? (sizeType === 'stat' ? val : 0),
+            bundledSize: node.bundledSize ?? (sizeType === 'parsed' ? val : 0),
+            gzipSize: node.gzipSize ?? (sizeType === 'gzip' ? val : 0),
             itemStyle: {
-              borderWidth: 2,
-              gapWidth: 2,
-              borderColorSaturation: 0.2,
-              colorSaturation: 0.2,
-              color: groupColors[level % groupColors.length],
-              borderColor: groupColors[level % groupColors.length],
+              borderWidth: isHighlighted ? 4 : 1,
+              color: nodeColor,
+              borderColor: nodeBorderColor,
+              ...(level === 0 && { gapWidth: 2 }),
             },
-            level,
           };
+
+          if (children && children.length > 0) {
+            result.children = children;
+          }
+
+          if (isHighlighted) {
+            result.emphasis = {
+              itemStyle: {
+                borderColor: '#ff4d4f',
+                borderWidth: 4,
+                color: '#fff5f5',
+              },
+            };
+          }
+
+          return result;
         }
-        const data = treeData.map((item, index) => {
-          const group = COLOR_GROUPS[index % COLOR_GROUPS.length];
-          return convert(item, group, 0);
-        });
+
+        const data = treeData
+          .map((item, index) =>
+            convert(item, index, 0, undefined, index, treeData.length),
+          )
+          .filter(
+            (item) =>
+              item.value > 0 || (item.children && item.children.length > 0),
+          );
+
+        chartDataRef.current = data;
 
         setOption({
+          color: TREE_COLORS,
           title: {
-            text: 'Bundle Tree Map',
+            text: 'Rsdoctor TreeMap',
             left: 'center',
+            top: 10,
+            textStyle: {
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: 'rgba(0, 0, 0, 0.8)',
+            },
           },
           tooltip: {
-            position: 'top',
+            padding: 10,
+            backgroundColor: '#fff',
+            borderColor: '#eee',
+            borderWidth: 1,
+            textStyle: {
+              color: 'rgba(0, 0, 0, 0.8)',
+            },
+            confine: true,
+            extraCssText: 'max-width: 450px; word-wrap: break-word;',
+            position: function (
+              pos: any,
+              _params: any,
+              _dom: any,
+              _rect: any,
+              size: any,
+            ) {
+              const obj = { top: pos[1] + 10 };
+              if (pos[0] < size.viewSize[0] / 2) {
+                (obj as any).left = pos[0] + 10;
+              } else {
+                (obj as any).right = size.viewSize[0] - pos[0] + 10;
+              }
+              return obj;
+            },
             formatter: function (info: any) {
-              var treePathInfo = info.treePathInfo;
-              var treePath = [];
-              for (var i = 1; i < treePathInfo.length; i++) {
-                treePath.push(treePathInfo[i].name);
-              }
-              // Get extra info from node data
-              var node = info.data || {};
-              var path = node.path || treePath.join('/');
-              var sourceSize = node.sourceSize;
-              var bundledSize = node.bundledSize;
-              var gzipSize = node.gzipSize;
-              var level = node.level;
+              const node = info.data || {};
+              const name = node.name;
+              let path = node.path || name;
 
-              function makeRow(
-                label: string,
-                value: string,
-                valueColor?: string,
-              ) {
-                return (
-                  `<div class="${Styles['tooltip-row']}">` +
-                  `<span class="${Styles['tooltip-label']}">${label}</span>` +
-                  `<span${valueColor ? ` style="color: ${valueColor}"` : ''}>${value}</span>` +
-                  '</div>'
-                );
+              if (rootPath && path) {
+                const normalizedRoot = rootPath
+                  .replace(/\\/g, '/')
+                  .replace(/\/$/, '');
+                const normalizedPath = path.replace(/\\/g, '/');
+                if (normalizedPath.startsWith(normalizedRoot + '/')) {
+                  path = normalizedPath.slice(normalizedRoot.length + 1);
+                } else if (normalizedPath === normalizedRoot) {
+                  path = '';
+                }
               }
-              return [
-                `<div class="${Styles['tooltip-path']}">` +
-                  echarts.format.encodeHTML(path) +
-                  '</div>',
-                makeRow(
-                  level === 0 ? 'Asset' : 'Source',
-                  sourceSize !== undefined ? formatSize(sourceSize) : '-',
-                ),
-                !bundledSize
-                  ? ''
-                  : makeRow('Bundled', formatSize(bundledSize), '#1890ff'),
-                !gzipSize
-                  ? ''
-                  : makeRow('Gzipped', formatSize(gzipSize), '#52c41a'),
-              ].join('');
+
+              const sourceSize = node.sourceSize || node.value;
+              const bundledSize = node.bundledSize;
+              const gzipSize = node.gzipSize;
+
+              function makeRow(label: string, value: string, color: string) {
+                return `<div class="${Styles['tooltip-row']}">
+                    <span class="${Styles['tooltip-label']}" style="color: ${color};">${label}</span>
+                    <span style="color: ${color};">${value}</span>
+                </div>`;
+              }
+
+              const rows = [];
+              if (sourceSize !== undefined) {
+                rows.push(
+                  makeRow('Stat size', formatSize(sourceSize), '#52c41a'),
+                ); // Green
+              }
+              if (bundledSize !== undefined) {
+                rows.push(
+                  makeRow('Parsed size', formatSize(bundledSize), '#fadb14'),
+                ); // Yellow
+              }
+              if (gzipSize !== undefined) {
+                rows.push(
+                  makeRow('Gzipped size', formatSize(gzipSize), '#1677ff'),
+                ); // Blue
+              }
+
+              return `
+                <div style="font-family: sans-serif; font-size: 12px; line-height: 1.5;">
+                  <div style="margin-bottom: 6px; max-width: 400px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; white-space: normal; color: rgba(0, 0, 0, 0.8);">${echarts.format.encodeHTML(path)}</div>
+                  ${rows.join('')}
+                </div>
+              `;
             },
           },
           series: [
             {
-              name: 'Bundle Tree Map',
-              id: 'bundle-treemap',
               type: 'treemap',
-              visibleMin: 300,
-              left: 10,
-              right: 10,
-              top: 10,
-              bottom: 10,
               label: {
                 show: true,
                 formatter: '{b}',
+                fontSize: 12,
                 color: '#000',
+                position: 'inside',
+                fontWeight: 'normal',
+                textBorderColor: '#fff',
+                textBorderWidth: 2,
+                padding: [4, 8, 4, 8],
               },
               upperLabel: {
                 show: true,
                 height: 30,
+                color: '#000',
+                fontSize: 12,
+                fontWeight: 'normal',
+                padding: [0, 0, 0, 4],
               },
-
               levels: getLevelOption(),
               data: data,
+              breadcrumb: {
+                show: true,
+                left: 'center',
+                top: 'bottom',
+                height: 22,
+                emptyItemWidth: 25,
+                itemStyle: {
+                  color: '#999',
+                  borderColor: 'transparent',
+                  borderWidth: 0,
+                  borderRadius: 0,
+                },
+                emphasis: {
+                  itemStyle: {
+                    color: '#333',
+                  },
+                },
+                textStyle: {
+                  fontFamily: 'sans-serif',
+                  fontSize: 12,
+                  color: '#666',
+                },
+              },
+              roam: true,
+              nodeClick: false,
+              zoomToNodeRatio: 0.5,
+              animationDurationUpdate: 500,
+              width: '100%',
+              height: '100%',
+              top: 40,
+              bottom: 30,
+              left: 0,
+              right: 0,
             },
           ],
         });
-      }, [treeData, valueKey]);
+      }, [treeData, sizeType, highlightNodeId, rootPath]);
+
+      useEffect(() => {
+        if (centerNodeId && chartRef.current && option) {
+          const chartInstance = chartRef.current.getEchartsInstance();
+          if (chartInstance) {
+            const findNodeInfo = (
+              data: any[],
+              targetId: number,
+              path: string[] = [],
+            ): { name: string; path: string[] } | null => {
+              for (const item of data) {
+                const currentPath = [...path, item.name];
+                if (item.id === targetId) {
+                  return { name: item.name, path: currentPath };
+                }
+                if (item.children) {
+                  const found = findNodeInfo(
+                    item.children,
+                    targetId,
+                    currentPath,
+                  );
+                  if (found) return found;
+                }
+              }
+              return null;
+            };
+
+            setTimeout(() => {
+              const nodeInfo = findNodeInfo(chartDataRef.current, centerNodeId);
+              if (!nodeInfo) return;
+
+              try {
+                chartInstance.dispatchAction({
+                  type: 'highlight',
+                  seriesIndex: 0,
+                  name: nodeInfo.name,
+                });
+              } catch (e) {
+                console.error(
+                  'Failed to highlight node with name:',
+                  nodeInfo.name,
+                  e,
+                );
+              }
+
+              const zoomStrategies: Array<() => void> = [
+                () =>
+                  chartInstance.dispatchAction({
+                    type: 'treemapZoomToNode',
+                    seriesIndex: 0,
+                    targetNodeId: String(centerNodeId),
+                  }),
+                () =>
+                  chartInstance.dispatchAction({
+                    type: 'treemapZoomToNode',
+                    seriesIndex: 0,
+                    name: nodeInfo.name,
+                  }),
+                () =>
+                  chartInstance.dispatchAction({
+                    type: 'treemapZoomToNode',
+                    seriesIndex: 0,
+                    name: nodeInfo.path.join('/'),
+                  }),
+                () =>
+                  nodeInfo.path.length > 0 &&
+                  chartInstance.dispatchAction({
+                    type: 'treemapZoomToNode',
+                    seriesIndex: 0,
+                    name: nodeInfo.path[nodeInfo.path.length - 1],
+                  }),
+              ];
+
+              for (const strategy of zoomStrategies) {
+                try {
+                  strategy();
+                  return;
+                } catch (e) {
+                  console.error(
+                    'Failed to zoom to node with id:',
+                    centerNodeId,
+                    e,
+                  );
+                }
+              }
+
+              console.warn('Failed to zoom to node with id:', centerNodeId);
+            }, 200);
+          }
+        }
+      }, [centerNodeId, option]);
 
       return option ? (
-        <div>
+        <div className={Styles['chart-container']} style={style}>
           <EChartsReactCore
             ref={chartRef}
             option={option}
             echarts={echarts}
-            onEvents={onChartClick ? { click: onChartClick } : undefined}
+            onEvents={{
+              click: (params: any) => {
+                if (chartRef.current) {
+                  const instance = chartRef.current.getEchartsInstance();
+                  if (instance && params?.data?.id) {
+                    instance.dispatchAction({
+                      type: 'treemapZoomToNode',
+                      seriesIndex: 0,
+                      targetNodeId: String(params.data.id),
+                    });
+                  }
+                }
+                onChartClick?.(params);
+              },
+            }}
             style={{
               width: '100%',
-              minHeight: '500px',
-              maxHeight: '1000px',
-              border: '5px solid white',
-              borderRadius: '10px',
-              ...style,
+              height: '100%',
             }}
-            className={Styles['chart-container']}
           />
         </div>
       ) : null;
@@ -243,104 +506,273 @@ export const AssetTreemapWithFilter: React.FC<{
   treeData: TreeNode[];
   onChartClick?: (params: any) => void;
   bundledSize?: boolean;
-}> = ({ treeData, onChartClick, bundledSize = false }) => {
+}> = ({ treeData, onChartClick, bundledSize = true }) => {
+  return (
+    <ServerAPIProvider api={SDK.ServerAPI.API.GetProjectInfo}>
+      {(projectInfo) => {
+        return (
+          <AssetTreemapWithFilterInner
+            treeData={treeData}
+            onChartClick={onChartClick}
+            bundledSize={bundledSize}
+            rootPath={projectInfo.root}
+          />
+        );
+      }}
+    </ServerAPIProvider>
+  );
+};
+
+const AssetTreemapWithFilterInner: React.FC<{
+  treeData: TreeNode[];
+  onChartClick?: (params: any) => void;
+  bundledSize?: boolean;
+  rootPath: string;
+}> = ({ treeData, onChartClick, bundledSize = true, rootPath }) => {
   const assetNames = useMemo(
     () => treeData.map((item) => item.name),
     [treeData],
   );
+
   const [checkedAssets, setCheckedAssets] = useState<string[]>(assetNames);
   const [collapsed, setCollapsed] = useState(false);
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const chartRef = React.useRef<any>(null);
-  const { t } = useI18n();
+  const [sizeType, setSizeType] = useState<SizeType>(
+    bundledSize ? 'parsed' : 'stat',
+  );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [highlightNodeId, setHighlightNodeId] = useState<number | undefined>();
+  const [centerNodeId, setCenterNodeId] = useState<number | undefined>();
 
-  const filteredTreeData = useMemo(
-    () => treeData.filter((item) => checkedAssets.includes(item.name)),
-    [treeData, checkedAssets],
+  const chartRef = React.useRef<any>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  const enterFullscreen = useCallback(() => {
+    if (containerRef.current) {
+      const el = containerRef.current as any;
+      if (el.requestFullscreen) {
+        el.requestFullscreen()
+          .then(() => setIsFullscreen(true))
+          .catch((err: any) =>
+            console.error('Failed to enter fullscreen:', err),
+          );
+      } else if (el.webkitRequestFullscreen) {
+        try {
+          el.webkitRequestFullscreen();
+          setIsFullscreen(true);
+        } catch (err) {
+          console.error('Failed to enter fullscreen (webkit):', err);
+        }
+      } else if (el.mozRequestFullScreen) {
+        try {
+          el.mozRequestFullScreen();
+          setIsFullscreen(true);
+        } catch (err) {
+          console.error('Failed to enter fullscreen (moz):', err);
+        }
+      } else if (el.msRequestFullscreen) {
+        try {
+          el.msRequestFullscreen();
+          setIsFullscreen(true);
+        } catch (err) {
+          console.error('Failed to enter fullscreen (ms):', err);
+        }
+      } else {
+        console.error('Fullscreen API is not supported in this browser.');
+      }
+    }
+  }, []);
+
+  const exitFullscreen = useCallback(() => {
+    document
+      .exitFullscreen()
+      .then(() => setIsFullscreen(false))
+      .catch((err) => console.error('Failed to exit fullscreen:', err));
+  }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    if (isFullscreen) {
+      exitFullscreen();
+    } else {
+      enterFullscreen();
+    }
+  }, [isFullscreen, enterFullscreen, exitFullscreen]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+
+    const regex = new RegExp(searchQuery, 'i');
+    const results: Array<{ path: string; nodeId: number }> = [];
+
+    const collectMatchingPaths = (node: TreeNode) => {
+      if (node.path && regex.test(node.path)) {
+        const nodeId = hashString(node.path);
+        results.push({ path: node.path, nodeId });
+      }
+      if (node.children) {
+        node.children.forEach(collectMatchingPaths);
+      }
+    };
+
+    treeData.forEach(collectMatchingPaths);
+    return results;
+  }, [treeData, searchQuery]);
+
+  const filteredTreeData = useMemo(() => {
+    let filtered = treeData.filter((item) => checkedAssets.includes(item.name));
+
+    return filtered;
+  }, [treeData, checkedAssets]);
+
+  const handleSearchResultClick = useCallback((nodeId: number) => {
+    setHighlightNodeId(nodeId);
+    setCenterNodeId(nodeId);
+  }, []);
+
+  const removeRootPath = useCallback(
+    (filepath: string): string => {
+      if (!rootPath || !filepath) return filepath;
+      const normalizedRoot = rootPath.replace(/\\/g, '/').replace(/\/$/, '');
+      const normalizedPath = filepath.replace(/\\/g, '/');
+
+      if (normalizedPath.startsWith(normalizedRoot + '/')) {
+        return normalizedPath.slice(normalizedRoot.length + 1);
+      } else if (normalizedPath === normalizedRoot) {
+        return '';
+      }
+      return filepath;
+    },
+    [rootPath],
   );
 
-  // Handler for search modal click
-  const handleModuleClick = (module: any) => {
-    if (!module?.path) return;
-    const nodeId = hashString(module.path);
-    if (chartRef.current) {
-      const echartsInstance = chartRef.current.getEchartsInstance();
-      echartsInstance.dispatchAction({
-        type: 'treemapZoomToNode',
-        seriesId: 'bundle-treemap',
-        targetNodeId: nodeId.toString(),
-      });
-    }
-    setSearchModalOpen(false);
-  };
+  const getSize = useCallback((node: TreeNode, type?: SizeType) => {
+    if (type === 'stat') return node.sourceSize || 0;
+    if (type === 'parsed') return node.bundledSize || 0;
+    if (type === 'gzip') return node.gzipSize || 0;
+    if (type === 'value') return node.value || 0;
+    if (node.value) return node.value;
+    return 0;
+  }, []);
+
+  const calculateNodeTotalSize = useCallback(
+    (node: TreeNode, type: SizeType): number => {
+      let size = getSize(node, type);
+
+      if (node.children && node.children.length > 0) {
+        const childrenSize = node.children.reduce(
+          (sum, child) => sum + calculateNodeTotalSize(child, type),
+          0,
+        );
+        if (size === 0 || (!node.path && childrenSize > 0)) {
+          size = childrenSize;
+        }
+      }
+
+      return size;
+    },
+    [getSize],
+  );
+
+  const getChunkSize = useCallback(
+    (name: string, type?: SizeType) => {
+      const node = treeData.find((n) => n.name === name);
+      if (!node) return 0;
+      const sizeTypeToUse = type || sizeType;
+      return calculateNodeTotalSize(node, sizeTypeToUse);
+    },
+    [treeData, sizeType, calculateNodeTotalSize],
+  );
 
   return (
-    <div
-      style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
-      className={Styles.treemap}
-    >
-      <Space direction="vertical" style={{ width: '100%' }}>
-        <Card
-          title={
-            <Space>
-              <Typography.Text>{t('Output Assets List')}</Typography.Text>
-              <SearchModal
-                onModuleClick={handleModuleClick}
-                open={searchModalOpen}
-                setOpen={setSearchModalOpen}
-                isIcon={true}
-              />
-              <Tooltip
-                color={'white'}
-                title={
-                  <span>
-                    ✨ In Rspack, TreeMap proportions are always based on
-                    Bundled Size by default.
-                    <br />
-                    ✨ In Webpack, TreeMap proportions are based on Bundled Size
-                    only when SourceMap is enabled.
-                    <br />✨ <b>Bundled Size</b>: The size of a module after
-                    bundling and minification.
-                    <br />✨ <b>Source Size</b>: The size of a module after
-                    compilation (e.g., TypeScript/JSX to JS), but before
-                    bundling and minification.
-                    <br />✨ <b>Gzipped Size</b>: The compressed file size that
-                    users actually download, as most web servers use gzip
-                    compression.
-                    <br />
-                  </span>
-                }
-                overlayInnerStyle={{ width: 620, color: 'black' }}
-              >
-                <InfoCircleOutlined
-                  style={{ color: '#1890ff', marginLeft: 8 }}
-                />
-              </Tooltip>
-              <Tag color="blue">
-                TreeMap area based on{' '}
-                {bundledSize ? 'Bundled Size' : 'Source Size'}
-              </Tag>
-            </Space>
-          }
-          extra={
-            <span
-              className={Styles['collapse-icon']}
-              onClick={() => setCollapsed((c) => !c)}
-              aria-label={collapsed ? t('Expand') : t('Collapse')}
-            >
-              {collapsed ? (
-                <VerticalAlignBottomOutlined />
-              ) : (
-                <VerticalAlignTopOutlined />
-              )}
-            </span>
-          }
-          size="small"
-          className={`card-body ${collapsed ? 'collapsed' : ''}`}
+    <div className={Styles.treemap} ref={containerRef}>
+      <button
+        className={Styles['fullscreen-button']}
+        onClick={toggleFullscreen}
+        title={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+        aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+      >
+        {isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+      </button>
+
+      <div className={`${Styles.sidebar} ${collapsed ? Styles.collapsed : ''}`}>
+        <div
+          className={`${Styles['sidebar-toggle']} ${collapsed ? Styles.collapsed : ''}`}
+          onClick={() => setCollapsed(!collapsed)}
         >
-          <div className={`checkbox-container ${collapsed ? 'collapsed' : ''}`}>
+          {collapsed ? <RightOutlined /> : <LeftOutlined />}
+        </div>
+        <div className={Styles['sidebar-content']}>
+          <div>
+            <h4>Treemap sizes</h4>
+            <Radio.Group
+              value={sizeType}
+              onChange={(e) => setSizeType(e.target.value)}
+              size="small"
+              buttonStyle="solid"
+            >
+              <Radio.Button value="stat">Stat</Radio.Button>
+              <Radio.Button value="parsed">Parsed</Radio.Button>
+              <Radio.Button value="gzip">Gzipped</Radio.Button>
+            </Radio.Group>
+          </div>
+
+          <div>
+            <h4>Search modules</h4>
+            <Input
+              placeholder="Enter regexp"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setHighlightNodeId(undefined);
+                setCenterNodeId(undefined);
+              }}
+              suffix={<SearchOutlined style={{ color: '#ccc' }} />}
+              allowClear
+              size="small"
+            />
+            {searchQuery.trim() && searchResults.length > 0 && (
+              <div className={Styles['search-results']}>
+                <div className={Styles['search-results-header']}>
+                  Found {searchResults.length} file
+                  {searchResults.length > 1 ? 's' : ''}
+                </div>
+                <div className={Styles['search-results-list']}>
+                  {searchResults.map((result, index) => {
+                    const displayPath = removeRootPath(result.path);
+                    return (
+                      <div
+                        key={index}
+                        className={Styles['search-result-item']}
+                        onClick={() => handleSearchResultClick(result.nodeId)}
+                        title={result.path}
+                      >
+                        {displayPath || result.path}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            {searchQuery.trim() && searchResults.length === 0 && (
+              <div className={Styles['search-results-empty']}>
+                No files found matching "{searchQuery}"
+              </div>
+            )}
+          </div>
+
+          <div>
+            <h4>Show chunks</h4>
             <Checkbox
-              key="all-none-checkbox"
               indeterminate={
                 checkedAssets.length > 0 &&
                 checkedAssets.length < assetNames.length
@@ -351,26 +783,47 @@ export const AssetTreemapWithFilter: React.FC<{
               }
               className={Styles['all-none-checkbox']}
             >
-              {'ALL / NONE'}
+              All
             </Checkbox>
-            <Checkbox.Group
-              key="asset-checkbox-group"
-              options={assetNames}
-              value={checkedAssets}
-              onChange={setCheckedAssets}
-              className={`checkbox-container ${collapsed ? 'collapsed' : ''} ${Styles['asset-checkbox-group']}`}
-            />
+            <div className={Styles['chunk-list']}>
+              {assetNames.map((name) => (
+                <div key={name} className={Styles['chunk-item']}>
+                  <Checkbox
+                    checked={checkedAssets.includes(name)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setCheckedAssets([...checkedAssets, name]);
+                      } else {
+                        setCheckedAssets(
+                          checkedAssets.filter((a) => a !== name),
+                        );
+                      }
+                    }}
+                  >
+                    <span title={name}>{name}</span>
+                  </Checkbox>
+                  <span className={Styles['size-tag']}>
+                    {formatSize(getChunkSize(name, 'value'))}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </Card>
-        <div style={{ flex: 1 }}>
-          <TreeMap
-            ref={chartRef}
-            treeData={filteredTreeData}
-            valueKey={bundledSize ? 'bundledSize' : 'sourceSize'}
-            onChartClick={onChartClick}
-          />
         </div>
-      </Space>
+      </div>
+
+      <div className={Styles['chart-wrapper']}>
+        <TreeMap
+          ref={chartRef}
+          treeData={filteredTreeData}
+          sizeType={sizeType}
+          onChartClick={onChartClick}
+          highlightNodeId={highlightNodeId}
+          centerNodeId={centerNodeId}
+          rootPath={rootPath}
+          style={{ width: '100%', height: '100%' }}
+        />
+      </div>
     </div>
   );
 };
