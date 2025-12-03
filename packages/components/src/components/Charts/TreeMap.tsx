@@ -39,6 +39,7 @@ interface TreeMapProps {
   onChartClick?: (params: any) => void;
   highlightNodeId?: number;
   centerNodeId?: number;
+  rootPath?: string;
 }
 
 function hashString(str: string): number {
@@ -67,7 +68,7 @@ function getLevelOption() {
       },
     },
     {
-      colorSaturation: [0.3, 0.7],
+      colorSaturation: [0.3, 0.9],
       itemStyle: {
         borderWidth: 5,
         gapWidth: 2,
@@ -88,6 +89,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
       forwardedRef,
       highlightNodeId,
       centerNodeId,
+      rootPath,
     }) => {
       const [option, setOption] = useState<any>(null);
       const chartRef = React.useRef<any>(null);
@@ -111,7 +113,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
           level = 0,
         ): any {
           const groupColors = BUNDLE_ANALYZER_COLORS[colorGroup];
-          const _level = level === 0 ? 0 : level || 1;
+          const _level = level;
           const children = node.children?.map((c) =>
             convert(c, colorGroup, _level + 1),
           );
@@ -128,7 +130,11 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             ? hashString(node.path)
             : hashString(node.name || '');
           const isHighlighted = highlightNodeId === nodeId;
-
+          console.log(
+            (level % groupColors.length) - 1,
+            groupColors,
+            colorGroup,
+          );
           const result: any = {
             id: nodeId,
             name: node.name,
@@ -142,10 +148,11 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
               gapWidth: 2,
               color: isHighlighted
                 ? '#fff5f5'
-                : groupColors[level % groupColors.length],
+                : groupColors[(level % groupColors.length) - 1],
               borderColor: isHighlighted
                 ? '#ff4d4f'
-                : groupColors[level % groupColors.length],
+                : groupColors[(level % groupColors.length) - 1],
+              borderColorSaturation: isHighlighted ? 1 : 0.5,
             },
           };
 
@@ -186,7 +193,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             textStyle: {
               fontSize: 16,
               fontWeight: 'bold',
-              color: '#333',
+              color: 'rgba(0, 0, 0, 0.8)',
             },
           },
           tooltip: {
@@ -195,7 +202,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             borderColor: '#eee',
             borderWidth: 1,
             textStyle: {
-              color: '#333',
+              color: 'rgba(0, 0, 0, 0.8)',
             },
             confine: true,
             extraCssText: 'max-width: 450px; word-wrap: break-word;',
@@ -217,33 +224,52 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             formatter: function (info: any) {
               const node = info.data || {};
               const name = node.name;
-              const path = node.path || name;
+              let path = node.path || name;
+
+              // Remove root path prefix if rootPath is provided
+              if (rootPath && path) {
+                const normalizedRoot = rootPath
+                  .replace(/\\/g, '/')
+                  .replace(/\/$/, '');
+                const normalizedPath = path.replace(/\\/g, '/');
+                if (normalizedPath.startsWith(normalizedRoot + '/')) {
+                  path = normalizedPath.slice(normalizedRoot.length + 1);
+                } else if (normalizedPath === normalizedRoot) {
+                  path = '';
+                }
+              }
 
               const sourceSize = node.sourceSize || node.value;
               const bundledSize = node.bundledSize;
               const gzipSize = node.gzipSize;
 
-              function makeRow(label: string, value: string) {
+              function makeRow(label: string, value: string, color: string) {
                 return `<div class="${Styles['tooltip-row']}">
-                    <span class="${Styles['tooltip-label']}">${label}</span>
-                    <span>${value}</span>
+                    <span class="${Styles['tooltip-label']}" style="color: ${color};">${label}</span>
+                    <span style="color: ${color};">${value}</span>
                 </div>`;
               }
 
               const rows = [];
               if (sourceSize !== undefined) {
-                rows.push(makeRow('Stat size', formatSize(sourceSize)));
+                rows.push(
+                  makeRow('Stat size', formatSize(sourceSize), '#52c41a'),
+                ); // Green
               }
               if (bundledSize !== undefined) {
-                rows.push(makeRow('Parsed size', formatSize(bundledSize)));
+                rows.push(
+                  makeRow('Parsed size', formatSize(bundledSize), '#fadb14'),
+                ); // Yellow
               }
               if (gzipSize !== undefined) {
-                rows.push(makeRow('Gzipped size', formatSize(gzipSize)));
+                rows.push(
+                  makeRow('Gzipped size', formatSize(gzipSize), '#1677ff'),
+                ); // Blue
               }
 
               return `
                 <div style="font-family: sans-serif; font-size: 12px; line-height: 1.5;">
-                  <div style="font-weight: bold; margin-bottom: 6px; max-width: 400px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; white-space: normal;">${echarts.format.encodeHTML(path)}</div>
+                  <div style="margin-bottom: 6px; max-width: 400px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; white-space: normal; color: rgba(0, 0, 0, 0.8);">${echarts.format.encodeHTML(path)}</div>
                   ${rows.join('')}
                 </div>
               `;
@@ -261,6 +287,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
                 fontWeight: 'normal',
                 textBorderColor: '#fff',
                 textBorderWidth: 2,
+                padding: [4, 8, 4, 8],
               },
               upperLabel: {
                 show: true,
@@ -268,6 +295,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
                 color: '#000',
                 fontSize: 12,
                 fontWeight: 'normal',
+                padding: [0, 0, 0, 4],
               },
               itemStyle: {
                 borderColor: '#fff',
@@ -299,6 +327,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
               },
               roam: true,
               nodeClick: false,
+              zoomToNodeRatio: 0.5,
               animationDurationUpdate: 500,
               width: '100%',
               height: '100%',
@@ -309,7 +338,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             },
           ],
         });
-      }, [treeData, sizeType, highlightNodeId]);
+      }, [treeData, sizeType, highlightNodeId, rootPath]);
 
       useEffect(() => {
         if (centerNodeId && chartRef.current && option) {
@@ -481,7 +510,7 @@ const AssetTreemapWithFilterInner: React.FC<{
       containerRef.current
         .requestFullscreen()
         .then(() => setIsFullscreen(true))
-        .catch((err) => console.error('全屏失败:', err));
+        .catch((err) => console.error('Failed to enter fullscreen:', err));
     }
   }, []);
 
@@ -489,7 +518,7 @@ const AssetTreemapWithFilterInner: React.FC<{
     document
       .exitFullscreen()
       .then(() => setIsFullscreen(false))
-      .catch((err) => console.error('退出全屏失败:', err));
+      .catch((err) => console.error('Failed to exit fullscreen:', err));
   }, []);
 
   const toggleFullscreen = useCallback(() => {
@@ -595,12 +624,6 @@ const AssetTreemapWithFilterInner: React.FC<{
     [treeData, sizeType, calculateNodeTotalSize],
   );
 
-  const totalSize = useMemo(() => {
-    return assetNames
-      .filter((name) => checkedAssets.includes(name))
-      .reduce((acc, name) => acc + getChunkSize(name, 'value'), 0);
-  }, [assetNames, checkedAssets, getChunkSize]);
-
   return (
     <div className={Styles.treemap} ref={containerRef}>
       <button
@@ -612,14 +635,13 @@ const AssetTreemapWithFilterInner: React.FC<{
         {isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
       </button>
 
-      <div
-        className={`${Styles['sidebar-toggle']} ${collapsed ? Styles.collapsed : ''}`}
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        {collapsed ? <RightOutlined /> : <LeftOutlined />}
-      </div>
-
       <div className={`${Styles.sidebar} ${collapsed ? Styles.collapsed : ''}`}>
+        <div
+          className={`${Styles['sidebar-toggle']} ${collapsed ? Styles.collapsed : ''}`}
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? <RightOutlined /> : <LeftOutlined />}
+        </div>
         <div className={Styles['sidebar-content']}>
           <div>
             <h4>Treemap sizes</h4>
@@ -692,7 +714,7 @@ const AssetTreemapWithFilterInner: React.FC<{
               }
               className={Styles['all-none-checkbox']}
             >
-              All ({formatSize(totalSize)})
+              All
             </Checkbox>
             <div className={Styles['chunk-list']}>
               {assetNames.map((name) => (
@@ -729,6 +751,7 @@ const AssetTreemapWithFilterInner: React.FC<{
           onChartClick={onChartClick}
           highlightNodeId={highlightNodeId}
           centerNodeId={centerNodeId}
+          rootPath={rootPath}
           style={{ width: '100%', height: '100%' }}
         />
       </div>

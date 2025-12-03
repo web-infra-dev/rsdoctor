@@ -35,6 +35,8 @@
   transition: transform 0.3s ease;
   z-index: 10;
   height: 100%;
+  position: relative;
+  overflow: visible;
 
   &.collapsed {
     transform: translateX(-100%);
@@ -62,17 +64,17 @@
 .sidebar-toggle {
   position: absolute;
   top: 10px;
-  left: 310px;
+  right: 10px;
   z-index: 20;
   background: white;
   border: 1px solid #ccc;
-  border-radius: 0 4px 4px 0;
+  border-radius: 4px;
   padding: 5px;
   cursor: pointer;
-  transition: left 0.3s ease;
+  transition: right 0.3s ease;
 
   &.collapsed {
-    left: 0;
+    right: -40px;
   }
 }
 
@@ -214,4 +216,8 @@
   font-size: 12px;
   color: #999;
   text-align: center;
+}
+
+.all-none-checkbox {
+  margin-bottom: 6px;
 }
