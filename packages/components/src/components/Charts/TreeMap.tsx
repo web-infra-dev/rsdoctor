@@ -130,11 +130,6 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             ? hashString(node.path)
             : hashString(node.name || '');
           const isHighlighted = highlightNodeId === nodeId;
-          console.log(
-            (level % groupColors.length) - 1,
-            groupColors,
-            colorGroup,
-          );
           const result: any = {
             id: nodeId,
             name: node.name,

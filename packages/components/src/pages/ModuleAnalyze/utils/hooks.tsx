@@ -37,14 +37,14 @@ export function useCreateFileTreeData(
           name: getShortPath(imported.path),
           __RESOURCEPATH__: imported.path,
           id: imported.id,
-          level: 1,
+          level: 0,
           chunks: imported.chunks,
           size: formatSize(imported.size.parsedSize),
           kind: imported.kind,
           concatModules: imported.concatenationModules,
           fatherPath: getShortPath(curModule.path),
           dependencies: imported.dependencies,
-          getChildren: () => getLeafs(imported, modules, curModule),
+          getChildren: () => getLeafs(imported, modules, curModule, 0),
           children: imported.imported,
         };
       }),
@@ -60,8 +60,10 @@ function getLeafs(
   imported: SDK.ModuleData,
   modules: SDK.ModuleData[],
   fatherModule: SDK.ModuleData,
+  parentLevel: number,
 ) {
   const leafModules = getImporteds(imported, modules);
+  const currentLevel = parentLevel + 1;
 
   const leafs = leafModules?.map((_imported, index) => {
     return {
@@ -69,14 +71,14 @@ function getLeafs(
       name: getShortPath(_imported.path),
       __RESOURCEPATH__: _imported.path,
       id: _imported.id,
-      level: 1,
+      level: currentLevel,
       size: formatSize(_imported.size.parsedSize),
       kind: _imported.kind,
       chunks: _imported.chunks,
       concatModules: _imported.concatenationModules,
       fatherPath: getShortPath(fatherModule.path),
       dependencies: _imported.dependencies,
-      getChildren: () => getLeafs(_imported, modules, imported),
+      getChildren: () => getLeafs(_imported, modules, imported, currentLevel),
       children: _imported.imported,
     };
   });
