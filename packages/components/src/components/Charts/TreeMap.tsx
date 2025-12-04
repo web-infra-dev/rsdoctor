@@ -16,6 +16,7 @@ import { formatSize } from 'src/utils';
 import { SDK } from '@rsdoctor/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
 import Styles from './treemap.module.scss';
+import { TREE_COLORS } from './constants';
 
 echarts.use([TreemapChart, TooltipComponent, CanvasRenderer]);
 
@@ -88,20 +89,6 @@ function getLevelOption() {
     },
   ];
 }
-
-const TREE_COLORS = [
-  '#6F3FE1',
-  '#5781FD',
-  '#4DB1CB',
-  '#3EBD7C',
-  '#F7A925',
-  '#bda29a',
-  '#ca8622',
-  '#749f83',
-  '#6e7074',
-  '#546570',
-  '#c4ccd3',
-];
 
 const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
   memo(
