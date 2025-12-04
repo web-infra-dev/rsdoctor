@@ -4,7 +4,6 @@ import * as echarts from 'echarts/core';
 import { TreemapChart } from 'echarts/charts';
 import { TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { BUNDLE_ANALYZER_COLORS, COLOR_GROUPS } from './constants';
 import { Checkbox, Radio, Input } from 'antd';
 import {
   LeftOutlined,
@@ -50,34 +49,59 @@ function hashString(str: string): number {
   return hash >>> 0;
 }
 
+function blendWithWhite(hex: string, ratio: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  const blendedR = Math.round(r * ratio + 255 * (1 - ratio));
+  const blendedG = Math.round(g * ratio + 255 * (1 - ratio));
+  const blendedB = Math.round(b * ratio + 255 * (1 - ratio));
+
+  return `#${blendedR.toString(16).padStart(2, '0')}${blendedG.toString(16).padStart(2, '0')}${blendedB.toString(16).padStart(2, '0')}`;
+}
+
 function getLevelOption() {
   return [
     {
       itemStyle: {
-        gapWidth: 3,
-        borderColor: '#eee',
+        borderWidth: 0,
+        gapWidth: 2,
+      },
+    },
+    {
+      itemStyle: {
+        borderColorAlpha: [1, 0.3],
+        borderWidth: 5,
+        gapWidth: 1,
       },
       upperLabel: {
-        show: false,
+        show: true,
+        color: '#555555',
+        height: 30,
       },
-    },
-    {
-      itemStyle: {
-        borderWidth: 5,
-        gapWidth: 2,
-      },
-    },
-    {
-      colorSaturation: [0.3, 0.9],
-      itemStyle: {
-        borderWidth: 5,
-        gapWidth: 2,
-        borderColorSaturation: 0.6,
-        borderColor: '#eee',
+      emphasis: {
+        itemStyle: {
+          borderColor: '#ccc',
+        },
       },
     },
   ];
 }
+
+const TREE_COLORS = [
+  '#6F3FE1',
+  '#5781FD',
+  '#4DB1CB',
+  '#3EBD7C',
+  '#F7A925',
+  '#bda29a',
+  '#ca8622',
+  '#749f83',
+  '#6e7074',
+  '#546570',
+  '#c4ccd3',
+];
 
 const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
   memo(
@@ -109,13 +133,24 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
         if (!treeData) return;
         function convert(
           node: TreeNode,
-          colorGroup: keyof typeof BUNDLE_ANALYZER_COLORS,
+          index = 0,
           level = 0,
+          parentColor?: string,
+          siblingIndex = 0,
+          siblingCount = 1,
         ): any {
-          const groupColors = BUNDLE_ANALYZER_COLORS[colorGroup];
-          const _level = level;
-          const children = node.children?.map((c) =>
-            convert(c, colorGroup, _level + 1),
+          const baseColor =
+            parentColor || TREE_COLORS[index % TREE_COLORS.length];
+
+          const children = node.children?.map((c, childIndex) =>
+            convert(
+              c,
+              index,
+              level + 1,
+              baseColor,
+              childIndex,
+              node.children?.length || 0,
+            ),
           );
 
           let val = 0;
@@ -130,6 +165,33 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             ? hashString(node.path)
             : hashString(node.name || '');
           const isHighlighted = highlightNodeId === nodeId;
+
+          const baseColorRatio =
+            level === 0 ? 1 : Math.max(0.2, 1 - level * 0.2);
+          const baseBorderRatio =
+            level === 0 ? 1 : Math.max(0.3, 1 - level * 0.25);
+
+          const siblingGradientRange = 0.15;
+          const siblingRatio =
+            siblingCount > 1
+              ? 1 - (siblingIndex / (siblingCount - 1)) * siblingGradientRange
+              : 1;
+
+          const colorRatio = baseColorRatio * siblingRatio;
+          const borderRatio = baseBorderRatio * siblingRatio;
+
+          const nodeColor = isHighlighted
+            ? '#fff5f5'
+            : level === 0
+              ? blendWithWhite(baseColor, 0.8)
+              : blendWithWhite(baseColor, colorRatio);
+
+          const nodeBorderColor = isHighlighted
+            ? '#ff4d4f'
+            : level === 0
+              ? baseColor
+              : blendWithWhite(baseColor, borderRatio);
+
           const result: any = {
             id: nodeId,
             name: node.name,
@@ -140,14 +202,9 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
             gzipSize: node.gzipSize ?? (sizeType === 'gzip' ? val : 0),
             itemStyle: {
               borderWidth: isHighlighted ? 4 : 1,
-              gapWidth: 2,
-              color: isHighlighted
-                ? '#fff5f5'
-                : groupColors[(level % groupColors.length) - 1],
-              borderColor: isHighlighted
-                ? '#ff4d4f'
-                : groupColors[(level % groupColors.length) - 1],
-              borderColorSaturation: isHighlighted ? 1 : 0.5,
+              color: nodeColor,
+              borderColor: nodeBorderColor,
+              ...(level === 0 && { gapWidth: 2 }),
             },
           };
 
@@ -169,10 +226,9 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
         }
 
         const data = treeData
-          .map((item, index) => {
-            const group = COLOR_GROUPS[index % COLOR_GROUPS.length];
-            return convert(item, group, 1);
-          })
+          .map((item, index) =>
+            convert(item, index, 0, undefined, index, treeData.length),
+          )
           .filter(
             (item) =>
               item.value > 0 || (item.children && item.children.length > 0),
@@ -181,6 +237,7 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
         chartDataRef.current = data;
 
         setOption({
+          color: TREE_COLORS,
           title: {
             text: 'Rsdoctor TreeMap',
             left: 'center',
@@ -221,7 +278,6 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
               const name = node.name;
               let path = node.path || name;
 
-              // Remove root path prefix if rootPath is provided
               if (rootPath && path) {
                 const normalizedRoot = rootPath
                   .replace(/\\/g, '/')
@@ -291,9 +347,6 @@ const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
                 fontSize: 12,
                 fontWeight: 'normal',
                 padding: [0, 0, 0, 4],
-              },
-              itemStyle: {
-                borderColor: '#fff',
               },
               levels: getLevelOption(),
               data: data,
