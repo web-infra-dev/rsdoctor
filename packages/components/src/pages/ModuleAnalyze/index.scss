@@ -17,3 +17,50 @@ $prefixCls: 'module-analyze';
 .file-tree-com-titles-box {
   line-height: 30px;
 }
+
+.#{$prefixCls}-bailout-card {
+  margin-top: 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(5, 5, 5, 0.06);
+  box-shadow: none;
+  background: #ffffff;
+  margin-bottom: 24px;
+
+  &-title {
+    display: inline-block;
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: rgba(28, 31, 35, 0.8);
+    font-weight: 600;
+  }
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(22, 26, 35, 0.08);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &-text {
+    max-width: calc(100% - 70px);
+    font-weight: 400;
+    font-size: 12px;
+    color: rgba(28, 31, 35, 0.8);
+  }
+
+  &-meta {
+    font-size: 12px;
+    color: rgba(28, 31, 35, 0.45);
+  }
+}
