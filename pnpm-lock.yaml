@@ -492,8 +492,8 @@ importers:
         specifier: ^22.8.1
         version: 22.18.1
       axios:
-        specifier: ^1.12.2
-        version: 1.12.2
+        specifier: ^1.13.2
+        version: 1.13.2
       prebundle:
         specifier: 1.4.2
         version: 1.4.2(typescript@5.9.2)
@@ -532,8 +532,8 @@ importers:
         specifier: workspace:*
         version: link:../client
       axios:
-        specifier: ^1.12.2
-        version: 1.12.2
+        specifier: ^1.13.2
+        version: 1.13.2
       cac:
         specifier: ^6.7.14
         version: 6.7.14
@@ -628,8 +628,8 @@ importers:
         specifier: 5.19.1
         version: 5.19.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       axios:
-        specifier: ^1.12.2
-        version: 1.12.2
+        specifier: ^1.13.2
+        version: 1.13.2
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -783,8 +783,8 @@ importers:
         specifier: 2.2.7
         version: 2.2.7
       axios:
-        specifier: ^1.12.2
-        version: 1.12.2
+        specifier: ^1.13.2
+        version: 1.13.2
       babel-loader:
         specifier: 10.0.0
         version: 10.0.0(@babel/core@7.26.0)(webpack@5.97.1)
@@ -5100,8 +5100,8 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  axios@1.12.2:
-    resolution: {integrity: sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==}
+  axios@1.13.2:
+    resolution: {integrity: sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==}
 
   b-tween@0.3.3:
     resolution: {integrity: sha512-oEHegcRpA7fAuc9KC4nktucuZn2aS8htymCPcP3qkEGPqiBH+GfqtqoG2l7LxHngg6O0HFM7hOeOYExl1Oz4ZA==}
@@ -13222,7 +13222,7 @@ snapshots:
       '@modern-js/types': 2.63.6
       '@modern-js/utils': 2.63.6
       '@swc/helpers': 0.5.13
-      axios: 1.12.2
+      axios: 1.13.2
       connect-history-api-fallback: 2.0.0
       http-compression: 1.0.6
       minimatch: 3.1.2
@@ -14187,7 +14187,7 @@ snapshots:
       '@rsdoctor/sdk': 1.2.3(@rspack/core@1.6.6(@swc/helpers@0.5.17))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.6.6(@swc/helpers@0.5.17))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.6.6(@swc/helpers@0.5.17))(webpack@5.97.1)
-      axios: 1.12.2
+      axios: 1.13.2
       browserslist-load-config: 1.0.1
       enhanced-resolve: 5.12.0
       filesize: 10.1.6
@@ -16033,7 +16033,7 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.0.0
 
-  axios@1.12.2:
+  axios@1.13.2:
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.4
@@ -19954,7 +19954,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.2
       '@zkochan/js-yaml': 0.0.7
-      axios: 1.12.2
+      axios: 1.13.2
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
