@@ -1,8 +1,13 @@
 import React, { useEffect, useState, memo, useMemo, useCallback } from 'react';
 import EChartsReactCore from 'echarts-for-react/esm/core';
 import * as echarts from 'echarts/core';
-import { TreemapChart } from 'echarts/charts';
-import { TooltipComponent } from 'echarts/components';
+import { TreemapChart, type TreemapSeriesOption } from 'echarts/charts';
+import {
+  TooltipComponent,
+  TitleComponent,
+  type TooltipComponentOption,
+  type TitleComponentOption,
+} from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { Checkbox, Radio, Input } from 'antd';
 import {
@@ -12,13 +17,31 @@ import {
   FullscreenOutlined,
   FullscreenExitOutlined,
 } from '@ant-design/icons';
+import type { ComposeOption, EChartsType } from 'echarts/core';
 import { formatSize } from 'src/utils';
 import { SDK } from '@rsdoctor/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
+import { ModuleAnalyzeComponent } from '../../pages/ModuleAnalyze';
 import Styles from './treemap.module.scss';
 import { TREE_COLORS } from './constants';
+import type {
+  CallbackDataParams,
+  ECElementEvent,
+} from 'echarts/types/dist/shared';
 
-echarts.use([TreemapChart, TooltipComponent, CanvasRenderer]);
+type TreeMapOption = ComposeOption<
+  TreemapSeriesOption | TooltipComponentOption | TitleComponentOption
+>;
+
+type TreemapDataNode = NonNullable<TreemapSeriesOption['data']>[number] & {
+  path?: string;
+  sourceSize?: number;
+  bundledSize?: number;
+  gzipSize?: number;
+  moduleId?: string | number;
+};
+
+echarts.use([TreemapChart, TooltipComponent, TitleComponent, CanvasRenderer]);
 
 export type TreeNode = {
   name: string;
@@ -28,6 +51,7 @@ export type TreeNode = {
   sourceSize?: number;
   bundledSize?: number;
   gzipSize?: number;
+  id?: string | number;
 };
 
 export type SizeType = 'stat' | 'parsed' | 'gzip' | 'value';
@@ -36,7 +60,7 @@ interface TreeMapProps {
   treeData: TreeNode[];
   sizeType: SizeType;
   style?: React.CSSProperties;
-  onChartClick?: (params: any) => void;
+  onChartClick?: (params: ECElementEvent) => void;
   highlightNodeId?: number;
   centerNodeId?: number;
   rootPath?: string;
@@ -91,412 +115,427 @@ function getLevelOption() {
   ];
 }
 
-const TreeMapInner: React.FC<TreeMapProps & { forwardedRef?: React.Ref<any> }> =
-  memo(
-    ({
-      treeData,
-      sizeType,
-      style,
-      onChartClick,
-      forwardedRef,
-      highlightNodeId,
-      centerNodeId,
-      rootPath,
-    }) => {
-      const [option, setOption] = useState<any>(null);
-      const chartRef = React.useRef<any>(null);
-      const chartDataRef = React.useRef<any[]>([]);
+const TreeMapInner: React.FC<
+  TreeMapProps & { forwardedRef?: React.Ref<EChartsReactCore> }
+> = memo(
+  ({
+    treeData,
+    sizeType,
+    style,
+    onChartClick,
+    forwardedRef,
+    highlightNodeId,
+    centerNodeId,
+    rootPath,
+  }) => {
+    const [option, setOption] = useState<TreeMapOption | null>(null);
+    const chartRef = React.useRef<EChartsReactCore | null>(null);
+    const chartDataRef = React.useRef<TreemapDataNode[]>([]);
 
-      useEffect(() => {
-        if (forwardedRef && chartRef.current) {
-          if (typeof forwardedRef === 'function') {
-            forwardedRef(chartRef.current);
-          } else {
-            (forwardedRef as React.MutableRefObject<any>).current =
-              chartRef.current;
-          }
+    useEffect(() => {
+      if (forwardedRef && chartRef.current) {
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(chartRef.current);
+        } else {
+          (forwardedRef as React.MutableRefObject<any>).current =
+            chartRef.current;
         }
-      }, [forwardedRef, chartRef.current]);
-      useEffect(() => {
-        if (!treeData) return;
-        function convert(
-          node: TreeNode,
-          index = 0,
-          level = 0,
-          parentColor?: string,
-          siblingIndex = 0,
-          siblingCount = 1,
-        ): any {
-          const baseColor =
-            parentColor || TREE_COLORS[index % TREE_COLORS.length];
+      }
+    }, [forwardedRef, chartRef.current]);
+    useEffect(() => {
+      if (!treeData) return;
+      function convert(
+        node: TreeNode,
+        index = 0,
+        level = 0,
+        parentColor?: string,
+        siblingIndex = 0,
+        siblingCount = 1,
+      ): TreemapDataNode {
+        const baseColor =
+          parentColor || TREE_COLORS[index % TREE_COLORS.length];
 
-          const children = node.children?.map((c, childIndex) =>
-            convert(
-              c,
-              index,
-              level + 1,
-              baseColor,
-              childIndex,
-              node.children?.length || 0,
-            ),
-          );
+        const children = node.children?.map((c, childIndex) =>
+          convert(
+            c,
+            index,
+            level + 1,
+            baseColor,
+            childIndex,
+            node.children?.length || 0,
+          ),
+        );
 
-          let val = 0;
-          if (sizeType === 'stat') val = node.sourceSize || 0;
-          else if (sizeType === 'parsed') val = node.bundledSize || 0;
-          else if (sizeType === 'gzip') val = node.gzipSize || 0;
-          else if (sizeType === 'value') val = node.value || 0;
+        let val = 0;
+        if (sizeType === 'stat') val = node.sourceSize || 0;
+        else if (sizeType === 'parsed') val = node.bundledSize || 0;
+        else if (sizeType === 'gzip') val = node.gzipSize || 0;
+        else if (sizeType === 'value') val = node.value || 0;
 
-          if (!val && node.value) val = node.value;
+        if (!val && node.value) val = node.value;
 
-          const nodeId = node.path
-            ? hashString(node.path)
-            : hashString(node.name || '');
-          const isHighlighted = highlightNodeId === nodeId;
+        const nodeId = node.path
+          ? hashString(node.path)
+          : hashString(node.name || '');
+        const isHighlighted = highlightNodeId === nodeId;
 
-          const baseColorRatio =
-            level === 0 ? 1 : Math.max(0.2, 1 - level * 0.2);
-          const baseBorderRatio =
-            level === 0 ? 1 : Math.max(0.3, 1 - level * 0.25);
+        const baseColorRatio = level === 0 ? 1 : Math.max(0.2, 1 - level * 0.2);
+        const baseBorderRatio =
+          level === 0 ? 1 : Math.max(0.3, 1 - level * 0.25);
 
-          const siblingGradientRange = 0.15;
-          const siblingRatio =
-            siblingCount > 1
-              ? 1 - (siblingIndex / (siblingCount - 1)) * siblingGradientRange
-              : 1;
+        const siblingGradientRange = 0.15;
+        const siblingRatio =
+          siblingCount > 1
+            ? 1 - (siblingIndex / (siblingCount - 1)) * siblingGradientRange
+            : 1;
 
-          const colorRatio = baseColorRatio * siblingRatio;
-          const borderRatio = baseBorderRatio * siblingRatio;
+        const colorRatio = baseColorRatio * siblingRatio;
+        const borderRatio = baseBorderRatio * siblingRatio;
 
-          const nodeColor = isHighlighted
-            ? '#fff5f5'
-            : level === 0
-              ? blendWithWhite(baseColor, 0.8)
-              : blendWithWhite(baseColor, colorRatio);
+        const nodeColor = isHighlighted
+          ? '#fff5f5'
+          : level === 0
+            ? blendWithWhite(baseColor, 0.8)
+            : blendWithWhite(baseColor, colorRatio);
 
-          const nodeBorderColor = isHighlighted
-            ? '#ff4d4f'
-            : level === 0
-              ? baseColor
-              : blendWithWhite(baseColor, borderRatio);
+        const nodeBorderColor = isHighlighted
+          ? '#ff4d4f'
+          : level === 0
+            ? baseColor
+            : blendWithWhite(baseColor, borderRatio);
 
-          const result: any = {
-            id: nodeId,
-            name: node.name,
-            value: val,
-            path: node.path || node.name,
-            sourceSize: node.sourceSize ?? (sizeType === 'stat' ? val : 0),
-            bundledSize: node.bundledSize ?? (sizeType === 'parsed' ? val : 0),
-            gzipSize: node.gzipSize ?? (sizeType === 'gzip' ? val : 0),
+        const result: TreemapDataNode = {
+          id: nodeId,
+          name: node.name,
+          value: val,
+          path: node.path || node.name,
+          sourceSize: node.sourceSize ?? (sizeType === 'stat' ? val : 0),
+          bundledSize: node.bundledSize ?? (sizeType === 'parsed' ? val : 0),
+          gzipSize: node.gzipSize ?? (sizeType === 'gzip' ? val : 0),
+          moduleId: node.id,
+          itemStyle: {
+            borderWidth: isHighlighted ? 4 : 1,
+            color: nodeColor,
+            borderColor: nodeBorderColor,
+            ...(level === 0 && { gapWidth: 2 }),
+          },
+        };
+
+        if (children && children.length > 0) {
+          result.children = children;
+        }
+
+        if (isHighlighted) {
+          result.emphasis = {
             itemStyle: {
-              borderWidth: isHighlighted ? 4 : 1,
-              color: nodeColor,
-              borderColor: nodeBorderColor,
-              ...(level === 0 && { gapWidth: 2 }),
+              borderColor: '#ff4d4f',
+              borderWidth: 4,
+              color: '#fff5f5',
             },
           };
-
-          if (children && children.length > 0) {
-            result.children = children;
-          }
-
-          if (isHighlighted) {
-            result.emphasis = {
-              itemStyle: {
-                borderColor: '#ff4d4f',
-                borderWidth: 4,
-                color: '#fff5f5',
-              },
-            };
-          }
-
-          return result;
         }
 
-        const data = treeData
-          .map((item, index) =>
-            convert(item, index, 0, undefined, index, treeData.length),
-          )
-          .filter(
-            (item) =>
-              item.value > 0 || (item.children && item.children.length > 0),
-          );
+        return result;
+      }
 
-        chartDataRef.current = data;
+      const data = treeData
+        .map((item, index) =>
+          convert(item, index, 0, undefined, index, treeData.length),
+        )
+        .filter(
+          (item) =>
+            (typeof item.value === 'number' ? item.value > 0 : false) ||
+            (item.children && item.children.length > 0),
+        );
 
-        setOption({
-          color: TREE_COLORS,
-          title: {
-            text: 'Rsdoctor TreeMap',
-            left: 'center',
-            top: 10,
-            textStyle: {
-              fontSize: 16,
-              fontWeight: 'bold',
-              color: 'rgba(0, 0, 0, 0.8)',
-            },
+      chartDataRef.current = data;
+
+      setOption({
+        color: TREE_COLORS,
+        title: {
+          text: 'Rsdoctor TreeMap',
+          left: 'center',
+          top: 10,
+          textStyle: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: 'rgba(0, 0, 0, 0.8)',
           },
-          tooltip: {
-            padding: 10,
-            backgroundColor: '#fff',
-            borderColor: '#eee',
-            borderWidth: 1,
-            textStyle: {
-              color: 'rgba(0, 0, 0, 0.8)',
-            },
-            confine: true,
-            extraCssText: 'max-width: 450px; word-wrap: break-word;',
-            position: function (
-              pos: any,
-              _params: any,
-              _dom: any,
-              _rect: any,
-              size: any,
-            ) {
-              const obj = { top: pos[1] + 10 };
-              if (pos[0] < size.viewSize[0] / 2) {
-                (obj as any).left = pos[0] + 10;
-              } else {
-                (obj as any).right = size.viewSize[0] - pos[0] + 10;
+        },
+        tooltip: {
+          padding: 10,
+          backgroundColor: '#fff',
+          borderColor: '#eee',
+          borderWidth: 1,
+          textStyle: {
+            color: 'rgba(0, 0, 0, 0.8)',
+          },
+          confine: true,
+          extraCssText: 'max-width: 450px; word-wrap: break-word;',
+          position: function (pos, _params, _dom, _rect, size) {
+            const obj = { top: pos[1] + 10 };
+            if (pos[0] < size.viewSize[0] / 2) {
+              (obj as any).left = pos[0] + 10;
+            } else {
+              (obj as any).right = size.viewSize[0] - pos[0] + 10;
+            }
+            return obj;
+          } as TooltipComponentOption['position'],
+          formatter: function (
+            info: CallbackDataParams & { data?: TreemapDataNode },
+          ) {
+            const node = info.data || {};
+            let path =
+              typeof node.path === 'string'
+                ? node.path
+                : typeof node.name === 'string'
+                  ? node.name
+                  : String(node.name ?? '');
+
+            if (rootPath && path) {
+              const normalizedRoot = rootPath
+                .replace(/\\/g, '/')
+                .replace(/\/$/, '');
+              const normalizedPath = path.replace(/\\/g, '/');
+              if (normalizedPath.startsWith(normalizedRoot + '/')) {
+                path = normalizedPath.slice(normalizedRoot.length + 1);
+              } else if (normalizedPath === normalizedRoot) {
+                path = '';
               }
-              return obj;
-            },
-            formatter: function (info: any) {
-              const node = info.data || {};
-              const name = node.name;
-              let path = node.path || name;
+            }
 
-              if (rootPath && path) {
-                const normalizedRoot = rootPath
-                  .replace(/\\/g, '/')
-                  .replace(/\/$/, '');
-                const normalizedPath = path.replace(/\\/g, '/');
-                if (normalizedPath.startsWith(normalizedRoot + '/')) {
-                  path = normalizedPath.slice(normalizedRoot.length + 1);
-                } else if (normalizedPath === normalizedRoot) {
-                  path = '';
-                }
-              }
+            const sourceSize =
+              typeof node.sourceSize === 'number'
+                ? node.sourceSize
+                : typeof node.value === 'number'
+                  ? node.value
+                  : 0;
+            const bundledSize =
+              typeof node.bundledSize === 'number'
+                ? node.bundledSize
+                : undefined;
+            const gzipSize =
+              typeof node.gzipSize === 'number' ? node.gzipSize : undefined;
 
-              const sourceSize = node.sourceSize || node.value;
-              const bundledSize = node.bundledSize;
-              const gzipSize = node.gzipSize;
-
-              function makeRow(label: string, value: string, color: string) {
-                return `<div class="${Styles['tooltip-row']}">
+            function makeRow(label: string, value: string, color: string) {
+              return `<div class="${Styles['tooltip-row']}">
                     <span class="${Styles['tooltip-label']}" style="color: ${color};">${label}</span>
                     <span style="color: ${color};">${value}</span>
                 </div>`;
-              }
+            }
 
-              const rows = [];
-              if (sourceSize !== undefined) {
-                rows.push(
-                  makeRow('Stat size', formatSize(sourceSize), '#52c41a'),
-                ); // Green
-              }
-              if (bundledSize !== undefined) {
-                rows.push(
-                  makeRow('Parsed size', formatSize(bundledSize), '#fadb14'),
-                ); // Yellow
-              }
-              if (gzipSize !== undefined) {
-                rows.push(
-                  makeRow('Gzipped size', formatSize(gzipSize), '#1677ff'),
-                ); // Blue
-              }
+            const rows = [];
+            if (sourceSize !== undefined) {
+              rows.push(
+                makeRow('Stat size', formatSize(sourceSize), '#52c41a'),
+              ); // Green
+            }
+            if (bundledSize !== undefined) {
+              rows.push(
+                makeRow('Parsed size', formatSize(bundledSize), '#fadb14'),
+              ); // Yellow
+            }
+            if (gzipSize !== undefined) {
+              rows.push(
+                makeRow('Gzipped size', formatSize(gzipSize), '#1677ff'),
+              ); // Blue
+            }
 
-              return `
+            return `
                 <div style="font-family: sans-serif; font-size: 12px; line-height: 1.5;">
                   <div style="margin-bottom: 6px; max-width: 400px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; white-space: normal; color: rgba(0, 0, 0, 0.8);">${echarts.format.encodeHTML(path)}</div>
                   ${rows.join('')}
                 </div>
               `;
-            },
           },
-          series: [
-            {
-              type: 'treemap',
-              label: {
-                show: true,
-                formatter: '{b}',
-                fontSize: 12,
-                color: '#000',
-                position: 'inside',
-                fontWeight: 'normal',
-                textBorderColor: '#fff',
-                textBorderWidth: 2,
-                padding: [4, 8, 4, 8],
-              },
-              upperLabel: {
-                show: true,
-                height: 30,
-                color: '#000',
-                fontSize: 12,
-                fontWeight: 'normal',
-                padding: [0, 0, 0, 4],
-              },
-              levels: getLevelOption(),
-              data: data,
-              breadcrumb: {
-                show: true,
-                left: 'center',
-                top: 'bottom',
-                height: 22,
-                emptyItemWidth: 25,
-                itemStyle: {
-                  color: '#999',
-                  borderColor: 'transparent',
-                  borderWidth: 0,
-                  borderRadius: 0,
-                },
-                emphasis: {
-                  itemStyle: {
-                    color: '#333',
-                  },
-                },
-                textStyle: {
-                  fontFamily: 'sans-serif',
-                  fontSize: 12,
-                  color: '#666',
-                },
-              },
-              roam: true,
-              nodeClick: false,
-              zoomToNodeRatio: 0.5,
-              animationDurationUpdate: 500,
-              width: '100%',
-              height: '100%',
-              top: 40,
-              bottom: 30,
-              left: 0,
-              right: 0,
+        } as TooltipComponentOption,
+        series: [
+          {
+            type: 'treemap',
+            label: {
+              show: true,
+              formatter: '{b}',
+              fontSize: 12,
+              color: '#000',
+              position: 'inside',
+              fontWeight: 'normal',
+              textBorderColor: '#fff',
+              textBorderWidth: 2,
+              padding: [4, 8, 4, 8],
             },
-          ],
-        });
-      }, [treeData, sizeType, highlightNodeId, rootPath]);
+            upperLabel: {
+              show: true,
+              height: 30,
+              color: '#000',
+              fontSize: 12,
+              fontWeight: 'normal',
+              padding: [0, 0, 0, 4],
+            },
+            levels: getLevelOption(),
+            data: data,
+            breadcrumb: {
+              show: true,
+              left: 'center',
+              top: 'bottom',
+              height: 22,
+              emptyItemWidth: 25,
+              itemStyle: {
+                color: '#999',
+                borderColor: 'transparent',
+                borderWidth: 0,
+                borderRadius: 0,
+              },
+              emphasis: {
+                itemStyle: {
+                  color: '#333',
+                },
+              },
+              textStyle: {
+                fontFamily: 'sans-serif',
+                fontSize: 12,
+                color: '#666',
+              },
+            },
+            roam: true,
+            nodeClick: false,
+            zoomToNodeRatio: 0.5,
+            animationDurationUpdate: 500,
+            width: '100%',
+            height: '100%',
+            top: 40,
+            bottom: 30,
+            left: 0,
+            right: 0,
+          } as TreemapSeriesOption,
+        ],
+      });
+    }, [treeData, sizeType, highlightNodeId, rootPath]);
 
-      useEffect(() => {
-        if (centerNodeId && chartRef.current && option) {
-          const chartInstance = chartRef.current.getEchartsInstance();
-          if (chartInstance) {
-            const findNodeInfo = (
-              data: any[],
-              targetId: number,
-              path: string[] = [],
-            ): { name: string; path: string[] } | null => {
-              for (const item of data) {
-                const currentPath = [...path, item.name];
-                if (item.id === targetId) {
-                  return { name: item.name, path: currentPath };
-                }
-                if (item.children) {
-                  const found = findNodeInfo(
-                    item.children,
-                    targetId,
-                    currentPath,
-                  );
-                  if (found) return found;
-                }
+    useEffect(() => {
+      if (centerNodeId && chartRef.current && option) {
+        const chartInstance =
+          chartRef.current.getEchartsInstance() as unknown as EChartsType;
+        if (chartInstance) {
+          const findNodeInfo = (
+            data: TreemapDataNode[],
+            targetId: number,
+            path: string[] = [],
+          ): { name: string; path: string[] } | null => {
+            for (const item of data) {
+              const itemName =
+                typeof item.name === 'string'
+                  ? item.name
+                  : String(item.name ?? '');
+              const currentPath = [...path, itemName];
+              if (item.id === targetId) {
+                return { name: itemName, path: currentPath };
               }
-              return null;
-            };
+              if (item.children) {
+                const found = findNodeInfo(
+                  item.children,
+                  targetId,
+                  currentPath,
+                );
+                if (found) return found;
+              }
+            }
+            return null;
+          };
 
-            setTimeout(() => {
-              const nodeInfo = findNodeInfo(chartDataRef.current, centerNodeId);
-              if (!nodeInfo) return;
+          setTimeout(() => {
+            const nodeInfo = findNodeInfo(chartDataRef.current, centerNodeId);
+            if (!nodeInfo) return;
+            const nodeName = nodeInfo.name;
 
-              try {
+            try {
+              chartInstance.dispatchAction({
+                type: 'highlight',
+                seriesIndex: 0,
+                name: nodeName,
+              });
+            } catch (e) {
+              console.error('Failed to highlight node with name:', nodeName, e);
+            }
+
+            const zoomStrategies: Array<() => void> = [
+              () =>
                 chartInstance.dispatchAction({
-                  type: 'highlight',
+                  type: 'treemapZoomToNode',
                   seriesIndex: 0,
-                  name: nodeInfo.name,
-                });
+                  targetNodeId: String(centerNodeId),
+                }),
+              () =>
+                chartInstance.dispatchAction({
+                  type: 'treemapZoomToNode',
+                  seriesIndex: 0,
+                  name: nodeName,
+                }),
+              () =>
+                chartInstance.dispatchAction({
+                  type: 'treemapZoomToNode',
+                  seriesIndex: 0,
+                  name: nodeInfo.path.join('/'),
+                }),
+              () =>
+                nodeInfo.path.length > 0 &&
+                chartInstance.dispatchAction({
+                  type: 'treemapZoomToNode',
+                  seriesIndex: 0,
+                  name: nodeInfo.path[nodeInfo.path.length - 1],
+                }),
+            ];
+
+            for (const strategy of zoomStrategies) {
+              try {
+                strategy();
+                return;
               } catch (e) {
                 console.error(
-                  'Failed to highlight node with name:',
-                  nodeInfo.name,
+                  'Failed to zoom to node with id:',
+                  centerNodeId,
                   e,
                 );
               }
+            }
 
-              const zoomStrategies: Array<() => void> = [
-                () =>
-                  chartInstance.dispatchAction({
-                    type: 'treemapZoomToNode',
-                    seriesIndex: 0,
-                    targetNodeId: String(centerNodeId),
-                  }),
-                () =>
-                  chartInstance.dispatchAction({
-                    type: 'treemapZoomToNode',
-                    seriesIndex: 0,
-                    name: nodeInfo.name,
-                  }),
-                () =>
-                  chartInstance.dispatchAction({
-                    type: 'treemapZoomToNode',
-                    seriesIndex: 0,
-                    name: nodeInfo.path.join('/'),
-                  }),
-                () =>
-                  nodeInfo.path.length > 0 &&
-                  chartInstance.dispatchAction({
-                    type: 'treemapZoomToNode',
-                    seriesIndex: 0,
-                    name: nodeInfo.path[nodeInfo.path.length - 1],
-                  }),
-              ];
+            console.warn('Failed to zoom to node with id:', centerNodeId);
+          }, 200);
+        }
+      }
+    }, [centerNodeId, option]);
 
-              for (const strategy of zoomStrategies) {
-                try {
-                  strategy();
-                  return;
-                } catch (e) {
-                  console.error(
-                    'Failed to zoom to node with id:',
-                    centerNodeId,
-                    e,
-                  );
+    return option ? (
+      <div className={Styles['chart-container']} style={style}>
+        <EChartsReactCore
+          ref={chartRef}
+          option={option}
+          echarts={echarts}
+          onEvents={{
+            click: (params: ECElementEvent) => {
+              if (chartRef.current) {
+                const instance =
+                  chartRef.current.getEchartsInstance() as unknown as EChartsType;
+                const data = params?.data as TreemapDataNode | undefined;
+                if (instance && data?.id !== undefined) {
+                  instance.dispatchAction({
+                    type: 'treemapZoomToNode',
+                    seriesIndex: 0,
+                    targetNodeId: String(data.id),
+                  });
                 }
               }
-
-              console.warn('Failed to zoom to node with id:', centerNodeId);
-            }, 200);
-          }
-        }
-      }, [centerNodeId, option]);
-
-      return option ? (
-        <div className={Styles['chart-container']} style={style}>
-          <EChartsReactCore
-            ref={chartRef}
-            option={option}
-            echarts={echarts}
-            onEvents={{
-              click: (params: any) => {
-                if (chartRef.current) {
-                  const instance = chartRef.current.getEchartsInstance();
-                  if (instance && params?.data?.id) {
-                    instance.dispatchAction({
-                      type: 'treemapZoomToNode',
-                      seriesIndex: 0,
-                      targetNodeId: String(params.data.id),
-                    });
-                  }
-                }
-                onChartClick?.(params);
-              },
-            }}
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-          />
-        </div>
-      ) : null;
-    },
-  );
+              onChartClick?.(params);
+            },
+          }}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        />
+      </div>
+    ) : null;
+  },
+);
 
 export const TreeMap = React.forwardRef<any, TreeMapProps>((props, ref) => (
   <TreeMapInner {...props} forwardedRef={ref} />
@@ -504,7 +543,7 @@ export const TreeMap = React.forwardRef<any, TreeMapProps>((props, ref) => (
 
 export const AssetTreemapWithFilter: React.FC<{
   treeData: TreeNode[];
-  onChartClick?: (params: any) => void;
+  onChartClick?: (params: ECElementEvent) => void;
   bundledSize?: boolean;
 }> = ({ treeData, onChartClick, bundledSize = true }) => {
   return (
@@ -525,7 +564,7 @@ export const AssetTreemapWithFilter: React.FC<{
 
 const AssetTreemapWithFilterInner: React.FC<{
   treeData: TreeNode[];
-  onChartClick?: (params: any) => void;
+  onChartClick?: (params: ECElementEvent) => void;
   bundledSize?: boolean;
   rootPath: string;
 }> = ({ treeData, onChartClick, bundledSize = true, rootPath }) => {
@@ -543,9 +582,24 @@ const AssetTreemapWithFilterInner: React.FC<{
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [highlightNodeId, setHighlightNodeId] = useState<number | undefined>();
   const [centerNodeId, setCenterNodeId] = useState<number | undefined>();
+  const [moduleId, setModuleId] = useState<string | number>('');
+  const [showAnalyze, setShowAnalyze] = useState(false);
 
   const chartRef = React.useRef<any>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
+
+  const handleChartClick = useCallback(
+    (params: ECElementEvent) => {
+      onChartClick?.(params);
+      const data = params.data as TreemapDataNode | undefined;
+      const moduleId = data?.moduleId;
+      if (moduleId !== undefined) {
+        setModuleId(moduleId);
+        setShowAnalyze(true);
+      }
+    },
+    [onChartClick],
+  );
 
   const enterFullscreen = useCallback(() => {
     if (containerRef.current) {
@@ -553,7 +607,7 @@ const AssetTreemapWithFilterInner: React.FC<{
       if (el.requestFullscreen) {
         el.requestFullscreen()
           .then(() => setIsFullscreen(true))
-          .catch((err: any) =>
+          .catch((err: unknown) =>
             console.error('Failed to enter fullscreen:', err),
           );
       } else if (el.webkitRequestFullscreen) {
@@ -817,12 +871,28 @@ const AssetTreemapWithFilterInner: React.FC<{
           ref={chartRef}
           treeData={filteredTreeData}
           sizeType={sizeType}
-          onChartClick={onChartClick}
+          onChartClick={handleChartClick}
           highlightNodeId={highlightNodeId}
           centerNodeId={centerNodeId}
           rootPath={rootPath}
           style={{ width: '100%', height: '100%' }}
         />
+        {moduleId ? (
+          <ServerAPIProvider
+            api={SDK.ServerAPI.API.GetAllModuleGraph}
+            body={{}}
+          >
+            {(modules) => (
+              <ModuleAnalyzeComponent
+                cwd={rootPath}
+                moduleId={moduleId}
+                modules={modules}
+                show={showAnalyze}
+                setShow={setShowAnalyze}
+              />
+            )}
+          </ServerAPIProvider>
+        ) : null}
       </div>
     </div>
   );

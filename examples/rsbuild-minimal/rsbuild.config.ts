@@ -12,10 +12,10 @@ export default defineConfig({
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
           features: ['resolver', 'bundle', 'plugins', 'loader'],
           output: {
-            // mode: 'brief',
-            // options: {
-            //   type: ['json', 'html'],
-            // },
+            mode: 'brief',
+            options: {
+              type: ['json', 'html'],
+            },
             reportCodeType: {
               noCode: true,
             },
@@ -39,12 +39,12 @@ export default defineConfig({
             },
           },
           port: 9988,
-          // mode: 'brief',
         },
       ]);
     },
   },
   output: {
+    assetPrefix: './',
     minify: false,
     filenameHash: false,
     sourceMap: {
