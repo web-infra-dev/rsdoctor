@@ -113,11 +113,11 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
     await this._router.setup();
 
-    process.once('exit', () => this.dispose(false));
-    process.once('SIGINT', () => this.dispose(true));
-    process.once('SIGTERM', () => this.dispose(true));
-    process.once('unhandledRejection', () => this.dispose(true));
-    process.once('uncaughtException', () => this.dispose(true));
+    process.once('exit', () => this.dispose());
+    process.once('SIGINT', () => this.dispose(0));
+    process.once('SIGTERM', () => this.dispose(0));
+    process.once('unhandledRejection', () => this.dispose(1));
+    process.once('uncaughtException', () => this.dispose(1));
   }
 
   protected wrapNextHandleFunction(
@@ -248,10 +248,10 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     await this._socket?.broadcast();
   }
 
-  dispose = async (shouldExit: boolean = false) => {
+  dispose = async (exitCode?: number) => {
     if (this.disposed) {
-      if (shouldExit) {
-        process.exit(0);
+      if (exitCode !== undefined) {
+        process.exit(exitCode);
       }
       return;
     }
@@ -266,8 +266,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       this._socket.dispose();
     }
 
-    if (shouldExit) {
-      process.exit(0);
+    if (exitCode !== undefined) {
+      process.exit(exitCode);
     }
   };
 }
