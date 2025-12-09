@@ -1,7 +1,7 @@
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { File, Json, EnvInfo } from '@rsdoctor/utils/build';
 import path from 'path';
-import { createHash } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
 import process from 'process';
 import { AsyncSeriesHook } from 'tapable';
 import { decycle } from '@rsdoctor/utils/common';
@@ -187,7 +187,14 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
       '[SDKCore.writeManifest]',
     );
 
-    await Promise.all([File.fse.outputFile(diskManifestPath, dataStr)]);
+    // Atomic write via temp file + rename to avoid O_TRUNC truncation
+    const dir = path.dirname(diskManifestPath);
+    const base = path.basename(diskManifestPath);
+    await File.fse.ensureDir(dir);
+    const tmpPath = path.join(dir, `${base}.${Date.now()}.${randomUUID()}.tmp`);
+
+    await File.fse.outputFile(tmpPath, dataStr);
+    await File.fse.rename(tmpPath, diskManifestPath);
 
     return diskManifestPath;
   }
