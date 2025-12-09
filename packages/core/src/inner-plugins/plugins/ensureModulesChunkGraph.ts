@@ -141,6 +141,7 @@ async function doneHandler(
               cachedModules: true,
               orphanModules: true,
               runtimeModules: true,
+              optimizationBailout: true,
             });
       return cached;
     };

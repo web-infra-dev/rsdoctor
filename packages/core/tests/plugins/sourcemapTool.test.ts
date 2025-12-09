@@ -44,6 +44,9 @@ function createMockPluginInstance() {
 function createMockCompilation() {
   return {
     compiler: { rspack: {} },
+    options: {
+      output: {},
+    },
     getAssets: () => [
       {
         name: 'main.js',
@@ -90,6 +93,99 @@ describe('sourcemapTool', () => {
           '/project/bar/other.js',
         );
       }
+    });
+
+    it('should resolve relative paths based on sourceMapDir or sourceRoot', () => {
+      const context = '/project/dist';
+
+      // Case 1: No sourceRoot, use sourceMapDir
+      const fn1 = bindContextCache(
+        context,
+        undefined,
+        new Map(),
+        '/project/dist/js',
+      );
+      expect(fn1('../src/utils.js')).toBe(
+        path.resolve('/project/dist/js', '../src/utils.js'),
+      );
+
+      // Case 2: sourceRoot is absolute
+      const fn2 = bindContextCache(
+        context,
+        undefined,
+        new Map(),
+        '/project/dist/js',
+        '/project/src',
+      );
+      expect(fn2('utils.js')).toBe(path.resolve('/project/src', 'utils.js'));
+
+      // Case 3: sourceRoot is relative, use sourceMapDir as base
+      const fn3 = bindContextCache(
+        context,
+        undefined,
+        new Map(),
+        '/project/dist/js',
+        '../src',
+      );
+      // resolve('/project/dist/js', '../src', 'utils.js') -> /project/dist/src/utils.js
+      expect(fn3('utils.js')).toBe(
+        path.resolve('/project/dist/js', '../src', 'utils.js'),
+      );
+
+      // Case 4: sourceRoot is relative, no sourceMapDir, use context as base
+      const fn4 = bindContextCache(
+        context,
+        undefined,
+        new Map(),
+        undefined,
+        '../src',
+      );
+      expect(fn4('utils.js')).toBe(path.resolve(context, '../src', 'utils.js'));
+    });
+  });
+
+  describe('inline sourcemap path resolution', () => {
+    it('should use hypothetical .map path to resolve relative sources', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            path: '/project/dist',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'js/bundle.js',
+            source: {
+              source: () => 'const foo=1;\n//# sourceMappingURL=bundle.js.map',
+              name: 'js/bundle.js',
+              sourceAndMap: () => ({
+                source: 'const foo=1;\n',
+                map: {
+                  version: 3,
+                  file: 'js/bundle.js',
+                  sourceRoot: '../src',
+                  sources: ['utils.js'],
+                  names: [],
+                  mappings: 'AAAA',
+                  sourcesContent: ['export const foo = 1;\n'],
+                },
+              }),
+            },
+            info: {},
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+      expect(plugin.sourceMapSets.size).toBe(1);
+      const resolvedKey = path.resolve(
+        '/project/dist/js',
+        '../src',
+        'utils.js',
+      );
+      expect(plugin.sourceMapSets.has(resolvedKey)).toBe(true);
     });
   });
 
@@ -169,7 +265,9 @@ describe('sourcemapTool', () => {
       await handleAfterEmitAssets(compilation, plugin);
 
       expect(plugin.sourceMapSets.size).toBe(1);
-      const sourceMap = plugin.sourceMapSets.get('src/index.js');
+      const sourceMap = plugin.sourceMapSets.get(
+        path.resolve(process.cwd(), 'src/index.js'),
+      );
       expect(sourceMap).toBe('console.log("test");');
     });
   });
@@ -214,7 +312,9 @@ describe('sourcemapTool', () => {
 
       await handleAfterEmitAssets(compilation, plugin);
       expect(plugin.sourceMapSets.size).toBe(1);
-      const sourceMap = plugin.sourceMapSets.get('src/index.js');
+      const sourceMap = plugin.sourceMapSets.get(
+        path.resolve(process.cwd(), 'src/index.js'),
+      );
       expect(sourceMap).toBe('console.log("test");');
     });
 
@@ -257,7 +357,9 @@ describe('sourcemapTool', () => {
 
       await handleAfterEmitAssets(compilation, plugin);
       expect(plugin.sourceMapSets.size).toBe(1);
-      const sourceMap = plugin.sourceMapSets.get('src/index.js');
+      const sourceMap = plugin.sourceMapSets.get(
+        path.resolve(process.cwd(), 'src/index.js'),
+      );
       expect(sourceMap).toBe('console.log("test");');
     });
 
@@ -305,7 +407,9 @@ describe('sourcemapTool', () => {
 
       await handleAfterEmitAssets(compilation, plugin);
       expect(plugin.sourceMapSets.size).toBe(1);
-      const sourceMap = plugin.sourceMapSets.get('src/app.js');
+      const sourceMap = plugin.sourceMapSets.get(
+        path.resolve(process.cwd(), 'src/app.js'),
+      );
       expect(sourceMap).toBe('console.log("app");');
     });
 
@@ -379,7 +483,9 @@ describe('sourcemapTool', () => {
 
       await handleAfterEmitAssets(compilation, plugin);
       expect(plugin.sourceMapSets.size).toBe(1);
-      const sourceMap = plugin.sourceMapSets.get('src/index.js');
+      const sourceMap = plugin.sourceMapSets.get(
+        path.resolve(process.cwd(), 'src/index.js'),
+      );
       expect(sourceMap).toBe('console.log("test");');
     });
   });
