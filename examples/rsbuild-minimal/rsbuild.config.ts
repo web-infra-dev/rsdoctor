@@ -44,7 +44,6 @@ export default defineConfig({
     },
   },
   output: {
-    assetPrefix: './',
     minify: false,
     filenameHash: false,
     sourceMap: {
