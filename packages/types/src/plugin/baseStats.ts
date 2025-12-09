@@ -19,7 +19,6 @@ interface StatsOptionsObj {
   runtimeModules?: boolean;
   cachedModules?: boolean;
   nestedModules?: boolean;
-  optimizationBailout?: boolean;
   /** Rspack not support below opts */
   cachedAssets?: boolean;
   groupAssetsByInfo?: boolean;

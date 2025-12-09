@@ -580,19 +580,11 @@ export class RsdoctorSDK<
   }
 
   public inlineScriptsAndStyles(htmlFilePath: string) {
-    function resolveFilePath(basePath: string, filePath: string): string {
-      if (filePath.startsWith('/')) {
-        return path.resolve(basePath, filePath.slice(1));
-      }
-
-      return path.resolve(basePath, filePath);
-    }
-
     // Helper function to inline JavaScript files
     function inlineScripts(basePath: string, scripts: string[]): string {
       return scripts
         .map((src) => {
-          const scriptPath = resolveFilePath(basePath, src);
+          const scriptPath = path.resolve(basePath, src);
           try {
             const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
             return `<script>${scriptContent}</script>`;
@@ -608,7 +600,7 @@ export class RsdoctorSDK<
     function inlineCss(basePath: string, cssFiles: string[]): string {
       return cssFiles
         .map((href) => {
-          const cssPath = resolveFilePath(basePath, href);
+          const cssPath = path.resolve(basePath, href);
           try {
             const cssContent = fs.readFileSync(cssPath, 'utf-8');
             return `<style>${cssContent}</style>`;
