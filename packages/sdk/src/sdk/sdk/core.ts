@@ -190,7 +190,6 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     // Atomic write via temp file + rename to avoid O_TRUNC truncation
     const dir = path.dirname(diskManifestPath);
     const base = path.basename(diskManifestPath);
-    await File.fse.ensureDir(dir);
     const tmpPath = path.join(dir, `${base}.${Date.now()}.${randomUUID()}.tmp`);
 
     await File.fse.outputFile(tmpPath, dataStr);
