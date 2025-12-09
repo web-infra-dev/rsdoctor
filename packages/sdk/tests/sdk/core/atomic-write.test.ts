@@ -5,6 +5,10 @@ import { Worker } from 'node:worker_threads';
 import { File } from '@rsdoctor/utils/build';
 import { execSync } from 'node:child_process';
 
+// Skip on Windows because rename may throw EPERM/EBUSY under concurrent access
+const describeIfNotWin =
+  process.platform === 'win32' ? describe.skip : describe;
+
 /**
  * Verify manifest writing uses an atomic pattern (temp file + rename).
  * Atomic write prevents file truncation caused by O_TRUNC during concurrent writes.
@@ -19,7 +23,7 @@ import { execSync } from 'node:child_process';
  * - Readers either see the old file or the new file, never a partial file
  */
 describe('atomic write manifest', () => {
-  describe('concurrent write test', () => {
+  describeIfNotWin('concurrent write test', () => {
     let outputDir: string;
 
     // Build SDK package before running tests to ensure dist exists
