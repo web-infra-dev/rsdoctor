@@ -24,6 +24,10 @@ export class InternalBundlePlugin<
     }
   }
   changeDevtoolModuleFilename(compiler: Plugin.BaseCompiler) {
+    if ('rspack' in compiler) {
+      return;
+    }
+
     const devtool = compiler.options.devtool;
     if (devtool) {
       if (!compiler.options.output) {
