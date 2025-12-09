@@ -86,6 +86,22 @@ function blendWithWhite(hex: string, ratio: number): string {
   return `#${blendedR.toString(16).padStart(2, '0')}${blendedG.toString(16).padStart(2, '0')}${blendedB.toString(16).padStart(2, '0')}`;
 }
 
+function getLuminance(hex: string): number {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+
+  const [rs, gs, bs] = [r, g, b].map((val) => {
+    return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+  });
+
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+}
+
+function isDarkColor(hex: string): boolean {
+  return getLuminance(hex) < 0.4;
+}
+
 function getLevelOption() {
   return [
     {
@@ -137,8 +153,9 @@ const TreeMapInner: React.FC<
         if (typeof forwardedRef === 'function') {
           forwardedRef(chartRef.current);
         } else {
-          (forwardedRef as React.MutableRefObject<any>).current =
-            chartRef.current;
+          (
+            forwardedRef as React.MutableRefObject<EChartsReactCore | null>
+          ).current = chartRef.current;
         }
       }
     }, [forwardedRef, chartRef.current]);
@@ -204,14 +221,22 @@ const TreeMapInner: React.FC<
             ? baseColor
             : blendWithWhite(baseColor, borderRatio);
 
+        const isDark = isDarkColor(nodeColor);
+        const textColor = isDark ? '#ffffff' : '#000000';
+        const textBorderColor = isDark
+          ? 'rgba(255, 255, 255, 0.2)'
+          : 'rgba(0, 0, 0, 0.1)';
+
         const result: TreemapDataNode = {
           id: nodeId,
           name: node.name,
           value: val,
           path: node.path || node.name,
-          sourceSize: node.sourceSize ?? (sizeType === 'stat' ? val : 0),
-          bundledSize: node.bundledSize ?? (sizeType === 'parsed' ? val : 0),
-          gzipSize: node.gzipSize ?? (sizeType === 'gzip' ? val : 0),
+          sourceSize:
+            node.sourceSize ?? (sizeType === 'stat' ? val : undefined),
+          bundledSize:
+            node.bundledSize ?? (sizeType === 'parsed' ? val : undefined),
+          gzipSize: node.gzipSize ?? (sizeType === 'gzip' ? val : undefined),
           moduleId: node.id,
           itemStyle: {
             borderWidth: isHighlighted ? 4 : 1,
@@ -219,6 +244,19 @@ const TreeMapInner: React.FC<
             borderColor: nodeBorderColor,
             ...(level === 0 && { gapWidth: 2 }),
           },
+          label: {
+            show: true,
+            color: textColor,
+            textBorderColor: textBorderColor,
+            textBorderWidth: 1,
+          },
+          upperLabel:
+            level === 0
+              ? undefined
+              : {
+                  show: true,
+                  color: textColor,
+                },
         };
 
         if (children && children.length > 0) {
@@ -273,11 +311,13 @@ const TreeMapInner: React.FC<
           confine: true,
           extraCssText: 'max-width: 450px; word-wrap: break-word;',
           position: function (pos, _params, _dom, _rect, size) {
-            const obj = { top: pos[1] + 10 };
+            const obj: { top: number; left?: number; right?: number } = {
+              top: pos[1] + 10,
+            };
             if (pos[0] < size.viewSize[0] / 2) {
-              (obj as any).left = pos[0] + 10;
+              obj.left = pos[0] + 10;
             } else {
-              (obj as any).right = size.viewSize[0] - pos[0] + 10;
+              obj.right = size.viewSize[0] - pos[0] + 10;
             }
             return obj;
           } as TooltipComponentOption['position'],
@@ -305,17 +345,21 @@ const TreeMapInner: React.FC<
             }
 
             const sourceSize =
-              typeof node.sourceSize === 'number'
+              typeof node.sourceSize === 'number' && node.sourceSize > 0
                 ? node.sourceSize
-                : typeof node.value === 'number'
+                : typeof node.value === 'number' &&
+                    node.value > 0 &&
+                    sizeType === 'stat'
                   ? node.value
-                  : 0;
+                  : undefined;
             const bundledSize =
-              typeof node.bundledSize === 'number'
+              typeof node.bundledSize === 'number' && node.bundledSize > 0
                 ? node.bundledSize
                 : undefined;
             const gzipSize =
-              typeof node.gzipSize === 'number' ? node.gzipSize : undefined;
+              typeof node.gzipSize === 'number' && node.gzipSize > 0
+                ? node.gzipSize
+                : undefined;
 
             function makeRow(label: string, value: string, color: string) {
               return `<div class="${Styles['tooltip-row']}">
@@ -325,20 +369,20 @@ const TreeMapInner: React.FC<
             }
 
             const rows = [];
-            if (sourceSize !== undefined) {
+            if (sourceSize !== undefined && sourceSize > 0) {
               rows.push(
                 makeRow('Stat size', formatSize(sourceSize), '#52c41a'),
-              ); // Green
+              );
             }
-            if (bundledSize !== undefined) {
+            if (bundledSize !== undefined && bundledSize > 0) {
               rows.push(
-                makeRow('Parsed size', formatSize(bundledSize), '#fadb14'),
-              ); // Yellow
+                makeRow('Parsed size', formatSize(bundledSize), '#d96420'),
+              );
             }
-            if (gzipSize !== undefined) {
+            if (gzipSize !== undefined && gzipSize > 0) {
               rows.push(
                 makeRow('Gzipped size', formatSize(gzipSize), '#1677ff'),
-              ); // Blue
+              );
             }
 
             return `
@@ -356,17 +400,14 @@ const TreeMapInner: React.FC<
               show: true,
               formatter: '{b}',
               fontSize: 12,
-              color: '#000',
               position: 'inside',
               fontWeight: 'normal',
-              textBorderColor: '#fff',
-              textBorderWidth: 2,
+              textBorderWidth: 1,
               padding: [4, 8, 4, 8],
             },
             upperLabel: {
               show: true,
               height: 30,
-              color: '#000',
               fontSize: 12,
               fontWeight: 'normal',
               padding: [0, 0, 0, 4],
@@ -406,6 +447,10 @@ const TreeMapInner: React.FC<
             bottom: 30,
             left: 0,
             right: 0,
+            zoomLimit: {
+              min: 0.5,
+              max: 5,
+            },
           } as TreemapSeriesOption,
         ],
       });
@@ -504,6 +549,29 @@ const TreeMapInner: React.FC<
       }
     }, [centerNodeId, option]);
 
+    useEffect(() => {
+      if (!chartRef.current || !option) return;
+
+      const chartInstance =
+        chartRef.current.getEchartsInstance() as unknown as EChartsType;
+      if (!chartInstance) return;
+
+      const handleDblClick = () => {
+        try {
+          chartInstance.dispatchAction({
+            type: 'treemapRootToNode',
+            seriesIndex: 0,
+          });
+        } catch (e) {}
+      };
+
+      chartInstance.on('dblclick', handleDblClick);
+
+      return () => {
+        chartInstance.off('dblclick', handleDblClick);
+      };
+    }, [option]);
+
     return option ? (
       <div className={Styles['chart-container']} style={style}>
         <EChartsReactCore
@@ -537,9 +605,9 @@ const TreeMapInner: React.FC<
   },
 );
 
-export const TreeMap = React.forwardRef<any, TreeMapProps>((props, ref) => (
-  <TreeMapInner {...props} forwardedRef={ref} />
-));
+export const TreeMap = React.forwardRef<EChartsReactCore, TreeMapProps>(
+  (props, ref) => <TreeMapInner {...props} forwardedRef={ref} />,
+);
 
 export const AssetTreemapWithFilter: React.FC<{
   treeData: TreeNode[];
@@ -584,8 +652,9 @@ const AssetTreemapWithFilterInner: React.FC<{
   const [centerNodeId, setCenterNodeId] = useState<number | undefined>();
   const [moduleId, setModuleId] = useState<string | number>('');
   const [showAnalyze, setShowAnalyze] = useState(false);
+  const [chunkSearchQuery, setChunkSearchQuery] = useState('');
 
-  const chartRef = React.useRef<any>(null);
+  const chartRef = React.useRef<EChartsReactCore>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   const handleChartClick = useCallback(
@@ -603,7 +672,11 @@ const AssetTreemapWithFilterInner: React.FC<{
 
   const enterFullscreen = useCallback(() => {
     if (containerRef.current) {
-      const el = containerRef.current as any;
+      const el = containerRef.current as HTMLElement & {
+        webkitRequestFullscreen?: () => void;
+        mozRequestFullScreen?: () => void;
+        msRequestFullscreen?: () => void;
+      };
       if (el.requestFullscreen) {
         el.requestFullscreen()
           .then(() => setIsFullscreen(true))
@@ -662,6 +735,19 @@ const AssetTreemapWithFilterInner: React.FC<{
     };
   }, []);
 
+  const filteredTreeData = useMemo(() => {
+    let filtered = treeData.filter((item) => checkedAssets.includes(item.name));
+
+    if (chunkSearchQuery.trim()) {
+      const searchLower = chunkSearchQuery.toLowerCase();
+      filtered = filtered.filter((item) =>
+        item.name.toLowerCase().includes(searchLower),
+      );
+    }
+
+    return filtered;
+  }, [treeData, checkedAssets, chunkSearchQuery]);
+
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return [];
 
@@ -678,15 +764,9 @@ const AssetTreemapWithFilterInner: React.FC<{
       }
     };
 
-    treeData.forEach(collectMatchingPaths);
+    filteredTreeData.forEach(collectMatchingPaths);
     return results;
-  }, [treeData, searchQuery]);
-
-  const filteredTreeData = useMemo(() => {
-    let filtered = treeData.filter((item) => checkedAssets.includes(item.name));
-
-    return filtered;
-  }, [treeData, checkedAssets]);
+  }, [filteredTreeData, searchQuery]);
 
   const handleSearchResultClick = useCallback((nodeId: number) => {
     setHighlightNodeId(nodeId);
@@ -781,6 +861,59 @@ const AssetTreemapWithFilterInner: React.FC<{
           </div>
 
           <div>
+            <h4>Show chunks</h4>
+            <Input
+              placeholder="Search chunks"
+              value={chunkSearchQuery}
+              onChange={(e) => setChunkSearchQuery(e.target.value)}
+              suffix={<SearchOutlined style={{ color: '#ccc' }} />}
+              allowClear
+              size="small"
+              style={{ marginBottom: 8 }}
+            />
+            <Checkbox
+              indeterminate={
+                checkedAssets.length > 0 &&
+                checkedAssets.length < assetNames.length
+              }
+              checked={checkedAssets.length === assetNames.length}
+              onChange={(e) =>
+                setCheckedAssets(e.target.checked ? assetNames : [])
+              }
+              className={Styles['all-none-checkbox']}
+            >
+              All
+            </Checkbox>
+            <div className={Styles['chunk-list']}>
+              {assetNames
+                .filter((name) =>
+                  name.toLowerCase().includes(chunkSearchQuery.toLowerCase()),
+                )
+                .map((name) => (
+                  <div key={name} className={Styles['chunk-item']}>
+                    <Checkbox
+                      checked={checkedAssets.includes(name)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setCheckedAssets([...checkedAssets, name]);
+                        } else {
+                          setCheckedAssets(
+                            checkedAssets.filter((a) => a !== name),
+                          );
+                        }
+                      }}
+                    >
+                      <span title={name}>{name}</span>
+                    </Checkbox>
+                    <span className={Styles['size-tag']}>
+                      {formatSize(getChunkSize(name, 'value'))}
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <div>
             <h4>Search modules</h4>
             <Input
               placeholder="Enter regexp"
@@ -822,46 +955,6 @@ const AssetTreemapWithFilterInner: React.FC<{
                 No files found matching "{searchQuery}"
               </div>
             )}
-          </div>
-
-          <div>
-            <h4>Show chunks</h4>
-            <Checkbox
-              indeterminate={
-                checkedAssets.length > 0 &&
-                checkedAssets.length < assetNames.length
-              }
-              checked={checkedAssets.length === assetNames.length}
-              onChange={(e) =>
-                setCheckedAssets(e.target.checked ? assetNames : [])
-              }
-              className={Styles['all-none-checkbox']}
-            >
-              All
-            </Checkbox>
-            <div className={Styles['chunk-list']}>
-              {assetNames.map((name) => (
-                <div key={name} className={Styles['chunk-item']}>
-                  <Checkbox
-                    checked={checkedAssets.includes(name)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setCheckedAssets([...checkedAssets, name]);
-                      } else {
-                        setCheckedAssets(
-                          checkedAssets.filter((a) => a !== name),
-                        );
-                      }
-                    }}
-                  >
-                    <span title={name}>{name}</span>
-                  </Checkbox>
-                  <span className={Styles['size-tag']}>
-                    {formatSize(getChunkSize(name, 'value'))}
-                  </span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
