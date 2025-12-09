@@ -3,7 +3,7 @@ import { Linter, Plugin } from '@rsdoctor/types';
 import { Graph } from '@rsdoctor/utils/common';
 import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 import { Asset } from '@rspack/core';
-import { resolve } from 'path';
+import { resolve, dirname, isAbsolute } from 'path';
 import { SourceMapConsumer, RawSourceMap, MappingItem } from 'source-map';
 
 // Constant used to represent unresolved source paths
@@ -11,10 +11,10 @@ export const UNASSIGNED = '[unassigned]';
 
 /**
  * Options for handling source map assets.
- * @property compilation - The current compilation object.
- * @property pluginInstance - The Rsdoctor plugin instance.
- * @property sourceMapFilenameRegex - Regex to extract file paths from source map sources.
- * @property namespace - Optional namespace for resolving sources.
+ * @param compilation - The current compilation object.
+ * @param pluginInstance - The Rsdoctor plugin instance.
+ * @param sourceMapFilenameRegex - Regex to extract file paths from source map sources.
+ * @param namespace - Optional namespace for resolving sources.
  */
 interface SourceMapAssetOptions {
   compilation: Plugin.BaseCompilation;
@@ -27,19 +27,23 @@ interface SourceMapAssetOptions {
 }
 
 /**
- * Returns a function that resolves a source path to an absolute path, with caching for performance.
- * Handles both normal and webpack:// sources, optionally using a namespace.
- * @param context - The base directory for resolution.
- * @param namespace - Optional namespace for webpack sources.
- * @param cache - Optional cache map to store resolved paths.
+ * Binds a context cache to a source path resolver.
+ * @param context - The base context directory.
+ * @param namespace - Optional namespace for resolving sources.
+ * @param cache - The cache map to store resolved paths.
+ * @param sourceMapDir - The directory containing source maps.
+ * @param sourceRoot - The source root directory.
+ * @returns A function that resolves source paths based on the given context.
  */
 export function bindContextCache(
   context: string,
   namespace?: string,
   cache?: Map<string, string>,
+  sourceMapDir?: string,
+  sourceRoot?: string,
 ) {
   cache = cache || new Map<string, string>();
-  return (source: string, sourceMapFilenameRegex: RegExp): string => {
+  return (source: string, sourceMapFilenameRegex?: RegExp): string => {
     if (cache.has(source)) {
       return cache.get(source)!;
     }
@@ -47,17 +51,37 @@ export function bindContextCache(
 
     if (source.startsWith('file://')) {
       resolved = resolve(context, source.replace(/^file:\/\//, ''));
-    } else if (!source.startsWith('webpack://')) {
-      resolved = resolve(context, source);
+    } else if (source.startsWith('webpack://')) {
+      if (sourceMapFilenameRegex) {
+        const match = source.match(sourceMapFilenameRegex);
+        const filePath = match?.[1];
+        const hasNamespace =
+          (namespace && source.startsWith(`webpack://${namespace}`)) ||
+          (namespace && source.startsWith(`file://${namespace}`));
+        const baseDir = hasNamespace ? process.cwd() : context;
+        resolved = filePath ? resolve(baseDir, `./${filePath}`) : UNASSIGNED;
+      } else {
+        resolved = UNASSIGNED;
+      }
     } else {
-      // For webpack:// sources, extract file path and resolve
-      const match = source.match(sourceMapFilenameRegex);
-      const filePath = match?.[1];
-      const hasNamespace =
-        (namespace && source.startsWith(`webpack://${namespace}`)) ||
-        (namespace && source.startsWith(`file://${namespace}`));
-      const baseDir = hasNamespace ? process.cwd() : context;
-      resolved = filePath ? resolve(baseDir, `./${filePath}`) : UNASSIGNED;
+      if (isAbsolute(source)) {
+        resolved = source;
+      } else {
+        let baseDir = context;
+        if (sourceRoot) {
+          if (isAbsolute(sourceRoot)) {
+            baseDir = sourceRoot;
+          } else if (sourceMapDir) {
+            baseDir = resolve(sourceMapDir, sourceRoot);
+          } else {
+            baseDir = resolve(context, sourceRoot);
+          }
+        } else if (sourceMapDir) {
+          baseDir = sourceMapDir;
+        }
+
+        resolved = resolve(baseDir, source);
+      }
     }
     cache.set(source, resolved);
     return resolved;
@@ -82,17 +106,28 @@ export async function collectSourceMaps(
   sourceMapFilenameRegex?: RegExp,
   namespace?: string,
   skipSources?: Set<string>,
+  sourceMapPath?: string,
 ) {
   if (map) {
-    // Create a SourceMapConsumer to iterate mappings
     const consumer = await new SourceMapConsumer(
       map as unknown as RawSourceMap,
     );
-    // Function to resolve real source file paths
+    let sourceMapDir: string | undefined;
+    if (sourceMapPath) {
+      sourceMapDir = dirname(sourceMapPath);
+    } else if (_compilation.options.output?.path) {
+      sourceMapDir =
+        typeof _compilation.options.output.path === 'string'
+          ? _compilation.options.output.path
+          : undefined;
+    }
+    const sourceRoot = (map as RawSourceMap).sourceRoot;
     const getRealSourcePath = bindContextCache(
       _this.sdk.root || process.cwd(),
       namespace,
       _this._realSourcePathCache,
+      sourceMapDir,
+      sourceRoot ?? undefined,
     );
 
     // Group all mappings by generated line number
@@ -116,7 +151,6 @@ export async function collectSourceMaps(
 
       for (let i = 0; i < mappings.length; i++) {
         const m = mappings[i];
-        // Skip if source is null
         if (!m.source) continue;
 
         // The source in map.sources returned by sourceAndMap may be modified by Rsdoctor's loader
@@ -135,7 +169,6 @@ export async function collectSourceMaps(
             if (cleanPart.startsWith('builtin:')) {
               continue;
             }
-
             // Check if it looks like a file path (absolute path starting with '/' or relative path)
             if (cleanPart.startsWith('/') || cleanPart.includes('\\')) {
               realSource = cleanPart;
@@ -150,17 +183,19 @@ export async function collectSourceMaps(
         } else if (realSource.includes('??')) {
           realSource = realSource.split('??')[0];
         }
-
-        if (
-          (realSource?.startsWith('webpack://') ||
-            realSource?.startsWith('file://')) &&
-          sourceMapFilenameRegex
-        ) {
-          realSource = getRealSourcePath(realSource, sourceMapFilenameRegex);
+        if (realSource) {
+          if (
+            (realSource.startsWith('webpack://') ||
+              realSource.startsWith('file://')) &&
+            sourceMapFilenameRegex
+          ) {
+            realSource = getRealSourcePath(realSource, sourceMapFilenameRegex);
+          } else if (!isAbsolute(realSource)) {
+            realSource = getRealSourcePath(realSource, sourceMapFilenameRegex);
+          }
         }
 
-        if (!realSource) continue;
-
+        if (!realSource || realSource === UNASSIGNED) continue;
         // Skip if this source has already been processed in a previous asset
         if (skipSources && skipSources.has(realSource)) {
           continue;
@@ -179,11 +214,11 @@ export async function collectSourceMaps(
 }
 
 /**
- * Handles source map collection after assets are emitted (Rspack only).
- * Iterates over all assets, parses them, and collects source maps.
+ * Handles the afterEmit event for assets to collect source map information.
  * @param compilation - The current compilation object.
  * @param _this - The Rsdoctor plugin instance.
  * @param sourceMapFilenameRegex - Regex to extract file paths from source map sources.
+ * @param namespace - Optional namespace for resolving sources.
  */
 export async function handleAfterEmitAssets(
   compilation: Plugin.BaseCompilation,
@@ -201,12 +236,14 @@ export async function handleAfterEmitAssets(
     const skipSources = new Set<string>();
 
     for (const asset of assets) {
-      const { assetLinesCodeList, map: mapFromAsset } = parseAsset(
-        asset,
-        assets,
-        'js/css',
-      );
+      const {
+        assetLinesCodeList,
+        map: mapFromAsset,
+        assetName,
+      } = parseAsset(asset, assets, 'js/css');
       let map = mapFromAsset;
+      let sourceMapPath: string | undefined;
+
       if (!map) {
         let sourceMapFile = asset.info.related?.sourceMap;
         let sourceMapFileAssetName = sourceMapFile?.replace(
@@ -214,12 +251,9 @@ export async function handleAfterEmitAssets(
           '$1',
         );
         if (sourceMapFile) {
-          // Try to find the source map asset by exact name first
           let sourceMapAsset = assets.find(
             (asset) => asset.name === sourceMapFile,
           );
-
-          // If not found by exact name, try to match by base name without hash
           if (!sourceMapAsset && sourceMapFileAssetName) {
             const baseNameWithoutHash = Graph.formatAssetName(
               sourceMapFileAssetName,
@@ -243,11 +277,24 @@ export async function handleAfterEmitAssets(
 
           if (sourceMapAsset) {
             map = JSON.parse(sourceMapAsset.source.source().toString());
+            const outputPath = compilation.options.output?.path;
+            if (outputPath && typeof outputPath === 'string') {
+              sourceMapPath = resolve(outputPath, sourceMapAsset.name);
+            }
           }
         } else {
           continue;
         }
+      } else {
+        const outputPath = compilation.options.output?.path;
+        if (outputPath && typeof outputPath === 'string' && assetName) {
+          const mapFileName = assetName.endsWith('.map')
+            ? assetName
+            : `${assetName}.map`;
+          sourceMapPath = resolve(outputPath, mapFileName);
+        }
       }
+
       try {
         await collectSourceMaps(
           map,
@@ -257,13 +304,11 @@ export async function handleAfterEmitAssets(
           sourceMapFilenameRegex,
           namespace,
           skipSources,
+          sourceMapPath,
         );
       } catch (e) {
         logger.debug(e);
       }
-
-      // After processing this asset, mark newly processed sources
-      // to prevent processing them again in subsequent assets
       _this.sourceMapSets.forEach((_value: string, key: string) => {
         if (!skipSources.has(key)) {
           skipSources.add(key);
@@ -275,9 +320,9 @@ export async function handleAfterEmitAssets(
 }
 
 /**
- * Handles source map collection for Webpack assets (non-Rspack).
- * Iterates over all assets, parses them, and collects source maps.
- * @param options - SourceMapAssetOptions containing compilation, plugin instance, regex, and namespace.
+ * Handles the emit event for assets to collect source map information.
+ * @param options - The options for handling source map assets.
+ * @returns A promise that resolves when the source map information is collected.
  */
 export async function handleEmitAssets(options: SourceMapAssetOptions) {
   const { compilation, pluginInstance, sourceMapFilenameRegex, namespace } =
@@ -293,8 +338,25 @@ export async function handleEmitAssets(options: SourceMapAssetOptions) {
       }),
     );
     for (const asset of assets) {
-      const { assetLinesCodeList, map } = parseAsset(asset, assets, 'map');
+      const { assetLinesCodeList, map, assetName } = parseAsset(
+        asset,
+        assets,
+        'map',
+      );
       if (!map) continue;
+      let sourceMapPath: string | undefined;
+      const outputPath = compilation.options.output?.path;
+      if (
+        outputPath &&
+        typeof outputPath === 'string' &&
+        typeof assetName === 'string'
+      ) {
+        const mapFileName = assetName.endsWith('.map')
+          ? assetName
+          : `${assetName}.map`;
+        sourceMapPath = resolve(outputPath, mapFileName);
+      }
+
       try {
         await collectSourceMaps(
           map,
@@ -303,6 +365,8 @@ export async function handleEmitAssets(options: SourceMapAssetOptions) {
           pluginInstance,
           sourceMapFilenameRegex,
           namespace,
+          undefined,
+          sourceMapPath,
         );
       } catch (e) {
         logger.debug(e);
@@ -313,12 +377,11 @@ export async function handleEmitAssets(options: SourceMapAssetOptions) {
 }
 
 /**
- * Parses an asset to extract its content, code lines, and source map.
- * Handles both JS/CSS and .map files.
+ * Parses an asset to extract its content and source map information.
  * @param asset - The asset to parse.
- * @param assets - All assets in the compilation.
- * @param type - The type of asset ('js/css' or 'map').
- * @returns An object containing assetName, assetContent, assetLinesCodeList, and map.
+ * @param assets - The list of all assets.
+ * @param type - The type of asset to parse.
+ * @returns The parsed asset information.
  */
 function parseAsset(
   asset: { name: any; source: any; info?: any },
@@ -328,15 +391,15 @@ function parseAsset(
   const assetName = asset.source?.name || asset.name;
   let assetContent = '';
   let assetLinesCodeList: string[] = [];
-  let map: any = null;
+  let map: RawSourceMap | null = null;
 
   try {
     if (
       type === 'map' &&
+      typeof assetName === 'string' &&
       assetName.endsWith('.map') &&
       !asset.name.includes('d.ts')
     ) {
-      // Add defensive checks for the source chain
       assetContent = asset.source?.source?.source?.() || '';
       if (!assetContent) {
         logger.debug(`Failed to get source content for asset: ${assetName}`);
@@ -349,8 +412,12 @@ function parseAsset(
       }
 
       map = JSON.parse(assetContent);
+      if (!map || !map.file) {
+        logger.debug(`Failed to get source map file for asset: ${assetName}`);
+        return { assetName, assetContent, assetLinesCodeList: [], map: null };
+      }
       const bundledAsset = assets.find(
-        (asset2) => asset2.source?.name === map.file,
+        (asset2) => asset2.source?.name === map?.file,
       );
       const bundledCode = bundledAsset?.source?.source?.source?.() || '';
       if (!bundledCode) {
