@@ -1,10 +1,9 @@
 import path from 'path';
 import { tmpdir } from 'os';
-import { describe, it, expect, afterEach } from '@rstest/core';
+import { describe, it, expect, afterEach, beforeAll } from '@rstest/core';
 import { Worker } from 'node:worker_threads';
 import { File } from '@rsdoctor/utils/build';
-import { SDK } from '@rsdoctor/types';
-import { createSDK } from '../../utils';
+import { execSync } from 'node:child_process';
 
 /**
  * Verify manifest writing uses an atomic pattern (temp file + rename).
@@ -22,6 +21,18 @@ import { createSDK } from '../../utils';
 describe('atomic write manifest', () => {
   describe('concurrent write test', () => {
     let outputDir: string;
+
+    // Build SDK package before running tests to ensure dist exists
+    beforeAll(() => {
+      try {
+        execSync('pnpm --filter @rsdoctor/sdk run build', {
+          stdio: 'ignore',
+          cwd: path.resolve(__dirname, '../../../../..'),
+        });
+      } catch {
+        // Ignore build errors, dist may already exist
+      }
+    });
 
     afterEach(async () => {
       if (outputDir) {
