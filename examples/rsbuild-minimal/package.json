@@ -11,7 +11,8 @@
   "scripts": {
     "start:analysis": "ENABLE_CLIENT_SERVER=true rsbuild dev",
     "build:analysis": "ENABLE_CLIENT_SERVER=true rsbuild build",
-    "build": "rsbuild build"
+    "build": "rsbuild build",
+    "start": "rsbuild dev"
   },
   "author": "",
   "license": "MIT",

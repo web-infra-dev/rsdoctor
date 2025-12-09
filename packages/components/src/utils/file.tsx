@@ -263,6 +263,7 @@ type TreeNode = {
   sourceSize?: number;
   bundledSize?: number;
   gzipSize?: number;
+  id?: string | number;
   // Internal helper, not exported
   _map?: Map<string, TreeNode>;
 };
@@ -288,6 +289,7 @@ export function buildTreemapData(
           sourceSize: mod.size?.sourceSize ?? 0,
           bundledSize: mod.size?.parsedSize ?? 0,
           gzipSize: mod.size?.gzipSize ?? 0,
+          id: mod.id,
         });
       } else {
         // Directory node
