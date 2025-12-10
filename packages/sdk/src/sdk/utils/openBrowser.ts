@@ -65,10 +65,12 @@ export async function openBrowser(
         return true;
       }
       logger.debug('Failed to find the target browser.');
+      const { default: open } = await import('open');
+      await open(url);
+      return true;
     } catch (err) {
       logger.debug('Failed to open Rsdoctor URL with apple script.');
       logger.debug(err);
-      return false;
     }
   } else {
     // Fallback to open
