@@ -68,6 +68,14 @@ export async function openBrowser(
     } catch (err) {
       logger.debug('Failed to open Rsdoctor URL with apple script.');
       logger.debug(err);
+    }
+    try {
+      const { default: open } = await import('open');
+      await open(url);
+      return true;
+    } catch (err) {
+      logger.error('Failed to open Rsdoctor URL.');
+      logger.error(err);
       return false;
     }
   } else {
