@@ -1,8 +1,9 @@
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { File, Json, EnvInfo } from '@rsdoctor/utils/build';
-import path from 'path';
-import { createHash, randomUUID } from 'crypto';
-import process from 'process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash, randomUUID } from 'node:crypto';
+import process from 'node:process';
 import { AsyncSeriesHook } from 'tapable';
 import { decycle } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
@@ -193,7 +194,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     const tmpPath = path.join(dir, `${base}.${Date.now()}.${randomUUID()}.tmp`);
 
     await File.fse.outputFile(tmpPath, dataStr);
-    await File.fse.rename(tmpPath, diskManifestPath);
+    fs.renameSync(tmpPath, diskManifestPath);
 
     return diskManifestPath;
   }
