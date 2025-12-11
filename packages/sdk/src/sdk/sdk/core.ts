@@ -1,7 +1,7 @@
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { File, Json, EnvInfo } from '@rsdoctor/utils/build';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { createHash, randomUUID } from 'crypto';
 import process from 'process';
 import { AsyncSeriesHook } from 'tapable';
