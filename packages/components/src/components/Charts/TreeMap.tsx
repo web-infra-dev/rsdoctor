@@ -147,6 +147,7 @@ const TreeMapInner: React.FC<
     const [option, setOption] = useState<TreeMapOption | null>(null);
     const chartRef = React.useRef<EChartsReactCore | null>(null);
     const chartDataRef = React.useRef<TreemapDataNode[]>([]);
+    const clickTimeoutRef = React.useRef<number | null>(null);
 
     useEffect(() => {
       if (forwardedRef && chartRef.current) {
@@ -550,27 +551,12 @@ const TreeMapInner: React.FC<
     }, [centerNodeId, option]);
 
     useEffect(() => {
-      if (!chartRef.current || !option) return;
-
-      const chartInstance =
-        chartRef.current.getEchartsInstance() as unknown as EChartsType;
-      if (!chartInstance) return;
-
-      const handleDblClick = () => {
-        try {
-          chartInstance.dispatchAction({
-            type: 'treemapRootToNode',
-            seriesIndex: 0,
-          });
-        } catch (e) {}
-      };
-
-      chartInstance.on('dblclick', handleDblClick);
-
       return () => {
-        chartInstance.off('dblclick', handleDblClick);
+        if (clickTimeoutRef.current) {
+          window.clearTimeout(clickTimeoutRef.current);
+        }
       };
-    }, [option]);
+    }, []);
 
     return option ? (
       <div className={Styles['chart-container']} style={style}>
@@ -580,17 +566,30 @@ const TreeMapInner: React.FC<
           echarts={echarts}
           onEvents={{
             click: (params: ECElementEvent) => {
-              if (chartRef.current) {
-                const instance =
-                  chartRef.current.getEchartsInstance() as unknown as EChartsType;
-                const data = params?.data as TreemapDataNode | undefined;
-                if (instance && data?.id !== undefined) {
-                  instance.dispatchAction({
-                    type: 'treemapZoomToNode',
-                    seriesIndex: 0,
-                    targetNodeId: String(data.id),
-                  });
+              // Delay to differentiate from double-click; only zoom on single click
+              if (clickTimeoutRef.current) {
+                window.clearTimeout(clickTimeoutRef.current);
+              }
+              clickTimeoutRef.current = window.setTimeout(() => {
+                if (chartRef.current) {
+                  const instance =
+                    chartRef.current.getEchartsInstance() as unknown as EChartsType;
+                  const data = params?.data as TreemapDataNode | undefined;
+                  if (instance && data?.id !== undefined) {
+                    instance.dispatchAction({
+                      type: 'treemapZoomToNode',
+                      seriesIndex: 0,
+                      targetNodeId: String(data.id),
+                    });
+                  }
                 }
+              }, 180);
+            },
+            dblclick: (params: ECElementEvent) => {
+              // Double click: cancel pending single-click action and trigger analyze
+              if (clickTimeoutRef.current) {
+                window.clearTimeout(clickTimeoutRef.current);
+                clickTimeoutRef.current = null;
               }
               onChartClick?.(params);
             },
@@ -884,13 +883,20 @@ const AssetTreemapWithFilterInner: React.FC<{
             >
               All
             </Checkbox>
-            <div className={Styles['chunk-list']}>
+            <div
+              className={Styles['chunk-list']}
+              style={{ maxHeight: 180, overflowY: 'auto' }}
+            >
               {assetNames
                 .filter((name) =>
                   name.toLowerCase().includes(chunkSearchQuery.toLowerCase()),
                 )
                 .map((name) => (
-                  <div key={name} className={Styles['chunk-item']}>
+                  <div
+                    key={name}
+                    className={Styles['chunk-item']}
+                    style={{ height: 15, lineHeight: '15px' }}
+                  >
                     <Checkbox
                       checked={checkedAssets.includes(name)}
                       onChange={(e) => {
