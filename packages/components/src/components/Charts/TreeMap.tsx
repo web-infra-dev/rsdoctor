@@ -9,7 +9,7 @@ import {
   type TitleComponentOption,
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { Checkbox, Radio, Input } from 'antd';
+import { Alert, Checkbox, Radio, Input } from 'antd';
 import {
   LeftOutlined,
   RightOutlined,
@@ -107,25 +107,22 @@ function getLevelOption() {
     {
       itemStyle: {
         borderWidth: 0,
-        gapWidth: 2,
+        gapWidth: 4,
+        gapColor: '#ffffff',
       },
     },
     {
       itemStyle: {
         borderColorAlpha: [1, 0.3],
         borderWidth: 5,
-        gapWidth: 1,
+        gapWidth: 4,
+        gapColor: '#ffffff',
       },
       upperLabel: {
         show: true,
         color: '#ffffff',
         fontSize: 14,
         height: 30,
-      },
-      emphasis: {
-        itemStyle: {
-          borderColor: '#ccc',
-        },
       },
     },
   ];
@@ -197,9 +194,10 @@ const TreeMapInner: React.FC<
           : hashString(node.name || '');
         const isHighlighted = highlightNodeId === nodeId;
 
-        const baseColorRatio = level === 0 ? 1 : Math.max(0.2, 1 - level * 0.2);
+        const baseColorRatio =
+          level === 0 ? 1 : Math.max(0.35, 1 - level * 0.15);
         const baseBorderRatio =
-          level === 0 ? 1 : Math.max(0.3, 1 - level * 0.25);
+          level === 0 ? 1 : Math.max(0.4, 1 - level * 0.15);
 
         const siblingGradientRange = 0.15;
         const siblingRatio =
@@ -272,6 +270,15 @@ const TreeMapInner: React.FC<
               color: '#fff5f5',
             },
           };
+        } else {
+          // Keep the same color on hover/click to prevent color change
+          result.emphasis = {
+            itemStyle: {
+              color: nodeColor,
+              borderColor: nodeBorderColor,
+              borderWidth: isHighlighted ? 4 : 1,
+            },
+          };
         }
 
         return result;
@@ -291,16 +298,6 @@ const TreeMapInner: React.FC<
 
       setOption({
         color: TREE_COLORS,
-        title: {
-          text: 'Rsdoctor TreeMap',
-          left: 'center',
-          top: 10,
-          textStyle: {
-            fontSize: 16,
-            fontWeight: 'bold',
-            color: 'rgba(0, 0, 0, 0.8)',
-          },
-        },
         tooltip: {
           padding: 10,
           backgroundColor: '#fff',
@@ -397,6 +394,9 @@ const TreeMapInner: React.FC<
         series: [
           {
             type: 'treemap',
+            itemStyle: {
+              gapColor: '#ffffff',
+            },
             label: {
               show: true,
               formatter: '{b}',
@@ -440,11 +440,11 @@ const TreeMapInner: React.FC<
             },
             roam: true,
             nodeClick: false,
-            zoomToNodeRatio: 0.5,
+            zoomToNodeRatio: 0.7,
             animationDurationUpdate: 500,
             width: '100%',
             height: '100%',
-            top: 40,
+            top: -10,
             bottom: 30,
             left: 0,
             right: 0,
@@ -560,6 +560,12 @@ const TreeMapInner: React.FC<
 
     return option ? (
       <div className={Styles['chart-container']} style={style}>
+        <Alert
+          message="If parsed size lacks detailed module information, you can enable sourceMap when RSDOCTOR = true. This is because Rsdoctor relies on SourceMap to obtain Parsed Size. Rspack provides SourceMap information to Rsdoctor by default without affecting the build output."
+          type="info"
+          showIcon
+          style={{ marginBottom: 0 }}
+        />
         <EChartsReactCore
           ref={chartRef}
           option={option}

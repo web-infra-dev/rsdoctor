@@ -153,6 +153,7 @@ const MenusBase: React.FC<{
           navigate(e.key);
         }
       }}
+      disabledOverflow
       overflowedIndicator={<MenuOutlined />}
       style={{
         height: Size.NavBarHeight,
