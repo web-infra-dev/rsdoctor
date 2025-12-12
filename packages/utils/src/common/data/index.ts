@@ -188,7 +188,6 @@ export class APIDataLoader {
           const isLynx =
             Array.isArray(configs) && configs[0]?.config?.name === 'lynx';
           const checkModules = (module: SDK.ModuleData) => {
-            // TODO: Cannot fully filter for now, because there are cases where sourcemap is missing or parsing failed, so filtering is not possible currently. Consider modifying the concatenated module tag identification later
             if (isLynx && module.size.parsedSize === 0) {
               return false;
             }
