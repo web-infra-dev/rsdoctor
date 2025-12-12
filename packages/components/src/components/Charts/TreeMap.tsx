@@ -166,9 +166,14 @@ const TreeMapInner: React.FC<
         parentColor?: string,
         siblingIndex = 0,
         siblingCount = 1,
+        chunkPath?: string,
       ): TreemapDataNode {
         const baseColor =
           parentColor || TREE_COLORS[index % TREE_COLORS.length];
+
+        // For level 0 (chunk level), use the chunk's path/name as chunkPath
+        const currentChunkPath =
+          level === 0 ? node.path || node.name || '' : chunkPath || '';
 
         const children = node.children?.map((c, childIndex) =>
           convert(
@@ -178,6 +183,7 @@ const TreeMapInner: React.FC<
             baseColor,
             childIndex,
             node.children?.length || 0,
+            currentChunkPath,
           ),
         );
 
@@ -189,9 +195,12 @@ const TreeMapInner: React.FC<
 
         if (!val && node.value) val = node.value;
 
-        const nodeId = node.path
-          ? hashString(node.path)
-          : hashString(node.name || '');
+        // Include chunk path in nodeId for non-root nodes to ensure uniqueness across chunks
+        const nodeIdString =
+          level === 0
+            ? node.path || node.name || ''
+            : `${currentChunkPath}::${node.path || node.name || ''}`;
+        const nodeId = hashString(nodeIdString);
         const isHighlighted = highlightNodeId === nodeId;
 
         const baseColorRatio =
@@ -286,7 +295,7 @@ const TreeMapInner: React.FC<
 
       const data = treeData
         .map((item, index) =>
-          convert(item, index, 0, undefined, index, treeData.length),
+          convert(item, index, 0, undefined, index, treeData.length, undefined),
         )
         .filter(
           (item) =>
@@ -759,17 +768,26 @@ const AssetTreemapWithFilterInner: React.FC<{
     const regex = new RegExp(searchQuery, 'i');
     const results: Array<{ path: string; nodeId: number }> = [];
 
-    const collectMatchingPaths = (node: TreeNode) => {
+    const collectMatchingPaths = (node: TreeNode, chunkPath?: string) => {
+      // For chunk level (root of filteredTreeData), use its path/name as chunkPath
+      const currentChunkPath = chunkPath || node.path || node.name || '';
+
       if (node.path && regex.test(node.path)) {
-        const nodeId = hashString(node.path);
+        // Use the same nodeId calculation as in convert function
+        const nodeIdString = chunkPath
+          ? `${chunkPath}::${node.path}`
+          : node.path;
+        const nodeId = hashString(nodeIdString);
         results.push({ path: node.path, nodeId });
       }
       if (node.children) {
-        node.children.forEach(collectMatchingPaths);
+        node.children.forEach((child) =>
+          collectMatchingPaths(child, currentChunkPath),
+        );
       }
     };
 
-    filteredTreeData.forEach(collectMatchingPaths);
+    filteredTreeData.forEach((chunk) => collectMatchingPaths(chunk));
     return results;
   }, [filteredTreeData, searchQuery]);
 
