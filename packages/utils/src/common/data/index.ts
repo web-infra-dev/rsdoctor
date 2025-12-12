@@ -185,11 +185,12 @@ export class APIDataLoader {
           const { isRspack, hasSourceMap } = checkSourceMapSupport(configs);
           const { assets = [], chunks = [] } = res[0] || {};
           const { modules = [] } = res[1] || {};
-          const checkModules = (_module: SDK.ModuleData) => {
-            // TODO: Cannot fully filter for now, because there are cases where sourcemap is missing or parsing failed, so filtering is not possible currently. Consider modifying the concatenated module tag identification later
-            // if (module.size.parsedSize === 0) {
-            //   return false;
-            // }
+          const isLynx =
+            Array.isArray(configs) && configs[0]?.config?.name === 'lynx';
+          const checkModules = (module: SDK.ModuleData) => {
+            if (isLynx && module.size.parsedSize === 0) {
+              return false;
+            }
             return true;
           };
 
