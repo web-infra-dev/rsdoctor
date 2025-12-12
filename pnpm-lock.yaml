@@ -809,6 +809,8 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
+  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
+
   packages/core/compiled/axios: {}
 
   packages/document:
@@ -1026,11 +1028,15 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
+  packages/sdk/compiled/body-parser: {}
+
   packages/sdk/compiled/cors: {}
 
   packages/sdk/compiled/dayjs: {}
 
   packages/sdk/compiled/fs-extra: {}
+
+  packages/sdk/compiled/json-cycle: {}
 
   packages/types:
     dependencies:
