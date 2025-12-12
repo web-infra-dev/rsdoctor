@@ -140,7 +140,6 @@ async function doneHandler(
               nestedModules: true,
               cachedModules: true,
               orphanModules: true,
-              runtimeModules: true,
               optimizationBailout: true,
             });
       return cached;

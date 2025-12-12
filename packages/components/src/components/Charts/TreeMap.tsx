@@ -9,7 +9,7 @@ import {
   type TitleComponentOption,
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { Checkbox, Radio, Input } from 'antd';
+import { Alert, Checkbox, Radio, Input } from 'antd';
 import {
   LeftOutlined,
   RightOutlined,
@@ -107,25 +107,22 @@ function getLevelOption() {
     {
       itemStyle: {
         borderWidth: 0,
-        gapWidth: 2,
+        gapWidth: 4,
+        gapColor: '#ffffff',
       },
     },
     {
       itemStyle: {
         borderColorAlpha: [1, 0.3],
         borderWidth: 5,
-        gapWidth: 1,
+        gapWidth: 4,
+        gapColor: '#ffffff',
       },
       upperLabel: {
         show: true,
         color: '#ffffff',
         fontSize: 14,
         height: 30,
-      },
-      emphasis: {
-        itemStyle: {
-          borderColor: '#ccc',
-        },
       },
     },
   ];
@@ -147,6 +144,7 @@ const TreeMapInner: React.FC<
     const [option, setOption] = useState<TreeMapOption | null>(null);
     const chartRef = React.useRef<EChartsReactCore | null>(null);
     const chartDataRef = React.useRef<TreemapDataNode[]>([]);
+    const clickTimeoutRef = React.useRef<number | null>(null);
 
     useEffect(() => {
       if (forwardedRef && chartRef.current) {
@@ -196,9 +194,10 @@ const TreeMapInner: React.FC<
           : hashString(node.name || '');
         const isHighlighted = highlightNodeId === nodeId;
 
-        const baseColorRatio = level === 0 ? 1 : Math.max(0.2, 1 - level * 0.2);
+        const baseColorRatio =
+          level === 0 ? 1 : Math.max(0.35, 1 - level * 0.15);
         const baseBorderRatio =
-          level === 0 ? 1 : Math.max(0.3, 1 - level * 0.25);
+          level === 0 ? 1 : Math.max(0.4, 1 - level * 0.15);
 
         const siblingGradientRange = 0.15;
         const siblingRatio =
@@ -271,6 +270,15 @@ const TreeMapInner: React.FC<
               color: '#fff5f5',
             },
           };
+        } else {
+          // Keep the same color on hover/click to prevent color change
+          result.emphasis = {
+            itemStyle: {
+              color: nodeColor,
+              borderColor: nodeBorderColor,
+              borderWidth: isHighlighted ? 4 : 1,
+            },
+          };
         }
 
         return result;
@@ -290,16 +298,6 @@ const TreeMapInner: React.FC<
 
       setOption({
         color: TREE_COLORS,
-        title: {
-          text: 'Rsdoctor TreeMap',
-          left: 'center',
-          top: 10,
-          textStyle: {
-            fontSize: 16,
-            fontWeight: 'bold',
-            color: 'rgba(0, 0, 0, 0.8)',
-          },
-        },
         tooltip: {
           padding: 10,
           backgroundColor: '#fff',
@@ -396,6 +394,9 @@ const TreeMapInner: React.FC<
         series: [
           {
             type: 'treemap',
+            itemStyle: {
+              gapColor: '#ffffff',
+            },
             label: {
               show: true,
               formatter: '{b}',
@@ -439,11 +440,11 @@ const TreeMapInner: React.FC<
             },
             roam: true,
             nodeClick: false,
-            zoomToNodeRatio: 0.5,
+            zoomToNodeRatio: 0.7,
             animationDurationUpdate: 500,
             width: '100%',
             height: '100%',
-            top: 40,
+            top: -10,
             bottom: 30,
             left: 0,
             right: 0,
@@ -550,47 +551,51 @@ const TreeMapInner: React.FC<
     }, [centerNodeId, option]);
 
     useEffect(() => {
-      if (!chartRef.current || !option) return;
-
-      const chartInstance =
-        chartRef.current.getEchartsInstance() as unknown as EChartsType;
-      if (!chartInstance) return;
-
-      const handleDblClick = () => {
-        try {
-          chartInstance.dispatchAction({
-            type: 'treemapRootToNode',
-            seriesIndex: 0,
-          });
-        } catch (e) {}
-      };
-
-      chartInstance.on('dblclick', handleDblClick);
-
       return () => {
-        chartInstance.off('dblclick', handleDblClick);
+        if (clickTimeoutRef.current) {
+          window.clearTimeout(clickTimeoutRef.current);
+        }
       };
-    }, [option]);
+    }, []);
 
     return option ? (
       <div className={Styles['chart-container']} style={style}>
+        <Alert
+          message="If parsed size lacks detailed module information, you can enable sourceMap when RSDOCTOR = true. This is because Rsdoctor relies on SourceMap to obtain Parsed Size. Rspack provides SourceMap information to Rsdoctor by default without affecting the build output."
+          type="info"
+          showIcon
+          style={{ marginBottom: 0 }}
+        />
         <EChartsReactCore
           ref={chartRef}
           option={option}
           echarts={echarts}
           onEvents={{
             click: (params: ECElementEvent) => {
-              if (chartRef.current) {
-                const instance =
-                  chartRef.current.getEchartsInstance() as unknown as EChartsType;
-                const data = params?.data as TreemapDataNode | undefined;
-                if (instance && data?.id !== undefined) {
-                  instance.dispatchAction({
-                    type: 'treemapZoomToNode',
-                    seriesIndex: 0,
-                    targetNodeId: String(data.id),
-                  });
+              // Delay to differentiate from double-click; only zoom on single click
+              if (clickTimeoutRef.current) {
+                window.clearTimeout(clickTimeoutRef.current);
+              }
+              clickTimeoutRef.current = window.setTimeout(() => {
+                if (chartRef.current) {
+                  const instance =
+                    chartRef.current.getEchartsInstance() as unknown as EChartsType;
+                  const data = params?.data as TreemapDataNode | undefined;
+                  if (instance && data?.id !== undefined) {
+                    instance.dispatchAction({
+                      type: 'treemapZoomToNode',
+                      seriesIndex: 0,
+                      targetNodeId: String(data.id),
+                    });
+                  }
                 }
+              }, 180);
+            },
+            dblclick: (params: ECElementEvent) => {
+              // Double click: cancel pending single-click action and trigger analyze
+              if (clickTimeoutRef.current) {
+                window.clearTimeout(clickTimeoutRef.current);
+                clickTimeoutRef.current = null;
               }
               onChartClick?.(params);
             },
@@ -884,13 +889,20 @@ const AssetTreemapWithFilterInner: React.FC<{
             >
               All
             </Checkbox>
-            <div className={Styles['chunk-list']}>
+            <div
+              className={Styles['chunk-list']}
+              style={{ maxHeight: 180, overflowY: 'auto' }}
+            >
               {assetNames
                 .filter((name) =>
                   name.toLowerCase().includes(chunkSearchQuery.toLowerCase()),
                 )
                 .map((name) => (
-                  <div key={name} className={Styles['chunk-item']}>
+                  <div
+                    key={name}
+                    className={Styles['chunk-item']}
+                    style={{ height: 15, lineHeight: '15px' }}
+                  >
                     <Checkbox
                       checked={checkedAssets.includes(name)}
                       onChange={(e) => {
