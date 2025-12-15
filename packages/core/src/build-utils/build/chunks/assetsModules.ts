@@ -8,6 +8,7 @@ export async function getAssetsModulesData(
   bundleDir: string,
   sourceMapSets: Map<string, string>,
   hasParseBundle = true,
+  assetsWithoutSourceMap?: Set<string>,
 ) {
   return Chunks.getAssetsModulesData(
     moduleGraph,
@@ -15,5 +16,6 @@ export async function getAssetsModulesData(
     bundleDir,
     hasParseBundle ? { parseBundle } : {},
     sourceMapSets,
+    assetsWithoutSourceMap,
   );
 }

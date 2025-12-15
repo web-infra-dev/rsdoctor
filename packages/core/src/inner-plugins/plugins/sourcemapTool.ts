@@ -231,6 +231,11 @@ export async function handleAfterEmitAssets(
 ) {
   if ('rspack' in compilation.compiler) {
     _this.sourceMapSets = new Map();
+    if (!_this.assetsWithoutSourceMap) {
+      _this.assetsWithoutSourceMap = new Set<string>();
+    } else {
+      _this.assetsWithoutSourceMap.clear();
+    }
     time('ensureModulesChunkGraph.afterEmit.start');
     const assets = [...compilation.getAssets()] as Asset[];
     const skipSources = new Set<string>();
@@ -283,6 +288,15 @@ export async function handleAfterEmitAssets(
             }
           }
         } else {
+          // Mark asset as having no sourcemap for AST parsing fallback
+          // Only mark js/css files that don't have sourcemap
+          if (
+            assetName &&
+            typeof assetName === 'string' &&
+            (assetName.endsWith('.js') || assetName.endsWith('.css'))
+          ) {
+            _this.assetsWithoutSourceMap.add(assetName);
+          }
           continue;
         }
       } else {
