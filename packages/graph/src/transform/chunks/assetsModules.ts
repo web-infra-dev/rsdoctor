@@ -25,8 +25,40 @@ export async function getAssetsModulesData(
     parseBundle?: ParseBundle;
   },
   sourceMapSets: Map<string, string> = new Map(),
+  assetsWithoutSourceMap?: Set<string>,
 ) {
-  if (opts.parseBundle && sourceMapSets.size < 1) {
+  // Parse assets with sourcemap using sourcemap data
+  if (sourceMapSets.size > 0) {
+    time(`Start Parse bundle by sourcemap.`);
+    for (const [modulePath, codes] of sourceMapSets.entries()) {
+      const modules = moduleGraph.getModuleByFile(modulePath);
+      let gzipSize = undefined;
+      try {
+        if (codes && typeof codes === 'string' && codes.length > 0) {
+          const { gzipSync } = await import('node:zlib');
+          gzipSize = gzipSync(codes, { level: 9 }).length;
+        }
+      } catch {}
+      for (const module of modules) {
+        module?.setSize({
+          parsedSize: codes.length,
+          gzipSize,
+        });
+        module?.setSource({ parsedSource: codes });
+      }
+    }
+    timeEnd(`Start Parse bundle by sourcemap.`);
+  }
+
+  // Parse assets without sourcemap using AST parsing
+  // Use AST parsing if:
+  // 1. There are assets without sourcemap (assetsWithoutSourceMap is provided and not empty)
+  // 2. OR there's no sourcemap at all (sourceMapSets.size < 1) as fallback
+  const shouldUseASTParsing =
+    opts.parseBundle &&
+    ((assetsWithoutSourceMap && assetsWithoutSourceMap.size > 0) ||
+      sourceMapSets.size < 1);
+  if (shouldUseASTParsing) {
     time(`Start Parse bundle by AST.`);
     const { parseBundle = () => ({}) as ReturnType<ParseBundle> } = opts || {};
 
@@ -42,6 +74,16 @@ export async function getAssetsModulesData(
       parsedModules = {};
 
       for (const asset of assets) {
+        // If assetsWithoutSourceMap is provided, only parse assets without sourcemap
+        // Otherwise (fallback case), parse all assets
+        if (
+          assetsWithoutSourceMap &&
+          assetsWithoutSourceMap.size > 0 &&
+          !assetsWithoutSourceMap.has(asset.path)
+        ) {
+          continue;
+        }
+
         const assetFile = path.join(bundleDir, asset.path);
         let bundleInfo: ReturnType<ParseBundle>;
         try {
@@ -76,26 +118,6 @@ export async function getAssetsModulesData(
       }
     }
     timeEnd(`Start Parse bundle by AST.`);
-  } else {
-    time(`Start Parse bundle by sourcemap.`);
-    for (const [modulePath, codes] of sourceMapSets.entries()) {
-      const modules = moduleGraph.getModuleByFile(modulePath);
-      let gzipSize = undefined;
-      try {
-        if (codes && typeof codes === 'string' && codes.length > 0) {
-          const { gzipSync } = await import('node:zlib');
-          gzipSize = gzipSync(codes, { level: 9 }).length;
-        }
-      } catch {}
-      for (const module of modules) {
-        module?.setSize({
-          parsedSize: codes.length,
-          gzipSize,
-        });
-        module?.setSource({ parsedSource: codes });
-      }
-    }
-    timeEnd(`Start Parse bundle by sourcemap.`);
   }
 }
 
