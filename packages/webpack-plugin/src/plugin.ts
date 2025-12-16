@@ -241,14 +241,6 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
       }
 
       // Also dispose if brief mode with JSON only output
-      if (
-        this.options.output.mode === SDK.IMode[SDK.IMode.brief] &&
-        Array.isArray(this.options.output.options?.type) &&
-        this.options.output.options.type.length === 1 &&
-        this.options.output.options.type[0] === 'json'
-      ) {
-        await this.sdk.dispose();
-      }
     } catch (e) {
       console.error(`[Rsdoctor] Webpack plugin this.done error`, e);
     }
