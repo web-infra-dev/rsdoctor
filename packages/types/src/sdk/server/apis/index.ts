@@ -79,6 +79,7 @@ export enum API {
   /** Alerts API */
   GetPackageRelationAlertDetails = '/api/alerts/details/package/relation',
   GetOverlayAlerts = '/api/alerts/overlay',
+  GetBundleAlerts = '/api/alerts/bundle',
 
   /** BundleDiff API */
   BundleDiffManifest = '/api/bundle_diff/manifest.json',

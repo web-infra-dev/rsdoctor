@@ -18,6 +18,11 @@ export interface AlertsAPIResponse {
    * get the alerts list which use to display in overlay at the client page
    */
   [API.GetOverlayAlerts]: OverlayRuleStoreData[];
+
+  /**
+   * get the alerts list which use to display in category bundle at the client page
+   */
+  [API.GetBundleAlerts]: OverlayRuleStoreData[];
 }
 
 export interface AlertsAPIRequestBody {
