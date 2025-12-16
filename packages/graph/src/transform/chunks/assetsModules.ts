@@ -35,7 +35,6 @@ export async function getAssetsModulesData(
       let gzipSize = undefined;
       try {
         if (codes && typeof codes === 'string' && codes.length > 0) {
-          const { gzipSync } = await import('node:zlib');
           gzipSize = gzipSync(codes, { level: 9 }).length;
         }
       } catch {}
