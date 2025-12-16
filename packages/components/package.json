@@ -46,7 +46,7 @@
     "@rsbuild/plugin-check-syntax": "1.5.0",
     "@rsbuild/plugin-react": "^1.4.2",
     "@rsbuild/plugin-sass": "^1.4.0",
-    "@rsbuild/plugin-svgr": "^1.2.2",
+    "@rsbuild/plugin-svgr": "^1.2.3",
     "@types/node": "^22.8.1",
     "@types/path-browserify": "1.0.3",
     "@types/react": "^18.3.27",
