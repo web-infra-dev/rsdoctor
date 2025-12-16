@@ -9,7 +9,7 @@ import { SDK } from '@rsdoctor/types';
  * @param bundleDir The directory containing the bundle files
  * @param sourceMapSets Map of module paths to their source code extracted from sourcemaps
  * @param hasParseBundle Whether to enable AST-based bundle parsing
- * @param assetsWithoutSourceMap Set of asset paths that don't have sourcemaps and should be parsed using AST parsing
+ * @param [assetsWithoutSourceMap] Set of asset paths that don't have sourcemaps and should be parsed using AST parsing
  */
 export async function getAssetsModulesData(
   moduleGraph: SDK.ModuleGraphInstance,
