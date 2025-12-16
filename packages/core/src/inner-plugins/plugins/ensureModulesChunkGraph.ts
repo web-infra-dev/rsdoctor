@@ -212,6 +212,7 @@ async function doneHandler(
     _this.chunkGraph!,
     shouldParseBundle,
     _this.sourceMapSets,
+    _this.assetsWithoutSourceMap,
   );
 
   logger.debug(
@@ -281,6 +282,7 @@ async function getModulesInfos(
   chunkGraph: SDK.ChunkGraphInstance,
   parseBundle: boolean,
   sourceMapSets: Map<string, string>,
+  assetsWithoutSourceMap?: Set<string>,
 ) {
   if (!moduleGraph) {
     return;
@@ -292,6 +294,7 @@ async function getModulesInfos(
       compiler.outputPath,
       sourceMapSets,
       parseBundle,
+      assetsWithoutSourceMap,
     );
   } catch (e) {}
 }
