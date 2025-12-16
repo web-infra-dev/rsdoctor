@@ -54,7 +54,7 @@ async function rspackCompile(_tapName: string, compile: any) {
         output: {
           mode: 'brief',
           options: {
-            type: ['json'],
+            type: ['json', 'html'],
           },
         },
         port: 8681,
