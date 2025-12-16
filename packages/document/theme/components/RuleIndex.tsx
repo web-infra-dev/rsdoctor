@@ -2,7 +2,7 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Rule } from '@rsdoctor/types';
 import styles from './RuleIndex.module.scss';
-import { getCustomMDXComponent } from '@rspress/core/theme';
+import { getCustomMDXComponent } from '@rspress/core/theme-original';
 
 const RuleIndex = () => {
   const rules = Object.values(Rule.RuleErrorMap);

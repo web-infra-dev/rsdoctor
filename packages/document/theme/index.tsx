@@ -1,4 +1,4 @@
-import { Layout as BaseLayout } from '@rspress/core/theme';
+import { Layout as BaseLayout } from '@rspress/core/theme-original';
 import { NavIcon } from '@rstack-dev/doc-ui/nav-icon';
 import { HomeLayout } from './pages';
 import {
@@ -28,4 +28,4 @@ const Search = () => {
 
 export { Layout, HomeLayout, Search };
 // eslint-disable-next-line import/export
-export * from '@rspress/core/theme';
+export * from '@rspress/core/theme-original';
