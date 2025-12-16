@@ -23,7 +23,7 @@ import { Process } from '@rsdoctor/utils/build';
 import { Loader } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
 import type { Compiler } from 'webpack';
-import { pluginTapName, pluginTapPostOptions } from './constants';
+import { pluginTapName, pluginTapPostOptions, pkg } from './constants';
 import path from 'path';
 
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
@@ -79,6 +79,9 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   apply(compiler: unknown): unknown;
 
   apply(compiler: Compiler) {
+    logger.greet(`
+        \nRsdoctor v${pkg.version}\n`);
+
     // bootstrap sdk in apply()
     // avoid to has different sdk instance in one plugin, because of webpack-chain toConfig() will new every webpack plugins.
     if (!this._bootstrapTask) {
@@ -230,11 +233,21 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
         !this.options.disableClientServer
       ) {
         // Use extracted common function to handle brief mode
-        handleBriefModeReport(
+        await handleBriefModeReport(
           this.sdk,
           this.options,
           this.options.disableClientServer,
         );
+      }
+
+      // Also dispose if brief mode with JSON only output
+      if (
+        this.options.output.mode === SDK.IMode[SDK.IMode.brief] &&
+        Array.isArray(this.options.output.options?.type) &&
+        this.options.output.options.type.length === 1 &&
+        this.options.output.options.type[0] === 'json'
+      ) {
+        await this.sdk.dispose();
       }
     } catch (e) {
       console.error(`[Rsdoctor] Webpack plugin this.done error`, e);
