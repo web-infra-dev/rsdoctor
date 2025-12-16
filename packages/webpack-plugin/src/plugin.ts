@@ -223,7 +223,13 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
         `${Process.getMemoryUsageMessage()}, '[After Write Manifest]'`,
       );
 
-      if (this.options.disableClientServer) {
+      if (
+        this.options.disableClientServer ||
+        (this.options.output.mode === SDK.IMode[SDK.IMode.brief] &&
+          Array.isArray(this.options.output.options?.type) &&
+          this.options.output.options.type.length === 1 &&
+          this.options.output.options.type[0] === 'json')
+      ) {
         await this.sdk.dispose();
         logger.debug(
           `${Process.getMemoryUsageMessage()}, '[After SDK Dispose]'`,
