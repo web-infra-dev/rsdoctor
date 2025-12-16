@@ -27,7 +27,7 @@ import {
   SDK,
 } from '@rsdoctor/types';
 import path from 'path';
-import { pluginTapName, pluginTapPostOptions } from './constants';
+import { pluginTapName, pluginTapPostOptions, pkg } from './constants';
 
 import {
   handleBriefModeReport,
@@ -96,6 +96,9 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   apply(compiler: Plugin.BaseCompilerType<'rspack'>) {
     time('RsdoctorRspackPlugin.apply');
     try {
+      logger.greet(`
+        \nRsdoctor v${pkg.version}\n`);
+
       // bootstrap sdk in apply()
       // avoid to has different sdk instance in one plugin, because of webpack-chain toConfig() will new every webpack plugins.
       if (!this._bootstrapTask) {
@@ -248,7 +251,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         // If it's brief mode, open the static report page instead of the local server page.
         if (this.options.output.mode === SDK.IMode[SDK.IMode.brief]) {
           // Use extracted common function to handle brief mode
-          handleBriefModeReport(
+          await handleBriefModeReport(
             this.sdk,
             this.options,
             this.options.disableClientServer,
@@ -258,7 +261,13 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         }
       }
 
-      if (this.options.disableClientServer) {
+      if (
+        this.options.disableClientServer ||
+        (this.options.output.mode === SDK.IMode[SDK.IMode.brief] &&
+          Array.isArray(this.options.output.options?.type) &&
+          this.options.output.options.type.length === 1 &&
+          this.options.output.options.type[0] === 'json')
+      ) {
         await this.sdk.dispose();
       }
     } finally {
