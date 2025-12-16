@@ -51,9 +51,6 @@ export async function handleBriefModeReport(
       console.log(
         `${chalk.green('[RSDOCTOR] generated JSON data')}: ${jsonFilePath}`,
       );
-
-      // Close server after printing JSON file location
-      await sdk.dispose();
     } else {
       // HTML output (with or without JSON): print HTML path and open browser
       const htmlOptions =
