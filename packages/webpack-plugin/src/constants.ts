@@ -21,3 +21,5 @@ export const internalPluginTapPostOptions = (namespace: string): Tap => ({
   name: `${pluginTapName}:${namespace}`,
   stage: 1000,
 });
+
+export const pkg = require('../package.json');
