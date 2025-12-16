@@ -7,8 +7,8 @@
     "directory": "packages/ai"
   },
   "license": "MIT",
-  "main": "./dist/server/index.js",
-  "types": "./dist/server/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "bin"

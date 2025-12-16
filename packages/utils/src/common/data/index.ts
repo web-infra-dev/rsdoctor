@@ -405,9 +405,18 @@ export class APIDataLoader {
 
       case SDK.ServerAPI.API.GetOverlayAlerts:
         return this.loader.loadData('errors').then((res) => {
-          return (res || []).filter(
+          const results = (res || []).filter(
             (e) => e.code === Rule.RuleMessageCodeEnumerated.Overlay,
-          ) as R;
+          ) as Rule.OverlayRuleStoreData[];
+          return results as R;
+        });
+
+      case SDK.ServerAPI.API.GetBundleAlerts:
+        return this.loader.loadData('errors').then((res) => {
+          const results = (res || []).filter(
+            (e) => e.category === Rule.RuleMessageCategory.Bundle,
+          ) as Rule.OverlayRuleStoreData[];
+          return results as R;
         });
 
       /** Bundle Diff API */
@@ -523,8 +532,8 @@ export class APIDataLoader {
 
       case SDK.ServerAPI.API.GetChunkGraphAI:
         return this.loader.loadData('chunkGraph').then((res) => {
-          const { chunks = [] } = res || {};
-          const filteredChunks = chunks.map(({ modules, ...rest }) => rest);
+          const { assets = [] } = res || {};
+          const filteredChunks = assets.map(({ content, ...rest }) => rest);
           return filteredChunks as R;
         });
 
