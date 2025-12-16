@@ -138,9 +138,9 @@ export const getModuleById = async (
   moduleId: string,
 ): Promise<{
   module: {
-    id: string;
-    renderId: string;
-    webpackId: string | number;
+    id: number;
+    renderId?: string;
+    webpackId: string;
     path: string;
     isPreferSource: boolean;
     imported: number[];
@@ -216,11 +216,11 @@ export const getPackageDependency = async () => {
 };
 
 export const getRuleInfo = async () => {
-  return await sendRequest(SDK.ServerAPI.API.GetOverlayAlerts, {});
+  return await sendRequest(SDK.ServerAPI.API.GetBundleAlerts, {});
 };
 
 export const getDuplicatePackages = async () => {
-  const ruleInfo = await sendRequest(SDK.ServerAPI.API.GetOverlayAlerts, {});
+  const ruleInfo = await sendRequest(SDK.ServerAPI.API.GetBundleAlerts, {});
 
   if (!ruleInfo) {
     return {
@@ -233,9 +233,7 @@ export const getDuplicatePackages = async () => {
 
   // Assuming ruleInfo contains a 'rules' array
   // @ts-ignore
-  const e1001Rule = ruleInfo?.find((rule) =>
-    rule.description?.includes('E1001'),
-  );
+  const e1001Rule = ruleInfo?.find((rule) => rule.code?.includes('E1001'));
 
   if (e1001Rule) {
     return {
