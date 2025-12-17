@@ -1,10 +1,10 @@
-# Module dependency analysis
+# Module analysis
 
 ## Introduction
 
-**Rsdoctor** provides the `Module Imported Chain Analysis` module, which is mainly used to analyze the dependency tree of a specific module, i.e. the modules that depend on it, similar to [Webpack's stats.reasons](https://webpack.js.org/configuration/stats/#statsreasons).
+**Rsdoctor** provides the `Module Reference Chain Analysis` module, which is mainly used to analyze the dependency tree of a specific Module, i.e., which modules depend on it, similar to [Webpack's stats.reasons](https://webpack.js.org/configuration/stats/#statsreasons).
 
-In this section, you can analyze the imported chain of a module. If you have the need to split the package or want to see why a certain module is being imported, you can quickly and clearly locate the reference chain through the `Module Imported Chain Analysis`.
+In this module, you can analyze the `Module` reference chain. If you have the need to split packages or want to see why a certain `Module` is being imported, you can quickly and clearly locate the reference chain through `Module Reference Chain Analysis`.
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/module-analysis-tree.png"
@@ -14,26 +14,21 @@ In this section, you can analyze the imported chain of a module. If you have the
 
 ### This section's entry
 
-Clicking on an **Assets** in the **[Bundle Size](./bundle-size)** page will display the `「Module Tree」` on the right side. Each **Module** will have the following icon next to it, click on it to view the imported chain of that **Module**.
+After clicking on an **Assets** in the `「Bundle Size」` page, the `「Module Tree」` will be displayed on the right side. Click on the **Module** to view the reference chain relationship diagram of that **Module**.
 
-<img
-  src="https://assets.rspack.rs/others/assets/rsdoctor/module-analysis-entry.png"
-  height="300px"
-  width="440px"
-  style={{ margin: 'auto' }}
-/>
+<img src="https://assets.rspack.rs/others/assets/rsdoctor/bailout-reason.gif" />
 
 ### Glossary
 
-- **`Reasons`**: As the name suggests, it means the reasons why a `Module` exists. Reasons indicate which other `Module`s import this `Module`, and the entire `Reasons Tree` represents the upstream reference chain of this `Module`, including both direct and indirect parent `Module`s. [Similar to Webpack's stats.reasons.](https://webpack.js.org/configuration/stats/#statsreasons)
+- **`Reasons`**: As the name suggests, it means the `[reason]` why a `Module` exists. Reasons indicate which `Module`s import this `Module`, and the entire `Reasons Tree` represents the upstream reference chain of this `Module`, including both direct and indirect parents. [Similar to Rspack's stats.reasons.](https://webpack.js.org/configuration/stats/#statsreasons)
 - **`Dependencies`**: The `Module`s that this `Module` depends on.
-- **`Bailout Reason`** : The reason why this `Module` failed Tree Shaking.
+- **`Bailout Reason`**: The reason why this `Module` failed Tree Shaking.
 
 ## Reasons dependency tree
 
 ### Introduction
 
-The `Reasons Tree` displays the dependency chain of this `Module`, showing which other `Modules` directly or indirectly import it. In this dependency tree, you can view the `Bundled Size` of the `Modules` along the dependency chain. You can also click the right arrow `>` to navigate to the `Module Dependency Analysis` page for that specific `Module`.
+The `Reasons Tree` displays the dependency chain of this `Module`, showing which other `Modules` directly or indirectly import it. In this dependency tree, you can view the `Bundled Size` of the `Modules` along the dependency chain. You can also click the right arrow `>` to navigate to the `Module Reference Chain Analysis` page for that specific `Module`.
 
 - **Parent-child relationship in the dependency tree**: The parent node file is the one that is depended upon by the child node file and is therefore bundled into the output. Similarly, the grandchild node file is depended upon by the child node and is bundled into the output, and so on.
 
@@ -47,7 +42,7 @@ The `Reasons Tree` displays the dependency chain of this `Module`, showing which
 
 - The `Concatenated` tag:
   - The `Concatenated` tag indicates that the module is a concatenated sub-module. Hover over it to see which main module it is aggregated into. This type of aggregated module cannot be further unpacked, so the specific `Bundled Size` cannot be determined, only the size of the entire concatenated module can be known.
-  - Glossary: A **concatenated module** is when multiple modules are promoted or **concatenated into a closure** during packaging. For an explanation of `Concatenated Module`, refer to the [Glossary](/guide/usage/bundle-size#glossary).
+  - Glossary: A **concatenated module** is when multiple modules are promoted or **concatenated into a closure** during packaging. For an explanation of `Concatenated Module`, refer to the [Glossary](/guide/usage/bundle-size#-glossary).
 
 - The `!` tag, hover over it to display the detailed path of the module.
 

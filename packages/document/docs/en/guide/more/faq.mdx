@@ -2,7 +2,7 @@
 
 ## How to use only a specific feature of Rsdoctor?
 
-When we **only need** the [bundle size analysis](../usage/bundle-size) feature of Rsdoctor, we can configure the corresponding [Features](/config/options/options) option when integrating the Rsdoctor plugin. Refer to the code snippet below:
+When we **only need** to use Rsdoctor's [Bundle Size](../usage/bundle-size) bundle size analysis feature, we can configure the corresponding [Features](/config/options/options) option when integrating the Rsdoctor plugin. Refer to the code snippet below:
 
 ```ts
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
@@ -23,7 +23,7 @@ Furthermore, the asynchronous logic within loader functions cannot be recognized
   style={{ width: '250px' }}
 />
 
-Therefore, the loader timing provided by Rsdoctor is an **estimate**. The timing data we provide is adapted to handle Case 1 and Case 2 from the diagram. As for Case 3, we are still exploring solutions.
+Therefore, the loader timing provided by Rsdoctor is an **estimated** value. The timing data we provide is adapted to handle scenario 1 and scenario 2 from the diagram. As for scenario 3, we are still exploring solutions.
 
 ## `out of memory` error when using `Rsdoctor` for building
 
@@ -31,22 +31,21 @@ If you encounter an `out of memory` error, you can try the following two methods
 
 ### Method 1
 
-Increase the memory limit of Node, for example: NODE_OPTIONS=--max-old-space-size=8096.
+Increase the Node.js memory limit, for example: `NODE_OPTIONS=--max-old-space-size=8096`.
 
 ### Method 2
 
-You can add the `lite` field to the `features` array to use the lite mode. Additionally, since the `features` array overrides the default configuration when it is an array, you should:
+You can add the `lite` field to the `features` array to use the lite mode. Note: Since the `features` array overrides the default configuration when it is an array, you need to manually add the required features:
 
-- Add `loader` and `plugins` to the `features` array if you need build-time analysis to enable the analysis of loader and plugin timings.
+- If you need build-time analysis, add `loader` and `plugins` to the `features` array to enable timing analysis for `loader` and `plugins`.
+- If you need bundle analysis, add `bundle` to the `features` array to enable bundle analysis.
 
-- Add `bundle` to the `features` array if you need bundle analysis to enable the analysis of build artifacts.
-
-The following example enables the lite mode, build-time analysis, and bundle analysis:
+The following example enables the lite mode along with build-time and bundle analysis:
 
 ```js
 const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 
-// adding the plugin to your configuration
+// Add the plugin to your configuration
 module.exports = {
   // ...
   plugins: [
@@ -58,8 +57,53 @@ module.exports = {
 };
 ```
 
-- Cause: During the build process, the source code information is stored, which exceeds the memory limit. Enabling the `lite` mode can alleviate this issue.
-- Difference: The difference between the **lite mode** and the **normal mode** is that the **lite mode** no longer stores the **source code information**, only the **bundled code** is stored. Additionally, the code displayed in the analysis report will only consist of the **bundled code**.
+- **Cause**: During the build process, source code information is stored, which exceeds the memory limit. Enabling the `lite` mode can alleviate this issue.
+- **Difference**: The difference between the `lite` mode and the normal mode is that the `lite` mode no longer stores **source code information**, only **bundled code** is stored. The code displayed in the analysis report will also **only show bundled code**.
+
+## No Bundled/Parsed Size for Modules in bundle analysis?
+
+### Issue Description
+
+The difference between `Source Size` and `Bundled Size`:
+
+- **Source Size**: The original size of the Module source code file (marked in cyan in the image below).
+- **Bundled Size**: The final code size of the Module after bundling and minification (marked in blue in the image below).
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-after.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+### Solution
+
+If you only have Source Size but no Bundled Size, or **there is no Module drill-down in Tree Map** (i.e., no Module chunks), you need to **manually enable SourceMap**. **Note: Only enable SourceMap when Rsdoctor is enabled, do not affect production builds.**
+
+- The following scenario requires manually enabling SourceMap:
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
+  width="600px"
+  height="300px"
+  style={{ margin: 'auto' }}
+/>
+
+Configuration example:
+
+```js rspack.config.mjs
+export default {
+  devtool: 'cheap-source-map', // or other devtool configuration
+};
+```
+
+Rsdoctor supports the following SourceMap configurations:
+
+- source-map
+- hidden-source-map
+- inline-source-map
+- cheap-source-map
+- cheap-module-source-map
+- nosources-source-map
 
 ## Bundle analysis page no `Bundled Size`?
 
@@ -79,7 +123,7 @@ When [optimization.concatenateModules](https://rspack.rs/config/optimization#opt
 ### Solution
 
 :::danger
-**Important Note:** You must check the `RSDOCTOR` environment variable and not modify ConcatenateModules directly! ConcatenateModules is enabled by default in production environments, and disabling it in production builds will increase the bundle size.
+**Important Note:** You must check the `RSDOCTOR` environment variable and not modify ConcatenateModules directly! ConcatenateModules is enabled by default in production environments. Disabling it in production builds will increase the bundle size.
 :::
 
 When enabling Rsdoctor analysis, set **concatenateModules to false** as shown below. **Note: Disabling `concatenateModules` will slightly increase bundle size, creating differences from production builds.**

@@ -68,7 +68,10 @@ name: Bundle Analysis
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main # 或者其他目标分支
 
 jobs:
   bundle-analysis:
