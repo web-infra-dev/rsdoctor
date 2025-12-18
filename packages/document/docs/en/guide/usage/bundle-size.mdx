@@ -39,6 +39,7 @@ Tree Graph is a **file tree-based** build artifact analysis view that helps deve
 - **`Module`**: Multiple Modules combine to form a Chunk. For more information about Module types, please refer to [Rspack Modules](https://www.rspack.rs/api/modules.html) and [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module).
 - **`Source Size`**: The original size of the file, before any transformations and minification.
 - **`Bundle Size`**: The final output size of the files. If you enabled minification, this value shows the minified size.
+- **`Gzip Size`**: The size of the file after gzip compression.
 - **`Package Count`**: The number of third-party packages.
 - **`Initial Chunk`**: **initial (initialization)** is the main Chunk of the entry point. This Chunk contains all the modules specified by the entry point and their dependencies, unlike the **Chunk** resources for "**on-demand loading**".
   - For more information about Initial Chunk, please refer to [Initial Chunk Introduction](https://webpack.js.org/concepts/under-the-hood/#chunks).

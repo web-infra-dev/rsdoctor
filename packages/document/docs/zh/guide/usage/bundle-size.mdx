@@ -39,6 +39,7 @@ Tree Graph 是一种**基于文件树形式**的构建产物分析视图，能�
 - **`Module`**：多个 Module 组合成了 Chunk。有关 Module 类型的详细信息，请参阅 [Rspack Modules](https://www.rspack.rs/api/modules.html) 和 [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module)。
 - **`Source Size`**：文件的原始大小，未经过任何转换和压缩。
 - **`Bundle Size`**：文件最终输出的大小。如果开启了压缩，这个值代表压缩后的大小。
+- **`Gzip Size`**：文件经过 gzip 压缩后的大小。
 - **`Package Count`**：第三方包的数量。
 - **`Initial Chunk`**: **initial(初始化)** 是入口起点的主 Chunk，该 Chunk 包含入口起点指定的所有模块及其依赖项，与「**按需加载**」的 **Chunk** 资源不同。
   - 有关 Initial Chunk 的详细信息，请参阅 [Initial Chunk 介绍](https://webpack.js.org/concepts/under-the-hood/#chunks)。
