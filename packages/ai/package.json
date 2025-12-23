@@ -24,7 +24,7 @@
     "client": "npm run build && node dist/mcp/index.js"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "1.24.3",
+    "@modelcontextprotocol/sdk": "1.25.1",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rstest/core": "0.7.5",
