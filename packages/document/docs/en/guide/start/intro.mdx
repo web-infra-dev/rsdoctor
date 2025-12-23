@@ -29,17 +29,17 @@ Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: 
   - Build artifact support for resource lists and module dependencies, etc.
   - Build-time analysis supports Loader, Plugin, and Resolver building process analysis.
   - Build rules support duplicate package detection and ES Version Check, etc.
-- **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
+- **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom build scan rules based on Rsdoctor's build data.
 
 ## 🛠️ Introduction
 
 ### ⭐️ Overview
 
-- The overview page (i.e. the home page) can know **project configuration, diagnostic information, compilation information, and product status**.
+- The overview page (i.e., the home page) displays **project configuration, diagnostic information, compilation information, and artifact status**.
 
 ![Overall](https://assets.rspack.rs/others/assets/rsdoctor/project-overall-1.jpg)
 
-- In addition to the project overview, we also provide diagnostic functions, including compilation diagnostics and duplicate packages diagnostics. If your compilation and products hit the diagnostic rules we defined, the corresponding warning alerts will appear on the tool's home page, **where you can see the detailed reference path of duplicate packages**:
+- In addition to the project overview, we also provide diagnostic modules, including compilation diagnostics and duplicate package diagnostics. If your compilation and artifacts match the diagnostic rules we defined, the corresponding warning modules will appear on the tool's home page, **where you can view the detailed reference paths of duplicate packages**:
 
 ![Overall-Alerts](https://assets.rspack.rs/others/assets/rsdoctor/overall-alerts.png)
 
@@ -76,7 +76,7 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
 
 #### Resolve analysis
 
-- This module mainly provides path data and estimated time consumption for module resolution in a single file within the project. Rspack does not currently support this module.
+- This module mainly provides path data and estimated time consumption for module resolution in a single file within the project. Rspack temporarily does not support this module.
 
 <p>
   <img
@@ -106,15 +106,15 @@ Provides corresponding data and analysis functions for **Loaders, Plugins, and M
 
 ### ⭐️ Bundle diff
 
-::: tip
-Support in progress...
-:::
+Using the Bundle Diff function provided by Rsdoctor, you can see the changes in resource size, duplicate packages, Packages, and other data in the artifacts, as well as the size of module files and code changes in each resource.
 
-Using the bundle diff function provided by Rsdoctor, you can see the changes in **the size of resources, duplicate packages, Packages and other data in the product**, as well as **the size of module files and code changes in each resource**.
+> For more information, refer to the [Bundle Diff](/guide/usage/bundle-diff) documentation.
 
 | ![bundle-diff-1](https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-1.png) | ![bundle-diff-2](https://assets.rspack.rs/others/assets/rsdoctor/bundle-diff-2.png) |
 | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 
 ## 🧑‍💻 Community
 
-Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rstack team and users are active there, and we're always looking for contributions.
+Welcome to join our [Discord](https://discord.gg/wrBPBT6rkM) channel! The Rstack team and users are active there, and we're always looking for contributions.
+
+You can also join the [Feishu Group](https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=3c3vca77-bfc0-4ef5-b62b-9c5c9c92f1b4) to chat with everyone.
