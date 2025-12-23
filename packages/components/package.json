@@ -50,7 +50,7 @@
     "@types/node": "^22.8.1",
     "@types/path-browserify": "1.0.3",
     "@types/react": "^18.3.27",
-    "@types/react-highlight-words": "^0.20.0",
+    "@types/react-highlight-words": "^0.20.1",
     "@types/url-parse": "1.4.11",
     "react": "18.3.1",
     "typescript": "^5.9.2"
