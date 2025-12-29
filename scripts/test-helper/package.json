@@ -28,7 +28,7 @@
     "@rsbuild/core": "^1.5.17",
     "@rspack/core": "1.6.8",
     "@types/node": "^22.8.1",
-    "es-toolkit": "^1.41.0",
+    "es-toolkit": "^1.43.0",
     "memfs": "4.49.0",
     "typescript": "^5.9.2",
     "upath": "2.0.1",

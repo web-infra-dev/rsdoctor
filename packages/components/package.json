@@ -68,7 +68,7 @@
     "dayjs": "1.11.19",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.5",
-    "es-toolkit": "^1.41.0",
+    "es-toolkit": "^1.43.0",
     "i18next": "22.0.4",
     "monaco-editor": "0.49.0",
     "path-browserify": "1.0.1",
