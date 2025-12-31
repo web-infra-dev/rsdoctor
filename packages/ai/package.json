@@ -27,7 +27,7 @@
     "@modelcontextprotocol/sdk": "1.25.1",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "@rstest/core": "0.7.5",
+    "@rstest/core": "0.7.7",
     "@types/node": "^22.8.1",
     "prebundle": "1.4.2",
     "socket.io-client": "4.8.1",
