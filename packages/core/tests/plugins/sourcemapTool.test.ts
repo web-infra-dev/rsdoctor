@@ -489,4 +489,347 @@ describe('sourcemapTool', () => {
       expect(sourceMap).toBe('console.log("test");');
     });
   });
+
+  describe('asset no map - assetsWithoutSourceMap tracking', () => {
+    it('should add JS asset to assetsWithoutSourceMap when no sourcemap exists', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            filename: '[name].[contenthash].js',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'bundle.abc123.js',
+            source: {
+              source: () => 'console.log("test");\n',
+              name: 'bundle.abc123.js',
+              sourceAndMap: () => ({
+                source: 'console.log("test");\n',
+                map: null, // No inline source map
+              }),
+            },
+            info: {
+              related: {}, // No source map reference
+            },
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+
+      // The asset should be marked as having no sourcemap
+      expect(plugin.assetsWithoutSourceMap).toBeDefined();
+      expect(plugin.assetsWithoutSourceMap.has('bundle.abc123.js')).toBe(true);
+      expect(plugin.assetsWithoutSourceMap.size).toBe(1);
+      // No sourcemap data should be collected
+      expect(plugin.sourceMapSets.size).toBe(0);
+    });
+
+    it('should add CSS asset to assetsWithoutSourceMap when no sourcemap exists', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {},
+        },
+        getAssets: () => [
+          {
+            name: 'styles.css',
+            source: {
+              source: () => '.header { color: red; }\n',
+              name: 'styles.css',
+              sourceAndMap: () => ({
+                source: '.header { color: red; }\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {},
+            },
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+
+      expect(plugin.assetsWithoutSourceMap).toBeDefined();
+      expect(plugin.assetsWithoutSourceMap.has('styles.css')).toBe(true);
+      expect(plugin.assetsWithoutSourceMap.size).toBe(1);
+      expect(plugin.sourceMapSets.size).toBe(0);
+    });
+
+    it('should NOT add asset to assetsWithoutSourceMap when inline sourcemap exists', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = createMockCompilation();
+
+      await handleAfterEmitAssets(compilation, plugin);
+
+      // Asset has inline sourcemap, should not be in assetsWithoutSourceMap
+      expect(plugin.assetsWithoutSourceMap).toBeDefined();
+      expect(plugin.assetsWithoutSourceMap.has('main.js')).toBe(false);
+      expect(plugin.assetsWithoutSourceMap.size).toBe(0);
+      // Sourcemap data should be collected
+      expect(plugin.sourceMapSets.size).toBe(1);
+    });
+
+    it('should NOT add asset to assetsWithoutSourceMap when external sourcemap file exists', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {},
+        },
+        getAssets: () => [
+          {
+            name: 'app.js',
+            source: {
+              source: () => 'console.log("app");\n',
+              name: 'app.js',
+              sourceAndMap: () => ({
+                source: 'console.log("app");\n',
+                map: null, // No inline map
+              }),
+            },
+            info: {
+              related: {
+                sourceMap: 'app.js.map', // But has external map reference
+              },
+            },
+          },
+          {
+            name: 'app.js.map',
+            source: {
+              source: () => JSON.stringify(mockJsMap),
+              name: 'app.js.map',
+            },
+            info: {},
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+
+      // Asset has external sourcemap file, should not be in assetsWithoutSourceMap
+      expect(plugin.assetsWithoutSourceMap).toBeDefined();
+      expect(plugin.assetsWithoutSourceMap.has('app.js')).toBe(false);
+      expect(plugin.assetsWithoutSourceMap.size).toBe(0);
+      // Sourcemap data should be collected from external file
+      expect(plugin.sourceMapSets.size).toBe(1);
+    });
+
+    it('should track multiple assets without sourcemap', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {},
+        },
+        getAssets: () => [
+          {
+            name: 'main.js',
+            source: {
+              source: () => 'console.log("main");\n',
+              name: 'main.js',
+              sourceAndMap: () => ({
+                source: 'console.log("main");\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {},
+            },
+          },
+          {
+            name: 'vendor.js',
+            source: {
+              source: () => 'console.log("vendor");\n',
+              name: 'vendor.js',
+              sourceAndMap: () => ({
+                source: 'console.log("vendor");\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {},
+            },
+          },
+          {
+            name: 'styles.css',
+            source: {
+              source: () => '.app { color: blue; }\n',
+              name: 'styles.css',
+              sourceAndMap: () => ({
+                source: '.app { color: blue; }\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {},
+            },
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+
+      expect(plugin.assetsWithoutSourceMap).toBeDefined();
+      expect(plugin.assetsWithoutSourceMap.size).toBe(3);
+      expect(plugin.assetsWithoutSourceMap.has('main.js')).toBe(true);
+      expect(plugin.assetsWithoutSourceMap.has('vendor.js')).toBe(true);
+      expect(plugin.assetsWithoutSourceMap.has('styles.css')).toBe(true);
+      expect(plugin.sourceMapSets.size).toBe(0);
+    });
+
+    it('should NOT add non-JS/CSS assets to assetsWithoutSourceMap', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {},
+        },
+        getAssets: () => [
+          {
+            name: 'image.png',
+            source: {
+              source: () => Buffer.from('fake-image-data'),
+              name: 'image.png',
+              sourceAndMap: () => ({
+                source: Buffer.from('fake-image-data'),
+                map: null,
+              }),
+            },
+            info: {
+              related: {},
+            },
+          },
+          {
+            name: 'data.json',
+            source: {
+              source: () => '{"key": "value"}',
+              name: 'data.json',
+              sourceAndMap: () => ({
+                source: '{"key": "value"}',
+                map: null,
+              }),
+            },
+            info: {
+              related: {},
+            },
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+
+      // Non-JS/CSS assets should not be tracked
+      expect(plugin.assetsWithoutSourceMap).toBeDefined();
+      expect(plugin.assetsWithoutSourceMap.size).toBe(0);
+      expect(plugin.sourceMapSets.size).toBe(0);
+    });
+
+    it('should handle mixed scenario: assets with and without sourcemap', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {},
+        },
+        getAssets: () => [
+          // Asset WITH inline sourcemap
+          {
+            name: 'with-map.js',
+            source: {
+              source: () => 'console.log("with map");\n',
+              name: 'with-map.js',
+              sourceAndMap: () => ({
+                source: 'console.log("with map");\n',
+                map: mockJsMap,
+              }),
+            },
+            info: {},
+          },
+          // Asset WITHOUT sourcemap
+          {
+            name: 'no-map.js',
+            source: {
+              source: () => 'console.log("no map");\n',
+              name: 'no-map.js',
+              sourceAndMap: () => ({
+                source: 'console.log("no map");\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {},
+            },
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+
+      // Only the asset without sourcemap should be tracked
+      expect(plugin.assetsWithoutSourceMap).toBeDefined();
+      expect(plugin.assetsWithoutSourceMap.size).toBe(1);
+      expect(plugin.assetsWithoutSourceMap.has('no-map.js')).toBe(true);
+      expect(plugin.assetsWithoutSourceMap.has('with-map.js')).toBe(false);
+      // Sourcemap data should only be collected from asset with map
+      expect(plugin.sourceMapSets.size).toBe(1);
+    });
+
+    it('should clear assetsWithoutSourceMap on subsequent calls', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation1 = {
+        compiler: { rspack: {} },
+        options: { output: {} },
+        getAssets: () => [
+          {
+            name: 'bundle1.js',
+            source: {
+              source: () => 'console.log("1");\n',
+              name: 'bundle1.js',
+              sourceAndMap: () => ({
+                source: 'console.log("1");\n',
+                map: null,
+              }),
+            },
+            info: { related: {} },
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation1, plugin);
+      expect(plugin.assetsWithoutSourceMap.size).toBe(1);
+      expect(plugin.assetsWithoutSourceMap.has('bundle1.js')).toBe(true);
+
+      // Second call with different assets
+      const compilation2 = {
+        compiler: { rspack: {} },
+        options: { output: {} },
+        getAssets: () => [
+          {
+            name: 'bundle2.js',
+            source: {
+              source: () => 'console.log("2");\n',
+              name: 'bundle2.js',
+              sourceAndMap: () => ({
+                source: 'console.log("2");\n',
+                map: null,
+              }),
+            },
+            info: { related: {} },
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation2, plugin);
+      // Should clear previous entries and only have new ones
+      expect(plugin.assetsWithoutSourceMap.size).toBe(1);
+      expect(plugin.assetsWithoutSourceMap.has('bundle1.js')).toBe(false);
+      expect(plugin.assetsWithoutSourceMap.has('bundle2.js')).toBe(true);
+    });
+  });
 });
