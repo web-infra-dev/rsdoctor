@@ -73,7 +73,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "browserslist-load-config": "^1.0.1",
-    "@rsbuild/plugin-check-syntax": "1.5.0",
+    "@rsbuild/plugin-check-syntax": "1.6.0",
     "enhanced-resolve": "5.12.0",
     "es-toolkit": "^1.43.0",
     "filesize": "^10.1.6",
