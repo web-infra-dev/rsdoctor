@@ -29,23 +29,15 @@ export function chunkTransform(
     bundleStats.assets?.every((asset) => asset.type === FILTER_ASSETS_TYPE) ||
     false;
 
-  if (
-    hasOnlyFilterAssets ||
-    !bundleStats.assets ||
-    bundleStats.assets.length === 0
-  ) {
+  if (hasOnlyFilterAssets) {
+    // If only FILTER_ASSETS_TYPE assets exist, create assets from chunk files
     bundleStats.chunks?.forEach((_chunk) => {
       const chunk = chunkGraph.getChunkById(String(_chunk.id));
       if (chunk && _chunk.files) {
         _chunk.files.forEach((fileName) => {
           if (!chunkGraph.getAssetByPath(fileName)) {
             const { content = '' } = assetMap.get(fileName) || {};
-            const size =
-              content.length > 0
-                ? content.length
-                : (bundleStats.assets?.find((a) => a.name === fileName)?.size ??
-                  0);
-            const asset = new Asset(fileName, size, [chunk], content);
+            const asset = new Asset(fileName, 0, [chunk], content); // size is 0 since we don't have it from stats
             chunk.addAsset(asset);
             chunkGraph.addAsset(asset);
           }
