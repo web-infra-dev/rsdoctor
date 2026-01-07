@@ -26,6 +26,9 @@ import type { Compiler } from 'webpack';
 import { pluginTapName, pluginTapPostOptions, pkg } from './constants';
 import path from 'path';
 
+// Static flag to ensure greet message is only printed once per process
+let hasGreeted = false;
+
 export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorPluginInstance<Compiler, Rules>
 {
@@ -79,8 +82,11 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
   apply(compiler: unknown): unknown;
 
   apply(compiler: Compiler) {
-    logger.greet(`
+    if (!hasGreeted && !compiler.isChild()) {
+      hasGreeted = true;
+      logger.greet(`
         \nRsdoctor v${pkg.version}\n`);
+    }
 
     // bootstrap sdk in apply()
     // avoid to has different sdk instance in one plugin, because of webpack-chain toConfig() will new every webpack plugins.
