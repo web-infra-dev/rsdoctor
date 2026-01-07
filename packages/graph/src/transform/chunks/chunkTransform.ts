@@ -29,15 +29,23 @@ export function chunkTransform(
     bundleStats.assets?.every((asset) => asset.type === FILTER_ASSETS_TYPE) ||
     false;
 
-  if (hasOnlyFilterAssets) {
-    // If only FILTER_ASSETS_TYPE assets exist, create assets from chunk files
+  if (
+    hasOnlyFilterAssets ||
+    !bundleStats.assets ||
+    bundleStats.assets.length === 0
+  ) {
     bundleStats.chunks?.forEach((_chunk) => {
       const chunk = chunkGraph.getChunkById(String(_chunk.id));
       if (chunk && _chunk.files) {
         _chunk.files.forEach((fileName) => {
           if (!chunkGraph.getAssetByPath(fileName)) {
             const { content = '' } = assetMap.get(fileName) || {};
-            const asset = new Asset(fileName, 0, [chunk], content); // size is 0 since we don't have it from stats
+            const size =
+              content.length > 0
+                ? content.length
+                : (bundleStats.assets?.find((a) => a.name === fileName)?.size ??
+                  0);
+            const asset = new Asset(fileName, size, [chunk], content);
             chunk.addAsset(asset);
             chunkGraph.addAsset(asset);
           }
@@ -63,7 +71,8 @@ export function chunkTransform(
           })
           .filter(<T>(chunk: T): chunk is NonNullable<T> => !!chunk) || [];
       const { content = '' } = assetMap.get(_asset.name) || {};
-      const asset = new Asset(_asset.name, _asset.size, chunks, content);
+      const size = _asset.size ?? (content.length > 0 ? content.length : 0);
+      const asset = new Asset(_asset.name, size, chunks, content);
       chunks.forEach((chunk) => chunk?.addAsset(asset));
       chunkGraph.addAsset(asset);
     });

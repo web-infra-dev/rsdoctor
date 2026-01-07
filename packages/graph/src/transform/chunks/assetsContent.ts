@@ -12,6 +12,9 @@ export function assetsContents(
   assets.forEach((asset) => {
     const { content = '' } = assetMap.get(asset.path) || {};
     asset.content = content;
+    if (content.length > 0 && asset.size === 0) {
+      asset.size = content.length;
+    }
     if (COMPRESSIBLE_REGEX.test(asset.path) && supports?.gzip) {
       asset.setGzipSize(content);
     }
