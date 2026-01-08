@@ -21,7 +21,7 @@ export const rootDirname = (file: string, sep = '/'): string | null => {
     return null;
   }
   if (idx === 0) {
-    return sep + (rootDirname(file?.slice(1)) || '');
+    return sep + (rootDirname(file?.slice(1), sep) || '');
   }
   return file?.slice(0, idx);
 };
@@ -86,7 +86,7 @@ export function flattenDirectory(
 
 export function createFileStructures({
   files,
-  sep = '/',
+  sep,
   inlinedResourcePathKey = '__RESOURCEPATH__',
   fileTitle = (_file: string, basename: string) => basename,
   dirTitle = (_dir: DataNode, defaultTitle: string) => defaultTitle,
@@ -100,11 +100,38 @@ export function createFileStructures({
   fileTitle?(file: string, basename: string): JSX.Element | string;
   page?: 'bundle' | 'other';
 }): DataNode[] {
-  const sepRegexp = new RegExp(sep);
+  // Auto-detect path separator if not provided
+  // Check if any file path contains backslash (Windows) or forward slash (Unix)
+  if (!sep && files.length > 0) {
+    const hasBackslash = files.some((file) => file.includes('\\'));
+    const hasForwardSlash = files.some((file) => file.includes('/'));
 
-  const res = files.reduce<DataNode>(
+    if (hasBackslash && !hasForwardSlash) {
+      // Windows paths only - detect Windows separator
+      sep = '\\';
+    } else if (hasForwardSlash) {
+      // Unix paths or mixed (prefer forward slash)
+      sep = '/';
+    } else {
+      // Default to forward slash if no separator found
+      sep = '/';
+    }
+  }
+
+  // Normalize all paths to use forward slash as internal separator for consistency
+  // This ensures Windows paths (using backslash) are properly converted to forward slashes
+  const normalizedFiles = files.map((file) => {
+    // Always convert backslashes to forward slashes for internal processing
+    return file.replace(/\\/g, '/');
+  });
+
+  // Use forward slash as the internal separator for consistency
+  const internalSep = '/';
+  const sepRegexp = new RegExp(internalSep);
+
+  const res = normalizedFiles.reduce<DataNode>(
     (t, file) => {
-      let dir = rootDirname(file, sep);
+      let dir = rootDirname(file, internalSep);
       let basename = dir ? file?.slice(dir.length + 1) : file;
       let parent: DataNode = t;
 
@@ -114,7 +141,7 @@ export function createFileStructures({
         if (!exist) {
           const p = [parent[inlinedResourcePathKey], dir]
             .filter(Boolean)
-            .join(sep);
+            .join(internalSep);
           exist = {
             title: dir,
             icon:
@@ -131,7 +158,7 @@ export function createFileStructures({
         }
 
         parent = exist;
-        dir = rootDirname(basename);
+        dir = rootDirname(basename, internalSep);
         basename = dir
           ? basename.slice(dir.length).replace(sepRegexp, '')
           : basename;
@@ -163,7 +190,13 @@ export function createFileStructures({
   res.forEach((e) => {
     e.children &&
       e.children.forEach((item) =>
-        flattenDirectory(item, e, sep, inlinedResourcePathKey, dirTitle),
+        flattenDirectory(
+          item,
+          e,
+          internalSep,
+          inlinedResourcePathKey,
+          dirTitle,
+        ),
       );
   });
 
