@@ -38,6 +38,9 @@ import { ModuleGraph } from '@rsdoctor/graph';
 import { Loader } from '@rsdoctor/utils/common';
 import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 
+// Static flag to ensure greet message is only printed once per process
+let hasGreeted = false;
+
 export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   implements RsdoctorRspackPluginInstance<Rules>
 {
@@ -96,8 +99,11 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   apply(compiler: Plugin.BaseCompilerType<'rspack'>) {
     time('RsdoctorRspackPlugin.apply');
     try {
-      logger.greet(`
+      if (!hasGreeted && !compiler.isChild()) {
+        hasGreeted = true;
+        logger.greet(`
         \nRsdoctor v${pkg.version}\n`);
+      }
 
       // bootstrap sdk in apply()
       // avoid to has different sdk instance in one plugin, because of webpack-chain toConfig() will new every webpack plugins.

@@ -121,7 +121,7 @@ function getLevelOption() {
       upperLabel: {
         show: true,
         color: '#ffffff',
-        fontSize: 14,
+        fontSize: 12,
         height: 30,
       },
     },
