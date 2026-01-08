@@ -19,7 +19,7 @@ interface Props {
 }
 
 const Component: React.FC<Props> = ({ project }) => {
-  const { summary, configs, root: cwd, envinfo, errors } = project;
+  const { summary, configs, root: cwd, envinfo, errors, name } = project;
 
   return (
     <div className={style.overall}>
@@ -31,6 +31,7 @@ const Component: React.FC<Props> = ({ project }) => {
               cwd={cwd}
               envinfo={envinfo}
               alerts={errors}
+              name={name}
             />
             <BundleAlerts />
           </ResponsiveLayout>

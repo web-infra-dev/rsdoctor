@@ -50,7 +50,16 @@ export class APIDataLoader {
           this.loader.loadData('errors'),
         ]).then(
           ([root, pid, hash, summary, configs, envinfo, errors]) =>
-            ({ root, pid, hash, summary, configs, envinfo, errors }) as R,
+            ({
+              root,
+              pid,
+              hash,
+              summary,
+              configs,
+              envinfo,
+              errors,
+              name: configs?.[0]?.config?.name,
+            }) as R,
         );
       case SDK.ServerAPI.API.GetClientRoutes:
         if (

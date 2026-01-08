@@ -13,10 +13,26 @@ import {
 } from '../../utils';
 import { Progress } from './progress';
 import { ConfigContext } from '../../config';
+import { SDK } from '@rsdoctor/types';
+import { ServerAPIProvider } from '../Manifest';
 
 export interface LayoutProps {
   children: JSX.Element;
 }
+
+const TitleUpdater: React.FC<{
+  name?: string;
+}> = ({ name }) => {
+  useEffect(() => {
+    if (name) {
+      document.title = `Rsdoctor - ${name}`;
+    } else {
+      document.title = 'Rsdoctor';
+    }
+  }, [name]);
+
+  return null;
+};
 
 export const Layout = (props: PropsWithChildren<LayoutProps>): JSX.Element => {
   const locale = useLocale();
@@ -53,22 +69,31 @@ export const Layout = (props: PropsWithChildren<LayoutProps>): JSX.Element => {
   }, [query]);
 
   const ctx = useContext(ConfigContext);
+
   return (
-    <L>
-      {!ctx.embedded ? <Header enableRoutes={enableRoutes} /> : null}
-      <Progress />
-      <L.Content
-        style={{
-          height: '100%',
-          minHeight: '100vh',
-          padding: Size.BasePadding,
-          marginTop: !ctx.embedded ? Size.NavBarHeight : 0,
-          background: MAIN_BG,
-        }}
-      >
-        {children}
-        <FloatButton.BackTop />
-      </L.Content>
-    </L>
+    <ServerAPIProvider
+      api={SDK.ServerAPI.API.GetProjectInfo}
+      showSkeleton={false}
+    >
+      {(project) => (
+        <L>
+          <TitleUpdater name={project?.name} />
+          {!ctx.embedded ? <Header enableRoutes={enableRoutes} /> : null}
+          <Progress />
+          <L.Content
+            style={{
+              height: '100%',
+              minHeight: '100vh',
+              padding: Size.BasePadding,
+              marginTop: !ctx.embedded ? Size.NavBarHeight : 0,
+              background: MAIN_BG,
+            }}
+          >
+            {children}
+            <FloatButton.BackTop />
+          </L.Content>
+        </L>
+      )}
+    </ServerAPIProvider>
   );
 };
