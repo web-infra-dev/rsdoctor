@@ -24,7 +24,8 @@ export const ProjectOverall: React.FC<{
   cwd: string;
   envinfo: SDK.EnvInfo;
   alerts: SDK.ErrorsData;
-}> = ({ configs = [], cwd, envinfo, alerts = [] }) => {
+  name?: string;
+}> = ({ configs = [], cwd, envinfo, alerts = [], name }) => {
   const { t } = useI18n();
 
   const warns = alerts.filter((e) => e.level === 'warn').length;
@@ -32,6 +33,15 @@ export const ProjectOverall: React.FC<{
   const errors = alerts.length - warns;
 
   const items: DescriptionsProps['items'] = [
+    ...(name
+      ? [
+          {
+            key: 'name',
+            label: 'Builder',
+            children: name,
+          },
+        ]
+      : []),
     ...Object.keys(envinfo).map((key) => {
       const regexp = /Version$/;
       const isVersion = regexp.test(key);
@@ -44,10 +54,10 @@ export const ProjectOverall: React.FC<{
     ...configs
       .filter((item) => !!item.version)
       .map((config) => {
-        const { name, version } = config;
+        const { name: configName, version } = config;
         return {
-          key: name,
-          label: name,
+          key: configName,
+          label: configName,
           children: version,
         };
       }),

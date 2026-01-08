@@ -1,25 +1,26 @@
-import { SDK } from '@rsdoctor/types';
 import React from 'react';
 import { Flex } from 'antd';
 
 import { HelpCenter } from '../../components/Overall/help-center';
 import { BundleAlerts } from '../../components/Alerts';
-import { withServerAPI } from '../../components/Manifest';
 import {
   BundleOverall,
   CompileOverall,
   ProjectOverall,
 } from '../../components/Overall';
 import { ResponsiveLayout } from './responsiveLayout';
+import { useProjectInfo } from '../../components/Layout/project-info-context';
 
 import style from './index.module.scss';
 
-interface Props {
-  project: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetProjectInfo>;
-}
+const Component: React.FC = () => {
+  const { project } = useProjectInfo();
 
-const Component: React.FC<Props> = ({ project }) => {
-  const { summary, configs, root: cwd, envinfo, errors } = project;
+  if (!project) {
+    return null;
+  }
+
+  const { summary, configs, root: cwd, envinfo, errors, name } = project;
 
   return (
     <div className={style.overall}>
@@ -31,6 +32,7 @@ const Component: React.FC<Props> = ({ project }) => {
               cwd={cwd}
               envinfo={envinfo}
               alerts={errors}
+              name={name}
             />
             <BundleAlerts />
           </ResponsiveLayout>
@@ -48,10 +50,6 @@ const Component: React.FC<Props> = ({ project }) => {
   );
 };
 
-export const Page = withServerAPI({
-  api: SDK.ServerAPI.API.GetProjectInfo,
-  responsePropName: 'project',
-  Component,
-});
+export const Page = Component;
 
 export * from './constants';

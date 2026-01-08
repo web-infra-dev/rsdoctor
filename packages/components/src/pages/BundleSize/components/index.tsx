@@ -26,8 +26,9 @@ import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
 import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
-import { ServerAPIProvider, withServerAPI } from '../../../components/Manifest';
+import { ServerAPIProvider } from '../../../components/Manifest';
 import { Size } from '../../../constants';
+import { useProjectInfo } from '../../../components/Layout/project-info-context';
 import {
   createFileStructures,
   flattenTreemapData,
@@ -572,33 +573,33 @@ export const WebpackModulesOverallBase: React.FC<
   );
 };
 
-export const WebpackModulesOverall = withServerAPI({
-  api: SDK.ServerAPI.API.GetProjectInfo,
-  responsePropName: 'project',
-  Component: (props: {
-    project: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetProjectInfo>;
-  }) => {
-    const { root, errors } = props.project;
-    return (
-      <ServerAPIProvider
-        api={SDK.ServerAPI.API.GetAssetsSummary}
-        body={{ withFileContent: true }}
-      >
-        {(summary) => {
-          return (
-            <ServerAPIProvider api={SDK.ServerAPI.API.GetEntryPoints}>
-              {(entryPoints) => (
-                <WebpackModulesOverallBase
-                  cwd={root}
-                  errors={errors}
-                  summary={summary}
-                  entryPoints={entryPoints}
-                />
-              )}
-            </ServerAPIProvider>
-          );
-        }}
-      </ServerAPIProvider>
-    );
-  },
-});
+export const WebpackModulesOverall: React.FC = () => {
+  const { project } = useProjectInfo();
+
+  if (!project) {
+    return null;
+  }
+
+  const { root, errors } = project;
+  return (
+    <ServerAPIProvider
+      api={SDK.ServerAPI.API.GetAssetsSummary}
+      body={{ withFileContent: true }}
+    >
+      {(summary) => {
+        return (
+          <ServerAPIProvider api={SDK.ServerAPI.API.GetEntryPoints}>
+            {(entryPoints) => (
+              <WebpackModulesOverallBase
+                cwd={root}
+                errors={errors}
+                summary={summary}
+                entryPoints={entryPoints}
+              />
+            )}
+          </ServerAPIProvider>
+        );
+      }}
+    </ServerAPIProvider>
+  );
+};
