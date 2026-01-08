@@ -63,7 +63,8 @@ export function chunkTransform(
           })
           .filter(<T>(chunk: T): chunk is NonNullable<T> => !!chunk) || [];
       const { content = '' } = assetMap.get(_asset.name) || {};
-      const size = _asset.size ?? (content.length > 0 ? content.length : 0);
+      const contentLength = Buffer.byteLength(content, 'utf8');
+      const size = _asset.size ?? contentLength;
       const asset = new Asset(_asset.name, size, chunks, content);
       chunks.forEach((chunk) => chunk?.addAsset(asset));
       chunkGraph.addAsset(asset);
