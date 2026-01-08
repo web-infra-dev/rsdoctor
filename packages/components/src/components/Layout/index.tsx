@@ -15,6 +15,7 @@ import { Progress } from './progress';
 import { ConfigContext } from '../../config';
 import { SDK } from '@rsdoctor/types';
 import { ServerAPIProvider } from '../Manifest';
+import { ProjectInfoContext } from './project-info-context';
 
 export interface LayoutProps {
   children: JSX.Element;
@@ -76,23 +77,25 @@ export const Layout = (props: PropsWithChildren<LayoutProps>): JSX.Element => {
       showSkeleton={false}
     >
       {(project) => (
-        <L>
-          <TitleUpdater name={project?.name} />
-          {!ctx.embedded ? <Header enableRoutes={enableRoutes} /> : null}
-          <Progress />
-          <L.Content
-            style={{
-              height: '100%',
-              minHeight: '100vh',
-              padding: Size.BasePadding,
-              marginTop: !ctx.embedded ? Size.NavBarHeight : 0,
-              background: MAIN_BG,
-            }}
-          >
-            {children}
-            <FloatButton.BackTop />
-          </L.Content>
-        </L>
+        <ProjectInfoContext.Provider value={{ project }}>
+          <L>
+            <TitleUpdater name={project?.name} />
+            {!ctx.embedded ? <Header enableRoutes={enableRoutes} /> : null}
+            <Progress />
+            <L.Content
+              style={{
+                height: '100%',
+                minHeight: '100vh',
+                padding: Size.BasePadding,
+                marginTop: !ctx.embedded ? Size.NavBarHeight : 0,
+                background: MAIN_BG,
+              }}
+            >
+              {children}
+              <FloatButton.BackTop />
+            </L.Content>
+          </L>
+        </ProjectInfoContext.Provider>
       )}
     </ServerAPIProvider>
   );
