@@ -86,7 +86,6 @@ export function flattenDirectory(
 
 export function createFileStructures({
   files,
-  sep,
   inlinedResourcePathKey = '__RESOURCEPATH__',
   fileTitle = (_file: string, basename: string) => basename,
   dirTitle = (_dir: DataNode, defaultTitle: string) => defaultTitle,
@@ -94,30 +93,11 @@ export function createFileStructures({
 }: {
   files: string[];
   cwd?: string;
-  sep?: string;
   inlinedResourcePathKey?: keyof DataNode;
   dirTitle?(dir: DataNode, defaultTitle: string): JSX.Element | string;
   fileTitle?(file: string, basename: string): JSX.Element | string;
   page?: 'bundle' | 'other';
 }): DataNode[] {
-  // Auto-detect path separator if not provided
-  // Check if any file path contains backslash (Windows) or forward slash (Unix)
-  if (!sep && files.length > 0) {
-    const hasBackslash = files.some((file) => file.includes('\\'));
-    const hasForwardSlash = files.some((file) => file.includes('/'));
-
-    if (hasBackslash && !hasForwardSlash) {
-      // Windows paths only - detect Windows separator
-      sep = '\\';
-    } else if (hasForwardSlash) {
-      // Unix paths or mixed (prefer forward slash)
-      sep = '/';
-    } else {
-      // Default to forward slash if no separator found
-      sep = '/';
-    }
-  }
-
   // Normalize all paths to use forward slash as internal separator for consistency
   // This ensures Windows paths (using backslash) are properly converted to forward slashes
   const normalizedFiles = files.map((file) => {
