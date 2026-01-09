@@ -185,11 +185,11 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
           moduleGraphFeatures:
             typeof enableNativePlugin === 'boolean'
               ? enableNativePlugin
-              : enableNativePlugin?.moduleGraph || false,
+              : (enableNativePlugin?.moduleGraph ?? true),
           chunkGraphFeatures:
             typeof enableNativePlugin === 'boolean'
               ? enableNativePlugin
-              : enableNativePlugin?.chunkGraph || false,
+              : (enableNativePlugin?.chunkGraph ?? true),
           sourceMapFeatures: {
             cheap: false,
             module: false,
