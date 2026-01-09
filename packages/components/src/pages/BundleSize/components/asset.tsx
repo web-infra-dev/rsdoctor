@@ -471,11 +471,15 @@ export const AssetDetail: React.FC<{
   }, [includeModules, moduleKeyword, moduleSizeLimit]);
 
   const fileStructures = useMemo(() => {
+    // Normalize paths for comparison - convert backslashes to forward slashes
+    const normalizePath = (path: string) => path.replace(/\\/g, '/');
     const res = createFileStructures({
       files: filteredModules.map((e) => e.path).filter(Boolean),
       inlinedResourcePathKey,
       fileTitle(file, basename) {
-        const mod = filteredModules.find((e) => e.path === file)!;
+        const mod = filteredModules.find(
+          (e) => normalizePath(e.path) === normalizePath(file),
+        )!;
 
         if (!mod) return basename;
 
@@ -598,12 +602,17 @@ export const AssetDetail: React.FC<{
         const mods: string[] = [];
         const paths = getChildrenModule(dir, mods);
         if (paths.length) {
+          // Normalize paths for comparison - convert backslashes to forward slashes
+          const normalizePath = (path: string) => path.replace(/\\/g, '/');
           const mods = paths.map(
-            (e) => includeModules.find((m) => m.path === e)!,
+            (e) =>
+              includeModules.find(
+                (m) => normalizePath(m.path) === normalizePath(e),
+              )!,
           );
 
-          const parsedSize = sumBy(mods, (e) => e.size?.parsedSize || 0);
-          const sourceSize = sumBy(mods, (e) => e.size?.sourceSize || 0);
+          const parsedSize = sumBy(mods, (e) => e?.size?.parsedSize || 0);
+          const sourceSize = sumBy(mods, (e) => e?.size?.sourceSize || 0);
           return (
             <div className={styles['bundle-tree']}>
               <div className={styles.box}>
