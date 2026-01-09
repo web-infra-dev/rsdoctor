@@ -71,8 +71,8 @@ describe('test src/utils/config.ts', () => {
       const result = normalizeRspackUserOptions(options);
 
       expect(result.experiments?.enableNativePlugin).toEqual({
-        moduleGraph: false,
-        chunkGraph: false,
+        moduleGraph: true,
+        chunkGraph: true,
       });
     });
   });

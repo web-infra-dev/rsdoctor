@@ -54,7 +54,7 @@ export interface NativePluginConfig {
 export interface RsdoctorRspackPluginExperiments {
   /**
    * Whether to enable the native plugin to improve the performance.
-   * @default false
+   * @default true
    */
   enableNativePlugin?: boolean;
 }
