@@ -194,7 +194,9 @@ NormalModeOptions currently has an empty Object type.
 
 ```js
 new RsdoctorRspackPlugin({
-  reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
+  output: {
+    reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
+  }
 }),
 ```
 

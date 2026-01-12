@@ -58,9 +58,12 @@ Create a `.github/workflows/ci.yml` file in your GitHub repository as shown in t
 target_branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
 ```
 
-- `on` indicates when the workflow runs, commonly set to `pull_request` and `push`.
+- `dispatch_target_branch`: Optional, used to specify the target branch when manually triggered (workflow_dispatch).
+
+- `on` indicates when the workflow runs, commonly set to `pull_request` and `push`, and also supports `workflow_dispatch` for manual triggering.
   - On `pull_request`, Rsdoctor Action fetches baseline and current and performs bundle diff analysis.
   - On `push` (i.e., after PR merge), it updates and uploads the baseline.
+  - On `workflow_dispatch` (manual trigger), it combines the behavior of `push` and `pull_request`: it uploads artifacts, and if `dispatch_target_branch` is specified, it also performs baseline comparison analysis.
 - Before executing rsdoctor-action, build your project with the Rsdoctor plugin enabled to generate the Rsdoctor JSON data file.
 
 ```yaml
@@ -72,6 +75,13 @@ on:
   push:
     branches:
       - main # or your target branch name
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Target branch to compare against'
+        required: false
+        default: 'main'
+        type: string
 
 jobs:
   bundle-analysis:
@@ -115,6 +125,8 @@ jobs:
           # Default 'main'. If you want to use a dynamic target branch, i.e., automatically get the target branch of the current pull request instead of a fixed main branch, you can use the following configuration:
           # ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
           target_branch: 'main'
+          # Target branch for manual trigger
+          dispatch_target_branch: ${{ github.event.inputs.target_branch }}
 ```
 
 ## View Reports

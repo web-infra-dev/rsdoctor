@@ -58,9 +58,12 @@ export default defineConfig({
 target_branch: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
 ```
 
-- `on` 是指 workflow 运行的时机，通常设置为 `pull_request` 和 `push`。
+- `dispatch_target_branch`：非必需，用于手动触发 (workflow_dispatch) 时指定目标分支。
+
+- `on` 是指 workflow 运行的时机，通常设置为 `pull_request` 和 `push`，也支持 `workflow_dispatch` 手动触发。
   - 在 `pull_request` 时，Rsdoctor Action 会拉取 baseline 和 current，进行 bundle diff 分析。
   - 在 `push`（即 PR 合并）时，会进行 baseline 的更新和上传操作。
+  - 在 `workflow_dispatch`（手动触发）时，结合了 `push` 和 `pull_request` 的行为：会上传制品，同时如果指定了 `dispatch_target_branch`，还会进行 baseline 对比分析。
 - 在执行 rsdoctor-action 之前，需要先将项目进行构建，构建时需要开启 Rsdoctor 插件，并生成 Rsdoctor JSON 数据文件。
 
 ```yaml
@@ -72,6 +75,13 @@ on:
   push:
     branches:
       - main # 或者其他目标分支
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: '用于对比的目标分支'
+        required: false
+        default: 'main'
+        type: string
 
 jobs:
   bundle-analysis:
@@ -115,6 +125,8 @@ jobs:
           # 默认 'main'，如果想用不固定的目标分支，即自动获取当前 pull request 的 target branch，则可以使用下方配置：
           # ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
           target_branch: 'main'
+          # 手动触发时使用的目标分支
+          dispatch_target_branch: ${{ github.event.inputs.target_branch }}
 ```
 
 ## 查看报告
