@@ -3,15 +3,124 @@ import { openBrowser } from '@rsdoctor/sdk';
 import { makeRulesSerializable } from '@rsdoctor/core/plugins';
 import { SDK } from '@rsdoctor/types';
 import { chalk } from '@rsdoctor/utils/logger';
-import { cloneDeep } from 'es-toolkit/compat';
 import path from 'path';
+
+/**
+ * Safe cloneDeep implementation that skips read-only properties (getters without setters)
+ * to avoid errors when cloning objects like AppContext that have read-only properties
+ */
+export function safeCloneDeep<T>(value: T, visited = new WeakMap()): T {
+  if (value === null || value === undefined) {
+    return value;
+  }
+
+  if (typeof value !== 'object') {
+    return value;
+  }
+
+  if (value instanceof Date || value instanceof RegExp) {
+    return value.toString() as T;
+  }
+
+  if (visited.has(value as object)) {
+    return visited.get(value as object) as T;
+  }
+
+  if (Array.isArray(value)) {
+    const len = value.length;
+    const cloned: any[] = new Array(len);
+    visited.set(value as object, cloned as T);
+    for (let i = 0; i < len; i++) {
+      cloned[i] = safeCloneDeep(value[i], visited);
+    }
+    return cloned as T;
+  }
+
+  const cloned: any = {};
+  visited.set(value as object, cloned as T);
+
+  const ownPropertyNames = Object.getOwnPropertyNames(value);
+  const ownSymbols = Object.getOwnPropertySymbols(value);
+  const enumerableKeys = Object.keys(value);
+  const enumerableKeysSet = new Set(enumerableKeys);
+  const obj = value as any;
+
+  for (let i = 0; i < enumerableKeys.length; i++) {
+    const key = enumerableKeys[i];
+
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+
+    if (descriptor && descriptor.get && !descriptor.set) {
+      continue;
+    }
+
+    try {
+      const propValue = obj[key];
+      cloned[key] = safeCloneDeep(propValue, visited);
+    } catch {
+      continue;
+    }
+  }
+
+  for (let i = 0; i < ownPropertyNames.length; i++) {
+    const key = ownPropertyNames[i];
+    if (enumerableKeysSet.has(key)) {
+      continue;
+    }
+
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (!descriptor) continue;
+
+    if (descriptor.get && !descriptor.set) {
+      continue;
+    }
+
+    if (descriptor.set !== undefined) {
+      try {
+        const propValue = obj[key];
+        cloned[key] = safeCloneDeep(propValue, visited);
+      } catch {
+        continue;
+      }
+    }
+  }
+
+  // Process Symbol keys
+  for (let i = 0; i < ownSymbols.length; i++) {
+    const key = ownSymbols[i];
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (!descriptor) continue;
+
+    // Skip read-only properties (getter without setter)
+    if (descriptor.get && !descriptor.set) {
+      continue;
+    }
+
+    // Clone enumerable symbols and symbols with setters
+    if (descriptor.enumerable || descriptor.set !== undefined) {
+      try {
+        const propValue = obj[key];
+        cloned[key] = safeCloneDeep(propValue, visited);
+      } catch {
+        continue;
+      }
+    }
+  }
+
+  return cloned as T;
+}
 
 /**
  * Process compiler configuration to make it serializable
  */
 export function processCompilerConfig(config: any): Configuration {
-  const { plugins, infrastructureLogging, ...rest } = config;
-  const _rest = cloneDeep(rest);
+  // Exclude plugins and infrastructureLogging before cloning
+  const {
+    plugins,
+    infrastructureLogging: _infrastructureLogging,
+    ...rest
+  } = config;
+  const _rest = safeCloneDeep(rest);
 
   // Make rules serializable
   if (_rest.module?.defaultRules) {

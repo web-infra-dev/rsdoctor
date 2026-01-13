@@ -22,15 +22,8 @@ export class InternalBundleTagPlugin<
               stage: -2000,
             },
             async () => {
-              if (
-                (!compilation.options.plugins
-                  .map((p) => p && p.constructor.name)
-                  .includes('BannerPlugin') &&
-                  supportBannerPlugin !== true) ||
-                supportBannerPlugin === false ||
-                // rspack no need to use this plugin
-                'rspack' in compiler
-              ) {
+              // This plugin is only enabled when supports.banner is explicitly configured. Rspack doesn't need to use this plugin.
+              if (supportBannerPlugin !== true || 'rspack' in compiler) {
                 return;
               }
               logger.info(
