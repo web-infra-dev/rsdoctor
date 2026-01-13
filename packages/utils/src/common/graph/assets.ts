@@ -8,10 +8,10 @@ const EXT = 'js|css|html';
 // This avoids matching common words like "basic", "main", "v2", etc.
 // Pattern breakdown:
 // - [a-f0-9]{4,32}: hex strings (4-32 chars)
-// - [a-zA-Z]*[0-9][a-zA-Z0-9]*: alphanumeric strings with at least one digit
+// - [a-zA-Z]*[0-9][a-zA-Z0-9]{3,31}: alphanumeric strings with at least one digit
 //   Total length must be 4-32 chars (enforced by filenamePattern context)
 //   Minimum 4 characters to avoid matching very short strings like "v2" (2 chars)
-const hashPattern = /(?:[a-f0-9]{4,32}|[a-zA-Z]*[0-9][a-zA-Z0-9]*)/;
+const hashPattern = /(?:[a-f0-9]{4,32}|[a-zA-Z]*[0-9][a-zA-Z0-9]{3,31})/;
 
 const hashSeparatorPattern = /[-|.]/;
 
@@ -37,8 +37,6 @@ export function formatAssetName(assetName: string, fileConfig?: string) {
     EXT.indexOf(splitFilesList[splitFilesList.length - 1]) > -1
   ) {
     outputFileTailName = splitFilesList[splitFilesList.length - 2];
-    // When fileConfig is provided, support both hex and alphanumeric hashes (4-32 chars)
-    // Pattern: \.[a-f0-9]{4,32} or \.[a-zA-Z]*[0-9][a-zA-Z0-9]* where total length is 4-32
     const _regPattern =
       /(.*)(\.([a-f0-9]{4,32}|[a-zA-Z]*[0-9][a-zA-Z0-9]*))(\.[^.]+){2,}$/;
     const match = assetName.match(_regPattern);
