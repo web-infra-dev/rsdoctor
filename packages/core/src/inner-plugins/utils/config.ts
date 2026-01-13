@@ -217,12 +217,6 @@ export function normalizeRspackUserOptions<
       moduleGraph: false,
       chunkGraph: false,
     };
-  } else {
-    // Default to true when undefined or explicitly set to true
-    config.experiments.enableNativePlugin = {
-      moduleGraph: true,
-      chunkGraph: true,
-    };
   }
   return config;
 }
