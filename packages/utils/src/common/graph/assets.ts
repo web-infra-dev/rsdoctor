@@ -8,10 +8,12 @@ const EXT = 'js|css|html';
 // This avoids matching common words like "basic", "main", "v2", etc.
 // Pattern breakdown:
 // - [a-f0-9]{4,32}: hex strings (4-32 chars)
-// - [a-zA-Z]*[0-9][a-zA-Z0-9]{3,31}: alphanumeric strings with at least one digit
-//   Total length must be 4-32 chars (enforced by filenamePattern context)
-//   Minimum 4 characters to avoid matching very short strings like "v2" (2 chars)
-const hashPattern = /(?:[a-f0-9]{4,32}|[a-zA-Z]*[0-9][a-zA-Z0-9]{3,31})/;
+// - [a-zA-Z]{3,}[0-9]: at least 3 letters followed by a digit (min 4 chars, e.g., "ajsb1")
+// - [a-zA-Z]*[0-9][a-zA-Z]{2,}: digit followed by at least 2 letters (min 4 chars, e.g., "a1bc")
+// - [a-zA-Z]*[0-9][a-zA-Z0-9]{3,31}: digit followed by at least 3 chars (min 4 chars, e.g., "a1bcd")
+//   All alternatives ensure minimum 4 characters to avoid matching short strings like "v2" (2 chars)
+const hashPattern =
+  /(?:[a-f0-9]{4,32}|[a-zA-Z]{3,}[0-9]|[a-zA-Z]*[0-9][a-zA-Z]{2,}|[a-zA-Z]*[0-9][a-zA-Z0-9]{3,31})/;
 
 const hashSeparatorPattern = /[-|.]/;
 
