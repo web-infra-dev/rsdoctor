@@ -5,11 +5,12 @@ import { getModulesByAsset } from './modules';
 const EXT = 'js|css|html';
 
 // More strict hash pattern: matches hex strings (0-9a-f) or alphanumeric strings containing digits
-// This avoids matching common words like "basic", "main", etc. that don't contain digits
+// This avoids matching common words like "basic", "main", "v2", etc.
 // Pattern breakdown:
 // - [a-f0-9]{4,32}: hex strings (4-32 chars)
 // - [a-zA-Z]*[0-9][a-zA-Z0-9]*: alphanumeric strings with at least one digit
-//   The total length is constrained by the filenamePattern regex context (4-32 chars)
+//   Total length must be 4-32 chars (enforced by filenamePattern context)
+//   Minimum 4 characters to avoid matching very short strings like "v2" (2 chars)
 const hashPattern = /(?:[a-f0-9]{4,32}|[a-zA-Z]*[0-9][a-zA-Z0-9]*)/;
 
 const hashSeparatorPattern = /[-|.]/;
@@ -17,7 +18,7 @@ const hashSeparatorPattern = /[-|.]/;
 const fileExtensionPattern = /(?:\.[a-z｜A-Z|0-9]{2,}){1,}/;
 
 const filenamePattern = new RegExp(
-  `(.*)${hashSeparatorPattern.source}${hashPattern.source}(${fileExtensionPattern.source})$`,
+  `(.*)${hashSeparatorPattern.source}(${hashPattern.source})(${fileExtensionPattern.source})$`,
 );
 
 export function formatAssetName(assetName: string, fileConfig?: string) {
@@ -36,13 +37,28 @@ export function formatAssetName(assetName: string, fileConfig?: string) {
     EXT.indexOf(splitFilesList[splitFilesList.length - 1]) > -1
   ) {
     outputFileTailName = splitFilesList[splitFilesList.length - 2];
-    const _regPattern = /(.*)(\.[a-f0-9]{4,32})([^.]*.[^.]+){2,}/g;
-    unHashedFileName = assetName.replace(_regPattern, '$1');
-    return `${unHashedFileName}.${outputFileTailName}.${assetName.substring(
-      assetName.lastIndexOf('.') + 1,
-    )}`;
+    // When fileConfig is provided, support both hex and alphanumeric hashes (4-32 chars)
+    // Pattern: \.[a-f0-9]{4,32} or \.[a-zA-Z]*[0-9][a-zA-Z0-9]* where total length is 4-32
+    const _regPattern =
+      /(.*)(\.([a-f0-9]{4,32}|[a-zA-Z]*[0-9][a-zA-Z0-9]*))(\.[^.]+){2,}$/;
+    const match = assetName.match(_regPattern);
+    if (match && match[3].length >= 4 && match[3].length <= 32) {
+      unHashedFileName = match[1];
+      return `${unHashedFileName}.${outputFileTailName}.${assetName.substring(
+        assetName.lastIndexOf('.') + 1,
+      )}`;
+    }
   }
-  return assetName.replace(filenamePattern, '$1$2');
+  // When fileConfig contains [hash] or no fileConfig, use filenamePattern
+  // This uses stricter matching to avoid false positives like "v2", "basic", etc.
+  // filenamePattern structure: (.*)[separator](hash)(extension) - separator is not captured
+  // So groups are: 1=filename, 2=hash, 3=extension
+  // Check if match exists and hash length is 4-32 chars
+  const match = assetName.match(filenamePattern);
+  if (match && match[2] && match[2].length >= 4 && match[2].length <= 32) {
+    return assetName.replace(filenamePattern, '$1$3');
+  }
+  return assetName;
 }
 
 export function isAssetMatchExtension(asset: SDK.AssetData, ext: string) {

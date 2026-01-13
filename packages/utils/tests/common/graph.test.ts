@@ -93,7 +93,12 @@ describe('test src/common/graph.ts', () => {
     expect(Graph.formatAssetName('common/index-basic.js')).toBe(
       'common/index-basic.js',
     );
-    // Test cases for filenames with hash that should be removed
+    // Test cases for short version numbers that should NOT be treated as hash
+    expect(Graph.formatAssetName('config-v2.html')).toBe('config-v2.html');
+    expect(Graph.formatAssetName('config-v1.html')).toBe('config-v1.html');
+    expect(Graph.formatAssetName('index-v2.js')).toBe('index-v2.js');
+    expect(Graph.formatAssetName('app-v1.0.js')).toBe('app-v1.0.js');
+    // Test cases for filenames with hash that should be removed (4+ chars)
     expect(Graph.formatAssetName('config-a1b2c3d4.html')).toBe('config.html');
     expect(Graph.formatAssetName('config.a1b2c3d4.html')).toBe('config.html');
     expect(Graph.formatAssetName('zh/api/config/config-a1b2c3d4.html')).toBe(
