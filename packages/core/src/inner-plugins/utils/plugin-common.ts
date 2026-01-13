@@ -18,8 +18,11 @@ export function safeCloneDeep<T>(value: T, visited = new WeakMap()): T {
     return value;
   }
 
-  if (value instanceof Date || value instanceof RegExp) {
-    return value.toString() as T;
+  if (value instanceof Date) {
+    return new Date(value.getTime()) as T;
+  }
+  if (value instanceof RegExp) {
+    return new RegExp(value.source, value.flags) as T;
   }
 
   if (visited.has(value as object)) {

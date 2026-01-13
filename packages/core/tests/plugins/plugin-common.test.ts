@@ -12,16 +12,19 @@ describe('safeCloneDeep', () => {
     expect(safeCloneDeep(sym)).toBe(sym);
   });
 
-  it('should convert Date and RegExp objects to string', () => {
+  it('should clone Date and RegExp objects', () => {
     const date = new Date('2024-01-01T00:00:00Z');
     const clonedDate = safeCloneDeep(date);
-    expect(typeof clonedDate).toBe('string');
-    expect(clonedDate).toBe(date.toString());
+    expect(clonedDate).toBeInstanceOf(Date);
+    expect(clonedDate).not.toBe(date);
+    expect(clonedDate.getTime()).toBe(date.getTime());
 
     const regex = /test/gi;
     const clonedRegex = safeCloneDeep(regex);
-    expect(typeof clonedRegex).toBe('string');
-    expect(clonedRegex).toBe(regex.toString());
+    expect(clonedRegex).toBeInstanceOf(RegExp);
+    expect(clonedRegex).not.toBe(regex);
+    expect(clonedRegex.source).toBe(regex.source);
+    expect(clonedRegex.flags).toBe(regex.flags);
   });
 
   it('should clone arrays and nested structures', () => {
@@ -106,10 +109,13 @@ describe('safeCloneDeep', () => {
     const cloned = safeCloneDeep(obj);
     expect(cloned).not.toBe(obj);
     expect(cloned.string).toBe('hello');
-    expect(typeof cloned.date).toBe('string');
-    expect(cloned.date).toBe(date.toString());
-    expect(typeof cloned.regex).toBe('string');
-    expect(cloned.regex).toBe(regex.toString());
+    expect(cloned.date).toBeInstanceOf(Date);
+    expect(cloned.date).not.toBe(date);
+    expect(cloned.date.getTime()).toBe(date.getTime());
+    expect(cloned.regex).toBeInstanceOf(RegExp);
+    expect(cloned.regex).not.toBe(regex);
+    expect(cloned.regex.source).toBe(regex.source);
+    expect(cloned.regex.flags).toBe(regex.flags);
     expect(cloned.array).not.toBe(obj.array);
     expect(cloned.nested.deep).not.toBe(obj.nested.deep);
   });
