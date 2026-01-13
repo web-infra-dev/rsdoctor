@@ -63,7 +63,7 @@ target_branch: ${{ github.event_name == 'pull_request' && github.event.pull_requ
 - `on` indicates when the workflow runs, commonly set to `pull_request` and `push`, and also supports `workflow_dispatch` for manual triggering.
   - On `pull_request`, Rsdoctor Action fetches baseline and current and performs bundle diff analysis.
   - On `push` (i.e., after PR merge), it updates and uploads the baseline.
-  - On `workflow_dispatch` (manual trigger), it combines the behavior of `push` and `pull_request`: it uploads artifacts, and if `dispatch_target_branch` is specified, it also performs baseline comparison analysis.
+  - `workflow_dispatch` allows you to manually trigger the workflow from the GitHub Actions page. This mode combines the behavior of `push` and `pull_request`: it uploads baseline data, and if `dispatch_target_branch` is specified, it also performs baseline comparison analysis.
 - Before executing rsdoctor-action, build your project with the Rsdoctor plugin enabled to generate the Rsdoctor JSON data file.
 
 ```yaml
@@ -75,7 +75,7 @@ on:
   push:
     branches:
       - main # or your target branch name
-  workflow_dispatch:
+  workflow_dispatch: # Optional, allows manual triggering
     inputs:
       target_branch:
         description: 'Target branch to compare against'
