@@ -4,7 +4,13 @@ import { getModulesByAsset } from './modules';
 
 const EXT = 'js|css|html';
 
-const hashPattern = /[a-z|A-Z|0-9]{4,32}/;
+// More strict hash pattern: matches hex strings (0-9a-f) or alphanumeric strings containing digits
+// This avoids matching common words like "basic", "main", etc. that don't contain digits
+// Pattern breakdown:
+// - [a-f0-9]{4,32}: hex strings (4-32 chars)
+// - [a-zA-Z]*[0-9][a-zA-Z0-9]*: alphanumeric strings with at least one digit
+//   The total length is constrained by the filenamePattern regex context (4-32 chars)
+const hashPattern = /(?:[a-f0-9]{4,32}|[a-zA-Z]*[0-9][a-zA-Z0-9]*)/;
 
 const hashSeparatorPattern = /[-|.]/;
 

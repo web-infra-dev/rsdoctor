@@ -81,5 +81,33 @@ describe('test src/common/graph.ts', () => {
         'js/[name].[chunkhash].no-online.js',
       ),
     ).toBe('js/okr_block.no-online.js');
+    // Test cases for filenames with common words that should NOT be treated as hash
+    expect(Graph.formatAssetName('zh/api/config/config-basic.html')).toBe(
+      'zh/api/config/config-basic.html',
+    );
+    expect(Graph.formatAssetName('config-basic.html')).toBe(
+      'config-basic.html',
+    );
+    expect(Graph.formatAssetName('main.js')).toBe('main.js');
+    expect(Graph.formatAssetName('index-main.js')).toBe('index-main.js');
+    expect(Graph.formatAssetName('common/index-basic.js')).toBe(
+      'common/index-basic.js',
+    );
+    // Test cases for filenames with hash that should be removed
+    expect(Graph.formatAssetName('config-a1b2c3d4.html')).toBe('config.html');
+    expect(Graph.formatAssetName('config.a1b2c3d4.html')).toBe('config.html');
+    expect(Graph.formatAssetName('zh/api/config/config-a1b2c3d4.html')).toBe(
+      'zh/api/config/config.html',
+    );
+    // Test cases for hex hash (should be removed)
+    expect(Graph.formatAssetName('index.663b6aff6da26ba53cc3.js')).toBe(
+      'index.js',
+    );
+    expect(Graph.formatAssetName('index-663b6aff6da26ba53cc3.js')).toBe(
+      'index.js',
+    );
+    // Test cases for alphanumeric hash with digits (should be removed)
+    expect(Graph.formatAssetName('index.abc123def456.js')).toBe('index.js');
+    expect(Graph.formatAssetName('index-abc123def456.js')).toBe('index.js');
   });
 });
