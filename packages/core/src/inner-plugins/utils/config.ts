@@ -204,19 +204,15 @@ export function normalizeRspackUserOptions<
     normalizeUserConfig(options);
   config.experiments ??= {
     enableNativePlugin: {
-      moduleGraph: false,
-      chunkGraph: false,
-    },
-  };
-  if (
-    typeof options.experiments?.enableNativePlugin === 'boolean' &&
-    options.experiments?.enableNativePlugin === true
-  ) {
-    config.experiments.enableNativePlugin = {
       moduleGraph: true,
       chunkGraph: true,
-    };
-  } else {
+    },
+  };
+  // Default to true, only set to false when explicitly set to false
+  if (
+    typeof options.experiments?.enableNativePlugin === 'boolean' &&
+    options.experiments?.enableNativePlugin === false
+  ) {
     config.experiments.enableNativePlugin = {
       moduleGraph: false,
       chunkGraph: false,
