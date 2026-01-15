@@ -11,6 +11,7 @@ overrides:
   rc-dialog: 9.1.0
   rc-tree: 5.7.2
   react-dom: 18.3.1
+  sirv: 3.0.2
   tslib: 2.8.1
 
 importers:
@@ -9903,10 +9904,6 @@ packages:
   simple-swizzle@0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
 
-  sirv@2.0.4:
-    resolution: {integrity: sha512-94Bdh3cC2PKrbgSOUqTiGPWVZeSiXfKOVZNJniWoqrWrRkB1CJzBU3NEbiTsPcYy1lDsANA/THzS+9WBiy5nfQ==}
-    engines: {node: '>= 10'}
-
   sirv@3.0.2:
     resolution: {integrity: sha512-2wcC/oGxHis/BoHkkPwldgiPSYcpZK3JU28WoMVv55yHJgcZ8rlXvuG9iZggz+sU1d4bRgIGASwyWqjxu3FM0g==}
     engines: {node: '>=18'}
@@ -13910,7 +13907,7 @@ snapshots:
       fs-extra: 11.3.0
       json-cycle: 1.5.0
       open: 8.4.2
-      sirv: 2.0.4
+      sirv: 3.0.2
       socket.io: 4.8.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       source-map: 0.7.6
       tapable: 2.2.2
@@ -21869,12 +21866,6 @@ snapshots:
     dependencies:
       is-arrayish: 0.3.2
 
-  sirv@2.0.4:
-    dependencies:
-      '@polka/url': 1.0.0-next.28
-      mrmime: 2.0.0
-      totalist: 3.0.1
-
   sirv@3.0.2:
     dependencies:
       '@polka/url': 1.0.0-next.28
@@ -22728,7 +22719,7 @@ snapshots:
       html-escaper: 2.0.2
       opener: 1.5.2
       picocolors: 1.1.1
-      sirv: 2.0.4
+      sirv: 3.0.2
       ws: 7.5.10(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
