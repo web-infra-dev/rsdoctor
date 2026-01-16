@@ -90,60 +90,64 @@ export function getModuleGraphByStats(
       continue;
     }
 
-    if (moduleGraph.getModuleByWebpackId(data.identifier!)) {
-      continue;
-    }
+    const existingModule = moduleGraph.getModuleByWebpackId(data.identifier!);
+    let concatenatedModule: SDK.ModuleInstance;
 
-    allModules.push(data);
+    if (existingModule) {
+      concatenatedModule = existingModule;
+    } else {
+      allModules.push(data);
 
-    const isConcatenated = Boolean(data.modules && data.modules.length > 0);
-    const concatenatedModule = new Module(
-      data.identifier ?? data.moduleIdentifier!,
-      getGetModuleName(root, data),
-      data.depth === 0,
-      isConcatenated ? SDK.ModuleKind.Concatenation : SDK.ModuleKind.Normal,
-      data.id ? String(data.id) : undefined,
-      data.layer!,
-    );
-
-    if (data.optimizationBailout) {
-      data.optimizationBailout.forEach((reason) =>
-        concatenatedModule.addBailoutReason(reason),
+      const isConcatenated = Boolean(data.modules && data.modules.length > 0);
+      concatenatedModule = new Module(
+        data.identifier ?? data.moduleIdentifier!,
+        getGetModuleName(root, data),
+        data.depth === 0,
+        isConcatenated ? SDK.ModuleKind.Concatenation : SDK.ModuleKind.Normal,
+        data.id ? String(data.id) : undefined,
+        data.layer!,
       );
-    }
 
-    if (data.issuerPath) {
-      concatenatedModule.addIssuerPath(data.issuerPath);
-    }
-
-    data.chunks?.forEach((_chunkId) => {
-      const chunk = chunkGraph.getChunkById(String(_chunkId));
-      chunk && concatenatedModule.addChunk(chunk);
-    });
-
-    moduleGraph.addModule(concatenatedModule);
-
-    if (data.source) {
-      concatenatedModule.setSource({
-        transformed: Buffer.isBuffer(data.source)
-          ? data.source.toString()
-          : data.source,
-      });
-    }
-
-    if (typeof data.size === 'number') {
-      concatenatedModule.setSize({
-        sourceSize: data.size,
-        transformedSize: data.size,
-      });
-      const sizeData: Partial<SDK.ModuleSize> = {
-        sourceSize: data.size,
-        transformedSize: data.size,
-      };
-      if (isJsonFile(concatenatedModule.path)) {
-        sizeData.parsedSize = data.size;
+      if (data.issuerPath) {
+        concatenatedModule.addIssuerPath(data.issuerPath);
       }
-      concatenatedModule.setSize(sizeData);
+
+      data.chunks?.forEach((_chunkId) => {
+        const chunk = chunkGraph.getChunkById(String(_chunkId));
+        chunk && concatenatedModule.addChunk(chunk);
+      });
+
+      moduleGraph.addModule(concatenatedModule);
+
+      if (data.source) {
+        concatenatedModule.setSource({
+          transformed: Buffer.isBuffer(data.source)
+            ? data.source.toString()
+            : data.source,
+        });
+      }
+
+      if (typeof data.size === 'number') {
+        concatenatedModule.setSize({
+          sourceSize: data.size,
+          transformedSize: data.size,
+        });
+        const sizeData: Partial<SDK.ModuleSize> = {
+          sourceSize: data.size,
+          transformedSize: data.size,
+        };
+        if (isJsonFile(concatenatedModule.path)) {
+          sizeData.parsedSize = data.size;
+        }
+        concatenatedModule.setSize(sizeData);
+      }
+    }
+
+    // Always add bailoutReason if present, even if module already exists
+    if (data.optimizationBailout) {
+      data.optimizationBailout
+        .filter((reason) => !reason.includes('ModuleConcatenation bailout'))
+        .forEach((reason) => concatenatedModule.addBailoutReason(reason));
     }
 
     for (const normal of data.modules ?? []) {
@@ -173,9 +177,9 @@ export function getModuleGraphByStats(
       }
 
       if (normal.optimizationBailout) {
-        normal.optimizationBailout.forEach((reason) =>
-          normalModule.addBailoutReason(reason),
-        );
+        normal.optimizationBailout
+          .filter((reason) => !reason.includes('ModuleConcatenation bailout'))
+          .forEach((reason) => normalModule.addBailoutReason(reason));
       }
 
       if (normal.issuerPath) {
