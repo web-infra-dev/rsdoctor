@@ -32,6 +32,17 @@ export const parseBundle: ParseBundle = (
     return {};
   }
 
+  // Check file size before parsing to avoid hanging on very large files
+  // Skip AST parsing for files larger than 1MB to prevent performance issues
+  const MAX_FILE_SIZE = 1024 * 1024; // 1MB
+  const stats = fs.statSync(bundlePath);
+  if (stats.size > MAX_FILE_SIZE) {
+    logger.debug(
+      `Skipping AST parsing for large file: ${bundlePath} (${stats.size} bytes)`,
+    );
+    return {};
+  }
+
   let content = fs.readFileSync(bundlePath, 'utf8');
   const tagCache = new Map();
 
