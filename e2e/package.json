@@ -11,7 +11,7 @@
     "@actions/core": "^1.11.1",
     "@lynx-js/react": "^0.115.4",
     "@lynx-js/rspeedy": "^0.13.0",
-    "@playwright/test": "1.54.2",
+    "@playwright/test": "1.55.1",
     "@rsbuild/plugin-less": "1.5.0",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
@@ -25,7 +25,7 @@
     "@types/react": "^18.3.27",
     "loader-utils": "^2.0.4",
     "es-toolkit": "^1.43.0",
-    "playwright": "1.54.2",
+    "playwright": "1.55.1",
     "terser-webpack-plugin": "^5.3.16",
     "typescript": "^5.9.2",
     "webpack": "^5.97.1"
