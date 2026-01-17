@@ -376,7 +376,7 @@ export class Module implements SDK.ModuleInstance {
         : this.issuerPath
             ?.filter((issuer) => issuer.moduleId)
             .map((issuer) => issuer.moduleId) || [],
-      bailoutReason: isBrief ? undefined : this.bailoutReason,
+      bailoutReason: this.bailoutReason,
     };
 
     if (this.meta.hasSetEsModuleStatement || this.meta.strictHarmonyModule) {
