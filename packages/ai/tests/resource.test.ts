@@ -34,7 +34,11 @@ async function readMarkdownResource(uri: URL, baseDir: string) {
   // Additional security: Verify the resolved path is still within the resources directory
   const resolvedPath = path.resolve(filePath);
   const resolvedResourcesDir = path.resolve(resourcesDir);
-  if (!resolvedPath.startsWith(resolvedResourcesDir)) {
+  const relativePath = path.relative(resolvedResourcesDir, resolvedPath);
+
+  // Check if the relative path starts with '..' or is an absolute path
+  // This prevents both upward traversal and accessing files outside the directory
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
     throw new Error('Invalid resource path: access denied');
   }
 
