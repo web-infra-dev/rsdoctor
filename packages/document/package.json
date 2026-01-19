@@ -33,15 +33,15 @@
     "cross-env": "^7.0.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "rsbuild-plugin-google-analytics": "^1.0.4",
-    "rsbuild-plugin-open-graph": "^1.1.0",
+    "rsbuild-plugin-google-analytics": "^1.0.5",
+    "rsbuild-plugin-open-graph": "^1.1.2",
     "rspress-plugin-font-open-sans": "^1.0.3",
     "rspress-plugin-sitemap": "^1.2.1",
     "typescript": "^5.9.2",
-    "@rsbuild/plugin-sass": "^1.4.0"
+    "@rsbuild/plugin-sass": "^1.4.1"
   },
   "dependencies": {
-    "@rstack-dev/doc-ui": "1.12.2",
+    "@rstack-dev/doc-ui": "1.12.3",
     "clsx": "^2.1.1",
     "react-markdown": "^9.1.0",
     "@rspress/core": "2.0.0-rc.5"
