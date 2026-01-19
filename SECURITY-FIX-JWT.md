@@ -8,10 +8,11 @@ Fixed a critical JWT algorithm confusion vulnerability in the hono JWT middlewar
 
 ### Issue
 
-- **CVE**: JWT Algorithm Confusion / Unsafe Default (HS256)
+- **Vulnerability Type**: JWT Algorithm Confusion / Unsafe Default (HS256)
 - **Severity**: High
 - **Affected Version**: hono@3.12.12
 - **Fixed Version**: hono@4.11.4
+- **Note**: This is a general JWT algorithm confusion vulnerability category, not a specific CVE
 
 ### Description
 
