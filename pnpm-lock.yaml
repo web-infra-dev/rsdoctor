@@ -480,7 +480,7 @@ importers:
     devDependencies:
       '@modelcontextprotocol/sdk':
         specifier: 1.25.2
-        version: 1.25.2(hono@3.12.12)(zod@3.25.76)
+        version: 1.25.2(hono@4.11.4)(zod@3.25.76)
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -496,6 +496,9 @@ importers:
       axios:
         specifier: ^1.13.2
         version: 1.13.2
+      hono:
+        specifier: ^4.11.4
+        version: 4.11.4
       prebundle:
         specifier: 1.4.2
         version: 1.4.2(typescript@5.9.2)
@@ -811,8 +814,6 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
-  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
-
   packages/core/compiled/axios: {}
 
   packages/document:
@@ -1030,15 +1031,11 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/sdk/compiled/body-parser: {}
-
   packages/sdk/compiled/cors: {}
 
   packages/sdk/compiled/dayjs: {}
 
   packages/sdk/compiled/fs-extra: {}
-
-  packages/sdk/compiled/json-cycle: {}
 
   packages/types:
     dependencies:
@@ -6583,6 +6580,10 @@ packages:
   hono@3.12.12:
     resolution: {integrity: sha512-5IAMJOXfpA5nT+K0MNjClchzz0IhBHs2Szl7WFAhrFOsbtQsYmNynFyJRg/a3IPsmCfxcrf8txUGiNShXpK5Rg==}
     engines: {node: '>=16.0.0'}
+
+  hono@4.11.4:
+    resolution: {integrity: sha512-U7tt8JsyrxSRKspfhtLET79pU8K+tInj5QZXs1jSugO1Vq5dFj3kmZsRldo29mTBfcjDRVRXrEZ6LS63Cog9ZA==}
+    engines: {node: '>=16.9.0'}
 
   hookable@6.0.1:
     resolution: {integrity: sha512-uKGyY8BuzN/a5gvzvA+3FVWo0+wUjgtfSdnmjtrOVwQCZPHpHDH2WRO3VZSOeluYrHoDCiXFffZXs8Dj1ULWtw==}
@@ -12439,9 +12440,9 @@ snapshots:
 
   '@hongzhiyuan/preact@10.24.0-00213bad': {}
 
-  '@hono/node-server@1.19.7(hono@3.12.12)':
+  '@hono/node-server@1.19.7(hono@4.11.4)':
     dependencies:
-      hono: 3.12.12
+      hono: 4.11.4
 
   '@inquirer/external-editor@1.0.3(@types/node@22.18.1)':
     dependencies:
@@ -12700,9 +12701,9 @@ snapshots:
       '@types/react': 18.3.27
       react: 19.2.3
 
-  '@modelcontextprotocol/sdk@1.25.2(hono@3.12.12)(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.25.2(hono@4.11.4)(zod@3.25.76)':
     dependencies:
-      '@hono/node-server': 1.19.7(hono@3.12.12)
+      '@hono/node-server': 1.19.7(hono@4.11.4)
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
       content-type: 1.0.5
@@ -17692,6 +17693,8 @@ snapshots:
       react-is: 16.13.1
 
   hono@3.12.12: {}
+
+  hono@4.11.4: {}
 
   hookable@6.0.1: {}
 
