@@ -1,11 +1,31 @@
 # 产物分析
 
-## 功能介绍
+:::info
+如果想要分析某个 Module 的引用链路，可以查看 👉🏻[Module 引用链分析](/guide/usage/module-analysis)。
+:::
+
+## ⭐️ 功能概览
 
 **Rsdoctor** 提供了 `Bundle Size` 模块，该模块主要用于分析 **Webpack** 或 **Rspack** 构建产物的信息，包括当前编译产物的**资源大小**、**重复包**、**模块引用关系**等：
 
-- **产物概览**：展示产物总数、各类型文件数目、大小以及占比，以及重复包和重复包的引用链；
-- **产物分析（`Bundle Analysis`）模块**：分析构建产物资源（**Assets**）以及所包含的 **Modules** 的大小和代码信息。在该模块中，可以查看 Assets 中 **Module 打包后的实际代码大小**，以及模块的原始代码或**打包后的代码段**以及**模块引用关系**。
+- **产物概览**：展示产物总数、各类型文件数目、大小以及占比，以及重复包和重复包的引用链，👉🏻 [**产物概览**](#-%E4%BA%A7%E7%89%A9%E6%A6%82%E8%A7%88)
+- **产物分析（`Bundle Analysis`）模块**：分析构建产物资源（**Assets**）以及所包含的 **Modules** 的大小和代码信息。在该模块中，可以查看 Assets 中 **Module 打包后的实际代码大小**、模块的原始代码、**打包后的代码段**以及**模块引用关系**。
+
+其中，**产物分析**展示了两种视图模式，**Tree Map** 和 **Tree Graph**：
+
+- 👉🏻 [**Tree Map**](/guide/usage/bundle-size#-tree-map)
+
+Tree Map 是一种经典的构建产物分析视图，能帮助开发者更直观地可视化并分析 bundle 的构成，以及资源（Assets）和模块（Modules）的占比。同时支持搜索模块资源，点击模块资源可以放大到该模块区域。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap-intro.gif"
+  width="500px"
+  style={{ margin: 'auto' }}
+/>
+
+- 👉🏻 [**Tree Graph**](/guide/usage/bundle-size#-tree-graph)
+
+Tree Graph 是一种**基于文件树形式**的构建产物分析视图，能帮助开发者更直观地可视化并分析产物的构成，以及产物（Assets）和模块（Modules）的占比。同时支持搜索模块资源，点击模块还可以查看模块详情和代码。
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-overall.png"
@@ -13,25 +33,24 @@
   style={{ margin: 'auto' }}
 />
 
-点击**导航栏 「Bundle Size」-> 「Bundle Size」选项**，即可查看 Bundle 分析报告。请注意，要展示此页面，需要开启构建产物分析能力 [features](/config/options/options)。
+## 🪐 名词解释
 
-### 名词解释
-
-- **`Assets`**：资源是对图像、字体、媒体和其他文件类型的统称，是最终存在于输出文件夹内的文件，同时，每个 Chunk 都有对应的 [Assets 资源](https://webpack.js.org/concepts/under-the-hood/#chunks)。
-- **`Module`**：一个或多个 Module 组合成了 Chunk。有关 Module 类型的详细信息，请参阅 [Rspack Modules](https://www.rspack.rs/api/modules.html) 和 [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module)。
+- **`Assets`**：资源是最终存在于输出文件夹内的文件，包括 JavaScript、CSS、图像、字体、媒体等文件类型。每个 Chunk 都有对应的 [Assets 资源](https://webpack.js.org/concepts/under-the-hood/#chunks)。
+- **`Module`**：多个 Module 组合成了 Chunk。有关 Module 类型的详细信息，请参阅 [Rspack Modules](https://www.rspack.rs/api/modules.html) 和 [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module)。
 - **`Source Size`**：文件的原始大小，未经过任何转换和压缩。
 - **`Bundle Size`**：文件最终输出的大小。如果开启了压缩，这个值代表压缩后的大小。
+- **`Gzip Size`**：文件经过 gzip 压缩后的大小。
 - **`Package Count`**：第三方包的数量。
-- **`Initial Chunk`**: **initial(初始化)** 是入口起点的主 Chunk，该 chunk 包含入口起点指定的所有模块及其依赖项，与「**按需加载**」的 **Chunk** 资源不同。
+- **`Initial Chunk`**: **initial(初始化)** 是入口起点的主 Chunk，该 Chunk 包含入口起点指定的所有模块及其依赖项，与「**按需加载**」的 **Chunk** 资源不同。
   - 有关 Initial Chunk 的详细信息，请参阅 [Initial Chunk 介绍](https://webpack.js.org/concepts/under-the-hood/#chunks)。
 - **`Duplicate Packages`**: 打包到项目中的重复的第三方包。不包括未打包进产物的第三方包，请参阅[重复第三方包](/guide/usage/bundle-alerts)。
-- **`Concatenated Module`**: 串联模块是将多个模块在打包时提升或串联到一个闭包中。在过去，Webpack 在打包时会将每个模块都打包到单独的闭包中，这种封装函数会导致 JavaScript 在浏览器中执行时较慢。可以通过打开 [`optimization.concatenateModules`](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6) 参数来进行优化。
+- **`Concatenated Module`**: 串联模块是将多个模块在打包时提升或串联到一个闭包中。在过去，Webpack 在打包时会将每个模块都打包到单独的闭包中，这种封装函数会导致 JavaScript 在浏览器中执行时较慢。可以通过开启 [`optimization.concatenateModules`](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6) 参数来进行优化。
 
-## 产物概览
+## 🪐 产物概览
 
 ### 产物信息卡
 
-产物概览显示了 `Total Files` 等文件数目和大小信息。点击卡片图表可以展开资源详情，如下图所示：
+产物概览显示了 `Total Files` 等文件数目和大小信息。点击卡片可以展开资源详情，如下图所示：
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-overall-1.png"
@@ -39,7 +58,7 @@
   style={{ margin: 'auto' }}
 />
 
-- 点击详情小图标，右侧会展示对应资源树，标明资源大小：
+- 点击详情图标，右侧会展示对应的资源树，并标明资源大小：
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-tree.png"
@@ -56,7 +75,51 @@
 
 更多信息，请参阅[重复第三方包](/guide/usage/bundle-alerts)
 
-## 产物分析
+## 🪐 Tree map
+
+:::info
+如果一个 Asset 区块中没有 Module 分块，则需要手动开启 SourceMap。注意只在 Rsdoctor 开启时打开 SourceMap，不要影响线上产物。[FAQ](/guide/more/faq#%E4%BA%A7%E7%89%A9%E5%88%86%E6%9E%90%E4%B8%ADmodule-%E9%83%BD%E6%B2%A1%E6%9C%89-bundledparsed-size-%E6%80%8E%E4%B9%88%E5%8A%9E)
+:::
+
+Tree Map 视图可以直观展示各个模块之间的占比和关系，如下图所示。点击模块资源可以放大到该模块区域。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap-intro.gif"
+  width="500px"
+  style={{ margin: 'auto' }}
+/>
+
+- Tree Map 视图也支持搜索模块资源，左侧的侧边栏可以过滤资源（Assets）和搜索模块（Modules）。点击模块的搜索结果可以放大到该模块区域。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap-all.png"
+  width={'700px'}
+  style={{ margin: 'auto' }}
+/>
+
+- 双击某个区块可以展示其 Module 详情卡片，如下图所示。更多信息请参阅 [Module 详情](/guide/usage/module-analysis)。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap-dbclick.png"
+  width={'700px'}
+  style={{ margin: 'auto' }}
+/>
+
+## 🪐 Tree graph
+
+:::info
+如果一个 Asset 区块中没有 Module 分块，则需要手动开启 SourceMap。注意只在 Rsdoctor 开启时打开 SourceMap，不要影响线上产物。[FAQ](/guide/more/faq#%E4%BA%A7%E7%89%A9%E5%88%86%E6%9E%90%E4%B8%ADmodule-%E9%83%BD%E6%B2%A1%E6%9C%89-bundledparsed-size-%E6%80%8E%E4%B9%88%E5%8A%9E)
+:::
+
+Tree Graph 是一种**基于文件树形式**的构建产物分析视图，用于分析构建产物资源（**Assets**）以及所包含的 **Modules** 的大小和代码信息。在该模块中，可以查看 Assets 中 **Module 打包后的实际代码大小**、模块的原始代码、**打包后的代码段**以及**模块引用关系**。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-overall.png"
+  width={'700px'}
+  style={{ margin: 'auto' }}
+/>
+
+点击导航栏的「Bundle Size」选项，即可查看 Bundle 分析报告。请注意，要展示此页面，需要开启构建产物分析能力 [features](/config/options/options)。
 
 ::: tip
 如果项目基于 Rspack 且版本低于 0.5.1，无法查看代码信息。
@@ -82,11 +145,11 @@
 
 <img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-analysis-selects.png" />
 
-#### 模块搜索功能
+### 模块搜索功能
 
-支持了模块搜索功能，用户可以通过点击「**Search Module**」按钮，打开模块搜索弹窗。输入模块名称来快速定位和查看模块所在的 Assets，从而更方便地分析模块的引用关系和大小。搜索 Module 位于哪些 Assets 中。
+支持模块搜索功能，用户可以通过点击「**Search Module**」按钮，打开模块搜索弹窗。输入模块名称来快速定位和查看模块所在的 Assets，从而更方便地分析模块的引用关系和大小。
 
-如下图，可以看到匹配搜素 Module 关键字的结果：
+如下图，可以看到匹配搜索 Module 关键字的结果：
 
 <img src="https://assets.rspack.rs/others/assets/rsdoctor/search-modules.png" />
 
@@ -113,7 +176,7 @@
 
 - **Bundled Size**
   - 模块打包进产物的最终大小。一些标有 `concatenated` 的模块是串联模块，对此值有一定影响，请参阅下方的 `concatenated module` 解释。
-- **[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 串联模块，串联模块是将多个模块在打包时提升或串联到一个闭包中。有两种类型：
+- **[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 串联模块：将多个模块在打包时提升或串联到一个闭包中。有两种类型：
   - 一种是串联主模块，标明串联了多少个 `Modules`；
   - 另一种是被串联的子模块，标明被聚合到了哪个 `Module` 内。这种子模块无法继续拆解打包后的代码，因此无法得知具体的 `Bundled Size`，只能得知整个串联模块的大小，该大小标注在主模块尾部。
 - **Module Explorer** 标签：点击可打开 `Module` 之间的依赖关系分析页面。
@@ -121,11 +184,11 @@
 
 ### 支持 concatenated module 分析
 
-首先，**[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 是多个 Modules 被合并在了一个闭包中，无法通过 AST 语法分析拆解，但 concatenated module 中可能包含不同 Package 的代码，分析 concatenated module 内部子 Modules 也成为了重点，尤其是采用 ["all-in-one"](https://rsbuild.rs/guide/optimization/code-splitting#all-in-one) 方式打包的项目。
+**[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 是多个 Modules 被合并在了一个闭包中，无法通过 AST 语法分析拆解。但 concatenated module 中可能包含不同 Package 的代码，分析 concatenated module 内部子 Modules 也成为了重点，尤其是采用 ["all-in-one"](https://rsbuild.rs/guide/optimization/code-splitting#all-in-one) 方式打包的项目。
 
 Rsdoctor 支持了对 **[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 的拆解并精确计算 concatenated module 中子 modules 的真实的打包后的体积，帮助开发者准确识别 Tree Shaking 后的实际构建体积，分析合并模块对最终 bundle 大小的影响以及优化分包策略。
 
-- **Rspack 项目**，Rspack（>=1.4.11）内部的 Rsdoctor native 插件也增强了 sourcemap 相关能力，可以在不开启 source map 的情况下，无痛分析 concatenate module。
+- **Rspack 项目**：Rspack（>=1.4.11）内部的 Rsdoctor native 插件增强了 sourcemap 相关能力，可以在不开启 source map 的情况下，无痛分析 concatenate module。
 
 > 可以看到下图，是 'all-in-one' 的打包分析，上图为之前无法分析的情况，下图为可分析情况
 
@@ -145,7 +208,7 @@ Rsdoctor 支持了对 **[Concatenated Module](https://rspack.rs/zh/misc/glossary
   style={{ margin: 'auto' }}
 />
 
-- **webpack 项目**，则需要开启 sourcemap，才可以准确拆解并分析 concatenated module，如下配置。
+- **webpack 项目**：需要开启 sourcemap，才可以准确拆解并分析 concatenated module，配置如下。
 
 ```js
 export default {
@@ -162,47 +225,29 @@ export default {
   - cheap-module-source-map
   - nosources-source-map
 
-### Module 详情
+## 🪐 Module 详情
 
 点击模块标签，可以查看模块详情，如下图所示：
 
 <img src="https://assets.rspack.rs/others/assets/rsdoctor/bailout-reason.gif" />
 
-- Reasons : 顾名思义是 [原因] 的意思，即某个 Module 存在的原因。Reasons 就是该 Module 被哪些 Module 们引入，而整个 Reasons Tree 就是这个 Module 的整个上游引用链，包括了直接父级和间接父级们。即 Rspack 的 stats.reasons。
-- Dependencies : 是该 Module 依赖了哪些 Module。
-- Bailout Reason : Tree shaking 时，该 Module Tree shaking 失败的原因。
+- **Reasons**：顾名思义是 [原因] 的意思，即某个 Module 存在的原因。Reasons 就是该 Module 被哪些 Module 引入，而整个 Reasons Tree 就是这个 Module 的整个上游引用链，包括直接父级和间接父级。即 Rspack 的 stats.reasons。
+- **Dependencies**：是该 Module 依赖了哪些 Module。
+- **Bailout Reason**：Tree shaking 时，该 Module Tree shaking 失败的原因。
 
 > 更多可查看详情：[Module 详情](/guide/usage/module-analysis)
 
-## 产物总览瓦片图
-
-点击 **「Bundle Size」** 页面的 **「Treemap Graph」** 标签，可以查看瓦片图。通过瓦片图可以清晰的看到各个资源和模块之间的占比和关系，如下图所示：
-
-<img
-  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.png"
-  width="500px"
-  style={{ margin: 'auto' }}
-/>
-
-同时可以点击卡片标题侧的 🔍 按钮，搜索 Module 资源，点击 Module 资源，可以放大到该 Module 区域，如下图所示：
-
-<img
-  src="https://assets.rspack.rs/others/assets/rsdoctor/treemap.gif"
-  width="500px"
-  style={{ margin: 'auto' }}
-/>
-
-## 支持 BannerPlugin
+## 🪐 支持 BannerPlugin
 
 :::danger
 `supports.banner` 选项仅用于调试，请勿将其用于生产。
 :::
 
-由于 Rspack 和 webpack 都支持 [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin)，BannerPlugin 是可在生成的 chunk 顶部或尾部添加一段指定的内容的内置插件。
+由于 Rspack 和 webpack 都支持 [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin)，BannerPlugin 是一个可在生成的 chunk 顶部或尾部添加指定内容的内置插件。
 
 添加的代码段将会影响到对 Bundle 的解析能力。
 
-Rsdoctor 兼容了对 BannerPlugin 这种添加代码的逻辑，但因为 Rsdoctor 需要添加标记代码，所以没有默认开启，以下两种情况会开启 Rsdoctor BannerPlugin 能力：
+Rsdoctor 兼容了 BannerPlugin 这种添加代码的逻辑，但因为 Rsdoctor 需要添加标记代码，所以没有默认开启。以下两种情况会开启 Rsdoctor BannerPlugin 能力：
 
 1. 项目在 `rspack.config.(js|ts)` 或 `webpack.config.(js|ts)` 中使用了 BannerPlugin；
 
@@ -215,5 +260,3 @@ new RsdoctorRspackPlugin({
   },
 });
 ```
-
-- 注：如果开启了 `drop_console` 将会影响 Rsdoctor 对 BannerPlugin 的分析，所以可以在 `RSDOCTOR = true` 时，关闭 `drop_console`。

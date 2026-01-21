@@ -2,7 +2,7 @@
 
 ## How to use only a specific feature of Rsdoctor?
 
-When we **only need** the [bundle size analysis](../usage/bundle-size) feature of Rsdoctor, we can configure the corresponding [Features](/config/options/options) option when integrating the Rsdoctor plugin. Refer to the code snippet below:
+When we **only need** the [Bundle Size](../usage/bundle-size) bundle size analysis feature **within** Rsdoctor, we can add the corresponding [features](/config/options/features) option when configuring the Rsdoctor plugin. Refer to the code snippet below:
 
 ```ts
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
@@ -14,16 +14,14 @@ new RsdoctorRspackPlugin({
 
 ## Loader timing data is inaccurate?
 
-The timing data provided by Rsdoctor for loaders is an **estimated time**. Why can't it accurately measure the timing? It's because we know that loader execution can be both **asynchronous** and **synchronous**.
-Additionally, the bundler will **parallelize the execution** of multiple non-conflicting loader functions. Since JavaScript is single-threaded, multiple loader functions can **compete for the current task queue**.
-Furthermore, the asynchronous logic within loader functions cannot be recognized, causing a single loader function to potentially span across the execution of multiple other loaders. As a result, there are three possible cases, as shown in the following diagram:
+The timing data provided by Rsdoctor for loaders is an **estimated time**. The reason accurate timing cannot be measured is that loader execution can be both **asynchronous** and **synchronous** functions, the bundler will **parallelize the execution** of multiple non-conflicting loader functions, and since **JavaScript is single-threaded**, multiple loader functions can **compete for the current task queue**. Furthermore, the **asynchronous logic within loader functions cannot be recognized**, causing a single loader function to potentially **span across** the execution of multiple other loaders. As a result, there are three possible cases, as shown in the following diagram:
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/loader-cases.jpeg"
-  style={{ width: '250px' }}
+  style={{ width: '250px', margin: 'auto' }}
 />
 
-Therefore, the loader timing provided by Rsdoctor is an **estimate**. The timing data we provide is adapted to handle Case 1 and Case 2 from the diagram. As for Case 3, we are still exploring solutions.
+Therefore, the loader timing provided by Rsdoctor is an **estimated** value. The timing data we provide accurately reflects scenario 1 and scenario 2 from the diagram. As for scenario 3, we are still exploring solutions.
 
 ## `out of memory` error when using `Rsdoctor` for building
 
@@ -31,35 +29,57 @@ If you encounter an `out of memory` error, you can try the following two methods
 
 ### Method 1
 
-Increase the memory limit of Node, for example: NODE_OPTIONS=--max-old-space-size=8096.
+Increase the Node.js memory limit, for example: `NODE_OPTIONS=--max-old-space-size=8096`.
 
 ### Method 2
 
-You can add the `lite` field to the `features` array to use the lite mode. Additionally, since the `features` array overrides the default configuration when it is an array, you should:
+This issue is often caused by storing source code information during the build process, which exceeds the memory limit. You can configure the `noCode` or `noAssetsAndModuleSource` field in `output.reportCodeType` to alleviate this issue. [output.reportCodeType](/config/options/output#reportcodetype)
 
-- Add `loader` and `plugins` to the `features` array if you need build-time analysis to enable the analysis of loader and plugin timings.
+## No Bundled/Parsed Size for Modules in bundle analysis?
 
-- Add `bundle` to the `features` array if you need bundle analysis to enable the analysis of build artifacts.
+### Issue Description
 
-The following example enables the lite mode, build-time analysis, and bundle analysis:
+The difference between `Source Size` and `Bundled Size`:
 
-```js
-const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+- **Source Size**: The original size of the Module source code file (marked in cyan in the image below).
+- **Bundled Size**: The final code size of the Module after bundling and minification (marked in blue in the image below).\
+- **Gzip Size**: The final code size of the Module after gzip compression (marked in yellow in the image below).
 
-// adding the plugin to your configuration
-module.exports = {
-  // ...
-  plugins: [
-    new RsdoctorRspackPlugin({
-      disableClientServer: false,
-      features: ['lite', 'loader', 'plugins', 'bundle'],
-    }),
-  ].filter(Boolean),
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-after.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+### Solution
+
+If you only have Source Size but no Bundled Size, or **there is no Module drill-down in Tree Map** (i.e., no Module chunks), you need to **manually enable SourceMap**. **Note: Only enable SourceMap when Rsdoctor is enabled, do not affect production builds.**
+
+- The following scenario requires manually enabling SourceMap:
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
+  width="600px"
+  height="300px"
+  style={{ margin: 'auto' }}
+/>
+
+Configuration example:
+
+```js rspack.config.mjs
+export default {
+  devtool: 'cheap-source-map', // or other devtool configuration
 };
 ```
 
-- Cause: During the build process, the source code information is stored, which exceeds the memory limit. Enabling the `lite` mode can alleviate this issue.
-- Difference: The difference between the **lite mode** and the **normal mode** is that the **lite mode** no longer stores the **source code information**, only the **bundled code** is stored. Additionally, the code displayed in the analysis report will only consist of the **bundled code**.
+Rsdoctor supports the following SourceMap configurations:
+
+- source-map
+- hidden-source-map
+- inline-source-map
+- cheap-source-map
+- cheap-module-source-map
+- nosources-source-map
 
 ## Bundle analysis page no `Bundled Size`?
 
@@ -79,7 +99,7 @@ When [optimization.concatenateModules](https://rspack.rs/config/optimization#opt
 ### Solution
 
 :::danger
-**Important Note:** You must check the `RSDOCTOR` environment variable and not modify ConcatenateModules directly! ConcatenateModules is enabled by default in production environments, and disabling it in production builds will increase the bundle size.
+**Important Note:** You must check the `RSDOCTOR` environment variable and not modify ConcatenateModules directly! ConcatenateModules is enabled by default in production environments. Disabling it in production builds will increase the bundle size.
 :::
 
 When enabling Rsdoctor analysis, set **concatenateModules to false** as shown below. **Note: Disabling `concatenateModules` will slightly increase bundle size, creating differences from production builds.**

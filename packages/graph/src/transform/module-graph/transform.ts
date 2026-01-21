@@ -173,9 +173,9 @@ export function getModuleGraphByStats(
       }
 
       if (normal.optimizationBailout) {
-        normal.optimizationBailout.forEach((reason) =>
-          normalModule.addBailoutReason(reason),
-        );
+        normal.optimizationBailout
+          .filter((reason) => !reason.includes('ModuleConcatenation bailout'))
+          .forEach((reason) => normalModule.addBailoutReason(reason));
       }
 
       if (normal.issuerPath) {

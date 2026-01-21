@@ -50,7 +50,16 @@ export class APIDataLoader {
           this.loader.loadData('errors'),
         ]).then(
           ([root, pid, hash, summary, configs, envinfo, errors]) =>
-            ({ root, pid, hash, summary, configs, envinfo, errors }) as R,
+            ({
+              root,
+              pid,
+              hash,
+              summary,
+              configs,
+              envinfo,
+              errors,
+              name: configs?.[0]?.config?.name,
+            }) as R,
         );
       case SDK.ServerAPI.API.GetClientRoutes:
         if (
@@ -185,10 +194,9 @@ export class APIDataLoader {
           const { isRspack, hasSourceMap } = checkSourceMapSupport(configs);
           const { assets = [], chunks = [] } = res[0] || {};
           const { modules = [] } = res[1] || {};
-          const isLynx =
-            Array.isArray(configs) && configs[0]?.config?.name === 'lynx';
+
           const checkModules = (module: SDK.ModuleData) => {
-            if (isLynx && module.size.parsedSize === 0) {
+            if (module.size.parsedSize === 0) {
               return false;
             }
             return true;

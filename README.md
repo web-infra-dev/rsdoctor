@@ -17,7 +17,7 @@ Rsdoctor is a build analyzer tailored for the [Rspack](https://rspack.rs/) ecosy
 
 Rsdoctor is committed to being a one-stop, intelligent build analyzer that makes the build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
 
-Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rspeedy (Lynx)](https://lynxjs.org/rspeedy/), [Storybook](https://github.com/rspack-contrib/storybook-rsbuild), [Next.js](https://nextjs.org/), [Nuxt](https://nuxt.com/), [Re.Pack](https://re-pack.dev/), [Modern.js](https://modernjs.dev/), [Rsbuild](https://rsbuild.rs/), [Rspress](https://rspress.rs/) and [Rslib](https://rslib.rs/).
+Rsdoctor supports all tools and frameworks based on Rspack or webpack, such as: [Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor), [Rspeedy (Lynx)](https://lynxjs.org/rspeedy/), [Storybook](https://github.com/rstackjs/storybook-rsbuild), [Next.js](https://nextjs.org/), [Nuxt](https://nuxt.com/), [Re.Pack](https://re-pack.dev/), [Modern.js](https://modernjs.dev/), [Rsbuild](https://rsbuild.rs/), [Rspress](https://rspress.rs/) and [Rslib](https://rslib.rs/).
 
 https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
@@ -26,7 +26,6 @@ https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 - **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.
 
 - **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
-
   - Build artifact support for resource lists and module dependencies, etc.
   - Build-time analysis supports Loader, Plugin, and Resolver building process analysis
   - Build rules support duplicate package detection and ES Version Check, etc.
@@ -51,7 +50,7 @@ Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rstack te
 
 ## 🦀 Rstack
 
-Rstack is a unified JavaScript toolchain built around Rspack, with high performance and consistent architecture.
+Rstack is a unified JavaScript toolchain centered on Rspack, with high performance and consistent architecture.
 
 | Name                                                  | Description              | Version                                                                                                                                                                          |
 | ----------------------------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

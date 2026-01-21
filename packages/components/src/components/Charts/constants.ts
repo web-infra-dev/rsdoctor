@@ -38,15 +38,13 @@ export enum ChartTypes {
 }
 
 export const TREE_COLORS = [
+  '#bda29a',
   '#6F3FE1',
-  '#072da1',
+  '#3966ed',
   '#0a5f74',
   '#3EBD7C',
   '#F7A925',
-  '#bda29a',
   '#ca8622',
   '#749f83',
   '#6e7074',
-  '#546570',
-  '#c4ccd3',
 ];

@@ -24,10 +24,10 @@
     "client": "npm run build && node dist/mcp/index.js"
   },
   "devDependencies": {
-    "@modelcontextprotocol/sdk": "1.24.3",
+    "@modelcontextprotocol/sdk": "1.25.2",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "@rstest/core": "0.7.3",
+    "@rstest/core": "0.7.9",
     "@types/node": "^22.8.1",
     "prebundle": "1.4.2",
     "socket.io-client": "4.8.1",

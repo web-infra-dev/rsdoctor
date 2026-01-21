@@ -127,6 +127,15 @@ export function patchNativeModuleGraph(
         .filter(Boolean),
     );
   }
+  /** set module bailoutReason */
+  for (const rawModule of rawModules) {
+    const module = mg.getModuleById(rawModule.ukey);
+    if (module && rawModule.bailoutReason) {
+      rawModule.bailoutReason
+        .filter((reason) => !reason.includes('ModuleConcatenation bailout'))
+        .forEach((reason) => module.addBailoutReason(reason));
+    }
+  }
 }
 
 /**

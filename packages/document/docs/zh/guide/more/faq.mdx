@@ -2,7 +2,7 @@
 
 ## 如何只使用 Rsdoctor 的某个功能？
 
-当我们**只需要** Rsdoctor 内 [Bundle Size](../usage/bundle-size) 分析产物大小的功能时，我们可以在接入 Rsdoctor 插件时配置对应的 [Features](/config/options/options) 配置项，参考下方代码：
+当**只需要** Rsdoctor 内的 [Bundle Size](../usage/bundle-size) 分析产物大小功能时，可以在 Rsdoctor 插件配置时添加对应的 [features](/config/options/features) 配置项，参考下方代码：
 
 ```ts
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
@@ -14,14 +14,14 @@ new RsdoctorRspackPlugin({
 
 ## Loader 耗时数据不准？
 
-Rsdoctor 提供的 Loader 耗时时间是**预估耗时**，为什么没法统计到准确耗时？是因为我们知道 Loader 执行可能是**异步**函数也可能是**同步**函数，同时，打包工具会**并行执行多个**不冲突的 Loader 函数，其中 **JS 是单线程**的，多个 Loader 函数均可能**抢占当前的任务队列**，同时 Loader 函数内的**异步逻辑没法识别**，导致单个 Loader 函数在执行过程中，**可能横跨**多个其他 Loader 的执行过程，所以会存在如下图所示的三种 case：
+Rsdoctor 提供的 Loader 耗时是**预估耗时**。无法统计到准确耗时是因为 Loader 执行可能是**异步**函数也可能是**同步**函数，打包工具会**并行执行多个**不冲突的 Loader 函数，而 **JavaScript 是单线程**的，多个 Loader 函数均可能**抢占当前的任务队列**，且 Loader 函数内的**异步逻辑无法识别**，导致单个 Loader 函数在执行过程中**可能横跨**多个其他 Loader 的执行过程，因此会存在如下图所示的三种情况：
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/loader-cases.jpeg"
-  style={{ width: '250px' }}
+  style={{ width: '250px', margin: 'auto' }}
 />
 
-因此，Rsdoctor 提供的 Loader 耗时是一个**预估**的数据，而我们给出的耗时数据适配了上图中 Case 1 和 Case 2 的情况，对于 Case 3 的解决方案，我们目前还在探索中。
+因此，Rsdoctor 提供的 Loader 耗时是一个**预估**的数据，我们给出的耗时数据准确反映了上图中情况 1 和情况 2，对于情况 3 的解决方案，我们目前还在探索中。
 
 ## 使用 `Rsdoctor` 构建时出现了 `out of memory` 问题
 
@@ -29,35 +29,57 @@ Rsdoctor 提供的 Loader 耗时时间是**预估耗时**，为什么没法统�
 
 ### 方法一
 
-增大 node 内存上限, 例如：NODE_OPTIONS=--max-old-space-size=8096。
+增大 Node.js 内存上限，例如：`NODE_OPTIONS=--max-old-space-size=8096`。
 
 ### 方法二
 
-可以在 `features` 数组中添加 `lite` 字段，使用 lite 模式，同时，因为 features 为数组时会覆盖掉默认配置，所以：
+这个问题多是因为构建过程中存储了源码信息，超过了内存限制，可以在 `output.reportCodeType` 中配置 `noCode` 或 `noAssetsAndModuleSource` 字段来缓解此问题。[output.reportCodeType](/config/options/output#reportcodetype)
 
-- 如果需要构建时分析，`features` 数组中添加 `loader` 和 `plugins`，是开启 `loader` 和 `plugins` 的耗时分析。
+## 产物分析中，Module 都没有 Bundled/Parsed Size 怎么办？
 
-- 如果需要构建产物分析，`features` 数组中添加 `bundle`，是开启构建产物分析。
+### 问题说明
 
-下面示例是开启了 lite 模式以及构建时和构建产物分析：
+`Source Size` 和 `Bundled Size` 的区别：
 
-```js
-const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+- **Source Size**：Module 文件源码的原始大小（如下图青色标识）。
+- **Bundled Size**：经过打包及压缩后的 Module 的最终代码大小（如下图蓝色标识）。\
+- **Gzip Size**：经过 gzip 压缩后的 Module 的最终代码大小（如下图黄色标识）。
 
-// adding the plugin to your configuration
-module.exports = {
-  // ...
-  plugins: [
-    new RsdoctorRspackPlugin({
-      disableClientServer: false,
-      features: ['lite', 'loader', 'plugins', 'bundle'],
-    }),
-  ].filter(Boolean),
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-after.png"
+  width="600px"
+  style={{ margin: 'auto' }}
+/>
+
+### 解决方案
+
+如果只有 Source Size，没有 Bundled Size，或者 **Tree Map 中没有 Module 下钻**（即没有 Modules 分块），则需要**手动开启 SourceMap**。**注意只在 Rsdoctor 开启时打开 SourceMap，不要影响线上产物**。
+
+- 下面情况就需要手动开启 Sourcemap
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
+  width="600px"
+  height="300px"
+  style={{ margin: 'auto' }}
+/>
+
+配置示例：
+
+```js rspack.config.mjs
+export default {
+  devtool: 'cheap-source-map', // 或其他 devtool 配置
 };
 ```
 
-- 原因：因为构建过程中，存储了源码信息，超过了内存，所以开启 `lite` 模式可以缓解。
-- 区别：`lite` 模式和普通模式的区别就是不再存储**源码信息**，只存储**打包后的代码**，同时分析报告上的代码也将**只有打包后的代码**。
+Rsdoctor 支持以下 SourceMap 配置：
+
+- source-map
+- hidden-source-map
+- inline-source-map
+- cheap-source-map
+- cheap-module-source-map
+- nosources-source-map
 
 ## 产物分析界面没有 `Bundled Size` 怎么办？
 

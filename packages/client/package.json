@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/client",
-  "version": "1.3.16",
+  "version": "1.5.0",
   "main": "dist/index.html",
   "repository": {
     "type": "git",
@@ -20,11 +20,11 @@
     "inspect": "rsbuild inspect"
   },
   "devDependencies": {
-    "@rsbuild/core": "^1.5.17",
-    "@rsbuild/plugin-node-polyfill": "^1.4.2",
-    "@rsbuild/plugin-react": "^1.4.2",
-    "@rsbuild/plugin-sass": "^1.4.0",
-    "@rsbuild/plugin-type-check": "^1.2.4",
+    "@rsbuild/core": "^1.7.2",
+    "@rsbuild/plugin-node-polyfill": "^1.4.3",
+    "@rsbuild/plugin-react": "^1.4.3",
+    "@rsbuild/plugin-sass": "^1.4.1",
+    "@rsbuild/plugin-type-check": "^1.3.3",
     "@rsdoctor/components": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@types/node": "^22.8.1",
@@ -35,8 +35,8 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-error-boundary": "^4.1.2",
-    "react-router-dom": "6.4.3",
-    "sirv": "2.0.4",
+    "react-router-dom": "6.30.3",
+    "sirv": "3.0.2",
     "source-map-loader": "^5.0.0",
     "typescript": "^5.9.2"
   },

@@ -12,7 +12,9 @@ export interface ProjectAPIResponse {
   [API.GetProjectInfo]: Pick<
     RsdoctorManifestData,
     'hash' | 'root' | 'pid' | 'summary' | 'configs' | 'envinfo' | 'errors'
-  >;
+  > & {
+    name?: string;
+  };
   [API.GetClientRoutes]: RsdoctorManifestClientRoutes[];
   [APIExtends.GetCompileProgress]: {
     percentage: number;
