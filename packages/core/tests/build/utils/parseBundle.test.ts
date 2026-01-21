@@ -1,6 +1,7 @@
 import { lowerCase } from 'es-toolkit/compat';
 import fs from 'fs';
 import os from 'os';
+import path from 'path';
 import { describe, it, expect } from '@rstest/core';
 import { parseBundle } from '@/build-utils/build/utils/parseBundle';
 
@@ -41,4 +42,60 @@ describe('parseBundle', function () {
           expect(bundle.modules).toEqual(expectedModules.modules);
       });
     });
+
+  it('should remove inline sourcemap from bundle content', function () {
+    const tmpDir = os.tmpdir();
+    const testBundlePath = path.join(tmpDir, 'test-bundle-with-sourcemap.js');
+    const bundleCode = `(function() {
+  var modules = {
+    0: function() { console.log('module 0'); }
+  };
+})();
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiJ9`;
+
+    try {
+      fs.writeFileSync(testBundlePath, bundleCode, 'utf8');
+
+      const modules = [{ renderId: '0', webpackId: '0' }];
+      const result = parseBundle(testBundlePath, modules);
+
+      // Verify that sourcemap is removed from src
+      expect(result.src).not.toContain('sourceMappingURL');
+      expect(result.src).not.toContain('data:application/json;base64');
+      // Verify that the actual code is preserved
+      expect(result.src).toContain('console.log');
+    } finally {
+      if (fs.existsSync(testBundlePath)) {
+        fs.unlinkSync(testBundlePath);
+      }
+    }
+  });
+
+  it('should remove inline sourcemap with file path', function () {
+    const tmpDir = os.tmpdir();
+    const testBundlePath = path.join(tmpDir, 'test-bundle-sourcemap-file.js');
+    const bundleCode = `(function() {
+  var modules = {
+    0: function() { console.log('module 0'); }
+  };
+})();
+//# sourceMappingURL=bundle.js.map`;
+
+    try {
+      fs.writeFileSync(testBundlePath, bundleCode, 'utf8');
+
+      const modules = [{ renderId: '0', webpackId: '0' }];
+      const result = parseBundle(testBundlePath, modules);
+
+      // Verify that sourcemap is removed from src
+      expect(result.src).not.toContain('sourceMappingURL');
+      expect(result.src).not.toContain('bundle.js.map');
+      // Verify that the actual code is preserved
+      expect(result.src).toContain('console.log');
+    } finally {
+      if (fs.existsSync(testBundlePath)) {
+        fs.unlinkSync(testBundlePath);
+      }
+    }
+  });
 });
