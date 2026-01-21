@@ -27,21 +27,20 @@ export async function loadManifestByUrl(url: string) {
 }
 
 export async function fetchJSONByUrl(url: string) {
-  let json: Manifest.RsdoctorManifestWithShardingFiles = await axios
-    .get(url, { timeout: 30000 })
-    .then((e) => e.data);
+  const res = await axios.get(url, { timeout: 30000 });
+  let json: unknown = res.data;
 
   if (typeof json === 'string') {
-    try {
-      json = JSON.parse(json);
-    } catch (error) {
+    const trimmed = json.trim();
+    // If we got an HTML document (usually error page / SPA fallback), skip JSON.parse
+    if (/^<!doctype html\b/i.test(trimmed) || /^<html\b/i.test(trimmed)) {
       json = {} as Manifest.RsdoctorManifestWithShardingFiles;
+    } else {
+      json = JSON.parse(json);
     }
   }
 
-  console.log('[json] ', url, json);
-
-  return json;
+  return json as Manifest.RsdoctorManifestWithShardingFiles;
 }
 
 export function fetchJSONByUrls(urls: string[]) {
@@ -70,7 +69,7 @@ export async function parseManifest(
         fetchShardingFile,
       );
     }
-  } catch (error) {
+  } catch {
     transformedData = await ManifestMethod.fetchShardingFiles(
       json.data,
       fetchShardingFile,
