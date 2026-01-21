@@ -32,7 +32,11 @@ export async function fetchJSONByUrl(url: string) {
     .then((e) => e.data);
 
   if (typeof json === 'string') {
-    json = JSON.parse(json);
+    try {
+      json = JSON.parse(json);
+    } catch (error) {
+      json = {} as Manifest.RsdoctorManifestWithShardingFiles;
+    }
   }
 
   console.log('[json] ', url, json);

@@ -132,12 +132,7 @@ export const ServerAPIProvider = <
             '[ServerAPIProvider] Failed to load manifest for uploader route, continuing with empty manifest:',
             err,
           );
-          setManifest({
-            client: {
-              enableRoutes: [],
-            },
-            data: {} as Manifest.RsdoctorManifestData,
-          });
+          setState(ComponentState.Success);
           return;
         }
         setState(ComponentState.Fail);
@@ -148,10 +143,7 @@ export const ServerAPIProvider = <
   function executeLoader(loader: BaseDataLoader | void) {
     if (!loader) {
       // If route is uploader and no loader, set success state with empty response
-      if (isUploaderRoute()) {
-        setState(ComponentState.Success);
-        return;
-      }
+
       return;
     }
 
@@ -178,15 +170,6 @@ export const ServerAPIProvider = <
         setState(ComponentState.Success);
       })
       .catch((err) => {
-        // If route is uploader, set success state with empty response instead of failing
-        if (isUploaderRoute()) {
-          console.warn(
-            '[ServerAPIProvider] Failed to load API for uploader route, continuing with empty response:',
-            err,
-          );
-          setState(ComponentState.Success);
-          return;
-        }
         console.error(err);
         setState(ComponentState.Fail);
       });
@@ -197,11 +180,6 @@ export const ServerAPIProvider = <
   }
 
   if (state === ComponentState.Fail) {
-    // If route is uploader, render children with empty response instead of showing error
-    if (isUploaderRoute()) {
-      return children({} as SDK.ServerAPI.InferResponseType<T>);
-    }
-
     if (fallbackComponent)
       return fallbackComponent as unknown as React.ReactElement;
 
