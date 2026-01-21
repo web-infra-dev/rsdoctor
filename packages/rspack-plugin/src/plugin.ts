@@ -221,7 +221,9 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   ): Promise<void> => {
     time('RsdoctorRspackPlugin.done');
     try {
+      logger.debug('[RsdoctorRspackPlugin] bootstrap(start) in done()');
       await this.sdk.bootstrap();
+      logger.debug('[RsdoctorRspackPlugin] bootstrap(end) in done()');
 
       this.sdk.addClientRoutes([
         ManifestType.RsdoctorManifestClientRoutes.Overall,

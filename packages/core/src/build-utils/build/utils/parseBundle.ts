@@ -19,7 +19,6 @@ import type { ParseBundle } from '@rsdoctor/graph';
  * Copyright JS Foundation and other contributors.
  * https://github.com/webpack-contrib/webpack-bundle-analyzer/blob/44bd8d0f9aa3b098e271af220096ea70cc44bc9e/LICENSE
  */
-// TODO: optimize type
 export const parseBundle: ParseBundle = (
   bundlePath: string,
   modulesData: Pick<SDK.ModuleInstance, 'renderId' | 'webpackId'>[],
@@ -34,6 +33,12 @@ export const parseBundle: ParseBundle = (
 
   let content = fs.readFileSync(bundlePath, 'utf8');
   const tagCache = new Map();
+
+  // Remove inline sourcemap to avoid hanging when parsing large base64 sourcemaps
+  // Matches: //# sourceMappingURL=data:application/json;base64,...
+  // or: //# sourceMappingURL=...
+  const sourceMapRegex = /\/\/# sourceMappingURL=[^\n]*$/m;
+  content = content.replace(sourceMapRegex, '');
 
   let hasBannerPlugin = content.indexOf('RSDOCTOR_START::') > 0;
   if (hasBannerPlugin && !tagCache.get(bundlePath)) {
