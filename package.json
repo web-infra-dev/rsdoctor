@@ -57,6 +57,7 @@
       "es-object-atoms": "1.1.1",
       "get-intrinsic": "1.3.0",
       "node-forge": "1.3.3",
+      "qs": "6.14.1",
       "rc-dialog": "9.1.0",
       "rc-tree": "5.7.2",
       "react-dom": "18.3.1",
