@@ -142,8 +142,6 @@ export const ServerAPIProvider = <
 
   function executeLoader(loader: BaseDataLoader | void) {
     if (!loader) {
-      // If route is uploader and no loader, set success state with empty response
-
       return;
     }
 
