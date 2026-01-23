@@ -42,7 +42,7 @@ export const ProjectOverall: React.FC<{
           },
         ]
       : []),
-    ...Object.keys(envinfo).map((key) => {
+    ...Object.keys(envinfo || {}).map((key) => {
       const regexp = /Version$/;
       const isVersion = regexp.test(key);
       return {

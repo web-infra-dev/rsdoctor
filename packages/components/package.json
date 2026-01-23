@@ -53,6 +53,7 @@
     "@types/react-highlight-words": "^0.20.1",
     "@types/url-parse": "1.4.11",
     "react": "18.3.1",
+    "react-router-dom": "6.30.3",
     "typescript": "^5.9.2"
   },
   "dependencies": {
@@ -79,7 +80,6 @@
     "react-i18next": "12.0.0",
     "react-json-view": "1.21.3",
     "react-markdown": "^9.1.0",
-    "react-router-dom": "6.30.3",
     "socket.io-client": "4.8.1",
     "url-parse": "1.5.10"
   },
