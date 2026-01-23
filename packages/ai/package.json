@@ -29,6 +29,7 @@
     "@rsdoctor/utils": "workspace:*",
     "@rstest/core": "0.7.9",
     "@types/node": "^22.8.1",
+    "hono": "^4.11.4",
     "prebundle": "1.4.2",
     "socket.io-client": "4.8.1",
     "axios": "^1.13.2",
