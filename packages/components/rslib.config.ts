@@ -17,6 +17,7 @@ export default defineConfig({
       output: {
         target: 'web',
         sourceMap: true,
+        externals: ['react', 'react-dom', 'react-router-dom'],
       },
       redirect: {
         dts: {
