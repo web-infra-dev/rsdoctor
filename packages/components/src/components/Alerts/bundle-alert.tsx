@@ -14,6 +14,7 @@ import type { Rule } from '@rsdoctor/types';
 import styles from './bundle-alert.module.scss';
 import { CSSProperties, useState } from 'react';
 import { CrossChunksAlertCollapse } from './collapse-cross-chunks';
+import { ModuleMixedChunksAlertCollapse } from './collapse-module-mixed-chunks';
 
 interface BundleAlertProps {
   title: string;
@@ -59,6 +60,11 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
     {
       key: 'E1005',
       label: 'Default Import Check',
+      data: [],
+    },
+    {
+      key: 'E1006',
+      label: 'Module Mixed Chunks',
       data: [],
     },
   ];
@@ -130,6 +136,14 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
         break;
       case 'E1005':
         children = <CommonList data={td.data} />;
+        break;
+      case 'E1006':
+        children = (
+          <ModuleMixedChunksAlertCollapse
+            data={td.data}
+            extraData={extraData}
+          />
+        );
         break;
       default:
         children = null;
