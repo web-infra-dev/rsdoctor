@@ -116,8 +116,19 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     process.once('exit', () => this.dispose());
     process.once('SIGINT', () => this.dispose(0));
     process.once('SIGTERM', () => this.dispose(0));
-    process.once('unhandledRejection', () => this.dispose(1));
-    process.once('uncaughtException', () => this.dispose(1));
+
+    process.once('unhandledRejection', (reason: unknown) => {
+      console.error('Unhandled promise rejection:', reason);
+      this.dispose(1);
+    });
+
+    process.once('uncaughtException', (err: Error, origin: string) => {
+      console.error('Uncaught exception:', err);
+      if (origin) {
+        console.error('Exception origin:', origin);
+      }
+      this.dispose(1);
+    });
   }
 
   protected wrapNextHandleFunction(
