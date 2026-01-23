@@ -244,7 +244,7 @@ async function doneHandler(
       ),
     );
   }
-  console.log('doneHandler done');
+  logger.debug('doneHandler done');
 }
 
 /**
