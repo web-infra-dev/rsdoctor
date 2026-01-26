@@ -70,8 +70,8 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
       '@lynx-js/react':
-        specifier: ^0.115.4
-        version: 0.115.4(@types/react@18.3.27)
+        specifier: ^0.116.1
+        version: 0.116.1(@types/react@18.3.27)
       '@lynx-js/rspeedy':
         specifier: ^0.13.0
         version: 0.13.0(@rspack/core@1.7.2(@swc/helpers@0.5.18))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)
@@ -2561,8 +2561,8 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
-  '@hongzhiyuan/preact@10.24.0-00213bad':
-    resolution: {integrity: sha512-bHWp4ZDK5ZimcY+bTWw3S3xGiB8eROpZj0RK3FClNIaTOajb0b11CsT3K+pdeakgPgq1jWN3T2e2rfrPm40JsQ==}
+  '@hongzhiyuan/preact@10.28.0-fc4af453':
+    resolution: {integrity: sha512-TrM2g079OZN1poroDnU2kQd1gNUB1DMfVoKyz23AE3hZvl9ypRgG2MdgxAJtwT5u3BmYvI4Z0EbdpJTdf428IQ==}
 
   '@hono/node-server@1.19.7':
     resolution: {integrity: sha512-vUcD0uauS7EU2caukW8z5lJKtoGMokxNbJtBiwHgpqxEXokaHCBkQUmCHhjFB1VUTWdqj25QoMkMKzgjq+uhrw==}
@@ -2686,8 +2686,8 @@ packages:
     resolution: {integrity: sha512-RS399O/03gpBFbztnsRlwarkMoS2bSVWL8YUnEwy/w9rKewO7CqhX0IUFUZXrzRv0JR17eZJ+YN+14ga+g5FyA==}
     engines: {node: '>=18'}
 
-  '@lynx-js/react@0.115.4':
-    resolution: {integrity: sha512-GfsDHNNqq0QKJJKbi/bHx3hDzCvdgxI1DGapp4DYg+h09SRA5XxTo/9RI4mcvFB/o+VKt8U2L1hQcDUxJSP5/Q==}
+  '@lynx-js/react@0.116.1':
+    resolution: {integrity: sha512-9rVGbdfHXsTlJfqLzR6zAr2JCAQdvVFZ3HbiZN+PlcRsaD+k0ujuLiOwV5l77G09M+wpEcyehQ6ouW2EOuJw2g==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18
@@ -12384,7 +12384,7 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
-  '@hongzhiyuan/preact@10.24.0-00213bad': {}
+  '@hongzhiyuan/preact@10.28.0-fc4af453': {}
 
   '@hono/node-server@1.19.7(hono@3.12.12)':
     dependencies:
@@ -12507,10 +12507,10 @@ snapshots:
     dependencies:
       '@lynx-js/webpack-runtime-globals': 0.0.6
 
-  '@lynx-js/react@0.115.4(@types/react@18.3.27)':
+  '@lynx-js/react@0.116.1(@types/react@18.3.27)':
     dependencies:
       '@types/react': 18.3.27
-      preact: '@hongzhiyuan/preact@10.24.0-00213bad'
+      preact: '@hongzhiyuan/preact@10.28.0-fc4af453'
 
   '@lynx-js/rspeedy@0.13.0(@rspack/core@1.7.2(@swc/helpers@0.5.18))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
