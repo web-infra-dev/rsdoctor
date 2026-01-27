@@ -34,8 +34,8 @@ importers:
         specifier: ^0.18.5
         version: 0.18.5(typescript@5.9.2)
       '@rstest/core':
-        specifier: 0.7.9
-        version: 0.7.9
+        specifier: 0.8.1
+        version: 0.8.1
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:scripts/test-helper
@@ -490,8 +490,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@rstest/core':
-        specifier: 0.7.9
-        version: 0.7.9
+        specifier: 0.8.1
+        version: 0.8.1
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -4074,8 +4074,8 @@ packages:
   '@rstack-dev/doc-ui@1.12.3':
     resolution: {integrity: sha512-5W70pjRxxwyNT3R4kTYDE8cPaMjsJKXMeZQn7+Q54+RCJ1ahN4pADnpaY7WvSEBWkjXdI4IR4GGvBs7nSU/8MA==}
 
-  '@rstest/core@0.7.9':
-    resolution: {integrity: sha512-RHNPS1MDUxtf+1Z0YZi+vIQ13SdvCbcbpzDA7XHcPziTRy2mAPg8nfcms+XzbIp95KXH75ucAhgAKNFO0QgARA==}
+  '@rstest/core@0.8.1':
+    resolution: {integrity: sha512-7d/2fm2V91pVx/rRtZ2gl6Zh4hVMivtDl4RgHFhBOrxi//UwhKISeF5gS/CSwpCgfOf10TzJRXqdI17ueUBNMQ==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
@@ -14489,9 +14489,9 @@ snapshots:
       - react
       - react-dom
 
-  '@rstest/core@0.7.9':
+  '@rstest/core@0.8.1':
     dependencies:
-      '@rsbuild/core': 1.7.1
+      '@rsbuild/core': 1.7.2
       '@types/chai': 5.2.3
       tinypool: 1.1.1
 
