@@ -113,9 +113,11 @@ function transformErrorLike(err: any, opt?: Err.DevToolErrorParams) {
     // const stacks = stackParse(err); // TODO: add doctor stack-trace
     const stacks = [] as any[];
     const filePath = stacks?.[0]?.getFileName?.();
+    const message =
+      err.message.length > 1000 ? err.message.slice(0, 1000) : err.message;
     return new DevToolError(
       err.name || 'UNKNOWN_ERROR',
-      clearMessage(err.message),
+      clearMessage(message),
       {
         ...opt,
         codeFrame: filePath ? { filePath } : undefined,
