@@ -74,7 +74,7 @@ importers:
         version: 0.116.1(@types/react@18.3.27)
       '@lynx-js/rspeedy':
         specifier: ^0.13.2
-        version: 0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)
+        version: 0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(typescript@5.9.2)(webpack@5.97.1)
       '@playwright/test':
         specifier: 1.55.1
         version: 1.55.1
@@ -820,8 +820,8 @@ importers:
   packages/document:
     dependencies:
       '@rspress/core':
-        specifier: 2.0.0-rc.8
-        version: 2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0)
+        specifier: 2.0.0-rc.5
+        version: 2.0.0-rc.5(@types/react@18.3.27)
       '@rstack-dev/doc-ui':
         specifier: 1.12.3
         version: 1.12.3(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -839,14 +839,14 @@ importers:
         specifier: workspace:*
         version: link:../types
       '@rspress/plugin-algolia':
-        specifier: 2.0.0-rc.8
-        version: 2.0.0-rc.8(@rspress/core@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0))(@types/react@18.3.27)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
+        specifier: 2.0.0-rc.5
+        version: 2.0.0-rc.5(@rspress/core@2.0.0-rc.5(@types/react@18.3.27))(@types/react@18.3.27)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
       '@rspress/plugin-llms':
-        specifier: 2.0.0-rc.8
-        version: 2.0.0-rc.8(@rspress/core@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0))
+        specifier: 2.0.0-rc.5
+        version: 2.0.0-rc.5(@rspress/core@2.0.0-rc.5(@types/react@18.3.27))
       '@rspress/plugin-rss':
         specifier: 2.0.0-rc.0
-        version: 2.0.0-rc.0(@rspress/core@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0))
+        version: 2.0.0-rc.0(@rspress/core@2.0.0-rc.5(@types/react@18.3.27))
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -873,7 +873,7 @@ importers:
         version: 1.1.2(@rsbuild/core@2.0.0-alpha.2(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))
       rspress-plugin-font-open-sans:
         specifier: ^1.0.3
-        version: 1.0.3(@rspress/core@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0))
+        version: 1.0.3(@rspress/core@2.0.0-rc.5(@types/react@18.3.27))
       rspress-plugin-sitemap:
         specifier: ^1.2.1
         version: 1.2.1
@@ -3957,8 +3957,8 @@ packages:
     resolution: {integrity: sha512-q5/MoIevPRX8KRsnvCZ1ZpYbs1SmPXY0uJcDPm6ChK+0EvnrCOQNRdAeR1Si8sMxCszRDd7jbFwM5aKxlf8AHA==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/core@2.0.0-rc.8':
-    resolution: {integrity: sha512-kNn+e7AALs+zrNereSBfW7tzKa8lqQLeaFl8JHyIv3cVDmiXDqQCMEbvKahWPD6py+N3eiq8vuXhzvZEEjoOiQ==}
+  '@rspress/core@2.0.0-rc.5':
+    resolution: {integrity: sha512-T5WF7CxAAlt0HAeugbaQAk0BKm3NGrfaxYyrij7nLHRSBZPkY4sO8p3IHfLfmxKCvFogpskmd5F+hBXhow7rxg==}
     engines: {node: '>=20.9.0'}
     hasBin: true
 
@@ -4014,11 +4014,11 @@ packages:
     resolution: {integrity: sha512-NpNhTKBIlV3O6ADhoZkgHvBFvXMW2TYlIWmIT1ysJESUBqDpaN9H3Teve5fugjU2pQ2ORBZO6SQGKliMw/8m/Q==}
     engines: {node: '>= 10'}
 
-  '@rspress/plugin-algolia@2.0.0-rc.8':
-    resolution: {integrity: sha512-/TSywfn4t7cQFA/7VtDkkT41dVBtBhZGbmJAiBbZt5hmSD+6hDF6cdk+f/Y5QihTmO+0QOmMY5tPL/fPdsGz7w==}
+  '@rspress/plugin-algolia@2.0.0-rc.5':
+    resolution: {integrity: sha512-+SFsyqqN6ykeFPXng0ZcaBEERscvXnlihpmX87fwbwR56NFlHl+5mPaTFbsCQInlEViFXY9Fbcl6OqblF2ATRg==}
     engines: {node: '>=20.9.0'}
     peerDependencies:
-      '@rspress/core': ^2.0.0-rc.8
+      '@rspress/core': ^2.0.0-rc.5
 
   '@rspress/plugin-auto-nav-sidebar@2.0.0-alpha.3':
     resolution: {integrity: sha512-U1detSiGlAd+2U6oK1/PEPBulOKUnODsygWvfiY4fydF9FAhcvjeDWanmiAoNWnKBj+bmUMay/e9nR1vtSSpmw==}
@@ -4032,11 +4032,11 @@ packages:
     resolution: {integrity: sha512-6xvPvSnx2wPPnKFjVyHSUspaDWRMrTMXg1HO+YOnruSMjXQGELoagGRObH0FUtXQkmUH8Og8w0Ezf6a7oZZISQ==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-llms@2.0.0-rc.8':
-    resolution: {integrity: sha512-GCgYpnFTun22E8viFqkJUtYtvuwPbnavVG4fzHZk+2gGKV/CiaCUDvkrCseUgTxGHpsN17FY6Tode1cGut2flA==}
+  '@rspress/plugin-llms@2.0.0-rc.5':
+    resolution: {integrity: sha512-7FevOhOsPBMAln/vgxY0gE0oQIIUdATE91d1zof5LgUuocV26od362KTlvAzOK0VsFKTwuJGEOgx2uDU6LzejA==}
     engines: {node: '>=20.9.0'}
     peerDependencies:
-      '@rspress/core': ^2.0.0-rc.8
+      '@rspress/core': ^2.0.0-rc.5
 
   '@rspress/plugin-medium-zoom@2.0.0-alpha.3':
     resolution: {integrity: sha512-3mInIGNIdMD5g+AdLAEHuN+xPHH/Wn58xWcyH4MKlvvZRhfhBd3xwWQbWB1tNlCelwNfREuqcaq65HITRJBQxg==}
@@ -4057,8 +4057,8 @@ packages:
   '@rspress/shared@2.0.0-alpha.3':
     resolution: {integrity: sha512-h6vOhwwe57pDZWJjbKO4IUCNpYM/8XAIjHWT8NCQKCgNE7lCykXgifvZQtPHTEfQA0EX1BowlruHhsZkIo6Ntw==}
 
-  '@rspress/shared@2.0.0-rc.8':
-    resolution: {integrity: sha512-pt1rmy+O1yeSJXyE6tEBoMf4nr8rd8bJjnjoL+4xYcqKhue/HS2lSDwzM3NwROA1n4BQZFpj5udcyNFmuTjCAA==}
+  '@rspress/shared@2.0.0-rc.5':
+    resolution: {integrity: sha512-bPM+3hkh923HEq7UKbeY4CCokeh1ilXGvk+Kxm1LwT51CJH5Jt3aKhzzWLr//+OuaFcSUaO0sWiUQbJU7JaqWA==}
 
   '@rspress/theme-default@2.0.0-alpha.3':
     resolution: {integrity: sha512-7N+Fwv99t6tPITVsR6D+7DS2kfWA5kdfX7s2GyCnJE1oAuK+idq392xkvsUG2j+bauNvbg2VEQqbOOjurdBeUg==}
@@ -10386,9 +10386,6 @@ packages:
   unist-util-remove-position@4.0.2:
     resolution: {integrity: sha512-TkBb0HABNmxzAcfLf4qsIbFbaPDvMO6wa3b3j4VcEzFVaw1LBKwnW4/sRJ/atSLSzoIg41JWEdnE7N6DIhGDGQ==}
 
-  unist-util-remove@4.0.0:
-    resolution: {integrity: sha512-b4gokeGId57UVRX/eVKej5gXqGlc9+trkORhFJpu9raqZkZhU0zm8Doi05+HaiBsMEIJowL+2WtQ5ItjsngPXg==}
-
   unist-util-stringify-position@3.0.3:
     resolution: {integrity: sha512-k5GzIBZ/QatR8N5X2y+drfpWG8IDBzdnVj6OInRNWm1oXrzydiaAT2OQiA8DPRRZyAKb9b6I2a6PxYklZD0gKg==}
 
@@ -12333,7 +12330,7 @@ snapshots:
       '@types/react': 18.3.27
       preact: '@hongzhiyuan/preact@10.28.0-fc4af453'
 
-  '@lynx-js/rspeedy@0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@lynx-js/rspeedy@0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(typescript@5.9.2)(webpack@5.97.1)':
     dependencies:
       '@lynx-js/cache-events-webpack-plugin': 0.0.2
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.3
@@ -12342,7 +12339,7 @@ snapshots:
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 1.7.2
       '@rsbuild/plugin-css-minimizer': 1.0.3(@rsbuild/core@1.7.2)(webpack@5.97.1)
-      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
     optionalDependencies:
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -13658,11 +13655,11 @@ snapshots:
 
   '@rsdoctor/client@1.2.3': {}
 
-  '@rsdoctor/core@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/core@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.3.0(@rsbuild/core@1.7.2)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       axios: 1.13.4
@@ -13694,11 +13691,11 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)':
     dependencies:
-      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       lodash: 4.17.21
@@ -13712,7 +13709,7 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/sdk@1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
+  '@rsdoctor/sdk@1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/client': 1.2.3
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
@@ -14200,13 +14197,14 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rspress/core@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0)':
+  '@rspress/core@2.0.0-rc.5(@types/react@18.3.27)':
     dependencies:
       '@mdx-js/mdx': 3.1.1
       '@mdx-js/react': 3.1.1(@types/react@18.3.27)(react@19.2.3)
-      '@rsbuild/core': 2.0.0-alpha.2(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0)
-      '@rsbuild/plugin-react': 1.4.3(@rsbuild/core@2.0.0-alpha.2(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))
-      '@rspress/shared': 2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0)
+      '@rsbuild/core': 1.7.2
+      '@rsbuild/plugin-react': 1.4.3(@rsbuild/core@1.7.2)
+      '@rspress/mdx-rs': 0.6.6
+      '@rspress/shared': 2.0.0-rc.5
       '@shikijs/rehype': 3.21.0
       '@types/unist': 3.0.3
       '@unhead/react': 2.1.2(react@19.2.3)
@@ -14219,6 +14217,7 @@ snapshots:
       github-slugger: 2.0.0
       hast-util-heading-rank: 3.0.0
       hast-util-to-jsx-runtime: 2.3.6
+      html-to-text: 9.0.5
       lodash-es: 4.17.22
       mdast-util-mdx: 3.0.0
       mdast-util-mdxjs-esm: 2.0.1
@@ -14234,20 +14233,16 @@ snapshots:
       rehype-raw: 7.0.0
       remark-gfm: 4.0.1
       remark-mdx: 3.1.1
-      remark-parse: 11.0.0
       remark-stringify: 11.0.0
       scroll-into-view-if-needed: 3.1.0
       shiki: 3.21.0
       tinyglobby: 0.2.15
       tinypool: 1.1.1
       unified: 11.0.5
-      unist-util-remove: 4.0.0
       unist-util-visit: 5.0.0
       unist-util-visit-children: 3.0.0
     transitivePeerDependencies:
-      - '@module-federation/runtime-tools'
       - '@types/react'
-      - core-js
       - supports-color
       - webpack-hot-middleware
 
@@ -14286,11 +14281,11 @@ snapshots:
       '@rspress/mdx-rs-win32-arm64-msvc': 0.6.6
       '@rspress/mdx-rs-win32-x64-msvc': 0.6.6
 
-  '@rspress/plugin-algolia@2.0.0-rc.8(@rspress/core@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0))(@types/react@18.3.27)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
+  '@rspress/plugin-algolia@2.0.0-rc.5(@rspress/core@2.0.0-rc.5(@types/react@18.3.27))(@types/react@18.3.27)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
     dependencies:
       '@docsearch/css': 4.5.3
       '@docsearch/react': 4.5.3(@types/react@18.3.27)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
-      '@rspress/core': 2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0)
+      '@rspress/core': 2.0.0-rc.5(@types/react@18.3.27)
     transitivePeerDependencies:
       - '@types/react'
       - react
@@ -14315,9 +14310,9 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/plugin-llms@2.0.0-rc.8(@rspress/core@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0))':
+  '@rspress/plugin-llms@2.0.0-rc.5(@rspress/core@2.0.0-rc.5(@types/react@18.3.27))':
     dependencies:
-      '@rspress/core': 2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0)
+      '@rspress/core': 2.0.0-rc.5(@types/react@18.3.27)
       remark-mdx: 3.1.1
       remark-parse: 11.0.0
       remark-stringify: 11.0.0
@@ -14331,9 +14326,9 @@ snapshots:
       '@rspress/runtime': 2.0.0-alpha.3
       medium-zoom: 1.1.0
 
-  '@rspress/plugin-rss@2.0.0-rc.0(@rspress/core@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0))':
+  '@rspress/plugin-rss@2.0.0-rc.0(@rspress/core@2.0.0-rc.5(@types/react@18.3.27))':
     dependencies:
-      '@rspress/core': 2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0)
+      '@rspress/core': 2.0.0-rc.5(@types/react@18.3.27)
       feed: 4.2.2
 
   '@rspress/runtime@2.0.0-alpha.3':
@@ -14355,16 +14350,13 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/shared@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0)':
+  '@rspress/shared@2.0.0-rc.5':
     dependencies:
-      '@rsbuild/core': 2.0.0-alpha.2(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0)
+      '@rsbuild/core': 1.7.2
       '@shikijs/rehype': 3.21.0
       gray-matter: 4.0.3
       lodash-es: 4.17.22
       unified: 11.0.5
-    transitivePeerDependencies:
-      - '@module-federation/runtime-tools'
-      - core-js
 
   '@rspress/theme-default@2.0.0-alpha.3':
     dependencies:
@@ -21242,9 +21234,9 @@ snapshots:
     dependencies:
       fs-extra: 11.3.0
 
-  rspress-plugin-font-open-sans@1.0.3(@rspress/core@2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0)):
+  rspress-plugin-font-open-sans@1.0.3(@rspress/core@2.0.0-rc.5(@types/react@18.3.27)):
     dependencies:
-      '@rspress/core': 2.0.0-rc.8(@module-federation/runtime-tools@0.22.0)(@types/react@18.3.27)(core-js@3.47.0)
+      '@rspress/core': 2.0.0-rc.5(@types/react@18.3.27)
 
   rspress-plugin-sitemap@1.2.1: {}
 
@@ -22294,12 +22286,6 @@ snapshots:
     dependencies:
       '@types/unist': 2.0.11
       unist-util-visit: 4.1.2
-
-  unist-util-remove@4.0.0:
-    dependencies:
-      '@types/unist': 3.0.3
-      unist-util-is: 6.0.0
-      unist-util-visit-parents: 6.0.1
 
   unist-util-stringify-position@3.0.3:
     dependencies:
