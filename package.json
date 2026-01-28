@@ -40,7 +40,7 @@
     "@changesets/cli": "^2.29.8",
     "@rsdoctor/tsconfig": "workspace:*",
     "@rslib/core": "^0.18.5",
-    "@rstest/core": "0.7.9",
+    "@rstest/core": "0.8.1",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "^7.0.3",
     "cspell-ban-words": "^0.0.4",
