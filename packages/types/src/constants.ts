@@ -1,5 +1,9 @@
 export const JSExtension = '.js';
 
+export const BundleExtension = '.bundle';
+
+export const JSExtensions = [JSExtension, BundleExtension];
+
 export const CSSExtension = '.css';
 
 export const HtmlExtension = '.html';

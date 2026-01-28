@@ -34,7 +34,7 @@ import { formatDiffSize } from './utils';
 import { Graph } from '@rsdoctor/utils/common';
 
 const fileTypes = {
-  JS: [Constants.JSExtension],
+  JS: Constants.JSExtensions,
   CSS: [Constants.CSSExtension],
   HTML: [Constants.HtmlExtension],
   Imgs: Constants.ImgExtensions,
