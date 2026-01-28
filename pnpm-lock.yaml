@@ -511,6 +511,8 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
 
+  packages/ai/compiled/socket.io-client: {}
+
   packages/cli:
     dependencies:
       '@rsdoctor/core':
@@ -811,6 +813,10 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
+  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
+
+  packages/core/compiled/axios: {}
+
   packages/document:
     dependencies:
       '@rspress/core':
@@ -1026,6 +1032,12 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
+  packages/sdk/compiled/cors: {}
+
+  packages/sdk/compiled/dayjs: {}
+
+  packages/sdk/compiled/fs-extra: {}
+
   packages/types:
     dependencies:
       '@types/connect':
@@ -1142,6 +1154,10 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
+  packages/utils/compiled/connect: {}
+
+  packages/utils/compiled/filesize: {}
+
   packages/webpack-plugin:
     dependencies:
       '@rsdoctor/core':
@@ -1184,6 +1200,9 @@ importers:
       '@rspack/core':
         specifier: 1.7.4
         version: 1.7.4(@swc/helpers@0.5.18)
+      '@types/lodash':
+        specifier: ^4.17.20
+        version: 4.17.20
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -14731,8 +14750,7 @@ snapshots:
     dependencies:
       '@types/react': 18.3.27
 
-  '@types/lodash@4.17.20':
-    optional: true
+  '@types/lodash@4.17.20': {}
 
   '@types/mdast@3.0.15':
     dependencies:
