@@ -82,8 +82,8 @@
     "source-map": "^0.7.6"
   },
   "devDependencies": {
-    "axios": "^1.13.2",
-    "@rspack/core": "1.7.2",
+    "axios": "^1.13.4",
+    "@rspack/core": "1.7.4",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",
