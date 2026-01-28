@@ -3,6 +3,16 @@ import stripAnsi from 'strip-ansi';
 import { Esbuild, Babel, Err, Linter } from '@rsdoctor/types';
 import { DevToolError } from './error';
 
+const MAX_ERROR_MESSAGE_LENGTH = 1000;
+
+function truncateMessage(
+  input: unknown,
+  maxLen = MAX_ERROR_MESSAGE_LENGTH,
+): string {
+  const str = typeof input === 'string' ? input : String(input ?? '');
+  return str.length > maxLen ? str.slice(0, maxLen) : str;
+}
+
 function isEsbuildError(err: any): err is Esbuild.Error {
   return 'pluginName' in err && 'text' in err && 'location' in err;
 }
@@ -16,7 +26,7 @@ function isDiagnosticError(err: any): err is Linter.Diagnostic {
 }
 
 function parseBabelErrorMessage(input: string) {
-  const lines = stripAnsi(input).split('\n');
+  const lines = stripAnsi(truncateMessage(input)).split('\n');
   const filePath = lines[0].replace(/^([^:]+):.*/, '$1');
   const message = lines[0].replace(/.*: (.*) \(\d+:\d+\)*/, '$1');
   const lineText =
@@ -30,7 +40,7 @@ function parseBabelErrorMessage(input: string) {
 }
 
 function clearMessage(str: string) {
-  return stripAnsi(str).replace(/.*: (.*)\n\n[\s\S]*/g, '$1');
+  return stripAnsi(truncateMessage(str)).replace(/.*: (.*)\n\n[\s\S]*/g, '$1');
 }
 
 function clearStack(str: string) {
@@ -74,11 +84,15 @@ function transformBabelError(err: any, opt?: Err.DevToolErrorParams) {
     const errorCode = opt?.code ?? err.code ?? 'BABEL';
     const title = err.reasonCode;
     const errorParsed = parseBabelErrorMessage(err.message);
-    const speedyError = new DevToolError(title, errorParsed.message, {
-      ...opt,
-      code: errorCode,
-      stack: err.stack && clearStack(err.stack),
-    });
+    const speedyError = new DevToolError(
+      title,
+      truncateMessage(errorParsed.message),
+      {
+        ...opt,
+        code: errorCode,
+        stack: err.stack && clearStack(err.stack),
+      },
+    );
 
     if (err.loc) {
       speedyError.setCodeFrame({
@@ -113,8 +127,7 @@ function transformErrorLike(err: any, opt?: Err.DevToolErrorParams) {
     // const stacks = stackParse(err); // TODO: add doctor stack-trace
     const stacks = [] as any[];
     const filePath = stacks?.[0]?.getFileName?.();
-    const message =
-      err.message.length > 1000 ? err.message.slice(0, 1000) : err.message;
+    const message = truncateMessage(err.message);
     return new DevToolError(
       err.name || 'UNKNOWN_ERROR',
       clearMessage(message),
@@ -129,7 +142,7 @@ function transformErrorLike(err: any, opt?: Err.DevToolErrorParams) {
 
 function transformDiagnostic(err: any, opt?: Err.DevToolErrorParams) {
   if (isDiagnosticError(err)) {
-    return new DevToolError(err.title, err.message, {
+    return new DevToolError(err.title, truncateMessage(err.message), {
       ...err,
       ...opt,
       hint: err.suggestions?.description,
