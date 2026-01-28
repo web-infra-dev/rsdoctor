@@ -181,11 +181,11 @@ export function getAssetsDiffResult(
       total: diffAssetsByExtensions(baseline, current),
     },
     js: {
-      total: diffAssetsByExtensions(baseline, current, Constants.JSExtension),
+      total: diffAssetsByExtensions(baseline, current, Constants.JSExtensions),
       initial: diffAssetsByExtensions(
         baseline,
         current,
-        Constants.JSExtension,
+        Constants.JSExtensions,
         true,
       ),
     },
@@ -226,7 +226,7 @@ export function getAssetsDiffResult(
           !isAssetMatchExtensions(
             asset,
             [
-              Constants.JSExtension,
+              ...Constants.JSExtensions,
               Constants.CSSExtension,
               Constants.HtmlExtension,
             ].concat(
@@ -319,7 +319,7 @@ export function getAssetsSummary(
 ): Client.RsdoctorClientAssetsSummary {
   const jsOpt: GetAssetsOptions = {
     ...options,
-    filterOrExtensions: Constants.JSExtension,
+    filterOrExtensions: Constants.JSExtensions,
   };
   const cssOpt: GetAssetsOptions = {
     ...options,
@@ -347,7 +347,7 @@ export function getAssetsSummary(
       !isAssetMatchExtensions(
         asset,
         [
-          Constants.JSExtension,
+          ...Constants.JSExtensions,
           Constants.CSSExtension,
           Constants.HtmlExtension,
         ].concat(

@@ -27,7 +27,8 @@ export const parseBundle: ParseBundle = (
     return {};
   }
 
-  if (extname(bundlePath) !== '.js') {
+  const ext = extname(bundlePath);
+  if (ext !== '.js' && ext !== '.bundle') {
     return {};
   }
 
