@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@rsbuild/core": "^1.7.2",
-    "@rspack/core": "1.7.2",
+    "@rspack/core": "1.7.4",
     "@types/node": "^22.8.1",
     "es-toolkit": "^1.43.0",
     "memfs": "4.49.0",
