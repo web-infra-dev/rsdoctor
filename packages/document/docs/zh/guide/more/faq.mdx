@@ -138,3 +138,49 @@ export default {
 - 原因：[CssExtractRspackPlugin](https://rspack.rs/plugins/rspack/css-extract-rspack-plugin) 中的 loader 在 pitch 阶段会异步调用其他 loader，并等待这些 loader 执行后的回调结果。因此，CssExtractRspackPlugin 的耗时实际上包括了其他 loader 的执行时间和空闲时间。
 
 <img src="https://assets.rspack.rs/rsdoctor/css-extract-loader.png" />
+
+## 在 Re.Pack 或自定义 Bundle 扩展名项目中使用 Rsdoctor
+
+Rsdoctor 现在支持标准 `.js` 扩展名之外的自定义 JavaScript bundle 文件扩展名。这对于使用 `.bundle` 扩展名的 Re.Pack 等项目特别有用。
+
+### 支持的扩展名
+
+默认情况下，Rsdoctor 识别以下 JavaScript bundle 扩展名：
+
+- `.js` - 标准 JavaScript 文件
+- `.bundle` - Re.Pack 和其他自定义打包工具
+
+### 无需配置
+
+如果您的项目生成带有 `.bundle` 扩展名的 bundle 文件（例如 `main.bundle`、`vendor.bundle`），Rsdoctor 将自动：
+
+- 解析和分析 `.bundle` 文件以及 `.js` 文件
+- 在 Bundle 分析图表中显示 `.bundle` 文件
+- 在 JavaScript 资源统计中包含 `.bundle` 资源
+- 支持 `.bundle` 文件的 source map 分析
+
+### 工作原理
+
+检测逻辑已在以下领域更新：
+
+1. **Bundle 解析**：`parseBundle` 函数现在在分析 bundle 内容时接受 `.js` 和 `.bundle` 扩展名。
+2. **资源过滤**：资源摘要和过滤函数将 `.bundle` 文件视为 JavaScript 资源。
+3. **文件类型检测**：所有文件扩展名匹配工具都包含 `.bundle` 作为公认的 JavaScript 扩展名。
+
+### 用例示例
+
+Re.Pack 项目通常生成带有 `.bundle` 扩展名的 bundle：
+
+```
+dist/
+  ├── index.bundle        ← 现已支持！
+  ├── vendor.bundle       ← 现已支持！
+  ├── styles.css
+  └── assets/
+```
+
+Rsdoctor 将自动检测和分析这些 `.bundle` 文件，无需任何额外配置。
+
+### 未来扩展
+
+如果您需要支持其他自定义扩展名，请在 [Rsdoctor GitHub 仓库](https://github.com/web-infra-dev/rsdoctor) 上开启一个 issue，并详细说明您的使用场景。

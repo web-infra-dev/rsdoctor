@@ -138,3 +138,49 @@ When using Rsdoctor to analyze the compilation time of Rspack projects, you may 
 - Reason: The loader in [CssExtractRspackPlugin](https://rspack.rs/plugins/rspack/css-extract-rspack-plugin) asynchronously calls other loaders during the pitch phase and waits for the callback results after these loaders execute. Therefore, the time taken by CssExtractRspackPlugin actually includes the execution time of other loaders and idle time.
 
 <img src="https://assets.rspack.rs/rsdoctor/css-extract-loader.png" />
+
+## Using Rsdoctor with Re.Pack or Custom Bundle Extensions
+
+Rsdoctor now supports custom JavaScript bundle file extensions beyond the standard `.js` extension. This is particularly useful for projects like Re.Pack that use `.bundle` extensions.
+
+### Supported Extensions
+
+By default, Rsdoctor recognizes the following JavaScript bundle extensions:
+
+- `.js` - Standard JavaScript files
+- `.bundle` - Re.Pack and other custom bundlers
+
+### No Configuration Required
+
+If your project generates bundle files with a `.bundle` extension (e.g., `main.bundle`, `vendor.bundle`), Rsdoctor will automatically:
+
+- Parse and analyze `.bundle` files alongside `.js` files
+- Display `.bundle` files in the Bundle Analyzer Graph
+- Include `.bundle` assets in JavaScript asset statistics
+- Support source map analysis for `.bundle` files
+
+### How It Works
+
+The detection logic has been updated in the following areas:
+
+1. **Bundle Parsing**: The `parseBundle` function now accepts both `.js` and `.bundle` extensions when analyzing bundle contents.
+2. **Asset Filtering**: Asset summary and filtering functions treat `.bundle` files as JavaScript assets.
+3. **File Type Detection**: All file extension matching utilities include `.bundle` as a recognized JavaScript extension.
+
+### Example Use Case
+
+Re.Pack projects typically generate bundles with the `.bundle` extension:
+
+```
+dist/
+  ├── index.bundle        ← Now supported!
+  ├── vendor.bundle       ← Now supported!
+  ├── styles.css
+  └── assets/
+```
+
+Rsdoctor will automatically detect and analyze these `.bundle` files without any additional configuration.
+
+### Future Extensions
+
+If you need support for additional custom extensions, please open an issue on the [Rsdoctor GitHub repository](https://github.com/web-infra-dev/rsdoctor) with details about your use case.
