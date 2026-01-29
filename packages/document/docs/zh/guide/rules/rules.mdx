@@ -219,6 +219,67 @@ interface Config {
 }
 ```
 
+### [E1006] Module Mixed Chunks
+
+当某个模块同时被包含在 **initial chunks**（初始 chunk）和 **async chunks**（异步 chunk）中时，会导致同一份模块代码被重复打进多个 chunk，增加产物体积，并可能影响首屏加载与缓存效率。
+
+- **Initial chunks**：随主入口一起加载的 chunk（如 entry、主包里的同步 import）。
+- **Async chunks**：通过动态 `import()` 等方式按需加载的 chunk。
+
+#### 规则详情
+
+- 在 Bundle Alerts 的 **「Module Mixed Chunks」** 标签页中，会列出所有同时出现在初始 chunk 与异步 chunk 中的模块。
+- 每个条目会展示：模块路径、所属的 **Initial Chunks** 列表和 **Async Chunks** 列表，便于定位重复打包的模块。
+
+#### 常见原因
+
+- **同一模块被两种方式引用**：既在主包或 entry 里被同步 `import`，又在某处被动态 `import()` 引用，构建工具会分别打进 initial 与 async chunk。
+- **某文件既作 entry 又作异步 chunk**：例如某工具模块既在配置里被设为 entry，又在业务代码里被 `import()`，会导致该模块同时出现在 entry 产物的 initial chunk 和动态加载的 async chunk 中。
+- **splitChunks 与 entry 重叠**：通过 `splitChunks` / `chunkSplit` 把某路径单独拆成 async chunk，但该路径同时又是 entry 或主包依赖，也会出现混合。
+
+#### 解决方案与建议
+
+1. **统一引用方式**  
+   尽量对同一模块只使用一种引用方式：要么全部同步 import（放进 initial），要么全部动态 `import()`（放进 async）。避免「主包同步引用 + 某处动态引用」同一文件。
+
+2. **审视 entry 与动态加载**  
+   若某文件既作为 entry 又被打进异步 **chunk**，考虑：去掉其中一种用法；或将该文件只作为公共依赖，通过构建配置抽成单一 shared chunk，由 initial 与 async 共同引用，而不是重复打包。
+
+3. **调整 splitChunks / chunkSplit**  
+   检查 `optimization.splitChunks`（Rspack/Webpack）或 `performance.chunkSplit`（Rsbuild）中对该模块路径的规则，避免同一模块被同时拆到 initial 与 async 两类 chunk。可适当使用 `chunks: 'async'` 或 `chunks: 'initial'` 做区分，或通过 `cacheGroups` 的 `test` 与 `chunks` 控制其只进入一类 chunk。
+
+4. **梳理依赖关系**  
+   根据报告中的模块路径与 chunk 列表，在源码中搜索该模块的引用位置，区分同步与动态引用，再按上述方式收敛为单一 chunk 类型或抽成公共 chunk。
+
+#### 配置
+
+- **ignore**：配置需要忽略的模块路径（支持字符串匹配：模块路径包含配置中的某字符串即忽略）。
+
+```ts
+interface Config {
+  /** 需要忽略的模块路径片段 */
+  ignore: string[];
+}
+```
+
+配置示例：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'module-mixed-chunks': ['Warn', { ignore: ['node_modules/'] }],
+        },
+      },
+    }),
+  ],
+};
+```
+
 ## Linter 类型定义
 
 - `linter`字段的类型如下：

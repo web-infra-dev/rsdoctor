@@ -34,7 +34,8 @@ Please refer to the [Linter Type](#linter-type) in this document for the type de
   - Clicking the **「Show Relations」** on the far right can view the specific reference chain and the corresponding reference file code position of this third-party package.
 
   <img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-alters-relations.png" />
-  - Clicking the **「!（exclamation mark）」** icon on the far right can view the specific explanation of the rule for the duplicate third-party package.
+  - Clicking the **「!（exclamation mark）」** icon on the far right can view
+  the specific explanation of the rule for the duplicate third-party package.
 
   <img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-alters-rule.png" />
 
@@ -220,6 +221,67 @@ interface Config {
   /** Packages that need to be ignored */
   ignore: string[];
 }
+```
+
+### [E1006] Module Mixed Chunks
+
+When a module is included in both **initial chunks** and **async chunks**, the same module code is bundled into multiple chunks, increasing output size and potentially affecting first-screen load and cache efficiency.
+
+- **Initial chunks**: Chunks loaded with the main entry (e.g. entry points, synchronous `import` in the main bundle).
+- **Async chunks**: Chunks loaded on demand via dynamic `import()` or similar.
+
+#### Rule details
+
+- In the **「Module Mixed Chunks」** tab of Bundle Alerts, all modules that appear in both initial and async chunks are listed.
+- Each entry shows: module path, **Initial Chunks** list, and **Async Chunks** list, so you can locate duplicated modules.
+
+#### Common causes
+
+- **Same module referenced in two ways**: The module is both synchronously `import`ed in the main bundle or entry, and dynamically `import()`ed somewhere else, so the bundler emits it in both initial and async chunks.
+- **A file is both an entry and an async chunk**: For example, a utility module is configured as an entry and also `import()`ed in app code, so it appears in the entry’s initial chunk and in a dynamically loaded async chunk.
+- **splitChunks overlapping with entry**: A path is split into an async chunk via `splitChunks` / `chunkSplit`, but that path is also an entry or a main-bundle dependency, leading to mixed chunk types.
+
+#### Solutions and recommendations
+
+1. **Use a single import style**  
+   Prefer one way to reference a module: either all synchronous imports (in initial) or all dynamic `import()` (in async). Avoid having the same file both synchronously imported in the main bundle and dynamically imported elsewhere.
+
+2. **Review entry vs dynamic loading**  
+   If a file is both an entry and part of an async chunk, either remove one of those usages or treat the file as a shared dependency and extract it into a single shared chunk via build config, so both initial and async chunks reference it instead of duplicating it.
+
+3. **Adjust splitChunks / chunkSplit**  
+   Check rules for that module path in `optimization.splitChunks` (Rspack/Webpack) or `performance.chunkSplit` (Rsbuild), and avoid the same module being split into both initial and async chunks. Use `chunks: 'async'` or `chunks: 'initial'` where appropriate, or control which chunk type it goes into via `cacheGroups` and `test` / `chunks`.
+
+4. **Trace dependencies**  
+   From the reported module path and chunk list, search the codebase for references to that module, distinguish sync vs dynamic imports, then converge to a single chunk type or extract a common chunk as above.
+
+#### Configuration
+
+- **ignore**: Module path patterns to ignore (string match: if the module path contains any of these strings, it is ignored).
+
+```ts
+interface Config {
+  /** Module path fragments to ignore */
+  ignore: string[];
+}
+```
+
+Configuration example:
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'module-mixed-chunks': ['Warn', { ignore: ['node_modules/'] }],
+        },
+      },
+    }),
+  ],
+};
 ```
 
 ## Linter type
