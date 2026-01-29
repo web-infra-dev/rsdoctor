@@ -143,12 +143,33 @@ export interface OverlayRuleStoreData extends BaseRuleStoreData {
   stack?: string;
 }
 
+/**
+ * Rule for detecting modules that are included in both initial and async chunks.
+ */
+export interface ModuleMixedChunksRuleStoreData extends BaseRuleStoreData {
+  type: 'module-mixed-chunks';
+  module: {
+    id: number | string;
+    path: string;
+    webpackId?: string | number;
+  };
+  initialChunks: Array<{
+    id: string;
+    name: string;
+  }>;
+  asyncChunks: Array<{
+    id: string;
+    name: string;
+  }>;
+}
+
 export type RuleStoreDataItem =
   | LinkRuleStoreData
   | FileRelationRuleStoreData
   | CodeChangeRuleStoreData
   | PackageRelationDiffRuleStoreData
   | CodeViewRuleStoreData
-  | CrossChunksPackageRuleStoreData;
+  | CrossChunksPackageRuleStoreData
+  | ModuleMixedChunksRuleStoreData;
 
 export type RuleStoreData = RuleStoreDataItem[];

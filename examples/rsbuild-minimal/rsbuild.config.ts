@@ -4,6 +4,13 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import { AssetsCountLimit } from './rules/assets-count-limit';
 
 export default defineConfig({
+  source: {
+    include: ['src/**/*.ts', 'src/**/*.tsx'],
+    entry: {
+      index: './src/index.tsx',
+      shared: './src/utils/shared.ts',
+    },
+  },
   plugins: [pluginReact()],
   tools: {
     bundlerChain: (chain) => {
@@ -46,5 +53,24 @@ export default defineConfig({
   output: {
     minify: false,
     filenameHash: false,
+  },
+  performance: {
+    chunkSplit: {
+      strategy: 'split-by-experience',
+      override: {
+        cacheGroups: {
+          shared: {
+            test: /[\\/]src[\\/]utils[\\/]shared\.ts$/,
+            name: 'shared',
+            chunks: 'async',
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+        },
+      },
+    },
+    bundleAnalyze: {
+      generateStatsFile: true,
+    },
   },
 });
