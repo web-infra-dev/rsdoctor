@@ -75,10 +75,10 @@ importers:
         version: 0.116.1(@types/react@18.3.27)
       '@lynx-js/rspeedy':
         specifier: ^0.13.2
-        version: 0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(typescript@5.9.2)(webpack@5.97.1)
+        version: 0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@playwright/test':
-        specifier: 1.55.1
-        version: 1.55.1
+        specifier: 1.58.0
+        version: 1.58.0
       '@rsbuild/plugin-less':
         specifier: 1.5.1
         version: 1.5.1(@rsbuild/core@2.0.0-alpha.2(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))
@@ -512,8 +512,6 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
 
-  packages/ai/compiled/socket.io-client: {}
-
   packages/cli:
     dependencies:
       '@rsdoctor/core':
@@ -814,10 +812,6 @@ importers:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
 
-  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
-
-  packages/core/compiled/axios: {}
-
   packages/document:
     dependencies:
       '@rspress/core':
@@ -1033,16 +1027,6 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/sdk/compiled/body-parser: {}
-
-  packages/sdk/compiled/cors: {}
-
-  packages/sdk/compiled/dayjs: {}
-
-  packages/sdk/compiled/fs-extra: {}
-
-  packages/sdk/compiled/json-cycle: {}
-
   packages/types:
     dependencies:
       '@types/connect':
@@ -1158,10 +1142,6 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
-
-  packages/utils/compiled/connect: {}
-
-  packages/utils/compiled/filesize: {}
 
   packages/webpack-plugin:
     dependencies:
@@ -3057,8 +3037,8 @@ packages:
     resolution: {integrity: sha512-dfUnCxiN9H4ap84DvD2ubjw+3vUNpstxa0TneY/Paat8a3R4uQZDLSvWjmznAY/DoahqTHl9V46HF/Zs3F29pg==}
     engines: {node: '>= 10.0.0'}
 
-  '@playwright/test@1.55.1':
-    resolution: {integrity: sha512-IVAh/nOJaw6W9g+RJVlIQJ6gSiER+ae6mKQ5CX1bERzQgbC1VSeBlwdvczT7pxb0GWiyrxH4TGKbMfDb4Sq/ig==}
+  '@playwright/test@1.58.0':
+    resolution: {integrity: sha512-fWza+Lpbj6SkQKCrU6si4iu+fD2dD3gxNHFhUPxsfXBPhnv3rRSQVd0NtBUT9Z/RhF/boCBcuUaMUSTRTopjZg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -8164,8 +8144,18 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  playwright-core@1.58.0:
+    resolution: {integrity: sha512-aaoB1RWrdNi3//rOeKuMiS65UCcgOVljU46At6eFcOFPFHWtd2weHRRow6z/n+Lec0Lvu0k9ZPKJSjPugikirw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   playwright@1.55.1:
     resolution: {integrity: sha512-cJW4Xd/G3v5ovXtJJ52MAOclqeac9S/aGGgRzLabuF8TnIb6xHvMzKIa6JmrRzUkeXJgfL1MhukP0NK6l39h3A==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.58.0:
+    resolution: {integrity: sha512-2SVA0sbPktiIY/MCOPX8e86ehA/e+tDNq+e5Y8qjKYti2Z/JG7xnronT/TXTIkKbYGWlCbuucZ6dziEgkoEjQQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -12331,7 +12321,7 @@ snapshots:
       '@types/react': 18.3.27
       preact: '@hongzhiyuan/preact@10.28.0-fc4af453'
 
-  '@lynx-js/rspeedy@0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(typescript@5.9.2)(webpack@5.97.1)':
+  '@lynx-js/rspeedy@0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@lynx-js/cache-events-webpack-plugin': 0.0.2
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.3
@@ -12340,7 +12330,7 @@ snapshots:
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 1.7.2
       '@rsbuild/plugin-css-minimizer': 1.0.3(@rsbuild/core@1.7.2)(webpack@5.97.1)
-      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
+      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
     optionalDependencies:
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -13109,9 +13099,9 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.1
     optional: true
 
-  '@playwright/test@1.55.1':
+  '@playwright/test@1.58.0':
     dependencies:
-      playwright: 1.55.1
+      playwright: 1.58.0
 
   '@pmmmwh/react-refresh-webpack-plugin@0.5.15(react-refresh@0.14.2)(type-fest@4.32.0)(webpack-dev-server@5.2.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1(esbuild@0.17.19)))(webpack@5.97.1(esbuild@0.17.19))':
     dependencies:
@@ -13654,11 +13644,11 @@ snapshots:
 
   '@rsdoctor/client@1.2.3': {}
 
-  '@rsdoctor/core@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)':
+  '@rsdoctor/core@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.3.0(@rsbuild/core@1.7.2)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       axios: 1.13.4
@@ -13690,11 +13680,11 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)':
+  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
-      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
+      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       lodash: 4.17.21
@@ -13708,7 +13698,7 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/sdk@1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)':
+  '@rsdoctor/sdk@1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/client': 1.2.3
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
@@ -19645,9 +19635,17 @@ snapshots:
 
   playwright-core@1.55.1: {}
 
+  playwright-core@1.58.0: {}
+
   playwright@1.55.1:
     dependencies:
       playwright-core: 1.55.1
+    optionalDependencies:
+      fsevents: 2.3.2
+
+  playwright@1.58.0:
+    dependencies:
+      playwright-core: 1.58.0
     optionalDependencies:
       fsevents: 2.3.2
 
