@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/components",
-  "version": "1.5.1",
+  "version": "1.5.2-beta.0",
   "license": "MIT",
   "types": "dist/index.d.ts",
   "repository": {
