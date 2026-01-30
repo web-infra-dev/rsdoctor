@@ -293,7 +293,9 @@ export async function handleAfterEmitAssets(
           if (
             assetName &&
             typeof assetName === 'string' &&
-            (assetName.endsWith('.js') || assetName.endsWith('.css'))
+            (assetName.endsWith('.js') ||
+              assetName.endsWith('.bundle') ||
+              assetName.endsWith('.css'))
           ) {
             _this.assetsWithoutSourceMap.add(assetName);
           }
@@ -441,7 +443,9 @@ function parseAsset(
       assetLinesCodeList = bundledCode.split(/\r?\n/);
     } else if (
       type === 'js/css' &&
-      (assetName.endsWith('.js') || assetName.endsWith('.css'))
+      (assetName.endsWith('.js') ||
+        assetName.endsWith('.bundle') ||
+        assetName.endsWith('.css'))
     ) {
       assetContent = asset.source?.source?.() || '';
       assetLinesCodeList = assetContent.split(/\r?\n/);

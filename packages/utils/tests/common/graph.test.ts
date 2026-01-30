@@ -115,4 +115,65 @@ describe('test src/common/graph.ts', () => {
     expect(Graph.formatAssetName('index.abc123def456.js')).toBe('index.js');
     expect(Graph.formatAssetName('index-abc123def456.js')).toBe('index.js');
   });
+
+  it('isAssetMatchExtension should match .bundle files', () => {
+    const bundleAsset = { path: 'main.bundle', type: 'asset' as const };
+    const jsAsset = { path: 'main.js', type: 'asset' as const };
+    const cssAsset = { path: 'main.css', type: 'asset' as const };
+
+    // Test .bundle extension matching
+    expect(Graph.isAssetMatchExtension(bundleAsset, '.bundle')).toBe(true);
+    expect(Graph.isAssetMatchExtension(bundleAsset, '.js')).toBe(false);
+
+    // Test .js extension matching
+    expect(Graph.isAssetMatchExtension(jsAsset, '.js')).toBe(true);
+    expect(Graph.isAssetMatchExtension(jsAsset, '.bundle')).toBe(false);
+
+    // Test other extensions
+    expect(Graph.isAssetMatchExtension(cssAsset, '.css')).toBe(true);
+    expect(Graph.isAssetMatchExtension(cssAsset, '.js')).toBe(false);
+  });
+
+  it('isAssetMatchExtensions should match .bundle files in array', () => {
+    const bundleAsset = { path: 'main.bundle', type: 'asset' as const };
+    const jsAsset = { path: 'main.js', type: 'asset' as const };
+
+    // Test matching with multiple extensions
+    expect(Graph.isAssetMatchExtensions(bundleAsset, ['.js', '.bundle'])).toBe(
+      true,
+    );
+    expect(Graph.isAssetMatchExtensions(jsAsset, ['.js', '.bundle'])).toBe(
+      true,
+    );
+    expect(Graph.isAssetMatchExtensions(bundleAsset, ['.css', '.html'])).toBe(
+      false,
+    );
+  });
+
+  it('filterAssetsByExtensions should filter .bundle files', () => {
+    const assets = [
+      { path: 'main.bundle', type: 'asset' as const },
+      { path: 'main.js', type: 'asset' as const },
+      { path: 'styles.css', type: 'asset' as const },
+      { path: 'vendor.bundle', type: 'asset' as const },
+    ];
+
+    // Filter by .bundle extension
+    const bundleAssets = Graph.filterAssetsByExtensions(assets, '.bundle');
+    expect(bundleAssets).toHaveLength(2);
+    expect(bundleAssets[0].path).toBe('main.bundle');
+    expect(bundleAssets[1].path).toBe('vendor.bundle');
+
+    // Filter by multiple extensions
+    const jsAndBundleAssets = Graph.filterAssetsByExtensions(assets, [
+      '.js',
+      '.bundle',
+    ]);
+    expect(jsAndBundleAssets).toHaveLength(3);
+
+    // Filter by .css extension
+    const cssAssets = Graph.filterAssetsByExtensions(assets, '.css');
+    expect(cssAssets).toHaveLength(1);
+    expect(cssAssets[0].path).toBe('styles.css');
+  });
 });

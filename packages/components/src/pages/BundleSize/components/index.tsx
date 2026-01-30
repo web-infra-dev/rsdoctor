@@ -333,13 +333,14 @@ export const WebpackModulesOverallBase: React.FC<
               return (
                 <ServerAPIProvider api={SDK.ServerAPI.API.GetSummaryBundles}>
                   {(data) => {
-                    // Filter assets to only show JS (js, cjs, mjs), CSS, and HTML files
+                    // Filter assets to only show JS (js, cjs, mjs), .bundle, CSS, and HTML files
                     const isTargetFileType = (filePath: string): boolean => {
                       const ext = filePath.toLowerCase().split('.').pop() || '';
                       return (
                         ext === 'js' ||
                         ext === 'cjs' ||
                         ext === 'mjs' ||
+                        ext === 'bundle' ||
                         ext === 'css' ||
                         ext === 'html'
                       );
