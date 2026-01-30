@@ -24,7 +24,10 @@ export const rule = defineRule<typeof title, Config>(() => {
     },
     async check({ chunkGraph, report, ruleConfig, root, configs }) {
       for (const asset of chunkGraph.getAssets()) {
-        if (path.extname(asset.path) !== '.js') {
+        if (
+          path.extname(asset.path) !== '.js' &&
+          path.extname(asset.path) !== '.bundle'
+        ) {
           continue;
         }
 
