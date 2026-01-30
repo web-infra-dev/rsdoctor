@@ -16,22 +16,27 @@ for (const item of prebundleConfig.dependencies) {
   regexpMap[depName] = new RegExp(`compiled[\\/]${depName}(?:[\\/]|$)`);
 }
 
-const externals = [
-  ({ request }: { request?: string }, callback: any) => {
-    if (request) {
-      if (prebundleConfig.dependencies.includes(request)) {
-        return callback(undefined, `../compiled/${request}/index.js`);
-      }
-      const entries = Object.entries(regexpMap);
-      for (const [name, test] of entries) {
-        if (test.test(request)) {
-          return callback(undefined, `../compiled/${name}/index.js`);
+function getExternals(_libConfig: { format?: string }) {
+  return [
+    ({ request }: { request?: string }, callback: any) => {
+      if (request) {
+        if (prebundleConfig.dependencies.includes(request)) {
+          return callback(undefined, `../compiled/${request}/index.js`);
+        }
+        const entries = Object.entries(regexpMap);
+        for (const [name, test] of entries) {
+          if (test.test(request)) {
+            return callback(undefined, `../compiled/${name}/index.js`);
+          }
+        }
+        if (request === 'safer-buffer' && _libConfig.format === 'esm') {
+          return callback(undefined, 'safer-buffer', 'commonjs');
         }
       }
-    }
-    callback();
-  },
-];
+      callback();
+    },
+  ];
+}
 
 export default defineConfig({
   ...dualPackage,
@@ -39,12 +44,13 @@ export default defineConfig({
     ...libConfig,
     output: {
       ...libConfig.output,
-      externals,
+      externals: getExternals(libConfig),
     },
     shims: {
       esm: {
         __filename: true,
         __dirname: true,
+        require: true,
       },
       cjs: {
         'import.meta.url': true,
