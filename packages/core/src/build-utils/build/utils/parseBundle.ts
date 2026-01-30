@@ -5,7 +5,7 @@ import { filesize } from 'filesize';
 import { parser } from '@rsdoctor/utils/ruleUtils';
 import { extname } from 'path';
 
-import { SDK } from '@rsdoctor/types';
+import { Constants, SDK } from '@rsdoctor/types';
 import { logger } from '@rsdoctor/utils/logger';
 import type { ParseBundle } from '@rsdoctor/graph';
 
@@ -28,7 +28,7 @@ export const parseBundle: ParseBundle = (
   }
 
   const ext = extname(bundlePath);
-  if (ext !== '.js' && ext !== '.bundle') {
+  if (!Constants.JSExtensions.includes(ext)) {
     return {};
   }
 
