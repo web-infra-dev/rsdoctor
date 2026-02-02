@@ -98,4 +98,48 @@ describe('parseBundle', function () {
       }
     }
   });
+
+  it('should parse bundle files with .bundle extension', function () {
+    const bundleFile = `${BUNDLES_DIR}/validBundleWithArrowFunction.bundle`;
+    const modules = [
+      { renderId: '0', webpackId: '0' },
+      { renderId: '1', webpackId: '1' },
+      { renderId: '2', webpackId: '2' },
+      { renderId: '3', webpackId: '33' },
+      { renderId: '5', webpackId: '5' },
+      { renderId: '6', webpackId: '6' },
+      { renderId: '/x1Yz5', webpackId: '/x1Yz5' },
+    ];
+    const bundle = parseBundle(bundleFile, modules);
+
+    const expectedModules = JSON.parse(
+      fs.readFileSync(
+        `${BUNDLES_DIR}/validBundleWithArrowFunction.bundle.modules.json`,
+        {
+          encoding: 'utf-8',
+        },
+      ),
+    );
+    expect(bundle.src).toEqual(fs.readFileSync(bundleFile, 'utf8'));
+    os.EOL === '\n' && expect(bundle.modules).toEqual(expectedModules.modules);
+  });
+
+  it('should return empty object for non-js and non-bundle files', function () {
+    const tmpDir = os.tmpdir();
+    const testFilePath = path.join(tmpDir, 'test-file.css');
+
+    try {
+      fs.writeFileSync(testFilePath, '.test { color: red; }', 'utf8');
+
+      const modules = [{ renderId: '0', webpackId: '0' }];
+      const result = parseBundle(testFilePath, modules);
+
+      // Should return empty object for non-JS/bundle files
+      expect(result).toEqual({});
+    } finally {
+      if (fs.existsSync(testFilePath)) {
+        fs.unlinkSync(testFilePath);
+      }
+    }
+  });
 });
