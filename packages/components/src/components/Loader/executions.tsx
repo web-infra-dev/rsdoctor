@@ -136,7 +136,7 @@ export const LoaderExecutions = ({
   
   // Fetch code when user switches to loader details tab or changes loader
   useEffect(() => {
-    if (activeKey === 'loaderDetails' && !loader.isPitch && dataLoader) {
+    if (activeKey === 'loaderDetails' && dataLoader) {
       setIsLoadingCode(true);
       setLoaderCode(null);
       
@@ -156,7 +156,7 @@ export const LoaderExecutions = ({
           setIsLoadingCode(false);
         });
     }
-  }, [currentIndex, activeKey, loader.loader, loader.loaderIndex, loader.isPitch, resource.path, dataLoader]);
+  }, [currentIndex, activeKey, resource.path, dataLoader]);
   
   const before = loaderCode?.input || '';
   const loaderResult = loaderCode?.output || '';
