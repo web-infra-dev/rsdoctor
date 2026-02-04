@@ -12,14 +12,15 @@ import {
   Timeline,
   Tooltip,
   Typography,
+  Spin,
 } from 'antd';
 import dayjs from 'dayjs';
-import { PropsWithChildren, useCallback, useState } from 'react';
+import { PropsWithChildren, useCallback, useState, useEffect } from 'react';
 import InputIcon from 'src/common/svg/loader/input.svg';
 import OutputIcon from 'src/common/svg/loader/output.svg';
 import StepIcon from 'src/common/svg/loader/step.svg';
 import { Size } from '../../constants';
-import { beautifyPath, formatCosts, useTheme } from '../../utils';
+import { beautifyPath, formatCosts, useTheme, useDataLoader } from '../../utils';
 import { CodeViewer, DiffViewer } from '../base';
 import { Card } from '../Card';
 import { CodeOpener } from '../Opener';
@@ -118,13 +119,47 @@ export const LoaderExecutions = ({
   const { theme } = useTheme();
   const isLight = theme === 'light';
   const loader = loaders[currentIndex];
-  const before = loader.input || '';
   const leftSpan = 5;
   const hasError = loader.errors && loader.errors.length;
   const [activeKey, setActiveKey] = useState('loaderDetails');
   const onChange = useCallback((key: string) => {
     setActiveKey(key);
   }, []);
+  
+  // State for lazy-loaded code
+  const [loaderCode, setLoaderCode] = useState<{
+    input: string;
+    output: string;
+  } | null>(null);
+  const [isLoadingCode, setIsLoadingCode] = useState(false);
+  const { loader: dataLoader } = useDataLoader();
+  
+  // Fetch code when user switches to loader details tab or changes loader
+  useEffect(() => {
+    if (activeKey === 'loaderDetails' && !loader.isPitch && dataLoader) {
+      setIsLoadingCode(true);
+      setLoaderCode(null);
+      
+      dataLoader
+        .loadAPI(SDK.ServerAPI.API.GetLoaderFileInputAndOutput, {
+          file: resource.path,
+          loader: loader.loader,
+          loaderIndex: loader.loaderIndex,
+        })
+        .then((res) => {
+          setLoaderCode(res);
+          setIsLoadingCode(false);
+        })
+        .catch((err) => {
+          console.error('Failed to load loader code:', err);
+          setLoaderCode({ input: '', output: '' });
+          setIsLoadingCode(false);
+        });
+    }
+  }, [currentIndex, activeKey, loader.loader, loader.loaderIndex, loader.isPitch, resource.path, dataLoader]);
+  
+  const before = loaderCode?.input || '';
+  const loaderResult = loaderCode?.output || '';
 
   return (
     <Row className={styles.executions} style={{ height: '100%' }}>
@@ -278,12 +313,16 @@ export const LoaderExecutions = ({
                         />
                         <div style={{ flex: 1 }} />
                       </div>
-                      {loader.isPitch ? (
-                        loader.result ? (
+                      {isLoadingCode ? (
+                        <div style={{ height: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Spin tip="Loading loader code..." />
+                        </div>
+                      ) : loader.isPitch ? (
+                        loaderResult ? (
                           <div style={{ height: '90%' }}>
                             <CodeViewer
                               isEmbed
-                              code={loader.result}
+                              code={loaderResult}
                               filePath={resource.path}
                             />
                           </div>
@@ -297,7 +336,7 @@ export const LoaderExecutions = ({
                       ) : (
                         <div style={{ minHeight: '700px' }}>
                           <div style={{ height: '40rem', overflow: 'hidden' }}>
-                            {!loader.result && !before ? (
+                            {!loaderResult && !before ? (
                               <Empty
                                 description={
                                   'No loader result. If you use the Brief Mode, there will not have loader results.'
@@ -307,7 +346,7 @@ export const LoaderExecutions = ({
                               <DiffViewer
                                 isEmbed
                                 original={before}
-                                modified={loader.result || ''}
+                                modified={loaderResult || ''}
                                 originalFilePath={resource.path}
                                 modifiedFilePath={resource.path}
                               />

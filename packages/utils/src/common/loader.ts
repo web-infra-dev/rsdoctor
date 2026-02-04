@@ -210,8 +210,11 @@ export function getLoaderFileDetails(
   return {
     ...data,
     loaders: data.loaders.map((el) => {
+      // Strip large input/result fields to reduce data volume
+      // These can be fetched on-demand via GetLoaderFileInputAndOutput API
+      const { input, result, ...loaderWithoutCode } = el;
       return {
-        ...el,
+        ...loaderWithoutCode,
         loader: getLoadrName(el.loader),
         costs: getLoaderCosts(el, list),
       };
