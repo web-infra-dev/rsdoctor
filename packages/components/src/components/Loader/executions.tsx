@@ -38,7 +38,7 @@ const LoaderPropsItem = ({
   resource,
   cwd,
 }: {
-  loader: SDK.LoaderTransformData & {
+  loader: Omit<SDK.LoaderTransformData, 'input' | 'result'> & {
     costs: number;
   };
   resource: SDK.ResourceData;
