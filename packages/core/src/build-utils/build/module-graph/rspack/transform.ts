@@ -180,4 +180,20 @@ export function patchNativeModuleSources(
       });
     }
   }
+
+  // Handle JSON module sizes from Rspack native plugin
+  const jsonModuleSizes = rawModuleSourcesPatch.json_module_sizes as
+    | Array<{ identifier: string; size: number }>
+    | undefined;
+  if (jsonModuleSizes && jsonModuleSizes.length > 0) {
+    for (const jsonModuleSize of jsonModuleSizes) {
+      const module = mg.getModuleByWebpackId(jsonModuleSize.identifier);
+      if (module) {
+        // Set parsedSize for JSON modules from Rspack's tree-shaken size
+        module.setSize({
+          parsedSize: jsonModuleSize.size,
+        });
+      }
+    }
+  }
 }
