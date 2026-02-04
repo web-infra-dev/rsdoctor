@@ -43,8 +43,7 @@ export const rule = defineRule<typeof title, Config>(() => {
 
       // flatten loaders
       const loaders: SDK.LoaderTransformData[] = loader
-        .map((el) => el.loaders)
-        .reduce((t, c) => t.concat(c));
+        .flatMap((el) => el.loaders);
 
       for (const item of loader) {
         const { path, ext } = item.resource;
