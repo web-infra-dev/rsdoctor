@@ -113,8 +113,8 @@ importers:
         specifier: ^18.3.27
         version: 18.3.27
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       loader-utils:
         specifier: ^2.0.4
         version: 2.0.4
@@ -648,8 +648,8 @@ importers:
         specifier: ^3.0.6
         version: 3.0.6(echarts@5.6.0)(react@18.3.1)
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       i18next:
         specifier: 22.0.4
         version: 22.0.4
@@ -751,8 +751,8 @@ importers:
         specifier: 5.12.0
         version: 5.12.0
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       filesize:
         specifier: ^10.1.6
         version: 10.1.6
@@ -885,8 +885,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       path-browserify:
         specifier: 1.0.1
         version: 1.0.1
@@ -1192,8 +1192,8 @@ importers:
         specifier: ^22.8.1
         version: 22.18.1
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       memfs:
         specifier: 4.49.0
         version: 4.49.0
@@ -5909,8 +5909,8 @@ packages:
     resolution: {integrity: sha512-j6vWzfrGVfyXxge+O0x5sh6cvxAog0a/4Rdd2K36zCMV5eJ+/+tOAngRO8cODMNWbVRdVlmGZQL2YS3yR8bIUA==}
     engines: {node: '>= 0.4'}
 
-  es-toolkit@1.43.0:
-    resolution: {integrity: sha512-SKCT8AsWvYzBBuUqMk4NPwFlSdqLpJwmy6AP322ERn8W2YLIB6JBXnwMI2Qsh2gfphT3q7EKAxKb23cvFHFwKA==}
+  es-toolkit@1.44.0:
+    resolution: {integrity: sha512-6penXeZalaV88MM3cGkFZZfOoLGWshWWfdy0tWw/RlVVyhvMaWSBTOvXNeiW3e5FwdS5ePW0LGEu17zT139ktg==}
 
   esast-util-from-estree@2.0.0:
     resolution: {integrity: sha512-4CyanoAudUSBAn5K13H4JhsMH6L9ZP7XbLVe/dKybkxMO7eDyLsT8UHl9TRNrU2Gr9nz+FovfSIjuXWJ81uVwQ==}
@@ -16619,7 +16619,7 @@ snapshots:
       has-tostringtag: 1.0.2
       hasown: 2.0.2
 
-  es-toolkit@1.43.0: {}
+  es-toolkit@1.44.0: {}
 
   esast-util-from-estree@2.0.0:
     dependencies:
