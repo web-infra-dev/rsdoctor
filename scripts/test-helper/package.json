@@ -29,7 +29,7 @@
     "@rspack/core": "1.7.5",
     "@types/lodash": "^4.17.23",
     "@types/node": "^22.8.1",
-    "es-toolkit": "^1.43.0",
+    "es-toolkit": "^1.44.0",
     "memfs": "4.49.0",
     "typescript": "^5.9.2",
     "upath": "2.0.1",

@@ -128,15 +128,12 @@ function getLevelOption() {
   ];
 }
 
-const TreeMapInner: React.FC<
-  TreeMapProps & { forwardedRef?: React.Ref<EChartsReactCore> }
-> = memo(
+export const TreeMap: React.FC<TreeMapProps> = memo(
   ({
     treeData,
     sizeType,
     style,
     onChartClick,
-    forwardedRef,
     highlightNodeId,
     centerNodeId,
     rootPath,
@@ -146,17 +143,6 @@ const TreeMapInner: React.FC<
     const chartDataRef = React.useRef<TreemapDataNode[]>([]);
     const clickTimeoutRef = React.useRef<number | null>(null);
 
-    useEffect(() => {
-      if (forwardedRef && chartRef.current) {
-        if (typeof forwardedRef === 'function') {
-          forwardedRef(chartRef.current);
-        } else {
-          (
-            forwardedRef as React.MutableRefObject<EChartsReactCore | null>
-          ).current = chartRef.current;
-        }
-      }
-    }, [forwardedRef, chartRef.current]);
     useEffect(() => {
       if (!treeData) return;
       function convert(
@@ -619,10 +605,6 @@ const TreeMapInner: React.FC<
   },
 );
 
-export const TreeMap = React.forwardRef<EChartsReactCore, TreeMapProps>(
-  (props, ref) => <TreeMapInner {...props} forwardedRef={ref} />,
-);
-
 export const AssetTreemapWithFilter: React.FC<{
   treeData: TreeNode[];
   onChartClick?: (params: ECElementEvent) => void;
@@ -668,7 +650,6 @@ const AssetTreemapWithFilterInner: React.FC<{
   const [showAnalyze, setShowAnalyze] = useState(false);
   const [chunkSearchQuery, setChunkSearchQuery] = useState('');
 
-  const chartRef = React.useRef<EChartsReactCore>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   const handleChartClick = useCallback(
@@ -991,7 +972,6 @@ const AssetTreemapWithFilterInner: React.FC<{
 
       <div className={Styles['chart-wrapper']}>
         <TreeMap
-          ref={chartRef}
           treeData={filteredTreeData}
           sizeType={sizeType}
           onChartClick={handleChartClick}
