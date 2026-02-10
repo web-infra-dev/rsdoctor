@@ -78,12 +78,12 @@
     "es-toolkit": "^1.44.0",
     "filesize": "^10.1.6",
     "fs-extra": "^11.1.1",
-    "semver": "^7.7.3",
+    "semver": "^7.7.4",
     "source-map": "^0.7.6"
   },
   "devDependencies": {
-    "axios": "^1.13.4",
-    "@rspack/core": "1.7.4",
+    "axios": "^1.13.5",
+    "@rspack/core": "1.7.5",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",
