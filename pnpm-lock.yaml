@@ -75,7 +75,7 @@ importers:
         version: 0.116.1(@types/react@18.3.27)
       '@lynx-js/rspeedy':
         specifier: ^0.13.2
-        version: 0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(typescript@5.9.2)(webpack@5.97.1)
+        version: 0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@playwright/test':
         specifier: 1.55.1
         version: 1.55.1
@@ -113,8 +113,8 @@ importers:
         specifier: ^18.3.27
         version: 18.3.27
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       loader-utils:
         specifier: ^2.0.4
         version: 2.0.4
@@ -482,8 +482,8 @@ importers:
   packages/ai:
     devDependencies:
       '@modelcontextprotocol/sdk':
-        specifier: 1.25.3
-        version: 1.25.3(hono@3.12.12)(zod@3.25.76)
+        specifier: 1.26.0
+        version: 1.26.0(zod@3.25.76)
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -511,8 +511,6 @@ importers:
       zod:
         specifier: ^3.25.76
         version: 3.25.76
-
-  packages/ai/compiled/socket.io-client: {}
 
   packages/cli:
     dependencies:
@@ -629,8 +627,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       ansi-to-react:
-        specifier: 6.1.6
-        version: 6.1.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 6.2.6
+        version: 6.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       antd:
         specifier: 5.19.1
         version: 5.19.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -650,8 +648,8 @@ importers:
         specifier: ^3.0.6
         version: 3.0.6(echarts@5.6.0)(react@18.3.1)
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       i18next:
         specifier: 22.0.4
         version: 22.0.4
@@ -753,8 +751,8 @@ importers:
         specifier: 5.12.0
         version: 5.12.0
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       filesize:
         specifier: ^10.1.6
         version: 10.1.6
@@ -813,10 +811,6 @@ importers:
       webpack:
         specifier: ^5.97.1
         version: 5.97.1(webpack-cli@5.1.4)
-
-  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
-
-  packages/core/compiled/axios: {}
 
   packages/document:
     dependencies:
@@ -891,8 +885,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       path-browserify:
         specifier: 1.0.1
         version: 1.0.1
@@ -1033,12 +1027,6 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/sdk/compiled/cors: {}
-
-  packages/sdk/compiled/dayjs: {}
-
-  packages/sdk/compiled/fs-extra: {}
-
   packages/types:
     dependencies:
       '@types/connect':
@@ -1155,10 +1143,6 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/utils/compiled/connect: {}
-
-  packages/utils/compiled/filesize: {}
-
   packages/webpack-plugin:
     dependencies:
       '@rsdoctor/core':
@@ -1208,8 +1192,8 @@ importers:
         specifier: ^22.8.1
         version: 22.18.1
       es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
+        specifier: ^1.44.0
+        version: 1.44.0
       memfs:
         specifier: 4.49.0
         version: 4.49.0
@@ -2676,8 +2660,8 @@ packages:
       '@types/react': '>=16'
       react: '>=16'
 
-  '@modelcontextprotocol/sdk@1.25.3':
-    resolution: {integrity: sha512-vsAMBMERybvYgKbg/l4L1rhS7VXV1c0CtyJg72vwxONVX0l4ZfKVAnZEWTQixJGTzKnELjQ59e4NbdFDALRiAQ==}
+  '@modelcontextprotocol/sdk@1.26.0':
+    resolution: {integrity: sha512-Y5RmPncpiDtTXDbLKswIJzTqu2hyBKxTNsgKqKclDbhIgg1wgtf1fRuvxgTnRfcnxtvvgbIEcqUOzZrJ6iSReg==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
@@ -4697,8 +4681,8 @@ packages:
   ajv@8.17.1:
     resolution: {integrity: sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==}
 
-  anser@1.4.10:
-    resolution: {integrity: sha512-hCv9AqTQ8ycjpSd3upOJd7vFwW1JaoYQ7tpham03GJ1ca8/65rqn0RpaWpItOAd6ylW9wAw6luXYPJIyPFVOww==}
+  anser@2.3.5:
+    resolution: {integrity: sha512-vcZjxvvVoxTeR5XBNJB38oTu/7eDCZlwdz32N1eNgpyPF7j/Z7Idf+CUwQOkKKpJ7RJyjxgLHCM7vdIK0iCNMQ==}
 
   ansi-align@3.0.1:
     resolution: {integrity: sha512-IOfwwBF5iczOjp/WeY4YxyjqAFMQoZufdQWDd19SEExbVLNXqvpzSJ/M7Za4/sCPmQ0+GRquoA7bGcINcxew6w==}
@@ -4737,10 +4721,10 @@ packages:
     resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
     engines: {node: '>=10'}
 
-  ansi-to-react@6.1.6:
-    resolution: {integrity: sha512-+HWn72GKydtupxX9TORBedqOMsJRiKTqaLUKW8txSBZw9iBpzPKLI8KOu4WzwD4R7hSv1zEspobY6LwlWvwZ6Q==}
+  ansi-to-react@6.2.6:
+    resolution: {integrity: sha512-Eqi0iaMK5OZ3jsVFxWvU2B74UZBnGuHlkflKMX6wTOeH+luy9KE2O0gUkc2PxhIP1R4IO0xohv62UMFInQOSeg==}
     peerDependencies:
-      react: ^16.3.2 || ^17.0.0
+      react: ^16.3.2 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: 18.3.1
 
   antd@5.15.3:
@@ -5925,8 +5909,8 @@ packages:
     resolution: {integrity: sha512-j6vWzfrGVfyXxge+O0x5sh6cvxAog0a/4Rdd2K36zCMV5eJ+/+tOAngRO8cODMNWbVRdVlmGZQL2YS3yR8bIUA==}
     engines: {node: '>= 0.4'}
 
-  es-toolkit@1.43.0:
-    resolution: {integrity: sha512-SKCT8AsWvYzBBuUqMk4NPwFlSdqLpJwmy6AP322ERn8W2YLIB6JBXnwMI2Qsh2gfphT3q7EKAxKb23cvFHFwKA==}
+  es-toolkit@1.44.0:
+    resolution: {integrity: sha512-6penXeZalaV88MM3cGkFZZfOoLGWshWWfdy0tWw/RlVVyhvMaWSBTOvXNeiW3e5FwdS5ePW0LGEu17zT139ktg==}
 
   esast-util-from-estree@2.0.0:
     resolution: {integrity: sha512-4CyanoAudUSBAn5K13H4JhsMH6L9ZP7XbLVe/dKybkxMO7eDyLsT8UHl9TRNrU2Gr9nz+FovfSIjuXWJ81uVwQ==}
@@ -6072,18 +6056,18 @@ packages:
     resolution: {integrity: sha512-Fqs7ChZm72y40wKjOFXBKg7nJZvQJmewP5/7LtePDdnah/+FH9Hp5sgMujSCMPXlxOAW2//1jrW9pnsY7o20vQ==}
     engines: {node: '>=18'}
 
-  express-rate-limit@7.5.0:
-    resolution: {integrity: sha512-eB5zbQh5h+VenMPM3fh+nw1YExi5nMr6HUCR62ELSP11huvxm/Uir1H1QEyTkk5QX6A58pX6NmaTMceKZ0Eodg==}
+  express-rate-limit@8.2.1:
+    resolution: {integrity: sha512-PCZEIEIxqwhzw4KF0n7QF4QqruVTcF73O5kFKUnGOyjbCCgizBBiFaYpd/fnBLUMPw/BWw9OsiN7GgrNYr7j6g==}
     engines: {node: '>= 16'}
     peerDependencies:
-      express: ^4.11 || 5 || ^5.0.0-beta.1
+      express: '>= 4.11'
 
   express@4.21.2:
     resolution: {integrity: sha512-28HqgMZAmih1Czt9ny7qr6ek2qddF4FclbMzwhCREB6OFfH+rXAnuNCwo1/wFvrtbgsQDb4kSbX9de9lFbrXnA==}
     engines: {node: '>= 0.10.0'}
 
-  express@5.1.0:
-    resolution: {integrity: sha512-DT9ck5YIRU+8GYzzU5kT3eHGA5iL+1Zd0EutOmTE9Dtk+Tvuzd23VBU+ec7HPNSTxXYO55gPV/hq4pSBJDjFpA==}
+  express@5.2.1:
+    resolution: {integrity: sha512-hIS4idWWai69NezIdRt2xFVofaF4j+6INOpJlVOLDO8zXGpUVEVzIYk12UUi2JzjEzWL3IOAxcTubgz9Po0yXw==}
     engines: {node: '>= 18'}
 
   extend-shallow@2.0.1:
@@ -6367,16 +6351,17 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@9.3.5:
     resolution: {integrity: sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==}
     engines: {node: '>=16 || 14 >=14.17'}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   global-dirs@3.0.1:
     resolution: {integrity: sha512-NBcGGFbBA9s1VzD41QXDG+3++t9Mn5t1FpLdhESY6oKY4gYTFpX4wO3sqGUa0Srjtbfj3szX0RnemmrVRUdULA==}
@@ -6542,6 +6527,10 @@ packages:
   hono@3.12.12:
     resolution: {integrity: sha512-5IAMJOXfpA5nT+K0MNjClchzz0IhBHs2Szl7WFAhrFOsbtQsYmNynFyJRg/a3IPsmCfxcrf8txUGiNShXpK5Rg==}
     engines: {node: '>=16.0.0'}
+
+  hono@4.11.7:
+    resolution: {integrity: sha512-l7qMiNee7t82bH3SeyUCt9UF15EVmaBvsppY2zQtrbIhl/yzBTny+YUxsVjSjQ6gaqaeVtZmGocom8TzBlA4Yw==}
+    engines: {node: '>=16.9.0'}
 
   hookable@6.0.1:
     resolution: {integrity: sha512-uKGyY8BuzN/a5gvzvA+3FVWo0+wUjgtfSdnmjtrOVwQCZPHpHDH2WRO3VZSOeluYrHoDCiXFffZXs8Dj1ULWtw==}
@@ -6760,6 +6749,10 @@ packages:
 
   invariant@2.2.4:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
+
+  ip-address@10.0.1:
+    resolution: {integrity: sha512-NWv9YLW4PoW2B7xtzaS3NCot75m6nK7Icdv0o3lfMceJVRfSoQwqD4wEH5rLwoKJwUiZ/rfpiVBhnaF0FK4HoA==}
+    engines: {node: '>= 12'}
 
   ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
@@ -7134,6 +7127,9 @@ packages:
   lines-and-columns@2.0.4:
     resolution: {integrity: sha512-wM1+Z03eypVAVUCE7QdSqpVIvelbOakn1M0bPDoA4SGWPx3sNDVUiMo3L6To6WWGClB7VyXnhQ4Sn7gxiJbE6A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
+  linkify-it@3.0.3:
+    resolution: {integrity: sha512-ynTsyrFSdE5oZ/O9GEf00kPngmOfVwazR5GKDq6EYfhlpFug3J2zybX56a2PRRpc9P+FuSoGNAwjlbDs9jJBPQ==}
 
   listr2@5.0.8:
     resolution: {integrity: sha512-mC73LitKHj9w6v30nLNGPetZIlfpUniNSsxxrbaPcWOjDb92SHPzJPi/t+v1YC/lxKz/AJ9egOjww0qUuFxBpA==}
@@ -10320,6 +10316,9 @@ packages:
     resolution: {integrity: sha512-z6PJ8Lml+v3ichVojCiB8toQJBuwR42ySM4ezjXIqXK3M0HczmKQ3LF4rhU55PfD99KEEXQG6yb7iOMyvYuHew==}
     hasBin: true
 
+  uc.micro@1.0.6:
+    resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==}
+
   ufo@1.5.4:
     resolution: {integrity: sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==}
 
@@ -10792,8 +10791,8 @@ packages:
     resolution: {integrity: sha512-b4JR1PFR10y1mKjhHY9LaGo6tmrgjit7hxVIeAmyMw3jegXR4dhYqLaQF5zMXZxY7tLpMyJeLjr1C4rLmkVe8g==}
     engines: {node: '>=12.20'}
 
-  zod-to-json-schema@3.25.0:
-    resolution: {integrity: sha512-HvWtU2UG41LALjajJrML6uQejQhNJx+JBO9IflpSja4R03iNWfKXrj6W2h7ljuLyc1nKS+9yDyL/9tD1U/yBnQ==}
+  zod-to-json-schema@3.25.1:
+    resolution: {integrity: sha512-pM/SU9d3YAggzi6MtR4h7ruuQlqKtad8e9S0fmxcMi+ueAK5Korys/aWcV9LIIHTVbj01NdzxcnXSN+O74ZIVA==}
     peerDependencies:
       zod: ^3.25 || ^4
 
@@ -12201,9 +12200,9 @@ snapshots:
 
   '@hongzhiyuan/preact@10.28.0-fc4af453': {}
 
-  '@hono/node-server@1.19.9(hono@3.12.12)':
+  '@hono/node-server@1.19.9(hono@4.11.7)':
     dependencies:
-      hono: 3.12.12
+      hono: 4.11.7
 
   '@inquirer/external-editor@1.0.3(@types/node@22.18.1)':
     dependencies:
@@ -12327,7 +12326,7 @@ snapshots:
       '@types/react': 18.3.27
       preact: '@hongzhiyuan/preact@10.28.0-fc4af453'
 
-  '@lynx-js/rspeedy@0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(typescript@5.9.2)(webpack@5.97.1)':
+  '@lynx-js/rspeedy@0.13.2(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@lynx-js/cache-events-webpack-plugin': 0.0.2
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.3
@@ -12336,7 +12335,7 @@ snapshots:
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 1.7.2
       '@rsbuild/plugin-css-minimizer': 1.0.3(@rsbuild/core@1.7.2)(webpack@5.97.1)
-      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
+      '@rsdoctor/rspack-plugin': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
     optionalDependencies:
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -12466,9 +12465,9 @@ snapshots:
       '@types/react': 18.3.27
       react: 19.2.3
 
-  '@modelcontextprotocol/sdk@1.25.3(hono@3.12.12)(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.26.0(zod@3.25.76)':
     dependencies:
-      '@hono/node-server': 1.19.9(hono@3.12.12)
+      '@hono/node-server': 1.19.9(hono@4.11.7)
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
       content-type: 1.0.5
@@ -12476,16 +12475,16 @@ snapshots:
       cross-spawn: 7.0.6
       eventsource: 3.0.6
       eventsource-parser: 3.0.6
-      express: 5.1.0
-      express-rate-limit: 7.5.0(express@5.1.0)
+      express: 5.2.1
+      express-rate-limit: 8.2.1(express@5.2.1)
+      hono: 4.11.7
       jose: 6.1.3
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.0
       raw-body: 3.0.2
       zod: 3.25.76
-      zod-to-json-schema: 3.25.0(zod@3.25.76)
+      zod-to-json-schema: 3.25.1(zod@3.25.76)
     transitivePeerDependencies:
-      - hono
       - supports-color
 
   '@modern-js-reduck/plugin-auto-actions@1.1.11(@modern-js-reduck/store@1.1.11)':
@@ -13650,11 +13649,11 @@ snapshots:
 
   '@rsdoctor/client@1.2.3': {}
 
-  '@rsdoctor/core@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)':
+  '@rsdoctor/core@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.3.0(@rsbuild/core@1.7.2)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       axios: 1.13.4
@@ -13686,11 +13685,11 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)':
+  '@rsdoctor/rspack-plugin@1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
-      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
+      '@rsdoctor/core': 1.2.3(@rsbuild/core@1.7.2)(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
-      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
+      '@rsdoctor/sdk': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)
       '@rsdoctor/types': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       '@rsdoctor/utils': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
       lodash: 4.17.21
@@ -13704,7 +13703,7 @@ snapshots:
       - utf-8-validate
       - webpack
 
-  '@rsdoctor/sdk@1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)':
+  '@rsdoctor/sdk@1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(bufferutil@4.0.9)(utf-8-validate@5.0.10)(webpack@5.97.1)':
     dependencies:
       '@rsdoctor/client': 1.2.3
       '@rsdoctor/graph': 1.2.3(@rspack/core@1.7.4(@swc/helpers@0.5.18))(webpack@5.97.1)
@@ -15153,7 +15152,7 @@ snapshots:
       json-schema-traverse: 1.0.0
       require-from-string: 2.0.2
 
-  anser@1.4.10: {}
+  anser@2.3.5: {}
 
   ansi-align@3.0.1:
     dependencies:
@@ -15181,10 +15180,11 @@ snapshots:
 
   ansi-styles@5.2.0: {}
 
-  ansi-to-react@6.1.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  ansi-to-react@6.2.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      anser: 1.4.10
+      anser: 2.3.5
       escape-carriage: 1.3.1
+      linkify-it: 3.0.3
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
@@ -16619,7 +16619,7 @@ snapshots:
       has-tostringtag: 1.0.2
       hasown: 2.0.2
 
-  es-toolkit@1.43.0: {}
+  es-toolkit@1.44.0: {}
 
   esast-util-from-estree@2.0.0:
     dependencies:
@@ -16807,9 +16807,10 @@ snapshots:
 
   exit-hook@4.0.0: {}
 
-  express-rate-limit@7.5.0(express@5.1.0):
+  express-rate-limit@8.2.1(express@5.2.1):
     dependencies:
-      express: 5.1.0
+      express: 5.2.1
+      ip-address: 10.0.1
 
   express@4.21.2:
     dependencies:
@@ -16847,7 +16848,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  express@5.1.0:
+  express@5.2.1:
     dependencies:
       accepts: 2.0.0
       body-parser: 2.2.2
@@ -16856,6 +16857,7 @@ snapshots:
       cookie: 0.7.2
       cookie-signature: 1.2.2
       debug: 4.4.3
+      depd: 2.0.0
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
@@ -17506,6 +17508,8 @@ snapshots:
 
   hono@3.12.12: {}
 
+  hono@4.11.7: {}
+
   hookable@6.0.1: {}
 
   hpack.js@2.1.6:
@@ -17744,6 +17748,8 @@ snapshots:
   invariant@2.2.4:
     dependencies:
       loose-envify: 1.4.0
+
+  ip-address@10.0.1: {}
 
   ipaddr.js@1.9.1: {}
 
@@ -18062,6 +18068,10 @@ snapshots:
   lines-and-columns@2.0.3: {}
 
   lines-and-columns@2.0.4: {}
+
+  linkify-it@3.0.3:
+    dependencies:
+      uc.micro: 1.0.6
 
   listr2@5.0.8(enquirer@2.4.1):
     dependencies:
@@ -22204,6 +22214,8 @@ snapshots:
 
   ua-parser-js@1.0.40: {}
 
+  uc.micro@1.0.6: {}
+
   ufo@1.5.4: {}
 
   undici-types@6.21.0: {}
@@ -22851,7 +22863,7 @@ snapshots:
 
   yocto-queue@1.1.1: {}
 
-  zod-to-json-schema@3.25.0(zod@3.25.76):
+  zod-to-json-schema@3.25.1(zod@3.25.76):
     dependencies:
       zod: 3.25.76
 
