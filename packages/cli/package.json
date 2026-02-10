@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/cli",
-  "version": "1.5.2",
+  "version": "1.5.3-alpha.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
