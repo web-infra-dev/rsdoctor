@@ -12,19 +12,19 @@ import {
   Timeline,
   Tooltip,
   Typography,
-  Spin,
 } from 'antd';
 import dayjs from 'dayjs';
-import { PropsWithChildren, useCallback, useState, useEffect } from 'react';
+import { PropsWithChildren, useCallback, useState } from 'react';
 import InputIcon from 'src/common/svg/loader/input.svg';
 import OutputIcon from 'src/common/svg/loader/output.svg';
 import StepIcon from 'src/common/svg/loader/step.svg';
 import { Size } from '../../constants';
-import { beautifyPath, formatCosts, useTheme, useDataLoader } from '../../utils';
+import { beautifyPath, formatCosts, useTheme } from '../../utils';
 import { CodeViewer, DiffViewer } from '../base';
 import { Card } from '../Card';
 import { CodeOpener } from '../Opener';
 import { Title } from '../Title';
+import { ServerAPIProvider } from '../Manifest';
 import styles from './Analysis/style.module.scss';
 
 interface LoaderExecutionsProps {
@@ -109,6 +109,123 @@ const LoaderPropsItem = ({
   );
 };
 
+// Component to render Loader Details content with lazy-loaded code
+const LoaderDetailsContent = ({
+  loader,
+  resource,
+  isLight,
+  codeData,
+}: {
+  loader: Omit<SDK.LoaderTransformData, 'input' | 'result'> & { costs: number };
+  resource: SDK.ResourceData;
+  isLight: boolean;
+  codeData: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileInputAndOutput>;
+}): JSX.Element => {
+  const hasError = loader.errors && loader.errors.length;
+  const before = codeData?.input || '';
+  const loaderResult = codeData?.output || '';
+
+  return (
+    <div style={{ height: '100%' }}>
+      {hasError ? (
+        <Col span={24} style={{ height: '53%', minHeight: 400 }}>
+          <div
+            style={{
+              padding: Size.BasePadding,
+              borderTop: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
+              borderBottom: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
+            }}
+          >
+            <Title
+              text={`the error stack of [${loader.loader}] ${loader.isPitch ? 'pitch' : ''}`}
+            />
+          </div>
+          <div style={{ height: '90%' }}>
+            <CodeViewer code={loader.errors[0].message} lang="javascript" />
+          </div>
+        </Col>
+      ) : (
+        <Col span={24} style={{ height: '53%', minHeight: 400 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: Size.BasePadding,
+              borderBottom: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
+            }}
+          >
+            <Title
+              text={
+                <>
+                  {`the result of [${loader.loader}] ${loader.isPitch ? 'pitch' : ''}`}
+                  {!loader.isPitch && (
+                    <span style={{ fontWeight: 400 }}>
+                      (
+                      <InputIcon
+                        style={{
+                          verticalAlign: 'middle',
+                          margin: '0 2px',
+                        }}
+                      />
+                      Input ⟷
+                      <OutputIcon
+                        style={{
+                          verticalAlign: 'middle',
+                          position: 'relative',
+                          top: -2,
+                        }}
+                      />
+                      Output)
+                    </span>
+                  )}
+                </>
+              }
+            />
+            <div style={{ flex: 1 }} />
+          </div>
+          {loader.isPitch ? (
+            loaderResult ? (
+              <div style={{ height: '90%' }}>
+                <CodeViewer
+                  isEmbed
+                  code={loaderResult}
+                  filePath={resource.path}
+                />
+              </div>
+            ) : (
+              <Empty
+                description={
+                  'No loader result. If you use the Brief Mode, there will not have loader results.'
+                }
+              />
+            )
+          ) : (
+            <div style={{ minHeight: '700px' }}>
+              <div style={{ height: '40rem', overflow: 'hidden' }}>
+                {!loaderResult && !before ? (
+                  <Empty
+                    description={
+                      'No loader result. If you use the Brief Mode, there will not have loader results.'
+                    }
+                  />
+                ) : (
+                  <DiffViewer
+                    isEmbed
+                    original={before}
+                    modified={loaderResult || ''}
+                    originalFilePath={resource.path}
+                    modifiedFilePath={resource.path}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+        </Col>
+      )}
+    </div>
+  );
+};
+
 export const LoaderExecutions = ({
   data,
   cwd,
@@ -120,46 +237,10 @@ export const LoaderExecutions = ({
   const isLight = theme === 'light';
   const loader = loaders[currentIndex];
   const leftSpan = 5;
-  const hasError = loader.errors && loader.errors.length;
   const [activeKey, setActiveKey] = useState('loaderDetails');
   const onChange = useCallback((key: string) => {
     setActiveKey(key);
   }, []);
-  
-  // State for lazy-loaded code
-  const [loaderCode, setLoaderCode] = useState<{
-    input: string;
-    output: string;
-  } | null>(null);
-  const [isLoadingCode, setIsLoadingCode] = useState(false);
-  const { loader: dataLoader } = useDataLoader();
-  
-  // Fetch code when user switches to loader details tab or changes loader
-  useEffect(() => {
-    if (activeKey === 'loaderDetails' && dataLoader) {
-      setIsLoadingCode(true);
-      setLoaderCode(null);
-      
-      dataLoader
-        .loadAPI(SDK.ServerAPI.API.GetLoaderFileInputAndOutput, {
-          file: resource.path,
-          loader: loader.loader,
-          loaderIndex: loader.loaderIndex,
-        })
-        .then((res) => {
-          setLoaderCode(res);
-          setIsLoadingCode(false);
-        })
-        .catch((err) => {
-          console.error('Failed to load loader code:', err);
-          setLoaderCode({ input: '', output: '' });
-          setIsLoadingCode(false);
-        });
-    }
-  }, [currentIndex, activeKey, resource.path, dataLoader]);
-  
-  const before = loaderCode?.input || '';
-  const loaderResult = loaderCode?.output || '';
 
   return (
     <Row className={styles.executions} style={{ height: '100%' }}>
@@ -252,112 +333,27 @@ export const LoaderExecutions = ({
             {
               label: 'Loader Details',
               key: 'loaderDetails',
-              children: (
-                <div style={{ height: '100%' }}>
-                  {hasError ? (
-                    <Col span={24} style={{ height: '53%', minHeight: 400 }}>
-                      <div
-                        style={{
-                          padding: Size.BasePadding,
-                          borderTop: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
-                          borderBottom: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
-                        }}
-                      >
-                        <Title
-                          text={`the error stack of [${loader.loader}] ${loader.isPitch ? 'pitch' : ''}`}
-                        />
-                      </div>
-                      <div style={{ height: '90%' }}>
-                        <CodeViewer
-                          code={loader.errors[0].message}
-                          lang="javascript"
-                        />
-                      </div>
-                    </Col>
-                  ) : (
-                    <Col span={24} style={{ height: '53%', minHeight: 400 }}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          padding: Size.BasePadding,
-                          borderBottom: `1px solid ${isLight ? '#f0f0f0' : 'rgba(253, 253, 253, 0.12)'}`,
-                        }}
-                      >
-                        <Title
-                          text={
-                            <>
-                              {`the result of [${loader.loader}] ${loader.isPitch ? 'pitch' : ''}`}
-                              {!loader.isPitch && (
-                                <span style={{ fontWeight: 400 }}>
-                                  (
-                                  <InputIcon
-                                    style={{
-                                      verticalAlign: 'middle',
-                                      margin: '0 2px',
-                                    }}
-                                  />
-                                  Input ⟷
-                                  <OutputIcon
-                                    style={{
-                                      verticalAlign: 'middle',
-                                      position: 'relative',
-                                      top: -2,
-                                    }}
-                                  />
-                                  Output)
-                                </span>
-                              )}
-                            </>
-                          }
-                        />
-                        <div style={{ flex: 1 }} />
-                      </div>
-                      {isLoadingCode ? (
-                        <div style={{ height: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Spin tip="Loading loader code..." />
-                        </div>
-                      ) : loader.isPitch ? (
-                        loaderResult ? (
-                          <div style={{ height: '90%' }}>
-                            <CodeViewer
-                              isEmbed
-                              code={loaderResult}
-                              filePath={resource.path}
-                            />
-                          </div>
-                        ) : (
-                          <Empty
-                            description={
-                              'No loader result. If you use the Brief Mode, there will not have loader results.'
-                            }
-                          />
-                        )
-                      ) : (
-                        <div style={{ minHeight: '700px' }}>
-                          <div style={{ height: '40rem', overflow: 'hidden' }}>
-                            {!loaderResult && !before ? (
-                              <Empty
-                                description={
-                                  'No loader result. If you use the Brief Mode, there will not have loader results.'
-                                }
-                              />
-                            ) : (
-                              <DiffViewer
-                                isEmbed
-                                original={before}
-                                modified={loaderResult || ''}
-                                originalFilePath={resource.path}
-                                modifiedFilePath={resource.path}
-                              />
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </Col>
-                  )}
-                </div>
-              ),
+              children:
+                activeKey === 'loaderDetails' ? (
+                  <ServerAPIProvider
+                    api={SDK.ServerAPI.API.GetLoaderFileInputAndOutput}
+                    body={{
+                      file: resource.path,
+                      loader: loader.loader,
+                      loaderIndex: loader.loaderIndex,
+                    }}
+                    showSkeleton={false}
+                  >
+                    {(codeData) => (
+                      <LoaderDetailsContent
+                        loader={loader}
+                        resource={resource}
+                        isLight={isLight}
+                        codeData={codeData}
+                      />
+                    )}
+                  </ServerAPIProvider>
+                ) : null,
             },
           ]}
           onChange={onChange}
