@@ -1,6 +1,9 @@
 import { describe, it, expect } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
-import { getLoaderFileDetails, getLoaderFileInputAndOutput } from '../../src/common/loader';
+import {
+  getLoaderFileDetails,
+  getLoaderFileInputAndOutput,
+} from '../../src/common/loader';
 
 describe('test src/common/loader.ts', () => {
   const mockLoaderData: SDK.LoaderData = [
@@ -64,7 +67,7 @@ describe('test src/common/loader.ts', () => {
     });
   });
 
-  it('getLoaderFileInputAndOutput should return input and output', () => {
+  it('getLoaderFileInputAndOutput should return input and output for first loader', () => {
     const result = getLoaderFileInputAndOutput(
       '/test/file.js',
       'babel-loader',
@@ -75,6 +78,19 @@ describe('test src/common/loader.ts', () => {
     expect(result).toBeDefined();
     expect(result.input).toBe('const foo = 1;');
     expect(result.output).toBe('var foo = 1;');
+  });
+
+  it('getLoaderFileInputAndOutput should return input and output for second loader (loaderIndex: 1)', () => {
+    const result = getLoaderFileInputAndOutput(
+      '/test/file.js',
+      'ts-loader',
+      1,
+      mockLoaderData,
+    );
+
+    expect(result).toBeDefined();
+    expect(result.input).toBe('const bar: number = 2;');
+    expect(result.output).toBe('const bar = 2;');
   });
 
   it('getLoaderFileInputAndOutput should return empty strings for non-existent loader', () => {
