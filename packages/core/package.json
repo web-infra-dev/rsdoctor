@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/core",
-  "version": "1.5.0",
+  "version": "1.5.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -75,15 +75,15 @@
     "browserslist-load-config": "^1.0.1",
     "@rsbuild/plugin-check-syntax": "1.6.1",
     "enhanced-resolve": "5.12.0",
-    "es-toolkit": "^1.43.0",
+    "es-toolkit": "^1.44.0",
     "filesize": "^10.1.6",
     "fs-extra": "^11.1.1",
     "semver": "^7.7.3",
     "source-map": "^0.7.6"
   },
   "devDependencies": {
-    "axios": "^1.13.2",
-    "@rspack/core": "1.7.2",
+    "axios": "^1.13.4",
+    "@rspack/core": "1.7.4",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",

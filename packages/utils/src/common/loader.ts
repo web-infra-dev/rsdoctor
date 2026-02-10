@@ -210,8 +210,11 @@ export function getLoaderFileDetails(
   return {
     ...data,
     loaders: data.loaders.map((el) => {
+      // Strip large input/result fields to reduce data volume
+      // These can be fetched on-demand via GetLoaderFileInputAndOutput API
+      const { input, result, ...loaderWithoutCode } = el;
       return {
-        ...el,
+        ...loaderWithoutCode,
         loader: getLoadrName(el.loader),
         costs: getLoaderCosts(el, list),
       };
@@ -341,20 +344,17 @@ export function getLoaderFileInputAndOutput(
     const item = loaders[i];
 
     if (item.resource.path === file) {
-      // biome-ignore lint/correctness/noUnreachable: may not need change
       for (let j = 0; j < item.loaders.length; j++) {
         const l = item.loaders[j];
-        if (l.loader === loader && l.loaderIndex === loaderIndex) {
+        if (
+          getLoadrName(l.loader) === loader &&
+          l.loaderIndex === loaderIndex
+        ) {
           return {
             input: l.input || '',
             output: l.result || '',
           };
         }
-
-        return {
-          input: '',
-          output: '',
-        };
       }
     }
   }

@@ -152,7 +152,12 @@ export class PackageGraph implements SDK.PackageGraphInstance {
     const chunksList = module.getChunks();
     chunksList.forEach((chunk) =>
       assetsList.push(
-        ...chunk.getAssets().filter((asset) => asset.path.endsWith('.js')),
+        ...chunk
+          .getAssets()
+          .filter(
+            (asset) =>
+              asset.path.endsWith('.js') || asset.path.endsWith('.bundle'),
+          ),
       ),
     );
     if (chunksList.length > 1) {

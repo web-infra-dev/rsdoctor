@@ -230,9 +230,12 @@ async function doneHandler(
   );
 
   // Report graphs to SDK for further processing or client display
+  logger.debug('reportModuleGraph start');
   _this.modulesGraph && (await _this.sdk.reportModuleGraph(_this.modulesGraph));
+  logger.debug('reportModuleGraph done');
+  logger.debug('reportChunkGraph start');
   await _this.sdk.reportChunkGraph(_this.chunkGraph!);
-
+  logger.debug('reportChunkGraph done');
   // Warn if deprecated treemap option is enabled
   if (_this.options.supports.generateTileGraph) {
     logger.warn(
@@ -241,6 +244,7 @@ async function doneHandler(
       ),
     );
   }
+  logger.debug('doneHandler done');
 }
 
 /**

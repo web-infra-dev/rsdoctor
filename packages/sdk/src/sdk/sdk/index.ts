@@ -297,7 +297,7 @@ export class RsdoctorSDK<
     }
     this.onDataReport();
     logger.debug(
-      `sdk._moduleGraph size: ${this._moduleGraph.size()}`,
+      `sdk._packageGraph size: ${this._packageGraph.getPackages().length}`,
       '[SDK reportPackageGraph][end]',
     );
   }
