@@ -127,10 +127,12 @@ export class APIDataLoader {
 
       case SDK.ServerAPI.API.GetLoaderFileInputAndOutput:
         return this.loader.loadData('loader').then((res) => {
-          return Loader.getLoaderFileFirstInput(
-            (
-              body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetLoaderFileFirstInput>
-            ).file,
+          const params =
+            body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetLoaderFileInputAndOutput>;
+          return Loader.getLoaderFileInputAndOutput(
+            params.file,
+            params.loader,
+            params.loaderIndex,
             res || [],
           ) as R;
         });

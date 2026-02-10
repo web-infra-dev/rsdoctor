@@ -29,7 +29,7 @@ export interface LoaderAPIResponse {
   >;
   [API.GetLoaderFileDetails]: {
     resource: ResourceData;
-    loaders: (LoaderTransformData & {
+    loaders: (Omit<LoaderTransformData, 'input' | 'result'> & {
       costs: number;
     })[];
   };
