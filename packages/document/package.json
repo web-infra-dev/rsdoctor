@@ -18,6 +18,7 @@
     "docs",
     "src"
   ],
+  "type": "module",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -26,7 +27,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rspress/plugin-algolia": "2.0.2",
     "@rspress/plugin-llms": "2.0.2",
-    "@rspress/plugin-rss": "2.0.0-rc.0",
+    "@rspress/plugin-rss": "2.0.2",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
@@ -38,7 +39,7 @@
     "rspress-plugin-font-open-sans": "^1.0.3",
     "rspress-plugin-sitemap": "^1.2.1",
     "typescript": "^5.9.2",
-    "@rsbuild/plugin-sass": "^1.4.1"
+    "@rsbuild/plugin-sass": "^1.5.0"
   },
   "dependencies": {
     "@rstack-dev/doc-ui": "1.12.3",

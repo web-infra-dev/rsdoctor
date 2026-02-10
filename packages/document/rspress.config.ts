@@ -89,7 +89,7 @@ export default defineConfig({
     },
   ],
   markdown: {},
-  ssg: false,
+  ssg: true,
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
