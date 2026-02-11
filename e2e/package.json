@@ -26,8 +26,7 @@
     "loader-utils": "^2.0.4",
     "es-toolkit": "^1.44.0",
     "playwright": "1.55.1",
-    "terser-webpack-plugin": "^5.3.16",
     "typescript": "^5.9.2",
-    "webpack": "^5.97.1"
+    "webpack": "^5.104.1"
   }
 }

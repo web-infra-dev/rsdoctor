@@ -364,7 +364,7 @@ export function createLoaderContextTrap(
   let async: typeof this.async = (...args) => {
     const cb = ac(...args);
     return (...args) => {
-      final(args[0], args[1] ?? null, args[2]);
+      final(args[0], args[1] ?? null, args[2] as Plugin.SourceMapInput);
       return cb(...args);
     };
   };

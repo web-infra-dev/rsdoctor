@@ -20,7 +20,7 @@ export type CrossChunksPackageType = {
 
 export interface PackageInstance extends PackageBasicData {
   id: number;
-  duplicates: CrossChunksPackageType[];
+  duplicates?: CrossChunksPackageType[];
 
   setDuplicates(data: CrossChunksPackageType): void;
 
@@ -55,7 +55,7 @@ export interface PackageInstance extends PackageBasicData {
 }
 
 export interface PackageData extends NonFunctionProperties<PackageInstance> {
-  modules: number[];
+  modules?: number[];
   size: ModuleSize;
 }
 

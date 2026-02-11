@@ -22,13 +22,14 @@ export const rule = defineRule<typeof title, Config>(() => {
     check({ packageGraph, report }) {
       const packages = packageGraph
         .getPackages()
-        .filter((pkg) => pkg.duplicates.length > 0);
+        .filter((pkg) => (pkg.duplicates?.length ?? 0) > 0);
 
       for (const pkg of packages) {
+        const duplicates = pkg.duplicates!;
         const detail: Linter.ReportDetailData<Rule.CrossChunksPackageRuleStoreData> =
           {
             type: title,
-            chunks: pkg.duplicates,
+            chunks: duplicates,
             package: {
               name: pkg.name,
               id: pkg.id,
@@ -38,7 +39,7 @@ export const rule = defineRule<typeof title, Config>(() => {
           };
 
         const chunks: string[] = [];
-        pkg.duplicates.forEach((dup) =>
+        duplicates.forEach((dup) =>
           chunks.push(...dup.chunks.map((ck) => ck.name)),
         );
         const message = getErrorMsgForDupPckChunks(uniq(chunks), pkg.name);
