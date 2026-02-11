@@ -220,7 +220,7 @@ async function appendModuleData(
       let { descriptionFileRoot: root } = origin.resourceResolveData;
       const { descriptionFileData: data } = origin.resourceResolveData;
 
-      if (root && data.name && data.version) {
+      if (root && data && data.name && data.version) {
         if (packagePathMap.has(root)) {
           root = packagePathMap.get(root)!;
         } else {
@@ -234,7 +234,7 @@ async function appendModuleData(
         packageData = {
           ...origin.resourceResolveData.descriptionFileData,
           root,
-        };
+        } as SDK.PackageData;
       }
     }
 

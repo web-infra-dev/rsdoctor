@@ -37,7 +37,7 @@ export class InternalBundlePlugin<
         `output.devtoolModuleFilenameTemplate has been changed to [absolute-resource-path], this is for bundle analysis.`,
       );
 
-      if (devtool.includes('source-map')) {
+      if (typeof devtool === 'string' && devtool.includes('source-map')) {
         compiler.options.output.devtoolFallbackModuleFilenameTemplate = () =>
           '[absolute-resource-path]';
       }

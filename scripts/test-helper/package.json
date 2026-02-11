@@ -33,7 +33,7 @@
     "memfs": "4.49.0",
     "typescript": "^5.9.2",
     "upath": "2.0.1",
-    "webpack": "^5.97.1"
+    "webpack": "^5.104.1"
   },
   "publishConfig": {
     "access": "public",

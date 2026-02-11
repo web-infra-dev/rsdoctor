@@ -30,6 +30,6 @@
     "ts-loader": "9.4.2",
     "tsx": "^4.19.3",
     "typescript": "^5.9.2",
-    "webpack": "^5.90.0"
+    "webpack": "^5.104.1"
   }
 }

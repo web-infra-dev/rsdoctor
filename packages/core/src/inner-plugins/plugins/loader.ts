@@ -91,7 +91,12 @@ export class InternalLoaderPlugin<
 
           // return origin loaders not doctor internal loaders
           const originLoaders = proxyLoaders.map((loader) => {
-            const opts: ProxyLoaderOptions = loader.options || {};
+            const rawOptions = loader.options;
+            const opts = (
+              typeof rawOptions === 'object' && rawOptions !== null
+                ? rawOptions
+                : {}
+            ) as ProxyLoaderOptions;
 
             if (opts[Loader.LoaderInternalPropertyName]) {
               return {
@@ -145,7 +150,7 @@ export class InternalLoaderPlugin<
               newLoaders.map((e) => {
                 return {
                   loader: e.loader,
-                  options: e.options,
+                  options: e.options ?? undefined,
                 };
               }),
             );
