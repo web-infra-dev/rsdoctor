@@ -29,7 +29,7 @@
     "@rsdoctor/utils": "workspace:*",
     "@rstest/core": "0.8.3",
     "@types/node": "^22.8.1",
-    "prebundle": "1.4.2",
+    "prebundle": "1.6.2",
     "socket.io-client": "4.8.1",
     "axios": "^1.13.5",
     "typescript": "^5.9.2",

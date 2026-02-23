@@ -91,7 +91,7 @@
     "@types/semver": "^7.7.1",
     "@types/tapable": "2.2.7",
     "babel-loader": "10.0.0",
-    "prebundle": "1.4.2",
+    "prebundle": "1.6.2",
     "string-loader": "0.0.1",
     "ts-loader": "^9.5.4",
     "tslib": "2.8.1",
