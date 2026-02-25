@@ -5,7 +5,7 @@ import ora from 'ora';
 import { Commands } from '../constants';
 import { Command } from '../types';
 import { enhanceCommand, readFile } from '../utils';
-import { StatsCompilation } from '@rsdoctor/types/src/plugin';
+import { Plugin } from '@rsdoctor/types';
 import { TransUtils } from '@rsdoctor/graph';
 
 interface Options {
@@ -37,7 +37,7 @@ export const statsAnalyze: Command<
       `start to loading "${profile}"`,
     );
     const statsStrings = await readFile(profile, cwd);
-    const json = JSON.parse(statsStrings) as StatsCompilation;
+    const json = JSON.parse(statsStrings) as Plugin.StatsCompilation;
 
     spinner.text = `start server`;
     const { chunkGraph, moduleGraph } = await TransUtils.transStats(json);
