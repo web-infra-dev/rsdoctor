@@ -19,5 +19,15 @@ export default defineConfig({
         },
       },
     },
+    {
+      format: 'cjs',
+      syntax: ['node 16'],
+      dts: false,
+      output: {
+        filename: {
+          js: '[name].cjs',
+        },
+      },
+    },
   ],
 });
