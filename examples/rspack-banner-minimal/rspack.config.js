@@ -11,26 +11,16 @@ const config = {
   },
   devtool: 'source-map',
   module: {
-    parser: {
-      'css/module': {
-        namedExports: false,
-      },
-    },
     rules: [
       {
-        test: /\.css$/,
+        test: /\.less$/,
+        use: 'less-loader',
         type: 'css',
       },
       {
         test: /\.module\.less$/,
         use: 'less-loader',
         type: 'css/module',
-      },
-      {
-        test: /\.less$/,
-        exclude: /\.module\.less$/,
-        use: 'less-loader',
-        type: 'css',
       },
       {
         test: /\.svg$/,
