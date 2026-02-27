@@ -7,15 +7,22 @@
     "directory": "packages/types"
   },
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
+    }
+  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "rm -f ./tsconfig.tsbuildinfo && tsc -p tsconfig.json",
-    "dev": "npm run start",
-    "start": "npm run build -- -w"
+    "build": "rslib build",
+    "dev": "rslib build --watch"
   },
   "dependencies": {
     "@types/connect": "3.4.38",
