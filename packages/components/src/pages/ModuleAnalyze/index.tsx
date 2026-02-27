@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { Badge, Card, Drawer, Popover, Space, Typography } from 'antd';
+import { Badge, Card, Drawer, Popover, Space, Tabs, Typography } from 'antd';
 import React, { useState } from 'react';
 import { ServerAPIProvider } from 'src/components/Manifest';
 import { getShortPath } from 'src/utils';
@@ -44,7 +44,7 @@ export const ModuleAnalyzeComponent: React.FC<{
       api={SDK.ServerAPI.API.GetModuleDetails}
       body={{ moduleId: +moduleId }}
     >
-      {({ module, dependencies }) => {
+      {({ module, dependencies, sideEffectCodes }) => {
         return (
           <Drawer
             title={
@@ -71,73 +71,95 @@ export const ModuleAnalyzeComponent: React.FC<{
                   <ModuleGraphListContext.Consumer>
                     {({ moduleJumpList, setModuleJumpList }) => {
                       return (
-                        <>
-                          <div style={{ marginTop: 16 }}>
-                            <BailoutReasonCard reasons={module.bailoutReason} />
-                          </div>
-                          <Card
-                            style={{ minHeight: 400 }}
-                            tabList={tabslist}
-                            activeTabKey={activeTabKey}
-                            tabProps={{
-                              size: 'small',
-                              style: {
-                                fontSize: 12,
-                              },
-                            }}
-                            onTabChange={(k) => setActiveTabKey(k)}
-                            styles={{
-                              title: { paddingTop: 0 },
-                            }}
-                            title={
-                              <Space style={{ padding: '10px 0px' }}>
-                                <LeftSquareOutlined
-                                  onClick={() => {
-                                    const _list = [
-                                      ...moduleJumpList.slice(0, -1),
-                                    ];
-                                    setModuleJumpList(_list);
+                        <Tabs
+                          defaultActiveKey="bailout"
+                          items={[
+                            {
+                              key: 'moduleTree',
+                              label: 'Module Tree',
+                              children: (
+                                <Card
+                                  style={{ minHeight: 400 }}
+                                  tabList={tabslist}
+                                  activeTabKey={activeTabKey}
+                                  tabProps={{
+                                    size: 'small',
+                                    style: {
+                                      fontSize: 12,
+                                    },
                                   }}
-                                />
-                                <Typography.Text
-                                  style={{
-                                    fontSize: 14,
-                                    color: 'rgba(28, 31, 35, 0.8)',
+                                  onTabChange={(k) => setActiveTabKey(k)}
+                                  styles={{
+                                    title: { paddingTop: 0 },
                                   }}
-                                >
-                                  Current Module Imported Reasons Tree
-                                </Typography.Text>
-                                <Popover
-                                  content={
-                                    <div>
-                                      <div>
-                                        <Badge status="success" text=" " />
-                                        <RightSquareTwoTone />
-                                        <Typography.Text>
-                                          {
-                                            ': Jump button, click to jump to the Module dependency analysis page of this module.'
-                                          }
-                                        </Typography.Text>
-                                      </div>
-                                    </div>
+                                  title={
+                                    <Space style={{ padding: '10px 0px' }}>
+                                      <LeftSquareOutlined
+                                        onClick={() => {
+                                          const _list = [
+                                            ...moduleJumpList.slice(0, -1),
+                                          ];
+                                          setModuleJumpList(_list);
+                                        }}
+                                      />
+                                      <Typography.Text
+                                        style={{
+                                          fontSize: 14,
+                                          color: 'rgba(28, 31, 35, 0.8)',
+                                        }}
+                                      >
+                                        Current Module Imported Reasons Tree
+                                      </Typography.Text>
+                                      <Popover
+                                        content={
+                                          <div>
+                                            <div>
+                                              <Badge
+                                                status="success"
+                                                text=" "
+                                              />
+                                              <RightSquareTwoTone />
+                                              <Typography.Text>
+                                                {
+                                                  ': Jump button, click to jump to the Module dependency analysis page of this module.'
+                                                }
+                                              </Typography.Text>
+                                            </div>
+                                          </div>
+                                        }
+                                        title="Usage"
+                                      >
+                                        <QuestionCircleOutlined />
+                                      </Popover>
+                                    </Space>
                                   }
-                                  title="Usage"
                                 >
-                                  <QuestionCircleOutlined />
-                                </Popover>
-                              </Space>
-                            }
-                          >
-                            <ModuleFilesTree
-                              curModule={module}
-                              modules={modules}
-                              dependencies={dependencies}
-                              cwd={cwd}
-                              selectedChunk={selectedChunk}
-                              activeTabKey={activeTabKey}
-                            />
-                          </Card>
-                        </>
+                                  <ModuleFilesTree
+                                    curModule={module}
+                                    modules={modules}
+                                    dependencies={dependencies}
+                                    cwd={cwd}
+                                    selectedChunk={selectedChunk}
+                                    activeTabKey={activeTabKey}
+                                  />
+                                </Card>
+                              ),
+                            },
+                            {
+                              key: 'bailout',
+                              label: 'Bailout',
+                              children: (
+                                <div style={{ marginTop: 16 }}>
+                                  <BailoutReasonCard
+                                    reasons={module.bailoutReason}
+                                    sideEffectCodes={sideEffectCodes}
+                                    modulePath={module.path}
+                                  />
+                                </div>
+                              ),
+                            },
+                          ]}
+                        />
                       );
                     }}
                   </ModuleGraphListContext.Consumer>

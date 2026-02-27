@@ -1,4 +1,9 @@
-import { Dependency, Module } from '@rsdoctor/graph';
+import {
+  Dependency,
+  extractCodeFromLocation,
+  Module,
+  parseLocation,
+} from '@rsdoctor/graph';
 import { Plugin, SDK } from '@rsdoctor/types';
 
 /**
@@ -118,7 +123,7 @@ export function patchNativeModuleGraph(
   });
   mg.setDependencies(deppendencies);
 
-  /** set module dependencies */
+  /** set module dependencies、bailoutReason and sideEffectLocations */
   for (const rawModule of rawModules) {
     const module = mg.getModuleById(rawModule.ukey)!;
     module.setDependencies(
@@ -126,14 +131,25 @@ export function patchNativeModuleGraph(
         .map((ukey) => mg.getDependencyById(ukey)!)
         .filter(Boolean),
     );
-  }
-  /** set module bailoutReason */
-  for (const rawModule of rawModules) {
-    const module = mg.getModuleById(rawModule.ukey);
     if (module && rawModule.bailoutReason) {
       rawModule.bailoutReason
         .filter((reason) => !reason.includes('ModuleConcatenation bailout'))
         .forEach((reason) => module.addBailoutReason(reason));
+    }
+    if (
+      module &&
+      'sideEffectsLocations' in rawModule &&
+      Array.isArray(rawModule.sideEffectsLocations) &&
+      rawModule.sideEffectsLocations.length
+    ) {
+      rawModule.sideEffectsLocations.forEach((item: any) => {
+        module.addSideEffectLocation({
+          location: item.location,
+          nodeType: item.nodeType,
+          module: item.module,
+          request: item.request,
+        });
+      });
     }
   }
 }
@@ -178,6 +194,42 @@ export function patchNativeModuleSources(
       module.setSize({
         sourceSize: rawModuleOriginalSource.size,
       });
+    }
+  }
+}
+
+/**
+ * Extract and store code snippets for side effect locations
+ * This should be called after module sources have been set
+ * @param mg The ModuleGraph instance with modules and side effect locations
+ */
+export function extractSideEffectCodes(mg: SDK.ModuleGraphInstance) {
+  const modules = mg.getModules();
+  for (const module of modules) {
+    const sideEffectLocations = module.getSideEffectLocations();
+    if (!sideEffectLocations.length) continue;
+
+    // Get the module source code
+    const moduleSource = module.getSource();
+    const source = moduleSource.source || moduleSource.parsedSource;
+    if (!source) continue;
+
+    // Process each side effect location
+    for (const sideEffectLocation of sideEffectLocations) {
+      // Parse the location string
+      const parsedLocation = parseLocation(sideEffectLocation.location);
+      if (!parsedLocation) continue;
+
+      // Extract the code snippet
+      const code = extractCodeFromLocation(source, parsedLocation);
+      if (code) {
+        // Store the code in a separate data structure
+        module.addSideEffectCode({
+          moduleId: module.id,
+          startLine: parsedLocation.startLine,
+          code,
+        });
+      }
     }
   }
 }

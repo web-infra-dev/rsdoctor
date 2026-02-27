@@ -1,5 +1,3 @@
-import { API } from './index';
-import { ModuleData, ModuleGraphData } from '../../module';
 import { RsdoctorClientAssetsSummary } from '../../../client';
 import {
   AssetData,
@@ -7,6 +5,8 @@ import {
   ChunkGraphData,
   EntryPointData,
 } from '../../chunk';
+import { ModuleData, ModuleGraphData, SideEffectCodeData } from '../../module';
+import { API } from './index';
 
 export interface GraphAPIResponse {
   [API.GetAssetsSummary]: RsdoctorClientAssetsSummary;
@@ -17,6 +17,7 @@ export interface GraphAPIResponse {
   [API.GetChunksByModuleId]: ChunkData[];
   [API.GetModuleDetails]: {
     module: ModuleData;
+    sideEffectCodes?: SideEffectCodeData[];
   } & Pick<ModuleGraphData, 'dependencies'>;
   [API.GetModulesByModuleIds]: ModuleData[];
   [API.GetEntryPoints]: EntryPointData[];
