@@ -5,7 +5,7 @@ import ora from 'ora';
 import { Commands } from '../constants';
 import { Command } from '../types';
 import { enhanceCommand, readFile } from '../utils';
-import { Plugin } from '@rsdoctor/types';
+import type { Plugin } from '@rsdoctor/types';
 import { TransUtils } from '@rsdoctor/graph';
 
 interface Options {
