@@ -51,7 +51,7 @@
     // align Node.js version minimum requirements
     '@types/node',
     'acorn',
-    'enhanced-resolve',
+    '@rspack/resolver',
     '@biomejs/biome',
     'json-stream-stringify',
     'fs-extra',

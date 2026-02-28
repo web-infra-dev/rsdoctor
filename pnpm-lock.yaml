@@ -743,12 +743,12 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
+      '@rspack/resolver':
+        specifier: 0.2.6
+        version: 0.2.6
       browserslist-load-config:
         specifier: ^1.0.1
         version: 1.0.1
-      enhanced-resolve:
-        specifier: 5.12.0
-        version: 5.12.0
       es-toolkit:
         specifier: ^1.44.0
         version: 1.44.0
@@ -810,8 +810,6 @@ importers:
       webpack:
         specifier: ^5.104.1
         version: 5.105.1(webpack-cli@5.1.4)
-
-  packages/core/compiled/@rsbuild/plugin-check-syntax: {}
 
   packages/core/compiled/axios: {}
 
@@ -4055,6 +4053,54 @@ packages:
     peerDependenciesMeta:
       webpack-hot-middleware:
         optional: true
+
+  '@rspack/resolver-binding-darwin-arm64@0.2.6':
+    resolution: {integrity: sha512-PyYPmInhqAjH7Ykt9D8MAbD/6/c0R//8MlKJoY9imr1Q2S5tPx8RJ84UCE3q7VPuolEG0xBss/8Mwh5iEcQ4SA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@rspack/resolver-binding-darwin-x64@0.2.6':
+    resolution: {integrity: sha512-k8ut9VUeSi1ChVDdp1L4MYwvqut99Be0WpBcC8+lXVslOtmNJSBOCWTqSPxYIIzq6fR5RzKTy5y2jEr4/ptcAQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@rspack/resolver-binding-linux-arm64-gnu@0.2.6':
+    resolution: {integrity: sha512-TwKeRhhIzc6e+LswjTIraWOetz2MTbp8B4/rUQS1zxIiWV+Wo84uJhL42fLGsyjS3SdZDliPaYtwPGEHzlvEPQ==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rspack/resolver-binding-linux-arm64-musl@0.2.6':
+    resolution: {integrity: sha512-K9uBdxONGLhOg3Dw7FRbDq1paPuLp3frQN2h28xJVkdwmevkdSB/dRP8f5eu5ANIMB1gfkJu8zYaM3+Yf3htDw==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rspack/resolver-binding-linux-x64-gnu@0.2.6':
+    resolution: {integrity: sha512-wBJyhwTXF8NNBmG2fW2hS+XeJPrpnmoQwt//hHqnyXTIbQvGUiU5QSNGTE1NCiVk1xgqyNZM1N/kSx6nh5QJog==}
+    cpu: [x64]
+    os: [linux]
+
+  '@rspack/resolver-binding-linux-x64-musl@0.2.6':
+    resolution: {integrity: sha512-n90zydKsQ3TqNCYN7HJaESaYtPmbsvzTpUIBye7Er1wiDW2YANs91kAjafRUntrgT4sJaWl+BRz4lZGoh+53ng==}
+    cpu: [x64]
+    os: [linux]
+
+  '@rspack/resolver-binding-win32-arm64-msvc@0.2.6':
+    resolution: {integrity: sha512-BEne4+Oo7pKZ3K4WFT7kkV9y5melcrBbnLG2vwc+6yNioUde7vOZdsq8IlIxFlZHwHjtbur1D/H9x/OnQI9dlw==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@rspack/resolver-binding-win32-ia32-msvc@0.2.6':
+    resolution: {integrity: sha512-0xsdl298VfDGI6KxbaClJPVTPeBUBrLvJs1+nnuFknwjYMu0skUWmu7GgWxImw1DMdPbe0osUdxx00MgjpIALw==}
+    cpu: [ia32]
+    os: [win32]
+
+  '@rspack/resolver-binding-win32-x64-msvc@0.2.6':
+    resolution: {integrity: sha512-5CNoarhognjz0+VKoGJjzaoMLq7Jth8zGiHU/m2JwwfoU3JO8motbrONmpJSiWzdwIsgefa10bbzatC42H3Phg==}
+    cpu: [x64]
+    os: [win32]
+
+  '@rspack/resolver@0.2.6':
+    resolution: {integrity: sha512-1c76jgzy4khqiwMxzJryyg/vm8gsZa47TFvX/zsT95U6RRer4K4/P1270vc+NHR09VMgHZGXt06CSrrszwsx0w==}
 
   '@rspress/core@2.0.0-alpha.3':
     resolution: {integrity: sha512-q5/MoIevPRX8KRsnvCZ1ZpYbs1SmPXY0uJcDPm6ChK+0EvnrCOQNRdAeR1Si8sMxCszRDd7jbFwM5aKxlf8AHA==}
@@ -14641,6 +14687,45 @@ snapshots:
       error-stack-parser: 2.1.4
       html-entities: 2.6.0
       react-refresh: 0.18.0
+
+  '@rspack/resolver-binding-darwin-arm64@0.2.6':
+    optional: true
+
+  '@rspack/resolver-binding-darwin-x64@0.2.6':
+    optional: true
+
+  '@rspack/resolver-binding-linux-arm64-gnu@0.2.6':
+    optional: true
+
+  '@rspack/resolver-binding-linux-arm64-musl@0.2.6':
+    optional: true
+
+  '@rspack/resolver-binding-linux-x64-gnu@0.2.6':
+    optional: true
+
+  '@rspack/resolver-binding-linux-x64-musl@0.2.6':
+    optional: true
+
+  '@rspack/resolver-binding-win32-arm64-msvc@0.2.6':
+    optional: true
+
+  '@rspack/resolver-binding-win32-ia32-msvc@0.2.6':
+    optional: true
+
+  '@rspack/resolver-binding-win32-x64-msvc@0.2.6':
+    optional: true
+
+  '@rspack/resolver@0.2.6':
+    optionalDependencies:
+      '@rspack/resolver-binding-darwin-arm64': 0.2.6
+      '@rspack/resolver-binding-darwin-x64': 0.2.6
+      '@rspack/resolver-binding-linux-arm64-gnu': 0.2.6
+      '@rspack/resolver-binding-linux-arm64-musl': 0.2.6
+      '@rspack/resolver-binding-linux-x64-gnu': 0.2.6
+      '@rspack/resolver-binding-linux-x64-musl': 0.2.6
+      '@rspack/resolver-binding-win32-arm64-msvc': 0.2.6
+      '@rspack/resolver-binding-win32-ia32-msvc': 0.2.6
+      '@rspack/resolver-binding-win32-x64-msvc': 0.2.6
 
   '@rspress/core@2.0.0-alpha.3(webpack@5.105.1)':
     dependencies:
