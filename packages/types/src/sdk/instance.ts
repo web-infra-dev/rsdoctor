@@ -128,4 +128,5 @@ export type SDKOptionsType = {
   printLog?: IPrintLog;
   mode?: keyof typeof IMode;
   brief?: BriefModeOptions;
+  features?: { treeShaking?: boolean };
 };

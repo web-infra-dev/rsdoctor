@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { Typography } from 'antd';
 import path from 'path';
-import { VSCode, openVSCode } from './vscode';
+import { VSCode, openVSCode } from './ide';
 import { getShortPath } from 'src/utils';
 
 interface CodeOpenerProps {

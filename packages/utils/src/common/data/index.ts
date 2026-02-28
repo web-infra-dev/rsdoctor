@@ -254,11 +254,19 @@ export class APIDataLoader {
         return Promise.all([
           this.loader.loadData('chunkGraph'),
           this.loader.loadData('moduleGraph'),
+          this.loader.loadData('treeShaking'),
         ]).then((res) => {
           const { moduleId } =
             body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleDetails>;
           const { modules = [], dependencies = [] } = res[1] || {};
-          return Graph.getModuleDetails(moduleId, modules, dependencies) as R;
+          const treeShaking = res[2];
+          const sideEffectCodes = treeShaking?.sideEffectCodes[moduleId] || [];
+          return Graph.getModuleDetails(
+            moduleId,
+            modules,
+            dependencies,
+            sideEffectCodes,
+          ) as R;
         });
       case SDK.ServerAPI.API.GetModulesByModuleIds:
         return this.loader.loadData('moduleGraph').then((res) => {

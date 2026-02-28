@@ -25,6 +25,7 @@ export function CodeViewer({
   isEmbed = false,
   headerVisible = true,
   isLightTheme = true,
+  formatOnMount = false,
 }: CodeViewerProps) {
   const editor = useRef<editor.IStandaloneCodeEditor>();
   const monaco = useRef<Monaco>();
@@ -37,17 +38,27 @@ export function CodeViewer({
     () => defineMonacoOptions({ wordWrap: isWordWrap ? 'on' : 'off' }),
     [isWordWrap],
   );
-  const onEditorMount = useCallback<OnMount>((editorInstance, monacoVal) => {
-    editor.current = editorInstance;
-    monaco.current = monacoVal;
+  const onEditorMount = useCallback<OnMount>(
+    (editorInstance, monacoVal) => {
+      editor.current = editorInstance;
+      monaco.current = monacoVal;
 
-    editorShowRange(editorInstance, monacoVal, ranges);
-    if (Lodash.isNumber(defaultLine)) {
-      setTimeout(() => {
-        editorInstance.revealLine(defaultLine);
-      });
-    }
-  }, []);
+      editorShowRange(editorInstance, monacoVal, ranges);
+      if (Lodash.isNumber(defaultLine)) {
+        setTimeout(() => {
+          editorInstance.revealLine(defaultLine);
+        });
+      }
+
+      if (formatOnMount) {
+        // Use Monaco's built-in formatter to format the whole document
+        setTimeout(() => {
+          editorInstance.getAction('editor.action.formatDocument')?.run();
+        }, 0);
+      }
+    },
+    [ranges, defaultLine, formatOnMount],
+  );
 
   const theme = isLightTheme ? 'vs-light' : 'vs-dark';
 

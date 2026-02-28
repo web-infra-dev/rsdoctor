@@ -4,3 +4,4 @@ export * from './graph';
 export * from './statement';
 export * from './tree-shaking';
 export * from './types';
+export * from './utils';

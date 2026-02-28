@@ -974,6 +974,9 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
+      launch-editor:
+        specifier: ^2.10.0
+        version: 2.10.0
       safer-buffer:
         specifier: 2.1.2
         version: 2.1.2
