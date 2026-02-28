@@ -2,9 +2,11 @@ import { SDK } from '@rsdoctor/types';
 import { Card, Col, Empty, Popover, Tooltip, Typography } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Size } from 'src/constants';
-import { openVSCode } from 'src/components/Opener';
+import { openVSCode, openCursor, openTrae } from 'src/components/Opener';
 import { CodeViewer } from 'src/components/base';
-import VSCodeIcon from './vscode.svg';
+import VSCodeIcon from '../../common/svg/vscode.svg';
+import CursorIcon from '../../common/svg/cursor.svg';
+import TraeIcon from '../../common/svg/trae.svg';
 import { FileTree } from './components/fileTreeCom';
 import { clsNamePrefix } from './constants';
 import DependencyTree from './dependency';
@@ -109,6 +111,48 @@ export const BailoutReasonCard: React.FC<{
                   }}
                   onClick={() =>
                     openVSCode({
+                      file: modulePath,
+                      line: sideEffectCodes[0].startLine,
+                    })
+                  }
+                />
+              </Tooltip>
+            )}
+            {modulePath && sideEffectCodes[0] && (
+              <Tooltip
+                title={`Open in Cursor: line ${sideEffectCodes[0].startLine}`}
+              >
+                <CursorIcon
+                  style={{
+                    width: 16,
+                    height: 16,
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                    marginBottom: 12,
+                  }}
+                  onClick={() =>
+                    openCursor({
+                      file: modulePath,
+                      line: sideEffectCodes[0].startLine,
+                    })
+                  }
+                />
+              </Tooltip>
+            )}
+            {modulePath && sideEffectCodes[0] && (
+              <Tooltip
+                title={`Open in Trae: line ${sideEffectCodes[0].startLine}`}
+              >
+                <TraeIcon
+                  style={{
+                    width: 16,
+                    height: 16,
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                    marginBottom: 12,
+                  }}
+                  onClick={() =>
+                    openTrae({
                       file: modulePath,
                       line: sideEffectCodes[0].startLine,
                     })
