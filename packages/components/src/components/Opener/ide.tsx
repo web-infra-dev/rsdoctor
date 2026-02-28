@@ -10,31 +10,56 @@ interface VSCodeProps {
   style?: React.CSSProperties;
 }
 
+const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
+
+type EditorKind = 'code' | 'cursor' | 'trae';
+
+async function openInEditor(
+  file: string,
+  line: number | string,
+  column: number | string,
+  editor: EditorKind,
+  urlSchemeFallback: () => void,
+) {
+  const fileSpec = `${file}:${line}:${column}`;
+  try {
+    const base =
+      typeof window !== 'undefined' && window.location?.origin
+        ? window.location.origin
+        : '';
+    const url = `${base}${OPEN_IN_EDITOR_PATH}?file=${encodeURIComponent(fileSpec)}&editor=${editor}`;
+    const res = await fetch(url, { method: 'GET' });
+    if (!res.ok) {
+      urlSchemeFallback();
+    }
+  } catch {
+    urlSchemeFallback();
+  }
+}
+
 export function openVSCode({
   file,
   line = 1,
   column = 1,
   windowId,
 }: VSCodeProps) {
-  const query: Record<string, unknown> = {
-    windowId,
-  };
+  const query: Record<string, unknown> = { windowId };
   const queryString = Object.keys(query)
     .map((k) => {
       const v = query[k];
-      if (Lodash.isNil(v) || v === '') {
-        return null;
-      }
+      if (Lodash.isNil(v) || v === '') return null;
       return `${k}=${v}`;
     })
     .filter(Boolean)
     .join('&');
 
-  let url = `vscode://file/${file}:${line}:${column}`;
-  if (queryString) {
-    url += `?${queryString}`;
-  }
-  window.open(url);
+  const fallback = () => {
+    let url = `vscode://file/${file}:${line}:${column}`;
+    if (queryString) url += `?${queryString}`;
+    window.open(url);
+  };
+
+  openInEditor(file, line, column, 'code', fallback);
 }
 
 export function openCursor({
@@ -42,8 +67,10 @@ export function openCursor({
   line = 1,
   column = 1,
 }: Pick<VSCodeProps, 'file' | 'line' | 'column'>) {
-  const url = `cursor://file/${file}:${line}:${column}`;
-  window.open(url);
+  const fallback = () => {
+    window.open(`cursor://file/${file}:${line}:${column}`);
+  };
+  openInEditor(file, line, column, 'cursor', fallback);
 }
 
 export function openTrae({
@@ -51,8 +78,11 @@ export function openTrae({
   line = 1,
   column = 1,
 }: Pick<VSCodeProps, 'file' | 'line' | 'column'>) {
-  const url = `trae://file/${file}:${line}:${column}`;
-  window.open(url);
+  const fallback = () => {
+    window.open(`trae://file/${file}:${line}:${column}`);
+  };
+
+  openInEditor(file, line, column, 'trae', fallback);
 }
 
 export const VSCode = (props: VSCodeProps): JSX.Element => {

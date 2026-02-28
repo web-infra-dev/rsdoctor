@@ -15,9 +15,13 @@ import path from 'path';
 import { getLocalIpAddress } from './utils';
 import { Lodash } from '@rsdoctor/utils/common';
 import { createRequire } from 'module';
+import { ServerResponse } from 'http';
 
 const require = createRequire(import.meta.url);
 export * from './utils';
+
+/** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
+const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
 
 export type ISocketType = { port: number; socketUrl: string };
 
@@ -109,6 +113,59 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       serve(clientDistPath, {
         dev: true,
       }),
+    );
+
+    // launch-editor: open file in editor (VSCode, Cursor, etc.) from the UI
+    this.app.use(
+      OPEN_IN_EDITOR_PATH,
+      (
+        req: Thirdparty.connect.IncomingMessage,
+        res: ServerResponse,
+        next: () => void,
+      ) => {
+        if (req.method !== 'GET' && req.method !== 'HEAD') {
+          return next();
+        }
+        const url = new URL(req.url || '', `http://localhost`);
+        const file = url.searchParams.get('file');
+        const editor = url.searchParams.get('editor') || undefined;
+        if (!file) {
+          res.statusCode = 400;
+          res.end('Missing file parameter');
+          return;
+        }
+        try {
+          const launch = require('launch-editor') as (
+            file: string,
+            specifiedEditor?: string,
+            onErrorCallback?: (
+              fileName: string,
+              errorMessage: string | null,
+            ) => void,
+          ) => void;
+          let responded = false;
+          const safeEnd = (code: number, body: string) => {
+            if (responded) return;
+            responded = true;
+            res.statusCode = code;
+            res.end(body);
+          };
+          launch(file, editor, (_fileName, errorMessage) => {
+            if (errorMessage) {
+              safeEnd(500, errorMessage);
+            }
+          });
+
+          setTimeout(() => {
+            safeEnd(200, '');
+          }, 200);
+        } catch (err) {
+          if (!res.writableEnded) {
+            res.statusCode = 500;
+            res.end((err as Error).message);
+          }
+        }
+      },
     );
 
     await this._router.setup();
