@@ -1,7 +1,5 @@
 import axios from 'axios';
-import enhancedResolve from 'enhanced-resolve';
-const { CachedInputFileSystem, create: ResolverCreator } = enhancedResolve;
-import fs from 'fs';
+import { ResolverFactory } from '@rspack/resolver';
 import { omit } from 'es-toolkit/compat';
 import path from 'path';
 import { logger } from '@rsdoctor/utils/logger';
@@ -70,15 +68,21 @@ export function shouldSkipLoader(
   return false;
 }
 
+export type CompatibleResolve = Omit<
+  Plugin.Configuration['resolve'],
+  'mainFields'
+> & {
+  mainFields?: string[];
+};
+
 export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
   loaderPath: string,
   options: Omit<ProxyLoaderInternalOptions, 'loader' | 'hasOptions'>,
   cwd = process.cwd(),
-  resolveLoader?: Plugin.Configuration['resolve'],
+  resolveLoader?: CompatibleResolve,
 ): T[] {
-  const loaderResolver = ResolverCreator.sync({
-    fileSystem: new CachedInputFileSystem(fs, 4000),
+  const loaderResolver = new ResolverFactory({
     conditionNames: ['loader', 'require', 'node'],
     exportsFields: ['exports'],
     mainFiles: ['index'],
@@ -90,10 +94,10 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
 
   const resolve = (target: string) => {
     try {
-      const result = loaderResolver({}, cwd, target);
+      const result = loaderResolver.sync(cwd, target);
 
-      if (typeof result === 'string') {
-        return result;
+      if (result.path) {
+        return result.path;
       }
     } catch (e) {
       // ..
