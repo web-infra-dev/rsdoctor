@@ -34,6 +34,7 @@
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
+    "launch-editor": "^2.10.0",
     "safer-buffer": "2.1.2",
     "socket.io": "4.8.1",
     "tapable": "2.2.3"

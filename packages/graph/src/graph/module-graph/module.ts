@@ -25,6 +25,12 @@ export class Module implements SDK.ModuleInstance {
 
   bailoutReason: string[] = [];
 
+  /** Side effect location data from the bundler */
+  sideEffectLocations: SDK.SideEffectLocationData[] = [];
+
+  /** Side effect code snippets */
+  private sideEffectCodes: SDK.SideEffectCodeData[] = [];
+
   readonly webpackId: string;
 
   readonly path: string;
@@ -109,6 +115,22 @@ export class Module implements SDK.ModuleInstance {
 
   getBailoutReason() {
     return this.bailoutReason;
+  }
+
+  addSideEffectLocation(location: SDK.SideEffectLocationData) {
+    this.sideEffectLocations.push(location);
+  }
+
+  getSideEffectLocations() {
+    return this.sideEffectLocations.slice();
+  }
+
+  addSideEffectCode(codeData: SDK.SideEffectCodeData) {
+    this.sideEffectCodes.push(codeData);
+  }
+
+  getSideEffectCodes() {
+    return this.sideEffectCodes.slice();
   }
 
   getChunks(): SDK.ChunkInstance[] {
@@ -377,6 +399,9 @@ export class Module implements SDK.ModuleInstance {
             ?.filter((issuer) => issuer.moduleId)
             .map((issuer) => issuer.moduleId) || [],
       bailoutReason: this.bailoutReason,
+      ...(this.sideEffectLocations.length > 0
+        ? { sideEffectLocations: this.sideEffectLocations }
+        : {}),
     };
 
     if (this.meta.hasSetEsModuleStatement || this.meta.strictHarmonyModule) {

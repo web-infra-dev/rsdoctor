@@ -38,6 +38,24 @@ export interface SourceRange {
   end?: SourcePosition;
 }
 
+/** Side effect location from bundler (e.g. Rspack JsRsdoctorSideEffectLocation) */
+export interface SideEffectLocationData {
+  location: string;
+  nodeType: string;
+  module: number;
+  request: string;
+}
+
+/** Side effect code snippet data */
+export interface SideEffectCodeData {
+  /** Module ID */
+  moduleId: number;
+  /** Start line number (1-indexed) */
+  startLine: number;
+  /** Extracted source code snippet */
+  code: string;
+}
+
 /** Module size */
 export interface ModuleSize {
   sourceSize: number;
@@ -196,6 +214,16 @@ export interface ModuleInstance {
   addBailoutReason(reason: string): void;
   /** Get bailout reason */
   getBailoutReason(): string[];
+  /** Side effect location data (e.g. from Rspack sideEffectsLocations) */
+  sideEffectLocations?: SideEffectLocationData[];
+  /** Add a side effect location */
+  addSideEffectLocation(location: SideEffectLocationData): void;
+  /** Get side effect locations */
+  getSideEffectLocations(): SideEffectLocationData[];
+  /** Add side effect code */
+  addSideEffectCode(codeData: SideEffectCodeData): void;
+  /** Get side effect codes */
+  getSideEffectCodes(): SideEffectCodeData[];
 }
 
 /** Depends on Metadata */
@@ -340,6 +368,9 @@ export interface ModuleGraphInstance {
   /** Generate data */
   toData(configs?: ModuleGraphToDataArgs): ModuleGraphData;
 
+  /** Generate tree shaking data */
+  toTreeShakingData(): TreeShakingData;
+
   /** Generate data */
   toCodeData(type?: ToDataType): ModuleCodeData;
 
@@ -388,9 +419,17 @@ export interface ModuleData
 
   /** Issuer path */
   issuerPath?: string[] | number[];
+
+  /** Side effect location data (e.g. from Rspack sideEffectsLocations) */
+  sideEffectLocations?: SideEffectLocationData[];
 }
 
 export type ModuleCodeData = Record<number, ModuleSource>;
+
+/** Tree shaking analysis data */
+export interface TreeShakingData {
+  sideEffectCodes: Record<number, SideEffectCodeData[]>;
+}
 
 export interface DependencyData
   extends Omit<

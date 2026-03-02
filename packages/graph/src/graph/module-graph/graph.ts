@@ -442,6 +442,17 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
     };
   }
 
+  toTreeShakingData(): SDK.TreeShakingData {
+    const sideEffectCodes: Record<number, SDK.SideEffectCodeData[]> = {};
+    for (const module of this.getModules()) {
+      const codes = module.getSideEffectCodes();
+      if (codes.length > 0) {
+        sideEffectCodes[codes[0].moduleId] = codes;
+      }
+    }
+    return { sideEffectCodes };
+  }
+
   toCodeData(type: SDK.ToDataType = SDK.ToDataType.Normal): SDK.ModuleCodeData {
     const codeMap: SDK.ModuleCodeData = {};
     this.getModules().forEach((item) => {

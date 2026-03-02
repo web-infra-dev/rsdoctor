@@ -1,6 +1,6 @@
 import { EmoCheckData } from '../emo';
 import { LoaderData } from './loader';
-import { ModuleGraphData, ModuleCodeData } from './module';
+import { ModuleGraphData, ModuleCodeData, TreeShakingData } from './module';
 import { ChunkGraphData } from './chunk';
 import { ResolverData } from './resolver';
 import { PluginData } from './plugin';
@@ -31,6 +31,7 @@ export interface BuilderStoreData extends StoreCommonData {
   chunkGraph: ChunkGraphData;
   packageGraph: PackageGraphData;
   moduleCodeMap: ModuleCodeData;
+  treeShaking?: TreeShakingData;
   otherReports?: OtherReports | undefined;
 }
 

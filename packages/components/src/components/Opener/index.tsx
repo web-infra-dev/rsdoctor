@@ -1,2 +1,2 @@
 export * from './code';
-export * from './vscode';
+export * from './ide';

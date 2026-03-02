@@ -43,4 +43,9 @@ export interface CodeViewerProps {
    * @default true
    */
   headerVisible?: boolean;
+  /**
+   * Whether to format code on editor mount (using Monaco's formatter)
+   * @default false
+   */
+  formatOnMount?: boolean;
 }

@@ -70,6 +70,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
             output.mode === SDK.IMode[SDK.IMode.brief]
               ? output.options || undefined
               : undefined,
+          features: { treeShaking: this.options.features.treeShaking },
         },
       });
 

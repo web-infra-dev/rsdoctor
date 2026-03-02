@@ -496,6 +496,15 @@ export class RsdoctorSDK<
               dependencies: [],
             };
       },
+      get treeShaking() {
+        if (ctx.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
+          return undefined;
+        }
+        if (!ctx.extraConfig?.features?.treeShaking) {
+          return undefined;
+        }
+        return ctx._moduleGraph.toTreeShakingData();
+      },
       get otherReports() {
         return { treemapReportHtml: '' };
       },

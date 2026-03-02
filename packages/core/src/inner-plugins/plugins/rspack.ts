@@ -74,6 +74,8 @@ export function applyRspackNativePlugin(
           plugin.modulesGraph,
           data,
         );
+        // Extract side effect codes after sources are available
+        ModuleGraphBuildUtils.extractSideEffectCodes(plugin.modulesGraph);
       },
       assetPatchData: (data: Plugin.RspackNativeAssetPatch) => {
         ChunksBuildUtils.patchNativeAssets(plugin.chunkGraph!, data);

@@ -121,11 +121,13 @@ export function getModuleDetails(
   moduleId: number,
   modules: SDK.ModuleData[],
   dependencies: SDK.DependencyData[],
+  sideEffectCodes?: SDK.SideEffectCodeData[],
 ): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetModuleDetails> {
   const module = modules.find((e) => e.id === moduleId)!;
 
   return {
     module,
     dependencies: getDependenciesByModule(module, dependencies),
+    ...(sideEffectCodes?.length ? { sideEffectCodes } : {}),
   };
 }
