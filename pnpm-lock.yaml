@@ -479,8 +479,8 @@ importers:
   packages/ai:
     devDependencies:
       '@modelcontextprotocol/sdk':
-        specifier: 1.26.0
-        version: 1.26.0(zod@3.25.76)
+        specifier: 1.27.1
+        version: 1.27.1(zod@3.25.76)
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -2744,8 +2744,8 @@ packages:
       '@types/react': '>=16'
       react: '>=16'
 
-  '@modelcontextprotocol/sdk@1.26.0':
-    resolution: {integrity: sha512-Y5RmPncpiDtTXDbLKswIJzTqu2hyBKxTNsgKqKclDbhIgg1wgtf1fRuvxgTnRfcnxtvvgbIEcqUOzZrJ6iSReg==}
+  '@modelcontextprotocol/sdk@1.27.1':
+    resolution: {integrity: sha512-sr6GbP+4edBwFndLbM60gf07z0FQ79gaExpnsjMGePXqFcSSb7t6iscpjk9DhFhwd+mTEQrzNafGP8/iGGFYaA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
@@ -12963,7 +12963,7 @@ snapshots:
       '@types/react': 18.3.28
       react: 19.2.4
 
-  '@modelcontextprotocol/sdk@1.26.0(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.27.1(zod@3.25.76)':
     dependencies:
       '@hono/node-server': 1.19.9(hono@4.11.7)
       ajv: 8.17.1
