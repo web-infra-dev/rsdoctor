@@ -82,8 +82,8 @@
     "source-map": "^0.7.6"
   },
   "devDependencies": {
-    "axios": "^1.13.5",
-    "@rspack/core": "1.7.5",
+    "axios": "^1.13.6",
+    "@rspack/core": "1.7.6",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",
@@ -96,7 +96,7 @@
     "ts-loader": "^9.5.4",
     "tslib": "2.8.1",
     "typescript": "^5.9.2",
-    "webpack": "^5.104.1"
+    "webpack": "^5.105.3"
   },
   "publishConfig": {
     "access": "public",

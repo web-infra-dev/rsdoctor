@@ -26,14 +26,14 @@
   },
   "dependencies": {
     "@rsbuild/core": "^1.7.3",
-    "@rspack/core": "1.7.5",
-    "@types/lodash": "^4.17.23",
+    "@rspack/core": "1.7.6",
+    "@types/lodash": "^4.17.24",
     "@types/node": "^22.8.1",
     "es-toolkit": "^1.44.0",
     "memfs": "4.56.10",
     "typescript": "^5.9.2",
     "upath": "2.0.1",
-    "webpack": "^5.104.1"
+    "webpack": "^5.105.3"
   },
   "publishConfig": {
     "access": "public",
