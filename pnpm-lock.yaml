@@ -59,8 +59,8 @@ importers:
         specifier: ^20.8.4
         version: 20.8.4
       prettier:
-        specifier: ^3.6.2
-        version: 3.6.2
+        specifier: ^3.8.1
+        version: 3.8.1
       rsbuild-plugin-publint:
         specifier: ^0.3.4
         version: 0.3.4(@rsbuild/core@1.7.3)
@@ -479,8 +479,8 @@ importers:
   packages/ai:
     devDependencies:
       '@modelcontextprotocol/sdk':
-        specifier: 1.26.0
-        version: 1.26.0(zod@3.25.76)
+        specifier: 1.27.1
+        version: 1.27.1(zod@3.25.76)
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -508,8 +508,6 @@ importers:
       zod:
         specifier: ^3.25.76
         version: 3.25.76
-
-  packages/ai/compiled/socket.io-client: {}
 
   packages/cli:
     dependencies:
@@ -813,8 +811,6 @@ importers:
 
   packages/core/compiled/@rsbuild/plugin-check-syntax: {}
 
-  packages/core/compiled/axios: {}
-
   packages/document:
     dependencies:
       '@rspress/core':
@@ -1033,12 +1029,6 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/sdk/compiled/cors: {}
-
-  packages/sdk/compiled/dayjs: {}
-
-  packages/sdk/compiled/fs-extra: {}
-
   packages/types:
     dependencies:
       '@types/connect':
@@ -1154,10 +1144,6 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
-
-  packages/utils/compiled/connect: {}
-
-  packages/utils/compiled/filesize: {}
 
   packages/webpack-plugin:
     dependencies:
@@ -2830,8 +2816,8 @@ packages:
       '@types/react': '>=16'
       react: '>=16'
 
-  '@modelcontextprotocol/sdk@1.26.0':
-    resolution: {integrity: sha512-Y5RmPncpiDtTXDbLKswIJzTqu2hyBKxTNsgKqKclDbhIgg1wgtf1fRuvxgTnRfcnxtvvgbIEcqUOzZrJ6iSReg==}
+  '@modelcontextprotocol/sdk@1.27.1':
+    resolution: {integrity: sha512-sr6GbP+4edBwFndLbM60gf07z0FQ79gaExpnsjMGePXqFcSSb7t6iscpjk9DhFhwd+mTEQrzNafGP8/iGGFYaA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
@@ -8883,11 +8869,6 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  prettier@3.6.2:
-    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
-    engines: {node: '>=14'}
-    hasBin: true
-
   prettier@3.8.1:
     resolution: {integrity: sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg==}
     engines: {node: '>=14'}
@@ -13155,7 +13136,7 @@ snapshots:
       '@types/react': 18.3.28
       react: 19.2.4
 
-  '@modelcontextprotocol/sdk@1.26.0(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.27.1(zod@3.25.76)':
     dependencies:
       '@hono/node-server': 1.19.9(hono@4.11.7)
       ajv: 8.17.1
@@ -20872,8 +20853,6 @@ snapshots:
   prepend-http@2.0.0: {}
 
   prettier@2.8.8: {}
-
-  prettier@3.6.2: {}
 
   prettier@3.8.1: {}
 
