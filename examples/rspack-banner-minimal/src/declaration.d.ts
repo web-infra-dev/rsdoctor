@@ -5,7 +5,7 @@ declare module '*.svg' {
 
 declare module '*.less' {
   const classes: { [className: string]: string };
-  export default classes;
+  export = classes;
 }
 
 declare module '*/settings.json' {

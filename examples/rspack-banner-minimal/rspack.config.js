@@ -13,6 +13,10 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.css$/,
+        type: 'css/auto',
+      },
+      {
         test: /\.less$/,
         use: 'less-loader',
         type: 'css',
@@ -77,9 +81,6 @@ const config = {
   },
   optimization: {
     minimize: true,
-  },
-  experiments: {
-    css: true,
   },
   // stats: 'verbose',
   plugins: [
