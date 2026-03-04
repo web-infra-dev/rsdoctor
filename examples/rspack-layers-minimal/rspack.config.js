@@ -17,6 +17,10 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.css$/,
+        type: 'css/auto',
+      },
+      {
         test: /\.less$/,
         use: 'less-loader',
         type: 'css',
@@ -120,9 +124,5 @@ const config = {
       ],
     }),
   ],
-  experiments: {
-    css: true,
-    layers: true,
-  },
 };
 module.exports = config;
