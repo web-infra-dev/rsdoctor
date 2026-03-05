@@ -1,3 +1,5 @@
+import type { ModuleSize } from './sdk/module';
+
 export enum RsdoctorClientUrlQuery {
   BundleDiffFiles = '__bundle_files__',
   ManifestFile = 'manifest',
@@ -112,4 +114,56 @@ export interface RsdoctorClientAssetsSummary {
   others: {
     total: AssetInfo;
   };
+}
+
+export interface RsdoctorClientModuleDiffItem {
+  path: string;
+  size: {
+    baseline: ModuleSize;
+    current: ModuleSize;
+  };
+  /** Percent change based on parsedSize */
+  percent: number;
+  state: RsdoctorClientDiffState;
+}
+
+export interface RsdoctorClientModulesDiffResult {
+  added: Array<{ path: string; size: ModuleSize }>;
+  removed: Array<{ path: string; size: ModuleSize }>;
+  changed: RsdoctorClientModuleDiffItem[];
+}
+
+export interface RsdoctorClientPackageDiffItem {
+  name: string;
+  version: string;
+  root: string;
+  size: {
+    baseline: ModuleSize;
+    current: ModuleSize;
+  };
+  /** Percent change based on parsedSize */
+  percent: number;
+  state: RsdoctorClientDiffState;
+}
+
+export interface RsdoctorClientPackagesDiffResult {
+  added: Array<{
+    name: string;
+    version: string;
+    root: string;
+    size: ModuleSize;
+  }>;
+  removed: Array<{
+    name: string;
+    version: string;
+    root: string;
+    size: ModuleSize;
+  }>;
+  changed: RsdoctorClientPackageDiffItem[];
+}
+
+export interface RsdoctorClientBundleDiffResult {
+  assets: RsdoctorClientAssetsDiffResult;
+  modules: RsdoctorClientModulesDiffResult;
+  packages: RsdoctorClientPackagesDiffResult;
 }
