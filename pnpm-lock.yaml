@@ -80,8 +80,8 @@ importers:
         specifier: 1.55.1
         version: 1.55.1
       '@rsbuild/plugin-less':
-        specifier: 1.5.1
-        version: 1.5.1(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))
+        specifier: 1.6.0
+        version: 1.6.0(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))
       '@rsdoctor/cli':
         specifier: workspace:*
         version: link:../packages/cli
@@ -697,8 +697,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))
       '@rsbuild/plugin-svgr':
-        specifier: ^1.2.4
-        version: 1.2.4(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))(typescript@5.9.2)
+        specifier: ^1.3.0
+        version: 1.3.0(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))(typescript@5.9.2)
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -3496,10 +3496,10 @@ packages:
     peerDependencies:
       '@rsbuild/core': 1.x
 
-  '@rsbuild/plugin-less@1.5.1':
-    resolution: {integrity: sha512-rDtx2RkWEAeKiXOMY6ULX8K/2t+FcL2uLdSm1eC/srdyzkn0uhtsxduUS0t4pqUm2Bb+c5GOh5O69SXyPPhmpg==}
+  '@rsbuild/plugin-less@1.6.0':
+    resolution: {integrity: sha512-LridpH/ai10eyN7jlEPfmNiv8Kc9+eDggZkXIMYXcccpdQsc+ZvuuOWMugbyyiZ2j56uCuhvS4fG6UYL8QmL6A==}
     peerDependencies:
-      '@rsbuild/core': ^1.0.0 || ^2.0.0-0
+      '@rsbuild/core': ^1.3.0 || ^2.0.0-0
 
   '@rsbuild/plugin-node-polyfill@1.2.0':
     resolution: {integrity: sha512-mYctpK5Jn2yxTOxQ4rOJ0iFBJNW7sADFtKsLp9dL7MjToMhKiyIs4Mc65piI7B+YOBshdyMqCk3LPjJ+CtSRXQ==}
@@ -3584,8 +3584,8 @@ packages:
     peerDependencies:
       '@rsbuild/core': 1.x
 
-  '@rsbuild/plugin-svgr@1.2.4':
-    resolution: {integrity: sha512-QkjwEaoJ4HrZP8TEW+7x7U9EJ1EhAuV8cmnZg3nQ0UwSJgEhQ7Dfbpv6fjnex5aKtZioh/xu0XXU+CE9DIH1xA==}
+  '@rsbuild/plugin-svgr@1.3.0':
+    resolution: {integrity: sha512-Ubo9U5VFrtTAGXMMNYgqBZUYbSD8tBXYfVi/61UJhzwDJCSTQmDxY/jjeolpEZwznTPUS90wCUSHc85+0Z664Q==}
     peerDependencies:
       '@rsbuild/core': ^1.0.0 || ^2.0.0-0
 
@@ -14013,7 +14013,7 @@ snapshots:
       deepmerge: 4.3.1
       reduce-configs: 1.1.1
 
-  '@rsbuild/plugin-less@1.5.1(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))':
+  '@rsbuild/plugin-less@1.6.0(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))':
     dependencies:
       '@rsbuild/core': 2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0)
       deepmerge: 4.3.1
@@ -14181,7 +14181,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rsbuild/plugin-svgr@1.2.4(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))(typescript@5.9.2)':
+  '@rsbuild/plugin-svgr@1.3.0(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))(typescript@5.9.2)':
     dependencies:
       '@rsbuild/core': 2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0)
       '@rsbuild/plugin-react': 1.4.5(@rsbuild/core@2.0.0-beta.3(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0))
