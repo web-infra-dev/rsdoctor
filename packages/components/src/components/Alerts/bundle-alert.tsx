@@ -15,6 +15,7 @@ import styles from './bundle-alert.module.scss';
 import { CSSProperties, useState } from 'react';
 import { CrossChunksAlertCollapse } from './collapse-cross-chunks';
 import { ModuleMixedChunksAlertCollapse } from './collapse-module-mixed-chunks';
+import { SideEffectsOnlyImportsAlertCollapse } from './collapse-side-effects-only-imports';
 
 interface BundleAlertProps {
   title: string;
@@ -31,7 +32,11 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   dataSource,
   extraData,
 }) => {
-  const [activeKey, setActiveKey] = useState('E1001');
+  const firstKeyWithData =
+    ['E1001', 'E1002', 'E1003', 'E1004', 'E1005', 'E1006', 'E1007'].find(
+      (code) => dataSource.some((d) => d.code === code),
+    ) ?? 'E1001';
+  const [activeKey, setActiveKey] = useState(firstKeyWithData);
   const tabData: Array<{
     key: string;
     label: string;
@@ -67,12 +72,21 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
       label: 'Module Mixed Chunks',
       data: [],
     },
+    {
+      key: 'E1007',
+      label: 'Tree Shaking Side Effects Only',
+      data: [],
+    },
   ];
 
   dataSource.forEach((data) => {
     const target = tabData.find((td) => td.key === data.code)?.data;
     target?.push(data);
   });
+
+  tabData.sort(
+    (a, b) => (b.data.length > 0 ? 1 : 0) - (a.data.length > 0 ? 1 : 0),
+  );
 
   const tabItems = tabData.map((td) => {
     const tagStyle =
@@ -145,6 +159,14 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
           />
         );
         break;
+      case 'E1007':
+        children = (
+          <SideEffectsOnlyImportsAlertCollapse
+            data={td.data}
+            extraData={extraData}
+          />
+        );
+        break;
       default:
         children = null;
         break;
@@ -209,7 +231,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
             onChange={setActiveKey}
             tabBarGutter={10}
             type="card"
-            defaultActiveKey="E1001"
+            defaultActiveKey={tabData[0]?.key ?? 'E1001'}
             items={tabItems}
           />
         )}

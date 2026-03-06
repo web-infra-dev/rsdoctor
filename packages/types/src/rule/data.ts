@@ -6,8 +6,10 @@ import type {
   PackageInstance,
 } from '../sdk/package';
 
-export interface BaseRuleStoreData
-  extends Pick<RuleMessage, 'code' | 'category'> {
+export interface BaseRuleStoreData extends Pick<
+  RuleMessage,
+  'code' | 'category'
+> {
   /**
    * unique of error
    */
@@ -163,6 +165,25 @@ export interface ModuleMixedChunksRuleStoreData extends BaseRuleStoreData {
   }>;
 }
 
+/**
+ * Rule for detecting modules that are only imported for their side effects,
+ * which may indicate unintended tree-shaking failures.
+ */
+export interface ConnectionsOnlyImportsRuleStoreData extends BaseRuleStoreData {
+  type: 'tree-shaking-side-effects-only';
+  module: {
+    id: number | string;
+    path: string;
+    webpackId?: string | number;
+  };
+
+  connections: Array<{
+    originModule: number;
+    dependencyType: string;
+    userRequest: string;
+  }>;
+}
+
 export type RuleStoreDataItem =
   | LinkRuleStoreData
   | FileRelationRuleStoreData
@@ -170,6 +191,7 @@ export type RuleStoreDataItem =
   | PackageRelationDiffRuleStoreData
   | CodeViewRuleStoreData
   | CrossChunksPackageRuleStoreData
-  | ModuleMixedChunksRuleStoreData;
+  | ModuleMixedChunksRuleStoreData
+  | ConnectionsOnlyImportsRuleStoreData;
 
 export type RuleStoreData = RuleStoreDataItem[];
