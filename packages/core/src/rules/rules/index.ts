@@ -4,6 +4,7 @@ import { rule as loaderPerformanceOptimization } from './loader-performance-opti
 import { rule as ecmaVersionCheck } from './ecma-version-check';
 import { rule as crossChunksPackage } from './cross-chunks-package';
 import { rule as moduleMixedChunks } from './module-mixed-chunks';
+import { rule as ConnectionsOnlyImports } from './side-effects-only-imports';
 
 export const rules = [
   duplicatePackage,
@@ -12,4 +13,5 @@ export const rules = [
   ecmaVersionCheck,
   crossChunksPackage,
   moduleMixedChunks,
+  ConnectionsOnlyImports,
 ];
