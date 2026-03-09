@@ -280,6 +280,95 @@ export default {
 };
 ```
 
+### [E1007] Tree Shaking Side Effects Only
+
+该规则用于检测**仅因副作用而被打包进产物的模块**。这通常是由于 tree-shaking 未能正常工作导致的，例如 `package.json` 中的 `"sideEffects"` 字段缺失或配置有误，或使用了无法 tree-shake 的导入写法，导致整个模块被打包进产物，即使该模块的导出没有被使用。
+
+#### 常见原因
+
+- 包的 `package.json` 缺少 `"sideEffects": false`（或被错误设置为 `true`），导致打包器无法裁剪未使用的导出。
+- `import 'some-module'` 或 `import './styles.css'` 等语句被识别为纯副作用导入，但实际意图是使用该模块的导出。
+- Barrel 文件（重新导出大量内容的 index 文件）在仅有副作用导入时，会导致整个模块被保留。
+- 在 barrel 文件中使用了**先导入再导出**的写法（见下文），导致打包器无法静态分析哪些导出被实际使用。
+
+#### Barrel 文件中的重导出写法
+
+编写 barrel 文件（如 `index.ts`）对多个模块进行重导出时，不同的导出写法对 tree-shaking 效果有显著影响：
+
+```ts
+// 方式 1：使用 export ... from（推荐）
+export { Button, ButtonGroup } from './Button';
+export { Input, TextArea } from './Input';
+export { Modal, Dialog } from './Modal';
+export { Select, Option } from './Select';
+
+// 方式 2：使用 export * from（同样可行）
+export * from './Button';
+export * from './Input';
+export * from './Modal';
+export * from './Select';
+
+// 方式 3：先导入再导出（不推荐，会导致 tree-shaking 问题）
+import { Button } from './Button';
+import { Input } from './Input';
+import { Modal } from './Modal';
+import { Select } from './Select';
+
+export { Button, Input, Modal, Select };
+```
+
+**方式 1**（`export { ... } from`）和**方式 2**（`export * from`）均为静态重导出，打包器可以静态分析哪些导出被实际使用，从而安全地 tree-shake 掉未使用的部分。
+
+**方式 3**（先导入再导出）会引入中间绑定：每条 `import` 语句都会导致该模块被执行（即被视为有副作用），打包器无法安全地丢弃该模块，即使其导出完全未被消费。请避免在 barrel 文件中使用这种写法。
+
+#### 解决方案
+
+1. **审查导入语句**：确认你确实在使用该模块的具名导出。如果需要使用模块的导出，应将裸副作用导入替换为显式具名导入。
+2. **正确配置 `"sideEffects"`**：若模块没有全局副作用，在其 `package.json` 中设置 `"sideEffects": false`，让打包器可以安全地 tree-shake 未使用的导出。
+3. **避免意外的副作用导入**：将 `import 'module'` 模式替换为 `import { foo } from 'module'` 的显式具名导入形式（当确实需要使用导出时）。
+4. **在 barrel 文件中使用静态重导出**：将 `import` + `export` 的写法改为 `export { ... } from` 或 `export * from`，以保持重导出的静态可分析性。
+
+#### 配置
+
+- **ignore**：配置需要忽略的模块路径片段（字符串匹配：模块路径包含配置中的某字符串即忽略）。
+- **include**：当模块位于 `node_modules` 下时，只检查路径包含这些字符串的模块。默认不检查 `node_modules` 中的模块。
+
+```ts
+interface Config {
+  /** 需要忽略的模块路径片段 */
+  ignore: string[];
+  /**
+   * 当模块在 node_modules 下时，只检查路径包含这些字符串的模块。
+   * 示例：['react', '@babel/runtime']
+   */
+  include: string[];
+}
+```
+
+配置示例：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'tree-shaking-side-effects-only': [
+            'Warn',
+            {
+              ignore: ['node_modules/some-pkg'],
+              include: ['@my-scope/'],
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
 ## Linter 类型定义
 
 - `linter`字段的类型如下：

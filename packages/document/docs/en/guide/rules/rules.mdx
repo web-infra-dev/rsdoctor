@@ -284,6 +284,95 @@ export default {
 };
 ```
 
+### [E1007] Tree Shaking Side Effects Only
+
+This rule detects **modules that are bundled solely due to side effects**. This is often caused by unintended tree-shaking failures — for example, a missing or incorrect `"sideEffects"` field in `package.json`, or non-tree-shakeable import patterns — resulting in the entire module being bundled even though none of its exports are used.
+
+#### Common causes
+
+- The package's `package.json` is missing `"sideEffects": false` (or is incorrectly set to `true`), preventing the bundler from pruning unused exports.
+- An import statement like `import 'some-module'` or `import './styles.css'` is treated as a side-effect-only import, but the intended use was to consume exports.
+- Barrel files (index files that re-export many things) cause the whole module to be kept when only a side-effect import is present.
+- Using **import-then-export** patterns in barrel files (see below) prevents the bundler from statically analyzing which exports are used.
+
+#### Re-export patterns in barrel files
+
+When writing a barrel file (e.g. `index.ts`) that re-exports from multiple modules, the export pattern you choose has a significant impact on tree-shaking:
+
+```ts
+// Method 1: export ... from (recommended)
+export { Button, ButtonGroup } from './Button';
+export { Input, TextArea } from './Input';
+export { Modal, Dialog } from './Modal';
+export { Select, Option } from './Select';
+
+// Method 2: export * from (also fine)
+export * from './Button';
+export * from './Input';
+export * from './Modal';
+export * from './Select';
+
+// Method 3: import then export (NOT recommended — hurts tree-shaking)
+import { Button } from './Button';
+import { Input } from './Input';
+import { Modal } from './Modal';
+import { Select } from './Select';
+
+export { Button, Input, Modal, Select };
+```
+
+**Method 1** (`export { ... } from`) and **Method 2** (`export * from`) are both static re-exports. The bundler can statically analyze which exports are used and tree-shake the rest.
+
+**Method 3** (import then export) introduces an intermediate binding: each `import` statement causes the module to be evaluated (i.e. treated as having side effects), so the bundler cannot safely drop the module even when none of its exports are consumed. Avoid this pattern in barrel files.
+
+#### Solutions
+
+1. **Audit import statements**: Make sure you are actually importing and using named exports from this module. Replace bare side-effect imports with explicit named imports when you intend to use the module's exports.
+2. **Set `"sideEffects"` correctly**: In the module's `package.json`, set `"sideEffects": false` if the module has no global side effects, so the bundler can safely tree-shake unused exports.
+3. **Avoid unintended side-effect imports**: Convert `import 'module'` patterns to explicit `import { foo } from 'module'` patterns where the exports are needed.
+4. **Use static re-exports in barrel files**: Replace `import` + `export` patterns with `export { ... } from` or `export * from` to keep re-exports statically analyzable.
+
+#### Configuration
+
+- **ignore**: Module path patterns to ignore (string match: if the module path contains any of these strings, it is ignored).
+- **include**: When a module is under `node_modules`, only check modules whose path contains one of these strings. By default, modules under `node_modules` are not checked.
+
+```ts
+interface Config {
+  /** Module path fragments to ignore */
+  ignore: string[];
+  /**
+   * When a module is under node_modules, only check modules whose path contains these strings.
+   * Example: ['react', '@babel/runtime']
+   */
+  include: string[];
+}
+```
+
+Configuration example:
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'tree-shaking-side-effects-only': [
+            'Warn',
+            {
+              ignore: ['node_modules/some-pkg'],
+              include: ['@my-scope/'],
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
 ## Linter type
 
 - The type definition for the `linter` field is as follows:
