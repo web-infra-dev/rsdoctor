@@ -286,7 +286,7 @@ export default {
 
 #### 常见原因
 
-- 包的 `package.json` 缺少 `"sideEffects": false`（或被错误设置为 `true`），导致打包器无法裁剪未使用的导出。
+- Package 的 `package.json` 缺少 `"sideEffects": false`（或被错误设置为 `true`），导致打包器无法裁剪未使用的导出。
 - `import 'some-module'` 或 `import './styles.css'` 等语句被识别为纯副作用导入，但实际意图是使用该模块的导出。
 - Barrel 文件（重新导出大量内容的 index 文件）在仅有副作用导入时，会导致整个模块被保留。
 - 在 barrel 文件中使用了**先导入再导出**的写法（见下文），导致打包器无法静态分析哪些导出被实际使用。
