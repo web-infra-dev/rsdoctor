@@ -6,11 +6,14 @@ import type {
   ModuleGraph,
   Dependency,
 } from '@rspack/core';
+import type { ConnectionsOnlyImportData } from '../sdk/module';
 export type RspackNormalModuleFactory = NormalModuleFactory;
 
 export type RspackNativeAsset = RsdoctorPluginData.RsdoctorAsset;
 export type RspackNativeChunkGraph = RsdoctorPluginData.RsdoctorChunkGraph;
-export type RspackNativeModuleGraph = RsdoctorPluginData.RsdoctorModuleGraph;
+export type RspackNativeModuleGraph = RsdoctorPluginData.RsdoctorModuleGraph & {
+  connectionsOnlyImports?: ConnectionsOnlyImportData[];
+};
 export type RspackNativeChunk = RsdoctorPluginData.RsdoctorChunk;
 export type RspackNativeModule = RsdoctorPluginData.RsdoctorModule;
 export type RspackNativeSideEffect = RsdoctorPluginData.RsdoctorSideEffect;

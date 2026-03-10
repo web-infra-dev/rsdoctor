@@ -153,15 +153,7 @@ export function patchNativeModuleGraph(
     }
   }
 
-  const rawConnectionsOnlyImports = (
-    rawModuleGraph as {
-      connectionsOnlyImports?: SDK.ConnectionsOnlyImportData[];
-    }
-  ).connectionsOnlyImports;
-
-  if (rawConnectionsOnlyImports?.length) {
-    mg.setConnectionsOnlyImports(rawConnectionsOnlyImports);
-  }
+  mg.setConnectionsOnlyImports(rawModuleGraph.connectionsOnlyImports ?? []);
 }
 
 /**
