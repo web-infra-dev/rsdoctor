@@ -232,7 +232,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
 
   private _dependenciesIdMap: Map<number, SDK.DependencyInstance> = new Map();
 
-  private _ConnectionsOnlyImports: SDK.ConnectionsOnlyImportData[] = [];
+  private _connectionsOnlyImports: SDK.ConnectionsOnlyImportData[] = [];
 
   private _moduleWebpackIdMap: Map<string, SDK.ModuleInstance> = new Map();
 
@@ -480,10 +480,10 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
   }
 
   setConnectionsOnlyImports(items: SDK.ConnectionsOnlyImportData[]) {
-    this._ConnectionsOnlyImports = items;
+    this._connectionsOnlyImports = items;
   }
 
   getConnectionsOnlyImports(): SDK.ConnectionsOnlyImportData[] {
-    return this._ConnectionsOnlyImports;
+    return this._connectionsOnlyImports;
   }
 }
