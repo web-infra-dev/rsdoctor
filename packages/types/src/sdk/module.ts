@@ -46,6 +46,17 @@ export interface SideEffectLocationData {
   request: string;
 }
 
+/** Pre-computed side-effects-only import result (from Rust analysis) */
+export interface ConnectionsOnlyImportData {
+  moduleUkey: number;
+  modulePath: string;
+  connections: Array<{
+    originModule?: number;
+    dependencyType: string;
+    userRequest: string;
+  }>;
+}
+
 /** Side effect code snippet data */
 export interface SideEffectCodeData {
   /** Module ID */
@@ -376,13 +387,14 @@ export interface ModuleGraphInstance {
 
   setModules(modules: ModuleInstance[]): void;
   setDependencies(dependencies: DependencyInstance[]): void;
+  setConnectionsOnlyImports(items: ConnectionsOnlyImportData[]): void;
+  getConnectionsOnlyImports(): ConnectionsOnlyImportData[];
 }
 
-export interface ModuleData
-  extends Omit<
-    NonFunctionProperties<ModuleInstance>,
-    'rootModule' | 'isEntry' | 'concatenationModules' | 'meta' | 'issuerPath'
-  > {
+export interface ModuleData extends Omit<
+  NonFunctionProperties<ModuleInstance>,
+  'rootModule' | 'isEntry' | 'concatenationModules' | 'meta' | 'issuerPath'
+> {
   /** chunk identifier */
   chunks: string[];
 
@@ -431,17 +443,16 @@ export interface TreeShakingData {
   sideEffectCodes: Record<number, SideEffectCodeData[]>;
 }
 
-export interface DependencyData
-  extends Omit<
-    NonFunctionProperties<DependencyInstance>,
-    | 'module'
-    | 'dependency'
-    | 'statements'
-    | 'originDependency'
-    | 'kindString'
-    | 'resolveConcatenationModule'
-    | 'meta'
-  > {
+export interface DependencyData extends Omit<
+  NonFunctionProperties<DependencyInstance>,
+  | 'module'
+  | 'dependency'
+  | 'statements'
+  | 'originDependency'
+  | 'kindString'
+  | 'resolveConcatenationModule'
+  | 'meta'
+> {
   /** Module Identifier */
   module: number;
   /** Dependency Module Identifier */
@@ -452,6 +463,19 @@ export interface DependencyData
   statements: StatementData[];
 }
 
+/** Module connection data from rspack module graph */
+export interface ConnectionData {
+  ukey: number;
+  dependencyId: string;
+  module: number;
+  originModule?: number;
+  resolvedModule: number;
+  dependencyType: string;
+  userRequest: string;
+  loc?: string;
+  active: boolean;
+}
+
 export interface ModuleGraphData {
   dependencies: DependencyData[];
   modules: ModuleData[];
@@ -460,4 +484,5 @@ export interface ModuleGraphData {
   sideEffects: SideEffectData[];
   variables: VariableData[];
   layers?: string[];
+  connections?: ConnectionData[];
 }

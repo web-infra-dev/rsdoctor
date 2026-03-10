@@ -232,6 +232,8 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
 
   private _dependenciesIdMap: Map<number, SDK.DependencyInstance> = new Map();
 
+  private _connectionsOnlyImports: SDK.ConnectionsOnlyImportData[] = [];
+
   private _moduleWebpackIdMap: Map<string, SDK.ModuleInstance> = new Map();
 
   private _moduleIdMap: Map<number, SDK.ModuleInstance> = new Map();
@@ -264,15 +266,19 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
     return this._moduleIdMap.size;
   }
 
-  fromInstance(data: ModuleGraph) {
-    this._dependenciesIdMap = new Map(data._dependenciesIdMap);
-    this._moduleWebpackIdMap = new Map(data._moduleWebpackIdMap);
-    this._moduleIdMap = new Map(data._moduleIdMap);
-    this._moduleGraphModules = new Map(data._moduleGraphModules);
-    this._exportIdMap = new Map(data._exportIdMap);
-    this._sideEffectIdMap = new Map(data._sideEffectIdMap);
-    this._varIdMap = new Map(data._varIdMap);
-    this._layers = new Map(data._layers);
+  fromInstance(data: SDK.ModuleGraphInstance) {
+    this.setModules(data.getModules());
+    this.setDependencies(data.getDependencies());
+    this.setConnectionsOnlyImports(data.getConnectionsOnlyImports());
+
+    // Preserve full internal maps when cloning from the same implementation.
+    if (data instanceof ModuleGraph) {
+      this._moduleGraphModules = new Map(data._moduleGraphModules);
+      this._exportIdMap = new Map(data._exportIdMap);
+      this._sideEffectIdMap = new Map(data._sideEffectIdMap);
+      this._varIdMap = new Map(data._varIdMap);
+      this._layers = new Map(data._layers);
+    }
   }
 
   getSubGraphByModule(module: SDK.ModuleInstance): SDK.ModuleInstance[] {
@@ -471,5 +477,13 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
 
   setDependencies(dependencies: SDK.DependencyInstance[]) {
     this._dependenciesIdMap = new Map(dependencies.map((d) => [d.id, d]));
+  }
+
+  setConnectionsOnlyImports(items: SDK.ConnectionsOnlyImportData[]) {
+    this._connectionsOnlyImports = items;
+  }
+
+  getConnectionsOnlyImports(): SDK.ConnectionsOnlyImportData[] {
+    return this._connectionsOnlyImports;
   }
 }
