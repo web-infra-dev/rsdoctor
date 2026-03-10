@@ -509,8 +509,6 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
 
-  packages/ai/compiled/socket.io-client: {}
-
   packages/cli:
     dependencies:
       '@rsdoctor/core':
@@ -811,8 +809,6 @@ importers:
         specifier: ^5.105.3
         version: 5.105.3(webpack-cli@5.1.4)
 
-  packages/core/compiled/axios: {}
-
   packages/document:
     dependencies:
       '@rspress/core':
@@ -1031,12 +1027,6 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/sdk/compiled/cors: {}
-
-  packages/sdk/compiled/dayjs: {}
-
-  packages/sdk/compiled/fs-extra: {}
-
   packages/types:
     dependencies:
       '@types/connect':
@@ -1152,10 +1142,6 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
-
-  packages/utils/compiled/connect: {}
-
-  packages/utils/compiled/filesize: {}
 
   packages/webpack-plugin:
     dependencies:
