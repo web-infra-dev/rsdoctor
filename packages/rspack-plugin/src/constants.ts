@@ -1,4 +1,5 @@
 import type { Tap } from 'tapable';
+import packageJson from '../package.json';
 
 export const pluginTapName = 'RsdoctorRspackPlugin';
 
@@ -22,4 +23,4 @@ export const internalPluginTapPostOptions = (namespace: string): Tap => ({
   stage: 1000,
 });
 
-export const pkg = require('../package.json');
+export const pkg = packageJson;
