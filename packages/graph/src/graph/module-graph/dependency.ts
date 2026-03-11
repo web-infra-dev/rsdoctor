@@ -17,6 +17,8 @@ export class Dependency implements SDK.DependencyInstance {
 
   readonly kind: SDK.DependencyKind;
 
+  typeString?: string;
+
   readonly statements: SDK.StatementInstance[] = [];
 
   private _originDependency: SDK.ModuleInstance;
@@ -92,6 +94,7 @@ export class Dependency implements SDK.DependencyInstance {
       request: this.request,
       resolvedRequest: this.resolvedRequest,
       kind: this.kind,
+      typeString: this.typeString,
       module: this.module.id,
       dependency: this.dependency.id,
       originDependency: this.originDependency.id,

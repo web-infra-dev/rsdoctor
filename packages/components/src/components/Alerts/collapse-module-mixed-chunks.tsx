@@ -1,34 +1,17 @@
 import Icon from '@ant-design/icons';
 import { Collapse, Space, Tag, Typography } from 'antd';
-import { ReactNode } from 'react';
 
 import Overview from '../Overall/overview';
 import styles from './collapse.module.scss';
 import TotalSizeSvg from '../../common/svg/total-size.svg';
 import { beautifyPath } from '../../utils/file';
+import { LabelComponent } from './collapse-shared';
 
 import type { Rule } from '@rsdoctor/types';
 import type { AlertProps } from '../Alert/types';
 
 const { Text } = Typography;
 const { innerWidth } = window;
-
-const LabelComponent = (props: {
-  title: string | ReactNode;
-  description: string;
-  extra?: ReactNode;
-}) => {
-  const { title, description, extra } = props;
-  return (
-    <div className={styles.label}>
-      <div className={styles.labelContent}>
-        <div>{title}</div>
-        <div>{description}</div>
-      </div>
-      <div>{extra}</div>
-    </div>
-  );
-};
 
 export const ModuleMixedChunksAlertCollapse = (props: {
   data: Array<Rule.RuleStoreDataItem>;
