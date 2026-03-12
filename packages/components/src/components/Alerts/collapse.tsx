@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { Collapse, Typography, Divider, Space, Tabs, Tag, Tooltip } from 'antd';
 import Icon from '@ant-design/icons';
 import { sumBy } from 'es-toolkit/compat';
@@ -18,26 +17,10 @@ import type { Rule } from '@rsdoctor/types';
 import type { AlertProps } from '../Alert/types';
 
 import styles from './collapse.module.scss';
+import { LabelComponent } from './collapse-shared';
 
 const { Paragraph, Text } = Typography;
 const { innerWidth } = window;
-
-const LabelComponent = (props: {
-  title: string | ReactNode;
-  description: string;
-  extra: ReactNode;
-}) => {
-  const { title, description, extra } = props;
-  return (
-    <div className={styles.label}>
-      <div className={styles.labelContent}>
-        <div>{title}</div>
-        <div>{description}</div>
-      </div>
-      <div>{extra}</div>
-    </div>
-  );
-};
 
 export const AlertCollapse = (props: {
   data: Array<Rule.RuleStoreDataItem>;

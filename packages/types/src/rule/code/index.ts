@@ -7,6 +7,7 @@ import * as E1004 from './E1004';
 import * as E1005 from './E1005';
 import * as E1006 from './E1006';
 import * as E1007 from './E1007';
+import * as E1008 from './E1008';
 
 export type RuleErrorCodes = {
   [E1001.code]: typeof E1001;
@@ -16,6 +17,7 @@ export type RuleErrorCodes = {
   [E1005.code]: typeof E1005;
   [E1006.code]: typeof E1006;
   [E1007.code]: typeof E1007;
+  [E1008.code]: typeof E1008;
 };
 
 /**
@@ -33,6 +35,7 @@ export const RuleErrorMap: Record<keyof RuleErrorCodes, RuleMessage> = {
   [E1005.code]: E1005.message,
   [E1006.code]: E1006.message,
   [E1007.code]: E1007.message,
+  [E1008.code]: E1008.message,
 };
 
 export enum RsdoctorRuleClientConstant {
