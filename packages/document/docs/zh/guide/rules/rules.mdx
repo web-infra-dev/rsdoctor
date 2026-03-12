@@ -280,6 +280,65 @@ export default {
 };
 ```
 
+### [E1007] Tree Shaking Side Effects Only
+
+规则 key: `tree-shaking-side-effects-only`
+
+当某个模块仅以副作用（side effects）方式被引入并打进产物时，该规则会发出警告。这通常是由于意外的 tree-shaking 失败导致的（例如 `package.json` 中缺少或错误设置了 `"sideEffects"` 字段，或使用了不可 tree-shake 的 import 写法），使整个模块被打包进产物，即使其导出的内容没有被实际使用。
+
+#### 常见原因
+
+- 包的 `package.json` 缺少 `"sideEffects": false`（或错误地设置为 `true`），导致打包器无法裁剪未使用的导出。
+- `import 'some-module'` 或 `import './styles.css'` 这类语句被当作纯副作用引入处理，而实际意图是使用该模块的导出内容。
+- Barrel 文件（将许多内容重新导出的 index 文件）在只存在副作用引入时，导致整个模块被保留。
+
+#### 解决方案
+
+1. **审查 import 语句**：确认你确实在引入并使用该模块的具名导出。当你需要使用模块的导出时，将裸副作用引入替换为显式的具名引入。
+2. **正确设置 `"sideEffects"`**：如果该模块没有全局副作用，在其 `package.json` 中设置 `"sideEffects": false`，使打包器可以安全地 tree-shake 未使用的导出。
+3. **避免非预期的副作用引入**：将 `import 'module'` 模式转换为 `import { foo } from 'module'` 的显式写法（当需要使用导出时）。
+
+#### 配置
+
+- **ignore**：需要忽略的模块路径匹配规则（字符串匹配：模块路径包含配置中的某字符串即忽略）。
+- **include**：当模块位于 `node_modules` 下时，需要纳入检查的模块路径匹配规则（默认情况下 `node_modules` 中的模块会被跳过）。
+
+```ts
+interface Config {
+  /** 需要忽略的模块路径片段 */
+  ignore: string[];
+  /**
+   * 当模块位于 node_modules 下时，需要纳入检查的模块路径匹配规则。
+   * 示例：['react', '@babel/runtime']
+   */
+  include: string[];
+}
+```
+
+配置示例：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugins: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'tree-shaking-side-effects-only': [
+            'Warn',
+            {
+              ignore: ['src/polyfills'],
+              include: ['some-lib'],
+            },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
 ## Linter 类型定义
 
 - `linter`字段的类型如下：

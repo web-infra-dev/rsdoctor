@@ -282,6 +282,10 @@ export interface DependencyInstance {
    * - string enumeration
    */
   readonly kindString: keyof typeof DependencyKind;
+  /**
+   * Original dependency type string from the bundler (e.g. 'cjs require', 'cjs full require', 'esm import')
+   */
+  typeString?: string;
   /** Whether to connect to the aggregation module */
   readonly resolveConcatenationModule: boolean;
   /** quote statement */

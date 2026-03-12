@@ -16,6 +16,7 @@ import { CSSProperties, useState } from 'react';
 import { CrossChunksAlertCollapse } from './collapse-cross-chunks';
 import { ModuleMixedChunksAlertCollapse } from './collapse-module-mixed-chunks';
 import { SideEffectsOnlyImportsAlertCollapse } from './collapse-side-effects-only-imports';
+import { CjsRequireAlertCollapse } from './collapse-cjs-require';
 
 interface BundleAlertProps {
   title: string;
@@ -33,9 +34,16 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   extraData,
 }) => {
   const firstKeyWithData =
-    ['E1001', 'E1002', 'E1003', 'E1004', 'E1005', 'E1006', 'E1007'].find(
-      (code) => dataSource.some((d) => d.code === code),
-    ) ?? 'E1001';
+    [
+      'E1001',
+      'E1002',
+      'E1003',
+      'E1004',
+      'E1005',
+      'E1006',
+      'E1007',
+      'E1008',
+    ].find((code) => dataSource.some((d) => d.code === code)) ?? 'E1001';
   const [activeKey, setActiveKey] = useState(firstKeyWithData);
   const tabData: Array<{
     key: string;
@@ -75,6 +83,11 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
     {
       key: 'E1007',
       label: 'Tree Shaking Side Effects Only',
+      data: [],
+    },
+    {
+      key: 'E1008',
+      label: 'CJS Require Cannot Tree-Shake',
       data: [],
     },
   ];
@@ -165,6 +178,11 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
             data={td.data}
             extraData={extraData}
           />
+        );
+        break;
+      case 'E1008':
+        children = (
+          <CjsRequireAlertCollapse data={td.data} extraData={extraData} />
         );
         break;
       default:

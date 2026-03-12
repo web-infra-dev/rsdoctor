@@ -184,6 +184,28 @@ export interface ConnectionsOnlyImportsRuleStoreData extends BaseRuleStoreData {
   }>;
 }
 
+/**
+ * Rule for detecting modules imported via CJS require (bare require() call),
+ * which prevents tree-shaking of the required module.
+ */
+export interface CjsRequireRuleStoreData extends BaseRuleStoreData {
+  type: 'cjs-require';
+  /** The module that contains the require() call */
+  issuerModule: {
+    id: number | string;
+    path: string;
+    webpackId?: string | number;
+  };
+  /** The module being required */
+  requiredModule: {
+    id: number | string;
+    path: string;
+    webpackId?: string | number;
+  };
+  /** The original require string (e.g. 'lodash') */
+  request: string;
+}
+
 export type RuleStoreDataItem =
   | LinkRuleStoreData
   | FileRelationRuleStoreData
@@ -192,6 +214,7 @@ export type RuleStoreDataItem =
   | CodeViewRuleStoreData
   | CrossChunksPackageRuleStoreData
   | ModuleMixedChunksRuleStoreData
-  | ConnectionsOnlyImportsRuleStoreData;
+  | ConnectionsOnlyImportsRuleStoreData
+  | CjsRequireRuleStoreData;
 
 export type RuleStoreData = RuleStoreDataItem[];

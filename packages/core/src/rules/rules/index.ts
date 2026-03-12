@@ -5,6 +5,7 @@ import { rule as ecmaVersionCheck } from './ecma-version-check';
 import { rule as crossChunksPackage } from './cross-chunks-package';
 import { rule as moduleMixedChunks } from './module-mixed-chunks';
 import { rule as connectionsOnlyImports } from './side-effects-only-imports';
+import { rule as cjsRequire } from './cjs-require';
 
 export const rules = [
   duplicatePackage,
@@ -14,4 +15,5 @@ export const rules = [
   crossChunksPackage,
   moduleMixedChunks,
   connectionsOnlyImports,
+  cjsRequire,
 ];
