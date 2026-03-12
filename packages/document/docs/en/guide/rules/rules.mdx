@@ -284,6 +284,52 @@ export default {
 };
 ```
 
+### [E1008] CJS Require Cannot Tree-Shake
+
+When code uses a **bare `require()` call** (i.e. the CJS Require dependency type), the bundler cannot statically determine which exports of the required module are actually used, forcing the **entire module to be bundled** and preventing tree-shaking.
+
+Unlike `require('module').property` (CJS Full Require), `const mod = require('module')` causes the bundler to conservatively retain all exports of the module.
+
+#### Common causes
+
+- Using `const mod = require('some-module')` instead of destructuring at the require site.
+- Accessing properties of the required module dynamically at runtime rather than statically in source code.
+
+#### Solutions
+
+1. **Use destructured require**: Replace `const mod = require('A')` with `const { foo } = require('A')` (CJS Full Require), so the bundler can track which exports are used.
+2. **Migrate to ESM**: Use `import { foo } from 'A'` to get full tree-shaking support.
+3. **Use property-access require**: Replace `const mod = require('A'); mod.foo()` with `const foo = require('A').foo` to allow partial tree-shaking.
+
+#### Configuration
+
+- **ignore**: Module path patterns to ignore (applied to both the issuer module path and the required module path).
+
+```ts
+interface Config {
+  /** Module path fragments to ignore (applied to both issuer and required module paths) */
+  ignore: string[];
+}
+```
+
+Configuration example:
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'cjs-require': ['Warn', { ignore: ['node_modules/', 'legacy/'] }],
+        },
+      },
+    }),
+  ],
+};
+```
+
 ## Linter type
 
 - The type definition for the `linter` field is as follows:

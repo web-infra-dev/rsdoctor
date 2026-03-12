@@ -280,6 +280,52 @@ export default {
 };
 ```
 
+### [E1008] CJS Require Cannot Tree-Shake
+
+当代码中使用 **裸 `require()` 调用**（即 CJS Require 依赖类型）时，打包器无法静态分析该模块实际使用了哪些导出，从而导致**整个模块被强制打包**，无法 tree-shake。
+
+与 `require('module').property`（CJS Full Require）不同，`const mod = require('module')` 这种写法会让打包器保守地保留整个模块的所有导出。
+
+#### 常见原因
+
+- 使用 `const mod = require('some-module')` 而不是在 require 时直接解构。
+- 在运行时动态访问 required 模块的属性，而非在静态代码中直接访问。
+
+#### 解决方案
+
+1. **使用解构 require**：将 `const mod = require('A')` 替换为 `const { foo } = require('A')`（CJS Full Require），使打包器能追踪实际使用的导出。
+2. **迁移到 ESM**：使用 `import { foo } from 'A'`，以获得完整的 tree-shaking 支持。
+3. **使用属性访问 require**：将 `const mod = require('A'); mod.foo()` 替换为 `const foo = require('A').foo`，以允许部分 tree-shaking。
+
+#### 配置
+
+- **ignore**：配置需要忽略的模块路径片段（同时匹配引用方模块路径和被引用模块路径）。
+
+```ts
+interface Config {
+  /** 需要忽略的模块路径片段（同时应用于引用方和被引用模块路径） */
+  ignore: string[];
+}
+```
+
+配置示例：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugin: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'cjs-require': ['Warn', { ignore: ['node_modules/', 'legacy/'] }],
+        },
+      },
+    }),
+  ],
+};
+```
+
 ## Linter 类型定义
 
 - `linter`字段的类型如下：
