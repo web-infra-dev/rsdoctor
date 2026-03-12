@@ -208,9 +208,12 @@ export function patchNativeModuleSources(
   }
 
   // Handle JSON module sizes from Rspack native plugin
-  const jsonModuleSizes = rawModuleSourcesPatch.jsonModuleSizes as
-    | Array<{ identifier: string; size: number }>
-    | undefined;
+  // Need Rspack version > 2.x.
+  const jsonModuleSizes = (
+    rawModuleSourcesPatch as unknown as {
+      jsonModuleSizes?: Array<{ identifier: string; size: number }>;
+    }
+  ).jsonModuleSizes;
   if (jsonModuleSizes && jsonModuleSizes.length > 0) {
     for (const jsonModuleSize of jsonModuleSizes) {
       const module = mg.getModuleByWebpackId(jsonModuleSize.identifier);
