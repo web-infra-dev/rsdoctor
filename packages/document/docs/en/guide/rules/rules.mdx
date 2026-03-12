@@ -286,6 +286,8 @@ export default {
 
 ### [E1007] Tree Shaking Side Effects Only
 
+Rule key: `tree-shaking-side-effects-only`
+
 This rule detects modules that are pulled in and bundled solely due to side effects. This is often caused by unintended tree-shaking failures (e.g. missing or incorrect `"sideEffects"` field in `package.json`, or non-tree-shakeable import patterns), resulting in the entire module being bundled even though none of its exports are used.
 
 #### Common causes
@@ -323,7 +325,7 @@ Configuration example:
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 export default {
-  plugin: [
+  plugins: [
     new RsdoctorRspackPlugin({
       linter: {
         rules: {

@@ -282,6 +282,8 @@ export default {
 
 ### [E1007] Tree Shaking Side Effects Only
 
+规则 key: `tree-shaking-side-effects-only`
+
 当某个模块仅以副作用（side effects）方式被引入并打进产物时，该规则会发出警告。这通常是由于意外的 tree-shaking 失败导致的（例如 `package.json` 中缺少或错误设置了 `"sideEffects"` 字段，或使用了不可 tree-shake 的 import 写法），使整个模块被打包进产物，即使其导出的内容没有被实际使用。
 
 #### 常见原因
@@ -319,7 +321,7 @@ interface Config {
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 export default {
-  plugin: [
+  plugins: [
     new RsdoctorRspackPlugin({
       linter: {
         rules: {
