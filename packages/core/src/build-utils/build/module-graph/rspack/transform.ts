@@ -208,7 +208,7 @@ export function patchNativeModuleSources(
   }
 
   // Handle JSON module sizes from Rspack native plugin
-  const jsonModuleSizes = rawModuleSourcesPatch.json_module_sizes as
+  const jsonModuleSizes = rawModuleSourcesPatch.jsonModuleSizes as
     | Array<{ identifier: string; size: number }>
     | undefined;
   if (jsonModuleSizes && jsonModuleSizes.length > 0) {
