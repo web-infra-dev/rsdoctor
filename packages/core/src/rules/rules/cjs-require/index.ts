@@ -36,11 +36,17 @@ export const rule = defineRule<typeof title, Config>(() => {
           continue;
         }
 
-        if (ruleConfig.ignore.some((pattern) => issuerPath.includes(pattern))) {
+        const requiredModule = dep.dependency;
+
+        if (
+          ruleConfig.ignore.some(
+            (pattern) =>
+              issuerPath.includes(pattern) ||
+              requiredModule.path.includes(pattern),
+          )
+        ) {
           continue;
         }
-
-        const requiredModule = dep.dependency;
 
         const detail: Linter.ReportDetailData<Rule.CjsRequireRuleStoreData> = {
           type: title,
