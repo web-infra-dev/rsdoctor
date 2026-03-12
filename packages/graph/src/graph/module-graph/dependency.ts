@@ -94,7 +94,7 @@ export class Dependency implements SDK.DependencyInstance {
       request: this.request,
       resolvedRequest: this.resolvedRequest,
       kind: this.kind,
-      typeString: this.typeString,
+      ...(this.typeString !== undefined && { typeString: this.typeString }),
       module: this.module.id,
       dependency: this.dependency.id,
       originDependency: this.originDependency.id,

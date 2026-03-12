@@ -119,7 +119,7 @@ export function patchNativeModuleGraph(
       createDependencyKind(dep.kind),
     );
     res.setId(dep.ukey);
-    res.typeString = dep.kind;
+    if (dep.kind !== undefined) res.typeString = dep.kind;
     return res;
   });
   mg.setDependencies(deppendencies);
