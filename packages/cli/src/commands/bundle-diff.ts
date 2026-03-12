@@ -15,7 +15,7 @@ import {
   SDK,
   Constants,
 } from '@rsdoctor/types';
-import { Manifest, Algorithm } from '@rsdoctor/utils/common';
+import { Manifest, Algorithm, Graph } from '@rsdoctor/utils/common';
 import { RsdoctorSDK } from '@rsdoctor/sdk';
 import { createRequire } from 'node:module';
 
@@ -24,6 +24,7 @@ interface Options {
   baseline: string;
   open?: boolean;
   html?: boolean;
+  json?: boolean | string;
   output?: string;
 }
 
@@ -50,8 +51,12 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
       )
       .option('--html', 'output as a standalone HTML file')
       .option(
+        '--json [path]',
+        'output as a JSON file, optionally specify file path (default: rsdoctor-diff.json)',
+      )
+      .option(
         '--output <path>',
-        'output file path for HTML mode (default: rsdoctor-diff.html)',
+        'output file path for HTML/JSON mode (default: rsdoctor-diff.html or rsdoctor-diff.json)',
       );
   },
   async action({
@@ -59,7 +64,8 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
     current,
     open = true,
     html = false,
-    output = 'rsdoctor-diff.html',
+    json = false,
+    output, // ????
   }) {
     const spinner = ora({ prefixText: cyan(`[${name}]`) }).start();
 
@@ -125,6 +131,26 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
         spinner.fail(red((error as Error).message));
         throw error;
       }
+    }
+
+    if (json) {
+      spinner.text = 'Generating JSON output file...';
+
+      const outputPath = path.resolve(
+        cwd,
+        typeof json === 'string' ? json : 'rsdoctor-diff.json',
+      );
+      fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+
+      const jsonData = Graph.getBundleDiffResult(
+        baselineDataValue,
+        currentDataValue,
+      );
+
+      fs.writeFileSync(outputPath, JSON.stringify(jsonData, null, 2), 'utf-8');
+
+      spinner.succeed(`Generated JSON output file at: ${outputPath}`);
+      return null;
     }
 
     // Only start server if not in HTML mode
@@ -285,7 +311,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
       );
 
       // Write the output file
-      const outputPath = path.resolve(cwd, output);
+      const outputPath = path.resolve(cwd, output || 'rsdoctor-diff.html');
       fs.mkdirSync(path.dirname(outputPath), { recursive: true });
       fs.writeFileSync(outputPath, htmlContent, 'utf-8');
 
