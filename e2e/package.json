@@ -9,10 +9,10 @@
   },
   "devDependencies": {
     "@actions/core": "^1.11.1",
-    "@lynx-js/react": "^0.116.4",
-    "@lynx-js/rspeedy": "^0.13.4",
+    "@lynx-js/react": "^0.116.5",
+    "@lynx-js/rspeedy": "^0.13.5",
     "@playwright/test": "1.55.1",
-    "@rsbuild/plugin-less": "1.6.0",
+    "@rsbuild/plugin-less": "1.6.2",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
@@ -20,13 +20,13 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",
-    "@rspack/core": "2.0.0-beta.5",
+    "@rspack/core": "2.0.0-canary-20260116",
     "@types/node": "^22.8.1",
     "@types/react": "^18.3.28",
     "loader-utils": "^2.0.4",
     "es-toolkit": "^1.44.0",
     "playwright": "1.55.1",
     "typescript": "^5.9.2",
-    "webpack": "^5.105.3"
+    "webpack": "^5.105.4"
   }
 }
