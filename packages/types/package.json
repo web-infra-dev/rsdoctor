@@ -27,7 +27,7 @@
   "dependencies": {
     "@types/connect": "3.4.38",
     "@types/estree": "1.0.5",
-    "@types/tapable": "2.2.7",
+    "@types/tapable": "2.3.0",
     "source-map": "^0.7.6"
   },
   "devDependencies": {
