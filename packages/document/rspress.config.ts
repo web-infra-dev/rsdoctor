@@ -5,7 +5,6 @@ import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginRss } from '@rspress/plugin-rss';
-import { pluginLlms } from '@rspress/plugin-llms';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import pluginSitemap from 'rspress-plugin-sitemap';
 
@@ -17,7 +16,6 @@ export default defineConfig({
     pluginSitemap({
       domain: siteUrl,
     }),
-    pluginLlms(),
     pluginFontOpenSans(),
     pluginRss({
       siteUrl,
@@ -90,6 +88,7 @@ export default defineConfig({
   ],
   markdown: {},
   ssg: true,
+  llms: true,
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
