@@ -6,12 +6,19 @@ import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginRss } from '@rspress/plugin-rss';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
+import { pluginClientRedirects } from '@rspress/plugin-client-redirects';
 import pluginSitemap from 'rspress-plugin-sitemap';
 
 const siteUrl = 'https://rsdoctor.rs';
 
 export default defineConfig({
   plugins: [
+    pluginClientRedirects({
+      redirects: [
+        { from: '/guide/start/mcp', to: '/guide/usage/mcp' },
+        { from: '/zh/guide/start/mcp', to: '/zh/guide/usage/mcp' },
+      ],
+    }),
     pluginAlgolia(),
     pluginSitemap({
       domain: siteUrl,
