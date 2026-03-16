@@ -32,7 +32,7 @@ https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
 - **支持自定义规则**：除了内置构建扫描规则外，还支持用户根据 Rsdoctor 的构建数据添加自定义构建扫描规则。
 
-- **支持 MCP Server**：Rsdoctor 提供了 [MCP Server](https://rsdoctor.rs/zh/guide/start/mcp)，可以通过问答的方式来分析构建过程。
+- **支持 MCP Server**：Rsdoctor 提供了 [MCP Server](https://rsdoctor.rs/zh/guide/usage/mcp)，可以通过问答的方式来分析构建过程。
 
 ## 📚 快速上手
 
