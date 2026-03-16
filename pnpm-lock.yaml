@@ -833,12 +833,9 @@ importers:
       '@rspress/plugin-algolia':
         specifier: 2.0.5
         version: 2.0.5(@algolia/client-search@5.49.2)(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
-      '@rspress/plugin-llms':
+      '@rspress/plugin-rss':
         specifier: 2.0.5
         version: 2.0.5(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
-      '@rspress/plugin-rss':
-        specifier: 2.0.2
-        version: 2.0.2(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -856,6 +853,9 @@ importers:
         version: 18.3.1
       react-dom:
         specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-render-to-markdown:
+        specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       rsbuild-plugin-google-analytics:
         specifier: ^1.0.5
@@ -4305,23 +4305,17 @@ packages:
     resolution: {integrity: sha512-6xvPvSnx2wPPnKFjVyHSUspaDWRMrTMXg1HO+YOnruSMjXQGELoagGRObH0FUtXQkmUH8Og8w0Ezf6a7oZZISQ==}
     engines: {node: '>=14.17.6'}
 
-  '@rspress/plugin-llms@2.0.5':
-    resolution: {integrity: sha512-qOqeInHXhHoBnMSwQdXJuMDOdHO48pfHW/euzA1AZrlvA2jzbII33we+2AbQfkWm98NAKUO4koU1GKUV2hhJ4g==}
-    engines: {node: ^20.19.0 || >=22.12.0}
-    peerDependencies:
-      '@rspress/core': ^2.0.5
-
   '@rspress/plugin-medium-zoom@2.0.0-alpha.3':
     resolution: {integrity: sha512-3mInIGNIdMD5g+AdLAEHuN+xPHH/Wn58xWcyH4MKlvvZRhfhBd3xwWQbWB1tNlCelwNfREuqcaq65HITRJBQxg==}
     engines: {node: '>=14.17.6'}
     peerDependencies:
       '@rspress/runtime': ^2.0.0-alpha.3
 
-  '@rspress/plugin-rss@2.0.2':
-    resolution: {integrity: sha512-oWSfK1/cdb+C+eTdj5+v88cPGWK7EUjOMXMbjM88Dj6to6s4uddaqXDBq5vltO9MOLBbDyzJIQNyNPATwXlwsA==}
+  '@rspress/plugin-rss@2.0.5':
+    resolution: {integrity: sha512-qt6wWrC9CfwZBgM7GEe/RDKbnT5jH/TjaTwF5ShXXSxMH4uuRS/H1BaAFwqkuiCSDhwKvoc8fC8jvbYsdyC+bg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      '@rspress/core': ^2.0.2
+      '@rspress/core': ^2.0.5
 
   '@rspress/runtime@2.0.0-alpha.3':
     resolution: {integrity: sha512-NFzPc+LsHyFN8DUpXDQJGbJQ8o/YNnDkc4pcntqWMuG5pyAqp8Qe+w9n80w4iM47P0TRDnMkUXv1vS2ZezmksQ==}
@@ -6324,9 +6318,9 @@ packages:
       picomatch:
         optional: true
 
-  feed@4.2.2:
-    resolution: {integrity: sha512-u5/sxGfiMfZNtJ3OvQpXcvotFpYkL0n9u9mM2vkui2nGo8b4wvDkJ8gAkYqbA8QpGyFCv3RK0Z+Iv+9veCS9bQ==}
-    engines: {node: '>=0.4.0'}
+  feed@5.2.0:
+    resolution: {integrity: sha512-hgH6CCb+7+0c8PBlakI2KubG6R+Rb1MhpNcdvqUXZTBwBHf32piwY255diAkAmkGZ6AWlywOU88AkOgP9q8Rdw==}
+    engines: {node: '>=20', pnpm: '>=10'}
 
   figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
@@ -9334,6 +9328,12 @@ packages:
       '@types/react': '>=18'
       react: '>=18'
 
+  react-reconciler@0.29.2:
+    resolution: {integrity: sha512-zZQqIiYgDCTP/f1N/mAR10nJGrPD2ZR+jDSEsKWJHYC7Cm2wodlwbR3upZRdC3cjIjSlTLNVyO7Iu0Yy7t2AYg==}
+    engines: {node: '>=0.10.0'}
+    peerDependencies:
+      react: ^18.3.1
+
   react-reconciler@0.33.0:
     resolution: {integrity: sha512-KetWRytFv1epdpJc3J4G75I4WrplZE5jOL7Yq0p34+OVOKF4Se7WrdIdVC45XsSSmUTlht2FM/fM1FZb1mfQeA==}
     engines: {node: '>=0.10.0'}
@@ -9351,6 +9351,11 @@ packages:
   react-refresh@0.18.0:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
     engines: {node: '>=0.10.0'}
+
+  react-render-to-markdown@18.3.1:
+    resolution: {integrity: sha512-KK4nZB3YSI50HFVKay0mrEjylSe+CrWDgTcw54pVlYl8mmtHbcvuMEy3mxjRViFuOaOYdkrabB4f2n569rf86w==}
+    peerDependencies:
+      react: '>=18.2.0'
 
   react-render-to-markdown@19.0.1:
     resolution: {integrity: sha512-BPv48o+ubcu2JyUDIktvJXFqLIZqR7hA4mvGu1eFIofz9fogT2me9UvXwRvqvGs9jEtNaJkxZIUKUX0oiK4hDA==}
@@ -14724,26 +14729,15 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/plugin-llms@2.0.5(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
-    dependencies:
-      '@rspress/core': 2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
-      remark-mdx: 3.1.1
-      remark-parse: 11.0.0
-      remark-stringify: 11.0.0
-      unified: 11.0.5
-      unist-util-visit: 5.0.0
-    transitivePeerDependencies:
-      - supports-color
-
   '@rspress/plugin-medium-zoom@2.0.0-alpha.3(@rspress/runtime@2.0.0-alpha.3)':
     dependencies:
       '@rspress/runtime': 2.0.0-alpha.3
       medium-zoom: 1.1.0
 
-  '@rspress/plugin-rss@2.0.2(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
+  '@rspress/plugin-rss@2.0.5(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
     dependencies:
       '@rspress/core': 2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
-      feed: 4.2.2
+      feed: 5.2.0
 
   '@rspress/runtime@2.0.0-alpha.3':
     dependencies:
@@ -14804,7 +14798,7 @@ snapshots:
 
   '@rstest/core@0.9.2(core-js@3.47.0)':
     dependencies:
-      '@rsbuild/core': 2.0.0-beta.8(core-js@3.47.0)
+      '@rsbuild/core': 2.0.0-beta.8(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0)
       '@types/chai': 5.2.3
       tinypool: 2.1.0
     transitivePeerDependencies:
@@ -17195,7 +17189,7 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.3
 
-  feed@4.2.2:
+  feed@5.2.0:
     dependencies:
       xml-js: 1.6.11
 
@@ -21088,6 +21082,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  react-reconciler@0.29.2(react@18.3.1):
+    dependencies:
+      loose-envify: 1.4.0
+      react: 18.3.1
+      scheduler: 0.23.2
+
   react-reconciler@0.33.0(react@19.2.4):
     dependencies:
       react: 19.2.4
@@ -21098,6 +21098,11 @@ snapshots:
   react-refresh@0.16.0: {}
 
   react-refresh@0.18.0: {}
+
+  react-render-to-markdown@18.3.1(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-reconciler: 0.29.2(react@18.3.1)
 
   react-render-to-markdown@19.0.1(react@19.2.4):
     dependencies:
