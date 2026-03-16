@@ -206,6 +206,33 @@ export interface CjsRequireRuleStoreData extends BaseRuleStoreData {
   request: string;
 }
 
+/**
+ * Rule for detecting ESM imports that were resolved to a CJS module
+ * even though the package provides an ESM entry.
+ */
+export interface EsmResolvedToCjsRuleStoreData extends BaseRuleStoreData {
+  type: 'esm-resolved-to-cjs';
+  /** Package name */
+  packageName: string;
+  /** Package version */
+  packageVersion: string;
+  /** The ESM entry path declared in the package's package.json */
+  esmEntry: string;
+  /** The actual resolved (CJS) module */
+  resolvedModule: {
+    id: number | string;
+    path: string;
+    webpackId?: string | number;
+  };
+  /** All issuer modules that imported this package via ESM import */
+  issuers: Array<{
+    id: number | string;
+    path: string;
+    /** The import request string (e.g. 'lodash') */
+    request: string;
+  }>;
+}
+
 export type RuleStoreDataItem =
   | LinkRuleStoreData
   | FileRelationRuleStoreData
@@ -215,6 +242,7 @@ export type RuleStoreDataItem =
   | CrossChunksPackageRuleStoreData
   | ModuleMixedChunksRuleStoreData
   | ConnectionsOnlyImportsRuleStoreData
-  | CjsRequireRuleStoreData;
+  | CjsRequireRuleStoreData
+  | EsmResolvedToCjsRuleStoreData;
 
 export type RuleStoreData = RuleStoreDataItem[];
