@@ -42,7 +42,7 @@
     "@rsbuild/plugin-sass": "^1.5.1"
   },
   "dependencies": {
-    "@rstack-dev/doc-ui": "1.12.4",
+    "@rstack-dev/doc-ui": "1.12.5",
     "clsx": "^2.1.1",
     "react-markdown": "^9.1.0",
     "@rspress/core": "2.0.5"

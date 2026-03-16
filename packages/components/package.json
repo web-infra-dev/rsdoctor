@@ -66,7 +66,7 @@
     "antd": "5.19.1",
     "axios": "^1.13.6",
     "clsx": "^2.1.1",
-    "dayjs": "1.11.19",
+    "dayjs": "1.11.20",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.6",
     "es-toolkit": "^1.44.0",
