@@ -89,7 +89,7 @@
     "@types/node": "^22.8.1",
     "@types/node-fetch": "^2.6.13",
     "@types/semver": "^7.7.1",
-    "@types/tapable": "2.2.7",
+    "@types/tapable": "2.3.0",
     "babel-loader": "10.1.1",
     "prebundle": "1.6.4",
     "string-loader": "0.0.1",
