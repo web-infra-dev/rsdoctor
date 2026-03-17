@@ -16,7 +16,6 @@ export default defineConfig({
     pluginClientRedirects({
       redirects: [
         { from: '/guide/start/mcp', to: '/guide/usage/mcp' },
-        { from: '/zh/guide/start/mcp', to: '/zh/guide/usage/mcp' },
       ],
     }),
     pluginAlgolia(),
