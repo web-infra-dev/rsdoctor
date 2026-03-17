@@ -3,7 +3,8 @@ import { Collapse, Space, Tag, Typography } from 'antd';
 import Overview from '../Overall/overview';
 import styles from './collapse.module.scss';
 import { beautifyPath } from '../../utils/file';
-import { LabelComponent, IdeIcons } from './collapse-shared';
+import { truncateMiddle } from '../../utils/string';
+import { LabelComponent } from './collapse-shared';
 
 import type { Rule } from '@rsdoctor/types';
 import type { AlertProps } from '../Alert/types';
@@ -45,7 +46,10 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
             </Space>
           }
           description={
-            <div className={styles.collapseChild}>
+            <div
+              className={styles.collapseChild}
+              style={{ flexDirection: 'column', paddingTop: 16 }}
+            >
               {/* ESM entry that should have been used */}
               <div
                 style={{
@@ -58,10 +62,21 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
                   className={styles.attribute}
                   style={{ color: '#52c41a', minWidth: 100 }}
                 >
-                  ESM Entry
+                  <Tag
+                    style={{
+                      backgroundColor: '#f6ffed',
+                      borderColor: '#b7eb8f',
+                      color: '#389e0d',
+                      borderRadius: '2px',
+                    }}
+                  >
+                    ESM Entry
+                  </Tag>
                 </div>
                 <div className={styles.iconContainer}>
-                  <span className={styles.data}>{esmEntry}</span>
+                  <span className={styles.data}>
+                    {truncateMiddle(esmEntry)}
+                  </span>
                   <Tag
                     style={{
                       marginLeft: 8,
@@ -89,10 +104,21 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
                   className={styles.attribute}
                   style={{ color: '#ff4d4f', minWidth: 100 }}
                 >
-                  CJS Resolved
+                  <Tag
+                    style={{
+                      backgroundColor: '#fff7e6',
+                      borderColor: '#ffd591',
+                      color: '#d46b08',
+                      borderRadius: '2px',
+                    }}
+                  >
+                    CJS Resolved
+                  </Tag>
                 </div>
                 <div className={styles.iconContainer}>
-                  <span className={styles.data}>{resolvedDisplayPath}</span>
+                  <span className={styles.data}>
+                    {truncateMiddle(resolvedDisplayPath)}
+                  </span>
                   <Tag
                     style={{
                       marginLeft: 8,
@@ -109,44 +135,53 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
               </div>
 
               {/* Issuers */}
-              <div
-                style={{
-                  marginBottom: 8,
-                  fontWeight: 500,
-                  color: 'rgba(28, 31, 35, 0.85)',
-                }}
-              >
-                {`ESM Importers (${issuers.length}):`}
-              </div>
-              {issuers.map((issuer, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    marginBottom: 4,
-                    alignItems: 'center',
-                  }}
-                >
-                  <div className={styles.attribute}>import</div>
-                  <div className={styles.iconContainer}>
-                    <span className={styles.data}>
-                      {beautifyPath(issuer.path, cwd)}
-                    </span>
-                    <Tag
-                      style={{
-                        marginLeft: 8,
-                        backgroundColor: '#EAEDF1',
-                        borderRadius: '2px',
-                        fontSize: 11,
-                        fontFamily: 'Menlo',
-                      }}
-                    >
-                      {`'${issuer.request}'`}
-                    </Tag>
-                    <IdeIcons file={issuer.path} />
-                  </div>
-                </div>
-              ))}
+              <Collapse
+                size="small"
+                ghost
+                items={[
+                  {
+                    key: 'issuers',
+                    label: (
+                      <span
+                        style={{
+                          fontWeight: 500,
+                          color: 'rgba(28, 31, 35, 0.85)',
+                        }}
+                      >
+                        {`ESM Importers (${issuers.length})`}
+                      </span>
+                    ),
+                    children: issuers.map((issuer, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          marginBottom: 4,
+                          alignItems: 'center',
+                        }}
+                      >
+                        <div className={styles.attribute}>import</div>
+                        <div className={styles.iconContainer}>
+                          <span className={styles.data}>
+                            {beautifyPath(issuer.path, cwd)}
+                          </span>
+                          <Tag
+                            style={{
+                              marginLeft: 8,
+                              backgroundColor: '#EAEDF1',
+                              borderRadius: '2px',
+                              fontSize: 11,
+                              fontFamily: 'Menlo',
+                            }}
+                          >
+                            {`'${issuer.request}'`}
+                          </Tag>
+                        </div>
+                      </div>
+                    )),
+                  },
+                ]}
+              />
             </div>
           }
         />
