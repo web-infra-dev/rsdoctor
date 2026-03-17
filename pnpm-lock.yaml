@@ -833,6 +833,9 @@ importers:
       '@rspress/plugin-algolia':
         specifier: 2.0.5
         version: 2.0.5(@algolia/client-search@5.49.2)(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
+      '@rspress/plugin-client-redirects':
+        specifier: 2.0.5
+        version: 2.0.5(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
       '@rspress/plugin-rss':
         specifier: 2.0.5
         version: 2.0.5(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
@@ -4296,6 +4299,12 @@ packages:
   '@rspress/plugin-auto-nav-sidebar@2.0.0-alpha.3':
     resolution: {integrity: sha512-U1detSiGlAd+2U6oK1/PEPBulOKUnODsygWvfiY4fydF9FAhcvjeDWanmiAoNWnKBj+bmUMay/e9nR1vtSSpmw==}
     engines: {node: '>=14.17.6'}
+
+  '@rspress/plugin-client-redirects@2.0.5':
+    resolution: {integrity: sha512-sxwWzwHPefSPWUyV6/AA/hBlQUeNFntL8dBQi/vZCQiZHM6ShvKbqa3s5Xu2yI7DeFKHH3jb0VGbjufu8M3Ypw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    peerDependencies:
+      '@rspress/core': ^2.0.5
 
   '@rspress/plugin-container-syntax@2.0.0-alpha.3':
     resolution: {integrity: sha512-//IDlD/BKUkx/TRtxSIlTNomf7cU7Hc9Aeqtl02jk+b/wNbirmpFKQKCU5kvyZTzCLuHMEQSTe+Asf3PWqzlnQ==}
@@ -14705,6 +14714,10 @@ snapshots:
       '@rspress/shared': 2.0.0-alpha.3
     transitivePeerDependencies:
       - '@rspack/tracing'
+
+  '@rspress/plugin-client-redirects@2.0.5(@rspress/core@2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
+    dependencies:
+      '@rspress/core': 2.0.5(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
 
   '@rspress/plugin-container-syntax@2.0.0-alpha.3':
     dependencies:
