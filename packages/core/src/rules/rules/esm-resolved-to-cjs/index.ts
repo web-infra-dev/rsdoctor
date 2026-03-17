@@ -107,32 +107,25 @@ export const rule = defineRule<typeof title, Config>(() => {
       };
 
       const groups = new Map<string, Group>();
+      const inNodeModules = /[/\\]node_modules[/\\]/;
 
       for (const dep of moduleGraph.getDependencies()) {
-        // Only static ESM imports
-        if (dep.kind !== SDK.DependencyKind.ImportStatement) continue;
-
-        // Only user code → node_modules edges
-        if (dep.module.path.includes('node_modules')) continue;
-        if (!dep.dependency.path.includes('node_modules')) continue;
-
-        // Already resolved to native ESM — no problem
-        if (dep.dependency.meta.strictHarmonyModule) continue;
-
-        // Ignore patterns (match against the import request string)
-        if (ruleConfig.ignore.some((p) => dep.request.includes(p))) continue;
+        // Only static ESM import from user code into node_modules, not yet native ESM, not ignored
+        if (
+          dep.kind !== SDK.DependencyKind.ImportStatement ||
+          inNodeModules.test(dep.module.path) ||
+          !inNodeModules.test(dep.dependency.path) ||
+          dep.dependency.meta.strictHarmonyModule ||
+          ruleConfig.ignore.some((p) => dep.request.includes(p))
+        )
+          continue;
 
         const pkg = packageGraph.getPackageByModule(dep.dependency);
-        if (!pkg?.root) continue;
-
-        // Ignore patterns against the package name
-        if (ruleConfig.ignore.some((p) => pkg.name.includes(p))) continue;
-
-        const pkgJson = readPkgJson(pkg.root);
-        if (!pkgJson) continue;
-
-        const esmEntry = extractEsmEntry(pkgJson, pkg.root);
-        // Package doesn't provide an ESM entry — not our concern
+        const esmEntry =
+          pkg?.root &&
+          !ruleConfig.ignore.some((p) => pkg.name.includes(p)) &&
+          readPkgJson(pkg.root) &&
+          extractEsmEntry(readPkgJson(pkg.root)!, pkg.root);
         if (!esmEntry) continue;
 
         const groupKey = `${pkg.name}::${dep.dependency.path}`;
@@ -149,7 +142,7 @@ export const rule = defineRule<typeof title, Config>(() => {
           groups.set(groupKey, {
             packageName: pkg.name,
             packageVersion: pkg.version,
-            esmEntry: path.relative(pkg.root, esmEntry),
+            esmEntry,
             resolvedModule: {
               id: dep.dependency.id,
               path: dep.dependency.path,

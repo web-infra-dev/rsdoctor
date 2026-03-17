@@ -1,4 +1,4 @@
-import { Collapse, Space, Tag, Typography } from 'antd';
+import { Collapse, Space, Tag, Tooltip, Typography } from 'antd';
 
 import Overview from '../Overall/overview';
 import styles from './collapse.module.scss';
@@ -24,6 +24,7 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
       item;
 
     const resolvedDisplayPath = beautifyPath(resolvedModule.path, cwd);
+    const esmDisplayPath = beautifyPath(esmEntry, cwd);
 
     const ChildComponent = () => (
       <div className={styles.collapseContainer}>
@@ -74,9 +75,11 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
                   </Tag>
                 </div>
                 <div className={styles.iconContainer}>
-                  <span className={styles.data}>
-                    {truncateMiddle(esmEntry)}
-                  </span>
+                  <Tooltip title={esmDisplayPath}>
+                    <span className={styles.data}>
+                      {truncateMiddle(esmDisplayPath)}
+                    </span>
+                  </Tooltip>
                   <Tag
                     style={{
                       marginLeft: 8,
@@ -116,9 +119,11 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
                   </Tag>
                 </div>
                 <div className={styles.iconContainer}>
-                  <span className={styles.data}>
-                    {truncateMiddle(resolvedDisplayPath)}
-                  </span>
+                  <Tooltip title={resolvedDisplayPath}>
+                    <span className={styles.data}>
+                      {truncateMiddle(resolvedDisplayPath)}
+                    </span>
+                  </Tooltip>
                   <Tag
                     style={{
                       marginLeft: 8,
