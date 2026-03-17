@@ -339,6 +339,112 @@ export default {
 };
 ```
 
+### [E1008] CJS Require Cannot Tree-Shake
+
+规则 key: `cjs-require`
+
+当代码中使用裸 `require()` 调用（例如 `const mod = require('module')`）导入整个模块，而没有对导出属性做静态访问时，该规则会发出警告。这类写法会阻止打包器进行 tree-shaking，因为打包器无法静态分析实际使用了哪些导出，导致整个模块被打进产物，产物体积增大。
+
+#### 常见原因
+
+- 使用 `const mod = require('module')` 导入整个模块，而非 `const { foo } = require('module')`。
+- 动态拼接 require 参数（如 `require('module/' + name)`），打包器无法静态分析。
+- 在 ESM 文件中混用 `require()`，使打包器无法对该模块做 tree-shaking。
+
+#### 解决方案
+
+1. **改用解构 require**：将 `const mod = require('module')` 改为 `const { foo, bar } = require('module')`，使打包器可以静态分析实际使用的导出。
+2. **迁移到 ESM**：优先使用 `import { foo } from 'module'` 的静态 ESM 写法，充分利用打包器的 tree-shaking 能力。
+3. **避免动态 require**：如有动态加载需求，可改用动态 `import()` 代替动态 `require()`。
+
+#### 配置
+
+- **ignore**：需要忽略的模块路径匹配规则（对 issuer 和被 require 的模块路径均做字符串匹配）。
+
+```ts
+interface Config {
+  /** 需要忽略的模块路径片段 */
+  ignore: string[];
+}
+```
+
+配置示例：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugins: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'cjs-require': [
+            'Warn',
+            { ignore: ['legacy-lib', 'node_modules/@internal/'] },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
+### [E1009] ESM Import Resolved to CJS
+
+规则 key: `esm-resolved-to-cjs`
+
+当某个包同时提供了 ESM 和 CJS 两种格式（通过 `package.json` 中的 `module` 字段或 `exports["."]["import"]`），但打包器在处理 ESM `import` 语句时却解析到了 CJS 入口，该规则会发出警告。这种情况会导致 tree-shaking 失效，产物体积变大。
+
+#### 常见原因
+
+- `package.json` 中的 `exports` 字段配置不正确，导致 `import` 条件未能正确映射到 ESM 入口。
+- 打包器版本较旧，不支持 `exports` 条件导出，退而解析到 CJS 入口。
+- 包本身的 `module` 字段或 `exports["import"]` 路径指向错误，或文件不存在。
+- 消费方的构建配置未开启 `mainFields: ['module', ...]` 或未正确处理 `exports` 条件。
+
+#### 解决方案
+
+1. **检查 `package.json` 的 `exports` 配置**：确保目标包的 `exports` 字段正确配置了 `"import"` 条件，并指向合法的 ESM 入口文件。
+2. **升级打包器或相关插件**：确保使用支持 `exports` 条件导出的打包器版本（如 Rspack、Webpack 5+）。
+3. **联系包作者**：若问题出在第三方包的 `package.json` 配置错误，可向包作者反馈或提 issue。
+4. **临时忽略**：若该包暂无法修复，可通过 `ignore` 配置项跳过对该包的检查。
+
+#### 配置
+
+- **ignore**：需要忽略的包名匹配规则（对 import 请求字符串做子串匹配）。
+
+```ts
+interface Config {
+  /**
+   * 需要忽略的包名匹配规则（子串匹配 import 请求字符串）。
+   * 示例：['my-legacy-pkg', '@internal/']
+   * @default []
+   */
+  ignore: string[];
+}
+```
+
+配置示例：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugins: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'esm-resolved-to-cjs': [
+            'Warn',
+            { ignore: ['my-legacy-pkg', '@internal/'] },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
 ## Linter 类型定义
 
 - `linter`字段的类型如下：

@@ -343,6 +343,112 @@ export default {
 };
 ```
 
+### [E1008] CJS Require Cannot Tree-Shake
+
+Rule key: `cjs-require`
+
+This rule warns when code uses a bare `require()` call (e.g. `const mod = require('module')`) to import an entire module without statically accessing its exports. This pattern prevents tree-shaking because the bundler cannot statically determine which exports are actually used, resulting in the entire module being bundled and increasing output size.
+
+#### Common causes
+
+- Using `const mod = require('module')` instead of `const { foo } = require('module')`.
+- Dynamically composing the require argument (e.g. `require('module/' + name)`), which the bundler cannot statically analyze.
+- Mixing `require()` inside ESM files, preventing the bundler from tree-shaking the module.
+
+#### Solutions
+
+1. **Switch to destructured require**: Replace `const mod = require('module')` with `const { foo, bar } = require('module')` so the bundler can statically analyze which exports are used.
+2. **Migrate to ESM**: Prefer static `import { foo } from 'module'` syntax to take full advantage of bundler tree-shaking.
+3. **Avoid dynamic require**: If dynamic loading is needed, replace dynamic `require()` with dynamic `import()`.
+
+#### Configuration
+
+- **ignore**: Module path patterns to ignore (substring match applied to both issuer and required module paths).
+
+```ts
+interface Config {
+  /** Module path fragments to ignore */
+  ignore: string[];
+}
+```
+
+Configuration example:
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugins: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'cjs-require': [
+            'Warn',
+            { ignore: ['legacy-lib', 'node_modules/@internal/'] },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
+### [E1009] ESM Import Resolved to CJS
+
+Rule key: `esm-resolved-to-cjs`
+
+This rule warns when a package provides both ESM and CJS formats (via the `module` field or `exports["."]["import"]` in `package.json`), but the bundler resolves an ESM `import` statement to the CJS entry instead. This prevents tree-shaking and leads to larger bundle sizes.
+
+#### Common causes
+
+- The `exports` field in `package.json` is misconfigured, so the `"import"` condition does not map to the correct ESM entry.
+- An older bundler version that does not support `exports` conditional exports falls back to the CJS entry.
+- The package's `module` field or `exports["import"]` path is incorrect or points to a non-existent file.
+- The consumer's build config does not have `mainFields: ['module', ...]` or does not correctly handle `exports` conditions.
+
+#### Solutions
+
+1. **Check the package's `exports` config**: Ensure the target package's `exports` field correctly defines the `"import"` condition pointing to a valid ESM entry file.
+2. **Upgrade the bundler or plugins**: Make sure you are using a bundler version that supports `exports` conditional exports (e.g. Rspack, Webpack 5+).
+3. **Report to the package author**: If the problem is a misconfigured `package.json` in a third-party package, file an issue with the package author.
+4. **Temporarily ignore**: If the package cannot be fixed for now, use the `ignore` option to skip the check for that package.
+
+#### Configuration
+
+- **ignore**: Package name patterns to ignore (substring match against the import request string).
+
+```ts
+interface Config {
+  /**
+   * Package name patterns to ignore (substring match against the import request string).
+   * Example: ['my-legacy-pkg', '@internal/']
+   * @default []
+   */
+  ignore: string[];
+}
+```
+
+Configuration example:
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+
+export default {
+  plugins: [
+    new RsdoctorRspackPlugin({
+      linter: {
+        rules: {
+          'esm-resolved-to-cjs': [
+            'Warn',
+            { ignore: ['my-legacy-pkg', '@internal/'] },
+          ],
+        },
+      },
+    }),
+  ],
+};
+```
+
 ## Linter type
 
 - The type definition for the `linter` field is as follows:
