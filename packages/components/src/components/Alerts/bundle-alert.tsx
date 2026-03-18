@@ -17,6 +17,7 @@ import { CrossChunksAlertCollapse } from './collapse-cross-chunks';
 import { ModuleMixedChunksAlertCollapse } from './collapse-module-mixed-chunks';
 import { SideEffectsOnlyImportsAlertCollapse } from './collapse-side-effects-only-imports';
 import { CjsRequireAlertCollapse } from './collapse-cjs-require';
+import { EsmResolvedToCjsAlertCollapse } from './collapse-esm-cjs';
 
 interface BundleAlertProps {
   title: string;
@@ -43,6 +44,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
       'E1006',
       'E1007',
       'E1008',
+      'E1009',
     ].find((code) => dataSource.some((d) => d.code === code)) ?? 'E1001';
   const [activeKey, setActiveKey] = useState(firstKeyWithData);
   const tabData: Array<{
@@ -88,6 +90,11 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
     {
       key: 'E1008',
       label: 'CJS Require Cannot Tree-Shake',
+      data: [],
+    },
+    {
+      key: 'E1009',
+      label: 'ESM Import Resolved to CJS',
       data: [],
     },
   ];
@@ -183,6 +190,11 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
       case 'E1008':
         children = (
           <CjsRequireAlertCollapse data={td.data} extraData={extraData} />
+        );
+        break;
+      case 'E1009':
+        children = (
+          <EsmResolvedToCjsAlertCollapse data={td.data} extraData={extraData} />
         );
         break;
       default:

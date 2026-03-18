@@ -6,6 +6,7 @@ import { rule as crossChunksPackage } from './cross-chunks-package';
 import { rule as moduleMixedChunks } from './module-mixed-chunks';
 import { rule as connectionsOnlyImports } from './side-effects-only-imports';
 import { rule as cjsRequire } from './cjs-require';
+import { rule as esmResolvedToCjs } from './esm-resolved-to-cjs';
 
 export const rules = [
   duplicatePackage,
@@ -16,4 +17,5 @@ export const rules = [
   moduleMixedChunks,
   connectionsOnlyImports,
   cjsRequire,
+  esmResolvedToCjs,
 ];

@@ -12,7 +12,7 @@ import { Plugin, SDK } from '@rsdoctor/types';
  * @returns The normalized dependency kind
  */
 const createDependencyKind = (type: string) => {
-  if (type.includes('harmony')) {
+  if (type.includes('harmony') || type === 'esm import') {
     return SDK.DependencyKind.ImportStatement;
   }
   if (type.includes('cjs')) {

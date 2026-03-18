@@ -24,7 +24,7 @@ export function getImportKind(dep: DependencyData): SDK.DependencyKind {
     return SDK.DependencyKind.Unknown;
   }
 
-  if (type.includes('harmony')) {
+  if (type.includes('harmony') || type === 'esm import') {
     return SDK.DependencyKind.ImportStatement;
   }
 
