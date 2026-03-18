@@ -1,11 +1,15 @@
 import { describe, expect, it } from '@rstest/core';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
 
 /**
  * create sandbox to load src/multiple.ts to avoid sdk save in global variable between different test cases.
  */
 async function loadMultipleFile() {
-  // @ts-ignore
-  let multiple = await import('../dist/index.js');
+  const multiplePath = require.resolve('../dist/index.cjs');
+  delete require.cache[multiplePath];
+  let multiple = require(multiplePath);
   return multiple!;
 }
 

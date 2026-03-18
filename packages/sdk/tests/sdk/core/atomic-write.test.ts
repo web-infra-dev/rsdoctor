@@ -56,7 +56,9 @@ describe('atomic write manifest', () => {
 
         (async () => {
           const { outputDir, readAttempts } = workerData;
-          const port = await Server.getPort(4396);
+          const port = await Server.getPort(
+            10000 + Math.floor(Math.random() * 20000),
+          );
           const sdk = new RsdoctorSDK({
             name: 'test',
             root: process.cwd(),

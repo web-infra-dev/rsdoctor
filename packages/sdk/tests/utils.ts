@@ -30,10 +30,14 @@ export interface MockSDKResponse {
 
 export const cwd = process.cwd();
 
+function getPreferredTestPort() {
+  return 10000 + Math.floor(Math.random() * 20000);
+}
+
 export async function createSDK(
   config?: SDK.SDKOptionsType,
 ): Promise<MockSDKResponse> {
-  const port = await Server.getPort(4396);
+  const port = await Server.getPort(getPreferredTestPort());
   const sdk = new RsdoctorSDK({ name: 'test', root: cwd, port, config });
 
   await sdk.bootstrap();
@@ -131,11 +135,15 @@ export function setupSDK(config?: SDK.SDKOptionsType) {
   });
 
   afterEach(async () => {
-    await File.fse.remove(target.sdk.outputDir);
+    if (target?.sdk?.outputDir) {
+      await File.fse.remove(target.sdk.outputDir);
+    }
   });
 
   afterAll(async () => {
-    await target.dispose();
+    if (target) {
+      await target.dispose();
+    }
   });
 
   return new Proxy(

@@ -1,12 +1,14 @@
 import { Linter, Rule } from '@rsdoctor/types';
 import { gt, diff } from 'semver';
-import { Config, CheckVersionMap } from './types';
+import * as duplicatePackageTypes from './types';
+import type { Config } from './types';
 import { getErrorMsg, getErrorDetail } from './utils';
 import { defineRule } from '../../rule';
 
 export type { Config, CheckVersion } from './types';
 
 const title = 'duplicate-package';
+const { CheckVersionMap } = duplicatePackageTypes;
 
 export const rule = defineRule<typeof title, Config>(() => ({
   meta: {

@@ -7,6 +7,10 @@ export default defineConfig({
   name: 'node',
   globals: true,
   restoreMocks: true,
+  pool: {
+    // Build-heavy tests are flaky under parallel workers in this repo.
+    maxWorkers: 1,
+  },
   source: {
     decorators: {
       version: 'legacy',
