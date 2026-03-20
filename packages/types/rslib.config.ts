@@ -11,7 +11,17 @@ export default defineConfig({
       format: 'esm',
       syntax: ['node 16'],
       dts: {
-        build: true,
+        build: false,
+      },
+      redirect: {
+        js: {
+          path: true,
+          extension: true,
+        },
+        dts: {
+          path: true,
+          extension: true,
+        },
       },
       output: {
         filename: {
