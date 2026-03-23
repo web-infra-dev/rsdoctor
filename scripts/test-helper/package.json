@@ -30,7 +30,7 @@
     "@types/lodash": "^4.17.24",
     "@types/node": "^22.8.1",
     "es-toolkit": "^1.45.1",
-    "memfs": "4.56.11",
+    "memfs": "4.57.1",
     "typescript": "^5.9.2",
     "upath": "2.0.1",
     "webpack": "^5.105.4"
