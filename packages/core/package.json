@@ -83,7 +83,7 @@
   },
   "devDependencies": {
     "axios": "^1.13.6",
-    "@rspack/core": "2.0.0-beta.7",
+    "@rspack/core": "2.0.0-canary-20260116",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",
