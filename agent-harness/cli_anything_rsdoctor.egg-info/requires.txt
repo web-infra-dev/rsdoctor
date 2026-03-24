@@ -1,0 +1,6 @@
+click>=8.0
+tabulate>=0.9
+requests>=2.28
+
+[dev]
+pytest>=7.0
