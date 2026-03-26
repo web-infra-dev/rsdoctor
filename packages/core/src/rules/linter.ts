@@ -31,8 +31,9 @@ export class Linter<Rules extends LinterType.ExtendRuleData[]> {
       .concat(outside);
 
     rules.forEach((rule) => {
-      if (ruleMap[rule.title]) {
-        rule.setOption(ruleMap[rule.title]);
+      const config = ruleMap[rule.title];
+      if (config != null) {
+        rule.setOption(config);
       }
     });
 

@@ -15,8 +15,9 @@ export type DefaultRuleConfig = any;
 export type DefaultRuleTitle = string;
 
 /** Rule check context */
-export interface RuleCheckerContext<Config = DefaultRuleConfig>
-  extends RuntimeContext {
+export interface RuleCheckerContext<
+  Config = DefaultRuleConfig,
+> extends RuntimeContext {
   ruleConfig: Config;
   /**
    * Report an error
@@ -163,14 +164,13 @@ type InferRuleConfigByTitle<
     : never;
 }[number];
 
-export type InferRuleConfig<T> = T extends ExtendRuleData<infer P1>
-  ? P1
-  : T extends RuleData<infer P2>
-  ? P2
-  : any;
+export type InferRuleConfig<T> =
+  T extends ExtendRuleData<infer P1>
+    ? P1
+    : T extends RuleData<infer P2>
+      ? P2
+      : any;
 
 export type InferRulesConfig<T extends (ExtendRuleData | RuleData)[]> = {
   [K in InferRulesTitles<T>]?: RuleConfigItem<InferRuleConfigByTitle<T, K>>;
-} & {
-  [key: string]: RuleConfigItem;
-};
+} & Record<string, RuleConfigItem | undefined>;
