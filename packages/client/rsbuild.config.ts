@@ -32,7 +32,14 @@ export default defineConfig(({ env }) => {
       pluginReact(),
       pluginNodePolyfill(),
       pluginSass(),
-      pluginTypeCheck({ enable: IS_PRODUCTION }),
+      pluginTypeCheck({
+        enable: IS_PRODUCTION,
+        tsCheckerOptions: {
+          typescript: {
+            mode: 'readonly',
+          },
+        },
+      }),
     ],
 
     source: {
