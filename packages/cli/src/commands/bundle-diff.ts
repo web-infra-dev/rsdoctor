@@ -136,10 +136,9 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
     if (json) {
       spinner.text = 'Generating JSON output file...';
 
-      const outputPath = path.resolve(
-        cwd,
-        typeof json === 'string' ? json : 'rsdoctor-diff.json',
-      );
+      const jsonOutputFile =
+        typeof json === 'string' ? json : output || 'rsdoctor-diff.json';
+      const outputPath = path.resolve(cwd, jsonOutputFile);
       fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
       const jsonData = Graph.getBundleDiffResult(
