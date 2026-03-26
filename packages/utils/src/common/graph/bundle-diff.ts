@@ -47,6 +47,9 @@ export function getModulesDiffResult(
     }
   }
 
+  added.sort((a, b) => a.path.localeCompare(b.path));
+  removed.sort((a, b) => a.path.localeCompare(b.path));
+  changed.sort((a, b) => a.path.localeCompare(b.path));
   return { added, removed, changed };
 }
 
