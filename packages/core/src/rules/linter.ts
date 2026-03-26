@@ -21,7 +21,7 @@ export class Linter<Rules extends LinterType.ExtendRuleData[]> {
   }
 
   private getRules(
-    ruleMap: Record<string, LinterType.RuleConfigItem | undefined>,
+    ruleMap: LinterType.InferRulesConfig<Rules>,
     extendRules: LinterType.ExtendRuleData[],
     filterLevel: LinterType.Severity,
   ) {

@@ -173,4 +173,4 @@ export type InferRuleConfig<T> =
 
 export type InferRulesConfig<T extends (ExtendRuleData | RuleData)[]> = {
   [K in InferRulesTitles<T>]?: RuleConfigItem<InferRuleConfigByTitle<T, K>>;
-};
+} & Record<string, RuleConfigItem | undefined>;
