@@ -56,7 +56,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
       )
       .option(
         '--output <path>',
-        'output file path for HTML/JSON mode (default: rsdoctor-diff.html or rsdoctor-diff.json)',
+        'output file path for HTML mode (default: rsdoctor-diff.html). For JSON output, use --json [path] to specify the file path.',
       );
   },
   async action({
