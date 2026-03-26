@@ -32,7 +32,6 @@
   "type": "module",
   "dependencies": {
     "ora": "^5.4.1",
-    "@rsdoctor/core": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",

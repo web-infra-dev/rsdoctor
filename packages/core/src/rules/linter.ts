@@ -21,7 +21,7 @@ export class Linter<Rules extends LinterType.ExtendRuleData[]> {
   }
 
   private getRules(
-    ruleMap: LinterType.InferRulesConfig<Rules>,
+    ruleMap: Record<string, LinterType.RuleConfigItem | undefined>,
     extendRules: LinterType.ExtendRuleData[],
     filterLevel: LinterType.Severity,
   ) {
@@ -31,8 +31,9 @@ export class Linter<Rules extends LinterType.ExtendRuleData[]> {
       .concat(outside);
 
     rules.forEach((rule) => {
-      if (ruleMap[rule.title]) {
-        rule.setOption(ruleMap[rule.title]);
+      const config = ruleMap[rule.title];
+      if (config) {
+        rule.setOption(config);
       }
     });
 
