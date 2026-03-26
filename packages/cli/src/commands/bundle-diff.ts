@@ -133,7 +133,12 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
       }
     }
 
-    if (json) {
+    if (json && html) {
+      spinner.fail(
+        red('Options "--json" and "--html" cannot be used together. Please choose one.'),
+      );
+      return null;
+    } else if (json) {
       spinner.text = 'Generating JSON output file...';
 
       const jsonOutputFile =
