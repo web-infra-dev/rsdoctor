@@ -32,7 +32,7 @@ export class Linter<Rules extends LinterType.ExtendRuleData[]> {
 
     rules.forEach((rule) => {
       const config = ruleMap[rule.title];
-      if (config) {
+      if (config != null) {
         rule.setOption(config);
       }
     });
