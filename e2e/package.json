@@ -8,7 +8,7 @@
     "test:local": "npx playwright install chromium && playwright test"
   },
   "devDependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^3.0.0",
     "@lynx-js/react": "^0.116.5",
     "@lynx-js/rspeedy": "^0.13.5",
     "@playwright/test": "1.55.1",
