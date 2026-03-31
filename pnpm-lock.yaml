@@ -494,7 +494,7 @@ importers:
         specifier: ^22.8.1
         version: 22.18.1
       axios:
-        specifier: ^1.14.0
+        specifier: 1.14.0
         version: 1.14.0
       prebundle:
         specifier: 1.6.4
@@ -531,7 +531,7 @@ importers:
         specifier: workspace:*
         version: link:../client
       axios:
-        specifier: ^1.14.0
+        specifier: 1.14.0
         version: 1.14.0
       cac:
         specifier: ^7.0.0
@@ -627,7 +627,7 @@ importers:
         specifier: 5.19.1
         version: 5.19.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       axios:
-        specifier: ^1.14.0
+        specifier: 1.14.0
         version: 1.14.0
       clsx:
         specifier: ^2.1.1
@@ -782,7 +782,7 @@ importers:
         specifier: 2.3.0
         version: 2.3.0
       axios:
-        specifier: ^1.14.0
+        specifier: 1.14.0
         version: 1.14.0
       babel-loader:
         specifier: 10.1.1

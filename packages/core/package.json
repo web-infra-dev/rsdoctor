@@ -82,7 +82,7 @@
     "source-map": "^0.7.6"
   },
   "devDependencies": {
-    "axios": "^1.14.0",
+    "axios": "1.14.0",
     "@rspack/core": "2.0.0-canary-20260116",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
