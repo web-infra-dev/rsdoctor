@@ -31,7 +31,7 @@
     "@types/node": "^22.8.1",
     "prebundle": "1.6.4",
     "socket.io-client": "4.8.1",
-    "axios": "^1.14.0",
+    "axios": "~1.13.6",
     "typescript": "^5.9.2",
     "zod": "^3.25.76"
   },
