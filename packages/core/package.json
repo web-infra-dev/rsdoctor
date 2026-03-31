@@ -16,29 +16,54 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./build-utils": {
-      "types": "./dist/build-utils/build/index.d.ts",
-      "import": "./dist/build-utils/build/index.js",
-      "default": "./dist/build-utils/build/index.cjs"
+      "import": {
+        "types": "./dist/build-utils/build/index.d.ts",
+        "default": "./dist/build-utils/build/index.js"
+      },
+      "require": {
+        "types": "./dist/build-utils/build/index.d.cts",
+        "default": "./dist/build-utils/build/index.cjs"
+      }
     },
     "./plugins": {
-      "types": "./dist/inner-plugins/index.d.ts",
-      "import": "./dist/inner-plugins/index.js",
-      "default": "./dist/inner-plugins/index.cjs"
+      "import": {
+        "types": "./dist/inner-plugins/index.d.ts",
+        "default": "./dist/inner-plugins/index.js"
+      },
+      "require": {
+        "types": "./dist/inner-plugins/index.d.cts",
+        "default": "./dist/inner-plugins/index.cjs"
+      }
     },
     "./rules": {
-      "types": "./dist/rules/index.d.ts",
-      "import": "./dist/rules/index.js",
-      "default": "./dist/rules/index.cjs"
+      "import": {
+        "types": "./dist/rules/index.d.ts",
+        "default": "./dist/rules/index.js"
+      },
+      "require": {
+        "types": "./dist/rules/index.d.cts",
+        "default": "./dist/rules/index.cjs"
+      }
     },
     "./types": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js",
-      "default": "./dist/types/index.cjs"
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/types/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.cts",
+        "default": "./dist/types/index.cjs"
+      }
     }
   },
   "typesVersions": {

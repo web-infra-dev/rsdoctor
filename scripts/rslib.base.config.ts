@@ -82,6 +82,10 @@ export const esmConfig: LibConfig = {
 export const cjsConfig: LibConfig = {
   format: 'cjs',
   syntax: [BUILD_TARGET],
+  dts: {
+    build: false,
+    autoExtension: true,
+  },
   output: {
     minify: nodeMinifyConfig,
     filename: {

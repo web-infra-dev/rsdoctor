@@ -10,29 +10,54 @@
   "license": "MIT",
   "exports": {
     "./common": {
-      "types": "./dist/common/index.d.ts",
-      "import": "./dist/common.js",
-      "default": "./dist/common.cjs"
+      "import": {
+        "types": "./dist/common/index.d.ts",
+        "default": "./dist/common.js"
+      },
+      "require": {
+        "types": "./dist/common/index.d.cts",
+        "default": "./dist/common.cjs"
+      }
     },
     "./build": {
-      "types": "./dist/build/index.d.ts",
-      "import": "./dist/build.js",
-      "default": "./dist/build.cjs"
+      "import": {
+        "types": "./dist/build/index.d.ts",
+        "default": "./dist/build.js"
+      },
+      "require": {
+        "types": "./dist/build/index.d.cts",
+        "default": "./dist/build.cjs"
+      }
     },
     "./error": {
-      "types": "./dist/error/index.d.ts",
-      "import": "./dist/error.js",
-      "default": "./dist/error.cjs"
+      "import": {
+        "types": "./dist/error/index.d.ts",
+        "default": "./dist/error.js"
+      },
+      "require": {
+        "types": "./dist/error/index.d.cts",
+        "default": "./dist/error.cjs"
+      }
     },
     "./ruleUtils": {
-      "types": "./dist/rule-utils/index.d.ts",
-      "import": "./dist/ruleUtils.js",
-      "default": "./dist/ruleUtils.cjs"
+      "import": {
+        "types": "./dist/rule-utils/index.d.ts",
+        "default": "./dist/ruleUtils.js"
+      },
+      "require": {
+        "types": "./dist/rule-utils/index.d.cts",
+        "default": "./dist/ruleUtils.cjs"
+      }
     },
     "./logger": {
-      "types": "./dist/logger.d.ts",
-      "import": "./dist/logger.js",
-      "default": "./dist/logger.cjs"
+      "import": {
+        "types": "./dist/logger.d.ts",
+        "default": "./dist/logger.js"
+      },
+      "require": {
+        "types": "./dist/logger.d.cts",
+        "default": "./dist/logger.cjs"
+      }
     }
   },
   "typesVersions": {
