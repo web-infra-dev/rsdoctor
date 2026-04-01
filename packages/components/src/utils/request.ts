@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Manifest as ManifestMethod, Url } from '@rsdoctor/utils/common';
 import { APILoaderMode4Dev } from '../constants';
@@ -9,11 +8,58 @@ function random() {
   return `${Date.now()}${Math.floor(Math.random() * 10000)}`;
 }
 
+function mergeAbortSignal(signal?: AbortSignal, timeout = 30000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  if (signal) {
+    if (signal.aborted) {
+      controller.abort();
+    } else {
+      signal.addEventListener('abort', () => controller.abort(), {
+        once: true,
+      });
+    }
+  }
+
+  return {
+    signal: controller.signal,
+    clear: () => clearTimeout(timeoutId),
+  };
+}
+
+function resolveRequestUrl(url: string): string {
+  if (
+    process.env.NODE_ENV === 'development' &&
+    getAPILoaderModeFromStorage() === APILoaderMode4Dev.Local &&
+    url.startsWith('/')
+  ) {
+    const nextUrl =
+      url === manifestUrlForDev ? SDK.ServerAPI.API.Manifest : url;
+    const currentUrl = new URL(location.href);
+    currentUrl.port = String(process.env.LOCAL_CLI_PORT!);
+    return `${currentUrl.origin}${nextUrl}`;
+  }
+
+  return url;
+}
+
+async function requestText(url: string, timeout: number) {
+  const { signal, clear } = mergeAbortSignal(undefined, timeout);
+  try {
+    const res = await fetch(resolveRequestUrl(url), { signal });
+    if (!res.ok) {
+      throw new Error(`Request failed with status ${res.status}`);
+    }
+    return await res.text();
+  } finally {
+    clear();
+  }
+}
+
 export async function fetchShardingFile(url: string): Promise<string> {
   if (Url.isUrl(url)) {
-    return axios
-      .get(url, { timeout: 999999, responseType: 'text' })
-      .then((e) => e.data);
+    return requestText(url, 999999);
   }
   // json string
   return url;
@@ -27,8 +73,7 @@ export async function loadManifestByUrl(url: string) {
 }
 
 export async function fetchJSONByUrl(url: string) {
-  const res = await axios.get(url, { timeout: 30000 });
-  let json: unknown = res.data;
+  let json: unknown = await requestText(url, 30000);
 
   if (typeof json === 'string') {
     const trimmed = json.trim();
@@ -129,41 +174,30 @@ export async function fetchManifest(url = getManifestUrl()) {
   return res;
 }
 
-// test for cli
-if (process.env.NODE_ENV === 'development') {
-  if (getAPILoaderModeFromStorage() === APILoaderMode4Dev.Local) {
-    axios.interceptors.request.use((c) => {
-      c.withCredentials = false;
-      if (c.url?.startsWith('/')) {
-        if (c.url === manifestUrlForDev) {
-          c.url = SDK.ServerAPI.API.Manifest;
-        }
-        const url = new URL(location.href);
-        url.port = String(process.env.LOCAL_CLI_PORT!);
-        return {
-          ...c,
-          url: `${url.origin}${c.url}`,
-        };
-      }
-
-      return c;
-    });
-  }
-}
-
 export async function postServerAPI<
   T extends SDK.ServerAPI.API,
-  B extends
-    SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-  R extends
-    SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+  B extends SDK.ServerAPI.InferRequestBodyType<T> =
+    SDK.ServerAPI.InferRequestBodyType<T>,
+  R extends SDK.ServerAPI.InferResponseType<T> =
+    SDK.ServerAPI.InferResponseType<T>,
 >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
   const [api, body] = args;
   const timeout = process.env.NODE_ENV === 'development' ? 10000 : 60000;
-  const { data } = await axios.post<SDK.ServerAPI.InferResponseType<T>>(
-    `${api}?_t=${random()}`,
-    body,
-    { timeout },
-  );
-  return data as R;
+  const { signal, clear } = mergeAbortSignal(undefined, timeout);
+  try {
+    const res = await fetch(resolveRequestUrl(`${api}?_t=${random()}`), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body === undefined ? undefined : JSON.stringify(body),
+      signal,
+    });
+    if (!res.ok) {
+      throw new Error(`Request failed with status ${res.status}`);
+    }
+    return (await res.json()) as R;
+  } finally {
+    clear();
+  }
 }

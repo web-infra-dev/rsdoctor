@@ -10,7 +10,6 @@ import {
   Space,
   Typography,
 } from 'antd';
-import axios from 'axios';
 import React, { useState } from 'react';
 import { useRuleIndexNavigate } from '../../utils';
 import { DiffViewer } from '../base';
@@ -31,10 +30,18 @@ const CodeChangeDrawerContent: React.FC<CodeChangeAlertProps & FixedProps> = ({
   const { file, id } = data;
   const { path, line, isFixed, actual, expected } = file;
   // const [isFixed, setIsFixed] = useState(file.isFixed ?? false);
-  const applyFix = () => {
-    axios.post(SDK.ServerAPI.API.ApplyErrorFix, { id }).then(() => {
-      setIsFixed(true);
+  const applyFix = async () => {
+    const res = await fetch(SDK.ServerAPI.API.ApplyErrorFix, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
     });
+    if (!res.ok) {
+      throw new Error(`Request failed with status ${res.status}`);
+    }
+    setIsFixed(true);
   };
 
   const FixButton = () => {

@@ -30,7 +30,23 @@ export default defineConfig(({ env }) => {
   const config: RsbuildConfig = {
     plugins: [
       pluginReact(),
-      pluginNodePolyfill(),
+      pluginNodePolyfill({
+        // Explicitly handle Node builtins referenced by transitive deps.
+        overrides: {
+          'node:async_hooks': false,
+          async_hooks: false,
+          'node:diagnostics_channel': false,
+          diagnostics_channel: false,
+          'node:worker_threads': false,
+          worker_threads: false,
+          'node:perf_hooks': false,
+          perf_hooks: false,
+          'node:sqlite': false,
+          sqlite: false,
+          'node:util/types': false,
+          'util/types': false,
+        },
+      }),
       pluginSass(),
       pluginTypeCheck({
         enable: IS_PRODUCTION,
@@ -127,7 +143,7 @@ export default defineConfig(({ env }) => {
             vender: {
               chunks: 'all',
               name: 'vender',
-              test: /node_modules\/(acorn|lodash|i18next|socket.io-*|axios|remark-*)/,
+              test: /node_modules\/(acorn|lodash|i18next|socket.io-*|remark-*)/,
               maxSize: 1000000,
               minSize: 200000,
             },

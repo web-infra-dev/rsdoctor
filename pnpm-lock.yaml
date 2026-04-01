@@ -493,9 +493,6 @@ importers:
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
-      axios:
-        specifier: 1.14.0
-        version: 1.14.0
       prebundle:
         specifier: 1.6.4
         version: 1.6.4(typescript@5.9.2)
@@ -530,9 +527,6 @@ importers:
       '@rsdoctor/client':
         specifier: workspace:*
         version: link:../client
-      axios:
-        specifier: 1.14.0
-        version: 1.14.0
       cac:
         specifier: ^7.0.0
         version: 7.0.0
@@ -626,9 +620,6 @@ importers:
       antd:
         specifier: 5.19.1
         version: 5.19.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      axios:
-        specifier: 1.14.0
-        version: 1.14.0
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -781,9 +772,6 @@ importers:
       '@types/tapable':
         specifier: 2.3.0
         version: 2.3.0
-      axios:
-        specifier: 1.14.0
-        version: 1.14.0
       babel-loader:
         specifier: 10.1.1
         version: 10.1.1(@babel/core@7.26.0)(@rspack/core@2.0.0-canary-20260116(@module-federation/runtime-tools@0.22.0)(@swc/helpers@0.5.19))(webpack@5.105.4)
@@ -1108,6 +1096,9 @@ importers:
       strip-ansi:
         specifier: ^6.0.1
         version: 6.0.1
+      undici:
+        specifier: ^7.16.0
+        version: 7.24.6
     devDependencies:
       '@types/babel__code-frame':
         specifier: 7.27.0
@@ -10525,6 +10516,10 @@ packages:
   undici@5.29.0:
     resolution: {integrity: sha512-raqeBD6NQK4SkWhQzeYKd1KmIG6dllBOTt55Rmkt4HtI9mwdWtJljnrXjAFUBLTSN67HWrOIZ3EPF4kjUw80Bg==}
     engines: {node: '>=14.0'}
+
+  undici@7.24.6:
+    resolution: {integrity: sha512-Xi4agocCbRzt0yYMZGMA6ApD7gvtUFaxm4ZmeacWI4cZxaF6C+8I8QfofC20NAePiB/IcvZmzkJ7XPa471AEtA==}
+    engines: {node: '>=20.18.1'}
 
   unhead@2.1.12:
     resolution: {integrity: sha512-iTHdWD9ztTunOErtfUFk6Wr11BxvzumcYJ0CzaSCBUOEtg+DUZ9+gnE99i8QkLFT2q1rZD48BYYGXpOZVDLYkA==}
@@ -22433,6 +22428,8 @@ snapshots:
   undici@5.29.0:
     dependencies:
       '@fastify/busboy': 2.1.1
+
+  undici@7.24.6: {}
 
   unhead@2.1.12:
     dependencies:

@@ -1,10 +1,9 @@
-import axios from 'axios';
 import path from 'path';
 import fs from 'node:fs';
 import { Ora } from 'ora';
 import { Command } from './types';
 import { Common } from '@rsdoctor/types';
-import { Url } from '@rsdoctor/utils/common';
+import { Fetch, Url } from '@rsdoctor/utils/common';
 
 export function enhanceCommand<CMD extends string, Options, Result>(
   fn: Command<CMD, Options, Result>,
@@ -16,14 +15,27 @@ export function enhanceCommand<CMD extends string, Options, Result>(
 }
 
 export async function fetchText(url: string) {
-  const { data } = await axios.get(url, {
-    timeout: 60000,
-    headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
-      'Accept-Encoding': 'gzip,deflate,compress',
-    },
-  });
-  return data;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 60000);
+  const fetchImpl = await Fetch.getFetch();
+
+  try {
+    const res = await fetchImpl(url, {
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Accept-Encoding': 'gzip,deflate,compress',
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Request failed with status ${res.status}`);
+    }
+
+    return await res.text();
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 export async function readFile(url: string, cwd: string) {
@@ -39,7 +51,7 @@ export async function loadJSON<T extends Common.PlainObject>(
   if (Url.isUrl(uri)) {
     const data = await fetchText(uri);
 
-    return data;
+    return JSON.parse(data) as T;
   }
 
   const file = await readFile(uri, cwd);

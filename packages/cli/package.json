@@ -41,7 +41,6 @@
     "@rsdoctor/client": "workspace:*",
     "cac": "^7.0.0",
     "typescript": "^5.9.2",
-    "axios": "1.14.0",
     "picocolors": "^1.1.1"
   },
   "peerDependencies": {
