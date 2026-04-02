@@ -32,7 +32,10 @@ export default defineConfig({
     {
       format: 'cjs',
       syntax: ['node 16'],
-      dts: false,
+      dts: {
+        build: false,
+        autoExtension: true,
+      },
       output: {
         filename: {
           js: '[name].cjs',
