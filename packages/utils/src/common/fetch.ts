@@ -1,15 +1,11 @@
-const dynamicImport = new Function('specifier', 'return import(specifier)') as (
-  specifier: string,
-) => Promise<{ fetch: typeof fetch }>;
-
 let _fetch: typeof fetch | undefined;
 
-export async function getFetch(): Promise<typeof fetch> {
+export function getFetch(): typeof fetch {
   if (_fetch) return _fetch;
-  _fetch =
-    typeof globalThis.fetch === 'function'
-      ? globalThis.fetch.bind(globalThis)
-      : (await dynamicImport('undici')).fetch;
+  if (typeof globalThis.fetch !== 'function') {
+    throw new Error('fetch is not available in this environment');
+  }
+  _fetch = globalThis.fetch.bind(globalThis);
   return _fetch;
 }
 
@@ -39,7 +35,7 @@ export async function fetchWithTimeout(
     }
   }
 
-  const fetchImpl = await getFetch();
+  const fetchImpl = getFetch();
   try {
     const res = await fetchImpl(url, { ...init, signal: controller.signal });
     if (!res.ok) {
