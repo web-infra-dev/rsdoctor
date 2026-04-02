@@ -1,12 +1,10 @@
-let _fetch: typeof fetch | undefined;
-
 export function getFetch(): typeof fetch {
-  if (_fetch) return _fetch;
-  if (typeof globalThis.fetch !== 'function') {
+  const currentFetch = globalThis.fetch;
+  if (typeof currentFetch !== 'function') {
     throw new Error('fetch is not available in this environment');
   }
-  _fetch = globalThis.fetch.bind(globalThis);
-  return _fetch;
+
+  return currentFetch.bind(globalThis);
 }
 
 export interface FetchOptions {
