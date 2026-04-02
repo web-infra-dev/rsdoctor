@@ -11,6 +11,7 @@ export * as Url from './url';
 export * as Plugin from './plugin';
 export * as Data from './data';
 export * as Alerts from './alerts';
+export * as Fetch from './fetch';
 export * as Rspack from './rspack';
 export * as Package from './package';
 export * as Lodash from './lodash';

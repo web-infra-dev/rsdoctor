@@ -10,9 +10,8 @@ import {
   Space,
   Typography,
 } from 'antd';
-import axios from 'axios';
 import React, { useState } from 'react';
-import { useRuleIndexNavigate } from '../../utils';
+import { postServerAPI, useRuleIndexNavigate } from '../../utils';
 import { DiffViewer } from '../base';
 import { CodeOpener } from '../Opener';
 import { TextDrawer } from '../TextDrawer';
@@ -31,10 +30,9 @@ const CodeChangeDrawerContent: React.FC<CodeChangeAlertProps & FixedProps> = ({
   const { file, id } = data;
   const { path, line, isFixed, actual, expected } = file;
   // const [isFixed, setIsFixed] = useState(file.isFixed ?? false);
-  const applyFix = () => {
-    axios.post(SDK.ServerAPI.API.ApplyErrorFix, { id }).then(() => {
-      setIsFixed(true);
-    });
+  const applyFix = async () => {
+    await postServerAPI(SDK.ServerAPI.API.ApplyErrorFix, { id: Number(id) });
+    setIsFixed(true);
   };
 
   const FixButton = () => {

@@ -1,10 +1,10 @@
-import axios from 'axios';
 import path from 'path';
 import fs from 'node:fs';
 import { Ora } from 'ora';
 import { Command } from './types';
 import { Common } from '@rsdoctor/types';
 import { Url } from '@rsdoctor/utils/common';
+import { fetchWithTimeout } from './fetch-http';
 
 export function enhanceCommand<CMD extends string, Options, Result>(
   fn: Command<CMD, Options, Result>,
@@ -16,14 +16,14 @@ export function enhanceCommand<CMD extends string, Options, Result>(
 }
 
 export async function fetchText(url: string) {
-  const { data } = await axios.get(url, {
+  const res = await fetchWithTimeout(url, {
     timeout: 60000,
     headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
+      Accept: 'text/plain; charset=utf-8',
       'Accept-Encoding': 'gzip,deflate,compress',
     },
   });
-  return data;
+  return res.text();
 }
 
 export async function readFile(url: string, cwd: string) {
@@ -39,7 +39,7 @@ export async function loadJSON<T extends Common.PlainObject>(
   if (Url.isUrl(uri)) {
     const data = await fetchText(uri);
 
-    return data;
+    return JSON.parse(data) as T;
   }
 
   const file = await readFile(uri, cwd);

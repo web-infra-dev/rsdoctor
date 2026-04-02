@@ -1,6 +1,6 @@
 /** @type {import('prebundle').Config} */
 export default {
-  dependencies: ['axios'],
+  dependencies: [],
   exclude: [
     '@rsdoctor/client',
     '@rsdoctor/graph',

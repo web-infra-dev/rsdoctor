@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ResolverFactory } from '@rspack/resolver';
 import { omit } from 'es-toolkit/compat';
 import path from 'path';
@@ -12,7 +11,7 @@ import { checkCirclePath } from './circleDetect';
 import { ProxyLoaderInternalOptions, ProxyLoaderOptions } from '@/types';
 import { Utils as BuildUtils } from '@/build-utils/build';
 import { isESMLoader, parseQuery } from '@/build-utils/build/utils';
-import { Lodash } from '@rsdoctor/utils/common';
+import { Fetch, Lodash } from '@rsdoctor/utils/common';
 
 export function getInternalLoaderOptions(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,
@@ -99,7 +98,7 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
       if (result.path) {
         return result.path;
       }
-    } catch (e) {
+    } catch {
       // ..
     }
 
@@ -222,23 +221,20 @@ export async function reportLoader(
 
   // fallback to request the url to report loader data
   await Promise.all([
-    axios
-      .post(`${host}${SDK.ServerAPI.API.ReportLoader}`, loaderData, {
-        timeout: 8888,
-      })
-      .catch((err: Error) => {
-        logger.debug(`${err.message}`, '[WebpackPlugin.ReportLoader][error]');
-      }),
-    axios
-      .post(`${host}${SDK.ServerAPI.API.ReportSourceMap}`, sourceMapData, {
-        timeout: 8888,
-      })
-      .catch((err: Error) => {
-        logger.debug(
-          `${err.message}`,
-          '[WebpackPlugin.ReportSourceMap][error]',
-        );
-      }),
+    Fetch.postJSON(
+      `${host}${SDK.ServerAPI.API.ReportLoader}`,
+      loaderData,
+      8888,
+    ).catch((err: Error) => {
+      logger.debug(`${err.message}`, '[WebpackPlugin.ReportLoader][error]');
+    }),
+    Fetch.postJSON(
+      `${host}${SDK.ServerAPI.API.ReportSourceMap}`,
+      sourceMapData,
+      8888,
+    ).catch((err: Error) => {
+      logger.debug(`${err.message}`, '[WebpackPlugin.ReportSourceMap][error]');
+    }),
   ]);
 
   return loaderData;
