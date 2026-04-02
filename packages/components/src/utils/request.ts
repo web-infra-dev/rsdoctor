@@ -1,31 +1,11 @@
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Manifest as ManifestMethod, Url } from '@rsdoctor/utils/common';
+import { Fetch, Manifest as ManifestMethod, Url } from '@rsdoctor/utils/common';
 import { APILoaderMode4Dev } from '../constants';
 import { getManifestUrlFromUrlQuery } from './url';
 import { getAPILoaderModeFromStorage } from './storage';
 
 function random() {
   return `${Date.now()}${Math.floor(Math.random() * 10000)}`;
-}
-
-function mergeAbortSignal(signal?: AbortSignal, timeout = 30000) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-  if (signal) {
-    if (signal.aborted) {
-      controller.abort();
-    } else {
-      signal.addEventListener('abort', () => controller.abort(), {
-        once: true,
-      });
-    }
-  }
-
-  return {
-    signal: controller.signal,
-    clear: () => clearTimeout(timeoutId),
-  };
 }
 
 function resolveRequestUrl(url: string): string {
@@ -45,16 +25,8 @@ function resolveRequestUrl(url: string): string {
 }
 
 async function requestText(url: string, timeout: number) {
-  const { signal, clear } = mergeAbortSignal(undefined, timeout);
-  try {
-    const res = await fetch(resolveRequestUrl(url), { signal });
-    if (!res.ok) {
-      throw new Error(`Request failed with status ${res.status}`);
-    }
-    return await res.text();
-  } finally {
-    clear();
-  }
+  const res = await Fetch.fetchWithTimeout(resolveRequestUrl(url), { timeout });
+  return res.text();
 }
 
 export async function fetchShardingFile(url: string): Promise<string> {
@@ -183,21 +155,14 @@ export async function postServerAPI<
 >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
   const [api, body] = args;
   const timeout = process.env.NODE_ENV === 'development' ? 10000 : 60000;
-  const { signal, clear } = mergeAbortSignal(undefined, timeout);
-  try {
-    const res = await fetch(resolveRequestUrl(`${api}?_t=${random()}`), {
+  const res = await Fetch.fetchWithTimeout(
+    resolveRequestUrl(`${api}?_t=${random()}`),
+    {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body),
-      signal,
-    });
-    if (!res.ok) {
-      throw new Error(`Request failed with status ${res.status}`);
-    }
-    return (await res.json()) as R;
-  } finally {
-    clear();
-  }
+      timeout,
+    },
+  );
+  return (await res.json()) as R;
 }

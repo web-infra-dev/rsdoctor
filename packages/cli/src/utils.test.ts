@@ -1,29 +1,36 @@
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
+
+const { fetchWithTimeoutMock } = rs.hoisted(() => ({
+  fetchWithTimeoutMock: rs.fn(),
+}));
+
+rs.mock('./fetch-http', () => ({
+  fetchWithTimeout: fetchWithTimeoutMock,
+}));
+
 import { fetchText, loadJSON } from './utils';
 
 describe('cli utils', () => {
-  const originalFetch = globalThis.fetch;
-
   afterEach(() => {
-    globalThis.fetch = originalFetch;
+    fetchWithTimeoutMock.mockReset();
   });
 
   it('fetchText() returns response text for 2xx', async () => {
-    const fetchMock = rs.fn().mockResolvedValue({
+    fetchWithTimeoutMock.mockResolvedValue({
       ok: true,
       text: async () => 'plain text',
-    });
-    globalThis.fetch = fetchMock as typeof fetch;
+    } as Response);
 
     const result = await fetchText('https://example.com/file.txt');
 
     expect(result).toBe('plain text');
-    expect(fetchMock).toBeCalledTimes(1);
-    expect(fetchMock).toBeCalledWith(
+    expect(fetchWithTimeoutMock).toBeCalledTimes(1);
+    expect(fetchWithTimeoutMock).toBeCalledWith(
       'https://example.com/file.txt',
       expect.objectContaining({
+        timeout: 60000,
         headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
+          Accept: 'text/plain; charset=utf-8',
           'Accept-Encoding': 'gzip,deflate,compress',
         },
       }),
@@ -31,11 +38,9 @@ describe('cli utils', () => {
   });
 
   it('fetchText() throws when response is non-2xx', async () => {
-    const fetchMock = rs.fn().mockResolvedValue({
-      ok: false,
-      status: 404,
-    });
-    globalThis.fetch = fetchMock as typeof fetch;
+    fetchWithTimeoutMock.mockRejectedValue(
+      new Error('Request failed with status 404'),
+    );
 
     await expect(fetchText('https://example.com/missing.txt')).rejects.toThrow(
       'Request failed with status 404',
@@ -43,11 +48,10 @@ describe('cli utils', () => {
   });
 
   it('loadJSON() parses remote json text', async () => {
-    const fetchMock = rs.fn().mockResolvedValue({
+    fetchWithTimeoutMock.mockResolvedValue({
       ok: true,
       text: async () => '{"id":7,"name":"remote"}',
-    });
-    globalThis.fetch = fetchMock as typeof fetch;
+    } as Response);
 
     const data = await loadJSON<{ id: number; name: string }>(
       'https://example.com/data.json',

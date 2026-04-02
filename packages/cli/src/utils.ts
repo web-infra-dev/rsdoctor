@@ -3,7 +3,8 @@ import fs from 'node:fs';
 import { Ora } from 'ora';
 import { Command } from './types';
 import { Common } from '@rsdoctor/types';
-import { Fetch, Url } from '@rsdoctor/utils/common';
+import { Url } from '@rsdoctor/utils/common';
+import { fetchWithTimeout } from './fetch-http';
 
 export function enhanceCommand<CMD extends string, Options, Result>(
   fn: Command<CMD, Options, Result>,
@@ -15,27 +16,14 @@ export function enhanceCommand<CMD extends string, Options, Result>(
 }
 
 export async function fetchText(url: string) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 60000);
-  const fetchImpl = await Fetch.getFetch();
-
-  try {
-    const res = await fetchImpl(url, {
-      signal: controller.signal,
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Accept-Encoding': 'gzip,deflate,compress',
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error(`Request failed with status ${res.status}`);
-    }
-
-    return await res.text();
-  } finally {
-    clearTimeout(timeoutId);
-  }
+  const res = await fetchWithTimeout(url, {
+    timeout: 60000,
+    headers: {
+      Accept: 'text/plain; charset=utf-8',
+      'Accept-Encoding': 'gzip,deflate,compress',
+    },
+  });
+  return res.text();
 }
 
 export async function readFile(url: string, cwd: string) {

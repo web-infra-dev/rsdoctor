@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import React, { useState } from 'react';
-import { useRuleIndexNavigate } from '../../utils';
+import { postServerAPI, useRuleIndexNavigate } from '../../utils';
 import { DiffViewer } from '../base';
 import { CodeOpener } from '../Opener';
 import { TextDrawer } from '../TextDrawer';
@@ -31,16 +31,7 @@ const CodeChangeDrawerContent: React.FC<CodeChangeAlertProps & FixedProps> = ({
   const { path, line, isFixed, actual, expected } = file;
   // const [isFixed, setIsFixed] = useState(file.isFixed ?? false);
   const applyFix = async () => {
-    const res = await fetch(SDK.ServerAPI.API.ApplyErrorFix, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id }),
-    });
-    if (!res.ok) {
-      throw new Error(`Request failed with status ${res.status}`);
-    }
+    await postServerAPI(SDK.ServerAPI.API.ApplyErrorFix, { id: Number(id) });
     setIsFixed(true);
   };
 

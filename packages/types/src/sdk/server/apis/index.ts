@@ -112,7 +112,8 @@ export interface SocketResponseType<T extends API | APIExtends = API> {
 }
 
 export interface ResponseTypes
-  extends LoaderAPIResponse,
+  extends
+    LoaderAPIResponse,
     ResolverAPIResponse,
     PluginAPIResponse,
     GraphAPIResponse,
@@ -160,13 +161,15 @@ export interface ResponseTypes
 }
 
 export interface RequestBodyTypes
-  extends LoaderAPIRequestBody,
+  extends
+    LoaderAPIRequestBody,
     ResolverAPIRequestBody,
     PluginAPIRequestBody,
     GraphAPIRequestBody,
     AlertsAPIRequestBody,
     ProjectAPIRequestBody {
   [API.ReportLoader]: LoaderData;
+  [API.ApplyErrorFix]: { id: number };
   [API.SendAPIDataToClient]: {
     api: API;
     data: unknown;
