@@ -30,13 +30,7 @@ export default defineConfig(({ env }) => {
   const config: RsbuildConfig = {
     plugins: [
       pluginReact(),
-      pluginNodePolyfill({
-        // Explicitly handle Node builtins referenced by transitive deps.
-        overrides: {
-          'node:async_hooks': false,
-          async_hooks: false,
-        },
-      }),
+      pluginNodePolyfill(),
       pluginSass(),
       pluginTypeCheck({
         enable: IS_PRODUCTION,
