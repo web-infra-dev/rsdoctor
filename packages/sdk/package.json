@@ -37,7 +37,7 @@
     "launch-editor": "^2.13.2",
     "safer-buffer": "2.1.2",
     "socket.io": "4.8.1",
-    "tapable": "2.3.0"
+    "tapable": "2.3.2"
   },
   "devDependencies": {
     "@types/body-parser": "1.19.6",
