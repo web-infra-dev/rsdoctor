@@ -25,8 +25,8 @@
     "dev": "rslib build --watch"
   },
   "dependencies": {
-    "@rsbuild/core": "^1.7.3",
-    "@rspack/core": "2.0.0-canary-20260116",
+    "@rsbuild/core": "^1.7.5",
+    "@rspack/core": "2.0.0-rc.0",
     "@types/lodash": "^4.17.24",
     "@types/node": "^22.8.1",
     "es-toolkit": "^1.45.1",
