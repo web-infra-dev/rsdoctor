@@ -155,10 +155,19 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
       })();
 
       if (Array.isArray(jsonStr)) {
-        const urls = jsonStr.map((str, index) => {
-          return this.writeToFolder(str, outputDir, key, index + 1);
-        });
-        urlsPromiseList.push(...urls);
+        // Write chunks sequentially with cumulative file offset so each
+        // chunk's shard files get unique IDs within the shared folder.
+        let fileOffset = 0;
+        for (const str of jsonStr) {
+          const result = await this.writeToFolder(
+            str,
+            outputDir,
+            key,
+            fileOffset,
+          );
+          fileOffset += result.files.length;
+          urlsPromiseList.push(result);
+        }
       } else {
         urlsPromiseList.push(this.writeToFolder(jsonStr, outputDir, key));
       }
