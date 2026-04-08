@@ -7,6 +7,11 @@ export type { Config } from './types';
 const title = 'cjs-require';
 
 const CJS_REQUIRE_TYPE = 'cjs require';
+const NODE_MODULES_PATH_REGEXP = /[/\\]node_modules[/\\]/;
+
+function isNodeModulesPath(modulePath: string): boolean {
+  return NODE_MODULES_PATH_REGEXP.test(modulePath);
+}
 
 export const rule = defineRule<typeof title, Config>(() => {
   return {
@@ -16,7 +21,7 @@ export const rule = defineRule<typeof title, Config>(() => {
       category: 'bundle',
       severity: Linter.Severity.Warn,
       defaultConfig: {
-        ignore: ['node_modules'],
+        ignore: [],
       },
     },
     check({ moduleGraph, report, ruleConfig }) {
@@ -28,6 +33,9 @@ export const rule = defineRule<typeof title, Config>(() => {
         }
 
         const issuerPath = dep.module.path;
+        if (isNodeModulesPath(issuerPath)) {
+          continue;
+        }
 
         const requiredModule = dep.dependency;
 
