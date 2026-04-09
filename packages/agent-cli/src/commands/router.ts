@@ -1,5 +1,5 @@
 import { setDataFilePath } from './datasource';
-import { createExecutor } from './executor';
+import { createExecutor } from './utils';
 import { parseSubcommandOptions } from './utils';
 
 import { findLargeChunks, getChunkById, listChunks } from './handlers/chunks';
@@ -8,7 +8,7 @@ import {
   getModuleByPath,
   getModuleExports,
   getModuleIssuerPath,
-  getSideEffects,
+  getSideEffectsHandler as getSideEffects,
 } from './handlers/modules';
 import {
   detectDuplicatePackages,
@@ -21,6 +21,7 @@ import { diffAssets, getMediaAssets, listAssets } from './handlers/assets';
 import { getDirectories, getHotFiles } from './handlers/loaders';
 import {
   getConfig,
+  getDataFileInfo,
   getSummary,
   listEntrypoints,
   optimizeBundle,
@@ -31,7 +32,6 @@ import {
   listErrors,
 } from './handlers/errors';
 import { listRules } from './handlers/rules';
-import { getPort } from './handlers/server';
 import {
   detectCjsRequire,
   detectEsmResolvedToCjs,
@@ -56,12 +56,17 @@ interface SubcommandDef {
   description: string;
   options: OptionDef[];
   handler: (opts: Record<string, string | true>) => Promise<unknown>;
+  toolName?: string;
+  toolDescription?: string;
 }
 
 const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
   chunks: {
     list: {
       description: 'List all chunks (id, name, size, modules).',
+      toolName: 'chunks_list',
+      toolDescription:
+        'List chunks with ids, names, sizes, and module counts for bundle composition analysis.',
       options: [
         {
           name: '--page-number',
@@ -247,11 +252,17 @@ const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
     duplicates: {
       description:
         'Detect duplicate packages using E1001 overlay rule if present.',
+      toolName: 'packages_duplicates',
+      toolDescription:
+        'Detect duplicate packages from the current Rsdoctor analysis.',
       options: [],
       handler: () => detectDuplicatePackages(),
     },
     similar: {
       description: 'Detect similar packages (lodash/lodash-es etc.).',
+      toolName: 'packages_similar',
+      toolDescription:
+        'Detect similar package families from the current Rsdoctor analysis.',
       options: [],
       handler: () => detectSimilarPackages(),
     },
@@ -365,6 +376,9 @@ const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
   build: {
     summary: {
       description: 'Get build summary with costs (build time analysis).',
+      toolName: 'build_summary',
+      toolDescription:
+        'Get build summary with costs and overall build information.',
       options: [],
       handler: () => getSummary(),
     },
@@ -423,6 +437,9 @@ const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
     optimize: {
       description:
         'Combined bundle optimization inputs (alias for build optimize).',
+      toolName: 'bundle_optimize',
+      toolDescription:
+        'Get bundle optimization inputs including duplicate packages, similar packages, large chunks, and side effects signals.',
       options: [
         {
           name: '--step',
@@ -464,6 +481,9 @@ const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
   errors: {
     list: {
       description: 'Get all errors and warnings from the build.',
+      toolName: 'errors_list',
+      toolDescription:
+        'Get all build errors and warnings from the current Rsdoctor analysis.',
       options: [],
       handler: () => listErrors(),
     },
@@ -506,7 +526,7 @@ const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
     port: {
       description: 'Get the JSON data file path used by the CLI.',
       options: [],
-      handler: () => getPort(),
+      handler: () => getDataFileInfo(),
     },
   },
 
@@ -532,6 +552,9 @@ const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
     summary: {
       description:
         'Comprehensive tree-shaking health summary: all rule violations (E1007/E1008/E1009) plus per-module bailout reasons.',
+      toolName: 'tree_shaking_summary',
+      toolDescription:
+        'Get a tree-shaking health summary including E1007, E1008, E1009, and bailout reasons.',
       options: [],
       handler: () => getTreeShakingSummary(),
     },
@@ -571,6 +594,51 @@ const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
     },
   },
 };
+
+// --- Tool catalog (derived from SUBCOMMANDS) ---
+
+interface ToolCatalogEntry {
+  name: string;
+  description: string;
+  inputSchema: {
+    type: 'object';
+    properties: Record<string, unknown>;
+    additionalProperties: boolean;
+  };
+  buildCommand: (context: {
+    dataFile: string;
+    input: Record<string, unknown>;
+  }) => string[];
+}
+
+const emptyObjectSchema = {
+  type: 'object' as const,
+  properties: {} as Record<string, unknown>,
+  additionalProperties: false,
+};
+
+export function getToolCatalog(): ToolCatalogEntry[] {
+  const tools: ToolCatalogEntry[] = [];
+  for (const [group, subcommands] of Object.entries(SUBCOMMANDS)) {
+    for (const [subcommand, def] of Object.entries(subcommands)) {
+      if (!def.toolName) continue;
+      tools.push({
+        name: def.toolName,
+        description: def.toolDescription ?? def.description,
+        inputSchema: emptyObjectSchema,
+        buildCommand: ({ dataFile }) => [
+          'rsdoctor-agent',
+          group,
+          subcommand,
+          '--data-file',
+          dataFile,
+          '--compact',
+        ],
+      });
+    }
+  }
+  return tools;
+}
 
 // --- Schema introspection ---
 

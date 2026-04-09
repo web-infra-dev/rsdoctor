@@ -1,4 +1,4 @@
-import { getErrors } from '../tools';
+import { getErrors as getErrorsFromData } from '../datasource';
 import { requireArg } from '../utils';
 
 interface ErrorItem {
@@ -11,7 +11,7 @@ export async function listErrors(): Promise<{
   data: unknown;
   description: string;
 }> {
-  const errors = await getErrors();
+  const errors = getErrorsFromData();
   return {
     ok: true,
     data: errors,
@@ -23,7 +23,7 @@ export async function getErrorsByCode(
   codeInput: string | undefined,
 ): Promise<{ ok: boolean; data: unknown[]; description: string }> {
   const errorCode = requireArg(codeInput, 'code');
-  const errors = (await getErrors()) as ErrorItem[];
+  const errors = getErrorsFromData() as ErrorItem[];
   const filtered = errors.filter((error) => error.code === errorCode);
   return {
     ok: true,
@@ -36,7 +36,7 @@ export async function getErrorsByLevel(
   levelInput: string | undefined,
 ): Promise<{ ok: boolean; data: unknown[]; description: string }> {
   const errorLevel = requireArg(levelInput, 'level');
-  const errors = (await getErrors()) as ErrorItem[];
+  const errors = getErrorsFromData() as ErrorItem[];
   const filtered = errors.filter((error) => error.level === errorLevel);
   return {
     ok: true,

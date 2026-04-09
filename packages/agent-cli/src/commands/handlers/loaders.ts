@@ -1,4 +1,4 @@
-import { getLoaderTimes, getLongLoadersByCosts } from '../tools';
+import { getLoaderDirectories, getLongLoadersByCosts } from '../datasource';
 import { parseNumber, parsePositiveInt } from '../utils';
 
 interface LoaderItem {
@@ -22,7 +22,7 @@ export async function getHotFiles(
     parsePositiveInt(pageSizeInput, 'pageSize', { min: 1, max: 1000 }) ?? 100;
   const minCosts = parseNumber(minCostsInput, 'minCosts');
 
-  const hotFiles = (await getLongLoadersByCosts()) as LoaderItem[];
+  const hotFiles = getLongLoadersByCosts() as LoaderItem[];
   let filtered = hotFiles;
   if (minCosts !== undefined) {
     filtered = hotFiles.filter((item) => (item.costs ?? 0) >= minCosts);
@@ -59,7 +59,7 @@ export async function getDirectories(
     parsePositiveInt(pageSizeInput, 'pageSize', { min: 1, max: 1000 }) ?? 100;
   const minTotalCosts = parseNumber(minTotalCostsInput, 'minTotalCosts');
 
-  const directories = (await getLoaderTimes()) as DirectoryItem[];
+  const directories = getLoaderDirectories() as DirectoryItem[];
   let filtered = directories;
   if (minTotalCosts !== undefined) {
     filtered = directories.filter(

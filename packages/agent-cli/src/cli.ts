@@ -1,7 +1,6 @@
-import { createRsdoctorToolCatalog } from './tools/catalog';
-import { createRsdoctorCliToolExecutor } from './tools/rsdoctor-cli';
+import { createRsdoctorCliToolExecutor } from './executor';
 import { runAnalysisSession } from './core/session';
-import { runAiCli } from './commands';
+import { getToolCatalog, runAiCli } from './commands';
 
 function parseArgs(argv: string[]) {
   const args = [...argv];
@@ -93,7 +92,7 @@ export async function runCli(
     options?.write ?? ((text: string) => process.stdout.write(text));
   const writeError =
     options?.writeError ?? ((text: string) => process.stderr.write(text));
-  const tools = createRsdoctorToolCatalog();
+  const tools = getToolCatalog();
 
   if (command === 'describe-tools') {
     write(

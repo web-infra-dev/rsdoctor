@@ -1,12 +1,12 @@
 import { describe, expect, it } from '@rstest/core';
 
-import { createRsdoctorToolCatalog } from '../src/tools/catalog';
-import { createRsdoctorCliToolExecutor } from '../src/tools/rsdoctor-cli';
+import { getToolCatalog } from '../src/commands';
+import { createRsdoctorCliToolExecutor } from '../src/executor';
 
 describe('rsdoctor cli tool executor', () => {
   it('runs the mapped command and returns parsed json', async () => {
     const commands: string[][] = [];
-    const catalog = createRsdoctorToolCatalog();
+    const catalog = getToolCatalog();
     const executor = createRsdoctorCliToolExecutor({
       tools: catalog,
       runCommand: async (command) => {

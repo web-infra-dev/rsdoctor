@@ -1,11 +1,11 @@
-import { getRuleInfo } from '../tools';
+import { getRules } from '../datasource';
 
 export async function listRules(): Promise<{
   ok: boolean;
   data: unknown;
   description: string;
 }> {
-  const rules = await getRuleInfo();
+  const rules = getRules();
   return {
     ok: true,
     data: rules,

@@ -1,6 +1,9 @@
 import path from 'node:path';
-import { loadJsonData } from '../datasource';
-import { getAllChunks, getAssets } from '../tools';
+import {
+  loadJsonData,
+  getChunks,
+  getAssets as getAssetsFromData,
+} from '../datasource';
 import { requireArg } from '../utils';
 
 interface Asset {
@@ -216,7 +219,7 @@ export async function listAssets(): Promise<{
   data: unknown;
   description: string;
 }> {
-  const assets = await getAssets();
+  const assets = getAssetsFromData();
   return {
     ok: true,
     data: assets,
@@ -263,11 +266,8 @@ export async function getMediaAssets(): Promise<{
   data: { guidance: string; chunks: unknown };
   description: string;
 }> {
-  const chunksResult = await getAllChunks(1, Number.MAX_SAFE_INTEGER);
-  const chunksResultTyped = chunksResult as { items?: unknown } | unknown[];
-  const chunks = Array.isArray(chunksResultTyped)
-    ? chunksResultTyped
-    : chunksResultTyped.items || chunksResult;
+  const chunksResult = getChunks(1, Number.MAX_SAFE_INTEGER);
+  const chunks = chunksResult.items || [];
   return {
     ok: true,
     data: { guidance: 'Media asset optimization guidance.', chunks },

@@ -1,6 +1,4 @@
-import { API } from '../constants';
-import { sendRequest } from '../datasource';
-import { getAllChunks } from '../tools';
+import { getChunks, getChunkById as getChunkByIdFromData } from '../datasource';
 import { getMedianChunkSize, parseNumber, parsePositiveInt } from '../utils';
 
 interface Chunk {
@@ -16,7 +14,7 @@ export async function listChunks(
   const pageSize =
     parsePositiveInt(pageSizeInput, 'pageSize', { min: 1, max: 1000 }) ?? 100;
 
-  const chunks = await getAllChunks(pageNumber, pageSize);
+  const chunks = getChunks(pageNumber, pageSize);
 
   return {
     ok: true,
@@ -32,7 +30,7 @@ export async function getChunkById(
   if (chunkId === undefined) {
     throw new Error('Chunk id is required');
   }
-  const chunk = await sendRequest(API.GetChunkByIdAI, { chunkId });
+  const chunk = getChunkByIdFromData(chunkId);
   if (!chunk) {
     throw new Error(`Chunk ${chunkId} not found`);
   }
@@ -49,12 +47,8 @@ export async function findLargeChunks(): Promise<{
   };
   description: string;
 }> {
-  const chunksResult = (await getAllChunks(1, Number.MAX_SAFE_INTEGER)) as {
-    items?: Chunk[];
-    total?: number;
-  };
-  const chunks =
-    chunksResult.items || (Array.isArray(chunksResult) ? chunksResult : []);
+  const chunksResult = getChunks(1, Number.MAX_SAFE_INTEGER);
+  const chunks = chunksResult.items || [];
   if (!chunks.length) {
     throw new Error('No chunks found.');
   }
