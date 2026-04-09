@@ -63,7 +63,7 @@ importers:
         version: 3.8.1
       rsbuild-plugin-publint:
         specifier: ^0.3.4
-        version: 0.3.4(@rsbuild/core@2.0.0-beta.8(core-js@3.47.0))
+        version: 0.3.4(@rsbuild/core@2.0.0-beta.9(core-js@3.47.0))
 
   e2e:
     devDependencies:
@@ -475,6 +475,24 @@ importers:
       webpack-cli:
         specifier: 5.1.4
         version: 5.1.4(webpack@5.105.4)
+
+  packages/agent-sdk:
+    devDependencies:
+      '@rsdoctor/tsconfig':
+        specifier: workspace:*
+        version: link:../../scripts/tsconfig
+      '@rslib/core':
+        specifier: 0.20.0
+        version: 0.20.0(core-js@3.47.0)(typescript@5.9.2)
+      '@rstest/core':
+        specifier: 0.9.4
+        version: 0.9.4(core-js@3.47.0)
+      '@types/node':
+        specifier: ^22.8.1
+        version: 22.18.1
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/ai:
     devDependencies:
@@ -21597,12 +21615,12 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.0.0-beta.6(core-js@3.47.0)
 
-  rsbuild-plugin-publint@0.3.4(@rsbuild/core@2.0.0-beta.8(core-js@3.47.0)):
+  rsbuild-plugin-publint@0.3.4(@rsbuild/core@2.0.0-beta.9(core-js@3.47.0)):
     dependencies:
       picocolors: 1.1.1
       publint: 0.3.17
     optionalDependencies:
-      '@rsbuild/core': 2.0.0-beta.8(core-js@3.47.0)
+      '@rsbuild/core': 2.0.0-beta.9(@module-federation/runtime-tools@0.22.0)(core-js@3.47.0)
 
   rslog@1.3.2: {}
 

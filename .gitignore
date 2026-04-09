@@ -27,3 +27,8 @@ log/
 .cursor/
 e2e/test-results/
 .rsdoctor/
+.agents/
+.augment/
+.claude/
+.cursor/
+skills-lock.json
