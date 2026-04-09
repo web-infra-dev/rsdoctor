@@ -1,10 +1,10 @@
 import {
-  getPackageDependency,
-  getPackageInfo,
-  getPackageInfoByPackageName,
-  getPackageInfoFiltered,
-  getRuleInfo,
-} from '../tools';
+  getPackageDependencies as getPackageDepsFromData,
+  getPackages,
+  getPackagesByName,
+  getPackagesFiltered,
+  getRules,
+} from '../datasource';
 import { parsePositiveInt, requireArg } from '../utils';
 
 interface Rule {
@@ -24,7 +24,7 @@ export async function listPackages(
   const pageSize =
     parsePositiveInt(pageSizeInput, 'pageSize', { min: 1, max: 1000 }) ?? 100;
 
-  const allPackages = (await getPackageInfoFiltered()) as Array<unknown>;
+  const allPackages = getPackagesFiltered();
   const total = allPackages.length;
   const totalPages = Math.ceil(total / pageSize);
   const startIndex = (pageNumber - 1) * pageSize;
@@ -47,7 +47,7 @@ export async function getPackageByName(
   packageNameInput: string | undefined,
 ): Promise<{ ok: boolean; data: unknown; description: string }> {
   const packageName = requireArg(packageNameInput, 'name');
-  const packages = await getPackageInfoByPackageName(packageName);
+  const packages = getPackagesByName(packageName);
   return {
     ok: true,
     data: packages,
@@ -64,7 +64,7 @@ export async function getPackageDependencies(
   const pageSize =
     parsePositiveInt(pageSizeInput, 'pageSize', { min: 1, max: 100 }) ?? 100;
 
-  const dependencies = await getPackageDependency(pageNumber, pageSize);
+  const dependencies = getPackageDepsFromData(pageNumber, pageSize);
   return {
     ok: true,
     data: dependencies,
@@ -77,7 +77,7 @@ export async function detectDuplicatePackages(): Promise<{
   data: { rule: Rule | null; totalRules: number; note?: string };
   description: string;
 }> {
-  const rules = (await getRuleInfo()) as Rule[];
+  const rules = getRules() as Rule[];
   const duplicateRule = rules?.find((rule) =>
     rule.description?.includes('E1001'),
   );
@@ -100,7 +100,7 @@ export async function detectSimilarPackages(): Promise<{
   data: { similarPackages: string[][]; totalPackages: number; note?: string };
   description: string;
 }> {
-  const packages = (await getPackageInfo()) as Package[];
+  const packages = getPackages() as Package[];
   const rules = [
     ['lodash', 'lodash-es', 'string_decode'],
     ['dayjs', 'moment', 'date-fns', 'js-joda'],

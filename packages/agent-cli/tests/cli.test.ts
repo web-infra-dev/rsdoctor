@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@rstest/core';
 
 import { runCli } from '../src/cli';
-import { createRsdoctorToolCatalog } from '../src/tools/catalog';
+import { getToolCatalog } from '../src/commands';
 
 describe('agent cli', () => {
   it('describes the available tools for an external main agent', async () => {
@@ -13,7 +13,7 @@ describe('agent cli', () => {
 
     expect(exitCode).toBe(0);
     expect(JSON.parse(chunks.join(''))).toEqual(
-      createRsdoctorToolCatalog().map((tool) => ({
+      getToolCatalog().map((tool) => ({
         name: tool.name,
         description: tool.description,
         inputSchema: tool.inputSchema,

@@ -5,7 +5,7 @@ import type {
   ToolDefinition,
   ToolExecutionRequest,
   ToolExecutor,
-} from './types';
+} from './core/types';
 
 const execFileAsync = promisify(execFile);
 

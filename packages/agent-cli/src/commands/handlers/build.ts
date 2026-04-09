@@ -1,13 +1,13 @@
-import { API } from '../constants';
-import { sendRequest } from '../datasource';
 import {
-  getAllChunks,
-  getBuildConfig,
-  getBuildSummary,
-  getEntrypoints,
-  getPackageInfo,
-  getRuleInfo,
-} from '../tools';
+  getChunks,
+  getBuildConfig as getBuildConfigFromData,
+  getBuildSummary as getBuildSummaryFromData,
+  getDataFilePath,
+  getEntrypoints as getEntrypointsFromData,
+  getPackages,
+  getRules,
+  getSideEffects,
+} from '../datasource';
 import { getMedianChunkSize, parsePositiveInt } from '../utils';
 
 interface Rule {
@@ -27,7 +27,7 @@ export async function getSummary(): Promise<{
   data: unknown;
   description: string;
 }> {
-  const summary = await getBuildSummary();
+  const summary = getBuildSummaryFromData();
   return {
     ok: true,
     data: summary,
@@ -40,7 +40,7 @@ export async function listEntrypoints(): Promise<{
   data: unknown;
   description: string;
 }> {
-  const entrypoints = await getEntrypoints();
+  const entrypoints = getEntrypointsFromData();
   return {
     ok: true,
     data: entrypoints,
@@ -53,7 +53,7 @@ export async function getConfig(): Promise<{
   data: unknown;
   description: string;
 }> {
-  const config = await getBuildConfig();
+  const config = getBuildConfigFromData();
   return {
     ok: true,
     data: config,
@@ -67,23 +67,16 @@ async function executeStep1(): Promise<{
   mediaAssets: { ok: boolean; data: unknown };
   largeChunks: { ok: boolean; data: unknown };
 }> {
-  const [rules, packages, chunksResult] = await Promise.all([
-    getRuleInfo(),
-    getPackageInfo(),
-    getAllChunks(1, Number.MAX_SAFE_INTEGER),
-  ]);
+  const rules = getRules() as Rule[];
+  const packages = getPackages() as Package[];
+  const chunksResult = getChunks(1, Number.MAX_SAFE_INTEGER);
 
-  const chunksResultTyped = chunksResult as { items?: Chunk[] } | Chunk[];
-  const chunks = Array.isArray(chunksResultTyped)
-    ? chunksResultTyped
-    : chunksResultTyped.items || [];
+  const chunks = chunksResult.items || [];
 
-  const rulesArray = rules as Rule[];
-  const duplicateRule = rulesArray?.find((rule) =>
+  const duplicateRule = rules?.find((rule) =>
     rule.description?.includes('E1001'),
   );
 
-  const packagesArray = packages as Package[];
   const similarRules = [
     ['lodash', 'lodash-es', 'string_decode'],
     ['dayjs', 'moment', 'date-fns', 'js-joda'],
@@ -97,7 +90,7 @@ async function executeStep1(): Promise<{
   const similarMatches = similarRules
     .map((group) => {
       const found = group.filter((pkg) =>
-        packagesArray.some((p) => p.name.toLowerCase() === pkg.toLowerCase()),
+        packages.some((p) => p.name.toLowerCase() === pkg.toLowerCase()),
       );
       return found.length > 1 ? found : null;
     })
@@ -122,7 +115,7 @@ async function executeStep1(): Promise<{
       ok: true,
       data: {
         rule: duplicateRule ?? null,
-        totalRules: rulesArray?.length ?? 0,
+        totalRules: rules?.length ?? 0,
         note: duplicateRule
           ? undefined
           : 'No E1001 duplicate package rule found in current analysis.',
@@ -132,7 +125,7 @@ async function executeStep1(): Promise<{
       ok: true,
       data: {
         similarPackages: similarMatches,
-        totalPackages: packagesArray.length,
+        totalPackages: packages.length,
         note: similarMatches.length
           ? undefined
           : 'No similar package groups detected in current analysis.',
@@ -177,10 +170,7 @@ export async function optimizeBundle(
         max: 1000,
       }) ?? 100;
 
-    const sideEffectsData = await sendRequest(API.GetSideEffects, {
-      pageNumber,
-      pageSize,
-    });
+    const sideEffectsData = getSideEffects(pageNumber, pageSize);
 
     return {
       ok: true,
@@ -195,7 +185,6 @@ export async function optimizeBundle(
     };
   }
 
-  // Default: both steps
   const defaultPageNumber =
     parsePositiveInt(sideEffectsPageNumberInput, 'sideEffectsPageNumber', {
       min: 1,
@@ -208,10 +197,7 @@ export async function optimizeBundle(
 
   const [step1Data, sideEffectsData] = await Promise.all([
     executeStep1(),
-    sendRequest(API.GetSideEffects, {
-      pageNumber: defaultPageNumber,
-      pageSize: defaultPageSize,
-    }),
+    getSideEffects(defaultPageNumber, defaultPageSize),
   ]);
 
   return {
@@ -222,5 +208,22 @@ export async function optimizeBundle(
     },
     description:
       'Combined bundle optimization inputs: duplicate packages, similar packages, media assets, large chunks, and side effects modules, add give the advice to optimize the bundle.',
+  };
+}
+
+export async function getDataFileInfo(): Promise<{
+  ok: boolean;
+  data: { mode: string; dataFile: string | null; note: string };
+  description: string;
+}> {
+  const filePath = getDataFilePath();
+  return {
+    ok: true,
+    data: {
+      mode: 'json',
+      dataFile: filePath,
+      note: 'Using JSON data file mode. No server required.',
+    },
+    description: 'Get the JSON data file path used by the CLI.',
   };
 }

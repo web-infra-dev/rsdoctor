@@ -1,5 +1,10 @@
-import { API } from '../constants';
-import { sendRequest } from '../datasource';
+import {
+  getModuleById as getModuleByIdFromData,
+  getModulesByPath,
+  getModuleIssuerPath as getModuleIssuerPathFromData,
+  getModuleExports as getModuleExportsFromData,
+  getSideEffects,
+} from '../datasource';
 import { parsePositiveInt, requireArg } from '../utils';
 
 interface ModuleMatch {
@@ -10,7 +15,7 @@ export async function getModuleById(
   moduleIdInput: string | undefined,
 ): Promise<{ ok: boolean; data: unknown; description: string }> {
   const moduleId = requireArg(moduleIdInput, 'id');
-  const module = await sendRequest(API.GetModuleDetails, { moduleId });
+  const module = getModuleByIdFromData(moduleId);
   return {
     ok: true,
     data: module,
@@ -22,9 +27,7 @@ export async function getModuleByPath(
   modulePathInput: string | undefined,
 ): Promise<{ ok: boolean; data: unknown; description: string }> {
   const modulePath = requireArg(modulePathInput, 'path');
-  const matches = ((await sendRequest(API.GetModuleByName, {
-    moduleName: modulePath,
-  })) || []) as ModuleMatch[];
+  const matches = (getModulesByPath(modulePath) || []) as ModuleMatch[];
 
   if (!matches.length) {
     throw new Error(`No module found for "${modulePath}"`);
@@ -42,9 +45,7 @@ export async function getModuleByPath(
     };
   }
 
-  const moduleInfo = await sendRequest(API.GetModuleDetails, {
-    moduleId: matches[0].id,
-  });
+  const moduleInfo = getModuleByIdFromData(String(matches[0].id));
   return {
     ok: true,
     data: { match: 'single', module: moduleInfo },
@@ -61,7 +62,7 @@ export async function getModuleIssuerPath(
   description: string;
 }> {
   const moduleId = requireArg(moduleIdInput, 'id');
-  const issuerPath = await sendRequest(API.GetModuleIssuerPath, { moduleId });
+  const issuerPath = getModuleIssuerPathFromData(moduleId);
   return {
     ok: true,
     data: { moduleId, issuerPath },
@@ -74,7 +75,7 @@ export async function getModuleExports(): Promise<{
   data: unknown;
   description: string;
 }> {
-  const exports = await sendRequest(API.GetModuleExports, {});
+  const exports = getModuleExportsFromData();
   return {
     ok: true,
     data: exports,
@@ -82,7 +83,7 @@ export async function getModuleExports(): Promise<{
   };
 }
 
-export async function getSideEffects(
+export async function getSideEffectsHandler(
   pageNumberInput?: string,
   pageSizeInput?: string,
 ): Promise<{ ok: boolean; data: unknown; description: string }> {
@@ -91,10 +92,7 @@ export async function getSideEffects(
   const pageSize =
     parsePositiveInt(pageSizeInput, 'pageSize', { min: 1, max: 1000 }) ?? 100;
 
-  const sideEffects = await sendRequest(API.GetSideEffects, {
-    pageNumber,
-    pageSize,
-  });
+  const sideEffects = getSideEffects(pageNumber, pageSize);
   return {
     ok: true,
     data: sideEffects,

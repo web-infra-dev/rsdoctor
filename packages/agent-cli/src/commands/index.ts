@@ -72,4 +72,9 @@ export async function runAiCli(
   }
 }
 
-export { describeCommandSchema, describeCommands, route } from './router';
+export {
+  describeCommandSchema,
+  describeCommands,
+  getToolCatalog,
+  route,
+} from './router';

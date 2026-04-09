@@ -1,4 +1,4 @@
-import { getModuleExports, getRuleInfo, getSideEffects } from '../tools';
+import { getModuleExports, getRules, getSideEffects } from '../datasource';
 import { parsePositiveInt } from '../utils';
 
 interface Rule {
@@ -17,7 +17,7 @@ export async function detectSideEffectsOnlyImports(): Promise<{
   data: { rule: Rule | null; totalRules: number; note?: string };
   description: string;
 }> {
-  const rules = (await getRuleInfo()) as Rule[];
+  const rules = getRules() as Rule[];
   const rule = findRuleByCode(rules, 'E1007');
   return {
     ok: true,
@@ -43,7 +43,7 @@ export async function detectCjsRequire(): Promise<{
   data: { rule: Rule | null; totalRules: number; note?: string };
   description: string;
 }> {
-  const rules = (await getRuleInfo()) as Rule[];
+  const rules = getRules() as Rule[];
   const rule = findRuleByCode(rules, 'E1008');
   return {
     ok: true,
@@ -70,7 +70,7 @@ export async function detectEsmResolvedToCjs(): Promise<{
   data: { rule: Rule | null; totalRules: number; note?: string };
   description: string;
 }> {
-  const rules = (await getRuleInfo()) as Rule[];
+  const rules = getRules() as Rule[];
   const rule = findRuleByCode(rules, 'E1009');
   return {
     ok: true,
@@ -104,10 +104,8 @@ export async function getTreeShakingSummary(): Promise<{
   };
   description: string;
 }> {
-  const [rules, sideEffects] = await Promise.all([
-    getRuleInfo() as Promise<Rule[]>,
-    getSideEffects(),
-  ]);
+  const rules = getRules() as Rule[];
+  const sideEffects = getSideEffects();
   const e1007 = findRuleByCode(rules, 'E1007') ?? null;
   const e1008 = findRuleByCode(rules, 'E1008') ?? null;
   const e1009 = findRuleByCode(rules, 'E1009') ?? null;
@@ -145,7 +143,7 @@ export async function getBailoutModules(
     parsePositiveInt(pageNumberInput, 'pageNumber', { min: 1 }) ?? 1;
   const pageSize =
     parsePositiveInt(pageSizeInput, 'pageSize', { min: 1, max: 1000 }) ?? 100;
-  const sideEffects = await getSideEffects(pageNumber, pageSize);
+  const sideEffects = getSideEffects(pageNumber, pageSize);
   return {
     ok: true,
     data: sideEffects,
@@ -168,7 +166,7 @@ export async function getExportsAnalysis(): Promise<{
   data: unknown;
   description: string;
 }> {
-  const exports = await getModuleExports();
+  const exports = getModuleExports();
   return {
     ok: true,
     data: exports,

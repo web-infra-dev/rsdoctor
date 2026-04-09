@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { API } from './constants';
 
 interface Chunk {
   id: number;
@@ -99,7 +98,10 @@ interface RsdoctorData {
   };
 }
 
-// Module-level state — safe because each CLI invocation is a separate process
+// ---------------------------------------------------------------------------
+// State: safe because each CLI invocation is a separate process
+// ---------------------------------------------------------------------------
+
 let _dataFilePath: string | null = null;
 let jsonDataCache: RsdoctorData | null = null;
 let cachedFilePath: string | null = null;
@@ -133,8 +135,18 @@ export function loadJsonData(filePath: string): RsdoctorData {
   }
 }
 
-function getChunksFromJson(
-  data: RsdoctorData,
+function requireDataFile(): RsdoctorData {
+  if (!_dataFilePath) {
+    throw new Error('No data file specified. Use --data-file <path>');
+  }
+  return loadJsonData(_dataFilePath);
+}
+
+// ---------------------------------------------------------------------------
+// Chunks
+// ---------------------------------------------------------------------------
+
+export function getChunks(
   pageNumber: number = 1,
   pageSize: number = 100,
 ): {
@@ -144,6 +156,7 @@ function getChunksFromJson(
   totalPages: number;
   items: Chunk[];
 } {
+  const data = requireDataFile();
   const chunkGraph = data?.data?.chunkGraph;
   if (!chunkGraph) {
     return { total: 0, pageNumber: 1, pageSize, totalPages: 0, items: [] };
@@ -187,18 +200,20 @@ function getChunksFromJson(
   };
 }
 
-function getChunkByIdFromJson(
-  data: RsdoctorData,
-  chunkId: string | number,
-): Chunk | undefined {
-  const chunksResult = getChunksFromJson(data, 1, Number.MAX_SAFE_INTEGER);
+export function getChunkById(chunkId: string | number): Chunk | undefined {
+  const chunksResult = getChunks(1, Number.MAX_SAFE_INTEGER);
   const targetId = typeof chunkId === 'string' ? Number(chunkId) : chunkId;
   return chunksResult.items.find(
     (chunk) => chunk.id === targetId || String(chunk.id) === String(chunkId),
   );
 }
 
-function getModulesFromJson(data: RsdoctorData): Module[] {
+// ---------------------------------------------------------------------------
+// Modules
+// ---------------------------------------------------------------------------
+
+export function getModules(): Module[] {
+  const data = requireDataFile();
   const moduleGraph = data?.data?.moduleGraph;
   if (!moduleGraph) return [];
   const modules = moduleGraph.modules || [];
@@ -219,11 +234,10 @@ function getModulesFromJson(data: RsdoctorData): Module[] {
   }));
 }
 
-function getModulesByPathFromJson(
-  data: RsdoctorData,
+export function getModulesByPath(
   modulePath: string,
 ): Array<{ id: number; path: string; name: string; webpackId?: string }> {
-  const modules = getModulesFromJson(data);
+  const modules = getModules();
   const lowerPath = modulePath.toLowerCase();
   return modules
     .filter(
@@ -240,18 +254,15 @@ function getModulesByPathFromJson(
     }));
 }
 
-function getModuleByIdFromJson(
-  data: RsdoctorData,
-  moduleId: string,
-): Module | undefined {
-  const modules = getModulesFromJson(data);
+export function getModuleById(moduleId: string): Module | undefined {
+  const modules = getModules();
   return modules.find((module) => module.id === Number(moduleId));
 }
 
-function getModuleIssuerPathFromJson(
-  data: RsdoctorData,
+export function getModuleIssuerPath(
   moduleId: string,
 ): Array<{ id: number; path: string; name: string }> {
+  const data = requireDataFile();
   const moduleGraph = data?.data?.moduleGraph;
   if (!moduleGraph) return [];
 
@@ -286,7 +297,17 @@ function getModuleIssuerPathFromJson(
   return issuerPath.reverse();
 }
 
-function getPackagesFromJson(data: RsdoctorData): Package[] {
+export function getModuleExports(): unknown[] {
+  const data = requireDataFile();
+  return data?.data?.moduleGraph?.exports || [];
+}
+
+// ---------------------------------------------------------------------------
+// Packages
+// ---------------------------------------------------------------------------
+
+export function getPackages(): Package[] {
+  const data = requireDataFile();
   const packageGraph = data?.data?.packageGraph;
   if (!packageGraph) return [];
   const packages = packageGraph.packages || [];
@@ -300,8 +321,29 @@ function getPackagesFromJson(data: RsdoctorData): Package[] {
   }));
 }
 
-function getPackageDependenciesFromJson(
-  data: RsdoctorData,
+export function getPackagesFiltered(): Array<{
+  id: number;
+  name: string;
+  version: string;
+  size: unknown;
+  duplicates: unknown;
+}> {
+  const packages = getPackages();
+  return packages.map((pkg) => ({
+    id: pkg.id,
+    name: pkg.name,
+    version: pkg.version,
+    size: pkg.size,
+    duplicates: pkg.duplicates,
+  }));
+}
+
+export function getPackagesByName(packageName: string): Package[] {
+  const packages = getPackages();
+  return packages.filter((pkg) => pkg.name === packageName);
+}
+
+export function getPackageDependencies(
   pageNumber: number = 1,
   pageSize: number = 100,
 ): {
@@ -311,6 +353,7 @@ function getPackageDependenciesFromJson(
   totalPages: number;
   items: unknown[];
 } {
+  const data = requireDataFile();
   const packageGraph = data?.data?.packageGraph;
   if (!packageGraph) {
     return { total: 0, pageNumber: 1, pageSize, totalPages: 0, items: [] };
@@ -329,7 +372,11 @@ function getPackageDependenciesFromJson(
   };
 }
 
-function getOverlayAlertsFromJson(data: RsdoctorData): Array<{
+// ---------------------------------------------------------------------------
+// Rules / Overlay Alerts
+// ---------------------------------------------------------------------------
+
+export function getRules(): Array<{
   id: string;
   code: string;
   title: string;
@@ -338,6 +385,7 @@ function getOverlayAlertsFromJson(data: RsdoctorData): Array<{
   category: string;
   type: string;
 }> {
+  const data = requireDataFile();
   const errors = data?.data?.errors || [];
   return errors.map((error) => ({
     id: error.id,
@@ -350,7 +398,12 @@ function getOverlayAlertsFromJson(data: RsdoctorData): Array<{
   }));
 }
 
-function getLoaderChartDataFromJson(data: RsdoctorData): unknown[] {
+// ---------------------------------------------------------------------------
+// Loaders
+// ---------------------------------------------------------------------------
+
+export function getLoaderChartData(): unknown[] {
+  const data = requireDataFile();
   const loader = data?.data?.loader;
   if (!loader) return [];
   if (Array.isArray(loader)) return loader;
@@ -361,7 +414,8 @@ function getLoaderChartDataFromJson(data: RsdoctorData): unknown[] {
   );
 }
 
-function getDirectoriesLoadersFromJson(data: RsdoctorData): unknown[] {
+export function getLoaderDirectories(): unknown[] {
+  const data = requireDataFile();
   const loader = data?.data?.loader;
   if (!loader) return [];
   if (Array.isArray(loader)) return loader;
@@ -374,9 +428,22 @@ function getDirectoriesLoadersFromJson(data: RsdoctorData): unknown[] {
   );
 }
 
-function getBuildSummaryFromJson(
-  data: RsdoctorData,
-): { costs: Array<{ costs?: number }>; totalCost: number } | null {
+export function getLongLoadersByCosts(): Array<{ costs: number }> {
+  const loaders = getLoaderChartData() as Array<{ costs: number }>;
+  const sorted = [...loaders].sort((a, b) => b.costs - a.costs);
+  const count = Math.ceil(sorted.length / 3);
+  return sorted.slice(0, count);
+}
+
+// ---------------------------------------------------------------------------
+// Build
+// ---------------------------------------------------------------------------
+
+export function getBuildSummary(): {
+  costs: Array<{ costs?: number }>;
+  totalCost: number;
+} | null {
+  const data = requireDataFile();
   const summary = data?.data?.summary;
   if (!summary) return null;
   return {
@@ -386,21 +453,29 @@ function getBuildSummaryFromJson(
   };
 }
 
-function getAssetsFromJson(data: RsdoctorData): unknown[] {
+export function getAssets(): unknown[] {
+  const data = requireDataFile();
   return data?.data?.chunkGraph?.assets || [];
 }
 
-function getEntrypointsFromJson(data: RsdoctorData): unknown[] {
+export function getEntrypoints(): unknown[] {
+  const data = requireDataFile();
   return data?.data?.chunkGraph?.entrypoints || [];
 }
 
-function getBuildConfigFromJson(data: RsdoctorData): unknown | null {
+export function getBuildConfig(): unknown | null {
+  const data = requireDataFile();
   const configs = data?.data?.configs;
   if (!configs || !configs.length) return null;
   return configs[0]?.config || null;
 }
 
-function getErrorsFromJson(data: RsdoctorData): RsdoctorError[] {
+// ---------------------------------------------------------------------------
+// Errors
+// ---------------------------------------------------------------------------
+
+export function getErrors(): RsdoctorError[] {
+  const data = requireDataFile();
   const errors = data?.data?.errors || [];
   return errors.map((error) => ({
     id: error.id,
@@ -417,12 +492,11 @@ function getErrorsFromJson(data: RsdoctorData): RsdoctorError[] {
   }));
 }
 
-function getModuleExportsFromJson(data: RsdoctorData): unknown[] {
-  return data?.data?.moduleGraph?.exports || [];
-}
+// ---------------------------------------------------------------------------
+// Side Effects
+// ---------------------------------------------------------------------------
 
-function getSideEffectsFromJson(
-  data: RsdoctorData,
+export function getSideEffects(
   pageNumber: number = 1,
   pageSize: number = 100,
 ): {
@@ -442,6 +516,7 @@ function getSideEffectsFromJson(
   userCode: { count: number; totalPages: number; modules: SideEffectModule[] };
   all: SideEffectModule[];
 } {
+  const data = requireDataFile();
   const moduleGraph = data?.data?.moduleGraph;
   if (!moduleGraph) {
     return {
@@ -535,64 +610,4 @@ function getSideEffectsFromJson(
     },
     all: sideEffectModules.slice(startIndex, endIndex),
   };
-}
-
-export async function sendRequest(
-  api: string,
-  params: Record<string, unknown> = {},
-): Promise<unknown> {
-  const filePath = _dataFilePath;
-  if (!filePath) {
-    throw new Error('No data file specified. Use --data-file <path>');
-  }
-
-  const data = loadJsonData(filePath);
-
-  switch (api) {
-    case API.GetChunkGraphAI: {
-      const pageNumber = (params.pageNumber as number) ?? 1;
-      const pageSize = (params.pageSize as number) ?? 100;
-      return getChunksFromJson(data, pageNumber, pageSize);
-    }
-    case API.GetChunkByIdAI:
-      return getChunkByIdFromJson(data, params.chunkId as string | number);
-    case API.GetModuleDetails:
-      return getModuleByIdFromJson(data, params.moduleId as string);
-    case API.GetModuleByName:
-      return getModulesByPathFromJson(data, params.moduleName as string);
-    case API.GetModuleIssuerPath:
-      return getModuleIssuerPathFromJson(data, params.moduleId as string);
-    case API.GetPackageInfo:
-      return getPackagesFromJson(data);
-    case API.GetPackageDependency: {
-      const pageNumber = (params.pageNumber as number) ?? 1;
-      const pageSize = (params.pageSize as number) ?? 100;
-      return getPackageDependenciesFromJson(data, pageNumber, pageSize);
-    }
-    case API.GetOverlayAlerts:
-      return getOverlayAlertsFromJson(data);
-    case API.GetLoaderChartData:
-      return getLoaderChartDataFromJson(data);
-    case API.GetDirectoriesLoaders:
-      return getDirectoriesLoadersFromJson(data);
-    case API.GetBuildSummary:
-      return getBuildSummaryFromJson(data);
-    case API.GetAssets:
-      return getAssetsFromJson(data);
-    case API.GetEntrypoints:
-      return getEntrypointsFromJson(data);
-    case API.GetBuildConfig:
-      return getBuildConfigFromJson(data);
-    case API.GetErrors:
-      return getErrorsFromJson(data);
-    case API.GetModuleExports:
-      return getModuleExportsFromJson(data);
-    case API.GetSideEffects: {
-      const pageNumber = (params.pageNumber as number) ?? 1;
-      const pageSize = (params.pageSize as number) ?? 100;
-      return getSideEffectsFromJson(data, pageNumber, pageSize);
-    }
-    default:
-      throw new Error(`Unknown API: ${api}`);
-  }
 }
