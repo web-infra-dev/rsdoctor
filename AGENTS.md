@@ -5,7 +5,7 @@
 - Node.js `22+`
 - `pnpm` workspace + `Nx` monorepo
 - TypeScript (strict mode), Rspack/Rsbuild ecosystem
-- Test runner: `rstest`
+- Test runner: `rstest` (run via `pnpm test`)
 
 ## Commands (run early)
 
@@ -33,7 +33,7 @@ packages/rspack-plugin/     # rspack plugin
 packages/utils/             # shared utilities
 packages/sdk/               # server SDK
 packages/client/            # web client
-packages/mcp-server/       # MCP server
+packages/mcp-server/        # MCP server
 examples/                   # runnable examples
 ```
 
