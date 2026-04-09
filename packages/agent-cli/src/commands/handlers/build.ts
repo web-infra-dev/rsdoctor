@@ -207,7 +207,7 @@ export async function optimizeBundle(
       sideEffectsModules: { ok: true, data: sideEffectsData },
     },
     description:
-      'Combined bundle optimization inputs: duplicate packages, similar packages, media assets, large chunks, and side effects modules, add give the advice to optimize the bundle.',
+      'Combined bundle optimization inputs: duplicate packages, similar packages, media assets, large chunks, and side effects modules, with advice to optimize the bundle.',
   };
 }
 
