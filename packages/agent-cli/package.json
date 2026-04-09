@@ -25,8 +25,8 @@
   "dependencies": {},
   "devDependencies": {
     "@rsdoctor/tsconfig": "workspace:*",
-    "@rslib/core": "0.20.0",
-    "@rstest/core": "0.9.4",
+    "@rslib/core": "0.21.0",
+    "@rstest/core": "0.9.6",
     "@types/node": "^22.8.1",
     "typescript": "^5.9.2"
   },
