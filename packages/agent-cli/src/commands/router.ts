@@ -2,36 +2,36 @@ import { setDataFilePath } from './datasource';
 import { createExecutor } from './executor';
 import { parseSubcommandOptions } from './utils';
 
-import { findLargeChunks, getChunkById, listChunks } from './commands/chunks';
+import { findLargeChunks, getChunkById, listChunks } from './handlers/chunks';
 import {
   getModuleById,
   getModuleByPath,
   getModuleExports,
   getModuleIssuerPath,
   getSideEffects,
-} from './commands/modules';
+} from './handlers/modules';
 import {
   detectDuplicatePackages,
   detectSimilarPackages,
   getPackageByName,
   getPackageDependencies,
   listPackages,
-} from './commands/packages';
-import { diffAssets, getMediaAssets, listAssets } from './commands/assets';
-import { getDirectories, getHotFiles } from './commands/loaders';
+} from './handlers/packages';
+import { diffAssets, getMediaAssets, listAssets } from './handlers/assets';
+import { getDirectories, getHotFiles } from './handlers/loaders';
 import {
   getConfig,
   getSummary,
   listEntrypoints,
   optimizeBundle,
-} from './commands/build';
+} from './handlers/build';
 import {
   getErrorsByCode,
   getErrorsByLevel,
   listErrors,
-} from './commands/errors';
-import { listRules } from './commands/rules';
-import { getPort } from './commands/server';
+} from './handlers/errors';
+import { listRules } from './handlers/rules';
+import { getPort } from './handlers/server';
 import {
   detectCjsRequire,
   detectEsmResolvedToCjs,
@@ -39,7 +39,7 @@ import {
   getBailoutModules,
   getExportsAnalysis,
   getTreeShakingSummary,
-} from './commands/tree-shaking';
+} from './handlers/tree-shaking';
 
 interface OptionDef {
   name: string;
@@ -662,20 +662,21 @@ export async function route(
     compact?: boolean;
     describe?: boolean;
     schema?: string;
+    argv?: string[];
+    write?: (text: string) => void;
   },
-): Promise<void> {
+): Promise<number> {
   const spacing = options.compact ? 0 : 2;
+  const write = options.write ?? ((text: string) => console.log(text));
 
   if (options.schema) {
-    console.log(
-      JSON.stringify(describeCommandSchema(options.schema), null, spacing),
-    );
-    return;
+    write(JSON.stringify(describeCommandSchema(options.schema), null, spacing));
+    return 0;
   }
 
   if (options.describe) {
-    console.log(JSON.stringify(describeCommands(), null, spacing));
-    return;
+    write(JSON.stringify(describeCommands(), null, spacing));
+    return 0;
   }
 
   if (!options.dataFile) {
@@ -683,7 +684,7 @@ export async function route(
   }
   setDataFilePath(options.dataFile);
 
-  const execute = createExecutor(!!options.compact);
+  const execute = createExecutor(!!options.compact, { write });
 
   const [group, subcommand] = args;
   if (!group || !subcommand) {
@@ -708,6 +709,11 @@ export async function route(
     );
   }
 
-  const rawOpts = parseSubcommandOptions(process.argv);
-  await execute(() => cmdDef.handler(rawOpts));
+  const rawOpts = parseSubcommandOptions(options.argv ?? process.argv);
+  try {
+    await execute(() => cmdDef.handler(rawOpts));
+    return 0;
+  } catch {
+    return 1;
+  }
 }

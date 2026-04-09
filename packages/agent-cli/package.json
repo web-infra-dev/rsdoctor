@@ -1,0 +1,37 @@
+{
+  "name": "@rsdoctor/agent-cli",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/agent-sdk"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "bin": {
+    "rsdoctor-agent": "./bin/rsdoctor-agent.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "rslib build",
+    "dev": "rslib build --watch",
+    "test": "rstest run"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@rsdoctor/tsconfig": "workspace:*",
+    "@rslib/core": "0.20.0",
+    "@rstest/core": "0.9.4",
+    "@types/node": "^22.8.1",
+    "typescript": "^5.9.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
