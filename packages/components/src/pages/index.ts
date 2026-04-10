@@ -9,3 +9,4 @@ export * as RuleIndex from './Resources/RuleIndex';
 export * as TreeShaking from './TreeShaking';
 export * as BundleDiff from './Resources/BundleDiff';
 export * as Uploader from './Uploader';
+export * as PackageGraph from './PackageGraph';
