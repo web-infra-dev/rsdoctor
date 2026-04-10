@@ -76,7 +76,10 @@ export default defineConfig({
       bundle: false,
       format: 'cjs',
       syntax: 'es2021',
-      dts: false,
+      dts: {
+        build: false,
+        autoExtension: true,
+      },
       output: {
         filename: {
           js: '[name].cjs',
