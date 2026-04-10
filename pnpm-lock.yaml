@@ -476,6 +476,24 @@ importers:
         specifier: 5.1.4
         version: 5.1.4(webpack@5.105.4)
 
+  packages/agent-cli:
+    devDependencies:
+      '@rsdoctor/tsconfig':
+        specifier: workspace:*
+        version: link:../../scripts/tsconfig
+      '@rslib/core':
+        specifier: 0.21.0
+        version: 0.21.0(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)(typescript@5.9.2)
+      '@rstest/core':
+        specifier: 0.9.6
+        version: 0.9.6(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
+      '@types/node':
+        specifier: ^22.8.1
+        version: 22.18.1
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
   packages/ai:
     devDependencies:
       '@modelcontextprotocol/sdk':
