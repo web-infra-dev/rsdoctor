@@ -6,6 +6,7 @@ import type {
   ToolExecutionRequest,
   ToolExecutor,
 } from './core/types';
+import { getInProcessToolExecutors } from './commands';
 
 const execFileAsync = promisify(execFile);
 
@@ -53,6 +54,23 @@ export function createRsdoctorCliToolExecutor({
           `Failed to parse JSON output from ${request.toolName}: ${message}`,
         );
       }
+    },
+  };
+}
+
+export function createInProcessRsdoctorCliToolExecutor(): ToolExecutor {
+  const toolExecutors = getInProcessToolExecutors();
+
+  return {
+    async execute(request: ToolExecutionRequest): Promise<unknown> {
+      const tool = toolExecutors[request.toolName];
+      if (!tool) {
+        throw new Error(`Unknown rsdoctor tool: ${request.toolName}`);
+      }
+      return tool.execute({
+        dataFile: request.dataFile,
+        input: request.input,
+      });
     },
   };
 }

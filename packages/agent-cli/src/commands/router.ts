@@ -611,6 +611,13 @@ interface ToolCatalogEntry {
   }) => string[];
 }
 
+interface InProcessToolEntry {
+  execute: (context: {
+    dataFile: string;
+    input: Record<string, unknown>;
+  }) => Promise<unknown>;
+}
+
 const emptyObjectSchema = {
   type: 'object' as const,
   properties: {} as Record<string, unknown>,
@@ -635,6 +642,25 @@ export function getToolCatalog(): ToolCatalogEntry[] {
           '--compact',
         ],
       });
+    }
+  }
+  return tools;
+}
+
+export function getInProcessToolExecutors(): Record<
+  string,
+  InProcessToolEntry
+> {
+  const tools: Record<string, InProcessToolEntry> = {};
+  for (const [group, subcommands] of Object.entries(SUBCOMMANDS)) {
+    for (const [subcommand, def] of Object.entries(subcommands)) {
+      if (!def.toolName) continue;
+      tools[def.toolName] = {
+        execute: async ({ dataFile, input }) => {
+          setDataFilePath(dataFile);
+          return def.handler(input as Record<string, string | true>);
+        },
+      };
     }
   }
   return tools;

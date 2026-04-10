@@ -1,4 +1,7 @@
-import { createRsdoctorCliToolExecutor } from './executor';
+import {
+  createInProcessRsdoctorCliToolExecutor,
+  createRsdoctorCliToolExecutor,
+} from './executor';
 import { runAnalysisSession } from './core/session';
 import { getToolCatalog, runAiCli } from './commands';
 
@@ -109,9 +112,11 @@ export async function runCli(
 
   const toolExecutorFactory = () =>
     createRsdoctorCliToolExecutor({ tools }).execute;
+  const inProcessToolExecutorFactory = () =>
+    createInProcessRsdoctorCliToolExecutor().execute;
 
   if (command === 'analyze' && query && dataFile) {
-    const executeTool = options?.executeTool ?? toolExecutorFactory();
+    const executeTool = options?.executeTool ?? inProcessToolExecutorFactory();
     const result = await runAnalysisSession({
       query,
       dataFile,

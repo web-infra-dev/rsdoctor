@@ -75,6 +75,7 @@ export async function runAiCli(
 export {
   describeCommandSchema,
   describeCommands,
+  getInProcessToolExecutors,
   getToolCatalog,
   route,
 } from './router';

@@ -17,7 +17,6 @@ function dedupe(steps: AnalysisStep[]) {
 
 export function planAnalysis(query: string): AnalysisStep[] {
   const normalized = query.toLowerCase();
-  const steps: AnalysisStep[] = [];
   const dependencyFocused = hasAny(normalized, [
     'duplicate package',
     'duplicate packages',
@@ -37,6 +36,41 @@ export function planAnalysis(query: string): AnalysisStep[] {
     'split',
     'artifacts',
   ]);
+  const errorFocused = hasAny(normalized, ['error', 'warning', 'warn']);
+  const broadOptimization =
+    hasAny(normalized, ['optimiz', 'analy', 'build']) && !dependencyFocused;
+
+  if (broadOptimization) {
+    const broadSteps: AnalysisStep[] = [
+      {
+        toolName: 'build_summary',
+        input: {},
+        rationale: 'Start with an overall build summary.',
+      },
+      {
+        toolName: 'bundle_optimize',
+        input: {},
+        rationale: 'Collect broad optimization signals.',
+      },
+      {
+        toolName: 'tree_shaking_summary',
+        input: {},
+        rationale: 'Inspect tree-shaking health.',
+      },
+    ];
+
+    if (errorFocused) {
+      broadSteps.push({
+        toolName: 'errors_list',
+        input: {},
+        rationale: 'Review build errors and warnings.',
+      });
+    }
+
+    return dedupe(broadSteps);
+  }
+
+  const steps: AnalysisStep[] = [];
 
   if (dependencyFocused) {
     steps.push({
@@ -67,16 +101,13 @@ export function planAnalysis(query: string): AnalysisStep[] {
     });
   }
 
-  if (hasAny(normalized, ['error', 'warning', 'warn'])) {
+  if (errorFocused) {
     steps.push({
       toolName: 'errors_list',
       input: {},
       rationale: 'Review build errors and warnings.',
     });
   }
-
-  const broadOptimization =
-    hasAny(normalized, ['optimiz', 'analy', 'build']) && !dependencyFocused;
 
   if (steps.length === 0 || broadOptimization) {
     const broadSteps: AnalysisStep[] = [
@@ -91,19 +122,9 @@ export function planAnalysis(query: string): AnalysisStep[] {
         rationale: 'Collect broad optimization signals.',
       },
       {
-        toolName: 'packages_duplicates',
-        input: {},
-        rationale: 'Check for duplicate package overhead.',
-      },
-      {
         toolName: 'tree_shaking_summary',
         input: {},
         rationale: 'Inspect tree-shaking health.',
-      },
-      {
-        toolName: 'chunks_list',
-        input: {},
-        rationale: 'Inspect chunk composition after the broad summary.',
       },
     ];
     steps.unshift(...broadSteps);

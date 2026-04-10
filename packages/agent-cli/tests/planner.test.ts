@@ -11,9 +11,7 @@ describe('analysis planner', () => {
     expect(plan.map((step) => step.toolName)).toEqual([
       'build_summary',
       'bundle_optimize',
-      'packages_duplicates',
       'tree_shaking_summary',
-      'chunks_list',
     ]);
   });
 

@@ -27,6 +27,6 @@ describe('analysis session', () => {
     expect(toolCalls.length).toBeGreaterThan(1);
     expect(result.trace.map((item) => item.toolName)).toEqual(toolCalls);
     expect(result.summary).toContain('build_summary');
-    expect(result.summary).toContain('packages_duplicates');
+    expect(result.summary).toContain('tree_shaking_summary');
   });
 });

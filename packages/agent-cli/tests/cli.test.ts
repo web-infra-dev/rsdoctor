@@ -1,4 +1,7 @@
 import { describe, expect, it } from '@rstest/core';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 import { runCli } from '../src/cli';
 import { getToolCatalog } from '../src/commands';
@@ -100,5 +103,61 @@ describe('agent cli', () => {
     const output = JSON.parse(chunks.join(''));
     expect(output.trace.length).toBeGreaterThan(1);
     expect(output.plan.length).toBeGreaterThan(1);
+  });
+
+  it('analyzes in-process and reuses the same parsed data file', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        data: {
+          summary: { costs: [{ costs: 120 }] },
+          chunkGraph: { chunks: [], assets: [] },
+          moduleGraph: { modules: [], dependencies: [], exports: [] },
+          packageGraph: { packages: [], dependencies: [] },
+          errors: [],
+          configs: [],
+        },
+      }),
+    );
+
+    const originalReadFileSync = fs.readFileSync;
+    let readCount = 0;
+    (fs as typeof fs & { readFileSync: typeof fs.readFileSync }).readFileSync =
+      ((...args: Parameters<typeof fs.readFileSync>) => {
+        readCount += 1;
+        return originalReadFileSync(...args);
+      }) as typeof fs.readFileSync;
+
+    const chunks: string[] = [];
+
+    try {
+      const exitCode = await runCli(
+        [
+          'analyze',
+          'Analyze this build and provide optimization suggestions.',
+          '--data-file',
+          dataFile,
+          '--format',
+          'json',
+        ],
+        {
+          write: (text) => chunks.push(text),
+        },
+      );
+
+      expect(exitCode).toBe(0);
+      expect(readCount).toBe(1);
+
+      const output = JSON.parse(chunks.join(''));
+      expect(output.trace.length).toBeGreaterThan(1);
+      expect(
+        output.plan.map((step: { toolName: string }) => step.toolName),
+      ).toEqual(['build_summary', 'bundle_optimize', 'tree_shaking_summary']);
+    } finally {
+      fs.readFileSync = originalReadFileSync;
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
   });
 });
