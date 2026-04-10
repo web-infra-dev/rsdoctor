@@ -114,12 +114,12 @@ export const createExecutor = (
     try {
       const result = await handler();
       if (result && typeof result === 'object' && 'ok' in result) {
-        write(JSON.stringify(result, null, spacing));
-        if (!(result as { ok: boolean }).ok) {
+        if ((result as { ok: boolean }).ok) {
+          write(JSON.stringify(result, null, spacing));
+        } else {
           throw new Error('Command returned ok=false');
         }
       } else {
-        const spacing = compact ? 0 : 2;
         write(JSON.stringify(result, null, spacing));
       }
     } catch (error) {

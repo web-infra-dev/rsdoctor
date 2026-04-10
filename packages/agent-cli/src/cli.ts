@@ -9,7 +9,7 @@ function parseArgs(argv: string[]) {
   const args = [...argv];
   const command = args.shift() ?? '';
   const toolName = command === 'run-tool' ? (args.shift() ?? '') : '';
-  const queryParts: string[] = command === 'analyze' ? [] : [];
+  const queryParts: string[] = [];
   let dataFile = '';
   let input = '{}';
   let format = 'text';
