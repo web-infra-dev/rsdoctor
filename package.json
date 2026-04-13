@@ -40,7 +40,7 @@
     "@changesets/cli": "^2.30.0",
     "@rsdoctor/tsconfig": "workspace:*",
     "@rslib/core": "0.21.0",
-    "@rstest/core": "0.9.6",
+    "@rstest/core": "0.9.7",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "^7.0.3",
     "cspell-ban-words": "^0.0.4",
@@ -48,7 +48,7 @@
     "husky": "^9.1.7",
     "nano-staged": "^0.9.0",
     "nx": "^20.8.4",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.2",
     "rsbuild-plugin-publint": "^0.3.4"
   },
   "pnpm": {
@@ -58,7 +58,7 @@
       "es-object-atoms": "1.1.1",
       "get-intrinsic": "1.3.0",
       "node-forge": "1.3.3",
-      "qs": "6.15.0",
+      "qs": "6.15.1",
       "rc-dialog": "9.1.0",
       "rc-tree": "5.7.2",
       "react-dom": "18.3.1",
