@@ -1,5 +1,5 @@
 export * from './alerts';
-export * from './data';
+export { DataAPI } from './data';
 export * from './fs';
 export * from './loader';
 export * from './graph';
