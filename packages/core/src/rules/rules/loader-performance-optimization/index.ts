@@ -42,8 +42,9 @@ export const rule = defineRule<typeof title, Config>(() => {
       const resultMap: Map<string, Array<LoaderMapValue>> = new Map();
 
       // flatten loaders
-      const loaders: SDK.LoaderTransformData[] = loader
-        .flatMap((el) => el.loaders);
+      const loaders: SDK.LoaderTransformData[] = loader.flatMap(
+        (el) => el.loaders,
+      );
 
       for (const item of loader) {
         const { path, ext } = item.resource;
@@ -96,23 +97,19 @@ export const rule = defineRule<typeof title, Config>(() => {
 
         const msg = [
           nodeModulesFilesCosts >= threshold &&
-            `<b>${
-              nodeModulesFiles.length
-            }</b> node_modules files(costs: <b>${Time.formatCosts(
+            `${nodeModulesFiles.length} node_modules files (costs: ${Time.formatCosts(
               nodeModulesFilesCosts,
-            )}</b>)`,
+            )})`,
           outofCwdFilesCosts >= threshold &&
-            `<b>${
-              outofCwdFiles.length
-            }</b> outof project files(costs: <b>${Time.formatCosts(
+            `${outofCwdFiles.length} outside project files (costs: ${Time.formatCosts(
               outofCwdFilesCosts,
-            )}</b>)`,
+            )})`,
         ]
           .filter(Boolean)
           .join(' and ');
 
         if (msg) {
-          const message = `<b>${loaderName}</b> has process ${msg}.`;
+          const message = `${loaderName} has processed ${msg}.`;
           report({
             message,
             detail: {
