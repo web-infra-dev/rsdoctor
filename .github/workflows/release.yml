@@ -36,27 +36,16 @@ jobs:
           fetch-depth: 1
           ref: ${{ github.event.inputs.branch }}
 
-      - name: Setup Pnpm
-        run: |
-          npm install -g corepack@latest --force
-          corepack enable
-
       - name: Setup Node.js
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 22.22.2
           cache: 'pnpm'
 
-      - name: Install Pnpm
+      - name: Setup Pnpm
         run: |
-          npm install -g corepack@latest --force
           corepack enable
-
-      # Update npm to the latest version to enable OIDC
-      - name: Update npm
-        run: |
-          npm install -g npm@latest
-          npm --version
+          corepack prepare pnpm@10.17.0 --activate
 
       - name: Install Dependencies
         run: pnpm install
