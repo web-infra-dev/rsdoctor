@@ -46,7 +46,7 @@ export enum Color {
 }
 
 export const drawerWidth =
-  // eslint-disable-next-line financial/no-float-calculation
+  // rslint-disable-next-line financial/no-float-calculation
   typeof window === 'undefined'
     ? 0
     : window.innerWidth * 0.85 >= 1100

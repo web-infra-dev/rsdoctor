@@ -11,43 +11,43 @@
   },
   "data": {
     "hash": "2f92ad3f7425c572ea80ab34001e41fe",
-    "root": "<root>/rsdoctor/examples/modern-minimal",
+    "root": "/Users/wchenonly/work/gitHub/f/rsdoctor/examples/modern-minimal",
     "envinfo": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/envinfo/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/envinfo/0"
     ],
     "pid": 61791,
     "errors": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/errors/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/errors/0"
     ],
     "configs": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/configs/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/configs/0"
     ],
     "summary": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/summary/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/summary/0"
     ],
     "resolver": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/resolver/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/resolver/0"
     ],
     "loader": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/loader/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/loader/0"
     ],
     "moduleGraph": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/moduleGraph/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/moduleGraph/0"
     ],
     "chunkGraph": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/chunkGraph/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/chunkGraph/0"
     ],
     "moduleCodeMap": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/moduleCodeMap/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/moduleCodeMap/0"
     ],
     "plugin": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/plugin/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/plugin/0"
     ],
     "packageGraph": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/packageGraph/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/packageGraph/0"
     ],
     "otherReports": [
-      "<root>/rsdoctor/e2e/fixtures/rsdoctor/otherReports/0"
+      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/otherReports/0"
     ]
   }
 }

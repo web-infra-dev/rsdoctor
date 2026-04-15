@@ -226,7 +226,7 @@ export function useDebounceHook(
 ): DurationMetric[] | undefined {
   const [debounceValue, setDebounceValue] = useState(value);
   useEffect(() => {
-    let timer = setTimeout(() => setDebounceValue(value), delay);
+    const timer = setTimeout(() => setDebounceValue(value), delay);
     return () => clearTimeout(timer);
   }, [value, delay]);
   return debounceValue;

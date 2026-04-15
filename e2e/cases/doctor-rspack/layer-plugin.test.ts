@@ -98,6 +98,7 @@ async function rspackCompile(
       ],
     },
     experiments: {
+      // @ts-ignore
       layers: true,
     },
     plugins: [
@@ -119,6 +120,7 @@ async function rspackCompile(
             async () => {
               const sdk = getSDK();
               setSDK(
+                // @ts-ignore
                 new Proxy(sdk, {
                   get(target, key, receiver) {
                     switch (key) {
@@ -126,6 +128,7 @@ async function rspackCompile(
                         return null;
                       case 'reportLoaderStartOrEnd':
                         return (_data: any) => {
+                          // rslint-disable-next-line @typescript-eslint/no-unused-vars
                           reportLoaderStartOrEndTimes += 1;
                         };
                       default:
@@ -158,11 +161,11 @@ test('rspack data store', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspackLayers);
   const sdk = getSDK();
-  const datas = sdk.getStoreData();
-  const graphData = datas.moduleGraph;
-  const layerList = graphData.modules.map((m) => m.layer);
-  expect(layerList.filter((i) => i === 'modern').length).toBe(2);
-  expect(layerList.filter((i) => i === 'legacy').length).toBe(2);
-  expect(graphData.layers).toContain('modern');
-  expect(graphData.layers).toContain('legacy');
+  const datas = sdk?.getStoreData();
+  const graphData = datas?.moduleGraph;
+  const layerList = graphData?.modules.map((m) => m.layer);
+  expect(layerList?.filter((i) => i === 'modern').length).toBe(2);
+  expect(layerList?.filter((i) => i === 'legacy').length).toBe(2);
+  expect(graphData?.layers).toContain('modern');
+  expect(graphData?.layers).toContain('legacy');
 });

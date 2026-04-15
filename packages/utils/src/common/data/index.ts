@@ -22,10 +22,10 @@ export class APIDataLoader {
 
   public loadAPI<
     T extends SDK.ServerAPI.API,
-    B extends
-      SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-    R extends
-      SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+    B extends SDK.ServerAPI.InferRequestBodyType<T> =
+      SDK.ServerAPI.InferRequestBodyType<T>,
+    R extends SDK.ServerAPI.InferResponseType<T> =
+      SDK.ServerAPI.InferResponseType<T>,
   >(
     ...args: B extends void ? [api: T] : [api: T, body: B]
   ): Promise<SDK.ServerAPI.InferResponseType<T>> {
@@ -551,7 +551,7 @@ export class APIDataLoader {
       case SDK.ServerAPI.API.GetChunkGraphAI:
         return this.loader.loadData('chunkGraph').then((res) => {
           const { assets = [] } = res || {};
-          const filteredChunks = assets.map(({ content, ...rest }) => rest);
+          const filteredChunks = assets.map(({ content: _, ...rest }) => rest);
           return filteredChunks as R;
         });
 

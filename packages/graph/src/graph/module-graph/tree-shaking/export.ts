@@ -87,6 +87,7 @@ export class ExportInfo implements SDK.ExportInstance {
     }
 
     let currentDepth = 0;
+    // rslint-disable-next-line @typescript-eslint/no-this-alias
     let current: ExportInfo = this;
 
     while (current.from && currentDepth < depth) {

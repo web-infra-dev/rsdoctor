@@ -4,8 +4,6 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import { createStubRsbuild } from '@scripts/test-helper';
 import path from 'path';
 
-const file = path.resolve(__dirname, '../fixtures/a.js');
-
 async function rsbuild(_query?: string) {
   const res = await createStubRsbuild({
     rsbuildConfig: {
@@ -19,7 +17,7 @@ async function rsbuild(_query?: string) {
         web1: {},
       },
       tools: {
-        rspack(config: any, { appendPlugins, environment }: any) {
+        rspack(_config: any, { appendPlugins, environment }: any) {
           if (environment.name === 'node') {
             appendPlugins(
               new RsdoctorRspackPlugin({

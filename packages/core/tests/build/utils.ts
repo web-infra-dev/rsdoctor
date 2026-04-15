@@ -62,7 +62,6 @@ export class ModuleGraphTestPlugin {
         astCache: this.astCache,
       },
     );
-    this.modulesGraph = this.modulesGraph;
     this.modulesGraph = ModuleGraphBuildUtils.appendTreeShaking(
       this.modulesGraph,
       stats.compilation,

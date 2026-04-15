@@ -207,7 +207,7 @@ export function canParse(code: string, ecmaVersion: ecmaVersion) {
           : 'module',
     });
     return true;
-  } catch (err) {
+  } catch {
     return false;
   }
 }

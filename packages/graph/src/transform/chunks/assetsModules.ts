@@ -37,7 +37,9 @@ export async function getAssetsModulesData(
         if (codes && typeof codes === 'string' && codes.length > 0) {
           gzipSize = gzipSync(codes, { level: 9 }).length;
         }
-      } catch {}
+      } catch {
+        // Ignore errors
+      }
       for (const module of modules) {
         module?.setSize({
           parsedSize: codes.length,
@@ -137,7 +139,9 @@ export function transformAssetsModulesData(
       ) {
         gzipSize = gzipSync(parsedData.content, { level: 9 }).length;
       }
-    } catch {}
+    } catch {
+      // Ignore errors
+    }
     module?.setSize({
       parsedSize: parsedData?.size,
       gzipSize,

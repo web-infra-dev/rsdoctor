@@ -280,7 +280,7 @@ export class Module implements SDK.ModuleInstance {
       if (code && typeof code === 'string' && code.length > 0) {
         try {
           size.gzipSize = gzipSync(code, { level: 9 }).length;
-        } catch (e) {
+        } catch {
           size.gzipSize = 0;
         }
       }

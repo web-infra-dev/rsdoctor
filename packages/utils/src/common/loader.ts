@@ -212,7 +212,7 @@ export function getLoaderFileDetails(
     loaders: data.loaders.map((el) => {
       // Strip large input/result fields to reduce data volume
       // These can be fetched on-demand via GetLoaderFileInputAndOutput API
-      const { input, result, ...loaderWithoutCode } = el;
+      const { input: _input, result: _result, ...loaderWithoutCode } = el;
       return {
         ...loaderWithoutCode,
         loader: getLoadrName(el.loader),

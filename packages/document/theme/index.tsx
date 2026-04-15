@@ -27,5 +27,4 @@ const Search = () => {
 };
 
 export { Layout, HomeLayout, Search };
-// eslint-disable-next-line import/export
 export * from '@rspress/core/theme-original';

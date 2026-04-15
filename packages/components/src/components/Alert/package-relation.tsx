@@ -1,4 +1,4 @@
-/* eslint-disable financial/no-float-calculation */
+/* rslint-disable financial/no-float-calculation */
 import {
   Space,
   Alert,

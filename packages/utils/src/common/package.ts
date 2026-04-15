@@ -17,7 +17,7 @@ const VERSION_NUMBER = '@([\\d.]+)';
 
 // Extract package paths from module path
 // https://regex101.com/r/22Leep/6
-/* eslint-disable prettier/prettier */
+/* rslint-disable prettier/prettier */
 export const MODULE_PATH_PACKAGES = new RegExp(
   [
     // match dependency directory (eg: `node_modules/`, `node_modules/.pnpm/`)
@@ -47,7 +47,7 @@ export const MODULE_PATH_PACKAGES = new RegExp(
 
 // Extract package name from package path
 // https://regex101.com/r/tTlU0W/6
-/* eslint-disable prettier/prettier */
+/* rslint-disable prettier/prettier */
 export const PACKAGE_PATH_NAME =
   /(?:(?:node_modules|~)(?:\/\.pnpm)?\/)(?:((?:@[a-zA-Z0-9]+(?:[-|_|.]+[a-zA-Z0-9]+)*[/|+])?(?:(?:[a-zA-Z0-9]+(?:[-|_|.]+[a-zA-Z0-9]+)*\+)*)(?:[a-zA-Z0-9]+(?:[-|_|.]+[a-zA-Z0-9]+)*))(?:@[\w|\-|_|.]+)?)(?:_((?:@[a-zA-Z0-9]+(?:[-|_|.]+[a-zA-Z0-9]+)*[/|+])?(?:[a-zA-Z0-9]+(?:[-|_|.]+[a-zA-Z0-9]+)*))(?:@[a-zA-Z0-9]+(?:[-|_|.]+[a-zA-Z0-9]+)*))*\//gm;
 

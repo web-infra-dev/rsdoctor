@@ -250,8 +250,8 @@ export async function handleAfterEmitAssets(
       let sourceMapPath: string | undefined;
 
       if (!map) {
-        let sourceMapFile = asset.info.related?.sourceMap;
-        let sourceMapFileAssetName = sourceMapFile?.replace(
+        const sourceMapFile = asset.info.related?.sourceMap;
+        const sourceMapFileAssetName = sourceMapFile?.replace(
           /(\.[^.]+)(\.[^.]+)?$/,
           '$1',
         );

@@ -18,8 +18,8 @@
     "e2e": "pnpm run e2e:base && pnpm run e2e:native",
     "e2e:base": "cd ./e2e && pnpm test",
     "e2e:native": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test:native",
-    "format": "prettier --write . && heading-case --write",
-    "lint": "biome lint . --diagnostic-level=error",
+    "format": "prettier --experimental-cli --write . && heading-case --write",
+    "lint": "rslint",
     "prepare": "pnpm run build && husky",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm run ut",
     "test:all": "pnpm run test && pnpm run e2e",
@@ -28,15 +28,15 @@
     "ut:watch": "rstest"
   },
   "nano-staged": {
-    "*.{md,mdx,json,css,less,scss}": "prettier --write",
+    "*.{md,mdx,json,css,less,scss}": "prettier --experimental-cli --write",
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
-      "prettier --write",
-      "biome lint --diagnostic-level=error --no-errors-on-unmatched"
+      "rslint",
+      "prettier --experimental-cli --write"
     ],
     "package.json": "pnpm run check-dependency-version"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.1",
+    "@rslint/core": "^0.4.2",
     "@changesets/cli": "^2.30.0",
     "@rsdoctor/tsconfig": "workspace:*",
     "@rslib/core": "0.21.0",

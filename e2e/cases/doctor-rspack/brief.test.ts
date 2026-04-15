@@ -67,28 +67,31 @@ async function rspackCompile(
             { name: 'Foo', stage: 99999 },
             async () => {
               const sdk = getSDK();
-              setSDK(
-                new Proxy(sdk, {
-                  get(target, key, receiver) {
-                    switch (key) {
-                      case 'reportLoader':
-                        return null;
-                      case 'reportLoaderStartOrEnd':
-                        return (_data: any) => {
-                          reportLoaderStartOrEndTimes += 1;
-                        };
-                      default:
-                        return Reflect.get(target, key, receiver);
-                    }
-                  },
-                  set(target, key, value, receiver) {
-                    return Reflect.set(target, key, value, receiver);
-                  },
-                  defineProperty(target, p, attrs) {
-                    return Reflect.defineProperty(target, p, attrs);
-                  },
-                }),
-              );
+              if (sdk) {
+                setSDK(
+                  new Proxy(sdk, {
+                    get(target, key, receiver) {
+                      switch (key) {
+                        case 'reportLoader':
+                          return null;
+                        case 'reportLoaderStartOrEnd':
+                          return (_data: any) => {
+                            // rslint-disable-next-line @typescript-eslint/no-unused-vars
+                            reportLoaderStartOrEndTimes += 1;
+                          };
+                        default:
+                          return Reflect.get(target, key, receiver);
+                      }
+                    },
+                    set(target, key, value, receiver) {
+                      return Reflect.set(target, key, value, receiver);
+                    },
+                    defineProperty(target, p, attrs) {
+                      return Reflect.defineProperty(target, p, attrs);
+                    },
+                  }),
+                );
+              }
             },
           );
         },

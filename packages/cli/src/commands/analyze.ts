@@ -62,7 +62,7 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
             json.cloudData || {},
             (url: string) => loadShardingFileWithSpinner(url, cwd, spinner),
           );
-        } catch (e) {
+        } catch {
           spinner.fail(red((error as Error).message));
           throw error;
         }

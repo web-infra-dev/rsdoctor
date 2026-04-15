@@ -12,10 +12,10 @@ let reportLoaderStartOrEndTimes = 0;
 async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
   const file = path.resolve(__dirname, './fixtures/a.js');
   const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
-  const esmLoader = path.resolve(
-    __dirname,
-    './fixtures/loaders/esm-serialize-query-to-comment.mjs',
-  );
+  // const esmLoader = path.resolve(
+  //   __dirname,
+  //   './fixtures/loaders/esm-serialize-query-to-comment.mjs',
+  // );
   const esmLoaderJs = path.resolve(
     __dirname,
     './fixtures/loaders/esm/esm-serialize-query-to-comment.js',

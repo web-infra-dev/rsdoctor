@@ -1,4 +1,3 @@
-// biome-ignore assist/source/organizeImports: <explanation>
 import type {
   RsdoctorPluginData,
   NormalModuleFactory,

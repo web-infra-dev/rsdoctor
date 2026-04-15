@@ -290,7 +290,7 @@ export async function appendModuleGraphByCompilation(
 
     ModuleGraphTrans.removeNoImportStyle(graph);
     return graph;
-  } catch (e) {
+  } catch {
     return graph;
   }
 }

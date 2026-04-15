@@ -97,8 +97,7 @@ test('brief mode with HTML type and custom report name should generate file with
     writeDataJson: true,
   };
 
-  const { outputDir, plugin } =
-    await compileWithBriefHtmlMode(customHtmlOptions);
+  const { outputDir } = await compileWithBriefHtmlMode(customHtmlOptions);
 
   const sdk = getSDK();
   expect(sdk?.extraConfig?.brief).toMatchObject({
@@ -140,8 +139,7 @@ test('brief mode with HTML type and writeDataJson should generate both HTML and 
     writeDataJson: true,
   };
 
-  const { outputDir, plugin } =
-    await compileWithBriefHtmlMode(htmlOptionsWithData);
+  const { outputDir } = await compileWithBriefHtmlMode(htmlOptionsWithData);
 
   const sdk = getSDK();
   expect(sdk?.extraConfig?.brief?.htmlOptions?.writeDataJson).toBe(true);
