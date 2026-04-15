@@ -73,7 +73,7 @@ test('test async', async () => {
   expect(modules!.length).toEqual(1);
   expect(getSDK()).toBeInstanceOf(RsdoctorSDK);
 
-  const { loader } = getSDK().getStoreData();
+  const { loader } = getSDK()!.getStoreData();
 
   expect(loader).toHaveLength(1);
   expect(loader[0].resource).toStrictEqual({
@@ -182,7 +182,11 @@ test('set sdk.reportLoader as null to mock this scene', async () => {
             { name: 'Foo', stage: 99999 },
             async () => {
               const sdk = getSDK();
+              if (!sdk) {
+                throw new Error('SDK is undefined');
+              }
               setSDK(
+                // @ts-ignore
                 new Proxy(sdk, {
                   get(target, key, receiver) {
                     switch (key) {

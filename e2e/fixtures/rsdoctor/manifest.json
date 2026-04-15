@@ -11,43 +11,19 @@
   },
   "data": {
     "hash": "2f92ad3f7425c572ea80ab34001e41fe",
-    "root": "/Users/wchenonly/work/gitHub/f/rsdoctor/examples/modern-minimal",
-    "envinfo": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/envinfo/0"
-    ],
+    "root": "<root>/rsdoctor/examples/modern-minimal",
+    "envinfo": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/envinfo/0"],
     "pid": 61791,
-    "errors": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/errors/0"
-    ],
-    "configs": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/configs/0"
-    ],
-    "summary": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/summary/0"
-    ],
-    "resolver": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/resolver/0"
-    ],
-    "loader": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/loader/0"
-    ],
-    "moduleGraph": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/moduleGraph/0"
-    ],
-    "chunkGraph": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/chunkGraph/0"
-    ],
-    "moduleCodeMap": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/moduleCodeMap/0"
-    ],
-    "plugin": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/plugin/0"
-    ],
-    "packageGraph": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/packageGraph/0"
-    ],
-    "otherReports": [
-      "/Users/wchenonly/work/gitHub/f/rsdoctor/e2e/fixtures/rsdoctor/otherReports/0"
-    ]
+    "errors": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/errors/0"],
+    "configs": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/configs/0"],
+    "summary": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/summary/0"],
+    "resolver": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/resolver/0"],
+    "loader": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/loader/0"],
+    "moduleGraph": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/moduleGraph/0"],
+    "chunkGraph": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/chunkGraph/0"],
+    "moduleCodeMap": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/moduleCodeMap/0"],
+    "plugin": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/plugin/0"],
+    "packageGraph": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/packageGraph/0"],
+    "otherReports": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/otherReports/0"]
   }
 }

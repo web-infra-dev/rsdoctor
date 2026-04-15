@@ -25,6 +25,8 @@ const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, {}> = function (
     if (mod.raw === false && Buffer.isBuffer(args[0])) {
       args[0] = args[0].toString();
     }
+    let start: number = 0;
+    let startHRTime: [number, number] = [0, 0];
 
     const trap = BuildUtils.createLoaderContextTrap.call(
       this,
@@ -43,8 +45,8 @@ const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, {}> = function (
       },
     );
 
-    const start = Date.now();
-    const startHRTime = process.hrtime();
+    start = Date.now();
+    startHRTime = process.hrtime();
 
     try {
       const result = mod.default.apply(trap, args);
@@ -95,6 +97,9 @@ export const pitch = function (
   const mod = getOriginLoaderModule(this);
 
   if (mod.pitch && typeof mod.pitch === 'function') {
+    let start: number = 0;
+    let startHRTime: [number, number] = [0, 0];
+
     const trap = BuildUtils.createLoaderContextTrap.call(this, (err, res) => {
       reportLoader(
         this,
@@ -108,8 +113,8 @@ export const pitch = function (
       );
     });
 
-    const start = Date.now();
-    const startHRTime = process.hrtime();
+    start = Date.now();
+    startHRTime = process.hrtime();
 
     try {
       // @ts-ignore

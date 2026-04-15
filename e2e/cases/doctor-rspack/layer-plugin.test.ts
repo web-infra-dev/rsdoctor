@@ -119,6 +119,9 @@ async function rspackCompile(
             { name: 'Foo', stage: 99999 },
             async () => {
               const sdk = getSDK();
+              if (!sdk) {
+                throw new Error('SDK is undefined');
+              }
               setSDK(
                 // @ts-ignore
                 new Proxy(sdk, {
@@ -160,12 +163,12 @@ test.afterEach(async ({ page }) => {
 test('rspack data store', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspackLayers);
-  const sdk = getSDK();
-  const datas = sdk?.getStoreData();
-  const graphData = datas?.moduleGraph;
-  const layerList = graphData?.modules.map((m) => m.layer);
-  expect(layerList?.filter((i) => i === 'modern').length).toBe(2);
-  expect(layerList?.filter((i) => i === 'legacy').length).toBe(2);
-  expect(graphData?.layers).toContain('modern');
-  expect(graphData?.layers).toContain('legacy');
+  const sdk = getSDK()!;
+  const datas = sdk.getStoreData();
+  const graphData = datas.moduleGraph;
+  const layerList = graphData.modules.map((m) => m.layer);
+  expect(layerList.filter((i) => i === 'modern').length).toBe(2);
+  expect(layerList.filter((i) => i === 'legacy').length).toBe(2);
+  expect(graphData.layers).toContain('modern');
+  expect(graphData.layers).toContain('legacy');
 });
