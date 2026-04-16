@@ -15,6 +15,19 @@ interface FullPkgJson {
   exports?: unknown;
 }
 
+function normalizePathForCompare(filePath: string): string {
+  const queryIndex = filePath.indexOf('?');
+  const hashIndex = filePath.indexOf('#');
+  const splitIndex = [queryIndex, hashIndex]
+    .filter((index) => index >= 0)
+    .reduce((min, index) => Math.min(min, index), Number.POSITIVE_INFINITY);
+  const cleanPath =
+    splitIndex === Number.POSITIVE_INFINITY
+      ? filePath
+      : filePath.slice(0, splitIndex);
+  return path.normalize(cleanPath);
+}
+
 /**
  * Extract the ESM entry path from a package.json object.
  * Checks (in priority order):
@@ -81,6 +94,7 @@ export const rule = defineRule<typeof title, Config>(() => {
     check({ moduleGraph, packageGraph, report, ruleConfig }) {
       // Cache full package.json reads to avoid repeated I/O
       const pkgJsonCache = new Map<string, FullPkgJson | null>();
+      const realPathCache = new Map<string, string>();
 
       const readPkgJson = (pkgRoot: string): FullPkgJson | null => {
         if (pkgJsonCache.has(pkgRoot)) return pkgJsonCache.get(pkgRoot)!;
@@ -95,6 +109,24 @@ export const rule = defineRule<typeof title, Config>(() => {
         } catch {
           pkgJsonCache.set(pkgRoot, null);
           return null;
+        }
+      };
+
+      const toRealPath = (filePath: string): string => {
+        const normalized = normalizePathForCompare(filePath);
+        if (realPathCache.has(normalized))
+          return realPathCache.get(normalized)!;
+        try {
+          const realPath =
+            typeof fs.realpathSync.native === 'function'
+              ? fs.realpathSync.native(normalized)
+              : fs.realpathSync(normalized);
+          const normalizedRealPath = path.normalize(realPath);
+          realPathCache.set(normalized, normalizedRealPath);
+          return normalizedRealPath;
+        } catch {
+          realPathCache.set(normalized, normalized);
+          return normalized;
         }
       };
 
@@ -121,12 +153,15 @@ export const rule = defineRule<typeof title, Config>(() => {
           continue;
 
         const pkg = packageGraph.getPackageByModule(dep.dependency);
+        if (!pkg?.root) continue;
+
+        const pkgJson = readPkgJson(pkg.root);
         const esmEntry =
-          pkg?.root &&
           !ruleConfig.ignore.some((p) => pkg.name.includes(p)) &&
-          readPkgJson(pkg.root) &&
-          extractEsmEntry(readPkgJson(pkg.root)!, pkg.root);
+          pkgJson &&
+          extractEsmEntry(pkgJson, pkg.root);
         if (!esmEntry) continue;
+        if (toRealPath(dep.dependency.path) === toRealPath(esmEntry)) continue;
 
         const groupKey = `${pkg.name}::${dep.dependency.path}`;
 
