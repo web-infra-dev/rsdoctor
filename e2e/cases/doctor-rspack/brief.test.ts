@@ -67,7 +67,11 @@ async function rspackCompile(
             { name: 'Foo', stage: 99999 },
             async () => {
               const sdk = getSDK();
+              if (!sdk) {
+                throw new Error('SDK is undefined');
+              }
               setSDK(
+                // @ts-ignore
                 new Proxy(sdk, {
                   get(target, key, receiver) {
                     switch (key) {
@@ -75,6 +79,7 @@ async function rspackCompile(
                         return null;
                       case 'reportLoaderStartOrEnd':
                         return (_data: any) => {
+                          // rslint-disable-next-line @typescript-eslint/no-unused-vars
                           reportLoaderStartOrEndTimes += 1;
                         };
                       default:

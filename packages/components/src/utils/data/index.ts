@@ -30,7 +30,7 @@ async function createDataLoader(
       console.log(`[LocalServerDataLoader]`);
       return new LocalServerDataLoader(manifest);
     }
-  } catch (error) {
+  } catch {
     console.log('[DataLoader] fallback to RemoteDataLoader');
   }
 

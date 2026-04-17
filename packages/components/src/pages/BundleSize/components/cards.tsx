@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-key */
+/* rslint-disable react/jsx-key */
 import React, { useState, useMemo } from 'react';
 import { Divider, Segmented, theme, Avatar, Tree } from 'antd';
 import { Client, SDK } from '@rsdoctor/types';

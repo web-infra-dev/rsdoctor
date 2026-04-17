@@ -12,10 +12,7 @@ let reportLoaderStartOrEndTimes = 0;
 async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
   const file = path.resolve(__dirname, './fixtures/a.js');
   const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
-  const esmLoader = path.resolve(
-    __dirname,
-    './fixtures/loaders/esm-serialize-query-to-comment.mjs',
-  );
+
   const esmLoaderJs = path.resolve(
     __dirname,
     './fixtures/loaders/esm/esm-serialize-query-to-comment.js',
@@ -96,6 +93,7 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
             async () => {
               const sdk = getSDK();
               setSDK(
+                // @ts-ignore
                 new Proxy(sdk, {
                   get(target, key, receiver) {
                     switch (key) {
@@ -135,7 +133,7 @@ test.afterEach(async ({ page }) => {
 test('rspack plugin intercept', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);
-  const sdk = getSDK();
+  const sdk = getSDK()!;
   const { done, thisCompilation } = sdk.getStoreData().plugin;
   const loaderData = sdk.getStoreData().loader;
   expect(loaderData[0].loaders.length).toBe(1);
@@ -153,7 +151,7 @@ test('rspack plugin intercept', async () => {
 test('rspack data store', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspack);
-  const sdk = getSDK();
+  const sdk = getSDK()!;
   const datas = sdk.getStoreData();
   expect(datas.errors.length).toBe(2);
   const graphData = datas.moduleGraph;

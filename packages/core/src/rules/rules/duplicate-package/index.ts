@@ -31,7 +31,7 @@ export const rule = defineRule<typeof title, Config>(() => ({
           .filter((current) => {
             // The current version and all versions are different by bit.
             const check = pkgs.reduce(
-              // eslint-disable-next-line no-bitwise
+              // rslint-disable-next-line no-bitwise
               (ans, pkg) =>
                 ans |
                 CheckVersionMap[

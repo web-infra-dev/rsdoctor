@@ -7,7 +7,7 @@ enum Keys {
   Locale = 'LOCALE',
   ViewMode = 'VIEWMODE',
   APILoaderMode4Dev = 'APILOADERMODE_DEV',
-  FirstVisit = 'FIRST_VISIT'
+  FirstVisit = 'FIRST_VISIT',
 }
 
 export function getStorage(key: string): string | null {
@@ -41,14 +41,17 @@ export function setLocaleToStorage(locale: Config['locale']) {
 }
 
 export function getViewModeFromStorage(): Config['viewMode'] {
-  const fallback: Config['viewMode'] = { bundleAlerts: ViewMode.List, compileAlerts: ViewMode.List };
+  const fallback: Config['viewMode'] = {
+    bundleAlerts: ViewMode.List,
+    compileAlerts: ViewMode.List,
+  };
   try {
     const str = getStorage(Keys.ViewMode);
     if (str) {
       return JSON.parse(str) || fallback;
     }
     return fallback;
-  } catch (error) {
+  } catch {
     return fallback;
   }
 }

@@ -1,4 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
+/* rslint-disable react/no-unescaped-entities */
 import { CloseCircleOutlined, FileSearchOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
 import { Resolver } from '@rsdoctor/utils/common';

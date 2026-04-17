@@ -132,7 +132,7 @@ export function getFilePathFormat(filePath: string): string {
       default:
         return ext;
     }
-  } catch (e) {
+  } catch {
     return '';
   }
 }

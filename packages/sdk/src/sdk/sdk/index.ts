@@ -21,8 +21,8 @@ export * from '../utils/base';
 
 const require = createRequire(import.meta.url);
 export class RsdoctorSDK<
-    T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
-  >
+  T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
+>
   extends SDKCore<T>
   implements SDK.RsdoctorBuilderSDKInstance
 {
@@ -169,7 +169,7 @@ export class RsdoctorSDK<
       const result = await new SourceMapConsumer(rawData);
       sourceMap.set(file, result);
       return result;
-    } catch (e) {
+    } catch {
       // TODO: Specific errors need to be checked.
       return Promise.resolve(undefined);
     }
@@ -413,6 +413,7 @@ export class RsdoctorSDK<
   }
 
   public getStoreData(): SDK.BuilderStoreData {
+    // rslint-disable-next-line @typescript-eslint/no-this-alias
     const ctx = this;
     const briefOptions = this.extraConfig?.brief;
     const sections = briefOptions?.jsonOptions?.sections;
@@ -563,7 +564,7 @@ export class RsdoctorSDK<
     htmlContent: string,
   ) {
     let compressTextScripts = `<script>window.${Constants.WINDOW_RSDOCTOR_TAG}={}</script>`;
-    for (let key of Object.keys(storeData)) {
+    for (const key of Object.keys(storeData)) {
       const data = storeData[key];
 
       const jsonStrFn = () => {

@@ -25,9 +25,8 @@ const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, {}> = function (
     if (mod.raw === false && Buffer.isBuffer(args[0])) {
       args[0] = args[0].toString();
     }
-
-    let start: number;
-    let startHRTime: [number, number];
+    let start: number = 0;
+    let startHRTime: [number, number] = [0, 0];
 
     const trap = BuildUtils.createLoaderContextTrap.call(
       this,
@@ -98,8 +97,8 @@ export const pitch = function (
   const mod = getOriginLoaderModule(this);
 
   if (mod.pitch && typeof mod.pitch === 'function') {
-    let start: number;
-    let startHRTime: [number, number];
+    let start: number = 0;
+    let startHRTime: [number, number] = [0, 0];
 
     const trap = BuildUtils.createLoaderContextTrap.call(this, (err, res) => {
       reportLoader(
@@ -119,6 +118,7 @@ export const pitch = function (
 
     try {
       // @ts-ignore
+      // rslint-disable-next-line prefer-rest-params
       const res = mod.pitch.apply(trap, arguments);
 
       // with pitch result

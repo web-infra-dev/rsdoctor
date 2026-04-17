@@ -132,7 +132,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
 
     const urlsPromiseList: (Promise<DataWithUrl> | DataWithUrl)[] = [];
 
-    for (let key of Object.keys(storeData)) {
+    for (const key of Object.keys(storeData)) {
       const data = storeData[key];
       // not use filesharding when the data is not object.
       if (typeof data !== 'object') {
@@ -148,7 +148,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
             return JSON.stringify(decycle(data));
           }
           return JSON.stringify(data);
-        } catch (error) {
+        } catch {
           // use the stream json stringify when call JSON.stringify failed due to the json is too large.
           return Json.stringify(data);
         }

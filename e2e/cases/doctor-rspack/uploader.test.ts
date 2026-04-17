@@ -13,7 +13,7 @@ try {
   const testHelper = require('@scripts/test-helper');
   compileByRspack = testHelper.compileByRspack;
   Compiler = require('@rspack/core').Compiler;
-} catch (error) {
+} catch {
   // Skip tests if rspack is not available
   test.skip(true, 'Rspack binding not available, skipping all tests');
 }
@@ -251,7 +251,7 @@ test.describe('Uploader Integration Tests', () => {
           await expect(element).toBeVisible({ timeout: 3000 });
           found = true;
           break;
-        } catch (error) {
+        } catch {
           // Continue to next selector
           console.log(`Selector "${selector}" not found, trying next...`);
         }
@@ -277,6 +277,8 @@ test.describe('Uploader Integration Tests', () => {
         recursive: true,
         force: true,
       });
-    } catch (error) {}
+    } catch {
+      // Ignore errors
+    }
   });
 });

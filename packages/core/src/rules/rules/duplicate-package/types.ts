@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+/* rslint-disable prettier/prettier */
 // prettier-ignore
 export enum CheckVersion {
   null       = 0,

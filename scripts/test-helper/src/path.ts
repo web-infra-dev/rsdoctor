@@ -34,7 +34,9 @@ export function getRealTemporaryDirectory() {
   try {
     ret = os.tmpdir();
     ret = fs.realpathSync(ret);
-  } catch {}
+  } catch {
+    // Ignore errors
+  }
   return ret;
 }
 

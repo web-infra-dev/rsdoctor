@@ -12,6 +12,7 @@ export const Card: React.FC<CardProps> = ({
   collapsable = false,
   children,
   title,
+  // rslint-disable-next-line @typescript-eslint/no-unused-vars
   dividerStyle,
   defaultCollapsed = false,
   ...rest

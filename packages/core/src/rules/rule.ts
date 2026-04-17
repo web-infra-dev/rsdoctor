@@ -5,9 +5,9 @@ import { noop, toSeverity } from './utils';
 
 type DefaultRuleConfig = Linter.DefaultRuleConfig;
 
-export class Rule<Config = DefaultRuleConfig>
-  implements Linter.RuleMeta<Config>
-{
+export class Rule<
+  Config = DefaultRuleConfig,
+> implements Linter.RuleMeta<Config> {
   static from<C>(data: Linter.ExtendRuleData<C>) {
     return new Rule<C>({
       check: data.check,
@@ -68,7 +68,7 @@ export class Rule<Config = DefaultRuleConfig>
 
     if (Array.isArray(opt)) {
       severity = toSeverity(opt[0], this.meta.severity);
-      // eslint-disable-next-line prefer-destructuring
+      // rslint-disable-next-line prefer-destructuring
       config = opt[1];
     } else {
       severity = toSeverity(opt, this.meta.severity);
@@ -113,7 +113,7 @@ export class Rule<Config = DefaultRuleConfig>
       if (remove) {
         replace.push(remove);
       }
-      let severity = data.severity
+      const severity = data.severity
         ? toSeverity(data.severity, this.severity)
         : this.severity;
       const error: Linter.Diagnostic = {

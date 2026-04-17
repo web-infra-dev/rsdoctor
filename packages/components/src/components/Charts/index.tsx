@@ -21,9 +21,7 @@ export const LoaderChartBase: React.FC<{
     layer: '',
   } as ISelectLoaderProps);
   // @ts-ignore
-  const [dimension, setDimension] = useState<ChartDimension>(
-    ChartDimension.Loader,
-  );
+  const [dimension] = useState<ChartDimension>(ChartDimension.Loader);
 
   return (
     <Space direction="vertical" style={{ width: '100%' }}>

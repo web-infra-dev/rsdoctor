@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals */
+/* rslint-disable no-restricted-globals */
 import { io, Socket } from 'socket.io-client';
 
 const map = new Map<string, Socket>();

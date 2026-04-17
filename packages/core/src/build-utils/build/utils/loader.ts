@@ -173,7 +173,7 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
 }
 
 export function isESMLoader(r: Plugin.BuildRuleSetRule) {
-  let _loaderName =
+  const _loaderName =
     typeof r === 'object' && typeof r?.loader === 'string'
       ? r.loader
       : typeof r === 'string'
@@ -413,8 +413,7 @@ export function createLoaderContextTrap(
                 omit(target.getOptions(), [Loader.LoaderInternalPropertyName])
             : Reflect.get(target, key, receiver);
         default:
-          const _target = target as unknown as Record<string | symbol, unknown>;
-          return _target[key];
+          return (target as unknown as Record<string | symbol, unknown>)[key];
       }
     },
     set(target, key, value, receiver) {

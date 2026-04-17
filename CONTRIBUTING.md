@@ -153,7 +153,7 @@ pnpm run e2e
 
 ## Linting
 
-To help maintain consistency and readability of the codebase, we use [Biome](https://github.com/biomejs/biome) to lint the codes.
+To help maintain consistency and readability of the codebase, we use [Rslint](https://github.com/web-infra-dev/rslint) to lint the codes.
 
 You can run the Linter by executing the following command:
 
@@ -161,7 +161,7 @@ You can run the Linter by executing the following command:
 pnpm run lint
 ```
 
-For VS Code users, you can install the [Biome VS Code extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome) to see lints while typing.
+For VS Code users, you can install the [Rslint VS Code extension](https://marketplace.visualstudio.com/items?itemName=rstack.rslint) to see lints while typing.
 
 ---
 

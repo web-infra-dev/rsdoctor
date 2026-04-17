@@ -1,4 +1,4 @@
-import { expect, test, chromium } from '@playwright/test';
+import { test, chromium } from '@playwright/test';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
 import * as core from '@actions/core';
@@ -76,6 +76,7 @@ async function rspackCompile(
                         return null;
                       case 'reportLoaderStartOrEnd':
                         return (_data: any) => {
+                          // rslint-disable-next-line @typescript-eslint/no-unused-vars
                           reportLoaderStartOrEndTimes += 1;
                         };
                       default:

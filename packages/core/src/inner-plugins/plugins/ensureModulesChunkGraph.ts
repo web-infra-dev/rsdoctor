@@ -310,7 +310,9 @@ async function getModulesInfos(
       parseBundle,
       assetsWithoutSourceMap,
     );
-  } catch (e) {}
+  } catch {
+    // Ignore errors
+  }
 }
 
 /**

@@ -49,10 +49,10 @@ export function interceptPluginHook(
       const o = tap.fn;
 
       if (tap.type === 'sync') {
-        tap.fn = function () {
+        tap.fn = function (...args: unknown[]) {
           const start = Date.now();
           try {
-            const res = o.apply(this, arguments);
+            const res = o.apply(this, args);
             reportPluginData(sdk, name, tap.name, start, tap.type, res);
             return res;
           } catch (error) {
@@ -69,10 +69,10 @@ export function interceptPluginHook(
           }
         };
       } else if (tap.type === 'async') {
-        tap.fn = async function () {
+        tap.fn = async function (...args: unknown[]) {
           const start = Date.now();
           try {
-            const res = await o.apply(this, arguments);
+            const res = await o.apply(this, args);
             reportPluginData(sdk, name, tap.name, start, tap.type, res);
             return res;
           } catch (error) {
@@ -89,15 +89,15 @@ export function interceptPluginHook(
           }
         };
       } else if (tap.type === 'promise') {
-        tap.fn = function () {
+        tap.fn = function (...args: unknown[]) {
           const start = Date.now();
 
           // Only need to go to arguments for the 0th array value to judge because beforeCompile and afterCompile have only one parameter value.
           // This isChild() judge just for summary plugin & tapPromise, packages/shared-plugin/src/plugins/summary.ts file line:38 & line:48.
-          const isChild = arguments?.[0]?.compiler?.isChild();
+          const isChild = (args?.[0] as any)?.compiler?.isChild();
 
           return o
-            .apply(this, arguments)
+            .apply(this, args)
             .then((res: unknown) => {
               if (isChild) return res;
               reportPluginData(sdk, name, tap.name, start, tap.type, res);

@@ -63,7 +63,7 @@ export class InternalBundleTagPlugin<
                 }
               }
               const chunks = compilation.chunks;
-              for (let chunk of chunks) {
+              for (const chunk of chunks) {
                 for (const file of chunk.files) {
                   if (!file || extname(file) !== '.js') {
                     continue;
@@ -76,8 +76,8 @@ export class InternalBundleTagPlugin<
                     // @ts-ignore - webpack/rspack type compatibility issue
                     (old) => {
                       const concatSource = new ConcatSource();
-                      let header = "\n console.log('RSDOCTOR_START::');\n";
-                      let footer = "\n console.log('RSDOCTOR_END::');\n";
+                      const header = "\n console.log('RSDOCTOR_START::');\n";
+                      const footer = "\n console.log('RSDOCTOR_END::');\n";
 
                       concatSource.add(header);
                       concatSource.add(old);

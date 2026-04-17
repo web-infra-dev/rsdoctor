@@ -52,7 +52,6 @@
     '@types/node',
     'acorn',
     '@rspack/resolver',
-    '@biomejs/biome',
     'json-stream-stringify',
     'fs-extra',
     'socket.io',

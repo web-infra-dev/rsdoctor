@@ -98,6 +98,7 @@ async function rspackCompile(
       ],
     },
     experiments: {
+      // @ts-ignore
       layers: true,
     },
     plugins: [
@@ -118,7 +119,11 @@ async function rspackCompile(
             { name: 'Foo', stage: 99999 },
             async () => {
               const sdk = getSDK();
+              if (!sdk) {
+                throw new Error('SDK is undefined');
+              }
               setSDK(
+                // @ts-ignore
                 new Proxy(sdk, {
                   get(target, key, receiver) {
                     switch (key) {
@@ -126,6 +131,7 @@ async function rspackCompile(
                         return null;
                       case 'reportLoaderStartOrEnd':
                         return (_data: any) => {
+                          // rslint-disable-next-line @typescript-eslint/no-unused-vars
                           reportLoaderStartOrEndTimes += 1;
                         };
                       default:
@@ -157,7 +163,7 @@ test.afterEach(async ({ page }) => {
 test('rspack data store', async () => {
   const tapName = 'Foo';
   await rspackCompile(tapName, compileByRspackLayers);
-  const sdk = getSDK();
+  const sdk = getSDK()!;
   const datas = sdk.getStoreData();
   const graphData = datas.moduleGraph;
   const layerList = graphData.modules.map((m) => m.layer);

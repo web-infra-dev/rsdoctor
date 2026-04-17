@@ -3,7 +3,6 @@ import { getSDK } from '@rsdoctor/core/plugins';
 import path from 'path';
 import { compileByRspack } from '@scripts/test-helper';
 import { createRsdoctorPlugin } from './test-utils';
-import { Compiler } from '@rspack/core';
 
 async function rspackCompile(_tapName: string) {
   const file = path.resolve(__dirname, './fixtures/a.js');

@@ -1,6 +1,5 @@
 body {
   background: green;
-  /* biome-ignore lint/a11y/useGenericFontNames: use generic font names */
   font-family: 'Open Sans';
   margin: 0;
   padding: 20px;

@@ -1,4 +1,4 @@
-import { Common } from '@rsdoctor/types';
+import type { Common } from '@rsdoctor/types';
 import { compileByWebpack5 } from '@scripts/test-helper';
 import { cloneDeep } from 'es-toolkit/compat';
 import path from 'path';
@@ -35,7 +35,7 @@ async function webpack(
           options: cloneDeep(e.options),
         }));
       const hookHandler = (
-        context: Common.PlainObject,
+        _context: Common.PlainObject,
         module: NormalModule,
       ) => {
         beforeTransformRes = beforeTransform(mapper(module));
@@ -53,7 +53,7 @@ async function webpack(
 
   const RsdoctorPlugin = createRsdoctorPlugin({});
 
-  const result = await compile(file, {
+  await compile(file, {
     optimization: {
       minimize: true,
     },
@@ -121,6 +121,7 @@ function createTests(title: string, compile: typeof compileByWebpack5) {
     const { loaderData, beforeTransformRes, afterTransformRes } = await webpack(
       compile,
       (module) => {
+        // @ts-ignore
         module.loaders[0].options.mode = 'async';
       },
     );
@@ -144,7 +145,7 @@ function createTests(title: string, compile: typeof compileByWebpack5) {
       compile,
       (module) => {
         const originLoaders = cloneDeep(module.loaders);
-
+        // @ts-ignore
         originLoaders[0].options.mode = 'async';
 
         module.loaders = [

@@ -22,9 +22,6 @@ importers:
 
   .:
     devDependencies:
-      '@biomejs/biome':
-        specifier: ^2.1.1
-        version: 2.1.1
       '@changesets/cli':
         specifier: ^2.30.0
         version: 2.30.0(@types/node@22.18.1)
@@ -33,10 +30,13 @@ importers:
         version: link:scripts/tsconfig
       '@rslib/core':
         specifier: 0.21.0
-        version: 0.21.0(core-js@3.47.0)(typescript@5.9.2)
+        version: 0.21.0(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)(typescript@5.9.2)
+      '@rslint/core':
+        specifier: ^0.4.2
+        version: 0.4.2(jiti@2.6.1)
       '@rstest/core':
         specifier: 0.9.7
-        version: 0.9.7(core-js@3.47.0)
+        version: 0.9.7(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:scripts/test-helper
@@ -63,7 +63,7 @@ importers:
         version: 3.8.2
       rsbuild-plugin-publint:
         specifier: ^0.3.4
-        version: 0.3.4(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))
+        version: 0.3.4(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))
 
   e2e:
     devDependencies:
@@ -489,7 +489,7 @@ importers:
         version: link:../utils
       '@rstest/core':
         specifier: 0.9.7
-        version: 0.9.7(core-js@3.47.0)
+        version: 0.9.7(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -680,13 +680,13 @@ importers:
         version: 1.6.1(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))
       '@rsbuild/plugin-react':
         specifier: ^1.4.6
-        version: 1.4.6(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))
+        version: 1.4.6(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))
       '@rsbuild/plugin-sass':
         specifier: ^1.5.1
-        version: 1.5.1(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))
+        version: 1.5.1(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))
       '@rsbuild/plugin-svgr':
         specifier: ^1.3.1
-        version: 1.3.1(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))(typescript@5.9.2)
+        version: 1.3.1(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))(typescript@5.9.2)
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -798,7 +798,7 @@ importers:
     dependencies:
       '@rspress/core':
         specifier: 2.0.9
-        version: 2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+        version: 2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
       '@rstack-dev/doc-ui':
         specifier: 1.12.5
         version: 1.12.5
@@ -811,19 +811,19 @@ importers:
     devDependencies:
       '@rsbuild/plugin-sass':
         specifier: ^1.5.1
-        version: 1.5.1(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))
+        version: 1.5.1(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
       '@rspress/plugin-algolia':
         specifier: 2.0.9
-        version: 2.0.9(@algolia/client-search@5.49.2)(@rspress/core@2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
+        version: 2.0.9(@algolia/client-search@5.49.2)(@rspress/core@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
       '@rspress/plugin-client-redirects':
         specifier: 2.0.9
-        version: 2.0.9(@rspress/core@2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
+        version: 2.0.9(@rspress/core@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
       '@rspress/plugin-rss':
         specifier: 2.0.5
-        version: 2.0.5(@rspress/core@2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
+        version: 2.0.5(@rspress/core@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
       '@types/node':
         specifier: ^22.8.1
         version: 22.18.1
@@ -847,13 +847,13 @@ importers:
         version: 18.3.1(react@18.3.1)
       rsbuild-plugin-google-analytics:
         specifier: ^1.0.5
-        version: 1.0.5(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))
+        version: 1.0.5(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))
       rsbuild-plugin-open-graph:
         specifier: ^1.1.2
-        version: 1.1.2(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))
+        version: 1.1.2(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))
       rspress-plugin-font-open-sans:
         specifier: ^1.0.3
-        version: 1.0.3(@rspress/core@2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
+        version: 1.0.3(@rspress/core@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
       rspress-plugin-sitemap:
         specifier: ^1.2.1
         version: 1.2.1
@@ -2004,59 +2004,6 @@ packages:
   '@babel/types@7.26.5':
     resolution: {integrity: sha512-L6mZmwFDK6Cjh1nRCLXpa6no13ZIioJDz7mdkzHv399pThrTa/k0nUlNaenOeh2kWu/iaOQYElEpKPUswUa9Vg==}
     engines: {node: '>=6.9.0'}
-
-  '@biomejs/biome@2.1.1':
-    resolution: {integrity: sha512-HFGYkxG714KzG+8tvtXCJ1t1qXQMzgWzfvQaUjxN6UeKv+KvMEuliInnbZLJm6DXFXwqVi6446EGI0sGBLIYng==}
-    engines: {node: '>=14.21.3'}
-    hasBin: true
-
-  '@biomejs/cli-darwin-arm64@2.1.1':
-    resolution: {integrity: sha512-2Muinu5ok4tWxq4nu5l19el48cwCY/vzvI7Vjbkf3CYIQkjxZLyj0Ad37Jv2OtlXYaLvv+Sfu1hFeXt/JwRRXQ==}
-    engines: {node: '>=14.21.3'}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@biomejs/cli-darwin-x64@2.1.1':
-    resolution: {integrity: sha512-cC8HM5lrgKQXLAK+6Iz2FrYW5A62pAAX6KAnRlEyLb+Q3+Kr6ur/sSuoIacqlp1yvmjHJqjYfZjPvHWnqxoEIA==}
-    engines: {node: '>=14.21.3'}
-    cpu: [x64]
-    os: [darwin]
-
-  '@biomejs/cli-linux-arm64-musl@2.1.1':
-    resolution: {integrity: sha512-/7FBLnTswu4jgV9ttI3AMIdDGqVEPIZd8I5u2D4tfCoj8rl9dnjrEQbAIDlWhUXdyWlFSz8JypH3swU9h9P+2A==}
-    engines: {node: '>=14.21.3'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@biomejs/cli-linux-arm64@2.1.1':
-    resolution: {integrity: sha512-tw4BEbhAUkWPe4WBr6IX04DJo+2jz5qpPzpW/SWvqMjb9QuHY8+J0M23V8EPY/zWU4IG8Ui0XESapR1CB49Q7g==}
-    engines: {node: '>=14.21.3'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@biomejs/cli-linux-x64-musl@2.1.1':
-    resolution: {integrity: sha512-kUu+loNI3OCD2c12cUt7M5yaaSjDnGIksZwKnueubX6c/HWUyi/0mPbTBHR49Me3F0KKjWiKM+ZOjsmC+lUt9g==}
-    engines: {node: '>=14.21.3'}
-    cpu: [x64]
-    os: [linux]
-
-  '@biomejs/cli-linux-x64@2.1.1':
-    resolution: {integrity: sha512-3WJ1GKjU7NzZb6RTbwLB59v9cTIlzjbiFLDB0z4376TkDqoNYilJaC37IomCr/aXwuU8QKkrYoHrgpSq5ffJ4Q==}
-    engines: {node: '>=14.21.3'}
-    cpu: [x64]
-    os: [linux]
-
-  '@biomejs/cli-win32-arm64@2.1.1':
-    resolution: {integrity: sha512-vEHK0v0oW+E6RUWLoxb2isI3rZo57OX9ZNyyGH701fZPj6Il0Rn1f5DMNyCmyflMwTnIQstEbs7n2BxYSqQx4Q==}
-    engines: {node: '>=14.21.3'}
-    cpu: [arm64]
-    os: [win32]
-
-  '@biomejs/cli-win32-x64@2.1.1':
-    resolution: {integrity: sha512-i2PKdn70kY++KEF/zkQFvQfX1e8SkA8hq4BgC+yE9dZqyLzB/XStY2MvwI3qswlRgnGpgncgqe0QYKVS1blksg==}
-    engines: {node: '>=14.21.3'}
-    cpu: [x64]
-    os: [win32]
 
   '@bufbuild/protobuf@2.6.0':
     resolution: {integrity: sha512-6cuonJVNOIL7lTj5zgo/Rc2bKAo4/GvN+rKCrUj7GdEHRzCk8zKOfFwUsL9nAVk5rSIsRmlgcpLzTRysopEeeg==}
@@ -3684,6 +3631,45 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  '@rslint/core@0.4.2':
+    resolution: {integrity: sha512-YlTtjsJXoDftUf+xbMUabWEFnE9ya2p+VyPY3bJGFgqeF4u0yfEOn96/V2GoLMh7HqD6XMsSdg3/0SPxdE9bcA==}
+    hasBin: true
+    peerDependencies:
+      jiti: ^2.0.0
+    peerDependenciesMeta:
+      jiti:
+        optional: true
+
+  '@rslint/darwin-arm64@0.4.2':
+    resolution: {integrity: sha512-a+YeQA+I/RsNnj9ioak7KOpuKSWjt/hv8lvcMvxLy8r4uVcc6orhmccASfEfcpm1HdZHrEm+HJ25CFd3KZrCwA==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@rslint/darwin-x64@0.4.2':
+    resolution: {integrity: sha512-KrQ870EeDXc0V4ncfvZMUEX5uphwemy+Bhia5KDEKURR6rZtpROy/RLLKEn+UkavBJi8ygTv5HXRC4EI6OEHjA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@rslint/linux-arm64@0.4.2':
+    resolution: {integrity: sha512-E2yEe0ZeMhZNuafrTfKrFy3iWKDMwpnnxCeRzq3AsTmwLmsQDgUZ2iuSxO5EL3eeAJn/7R/hQ3/MKirbcsIWlA==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rslint/linux-x64@0.4.2':
+    resolution: {integrity: sha512-vyVsZHLiaGrWrlRFN7l6I+XxCCH4sI3LkhItA//My/chFIo3zyUa6hwooqllpA3Pb/eXdKVfvurF0hceKEQFjw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@rslint/win32-arm64@0.4.2':
+    resolution: {integrity: sha512-1dsU4zm5y+GoO45qLL9pxisXh7NFdX01m26a146rS1bCu9skHqSofmufVYLNrWtnMf7Wso2iaJKVsJya077PRQ==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@rslint/win32-x64@0.4.2':
+    resolution: {integrity: sha512-QBZHeBDW3f6pEHZLB7/2/w/KTv1O5RK1dtr9yLdqev93Tcgk9qwXXLm8TB/6JP9tx+0EyVo8f0XSAS1gtLJ9hQ==}
+    cpu: [x64]
+    os: [win32]
 
   '@rspack/binding-darwin-arm64@1.1.8':
     resolution: {integrity: sha512-I7avr471ghQ3LAqKm2fuXuJPLgQ9gffn5Q4nHi8rsukuZUtiLDPfYzK1QuupEp2JXRWM1gG5lIbSUOht3cD6Ug==}
@@ -8101,6 +8087,10 @@ packages:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.4:
+    resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
+    engines: {node: '>=12'}
+
   pify@4.0.1:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
@@ -11866,41 +11856,6 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@biomejs/biome@2.1.1':
-    optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 2.1.1
-      '@biomejs/cli-darwin-x64': 2.1.1
-      '@biomejs/cli-linux-arm64': 2.1.1
-      '@biomejs/cli-linux-arm64-musl': 2.1.1
-      '@biomejs/cli-linux-x64': 2.1.1
-      '@biomejs/cli-linux-x64-musl': 2.1.1
-      '@biomejs/cli-win32-arm64': 2.1.1
-      '@biomejs/cli-win32-x64': 2.1.1
-
-  '@biomejs/cli-darwin-arm64@2.1.1':
-    optional: true
-
-  '@biomejs/cli-darwin-x64@2.1.1':
-    optional: true
-
-  '@biomejs/cli-linux-arm64-musl@2.1.1':
-    optional: true
-
-  '@biomejs/cli-linux-arm64@2.1.1':
-    optional: true
-
-  '@biomejs/cli-linux-x64-musl@2.1.1':
-    optional: true
-
-  '@biomejs/cli-linux-x64@2.1.1':
-    optional: true
-
-  '@biomejs/cli-win32-arm64@2.1.1':
-    optional: true
-
-  '@biomejs/cli-win32-x64@2.1.1':
-    optional: true
-
   '@bufbuild/protobuf@2.6.0': {}
 
   '@bundle-stats/cli-utils@4.17.0(core-js@3.45.1)':
@@ -13704,7 +13659,7 @@ snapshots:
     transitivePeerDependencies:
       - webpack-hot-middleware
 
-  '@rsbuild/plugin-react@1.4.6(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))':
+  '@rsbuild/plugin-react@1.4.6(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))':
     dependencies:
       '@rspack/plugin-react-refresh': 1.6.1(react-refresh@0.18.0)
       react-refresh: 0.18.0
@@ -13739,7 +13694,7 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.7.5
 
-  '@rsbuild/plugin-sass@1.5.1(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))':
+  '@rsbuild/plugin-sass@1.5.1(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))':
     dependencies:
       deepmerge: 4.3.1
       loader-utils: 2.0.4
@@ -13777,9 +13732,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rsbuild/plugin-svgr@1.3.1(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))(typescript@5.9.2)':
+  '@rsbuild/plugin-svgr@1.3.1(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))(typescript@5.9.2)':
     dependencies:
-      '@rsbuild/plugin-react': 1.4.6(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))
+      '@rsbuild/plugin-react': 1.4.6(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))
       '@svgr/core': 8.1.0(typescript@5.9.2)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))
       '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))(typescript@5.9.2)
@@ -13963,10 +13918,10 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rslib/core@0.21.0(core-js@3.47.0)(typescript@5.9.2)':
+  '@rslib/core@0.21.0(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)(typescript@5.9.2)':
     dependencies:
       '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
-      rsbuild-plugin-dts: 0.21.0(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))(typescript@5.9.2)
+      rsbuild-plugin-dts: 0.21.0(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))(typescript@5.9.2)
     optionalDependencies:
       typescript: 5.9.2
     transitivePeerDependencies:
@@ -13975,6 +13930,36 @@ snapshots:
       - '@module-federation/runtime-tools'
       - '@typescript/native-preview'
       - core-js
+
+  '@rslint/core@0.4.2(jiti@2.6.1)':
+    dependencies:
+      picomatch: 4.0.4
+    optionalDependencies:
+      '@rslint/darwin-arm64': 0.4.2
+      '@rslint/darwin-x64': 0.4.2
+      '@rslint/linux-arm64': 0.4.2
+      '@rslint/linux-x64': 0.4.2
+      '@rslint/win32-arm64': 0.4.2
+      '@rslint/win32-x64': 0.4.2
+      jiti: 2.6.1
+
+  '@rslint/darwin-arm64@0.4.2':
+    optional: true
+
+  '@rslint/darwin-x64@0.4.2':
+    optional: true
+
+  '@rslint/linux-arm64@0.4.2':
+    optional: true
+
+  '@rslint/linux-x64@0.4.2':
+    optional: true
+
+  '@rslint/win32-arm64@0.4.2':
+    optional: true
+
+  '@rslint/win32-x64@0.4.2':
+    optional: true
 
   '@rspack/binding-darwin-arm64@1.1.8':
     optional: true
@@ -14366,13 +14351,13 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rspress/core@2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)':
+  '@rspress/core@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)':
     dependencies:
       '@mdx-js/mdx': 3.1.1
       '@mdx-js/react': 3.1.1(@types/react@18.3.28)(react@19.2.4)
       '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
-      '@rsbuild/plugin-react': 1.4.6(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))
-      '@rspress/shared': 2.0.9(core-js@3.47.0)
+      '@rsbuild/plugin-react': 1.4.6(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))
+      '@rspress/shared': 2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
       '@shikijs/rehype': 4.0.2
       '@types/unist': 3.0.3
       '@unhead/react': 2.1.13(react@19.2.4)
@@ -14453,11 +14438,11 @@ snapshots:
       '@rspress/mdx-rs-win32-arm64-msvc': 0.6.6
       '@rspress/mdx-rs-win32-x64-msvc': 0.6.6
 
-  '@rspress/plugin-algolia@2.0.9(@algolia/client-search@5.49.2)(@rspress/core@2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
+  '@rspress/plugin-algolia@2.0.9(@algolia/client-search@5.49.2)(@rspress/core@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
     dependencies:
       '@docsearch/css': 4.6.2
       '@docsearch/react': 4.6.2(@algolia/client-search@5.49.2)(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
-      '@rspress/core': 2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+      '@rspress/core': 2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
     transitivePeerDependencies:
       - '@algolia/client-search'
       - '@types/react'
@@ -14472,9 +14457,9 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/plugin-client-redirects@2.0.9(@rspress/core@2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
+  '@rspress/plugin-client-redirects@2.0.9(@rspress/core@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
     dependencies:
-      '@rspress/core': 2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+      '@rspress/core': 2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
 
   '@rspress/plugin-container-syntax@2.0.0-alpha.3':
     dependencies:
@@ -14493,9 +14478,9 @@ snapshots:
       '@rspress/runtime': 2.0.0-alpha.3
       medium-zoom: 1.1.0
 
-  '@rspress/plugin-rss@2.0.5(@rspress/core@2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
+  '@rspress/plugin-rss@2.0.5(@rspress/core@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
     dependencies:
-      '@rspress/core': 2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+      '@rspress/core': 2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
       feed: 5.2.0
 
   '@rspress/runtime@2.0.0-alpha.3':
@@ -14517,7 +14502,7 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/shared@2.0.9(core-js@3.47.0)':
+  '@rspress/shared@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)':
     dependencies:
       '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
       '@shikijs/rehype': 4.0.2
@@ -14549,7 +14534,7 @@ snapshots:
 
   '@rstack-dev/doc-ui@1.12.5': {}
 
-  '@rstest/core@0.9.7(core-js@3.47.0)':
+  '@rstest/core@0.9.7(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)':
     dependencies:
       '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
       '@types/chai': 5.2.3
@@ -19539,6 +19524,8 @@ snapshots:
 
   picomatch@4.0.3: {}
 
+  picomatch@4.0.4: {}
+
   pify@4.0.1: {}
 
   pirates@4.0.6: {}
@@ -21319,22 +21306,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  rsbuild-plugin-dts@0.21.0(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0))(typescript@5.9.2):
+  rsbuild-plugin-dts@0.21.0(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0))(typescript@5.9.2):
     dependencies:
       '@ast-grep/napi': 0.37.0
       '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
     optionalDependencies:
       typescript: 5.9.2
 
-  rsbuild-plugin-google-analytics@1.0.5(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0)):
+  rsbuild-plugin-google-analytics@1.0.5(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)):
     optionalDependencies:
       '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
 
-  rsbuild-plugin-open-graph@1.1.2(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0)):
+  rsbuild-plugin-open-graph@1.1.2(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)):
     optionalDependencies:
       '@rsbuild/core': 2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)
 
-  rsbuild-plugin-publint@0.3.4(@rsbuild/core@2.0.0-rc.1(core-js@3.47.0)):
+  rsbuild-plugin-publint@0.3.4(@rsbuild/core@2.0.0-rc.1(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(core-js@3.47.0)):
     dependencies:
       picocolors: 1.1.1
       publint: 0.3.17
@@ -21353,9 +21340,9 @@ snapshots:
     dependencies:
       fs-extra: 11.3.0
 
-  rspress-plugin-font-open-sans@1.0.3(@rspress/core@2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)):
+  rspress-plugin-font-open-sans@1.0.3(@rspress/core@2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)):
     dependencies:
-      '@rspress/core': 2.0.9(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+      '@rspress/core': 2.0.9(@emnapi/core@1.8.1)(@emnapi/runtime@1.8.1)(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
 
   rspress-plugin-sitemap@1.2.1: {}
 

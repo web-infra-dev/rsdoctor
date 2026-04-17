@@ -1,4 +1,4 @@
-import { Config, SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/types';
 
 export class Chunk implements SDK.ChunkInstance {
   readonly id: string;
