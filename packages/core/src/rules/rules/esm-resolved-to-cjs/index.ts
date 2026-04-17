@@ -161,10 +161,11 @@ export const rule = defineRule<typeof title, Config>(() => {
           pkgJson &&
           extractEsmEntry(pkgJson, pkg.root);
         if (!esmEntry) continue;
-        if (toRealPath(dep.dependency.path) === toRealPath(esmEntry)) continue;
 
-        const groupKey = `${pkg.name}::${dep.dependency.path}`;
+        const resolvedModuleRealPath = toRealPath(dep.dependency.path);
+        if (resolvedModuleRealPath === toRealPath(esmEntry)) continue;
 
+        const groupKey = `${pkg.name}::${resolvedModuleRealPath}`;
         const issuer = {
           id: dep.module.id,
           path: dep.module.path,
