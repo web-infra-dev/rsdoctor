@@ -39,8 +39,8 @@
     "@rslint/core": "^0.4.2",
     "@changesets/cli": "^2.30.0",
     "@rsdoctor/tsconfig": "workspace:*",
-    "@rslib/core": "0.21.0",
-    "@rstest/core": "0.9.7",
+    "@rslib/core": "0.21.2",
+    "@rstest/core": "0.9.8",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "^7.0.3",
     "cspell-ban-words": "^0.0.4",
@@ -48,7 +48,7 @@
     "husky": "^9.1.7",
     "nano-staged": "^0.9.0",
     "nx": "^20.8.4",
-    "prettier": "^3.8.2",
+    "prettier": "^3.8.3",
     "rsbuild-plugin-publint": "^0.3.4"
   },
   "pnpm": {

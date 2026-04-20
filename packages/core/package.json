@@ -82,7 +82,7 @@
     "source-map": "^0.7.6"
   },
   "devDependencies": {
-    "@rspack/core": "2.0.0-rc.1",
+    "@rspack/core": "2.0.0-rc.3",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.8.1",
