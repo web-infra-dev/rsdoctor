@@ -39,7 +39,7 @@
     "@rslint/core": "^0.4.2",
     "@changesets/cli": "^2.31.0",
     "@rsdoctor/tsconfig": "workspace:*",
-    "@rslib/core": "0.21.0",
+    "@rslib/core": "0.21.2",
     "@rstest/core": "catalog:",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",
