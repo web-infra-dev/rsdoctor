@@ -13,16 +13,16 @@
   "license": "MIT",
   "dependencies": {
     "antd": "5.15.3",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "devDependencies": {
     "@modern-js/app-tools": "^2.70.7",
     "@modern-js/runtime": "^2.70.7",
     "@rsdoctor/webpack-plugin": "workspace:*",
     "@types/node": "^22.8.1",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "typescript": "^5.9.2"
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
   }
 }

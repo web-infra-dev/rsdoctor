@@ -25,15 +25,15 @@
     "dev": "rslib build --watch"
   },
   "dependencies": {
-    "@rsbuild/core": "^1.7.5",
-    "@rspack/core": "2.0.0-rc.3",
+    "@rsbuild/core": "catalog:",
+    "@rspack/core": "catalog:",
     "@types/lodash": "^4.17.24",
-    "@types/node": "^22.8.1",
-    "es-toolkit": "^1.45.1",
-    "memfs": "4.57.2",
-    "typescript": "^5.9.2",
+    "@types/node": "catalog:",
+    "es-toolkit": "catalog:",
+    "memfs": "4.57.1",
+    "typescript": "catalog:",
     "upath": "2.0.1",
-    "webpack": "^5.105.4"
+    "webpack": "catalog:"
   },
   "publishConfig": {
     "access": "public",

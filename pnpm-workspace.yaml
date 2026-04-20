@@ -4,3 +4,40 @@ packages:
   - 'packages/**'
   - 'examples/**'
   - '!**/compiled/**'
+
+catalog:
+  '@rsbuild/core': ^1.7.5
+  '@rsbuild/plugin-check-syntax': 1.6.1
+  '@rsbuild/plugin-react': ^1.4.6
+  '@rsbuild/plugin-sass': ^1.5.1
+  '@rspack/core': 2.0.0-rc.3
+  '@rstest/core': 0.9.7
+  '@types/body-parser': 1.19.6
+  '@types/connect': 3.4.38
+  '@types/estree': 1.0.5
+  '@types/fs-extra': ^11.0.4
+  '@types/node': ^22.8.1
+  '@types/path-browserify': 1.0.3
+  '@types/react': ^18.3.28
+  '@types/react-dom': ^18.3.7
+  '@types/tapable': 2.3.0
+  antd: 5.19.1
+  clsx: ^2.1.1
+  cross-env: ^7.0.3
+  dayjs: 1.11.20
+  es-toolkit: ^1.45.1
+  filesize: ^10.1.6
+  fs-extra: ^11.1.1
+  path-browserify: 1.0.1
+  picocolors: ^1.1.1
+  prebundle: 1.6.4
+  react: 18.3.1
+  react-dom: 18.3.1
+  react-markdown: ^9.1.0
+  react-router-dom: 6.30.3
+  sirv: 3.0.2
+  socket.io-client: 4.8.1
+  source-map: ^0.7.6
+  tslib: 2.8.1
+  typescript: ^5.9.2
+  webpack: ^5.105.4
