@@ -61,6 +61,7 @@ export enum API {
   GetModuleDetails = '/api/graph/module/details',
   GetModulesByModuleIds = '/api/graph/modules/ids',
   GetEntryPoints = '/api/graph/entrypoints',
+  GetChunkGroupGraph = '/api/graph/chunk-group',
   GetModuleCodeByModuleId = '/api/graph/module/code',
   GetModuleCodeByModuleIds = '/api/graph/module/codes',
   GetAllModuleGraph = '/api/graph/module/all',
@@ -147,6 +148,7 @@ export interface ResponseTypes
     relativePath: string;
   }[];
   [API.GetAllChunkGraph]: SDK.ChunkData[];
+  [API.GetChunkGroupGraph]: SDK.ChunkGroupGraphData | undefined;
   [API.GetModuleByName]: { id: number; path: string }[];
   [API.GetModuleIssuerPath]: StatsModule['issuerPath'];
   [API.GetPackageInfo]: SDK.PackageData[];

@@ -40,11 +40,56 @@ export async function fetchJSONByUrl(url: string) {
     }
   }
 
-  return json as Manifest.RsdoctorManifestWithShardingFiles;
+  return normalizeManifestShardingUrls(
+    json as Manifest.RsdoctorManifestWithShardingFiles,
+    url,
+  );
 }
 
 export function fetchJSONByUrls(urls: string[]) {
   return Promise.all(urls.map((url) => fetchJSONByUrl(url)));
+}
+
+function normalizeManifestShardingUrls(
+  manifest: Manifest.RsdoctorManifestWithShardingFiles,
+  manifestUrl: string,
+) {
+  const resolvedManifestUrl = new URL(manifestUrl, window.location.href);
+  const isShardingPathList = (value: unknown): value is string[] =>
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every((item) => typeof item === 'string');
+
+  const normalizeData = (
+    data: Manifest.RsdoctorManifestWithShardingFiles['data'],
+  ) => {
+    return Object.fromEntries(
+      Object.entries(data).map(([key, value]) => {
+        if (!isShardingPathList(value)) {
+          return [key, value];
+        }
+
+        return [
+          key,
+          value.map((item) => {
+            if (Url.isUrl(item)) {
+              return item;
+            }
+
+            return new URL(item, resolvedManifestUrl).toString();
+          }),
+        ];
+      }),
+    ) as Manifest.RsdoctorManifestWithShardingFiles['data'];
+  };
+
+  return {
+    ...manifest,
+    data: normalizeData(manifest.data),
+    cloudData: manifest.cloudData
+      ? normalizeData(manifest.cloudData)
+      : undefined,
+  };
 }
 
 export async function parseManifest(
