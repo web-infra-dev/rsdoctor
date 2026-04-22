@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/agent-cli",
-  "version": "0.0.1",
+  "version": "0.1.0-beta.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -22,13 +22,14 @@
     "dev": "rslib build --watch",
     "test": "rstest run"
   },
-  "dependencies": {},
+  "dependencies": {
+    "cac": "^7.0.0"
+  },
   "devDependencies": {
-    "@rsdoctor/tsconfig": "workspace:*",
     "@rslib/core": "0.21.2",
-    "@rstest/core": "0.9.8",
-    "@types/node": "^22.8.1",
-    "typescript": "^5.9.2"
+    "@rstest/core": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
   },
   "publishConfig": {
     "access": "public",

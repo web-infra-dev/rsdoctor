@@ -1,9 +1,11 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it, rs } from '@rstest/core';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
 import { getToolCatalog } from '../src/commands';
+import * as datasource from '../src/commands/datasource';
+import { detectDuplicatePackages } from '../src/commands/handlers/packages';
 import {
   createInProcessRsdoctorCliToolExecutor,
   createRsdoctorCliToolExecutor,
@@ -50,7 +52,18 @@ describe('rsdoctor cli tool executor', () => {
   });
 
   it('supports tool output filtering and paging controls', async () => {
-    const catalog = getToolCatalog();
+    const catalog = [
+      {
+        name: 'array_tool',
+        description: 'test tool',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {},
+          additionalProperties: true,
+        },
+        buildCommand: () => ['array-tool'],
+      },
+    ];
     const executor = createRsdoctorCliToolExecutor({
       tools: catalog,
       runCommand: async () =>
@@ -64,7 +77,7 @@ describe('rsdoctor cli tool executor', () => {
     });
 
     const result = await executor.execute({
-      toolName: 'chunks_list',
+      toolName: 'array_tool',
       input: {
         filter: 'id,name',
         page: 2,
@@ -83,6 +96,88 @@ describe('rsdoctor cli tool executor', () => {
         items: [{ id: 2, name: 'b' }],
       },
     });
+  });
+
+  it('passes paging controls into source-paginated tool commands', async () => {
+    const commands: string[][] = [];
+    const catalog = getToolCatalog();
+    const executor = createRsdoctorCliToolExecutor({
+      tools: catalog,
+      runCommand: async (command) => {
+        commands.push(command);
+        return JSON.stringify({
+          ok: true,
+          data: {
+            total: 2,
+            pageNumber: 2,
+            pageSize: 1,
+            totalPages: 2,
+            items: [{ id: 2, name: 'async' }],
+          },
+        });
+      },
+    });
+
+    const result = await executor.execute({
+      toolName: 'chunks_list',
+      input: {
+        page: 2,
+        pageSize: 1,
+      },
+      dataFile: '/tmp/demo.json',
+    });
+
+    expect(commands).toEqual([
+      [
+        'rsdoctor-agent',
+        'chunks',
+        'list',
+        '--data-file',
+        '/tmp/demo.json',
+        '--compact',
+        '--page-number',
+        '2',
+        '--page-size',
+        '1',
+      ],
+    ]);
+    expect(result).toEqual({
+      ok: true,
+      data: {
+        total: 2,
+        pageNumber: 2,
+        pageSize: 1,
+        totalPages: 2,
+        items: [{ id: 2, name: 'async' }],
+      },
+    });
+  });
+
+  it('detects duplicate package rules by code instead of description text', async () => {
+    const spy = rs.spyOn(datasource, 'getRules').mockReturnValue([
+      {
+        code: 'E1001',
+        description: 'Duplicate package rule without literal token in text',
+      },
+    ] as never);
+
+    const result = await detectDuplicatePackages();
+
+    expect(result).toEqual({
+      ok: true,
+      data: {
+        rule: {
+          code: 'E1001',
+          description: 'Duplicate package rule without literal token in text',
+        },
+        totalRules: 1,
+        note: undefined,
+      },
+      description:
+        'Detect duplicate packages using E1001 overlay rule if present.',
+    });
+
+    spy.mockRestore();
   });
 
   it('executes tools in process and reuses the parsed data file', async () => {

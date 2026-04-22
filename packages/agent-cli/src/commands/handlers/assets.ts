@@ -30,6 +30,8 @@ interface RsdoctorData {
   };
 }
 
+type FilterOrExtensions = string | string[] | ((asset: Asset) => boolean);
+
 const Constants = {
   JSExtension: '.js',
   CSSExtension: '.css',
@@ -65,12 +67,24 @@ const filterAssetsByExtensions = (
 
 const filterAssets = (
   assets: Asset[],
-  filterOrExtensions?: string | string[] | ((asset: Asset) => boolean),
+  filterOrExtensions?: FilterOrExtensions,
 ): Asset[] => {
   if (!filterOrExtensions) return assets;
   if (typeof filterOrExtensions === 'function')
     return assets.filter(filterOrExtensions);
   return filterAssetsByExtensions(assets, filterOrExtensions);
+};
+
+const isAssetMatchFilter = (
+  asset: Asset,
+  filterOrExtensions?: FilterOrExtensions,
+): boolean => {
+  if (!filterOrExtensions) return true;
+  if (typeof filterOrExtensions === 'function')
+    return filterOrExtensions(asset);
+  if (typeof filterOrExtensions === 'string')
+    return isAssetMatchExtension(asset, filterOrExtensions);
+  return isAssetMatchExtensions(asset, filterOrExtensions);
 };
 
 const isInitialAsset = (asset: Asset, chunks: Chunk[]): boolean => {
@@ -90,7 +104,7 @@ const getAssetsSizeInfo = (
     filterOrExtensions,
   }: {
     withFileContent?: boolean;
-    filterOrExtensions?: string | string[] | ((asset: Asset) => boolean);
+    filterOrExtensions?: FilterOrExtensions;
   } = {},
 ) => {
   let filtered = assets.filter(
@@ -115,12 +129,14 @@ const getInitialAssetsSizeInfo = (
   chunks: Chunk[],
   options: {
     withFileContent?: boolean;
-    filterOrExtensions?: string | string[] | ((asset: Asset) => boolean);
+    filterOrExtensions?: FilterOrExtensions;
   } = {},
 ) =>
   getAssetsSizeInfo(assets, chunks, {
     ...options,
-    filterOrExtensions: (asset: Asset) => isInitialAsset(asset, chunks),
+    filterOrExtensions: (asset: Asset) =>
+      isAssetMatchFilter(asset, options.filterOrExtensions) &&
+      isInitialAsset(asset, chunks),
   });
 
 const diffSize = (
@@ -140,7 +156,7 @@ const diffSize = (
 const diffAssetsByExtensions = (
   baseline: ChunkGraph,
   current: ChunkGraph,
-  filterOrExtensions?: string | string[] | ((asset: Asset) => boolean),
+  filterOrExtensions?: FilterOrExtensions,
   isInitial = false,
 ) => {
   const { size: bSize, count: bCount } = isInitial

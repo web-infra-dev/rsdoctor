@@ -9,6 +9,7 @@ import {
 import { paginateItems, parsePositiveInt, requireArg } from '../utils';
 
 interface Rule {
+  code?: string;
   description?: string;
 }
 
@@ -93,9 +94,7 @@ export async function detectDuplicatePackages(): Promise<{
   description: string;
 }> {
   const rules = getRules() as Rule[];
-  const duplicateRule = rules?.find((rule) =>
-    rule.description?.includes('E1001'),
-  );
+  const duplicateRule = rules?.find((rule) => rule.code === 'E1001');
   return {
     ok: true,
     data: {

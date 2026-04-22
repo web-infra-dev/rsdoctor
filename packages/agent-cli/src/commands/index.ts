@@ -1,48 +1,28 @@
+import { cac } from 'cac';
+
 import { route } from './router';
 
 function parseAiArgs(argv: string[]) {
-  const args = [...argv];
-  const commandArgs: string[] = [];
-  let dataFile: string | undefined;
-  let compact = false;
-  let describe = false;
-  let schema: string | undefined;
-
-  while (args.length > 0) {
-    const current = args.shift();
-    if (!current) {
-      continue;
-    }
-
-    if (current === '--data-file') {
-      dataFile = args.shift();
-      continue;
-    }
-
-    if (current === '--compact') {
-      compact = true;
-      continue;
-    }
-
-    if (current === '--describe') {
-      describe = true;
-      continue;
-    }
-
-    if (current === '--schema') {
-      schema = args.shift();
-      continue;
-    }
-
-    commandArgs.push(current);
-  }
+  const cli = cac('rsdoctor-agent');
+  const parsed = cli
+    .option('--data-file <path>', 'Rsdoctor data file path.')
+    .option('--compact', 'Print compact JSON.')
+    .option('--describe', 'Describe all direct subcommands.')
+    .option('--schema <command>', 'Inspect one direct subcommand schema.')
+    .parse(['node', 'rsdoctor-agent', ...argv], { run: false });
 
   return {
-    args: commandArgs,
-    dataFile,
-    compact,
-    describe,
-    schema,
+    args: parsed.args,
+    dataFile:
+      typeof parsed.options.dataFile === 'string'
+        ? parsed.options.dataFile
+        : undefined,
+    compact: parsed.options.compact === true,
+    describe: parsed.options.describe === true,
+    schema:
+      typeof parsed.options.schema === 'string'
+        ? parsed.options.schema
+        : undefined,
   };
 }
 

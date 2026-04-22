@@ -17,6 +17,10 @@ export interface ToolDefinition {
   description: string;
   inputSchema: JsonSchema;
   buildCommand: (context: ToolCommandContext) => string[];
+  sourcePagination?: {
+    page: string;
+    pageSize: string;
+  };
 }
 
 export interface ToolExecutionRequest {

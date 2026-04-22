@@ -7,6 +7,7 @@ export interface ToolResultControls {
 interface ParsedControls {
   controls: ToolResultControls;
   passthroughInput: Record<string, unknown>;
+  paginateResult: boolean;
 }
 
 const CONTROL_KEYS = new Set(['filter', 'page', 'pageSize']);
@@ -215,6 +216,12 @@ function applyControlsToPayload(
 
 export function splitToolInputControls(
   input: Record<string, unknown>,
+  options?: {
+    sourcePagination?: {
+      page: string;
+      pageSize: string;
+    };
+  },
 ): ParsedControls {
   const controls: ToolResultControls = {
     filterPaths: parseFilterPaths(input.filter),
@@ -227,30 +234,58 @@ export function splitToolInputControls(
     if (CONTROL_KEYS.has(key)) {
       continue;
     }
+    if (
+      key === options?.sourcePagination?.page ||
+      key === options?.sourcePagination?.pageSize
+    ) {
+      continue;
+    }
     passthroughInput[key] = value;
+  }
+
+  if (options?.sourcePagination) {
+    if (controls.page !== undefined) {
+      passthroughInput[options.sourcePagination.page] = controls.page;
+    }
+    if (controls.pageSize !== undefined) {
+      passthroughInput[options.sourcePagination.pageSize] = controls.pageSize;
+    }
   }
 
   return {
     controls,
     passthroughInput,
+    paginateResult: options?.sourcePagination === undefined,
   };
 }
 
 export function applyToolResultControls(
   result: unknown,
   controls: ToolResultControls,
+  options?: {
+    paginateResult?: boolean;
+  },
 ): unknown {
   if (!result || typeof result !== 'object') {
-    return applyControlsToPayload(result, controls);
+    return applyControlsToPayload(result, {
+      ...controls,
+      page: options?.paginateResult === false ? undefined : controls.page,
+    });
   }
 
   const response = result as Record<string, unknown>;
   if ('data' in response) {
     return {
       ...response,
-      data: applyControlsToPayload(response.data, controls),
+      data: applyControlsToPayload(response.data, {
+        ...controls,
+        page: options?.paginateResult === false ? undefined : controls.page,
+      }),
     };
   }
 
-  return applyControlsToPayload(result, controls);
+  return applyControlsToPayload(result, {
+    ...controls,
+    page: options?.paginateResult === false ? undefined : controls.page,
+  });
 }

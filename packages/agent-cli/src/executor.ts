@@ -43,10 +43,11 @@ export function createRsdoctorCliToolExecutor({
 }): ToolExecutor {
   return {
     async execute(request: ToolExecutionRequest): Promise<unknown> {
-      const { controls, passthroughInput } = splitToolInputControls(
-        request.input,
-      );
       const tool = getToolByName(tools, request.toolName);
+      const { controls, passthroughInput, paginateResult } =
+        splitToolInputControls(request.input, {
+          sourcePagination: tool.sourcePagination,
+        });
       const command = tool.buildCommand({
         dataFile: request.dataFile,
         input: passthroughInput,
@@ -55,7 +56,9 @@ export function createRsdoctorCliToolExecutor({
 
       try {
         const parsed = JSON.parse(stdout);
-        return applyToolResultControls(parsed, controls);
+        return applyToolResultControls(parsed, controls, {
+          paginateResult,
+        });
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         throw new Error(
@@ -71,18 +74,19 @@ export function createInProcessRsdoctorCliToolExecutor(): ToolExecutor {
 
   return {
     async execute(request: ToolExecutionRequest): Promise<unknown> {
-      const { controls, passthroughInput } = splitToolInputControls(
-        request.input,
-      );
       const tool = toolExecutors[request.toolName];
       if (!tool) {
         throw new Error(`Unknown rsdoctor tool: ${request.toolName}`);
       }
+      const { controls, passthroughInput, paginateResult } =
+        splitToolInputControls(request.input, {
+          sourcePagination: tool.sourcePagination,
+        });
       const result = await tool.execute({
         dataFile: request.dataFile,
         input: passthroughInput,
       });
-      return applyToolResultControls(result, controls);
+      return applyToolResultControls(result, controls, { paginateResult });
     },
   };
 }

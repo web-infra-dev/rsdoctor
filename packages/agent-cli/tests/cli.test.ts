@@ -79,6 +79,68 @@ describe('agent cli', () => {
     );
   });
 
+  it('keeps extension filters when diffing initial assets', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const baselineFile = path.join(tempDir, 'baseline.json');
+    const currentFile = path.join(tempDir, 'current.json');
+    const createData = (
+      jsSize: number,
+      cssSize: number,
+      imageSize: number,
+    ) => ({
+      data: {
+        chunkGraph: {
+          chunks: [
+            { id: 1, initial: true },
+            { id: 2, initial: false },
+          ],
+          assets: [
+            { path: 'main.js', size: jsSize, chunks: [1] },
+            { path: 'style.css', size: cssSize, chunks: [1] },
+            { path: 'logo.png', size: imageSize, chunks: [1] },
+            { path: 'async.js', size: 50, chunks: [2] },
+          ],
+        },
+      },
+    });
+
+    fs.writeFileSync(baselineFile, JSON.stringify(createData(100, 20, 30)));
+    fs.writeFileSync(currentFile, JSON.stringify(createData(120, 25, 35)));
+
+    const stdout: string[] = [];
+
+    try {
+      const exitCode = await runCli(
+        [
+          'assets',
+          'diff',
+          '--data-file',
+          baselineFile,
+          '--baseline',
+          baselineFile,
+          '--current',
+          currentFile,
+        ],
+        {
+          write: (text) => stdout.push(text),
+        },
+      );
+
+      expect(exitCode).toBe(0);
+      const output = JSON.parse(stdout.join(''));
+      expect(output.data.diff.js.initial).toMatchObject({
+        size: { baseline: 100, current: 120 },
+        count: { baseline: 1, current: 1 },
+      });
+      expect(output.data.diff.css.initial).toMatchObject({
+        size: { baseline: 20, current: 25 },
+        count: { baseline: 1, current: 1 },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it('shows the provider-agnostic binary name in usage text', async () => {
     const stderr: string[] = [];
 
@@ -133,6 +195,69 @@ describe('agent cli', () => {
     });
   });
 
+  it('supports equals-style query options', async () => {
+    const chunks: string[] = [];
+    let capturedRequest:
+      | {
+          toolName: string;
+          input: Record<string, unknown>;
+          dataFile: string;
+        }
+      | undefined;
+
+    const exitCode = await runCli(
+      [
+        'query',
+        'packages_duplicates',
+        '--data-file=/tmp/demo.json',
+        '--input={"includeDev":true}',
+        '--filter=rule,totalRules',
+        '--page=2',
+        '--page-size=10',
+      ],
+      {
+        executeTool: async (request) => {
+          capturedRequest = request;
+          return { ok: true };
+        },
+        write: (text) => chunks.push(text),
+      },
+    );
+
+    expect(exitCode).toBe(0);
+    expect(capturedRequest).toEqual({
+      toolName: 'packages_duplicates',
+      dataFile: '/tmp/demo.json',
+      input: {
+        includeDev: true,
+        filter: 'rule,totalRules',
+        page: 2,
+        pageSize: 10,
+      },
+    });
+    expect(JSON.parse(chunks.join(''))).toEqual({ ok: true });
+  });
+
+  it('rejects query pagination options without values', async () => {
+    const stderr: string[] = [];
+
+    const exitCode = await runCli(
+      [
+        'query',
+        'packages_duplicates',
+        '--data-file',
+        '/tmp/demo.json',
+        '--page',
+      ],
+      {
+        writeError: (text) => stderr.push(text),
+      },
+    );
+
+    expect(exitCode).toBe(1);
+    expect(stderr.join('')).toContain('--page must be a positive integer.');
+  });
+
   it('executes a direct group command without the ai prefix', async () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
     const dataFile = path.join(tempDir, 'rsdoctor-data.json');
@@ -181,6 +306,80 @@ describe('agent cli', () => {
       },
       description: 'List all chunks (id, name, size, modules).',
     });
+  });
+
+  it('supports equals-style options for direct group commands', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        data: {
+          chunkGraph: {
+            chunks: [
+              {
+                id: 1,
+                name: 'main',
+                size: 1024,
+                modules: [],
+              },
+              {
+                id: 2,
+                name: 'async',
+                size: 512,
+                modules: [],
+              },
+            ],
+            assets: [],
+          },
+        },
+      }),
+    );
+
+    const chunks: string[] = [];
+
+    const exitCode = await runCli(
+      [
+        'chunks',
+        'list',
+        `--data-file=${dataFile}`,
+        '--page-number=2',
+        '--page-size=1',
+      ],
+      {
+        write: (text) => chunks.push(text),
+      },
+    );
+
+    expect(exitCode).toBe(0);
+    expect(JSON.parse(chunks.join('')).data).toEqual({
+      total: 2,
+      pageNumber: 2,
+      pageSize: 1,
+      totalPages: 2,
+      items: [
+        {
+          id: 2,
+          name: 'async',
+          size: 512,
+          modules: [],
+          assets: [],
+        },
+      ],
+    });
+  });
+
+  it('supports equals-style schema introspection', async () => {
+    const chunks: string[] = [];
+
+    const exitCode = await runCli(['--schema=chunks.list'], {
+      write: (text) => chunks.push(text),
+    });
+
+    expect(exitCode).toBe(0);
+    expect(JSON.parse(chunks.join('')).description).toContain(
+      'List all chunks',
+    );
   });
 
   it('answers which modules were not tree-shaken for a side-effects category', async () => {

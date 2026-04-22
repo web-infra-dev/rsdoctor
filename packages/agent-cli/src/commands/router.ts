@@ -59,6 +59,11 @@ interface SubcommandDef {
   toolDescription?: string;
 }
 
+interface SourcePaginationConfig {
+  page: string;
+  pageSize: string;
+}
+
 const optimizeStepOptions: OptionDef[] = [
   {
     name: '--step',
@@ -548,6 +553,7 @@ interface ToolCatalogEntry {
     dataFile: string;
     input: Record<string, unknown>;
   }) => string[];
+  sourcePagination?: SourcePaginationConfig;
 }
 
 interface InProcessToolEntry {
@@ -555,6 +561,23 @@ interface InProcessToolEntry {
     dataFile: string;
     input: Record<string, unknown>;
   }) => Promise<unknown>;
+  sourcePagination?: SourcePaginationConfig;
+}
+
+function getSourcePaginationConfig(
+  options: OptionDef[],
+): SourcePaginationConfig | undefined {
+  const hasPageNumber = options.some((opt) => opt.name === '--page-number');
+  const hasPageSize = options.some((opt) => opt.name === '--page-size');
+
+  if (!hasPageNumber || !hasPageSize) {
+    return undefined;
+  }
+
+  return {
+    page: 'page-number',
+    pageSize: 'page-size',
+  };
 }
 
 function appendToolSpecificOptions(
@@ -609,6 +632,7 @@ export function getToolCatalog(): ToolCatalogEntry[] {
         name: def.toolName,
         description: def.toolDescription ?? def.description,
         inputSchema: toolInputSchema,
+        sourcePagination: getSourcePaginationConfig(def.options),
         buildCommand: ({ dataFile, input }) =>
           appendToolSpecificOptions(
             [
@@ -667,6 +691,7 @@ export function getInProcessToolExecutors(): Record<
     for (const def of Object.values(subcommands)) {
       if (!def.toolName) continue;
       tools[def.toolName] = {
+        sourcePagination: getSourcePaginationConfig(def.options),
         execute: async ({ dataFile, input }) => {
           setDataFilePath(dataFile);
           return def.handler(input as Record<string, string | true>);

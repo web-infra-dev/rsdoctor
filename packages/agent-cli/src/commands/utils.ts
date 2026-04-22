@@ -1,3 +1,5 @@
+import { cac } from 'cac';
+
 // --- from utils.ts ---
 
 interface Chunk {
@@ -177,28 +179,25 @@ export const createExecutor = (
   };
 };
 
-// --- new: parse subcommand-specific options from process.argv ---
-
-/**
- * Parse subcommand-specific options (--id, --path, etc.) from process.argv.
- * CAC's allowUnknownOptions() does not parse these; we extract them manually.
- */
 export function parseSubcommandOptions(
   argv: string[],
 ): Record<string, string | true> {
+  const parsed = cac('rsdoctor-agent').parse(
+    ['node', 'rsdoctor-agent', ...argv],
+    { run: false },
+  );
   const opts: Record<string, string | true> = {};
-  for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i];
-    if (arg.startsWith('--')) {
-      const key = arg.slice(2);
-      const next = argv[i + 1];
-      if (next && !next.startsWith('--')) {
-        opts[key] = next;
-        i++;
-      } else {
-        opts[key] = true;
-      }
+
+  for (const [key, value] of Object.entries(parsed.options)) {
+    if (key === '--') {
+      continue;
     }
+    const optionName = key.replace(
+      /[A-Z]/g,
+      (char) => `-${char.toLowerCase()}`,
+    );
+    opts[optionName] = value === true ? true : String(value);
   }
+
   return opts;
 }

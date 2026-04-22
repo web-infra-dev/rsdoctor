@@ -1,3 +1,5 @@
+import { cac } from 'cac';
+
 import { createRsdoctorCliToolExecutor } from './executor';
 import {
   describeRunSubcommands,
@@ -6,65 +8,59 @@ import {
   runAiCli,
 } from './commands';
 
-function parseArgs(argv: string[]) {
-  const args = [...argv];
-  const command = args.shift() ?? '';
-  const toolName = command === 'query' ? (args.shift() ?? '') : '';
-  let dataFile = '';
-  let input = '{}';
-  let filter = '';
-  let page: number | undefined;
-  let pageSize: number | undefined;
+function parseStringOption(value: unknown, fallback: string) {
+  return typeof value === 'string' ? value : fallback;
+}
 
-  while (args.length > 0) {
-    const current = args.shift();
-
-    if (!current) {
-      continue;
-    }
-
-    if (current === '--data-file') {
-      dataFile = args.shift() ?? '';
-      continue;
-    }
-
-    if (current === '--input') {
-      input = args.shift() ?? '{}';
-      continue;
-    }
-
-    if (current === '--filter') {
-      filter = args.shift() ?? '';
-      continue;
-    }
-
-    if (current === '--page') {
-      const value = Number(args.shift() ?? '');
-      if (!Number.isFinite(value) || !Number.isInteger(value) || value < 1) {
-        throw new Error('--page must be a positive integer.');
-      }
-      page = value;
-      continue;
-    }
-
-    if (current === '--page-size') {
-      const value = Number(args.shift() ?? '');
-      if (!Number.isFinite(value) || !Number.isInteger(value) || value < 1) {
-        throw new Error('--page-size must be a positive integer.');
-      }
-      pageSize = value;
-      continue;
-    }
+function parsePositiveIntegerOption(
+  value: unknown,
+  optionName: string,
+): number | undefined {
+  if (value === undefined) {
+    return undefined;
   }
+
+  if (typeof value === 'boolean') {
+    throw new Error(`${optionName} must be a positive integer.`);
+  }
+
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || !Number.isInteger(parsed) || parsed < 1) {
+    throw new Error(`${optionName} must be a positive integer.`);
+  }
+  return parsed;
+}
+
+function parseArgs(argv: string[]) {
+  const cli = cac('rsdoctor-agent');
+
+  cli.command('list', 'List all available subcommands.');
+  cli
+    .command('query <toolName>', 'Execute one mapped tool from the catalog.')
+    .allowUnknownOptions()
+    .option('--data-file <path>', 'Rsdoctor data file path.')
+    .option('--input <json>', 'Tool input JSON.', { default: '{}' })
+    .option('--filter <fields>', 'Comma-separated field paths to keep.')
+    .option('--page <n>', 'Page number for paginating output collections.')
+    .option('--page-size <n>', 'Page size for paginating output collections.');
+
+  const parsed = cli.parse(['node', 'rsdoctor-agent', ...argv], {
+    run: false,
+  });
+  const command = cli.matchedCommandName ?? '';
+  const [toolName = ''] = parsed.args;
 
   return {
     command,
     toolName,
-    dataFile,
-    input,
-    filter,
-    page,
-    pageSize,
+    dataFile: parseStringOption(parsed.options.dataFile, ''),
+    input: parseStringOption(parsed.options.input, '{}'),
+    filter: parseStringOption(parsed.options.filter, ''),
+    page: parsePositiveIntegerOption(parsed.options.page, '--page'),
+    pageSize: parsePositiveIntegerOption(
+      parsed.options.pageSize,
+      '--page-size',
+    ),
   };
 }
 
