@@ -5,6 +5,7 @@ packages:
   - 'examples/**'
   - '!**/compiled/**'
 
+
 catalog:
   '@rstest/core': 0.9.7
   '@types/body-parser': 1.19.6
