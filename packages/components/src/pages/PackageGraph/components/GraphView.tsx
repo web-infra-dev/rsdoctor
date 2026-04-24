@@ -1,7 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import EChartsReactCore from 'echarts-for-react/esm/core';
 import * as echarts from 'echarts/core';
-import { GraphChart, type GraphSeriesOption } from 'echarts/charts';
+import {
+  GraphChart,
+  TreemapChart,
+  type GraphSeriesOption,
+  type TreemapSeriesOption,
+} from 'echarts/charts';
 import {
   TooltipComponent,
   LegendComponent,
@@ -14,17 +19,39 @@ import { Alert, Empty, Input, Space, Switch, Typography } from 'antd';
 import { SDK } from '@rsdoctor/types';
 import { formatSize } from 'src/utils';
 import { DetailPanel, PackageNodeInfo } from './DetailPanel';
+import { buildPackageSizeTreemapData } from './packageSizeTreemap';
 
-echarts.use([GraphChart, TooltipComponent, LegendComponent, CanvasRenderer]);
+echarts.use([
+  GraphChart,
+  TreemapChart,
+  TooltipComponent,
+  LegendComponent,
+  CanvasRenderer,
+]);
 
 type GraphOption = ComposeOption<
   GraphSeriesOption | TooltipComponentOption | LegendComponentOption
+>;
+
+type TreemapOption = ComposeOption<
+  TreemapSeriesOption | TooltipComponentOption | LegendComponentOption
 >;
 
 // Node colors
 const COLOR_NORMAL = '#4dabf7'; // blue – regular package
 const COLOR_DUPLICATE = '#ff6b6b'; // red  – duplicate package
 const COLOR_SOURCE = '#51cf66'; // green – user source code (virtual root)
+const TREEMAP_COLORS = [
+  '#4dabf7',
+  '#51cf66',
+  '#ffd43b',
+  '#ff922b',
+  '#845ef7',
+  '#20c997',
+  '#f06595',
+  '#15aabf',
+  '#adb5bd',
+];
 
 // Min/max node symbol sizes
 const MIN_SIZE = 16;
@@ -90,6 +117,14 @@ export const GraphView: React.FC<GraphViewProps> = ({
   const sizes = packages.map((p) => p.size.parsedSize);
   const minSize = Math.min(...sizes);
   const maxSize = Math.max(...sizes);
+  const treemapData = useMemo(
+    () => buildPackageSizeTreemapData(visiblePackages),
+    [visiblePackages],
+  );
+  const visiblePackagesSize = useMemo(
+    () => treemapData.reduce((total, item) => total + item.value, 0),
+    [treemapData],
+  );
 
   const option = useMemo<GraphOption>(() => {
     const nodes: GraphSeriesOption['data'] = visiblePackages.map((pkg) => {
@@ -205,6 +240,78 @@ export const GraphView: React.FC<GraphViewProps> = ({
     packages,
   ]);
 
+  const treemapOption = useMemo<TreemapOption>(
+    () => ({
+      color: TREEMAP_COLORS,
+      tooltip: {
+        trigger: 'item',
+        confine: true,
+        formatter: (params: any) => {
+          const data = params.data;
+          if (!data) return '';
+          return [
+            `<b>${echarts.format.encodeHTML(data.packageName)}</b>`,
+            `Version: ${echarts.format.encodeHTML(data.version)}`,
+            `Parsed: ${formatSize(data.value)}`,
+            `Share: ${data.percent.toFixed(2)}%`,
+            `Gzip: ${formatSize(data.gzipSize)}`,
+            `Source: ${formatSize(data.sourceSize)}`,
+          ].join('<br/>');
+        },
+      },
+      series: [
+        {
+          type: 'treemap',
+          data: treemapData,
+          roam: true,
+          nodeClick: false,
+          breadcrumb: { show: false },
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: '100%',
+          height: '100%',
+          itemStyle: {
+            borderColor: '#fff',
+            borderWidth: 2,
+            gapWidth: 2,
+          },
+          label: {
+            show: true,
+            color: '#fff',
+            fontSize: 11,
+            overflow: 'truncate',
+            formatter: (params: any) => {
+              const data = params.data;
+              if (!data) return params.name;
+              return `${data.packageName}\n${data.percent.toFixed(1)}%`;
+            },
+          },
+          upperLabel: {
+            show: false,
+          },
+          emphasis: {
+            itemStyle: {
+              borderColor: '#1c7ed6',
+              borderWidth: 3,
+            },
+          },
+          levels: [
+            {
+              itemStyle: {
+                borderColor: '#fff',
+                borderWidth: 2,
+                gapWidth: 2,
+              },
+            },
+          ],
+        },
+      ],
+    }),
+    [treemapData],
+  );
+
   const onChartClick = useCallback(
     (params: any) => {
       if (params.dataType !== 'node') return;
@@ -214,6 +321,23 @@ export const GraphView: React.FC<GraphViewProps> = ({
       setDrawerOpen(true);
     },
     [packages, dependencies],
+  );
+
+  const openPackageDetail = useCallback(
+    (id: number) => {
+      const pkg = packages.find((item) => item.id === id);
+      if (!pkg) return;
+      setSelectedPkg({ pkg, dependencies, allPackages: packages });
+      setDrawerOpen(true);
+    },
+    [packages, dependencies],
+  );
+
+  const onTreemapClick = useCallback(
+    (params: any) => {
+      openPackageDetail(Number(params.data?.id));
+    },
+    [openPackageDetail],
   );
 
   if (packages.length === 0) {
@@ -277,6 +401,35 @@ export const GraphView: React.FC<GraphViewProps> = ({
         onEvents={{ click: onChartClick }}
         notMerge
       />
+
+      <div style={{ marginTop: 20 }}>
+        <Space
+          align="baseline"
+          style={{
+            width: '100%',
+            justifyContent: 'space-between',
+            marginBottom: 8,
+          }}
+        >
+          <Typography.Title level={5} style={{ margin: 0 }}>
+            Package Size Treemap
+          </Typography.Title>
+          <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+            Parsed size total: {formatSize(visiblePackagesSize)}
+          </Typography.Text>
+        </Space>
+        {treemapData.length > 0 ? (
+          <EChartsReactCore
+            echarts={echarts}
+            option={treemapOption}
+            style={{ height: 420, width: '100%' }}
+            onEvents={{ click: onTreemapClick }}
+            notMerge
+          />
+        ) : (
+          <Empty description="No package size data available" />
+        )}
+      </div>
 
       <DetailPanel
         info={selectedPkg}
