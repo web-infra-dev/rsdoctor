@@ -27,7 +27,7 @@ describe('agent cli', () => {
     ).toBe(true);
   });
 
-  it('supports top-level help output', async () => {
+  it('shows list and query commands in top-level help', async () => {
     const stdout: string[] = [];
     const stderr: string[] = [];
 
@@ -39,117 +39,10 @@ describe('agent cli', () => {
     expect(exitCode).toBe(0);
     expect(stderr.join('')).toBe('');
     const text = stdout.join('');
-    expect(text).toContain('rsdoctor-agent list');
-    expect(text).toContain('rsdoctor-agent query');
-    expect(text).toContain('List all available subcommands');
-  });
-
-  it('supports query help with mapped subcommands output', async () => {
-    const stdout: string[] = [];
-    const stderr: string[] = [];
-
-    const exitCode = await runCli(['query', '--help'], {
-      write: (text) => stdout.push(text),
-      writeError: (text) => stderr.push(text),
-    });
-
-    expect(exitCode).toBe(0);
-    expect(stderr.join('')).toBe('');
-    const text = stdout.join('');
-    expect(text).toContain('Mapped subcommands:');
-    expect(text).toContain('chunks_list -> chunks.list');
-    expect(text).toContain('build_summary -> build.summary');
-  });
-
-  it('supports direct group command schema introspection', async () => {
-    const chunks: string[] = [];
-
-    const exitCode = await runCli(['chunks', '--describe'], {
-      write: (text) => chunks.push(text),
-    });
-
-    expect(exitCode).toBe(0);
-    const output = JSON.parse(chunks.join(''));
-    expect(output.chunks.list.description).toContain('List all chunks');
-    expect(output['tree-shaking'].summary.description).toContain(
-      'tree-shaking health summary',
-    );
-    expect(output['tree-shaking']['side-effects'].description).toContain(
-      'bailoutReason',
-    );
-  });
-
-  it('keeps extension filters when diffing initial assets', async () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
-    const baselineFile = path.join(tempDir, 'baseline.json');
-    const currentFile = path.join(tempDir, 'current.json');
-    const createData = (
-      jsSize: number,
-      cssSize: number,
-      imageSize: number,
-    ) => ({
-      data: {
-        chunkGraph: {
-          chunks: [
-            { id: 1, initial: true },
-            { id: 2, initial: false },
-          ],
-          assets: [
-            { path: 'main.js', size: jsSize, chunks: [1] },
-            { path: 'style.css', size: cssSize, chunks: [1] },
-            { path: 'logo.png', size: imageSize, chunks: [1] },
-            { path: 'async.js', size: 50, chunks: [2] },
-          ],
-        },
-      },
-    });
-
-    fs.writeFileSync(baselineFile, JSON.stringify(createData(100, 20, 30)));
-    fs.writeFileSync(currentFile, JSON.stringify(createData(120, 25, 35)));
-
-    const stdout: string[] = [];
-
-    try {
-      const exitCode = await runCli(
-        [
-          'assets',
-          'diff',
-          '--data-file',
-          baselineFile,
-          '--baseline',
-          baselineFile,
-          '--current',
-          currentFile,
-        ],
-        {
-          write: (text) => stdout.push(text),
-        },
-      );
-
-      expect(exitCode).toBe(0);
-      const output = JSON.parse(stdout.join(''));
-      expect(output.data.diff.js.initial).toMatchObject({
-        size: { baseline: 100, current: 120 },
-        count: { baseline: 1, current: 1 },
-      });
-      expect(output.data.diff.css.initial).toMatchObject({
-        size: { baseline: 20, current: 25 },
-        count: { baseline: 1, current: 1 },
-      });
-    } finally {
-      fs.rmSync(tempDir, { recursive: true, force: true });
-    }
-  });
-
-  it('shows the provider-agnostic binary name in usage text', async () => {
-    const stderr: string[] = [];
-
-    const exitCode = await runCli([], {
-      writeError: (text) => stderr.push(text),
-    });
-
-    expect(exitCode).toBe(1);
-    expect(stderr.join('')).toContain('rsdoctor-agent list');
+    expect(text).toContain('list');
+    expect(text).toContain('query <toolName>');
+    expect(text).toContain('List all available subcommands.');
+    expect(text).toContain('Execute one mapped tool from the catalog.');
   });
 
   it('invokes a named tool through the external agent query path', async () => {
@@ -256,6 +149,99 @@ describe('agent cli', () => {
 
     expect(exitCode).toBe(1);
     expect(stderr.join('')).toContain('--page must be a positive integer.');
+  });
+
+  it('supports direct group command schema introspection', async () => {
+    const chunks: string[] = [];
+
+    const exitCode = await runCli(['chunks', '--describe'], {
+      write: (text) => chunks.push(text),
+    });
+
+    expect(exitCode).toBe(0);
+    const output = JSON.parse(chunks.join(''));
+    expect(output.chunks.list.description).toContain('List all chunks');
+    expect(output['tree-shaking'].summary.description).toContain(
+      'tree-shaking health summary',
+    );
+    expect(output['tree-shaking']['side-effects'].description).toContain(
+      'bailoutReason',
+    );
+  });
+
+  it('keeps extension filters when diffing initial assets', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const baselineFile = path.join(tempDir, 'baseline.json');
+    const currentFile = path.join(tempDir, 'current.json');
+    const createData = (
+      jsSize: number,
+      cssSize: number,
+      imageSize: number,
+    ) => ({
+      data: {
+        chunkGraph: {
+          chunks: [
+            { id: 1, initial: true },
+            { id: 2, initial: false },
+          ],
+          assets: [
+            { path: 'main.js', size: jsSize, chunks: [1] },
+            { path: 'style.css', size: cssSize, chunks: [1] },
+            { path: 'logo.png', size: imageSize, chunks: [1] },
+            { path: 'async.js', size: 50, chunks: [2] },
+          ],
+        },
+      },
+    });
+
+    fs.writeFileSync(baselineFile, JSON.stringify(createData(100, 20, 30)));
+    fs.writeFileSync(currentFile, JSON.stringify(createData(120, 25, 35)));
+
+    const stdout: string[] = [];
+
+    try {
+      const exitCode = await runCli(
+        [
+          'assets',
+          'diff',
+          '--data-file',
+          baselineFile,
+          '--baseline',
+          baselineFile,
+          '--current',
+          currentFile,
+        ],
+        {
+          write: (text) => stdout.push(text),
+        },
+      );
+
+      expect(exitCode).toBe(0);
+      const output = JSON.parse(stdout.join(''));
+      expect(output.data.diff.js.initial).toMatchObject({
+        size: { baseline: 100, current: 120 },
+        count: { baseline: 1, current: 1 },
+      });
+      expect(output.data.diff.css.initial).toMatchObject({
+        size: { baseline: 20, current: 25 },
+        count: { baseline: 1, current: 1 },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('shows a short usage hint when no command is provided', async () => {
+    const stderr: string[] = [];
+
+    const exitCode = await runCli([], {
+      writeError: (text) => stderr.push(text),
+    });
+
+    expect(exitCode).toBe(1);
+    const text = stderr.join('');
+    expect(text).toContain('Usage: rsdoctor-agent <command>');
+    expect(text).toContain('Run rsdoctor-agent --help');
   });
 
   it('executes a direct group command without the ai prefix', async () => {
