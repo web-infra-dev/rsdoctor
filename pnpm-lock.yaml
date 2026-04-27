@@ -560,10 +560,6 @@ importers:
         version: 5.1.4(webpack@5.105.4)
 
   packages/agent-cli:
-    dependencies:
-      cac:
-        specifier: ^7.0.0
-        version: 7.0.0
     devDependencies:
       '@rslib/core':
         specifier: 0.21.3
@@ -574,6 +570,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 22.18.1
+      cac:
+        specifier: ^7.0.0
+        version: 7.0.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.2

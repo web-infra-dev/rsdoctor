@@ -150,15 +150,18 @@ async function runRegisteredCommands(
 
   try {
     const cli = createRootCli(options);
-    const originalInfo = console.info;
-    console.info = (...args: unknown[]) => {
-      options.write(`${args.map(String).join(' ')}\n`);
-    };
-    try {
-      cli.parse(['node', 'rsdoctor-agent', ...argv], { run: false });
-    } finally {
-      console.info = originalInfo;
+
+    if (argv[0] === '--help' || argv[0] === '-h') {
+      const commandHelp = cli.commands
+        .map((command) => `  ${command.rawName}  ${command.description}`)
+        .join('\n');
+      options.write(
+        `rsdoctor-agent\n\nUsage:\n  $ rsdoctor-agent <command> [options]\n\nCommands:\n${commandHelp}\n`,
+      );
+      return 0;
     }
+
+    cli.parse(['node', 'rsdoctor-agent', ...argv], { run: false });
 
     if (!cli.matchedCommand) {
       return 0;

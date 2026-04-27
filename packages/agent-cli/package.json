@@ -22,13 +22,11 @@
     "dev": "rslib build --watch",
     "test": "rstest run"
   },
-  "dependencies": {
-    "cac": "^7.0.0"
-  },
   "devDependencies": {
     "@rslib/core": "0.21.3",
     "@rstest/core": "catalog:",
     "@types/node": "catalog:",
+    "cac": "^7.0.0",
     "typescript": "catalog:"
   },
   "publishConfig": {
