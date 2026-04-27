@@ -38,6 +38,36 @@ const toArray = <T>(value: Iterable<T> | ArrayLike<T> | null | undefined) => {
 const getChunkGroupName = (chunkGroup: AnyChunkGroup, fallbackId: number) =>
   String(chunkGroup?.name ?? chunkGroup?.id ?? `chunk-group-${fallbackId}`);
 
+const getChunkId = (chunk: AnyChunk) =>
+  String(chunk?.id ?? chunk?.ukey ?? chunk?.name ?? '');
+
+const getChunkGroupChunkSignature = (chunkGroup: AnyChunkGroup) =>
+  toArray<AnyChunk>(chunkGroup?.chunks)
+    .map(getChunkId)
+    .filter(Boolean)
+    .sort()
+    .join('|');
+
+const isSameChunkGroup = (
+  left: AnyChunkGroup | null | undefined,
+  right: AnyChunkGroup | null | undefined,
+) => {
+  if (!left || !right) {
+    return false;
+  }
+  if (left === right) {
+    return true;
+  }
+
+  if (left.name && right.name && String(left.name) === String(right.name)) {
+    return true;
+  }
+
+  const leftSignature = getChunkGroupChunkSignature(left);
+  const rightSignature = getChunkGroupChunkSignature(right);
+  return Boolean(leftSignature && leftSignature === rightSignature);
+};
+
 const isInitialChunkGroup = (chunkGroup: AnyChunkGroup) => {
   const result = safeInvoke(() => chunkGroup?.isInitial?.());
   if (typeof result === 'boolean') {
@@ -143,9 +173,38 @@ const getModuleSizeRobust = (chunkGraph: AnyCompilation['chunkGraph'], module: A
   return size || 0;
 };
 
+const collectAsyncBlockDependencies = (module: AnyModule) => {
+  const dependencies = new Set<any>();
+  const queue = [...toArray<any>(safeInvoke(() => module?.blocks))];
+
+  while (queue.length) {
+    const block = queue.shift();
+    if (!block) {
+      continue;
+    }
+
+    for (const dependency of toArray<any>(safeInvoke(() => block?.dependencies))) {
+      dependencies.add(dependency);
+    }
+
+    queue.push(...toArray<any>(safeInvoke(() => block?.blocks)));
+  }
+
+  return dependencies;
+};
+
+const hasAsyncBlockParent = (
+  moduleGraph: AnyCompilation['moduleGraph'],
+  dependency: any,
+) => {
+  const parentBlock = safeInvoke(() => moduleGraph?.getParentBlock?.(dependency));
+  return Boolean(parentBlock?.constructor?.name?.includes('AsyncDependenciesBlock'));
+};
+
 const getOutgoingModules = (moduleGraph: AnyCompilation['moduleGraph'], module: AnyModule) => {
   const targets = new Set<AnyModule>();
   const connections = safeInvoke(() => moduleGraph?.getOutgoingConnections?.(module));
+  let asyncBlockDependencies: Set<any> | undefined;
 
   for (const connection of toArray<any>(connections)) {
     if (!connection?.module || connection?.weak) {
@@ -154,12 +213,12 @@ const getOutgoingModules = (moduleGraph: AnyCompilation['moduleGraph'], module: 
 
     const dependency = connection.dependency;
     if (dependency) {
-      const parentBlock = safeInvoke(() => moduleGraph?.getParentBlock?.(dependency));
-      if (
-        parentBlock &&
-        parentBlock !== module &&
-        parentBlock?.constructor?.name?.includes('AsyncDependenciesBlock')
-      ) {
+      if (hasAsyncBlockParent(moduleGraph, dependency)) {
+        continue;
+      }
+
+      asyncBlockDependencies ??= collectAsyncBlockDependencies(module);
+      if (asyncBlockDependencies.has(dependency)) {
         continue;
       }
     }
@@ -192,6 +251,13 @@ const getRootModules = (
   moduleGraph: AnyCompilation['moduleGraph'],
 ) => {
   const roots = new Set<AnyModule>();
+  const canReadBlockChunkGroup = typeof chunkGraph?.getBlockChunkGroup === 'function';
+  const addDependencyRoot = (dependency: any, requireActualModule: boolean) => {
+    const targetModule = safeInvoke(() => moduleGraph?.getModule?.(dependency));
+    if (targetModule && (!requireActualModule || actualModules.has(targetModule))) {
+      roots.add(targetModule);
+    }
+  };
 
   if (isInitialChunkGroup(chunkGroup)) {
     for (const chunk of toArray<AnyChunk>(chunkGroup?.chunks)) {
@@ -207,9 +273,9 @@ const getRootModules = (
 
   for (const origin of toArray<any>(chunkGroup?.origins)) {
     if (origin?.dependency) {
-      const targetModule = safeInvoke(() => moduleGraph?.getModule?.(origin.dependency));
-      if (targetModule) {
-        roots.add(targetModule);
+      const rootCountBeforeDependency = roots.size;
+      addDependencyRoot(origin.dependency, false);
+      if (roots.size > rootCountBeforeDependency) {
         continue;
       }
     }
@@ -220,11 +286,25 @@ const getRootModules = (
 
     const blocks = toArray<any>(safeInvoke(() => origin.module.blocks));
     for (const block of blocks) {
-      for (const dependency of toArray<any>(block?.dependencies)) {
-        const targetModule = safeInvoke(() => moduleGraph?.getModule?.(dependency));
-        if (targetModule && actualModules.has(targetModule)) {
-          roots.add(targetModule);
+      let hasPreciseBlockMapping = false;
+
+      if (canReadBlockChunkGroup) {
+        const blockChunkGroup = safeInvoke(() =>
+          chunkGraph?.getBlockChunkGroup?.(block),
+        );
+        if (blockChunkGroup === null) {
+          continue;
         }
+        if (blockChunkGroup) {
+          if (!isSameChunkGroup(blockChunkGroup, chunkGroup)) {
+            continue;
+          }
+          hasPreciseBlockMapping = true;
+        }
+      }
+
+      for (const dependency of toArray<any>(block?.dependencies)) {
+        addDependencyRoot(dependency, !hasPreciseBlockMapping);
       }
     }
   }

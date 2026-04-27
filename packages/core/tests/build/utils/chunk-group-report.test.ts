@@ -387,19 +387,22 @@ describe('buildChunkGroupGraphReport', () => {
     fs.writeFileSync(sharedMainFooFile, "export const sharedMainFoo = true\n");
     fs.writeFileSync(sharedFooBarFile, "export const sharedFooBar = true\n");
 
+    const fooBlock = { dependencies: ['dep_foo'] };
+    const barBlock = { dependencies: ['dep_bar'] };
+
     const mainModule = {
       resource: mainFile,
       identifier: () => mainFile,
       nameForCondition: () => mainFile,
       readableIdentifier: () => mainFile,
-      blocks: [{ dependencies: ['dep_foo'] }],
+      blocks: [fooBlock],
     };
     const fooModule = {
       resource: fooFile,
       identifier: () => fooFile,
       nameForCondition: () => fooFile,
       readableIdentifier: () => fooFile,
-      blocks: [{ dependencies: ['dep_bar'] }],
+      blocks: [barBlock],
     };
     const barModule = {
       resource: barFile,
@@ -465,7 +468,6 @@ describe('buildChunkGroupGraphReport', () => {
       origins: [
         {
           request: './foo',
-          dependency: 'dep_foo',
           module: mainModule,
           loc: {
             start: { line: 1, column: 0 },
@@ -481,7 +483,6 @@ describe('buildChunkGroupGraphReport', () => {
       origins: [
         {
           request: './bar',
-          dependency: 'dep_bar',
           module: fooModule,
           loc: {
             start: { line: 1, column: 0 },
@@ -517,9 +518,28 @@ describe('buildChunkGroupGraphReport', () => {
     ]);
 
     const syncDependencies = new Map<any, any[]>([
-      [mainModule, [libModule, sharedMainFooModule]],
-      [fooModule, [libModule, sharedMainFooModule, sharedFooBarModule]],
-      [barModule, [libModule, sharedFooBarModule]],
+      [
+        mainModule,
+        [
+          { module: libModule, dependency: 'dep_main_lib' },
+          { module: sharedMainFooModule, dependency: 'dep_main_shared' },
+        ],
+      ],
+      [
+        fooModule,
+        [
+          { module: libModule, dependency: 'dep_foo_lib' },
+          { module: sharedMainFooModule, dependency: 'dep_foo_main_shared' },
+          { module: sharedFooBarModule, dependency: 'dep_foo_bar_shared' },
+        ],
+      ],
+      [
+        barModule,
+        [
+          { module: libModule, dependency: 'dep_bar_lib' },
+          { module: sharedFooBarModule, dependency: 'dep_bar_shared' },
+        ],
+      ],
     ]);
 
     const compilation = {
@@ -543,6 +563,15 @@ describe('buildChunkGroupGraphReport', () => {
         getModuleSize(module: any) {
           return moduleSizes.get(module) ?? 0;
         },
+        getBlockChunkGroup(block: any) {
+          if (block === fooBlock) {
+            return fooGroup;
+          }
+          if (block === barBlock) {
+            return barGroup;
+          }
+          return null;
+        },
       },
       moduleGraph: {
         getModule(dep: string) {
@@ -555,9 +584,14 @@ describe('buildChunkGroupGraphReport', () => {
           return undefined;
         },
         getOutgoingConnections(module: any) {
-          return (syncDependencies.get(module) ?? []).map((target) => ({
-            module: target,
-          }));
+          const connections = [...(syncDependencies.get(module) ?? [])];
+          if (module === mainModule) {
+            connections.unshift({ module: fooModule, dependency: 'dep_foo' });
+          }
+          if (module === fooModule) {
+            connections.unshift({ module: barModule, dependency: 'dep_bar' });
+          }
+          return connections;
         },
         getIncomingConnections() {
           return [];
