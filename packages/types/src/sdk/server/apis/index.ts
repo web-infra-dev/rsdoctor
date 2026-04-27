@@ -88,6 +88,12 @@ export enum API {
   /** AI API */
   GetChunkGraphAI = '/api/graph/chunks/graph/ai',
   GetChunkByIdAI = '/api/graph/chunk/id/ai',
+
+  /** Runtime Vitals API */
+  ReportWebVitals = '/api/runtime/vitals/report',
+  GetWebVitals = '/api/runtime/vitals',
+  ReportResourceTimings = '/api/runtime/resource-timings/report',
+  GetResourceTimings = '/api/runtime/resource-timings',
 }
 
 /**
@@ -154,6 +160,10 @@ export interface ResponseTypes
   [API.GetPackageDependency]: SDK.PackageDependencyData[];
   [API.GetChunkByIdAI]: ExtendedChunkData[];
   [API.GetChunkGraphAI]: Omit<SDK.ChunkData, 'modules'>[];
+  [API.ReportWebVitals]: 'ok';
+  [API.GetWebVitals]: SDK.RuntimePerfData;
+  [API.ReportResourceTimings]: 'ok';
+  [API.GetResourceTimings]: SDK.ResourceTimingData[];
   [API.GetSummaryBundles]: {
     asset: SDK.AssetData;
     modules: SDK.ModuleData[];
@@ -168,8 +178,10 @@ export interface RequestBodyTypes
     GraphAPIRequestBody,
     AlertsAPIRequestBody,
     ProjectAPIRequestBody {
+  [API.ApplyErrorFix]: {
+    id: number;
+  };
   [API.ReportLoader]: LoaderData;
-  [API.ApplyErrorFix]: { id: number };
   [API.SendAPIDataToClient]: {
     api: API;
     data: unknown;
@@ -193,6 +205,8 @@ export interface RequestBodyTypes
   [API.GetChunkByIdAI]: {
     chunkId: string;
   };
+  [API.ReportWebVitals]: SDK.WebVitalMetric;
+  [API.ReportResourceTimings]: SDK.ResourceTimingData[];
 }
 
 export type InferResponseType<T, F = void> = Get<ResponseTypes, T, F>;

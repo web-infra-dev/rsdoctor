@@ -50,4 +50,59 @@ describe('test src/common/data/index.ts', () => {
       );
     });
   });
+
+  it('loads runtime performance api data from store data', async () => {
+    const runtime = {
+      vitals: [
+        {
+          name: 'LCP',
+          value: 1200,
+          rating: 'good',
+          delta: 1200,
+          id: 'v1',
+          navigationType: 'navigate',
+          entries: [],
+          timestamp: 1,
+        },
+      ],
+      resourceTimings: [
+        {
+          name: 'http://localhost/main.js',
+          initiatorType: 'script',
+          startTime: 10,
+          duration: 20,
+          transferSize: 1024,
+          decodedBodySize: 2048,
+          encodedBodySize: 1024,
+          domainLookupStart: 1,
+          domainLookupEnd: 2,
+          connectStart: 2,
+          connectEnd: 3,
+          requestStart: 4,
+          responseStart: 5,
+          responseEnd: 30,
+          fromCache: false,
+          nextHopProtocol: 'h2',
+          timestamp: 2,
+        },
+      ],
+    } satisfies SDK.RuntimePerfData;
+
+    const loader = new APIDataLoader({
+      loadData: rs.fn().mockImplementation((key) => {
+        if (key === 'runtime') {
+          return Promise.resolve(runtime);
+        }
+        return Promise.resolve(undefined);
+      }),
+      loadManifest: rs.fn(),
+    });
+
+    await expect(loader.loadAPI(SDK.ServerAPI.API.GetWebVitals)).resolves.toBe(
+      runtime,
+    );
+    await expect(
+      loader.loadAPI(SDK.ServerAPI.API.GetResourceTimings),
+    ).resolves.toBe(runtime.resourceTimings);
+  });
 });

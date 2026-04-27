@@ -8,6 +8,7 @@ import {
   InternalPluginsPlugin,
   InternalResolverPlugin,
   InternalRulesPlugin,
+  InternalRuntimeVitalsPlugin,
   InternalSummaryPlugin,
   normalizeRspackUserOptions,
   setSDK,
@@ -41,9 +42,9 @@ import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
 
-export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
-  implements RsdoctorRspackPluginInstance<Rules>
-{
+export class RsdoctorRspackPlugin<
+  Rules extends Linter.ExtendRuleData[],
+> implements RsdoctorRspackPluginInstance<Rules> {
   public readonly name = pluginTapName;
 
   public readonly sdk: SDK.RsdoctorBuilderSDKInstance | RsdoctorPrimarySDK;
@@ -86,7 +87,6 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
             output.mode === SDK.IMode[SDK.IMode.brief]
               ? output.options || undefined
               : undefined,
-          features: { treeShaking: this.options.features.treeShaking },
         },
       });
     this.outsideInstance = Boolean(sdkInstance);
@@ -167,6 +167,12 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
       if (this.options.features.resolver) {
         new InternalResolverPlugin<Plugin.BaseCompilerType<'rspack'>>(
+          this,
+        ).apply(compiler);
+      }
+
+      if (this.options.features.runtime) {
+        new InternalRuntimeVitalsPlugin<Plugin.BaseCompilerType<'rspack'>>(
           this,
         ).apply(compiler);
       }

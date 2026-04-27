@@ -254,19 +254,11 @@ export class APIDataLoader {
         return Promise.all([
           this.loader.loadData('chunkGraph'),
           this.loader.loadData('moduleGraph'),
-          this.loader.loadData('treeShaking'),
         ]).then((res) => {
           const { moduleId } =
             body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleDetails>;
           const { modules = [], dependencies = [] } = res[1] || {};
-          const treeShaking = res[2];
-          const sideEffectCodes = treeShaking?.sideEffectCodes[moduleId] || [];
-          return Graph.getModuleDetails(
-            moduleId,
-            modules,
-            dependencies,
-            sideEffectCodes,
-          ) as R;
+          return Graph.getModuleDetails(moduleId, modules, dependencies) as R;
         });
       case SDK.ServerAPI.API.GetModulesByModuleIds:
         return this.loader.loadData('moduleGraph').then((res) => {
@@ -551,7 +543,12 @@ export class APIDataLoader {
       case SDK.ServerAPI.API.GetChunkGraphAI:
         return this.loader.loadData('chunkGraph').then((res) => {
           const { assets = [] } = res || {};
-          const filteredChunks = assets.map(({ content: _, ...rest }) => rest);
+          const filteredChunks = assets.map((asset) => {
+            const entries = Object.entries(asset).filter(
+              ([key]) => key !== 'content',
+            );
+            return Object.fromEntries(entries);
+          });
           return filteredChunks as R;
         });
 
@@ -584,6 +581,22 @@ export class APIDataLoader {
             });
           chunkInfo.modulesInfo = chunkModules;
           return chunkInfo as R;
+        });
+
+      /** Runtime Vitals API */
+      case SDK.ServerAPI.API.ReportWebVitals:
+      case SDK.ServerAPI.API.ReportResourceTimings:
+        return Promise.resolve('ok' as R);
+      case SDK.ServerAPI.API.GetWebVitals:
+        return this.loader.loadData('runtime').then((runtime) => {
+          return (runtime || {
+            vitals: [],
+            resourceTimings: [],
+          }) as R;
+        });
+      case SDK.ServerAPI.API.GetResourceTimings:
+        return this.loader.loadData('runtime').then((runtime) => {
+          return (runtime?.resourceTimings || []) as R;
         });
 
       case SDK.ServerAPI.API.GetDirectoriesLoaders:

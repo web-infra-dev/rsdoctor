@@ -32,22 +32,21 @@ export interface RsdoctorWebpackPluginFeatures {
    * @default false
    */
   lite?: boolean;
+  /**
+   * turn on it to inject web-vitals collection script into entry chunks for runtime performance profiling.
+   * @default false
+   */
+  runtime?: boolean;
 }
 
 export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends Common.DeepRequired<
-    Omit<
-      RsdoctorWebpackPluginOptions<Rules>,
-      | 'sdkInstance'
-      | 'linter'
-      | 'output'
-      | 'supports'
-      | 'port'
-      | 'brief'
-      | 'mode'
-    >
-  > {
+  Omit<
+    RsdoctorWebpackPluginOptions<Rules>,
+    'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief' | 'mode'
+  >
+> {
   features: Common.DeepRequired<RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: SDK.RsdoctorBuilderSDKInstance;
@@ -185,8 +184,10 @@ export interface NormalModeOptions {
 }
 
 // Normal Mode Type
-interface NormalModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+interface NormalModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'normal';
   reportCodeType?: ReportCodeTypeByMode<'normal'>;
   options?: NormalModeOptions;
@@ -200,8 +201,10 @@ export interface BriefModeOptions {
   htmlOptions?: Config.BriefConfig;
 }
 
-export interface BriefModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+export interface BriefModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'brief';
   reportCodeType?: ReportCodeTypeByMode<'brief'>;
   options?: BriefModeOptions;

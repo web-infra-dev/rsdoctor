@@ -42,6 +42,7 @@ function normalizeFeatures(features: any, mode: keyof typeof SDK.IMode) {
       bundle: features.includes('bundle'),
       treeShaking: features.includes('treeShaking'),
       lite: features.includes('lite') || mode === SDK.IMode[SDK.IMode.lite],
+      runtime: features.includes('runtime'),
     };
   }
   return {
@@ -53,6 +54,7 @@ function normalizeFeatures(features: any, mode: keyof typeof SDK.IMode) {
     lite:
       defaultBoolean(features.lite, false) ||
       mode === SDK.IMode[SDK.IMode.lite],
+    runtime: defaultBoolean(features.runtime, false),
   };
 }
 function normalizeLinter(linter: any) {

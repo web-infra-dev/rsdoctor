@@ -14,3 +14,4 @@ export * from './treeShaking';
 export * from './envinfo';
 export * from './instance';
 export * from './hooks';
+export * from './runtime';

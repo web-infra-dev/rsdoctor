@@ -1,0 +1,67 @@
+.runtimePerfPage {
+  padding: 24px;
+  width: 100%;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.vitalsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.vitalCard {
+  text-align: center;
+}
+
+.vitalValue {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+
+.vitalGood {
+  color: #52c41a;
+}
+
+.vitalNeedsImprovement {
+  color: #faad14;
+}
+
+.vitalPoor {
+  color: #ff4d4f;
+}
+
+.resourceName {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timelineContainer {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.timelineBar {
+  position: relative;
+  height: 24px;
+  border-radius: 4px;
+  min-width: 4px;
+}
+
+.cached {
+  opacity: 0.6;
+}

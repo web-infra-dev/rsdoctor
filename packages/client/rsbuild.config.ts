@@ -32,14 +32,7 @@ export default defineConfig(({ env }) => {
       pluginReact(),
       pluginNodePolyfill(),
       pluginSass(),
-      pluginTypeCheck({
-        enable: IS_PRODUCTION,
-        tsCheckerOptions: {
-          typescript: {
-            mode: 'readonly',
-          },
-        },
-      }),
+      pluginTypeCheck({ enable: IS_PRODUCTION }),
     ],
 
     source: {
@@ -127,7 +120,7 @@ export default defineConfig(({ env }) => {
             vender: {
               chunks: 'all',
               name: 'vender',
-              test: /node_modules\/(acorn|lodash|i18next|socket.io-*|remark-*)/,
+              test: /node_modules\/(acorn|lodash|i18next|socket.io-*|axios|remark-*)/,
               maxSize: 1000000,
               minSize: 200000,
             },
@@ -174,6 +167,13 @@ export default defineConfig(({ env }) => {
           chainConfig.plugin('rsdoctor').use(RsdoctorRspackPlugin, [
             {
               disableClientServer: !ENABLE_CLIENT_SERVER,
+              features: ['runtime', 'bundle', 'loader', 'plugins'],
+              output: {
+                mode: 'brief',
+                options: {
+                  type: ['json'],
+                },
+              },
               port: 9988,
               linter: {
                 rules: {

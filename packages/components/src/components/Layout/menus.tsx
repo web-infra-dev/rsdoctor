@@ -4,6 +4,7 @@ import {
   FundFilled,
   ApiFilled,
   NodeIndexOutlined,
+  DashboardOutlined,
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Menu, MenuProps } from 'antd';
@@ -15,6 +16,7 @@ import {
   useI18n,
   hasBundle,
   hasCompile,
+  hasRuntime,
   getEnableRoutesFromUrlQuery,
 } from '../../utils';
 import { withServerAPI } from '../Manifest';
@@ -30,6 +32,7 @@ import {
   PluginsAnalyze,
   ModuleResolve,
   LoaderTimeline,
+  RuntimePerf,
 } from 'src/pages';
 import { CompileName } from './constants';
 
@@ -139,6 +142,18 @@ const MenusBase: React.FC<{
       children: [],
       onTitleClick() {
         navigate(BundleSize.route);
+      },
+    });
+  }
+
+  if (hasRuntime(enableRoutes)) {
+    items.push({
+      label: t(RuntimePerf.name),
+      key: RuntimePerf.route,
+      icon: <DashboardOutlined style={iconStyle} />,
+      children: [],
+      onTitleClick(e) {
+        navigate(e.key);
       },
     });
   }
