@@ -26,7 +26,7 @@
     "cac": "^7.0.0"
   },
   "devDependencies": {
-    "@rslib/core": "0.21.2",
+    "@rslib/core": "0.21.3",
     "@rstest/core": "catalog:",
     "@types/node": "catalog:",
     "typescript": "catalog:"
