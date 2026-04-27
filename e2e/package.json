@@ -20,7 +20,7 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "@rsdoctor/webpack-plugin": "workspace:*",
-    "@rspack/core": "2.0.0-rc.3",
+    "@rspack/core": "2.0.0",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "loader-utils": "^2.0.4",

@@ -39,7 +39,7 @@
     "@rslint/core": "^0.4.2",
     "@changesets/cli": "^2.31.0",
     "@rsdoctor/tsconfig": "workspace:*",
-    "@rslib/core": "0.21.2",
+    "@rslib/core": "0.21.3",
     "@rstest/core": "catalog:",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",
@@ -63,7 +63,7 @@
       "rc-tree": "5.7.2",
       "react-dom": "18.3.1",
       "socket.io-parser": "4.2.6",
-      "minimatch": "^9.0.7",
+      "minimatch": "^9.0.9",
       "sirv": "3.0.2",
       "tar": "7.5.13",
       "tslib": "2.8.1"
