@@ -27,3 +27,5 @@ log/
 .cursor/
 e2e/test-results/
 .rsdoctor/
+
+.worktrees/

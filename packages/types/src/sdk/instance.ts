@@ -5,6 +5,7 @@ import { ResolverData } from './resolver';
 import { PluginData } from './plugin';
 import { BuilderStoreData, EMOStoreData } from './result';
 import { ModuleGraphInstance, ToDataType } from './module';
+import { WebVitalMetric, ResourceTimingData, RuntimePerfData } from './runtime';
 import {
   RsdoctorManifestClientRoutes,
   RsdoctorManifestWithShardingFiles,
@@ -51,6 +52,12 @@ export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   reportSummaryData(part: Partial<SummaryData>): void;
   /** Report sourceMap data */
   reportSourceMap(data: RawSourceMap): void;
+  /** Report a web-vital metric from runtime collection */
+  reportWebVital(metric: WebVitalMetric): void;
+  /** Report resource timing entries (chunk fetch/load timings) */
+  reportResourceTimings(timings: ResourceTimingData[]): void;
+  /** Get collected runtime performance data */
+  getRuntimePerfData(): RuntimePerfData;
 
   getClientRoutes(): RsdoctorManifestClientRoutes[];
   addClientRoutes(routes: RsdoctorManifestClientRoutes[]): void;
@@ -128,5 +135,4 @@ export type SDKOptionsType = {
   printLog?: IPrintLog;
   mode?: keyof typeof IMode;
   brief?: BriefModeOptions;
-  features?: { treeShaking?: boolean };
 };

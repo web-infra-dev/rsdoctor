@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
+import { SDK } from '@rsdoctor/types';
 import { fetchJSONByUrl, postServerAPI } from './request';
 
 describe('request utils', () => {
@@ -57,5 +58,29 @@ describe('request utils', () => {
       body: JSON.stringify({ id: 1 }),
     });
     expect(result).toStrictEqual({ ok: true });
+  });
+
+  it('postServerAPI() accepts typed request bodies', async () => {
+    const fetchMock = rs.fn().mockResolvedValue({
+      ok: true,
+      json: async () => 'success',
+    });
+    globalThis.fetch = fetchMock as typeof fetch;
+    process.env.NODE_ENV = 'production';
+
+    const result = await postServerAPI(SDK.ServerAPI.API.ApplyErrorFix, {
+      id: 1,
+    });
+    const [url, init] = fetchMock.mock.calls[0];
+
+    expect(url).toContain('/api/apply/error/fix?_t=');
+    expect(init).toMatchObject({
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: 1 }),
+    });
+    expect(result).toBe('success');
   });
 });

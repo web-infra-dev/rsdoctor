@@ -17,12 +17,12 @@ export default defineConfig({
       chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
         {
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
-          features: ['resolver', 'bundle', 'plugins', 'loader'],
+          features: ['resolver', 'bundle', 'plugins', 'loader', 'runtime'],
           output: {
-            mode: 'brief',
-            options: {
-              type: ['json', 'html'],
-            },
+            // mode: 'brief',
+            // options: {
+            //   type: ['json', 'html'],
+            // },
             reportCodeType: {
               noCode: true,
             },
@@ -49,6 +49,9 @@ export default defineConfig({
         },
       ]);
     },
+  },
+  server: {
+    port: 1111,
   },
   output: {
     minify: false,

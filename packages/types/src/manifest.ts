@@ -27,8 +27,10 @@ export interface RsdoctorManifestSeriesData {
   origin?: string;
 }
 
-export interface RsdoctorManifestWithShardingFiles
-  extends Omit<RsdoctorManifest, 'data'> {
+export interface RsdoctorManifestWithShardingFiles extends Omit<
+  RsdoctorManifest,
+  'data'
+> {
   data: Record<keyof RsdoctorManifestData, string[] | string>;
   /**
    * manifest data shareding file urls in tos, used by inner-rsdoctor.
@@ -56,6 +58,7 @@ export enum RsdoctorManifestClientRoutes {
   BundleSize = 'Bundle.BundleSize',
   ModuleGraph = 'Bundle.ModuleGraph',
   TreeShaking = 'Bundle.TreeShaking',
+  RuntimePerf = 'Runtime.Performance',
 }
 
 export enum RsdoctorManifestClientConstant {

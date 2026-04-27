@@ -1,6 +1,6 @@
 import { EmoCheckData } from '../emo';
 import { LoaderData } from './loader';
-import { ModuleGraphData, ModuleCodeData, TreeShakingData } from './module';
+import { ModuleGraphData, ModuleCodeData } from './module';
 import { ChunkGraphData } from './chunk';
 import { ResolverData } from './resolver';
 import { PluginData } from './plugin';
@@ -9,6 +9,7 @@ import { ConfigData } from './config';
 import { RuleStoreData } from '../rule';
 import type { EnvInfo } from './envinfo';
 import { PackageGraphData, OtherReports } from './package';
+import { RuntimePerfData } from './runtime';
 
 export type ErrorsData = RuleStoreData;
 
@@ -31,8 +32,8 @@ export interface BuilderStoreData extends StoreCommonData {
   chunkGraph: ChunkGraphData;
   packageGraph: PackageGraphData;
   moduleCodeMap: ModuleCodeData;
-  treeShaking?: TreeShakingData;
   otherReports?: OtherReports | undefined;
+  runtime?: RuntimePerfData | undefined;
 }
 
 export interface EMOStoreData extends StoreCommonData {
@@ -43,5 +44,6 @@ export interface EMOStoreData extends StoreCommonData {
  * @deprecated
  */
 export interface StoreData
-  extends Partial<Omit<EMOStoreData, keyof StoreCommonData>>,
+  extends
+    Partial<Omit<EMOStoreData, keyof StoreCommonData>>,
     BuilderStoreData {}

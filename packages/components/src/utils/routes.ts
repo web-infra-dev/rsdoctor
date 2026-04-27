@@ -15,3 +15,7 @@ export function hasBundle(routes: Manifest.RsdoctorManifestClientRoutes[]) {
     routes.includes(Manifest.RsdoctorManifestClientRoutes.TreeShaking);
   return hasBundle;
 }
+
+export function hasRuntime(routes: Manifest.RsdoctorManifestClientRoutes[]) {
+  return routes.includes(Manifest.RsdoctorManifestClientRoutes.RuntimePerf);
+}

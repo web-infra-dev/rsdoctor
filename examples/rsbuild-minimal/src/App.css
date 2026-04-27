@@ -5,22 +5,130 @@ body {
   background-image: linear-gradient(to bottom, #020917, #101725);
 }
 
-.content {
-  display: flex;
+.shell {
   min-height: 100vh;
-  line-height: 1.1;
-  text-align: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.top-nav h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.top-nav nav {
+  display: flex;
+  gap: 12px;
+}
+
+.top-nav a,
+.actions a {
+  color: #8ac5ff;
+  text-decoration: none;
+}
+
+.top-nav a:hover,
+.actions a:hover {
+  text-decoration: underline;
+}
+
+.page {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.page h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.hint {
+  margin-top: 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.card,
+.detail,
+.order-item {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.card h3,
+.detail h3 {
+  margin-top: 0;
+}
+
+.meta,
+.actions,
+.order-right {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.actions {
+  margin-top: 12px;
+}
+
+.list {
+  display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 10px;
 }
 
-.content h1 {
-  font-size: 3.6rem;
+.order-item p {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.status {
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+.status-pending {
+  color: #ffe08a;
+  background: rgba(255, 224, 138, 0.18);
+}
+
+.status-paid {
+  color: #9af0b8;
+  background: rgba(154, 240, 184, 0.18);
+}
+
+.status-shipped {
+  color: #8ac5ff;
+  background: rgba(138, 197, 255, 0.18);
+}
+
+.primary-btn {
+  border: 0;
+  color: #041229;
   font-weight: 700;
-}
-
-.content p {
-  font-size: 1.2rem;
-  font-weight: 400;
-  opacity: 0.5;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background: #8ac5ff;
 }

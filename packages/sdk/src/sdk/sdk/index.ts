@@ -58,6 +58,11 @@ export class RsdoctorSDK<
 
   private _packageGraph!: SDK.PackageGraphInstance;
 
+  private _runtimePerf: SDK.RuntimePerfData = {
+    vitals: [],
+    resourceTimings: [],
+  };
+
   constructor(options: T) {
     super(options);
     this.server = options.config?.noServer
@@ -139,6 +144,7 @@ export class RsdoctorSDK<
     this._plugin = {};
     this._moduleGraph = new ModuleGraph();
     this._chunkGraph = new ChunkGraph();
+    this._runtimePerf = { vitals: [], resourceTimings: [] };
   }
 
   clearSourceMapCache(): void {
@@ -302,6 +308,44 @@ export class RsdoctorSDK<
     );
   }
 
+  reportWebVital(metric: SDK.WebVitalMetric): void {
+    const existing = this._runtimePerf.vitals.findIndex(
+      (v) => v.name === metric.name && v.id === metric.id,
+    );
+    if (existing >= 0) {
+      this._runtimePerf.vitals[existing] = metric;
+    } else {
+      this._runtimePerf.vitals.push(metric);
+    }
+
+    if (metric.url && !this._runtimePerf.url) {
+      this._runtimePerf.url = metric.url;
+    }
+    if (metric.userAgent && !this._runtimePerf.userAgent) {
+      this._runtimePerf.userAgent = metric.userAgent;
+    }
+
+    this.onDataReport();
+  }
+
+  reportResourceTimings(timings: SDK.ResourceTimingData[]): void {
+    for (const timing of timings) {
+      const existing = this._runtimePerf.resourceTimings.findIndex(
+        (t) => t.name === timing.name && t.startTime === timing.startTime,
+      );
+      if (existing < 0) {
+        this._runtimePerf.resourceTimings.push(timing);
+      }
+    }
+    // Sort by startTime for display
+    this._runtimePerf.resourceTimings.sort((a, b) => a.startTime - b.startTime);
+    this.onDataReport();
+  }
+
+  getRuntimePerfData(): SDK.RuntimePerfData {
+    return this._runtimePerf;
+  }
+
   reportChunkGraph(data: SDK.ChunkGraphInstance): void {
     this._chunkGraph.addAsset(...data.getAssets());
     this._chunkGraph.addChunk(...data.getChunks());
@@ -413,102 +457,63 @@ export class RsdoctorSDK<
   }
 
   public getStoreData(): SDK.BuilderStoreData {
-    // rslint-disable-next-line @typescript-eslint/no-this-alias
-    const ctx = this;
     const briefOptions = this.extraConfig?.brief;
     const sections = briefOptions?.jsonOptions?.sections;
     const isJsonType = briefOptions?.type?.includes('json');
 
     return {
-      get hash() {
-        return ctx.hash;
-      },
-      get root() {
-        return ctx.root;
-      },
-      get envinfo() {
-        return ctx._envinfo;
-      },
-      get pid() {
-        return ctx.pid;
-      },
-      get errors() {
-        // In brief mode with sections control, check if rules section is enabled
-        if (isJsonType && sections && !sections.rules) {
-          return [];
-        }
-        return ctx._errors.map((err) => err.toData());
-      },
-      get configs() {
-        return ctx._configs.slice();
-      },
-      get summary() {
-        return { ...ctx._summary };
-      },
-      get resolver() {
-        return ctx._resolver.slice();
-      },
-      get loader() {
-        return ctx._loader.slice();
-      },
-      get moduleGraph() {
-        // In brief mode with sections control, check if moduleGraph section is enabled
-        if (isJsonType && sections && !sections.moduleGraph) {
-          return {
-            dependencies: [],
-            modules: [],
-            moduleGraphModules: [],
-            exports: [],
-            sideEffects: [],
-            variables: [],
-            layers: [],
-          };
-        }
-        return ctx._moduleGraph.toData({
-          contextPath: ctx._configs?.[0]?.config?.context || '',
-          briefOptions,
-        });
-      },
-      get chunkGraph() {
-        // In brief mode with sections control, check if chunkGraph section is enabled
-        if (isJsonType && sections && !sections.chunkGraph) {
-          return {
-            assets: [],
-            chunks: [],
-            entrypoints: [],
-          };
-        }
-        return ctx._chunkGraph.toData(ctx.type);
-      },
-      get moduleCodeMap() {
-        if (ctx.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
-          return {};
-        }
-        return ctx._moduleGraph.toCodeData(ctx.type);
-      },
-      get plugin() {
-        return { ...ctx._plugin };
-      },
-      get packageGraph() {
-        return ctx._packageGraph
-          ? ctx._packageGraph.toData()
-          : {
-              packages: [],
+      hash: this.hash,
+      root: this.root,
+      envinfo: this._envinfo,
+      pid: this.pid,
+      errors:
+        isJsonType && sections && !sections.rules
+          ? []
+          : this._errors.map((err) => err.toData()),
+      configs: this._configs.slice(),
+      summary: { ...this._summary },
+      resolver: this._resolver.slice(),
+      loader: this._loader.slice(),
+      moduleGraph:
+        isJsonType && sections && !sections.moduleGraph
+          ? {
               dependencies: [],
-            };
-      },
-      get treeShaking() {
-        if (ctx.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
-          return undefined;
-        }
-        if (!ctx.extraConfig?.features?.treeShaking) {
-          return undefined;
-        }
-        return ctx._moduleGraph.toTreeShakingData();
-      },
-      get otherReports() {
-        return { treemapReportHtml: '' };
-      },
+              modules: [],
+              moduleGraphModules: [],
+              exports: [],
+              sideEffects: [],
+              variables: [],
+              layers: [],
+            }
+          : this._moduleGraph.toData({
+              contextPath: this._configs?.[0]?.config?.context || '',
+              briefOptions,
+            }),
+      chunkGraph:
+        isJsonType && sections && !sections.chunkGraph
+          ? {
+              assets: [],
+              chunks: [],
+              entrypoints: [],
+            }
+          : this._chunkGraph.toData(this.type),
+      moduleCodeMap:
+        this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]
+          ? {}
+          : this._moduleGraph.toCodeData(this.type),
+      plugin: { ...this._plugin },
+      packageGraph: this._packageGraph
+        ? this._packageGraph.toData()
+        : {
+            packages: [],
+            dependencies: [],
+          },
+      otherReports: { treemapReportHtml: '' },
+      runtime:
+        this._runtimePerf.vitals.length > 0 ||
+        this._runtimePerf.resourceTimings.length > 0
+          ? this._runtimePerf
+          : undefined,
     };
   }
 
