@@ -559,6 +559,24 @@ importers:
         specifier: 5.1.4
         version: 5.1.4(webpack@5.105.4)
 
+  packages/agent-cli:
+    devDependencies:
+      '@rslib/core':
+        specifier: 0.21.3
+        version: 0.21.3(core-js@3.47.0)(typescript@5.9.2)
+      '@rstest/core':
+        specifier: 'catalog:'
+        version: 0.9.9(core-js@3.47.0)
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.18.1
+      cac:
+        specifier: ^7.0.0
+        version: 7.0.0
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.2
+
   packages/ai:
     devDependencies:
       '@modelcontextprotocol/sdk':

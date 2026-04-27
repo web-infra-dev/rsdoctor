@@ -176,4 +176,40 @@ describe('test src/common/graph.ts', () => {
     expect(cssAssets).toHaveLength(1);
     expect(cssAssets[0].path).toBe('styles.css');
   });
+
+  it('diffAssetsByExtensions keeps extension filters for initial assets', () => {
+    type ChunkGraph = Parameters<typeof Graph.diffAssetsByExtensions>[0];
+    const createGraph = (
+      jsSize: number,
+      cssSize: number,
+      imageSize: number,
+    ): ChunkGraph => ({
+      chunks: [
+        { id: 1, initial: true },
+        { id: 2, initial: false },
+      ],
+      assets: [
+        { path: 'main.js', size: jsSize, chunks: [1] },
+        { path: 'style.css', size: cssSize, chunks: [1] },
+        { path: 'logo.png', size: imageSize, chunks: [1] },
+        { path: 'async.js', size: 50, chunks: [2] },
+      ],
+    });
+
+    const baseline = createGraph(100, 20, 30);
+    const current = createGraph(120, 25, 35);
+
+    expect(
+      Graph.diffAssetsByExtensions(baseline, current, '.js', true),
+    ).toMatchObject({
+      size: { baseline: 100, current: 120 },
+      count: { baseline: 1, current: 1 },
+    });
+    expect(
+      Graph.diffAssetsByExtensions(baseline, current, '.css', true),
+    ).toMatchObject({
+      size: { baseline: 20, current: 25 },
+      count: { baseline: 1, current: 1 },
+    });
+  });
 });

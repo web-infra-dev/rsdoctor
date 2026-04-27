@@ -1,0 +1,15 @@
+{
+  "extends": "@rsdoctor/tsconfig/base",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "rootDir": "."
+  },
+  "include": ["src", "tests"],
+  "exclude": ["**/node_modules"]
+}

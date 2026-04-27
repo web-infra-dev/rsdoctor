@@ -89,6 +89,18 @@ type FilterFunctionOrExtensions =
   | string[]
   | ((asset: SDK.AssetData) => boolean);
 
+function isAssetMatchFilter(
+  asset: SDK.AssetData,
+  filterOrExtensions?: FilterFunctionOrExtensions,
+) {
+  if (!filterOrExtensions) return true;
+  if (typeof filterOrExtensions === 'function')
+    return filterOrExtensions(asset);
+  if (typeof filterOrExtensions === 'string')
+    return isAssetMatchExtension(asset, filterOrExtensions);
+  return isAssetMatchExtensions(asset, filterOrExtensions);
+}
+
 interface GetAssetsOptions {
   /**
    * turn off it when you need not file content.
@@ -163,12 +175,11 @@ export function getInitialAssetsSizeInfo(
   chunks: SDK.ChunkData[],
   options: GetAssetsOptions = {},
 ) {
-  if (options.filterOrExtensions) {
-    assets = filterAssets(assets, options.filterOrExtensions);
-  }
   return getAssetsSizeInfo(assets, chunks, {
     ...options,
-    filterOrExtensions: (asset) => isInitialAsset(asset, chunks),
+    filterOrExtensions: (asset) =>
+      isAssetMatchFilter(asset, options.filterOrExtensions) &&
+      isInitialAsset(asset, chunks),
   });
 }
 
