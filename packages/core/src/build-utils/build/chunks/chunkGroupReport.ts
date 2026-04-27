@@ -285,7 +285,19 @@ type InternalChunkGroupNode = Omit<
   | 'inheritedRemovableJSSize'
   | 'inheritedRemovableJSModules'
   | 'removableJSModules'
+  | 'incomingEdgeIds'
+  | 'outgoingEdgeIds'
+  | 'incomingImports'
+  | 'paths'
+  | 'pathCount'
+  | 'pathsTruncated'
+  | 'worstPathSeverity'
+  | 'maxPathUnnecessarySize'
+  | 'maxPathRatio'
+  | 'searchText'
 > & {
+  localActualJSById: Map<string, SDK.ChunkGroupGraphModuleData>;
+  localReachableJSById: Map<string, SDK.ChunkGroupGraphModuleData>;
   localRemovableById: Map<string, SDK.ChunkGroupGraphModuleData>;
 };
 
@@ -644,11 +656,19 @@ export function buildChunkGroupGraphReport(
       })
       .sort((a, b) => b.emittedSize - a.emittedSize);
 
+    const localActualJSById = new Map<
+      string,
+      SDK.ChunkGroupGraphModuleData
+    >();
+    const localReachableJSById = new Map<
+      string,
+      SDK.ChunkGroupGraphModuleData
+    >();
     const localRemovableJSModules: SDK.ChunkGroupGraphModuleData[] = [];
     let nonJSResidualCount = 0;
 
     for (const module of actualModules) {
-      if (reachableModules.has(module) || isExternalModule(compilation, module)) {
+      if (isExternalModule(compilation, module)) {
         continue;
       }
 
@@ -656,13 +676,20 @@ export function buildChunkGroupGraphReport(
       const size = getModuleSizeRobust(chunkGraph, module);
 
       if (isJavaScriptLikeResource(resource)) {
-        localRemovableJSModules.push({
+        const moduleData = {
           id: getModuleKey(compilation, compilerContext, module),
           name: getModuleName(compilation, module),
           resource: resource ? path.relative(compilerContext, resource) : null,
           size,
-        });
-      } else {
+        };
+
+        localActualJSById.set(moduleData.id, moduleData);
+        if (reachableModules.has(module)) {
+          localReachableJSById.set(moduleData.id, moduleData);
+        } else {
+          localRemovableJSModules.push(moduleData);
+        }
+      } else if (!reachableModules.has(module)) {
         nonJSResidualCount++;
       }
     }
@@ -685,6 +712,8 @@ export function buildChunkGroupGraphReport(
       nonJSResidualCount,
       chunks,
       localRemovableJSModules: sortedLocalRemovableJSModules,
+      localActualJSById,
+      localReachableJSById,
       localRemovableById: new Map(
         sortedLocalRemovableJSModules.map((module) => [module.id, module]),
       ),
@@ -812,7 +841,7 @@ export function buildChunkGroupGraphReport(
   }
 
   const nodeMap = new Map(localNodes.map((node) => [node.id, node]));
-  const guaranteedInclusiveRemovableByNode = new Map<
+  const guaranteedInclusiveLoadedByNode = new Map<
     string,
     Map<string, SDK.ChunkGroupGraphModuleData>
   >();
@@ -832,7 +861,7 @@ export function buildChunkGroupGraphReport(
     }
 
     const parentSets = (reverse.get(nodeId) ?? [])
-      .map((parentId) => guaranteedInclusiveRemovableByNode.get(parentId))
+      .map((parentId) => guaranteedInclusiveLoadedByNode.get(parentId))
       .filter(
         (
           modules,
@@ -852,11 +881,11 @@ export function buildChunkGroupGraphReport(
     }
 
     const guaranteedInclusive = new Map(guaranteedBefore);
-    for (const [moduleId, module] of node.localRemovableById) {
+    for (const [moduleId, module] of node.localActualJSById) {
       guaranteedInclusive.set(moduleId, module);
     }
 
-    guaranteedInclusiveRemovableByNode.set(nodeId, guaranteedInclusive);
+    guaranteedInclusiveLoadedByNode.set(nodeId, guaranteedInclusive);
     incrementalRemovableByNode.set(nodeId, incrementalRemovable);
     inheritedRemovableByNode.set(nodeId, inheritedRemovable);
   }
@@ -949,7 +978,11 @@ export function buildChunkGroupGraphReport(
     const paths = nodePaths
       .map((nodeIds, index) => {
         const uniqueChunks = new Map<string, SDK.ChunkGroupGraphChunkData>();
-        const unnecessaryModules = new Map<
+        const loadedModules = new Map<
+          string,
+          SDK.ChunkGroupGraphModuleData
+        >();
+        const requiredModules = new Map<
           string,
           SDK.ChunkGroupGraphModuleData
         >();
@@ -969,15 +1002,20 @@ export function buildChunkGroupGraphReport(
             }
           });
 
-          pathNode.localRemovableJSModules.forEach((module) => {
-            if (!unnecessaryModules.has(module.id)) {
-              unnecessaryModules.set(module.id, module);
-            }
+          const internalPathNode = nodeMap.get(nodeId);
+          internalPathNode?.localActualJSById.forEach((module, moduleId) => {
+            loadedModules.set(moduleId, module);
+          });
+          internalPathNode?.localReachableJSById.forEach((module, moduleId) => {
+            requiredModules.set(moduleId, module);
           });
         });
 
         const chunks = [...uniqueChunks.values()].sort(
           (a, b) => b.emittedSize - a.emittedSize,
+        );
+        const unnecessaryModules = [...loadedModules.values()].filter(
+          (module) => !requiredModules.has(module.id),
         );
         const allUnnecessaryModules = [...unnecessaryModules.values()].sort(
           (a, b) => b.size - a.size,

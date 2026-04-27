@@ -584,7 +584,8 @@ describe('buildChunkGroupGraphReport', () => {
     expect(
       barNode?.localRemovableJSModules.map((module) => module.resource),
     ).toEqual(['shared-main-foo.js']);
-    expect(barNode?.removableJSSize).toBe(50);
+    expect(barNode?.removableJSSize).toBe(0);
+    expect(barNode?.inheritedRemovableJSSize).toBe(50);
 
     expect(barPath?.label).toBe('main → foo → bar');
     expect([...(barPath?.chunkIds ?? [])].sort()).toEqual(
@@ -598,16 +599,8 @@ describe('buildChunkGroupGraphReport', () => {
     );
     expect(barPath?.totalEmittedSize).toBe(100 + 200 + 300 + 400 + 500);
     expect(barPath?.totalJSSize).toBe(10 + 20 + 30 + 40 + 50 + 70);
-    expect(barPath?.unnecessarySize).toBe(70 + 50);
-    expect(barPath?.severity).toBe('danger');
-    expect(
-      barPath?.topUnnecessaryModules.map((module) => [
-        module.resource,
-        module.size,
-      ]),
-    ).toEqual([
-      ['shared-foo-bar.js', 70],
-      ['shared-main-foo.js', 50],
-    ]);
+    expect(barPath?.unnecessarySize).toBe(0);
+    expect(barPath?.severity).toBe('normal');
+    expect(barPath?.topUnnecessaryModules).toEqual([]);
   });
 });
