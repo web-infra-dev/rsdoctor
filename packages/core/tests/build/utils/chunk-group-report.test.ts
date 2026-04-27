@@ -366,4 +366,248 @@ describe('buildChunkGroupGraphReport', () => {
     expect(report?.overview.dangerPathCount).toBe(2);
     expect(report?.overview.warningPathCount).toBe(0);
   });
+
+  it('deduplicates shared split chunks when calculating a nested load path', () => {
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), 'rsdoctor-chunk-group-splitchunks-'),
+    );
+    tempDirs.push(tempDir);
+
+    const mainFile = path.join(tempDir, 'main.js');
+    const fooFile = path.join(tempDir, 'foo.js');
+    const barFile = path.join(tempDir, 'bar.js');
+    const libFile = path.join(tempDir, 'lib.js');
+    const sharedMainFooFile = path.join(tempDir, 'shared-main-foo.js');
+    const sharedFooBarFile = path.join(tempDir, 'shared-foo-bar.js');
+
+    fs.writeFileSync(mainFile, "import('./foo')\n");
+    fs.writeFileSync(fooFile, "import('./bar')\n");
+    fs.writeFileSync(barFile, "export const bar = true\n");
+    fs.writeFileSync(libFile, "export const lib = true\n");
+    fs.writeFileSync(sharedMainFooFile, "export const sharedMainFoo = true\n");
+    fs.writeFileSync(sharedFooBarFile, "export const sharedFooBar = true\n");
+
+    const mainModule = {
+      resource: mainFile,
+      identifier: () => mainFile,
+      nameForCondition: () => mainFile,
+      readableIdentifier: () => mainFile,
+      blocks: [{ dependencies: ['dep_foo'] }],
+    };
+    const fooModule = {
+      resource: fooFile,
+      identifier: () => fooFile,
+      nameForCondition: () => fooFile,
+      readableIdentifier: () => fooFile,
+      blocks: [{ dependencies: ['dep_bar'] }],
+    };
+    const barModule = {
+      resource: barFile,
+      identifier: () => barFile,
+      nameForCondition: () => barFile,
+      readableIdentifier: () => barFile,
+    };
+    const libModule = {
+      resource: libFile,
+      identifier: () => libFile,
+      nameForCondition: () => libFile,
+      readableIdentifier: () => libFile,
+    };
+    const sharedMainFooModule = {
+      resource: sharedMainFooFile,
+      identifier: () => sharedMainFooFile,
+      nameForCondition: () => sharedMainFooFile,
+      readableIdentifier: () => sharedMainFooFile,
+    };
+    const sharedFooBarModule = {
+      resource: sharedFooBarFile,
+      identifier: () => sharedFooBarFile,
+      nameForCondition: () => sharedFooBarFile,
+      readableIdentifier: () => sharedFooBarFile,
+    };
+
+    const mainChunk = {
+      id: 'main-chunk',
+      name: 'main',
+      files: ['main.js'],
+    };
+    const fooChunk = {
+      id: 'foo-chunk',
+      name: 'foo',
+      files: ['foo.js'],
+    };
+    const barChunk = {
+      id: 'bar-chunk',
+      name: 'bar',
+      files: ['bar.js'],
+    };
+    const libChunk = {
+      id: 'lib-chunk',
+      name: 'lib',
+      files: ['lib.js'],
+    };
+    const sharedChunk = {
+      id: 'shared-chunk',
+      name: 'shared-main-foo-and-foo-bar',
+      files: ['shared.js'],
+    };
+
+    const mainGroup = {
+      name: 'main',
+      isInitial: () => true,
+      chunks: [mainChunk, libChunk, sharedChunk],
+      origins: [],
+    };
+    const fooGroup = {
+      name: 'foo',
+      isInitial: () => false,
+      chunks: [fooChunk, libChunk, sharedChunk],
+      origins: [
+        {
+          request: './foo',
+          dependency: 'dep_foo',
+          module: mainModule,
+          loc: {
+            start: { line: 1, column: 0 },
+            end: { line: 1, column: 15 },
+          },
+        },
+      ],
+    };
+    const barGroup = {
+      name: 'bar',
+      isInitial: () => false,
+      chunks: [barChunk, libChunk, sharedChunk],
+      origins: [
+        {
+          request: './bar',
+          dependency: 'dep_bar',
+          module: fooModule,
+          loc: {
+            start: { line: 1, column: 0 },
+            end: { line: 1, column: 15 },
+          },
+        },
+      ],
+    };
+
+    const chunkModules = new Map<any, any[]>([
+      [mainChunk, [mainModule]],
+      [fooChunk, [fooModule]],
+      [barChunk, [barModule]],
+      [libChunk, [libModule]],
+      [sharedChunk, [sharedMainFooModule, sharedFooBarModule]],
+    ]);
+
+    const chunkEntries = new Map<any, any[]>([
+      [mainChunk, [mainModule]],
+      [fooChunk, [fooModule]],
+      [barChunk, [barModule]],
+      [libChunk, []],
+      [sharedChunk, []],
+    ]);
+
+    const moduleSizes = new Map<any, number>([
+      [mainModule, 10],
+      [fooModule, 20],
+      [barModule, 30],
+      [libModule, 40],
+      [sharedMainFooModule, 50],
+      [sharedFooBarModule, 70],
+    ]);
+
+    const syncDependencies = new Map<any, any[]>([
+      [mainModule, [libModule, sharedMainFooModule]],
+      [fooModule, [libModule, sharedMainFooModule, sharedFooBarModule]],
+      [barModule, [libModule, sharedFooBarModule]],
+    ]);
+
+    const compilation = {
+      requestShortener: undefined,
+      chunks: [mainChunk, fooChunk, barChunk, libChunk, sharedChunk],
+      chunkGroups: [mainGroup, fooGroup, barGroup],
+      assets: {
+        'main.js': { size: () => 100 },
+        'foo.js': { size: () => 200 },
+        'bar.js': { size: () => 300 },
+        'lib.js': { size: () => 400 },
+        'shared.js': { size: () => 500 },
+      },
+      chunkGraph: {
+        getChunkModulesIterable(chunk: any) {
+          return chunkModules.get(chunk) ?? [];
+        },
+        getChunkEntryModulesIterable(chunk: any) {
+          return chunkEntries.get(chunk) ?? [];
+        },
+        getModuleSize(module: any) {
+          return moduleSizes.get(module) ?? 0;
+        },
+      },
+      moduleGraph: {
+        getModule(dep: string) {
+          if (dep === 'dep_foo') {
+            return fooModule;
+          }
+          if (dep === 'dep_bar') {
+            return barModule;
+          }
+          return undefined;
+        },
+        getOutgoingConnections(module: any) {
+          return (syncDependencies.get(module) ?? []).map((target) => ({
+            module: target,
+          }));
+        },
+        getIncomingConnections() {
+          return [];
+        },
+        getParentBlock() {
+          return null;
+        },
+      },
+    };
+
+    const report = buildChunkGroupGraphReport(compilation, tempDir);
+
+    expect(report).toBeTruthy();
+
+    const mainNode = report?.nodes.find((node) => node.name === 'main');
+    const fooNode = report?.nodes.find((node) => node.name === 'foo');
+    const barNode = report?.nodes.find((node) => node.name === 'bar');
+    const barPath = barNode?.paths[0];
+
+    expect(
+      mainNode?.localRemovableJSModules.map((module) => module.resource),
+    ).toEqual(['shared-foo-bar.js']);
+    expect(fooNode?.localRemovableJSSize).toBe(0);
+    expect(
+      barNode?.localRemovableJSModules.map((module) => module.resource),
+    ).toEqual(['shared-main-foo.js']);
+    expect(barNode?.removableJSSize).toBe(50);
+
+    expect(barPath?.label).toBe('main → foo → bar');
+    expect([...(barPath?.chunkIds ?? [])].sort()).toEqual(
+      [
+        'bar-chunk',
+        'foo-chunk',
+        'lib-chunk',
+        'main-chunk',
+        'shared-chunk',
+      ].sort(),
+    );
+    expect(barPath?.totalEmittedSize).toBe(100 + 200 + 300 + 400 + 500);
+    expect(barPath?.totalJSSize).toBe(10 + 20 + 30 + 40 + 50 + 70);
+    expect(barPath?.unnecessarySize).toBe(70 + 50);
+    expect(barPath?.severity).toBe('danger');
+    expect(
+      barPath?.topUnnecessaryModules.map((module) => [
+        module.resource,
+        module.size,
+      ]),
+    ).toEqual([
+      ['shared-foo-bar.js', 70],
+      ['shared-main-foo.js', 50],
+    ]);
+  });
 });
