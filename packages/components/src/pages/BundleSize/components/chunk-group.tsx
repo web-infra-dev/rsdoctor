@@ -54,11 +54,14 @@ const WARNING_COLOR = '#f59e0b';
 const DANGER_COLOR = '#ef4444';
 const MUTED_NODE = '#d1d5db';
 const MUTED_BORDER = '#9ca3af';
-const MIN_GRAPH_HEIGHT = 760;
-const LAYOUT_TOP_PADDING = 96;
-const LAYOUT_LEFT_PADDING = 140;
-const LAYOUT_ROW_GAP = 56;
-const LAYOUT_COLUMN_GAP = 380;
+const MIN_GRAPH_HEIGHT = 520;
+const MAX_GRAPH_HEIGHT = 620;
+const LAYOUT_TOP_PADDING = 64;
+const LAYOUT_LEFT_PADDING = 120;
+const LAYOUT_ROW_GAP = 32;
+const LAYOUT_COLUMN_GAP = 320;
+const LAYOUT_SUBCOLUMN_GAP = 250;
+const MAX_LAYOUT_ROWS_PER_LEVEL = 6;
 const NODE_LABEL_WIDTH = 180;
 
 const getBaseNodeColor = (node: SDK.ChunkGroupGraphNodeData) =>
@@ -76,9 +79,7 @@ const getPathColor = (severity: SDK.ChunkGroupGraphPathSeverity) => {
   return HIGHLIGHT_COLOR;
 };
 
-const getSeverityTagColor = (
-  severity: SDK.ChunkGroupGraphPathSeverity,
-) => {
+const getSeverityTagColor = (severity: SDK.ChunkGroupGraphPathSeverity) => {
   if (severity === 'danger') {
     return 'red';
   }
@@ -90,9 +91,7 @@ const getSeverityTagColor = (
 
 const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`;
 
-const buildForwardAdjacency = (
-  edges: SDK.ChunkGroupGraphEdgeData[],
-) => {
+const buildForwardAdjacency = (edges: SDK.ChunkGroupGraphEdgeData[]) => {
   const map = new Map<string, string[]>();
   for (const edge of edges) {
     if (!map.has(edge.from)) {
@@ -103,9 +102,7 @@ const buildForwardAdjacency = (
   return map;
 };
 
-const buildReverseAdjacency = (
-  edges: SDK.ChunkGroupGraphEdgeData[],
-) => {
+const buildReverseAdjacency = (edges: SDK.ChunkGroupGraphEdgeData[]) => {
   const map = new Map<string, string[]>();
   for (const edge of edges) {
     if (!map.has(edge.to)) {
@@ -128,14 +125,7 @@ const getNodeSymbolSize = (
 ) =>
   Math.max(
     38,
-    Math.min(
-      74,
-      38 +
-        36 *
-          Math.sqrt(
-            node.totalEmittedSize / maxEmittedSize,
-          ),
-    ),
+    Math.min(74, 38 + 36 * Math.sqrt(node.totalEmittedSize / maxEmittedSize)),
   );
 
 const getNodeLaneHeight = (
@@ -144,12 +134,21 @@ const getNodeLaneHeight = (
   outDegree: number,
 ) =>
   Math.max(
-    124,
-    getNodeSymbolSize(node, maxEmittedSize) + 74 + Math.min(24, outDegree * 6),
+    96,
+    getNodeSymbolSize(node, maxEmittedSize) + 50 + Math.min(18, outDegree * 4),
   );
 
 const truncateLabel = (value: string, maxLength = 26) =>
   value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
+
+const sortPathsByOpportunity = (
+  a: SDK.ChunkGroupGraphPathData,
+  b: SDK.ChunkGroupGraphPathData,
+) =>
+  b.unnecessarySize - a.unnecessarySize ||
+  b.ratio - a.ratio ||
+  b.totalEmittedSize - a.totalEmittedSize ||
+  a.label.localeCompare(b.label);
 
 const buildLayout = (
   nodes: SDK.ChunkGroupGraphNodeData[],
@@ -162,9 +161,7 @@ const buildLayout = (
     };
   }
 
-  const indegree = new Map<string, number>(
-    nodes.map((node) => [node.id, 0]),
-  );
+  const indegree = new Map<string, number>(nodes.map((node) => [node.id, 0]));
   for (const edge of edges) {
     indegree.set(edge.to, (indegree.get(edge.to) || 0) + 1);
   }
@@ -235,10 +232,16 @@ const buildLayout = (
   const orderMap = new Map<string, number>();
   const levelLayouts = new Map<
     number,
-    Array<{
-      laneHeight: number;
-      node: SDK.ChunkGroupGraphNodeData;
-    }>
+    {
+      height: number;
+      items: Array<{
+        laneHeight: number;
+        node: SDK.ChunkGroupGraphNodeData;
+      }>;
+      rowCount: number;
+      rowHeight: number;
+      width: number;
+    }
   >();
   let maxLevelHeight = 0;
 
@@ -280,14 +283,26 @@ const buildLayout = (
       ),
       node,
     }));
-    const levelHeight =
-      levelLayout.reduce((sum, item) => sum + item.laneHeight, 0) +
-      Math.max(0, levelLayout.length - 1) * LAYOUT_ROW_GAP;
+    const columnCount = Math.max(
+      1,
+      Math.ceil(levelLayout.length / MAX_LAYOUT_ROWS_PER_LEVEL),
+    );
+    const rowCount = Math.max(1, Math.ceil(levelLayout.length / columnCount));
+    const rowHeight =
+      Math.max(...levelLayout.map((item) => item.laneHeight)) + LAYOUT_ROW_GAP;
+    const levelHeight = rowCount * rowHeight - LAYOUT_ROW_GAP;
+    const levelWidth = Math.max(0, (columnCount - 1) * LAYOUT_SUBCOLUMN_GAP);
 
     levelLayout.forEach((item, index) => {
       orderMap.set(item.node.id, index);
     });
-    levelLayouts.set(level, levelLayout);
+    levelLayouts.set(level, {
+      height: levelHeight,
+      items: levelLayout,
+      rowCount,
+      rowHeight,
+      width: levelWidth,
+    });
     maxLevelHeight = Math.max(maxLevelHeight, levelHeight);
   }
 
@@ -303,22 +318,24 @@ const buildLayout = (
     }
   >();
 
-  for (const [level, levelNodes] of [...levelLayouts.entries()].sort(
+  let currentX = LAYOUT_LEFT_PADDING;
+  for (const [, levelLayout] of [...levelLayouts.entries()].sort(
     (a, b) => a[0] - b[0],
   )) {
-    const levelHeight =
-      levelNodes.reduce((sum, item) => sum + item.laneHeight, 0) +
-      Math.max(0, levelNodes.length - 1) * LAYOUT_ROW_GAP;
-    let currentY =
-      LAYOUT_TOP_PADDING + (contentHeight - levelHeight) / 2;
+    const currentY = LAYOUT_TOP_PADDING;
 
-    levelNodes.forEach((item) => {
+    levelLayout.items.forEach((item, index) => {
+      const column = Math.floor(index / levelLayout.rowCount);
+      const row = index % levelLayout.rowCount;
       positions.set(item.node.id, {
-        x: LAYOUT_LEFT_PADDING + level * LAYOUT_COLUMN_GAP,
-        y: currentY + item.laneHeight / 2,
+        x: currentX + column * LAYOUT_SUBCOLUMN_GAP,
+        y: currentY + row * levelLayout.rowHeight + levelLayout.rowHeight / 2,
       });
-      currentY += item.laneHeight + LAYOUT_ROW_GAP;
     });
+    currentX += Math.max(
+      LAYOUT_COLUMN_GAP,
+      levelLayout.width + LAYOUT_COLUMN_GAP,
+    );
   }
 
   return {
@@ -415,7 +432,10 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const nodeMap = useMemo(() => buildNodeMap(nodes), [nodes]);
   const edgeMap = useMemo(() => buildEdgeMap(edges), [edges]);
   const layout = useMemo(() => buildLayout(nodes, edges), [nodes, edges]);
-  const graphHeight = Math.max(MIN_GRAPH_HEIGHT, layout.height);
+  const graphHeight = Math.min(
+    MAX_GRAPH_HEIGHT,
+    Math.max(MIN_GRAPH_HEIGHT, layout.height),
+  );
 
   const matchedNodeIds = useMemo(() => {
     if (!searchQuery.trim()) {
@@ -432,14 +452,15 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
 
   const selectedNode = selectedNodeId ? nodeMap.get(selectedNodeId) : undefined;
   const selectedEdge = selectedEdgeId ? edgeMap.get(selectedEdgeId) : undefined;
-  const selectedNodePaths = selectedNode?.paths ?? [];
+  const selectedNodePaths = useMemo(
+    () => [...(selectedNode?.paths ?? [])].sort(sortPathsByOpportunity),
+    [selectedNode?.paths],
+  );
   const priorityNodes = useMemo(
     () =>
       (report?.priorityNodeIds ?? [])
         .map((nodeId) => nodeMap.get(nodeId))
-        .filter(
-          (node): node is SDK.ChunkGroupGraphNodeData => Boolean(node),
-        )
+        .filter((node): node is SDK.ChunkGroupGraphNodeData => Boolean(node))
         .filter((node) => matchedNodeIds.has(node.id)),
     [matchedNodeIds, nodeMap, report?.priorityNodeIds],
   );
@@ -462,7 +483,9 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     };
   }, [graphHeight, nodes.length, edges.length]);
 
-  const hoveredPath = selectedNodePaths.find((path) => path.id === hoveredPathId);
+  const hoveredPath = selectedNodePaths.find(
+    (path) => path.id === hoveredPathId,
+  );
 
   const highlightNodeIds = useMemo(() => {
     if (hoveredPath) {
@@ -499,8 +522,11 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const option = useMemo<ChunkGroupGraphOption>(() => {
     const hasSelection =
       Boolean(selectedNode) || Boolean(selectedEdge) || Boolean(hoveredPath);
-    const hoverColor = hoveredPath ? getPathColor(hoveredPath.severity) : HIGHLIGHT_COLOR;
-    const useForceLayout = nodes.length > 12;
+    const hoverColor = hoveredPath
+      ? getPathColor(hoveredPath.severity)
+      : HIGHLIGHT_COLOR;
+    const hasSearch = Boolean(searchQuery.trim());
+    const isLargeGraph = nodes.length > 80;
     const maxEmittedSize = Math.max(
       1,
       ...nodes.map((item) => item.totalEmittedSize),
@@ -511,14 +537,22 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       const baseColor = getBaseNodeColor(node);
       const isMatched = matchedNodeIds.has(node.id);
       const isOnHighlight = highlightNodeIds.has(node.id);
-      const symbolSize = getNodeSymbolSize(node, maxEmittedSize);
+      const symbolSize =
+        getNodeSymbolSize(node, maxEmittedSize) * (isLargeGraph ? 0.78 : 1);
 
       let opacity = 1;
       if (hasSelection) {
         opacity = isOnHighlight ? 1 : 0.16;
-      } else if (searchQuery.trim()) {
+      } else if (hasSearch) {
         opacity = isMatched ? 1 : 0.16;
       }
+      const shouldShowLabel =
+        opacity > 0.3 &&
+        (!isLargeGraph ||
+          node.isInitial ||
+          node.removableJSSize > 0 ||
+          isOnHighlight ||
+          (hasSearch && isMatched));
 
       const removableRatio =
         node.groupTotalJSSize > 0
@@ -541,7 +575,8 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
         value: node.totalEmittedSize,
         symbolSize,
         itemStyle: {
-          color: hasSelection && !isOnHighlight ? MUTED_NODE : baseColor.background,
+          color:
+            hasSelection && !isOnHighlight ? MUTED_NODE : baseColor.background,
           borderColor:
             hasSelection && !isOnHighlight ? MUTED_BORDER : borderColor,
           borderWidth: selectedNode?.id === node.id ? 4 : 2,
@@ -550,7 +585,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           shadowColor: 'rgba(17,24,39,0.25)',
         },
         label: {
-          show: opacity > 0.3,
+          show: shouldShowLabel,
           position: 'bottom' as const,
           distance: 10,
           width: NODE_LABEL_WIDTH,
@@ -572,7 +607,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       let opacity = 0.6;
       if (hasSelection) {
         opacity = highlight ? 0.95 : 0.08;
-      } else if (searchQuery.trim()) {
+      } else if (hasSearch) {
         opacity = matchesSearch ? 0.65 : 0.06;
       }
 
@@ -588,7 +623,10 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           curveness: 0.12,
         },
         label: {
-          show: edge.imports.length > 1 && opacity > 0.3,
+          show:
+            edge.imports.length > 1 &&
+            opacity > 0.3 &&
+            (!isLargeGraph || highlight),
           formatter: `${edge.imports.length} imports`,
           color: highlight ? hoverColor : '#64748b',
           fontSize: 10,
@@ -633,24 +671,27 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       series: [
         {
           type: 'graph',
-          layout: useForceLayout ? 'force' : 'none',
+          layout: 'none',
           roam: true,
-          draggable: true,
+          draggable: false,
+          zoom: isLargeGraph ? 1.15 : 1,
+          center: isLargeGraph
+            ? [LAYOUT_LEFT_PADDING + 520, LAYOUT_TOP_PADDING + 1000]
+            : undefined,
+          scaleLimit: {
+            min: 0.25,
+            max: 4,
+          },
+          edgeSymbol: ['none', 'arrow'],
+          edgeSymbolSize: [0, 8],
           data: graphNodes,
           links: graphEdges,
-          force: useForceLayout
-            ? {
-                initLayout: 'circular',
-                repulsion: Math.min(3200, Math.max(1200, nodes.length * 110)),
-                edgeLength: [180, 320],
-                gravity: 0.06,
-                friction: 0.5,
-                layoutAnimation: false,
-              }
-            : undefined,
           lineStyle: {
             opacity: 0.65,
             width: 1.5,
+          },
+          labelLayout: {
+            hideOverlap: true,
           },
           emphasis: {
             focus: 'adjacency',
@@ -691,6 +732,183 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const dangerPathCount = overview?.dangerPathCount ?? 0;
   const warningPathCount = overview?.warningPathCount ?? 0;
   const selectedNodeImports = selectedNode?.incomingImports ?? [];
+  const selectedNodePathList = selectedNode ? (
+    <div>
+      <Typography.Title level={5}>
+        Load Paths From Entry ({selectedNode.pathCount})
+      </Typography.Title>
+      {selectedNode.pathsTruncated ? (
+        <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+          Showing the first {report?.pathLimit ?? selectedNode.pathCount} paths
+          for this group. The full path set is larger.
+        </Typography.Text>
+      ) : null}
+      <Space direction="vertical" style={{ width: '100%' }}>
+        {selectedNodePaths.length ? (
+          selectedNodePaths.map((path) => {
+            const color = getPathColor(path.severity);
+            const backgroundColor =
+              path.severity === 'danger'
+                ? '#fff1f0'
+                : path.severity === 'warning'
+                  ? '#fffbe6'
+                  : '#fafafa';
+            const isExpanded = expandedPathIds.has(path.id);
+
+            const header = (
+              <div
+                onMouseEnter={() => setHoveredPathId(path.id)}
+                onMouseLeave={() => setHoveredPathId(null)}
+                onClick={() => {
+                  setExpandedPathIds((prev) => {
+                    const next = new Set(prev);
+                    if (next.has(path.id)) {
+                      next.delete(path.id);
+                    } else {
+                      next.add(path.id);
+                    }
+                    return next;
+                  });
+                }}
+                style={{
+                  border: `1px solid ${color}`,
+                  borderRadius: 8,
+                  padding: 12,
+                  background: backgroundColor,
+                  cursor: 'pointer',
+                }}
+              >
+                <Space
+                  direction="vertical"
+                  style={{ width: '100%' }}
+                  size="small"
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      gap: 12,
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <Typography.Text strong style={{ flex: 1 }}>
+                      {path.label}
+                    </Typography.Text>
+                    <Typography.Text
+                      type="secondary"
+                      style={{ fontSize: 12, whiteSpace: 'nowrap' }}
+                    >
+                      {isExpanded ? 'Collapse' : 'Expand'}
+                    </Typography.Text>
+                  </div>
+                  <Space wrap>
+                    <Tag color="default">
+                      {formatSize(path.totalEmittedSize)} loaded
+                    </Tag>
+                    <Tag color="default">
+                      {path.chunkIds.length} unique chunks
+                    </Tag>
+                    <Tag color="default">
+                      {formatSize(path.totalJSSize)} JS total
+                    </Tag>
+                    {path.unnecessarySize > 0 ? (
+                      <Tag color={path.severity === 'danger' ? 'red' : 'gold'}>
+                        {formatSize(path.unnecessarySize)} unnecessary
+                      </Tag>
+                    ) : null}
+                    {path.unnecessarySize > 0 ? (
+                      <Tag color={path.severity === 'danger' ? 'red' : 'gold'}>
+                        {formatPercent(path.ratio)}
+                      </Tag>
+                    ) : null}
+                    {path.unnecessaryModuleCount >
+                    path.topUnnecessaryModules.length ? (
+                      <Tag color="default">
+                        top {path.topUnnecessaryModules.length} /{' '}
+                        {path.unnecessaryModuleCount} modules
+                      </Tag>
+                    ) : null}
+                  </Space>
+                  {isExpanded ? (
+                    <>
+                      <div>
+                        <Typography.Text
+                          type="secondary"
+                          style={{ fontSize: 12 }}
+                        >
+                          Chunks
+                        </Typography.Text>
+                        {path.chunks.map((chunk) => (
+                          <div
+                            key={chunk.id}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              gap: 12,
+                            }}
+                          >
+                            <Typography.Text style={{ fontSize: 12 }}>
+                              {chunk.name}
+                            </Typography.Text>
+                            <Typography.Text code style={{ fontSize: 12 }}>
+                              {formatSize(chunk.emittedSize)}
+                            </Typography.Text>
+                          </div>
+                        ))}
+                      </div>
+                      {path.topUnnecessaryModules.length ? (
+                        <div>
+                          <Typography.Text
+                            type="secondary"
+                            style={{ fontSize: 12 }}
+                          >
+                            Top unnecessary modules
+                          </Typography.Text>
+                          {path.topUnnecessaryModules
+                            .slice(0, 5)
+                            .map((module) => (
+                              <div
+                                key={module.id}
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  gap: 12,
+                                }}
+                              >
+                                <Typography.Text style={{ fontSize: 12 }}>
+                                  {module.resource ?? module.name}
+                                </Typography.Text>
+                                <Typography.Text code style={{ fontSize: 12 }}>
+                                  {formatSize(module.size)}
+                                </Typography.Text>
+                              </div>
+                            ))}
+                        </div>
+                      ) : null}
+                    </>
+                  ) : null}
+                </Space>
+              </div>
+            );
+
+            if (path.severity !== 'danger') {
+              return <React.Fragment key={path.id}>{header}</React.Fragment>;
+            }
+
+            return (
+              <Tooltip title="非必要依赖过多" key={path.id}>
+                {header}
+              </Tooltip>
+            );
+          })
+        ) : (
+          <Typography.Text type="secondary">
+            No load path from entry was found for the selected chunk group.
+          </Typography.Text>
+        )}
+      </Space>
+    </div>
+  ) : null;
 
   return (
     <Space direction="vertical" style={{ width: '100%' }} size="middle">
@@ -773,7 +991,13 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                 {!selectedNode && !selectedEdge ? <DetailPlaceholder /> : null}
 
                 {selectedNode ? (
-                  <Space direction="vertical" style={{ width: '100%' }} size="middle">
+                  <Space
+                    direction="vertical"
+                    style={{ width: '100%' }}
+                    size="middle"
+                  >
+                    {selectedNodePathList}
+
                     <div>
                       <Typography.Title level={5} style={{ marginBottom: 8 }}>
                         {selectedNode.name}
@@ -782,30 +1006,49 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                         <Tag color={selectedNode.isInitial ? 'blue' : 'green'}>
                           {selectedNode.isInitial ? 'Entry' : 'Async'}
                         </Tag>
-                        <Tag>{formatSize(selectedNode.totalEmittedSize)} emitted</Tag>
-                        <Tag>{formatSize(selectedNode.groupTotalJSSize)} JS total</Tag>
-                        <Tag color={selectedNode.removableJSSize ? 'gold' : 'default'}>
-                          {formatSize(selectedNode.removableJSSize)} removable on path
+                        <Tag>
+                          {formatSize(selectedNode.totalEmittedSize)} emitted
                         </Tag>
-                        <Tag color={selectedNode.localRemovableJSSize ? 'default' : 'default'}>
-                          {formatSize(selectedNode.localRemovableJSSize)} in group
+                        <Tag>
+                          {formatSize(selectedNode.groupTotalJSSize)} JS total
+                        </Tag>
+                        <Tag
+                          color={
+                            selectedNode.removableJSSize ? 'gold' : 'default'
+                          }
+                        >
+                          {formatSize(selectedNode.removableJSSize)} removable
+                          on path
+                        </Tag>
+                        <Tag
+                          color={
+                            selectedNode.localRemovableJSSize
+                              ? 'default'
+                              : 'default'
+                          }
+                        >
+                          {formatSize(selectedNode.localRemovableJSSize)} in
+                          group
                         </Tag>
                         {selectedNode.inheritedRemovableJSSize > 0 ? (
                           <Tag color="cyan">
-                            {formatSize(selectedNode.inheritedRemovableJSSize)} already loaded before
+                            {formatSize(selectedNode.inheritedRemovableJSSize)}{' '}
+                            already loaded before
                           </Tag>
                         ) : null}
                       </Space>
                       <div style={{ marginTop: 8 }}>
                         <Typography.Text type="secondary">
-                          Reachable modules: {selectedNode.reachableModuleCount} /{' '}
-                          {selectedNode.actualModuleCount}
+                          Reachable modules: {selectedNode.reachableModuleCount}{' '}
+                          / {selectedNode.actualModuleCount}
                         </Typography.Text>
                       </div>
                     </div>
 
                     <div>
-                      <Typography.Title level={5}>Chunks In This Group</Typography.Title>
+                      <Typography.Title level={5}>
+                        Chunks In This Group
+                      </Typography.Title>
                       <Space direction="vertical" style={{ width: '100%' }}>
                         {selectedNode.chunks.length ? (
                           selectedNode.chunks.map((chunk) => (
@@ -817,11 +1060,17 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                                 padding: 12,
                               }}
                             >
-                              <Typography.Text strong>{chunk.name}</Typography.Text>
+                              <Typography.Text strong>
+                                {chunk.name}
+                              </Typography.Text>
                               <div style={{ marginTop: 6 }}>
                                 <Space wrap>
-                                  <Tag>{formatSize(chunk.emittedSize)} emitted</Tag>
-                                  <Tag>{formatSize(chunk.totalJSSize)} JS total</Tag>
+                                  <Tag>
+                                    {formatSize(chunk.emittedSize)} emitted
+                                  </Tag>
+                                  <Tag>
+                                    {formatSize(chunk.totalJSSize)} JS total
+                                  </Tag>
                                   <Tag>{chunk.moduleCount} modules</Tag>
                                 </Space>
                               </div>
@@ -829,7 +1078,9 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                                 <div style={{ marginTop: 8 }}>
                                   {chunk.files.map((file) => (
                                     <div key={file}>
-                                      <Typography.Text code>{file}</Typography.Text>
+                                      <Typography.Text code>
+                                        {file}
+                                      </Typography.Text>
                                     </div>
                                   ))}
                                 </div>
@@ -859,7 +1110,8 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                           ))
                         ) : (
                           <Typography.Text type="secondary">
-                            No inbound async import() origins were captured for this group.
+                            No inbound async import() origins were captured for
+                            this group.
                           </Typography.Text>
                         )}
                       </Space>
@@ -867,40 +1119,50 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
 
                     <div>
                       <Typography.Title level={5}>
-                        Incremental Removable JS Modules ({selectedNode.removableJSModuleCount})
+                        Incremental Removable JS Modules (
+                        {selectedNode.removableJSModuleCount})
                       </Typography.Title>
                       {selectedNode.inheritedRemovableJSModuleCount > 0 ? (
-                        <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                          {formatSize(selectedNode.inheritedRemovableJSSize)} of this group's local removable
-                          JS has already been loaded on every entry path before reaching this group.
+                        <Typography.Text
+                          type="secondary"
+                          style={{ fontSize: 12 }}
+                        >
+                          {formatSize(selectedNode.inheritedRemovableJSSize)} of
+                          this group's local removable JS has already been
+                          loaded on every entry path before reaching this group.
                         </Typography.Text>
                       ) : null}
                       {selectedNode.removableJSModules.length > 50 ? (
-                        <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                        <Typography.Text
+                          type="secondary"
+                          style={{ fontSize: 12 }}
+                        >
                           Showing top 50 modules by size.
                         </Typography.Text>
                       ) : null}
                       <Space direction="vertical" style={{ width: '100%' }}>
                         {selectedNode.removableJSModules.length ? (
-                          selectedNode.removableJSModules.slice(0, 50).map((module) => (
-                            <div
-                              key={module.id}
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                gap: 12,
-                              }}
-                            >
-                              <div style={{ minWidth: 0 }}>
-                                <Typography.Text style={{ display: 'block' }}>
-                                  {module.resource ?? module.name}
+                          selectedNode.removableJSModules
+                            .slice(0, 50)
+                            .map((module) => (
+                              <div
+                                key={module.id}
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  gap: 12,
+                                }}
+                              >
+                                <div style={{ minWidth: 0 }}>
+                                  <Typography.Text style={{ display: 'block' }}>
+                                    {module.resource ?? module.name}
+                                  </Typography.Text>
+                                </div>
+                                <Typography.Text code>
+                                  {formatSize(module.size)}
                                 </Typography.Text>
                               </div>
-                              <Typography.Text code>
-                                {formatSize(module.size)}
-                              </Typography.Text>
-                            </div>
-                          ))
+                            ))
                         ) : (
                           <Typography.Text type="secondary">
                             {selectedNode.localRemovableJSModuleCount > 0
@@ -914,7 +1176,8 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                     {selectedNode.inheritedRemovableJSModules.length ? (
                       <div>
                         <Typography.Title level={5}>
-                          Already Loaded Before This Group ({selectedNode.inheritedRemovableJSModuleCount})
+                          Already Loaded Before This Group (
+                          {selectedNode.inheritedRemovableJSModuleCount})
                         </Typography.Title>
                         <Space direction="vertical" style={{ width: '100%' }}>
                           {selectedNode.inheritedRemovableJSModules
@@ -941,186 +1204,15 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                         </Space>
                       </div>
                     ) : null}
-
-                    <div>
-                      <Typography.Title level={5}>
-                        Load Paths From Entry ({selectedNode.pathCount})
-                      </Typography.Title>
-                      {selectedNode.pathsTruncated ? (
-                        <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                          Showing the first {report?.pathLimit ?? selectedNode.pathCount} paths for this
-                          group. The full path set is larger.
-                        </Typography.Text>
-                      ) : null}
-                      <Space direction="vertical" style={{ width: '100%' }}>
-                        {selectedNodePaths.length ? (
-                          selectedNodePaths.map((path) => {
-                            const color = getPathColor(path.severity);
-                            const backgroundColor =
-                              path.severity === 'danger'
-                                ? '#fff1f0'
-                                : path.severity === 'warning'
-                                  ? '#fffbe6'
-                                  : '#fafafa';
-                            const isExpanded = expandedPathIds.has(path.id);
-
-                            const header = (
-                              <div
-                                onMouseEnter={() => setHoveredPathId(path.id)}
-                                onMouseLeave={() => setHoveredPathId(null)}
-                                onClick={() => {
-                                  setExpandedPathIds((prev) => {
-                                    const next = new Set(prev);
-                                    if (next.has(path.id)) {
-                                      next.delete(path.id);
-                                    } else {
-                                      next.add(path.id);
-                                    }
-                                    return next;
-                                  });
-                                }}
-                                style={{
-                                  border: `1px solid ${color}`,
-                                  borderRadius: 8,
-                                  padding: 12,
-                                  background: backgroundColor,
-                                  cursor: 'pointer',
-                                }}
-                              >
-                                <Space
-                                  direction="vertical"
-                                  style={{ width: '100%' }}
-                                  size="small"
-                                >
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      justifyContent: 'space-between',
-                                      gap: 12,
-                                      alignItems: 'flex-start',
-                                    }}
-                                  >
-                                    <Typography.Text strong style={{ flex: 1 }}>
-                                      {path.label}
-                                    </Typography.Text>
-                                    <Typography.Text
-                                      type="secondary"
-                                      style={{ fontSize: 12, whiteSpace: 'nowrap' }}
-                                    >
-                                      {isExpanded ? 'Collapse' : 'Expand'}
-                                    </Typography.Text>
-                                  </div>
-                                  <Space wrap>
-                                    <Tag color="default">
-                                      {formatSize(path.totalEmittedSize)} loaded
-                                    </Tag>
-                                    <Tag color="default">
-                                      {path.chunkIds.length} unique chunks
-                                    </Tag>
-                                    <Tag color="default">
-                                      {formatSize(path.totalJSSize)} JS total
-                                    </Tag>
-                                    {path.unnecessarySize > 0 ? (
-                                      <Tag color={path.severity === 'danger' ? 'red' : 'gold'}>
-                                        {formatSize(path.unnecessarySize)} unnecessary
-                                      </Tag>
-                                    ) : null}
-                                    {path.unnecessarySize > 0 ? (
-                                      <Tag color={path.severity === 'danger' ? 'red' : 'gold'}>
-                                        {formatPercent(path.ratio)}
-                                      </Tag>
-                                    ) : null}
-                                    {path.unnecessaryModuleCount > path.topUnnecessaryModules.length ? (
-                                      <Tag color="default">
-                                        top {path.topUnnecessaryModules.length} /{' '}
-                                        {path.unnecessaryModuleCount} modules
-                                      </Tag>
-                                    ) : null}
-                                  </Space>
-                                  {isExpanded ? (
-                                    <>
-                                      <div>
-                                        <Typography.Text
-                                          type="secondary"
-                                          style={{ fontSize: 12 }}
-                                        >
-                                          Chunks
-                                        </Typography.Text>
-                                        {path.chunks.map((chunk) => (
-                                          <div
-                                            key={chunk.id}
-                                            style={{
-                                              display: 'flex',
-                                              justifyContent: 'space-between',
-                                              gap: 12,
-                                            }}
-                                          >
-                                            <Typography.Text style={{ fontSize: 12 }}>
-                                              {chunk.name}
-                                            </Typography.Text>
-                                            <Typography.Text code style={{ fontSize: 12 }}>
-                                              {formatSize(chunk.emittedSize)}
-                                            </Typography.Text>
-                                          </div>
-                                        ))}
-                                      </div>
-                                      {path.topUnnecessaryModules.length ? (
-                                        <div>
-                                          <Typography.Text
-                                            type="secondary"
-                                            style={{ fontSize: 12 }}
-                                          >
-                                            Top unnecessary modules
-                                          </Typography.Text>
-                                          {path.topUnnecessaryModules
-                                            .slice(0, 5)
-                                            .map((module) => (
-                                            <div
-                                              key={module.id}
-                                              style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                gap: 12,
-                                              }}
-                                            >
-                                              <Typography.Text style={{ fontSize: 12 }}>
-                                                {module.resource ?? module.name}
-                                              </Typography.Text>
-                                              <Typography.Text code style={{ fontSize: 12 }}>
-                                                {formatSize(module.size)}
-                                              </Typography.Text>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      ) : null}
-                                    </>
-                                  ) : null}
-                                </Space>
-                              </div>
-                            );
-
-                            if (path.severity !== 'danger') {
-                              return <React.Fragment key={path.id}>{header}</React.Fragment>;
-                            }
-
-                            return (
-                              <Tooltip title="非必要依赖过多" key={path.id}>
-                                {header}
-                              </Tooltip>
-                            );
-                          })
-                        ) : (
-                          <Typography.Text type="secondary">
-                            No load path from entry was found for the selected chunk group.
-                          </Typography.Text>
-                        )}
-                      </Space>
-                    </div>
                   </Space>
                 ) : null}
 
                 {selectedEdge ? (
-                  <Space direction="vertical" style={{ width: '100%' }} size="middle">
+                  <Space
+                    direction="vertical"
+                    style={{ width: '100%' }}
+                    size="middle"
+                  >
                     <div>
                       <Typography.Title level={5} style={{ marginBottom: 8 }}>
                         {selectedEdge.fromName + ' → ' + selectedEdge.toName}
@@ -1130,7 +1222,10 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
 
                     <Space direction="vertical" style={{ width: '100%' }}>
                       {selectedEdge.imports.map((item, index) => (
-                        <ImportCard key={`${selectedEdge.id}_${index}`} item={item} />
+                        <ImportCard
+                          key={`${selectedEdge.id}_${index}`}
+                          item={item}
+                        />
                       ))}
                     </Space>
                   </Space>
@@ -1199,7 +1294,10 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                           }}
                         >
                           <div style={{ minWidth: 0, flex: 1 }}>
-                            <Typography.Text strong style={{ display: 'block' }}>
+                            <Typography.Text
+                              strong
+                              style={{ display: 'block' }}
+                            >
                               {node.name}
                             </Typography.Text>
                             {topPath ? (
@@ -1227,12 +1325,18 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
 
                         <Space wrap>
                           <Tag>{formatSize(node.totalEmittedSize)} emitted</Tag>
-                          <Tag>{formatSize(node.groupTotalJSSize)} JS total</Tag>
-                          <Tag color={node.removableJSSize ? 'gold' : 'default'}>
-                            {formatSize(node.removableJSSize)} incremental removable
+                          <Tag>
+                            {formatSize(node.groupTotalJSSize)} JS total
+                          </Tag>
+                          <Tag
+                            color={node.removableJSSize ? 'gold' : 'default'}
+                          >
+                            {formatSize(node.removableJSSize)} incremental
+                            removable
                           </Tag>
                           <Tag color={getSeverityTagColor(severity)}>
-                            {formatSize(node.maxPathUnnecessarySize)} worst path unnecessary
+                            {formatSize(node.maxPathUnnecessarySize)} worst path
+                            unnecessary
                           </Tag>
                           <Tag>{node.pathCount} path(s)</Tag>
                           <Tag>{node.incomingImports.length} import(s)</Tag>
@@ -1247,15 +1351,25 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                               flexWrap: 'wrap',
                             }}
                           >
-                            <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                            <Typography.Text
+                              type="secondary"
+                              style={{ fontSize: 12 }}
+                            >
                               Worst path ratio {formatPercent(topPath.ratio)}
                             </Typography.Text>
                             {topPath.topUnnecessaryModules[0] ? (
-                              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                              <Typography.Text
+                                type="secondary"
+                                style={{ fontSize: 12 }}
+                              >
                                 Top module:{' '}
                                 {topPath.topUnnecessaryModules[0].resource ??
                                   topPath.topUnnecessaryModules[0].name}{' '}
-                                ({formatSize(topPath.topUnnecessaryModules[0].size)})
+                                (
+                                {formatSize(
+                                  topPath.topUnnecessaryModules[0].size,
+                                )}
+                                )
                               </Typography.Text>
                             ) : null}
                           </div>
