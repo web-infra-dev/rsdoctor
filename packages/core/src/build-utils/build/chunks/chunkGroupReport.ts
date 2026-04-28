@@ -13,6 +13,8 @@ const JS_LIKE_EXTENSIONS = new Set([
   '.cts',
 ]);
 const CHUNK_GROUP_PATH_LIMIT = 50;
+const CHUNK_GROUP_PATH_MAX_DEPTH = 64;
+const CHUNK_GROUP_PATH_TRAVERSAL_LIMIT = 200_000;
 const PATH_TOP_MODULE_LIMIT = 20;
 
 type AnyChunk = any;
@@ -464,68 +466,72 @@ const getSeverityRank = (severity: SDK.ChunkGroupGraphPathSeverity) => {
   return 0;
 };
 
-const findPathsToTarget = (
-  targetId: string,
+const buildRepresentativePaths = (
   entryIds: string[],
   forwardAdjacency: Map<string, string[]>,
   fallbackNodeId?: string,
   maxPaths = CHUNK_GROUP_PATH_LIMIT,
 ) => {
-  const paths: string[][] = [];
-  let truncated = false;
+  const pathsByNode = new Map<string, string[][]>();
+  const truncatedNodeIds = new Set<string>();
   const entries = entryIds.length
     ? entryIds
     : fallbackNodeId
       ? [fallbackNodeId]
       : [];
+  const queue: string[][] = [];
+  let visitedPathCount = 0;
 
-  const dfs = (
-    current: string,
-    visited: Set<string>,
-    currentPath: string[],
-  ) => {
-    if (paths.length >= maxPaths) {
-      truncated = true;
-      return;
+  const addPath = (nodeId: string, pathIds: string[]) => {
+    const nodePaths = pathsByNode.get(nodeId) ?? [];
+    if (nodePaths.length >= maxPaths) {
+      truncatedNodeIds.add(nodeId);
+      return false;
     }
 
-    if (current === targetId) {
-      paths.push([...currentPath]);
-      return;
-    }
-
-    for (const next of forwardAdjacency.get(current) ?? []) {
-      if (visited.has(next)) {
-        continue;
-      }
-      visited.add(next);
-      currentPath.push(next);
-      dfs(next, visited, currentPath);
-      currentPath.pop();
-      visited.delete(next);
-
-      if (paths.length >= maxPaths) {
-        truncated = true;
-        return;
-      }
-    }
+    nodePaths.push(pathIds);
+    pathsByNode.set(nodeId, nodePaths);
+    return true;
   };
 
   for (const entryId of entries) {
-    dfs(entryId, new Set([entryId]), [entryId]);
-    if (paths.length >= maxPaths) {
-      truncated = true;
-      break;
+    const pathIds = [entryId];
+    if (addPath(entryId, pathIds)) {
+      queue.push(pathIds);
     }
   }
 
-  if (!paths.length && entries.includes(targetId)) {
-    paths.push([targetId]);
+  while (queue.length) {
+    if (visitedPathCount++ > CHUNK_GROUP_PATH_TRAVERSAL_LIMIT) {
+      for (const pathIds of queue) {
+        truncatedNodeIds.add(pathIds[pathIds.length - 1]);
+      }
+      break;
+    }
+
+    const currentPath = queue.shift()!;
+    const current = currentPath[currentPath.length - 1];
+
+    for (const next of forwardAdjacency.get(current) ?? []) {
+      if (currentPath.includes(next)) {
+        continue;
+      }
+
+      if (currentPath.length >= CHUNK_GROUP_PATH_MAX_DEPTH) {
+        truncatedNodeIds.add(next);
+        continue;
+      }
+
+      const nextPath = [...currentPath, next];
+      if (addPath(next, nextPath)) {
+        queue.push(nextPath);
+      }
+    }
   }
 
   return {
-    paths,
-    truncated,
+    pathsByNode,
+    truncatedNodeIds,
   };
 };
 
@@ -709,7 +715,8 @@ export function buildChunkGroupGraphReport(
         let emittedSize = 0;
         const files = toArray<string>(chunk?.files).filter(
           (file): file is string =>
-            typeof file === 'string' && file.endsWith('.js'),
+            typeof file === 'string' &&
+            JS_LIKE_EXTENSIONS.has(path.extname(file).toLowerCase()),
         );
 
         for (const file of files) {
@@ -900,10 +907,12 @@ export function buildChunkGroupGraphReport(
     })
     .map((node) => node.id);
   const topologicalOrder: string[] = [];
+  const topologicalOrderSet = new Set<string>();
 
   while (zeroIndegreeQueue.length) {
     const currentId = zeroIndegreeQueue.shift()!;
     topologicalOrder.push(currentId);
+    topologicalOrderSet.add(currentId);
 
     for (const nextId of forward.get(currentId) ?? []) {
       const nextIndegree = (indegree.get(nextId) ?? 0) - 1;
@@ -915,8 +924,9 @@ export function buildChunkGroupGraphReport(
   }
 
   for (const node of localNodes) {
-    if (!topologicalOrder.includes(node.id)) {
+    if (!topologicalOrderSet.has(node.id)) {
       topologicalOrder.push(node.id);
+      topologicalOrderSet.add(node.id);
     }
   }
 
@@ -1005,6 +1015,12 @@ export function buildChunkGroupGraphReport(
     .filter((node) => node.isInitial)
     .map((node) => node.id);
   const fallbackNodeId = baseNodes[0]?.id;
+  const { pathsByNode, truncatedNodeIds } = buildRepresentativePaths(
+    entryNodeIds,
+    forward,
+    fallbackNodeId,
+    CHUNK_GROUP_PATH_LIMIT,
+  );
   const baseNodeMap = new Map(baseNodes.map((node) => [node.id, node]));
   const enrichedEdges: SDK.ChunkGroupGraphEdgeData[] = edges.map((edge) => ({
     ...edge,
@@ -1047,13 +1063,8 @@ export function buildChunkGroupGraphReport(
         return (a.request ?? '').localeCompare(b.request ?? '');
       });
 
-    const { paths: nodePaths, truncated } = findPathsToTarget(
-      node.id,
-      entryNodeIds,
-      forward,
-      fallbackNodeId,
-      CHUNK_GROUP_PATH_LIMIT,
-    );
+    const nodePaths = pathsByNode.get(node.id) ?? [];
+    const truncated = truncatedNodeIds.has(node.id);
 
     const paths = nodePaths
       .map((nodeIds, index) => {
