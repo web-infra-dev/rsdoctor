@@ -154,8 +154,8 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
       '@lynx-js/react':
-        specifier: ^0.117.1
-        version: 0.117.1(@types/react@18.3.28)
+        specifier: ^0.120.0
+        version: 0.120.0(@types/react@18.3.28)
       '@lynx-js/rspeedy':
         specifier: ^0.13.5
         version: 0.13.5(@rspack/core@2.0.0(@swc/helpers@0.5.21))(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
@@ -2809,11 +2809,11 @@ packages:
     resolution: {integrity: sha512-RS399O/03gpBFbztnsRlwarkMoS2bSVWL8YUnEwy/w9rKewO7CqhX0IUFUZXrzRv0JR17eZJ+YN+14ga+g5FyA==}
     engines: {node: '>=18'}
 
-  '@lynx-js/internal-preact@10.28.4-4842985':
-    resolution: {integrity: sha512-D1ka7Kgv0lXFp1BtyBdc933VDoelOBiR47Td3QGp8ClaHtQJm1tcrTxhdwkmCDKNYe0oeiUUK6t82jiLiJoqiQ==}
+  '@lynx-js/internal-preact@10.29.1-20260424024911-12b794f':
+    resolution: {integrity: sha512-MQ+xjPL2f1P9/eCAdkT2h9cJRXl1qqhSJDX9GkPETt3UAepLo5N+HbGB8Qr3IUzqGDWMr3Mj76my1P0pLkKVDg==}
 
-  '@lynx-js/react@0.117.1':
-    resolution: {integrity: sha512-IhdB2YvlYwm/mTbwCjHJLx6WQM+jmVIKer2RR5sDIQIHRJ4g3tZOmI0ivJvXlubSUFQdYNIwgcfHnC2rfEwoug==}
+  '@lynx-js/react@0.120.0':
+    resolution: {integrity: sha512-XDDiMeQdK+FVlCHmeY3rUbvuTA2WPH/+8JznkUDVwUIwKmojoeEUOMCCXny434hIpBEtDeOtBoIEhxg569QGTw==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18
@@ -13274,12 +13274,12 @@ snapshots:
     dependencies:
       '@lynx-js/webpack-runtime-globals': 0.0.6
 
-  '@lynx-js/internal-preact@10.28.4-4842985': {}
+  '@lynx-js/internal-preact@10.29.1-20260424024911-12b794f': {}
 
-  '@lynx-js/react@0.117.1(@types/react@18.3.28)':
+  '@lynx-js/react@0.120.0(@types/react@18.3.28)':
     dependencies:
       '@types/react': 18.3.28
-      preact: '@lynx-js/internal-preact@10.28.4-4842985'
+      preact: '@lynx-js/internal-preact@10.29.1-20260424024911-12b794f'
 
   '@lynx-js/rspeedy@0.13.5(@rspack/core@2.0.0(@swc/helpers@0.5.21))(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))':
     dependencies:
