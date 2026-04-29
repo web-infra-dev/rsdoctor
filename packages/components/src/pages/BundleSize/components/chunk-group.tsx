@@ -278,6 +278,66 @@ const getZRenderEventPoint = (event: any) => ({
         : 0,
 });
 
+const getScrollableAxes = (element: HTMLElement) => {
+  const { overflowY, overflowX } = window.getComputedStyle(element);
+  const canScrollY =
+    /(auto|scroll|overlay)/.test(overflowY) &&
+    element.scrollHeight > element.clientHeight;
+  const canScrollX =
+    /(auto|scroll|overlay)/.test(overflowX) &&
+    element.scrollWidth > element.clientWidth;
+
+  return {
+    x: canScrollX,
+    y: canScrollY,
+  };
+};
+
+const findScrollContainer = (
+  element: HTMLElement,
+  deltaX: number,
+  deltaY: number,
+) => {
+  let current = element.parentElement;
+  const shouldScrollY = Math.abs(deltaY) >= Math.abs(deltaX);
+
+  while (current && current !== document.body) {
+    const scrollable = getScrollableAxes(current);
+    if (
+      (shouldScrollY && scrollable.y) ||
+      (!shouldScrollY && scrollable.x) ||
+      (deltaY !== 0 && scrollable.y) ||
+      (deltaX !== 0 && scrollable.x)
+    ) {
+      return current;
+    }
+    current = current.parentElement;
+  }
+
+  return document.scrollingElement ?? document.documentElement;
+};
+
+const scrollElementByWheel = (
+  element: Element,
+  deltaX: number,
+  deltaY: number,
+) => {
+  if (
+    element === document.scrollingElement ||
+    element === document.documentElement
+  ) {
+    window.scrollBy({
+      left: deltaX,
+      top: deltaY,
+      behavior: 'auto',
+    });
+    return;
+  }
+
+  element.scrollLeft += deltaX;
+  element.scrollTop += deltaY;
+};
+
 const sortPathsByOpportunity = (
   a: SDK.ChunkGroupGraphPathData,
   b: SDK.ChunkGroupGraphPathData,
@@ -1144,6 +1204,21 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const dangerPathCount = overview?.dangerPathCount ?? 0;
   const warningPathCount = overview?.warningPathCount ?? 0;
   const selectedNodeImports = selectedNode?.incomingImports ?? [];
+  const handleGraphWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    if (event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+
+    scrollElementByWheel(
+      findScrollContainer(event.currentTarget, event.deltaX, event.deltaY),
+      event.deltaX,
+      event.deltaY,
+    );
+  };
   const selectedNodePathList = selectedNode ? (
     <div>
       <Typography.Title level={5}>
@@ -1355,7 +1430,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
 
           <Row gutter={[16, 16]} align="top">
             <Col xs={24} xl={16}>
-              <div ref={graphContainerRef}>
+              <div ref={graphContainerRef} onWheelCapture={handleGraphWheel}>
                 <Card bodyStyle={{ padding: 0 }}>
                   <ReactEChartsCore
                     ref={chartRef}
