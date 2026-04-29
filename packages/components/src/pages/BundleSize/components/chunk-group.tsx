@@ -46,14 +46,16 @@ type ChunkGroupGraphPanelProps = {
 };
 
 const ENTRY_COLOR = '#1f6feb';
-const ENTRY_BORDER = '#58a6ff';
 const ASYNC_COLOR = '#238636';
-const ASYNC_BORDER = '#7ee787';
 const HIGHLIGHT_COLOR = '#f59e0b';
 const WARNING_COLOR = '#f59e0b';
 const DANGER_COLOR = '#ef4444';
 const MUTED_NODE = '#d1d5db';
 const MUTED_BORDER = '#9ca3af';
+const NODE_BORDER = '#94a3b8';
+const NODE_SELECTED_BORDER = '#334155';
+const EDGE_COLOR = '#94a3b8';
+const EDGE_HIGHLIGHT_COLOR = '#64748b';
 const MIN_GRAPH_HEIGHT = 520;
 const MAX_GRAPH_HEIGHT = 620;
 const LAYOUT_TOP_PADDING = 64;
@@ -70,8 +72,8 @@ const GRAPH_BOUNDARY_NODE_ID_PREFIX = '__chunk-group-graph-boundary__';
 
 const getBaseNodeColor = (node: SDK.ChunkGroupGraphNodeData) =>
   node.isInitial
-    ? { background: ENTRY_COLOR, border: ENTRY_BORDER }
-    : { background: ASYNC_COLOR, border: ASYNC_BORDER };
+    ? { background: ENTRY_COLOR, border: NODE_BORDER }
+    : { background: ASYNC_COLOR, border: NODE_BORDER };
 
 const getPathColor = (severity: SDK.ChunkGroupGraphPathSeverity) => {
   if (severity === 'danger') {
@@ -149,6 +151,55 @@ const getNodeLaneHeight = (
 
 const truncateLabel = (value: string, maxLength = 26) =>
   value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
+
+const normalizeGraphLabel = (value: string, maxLength: number) =>
+  truncateLabel(
+    value.replace(/[{}]/g, '').replace(/\s+/g, ' ').trim(),
+    maxLength,
+  );
+
+const getImportSnippetLabel = (item: SDK.ChunkGroupGraphImportData) => {
+  const snippetLine = item.snippet
+    ?.split('\n')
+    .map((line) => line.trim())
+    .find((line) => line.includes('import('));
+
+  if (snippetLine) {
+    return normalizeGraphLabel(snippetLine, 64);
+  }
+
+  if (item.request) {
+    return normalizeGraphLabel(`import(${JSON.stringify(item.request)})`, 64);
+  }
+
+  return '';
+};
+
+const getEdgeImportSnippetLabel = (edge: SDK.ChunkGroupGraphEdgeData) => {
+  const snippets = edge.imports.map(getImportSnippetLabel).filter(Boolean);
+  if (!snippets.length) {
+    return '';
+  }
+
+  return edge.imports.length > 1
+    ? `${snippets[0]} +${edge.imports.length - 1}`
+    : snippets[0];
+};
+
+const getZRenderEventPoint = (event: any) => ({
+  x:
+    typeof event.offsetX === 'number'
+      ? event.offsetX
+      : typeof event.zrX === 'number'
+        ? event.zrX
+        : 0,
+  y:
+    typeof event.offsetY === 'number'
+      ? event.offsetY
+      : typeof event.zrY === 'number'
+        ? event.zrY
+        : 0,
+});
 
 const sortPathsByOpportunity = (
   a: SDK.ChunkGroupGraphPathData,
@@ -428,6 +479,11 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
 }) => {
   const chartRef = useRef<any>(null);
   const graphContainerRef = useRef<HTMLDivElement>(null);
+  const blankPointerRef = useRef<{
+    x: number;
+    y: number;
+    dragged: boolean;
+  } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [graphWidth, setGraphWidth] = useState(0);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -527,6 +583,28 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const hoveredPath = selectedNodePaths.find(
     (path) => path.id === hoveredPathId,
   );
+  const activeSnippetPath = selectedNode
+    ? (hoveredPath ?? selectedNodePaths[0])
+    : undefined;
+  const activePathImportSnippets = useMemo(() => {
+    const snippets = new Map<string, string>();
+    if (!activeSnippetPath) {
+      return snippets;
+    }
+
+    for (const edgeId of activeSnippetPath.edgeIds) {
+      const edge = edgeMap.get(edgeId);
+      if (!edge) {
+        continue;
+      }
+      const snippet = getEdgeImportSnippetLabel(edge);
+      if (snippet) {
+        snippets.set(edge.to, snippet);
+      }
+    }
+
+    return snippets;
+  }, [activeSnippetPath, edgeMap]);
 
   const highlightNodeIds = useMemo(() => {
     if (hoveredPath) {
@@ -563,9 +641,6 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const option = useMemo<ChunkGroupGraphOption>(() => {
     const hasSelection =
       Boolean(selectedNode) || Boolean(selectedEdge) || Boolean(hoveredPath);
-    const hoverColor = hoveredPath
-      ? getPathColor(hoveredPath.severity)
-      : HIGHLIGHT_COLOR;
     const hasSearch = Boolean(searchQuery.trim());
     const isLargeGraph = nodes.length > 80;
     const maxEmittedSize = Math.max(
@@ -642,18 +717,23 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           isOnHighlight ||
           (hasSearch && isMatched));
 
-      const removableRatio =
-        node.groupTotalJSSize > 0
-          ? node.removableJSSize / node.groupTotalJSSize
-          : 0;
       const borderColor =
         selectedNode?.id === node.id
-          ? '#111827'
-          : removableRatio > 1 / 3
-            ? DANGER_COLOR
-            : removableRatio > 0
-              ? WARNING_COLOR
-              : baseColor.border;
+          ? NODE_SELECTED_BORDER
+          : isOnHighlight
+            ? EDGE_HIGHLIGHT_COLOR
+            : baseColor.border;
+      const importSnippet = activePathImportSnippets.get(node.id);
+      const shouldShowImportSnippet = Boolean(importSnippet) && isOnHighlight;
+      const baseLabel = `${normalizeGraphLabel(node.name, 30)}\n${formatSize(
+        node.totalEmittedSize,
+      )}`;
+      const labelFormatter = shouldShowImportSnippet
+        ? `{snippet|${importSnippet}}\n{name|${normalizeGraphLabel(
+            node.name,
+            30,
+          )}}\n{size|${formatSize(node.totalEmittedSize)}}`
+        : baseLabel;
 
       return {
         id: node.id,
@@ -674,17 +754,41 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           shadowColor: 'rgba(17,24,39,0.25)',
         },
         label: {
-          show: shouldShowLabel,
-          position: 'bottom' as const,
-          distance: 10,
-          width: NODE_LABEL_WIDTH,
+          show: shouldShowLabel || shouldShowImportSnippet,
+          position: shouldShowImportSnippet
+            ? ('top' as const)
+            : ('bottom' as const),
+          distance: shouldShowImportSnippet ? 14 : 10,
+          width: shouldShowImportSnippet ? 260 : NODE_LABEL_WIDTH,
           overflow: 'truncate' as const,
-          lineHeight: 16,
+          lineHeight: shouldShowImportSnippet ? 18 : 16,
           align: 'center' as const,
           color: '#111827',
           fontSize: 12,
           fontWeight: selectedNode?.id === node.id ? 700 : 500,
-          formatter: `${truncateLabel(node.name)}\n${formatSize(node.totalEmittedSize)}`,
+          formatter: labelFormatter,
+          rich: {
+            snippet: {
+              color: '#f9fafb',
+              backgroundColor: 'rgba(15, 23, 42, 0.92)',
+              borderRadius: 4,
+              padding: [4, 6],
+              fontFamily: 'monospace',
+              fontSize: 11,
+              lineHeight: 18,
+            },
+            name: {
+              color: '#111827',
+              fontWeight: 700,
+              fontSize: 12,
+              lineHeight: 18,
+            },
+            size: {
+              color: '#111827',
+              fontSize: 12,
+              lineHeight: 16,
+            },
+          },
         },
       };
     });
@@ -736,19 +840,13 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
         target: edge.to,
         value: edge.imports.length,
         lineStyle: {
-          color: highlight ? hoverColor : '#94a3b8',
+          color: highlight ? EDGE_HIGHLIGHT_COLOR : EDGE_COLOR,
           width: highlight ? 3 : 1.5,
           opacity,
           curveness: 0.12,
         },
         label: {
-          show:
-            edge.imports.length > 1 &&
-            opacity > 0.3 &&
-            (!isLargeGraph || highlight),
-          formatter: `${edge.imports.length} imports`,
-          color: highlight ? hoverColor : '#64748b',
-          fontSize: 10,
+          show: false,
         },
       };
     });
@@ -806,6 +904,9 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           },
           edgeSymbol: ['none', 'arrow'],
           edgeSymbolSize: [0, 8],
+          edgeLabel: {
+            show: false,
+          },
           data: [...graphNodes, ...graphBoundaryNodes],
           links: graphEdges,
           lineStyle: {
@@ -817,11 +918,15 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           },
           emphasis: {
             focus: 'adjacency',
+            edgeLabel: {
+              show: false,
+            },
           },
         },
       ],
     };
   }, [
+    activePathImportSnippets,
     edgeMap,
     edges,
     graphHeight,
@@ -870,6 +975,67 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       window.clearTimeout(timer);
     };
   }, [graphHeight, graphWidth, option]);
+
+  useEffect(() => {
+    const chart = chartRef.current?.getEchartsInstance?.();
+    const zr = chart?.getZr?.();
+    if (!zr) {
+      return;
+    }
+
+    const handleMouseDown = (event: any) => {
+      if (event.target) {
+        blankPointerRef.current = null;
+        return;
+      }
+
+      const point = getZRenderEventPoint(event);
+      blankPointerRef.current = {
+        x: point.x,
+        y: point.y,
+        dragged: false,
+      };
+    };
+
+    const handleMouseMove = (event: any) => {
+      const pointer = blankPointerRef.current;
+      if (!pointer) {
+        return;
+      }
+
+      const point = getZRenderEventPoint(event);
+      if (Math.hypot(point.x - pointer.x, point.y - pointer.y) > 5) {
+        pointer.dragged = true;
+      }
+    };
+
+    const handleMouseUp = (event: any) => {
+      const pointer = blankPointerRef.current;
+      blankPointerRef.current = null;
+      if (!pointer || event.target || pointer.dragged) {
+        return;
+      }
+
+      const point = getZRenderEventPoint(event);
+      if (Math.hypot(point.x - pointer.x, point.y - pointer.y) > 5) {
+        return;
+      }
+
+      setSelectedEdgeId(null);
+      setSelectedNodeId(null);
+      setHoveredPathId(null);
+    };
+
+    zr.on('mousedown', handleMouseDown);
+    zr.on('mousemove', handleMouseMove);
+    zr.on('mouseup', handleMouseUp);
+
+    return () => {
+      zr.off('mousedown', handleMouseDown);
+      zr.off('mousemove', handleMouseMove);
+      zr.off('mouseup', handleMouseUp);
+    };
+  }, [option]);
 
   if (!nodes.length) {
     return (
