@@ -78,6 +78,9 @@ const GRAPH_BOUNDARY_NODE_ID_PREFIX = '__chunk-group-graph-boundary__';
 const GRAPH_MIN_ZOOM = 0.2;
 const GRAPH_MAX_ZOOM = 4;
 const GRAPH_ZOOM_STEP = 0.25;
+const GRAPH_WHEEL_ZOOM_SENSITIVITY = 0.002;
+const WHEEL_DELTA_LINE_MODE = 1;
+const WHEEL_DELTA_PAGE_MODE = 2;
 
 const getBaseNodeColor = (node: SDK.ChunkGroupGraphNodeData) =>
   node.isInitial
@@ -105,6 +108,19 @@ const getSeverityTagColor = (severity: SDK.ChunkGroupGraphPathSeverity) => {
 };
 
 const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`;
+
+const clampGraphZoom = (zoom: number) =>
+  Math.max(GRAPH_MIN_ZOOM, Math.min(GRAPH_MAX_ZOOM, zoom));
+
+const normalizeWheelDelta = (event: WheelEvent, fallbackHeight: number) => {
+  if (event.deltaMode === WHEEL_DELTA_LINE_MODE) {
+    return event.deltaY * 16;
+  }
+  if (event.deltaMode === WHEEL_DELTA_PAGE_MODE) {
+    return event.deltaY * fallbackHeight;
+  }
+  return event.deltaY;
+};
 
 const buildForwardAdjacency = (edges: SDK.ChunkGroupGraphEdgeData[]) => {
   const map = new Map<string, string[]>();
@@ -621,7 +637,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   );
 
   const updateGraphZoom = (nextZoom: number) => {
-    setGraphZoom(Math.max(GRAPH_MIN_ZOOM, Math.min(GRAPH_MAX_ZOOM, nextZoom)));
+    setGraphZoom(clampGraphZoom(nextZoom));
   };
 
   useEffect(() => {
@@ -657,6 +673,37 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       observer.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    const element = graphContainerRef.current;
+    if (!element) {
+      return;
+    }
+
+    const handleWheel = (event: WheelEvent) => {
+      if (!event.ctrlKey && !event.metaKey) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const normalizedDelta = normalizeWheelDelta(event, graphHeight);
+      const zoomRatio = Math.exp(
+        -normalizedDelta * GRAPH_WHEEL_ZOOM_SENSITIVITY,
+      );
+      setGraphZoom((currentZoom) => clampGraphZoom(currentZoom * zoomRatio));
+    };
+
+    element.addEventListener('wheel', handleWheel, {
+      capture: true,
+      passive: false,
+    });
+
+    return () => {
+      element.removeEventListener('wheel', handleWheel, { capture: true });
+    };
+  }, [graphHeight]);
 
   useEffect(() => {
     const resizeChart = () => {
