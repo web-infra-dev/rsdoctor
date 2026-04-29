@@ -62,8 +62,10 @@ const LAYOUT_ROW_GAP = 96;
 const LAYOUT_COLUMN_GAP = 640;
 const LAYOUT_SUBCOLUMN_GAP = 520;
 const MAX_LAYOUT_ROWS_PER_LEVEL = 7;
-const LARGE_GRAPH_NODE_SCALE = 0.44;
+const LARGE_GRAPH_NODE_SCALE = 0.52;
 const NODE_LABEL_WIDTH = 180;
+const MIN_NODE_SYMBOL_SIZE = 30;
+const MAX_NODE_SYMBOL_SIZE = 112;
 const GRAPH_BOUNDARY_NODE_ID_PREFIX = '__chunk-group-graph-boundary__';
 
 const getBaseNodeColor = (node: SDK.ChunkGroupGraphNodeData) =>
@@ -126,8 +128,13 @@ const getNodeSymbolSize = (
   maxEmittedSize: number,
 ) =>
   Math.max(
-    38,
-    Math.min(74, 38 + 36 * Math.sqrt(node.totalEmittedSize / maxEmittedSize)),
+    MIN_NODE_SYMBOL_SIZE,
+    Math.min(
+      MAX_NODE_SYMBOL_SIZE,
+      MIN_NODE_SYMBOL_SIZE +
+        (MAX_NODE_SYMBOL_SIZE - MIN_NODE_SYMBOL_SIZE) *
+          Math.sqrt(node.totalEmittedSize / maxEmittedSize),
+    ),
   );
 
 const getNodeLaneHeight = (
@@ -420,7 +427,9 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   report,
 }) => {
   const chartRef = useRef<any>(null);
+  const graphContainerRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [graphWidth, setGraphWidth] = useState(0);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
   const [hoveredPathId, setHoveredPathId] = useState<string | null>(null);
@@ -472,6 +481,36 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   }, [selectedNode?.id]);
 
   useEffect(() => {
+    const element = graphContainerRef.current;
+    if (!element) {
+      return;
+    }
+
+    const updateGraphWidth = () => {
+      const nextWidth = Math.round(element.getBoundingClientRect().width);
+      setGraphWidth((currentWidth) =>
+        currentWidth === nextWidth ? currentWidth : nextWidth,
+      );
+    };
+
+    updateGraphWidth();
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateGraphWidth);
+      return () => {
+        window.removeEventListener('resize', updateGraphWidth);
+      };
+    }
+
+    const observer = new ResizeObserver(updateGraphWidth);
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
     const resizeChart = () => {
       chartRef.current?.getEchartsInstance?.().resize?.();
     };
@@ -483,7 +522,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       window.cancelAnimationFrame(rafId);
       window.clearTimeout(timer);
     };
-  }, [graphHeight, nodes.length, edges.length]);
+  }, [graphHeight, graphWidth, nodes.length, edges.length]);
 
   const hoveredPath = selectedNodePaths.find(
     (path) => path.id === hoveredPathId,
@@ -533,6 +572,52 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       1,
       ...nodes.map((item) => item.totalEmittedSize),
     );
+    const positionedNodes = [...layout.positions.values()];
+    const boundaryPadding = isLargeGraph ? 720 : 240;
+    const positionedXs = positionedNodes.map((position) => position.x);
+    const positionedYs = positionedNodes.map((position) => position.y);
+    let boundaryMinX = positionedNodes.length
+      ? Math.min(...positionedXs) - boundaryPadding
+      : 0;
+    let boundaryMaxX = positionedNodes.length
+      ? Math.max(...positionedXs) + boundaryPadding
+      : 1;
+    let boundaryMinY = positionedNodes.length
+      ? Math.min(...positionedYs) - boundaryPadding
+      : 0;
+    let boundaryMaxY = positionedNodes.length
+      ? Math.max(...positionedYs) + boundaryPadding
+      : 1;
+    const viewAspect = Math.max(
+      1,
+      (graphWidth || (graphHeight * 16) / 9) / Math.max(1, graphHeight),
+    );
+    const boundaryWidth = Math.max(1, boundaryMaxX - boundaryMinX);
+    const boundaryHeight = Math.max(1, boundaryMaxY - boundaryMinY);
+    const boundaryAspect = boundaryWidth / boundaryHeight;
+
+    if (boundaryAspect > viewAspect) {
+      const nextHeight = boundaryWidth / viewAspect;
+      const heightOffset = (nextHeight - boundaryHeight) / 2;
+      boundaryMinY -= heightOffset;
+      boundaryMaxY += heightOffset;
+    } else {
+      const nextWidth = boundaryHeight * viewAspect;
+      const widthOffset = (nextWidth - boundaryWidth) / 2;
+      boundaryMinX -= widthOffset;
+      boundaryMaxX += widthOffset;
+    }
+
+    const dataAspect =
+      (boundaryMaxX - boundaryMinX) / Math.max(1, boundaryMaxY - boundaryMinY);
+    const nodeShapeStretch = Math.max(
+      0.25,
+      Math.min(4, dataAspect / viewAspect),
+    );
+    const getCircleSymbolSize = (diameter: number): [number, number] => [
+      diameter,
+      diameter / nodeShapeStretch,
+    ];
 
     const graphNodes = nodes.map((node) => {
       const position = layout.positions.get(node.id) ?? { x: 0, y: 0 };
@@ -573,10 +658,11 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       return {
         id: node.id,
         name: node.name,
+        symbol: 'circle' as const,
         x: position.x,
         y: position.y,
         value: node.totalEmittedSize,
-        symbolSize,
+        symbolSize: getCircleSymbolSize(symbolSize),
         itemStyle: {
           color:
             hasSelection && !isOnHighlight ? MUTED_NODE : baseColor.background,
@@ -602,42 +688,37 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
         },
       };
     });
-    const positionedNodes = [...layout.positions.values()];
-    const boundaryPadding = isLargeGraph ? 720 : 240;
-    const positionedXs = positionedNodes.map((position) => position.x);
-    const positionedYs = positionedNodes.map((position) => position.y);
-    const boundaryMinX = Math.min(...positionedXs) - boundaryPadding;
-    const boundaryMaxX = Math.max(...positionedXs) + boundaryPadding;
-    const boundaryMinY = Math.min(...positionedYs) - boundaryPadding;
-    const boundaryMaxY = Math.max(...positionedYs) + boundaryPadding;
-    const graphBoundaryNodes = positionedNodes.length
+    const boundaryPoints = positionedNodes.length
       ? [
           [boundaryMinX, boundaryMinY],
           [boundaryMaxX, boundaryMinY],
           [boundaryMinX, boundaryMaxY],
           [boundaryMaxX, boundaryMaxY],
-        ].map(([x, y], index) => ({
-          id: `${GRAPH_BOUNDARY_NODE_ID_PREFIX}${index}`,
-          name: '',
-          x,
-          y,
-          silent: true,
-          symbolSize: 1,
-          itemStyle: {
-            opacity: 0,
-          },
-          label: {
-            show: false,
-          },
-          tooltip: {
-            show: false,
-          },
-          emphasis: {
-            disabled: true,
-          },
-        }))
+        ]
       : [];
-
+    const graphBoundaryNodes = boundaryPoints.map(([x, y], index) => ({
+      id: `${GRAPH_BOUNDARY_NODE_ID_PREFIX}${index}`,
+      name: '',
+      x,
+      y,
+      silent: true,
+      symbol: 'circle' as const,
+      symbolSize: 2,
+      itemStyle: {
+        borderColor: 'rgba(0,0,0,0)',
+        color: 'rgba(0,0,0,0.001)',
+        opacity: 0.001,
+      },
+      label: {
+        show: false,
+      },
+      tooltip: {
+        show: false,
+      },
+      emphasis: {
+        disabled: true,
+      },
+    }));
     const graphEdges = edges.map((edge) => {
       const highlight = highlightEdgeIds.has(edge.id);
       const matchesSearch =
@@ -709,6 +790,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       series: [
         {
           type: 'graph',
+          symbol: 'circle',
           left: 8,
           right: 8,
           top: 8,
@@ -742,6 +824,8 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   }, [
     edgeMap,
     edges,
+    graphHeight,
+    graphWidth,
     highlightEdgeIds,
     highlightNodeIds,
     hoveredPath,
@@ -753,6 +837,39 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     selectedEdge,
     selectedNode,
   ]);
+
+  useEffect(() => {
+    const chart = chartRef.current?.getEchartsInstance?.();
+    if (!chart) {
+      return;
+    }
+
+    const expandGraphRoamArea = () => {
+      const graphView = (chart as any)._chartsViews?.find(
+        (view: any) => view?.type === 'graph',
+      );
+      const controller = graphView?._controller;
+      if (!controller?.setPointerChecker) {
+        return;
+      }
+
+      // ECharts graph only roams inside the graph group's bounding rect by
+      // default; the chunk graph needs the whole canvas to be draggable/zoomable.
+      controller.setPointerChecker((_event: any, x: number, y: number) => {
+        const width = chart.getWidth?.() ?? graphWidth;
+        const height = chart.getHeight?.() ?? graphHeight;
+        return x >= 0 && x <= width && y >= 0 && y <= height;
+      });
+    };
+
+    const rafId = window.requestAnimationFrame(expandGraphRoamArea);
+    const timer = window.setTimeout(expandGraphRoamArea, 120);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.clearTimeout(timer);
+    };
+  }, [graphHeight, graphWidth, option]);
 
   if (!nodes.length) {
     return (
@@ -983,28 +1100,34 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
 
           <Row gutter={[16, 16]} align="top">
             <Col xs={24} xl={16}>
-              <Card bodyStyle={{ padding: 0 }}>
-                <ReactEChartsCore
-                  ref={chartRef}
-                  echarts={echarts}
-                  option={option}
-                  notMerge
-                  style={{ cursor: 'grab', height: graphHeight, width: '100%' }}
-                  onEvents={{
-                    click: (params: any) => {
-                      if (params.dataType === 'node') {
-                        setSelectedNodeId(params.data.id);
-                        setSelectedEdgeId(null);
-                        setHoveredPathId(null);
-                      } else if (params.dataType === 'edge') {
-                        setSelectedEdgeId(params.data.id);
-                        setSelectedNodeId(null);
-                        setHoveredPathId(null);
-                      }
-                    },
-                  }}
-                />
-              </Card>
+              <div ref={graphContainerRef}>
+                <Card bodyStyle={{ padding: 0 }}>
+                  <ReactEChartsCore
+                    ref={chartRef}
+                    echarts={echarts}
+                    option={option}
+                    notMerge
+                    style={{
+                      cursor: 'grab',
+                      height: graphHeight,
+                      width: '100%',
+                    }}
+                    onEvents={{
+                      click: (params: any) => {
+                        if (params.dataType === 'node') {
+                          setSelectedNodeId(params.data.id);
+                          setSelectedEdgeId(null);
+                          setHoveredPathId(null);
+                        } else if (params.dataType === 'edge') {
+                          setSelectedEdgeId(params.data.id);
+                          setSelectedNodeId(null);
+                          setHoveredPathId(null);
+                        }
+                      },
+                    }}
+                  />
+                </Card>
+              </div>
             </Col>
 
             <Col xs={24} xl={8}>
