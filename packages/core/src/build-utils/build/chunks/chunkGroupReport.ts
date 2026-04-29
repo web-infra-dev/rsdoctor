@@ -94,7 +94,9 @@ const getModuleResource = (compilerContext: string, module: AnyModule) => {
     module?.resource,
     safeInvoke(() => module?.nameForCondition?.()),
     module?.rootModule?.resource,
-  ].filter((item): item is string => typeof item === 'string' && item.length > 0);
+  ].filter(
+    (item): item is string => typeof item === 'string' && item.length > 0,
+  );
 
   if (!candidates.length) {
     return null;
@@ -148,7 +150,10 @@ const getAssetSize = (compilation: AnyCompilation, file: string) => {
   return 0;
 };
 
-const getModuleSizeRobust = (chunkGraph: AnyCompilation['chunkGraph'], module: AnyModule) => {
+const getModuleSizeRobust = (
+  chunkGraph: AnyCompilation['chunkGraph'],
+  module: AnyModule,
+) => {
   let size = 0;
 
   try {
@@ -185,7 +190,9 @@ const collectAsyncBlockDependencies = (module: AnyModule) => {
       continue;
     }
 
-    for (const dependency of toArray<any>(safeInvoke(() => block?.dependencies))) {
+    for (const dependency of toArray<any>(
+      safeInvoke(() => block?.dependencies),
+    )) {
       dependencies.add(dependency);
     }
 
@@ -199,13 +206,22 @@ const hasAsyncBlockParent = (
   moduleGraph: AnyCompilation['moduleGraph'],
   dependency: any,
 ) => {
-  const parentBlock = safeInvoke(() => moduleGraph?.getParentBlock?.(dependency));
-  return Boolean(parentBlock?.constructor?.name?.includes('AsyncDependenciesBlock'));
+  const parentBlock = safeInvoke(() =>
+    moduleGraph?.getParentBlock?.(dependency),
+  );
+  return Boolean(
+    parentBlock?.constructor?.name?.includes('AsyncDependenciesBlock'),
+  );
 };
 
-const getOutgoingModules = (moduleGraph: AnyCompilation['moduleGraph'], module: AnyModule) => {
+const getOutgoingModules = (
+  moduleGraph: AnyCompilation['moduleGraph'],
+  module: AnyModule,
+) => {
   const targets = new Set<AnyModule>();
-  const connections = safeInvoke(() => moduleGraph?.getOutgoingConnections?.(module));
+  const connections = safeInvoke(() =>
+    moduleGraph?.getOutgoingConnections?.(module),
+  );
   let asyncBlockDependencies: Set<any> | undefined;
 
   for (const connection of toArray<any>(connections)) {
@@ -253,10 +269,14 @@ const getRootModules = (
   moduleGraph: AnyCompilation['moduleGraph'],
 ) => {
   const roots = new Set<AnyModule>();
-  const canReadBlockChunkGroup = typeof chunkGraph?.getBlockChunkGroup === 'function';
+  const canReadBlockChunkGroup =
+    typeof chunkGraph?.getBlockChunkGroup === 'function';
   const addDependencyRoot = (dependency: any, requireActualModule: boolean) => {
     const targetModule = safeInvoke(() => moduleGraph?.getModule?.(dependency));
-    if (targetModule && (!requireActualModule || actualModules.has(targetModule))) {
+    if (
+      targetModule &&
+      (!requireActualModule || actualModules.has(targetModule))
+    ) {
       roots.add(targetModule);
     }
   };
@@ -329,8 +349,9 @@ const buildSnippet = (
   linesCache: Map<string, string[] | null>,
   absolutePath: string,
   loc: any,
+  request?: string,
 ) => {
-  if (!loc?.start?.line) {
+  if (!loc?.start?.line && !request) {
     return '';
   }
 
@@ -348,15 +369,66 @@ const buildSnippet = (
     return '';
   }
 
-  const startLine = Math.max(0, loc.start.line - 1);
+  const buildSnippetFromLines = (startLine: number, endLine: number) =>
+    lines
+      .slice(startLine, endLine)
+      .map((line, index) => `${startLine + index + 1} | ${line}`)
+      .join('\n');
+
+  const findImportSnippetByRequest = () => {
+    if (!request) {
+      return '';
+    }
+
+    const requestLineIndexes = lines
+      .map((line, index) => ({ line, index }))
+      .filter(({ line }) => line.includes(request));
+
+    for (const { index } of requestLineIndexes) {
+      let importStartLine = -1;
+      for (let cursor = index; cursor >= Math.max(0, index - 8); cursor--) {
+        if (/\bimport\s*\(/.test(lines[cursor])) {
+          importStartLine = cursor;
+          break;
+        }
+      }
+
+      if (importStartLine < 0) {
+        continue;
+      }
+
+      const candidate = lines.slice(importStartLine, index + 1).join('\n');
+      if (/\btypeof\s+import\s*\(/.test(candidate)) {
+        continue;
+      }
+
+      return buildSnippetFromLines(
+        importStartLine,
+        Math.min(lines.length, importStartLine + 5, index + 3),
+      );
+    }
+
+    return '';
+  };
+
+  const startLine = loc?.start?.line ? Math.max(0, loc.start.line - 1) : 0;
   const endLine = loc?.end?.line
     ? Math.min(lines.length, loc.end.line)
     : startLine + 1;
 
-  return lines
-    .slice(startLine, Math.min(endLine, startLine + 3))
-    .map((line, index) => `${startLine + index + 1} | ${line}`)
-    .join('\n');
+  const locSnippet = loc?.start?.line
+    ? buildSnippetFromLines(startLine, Math.min(endLine, startLine + 3))
+    : '';
+
+  if (
+    !request ||
+    (locSnippet.includes('import(') &&
+      !/\btypeof\s+import\s*\(/.test(locSnippet))
+  ) {
+    return locSnippet;
+  }
+
+  return findImportSnippetByRequest() || locSnippet;
 };
 
 type InternalChunkGroupNode = Omit<
@@ -424,9 +496,7 @@ const intersectModuleMaps = (
   return result;
 };
 
-const sumModuleSizes = (
-  modules: Iterable<SDK.ChunkGroupGraphModuleData>,
-) => {
+const sumModuleSizes = (modules: Iterable<SDK.ChunkGroupGraphModuleData>) => {
   let total = 0;
   for (const module of modules) {
     total += module.size;
@@ -595,7 +665,9 @@ export function buildChunkGroupGraphReport(
   const chunkModulesMap = new Map<AnyChunk, Set<AnyModule>>();
   for (const chunk of toArray<AnyChunk>(compilation?.chunks)) {
     const modules = new Set<AnyModule>();
-    const chunkModules = safeInvoke(() => chunkGraph?.getChunkModulesIterable?.(chunk));
+    const chunkModules = safeInvoke(() =>
+      chunkGraph?.getChunkModulesIterable?.(chunk),
+    );
     for (const module of toArray<AnyModule>(chunkModules)) {
       modules.add(module);
     }
@@ -638,7 +710,9 @@ export function buildChunkGroupGraphReport(
       );
       registerResourceGroups(module?.rootModule?.resource, groups);
 
-      for (const innerModule of toArray<any>(safeInvoke(() => module?.modules))) {
+      for (const innerModule of toArray<any>(
+        safeInvoke(() => module?.modules),
+      )) {
         registerResourceGroups(
           innerModule?.resource ??
             safeInvoke(() => innerModule?.nameForCondition?.()),
@@ -656,7 +730,12 @@ export function buildChunkGroupGraphReport(
     chunkGroupIdMap.set(chunkGroup, nodeId);
 
     const actualModules = getGroupModules(chunkGroup, chunkModulesMap);
-    const roots = getRootModules(chunkGroup, actualModules, chunkGraph, moduleGraph);
+    const roots = getRootModules(
+      chunkGroup,
+      actualModules,
+      chunkGraph,
+      moduleGraph,
+    );
     const visited = new Set<AnyModule>();
     const queue = [...roots];
 
@@ -699,7 +778,10 @@ export function buildChunkGroupGraphReport(
         }
 
         const originName = getModuleName(compilation, connection.originModule);
-        if (visited.has(connection.originModule) || originName.includes(' + ')) {
+        if (
+          visited.has(connection.originModule) ||
+          originName.includes(' + ')
+        ) {
           reachableModules.add(module);
           break;
         }
@@ -711,7 +793,9 @@ export function buildChunkGroupGraphReport(
 
     const chunks = toArray<AnyChunk>(chunkGroup?.chunks)
       .map((chunk: AnyChunk) => {
-        const chunkId = String(chunk?.id ?? chunk?.ukey ?? chunk?.name ?? 'unknown');
+        const chunkId = String(
+          chunk?.id ?? chunk?.ukey ?? chunk?.name ?? 'unknown',
+        );
         let emittedSize = 0;
         const files = toArray<string>(chunk?.files).filter(
           (file): file is string =>
@@ -743,10 +827,7 @@ export function buildChunkGroupGraphReport(
       })
       .sort((a, b) => b.emittedSize - a.emittedSize);
 
-    const localActualJSById = new Map<
-      string,
-      SDK.ChunkGroupGraphModuleData
-    >();
+    const localActualJSById = new Map<string, SDK.ChunkGroupGraphModuleData>();
     const localReachableJSById = new Map<
       string,
       SDK.ChunkGroupGraphModuleData
@@ -829,19 +910,22 @@ export function buildChunkGroupGraphReport(
       const relativeModulePath = moduleResource
         ? path.relative(compilerContext, moduleResource)
         : null;
+      const request = String(origin?.request ?? '');
       const snippet = moduleResource
-        ? buildSnippet(sourceFileCache, moduleResource, origin.loc)
+        ? buildSnippet(sourceFileCache, moduleResource, origin.loc, request)
         : '';
       const loc = origin?.loc?.start
         ? `${relativeModulePath ?? '?'}:${origin.loc.start.line}:${origin.loc.start.column}`
-        : relativeModulePath ?? '';
+        : (relativeModulePath ?? '');
 
       const sourceGroups = new Set<AnyChunkGroup>();
       const originResources = [
         origin.module?.resource,
         safeInvoke(() => origin.module?.nameForCondition?.()),
         origin.module?.rootModule?.resource,
-      ].filter((item): item is string => typeof item === 'string' && item.length > 0);
+      ].filter(
+        (item): item is string => typeof item === 'string' && item.length > 0,
+      );
 
       for (const resource of originResources) {
         const normalizedResource = normalizeResource(compilerContext, resource);
@@ -872,7 +956,6 @@ export function buildChunkGroupGraphReport(
         }
 
         const edge = edgeMap.get(edgeId)!;
-        const request = String(origin?.request ?? '');
         const isDuplicate = edge.imports.some(
           (item) =>
             item.loc === loc &&
@@ -953,13 +1036,14 @@ export function buildChunkGroupGraphReport(
     const parentSets = (reverse.get(nodeId) ?? [])
       .map((parentId) => guaranteedInclusiveLoadedByNode.get(parentId))
       .filter(
-        (
-          modules,
-        ): modules is Map<string, SDK.ChunkGroupGraphModuleData> =>
+        (modules): modules is Map<string, SDK.ChunkGroupGraphModuleData> =>
           Boolean(modules),
       );
     const guaranteedBefore = intersectModuleMaps(parentSets);
-    const incrementalRemovable = new Map<string, SDK.ChunkGroupGraphModuleData>();
+    const incrementalRemovable = new Map<
+      string,
+      SDK.ChunkGroupGraphModuleData
+    >();
     const inheritedRemovable = new Map<string, SDK.ChunkGroupGraphModuleData>();
 
     for (const [moduleId, module] of node.localRemovableById) {
@@ -1069,10 +1153,7 @@ export function buildChunkGroupGraphReport(
     const paths = nodePaths
       .map((nodeIds, index) => {
         const uniqueChunks = new Map<string, SDK.ChunkGroupGraphChunkData>();
-        const loadedModules = new Map<
-          string,
-          SDK.ChunkGroupGraphModuleData
-        >();
+        const loadedModules = new Map<string, SDK.ChunkGroupGraphModuleData>();
         const requiredModules = new Map<
           string,
           SDK.ChunkGroupGraphModuleData
@@ -1188,8 +1269,14 @@ export function buildChunkGroupGraphReport(
       if (a.removableJSSize !== b.removableJSSize) {
         return b.removableJSSize - a.removableJSSize;
       }
-      if (getSeverityRank(a.worstPathSeverity) !== getSeverityRank(b.worstPathSeverity)) {
-        return getSeverityRank(b.worstPathSeverity) - getSeverityRank(a.worstPathSeverity);
+      if (
+        getSeverityRank(a.worstPathSeverity) !==
+        getSeverityRank(b.worstPathSeverity)
+      ) {
+        return (
+          getSeverityRank(b.worstPathSeverity) -
+          getSeverityRank(a.worstPathSeverity)
+        );
       }
       if (a.maxPathRatio !== b.maxPathRatio) {
         return b.maxPathRatio - a.maxPathRatio;
@@ -1206,7 +1293,8 @@ export function buildChunkGroupGraphReport(
     entryGroupCount: nodes.filter((node) => node.isInitial).length,
     asyncGroupCount: nodes.filter((node) => !node.isInitial).length,
     totalEdgeCount: enrichedEdges.length,
-    removableGroupCount: nodes.filter((node) => node.removableJSSize > 0).length,
+    removableGroupCount: nodes.filter((node) => node.removableJSSize > 0)
+      .length,
     warningGroupCount: nodes.filter(
       (node) => node.worstPathSeverity === 'warning',
     ).length,
@@ -1228,14 +1316,12 @@ export function buildChunkGroupGraphReport(
     totalPathCount: nodes.reduce((total, node) => total + node.pathCount, 0),
     warningPathCount: nodes.reduce(
       (total, node) =>
-        total +
-        node.paths.filter((path) => path.severity === 'warning').length,
+        total + node.paths.filter((path) => path.severity === 'warning').length,
       0,
     ),
     dangerPathCount: nodes.reduce(
       (total, node) =>
-        total +
-        node.paths.filter((path) => path.severity === 'danger').length,
+        total + node.paths.filter((path) => path.severity === 'danger').length,
       0,
     ),
     truncatedPathGroupCount: nodes.filter((node) => node.pathsTruncated).length,

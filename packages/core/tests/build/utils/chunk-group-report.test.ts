@@ -23,7 +23,7 @@ describe('buildChunkGroupGraphReport', () => {
     const asyncFile = path.join(tempDir, 'async.js');
     const unusedFile = path.join(tempDir, 'unused.js');
 
-    fs.writeFileSync(entryFile, "import('./async')\nconsole.log('entry')\n");
+    fs.writeFileSync(entryFile, "console.log('entry')\nimport('./async')\n");
     fs.writeFileSync(asyncFile, "export const value = 'async'\n");
     fs.writeFileSync(unusedFile, "export const value = 'unused'\n");
 
@@ -193,8 +193,8 @@ describe('buildChunkGroupGraphReport', () => {
 
     fs.writeFileSync(entryFile, "import('./parent')\n");
     fs.writeFileSync(parentFile, "import('./child')\n");
-    fs.writeFileSync(childFile, "export const child = true\n");
-    fs.writeFileSync(sharedUnusedFile, "export const unused = true\n");
+    fs.writeFileSync(childFile, 'export const child = true\n');
+    fs.writeFileSync(sharedUnusedFile, 'export const unused = true\n');
 
     const entryModule = {
       resource: entryFile,
@@ -343,7 +343,9 @@ describe('buildChunkGroupGraphReport', () => {
 
     expect(report).toBeTruthy();
 
-    const parentNode = report?.nodes.find((node) => node.name === 'parent-group');
+    const parentNode = report?.nodes.find(
+      (node) => node.name === 'parent-group',
+    );
     const childNode = report?.nodes.find((node) => node.name === 'child-group');
 
     expect(parentNode).toBeTruthy();
@@ -382,10 +384,10 @@ describe('buildChunkGroupGraphReport', () => {
 
     fs.writeFileSync(mainFile, "import('./foo')\n");
     fs.writeFileSync(fooFile, "import('./bar')\n");
-    fs.writeFileSync(barFile, "export const bar = true\n");
-    fs.writeFileSync(libFile, "export const lib = true\n");
-    fs.writeFileSync(sharedMainFooFile, "export const sharedMainFoo = true\n");
-    fs.writeFileSync(sharedFooBarFile, "export const sharedFooBar = true\n");
+    fs.writeFileSync(barFile, 'export const bar = true\n');
+    fs.writeFileSync(libFile, 'export const lib = true\n');
+    fs.writeFileSync(sharedMainFooFile, 'export const sharedMainFoo = true\n');
+    fs.writeFileSync(sharedFooBarFile, 'export const sharedFooBar = true\n');
 
     const fooBlock = { dependencies: ['dep_foo'] };
     const barBlock = { dependencies: ['dep_bar'] };

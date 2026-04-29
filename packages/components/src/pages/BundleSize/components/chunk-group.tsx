@@ -45,6 +45,11 @@ type ChunkGroupGraphPanelProps = {
   report?: SDK.ChunkGroupGraphData;
 };
 
+type GraphImportSnippetLabel = {
+  file: string;
+  code: string;
+};
+
 const ENTRY_COLOR = '#1f6feb';
 const ASYNC_COLOR = '#238636';
 const HIGHLIGHT_COLOR = '#f59e0b';
@@ -152,38 +157,110 @@ const getNodeLaneHeight = (
 const truncateLabel = (value: string, maxLength = 26) =>
   value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
 
-const normalizeGraphLabel = (value: string, maxLength: number) =>
-  truncateLabel(
-    value.replace(/[{}]/g, '').replace(/\s+/g, ' ').trim(),
-    maxLength,
-  );
-
-const getImportSnippetLabel = (item: SDK.ChunkGroupGraphImportData) => {
-  const snippetLine = item.snippet
-    ?.split('\n')
-    .map((line) => line.trim())
-    .find((line) => line.includes('import('));
-
-  if (snippetLine) {
-    return normalizeGraphLabel(snippetLine, 64);
+const truncateMiddleLabel = (value: string, maxLength: number) => {
+  if (value.length <= maxLength) {
+    return value;
   }
 
-  if (item.request) {
-    return normalizeGraphLabel(`import(${JSON.stringify(item.request)})`, 64);
-  }
-
-  return '';
+  const tailLength = Math.floor((maxLength - 1) / 2);
+  const headLength = maxLength - tailLength - 1;
+  return `${value.slice(0, headLength)}…${value.slice(-tailLength)}`;
 };
 
-const getEdgeImportSnippetLabel = (edge: SDK.ChunkGroupGraphEdgeData) => {
-  const snippets = edge.imports.map(getImportSnippetLabel).filter(Boolean);
-  if (!snippets.length) {
-    return '';
+const normalizeGraphLabelText = (value: string) =>
+  value.replace(/[{}]/g, '').replace(/\s+/g, ' ').trim();
+
+const normalizeGraphLabel = (value: string, maxLength: number) =>
+  truncateLabel(normalizeGraphLabelText(value), maxLength);
+
+const normalizeFileGraphLabel = (value: string, maxLength: number) =>
+  truncateMiddleLabel(normalizeGraphLabelText(value), maxLength);
+
+const stripSnippetLineNumber = (value: string) =>
+  value.replace(/^\d+\s*\|\s*/, '').trim();
+
+const buildImportSnippetCode = (item: SDK.ChunkGroupGraphImportData) => {
+  const snippetLines =
+    item.snippet
+      ?.split('\n')
+      .map((line) => stripSnippetLineNumber(line.trim()))
+      .filter(Boolean) ?? [];
+  const importLineIndex = snippetLines.findIndex((line) =>
+    line.includes('import('),
+  );
+
+  if (importLineIndex >= 0) {
+    const requestLineIndex = item.request
+      ? snippetLines.findIndex((line, index) => {
+          return index >= importLineIndex && line.includes(item.request!);
+        })
+      : -1;
+    const endIndex =
+      requestLineIndex >= 0
+        ? Math.min(snippetLines.length, requestLineIndex + 2)
+        : importLineIndex + 1;
+
+    return snippetLines.slice(importLineIndex, endIndex).join(' ');
   }
 
-  return edge.imports.length > 1
-    ? `${snippets[0]} +${edge.imports.length - 1}`
-    : snippets[0];
+  return item.request ? `import(${JSON.stringify(item.request)})` : '';
+};
+
+const getSourceFileLabel = (item: SDK.ChunkGroupGraphImportData) => {
+  const source = item.sourceModule || item.loc?.replace(/:\d+:\d+$/, '') || '';
+  const fileName = source.split(/[\\/]/).filter(Boolean).pop() || source;
+  const line = item.loc?.match(/:(\d+):\d+$/)?.[1];
+
+  if (!fileName) {
+    return line ? `line ${line}` : 'unknown source';
+  }
+
+  return line ? `${fileName}:${line}` : fileName;
+};
+
+const getImportSnippetLabel = (
+  item: SDK.ChunkGroupGraphImportData,
+): GraphImportSnippetLabel | undefined => {
+  const code = buildImportSnippetCode(item);
+
+  if (!code) {
+    return undefined;
+  }
+
+  return {
+    file: normalizeFileGraphLabel(getSourceFileLabel(item), 42),
+    code: normalizeGraphLabel(code, 72),
+  };
+};
+
+const formatEdgeImportSnippetLabel = (
+  edge: SDK.ChunkGroupGraphEdgeData,
+): GraphImportSnippetLabel | undefined => {
+  const snippets = edge.imports.map(getImportSnippetLabel).filter(Boolean);
+  if (!snippets.length) {
+    return undefined;
+  }
+
+  const first = snippets[0]!;
+  if (edge.imports.length <= 1) {
+    return first;
+  }
+
+  return {
+    file: `${first.file} +${edge.imports.length - 1}`,
+    code: first.code,
+  };
+};
+
+const getEdgeImportSnippetGraphLabel = (
+  edge: SDK.ChunkGroupGraphEdgeData,
+): GraphImportSnippetLabel | undefined => {
+  const label = formatEdgeImportSnippetLabel(edge);
+  if (!label) {
+    return undefined;
+  }
+
+  return label;
 };
 
 const getZRenderEventPoint = (event: any) => ({
@@ -587,7 +664,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     ? (hoveredPath ?? selectedNodePaths[0])
     : undefined;
   const activePathImportSnippets = useMemo(() => {
-    const snippets = new Map<string, string>();
+    const snippets = new Map<string, GraphImportSnippetLabel>();
     if (!activeSnippetPath) {
       return snippets;
     }
@@ -597,7 +674,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       if (!edge) {
         continue;
       }
-      const snippet = getEdgeImportSnippetLabel(edge);
+      const snippet = getEdgeImportSnippetGraphLabel(edge);
       if (snippet) {
         snippets.set(edge.to, snippet);
       }
@@ -729,7 +806,9 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
         node.totalEmittedSize,
       )}`;
       const labelFormatter = shouldShowImportSnippet
-        ? `{snippet|${importSnippet}}\n{name|${normalizeGraphLabel(
+        ? `{file|${importSnippet!.file}}\n{snippet|${
+            importSnippet!.code
+          }}\n{name|${normalizeGraphLabel(
             node.name,
             30,
           )}}\n{size|${formatSize(node.totalEmittedSize)}}`
@@ -759,7 +838,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
             ? ('top' as const)
             : ('bottom' as const),
           distance: shouldShowImportSnippet ? 14 : 10,
-          width: shouldShowImportSnippet ? 260 : NODE_LABEL_WIDTH,
+          width: shouldShowImportSnippet ? 320 : NODE_LABEL_WIDTH,
           overflow: 'truncate' as const,
           lineHeight: shouldShowImportSnippet ? 18 : 16,
           align: 'center' as const,
@@ -776,6 +855,16 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
               fontFamily: 'monospace',
               fontSize: 11,
               lineHeight: 18,
+            },
+            file: {
+              color: '#e2e8f0',
+              backgroundColor: 'rgba(15, 23, 42, 0.92)',
+              borderRadius: 4,
+              padding: [4, 6, 0, 6],
+              fontFamily: 'monospace',
+              fontSize: 11,
+              fontWeight: 700,
+              lineHeight: 16,
             },
             name: {
               color: '#111827',
@@ -914,7 +1003,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
             width: 1.5,
           },
           labelLayout: {
-            hideOverlap: true,
+            hideOverlap: activePathImportSnippets.size === 0,
           },
           emphasis: {
             focus: 'adjacency',
