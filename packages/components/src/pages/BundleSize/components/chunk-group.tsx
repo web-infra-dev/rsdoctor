@@ -338,6 +338,43 @@ const scrollElementByWheel = (
   element.scrollTop += deltaY;
 };
 
+const normalizeWheelDelta = (event: WheelEvent) => {
+  let deltaX = event.deltaX;
+  let deltaY = event.deltaY;
+  const legacyEvent = event as WheelEvent & {
+    detail?: number;
+    wheelDelta?: number;
+    wheelDeltaX?: number;
+    wheelDeltaY?: number;
+  };
+
+  if (event.deltaMode === 1) {
+    deltaX *= 16;
+    deltaY *= 16;
+  } else if (event.deltaMode === 2) {
+    deltaX *= window.innerWidth;
+    deltaY *= window.innerHeight;
+  }
+
+  if (!deltaX && legacyEvent.wheelDeltaX) {
+    deltaX = -legacyEvent.wheelDeltaX;
+  }
+  if (!deltaY && legacyEvent.wheelDeltaY) {
+    deltaY = -legacyEvent.wheelDeltaY;
+  }
+  if (!deltaY && legacyEvent.wheelDelta) {
+    deltaY = -legacyEvent.wheelDelta;
+  }
+  if (!deltaY && legacyEvent.detail) {
+    deltaY = legacyEvent.detail * 16;
+  }
+
+  return {
+    deltaX,
+    deltaY,
+  };
+};
+
 const sortPathsByOpportunity = (
   a: SDK.ChunkGroupGraphPathData,
   b: SDK.ChunkGroupGraphPathData,
@@ -716,6 +753,52 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       window.clearTimeout(timer);
     };
   }, [graphHeight, graphWidth, nodes.length, edges.length]);
+
+  useEffect(() => {
+    const element = graphContainerRef.current;
+    if (!element) {
+      return;
+    }
+
+    const handleGraphWheel = (event: WheelEvent) => {
+      if (event.ctrlKey || event.metaKey) {
+        return;
+      }
+
+      const { deltaX, deltaY } = normalizeWheelDelta(event);
+      if (!deltaX && !deltaY) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      scrollElementByWheel(
+        findScrollContainer(element, deltaX, deltaY),
+        deltaX,
+        deltaY,
+      );
+    };
+    const options: AddEventListenerOptions = {
+      capture: true,
+      passive: false,
+    };
+
+    element.addEventListener('wheel', handleGraphWheel, options);
+    element.addEventListener('mousewheel', handleGraphWheel as EventListener, {
+      ...options,
+    });
+
+    return () => {
+      element.removeEventListener('wheel', handleGraphWheel, options);
+      element.removeEventListener(
+        'mousewheel',
+        handleGraphWheel as EventListener,
+        options,
+      );
+    };
+  }, []);
 
   const hoveredPath = selectedNodePaths.find(
     (path) => path.id === hoveredPathId,
@@ -1204,21 +1287,6 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const dangerPathCount = overview?.dangerPathCount ?? 0;
   const warningPathCount = overview?.warningPathCount ?? 0;
   const selectedNodeImports = selectedNode?.incomingImports ?? [];
-  const handleGraphWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    if (event.ctrlKey || event.metaKey) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-    event.nativeEvent.stopImmediatePropagation();
-
-    scrollElementByWheel(
-      findScrollContainer(event.currentTarget, event.deltaX, event.deltaY),
-      event.deltaX,
-      event.deltaY,
-    );
-  };
   const selectedNodePathList = selectedNode ? (
     <div>
       <Typography.Title level={5}>
@@ -1430,7 +1498,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
 
           <Row gutter={[16, 16]} align="top">
             <Col xs={24} xl={16}>
-              <div ref={graphContainerRef} onWheelCapture={handleGraphWheel}>
+              <div ref={graphContainerRef}>
                 <Card bodyStyle={{ padding: 0 }}>
                   <ReactEChartsCore
                     ref={chartRef}
