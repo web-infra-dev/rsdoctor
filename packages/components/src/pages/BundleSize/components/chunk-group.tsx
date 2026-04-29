@@ -58,11 +58,13 @@ const MIN_GRAPH_HEIGHT = 520;
 const MAX_GRAPH_HEIGHT = 620;
 const LAYOUT_TOP_PADDING = 64;
 const LAYOUT_LEFT_PADDING = 120;
-const LAYOUT_ROW_GAP = 32;
-const LAYOUT_COLUMN_GAP = 320;
-const LAYOUT_SUBCOLUMN_GAP = 250;
-const MAX_LAYOUT_ROWS_PER_LEVEL = 6;
+const LAYOUT_ROW_GAP = 96;
+const LAYOUT_COLUMN_GAP = 640;
+const LAYOUT_SUBCOLUMN_GAP = 520;
+const MAX_LAYOUT_ROWS_PER_LEVEL = 7;
+const LARGE_GRAPH_NODE_SCALE = 0.44;
 const NODE_LABEL_WIDTH = 180;
+const GRAPH_BOUNDARY_NODE_ID_PREFIX = '__chunk-group-graph-boundary__';
 
 const getBaseNodeColor = (node: SDK.ChunkGroupGraphNodeData) =>
   node.isInitial
@@ -538,7 +540,8 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       const isMatched = matchedNodeIds.has(node.id);
       const isOnHighlight = highlightNodeIds.has(node.id);
       const symbolSize =
-        getNodeSymbolSize(node, maxEmittedSize) * (isLargeGraph ? 0.78 : 1);
+        getNodeSymbolSize(node, maxEmittedSize) *
+        (isLargeGraph ? LARGE_GRAPH_NODE_SCALE : 1);
 
       let opacity = 1;
       if (hasSelection) {
@@ -599,6 +602,41 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
         },
       };
     });
+    const positionedNodes = [...layout.positions.values()];
+    const boundaryPadding = isLargeGraph ? 720 : 240;
+    const positionedXs = positionedNodes.map((position) => position.x);
+    const positionedYs = positionedNodes.map((position) => position.y);
+    const boundaryMinX = Math.min(...positionedXs) - boundaryPadding;
+    const boundaryMaxX = Math.max(...positionedXs) + boundaryPadding;
+    const boundaryMinY = Math.min(...positionedYs) - boundaryPadding;
+    const boundaryMaxY = Math.max(...positionedYs) + boundaryPadding;
+    const graphBoundaryNodes = positionedNodes.length
+      ? [
+          [boundaryMinX, boundaryMinY],
+          [boundaryMaxX, boundaryMinY],
+          [boundaryMinX, boundaryMaxY],
+          [boundaryMaxX, boundaryMaxY],
+        ].map(([x, y], index) => ({
+          id: `${GRAPH_BOUNDARY_NODE_ID_PREFIX}${index}`,
+          name: '',
+          x,
+          y,
+          silent: true,
+          symbolSize: 1,
+          itemStyle: {
+            opacity: 0,
+          },
+          label: {
+            show: false,
+          },
+          tooltip: {
+            show: false,
+          },
+          emphasis: {
+            disabled: true,
+          },
+        }))
+      : [];
 
     const graphEdges = edges.map((edge) => {
       const highlight = highlightEdgeIds.has(edge.id);
@@ -671,20 +709,22 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       series: [
         {
           type: 'graph',
+          left: 8,
+          right: 8,
+          top: 8,
+          bottom: 8,
           layout: 'none',
           roam: true,
           draggable: false,
-          zoom: isLargeGraph ? 1.15 : 1,
-          center: isLargeGraph
-            ? [LAYOUT_LEFT_PADDING + 520, LAYOUT_TOP_PADDING + 1000]
-            : undefined,
+          nodeScaleRatio: (isLargeGraph ? 0.24 : 0.6) as any,
+          zoom: isLargeGraph ? 0.72 : 1,
           scaleLimit: {
-            min: 0.25,
+            min: 0.2,
             max: 4,
           },
           edgeSymbol: ['none', 'arrow'],
           edgeSymbolSize: [0, 8],
-          data: graphNodes,
+          data: [...graphNodes, ...graphBoundaryNodes],
           links: graphEdges,
           lineStyle: {
             opacity: 0.65,
@@ -941,15 +981,15 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
             prefix={<SearchOutlined />}
           />
 
-          <Row gutter={16} align="top">
-            <Col span={16}>
+          <Row gutter={[16, 16]} align="top">
+            <Col xs={24} xl={16}>
               <Card bodyStyle={{ padding: 0 }}>
                 <ReactEChartsCore
                   ref={chartRef}
                   echarts={echarts}
                   option={option}
                   notMerge
-                  style={{ height: graphHeight, width: '100%' }}
+                  style={{ cursor: 'grab', height: graphHeight, width: '100%' }}
                   onEvents={{
                     click: (params: any) => {
                       if (params.dataType === 'node') {
@@ -967,7 +1007,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
               </Card>
             </Col>
 
-            <Col span={8}>
+            <Col xs={24} xl={8}>
               <Card
                 title="Details"
                 extra={
