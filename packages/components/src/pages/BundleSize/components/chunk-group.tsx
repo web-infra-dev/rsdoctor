@@ -657,41 +657,6 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     };
   }, [graphHeight, graphWidth, nodes.length, edges.length]);
 
-  useEffect(() => {
-    const element = graphContainerRef.current;
-    if (!element) {
-      return;
-    }
-
-    const handleGraphWheel = (event: WheelEvent) => {
-      if (event.ctrlKey || event.metaKey) {
-        return;
-      }
-
-      // Keep normal wheel scrolling native, but keep ECharts from treating it
-      // as graph zoom. Ctrl/Cmd + wheel is still forwarded for graph zoom.
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-    };
-    const options: AddEventListenerOptions = {
-      capture: true,
-    };
-
-    element.addEventListener('wheel', handleGraphWheel, options);
-    element.addEventListener('mousewheel', handleGraphWheel as EventListener, {
-      ...options,
-    });
-
-    return () => {
-      element.removeEventListener('wheel', handleGraphWheel, options);
-      element.removeEventListener(
-        'mousewheel',
-        handleGraphWheel as EventListener,
-        options,
-      );
-    };
-  }, []);
-
   const hoveredPath = selectedNodePaths.find(
     (path) => path.id === hoveredPathId,
   );
@@ -1018,7 +983,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           top: 8,
           bottom: 8,
           layout: 'none',
-          roam: true,
+          roam: 'move',
           draggable: false,
           nodeScaleRatio: (isLargeGraph ? 0.24 : 0.6) as any,
           zoom: isLargeGraph ? 0.72 : 1,
