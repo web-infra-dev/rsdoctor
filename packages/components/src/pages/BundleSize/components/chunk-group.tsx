@@ -278,103 +278,6 @@ const getZRenderEventPoint = (event: any) => ({
         : 0,
 });
 
-const getScrollableAxes = (element: HTMLElement) => {
-  const { overflowY, overflowX } = window.getComputedStyle(element);
-  const canScrollY =
-    /(auto|scroll|overlay)/.test(overflowY) &&
-    element.scrollHeight > element.clientHeight;
-  const canScrollX =
-    /(auto|scroll|overlay)/.test(overflowX) &&
-    element.scrollWidth > element.clientWidth;
-
-  return {
-    x: canScrollX,
-    y: canScrollY,
-  };
-};
-
-const findScrollContainer = (
-  element: HTMLElement,
-  deltaX: number,
-  deltaY: number,
-) => {
-  let current = element.parentElement;
-  const shouldScrollY = Math.abs(deltaY) >= Math.abs(deltaX);
-
-  while (current && current !== document.body) {
-    const scrollable = getScrollableAxes(current);
-    if (
-      (shouldScrollY && scrollable.y) ||
-      (!shouldScrollY && scrollable.x) ||
-      (deltaY !== 0 && scrollable.y) ||
-      (deltaX !== 0 && scrollable.x)
-    ) {
-      return current;
-    }
-    current = current.parentElement;
-  }
-
-  return document.scrollingElement ?? document.documentElement;
-};
-
-const scrollElementByWheel = (
-  element: Element,
-  deltaX: number,
-  deltaY: number,
-) => {
-  if (
-    element === document.scrollingElement ||
-    element === document.documentElement
-  ) {
-    window.scrollBy({
-      left: deltaX,
-      top: deltaY,
-      behavior: 'auto',
-    });
-    return;
-  }
-
-  element.scrollLeft += deltaX;
-  element.scrollTop += deltaY;
-};
-
-const normalizeWheelDelta = (event: WheelEvent) => {
-  let deltaX = event.deltaX;
-  let deltaY = event.deltaY;
-  const legacyEvent = event as WheelEvent & {
-    detail?: number;
-    wheelDelta?: number;
-    wheelDeltaX?: number;
-    wheelDeltaY?: number;
-  };
-
-  if (event.deltaMode === 1) {
-    deltaX *= 16;
-    deltaY *= 16;
-  } else if (event.deltaMode === 2) {
-    deltaX *= window.innerWidth;
-    deltaY *= window.innerHeight;
-  }
-
-  if (!deltaX && legacyEvent.wheelDeltaX) {
-    deltaX = -legacyEvent.wheelDeltaX;
-  }
-  if (!deltaY && legacyEvent.wheelDeltaY) {
-    deltaY = -legacyEvent.wheelDeltaY;
-  }
-  if (!deltaY && legacyEvent.wheelDelta) {
-    deltaY = -legacyEvent.wheelDelta;
-  }
-  if (!deltaY && legacyEvent.detail) {
-    deltaY = legacyEvent.detail * 16;
-  }
-
-  return {
-    deltaX,
-    deltaY,
-  };
-};
-
 const sortPathsByOpportunity = (
   a: SDK.ChunkGroupGraphPathData,
   b: SDK.ChunkGroupGraphPathData,
@@ -765,24 +668,13 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
         return;
       }
 
-      const { deltaX, deltaY } = normalizeWheelDelta(event);
-      if (!deltaX && !deltaY) {
-        return;
-      }
-
-      event.preventDefault();
+      // Keep normal wheel scrolling native, but keep ECharts from treating it
+      // as graph zoom. Ctrl/Cmd + wheel is still forwarded for graph zoom.
       event.stopPropagation();
       event.stopImmediatePropagation();
-
-      scrollElementByWheel(
-        findScrollContainer(element, deltaX, deltaY),
-        deltaX,
-        deltaY,
-      );
     };
     const options: AddEventListenerOptions = {
       capture: true,
-      passive: false,
     };
 
     element.addEventListener('wheel', handleGraphWheel, options);
