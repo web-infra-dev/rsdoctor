@@ -12,6 +12,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
 import {
   Alert,
+  Button,
   Card,
   Col,
   Empty,
@@ -74,6 +75,9 @@ const NODE_LABEL_WIDTH = 180;
 const MIN_NODE_SYMBOL_SIZE = 30;
 const MAX_NODE_SYMBOL_SIZE = 112;
 const GRAPH_BOUNDARY_NODE_ID_PREFIX = '__chunk-group-graph-boundary__';
+const GRAPH_MIN_ZOOM = 0.2;
+const GRAPH_MAX_ZOOM = 4;
+const GRAPH_ZOOM_STEP = 0.25;
 
 const getBaseNodeColor = (node: SDK.ChunkGroupGraphNodeData) =>
   node.isInitial
@@ -566,6 +570,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
   const [hoveredPathId, setHoveredPathId] = useState<string | null>(null);
+  const [graphZoom, setGraphZoom] = useState(1);
   const [expandedPathIds, setExpandedPathIds] = useState<Set<string>>(
     () => new Set(),
   );
@@ -580,6 +585,12 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     MAX_GRAPH_HEIGHT,
     Math.max(MIN_GRAPH_HEIGHT, layout.height),
   );
+  const isLargeGraph = nodes.length > 80;
+  const defaultGraphZoom = isLargeGraph ? 0.72 : 1;
+
+  useEffect(() => {
+    setGraphZoom(defaultGraphZoom);
+  }, [defaultGraphZoom]);
 
   const matchedNodeIds = useMemo(() => {
     if (!searchQuery.trim()) {
@@ -608,6 +619,10 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
         .filter((node) => matchedNodeIds.has(node.id)),
     [matchedNodeIds, nodeMap, report?.priorityNodeIds],
   );
+
+  const updateGraphZoom = (nextZoom: number) => {
+    setGraphZoom(Math.max(GRAPH_MIN_ZOOM, Math.min(GRAPH_MAX_ZOOM, nextZoom)));
+  };
 
   useEffect(() => {
     setExpandedPathIds(new Set());
@@ -719,7 +734,6 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     const hasSelection =
       Boolean(selectedNode) || Boolean(selectedEdge) || Boolean(hoveredPath);
     const hasSearch = Boolean(searchQuery.trim());
-    const isLargeGraph = nodes.length > 80;
     const maxEmittedSize = Math.max(
       1,
       ...nodes.map((item) => item.totalEmittedSize),
@@ -986,10 +1000,10 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           roam: 'move',
           draggable: false,
           nodeScaleRatio: (isLargeGraph ? 0.24 : 0.6) as any,
-          zoom: isLargeGraph ? 0.72 : 1,
+          zoom: graphZoom,
           scaleLimit: {
-            min: 0.2,
-            max: 4,
+            min: GRAPH_MIN_ZOOM,
+            max: GRAPH_MAX_ZOOM,
           },
           edgeSymbol: ['none', 'arrow'],
           edgeSymbolSize: [0, 8],
@@ -1020,9 +1034,11 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     edges,
     graphHeight,
     graphWidth,
+    graphZoom,
     highlightEdgeIds,
     highlightNodeIds,
     hoveredPath,
+    isLargeGraph,
     layout,
     matchedNodeIds,
     nodeMap,
@@ -1356,7 +1372,52 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           <Row gutter={[16, 16]} align="top">
             <Col xs={24} xl={16}>
               <div ref={graphContainerRef}>
-                <Card bodyStyle={{ padding: 0 }}>
+                <Card bodyStyle={{ padding: 0, position: 'relative' }}>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 12,
+                      right: 12,
+                      zIndex: 2,
+                      padding: '6px 8px',
+                      borderRadius: 8,
+                      background: 'rgba(255, 255, 255, 0.92)',
+                      boxShadow: '0 4px 12px rgba(15, 23, 42, 0.12)',
+                    }}
+                  >
+                    <Space size="small">
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          updateGraphZoom(graphZoom - GRAPH_ZOOM_STEP)
+                        }
+                        disabled={graphZoom <= GRAPH_MIN_ZOOM}
+                      >
+                        -
+                      </Button>
+                      <Typography.Text
+                        type="secondary"
+                        style={{ minWidth: 48, textAlign: 'center' }}
+                      >
+                        {Math.round(graphZoom * 100)}%
+                      </Typography.Text>
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          updateGraphZoom(graphZoom + GRAPH_ZOOM_STEP)
+                        }
+                        disabled={graphZoom >= GRAPH_MAX_ZOOM}
+                      >
+                        +
+                      </Button>
+                      <Button
+                        size="small"
+                        onClick={() => updateGraphZoom(defaultGraphZoom)}
+                      >
+                        Reset zoom
+                      </Button>
+                    </Space>
+                  </div>
                   <ReactEChartsCore
                     ref={chartRef}
                     echarts={echarts}
