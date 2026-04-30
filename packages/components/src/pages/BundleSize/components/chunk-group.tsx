@@ -66,10 +66,14 @@ const MIN_GRAPH_HEIGHT = 520;
 const MAX_GRAPH_HEIGHT = 620;
 const LAYOUT_TOP_PADDING = 64;
 const LAYOUT_LEFT_PADDING = 120;
-const LAYOUT_ROW_GAP = 96;
 const LAYOUT_COLUMN_GAP = 640;
-const LAYOUT_SUBCOLUMN_GAP = 520;
-const MAX_LAYOUT_ROWS_PER_LEVEL = 7;
+const LAYOUT_SUBCOLUMN_GAP = 360;
+const LAYOUT_PACKED_ROW_GAP = 50;
+const LAYOUT_PACKED_ROW_GAP_VARIANCE = 64;
+const LAYOUT_COLUMN_TOP_VARIANCE = 140;
+const LAYOUT_NODE_X_JITTER = 170;
+const LAYOUT_NODE_Y_JITTER = 32;
+const MAX_LAYOUT_ROWS_PER_LEVEL = 12;
 const LARGE_GRAPH_NODE_SCALE = 0.52;
 const NODE_LABEL_WIDTH = 180;
 const MIN_NODE_SYMBOL_SIZE = 30;
@@ -160,6 +164,22 @@ const getNodeLaneHeight = (
     96,
     getNodeSymbolSize(node, maxEmittedSize) + 50 + Math.min(18, outDegree * 4),
   );
+
+const stableHash = (value: string) => {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+};
+
+const stableRatio = (value: string) => (stableHash(value) % 10000) / 9999;
+
+const stableSignedRatio = (value: string) => stableRatio(value) * 2 - 1;
+
+const clampNumber = (value: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, value));
 
 const truncateLabel = (value: string, maxLength = 26) =>
   value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
@@ -379,11 +399,11 @@ const buildLayout = (
     {
       height: number;
       items: Array<{
+        column: number;
         laneHeight: number;
         node: SDK.ChunkGroupGraphNodeData;
+        y: number;
       }>;
-      rowCount: number;
-      rowHeight: number;
       width: number;
     }
   >();
@@ -431,10 +451,73 @@ const buildLayout = (
       1,
       Math.ceil(levelLayout.length / MAX_LAYOUT_ROWS_PER_LEVEL),
     );
-    const rowCount = Math.max(1, Math.ceil(levelLayout.length / columnCount));
-    const rowHeight =
-      Math.max(...levelLayout.map((item) => item.laneHeight)) + LAYOUT_ROW_GAP;
-    const levelHeight = rowCount * rowHeight - LAYOUT_ROW_GAP;
+    const columns = Array.from({ length: columnCount }, (_, columnIndex) => ({
+      count: 0,
+      height:
+        columnCount > 1
+          ? stableRatio(`${level}:${columnIndex}:top`) *
+            LAYOUT_COLUMN_TOP_VARIANCE
+          : 0,
+    }));
+    const placedItems: Array<{
+      column: number;
+      laneHeight: number;
+      node: SDK.ChunkGroupGraphNodeData;
+      y: number;
+    }> = [];
+
+    levelLayout.forEach((item, index) => {
+      const preferredColumn =
+        columnCount <= 1
+          ? 0
+          : Math.min(
+              columnCount - 1,
+              Math.max(
+                0,
+                Math.round(
+                  ((index + stableSignedRatio(`${item.node.id}:column`) * 0.4) /
+                    Math.max(1, levelLayout.length - 1)) *
+                    (columnCount - 1),
+                ),
+              ),
+            );
+      const column = columns.reduce(
+        (bestColumn, currentColumn, currentIndex) => {
+          const currentScore =
+            currentColumn.height +
+            Math.abs(currentIndex - preferredColumn) * 130 +
+            currentColumn.count * 12;
+          const best = columns[bestColumn];
+          const bestScore =
+            best.height +
+            Math.abs(bestColumn - preferredColumn) * 130 +
+            best.count * 12;
+
+          return currentScore < bestScore ? currentIndex : bestColumn;
+        },
+        0,
+      );
+      const yJitter =
+        stableSignedRatio(`${item.node.id}:y`) * LAYOUT_NODE_Y_JITTER;
+      const y = columns[column].height + item.laneHeight / 2 + yJitter;
+      const gap =
+        LAYOUT_PACKED_ROW_GAP +
+        stableRatio(`${item.node.id}:gap`) * LAYOUT_PACKED_ROW_GAP_VARIANCE;
+
+      placedItems.push({
+        column,
+        laneHeight: item.laneHeight,
+        node: item.node,
+        y,
+      });
+      columns[column].height += item.laneHeight + gap;
+      columns[column].count += 1;
+    });
+
+    const levelHeight = Math.max(
+      ...columns.map((column) => column.height),
+      ...placedItems.map((item) => item.y + item.laneHeight / 2),
+    );
     const levelWidth = Math.max(0, (columnCount - 1) * LAYOUT_SUBCOLUMN_GAP);
 
     levelLayout.forEach((item, index) => {
@@ -442,17 +525,18 @@ const buildLayout = (
     });
     levelLayouts.set(level, {
       height: levelHeight,
-      items: levelLayout,
-      rowCount,
-      rowHeight,
+      items: placedItems,
       width: levelWidth,
     });
     maxLevelHeight = Math.max(maxLevelHeight, levelHeight);
   }
 
+  const organicContentHeight =
+    nodes.length > 60 ? 420 + Math.sqrt(nodes.length) * 72 : 0;
   const contentHeight = Math.max(
     MIN_GRAPH_HEIGHT - LAYOUT_TOP_PADDING * 2,
     maxLevelHeight,
+    Math.min(1200, organicContentHeight),
   );
   const positions = new Map<
     string,
@@ -463,17 +547,34 @@ const buildLayout = (
   >();
 
   let currentX = LAYOUT_LEFT_PADDING;
-  for (const [, levelLayout] of [...levelLayouts.entries()].sort(
+  for (const [level, levelLayout] of [...levelLayouts.entries()].sort(
     (a, b) => a[0] - b[0],
   )) {
     const currentY = LAYOUT_TOP_PADDING;
+    const availableY = Math.max(0, contentHeight - levelLayout.height);
+    const levelWaveRatio =
+      Math.sin(level * 1.17) * 0.36 +
+      stableSignedRatio(`${level}:level-y`) * 0.18;
+    const levelOffsetY = clampNumber(
+      availableY / 2 + levelWaveRatio * availableY,
+      0,
+      availableY,
+    );
 
-    levelLayout.items.forEach((item, index) => {
-      const column = Math.floor(index / levelLayout.rowCount);
-      const row = index % levelLayout.rowCount;
+    levelLayout.items.forEach((item) => {
+      const xJitter =
+        stableSignedRatio(`${item.node.id}:x`) *
+        (levelLayout.width > 0
+          ? LAYOUT_NODE_X_JITTER
+          : LAYOUT_NODE_X_JITTER / 2);
+      const xWave =
+        levelLayout.width > 0
+          ? stableSignedRatio(`${item.column}:wave:${currentX}`) *
+            LAYOUT_NODE_X_JITTER
+          : 0;
       positions.set(item.node.id, {
-        x: currentX + column * LAYOUT_SUBCOLUMN_GAP,
-        y: currentY + row * levelLayout.rowHeight + levelLayout.rowHeight / 2,
+        x: currentX + item.column * LAYOUT_SUBCOLUMN_GAP + xJitter + xWave,
+        y: currentY + levelOffsetY + item.y,
       });
     });
     currentX += Math.max(
