@@ -31,15 +31,14 @@ type ChunkGroupGraphOption = ComposeOption<
   GraphSeriesOption | TooltipComponentOption
 >;
 
+type GraphPosition = {
+  x: number;
+  y: number;
+};
+
 type GraphLayout = {
   height: number;
-  positions: Map<
-    string,
-    {
-      x: number;
-      y: number;
-    }
-  >;
+  positions: Map<string, GraphPosition>;
 };
 
 type ChunkGroupGraphPanelProps = {
@@ -677,6 +676,9 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
   const [hoveredPathId, setHoveredPathId] = useState<string | null>(null);
   const [graphZoom, setGraphZoom] = useState(1);
+  const [draggedNodePositions, setDraggedNodePositions] = useState<
+    Map<string, GraphPosition>
+  >(() => new Map());
   const [expandedPathIds, setExpandedPathIds] = useState<Set<string>>(
     () => new Set(),
   );
@@ -770,6 +772,57 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     });
   };
 
+  const storeDraggedNodePosition = (params: any) => {
+    if (params?.dataType !== 'node') {
+      return;
+    }
+
+    const nodeId = params?.data?.id;
+    if (
+      typeof nodeId !== 'string' ||
+      nodeId.startsWith(GRAPH_BOUNDARY_NODE_ID_PREFIX)
+    ) {
+      return;
+    }
+
+    const chart = chartRef.current?.getEchartsInstance?.();
+    const graphData = chart?.getModel?.()?.getSeriesByIndex?.(0)?.getData?.();
+    const dataIndex =
+      typeof params.dataIndex === 'number' ? params.dataIndex : undefined;
+    const layoutPosition =
+      typeof dataIndex === 'number'
+        ? graphData?.getItemLayout?.(dataIndex)
+        : undefined;
+
+    if (
+      !Array.isArray(layoutPosition) ||
+      typeof layoutPosition[0] !== 'number' ||
+      typeof layoutPosition[1] !== 'number' ||
+      !Number.isFinite(layoutPosition[0]) ||
+      !Number.isFinite(layoutPosition[1])
+    ) {
+      return;
+    }
+
+    setDraggedNodePositions((currentPositions) => {
+      const current = currentPositions.get(nodeId);
+      if (
+        current &&
+        Math.abs(current.x - layoutPosition[0]) < 0.5 &&
+        Math.abs(current.y - layoutPosition[1]) < 0.5
+      ) {
+        return currentPositions;
+      }
+
+      const nextPositions = new Map(currentPositions);
+      nextPositions.set(nodeId, {
+        x: layoutPosition[0],
+        y: layoutPosition[1],
+      });
+      return nextPositions;
+    });
+  };
+
   const configureGraphRoamController = () => {
     const chart = chartRef.current?.getEchartsInstance?.();
     if (!chart) {
@@ -824,6 +877,10 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   useEffect(() => {
     setExpandedPathIds(new Set());
   }, [selectedNode?.id]);
+
+  useEffect(() => {
+    setDraggedNodePositions(new Map());
+  }, [report]);
 
   useEffect(() => {
     const element = graphContainerRef.current;
@@ -944,7 +1001,11 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       1,
       ...nodes.map((item) => item.totalEmittedSize),
     );
-    const positionedNodes = [...layout.positions.values()];
+    const nodePositions = new Map(layout.positions);
+    draggedNodePositions.forEach((position, nodeId) => {
+      nodePositions.set(nodeId, position);
+    });
+    const positionedNodes = [...nodePositions.values()];
     const boundaryPadding = isLargeGraph ? 720 : 240;
     const positionedXs = positionedNodes.map((position) => position.x);
     const positionedYs = positionedNodes.map((position) => position.y);
@@ -992,7 +1053,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     ];
 
     const graphNodes = nodes.map((node) => {
-      const position = layout.positions.get(node.id) ?? { x: 0, y: 0 };
+      const position = nodePositions.get(node.id) ?? { x: 0, y: 0 };
       const baseColor = getBaseNodeColor(node);
       const isMatched = matchedNodeIds.has(node.id);
       const isOnHighlight = highlightNodeIds.has(node.id);
@@ -1204,7 +1265,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           bottom: 8,
           layout: 'none',
           roam: 'move',
-          draggable: false,
+          draggable: true,
           nodeScaleRatio: 0 as any,
           zoom: graphZoomRef.current ?? defaultGraphZoom,
           scaleLimit: {
@@ -1239,6 +1300,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     edgeMap,
     edges,
     defaultGraphZoom,
+    draggedNodePositions,
     graphHeight,
     graphWidth,
     highlightEdgeIds,
@@ -1599,6 +1661,14 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                       >
                         Reset zoom
                       </Button>
+                      {draggedNodePositions.size ? (
+                        <Button
+                          size="small"
+                          onClick={() => setDraggedNodePositions(new Map())}
+                        >
+                          Reset layout
+                        </Button>
+                      ) : null}
                     </Space>
                   </div>
                   <ReactEChartsCore
@@ -1613,6 +1683,8 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                     }}
                     onEvents={{
                       graphRoam: syncGraphZoomFromChart,
+                      mouseup: storeDraggedNodePosition,
+                      dragend: storeDraggedNodePosition,
                       click: (params: any) => {
                         if (params.dataType === 'node') {
                           setSelectedNodeId(params.data.id);
