@@ -73,6 +73,12 @@ const LAYOUT_COLUMN_TOP_VARIANCE = 140;
 const LAYOUT_NODE_X_JITTER = 170;
 const LAYOUT_NODE_Y_JITTER = 32;
 const MAX_LAYOUT_ROWS_PER_LEVEL = 12;
+const DRAG_ADAPT_PRIMARY_STRENGTH = 0.34;
+const DRAG_ADAPT_SECONDARY_STRENGTH = 0.14;
+const DRAG_ADAPT_MAX_FOLLOW_DISTANCE = 320;
+const DRAG_REPEL_RADIUS = 230;
+const DRAG_REPEL_STRENGTH = 0.42;
+const DRAG_MAX_REPEL_DISTANCE = 96;
 const LARGE_GRAPH_NODE_SCALE = 0.52;
 const NODE_LABEL_WIDTH = 180;
 const MIN_NODE_SYMBOL_SIZE = 30;
@@ -179,6 +185,19 @@ const stableSignedRatio = (value: string) => stableRatio(value) * 2 - 1;
 
 const clampNumber = (value: number, min: number, max: number) =>
   Math.max(min, Math.min(max, value));
+
+const limitVector = (position: GraphPosition, maxDistance: number) => {
+  const distance = Math.hypot(position.x, position.y);
+  if (!distance || distance <= maxDistance) {
+    return position;
+  }
+
+  const scale = maxDistance / distance;
+  return {
+    x: position.x * scale,
+    y: position.y * scale,
+  };
+};
 
 const truncateLabel = (value: string, maxLength = 26) =>
   value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
@@ -804,21 +823,127 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
       return;
     }
 
+    const nextDraggedPosition = {
+      x: layoutPosition[0],
+      y: layoutPosition[1],
+    };
+
     setDraggedNodePositions((currentPositions) => {
-      const current = currentPositions.get(nodeId);
+      const basePositions = new Map(layout.positions);
+      currentPositions.forEach((position, currentNodeId) => {
+        basePositions.set(currentNodeId, position);
+      });
+
+      const previousPosition = basePositions.get(nodeId);
       if (
-        current &&
-        Math.abs(current.x - layoutPosition[0]) < 0.5 &&
-        Math.abs(current.y - layoutPosition[1]) < 0.5
+        previousPosition &&
+        Math.abs(previousPosition.x - nextDraggedPosition.x) < 0.5 &&
+        Math.abs(previousPosition.y - nextDraggedPosition.y) < 0.5
       ) {
         return currentPositions;
       }
 
-      const nextPositions = new Map(currentPositions);
-      nextPositions.set(nodeId, {
-        x: layoutPosition[0],
-        y: layoutPosition[1],
+      const delta = previousPosition
+        ? {
+            x: nextDraggedPosition.x - previousPosition.x,
+            y: nextDraggedPosition.y - previousPosition.y,
+          }
+        : { x: 0, y: 0 };
+      const followDelta = limitVector(delta, DRAG_ADAPT_MAX_FOLLOW_DISTANCE);
+      const adjacency = buildForwardAdjacency(edges);
+      const reverseAdjacency = buildReverseAdjacency(edges);
+      const firstHopNodeIds = new Set([
+        ...(adjacency.get(nodeId) ?? []),
+        ...(reverseAdjacency.get(nodeId) ?? []),
+      ]);
+      const adaptiveStrengthByNodeId = new Map<string, number>();
+
+      firstHopNodeIds.forEach((connectedNodeId) => {
+        adaptiveStrengthByNodeId.set(
+          connectedNodeId,
+          DRAG_ADAPT_PRIMARY_STRENGTH,
+        );
+        [
+          ...(adjacency.get(connectedNodeId) ?? []),
+          ...(reverseAdjacency.get(connectedNodeId) ?? []),
+        ].forEach((secondaryNodeId) => {
+          if (
+            secondaryNodeId !== nodeId &&
+            !firstHopNodeIds.has(secondaryNodeId)
+          ) {
+            adaptiveStrengthByNodeId.set(
+              secondaryNodeId,
+              Math.max(
+                adaptiveStrengthByNodeId.get(secondaryNodeId) ?? 0,
+                DRAG_ADAPT_SECONDARY_STRENGTH,
+              ),
+            );
+          }
+        });
       });
+
+      const nextPositions = new Map(currentPositions);
+      nextPositions.set(nodeId, nextDraggedPosition);
+
+      adaptiveStrengthByNodeId.forEach((strength, adaptiveNodeId) => {
+        const currentPosition =
+          nextPositions.get(adaptiveNodeId) ??
+          basePositions.get(adaptiveNodeId);
+        if (!currentPosition) {
+          return;
+        }
+
+        nextPositions.set(adaptiveNodeId, {
+          x: currentPosition.x + followDelta.x * strength,
+          y: currentPosition.y + followDelta.y * strength,
+        });
+      });
+
+      nodes.forEach((node) => {
+        if (node.id === nodeId) {
+          return;
+        }
+
+        const currentPosition =
+          nextPositions.get(node.id) ?? basePositions.get(node.id);
+        if (!currentPosition) {
+          return;
+        }
+
+        const vector = {
+          x: currentPosition.x - nextDraggedPosition.x,
+          y: currentPosition.y - nextDraggedPosition.y,
+        };
+        const distance = Math.hypot(vector.x, vector.y);
+        if (distance >= DRAG_REPEL_RADIUS) {
+          return;
+        }
+
+        const fallbackDirection = stableSignedRatio(`${node.id}:drag-repel`);
+        const unitVector =
+          distance > 0.1
+            ? {
+                x: vector.x / distance,
+                y: vector.y / distance,
+              }
+            : {
+                x: fallbackDirection,
+                y: stableSignedRatio(`${node.id}:drag-repel-y`),
+              };
+        const connectedStrength = adaptiveStrengthByNodeId.get(node.id) ?? 0;
+        const repelDistance = Math.min(
+          DRAG_MAX_REPEL_DISTANCE,
+          (DRAG_REPEL_RADIUS - distance) *
+            DRAG_REPEL_STRENGTH *
+            (1 - connectedStrength * 0.6),
+        );
+
+        nextPositions.set(node.id, {
+          x: currentPosition.x + unitVector.x * repelDistance,
+          y: currentPosition.y + unitVector.y * repelDistance,
+        });
+      });
+
       return nextPositions;
     });
   };
@@ -1683,6 +1808,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                     }}
                     onEvents={{
                       graphRoam: syncGraphZoomFromChart,
+                      drag: storeDraggedNodePosition,
                       mouseup: storeDraggedNodePosition,
                       dragend: storeDraggedNodePosition,
                       click: (params: any) => {
