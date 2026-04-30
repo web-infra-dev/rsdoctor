@@ -78,9 +78,6 @@ const GRAPH_BOUNDARY_NODE_ID_PREFIX = '__chunk-group-graph-boundary__';
 const GRAPH_MIN_ZOOM = 0.2;
 const GRAPH_MAX_ZOOM = 4;
 const GRAPH_ZOOM_STEP = 0.25;
-const GRAPH_WHEEL_ZOOM_SENSITIVITY = 0.002;
-const WHEEL_DELTA_LINE_MODE = 1;
-const WHEEL_DELTA_PAGE_MODE = 2;
 
 const getBaseNodeColor = (node: SDK.ChunkGroupGraphNodeData) =>
   node.isInitial
@@ -111,16 +108,6 @@ const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`;
 
 const clampGraphZoom = (zoom: number) =>
   Math.max(GRAPH_MIN_ZOOM, Math.min(GRAPH_MAX_ZOOM, zoom));
-
-const normalizeWheelDelta = (event: WheelEvent, fallbackHeight: number) => {
-  if (event.deltaMode === WHEEL_DELTA_LINE_MODE) {
-    return event.deltaY * 16;
-  }
-  if (event.deltaMode === WHEEL_DELTA_PAGE_MODE) {
-    return event.deltaY * fallbackHeight;
-  }
-  return event.deltaY;
-};
 
 const buildForwardAdjacency = (edges: SDK.ChunkGroupGraphEdgeData[]) => {
   const map = new Map<string, string[]>();
@@ -576,6 +563,8 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
 }) => {
   const chartRef = useRef<any>(null);
   const graphContainerRef = useRef<HTMLDivElement>(null);
+  const graphZoomRef = useRef<number | null>(null);
+  const graphZoomSyncRafRef = useRef<number | null>(null);
   const blankPointerRef = useRef<{
     x: number;
     y: number;
@@ -605,7 +594,22 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   const defaultGraphZoom = isLargeGraph ? 0.72 : 1;
 
   useEffect(() => {
+    graphZoomRef.current = defaultGraphZoom;
     setGraphZoom(defaultGraphZoom);
+    chartRef.current?.getEchartsInstance?.().setOption?.(
+      {
+        series: [
+          {
+            zoom: defaultGraphZoom,
+          },
+        ],
+      },
+      {
+        lazyUpdate: false,
+        notMerge: false,
+        silent: true,
+      },
+    );
   }, [defaultGraphZoom]);
 
   const matchedNodeIds = useMemo(() => {
@@ -636,8 +640,84 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     [matchedNodeIds, nodeMap, report?.priorityNodeIds],
   );
 
+  const syncGraphZoomState = (nextZoom: number) => {
+    const zoom = clampGraphZoom(nextZoom);
+    graphZoomRef.current = zoom;
+    setGraphZoom((currentZoom) =>
+      Math.abs(currentZoom - zoom) < 0.005 ? currentZoom : zoom,
+    );
+  };
+
+  const getChartGraphZoom = (chart: any) => {
+    const series = chart?.getOption?.()?.series?.[0];
+    const zoom = Array.isArray(series?.zoom) ? series.zoom[0] : series?.zoom;
+    return typeof zoom === 'number' ? zoom : graphZoomRef.current;
+  };
+
+  const syncGraphZoomFromChart = () => {
+    if (graphZoomSyncRafRef.current !== null) {
+      return;
+    }
+
+    graphZoomSyncRafRef.current = window.requestAnimationFrame(() => {
+      graphZoomSyncRafRef.current = null;
+      const chart = chartRef.current?.getEchartsInstance?.();
+      const zoom = getChartGraphZoom(chart);
+      if (typeof zoom === 'number') {
+        syncGraphZoomState(zoom);
+      }
+    });
+  };
+
+  const configureGraphRoamController = () => {
+    const chart = chartRef.current?.getEchartsInstance?.();
+    if (!chart) {
+      return;
+    }
+
+    const graphView = (chart as any)._chartsViews?.find(
+      (view: any) => view?.type === 'graph',
+    );
+    const controller = graphView?._controller;
+    if (!controller?.setPointerChecker) {
+      return;
+    }
+
+    controller.enable?.(true, {
+      moveOnMouseMove: true,
+      moveOnMouseWheel: false,
+      preventDefaultMouseMove: true,
+      zoomOnMouseWheel: 'ctrl',
+    });
+
+    // ECharts graph only roams inside the graph group's bounding rect by
+    // default; the chunk graph needs the whole canvas to be draggable. Zoom
+    // remains restricted to pinch or Ctrl+wheel so page scroll still works.
+    controller.setPointerChecker((_event: any, x: number, y: number) => {
+      const width = chart.getWidth?.() ?? graphWidth;
+      const height = chart.getHeight?.() ?? graphHeight;
+      return x >= 0 && x <= width && y >= 0 && y <= height;
+    });
+  };
+
   const updateGraphZoom = (nextZoom: number) => {
-    setGraphZoom(clampGraphZoom(nextZoom));
+    const nextClampedZoom = clampGraphZoom(nextZoom);
+    syncGraphZoomState(nextClampedZoom);
+    chartRef.current?.getEchartsInstance?.().setOption?.(
+      {
+        series: [
+          {
+            zoom: nextClampedZoom,
+          },
+        ],
+      },
+      {
+        lazyUpdate: false,
+        notMerge: false,
+        silent: true,
+      },
+    );
+    window.requestAnimationFrame(configureGraphRoamController);
   };
 
   useEffect(() => {
@@ -674,36 +754,14 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    const element = graphContainerRef.current;
-    if (!element) {
-      return;
-    }
-
-    const handleWheel = (event: WheelEvent) => {
-      if (!event.ctrlKey && !event.metaKey) {
-        return;
+  useEffect(
+    () => () => {
+      if (graphZoomSyncRafRef.current !== null) {
+        window.cancelAnimationFrame(graphZoomSyncRafRef.current);
       }
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      const normalizedDelta = normalizeWheelDelta(event, graphHeight);
-      const zoomRatio = Math.exp(
-        -normalizedDelta * GRAPH_WHEEL_ZOOM_SENSITIVITY,
-      );
-      setGraphZoom((currentZoom) => clampGraphZoom(currentZoom * zoomRatio));
-    };
-
-    element.addEventListener('wheel', handleWheel, {
-      capture: true,
-      passive: false,
-    });
-
-    return () => {
-      element.removeEventListener('wheel', handleWheel, { capture: true });
-    };
-  }, [graphHeight]);
+    },
+    [],
+  );
 
   useEffect(() => {
     const resizeChart = () => {
@@ -1046,8 +1104,8 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
           layout: 'none',
           roam: 'move',
           draggable: false,
-          nodeScaleRatio: (isLargeGraph ? 0.24 : 0.6) as any,
-          zoom: graphZoom,
+          nodeScaleRatio: 0 as any,
+          zoom: graphZoomRef.current ?? defaultGraphZoom,
           scaleLimit: {
             min: GRAPH_MIN_ZOOM,
             max: GRAPH_MAX_ZOOM,
@@ -1079,9 +1137,9 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
     activePathImportSnippets,
     edgeMap,
     edges,
+    defaultGraphZoom,
     graphHeight,
     graphWidth,
-    graphZoom,
     highlightEdgeIds,
     highlightNodeIds,
     hoveredPath,
@@ -1096,31 +1154,8 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
   ]);
 
   useEffect(() => {
-    const chart = chartRef.current?.getEchartsInstance?.();
-    if (!chart) {
-      return;
-    }
-
-    const expandGraphRoamArea = () => {
-      const graphView = (chart as any)._chartsViews?.find(
-        (view: any) => view?.type === 'graph',
-      );
-      const controller = graphView?._controller;
-      if (!controller?.setPointerChecker) {
-        return;
-      }
-
-      // ECharts graph only roams inside the graph group's bounding rect by
-      // default; the chunk graph needs the whole canvas to be draggable/zoomable.
-      controller.setPointerChecker((_event: any, x: number, y: number) => {
-        const width = chart.getWidth?.() ?? graphWidth;
-        const height = chart.getHeight?.() ?? graphHeight;
-        return x >= 0 && x <= width && y >= 0 && y <= height;
-      });
-    };
-
-    const rafId = window.requestAnimationFrame(expandGraphRoamArea);
-    const timer = window.setTimeout(expandGraphRoamArea, 120);
+    const rafId = window.requestAnimationFrame(configureGraphRoamController);
+    const timer = window.setTimeout(configureGraphRoamController, 120);
 
     return () => {
       window.cancelAnimationFrame(rafId);
@@ -1476,6 +1511,7 @@ const ChunkGroupGraphPanelBase: React.FC<ChunkGroupGraphPanelProps> = ({
                       width: '100%',
                     }}
                     onEvents={{
+                      graphRoam: syncGraphZoomFromChart,
                       click: (params: any) => {
                         if (params.dataType === 'node') {
                           setSelectedNodeId(params.data.id);
