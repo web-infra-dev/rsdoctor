@@ -3,6 +3,7 @@ import { Constants, Manifest as ManifestType, SDK } from '@rsdoctor/types';
 import { RsdoctorSDK } from '@rsdoctor/sdk';
 import ora from 'ora';
 import { cyan, red } from 'picocolors';
+import path from 'node:path';
 import { Command } from '../types';
 import {
   enhanceCommand,
@@ -16,6 +17,33 @@ interface Options {
   open?: boolean;
   port?: number;
   type?: SDK.ToDataType;
+}
+
+export function resolveLocalManifestShardingFiles<
+  T extends Record<string, unknown>,
+>(data: T, profile: string, cwd: string): T {
+  const manifestDir = path.dirname(path.resolve(cwd, profile));
+
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => {
+      if (
+        !Array.isArray(value) ||
+        value.length === 0 ||
+        !value.every((item) => typeof item === 'string')
+      ) {
+        return [key, value];
+      }
+
+      return [
+        key,
+        value.map((item) =>
+          /^(https?:)?\/\//.test(item) || path.isAbsolute(item)
+            ? item
+            : path.resolve(manifestDir, item),
+        ),
+      ];
+    }),
+  ) as T;
 }
 
 export const analyze: Command<Commands.Analyze, Options, RsdoctorSDK> =
@@ -50,16 +78,24 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
       spinner.text = `start to loading data...`;
 
       let dataValue: ManifestType.RsdoctorManifestData;
+      const localData = resolveLocalManifestShardingFiles(
+        json.data,
+        profile,
+        cwd,
+      );
+      const localCloudData = json.cloudData
+        ? resolveLocalManifestShardingFiles(json.cloudData, profile, cwd)
+        : undefined;
 
       try {
         dataValue = await Manifest.fetchShardingFiles(
-          json.data,
+          localData,
           (url: string) => loadShardingFileWithSpinner(url, cwd, spinner),
         );
       } catch (error) {
         try {
           dataValue = await Manifest.fetchShardingFiles(
-            json.cloudData || {},
+            localCloudData || {},
             (url: string) => loadShardingFileWithSpinner(url, cwd, spinner),
           );
         } catch (e) {
