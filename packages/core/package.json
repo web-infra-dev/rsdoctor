@@ -107,7 +107,7 @@
     "source-map": "catalog:"
   },
   "devDependencies": {
-    "@rspack/core": "2.0.0",
+    "@rspack/core": "2.0.1",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "catalog:",
     "@types/node": "catalog:",
