@@ -40,8 +40,8 @@ catalogs:
       specifier: 2.0.0
       version: 2.0.0
     '@rspack/plugin-react-refresh':
-      specifier: 1.5.2
-      version: 1.5.2
+      specifier: 2.0.0
+      version: 2.0.0
     '@rspack/resolver':
       specifier: 0.2.8
       version: 0.2.8
@@ -415,7 +415,7 @@ importers:
         version: 2.0.0(@swc/helpers@0.5.17)
       '@rspack/plugin-react-refresh':
         specifier: 'catalog:'
-        version: 1.5.2(react-refresh@0.14.2)
+        version: 2.0.0(@rspack/core@2.0.0(@swc/helpers@0.5.17))(react-refresh@0.14.2)
       '@types/react':
         specifier: 'catalog:'
         version: 18.3.28
@@ -467,7 +467,7 @@ importers:
         version: 2.0.0(@swc/helpers@0.5.17)
       '@rspack/plugin-react-refresh':
         specifier: 'catalog:'
-        version: 1.5.2(react-refresh@0.14.2)
+        version: 2.0.0(@rspack/core@2.0.0(@swc/helpers@0.5.17))(react-refresh@0.14.2)
       '@types/react':
         specifier: 'catalog:'
         version: 18.3.28
@@ -519,7 +519,7 @@ importers:
         version: 2.0.0(@swc/helpers@0.5.17)
       '@rspack/plugin-react-refresh':
         specifier: 'catalog:'
-        version: 1.5.2(react-refresh@0.14.2)
+        version: 2.0.0(@rspack/core@2.0.0(@swc/helpers@0.5.17))(react-refresh@0.14.2)
       '@types/react':
         specifier: 'catalog:'
         version: 18.3.28
@@ -938,7 +938,7 @@ importers:
     dependencies:
       '@rspress/core':
         specifier: 2.0.10
-        version: 2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+        version: 2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
       '@rstack-dev/doc-ui':
         specifier: 1.12.5
         version: 1.12.5
@@ -957,13 +957,13 @@ importers:
         version: link:../types
       '@rspress/plugin-algolia':
         specifier: 2.0.10
-        version: 2.0.10(@algolia/client-search@5.49.2)(@rspress/core@2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
+        version: 2.0.10(@algolia/client-search@5.49.2)(@rspress/core@2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
       '@rspress/plugin-client-redirects':
         specifier: 2.0.10
-        version: 2.0.10(@rspress/core@2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
+        version: 2.0.10(@rspress/core@2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
       '@rspress/plugin-rss':
         specifier: 2.0.5
-        version: 2.0.5(@rspress/core@2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
+        version: 2.0.5(@rspress/core@2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
       '@types/node':
         specifier: 'catalog:'
         version: 22.18.1
@@ -993,7 +993,7 @@ importers:
         version: 1.1.2(@rsbuild/core@2.0.3(core-js@3.47.0))
       rspress-plugin-font-open-sans:
         specifier: ^1.0.3
-        version: 1.0.3(@rspress/core@2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
+        version: 1.0.3(@rspress/core@2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
       rspress-plugin-sitemap:
         specifier: ^1.2.1
         version: 1.2.1
@@ -4035,15 +4035,6 @@ packages:
       react-refresh: '>=0.10.0 <1.0.0'
     peerDependenciesMeta:
       react-refresh:
-        optional: true
-
-  '@rspack/plugin-react-refresh@1.5.2':
-    resolution: {integrity: sha512-uTbN6P01LPdQOnl5YNwHkN4hDsb9Sb5nIetQb55mPyFiJnu9MQetmBUm+tmh8JJg0QPv4Ew7tXgi4hjpHFY3Rw==}
-    peerDependencies:
-      react-refresh: '>=0.10.0 <1.0.0'
-      webpack-hot-middleware: 2.x
-    peerDependenciesMeta:
-      webpack-hot-middleware:
         optional: true
 
   '@rspack/plugin-react-refresh@1.6.1':
@@ -14810,17 +14801,17 @@ snapshots:
     optionalDependencies:
       react-refresh: 0.16.0
 
-  '@rspack/plugin-react-refresh@1.5.2(react-refresh@0.14.2)':
-    dependencies:
-      error-stack-parser: 2.1.4
-      html-entities: 2.6.0
-      react-refresh: 0.14.2
-
   '@rspack/plugin-react-refresh@1.6.1(react-refresh@0.18.0)':
     dependencies:
       error-stack-parser: 2.1.4
       html-entities: 2.6.0
       react-refresh: 0.18.0
+
+  '@rspack/plugin-react-refresh@2.0.0(@rspack/core@2.0.0(@swc/helpers@0.5.17))(react-refresh@0.14.2)':
+    dependencies:
+      react-refresh: 0.14.2
+    optionalDependencies:
+      '@rspack/core': 2.0.0(@swc/helpers@0.5.17)
 
   '@rspack/plugin-react-refresh@2.0.0(@rspack/core@2.0.1(@swc/helpers@0.5.21))(react-refresh@0.18.0)':
     dependencies:
@@ -14921,7 +14912,7 @@ snapshots:
       - supports-color
       - webpack
 
-  '@rspress/core@2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)':
+  '@rspress/core@2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)':
     dependencies:
       '@mdx-js/mdx': 3.1.1
       '@mdx-js/react': 3.1.1(@types/react@18.3.28)(react@19.2.5)
@@ -15006,11 +14997,11 @@ snapshots:
       '@rspress/mdx-rs-win32-arm64-msvc': 0.6.6
       '@rspress/mdx-rs-win32-x64-msvc': 0.6.6
 
-  '@rspress/plugin-algolia@2.0.10(@algolia/client-search@5.49.2)(@rspress/core@2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
+  '@rspress/plugin-algolia@2.0.10(@algolia/client-search@5.49.2)(@rspress/core@2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)':
     dependencies:
       '@docsearch/css': 4.6.2
       '@docsearch/react': 4.6.2(@algolia/client-search@5.49.2)(@types/react@18.3.28)(algoliasearch@5.49.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)
-      '@rspress/core': 2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+      '@rspress/core': 2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
     transitivePeerDependencies:
       - '@algolia/client-search'
       - '@types/react'
@@ -15025,9 +15016,9 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/tracing'
 
-  '@rspress/plugin-client-redirects@2.0.10(@rspress/core@2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
+  '@rspress/plugin-client-redirects@2.0.10(@rspress/core@2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
     dependencies:
-      '@rspress/core': 2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+      '@rspress/core': 2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
 
   '@rspress/plugin-container-syntax@2.0.0-alpha.3':
     dependencies:
@@ -15046,9 +15037,9 @@ snapshots:
       '@rspress/runtime': 2.0.0-alpha.3
       medium-zoom: 1.1.0
 
-  '@rspress/plugin-rss@2.0.5(@rspress/core@2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
+  '@rspress/plugin-rss@2.0.5(@rspress/core@2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
     dependencies:
-      '@rspress/core': 2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+      '@rspress/core': 2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
       feed: 5.2.0
 
   '@rspress/runtime@2.0.0-alpha.3':
@@ -21732,9 +21723,9 @@ snapshots:
     dependencies:
       fs-extra: 11.3.0
 
-  rspress-plugin-font-open-sans@1.0.3(@rspress/core@2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)):
+  rspress-plugin-font-open-sans@1.0.3(@rspress/core@2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)):
     dependencies:
-      '@rspress/core': 2.0.10(@rspack/core@2.0.1(@swc/helpers@0.5.21))(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
+      '@rspress/core': 2.0.10(@types/mdast@4.0.4)(@types/react@18.3.28)(core-js@3.47.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
 
   rspress-plugin-sitemap@1.2.1: {}
 
