@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@rsbuild/core": "^1.7.5",
-    "@rspack/core": "2.0.0",
+    "@rspack/core": "2.0.1",
     "@types/lodash": "^4.17.24",
     "@types/node": "catalog:",
     "es-toolkit": "catalog:",
