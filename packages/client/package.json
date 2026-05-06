@@ -20,11 +20,11 @@
     "inspect": "rsbuild inspect"
   },
   "devDependencies": {
-    "@rsbuild/core": "^1.7.5",
-    "@rsbuild/plugin-node-polyfill": "^1.4.4",
-    "@rsbuild/plugin-react": "^1.4.6",
-    "@rsbuild/plugin-sass": "^1.5.2",
-    "@rsbuild/plugin-type-check": "^1.3.4",
+    "@rsbuild/core": "catalog:",
+    "@rsbuild/plugin-node-polyfill": "catalog:",
+    "@rsbuild/plugin-react": "catalog:",
+    "@rsbuild/plugin-sass": "catalog:",
+    "@rsbuild/plugin-type-check": "catalog:",
     "@rsdoctor/components": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@types/node": "catalog:",

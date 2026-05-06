@@ -18,9 +18,9 @@
   },
   "devDependencies": {
     "@rsdoctor/rspack-plugin": "workspace:*",
-    "@rspack/cli": "2.0.0-beta.7",
-    "@rspack/core": "2.0.0-beta.7",
-    "@rspack/plugin-react-refresh": "^1.5.2",
+    "@rspack/cli": "catalog:",
+    "@rspack/core": "catalog:",
+    "@rspack/plugin-react-refresh": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "react-refresh": "^0.14.0",

@@ -43,10 +43,10 @@
     }
   },
   "devDependencies": {
-    "@rsbuild/plugin-check-syntax": "1.6.1",
-    "@rsbuild/plugin-react": "^1.4.6",
-    "@rsbuild/plugin-sass": "^1.5.2",
-    "@rsbuild/plugin-svgr": "^1.3.1",
+    "@rsbuild/plugin-check-syntax": "catalog:",
+    "@rsbuild/plugin-react": "catalog:",
+    "@rsbuild/plugin-sass": "catalog:",
+    "@rsbuild/plugin-svgr": "catalog:",
     "@types/node": "catalog:",
     "@types/path-browserify": "catalog:",
     "@types/react": "catalog:",

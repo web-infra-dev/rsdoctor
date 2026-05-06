@@ -36,7 +36,7 @@
     "source-map": "catalog:"
   },
   "devDependencies": {
-    "@rspack/core": "2.0.1",
+    "@rspack/core": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "tslib": "catalog:",
