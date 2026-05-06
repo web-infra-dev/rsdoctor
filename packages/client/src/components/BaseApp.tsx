@@ -98,7 +98,9 @@ const BaseApp: React.FC<BaseAppProps> = ({
           setViewMode(m, saveStorage = true) {
             const res = { ...viewMode, ...m };
             setViewMode(res);
-            saveStorage && setViewModeToStorage(res);
+            if (saveStorage) {
+              setViewModeToStorage(res);
+            }
           },
         }}
       >

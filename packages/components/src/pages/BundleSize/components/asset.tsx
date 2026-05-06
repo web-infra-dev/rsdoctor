@@ -226,7 +226,7 @@ export const ModuleGraphViewer: React.FC<{
 const inlinedResourcePathKey = '__RESOURCEPATH__';
 
 export function getChildrenModule(node: DataNode, mods: string[]) {
-  node.children &&
+  if (node.children) {
     node.children.forEach((n: DataNode) => {
       if (n.isLeaf) {
         mods.push(n[inlinedResourcePathKey]);
@@ -234,6 +234,7 @@ export function getChildrenModule(node: DataNode, mods: string[]) {
         getChildrenModule(n, mods);
       }
     });
+  }
 
   return mods;
 }

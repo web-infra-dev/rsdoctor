@@ -340,7 +340,9 @@ export const ModuleRowForAsset: React.FC<
                   </Button>
                   <Button
                     onClick={() => {
-                      clearFilters && handleReset(clearFilters);
+                      if (clearFilters) {
+                        handleReset(clearFilters);
+                      }
                       setSelectedKeys([]);
                       handleSearch([], confirm);
                     }}

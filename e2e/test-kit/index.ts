@@ -35,7 +35,9 @@ export async function openBrowserByCLI(
 
   async function dispose() {
     const i = callbacks.findIndex((e) => e === dispose);
-    i > -1 && callbacks.splice(i, 1);
+    if (i > -1) {
+      callbacks.splice(i, 1);
+    }
     await Promise.all([sdk?.dispose(), browser?.close()]);
   }
 
@@ -80,7 +82,9 @@ export async function openBrowserByDiffCLI(
 
   async function dispose() {
     const i = callbacks.findIndex((e) => e === dispose);
-    i > -1 && callbacks.splice(i, 1);
+    if (i > -1) {
+      callbacks.splice(i, 1);
+    }
     await Promise.all([sdk?.dispose(), browser?.close()]);
   }
 

@@ -348,7 +348,9 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
       if (!this._moduleIdMap.has(module.id)) {
         this._moduleWebpackIdMap.set(module.webpackId, module);
         this._moduleIdMap.set(module.id, module);
-        module.layer && this.addLayer(module.layer);
+        if (module.layer) {
+          this.addLayer(module.layer);
+        }
       }
     }
   }
