@@ -115,8 +115,8 @@ importers:
         specifier: 0.21.3
         version: 0.21.3(core-js@3.47.0)(typescript@5.9.2)
       '@rslint/core':
-        specifier: ^0.4.2
-        version: 0.4.2(jiti@2.6.1)
+        specifier: ^0.5.1
+        version: 0.5.1(jiti@2.6.1)
       '@rstest/core':
         specifier: 'catalog:'
         version: 0.9.10(core-js@3.47.0)
@@ -3717,8 +3717,8 @@ packages:
       typescript:
         optional: true
 
-  '@rslint/core@0.4.2':
-    resolution: {integrity: sha512-YlTtjsJXoDftUf+xbMUabWEFnE9ya2p+VyPY3bJGFgqeF4u0yfEOn96/V2GoLMh7HqD6XMsSdg3/0SPxdE9bcA==}
+  '@rslint/core@0.5.1':
+    resolution: {integrity: sha512-UGcalhkpNvm4zN7E2DiQsuwM10LMi3CazOiANVevf5hn+NB7WKEMWYKn3bFySptg7Ll042IKMUlIXaFQjWs9lQ==}
     hasBin: true
     peerDependencies:
       jiti: ^2.0.0
@@ -3726,33 +3726,33 @@ packages:
       jiti:
         optional: true
 
-  '@rslint/darwin-arm64@0.4.2':
-    resolution: {integrity: sha512-a+YeQA+I/RsNnj9ioak7KOpuKSWjt/hv8lvcMvxLy8r4uVcc6orhmccASfEfcpm1HdZHrEm+HJ25CFd3KZrCwA==}
+  '@rslint/darwin-arm64@0.5.1':
+    resolution: {integrity: sha512-grbPKhrRv0BTKvdByIIlS5avc4ttF9vylaStJh/TTYS96cTkjCcTv7RAUv/ZI3VSaSZdRBcW4f6wW9pPWpt41w==}
     cpu: [arm64]
     os: [darwin]
 
-  '@rslint/darwin-x64@0.4.2':
-    resolution: {integrity: sha512-KrQ870EeDXc0V4ncfvZMUEX5uphwemy+Bhia5KDEKURR6rZtpROy/RLLKEn+UkavBJi8ygTv5HXRC4EI6OEHjA==}
+  '@rslint/darwin-x64@0.5.1':
+    resolution: {integrity: sha512-v7P5AYWzm4Xrly5nl5yXSAyHn6j9pwZyFFUTD9UCOodZMEVmBxW3WxdL9iq8PfnG5n8GXHqTqBSYwWfG1WWD0g==}
     cpu: [x64]
     os: [darwin]
 
-  '@rslint/linux-arm64@0.4.2':
-    resolution: {integrity: sha512-E2yEe0ZeMhZNuafrTfKrFy3iWKDMwpnnxCeRzq3AsTmwLmsQDgUZ2iuSxO5EL3eeAJn/7R/hQ3/MKirbcsIWlA==}
+  '@rslint/linux-arm64@0.5.1':
+    resolution: {integrity: sha512-czDNVvgea0LpTlqaRvZHulJn8RmmDso2DufIWedxIA9yfK+nEK4H0tANNVQL4NBTHiv/6cqQw8NveP3KD5I93g==}
     cpu: [arm64]
     os: [linux]
 
-  '@rslint/linux-x64@0.4.2':
-    resolution: {integrity: sha512-vyVsZHLiaGrWrlRFN7l6I+XxCCH4sI3LkhItA//My/chFIo3zyUa6hwooqllpA3Pb/eXdKVfvurF0hceKEQFjw==}
+  '@rslint/linux-x64@0.5.1':
+    resolution: {integrity: sha512-D0isbtok26OSjSQkWDDfTWPLQDqrufbTbiihMFxkDlIRKDGcU9HvnfTlEmgnwzkxt6Jm7CBZZiXdFtyhPgnWEg==}
     cpu: [x64]
     os: [linux]
 
-  '@rslint/win32-arm64@0.4.2':
-    resolution: {integrity: sha512-1dsU4zm5y+GoO45qLL9pxisXh7NFdX01m26a146rS1bCu9skHqSofmufVYLNrWtnMf7Wso2iaJKVsJya077PRQ==}
+  '@rslint/win32-arm64@0.5.1':
+    resolution: {integrity: sha512-XnU369fuTR9EqFhRMmbg+rHO3T/gwC+VV2AC1HAvZ62/pgNjFQmlK6IEsU293sgXHOUnRIQ6IsC9J0imyrCMXQ==}
     cpu: [arm64]
     os: [win32]
 
-  '@rslint/win32-x64@0.4.2':
-    resolution: {integrity: sha512-QBZHeBDW3f6pEHZLB7/2/w/KTv1O5RK1dtr9yLdqev93Tcgk9qwXXLm8TB/6JP9tx+0EyVo8f0XSAS1gtLJ9hQ==}
+  '@rslint/win32-x64@0.5.1':
+    resolution: {integrity: sha512-7++ELodvfVPFDSYEMVWb7OA+BD2JeONXtwXP/vmbrcawBTff7E/6VREB8dGPYCNh/ypBuSQ2WYXUtYAxQxwSiQ==}
     cpu: [x64]
     os: [win32]
 
@@ -4636,6 +4636,7 @@ packages:
 
   '@ungap/structured-clone@1.2.1':
     resolution: {integrity: sha512-fEzPV3hSkSMltkw152tJKNARhOupqbH96MZWyRjNaYZOMIzbrTeQDG+MTc6Mr2pgzFQzFxAfmhGDNP5QK++2ZA==}
+    deprecated: Potential CWE-502 - Update to 1.3.1 or higher
 
   '@unhead/react@2.1.13':
     resolution: {integrity: sha512-gC48tNJ0UtbithkiKCc2WUlxbVVk5o171EtruS2w2hQUblfYFHzCPu2hljjT1e0tUHXXqN8EMv7mpxHddMB2sg==}
@@ -8111,10 +8112,6 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
-  picomatch@4.0.3:
-    resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
-    engines: {node: '>=12'}
-
   picomatch@4.0.4:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
     engines: {node: '>=12'}
@@ -10321,6 +10318,10 @@ packages:
 
   tinyglobby@0.2.14:
     resolution: {integrity: sha512-tX5e7OM1HnYr2+a2C/4V0htOcSQcoSTH9KgJnVvNm5zm/cyEWKJ7j7YutsH9CxMdtOkkLFy2AHrMci9IM8IPZQ==}
+    engines: {node: '>=12.0.0'}
+
+  tinyglobby@0.2.15:
+    resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
     engines: {node: '>=12.0.0'}
 
   tinypool@2.1.0:
@@ -14786,34 +14787,35 @@ snapshots:
       - '@typescript/native-preview'
       - core-js
 
-  '@rslint/core@0.4.2(jiti@2.6.1)':
+  '@rslint/core@0.5.1(jiti@2.6.1)':
     dependencies:
       picomatch: 4.0.4
+      tinyglobby: 0.2.15
     optionalDependencies:
-      '@rslint/darwin-arm64': 0.4.2
-      '@rslint/darwin-x64': 0.4.2
-      '@rslint/linux-arm64': 0.4.2
-      '@rslint/linux-x64': 0.4.2
-      '@rslint/win32-arm64': 0.4.2
-      '@rslint/win32-x64': 0.4.2
+      '@rslint/darwin-arm64': 0.5.1
+      '@rslint/darwin-x64': 0.5.1
+      '@rslint/linux-arm64': 0.5.1
+      '@rslint/linux-x64': 0.5.1
+      '@rslint/win32-arm64': 0.5.1
+      '@rslint/win32-x64': 0.5.1
       jiti: 2.6.1
 
-  '@rslint/darwin-arm64@0.4.2':
+  '@rslint/darwin-arm64@0.5.1':
     optional: true
 
-  '@rslint/darwin-x64@0.4.2':
+  '@rslint/darwin-x64@0.5.1':
     optional: true
 
-  '@rslint/linux-arm64@0.4.2':
+  '@rslint/linux-arm64@0.5.1':
     optional: true
 
-  '@rslint/linux-x64@0.4.2':
+  '@rslint/linux-x64@0.5.1':
     optional: true
 
-  '@rslint/win32-arm64@0.4.2':
+  '@rslint/win32-arm64@0.5.1':
     optional: true
 
-  '@rslint/win32-x64@0.4.2':
+  '@rslint/win32-x64@0.5.1':
     optional: true
 
   '@rspack/binding-darwin-arm64@1.2.8':
@@ -17725,9 +17727,9 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  fdir@6.5.0(picomatch@4.0.3):
+  fdir@6.5.0(picomatch@4.0.4):
     optionalDependencies:
-      picomatch: 4.0.3
+      picomatch: 4.0.4
 
   feed@5.2.0:
     dependencies:
@@ -20264,8 +20266,6 @@ snapshots:
 
   picomatch@2.3.1: {}
 
-  picomatch@4.0.3: {}
-
   picomatch@4.0.4: {}
 
   pify@4.0.1: {}
@@ -22797,8 +22797,13 @@ snapshots:
 
   tinyglobby@0.2.14:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.3)
-      picomatch: 4.0.3
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
+
+  tinyglobby@0.2.15:
+    dependencies:
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
 
   tinypool@2.1.0: {}
 

@@ -36,7 +36,7 @@
     "package.json": "pnpm run check-dependency-version"
   },
   "devDependencies": {
-    "@rslint/core": "^0.4.2",
+    "@rslint/core": "^0.5.1",
     "@changesets/cli": "^2.31.0",
     "@rsdoctor/tsconfig": "workspace:*",
     "@rslib/core": "0.21.3",
