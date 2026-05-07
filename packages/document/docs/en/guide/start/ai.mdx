@@ -54,9 +54,9 @@ rsdoctor-agent <group> <subcommand> --data-file <path>
 **Description:**
 
 - `rsdoctor-agent --help`: Show command help, including available subcommands, argument descriptions, and examples.
-- `rsdoctor-agent list`: List currently available tool names, so you can confirm which `<tool-name>` values can be used with `query`.
-- `rsdoctor-agent query <tool-name> --data-file <path> [--input <json>]`: Invoke a specified tool and return the result.
-  - `<tool-name>`: The tool name to invoke.
+- `rsdoctor-agent list`: List the currently available direct grouped subcommands (for example, `group subcommand` / `group.subcommand`) for interactive use. This output is not the same as the catalog `<tool-name>` values used by `query`.
+- `rsdoctor-agent query <tool-name> --data-file <path> [--input <json>]`: Invoke a specified catalog tool and return the result.
+  - `<tool-name>`: The catalog tool name to invoke, for example `packages_duplicates`.
   - `--data-file <path>`: Path to the Rsdoctor analysis data file (required).
   - `[--input <json>]`: Optional extra input passed to the tool (JSON string).
 - `rsdoctor-agent <group> <subcommand> --data-file <path>`: Run grouped commands directly for interactive analysis.
