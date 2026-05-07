@@ -54,9 +54,9 @@ rsdoctor-agent <group> <subcommand> --data-file <path>
 **说明：**
 
 - `rsdoctor-agent --help`：查看命令帮助信息，包括可用子命令、参数说明和示例。
-- `rsdoctor-agent list`：列出当前可用的工具名称，便于确认后续 `query` 可使用的 `<tool-name>`。
+- `rsdoctor-agent list`：列出当前可用的直接子命令（如 `group subcommand` / `group.subcommand`），便于了解可直接执行的分组命令。
 - `rsdoctor-agent query <tool-name> --data-file <path> [--input <json>]`：调用指定工具并返回结果。
-  - `<tool-name>`：要调用的工具名称。
+  - `<tool-name>`：要调用的 catalog tool name（例如 `packages_duplicates`），不是 `rsdoctor-agent list` 输出的分组子命令名称。
   - `--data-file <path>`：Rsdoctor 分析数据文件路径（必填）。
   - `[--input <json>]`：可选，向工具传入额外输入参数（JSON 字符串）。
 - `rsdoctor-agent <group> <subcommand> --data-file <path>`：直接执行分组命令，适合交互式分析。
