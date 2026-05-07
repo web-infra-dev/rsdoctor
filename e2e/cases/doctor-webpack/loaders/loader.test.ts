@@ -44,6 +44,7 @@ test('webpack5 loader rule.use maybe empty array with oneOf', async () => {
     ? getSDK()?.getStoreData() || { loader: [] }
     : { loader: [] };
   expect(storeData?.loader).toHaveLength(1);
-  os.EOL === '\n' &&
+  if (os.EOL === '\n') {
     expect(storeData?.loader?.[0].loaders[0].result).toEqual(codeTransformed);
+  }
 });

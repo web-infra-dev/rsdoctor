@@ -128,12 +128,11 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
       }
 
       if (typeof rule.use === 'function') {
-        const funcUse = rule.use;
+        const funcUse = rule.use as (...args: any[]) => T[];
         const newRule = {
           ...rule,
-          use: (...args: any) => {
-            // @ts-expect-error TODO: data type is not the same between webpack and rspack
-            const rules = funcUse.apply(null, args) as T[];
+          use: (...args: any[]) => {
+            const rules = funcUse(...args);
             return mapEachRules(rules, callback);
           },
         };

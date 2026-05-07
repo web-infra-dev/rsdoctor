@@ -38,8 +38,9 @@ describe('parseBundle', function () {
           }),
         );
         expect(bundle.src).toEqual(fs.readFileSync(bundleFile, 'utf8'));
-        os.EOL === '\n' &&
+        if (os.EOL === '\n') {
           expect(bundle.modules).toEqual(expectedModules.modules);
+        }
       });
     });
 
@@ -121,7 +122,9 @@ describe('parseBundle', function () {
       ),
     );
     expect(bundle.src).toEqual(fs.readFileSync(bundleFile, 'utf8'));
-    os.EOL === '\n' && expect(bundle.modules).toEqual(expectedModules.modules);
+    if (os.EOL === '\n') {
+      expect(bundle.modules).toEqual(expectedModules.modules);
+    }
   });
 
   it('should return empty object for non-js and non-bundle files', function () {

@@ -75,7 +75,9 @@ export class RsdoctorSDK<
 
   async bootstrap() {
     logger.debug(`${Date.now()}`, '[RsdoctorSDK][bootstrap start]');
-    this.server && (await this.server.bootstrap());
+    if (this.server) {
+      await this.server.bootstrap();
+    }
     await super.bootstrap();
     logger.debug(
       `${Date.now()} ${this.server.origin}`,
@@ -85,7 +87,9 @@ export class RsdoctorSDK<
 
   async dispose() {
     logger.debug(`${Date.now()}`, '[RsdoctorSDK][dispose start]');
-    this.server && (await this.server.dispose());
+    if (this.server) {
+      await this.server.dispose();
+    }
     await super.dispose();
     logger.debug(`${Date.now()}`, '[RsdoctorSDK][dispose end]');
   }

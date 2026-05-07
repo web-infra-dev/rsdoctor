@@ -92,8 +92,9 @@ export async function getAssetsModulesData(
         } catch (err: any) {
           const { code = '', message } = err;
           const msg = code === 'ENOENT' ? 'no such file' : message;
-          process.env.DEVTOOLS_NODE_DEV === '1' &&
+          if (process.env.DEVTOOLS_NODE_DEV === '1') {
             logger.warn(`Error parsing bundle asset "${assetFile}": ${msg}`);
+          }
 
           continue;
         }
@@ -108,10 +109,11 @@ export async function getAssetsModulesData(
       if (Lodash.isEmpty(bundlesSources)) {
         bundlesSources = null;
         parsedModules = null;
-        process.env.DEVTOOLS_DEV &&
+        if (process.env.DEVTOOLS_DEV) {
           logger.warn(
             '\nNo bundles were parsed. Analyzer will show only original module sizes from stats file.\n',
           );
+        }
       }
 
       if (parsedModules) {

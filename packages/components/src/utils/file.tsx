@@ -69,18 +69,20 @@ export function flattenDirectory(
     parent.children = n.children;
     parent.title = dirTitle(parent, defaultTitle);
 
-    n.children &&
+    if (n.children) {
       n.children.forEach((c) => {
         flattenDirectory(c, parent, sep, inlinedResourcePathKey, dirTitle);
       });
+    }
   } else {
     // parent has more than 1 child.
     n.title = dirTitle(n, n[basenameKey]);
 
-    n.children &&
+    if (n.children) {
       n.children.forEach((c) => {
         flattenDirectory(c, n, sep, inlinedResourcePathKey, dirTitle);
       });
+    }
   }
 }
 
@@ -168,7 +170,7 @@ export function createFileStructures({
   ).children!;
 
   res.forEach((e) => {
-    e.children &&
+    if (e.children) {
       e.children.forEach((item) =>
         flattenDirectory(
           item,
@@ -178,6 +180,7 @@ export function createFileStructures({
           dirTitle,
         ),
       );
+    }
   });
 
   return res;

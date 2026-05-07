@@ -118,7 +118,9 @@ export function getModuleGraphByStats(
 
     data.chunks?.forEach((_chunkId) => {
       const chunk = chunkGraph.getChunkById(String(_chunkId));
-      chunk && concatenatedModule.addChunk(chunk);
+      if (chunk) {
+        concatenatedModule.addChunk(chunk);
+      }
     });
 
     moduleGraph.addModule(concatenatedModule);
@@ -185,12 +187,16 @@ export function getModuleGraphByStats(
       if (normal.chunks?.length) {
         normal.chunks?.forEach((_chunkId) => {
           const chunk = chunkGraph.getChunkById(String(_chunkId));
-          chunk && normalModule.addChunk(chunk);
+          if (chunk) {
+            normalModule.addChunk(chunk);
+          }
         });
       } else {
         data.chunks?.forEach((_chunkId) => {
           const chunk = chunkGraph.getChunkById(String(_chunkId));
-          chunk && normalModule.addChunk(chunk);
+          if (chunk) {
+            normalModule.addChunk(chunk);
+          }
         });
       }
       if (normal.source) {

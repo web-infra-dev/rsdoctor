@@ -164,13 +164,15 @@ test('rspack data store', async () => {
     `graphData.modules[0].webpackId: ${graphData.modules[0].webpackId}`,
   );
 
-  os.EOL === '\n'
-    ? expect(
-        graphData.modules[0].webpackId.indexOf('/fixtures/'),
-      ).toBeGreaterThan(0)
-    : expect(
-        graphData.modules[0].webpackId.indexOf('\\fixtures\\'),
-      ).toBeGreaterThan(0);
+  if (os.EOL === '\n') {
+    expect(
+      graphData.modules[0].webpackId.indexOf('/fixtures/'),
+    ).toBeGreaterThan(0);
+  } else {
+    expect(
+      graphData.modules[0].webpackId.indexOf('\\fixtures\\'),
+    ).toBeGreaterThan(0);
+  }
 
   graphData.modules.forEach((mod) => (mod.webpackId = ''));
   expect(graphData.modules[0].size.sourceSize).toBeGreaterThan(0);

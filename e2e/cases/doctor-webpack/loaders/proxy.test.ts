@@ -57,8 +57,9 @@ test('webpack5', async () => {
   expect(loader[0].loaders[0].isPitch).toBeFalsy();
   expect(loader[0].loaders[0].loaderIndex).toEqual(0);
   expect(loader[0].loaders[0].path).toEqual(loaderPath);
-  os.EOL === '\n' &&
+  if (os.EOL === '\n') {
     expect(loader[0].loaders[0].result).toEqual(codeTransformed);
+  }
   expect(loader[0].loaders[0].options).toStrictEqual({
     mode,
     pitchResult: '',
@@ -85,8 +86,9 @@ test('test async', async () => {
   expect(loader[0].loaders[0].isPitch).toBeFalsy();
   expect(loader[0].loaders[0].loaderIndex).toEqual(0);
   expect(loader[0].loaders[0].path).toEqual(loaderPath);
-  os.EOL === '\n' &&
+  if (os.EOL === '\n') {
     expect(loader[0].loaders[0].result).toEqual(codeTransformed);
+  }
   expect(loader[0].loaders[0].options).toStrictEqual({
     mode,
     pitchResult: '',
@@ -115,8 +117,9 @@ test('test callback', async () => {
   expect(loader[0].loaders[0].isPitch).toBeFalsy();
   expect(loader[0].loaders[0].loaderIndex).toEqual(0);
   expect(loader[0].loaders[0].path).toEqual(loaderPath);
-  os.EOL === '\n' &&
+  if (os.EOL === '\n') {
     expect(loader[0].loaders[0].result).toEqual(codeTransformed);
+  }
   expect(loader[0].loaders[0].options).toStrictEqual({
     mode,
     pitchResult: '',
@@ -227,8 +230,9 @@ test('set sdk.reportLoader as null to mock this scene', async () => {
   expect(loader[0].loaders[0].isPitch).toBeFalsy();
   expect(loader[0].loaders[0].loaderIndex).toEqual(0);
   expect(loader[0].loaders[0].path).toEqual(loaderPath);
-  os.EOL === '\n' &&
+  if (os.EOL === '\n') {
     expect(loader[0].loaders[0].result).toEqual(codeTransformed);
+  }
   expect(loader[0].loaders[0].options).toStrictEqual({
     mode,
     pitchResult: '',

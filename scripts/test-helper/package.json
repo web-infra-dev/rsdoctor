@@ -25,8 +25,8 @@
     "dev": "rslib build --watch"
   },
   "dependencies": {
-    "@rsbuild/core": "^1.7.5",
-    "@rspack/core": "2.0.1",
+    "@rsbuild/core": "catalog:",
+    "@rspack/core": "catalog:",
     "@types/lodash": "^4.17.24",
     "@types/node": "catalog:",
     "es-toolkit": "catalog:",
