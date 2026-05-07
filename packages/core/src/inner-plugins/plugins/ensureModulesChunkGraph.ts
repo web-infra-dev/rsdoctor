@@ -231,7 +231,9 @@ async function doneHandler(
 
   // Report graphs to SDK for further processing or client display
   logger.debug('reportModuleGraph start');
-  _this.modulesGraph && (await _this.sdk.reportModuleGraph(_this.modulesGraph));
+  if (_this.modulesGraph) {
+    await _this.sdk.reportModuleGraph(_this.modulesGraph);
+  }
   logger.debug('reportModuleGraph done');
   logger.debug('reportChunkGraph start');
   await _this.sdk.reportChunkGraph(_this.chunkGraph!);
@@ -257,10 +259,11 @@ export const ensureDevtools = (compiler: Plugin.BaseCompiler) => {
   const devtool = compiler.options.devtool;
 
   if (typeof devtool === 'string' && /eval/i.test(devtool)) {
-    !hasConsole &&
+    if (!hasConsole) {
       logger.warn(
         'SourceMap with eval is not supported. Please use other sourcemap options.',
       );
+    }
     hasConsole = true;
     return false;
   }

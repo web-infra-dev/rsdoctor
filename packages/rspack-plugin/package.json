@@ -39,7 +39,7 @@
     "@rsdoctor/utils": "workspace:*"
   },
   "devDependencies": {
-    "@rspack/core": "2.0.1",
+    "@rspack/core": "catalog:",
     "@types/node": "catalog:",
     "@types/tapable": "catalog:",
     "tslib": "catalog:",

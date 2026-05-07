@@ -1,5 +1,5 @@
 const rspack = require('@rspack/core');
-const ReactRefreshPlugin = require('@rspack/plugin-react-refresh');
+const { ReactRefreshRspackPlugin } = require('@rspack/plugin-react-refresh');
 const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 
 const banner = `var a = 111111111111111; console.log(a)`;
@@ -84,7 +84,7 @@ const config = {
   },
   // stats: 'verbose',
   plugins: [
-    new ReactRefreshPlugin(),
+    new ReactRefreshRspackPlugin(),
     new RsdoctorRspackPlugin({
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
       features: ['bundle', 'plugins', 'resolver', 'loader'],

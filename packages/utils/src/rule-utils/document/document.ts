@@ -14,7 +14,6 @@ export class Document {
   offsetAt!: (position: Position) => number | undefined;
 
   constructor(content: string) {
-    this._text;
     this._text = content;
     this.createFinder();
   }

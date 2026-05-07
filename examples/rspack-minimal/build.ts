@@ -1,7 +1,7 @@
 import rspack from '@rspack/core';
 import { resolve } from 'path';
 const config = require('./rspack.config.js');
-const ReactRefreshPlugin = require('@rspack/plugin-react-refresh');
+const { ReactRefreshRspackPlugin } = require('@rspack/plugin-react-refresh');
 const { RsdoctorRspackMultiplePlugin } = require('@rsdoctor/rspack-plugin');
 
 // console.log(config)
@@ -39,7 +39,7 @@ async function build() {
       name: 'Builder 1',
       target: 'web',
       plugins: [
-        new ReactRefreshPlugin(),
+        new ReactRefreshRspackPlugin(),
         new RsdoctorRspackMultiplePlugin({
           stage: 0,
           disableClientServer: false,

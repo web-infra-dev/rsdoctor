@@ -62,13 +62,14 @@ test('webpack5 plugins tests', async () => {
   expect(assets.length).toBe(1);
   expect(assets[0].chunks.length).toBeGreaterThan(0);
   expect(assets[0].content.length).toBeGreaterThan(10);
-  os.EOL === '\n' &&
+  if (os.EOL === '\n') {
     expect(assets[0].content).toStrictEqual(
       "/******/ (() => { // webpackBootstrap\nconsole.log('a');\n\n// hello world\n/******/ })()\n;",
     );
+  }
 
   expect(chunks.length).toBe(1);
-  os.EOL === '\n' &&
+  if (os.EOL === '\n') {
     expect(chunks).toStrictEqual([
       {
         id: '0',
@@ -83,4 +84,5 @@ test('webpack5 plugins tests', async () => {
         imported: [],
       },
     ]);
+  }
 });

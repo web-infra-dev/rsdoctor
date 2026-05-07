@@ -100,7 +100,7 @@ export class InternalSummaryPlugin<
       if (compiler.options.optimization.minimize !== false) {
         const pluginData = this.sdk.getStoreData().plugin;
         const minifyHookData = [...(pluginData.processAssets || [])];
-        minifyHookData.length &&
+        if (minifyHookData.length) {
           this.sdk.reportSummaryData({
             costs: [
               {
@@ -110,6 +110,7 @@ export class InternalSummaryPlugin<
               },
             ],
           });
+        }
       }
     } finally {
       timeEnd('InternalSummaryPlugin.done');

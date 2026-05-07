@@ -58,7 +58,9 @@ export const createDefaultPathMatchers = (_root: string) => {
     },
   ];
   const tmpdir = getRealTemporaryDirectory();
-  tmpdir && ret.push({ match: tmpdir, mark: 'temp' });
+  if (tmpdir) {
+    ret.push({ match: tmpdir, mark: 'temp' });
+  }
   ret.push({ match: os.tmpdir(), mark: 'temp' });
   ret.push({ match: os.homedir(), mark: 'home' });
   return ret;

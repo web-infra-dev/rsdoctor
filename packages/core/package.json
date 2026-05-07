@@ -98,8 +98,8 @@
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
     "browserslist-load-config": "^1.0.1",
-    "@rsbuild/plugin-check-syntax": "1.6.1",
-    "@rspack/resolver": "0.2.8",
+    "@rsbuild/plugin-check-syntax": "catalog:",
+    "@rspack/resolver": "catalog:",
     "es-toolkit": "catalog:",
     "filesize": "catalog:",
     "fs-extra": "catalog:",
@@ -107,7 +107,7 @@
     "source-map": "catalog:"
   },
   "devDependencies": {
-    "@rspack/core": "2.0.1",
+    "@rspack/core": "catalog:",
     "@scripts/test-helper": "workspace:*",
     "@types/fs-extra": "catalog:",
     "@types/node": "catalog:",

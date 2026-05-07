@@ -24,7 +24,9 @@ export const useI18n: typeof useTranslation = () => {
           if (!error) {
             setLocaleToStorage(lng as Language);
           }
-          callback && callback(error, t);
+          if (callback) {
+            callback(error, t);
+          }
         });
       },
     },

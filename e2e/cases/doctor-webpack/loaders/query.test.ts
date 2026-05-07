@@ -44,8 +44,9 @@ test('webpack5', async () => {
     ? getSDK()?.getStoreData() || { loader: [] }
     : { loader: [] };
   expect(loader).toHaveLength(1);
-  os.EOL === '\n' &&
+  if (os.EOL === '\n') {
     expect(loader[0].loaders[0].result).toEqual(codeTransformed);
+  }
 });
 
 test('query exists', async () => {
