@@ -5,6 +5,7 @@ import { PackageManagerTabs } from '@theme';
 To help AI better understand Rsdoctor's features, configuration, and best practices so it can provide more accurate assistance during day-to-day development and troubleshooting, Rsdoctor provides the following capabilities:
 
 - [Agent Skills](#agent-skills)
+- [Agent CLI](#agent-cli)
 - [MCP Server](#mcp-server)
 - [llms.txt](#llmstxt)
 - [Markdown docs](#markdown-docs)
@@ -29,6 +30,66 @@ After installation, simply use natural language prompts to trigger the skill, fo
 
 ```
 Use Rsdoctor to analyze this project and provide optimization suggestions
+```
+
+## Agent CLI
+
+`@rsdoctor/agent-cli` is a command-line tool for Agents. It reads Rsdoctor build analysis data and outputs structured JSON, making it easier for Agents to search, filter, and analyze the results.
+
+It is typically used together with the [rsdoctor-analysis](https://github.com/rstackjs/agent-skills#rsdoctor-skills) skill: first use the skill to guide the project through Rsdoctor build analysis, then use Agent CLI to query the generated analysis data.
+
+- Install it in your project (optional, because the skill can run the CLI with `npx` automatically):
+
+<PackageManagerTabs command="add @rsdoctor/agent-cli -g" />
+
+- The main `rsdoctor-agent` commands include:
+
+```bash
+rsdoctor-agent --help
+rsdoctor-agent list
+rsdoctor-agent query <tool-name> --data-file <path> [--input <json>]
+rsdoctor-agent <group> <subcommand> --data-file <path>
+```
+
+**Description:**
+
+- `rsdoctor-agent --help`: Show command help, including available subcommands, argument descriptions, and examples.
+- `rsdoctor-agent list`: List currently available tool names, so you can confirm which `<tool-name>` values can be used with `query`.
+- `rsdoctor-agent query <tool-name> --data-file <path> [--input <json>]`: Invoke a specified tool and return the result.
+  - `<tool-name>`: The tool name to invoke.
+  - `--data-file <path>`: Path to the Rsdoctor analysis data file (required).
+  - `[--input <json>]`: Optional extra input passed to the tool (JSON string).
+- `rsdoctor-agent <group> <subcommand> --data-file <path>`: Run grouped commands directly for interactive analysis.
+
+### Execution examples
+
+- Skill execution example:
+  - Prompt: `Use rsdoctor to help me do bundle analysis to see from which aspects the product volume can be optimized.`
+
+  <img
+    src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-2.gif"
+    style={{ margin: 'auto' }}
+  />
+  <br />
+
+  As shown in the animation above, the AI tool runs the corresponding `@rsdoctor/agent-cli` commands based on the Rsdoctor skill, retrieves the required data, and outputs optimization suggestions after consolidating the analysis. It also provides a deeper follow-up analysis plan. You can continue with `Next Step` to further investigate project build issues.
+
+  <br />
+
+  <img
+    src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-next.png"
+    style={{ margin: 'auto' }}
+  />
+  <br />
+
+- Command example (triggered by skill execution):
+
+```bash
+# Build optimize with side-effects pagination tuned for analysis
+rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json --side-effects-page-size 10
+
+# Example: return only required fields
+rsdoctor-agent packages duplicates --data-file ./dist/rsdoctor-data.json --filter "<command-specific-filter>"
 ```
 
 ## MCP Server
