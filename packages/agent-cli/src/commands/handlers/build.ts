@@ -5,7 +5,7 @@ import {
   getDataFilePath,
   getEntrypoints as getEntrypointsFromData,
 } from '../datasource';
-import { parsePositiveInt } from '../utils';
+import { omitModulesFields, parsePositiveInt } from '../utils';
 import { getMediaAssets } from './assets';
 import { getLargeChunksData } from './chunks';
 import { detectDuplicatePackages, detectSimilarPackages } from './packages';
@@ -23,21 +23,6 @@ function withoutDescription<T>(result: { ok: boolean; data: T }): {
     ok: result.ok,
     data: result.data,
   };
-}
-
-function omitModulesFields<T>(value: T): T {
-  if (!value || typeof value !== 'object') {
-    return value;
-  }
-  if (Array.isArray(value)) {
-    return value.map((item) => omitModulesFields(item)) as T;
-  }
-
-  return Object.fromEntries(
-    Object.entries(value)
-      .filter(([key]) => key !== 'modules')
-      .map(([key, item]) => [key, omitModulesFields(item)]),
-  ) as T;
 }
 
 export async function getSummary(): Promise<{

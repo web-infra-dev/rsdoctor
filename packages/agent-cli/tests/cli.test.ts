@@ -4,6 +4,9 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { runCli } from '../src/cli';
+import packageJson from '../package.json';
+
+const expectedVersionOutput = `${packageJson.version}\n`;
 
 describe('agent cli', () => {
   it('lists the available subcommands for an external main agent', async () => {
@@ -56,7 +59,7 @@ describe('agent cli', () => {
 
     expect(exitCode).toBe(0);
     expect(stderr.join('')).toBe('');
-    expect(stdout.join('')).toBe('0.1.0-beta.0\n');
+    expect(stdout.join('')).toBe(expectedVersionOutput);
   });
 
   it('prints the package version with short option', async () => {
@@ -70,7 +73,7 @@ describe('agent cli', () => {
 
     expect(exitCode).toBe(0);
     expect(stderr.join('')).toBe('');
-    expect(stdout.join('')).toBe('0.1.0-beta.0\n');
+    expect(stdout.join('')).toBe(expectedVersionOutput);
   });
 
   it('invokes a named tool through the external agent query path', async () => {
