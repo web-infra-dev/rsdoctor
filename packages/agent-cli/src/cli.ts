@@ -1,5 +1,6 @@
 import { cac } from 'cac';
 
+import packageJson from '../package.json';
 import { createRsdoctorCliToolExecutor } from './executor';
 import { describeSubcommands, getToolCatalog, runAiCli } from './commands';
 
@@ -142,6 +143,8 @@ async function runRegisteredCommands(
   if (
     argv[0] !== '--help' &&
     argv[0] !== '-h' &&
+    argv[0] !== '--version' &&
+    argv[0] !== '-v' &&
     argv[0] !== 'list' &&
     argv[0] !== 'query'
   ) {
@@ -158,6 +161,11 @@ async function runRegisteredCommands(
       options.write(
         `rsdoctor-agent\n\nUsage:\n  $ rsdoctor-agent <command> [options]\n\nCommands:\n${commandHelp}\n`,
       );
+      return 0;
+    }
+
+    if (argv[0] === '--version' || argv[0] === '-v') {
+      options.write(`${packageJson.version}\n`);
       return 0;
     }
 

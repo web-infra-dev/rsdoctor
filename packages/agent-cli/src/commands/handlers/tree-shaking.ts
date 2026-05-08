@@ -90,7 +90,7 @@ export async function getTreeShakingSummary(): Promise<{
       'Comprehensive tree-shaking health summary. ' +
       'Aggregates all three rule violations (E1007 side-effects-only imports, ' +
       'E1008 bare require() calls, E1009 ESM-resolved-to-CJS). ' +
-      'For detailed per-module bailout reasons, use the dedicated tree-shaking side-effects command. ' +
+      'For detailed per-module bailout reasons, use tree-shaking bailout-reasons or tree-shaking retained-modules. ' +
       'Rspack enables tree-shaking in production mode via usedExports, sideEffects, ' +
       'providedExports, and innerGraph — violations in this report indicate where those ' +
       'optimizations are being blocked. ' +

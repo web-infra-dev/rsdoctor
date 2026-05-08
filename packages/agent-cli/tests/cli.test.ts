@@ -45,6 +45,34 @@ describe('agent cli', () => {
     expect(text).toContain('Execute one mapped tool from the catalog.');
   });
 
+  it('prints the package version', async () => {
+    const stdout: string[] = [];
+    const stderr: string[] = [];
+
+    const exitCode = await runCli(['--version'], {
+      write: (text) => stdout.push(text),
+      writeError: (text) => stderr.push(text),
+    });
+
+    expect(exitCode).toBe(0);
+    expect(stderr.join('')).toBe('');
+    expect(stdout.join('')).toBe('0.1.0-beta.0\n');
+  });
+
+  it('prints the package version with short option', async () => {
+    const stdout: string[] = [];
+    const stderr: string[] = [];
+
+    const exitCode = await runCli(['-v'], {
+      write: (text) => stdout.push(text),
+      writeError: (text) => stderr.push(text),
+    });
+
+    expect(exitCode).toBe(0);
+    expect(stderr.join('')).toBe('');
+    expect(stdout.join('')).toBe('0.1.0-beta.0\n');
+  });
+
   it('invokes a named tool through the external agent query path', async () => {
     const chunks: string[] = [];
     let capturedInput: Record<string, unknown> | undefined;
@@ -285,7 +313,6 @@ describe('agent cli', () => {
             id: 1,
             name: 'main',
             size: 1024,
-            modules: [],
             assets: [],
           },
         ],
@@ -348,7 +375,6 @@ describe('agent cli', () => {
           id: 2,
           name: 'async',
           size: 512,
-          modules: [],
           assets: [],
         },
       ],

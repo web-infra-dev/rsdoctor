@@ -243,7 +243,6 @@ describe('rsdoctor cli tool executor', () => {
               id: 1,
               name: 'main',
               size: 10,
-              modules: [],
               assets: [
                 {
                   name: 'main.js',

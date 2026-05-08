@@ -5,6 +5,21 @@ interface Chunk {
   size: number;
 }
 
+const omitModulesFields = <T>(value: T): T => {
+  if (!value || typeof value !== 'object') {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => omitModulesFields(item)) as T;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key]) => key !== 'modules')
+      .map(([key, item]) => [key, omitModulesFields(item)]),
+  ) as T;
+};
+
 export function getLargeChunksData(chunks: Chunk[]): {
   median: number;
   operator: number;
@@ -35,7 +50,7 @@ export async function listChunks(
 
   return {
     ok: true,
-    data: chunks,
+    data: omitModulesFields(chunks),
     description: 'List all chunks (id, name, size, modules).',
   };
 }
@@ -71,7 +86,7 @@ export async function findLargeChunks(): Promise<{
   }
   return {
     ok: true,
-    data: getLargeChunksData(chunks),
+    data: omitModulesFields(getLargeChunksData(chunks)),
     description:
       'Find oversized chunks (>30% over median size and >= 1MB) to prioritize splitChunks suggestions.',
   };

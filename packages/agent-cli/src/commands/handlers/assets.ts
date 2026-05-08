@@ -230,6 +230,21 @@ const getAssetsDiffResult = (baseline: ChunkGraph, current: ChunkGraph) => ({
   },
 });
 
+const omitModulesFields = <T>(value: T): T => {
+  if (!value || typeof value !== 'object') {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => omitModulesFields(item)) as T;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key]) => key !== 'modules')
+      .map(([key, item]) => [key, omitModulesFields(item)]),
+  ) as T;
+};
+
 export async function listAssets(): Promise<{
   ok: boolean;
   data: unknown;
@@ -286,7 +301,10 @@ export async function getMediaAssets(): Promise<{
   const chunks = chunksResult.items || [];
   return {
     ok: true,
-    data: { guidance: 'Media asset optimization guidance.', chunks },
+    data: {
+      guidance: 'Media asset optimization guidance.',
+      chunks: omitModulesFields(chunks),
+    },
     description: 'Media asset optimization guidance.',
   };
 }
