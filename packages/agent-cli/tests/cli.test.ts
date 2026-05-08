@@ -4,6 +4,9 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { runCli } from '../src/cli';
+import packageJson from '../package.json';
+
+const expectedVersionOutput = `${packageJson.version}\n`;
 
 describe('agent cli', () => {
   it('lists the available subcommands for an external main agent', async () => {
@@ -43,6 +46,34 @@ describe('agent cli', () => {
     expect(text).toContain('query <toolName>');
     expect(text).toContain('List all available subcommands.');
     expect(text).toContain('Execute one mapped tool from the catalog.');
+  });
+
+  it('prints the package version', async () => {
+    const stdout: string[] = [];
+    const stderr: string[] = [];
+
+    const exitCode = await runCli(['--version'], {
+      write: (text) => stdout.push(text),
+      writeError: (text) => stderr.push(text),
+    });
+
+    expect(exitCode).toBe(0);
+    expect(stderr.join('')).toBe('');
+    expect(stdout.join('')).toBe(expectedVersionOutput);
+  });
+
+  it('prints the package version with short option', async () => {
+    const stdout: string[] = [];
+    const stderr: string[] = [];
+
+    const exitCode = await runCli(['-v'], {
+      write: (text) => stdout.push(text),
+      writeError: (text) => stderr.push(text),
+    });
+
+    expect(exitCode).toBe(0);
+    expect(stderr.join('')).toBe('');
+    expect(stdout.join('')).toBe(expectedVersionOutput);
   });
 
   it('invokes a named tool through the external agent query path', async () => {
@@ -285,12 +316,11 @@ describe('agent cli', () => {
             id: 1,
             name: 'main',
             size: 1024,
-            modules: [],
             assets: [],
           },
         ],
       },
-      description: 'List all chunks (id, name, size, modules).',
+      description: 'List all chunks (id, name, size).',
     });
   });
 
@@ -348,7 +378,6 @@ describe('agent cli', () => {
           id: 2,
           name: 'async',
           size: 512,
-          modules: [],
           assets: [],
         },
       ],

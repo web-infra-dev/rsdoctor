@@ -1,5 +1,10 @@
 import { getChunks, getChunkById as getChunkByIdFromData } from '../datasource';
-import { getMedianChunkSize, parseNumber, parsePositiveInt } from '../utils';
+import {
+  getMedianChunkSize,
+  omitModulesFields,
+  parseNumber,
+  parsePositiveInt,
+} from '../utils';
 
 interface Chunk {
   size: number;
@@ -35,8 +40,8 @@ export async function listChunks(
 
   return {
     ok: true,
-    data: chunks,
-    description: 'List all chunks (id, name, size, modules).',
+    data: omitModulesFields(chunks),
+    description: 'List all chunks (id, name, size).',
   };
 }
 
@@ -71,7 +76,7 @@ export async function findLargeChunks(): Promise<{
   }
   return {
     ok: true,
-    data: getLargeChunksData(chunks),
+    data: omitModulesFields(getLargeChunksData(chunks)),
     description:
       'Find oversized chunks (>30% over median size and >= 1MB) to prioritize splitChunks suggestions.',
   };

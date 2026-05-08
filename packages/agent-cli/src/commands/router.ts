@@ -129,7 +129,7 @@ function createOptimizeCommand(
 const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
   chunks: {
     list: {
-      description: 'List all chunks (id, name, size, modules).',
+      description: 'List all chunks (id, name, size).',
       toolName: 'chunks_list',
       toolDescription:
         'List chunks with ids, names, sizes, and module counts for bundle composition analysis.',

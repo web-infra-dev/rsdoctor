@@ -4,7 +4,7 @@ import {
   getChunks,
   getAssets as getAssetsFromData,
 } from '../datasource';
-import { requireArg } from '../utils';
+import { omitModulesFields, requireArg } from '../utils';
 
 interface Asset {
   path: string;
@@ -286,7 +286,10 @@ export async function getMediaAssets(): Promise<{
   const chunks = chunksResult.items || [];
   return {
     ok: true,
-    data: { guidance: 'Media asset optimization guidance.', chunks },
+    data: {
+      guidance: 'Media asset optimization guidance.',
+      chunks: omitModulesFields(chunks),
+    },
     description: 'Media asset optimization guidance.',
   };
 }

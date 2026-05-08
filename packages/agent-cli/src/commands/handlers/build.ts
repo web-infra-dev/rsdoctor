@@ -5,7 +5,7 @@ import {
   getDataFilePath,
   getEntrypoints as getEntrypointsFromData,
 } from '../datasource';
-import { parsePositiveInt } from '../utils';
+import { omitModulesFields, parsePositiveInt } from '../utils';
 import { getMediaAssets } from './assets';
 import { getLargeChunksData } from './chunks';
 import { detectDuplicatePackages, detectSimilarPackages } from './packages';
@@ -81,10 +81,13 @@ async function executeStep1(): Promise<{
   const chunksArray = chunks as Chunk[];
 
   return {
-    duplicatePackages: withoutDescription(duplicatePackages),
-    similarPackages: withoutDescription(similarPackages),
-    mediaAssets: withoutDescription(mediaAssets),
-    largeChunks: { ok: true, data: getLargeChunksData(chunksArray) },
+    duplicatePackages: omitModulesFields(withoutDescription(duplicatePackages)),
+    similarPackages: omitModulesFields(withoutDescription(similarPackages)),
+    mediaAssets: omitModulesFields(withoutDescription(mediaAssets)),
+    largeChunks: omitModulesFields({
+      ok: true,
+      data: getLargeChunksData(chunksArray),
+    }),
   };
 }
 
