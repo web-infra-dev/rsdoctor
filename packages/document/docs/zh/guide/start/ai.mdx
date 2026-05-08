@@ -5,6 +5,7 @@ import { PackageManagerTabs } from '@theme';
 为了帮助 AI 更全面地了解 Rsdoctor 的功能、配置与最佳实践，从而在日常开发和问题排查过程中提供更准确的帮助，Rsdoctor 提供了以下能力：
 
 - [Agent Skills](#agent-skills)
+- [Agent CLI](#agent-cli)
 - [MCP Server](#mcp-server)
 - [llms.txt](#llmstxt)
 - [Markdown 文档](#markdown-文档)
@@ -44,6 +45,68 @@ new RsdoctorRspackPlugin({
 
 ```
 使用 Rsdoctor 对该项目进行构建分析并给出优化建议
+```
+
+## Agent CLI
+
+[`@rsdoctor/agent-cli`](https://github.com/web-infra-dev/rsdoctor/tree/main/packages/agent-cli) 是面向 Agent 的命令行工具，可以读取 Rsdoctor 生成的构建分析数据，并以结构化 JSON 的形式输出，便于 Agent 进一步检索、过滤和分析。
+
+它通常与 [rsdoctor-analysis](https://github.com/rstackjs/agent-skills#rsdoctor-skills) Skill 配合使用：先让 Skill 引导项目完成 Rsdoctor 构建分析，再通过 Agent CLI 查询生成的分析数据。
+
+- 在项目中安装（可选，因为 Skill 可以自动全局安装这个依赖）：
+
+<PackageManagerTabs command="add -D @rsdoctor/agent-cli" />
+
+- `rsdoctor-agent` 命令主要包含：
+
+```bash
+rsdoctor-agent --help
+rsdoctor-agent --version
+rsdoctor-agent list
+rsdoctor-agent query <tool-name> --data-file <path> [--input <json>]
+rsdoctor-agent <group> <subcommand> --data-file <path>
+```
+
+**说明：**
+
+- `rsdoctor-agent --help`：查看命令帮助信息，包括可用子命令、参数说明和示例。
+- `rsdoctor-agent --version`：查看当前 `@rsdoctor/agent-cli` 包版本。
+- `rsdoctor-agent list`：列出当前可用的直接子命令（如 `group subcommand` / `group.subcommand`），便于了解可直接执行的分组命令。
+- `rsdoctor-agent query <tool-name> --data-file <path> [--input <json>]`：调用指定工具并返回结果。
+  - `<tool-name>`：要调用的 catalog tool name（例如 `packages_duplicates`），不是 `rsdoctor-agent list` 输出的分组子命令名称。
+  - `--data-file <path>`：Rsdoctor 分析数据文件路径（必填）。
+  - `[--input <json>]`：可选，向工具传入额外输入参数（JSON 字符串）。
+- `rsdoctor-agent <group> <subcommand> --data-file <path>`：直接执行分组命令，适合交互式分析。
+
+### 执行示例
+
+- Skill 执行示例：
+  - 问题：`Use rsdoctor to help me do bundle analysis to see from which aspects the product volume can be optimized.`
+
+  <img
+    src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-2.gif"
+    style={{ margin: 'auto' }}
+  />
+  <br />
+
+  如上动图所示，AI 工具会依据 Rsdoctor Skill 执行相应的 `@rsdoctor/agent-cli` 命令，获取所需数据，并在整合分析后输出优化建议。同时，它还会提供下一步更深入的分析计划，你可以根据指引进一步研究项目构建问题。
+
+  <br />
+
+  <img
+    src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-next.png"
+    style={{ margin: 'auto' }}
+  />
+  <br />
+
+- 命令示例 (由 Skill 触发执行)：
+
+```bash
+# Build optimize with side-effects pagination tuned for analysis
+rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json --side-effects-page-size 10
+
+# Example: return only required fields
+rsdoctor-agent query packages_duplicates --data-file ./dist/rsdoctor-data.json --filter "<command-specific-filter>"
 ```
 
 ## MCP Server
