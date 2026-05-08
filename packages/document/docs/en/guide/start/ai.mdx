@@ -38,14 +38,15 @@ Use Rsdoctor to analyze this project and provide optimization suggestions
 
 It is typically used together with the [rsdoctor-analysis](https://github.com/rstackjs/agent-skills#rsdoctor-skills) skill: first use the skill to guide the project through Rsdoctor build analysis, then use Agent CLI to query the generated analysis data.
 
-- Install it in your project (optional, because the skill can run the CLI with `npx` automatically):
+- Install it in your project (optional, because the skill can automatically install this dependency globally):
 
-<PackageManagerTabs command="add @rsdoctor/agent-cli -g" />
+<PackageManagerTabs command="add -D @rsdoctor/agent-cli" />
 
-- The main `rsdoctor-agent` commands include:
+- The main [`rsdoctor-agent`](https://github.com/web-infra-dev/rsdoctor/tree/main/packages/agent-cli) commands include:
 
 ```bash
 rsdoctor-agent --help
+rsdoctor-agent --version
 rsdoctor-agent list
 rsdoctor-agent query <tool-name> --data-file <path> [--input <json>]
 rsdoctor-agent <group> <subcommand> --data-file <path>
@@ -54,6 +55,7 @@ rsdoctor-agent <group> <subcommand> --data-file <path>
 **Description:**
 
 - `rsdoctor-agent --help`: Show command help, including available subcommands, argument descriptions, and examples.
+- `rsdoctor-agent --version`: Show the current `@rsdoctor/agent-cli` package version.
 - `rsdoctor-agent list`: List the currently available direct grouped subcommands (for example, `group subcommand` / `group.subcommand`) for interactive use. This output is not the same as the catalog `<tool-name>` values used by `query`.
 - `rsdoctor-agent query <tool-name> --data-file <path> [--input <json>]`: Invoke a specified catalog tool and return the result.
   - `<tool-name>`: The catalog tool name to invoke, for example `packages_duplicates`.
@@ -72,7 +74,7 @@ rsdoctor-agent <group> <subcommand> --data-file <path>
   />
   <br />
 
-  As shown in the animation above, the AI tool runs the corresponding `@rsdoctor/agent-cli` commands based on the Rsdoctor skill, retrieves the required data, and outputs optimization suggestions after consolidating the analysis. It also provides a deeper follow-up analysis plan. You can continue with `Next Step` to further investigate project build issues.
+  As shown in the animation above, the AI tool runs the corresponding `@rsdoctor/agent-cli` commands based on the Rsdoctor skill, retrieves the required data, and outputs optimization suggestions after consolidating the analysis. It also provides a deeper follow-up analysis plan, so you can follow the guidance to further investigate project build issues.
 
   <br />
 
