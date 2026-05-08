@@ -320,7 +320,7 @@ describe('agent cli', () => {
           },
         ],
       },
-      description: 'List all chunks (id, name, size, modules).',
+      description: 'List all chunks (id, name, size).',
     });
   });
 

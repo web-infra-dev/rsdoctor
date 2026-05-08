@@ -252,7 +252,7 @@ describe('rsdoctor cli tool executor', () => {
             },
           ],
         },
-        description: 'List all chunks (id, name, size, modules).',
+        description: 'List all chunks (id, name, size).',
       });
 
       const filteredSummary = await executor.execute({
