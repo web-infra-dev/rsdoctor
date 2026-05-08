@@ -34,7 +34,7 @@ Use Rsdoctor to analyze this project and provide optimization suggestions
 
 ## Agent CLI
 
-`@rsdoctor/agent-cli` is a command-line tool for Agents. It reads Rsdoctor build analysis data and outputs structured JSON, making it easier for Agents to search, filter, and analyze the results.
+[`@rsdoctor/agent-cli`](https://github.com/web-infra-dev/rsdoctor/tree/main/packages/agent-cli) is a command-line tool for Agents. It reads Rsdoctor build analysis data and outputs structured JSON, making it easier for Agents to search, filter, and analyze the results.
 
 It is typically used together with the [rsdoctor-analysis](https://github.com/rstackjs/agent-skills#rsdoctor-skills) skill: first use the skill to guide the project through Rsdoctor build analysis, then use Agent CLI to query the generated analysis data.
 
@@ -42,7 +42,7 @@ It is typically used together with the [rsdoctor-analysis](https://github.com/rs
 
 <PackageManagerTabs command="add -D @rsdoctor/agent-cli" />
 
-- The main [`rsdoctor-agent`](https://github.com/web-infra-dev/rsdoctor/tree/main/packages/agent-cli) commands include:
+- The main `rsdoctor-agent` commands include:
 
 ```bash
 rsdoctor-agent --help
