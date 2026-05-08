@@ -51,7 +51,7 @@ export async function listChunks(
   return {
     ok: true,
     data: omitModulesFields(chunks),
-    description: 'List all chunks (id, name, size, modules).',
+    description: 'List all chunks (id, name, size).',
   };
 }
 
