@@ -7,6 +7,7 @@ const originalConsoleLog = console.log;
 let consoleOutput: string[] = [];
 const originalEnvCI = process.env.CI;
 const originalEnvRSTEST = process.env.RSTEST;
+const originalEnvRSDOCTOROUTPUT = process.env.RSDOCTOR_OUTPUT;
 
 beforeEach(() => {
   consoleOutput = [];
@@ -15,6 +16,7 @@ beforeEach(() => {
   };
   delete process.env.CI;
   delete process.env.RSTEST;
+  delete process.env.RSDOCTOR_OUTPUT;
 });
 
 afterEach(() => {
@@ -28,6 +30,11 @@ afterEach(() => {
     process.env.RSTEST = originalEnvRSTEST;
   } else {
     delete process.env.RSTEST;
+  }
+  if (originalEnvRSDOCTOROUTPUT !== undefined) {
+    process.env.RSDOCTOR_OUTPUT = originalEnvRSDOCTOROUTPUT;
+  } else {
+    delete process.env.RSDOCTOR_OUTPUT;
   }
 });
 
@@ -228,6 +235,29 @@ describe('normalizeUserConfig', () => {
   });
 
   describe('mode priority', () => {
+    it('should use brief json output when RSDOCTOR_OUTPUT is json', () => {
+      process.env.RSDOCTOR_OUTPUT = 'json';
+
+      const result = normalizeUserConfig();
+
+      expect(result.output.mode).toBe('brief');
+      expect(result.output.options).toEqual({
+        type: ['json'],
+        htmlOptions: {
+          reportHtmlName: undefined,
+          writeDataJson: false,
+        },
+        jsonOptions: {
+          fileName: 'rsdoctor-data.json',
+          sections: {
+            moduleGraph: true,
+            chunkGraph: true,
+            rules: true,
+          },
+        },
+      });
+    });
+
     it('should prioritize output.mode over mode', () => {
       const result = normalizeUserConfig({
         mode: 'normal',
