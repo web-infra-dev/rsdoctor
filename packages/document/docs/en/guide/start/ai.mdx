@@ -18,6 +18,21 @@ In the [rstackjs/agent-skills](https://github.com/rstackjs/agent-skills) reposit
 
 - [rsdoctor-analysis](https://github.com/rstackjs/agent-skills#rsdoctor-skills): Use Rsdoctor for build analysis and provide optimization recommendations.
 
+The `rsdoctor-analysis` skill analyzes the data in `rsdoctor-data.json`. You can generate this file by setting `output.mode` to `'brief'` and `output.options.type` to `['json']`:
+
+```js
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      type: ['json'],
+    },
+  },
+});
+```
+
+You can also set the `RSDOCTOR_OUTPUT='json'` environment variable to output the analysis data as a JSON file. This environment configuration requires `@rsdoctor/*-plugin` version `>= 1.5.11`.
+
 In Coding Agents that support skills, you can use the [skills](https://www.npmjs.com/package/skills) package to install a specific skill with the following command:
 
 <PackageManagerTabs
