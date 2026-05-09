@@ -2,7 +2,7 @@ import {
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
 } from '@/types';
-import { Linter, Plugin, SDK } from '@rsdoctor/types';
+import { Config, Linter, Plugin, SDK } from '@rsdoctor/types';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 import assert from 'assert';
 import {
@@ -32,6 +32,9 @@ function getDefaultSupports() {
     banner: undefined,
     gzip: true, // change the gzip to true by default.
   };
+}
+function isJsonOutputEnv(value: unknown): boolean {
+  return value === 'json';
 }
 function normalizeFeatures(features: any, mode: keyof typeof SDK.IMode) {
   if (Array.isArray(features)) {
@@ -71,6 +74,24 @@ function isValidMode(mode: any): mode is keyof typeof SDK.IMode {
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   config: Plugin.RsdoctorWebpackPluginOptions<Rules> = {},
 ): Plugin.RsdoctorPluginOptionsNormalized<Rules> {
+  const userOutput = config.output;
+  const defaultOutput = getDefaultOutput();
+  const outputConfig: Config.IOutput<'brief' | 'normal'> = isJsonOutputEnv(
+    process.env.RSDOCTOR_OUTPUT,
+  )
+    ? {
+        reportDir: userOutput?.reportDir,
+        compressData: userOutput?.compressData,
+        mode: 'brief' as const,
+        options: {
+          type: ['json'] as Array<'json'>,
+        },
+      }
+    : (userOutput ?? defaultOutput);
+  const normalizedConfig = {
+    ...config,
+    output: outputConfig,
+  };
   const {
     linter = {},
     features = {},
@@ -78,13 +99,13 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     disableClientServer: userDisableClientServer = false,
     sdkInstance,
     innerClientPath = '',
-    output = getDefaultOutput(),
+    output = outputConfig,
     supports = getDefaultSupports(),
     port,
     printLog = { serverUrls: true },
     mode = undefined,
     brief = undefined,
-  } = config;
+  } = normalizedConfig;
   // If process.env.RSTEST is set to true, disableClientServer should be false
   // Otherwise, if process.env.CI is set, disableClientServer should be true
   const disableClientServer =
