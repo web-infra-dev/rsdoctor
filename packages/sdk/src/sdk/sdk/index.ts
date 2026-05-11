@@ -405,7 +405,7 @@ export class RsdoctorSDK<
             this.extraConfig.brief.jsonOptions?.fileName ??
               'rsdoctor-data.json',
           ),
-          JSON.stringify(jsonData, null, 2),
+          JSON.stringify(jsonData),
         );
       }
       if (this.extraConfig.brief?.type?.includes('html')) {
