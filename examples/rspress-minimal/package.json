@@ -13,6 +13,6 @@
   },
   "devDependencies": {
     "@rsdoctor/rspack-plugin": "workspace:*",
-    "@types/node": "^22.8.1"
+    "@types/node": "^24.12.3"
   }
 }

@@ -58,7 +58,7 @@ export const LoaderAnalysisBase: React.FC<{
   );
 };
 
-export const LoaderAnalysis = withServerAPI({
+export const LoaderAnalysis: React.FC = withServerAPI({
   api: SDK.ServerAPI.API.LoadDataByKey,
   body: { key: 'root' },
   responsePropName: 'cwd',

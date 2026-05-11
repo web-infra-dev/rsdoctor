@@ -1,7 +1,6 @@
 {
   "extends": "@rsdoctor/tsconfig/base",
   "compilerOptions": {
-    "baseUrl": "./",
     "jsx": "react-jsx",
     "declaration": true,
     "isolatedModules": true,

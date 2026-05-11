@@ -1,8 +1,5 @@
 import type { Configuration } from '@rspack/core';
-
-const {
-  createRspeedy,
-} = require('node_modules/@lynx-js/rspeedy/dist/index.js');
+import { createRspeedy } from '@lynx-js/rspeedy';
 import type { Config, RspeedyInstance } from '@lynx-js/rspeedy';
 
 interface RsbuildHelper {

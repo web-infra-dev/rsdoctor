@@ -3,7 +3,6 @@
   "include": ["src", "webpack.config.ts"],
   "compilerOptions": {
     "outDir": "dist",
-    "baseUrl": ".",
     "module": "ESNext"
   }
 }

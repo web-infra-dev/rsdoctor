@@ -4,7 +4,6 @@
     "experimentalDecorators": true,
     "noUnusedLocals": false,
     "outDir": "./dist",
-    "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]
     },

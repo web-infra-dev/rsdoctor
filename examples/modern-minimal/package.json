@@ -20,7 +20,7 @@
     "@modern-js/app-tools": "^2.70.7",
     "@modern-js/runtime": "^2.70.7",
     "@rsdoctor/webpack-plugin": "workspace:*",
-    "@types/node": "^22.8.1",
+    "@types/node": "^24.12.3",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "typescript": "catalog:"
