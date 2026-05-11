@@ -121,8 +121,8 @@ catalogs:
       specifier: ^0.7.6
       version: 0.7.6
     typescript:
-      specifier: ^5.9.2
-      version: 5.9.2
+      specifier: 1.6.2
+      version: 1.6.2
 
 overrides:
   '@remix-run/router': 1.23.2
@@ -197,7 +197,7 @@ importers:
         version: 0.120.0(@types/react@18.3.28)
       '@lynx-js/rspeedy':
         specifier: ^0.14.3
-        version: 0.14.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.2(@swc/helpers@0.5.21))(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
+        version: 0.14.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.2(@swc/helpers@0.5.21))(typescript@1.6.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
       '@playwright/test':
         specifier: 1.55.1
         version: 1.55.1
@@ -245,7 +245,7 @@ importers:
         version: 1.55.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
       webpack:
         specifier: ^5.105.4
         version: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))
@@ -266,7 +266,7 @@ importers:
     devDependencies:
       '@modern-js/app-tools':
         specifier: ^2.70.7
-        version: 2.70.8(@rspack/core@1.7.11(@swc/helpers@0.5.21))(@swc/core@1.15.8(@swc/helpers@0.5.21))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.59.0)(styled-components@5.3.11(@babel/core@7.29.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(tsconfig-paths@4.2.0)(type-fest@0.21.3)(typescript@5.9.2)
+        version: 2.70.8(@rspack/core@1.7.11(@swc/helpers@0.5.21))(@swc/core@1.15.8(@swc/helpers@0.5.21))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.59.0)(styled-components@5.3.11(@babel/core@7.29.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(tsconfig-paths@4.2.0)(type-fest@0.21.3)(typescript@1.6.2)
       '@modern-js/runtime':
         specifier: ^2.70.7
         version: 2.70.8(react-dom@18.3.1(react@18.3.1))(react-server-dom-webpack@19.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5)))(react@18.3.1)
@@ -284,7 +284,7 @@ importers:
         version: 18.3.7(@types/react@18.3.28)
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   examples/multiple-minimal:
     devDependencies:
@@ -326,13 +326,13 @@ importers:
         version: 3.3.2(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
       ts-loader:
         specifier: 9.4.2
-        version: 9.4.2(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
+        version: 9.4.2(typescript@1.6.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
       tsx:
         specifier: ^4.19.3
         version: 4.19.3
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
       webpack:
         specifier: ^5.104.1
         version: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))
@@ -375,7 +375,7 @@ importers:
         version: '@types/semver@7.5.6'
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   examples/rspack-banner-minimal:
     dependencies:
@@ -584,13 +584,13 @@ importers:
         version: 4.1.7(enquirer@2.4.1)
       ts-loader:
         specifier: 9.4.2
-        version: 9.4.2(typescript@5.9.2)(webpack@5.105.4)
+        version: 9.4.2(typescript@1.6.2)(webpack@5.105.4)
       tsx:
         specifier: ^4.19.3
         version: 4.19.3
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
       webpack:
         specifier: ^5.105.4
         version: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(webpack-cli@5.1.4)
@@ -602,7 +602,7 @@ importers:
     devDependencies:
       '@rslib/core':
         specifier: 0.21.4
-        version: 0.21.4(core-js@3.47.0)(typescript@5.9.2)
+        version: 0.21.4(core-js@3.47.0)(typescript@1.6.2)
       '@rstest/core':
         specifier: 'catalog:'
         version: 0.9.10(core-js@3.47.0)
@@ -614,7 +614,7 @@ importers:
         version: 7.0.0
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   packages/ai:
     devDependencies:
@@ -635,13 +635,13 @@ importers:
         version: 22.18.1
       prebundle:
         specifier: 'catalog:'
-        version: 1.6.4(typescript@5.9.2)
+        version: 1.6.4(typescript@1.6.2)
       socket.io-client:
         specifier: 'catalog:'
         version: 4.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
       zod:
         specifier: ^3.25.76
         version: 3.25.76
@@ -675,7 +675,7 @@ importers:
         version: 1.1.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   packages/client:
     devDependencies:
@@ -693,7 +693,7 @@ importers:
         version: 1.5.2(@rsbuild/core@2.0.5(core-js@3.47.0))
       '@rsbuild/plugin-type-check':
         specifier: 'catalog:'
-        version: 1.3.4(@rsbuild/core@2.0.5(core-js@3.47.0))(@rspack/core@2.0.2(@swc/helpers@0.5.21))(tslib@2.8.1)(typescript@5.9.2)
+        version: 1.3.4(@rsbuild/core@2.0.5(core-js@3.47.0))(@rspack/core@2.0.2(@swc/helpers@0.5.21))(tslib@2.8.1)(typescript@1.6.2)
       '@rsdoctor/components':
         specifier: workspace:*
         version: link:../components
@@ -735,7 +735,7 @@ importers:
         version: 5.0.0(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   packages/components:
     dependencies:
@@ -826,7 +826,7 @@ importers:
         version: 1.5.2(@rsbuild/core@2.0.5(core-js@3.47.0))
       '@rsbuild/plugin-svgr':
         specifier: 'catalog:'
-        version: 2.0.2(@rsbuild/core@2.0.5(core-js@3.47.0))(@rspack/core@2.0.2(@swc/helpers@0.5.21))(typescript@5.9.2)
+        version: 2.0.2(@rsbuild/core@2.0.5(core-js@3.47.0))(@rspack/core@2.0.2(@swc/helpers@0.5.21))(typescript@1.6.2)
       '@types/node':
         specifier: 'catalog:'
         version: 22.18.1
@@ -850,7 +850,7 @@ importers:
         version: 6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   packages/core:
     dependencies:
@@ -917,19 +917,19 @@ importers:
         version: 10.1.1(@babel/core@7.29.0)(@rspack/core@2.0.2(@swc/helpers@0.5.21))(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
       prebundle:
         specifier: 'catalog:'
-        version: 1.6.4(typescript@5.9.2)
+        version: 1.6.4(typescript@1.6.2)
       string-loader:
         specifier: 0.0.1
         version: 0.0.1
       ts-loader:
         specifier: ^9.5.7
-        version: 9.5.7(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
+        version: 9.5.7(typescript@1.6.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
       tslib:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
       webpack:
         specifier: ^5.105.4
         version: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))
@@ -999,7 +999,7 @@ importers:
         version: 1.2.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   packages/graph:
     dependencies:
@@ -1039,7 +1039,7 @@ importers:
         version: 2.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
       webpack:
         specifier: ^5.105.4
         version: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))
@@ -1080,7 +1080,7 @@ importers:
         version: 2.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   packages/sdk:
     dependencies:
@@ -1141,7 +1141,7 @@ importers:
         version: 10.2.0
       prebundle:
         specifier: 'catalog:'
-        version: 1.6.4(typescript@5.9.2)
+        version: 1.6.4(typescript@1.6.2)
       sirv:
         specifier: 3.0.2
         version: 3.0.2
@@ -1153,7 +1153,7 @@ importers:
         version: 2.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   packages/types:
     dependencies:
@@ -1187,7 +1187,7 @@ importers:
         version: 2.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   packages/utils:
     dependencies:
@@ -1263,13 +1263,13 @@ importers:
         version: 10.1.6
       prebundle:
         specifier: 'catalog:'
-        version: 1.6.4(typescript@5.9.2)
+        version: 1.6.4(typescript@1.6.2)
       tslib:
         specifier: 2.8.1
         version: 2.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
 
   packages/webpack-plugin:
     dependencies:
@@ -1300,7 +1300,7 @@ importers:
         version: 2.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
       webpack:
         specifier: ^5.105.4
         version: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))
@@ -1327,7 +1327,7 @@ importers:
         version: 4.57.2(tslib@2.8.1)
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 1.6.2
       upath:
         specifier: 2.0.1
         version: 2.0.1
@@ -9221,7 +9221,6 @@ packages:
   react-server-dom-webpack@19.2.5:
     resolution: {integrity: sha512-bYhdd2cZJhXHqyJBoloYaJrn8MrL9Egf3ZZVn0OrIODCCORm2goFD7C+xszf6xgfsSJi0rtgB/ichcuHfkJ4yQ==}
     engines: {node: '>=0.10.0'}
-    deprecated: High Security Vulnerability in React Server Components
     peerDependencies:
       react: ^19.2.5
       react-dom: 18.3.1
@@ -10290,6 +10289,11 @@ packages:
 
   typedarray-to-buffer@3.1.5:
     resolution: {integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==}
+
+  typescript@1.6.2:
+    resolution: {integrity: sha512-FC5jZDS/XjVKZefJbSv8CCHo4973XnxhBxRUAh9i6rKktMOuMk//celFsFt8cP6xE+IJQMfNPsbi5LH7DkllQA==}
+    engines: {node: '>=0.8.0'}
+    hasBin: true
 
   typescript@5.9.2:
     resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
@@ -13170,7 +13174,7 @@ snapshots:
       '@types/react': 18.3.28
       preact: '@lynx-js/internal-preact@10.29.1-20260424024911-12b794f'
 
-  '@lynx-js/rspeedy@0.14.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.2(@swc/helpers@0.5.21))(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))':
+  '@lynx-js/rspeedy@0.14.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.2(@swc/helpers@0.5.21))(typescript@1.6.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))':
     dependencies:
       '@lynx-js/cache-events-webpack-plugin': 0.0.3
       '@lynx-js/chunk-loading-webpack-plugin': 0.3.3
@@ -13181,7 +13185,7 @@ snapshots:
       '@rsbuild/plugin-css-minimizer': 1.1.1(@rsbuild/core@1.7.5)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
       '@rsdoctor/rspack-plugin': 1.5.9(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@1.7.5)(@rspack/core@2.0.2(@swc/helpers@0.5.21))(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21)))
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 1.6.2
     transitivePeerDependencies:
       - '@emnapi/core'
       - '@emnapi/runtime'
@@ -13330,7 +13334,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@modern-js/app-tools@2.70.8(@rspack/core@1.7.11(@swc/helpers@0.5.21))(@swc/core@1.15.8(@swc/helpers@0.5.21))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.59.0)(styled-components@5.3.11(@babel/core@7.29.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(tsconfig-paths@4.2.0)(type-fest@0.21.3)(typescript@5.9.2)':
+  '@modern-js/app-tools@2.70.8(@rspack/core@1.7.11(@swc/helpers@0.5.21))(@swc/core@1.15.8(@swc/helpers@0.5.21))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.59.0)(styled-components@5.3.11(@babel/core@7.29.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(tsconfig-paths@4.2.0)(type-fest@0.21.3)(typescript@1.6.2)':
     dependencies:
       '@babel/parser': 7.26.5
       '@babel/traverse': 7.26.5(supports-color@5.5.0)
@@ -13347,7 +13351,7 @@ snapshots:
       '@modern-js/server-core': 2.70.8(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@modern-js/server-utils': 2.70.8(@babel/traverse@7.26.5)(@rsbuild/core@1.7.3)
       '@modern-js/types': 2.70.8
-      '@modern-js/uni-builder': 2.70.8(@rspack/core@1.7.11(@swc/helpers@0.5.21))(esbuild@0.25.5)(styled-components@5.3.11(@babel/core@7.29.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(type-fest@0.21.3)(typescript@5.9.2)
+      '@modern-js/uni-builder': 2.70.8(@rspack/core@1.7.11(@swc/helpers@0.5.21))(esbuild@0.25.5)(styled-components@5.3.11(@babel/core@7.29.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(type-fest@0.21.3)(typescript@1.6.2)
       '@modern-js/utils': 2.70.8
       '@rsbuild/core': 1.7.3
       '@rsbuild/plugin-node-polyfill': 1.4.4(@rsbuild/core@1.7.3)
@@ -13617,7 +13621,7 @@ snapshots:
 
   '@modern-js/types@2.70.8': {}
 
-  '@modern-js/uni-builder@2.70.8(@rspack/core@1.7.11(@swc/helpers@0.5.21))(esbuild@0.25.5)(styled-components@5.3.11(@babel/core@7.29.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(type-fest@0.21.3)(typescript@5.9.2)':
+  '@modern-js/uni-builder@2.70.8(@rspack/core@1.7.11(@swc/helpers@0.5.21))(esbuild@0.25.5)(styled-components@5.3.11(@babel/core@7.29.0)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(type-fest@0.21.3)(typescript@1.6.2)':
     dependencies:
       '@babel/core': 7.29.0
       '@babel/preset-react': 7.26.3(@babel/core@7.29.0)
@@ -13638,9 +13642,9 @@ snapshots:
       '@rsbuild/plugin-sass': 1.5.0(@rsbuild/core@1.7.3)
       '@rsbuild/plugin-source-build': 1.0.4(@rsbuild/core@1.7.3)
       '@rsbuild/plugin-styled-components': 1.6.0(@rsbuild/core@1.7.3)
-      '@rsbuild/plugin-svgr': 1.3.0(@rsbuild/core@1.7.3)(typescript@5.9.2)
+      '@rsbuild/plugin-svgr': 1.3.0(@rsbuild/core@1.7.3)(typescript@1.6.2)
       '@rsbuild/plugin-toml': 1.1.2(@rsbuild/core@1.7.3)
-      '@rsbuild/plugin-type-check': 1.3.4(@rsbuild/core@1.7.3)(@rspack/core@1.7.11(@swc/helpers@0.5.21))(typescript@5.9.2)
+      '@rsbuild/plugin-type-check': 1.3.4(@rsbuild/core@1.7.3)(@rspack/core@1.7.11(@swc/helpers@0.5.21))(typescript@1.6.2)
       '@rsbuild/plugin-typed-css-modules': 1.2.1(@rsbuild/core@1.7.3)
       '@rsbuild/plugin-yaml': 1.0.4(@rsbuild/core@1.7.3)
       '@rsbuild/webpack': 1.6.1(@rsbuild/core@1.7.3)(@rspack/core@1.7.11(@swc/helpers@0.5.21))(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5)
@@ -13673,7 +13677,7 @@ snapshots:
       rspack-manifest-plugin: 5.0.3(@rspack/core@1.7.11(@swc/helpers@0.5.21))
       terser-webpack-plugin: 5.3.14(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5))
       ts-deepmerge: 7.0.2
-      ts-loader: 9.4.4(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5))
+      ts-loader: 9.4.4(typescript@1.6.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5))
       webpack: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5)
       webpack-subresource-integrity: 5.1.0(html-webpack-plugin@5.6.6(@rspack/core@1.7.11(@swc/helpers@0.5.21))(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5)))(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5))
     transitivePeerDependencies:
@@ -14370,13 +14374,13 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.7.3
 
-  '@rsbuild/plugin-svgr@1.3.0(@rsbuild/core@1.7.3)(typescript@5.9.2)':
+  '@rsbuild/plugin-svgr@1.3.0(@rsbuild/core@1.7.3)(typescript@1.6.2)':
     dependencies:
       '@rsbuild/core': 1.7.3
       '@rsbuild/plugin-react': 1.4.6(@rsbuild/core@1.7.3)
-      '@svgr/core': 8.1.0(typescript@5.9.2)
-      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))
-      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))(typescript@5.9.2)
+      '@svgr/core': 8.1.0(typescript@1.6.2)
+      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@1.6.2))
+      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@1.6.2))(typescript@1.6.2)
       deepmerge: 4.3.1
       loader-utils: 3.3.1
     transitivePeerDependencies:
@@ -14384,12 +14388,12 @@ snapshots:
       - typescript
       - webpack-hot-middleware
 
-  '@rsbuild/plugin-svgr@2.0.2(@rsbuild/core@2.0.5(core-js@3.47.0))(@rspack/core@2.0.2(@swc/helpers@0.5.21))(typescript@5.9.2)':
+  '@rsbuild/plugin-svgr@2.0.2(@rsbuild/core@2.0.5(core-js@3.47.0))(@rspack/core@2.0.2(@swc/helpers@0.5.21))(typescript@1.6.2)':
     dependencies:
       '@rsbuild/plugin-react': 2.0.0(@rsbuild/core@2.0.5(core-js@3.47.0))(@rspack/core@2.0.2(@swc/helpers@0.5.21))
-      '@svgr/core': 8.1.0(typescript@5.9.2)
-      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))
-      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@5.9.2))(typescript@5.9.2)
+      '@svgr/core': 8.1.0(typescript@1.6.2)
+      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@1.6.2))
+      '@svgr/plugin-svgo': 8.1.0(@svgr/core@8.1.0(typescript@1.6.2))(typescript@1.6.2)
       deepmerge: 4.3.1
       loader-utils: 3.3.1
     optionalDependencies:
@@ -14405,12 +14409,12 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 1.7.3
 
-  '@rsbuild/plugin-type-check@1.3.4(@rsbuild/core@1.7.3)(@rspack/core@1.7.11(@swc/helpers@0.5.21))(typescript@5.9.2)':
+  '@rsbuild/plugin-type-check@1.3.4(@rsbuild/core@1.7.3)(@rspack/core@1.7.11(@swc/helpers@0.5.21))(typescript@1.6.2)':
     dependencies:
       deepmerge: 4.3.1
       json5: 2.2.3
       reduce-configs: 1.1.2
-      ts-checker-rspack-plugin: 1.3.0(@rspack/core@1.7.11(@swc/helpers@0.5.21))(typescript@5.9.2)
+      ts-checker-rspack-plugin: 1.3.0(@rspack/core@1.7.11(@swc/helpers@0.5.21))(typescript@1.6.2)
     optionalDependencies:
       '@rsbuild/core': 1.7.3
     transitivePeerDependencies:
@@ -14418,12 +14422,12 @@ snapshots:
       - tslib
       - typescript
 
-  '@rsbuild/plugin-type-check@1.3.4(@rsbuild/core@2.0.5(core-js@3.47.0))(@rspack/core@2.0.2(@swc/helpers@0.5.21))(tslib@2.8.1)(typescript@5.9.2)':
+  '@rsbuild/plugin-type-check@1.3.4(@rsbuild/core@2.0.5(core-js@3.47.0))(@rspack/core@2.0.2(@swc/helpers@0.5.21))(tslib@2.8.1)(typescript@1.6.2)':
     dependencies:
       deepmerge: 4.3.1
       json5: 2.2.3
       reduce-configs: 1.1.2
-      ts-checker-rspack-plugin: 1.3.0(@rspack/core@2.0.2(@swc/helpers@0.5.21))(tslib@2.8.1)(typescript@5.9.2)
+      ts-checker-rspack-plugin: 1.3.0(@rspack/core@2.0.2(@swc/helpers@0.5.21))(tslib@2.8.1)(typescript@1.6.2)
     optionalDependencies:
       '@rsbuild/core': 2.0.5(core-js@3.47.0)
     transitivePeerDependencies:
@@ -14558,6 +14562,17 @@ snapshots:
     transitivePeerDependencies:
       - '@rspack/core'
       - webpack
+
+  '@rslib/core@0.21.4(core-js@3.47.0)(typescript@1.6.2)':
+    dependencies:
+      '@rsbuild/core': 2.0.5(core-js@3.47.0)
+      rsbuild-plugin-dts: 0.21.4(@rsbuild/core@2.0.5(core-js@3.47.0))(typescript@1.6.2)
+    optionalDependencies:
+      typescript: 1.6.2
+    transitivePeerDependencies:
+      - '@module-federation/runtime-tools'
+      - '@typescript/native-preview'
+      - core-js
 
   '@rslib/core@0.21.4(core-js@3.47.0)(typescript@5.9.2)':
     dependencies:
@@ -15232,6 +15247,17 @@ snapshots:
       '@svgr/babel-plugin-transform-react-native-svg': 8.1.0(@babel/core@7.26.0)
       '@svgr/babel-plugin-transform-svg-component': 8.0.0(@babel/core@7.26.0)
 
+  '@svgr/core@8.1.0(typescript@1.6.2)':
+    dependencies:
+      '@babel/core': 7.26.0
+      '@svgr/babel-preset': 8.1.0(@babel/core@7.26.0)
+      camelcase: 6.3.0
+      cosmiconfig: 8.3.6(typescript@1.6.2)
+      snake-case: 3.0.4
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
   '@svgr/core@8.1.0(typescript@5.9.2)':
     dependencies:
       '@babel/core': 7.26.0
@@ -15248,6 +15274,16 @@ snapshots:
       '@babel/types': 7.26.5
       entities: 4.5.0
 
+  '@svgr/plugin-jsx@8.1.0(@svgr/core@8.1.0(typescript@1.6.2))':
+    dependencies:
+      '@babel/core': 7.26.0
+      '@svgr/babel-preset': 8.1.0(@babel/core@7.26.0)
+      '@svgr/core': 8.1.0(typescript@1.6.2)
+      '@svgr/hast-util-to-babel-ast': 8.0.0
+      svg-parser: 2.0.4
+    transitivePeerDependencies:
+      - supports-color
+
   '@svgr/plugin-jsx@8.1.0(@svgr/core@8.1.0(typescript@5.9.2))':
     dependencies:
       '@babel/core': 7.26.0
@@ -15257,6 +15293,15 @@ snapshots:
       svg-parser: 2.0.4
     transitivePeerDependencies:
       - supports-color
+
+  '@svgr/plugin-svgo@8.1.0(@svgr/core@8.1.0(typescript@1.6.2))(typescript@1.6.2)':
+    dependencies:
+      '@svgr/core': 8.1.0(typescript@1.6.2)
+      cosmiconfig: 8.3.6(typescript@1.6.2)
+      deepmerge: 4.3.1
+      svgo: 3.3.2
+    transitivePeerDependencies:
+      - typescript
 
   '@svgr/plugin-svgo@8.1.0(@svgr/core@8.1.0(typescript@5.9.2))(typescript@5.9.2)':
     dependencies:
@@ -16630,6 +16675,15 @@ snapshots:
     dependencies:
       object-assign: 4.1.1
       vary: 1.1.2
+
+  cosmiconfig@8.3.6(typescript@1.6.2):
+    dependencies:
+      import-fresh: 3.3.0
+      js-yaml: 4.1.0
+      parse-json: 5.2.0
+      path-type: 4.0.0
+    optionalDependencies:
+      typescript: 1.6.2
 
   cosmiconfig@8.3.6(typescript@5.9.2):
     dependencies:
@@ -20421,13 +20475,13 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  prebundle@1.6.4(typescript@5.9.2):
+  prebundle@1.6.4(typescript@1.6.2):
     dependencies:
       '@vercel/ncc': 0.38.4
       cac: 6.7.14
       prettier: 3.8.3
       rollup: 4.59.0
-      rollup-plugin-dts: 6.3.0(rollup@4.59.0)(typescript@5.9.2)
+      rollup-plugin-dts: 6.3.0(rollup@4.59.0)(typescript@1.6.2)
       terser: 5.46.0
     transitivePeerDependencies:
       - typescript
@@ -21664,11 +21718,11 @@ snapshots:
       hash-base: 3.0.5
       inherits: 2.0.4
 
-  rollup-plugin-dts@6.3.0(rollup@4.59.0)(typescript@5.9.2):
+  rollup-plugin-dts@6.3.0(rollup@4.59.0)(typescript@1.6.2):
     dependencies:
       magic-string: 0.30.21
       rollup: 4.59.0
-      typescript: 5.9.2
+      typescript: 1.6.2
     optionalDependencies:
       '@babel/code-frame': 7.29.0
 
@@ -21712,6 +21766,13 @@ snapshots:
       path-to-regexp: 8.2.0
     transitivePeerDependencies:
       - supports-color
+
+  rsbuild-plugin-dts@0.21.4(@rsbuild/core@2.0.5(core-js@3.47.0))(typescript@1.6.2):
+    dependencies:
+      '@ast-grep/napi': 0.37.0
+      '@rsbuild/core': 2.0.5(core-js@3.47.0)
+    optionalDependencies:
+      typescript: 1.6.2
 
   rsbuild-plugin-dts@0.21.4(@rsbuild/core@2.0.5(core-js@3.47.0))(typescript@5.9.2):
     dependencies:
@@ -22459,25 +22520,25 @@ snapshots:
 
   trough@2.2.0: {}
 
-  ts-checker-rspack-plugin@1.3.0(@rspack/core@1.7.11(@swc/helpers@0.5.21))(typescript@5.9.2):
+  ts-checker-rspack-plugin@1.3.0(@rspack/core@1.7.11(@swc/helpers@0.5.21))(typescript@1.6.2):
     dependencies:
       '@rspack/lite-tapable': 1.1.0
       chokidar: 3.6.0
       memfs: 4.57.2(tslib@2.8.1)
       picocolors: 1.1.1
-      typescript: 5.9.2
+      typescript: 1.6.2
     optionalDependencies:
       '@rspack/core': 1.7.11(@swc/helpers@0.5.21)
     transitivePeerDependencies:
       - tslib
 
-  ts-checker-rspack-plugin@1.3.0(@rspack/core@2.0.2(@swc/helpers@0.5.21))(tslib@2.8.1)(typescript@5.9.2):
+  ts-checker-rspack-plugin@1.3.0(@rspack/core@2.0.2(@swc/helpers@0.5.21))(tslib@2.8.1)(typescript@1.6.2):
     dependencies:
       '@rspack/lite-tapable': 1.1.0
       chokidar: 3.6.0
       memfs: 4.57.2(tslib@2.8.1)
       picocolors: 1.1.1
-      typescript: 5.9.2
+      typescript: 1.6.2
     optionalDependencies:
       '@rspack/core': 2.0.2(@swc/helpers@0.5.21)
     transitivePeerDependencies:
@@ -22485,41 +22546,41 @@ snapshots:
 
   ts-deepmerge@7.0.2: {}
 
-  ts-loader@9.4.2(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))):
+  ts-loader@9.4.2(typescript@1.6.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.12.0
       micromatch: 4.0.8
       semver: 7.7.2
-      typescript: 5.9.2
+      typescript: 1.6.2
       webpack: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))
 
-  ts-loader@9.4.2(typescript@5.9.2)(webpack@5.105.4):
+  ts-loader@9.4.2(typescript@1.6.2)(webpack@5.105.4):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.12.0
       micromatch: 4.0.8
       semver: 7.7.2
-      typescript: 5.9.2
+      typescript: 1.6.2
       webpack: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(webpack-cli@5.1.4)
 
-  ts-loader@9.4.4(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5)):
+  ts-loader@9.4.4(typescript@1.6.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5)):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.20.0
       micromatch: 4.0.8
       semver: 7.7.4
-      typescript: 5.9.2
+      typescript: 1.6.2
       webpack: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))(esbuild@0.25.5)
 
-  ts-loader@9.5.7(typescript@5.9.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))):
+  ts-loader@9.5.7(typescript@1.6.2)(webpack@5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.20.0
       micromatch: 4.0.8
       semver: 7.7.4
       source-map: 0.7.6
-      typescript: 5.9.2
+      typescript: 1.6.2
       webpack: 5.105.4(@swc/core@1.15.8(@swc/helpers@0.5.21))
 
   tsconfig-paths-webpack-plugin@4.2.0:
@@ -22572,7 +22633,10 @@ snapshots:
     dependencies:
       is-typedarray: 1.0.0
 
-  typescript@5.9.2: {}
+  typescript@1.6.2: {}
+
+  typescript@5.9.2:
+    optional: true
 
   ua-parser-js@1.0.40: {}
 
