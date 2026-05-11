@@ -94,6 +94,25 @@ rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json --side-effe
 rsdoctor-agent query packages_duplicates --data-file ./dist/rsdoctor-data.json --filter "<command-specific-filter>"
 ```
 
+### QA
+
+#### 如果没有正确生成 `rsdoctor-data.json` 应该怎么办？
+
+`rsdoctor-analysis` Skill 分析的是 `rsdoctor-data.json` 中的数据。你可以通过将 `output.mode` 设置为 `'brief'`，并将 `output.options.type` 设置为 `['json']` 来生成该文件：
+
+```js
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      type: ['json'],
+    },
+  },
+});
+```
+
+也可以通过设置 `RSDOCTOR_OUTPUT='json'` 环境变量，将分析数据输出为 JSON 文件。这个环境配置需要 `@rsdoctor/*-plugin` `>= 1.5.11`。
+
 ## MCP Server
 
 Rsdoctor 提供 MCP Server 让 AI 工具可以查询本地构建分析数据，详见 [MCP Server](/guide/usage/mcp) 文档。

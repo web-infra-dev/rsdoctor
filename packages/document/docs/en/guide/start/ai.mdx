@@ -94,6 +94,25 @@ rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json --side-effe
 rsdoctor-agent query packages_duplicates --data-file ./dist/rsdoctor-data.json --filter "<command-specific-filter>"
 ```
 
+### QA
+
+#### What should I do if `rsdoctor-data.json` is not generated correctly?
+
+The `rsdoctor-analysis` skill analyzes the data in `rsdoctor-data.json`. You can generate this file by setting `output.mode` to `'brief'` and `output.options.type` to `['json']`:
+
+```js
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: {
+      type: ['json'],
+    },
+  },
+});
+```
+
+You can also set the `RSDOCTOR_OUTPUT='json'` environment variable to output the analysis data as a JSON file. This environment configuration requires `@rsdoctor/*-plugin` version `>= 1.5.11`.
+
 ## MCP Server
 
 Rsdoctor provides MCP Server so AI tools can query your local build analysis data. See the [MCP Server](/guide/usage/mcp) documentation.
