@@ -26,7 +26,7 @@ interface BundleAlertProps {
   extraData: Omit<AlertProps, 'data'>;
   viewMode: ViewMode;
   setViewMode(mode: ViewMode): void;
-  extraCom?: JSX.Element | undefined;
+  extraCom?: React.JSX.Element | undefined;
 }
 
 export const BundleAlert: React.FC<BundleAlertProps> = ({

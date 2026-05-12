@@ -10,10 +10,10 @@ export interface AlertProps extends Omit<PackageRelationAlertProps, 'data'> {
 
 export interface PackageRelationAlertProps {
   data: Rule.PackageRelationDiffRuleStoreData;
-  getPackageRelationContentComponent: React.FC<{
+  getPackageRelationContentComponent(props: {
     data: Rule.PackageRelationDiffRuleStoreData;
     package: Rule.PackageRelationData;
-  }>;
+  }): React.JSX.Element;
   cwd: string;
 }
 

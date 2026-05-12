@@ -293,7 +293,9 @@ export const LoaderFiles: React.FC<{
                 title={
                   <Tooltip
                     title={React.cloneElement(
-                      selectedNode.title as React.ReactElement,
+                      selectedNode.title as React.ReactElement<{
+                        style?: React.CSSProperties;
+                      }>,
                       { style: { color: '#fff' } },
                     )}
                   >

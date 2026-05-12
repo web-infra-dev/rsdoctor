@@ -11,7 +11,7 @@ export type BundleDiffServerAPIProviderComponentCommonProps<
   children: (
     baseline: SDK.ServerAPI.InferResponseType<T>,
     current: SDK.ServerAPI.InferResponseType<T>,
-  ) => JSX.Element;
+  ) => React.JSX.Element;
 } & InferServerAPIBody<T>;
 
 export interface BundleDiffContainerProps {

@@ -9,7 +9,7 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "rspress": "2.0.0-alpha.3"
+    "@rspress/core": "2.0.11"
   },
   "devDependencies": {
     "@rsdoctor/rspack-plugin": "workspace:*",

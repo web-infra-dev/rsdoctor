@@ -28,10 +28,10 @@ const defaultEditOption = defineMonacoOptions();
 
 export function CodeEditor(props: CodeEditorProps) {
   const { module, moduleGraph, ranges, toLine, setEditorData, source } = props;
-  const editorRef = useRef<editor.IStandaloneCodeEditor>();
+  const editorRef = useRef<editor.IStandaloneCodeEditor>(undefined);
   const oldRanges = useRef<string[]>([]);
   const oldHovers = useRef<string[]>([]);
-  const oldToLine = useRef<number>();
+  const oldToLine = useRef<number>(undefined);
   const changeModule = useRef(false);
   const [content, setContent] = useState('');
   // const [isDynamic, setIsDynamic] = useState(false);

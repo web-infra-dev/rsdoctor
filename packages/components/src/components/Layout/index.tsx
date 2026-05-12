@@ -18,7 +18,7 @@ import { ServerAPIProvider } from '../Manifest';
 import { ProjectInfoContext } from './project-info-context';
 
 export interface LayoutProps {
-  children: JSX.Element;
+  children: React.JSX.Element;
 }
 
 const TitleUpdater: React.FC<{
@@ -35,7 +35,9 @@ const TitleUpdater: React.FC<{
   return null;
 };
 
-export const Layout = (props: PropsWithChildren<LayoutProps>): JSX.Element => {
+export const Layout = (
+  props: PropsWithChildren<LayoutProps>,
+): React.JSX.Element => {
   const locale = useLocale();
   const { i18n } = useI18n();
   const { children } = props;

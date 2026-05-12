@@ -43,7 +43,7 @@ const LoaderPropsItem = ({
   };
   resource: SDK.ResourceData;
   cwd: string;
-}): JSX.Element => {
+}): React.JSX.Element => {
   return (
     <Card
       title={'Loader Details'}
@@ -120,7 +120,7 @@ const LoaderDetailsContent = ({
   resource: SDK.ResourceData;
   isLight: boolean;
   codeData: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileInputAndOutput>;
-}): JSX.Element => {
+}): React.JSX.Element => {
   const hasError = loader.errors && loader.errors.length;
   const before = codeData?.input || '';
   const loaderResult = codeData?.output || '';
@@ -230,7 +230,7 @@ export const LoaderExecutions = ({
   data,
   cwd,
   index,
-}: PropsWithChildren<LoaderExecutionsProps>): JSX.Element => {
+}: PropsWithChildren<LoaderExecutionsProps>): React.JSX.Element => {
   const { loaders, resource } = data;
   const [currentIndex, setCurrentIndex] = useState(index || 0);
   const { theme } = useTheme();

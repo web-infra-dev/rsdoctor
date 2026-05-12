@@ -18,7 +18,7 @@ export interface TextDrawerProps {
 
 export const TextDrawer = (
   props: PropsWithChildren<TextDrawerProps>,
-): JSX.Element => {
+): React.JSX.Element => {
   const [visible, setVisible] = useState(false);
 
   return (

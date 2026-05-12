@@ -84,15 +84,18 @@ export const OverlayAlertsModal: React.FC<{
       style={{ width: '100%', height: '100%', margin: 0, zIndex: 1000 }}
       closable={false}
       modalRender={(e) => {
-        return React.cloneElement(e as React.ReactElement, {
-          style: {
-            background: 'rgba(0, 0, 0, 0.7)',
-            color: '#fff',
-            height: '100%',
-            overflow: 'scroll',
-            borderRadius: 0,
+        return React.cloneElement(
+          e as React.ReactElement<{ style?: React.CSSProperties }>,
+          {
+            style: {
+              background: 'rgba(0, 0, 0, 0.7)',
+              color: '#fff',
+              height: '100%',
+              overflow: 'scroll',
+              borderRadius: 0,
+            },
           },
-        });
+        );
       }}
     >
       <Row justify="space-between" align="middle">
@@ -167,11 +170,16 @@ export const OverlayAlertsTips: React.FC<{
     <React.Fragment>
       <Alert
         banner
-        message={React.cloneElement(getOverlayAlertsMessage(alerts).detail, {
-          style: {
-            color: '#000',
+        message={React.cloneElement(
+          getOverlayAlertsMessage(alerts).detail as React.ReactElement<{
+            style?: React.CSSProperties;
+          }>,
+          {
+            style: {
+              color: '#000',
+            },
           },
-        })}
+        )}
         icon={<BugOutlined />}
         action={
           <Button onClick={() => setOpen(true)} size="small">

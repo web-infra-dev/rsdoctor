@@ -85,7 +85,7 @@ export function openTrae({
   openInEditor(file, line, column, 'trae', fallback);
 }
 
-export const VSCode = (props: VSCodeProps): JSX.Element => {
+export const VSCode = (props: VSCodeProps): React.JSX.Element => {
   return (
     <VSCodeIcon
       onClick={() => {

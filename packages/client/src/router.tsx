@@ -43,7 +43,7 @@ export default function Router(): React.ReactElement {
       path: TreeShaking.route,
       element: <TreeShaking.TreeShakingPage />,
     },
-  ].filter((e) => Boolean(e)) as { path: string; element: JSX.Element }[];
+  ].filter((e) => Boolean(e)) as { path: string; element: React.JSX.Element }[];
 
   return (
     <Routes>

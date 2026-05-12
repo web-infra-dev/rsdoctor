@@ -27,8 +27,8 @@ export function CodeViewer({
   isLightTheme = true,
   formatOnMount = false,
 }: CodeViewerProps) {
-  const editor = useRef<editor.IStandaloneCodeEditor>();
-  const monaco = useRef<Monaco>();
+  const editor = useRef<editor.IStandaloneCodeEditor>(undefined);
+  const monaco = useRef<Monaco>(undefined);
   const language = useMemo(
     () => lang || getFilePathFormat(filePath) || 'plaintext',
     [lang, filePath],
