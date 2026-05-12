@@ -7,8 +7,9 @@ import { rule as moduleMixedChunks } from './module-mixed-chunks';
 import { rule as connectionsOnlyImports } from './side-effects-only-imports';
 import { rule as cjsRequire } from './cjs-require';
 import { rule as esmResolvedToCjs } from './esm-resolved-to-cjs';
+import type { Linter } from '@rsdoctor/types';
 
-export const rules = [
+export const rules: Linter.RuleData[] = [
   duplicatePackage,
   defaultImportCheck,
   loaderPerformanceOptimization,

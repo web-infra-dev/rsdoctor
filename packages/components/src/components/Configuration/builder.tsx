@@ -86,7 +86,9 @@ export const WebpackConfigurationViewerBase: React.FC<
   );
 };
 
-export const WebpackConfigurationViewer = withServerAPI({
+export const WebpackConfigurationViewer: React.FC<
+  Omit<WebpackConfigurationViewerBaseProps, 'configs'>
+> = withServerAPI({
   Component: WebpackConfigurationViewerBase,
   api: SDK.ServerAPI.API.LoadDataByKey,
   responsePropName: 'configs',
