@@ -7,6 +7,12 @@ description: Use when asked to create a pull request for the Rsdoctor repository
 
 ## Steps
 
+0. Prefer the local GitHub CLI workflow for submitting code.
+   - Check `gh --version` and `gh auth status` before publishing changes.
+   - Use local `git` for staging and committing files.
+   - Use `git push` plus `gh pr create` for publishing the branch and opening the PR.
+   - Do not use the GitHub connector to create commits when authenticated `gh` is available; `gh` is faster and keeps the local branch state explicit.
+
 1. Confirm the current branch with `git branch --show-current`.
    If it is `main`, create and switch to a new branch before doing anything else.
    Use a descriptive branch name, for example `feat/add-xxx` or `fix/resolve-xxx`.
