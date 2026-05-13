@@ -32,3 +32,4 @@ e2e/test-results/
 .claude/
 .cursor/
 skills-lock.json
+.worktrees/
