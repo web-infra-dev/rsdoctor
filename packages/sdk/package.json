@@ -41,8 +41,8 @@
     "@rsdoctor/utils": "workspace:*",
     "launch-editor": "^2.13.2",
     "safer-buffer": "2.1.2",
-    "socket.io": "4.8.1",
-    "tapable": "2.3.3"
+    "tapable": "2.3.3",
+    "ws": "8.18.3"
   },
   "devDependencies": {
     "@types/body-parser": "catalog:",
@@ -50,6 +50,7 @@
     "@types/cors": "2.8.19",
     "@types/fs-extra": "catalog:",
     "@types/node": "catalog:",
+    "@types/ws": "^8.18.1",
     "body-parser": "2.2.2",
     "cors": "2.8.6",
     "dayjs": "catalog:",

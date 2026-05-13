@@ -1,22 +1,30 @@
 import { Common, SDK } from '@rsdoctor/types';
 import type { Server } from 'http';
-import {
-  Server as SocketServer,
-  ServerOptions as SocketServerOptions,
-  Socket as SocketType,
-} from 'socket.io';
 import { isDeepStrictEqual } from 'util';
+import WebSocket, { WebSocketServer } from 'ws';
 import { SocketAPILoader } from './api';
 
 interface SocketOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
   server: Server;
   port: number;
-  socketOptions?: SocketServerOptions;
 }
 
+type Subscription = {
+  api: SDK.ServerAPI.API;
+  body: Common.PlainObject | null;
+};
+
+type ClientMessage = {
+  type?: string;
+  api?: SDK.ServerAPI.API;
+  body?: Common.PlainObject | null;
+};
+
 export class Socket {
-  protected io!: SocketServer;
+  protected server?: WebSocketServer;
+
+  protected clients = new Set<WebSocket>();
 
   protected loader: SocketAPILoader;
 
@@ -28,31 +36,50 @@ export class Socket {
   }
 
   public bootstrap() {
-    this.io = new SocketServer(this.options.server, {
-      cors: {
-        origin: '*',
-      },
-      ...this.options.socketOptions,
-    });
-    this.io.on('connection', (socket) => {
-      // setup event listeners for every socket which connected
-      this.setupSocket(socket);
+    this.server = new WebSocketServer({ server: this.options.server });
+    this.server.on('connection', (client) => {
+      this.attachClient(client);
     });
   }
 
-  protected setupSocket(socket: SocketType) {
-    // setup server api load request
-    Object.values(SDK.ServerAPI.API).forEach((api) => {
-      // server received the request for server api
-      // and the first argument is request body.
-      socket.on(api, async (body, callback) => {
-        // save to map for server side emit event to client.
-        this.saveRequestToMap(api, body);
+  public attachClient(client: WebSocket) {
+    this.clients.add(client);
 
-        // server will send the response for server api
-        callback(await this.getAPIResponse(api, body));
+    if (typeof client.on === 'function') {
+      client.on('message', (message) => {
+        this.handleClientMessage(message.toString());
       });
+      client.on('close', () => {
+        this.clients.delete(client);
+      });
+    }
+  }
+
+  public handleClientMessage(raw: string) {
+    let message: ClientMessage;
+    try {
+      message = JSON.parse(raw) as ClientMessage;
+    } catch {
+      return;
+    }
+
+    if (
+      message.type !== 'subscribe' ||
+      !message.api ||
+      !Object.values(SDK.ServerAPI.API).includes(message.api)
+    ) {
+      return;
+    }
+
+    this.saveRequestToMap(message.api, message.body ?? null);
+  }
+
+  public getSubscriptions(): Subscription[] {
+    const subscriptions: Subscription[] = [];
+    this.map.forEach((bodies, api) => {
+      bodies.forEach((body) => subscriptions.push({ api, body }));
     });
+    return subscriptions;
   }
 
   protected saveRequestToMap<T extends SDK.ServerAPI.API>(
@@ -100,7 +127,7 @@ export class Socket {
           promises.push(
             (async () => {
               const res = await this.getAPIResponse(api, body!);
-              this.io.emit(api, res);
+              this.sendAPIData(api, res);
             })(),
           );
         });
@@ -112,13 +139,21 @@ export class Socket {
 
   public sendAPIData<T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends>(
     api: T,
-    msg: SDK.ServerAPI.SocketResponseType<T>,
+    payload: SDK.ServerAPI.SocketResponseType<T>,
   ) {
-    this.io.sockets.emit(api, msg);
+    const message = JSON.stringify({ api, payload });
+    this.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message);
+      }
+    });
   }
 
   public dispose() {
-    this.io.disconnectSockets();
-    this.io.close();
+    this.clients.forEach((client) => {
+      client.close();
+    });
+    this.clients.clear();
+    this.server?.close();
   }
 }
