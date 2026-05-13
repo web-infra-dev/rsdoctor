@@ -30,7 +30,6 @@
     "@rstest/core": "catalog:",
     "@types/node": "catalog:",
     "prebundle": "catalog:",
-    "socket.io-client": "catalog:",
     "typescript": "catalog:",
     "zod": "^3.25.76"
   },
