@@ -1,5 +1,5 @@
 import path from 'path';
-import { SDK } from '@rsdoctor/types';
+import { Manifest, SDK } from '@rsdoctor/types';
 import { RsdoctorSDK } from '../sdk';
 import { RsdoctorSlaveServer } from './server';
 import type { RsdoctorSDKController } from './controller';
@@ -103,7 +103,7 @@ export class RsdoctorPrimarySDK
     return result;
   }
 
-  getSeriesData(serverUrl = false) {
+  getSeriesData(serverUrl = false): Manifest.RsdoctorManifestSeriesData[] {
     return this.parent.getSeriesData(serverUrl);
   }
 
@@ -111,7 +111,7 @@ export class RsdoctorPrimarySDK
     this._name = this.parent.hasName(name) ? `${name}-${id}` : name;
   }
 
-  getManifestData() {
+  getManifestData(): Manifest.RsdoctorManifestWithShardingFiles {
     const data = super.getManifestData();
     data.name = this.name;
     data.series = this.getSeriesData(true);

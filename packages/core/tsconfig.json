@@ -4,7 +4,6 @@
     "experimentalDecorators": true,
     "declarationMap": false,
     "outDir": "dist",
-    "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]
     },

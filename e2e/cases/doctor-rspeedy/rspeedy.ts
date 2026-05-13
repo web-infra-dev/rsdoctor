@@ -1,8 +1,4 @@
 import type { Configuration } from '@rspack/core';
-
-const {
-  createRspeedy,
-} = require('node_modules/@lynx-js/rspeedy/dist/index.js');
 import type { Config, RspeedyInstance } from '@lynx-js/rspeedy';
 
 interface RsbuildHelper {
@@ -36,6 +32,8 @@ export async function createStubRspeedy(
   config: Config,
   cwd?: string,
 ): Promise<RspeedyInstance & RsbuildHelper> {
+  const { createRspeedy } = await import('@lynx-js/rspeedy');
+
   const rsbuild = await createRspeedy({
     rspeedyConfig: config,
     cwd: cwd ?? process.cwd(),

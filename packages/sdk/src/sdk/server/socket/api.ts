@@ -37,6 +37,11 @@ export class SocketAPILoader implements Manifest.ManifestDataLoader {
   }
 
   get loadAPIData() {
-    return this.dataLoader.loadAPI;
+    return this.dataLoader.loadAPI as <
+      T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
+    >(
+      api: T,
+      body: SDK.ServerAPI.InferRequestBodyType<T>,
+    ) => Promise<SDK.ServerAPI.InferResponseType<T>>;
   }
 }
