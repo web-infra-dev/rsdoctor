@@ -4,6 +4,8 @@ import {
   FundFilled,
   ApiFilled,
   NodeIndexOutlined,
+  ApartmentOutlined,
+  PieChartFilled,
 } from '@ant-design/icons';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Menu, MenuProps } from 'antd';
@@ -30,6 +32,7 @@ import {
   PluginsAnalyze,
   ModuleResolve,
   LoaderTimeline,
+  PackageGraph,
 } from 'src/pages';
 import { CompileName } from './constants';
 
@@ -133,13 +136,21 @@ const MenusBase: React.FC<{
 
   if (hasBundle(enableRoutes)) {
     items.push({
-      label: t(BundleSize.name),
-      key: BundleSize.name,
+      label: t('Bundle'),
+      key: 'bundle-group',
       icon: navIcon.bundle,
-      children: [],
-      onTitleClick() {
-        navigate(BundleSize.route);
-      },
+      children: [
+        {
+          label: t(BundleSize.name),
+          key: BundleSize.route,
+          icon: <PieChartFilled style={iconStyle} />,
+        },
+        {
+          label: t(PackageGraph.name),
+          key: PackageGraph.route,
+          icon: <ApartmentOutlined style={iconStyle} />,
+        },
+      ],
     });
   }
 

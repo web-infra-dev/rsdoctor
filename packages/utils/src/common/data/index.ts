@@ -545,7 +545,19 @@ export class APIDataLoader {
 
       case SDK.ServerAPI.API.GetPackageDependency:
         return this.loader.loadData('packageGraph').then((packageGraph) => {
-          return (packageGraph?.dependencies || []) as R;
+          const dependencies = packageGraph?.dependencies || [];
+          const dependencyKeys = new Set<string>();
+
+          return dependencies.filter((dep) => {
+            const key = `${dep.package}:${dep.dependency}`;
+
+            if (dependencyKeys.has(key)) {
+              return false;
+            }
+
+            dependencyKeys.add(key);
+            return true;
+          }) as R;
         });
 
       case SDK.ServerAPI.API.GetChunkGraphAI:

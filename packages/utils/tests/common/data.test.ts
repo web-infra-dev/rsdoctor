@@ -50,4 +50,27 @@ describe('test src/common/data/index.ts', () => {
       );
     });
   });
+
+  it('deduplicates package dependencies by package pair', async () => {
+    const loader = new APIDataLoader({
+      loadData: rs.fn().mockResolvedValue({
+        packages: [],
+        dependencies: [
+          { id: 1, package: 1, dependency: 2, refDependency: 101 },
+          { id: 2, package: 1, dependency: 2, refDependency: 102 },
+          { id: 3, package: 2, dependency: 1, refDependency: 103 },
+        ],
+      }),
+      loadManifest: rs.fn(),
+    });
+
+    await expect(
+      loader.loadAPI(SDK.ServerAPI.API.GetPackageDependency, {
+        packageId: '',
+      }),
+    ).resolves.toEqual([
+      { id: 1, package: 1, dependency: 2, refDependency: 101 },
+      { id: 3, package: 2, dependency: 1, refDependency: 103 },
+    ]);
+  });
 });

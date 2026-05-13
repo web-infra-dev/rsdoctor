@@ -20,6 +20,7 @@ export enum RsdoctorClientRoutes {
   RuleIndex = '/resources/rules',
   Uploader = '/resources/uploader',
   EmoCheck = '/emo/check',
+  PackageGraph = '/bundle/packages',
 }
 
 export enum RsdoctorClientDiffState {

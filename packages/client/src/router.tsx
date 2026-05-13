@@ -11,6 +11,7 @@ import {
   TreeShaking,
   BundleDiff,
   Uploader,
+  PackageGraph,
 } from '@rsdoctor/components/pages';
 
 export default function Router(): React.ReactElement {
@@ -42,6 +43,10 @@ export default function Router(): React.ReactElement {
     {
       path: TreeShaking.route,
       element: <TreeShaking.TreeShakingPage />,
+    },
+    {
+      path: PackageGraph.route,
+      element: <PackageGraph.Page />,
     },
   ].filter((e) => Boolean(e)) as { path: string; element: JSX.Element }[];
 
