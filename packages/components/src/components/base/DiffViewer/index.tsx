@@ -21,7 +21,7 @@ export function DiffViewer({
   headerVisible = true,
 }: DiffViewerProps) {
   const [isSideBySide, setIsSideBySide] = useState(true);
-  const editor = useRef<MonacoDiffEditor>();
+  const editor = useRef<MonacoDiffEditor>(undefined);
   const originalLanguage = useMemo(
     () => originalLang || getFilePathFormat(originalFilePath) || 'plaintext',
     [originalLang, originalFilePath],

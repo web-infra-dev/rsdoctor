@@ -57,7 +57,7 @@ export const CodeOpener = ({
   label,
   disabled,
   code = false,
-}: PropsWithChildren<CodeOpenerProps>): JSX.Element | null => {
+}: PropsWithChildren<CodeOpenerProps>): React.JSX.Element | null => {
   const file = path.resolve(cwd, parseUrl(url));
 
   const { line, columnStart } = parseLoc(loc);

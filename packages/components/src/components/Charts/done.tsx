@@ -18,7 +18,7 @@ import { ChartTypes } from './constants';
 
 export const DoneChartContainer: React.FC<CommonChartProps> = ({
   summary,
-}): JSX.Element | null => {
+}): React.JSX.Element | null => {
   const { costs = [] } = summary || {};
   const target = costs.find(
     (e) => e.name === Summary.SummaryCostsDataName.Done,

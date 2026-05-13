@@ -83,8 +83,8 @@
     "url-parse": "1.5.10"
   },
   "peerDependencies": {
-    "react": ">=18.3.1",
-    "react-dom": ">=18.3.1"
+    "react": ">=19",
+    "react-dom": ">=19"
   },
   "publishConfig": {
     "access": "public",

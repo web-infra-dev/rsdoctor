@@ -8,10 +8,10 @@ import { Lodash } from '@rsdoctor/utils/common';
 
 type ChunksDataType = {
   key: string | number;
-  name: JSX.Element;
-  size: JSX.Element;
-  entry: JSX.Element;
-  assets: JSX.Element[];
+  name: React.JSX.Element;
+  size: React.JSX.Element;
+  entry: React.JSX.Element;
+  assets: React.JSX.Element[];
 };
 
 const columns = [

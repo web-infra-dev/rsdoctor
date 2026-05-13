@@ -57,8 +57,10 @@ export function flattenDirectory(
   parent: DataNode,
   sep = '/',
   inlinedResourcePathKey: keyof DataNode,
-  dirTitle = (_dir: DataNode, defaultTitle: string): JSX.Element | string =>
-    defaultTitle,
+  dirTitle = (
+    _dir: DataNode,
+    defaultTitle: string,
+  ): React.JSX.Element | string => defaultTitle,
 ) {
   if (n.isLeaf) return;
   if (parent.children && parent.children.length === 1) {
@@ -96,8 +98,8 @@ export function createFileStructures({
   files: string[];
   cwd?: string;
   inlinedResourcePathKey?: keyof DataNode;
-  dirTitle?(dir: DataNode, defaultTitle: string): JSX.Element | string;
-  fileTitle?(file: string, basename: string): JSX.Element | string;
+  dirTitle?(dir: DataNode, defaultTitle: string): React.JSX.Element | string;
+  fileTitle?(file: string, basename: string): React.JSX.Element | string;
   page?: 'bundle' | 'other';
 }): DataNode[] {
   // Normalize all paths to use forward slash as internal separator for consistency

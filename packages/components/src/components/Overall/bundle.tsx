@@ -94,7 +94,7 @@ export const getFiles = (
 
 export const getFilesWithDrawer = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
-): JSX.Element => {
+): React.JSX.Element => {
   const { treeData } = getFiles(data);
 
   return (
@@ -280,7 +280,7 @@ const BundleDescriptions = ({
 export const BundleOverall: React.FC<{
   errors: SDK.ErrorsData;
   cwd: string;
-}> = (): JSX.Element | null => {
+}> = (): React.JSX.Element | null => {
   const [view, setView] = useState<viewType>('size');
   const navigate = useNavigate();
   const { t } = useI18n();

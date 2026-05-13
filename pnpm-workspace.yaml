@@ -33,8 +33,8 @@ catalog:
   '@types/fs-extra': ^11.0.4
   '@types/node': ^24.12.3
   '@types/path-browserify': 1.0.3
-  '@types/react': ^18.3.28
-  '@types/react-dom': ^18.3.7
+  '@types/react': ^19.2.14
+  '@types/react-dom': ^19.2.3
   '@types/tapable': 2.3.0
   antd: 5.19.1
   clsx: ^2.1.1
@@ -46,8 +46,8 @@ catalog:
   path-browserify: 1.0.1
   picocolors: ^1.1.1
   prebundle: 1.6.4
-  react: 18.3.1
-  react-dom: 18.3.1
+  react: 19.2.6
+  react-dom: 19.2.6
   react-markdown: ^9.1.0
   react-router-dom: 6.30.3
   sirv: 3.0.2
@@ -77,7 +77,6 @@ overrides:
   qs: 6.15.1
   rc-dialog: 9.1.0
   rc-tree: 5.7.2
-  react-dom: 18.3.1
   sirv: 3.0.2
   socket.io-parser: 4.2.6
   tar: 7.5.15

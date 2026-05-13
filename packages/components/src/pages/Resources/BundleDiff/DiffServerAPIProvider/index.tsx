@@ -8,7 +8,7 @@ export const DiffServerAPIProvider = <
   T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
 >(
   props: BundleDiffServerAPIProviderComponentCommonProps<T>,
-): JSX.Element => {
+): React.JSX.Element => {
   const { api, body, children, manifests } = props;
   const query = useUrlQuery();
 

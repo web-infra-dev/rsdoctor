@@ -34,7 +34,7 @@ type ServerAPIProviderProps<
 > = {
   manifestLoader?: () => Promise<Manifest.RsdoctorManifestWithShardingFiles>;
   api: T;
-  children: (response: SDK.ServerAPI.InferResponseType<T>) => JSX.Element;
+  children: (response: SDK.ServerAPI.InferResponseType<T>) => React.JSX.Element;
   fallbackComponent?: React.FC;
   showSkeleton?: boolean;
 } & InferServerAPIBody<T>;
@@ -54,7 +54,7 @@ export const ServerAPIProvider = <
   T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
 >(
   props: ServerAPIProviderProps<T>,
-): JSX.Element | null => {
+): React.JSX.Element | null => {
   const {
     manifestLoader = fetchManifest,
     api,
@@ -234,7 +234,7 @@ export function withServerAPI<
           const _props = {
             ...rest,
             [responsePropName]: res,
-          } as T & JSX.IntrinsicAttributes;
+          } as T & React.JSX.IntrinsicAttributes;
 
           return <Component {..._props} />;
         }}
