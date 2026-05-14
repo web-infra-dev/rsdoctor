@@ -171,8 +171,8 @@ importers:
         specifier: ^0.0.4
         version: 0.0.4
       heading-case:
-        specifier: ^0.1.6
-        version: 0.1.6
+        specifier: ^1.1.0
+        version: 1.1.0
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -5947,8 +5947,8 @@ packages:
   hastscript@9.0.0:
     resolution: {integrity: sha512-jzaLBGavEDKHrc5EfFImKN7nZKKBdSLIdGvCwDZ9TfzbF2ffXiov8CKE445L2Z1Ek2t/m4SKQ2j6Ipv7NyUolw==}
 
-  heading-case@0.1.6:
-    resolution: {integrity: sha512-SuymMv+TxrW2df/5arvKzoZu+HsMU+OpYVkmkCuI2qpdLUd7QDvkzpupFbBy180XpSp+Y5jTLdY3lZRGDjtn8A==}
+  heading-case@1.1.0:
+    resolution: {integrity: sha512-VNNu8W4V3Sc64VyLgeQU3uB5PIq0CM4yyD+OKq0zKgMMOOQGftNfCiwDahpFasKYN+RNY9+29jBZUBW8x9O/8A==}
     hasBin: true
 
   highlight-words-core@1.2.3:
@@ -9953,7 +9953,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.0
       '@babel/helper-validator-option': 7.27.1
-      browserslist: 4.28.1
+      browserslist: 4.28.2
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -15194,7 +15194,7 @@ snapshots:
       property-information: 6.5.0
       space-separated-tokens: 2.0.2
 
-  heading-case@0.1.6: {}
+  heading-case@1.1.0: {}
 
   highlight-words-core@1.2.3: {}
 
