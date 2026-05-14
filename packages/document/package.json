@@ -43,7 +43,7 @@
     "@rsbuild/plugin-sass": "catalog:"
   },
   "dependencies": {
-    "@rstack-dev/doc-ui": "1.12.5",
+    "@rstack-dev/doc-ui": "1.13.3",
     "clsx": "catalog:",
     "react-markdown": "catalog:",
     "@rspress/core": "2.0.11"

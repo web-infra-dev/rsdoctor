@@ -942,8 +942,8 @@ importers:
         specifier: 2.0.11
         version: 2.0.11(@types/mdast@4.0.4)(@types/react@19.2.14)(core-js@3.49.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
       '@rstack-dev/doc-ui':
-        specifier: 1.12.5
-        version: 1.12.5
+        specifier: 1.13.3
+        version: 1.13.3
       clsx:
         specifier: 'catalog:'
         version: 2.1.1
@@ -3854,8 +3854,8 @@ packages:
   '@rspress/shared@2.0.11':
     resolution: {integrity: sha512-7l5Pso4s597utJyisVEnd7n/40h053nfE8DwGQMeS8RLGtSwVgxFwNHsSrvQEGtFlLrg2aWWSITqnAVO1wfTew==}
 
-  '@rstack-dev/doc-ui@1.12.5':
-    resolution: {integrity: sha512-fwPRz8R52VHVW1u8SFH7uqon4IL2BAfYwrNDEPlB4rPAz+DrOkhag16oQtcQ2ApUXTInrQjEOXK9TaqfP02MXg==}
+  '@rstack-dev/doc-ui@1.13.3':
+    resolution: {integrity: sha512-g9T8mG1I5ch3CHnzktl/PPFwJmxgRBLUi8NC6pGDwp3JQfKzaylDNK2LcPM4kjLP60+9fv2gFDSrLHE6jFu8uQ==}
 
   '@rstest/core@0.9.10':
     resolution: {integrity: sha512-JUSUYYXWIHEBUn193u2RglZujvGPv46Blxpl17QFwc0y9vEXe2y/IfGwGrVsJfZz7PaWZ5NnbFf0J55YIIns+g==}
@@ -12729,7 +12729,7 @@ snapshots:
       - '@module-federation/runtime-tools'
       - core-js
 
-  '@rstack-dev/doc-ui@1.12.5': {}
+  '@rstack-dev/doc-ui@1.13.3': {}
 
   '@rstest/core@0.9.10(core-js@3.49.0)':
     dependencies:
