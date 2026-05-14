@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { getServerUrl, sendRequest } from './socket.js';
+import { getServerUrl, sendRequest } from './request.js';
 import { toolDescriptions } from '@/prompt/bundle.js';
 
 export enum Tools {

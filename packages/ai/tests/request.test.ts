@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
-import { sendRequest } from '../src/server/socket';
+import { sendRequest } from '../src/server/request';
 
 describe('http transport', () => {
   const originalFetch = globalThis.fetch;
