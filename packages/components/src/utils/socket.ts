@@ -8,6 +8,15 @@ export interface ServerSocketMessage<T extends SocketAPI = SocketAPI> {
   payload: SDK.ServerAPI.SocketResponseType<T>;
 }
 
+type ServerSocketResponseMessage<
+  T extends SDK.ServerAPI.API = SDK.ServerAPI.API,
+> = {
+  type: 'response';
+  id: string;
+  payload?: SDK.ServerAPI.InferResponseType<T>;
+  error?: string;
+};
+
 type SocketListener<T extends SocketAPI = SocketAPI> = (
   payload: SDK.ServerAPI.SocketResponseType<T>,
 ) => void;
@@ -17,16 +26,24 @@ type Subscription = {
   body: Common.PlainObject | null | undefined;
 };
 
+type PendingRequest = {
+  message: string;
+  resolve: (payload: unknown) => void;
+  reject: (error: Error) => void;
+};
+
 type SocketClient = {
   url: string;
   socket?: WebSocket;
-  listeners: Map<SocketAPI, Set<SocketListener>>;
+  listeners: Map<string, Set<SocketListener>>;
   subscriptions: Map<string, Subscription>;
+  requests: Map<string, PendingRequest>;
 };
 
 const clients = new Map<string, SocketClient>();
 const defaultClientKey = '__default__';
 const openState = 1;
+let requestId = 0;
 
 const ipv4Pattern =
   /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
@@ -67,12 +84,13 @@ function getClient(socketUrl = getDefaultSocketUrl()) {
       url: socketUrl,
       listeners: new Map(),
       subscriptions: new Map(),
+      requests: new Map(),
     });
   }
   return clients.get(key)!;
 }
 
-function getSubscriptionKey(api: SocketAPI, body: Subscription['body']) {
+function getSubscriptionKey(api: SocketAPI, body: unknown) {
   return `${api}:${JSON.stringify(body ?? null)}`;
 }
 
@@ -90,6 +108,35 @@ function sendSubscription(client: SocketClient, subscription: Subscription) {
   );
 }
 
+function sendRequest(client: SocketClient, id: string) {
+  if (client.socket?.readyState !== openState) {
+    return;
+  }
+
+  const request = client.requests.get(id);
+  if (!request) {
+    return;
+  }
+  client.socket.send(request.message);
+}
+
+function handleResponseMessage(
+  client: SocketClient,
+  message: ServerSocketResponseMessage,
+) {
+  const request = client.requests.get(message.id);
+  if (!request) {
+    return;
+  }
+
+  client.requests.delete(message.id);
+  if (message.error) {
+    request.reject(new Error(message.error));
+    return;
+  }
+  request.resolve(message.payload);
+}
+
 function connectSocket(client: SocketClient) {
   if (!client.url || typeof WebSocket === 'undefined' || client.socket) {
     return;
@@ -100,6 +147,9 @@ function connectSocket(client: SocketClient) {
     client.subscriptions.forEach((subscription) => {
       sendSubscription(client, subscription);
     });
+    client.requests.forEach((_, id) => {
+      sendRequest(client, id);
+    });
   });
   socket.addEventListener('message', (event) => {
     if (typeof event.data !== 'string') {
@@ -107,18 +157,54 @@ function connectSocket(client: SocketClient) {
     }
 
     try {
-      publishServerSocketMessage(
-        JSON.parse(event.data) as ServerSocketMessage,
-        client.url,
-      );
+      const message = JSON.parse(event.data) as
+        | ServerSocketMessage
+        | ServerSocketResponseMessage;
+      if ('type' in message && message.type === 'response') {
+        handleResponseMessage(client, message);
+        return;
+      }
+      publishServerSocketMessage(message as ServerSocketMessage, client.url);
     } catch {
       // Ignore malformed payloads and keep the transport alive.
     }
   });
   socket.addEventListener('close', () => {
     client.socket = undefined;
+    client.requests.forEach((request) => {
+      request.reject(
+        new Error('WebSocket closed before the response arrived.'),
+      );
+    });
+    client.requests.clear();
   });
   client.socket = socket;
+}
+
+export function requestServerAPI<
+  T extends SDK.ServerAPI.API,
+  B extends SDK.ServerAPI.InferRequestBodyType<T> =
+    SDK.ServerAPI.InferRequestBodyType<T>,
+  R extends SDK.ServerAPI.InferResponseType<T> =
+    SDK.ServerAPI.InferResponseType<T>,
+>(api: T, body: B | null | undefined, socketPort?: string): Promise<R> {
+  const client = getClient(getSocketUrl(socketPort));
+  const id = `${Date.now()}-${++requestId}`;
+
+  return new Promise<R>((resolve, reject) => {
+    client.requests.set(id, {
+      message: JSON.stringify({
+        type: 'request',
+        id,
+        api,
+        body: body ?? null,
+      }),
+      resolve: resolve as (payload: unknown) => void,
+      reject,
+    });
+    connectSocket(client);
+    sendRequest(client, id);
+  });
 }
 
 export function subscribeServerAPI<T extends SocketAPI>(
@@ -128,31 +214,41 @@ export function subscribeServerAPI<T extends SocketAPI>(
   socketPort?: string,
 ) {
   const client = getClient(getSocketUrl(socketPort));
-  if (!client.listeners.has(api)) {
-    client.listeners.set(api, new Set());
+  const bodyValue = body ?? null;
+  const key = getSubscriptionKey(api, bodyValue);
+  if (!client.listeners.has(key)) {
+    client.listeners.set(key, new Set());
   }
-  client.listeners.get(api)!.add(listener as SocketListener);
+  client.listeners.get(key)!.add(listener as SocketListener);
 
   const subscription = {
     api,
-    body: body ?? null,
+    body: bodyValue,
   };
-  client.subscriptions.set(getSubscriptionKey(api, body), subscription);
+  client.subscriptions.set(key, subscription);
   connectSocket(client);
   sendSubscription(client, subscription);
 
   return () => {
-    client.listeners.get(api)?.delete(listener as SocketListener);
+    unsubscribeServerAPI(api, bodyValue, listener, socketPort);
   };
 }
 
 export function unsubscribeServerAPI<T extends SocketAPI>(
   api: T,
+  body: SDK.ServerAPI.InferRequestBodyType<T, null> | null,
   listener: SocketListener<T>,
   socketPort?: string,
 ) {
   const client = getClient(getSocketUrl(socketPort));
-  client.listeners.get(api)?.delete(listener as SocketListener);
+  const key = getSubscriptionKey(api, body);
+  const listeners = client.listeners.get(key);
+  listeners?.delete(listener as SocketListener);
+
+  if (listeners?.size === 0) {
+    client.listeners.delete(key);
+    client.subscriptions.delete(key);
+  }
 }
 
 export function publishServerSocketMessage(
@@ -162,7 +258,8 @@ export function publishServerSocketMessage(
   const targets = socketUrl ? [getClient(socketUrl)] : [...clients.values()];
 
   targets.forEach((client) => {
-    client.listeners.get(message.api)?.forEach((listener) => {
+    const key = getSubscriptionKey(message.api, message.payload.req.body);
+    client.listeners.get(key)?.forEach((listener) => {
       listener(message.payload);
     });
   });

@@ -17,6 +17,7 @@ type Subscription = {
 
 type ClientMessage = {
   type?: string;
+  id?: string;
   api?: SDK.ServerAPI.API;
   body?: Common.PlainObject | null;
 };
@@ -47,7 +48,7 @@ export class Socket {
 
     if (typeof client.on === 'function') {
       client.on('message', (message) => {
-        this.handleClientMessage(message.toString());
+        this.handleClientMessage(message.toString(), client);
       });
       client.on('close', () => {
         this.clients.delete(client);
@@ -55,7 +56,7 @@ export class Socket {
     }
   }
 
-  public handleClientMessage(raw: string) {
+  public async handleClientMessage(raw: string, client?: WebSocket) {
     let message: ClientMessage;
     try {
       message = JSON.parse(raw) as ClientMessage;
@@ -64,14 +65,48 @@ export class Socket {
     }
 
     if (
-      message.type !== 'subscribe' ||
       !message.api ||
       !Object.values(SDK.ServerAPI.API).includes(message.api)
     ) {
       return;
     }
 
-    this.saveRequestToMap(message.api, message.body ?? null);
+    if (message.type === 'request') {
+      await this.handleAPIRequestMessage(message, client);
+      return;
+    }
+
+    if (message.type === 'subscribe') {
+      this.saveRequestToMap(message.api, message.body ?? null);
+    }
+  }
+
+  protected async handleAPIRequestMessage(
+    message: ClientMessage,
+    client?: WebSocket,
+  ) {
+    if (!message.id || !client || client.readyState !== WebSocket.OPEN) {
+      return;
+    }
+
+    try {
+      const response = await this.getAPIResponse(message.api!, message.body!);
+      client.send(
+        JSON.stringify({
+          type: 'response',
+          id: message.id,
+          payload: response.res,
+        }),
+      );
+    } catch (err) {
+      client.send(
+        JSON.stringify({
+          type: 'response',
+          id: message.id,
+          error: err instanceof Error ? err.message : String(err),
+        }),
+      );
+    }
   }
 
   public getSubscriptions(): Subscription[] {

@@ -3,7 +3,11 @@ import { Common, Manifest, SDK } from '@rsdoctor/types';
 import { get } from 'es-toolkit/compat';
 import { BaseDataLoader } from './base';
 import { postServerAPI } from '../request';
-import { subscribeServerAPI, unsubscribeServerAPI } from '../socket';
+import {
+  requestServerAPI,
+  subscribeServerAPI,
+  unsubscribeServerAPI,
+} from '../socket';
 
 type DataUpdateAPI = SDK.ServerAPI.API | SDK.ServerAPI.APIExtends;
 
@@ -65,10 +69,15 @@ export class LocalServerDataLoader extends BaseDataLoader {
     const [api, body] = args;
     // request limitation key
     const key = body ? `${api}_${JSON.stringify(body)}` : `${api}`;
+    const socketPort = this.get('__SOCKET__PORT__') ?? '';
 
     return this.limit(key, async () => {
       try {
-        return (await postServerAPI(...args)) as R;
+        return (await requestServerAPI(
+          api,
+          body as SDK.ServerAPI.InferRequestBodyType<T>,
+          socketPort,
+        )) as R;
       } catch (err) {
         this.log(`loadAPI error: `, key);
         throw err;
@@ -124,7 +133,7 @@ export class LocalServerDataLoader extends BaseDataLoader {
   ) {
     const key = `${api}::${JSON.stringify(body ?? null)}`;
     const socketPort = this.get('__SOCKET__PORT__') ?? '';
-    unsubscribeServerAPI(api, fn, socketPort);
+    unsubscribeServerAPI(api, body, fn, socketPort);
     this.events.get(key)?.listeners.delete(fn);
   }
 }

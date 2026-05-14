@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it, rs } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 import { Socket } from '../../src/sdk/server/socket';
 
@@ -50,6 +50,41 @@ describe('server websocket transport', () => {
           },
           res: { percentage: 50, message: 'building' },
         },
+      }),
+    ]);
+  });
+
+  it('responds to request messages on the source websocket client', async () => {
+    const sent: string[] = [];
+    const socket = new Socket({} as never);
+    (socket as any).loader = {
+      loadAPIData: rs.fn().mockResolvedValue([{ id: 1 }]),
+    };
+
+    const client = {
+      readyState: 1,
+      send(message: string) {
+        sent.push(message);
+      },
+      on() {},
+    } as never;
+    socket.attachClient(client);
+
+    await socket.handleClientMessage(
+      JSON.stringify({
+        type: 'request',
+        id: 'request-1',
+        api: SDK.ServerAPI.API.GetAllModuleGraph,
+        body: {},
+      }),
+      client,
+    );
+
+    expect(sent).toStrictEqual([
+      JSON.stringify({
+        type: 'response',
+        id: 'request-1',
+        payload: [{ id: 1 }],
       }),
     ]);
   });
