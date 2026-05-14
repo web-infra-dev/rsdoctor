@@ -91,8 +91,8 @@ catalogs:
       specifier: ^1.45.1
       version: 1.45.1
     filesize:
-      specifier: ^10.1.6
-      version: 10.1.6
+      specifier: ^11.0.17
+      version: 11.0.17
     fs-extra:
       specifier: ^11.1.1
       version: 11.3.0
@@ -882,7 +882,7 @@ importers:
         version: 1.45.1
       filesize:
         specifier: 'catalog:'
-        version: 10.1.6
+        version: 11.0.17
       fs-extra:
         specifier: 'catalog:'
         version: 11.3.0
@@ -1262,7 +1262,7 @@ importers:
         version: 3.7.0
       filesize:
         specifier: 'catalog:'
-        version: 10.1.6
+        version: 11.0.17
       prebundle:
         specifier: 'catalog:'
         version: 1.6.4(typescript@6.0.3)
@@ -5673,6 +5673,10 @@ packages:
     resolution: {integrity: sha512-sJslQKU2uM33qH5nqewAwVB2QgR6w1aMNsYUp3aN5rMRyXEwJGmZvaWzeJFNTOXWlHQyBFCWrdj3fV/fsTOX8w==}
     engines: {node: '>= 10.4.0'}
 
+  filesize@11.0.17:
+    resolution: {integrity: sha512-oHLTvMLw6imZUl1se/RBQrFlyy50nXce4sU7yGR6Qc0JgCwqnfiFsAnEwotdGmfKLD7SArGUk2/5STU0k8LOBQ==}
+    engines: {node: '>= 10.8.0'}
+
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
     engines: {node: '>=8'}
@@ -9953,7 +9957,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.0
       '@babel/helper-validator-option': 7.27.1
-      browserslist: 4.28.1
+      browserslist: 4.28.2
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -14813,6 +14817,8 @@ snapshots:
   file-uri-to-path@1.0.0: {}
 
   filesize@10.1.6: {}
+
+  filesize@11.0.17: {}
 
   fill-range@7.1.1:
     dependencies:
