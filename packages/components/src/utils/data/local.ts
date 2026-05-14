@@ -5,8 +5,16 @@ import { BaseDataLoader } from './base';
 import { postServerAPI } from '../request';
 import { subscribeServerAPI, unsubscribeServerAPI } from '../socket';
 
+type DataUpdateAPI = SDK.ServerAPI.API | SDK.ServerAPI.APIExtends;
+
+type DataUpdateSubscription = {
+  api: DataUpdateAPI;
+  body: SDK.ServerAPI.InferRequestBodyType<DataUpdateAPI, null> | null;
+  listeners: Set<Common.Function>;
+};
+
 export class LocalServerDataLoader extends BaseDataLoader {
-  protected events: Map<string, Set<Common.Function>> = new Map();
+  protected events: Map<string, DataUpdateSubscription> = new Map();
 
   public isLocal() {
     return true;
@@ -70,16 +78,11 @@ export class LocalServerDataLoader extends BaseDataLoader {
 
   public dispose() {
     super.dispose();
-    this.events.forEach((evs, key) => {
-      evs.forEach((ev) => {
-        const [api, bodyText] = key.split('::');
-        this.removeOnDataUpdate(
-          api as SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
-          JSON.parse(bodyText),
-          ev,
-        );
+    this.events.forEach(({ api, body, listeners }) => {
+      listeners.forEach((listener) => {
+        this.removeOnDataUpdate(api, body, listener);
       });
-      evs.clear();
+      listeners.clear();
     });
     this.events.clear();
   }
@@ -92,18 +95,24 @@ export class LocalServerDataLoader extends BaseDataLoader {
     body: SDK.ServerAPI.InferRequestBodyType<T, null> | null,
     fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void,
   ) {
-    const key = `${api}::${JSON.stringify(body ?? null)}`;
+    const normalizedBody = body ?? null;
+    const key = `${api}::${JSON.stringify(normalizedBody)}`;
     if (!this.events.has(key)) {
-      this.events.set(key, new Set());
+      this.events.set(key, {
+        api,
+        body: normalizedBody,
+        listeners: new Set(),
+      });
     }
 
-    if (this.events.get(key)!.has(fn)) {
+    const subscription = this.events.get(key)!;
+    if (subscription.listeners.has(fn)) {
       return;
     }
 
-    this.events.get(key)!.add(fn);
+    subscription.listeners.add(fn);
     const socketPort = this.get('__SOCKET__PORT__') ?? '';
-    subscribeServerAPI(api, body, fn, socketPort);
+    subscribeServerAPI(api, normalizedBody, fn, socketPort);
   }
 
   public removeOnDataUpdate<
@@ -116,6 +125,6 @@ export class LocalServerDataLoader extends BaseDataLoader {
     const key = `${api}::${JSON.stringify(body ?? null)}`;
     const socketPort = this.get('__SOCKET__PORT__') ?? '';
     unsubscribeServerAPI(api, fn, socketPort);
-    this.events.get(key)?.delete(fn);
+    this.events.get(key)?.listeners.delete(fn);
   }
 }
