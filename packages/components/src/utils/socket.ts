@@ -177,16 +177,20 @@ export function formatURL({
   protocol: string;
   hostname: string;
 }) {
+  const socketProtocol = getSocketProtocol(protocol);
+  const shouldUsePort =
+    ipv4Pattern.test(hostname) || hostname.includes('localhost');
+
   if (typeof URL !== 'undefined') {
     const url = new URL('http://localhost');
-    url.port = String(port);
     url.hostname = hostname;
-    url.protocol = getSocketProtocol(protocol);
-    return ipv4Pattern.test(hostname) || hostname.includes('localhost')
-      ? url.toString()
-      : `${protocol}//${hostname}`;
+    url.protocol = socketProtocol;
+    if (port && shouldUsePort) {
+      url.port = port;
+    }
+    return url.toString();
   }
 
-  const colon = protocol.indexOf(':') === -1 ? ':' : '';
-  return `${protocol}${colon}//${hostname}:${port}`;
+  const portText = port && shouldUsePort ? `:${port}` : '';
+  return `${socketProtocol}://${hostname}${portText}`;
 }

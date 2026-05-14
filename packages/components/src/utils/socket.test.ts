@@ -1,6 +1,10 @@
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
-import { publishServerSocketMessage, subscribeServerAPI } from './socket';
+import {
+  formatURL,
+  publishServerSocketMessage,
+  subscribeServerAPI,
+} from './socket';
 
 describe('websocket transport', () => {
   afterEach(() => {
@@ -26,5 +30,15 @@ describe('websocket transport', () => {
     });
 
     unsubscribe();
+  });
+
+  it('formats non-localhost socket urls with websocket protocol', () => {
+    expect(
+      formatURL({
+        port: '3000',
+        protocol: 'https:',
+        hostname: 'example.com',
+      }),
+    ).toBe('wss://example.com/');
   });
 });
