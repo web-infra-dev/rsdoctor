@@ -38,7 +38,7 @@ catalog:
   '@types/tapable': 2.3.0
   antd: 5.19.1
   clsx: ^2.1.1
-  cross-env: ^7.0.3
+  cross-env: ^10.1.0
   dayjs: 1.11.20
   es-toolkit: ^1.45.1
   filesize: ^10.1.6

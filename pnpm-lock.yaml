@@ -82,8 +82,8 @@ catalogs:
       specifier: ^2.1.1
       version: 2.1.1
     cross-env:
-      specifier: ^7.0.3
-      version: 7.0.3
+      specifier: ^10.1.0
+      version: 10.1.0
     dayjs:
       specifier: 1.11.20
       version: 1.11.20
@@ -166,7 +166,7 @@ importers:
         version: link:scripts/test-helper
       cross-env:
         specifier: 'catalog:'
-        version: 7.0.3
+        version: 10.1.0
       cspell-ban-words:
         specifier: ^0.0.4
         version: 0.0.4
@@ -977,7 +977,7 @@ importers:
         version: 19.2.3(@types/react@19.2.14)
       cross-env:
         specifier: 'catalog:'
-        version: 7.0.3
+        version: 10.1.0
       react:
         specifier: 'catalog:'
         version: 19.2.6
@@ -2339,6 +2339,9 @@ packages:
 
   '@emotion/unitless@0.7.5':
     resolution: {integrity: sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==}
+
+  '@epic-web/invariant@1.0.0':
+    resolution: {integrity: sha512-lrTPqgvfFQtR/eY/qkIzp98OGdNJu0m5ji3q/nJI8v3SXkRKEnWiOxMmbvcSoAIzv/cGiuvRy57k4suKQSAdwA==}
 
   '@esbuild/aix-ppc64@0.25.5':
     resolution: {integrity: sha512-9o3TMmpmftaCMepOdA5k/yDw8SfInyzWWTjYTFCX3kPSDJMROQTb8jg+h9Cnwnmm1vOzvxN7gIfB5V2ewpjtGA==}
@@ -5036,9 +5039,9 @@ packages:
   create-hmac@1.1.7:
     resolution: {integrity: sha512-MJG9liiZ+ogc4TzUwuvbER1JRdgvUFSB5+VR/g5h82fGaIRWMWddtKBHi7/sVhfjQZ6SehlyhvQYrcYkaUIpLg==}
 
-  cross-env@7.0.3:
-    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
-    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
+  cross-env@10.1.0:
+    resolution: {integrity: sha512-GsYosgnACZTADcmEyJctkJIoqAhHjttw7RsFrVoJNXbsWWqaq6Ym+7kZjq6mS45O0jij6vtiReppKQEtqWy6Dw==}
+    engines: {node: '>=20'}
     hasBin: true
 
   cross-fetch@3.2.0:
@@ -9953,7 +9956,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.0
       '@babel/helper-validator-option': 7.27.1
-      browserslist: 4.28.1
+      browserslist: 4.28.2
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -10941,6 +10944,8 @@ snapshots:
   '@emotion/hash@0.8.0': {}
 
   '@emotion/unitless@0.7.5': {}
+
+  '@epic-web/invariant@1.0.0': {}
 
   '@esbuild/aix-ppc64@0.25.5':
     optional: true
@@ -14078,8 +14083,9 @@ snapshots:
       safe-buffer: 5.2.1
       sha.js: 2.4.12
 
-  cross-env@7.0.3:
+  cross-env@10.1.0:
     dependencies:
+      '@epic-web/invariant': 1.0.0
       cross-spawn: 7.0.6
 
   cross-fetch@3.2.0:
