@@ -32,7 +32,7 @@
     "prebundle": "catalog:",
     "socket.io-client": "catalog:",
     "typescript": "catalog:",
-    "zod": "^3.25.76"
+    "zod": "^4.4.3"
   },
   "publishConfig": {
     "access": "public",
