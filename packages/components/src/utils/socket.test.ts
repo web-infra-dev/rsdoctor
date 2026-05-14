@@ -50,10 +50,15 @@ class MockWebSocket {
 }
 
 describe('websocket transport', () => {
+  const originalLocation = globalThis.location;
   const originalWebSocket = globalThis.WebSocket;
 
   afterEach(() => {
     rs.restoreAllMocks();
+    Object.defineProperty(globalThis, 'location', {
+      configurable: true,
+      value: originalLocation,
+    });
     globalThis.WebSocket = originalWebSocket;
     MockWebSocket.instances = [];
   });
@@ -115,6 +120,26 @@ describe('websocket transport', () => {
     ]);
   });
 
+  it('sends unsubscribe messages when the last listener unsubscribes', () => {
+    globalThis.WebSocket = MockWebSocket as any;
+
+    const api = SDK.ServerAPI.API.GetModuleByName;
+    const body = { name: 'foo' };
+    const unsubscribe = subscribeServerAPI(api, body as any, rs.fn(), '3084');
+    const socket = MockWebSocket.instances[0];
+    socket.trigger('open');
+
+    unsubscribe();
+
+    expect(
+      socket.sentMessages.map((message) => JSON.parse(message)),
+    ).toContainEqual({
+      type: 'unsubscribe',
+      api,
+      body,
+    });
+  });
+
   it('resolves request responses sent over websocket', async () => {
     globalThis.WebSocket = MockWebSocket as any;
 
@@ -144,5 +169,25 @@ describe('websocket transport', () => {
     );
 
     await expect(request).resolves.toStrictEqual([{ id: 1 }]);
+  });
+
+  it('rejects websocket requests when no socket url is available', async () => {
+    Object.defineProperty(globalThis, 'location', {
+      configurable: true,
+      value: undefined,
+    });
+    globalThis.WebSocket = MockWebSocket as any;
+
+    await expect(
+      requestServerAPI(SDK.ServerAPI.API.GetAllModuleGraph, {}),
+    ).rejects.toThrow('WebSocket URL is not available.');
+  });
+
+  it('rejects websocket requests when WebSocket is unavailable', async () => {
+    globalThis.WebSocket = undefined as any;
+
+    await expect(
+      requestServerAPI(SDK.ServerAPI.API.GetAllModuleGraph, {}, '3085'),
+    ).rejects.toThrow('WebSocket is not available.');
   });
 });

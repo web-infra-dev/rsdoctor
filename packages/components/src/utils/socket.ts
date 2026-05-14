@@ -108,6 +108,20 @@ function sendSubscription(client: SocketClient, subscription: Subscription) {
   );
 }
 
+function sendUnsubscribe(client: SocketClient, subscription: Subscription) {
+  if (client.socket?.readyState !== openState) {
+    return;
+  }
+
+  client.socket.send(
+    JSON.stringify({
+      type: 'unsubscribe',
+      api: subscription.api,
+      body: subscription.body ?? null,
+    }),
+  );
+}
+
 function sendRequest(client: SocketClient, id: string) {
   if (client.socket?.readyState !== openState) {
     return;
@@ -188,7 +202,16 @@ export function requestServerAPI<
   R extends SDK.ServerAPI.InferResponseType<T> =
     SDK.ServerAPI.InferResponseType<T>,
 >(api: T, body: B | null | undefined, socketPort?: string): Promise<R> {
-  const client = getClient(getSocketUrl(socketPort));
+  const socketUrl = getSocketUrl(socketPort);
+  if (!socketUrl) {
+    return Promise.reject(new Error('WebSocket URL is not available.'));
+  }
+
+  if (typeof WebSocket === 'undefined') {
+    return Promise.reject(new Error('WebSocket is not available.'));
+  }
+
+  const client = getClient(socketUrl);
   const id = `${Date.now()}-${++requestId}`;
 
   return new Promise<R>((resolve, reject) => {
@@ -246,6 +269,10 @@ export function unsubscribeServerAPI<T extends SocketAPI>(
   listeners?.delete(listener as SocketListener);
 
   if (listeners?.size === 0) {
+    const subscription = client.subscriptions.get(key);
+    if (subscription) {
+      sendUnsubscribe(client, subscription);
+    }
     client.listeners.delete(key);
     client.subscriptions.delete(key);
   }

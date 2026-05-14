@@ -1,6 +1,5 @@
 import { Common, SDK } from '@rsdoctor/types';
 import type { Server } from 'http';
-import { isDeepStrictEqual } from 'util';
 import WebSocket, { WebSocketServer } from 'ws';
 import { SocketAPILoader } from './api';
 
@@ -13,6 +12,10 @@ interface SocketOptions {
 type Subscription = {
   api: SDK.ServerAPI.API;
   body: Common.PlainObject | null;
+};
+
+type SubscriptionRecord = Subscription & {
+  count: number;
 };
 
 type ClientMessage = {
@@ -29,8 +32,9 @@ export class Socket {
 
   protected loader: SocketAPILoader;
 
-  protected map: Map<SDK.ServerAPI.API, (Common.PlainObject | null)[]> =
-    new Map();
+  protected map: Map<string, SubscriptionRecord> = new Map();
+
+  protected clientSubscriptions: Map<WebSocket, Set<string>> = new Map();
 
   constructor(protected options: SocketOptions) {
     this.loader = new SocketAPILoader({ sdk: options.sdk });
@@ -52,6 +56,7 @@ export class Socket {
       });
       client.on('close', () => {
         this.clients.delete(client);
+        this.removeClientSubscriptions(client);
       });
     }
   }
@@ -77,7 +82,12 @@ export class Socket {
     }
 
     if (message.type === 'subscribe') {
-      this.saveRequestToMap(message.api, message.body ?? null);
+      this.saveRequestToMap(message.api, message.body ?? null, client);
+      return;
+    }
+
+    if (message.type === 'unsubscribe') {
+      this.removeRequestFromMap(message.api, message.body ?? null, client);
     }
   }
 
@@ -110,26 +120,86 @@ export class Socket {
   }
 
   public getSubscriptions(): Subscription[] {
-    const subscriptions: Subscription[] = [];
-    this.map.forEach((bodies, api) => {
-      bodies.forEach((body) => subscriptions.push({ api, body }));
-    });
-    return subscriptions;
+    return [...this.map.values()].map(({ api, body }) => ({ api, body }));
   }
 
   protected saveRequestToMap<T extends SDK.ServerAPI.API>(
     api: T,
     body: SDK.ServerAPI.InferRequestBodyType<T, null> | null = null,
+    client?: WebSocket,
   ) {
-    if (!this.map.has(api)) {
-      this.map.set(api, []);
+    const key = this.getSubscriptionKey(api, body);
+    if (client) {
+      if (!this.clientSubscriptions.has(client)) {
+        this.clientSubscriptions.set(client, new Set());
+      }
+      const subscriptions = this.clientSubscriptions.get(client)!;
+      if (subscriptions.has(key)) {
+        return;
+      }
+      subscriptions.add(key);
     }
 
-    const list = this.map.get(api)!;
-
-    if (!list.some((e) => e === body || isDeepStrictEqual(e, body))) {
-      list.push(body);
+    const record = this.map.get(key);
+    if (record) {
+      record.count += 1;
+      return;
     }
+
+    this.map.set(key, {
+      api,
+      body,
+      count: 1,
+    });
+  }
+
+  protected removeRequestFromMap<T extends SDK.ServerAPI.API>(
+    api: T,
+    body: SDK.ServerAPI.InferRequestBodyType<T, null> | null = null,
+    client?: WebSocket,
+  ) {
+    const key = this.getSubscriptionKey(api, body);
+    if (client) {
+      const subscriptions = this.clientSubscriptions.get(client);
+      if (!subscriptions?.has(key)) {
+        return;
+      }
+      subscriptions.delete(key);
+      if (subscriptions.size === 0) {
+        this.clientSubscriptions.delete(client);
+      }
+    }
+
+    this.removeSubscriptionKey(key);
+  }
+
+  protected removeClientSubscriptions(client: WebSocket) {
+    const subscriptions = this.clientSubscriptions.get(client);
+    if (!subscriptions) {
+      return;
+    }
+
+    subscriptions.forEach((key) => this.removeSubscriptionKey(key));
+    this.clientSubscriptions.delete(client);
+  }
+
+  protected removeSubscriptionKey(key: string) {
+    const record = this.map.get(key);
+    if (!record) {
+      return;
+    }
+
+    record.count -= 1;
+    if (record.count <= 0) {
+      this.map.delete(key);
+    }
+  }
+
+  protected getSubscriptionKey(
+    api: SDK.ServerAPI.API,
+    body: Common.PlainObject | null,
+  ) {
+    return `${api}:${JSON.stringify(body ?? null)}`;
   }
 
   protected async getAPIResponse<T extends SDK.ServerAPI.API>(
@@ -157,15 +227,13 @@ export class Socket {
     this.timer = setImmediate(async () => {
       const promises: Promise<void>[] = [];
 
-      this.map.forEach((bodies, api) => {
-        bodies.forEach((body) => {
-          promises.push(
-            (async () => {
-              const res = await this.getAPIResponse(api, body!);
-              this.sendAPIData(api, res);
-            })(),
-          );
-        });
+      this.map.forEach(({ api, body }) => {
+        promises.push(
+          (async () => {
+            const res = await this.getAPIResponse(api, body!);
+            this.sendAPIData(api, res);
+          })(),
+        );
       });
 
       await Promise.all(promises);
