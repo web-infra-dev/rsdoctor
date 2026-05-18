@@ -63,7 +63,6 @@
     'rc-dialog',
     'monaco-editor',
     'react-i18next',
-    'socket.io-client',
     'react-router-dom',
     'tsx',
     '@types/estree',

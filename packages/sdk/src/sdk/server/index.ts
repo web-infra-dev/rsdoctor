@@ -324,13 +324,12 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     }
     this.disposed = true;
 
-    if (this._server) {
-      await this._server.close();
-    }
-
-    // must close socket after server to avoid socket.io close error.
     if (this._socket) {
       this._socket.dispose();
+    }
+
+    if (this._server) {
+      await this._server.close();
     }
 
     if (exitCode !== undefined) {
