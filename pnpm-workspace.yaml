@@ -26,7 +26,7 @@ catalog:
   '@rspack/core': 2.0.2
   '@rspack/plugin-react-refresh': 2.0.0
   '@rspack/resolver': 0.2.8
-  '@rstest/core': 0.9.10
+  '@rstest/core': 0.10.0
   '@types/body-parser': 1.19.6
   '@types/connect': 3.4.38
   '@types/estree': 1.0.5
