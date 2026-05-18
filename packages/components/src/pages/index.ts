@@ -1,9 +1,9 @@
 export * as Overall from './Overall';
 export * as BundleSize from './BundleSize';
 export * as ModuleAnalyze from './ModuleAnalyze';
-export * as LoaderTimeline from './WebpackLoaders/Overall';
-export * as LoaderFiles from './WebpackLoaders/Analysis';
-export * as PluginsAnalyze from './WebpackPlugins';
+export * as LoaderTimeline from './Loaders/Overall';
+export * as LoaderFiles from './Loaders/Analysis';
+export * as PluginsAnalyze from './Plugins';
 export * as ModuleResolve from './ModuleResolve';
 export * as RuleIndex from './Resources/RuleIndex';
 export * as TreeShaking from './TreeShaking';

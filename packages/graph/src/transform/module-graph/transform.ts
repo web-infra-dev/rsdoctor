@@ -90,7 +90,7 @@ export function getModuleGraphByStats(
       continue;
     }
 
-    if (moduleGraph.getModuleByWebpackId(data.identifier!)) {
+    if (moduleGraph.getModuleByIdentifier(data.identifier!)) {
       continue;
     }
 
@@ -155,17 +155,17 @@ export function getModuleGraphByStats(
 
       allModules.push(normal);
 
-      const webpackId = normal.identifier!;
-      const registeredModule = moduleGraph.getModuleByWebpackId(webpackId);
+      const identifier = normal.identifier!;
+      const registeredModule = moduleGraph.getModuleByIdentifier(identifier);
       let normalModule: SDK.ModuleInstance;
 
       if (registeredModule) {
         normalModule = registeredModule;
       } else {
         normalModule =
-          moduleGraph.getModuleByWebpackId(webpackId) ??
+          moduleGraph.getModuleByIdentifier(identifier) ??
           new Module(
-            webpackId,
+            identifier,
             getGetModuleName(root, normal),
             normal.depth === 0,
             SDK.ModuleKind.Normal,
@@ -230,7 +230,7 @@ export function getModuleGraphByStats(
 
   // Conversion dependency
   for (const module of allModules) {
-    const currentModule = moduleGraph.getModuleByWebpackId(
+    const currentModule = moduleGraph.getModuleByIdentifier(
       module.identifier ?? '',
     );
 
@@ -253,7 +253,7 @@ export function getModuleGraphByStats(
 
     for (const dep of dependencies) {
       const rawRequest = dep.userRequest!;
-      const requestModule = moduleGraph.getModuleByWebpackId(
+      const requestModule = moduleGraph.getModuleByIdentifier(
         dep.moduleIdentifier!,
       );
 
@@ -297,7 +297,7 @@ export function getModuleGraphByStats(
       module.issuerPath.forEach((issuer) => {
         let moduleInstance = moduleCache.get(issuer.identifier);
         if (!moduleInstance) {
-          moduleInstance = moduleGraph.getModuleByWebpackId(issuer.identifier);
+          moduleInstance = moduleGraph.getModuleByIdentifier(issuer.identifier);
           if (moduleInstance) {
             moduleCache.set(issuer.identifier, moduleInstance);
           }

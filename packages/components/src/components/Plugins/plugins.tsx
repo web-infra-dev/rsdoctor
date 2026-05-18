@@ -4,17 +4,17 @@ import { sumBy, uniq } from 'es-toolkit/compat';
 import { SDK } from '@rsdoctor/types';
 import { formatCosts } from '../../utils';
 
-interface WebpackPluginsTableDataItem {
+interface PluginsTableDataItem {
   tapName: string;
   hook: string;
   key: string;
   hookData: SDK.PluginHookData[];
 }
-export interface WebpackPluginsDataTableProps {
+export interface PluginsDataTableProps {
   dataSource: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetPluginData>;
 }
 
-export function useWebpackPluginsDataSource(
+export function usePluginsDataSource(
   plugin: SDK.PluginData,
   selectedTapNames: string[],
   selectedHooks: string[],
@@ -55,7 +55,7 @@ export function useWebpackPluginsDataSource(
       });
 
       return total;
-    }, [] as WebpackPluginsTableDataItem[]);
+    }, [] as PluginsTableDataItem[]);
   }, [plugin, selectedTapNames, selectedHooks]);
 
   return {
@@ -65,9 +65,9 @@ export function useWebpackPluginsDataSource(
   };
 }
 
-export const WebpackPluginsDataTable: React.FC<
-  WebpackPluginsDataTableProps
-> = ({ dataSource }) => {
+export const PluginsDataTable: React.FC<PluginsDataTableProps> = ({
+  dataSource,
+}) => {
   return (
     <Table
       dataSource={dataSource}

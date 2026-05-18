@@ -9,10 +9,10 @@ export enum RsdoctorClientUrlQuery {
 export enum RsdoctorClientRoutes {
   Home = '/',
   Overall = '/overall',
-  WebpackLoaderOverall = '/webpack/loaders/overall',
-  WebpackLoaderAnalysis = '/webpack/loaders/analysis',
+  LoaderOverall = '/loaders/overall',
+  LoaderAnalysis = '/loaders/analysis',
   ModuleResolve = '/module/resolve',
-  WebpackPlugins = '/webpack/plugins',
+  Plugins = '/plugins',
   BundleSize = '/bundle/size',
   ModuleAnalyze = '/module/analyze',
   TreeShaking = '/treeshaking',

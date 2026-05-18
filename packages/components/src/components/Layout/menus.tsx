@@ -37,7 +37,7 @@ const BuilderSwitchName = 'builder-switcher';
 
 const defaultInActive = {
   overall: <OverallInActive />,
-  webpack: <CompileAnalysisInActive />,
+  compile: <CompileAnalysisInActive />,
   bundle: <BundleSizeInActive />,
 };
 const MenusBase: React.FC<{
@@ -58,10 +58,14 @@ const MenusBase: React.FC<{
       : (urlEnableRoutes as Manifest.RsdoctorManifestClientRoutes[]) || [];
 
   useEffect(() => {
-    if (pathname.includes('webpack')) {
+    if (
+      pathname.includes('loaders') ||
+      pathname.includes('plugins') ||
+      pathname.includes('/module/resolve')
+    ) {
       setNavIcon({
         ...defaultInActive,
-        webpack: <CompileAnalysisActive />,
+        compile: <CompileAnalysisActive />,
       });
     } else if (pathname.includes('overall') || pathname === '/') {
       setNavIcon({
@@ -97,17 +101,17 @@ const MenusBase: React.FC<{
     items.push({
       label: t(CompileName),
       key: CompileName,
-      icon: navIcon.webpack,
+      icon: navIcon.compile,
       children: [
         enableRoutes.includes(
-          Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+          Manifest.RsdoctorManifestClientRoutes.Loaders,
         ) && {
           label: t(LoaderTimeline.name),
           key: LoaderTimeline.route,
           icon: <BoxPlotFilled style={iconStyle} />,
         },
         enableRoutes.includes(
-          Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+          Manifest.RsdoctorManifestClientRoutes.Loaders,
         ) && {
           label: t(LoaderFiles.name),
           key: LoaderFiles.route,
@@ -121,7 +125,7 @@ const MenusBase: React.FC<{
           icon: <NodeIndexOutlined style={iconStyle} />,
         },
         enableRoutes.includes(
-          Manifest.RsdoctorManifestClientRoutes.WebpackPlugins,
+          Manifest.RsdoctorManifestClientRoutes.Plugins,
         ) && {
           label: t(PluginsAnalyze.name),
           key: PluginsAnalyze.route,

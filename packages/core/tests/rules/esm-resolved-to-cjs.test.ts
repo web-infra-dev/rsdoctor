@@ -50,12 +50,12 @@ async function runRule(options: RunRuleOptions) {
       module: {
         id: 1,
         path: '/project/src/index.js',
-        webpackId: '1',
+        identifier: '1',
       },
       dependency: {
         id: 2,
         path: resolvedModulePath,
-        webpackId: '2',
+        identifier: '2',
         meta: {
           strictHarmonyModule: options.strictHarmonyModule ?? false,
         },
