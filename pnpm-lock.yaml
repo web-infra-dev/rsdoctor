@@ -201,8 +201,8 @@ importers:
         specifier: ^0.14.3
         version: 0.14.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.2(@swc/helpers@0.5.21))(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.21)))
       '@playwright/test':
-        specifier: 1.55.1
-        version: 1.55.1
+        specifier: 1.60.0
+        version: 1.60.0
       '@rsbuild/plugin-less':
         specifier: 'catalog:'
         version: 1.6.3(@rsbuild/core@1.7.5)(@rspack/core@2.0.2(@swc/helpers@0.5.21))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.21)))
@@ -3074,8 +3074,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@playwright/test@1.55.1':
-    resolution: {integrity: sha512-IVAh/nOJaw6W9g+RJVlIQJ6gSiER+ae6mKQ5CX1bERzQgbC1VSeBlwdvczT7pxb0GWiyrxH4TGKbMfDb4Sq/ig==}
+  '@playwright/test@1.60.0':
+    resolution: {integrity: sha512-O71yZIbAh/PxDMNGns37GHBIfrVkEVyn+AXyIa5dOTfb4/xNvRWV+Vv/NMbNCtODB/pO7vLlF2OTmMVLhmr7Ag==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -7202,8 +7202,18 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  playwright-core@1.60.0:
+    resolution: {integrity: sha512-9bW6zvX/m0lEbgTKJ6YppOKx8H3VOPBMOCFh2irXFOT4BbHgrx5hPjwJYLT40Lu+4qtD36qKc/Hn56StUW57IA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   playwright@1.55.1:
     resolution: {integrity: sha512-cJW4Xd/G3v5ovXtJJ52MAOclqeac9S/aGGgRzLabuF8TnIb6xHvMzKIa6JmrRzUkeXJgfL1MhukP0NK6l39h3A==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.60.0:
+    resolution: {integrity: sha512-hheHdokM8cdqCb0lcE3s+zT4t4W+vvjpGxsZlDnikarzx8tSzMebh3UiFtgqwFwnTnjYQcsyMF8ei2mCO/tpeA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -11833,9 +11843,9 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@playwright/test@1.55.1':
+  '@playwright/test@1.60.0':
     dependencies:
-      playwright: 1.55.1
+      playwright: 1.60.0
 
   '@polka/url@1.0.0-next.28': {}
 
@@ -16783,9 +16793,17 @@ snapshots:
 
   playwright-core@1.55.1: {}
 
+  playwright-core@1.60.0: {}
+
   playwright@1.55.1:
     dependencies:
       playwright-core: 1.55.1
+    optionalDependencies:
+      fsevents: 2.3.2
+
+  playwright@1.60.0:
+    dependencies:
+      playwright-core: 1.60.0
     optionalDependencies:
       fsevents: 2.3.2
 
