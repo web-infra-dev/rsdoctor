@@ -20,30 +20,11 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
     const moduleGraph = new ModuleGraph();
     const getStatement = (data: SDK.StatementData) =>
       new Statement(moduleGraph.getModuleById(data.module)!, data.position);
-    const usedModuleIdentifiers = new Set<string>();
-    const getUniqueModuleIdentifier = (item: SDK.ModuleData) => {
-      let identifier =
-        item.identifier ||
-        (item as SDK.ModuleData & { webpackId?: string }).webpackId ||
-        String(item.id);
-
-      if (usedModuleIdentifiers.has(identifier)) {
-        identifier = String(item.id);
-      }
-
-      let suffix = 1;
-      while (usedModuleIdentifiers.has(identifier)) {
-        identifier = `${item.id}:${suffix++}`;
-      }
-
-      usedModuleIdentifiers.add(identifier);
-      return identifier;
-    };
 
     // For creating Module.
     for (const item of data.modules ?? []) {
       const module = new Module(
-        getUniqueModuleIdentifier(item),
+        String(item.id),
         item.path,
         item.isEntry,
         item.kind,
