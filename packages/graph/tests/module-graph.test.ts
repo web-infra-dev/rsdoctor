@@ -114,6 +114,44 @@ describe('module graph', () => {
     expect(Object.keys(moduleData)).not.toContain('webpack' + 'Id');
   });
 
+  it('keeps deserialized modules when identifiers collide', async () => {
+    const createModuleData = (
+      id: number,
+      identifier: string,
+    ): SDK.ModuleData => ({
+      id,
+      renderId: String(id),
+      identifier,
+      path: `/path/to/module-${id}.js`,
+      isPreferSource: false,
+      dependencies: [],
+      imported: [],
+      chunks: [],
+      size: {
+        sourceSize: 0,
+        transformedSize: 0,
+        parsedSize: 0,
+        gzipSize: 0,
+      },
+      kind: SDK.ModuleKind.Normal,
+      issuerPath: [],
+      bailoutReason: [],
+      layer: '',
+    });
+    const moduleGraph = ModuleGraph.fromData({
+      modules: [
+        createModuleData(1, '/path/to/shared.js'),
+        createModuleData(2, '/path/to/shared.js'),
+        createModuleData(3, ''),
+      ],
+    });
+
+    expect(moduleGraph.getModules().map((item) => item.id)).toEqual([1, 2, 3]);
+    expect(moduleGraph.getModuleById(1)?.identifier).toBe('/path/to/shared.js');
+    expect(moduleGraph.getModuleById(2)?.identifier).toBe('2');
+    expect(moduleGraph.getModuleById(3)?.identifier).toBe('3');
+  });
+
   it('getModuleByFile should return modules by file path', async () => {
     const moduleGraph = new ModuleGraph();
     const filePath = '/path/to/module.js';
