@@ -184,7 +184,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
       client: {
         enableRoutes: this.getClientRoutes(),
       },
-      data: transformDataUrls(dataUrls),
+      data: transformDataUrls(dataUrls, outputDir),
     };
   }
 

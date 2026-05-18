@@ -58,6 +58,8 @@ export class RsdoctorSDK<
 
   private _packageGraph!: SDK.PackageGraphInstance;
 
+  private _otherReports: SDK.OtherReports = {};
+
   constructor(options: T) {
     super(options);
     this.server = options.config?.noServer
@@ -143,6 +145,7 @@ export class RsdoctorSDK<
     this._plugin = {};
     this._moduleGraph = new ModuleGraph();
     this._chunkGraph = new ChunkGraph();
+    this._otherReports = {};
   }
 
   clearSourceMapCache(): void {
@@ -310,6 +313,14 @@ export class RsdoctorSDK<
     this._chunkGraph.addAsset(...data.getAssets());
     this._chunkGraph.addChunk(...data.getChunks());
     this._chunkGraph.addEntryPoint(...data.getEntryPoints());
+    this.onDataReport();
+  }
+
+  reportOtherReports(part: Partial<SDK.OtherReports>): void {
+    this._otherReports = {
+      ...this._otherReports,
+      ...part,
+    };
     this.onDataReport();
   }
 
@@ -511,7 +522,7 @@ export class RsdoctorSDK<
         return ctx._moduleGraph.toTreeShakingData();
       },
       get otherReports() {
-        return { treemapReportHtml: '' };
+        return { ...ctx._otherReports };
       },
     };
   }
@@ -555,7 +566,7 @@ export class RsdoctorSDK<
       chunkGraph: this._chunkGraph,
       packageGraph: this._packageGraph,
       loader: this._loader.slice(),
-      otherReports: { treemapReportHtml: '' },
+      otherReports: { ...this._otherReports },
     };
   }
 

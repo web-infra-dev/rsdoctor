@@ -5,6 +5,7 @@ import {
   ChunkGraphData,
   EntryPointData,
 } from '../../chunk';
+import { ChunkGroupGraphData } from '../../chunk-group';
 import { ModuleData, ModuleGraphData, SideEffectCodeData } from '../../module';
 import { API } from './index';
 
@@ -21,6 +22,7 @@ export interface GraphAPIResponse {
   } & Pick<ModuleGraphData, 'dependencies'>;
   [API.GetModulesByModuleIds]: ModuleData[];
   [API.GetEntryPoints]: EntryPointData[];
+  [API.GetChunkGroupGraph]: ChunkGroupGraphData | undefined;
 }
 
 export interface GraphAPIRequestBody {

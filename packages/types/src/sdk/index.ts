@@ -3,6 +3,7 @@ export * from './resolver';
 export * from './plugin';
 export * from './module';
 export * from './chunk';
+export * from './chunk-group';
 export * from './result';
 export * from './summary';
 export * from './package';

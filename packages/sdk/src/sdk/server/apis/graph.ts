@@ -106,4 +106,11 @@ export class GraphAPI extends BaseAPI {
   > {
     return this.dataLoader.loadAPI(SDK.ServerAPI.API.GetEntryPoints);
   }
+
+  @Router.post(SDK.ServerAPI.API.GetChunkGroupGraph)
+  public async getChunkGroupGraph(): Promise<
+    SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetChunkGroupGraph>
+  > {
+    return this.dataLoader.loadAPI(SDK.ServerAPI.API.GetChunkGroupGraph);
+  }
 }
