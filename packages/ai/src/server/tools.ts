@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { getWsUrl, sendRequest } from './socket.js';
+import { getServerUrl, sendRequest } from './request.js';
 import { toolDescriptions } from '@/prompt/bundle.js';
 
 export enum Tools {
@@ -375,5 +375,5 @@ export const getLoaderTimes = async () => {
 };
 
 export const getPort = async () => {
-  return getWsUrl();
+  return getServerUrl();
 };
