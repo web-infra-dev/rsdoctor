@@ -3,12 +3,12 @@ import { InternalRules } from './internal-rules';
 
 export interface RsdoctorWebpackPluginFeatures {
   /**
-   * turn off it if you need not to analyze the executions of webpack loaders.
+   * turn off it if you need not to analyze the executions of bundler loaders.
    * @default true
    */
   loader?: boolean;
   /**
-   * turn off it if you need not to analyze the executions of webpack plugins.
+   * turn off it if you need not to analyze the executions of bundler plugins.
    * @default true
    */
   plugins?: boolean;
@@ -37,17 +37,11 @@ export interface RsdoctorWebpackPluginFeatures {
 export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends Common.DeepRequired<
-    Omit<
-      RsdoctorWebpackPluginOptions<Rules>,
-      | 'sdkInstance'
-      | 'linter'
-      | 'output'
-      | 'supports'
-      | 'port'
-      | 'brief'
-      | 'mode'
-    >
-  > {
+  Omit<
+    RsdoctorWebpackPluginOptions<Rules>,
+    'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief' | 'mode'
+  >
+> {
   features: Common.DeepRequired<RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: SDK.RsdoctorBuilderSDKInstance;
@@ -121,7 +115,7 @@ export interface RsdoctorWebpackPluginOptions<
   mode?: 'brief' | 'normal' | 'lite';
 
   /**
-   * configuration of the interceptor for webpack loaders. TODO: delete this options.
+   * configuration of the interceptor for bundler loaders. TODO: delete this options.
    * @description worked when the `features.loader === true`.
    */
   loaderInterceptorOptions?: {
@@ -185,8 +179,10 @@ export interface NormalModeOptions {
 }
 
 // Normal Mode Type
-interface NormalModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+interface NormalModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'normal';
   reportCodeType?: ReportCodeTypeByMode<'normal'>;
   options?: NormalModeOptions;
@@ -200,8 +196,10 @@ export interface BriefModeOptions {
   htmlOptions?: Config.BriefConfig;
 }
 
-export interface BriefModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+export interface BriefModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'brief';
   reportCodeType?: ReportCodeTypeByMode<'brief'>;
   options?: BriefModeOptions;

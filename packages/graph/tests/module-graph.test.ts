@@ -100,6 +100,20 @@ describe('module graph', () => {
     expect(_moduleGraph.toCodeData()).toMatchSnapshot();
   });
 
+  it('serializes modules with bundler identifiers', async () => {
+    const moduleGraph = new ModuleGraph();
+    const module = new Module('module-identifier', '/path/to/module.js');
+
+    moduleGraph.addModule(module);
+
+    expect(module.identifier).toBe('module-identifier');
+    expect(moduleGraph.getModuleByIdentifier('module-identifier')).toBe(module);
+
+    const [moduleData] = moduleGraph.toData().modules;
+    expect(moduleData.identifier).toBe('module-identifier');
+    expect(Object.keys(moduleData)).not.toContain('webpack' + 'Id');
+  });
+
   it('getModuleByFile should return modules by file path', async () => {
     const moduleGraph = new ModuleGraph();
     const filePath = '/path/to/module.js';
@@ -272,21 +286,21 @@ describe('module graph', () => {
       const moduleGraph = getModuleGraphByStats(stats, root, chunkGraph);
 
       // Check JSON file with lowercase extension
-      const jsonModule1 = moduleGraph.getModuleByWebpackId('json-module-1');
+      const jsonModule1 = moduleGraph.getModuleByIdentifier('json-module-1');
       expect(jsonModule1).toBeTruthy();
       expect(jsonModule1?.getSize().parsedSize).toBe(1024);
       expect(jsonModule1?.getSize().sourceSize).toBe(1024);
       expect(jsonModule1?.getSize().transformedSize).toBe(1024);
 
       // Check JSON file with uppercase extension
-      const jsonModule2 = moduleGraph.getModuleByWebpackId('json-module-2');
+      const jsonModule2 = moduleGraph.getModuleByIdentifier('json-module-2');
       expect(jsonModule2).toBeTruthy();
       expect(jsonModule2?.getSize().parsedSize).toBe(512);
       expect(jsonModule2?.getSize().sourceSize).toBe(512);
       expect(jsonModule2?.getSize().transformedSize).toBe(512);
 
       // Check non-JSON file should not have parsedSize set by this logic
-      const jsModule = moduleGraph.getModuleByWebpackId('js-module-1');
+      const jsModule = moduleGraph.getModuleByIdentifier('js-module-1');
       expect(jsModule).toBeTruthy();
       expect(jsModule?.getSize().sourceSize).toBe(2048);
       expect(jsModule?.getSize().transformedSize).toBe(2048);
@@ -333,14 +347,14 @@ describe('module graph', () => {
       const moduleGraph = getModuleGraphByStats(stats, root, chunkGraph);
 
       // Check JSON file inside concatenated module
-      const jsonModule = moduleGraph.getModuleByWebpackId('json-in-concat');
+      const jsonModule = moduleGraph.getModuleByIdentifier('json-in-concat');
       expect(jsonModule).toBeTruthy();
       expect(jsonModule?.getSize().parsedSize).toBe(1024);
       expect(jsonModule?.getSize().sourceSize).toBe(1024);
       expect(jsonModule?.getSize().transformedSize).toBe(1024);
 
       // Check non-JSON file inside concatenated module
-      const jsModule = moduleGraph.getModuleByWebpackId('js-in-concat');
+      const jsModule = moduleGraph.getModuleByIdentifier('js-in-concat');
       expect(jsModule).toBeTruthy();
       expect(jsModule?.getSize().sourceSize).toBe(2048);
       expect(jsModule?.getSize().transformedSize).toBe(2048);
@@ -366,7 +380,7 @@ describe('module graph', () => {
       const chunkGraph = chunkTransform(new Map(), stats);
       const moduleGraph = getModuleGraphByStats(stats, root, chunkGraph);
 
-      const jsonModule = moduleGraph.getModuleByWebpackId('json-no-size');
+      const jsonModule = moduleGraph.getModuleByIdentifier('json-no-size');
       expect(jsonModule).toBeTruthy();
       // When size is not provided, parsedSize should remain 0 (default)
       expect(jsonModule?.getSize().parsedSize).toBe(0);
@@ -392,7 +406,7 @@ describe('module graph', () => {
       const chunkGraph = chunkTransform(new Map(), stats);
       const moduleGraph = getModuleGraphByStats(stats, root, chunkGraph);
 
-      const jsonModule = moduleGraph.getModuleByWebpackId('json-absolute');
+      const jsonModule = moduleGraph.getModuleByIdentifier('json-absolute');
       expect(jsonModule).toBeTruthy();
       expect(jsonModule?.getSize().parsedSize).toBe(256);
     });
