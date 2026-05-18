@@ -1,7 +1,8 @@
 import { Helmet } from '@modern-js/runtime/head';
-import './index.css';
+// import './index.css';
+import React from 'react';
 
-const Index = (): JSX.Element => (
+const Index = (): React.JSX.Element => (
   <div className="container-box">
     <Helmet />
     Hello world

@@ -14,7 +14,7 @@ export enum RspackSummaryCostsDataName {
  * @param configs - Array of compiler configurations
  * @returns Object containing compiler type and source map support status
  */
-export function checkSourceMapSupport(configs: SDK.WebpackConfigData[]) {
+export function checkSourceMapSupport(configs: SDK.BundlerConfigData[]) {
   if (!Array.isArray(configs) || !configs[0]) {
     return {
       isRspack: false,

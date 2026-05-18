@@ -46,7 +46,6 @@ packages/
   sdk/                # server SDK: data collection, socket.io transport, report serving
   core/               # core analysis engine: build-utils, plugins, rules
   rspack-plugin/      # Rspack plugin (peerDep: @rspack/core)
-  webpack-plugin/     # Webpack 5 plugin (peerDep: webpack 5.x)
   cli/                # `rsdoctor` CLI binary
   ai/                 # `@rsdoctor/mcp-server` — MCP server + AI analysis (published as @rsdoctor/mcp-server)
   client/             # web client (Rsbuild SPA, serves analysis report)
@@ -60,13 +59,13 @@ scripts/
   rstest.setup.ts       # rstest global setup (snapshot serializer)
   tsconfig/             # shared tsconfig presets
 e2e/                    # Playwright E2E tests (cases/ per bundler)
-examples/               # runnable example projects (rspack / rsbuild / webpack / rspress)
+examples/               # runnable example projects (rspack / rsbuild / rspress)
 ```
 
 ### Package dependency flow
 
 ```text
-types → utils → graph → sdk → core → rspack-plugin / webpack-plugin → cli
+types → utils → graph → sdk → core → rspack-plugin → cli
                                   ↘ client ← components
                                   ↘ ai (mcp-server)
 ```
@@ -103,7 +102,7 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 
 - Branch off `main`; never commit directly to `main`.
 - PR title must follow **Conventional Commits**: `type(scope): description`.
-- Common scopes: `core`, `rspack-plugin`, `webpack-plugin`, `sdk`, `cli`, `ai`, `graph`, `utils`, `components`, `client`, `deps`.
+- Common scopes: `core`, `rspack-plugin`, `sdk`, `cli`, `ai`, `graph`, `utils`, `components`, `client`, `deps`.
 - PR body must follow `.github/PULL_REQUEST_TEMPLATE.md` with two sections:
   - `## Summary` — what changed and why.
   - `## Related Links` — issue links, docs, related PRs, or `None`.

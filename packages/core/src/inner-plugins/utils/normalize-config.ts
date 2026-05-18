@@ -3,11 +3,6 @@ import type {
   RuleSetCondition as RspackRuleSetCondition,
   RuleSetRule as RspackRuleSetRule,
 } from '@rspack/core';
-import {
-  RuleSetCondition as WebpackRuleSetCondition,
-  RuleSetConditionAbsolute as WebpackRuleSetConditionAbsolute,
-  RuleSetRule as WebpackRuleSetRule,
-} from 'webpack';
 /**
  * Process mode-specific configurations with priority logic
  */
@@ -106,11 +101,7 @@ export function convertReportCodeTypeObject(
  * This function recursively processes rule set conditions to ensure they can be
  * properly serialized to JSON.
  *
- * @param item - The rule set condition to make serializable. Can be:
- *   - RspackRuleSetCondition: Rspack-specific rule conditions
- *   - WebpackRuleSetConditionAbsolute: Webpack absolute rule conditions
- *   - WebpackRuleSetCondition: Webpack rule conditions
- *   - void: Undefined or null values
+ * @param item - The rule set condition to make serializable.
  *
  * @example
  * ```typescript
@@ -121,13 +112,7 @@ export function convertReportCodeTypeObject(
  * JSON.stringify(condition); // '"/\\.js$/"'
  * ```
  */
-export function makeRuleSetSerializable(
-  item:
-    | RspackRuleSetCondition
-    | WebpackRuleSetConditionAbsolute
-    | WebpackRuleSetCondition
-    | void,
-) {
+export function makeRuleSetSerializable(item: RspackRuleSetCondition | void) {
   if (!item) return;
   if (item instanceof RegExp) {
     // Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.
@@ -141,10 +126,7 @@ export function makeRuleSetSerializable(
   }
 }
 export function makeRulesSerializable(
-  rules:
-    | Plugin.RuleSetRule[]
-    | RspackRuleSetRule['oneOf']
-    | WebpackRuleSetRule['oneOf'],
+  rules: Plugin.RuleSetRule[] | RspackRuleSetRule['oneOf'],
 ) {
   if (!Array.isArray(rules)) return;
   if (!rules.length) return;

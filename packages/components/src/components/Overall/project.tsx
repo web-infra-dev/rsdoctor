@@ -8,7 +8,7 @@ import {
 
 import { ServerAPIProvider } from '../Manifest';
 import { useI18n, formatSize } from '../../utils';
-import { WebpackConfigurationViewer } from '../Configuration';
+import { BundlerConfigurationViewer } from '../Configuration';
 import { Card } from '../Card';
 import { Overview } from './overview';
 import styles from './project.module.scss';
@@ -136,7 +136,7 @@ export const ProjectOverall: React.FC<{
             <div>
               <div className={styles.title}>
                 <span className={styles.left}>{t('Project Overall')}</span>
-                <WebpackConfigurationViewer />
+                <BundlerConfigurationViewer />
               </div>
               <div className={projectStyles.overview}>
                 {overViewData.map((data, idx) => (

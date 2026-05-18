@@ -60,7 +60,7 @@ export async function getConfig(): Promise<{
   return {
     ok: true,
     data: config,
-    description: 'Get build configuration (rspack/webpack config).',
+    description: 'Get build configuration (Rspack config).',
   };
 }
 

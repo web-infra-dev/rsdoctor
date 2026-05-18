@@ -1,10 +1,10 @@
 # Rsdoctor Configuration Overview
 
-The Rsdoctor suite provides plugins for both Rspack and Webpack, namely `RsdoctorRspackPlugin` and `RsdoctorWebpackPlugin`. These plugins are designed to enhance build analysis by integrating Rsdoctor's capabilities directly into the build process.
+The Rsdoctor suite provides the `RsdoctorRspackPlugin` for Rspack projects. It enhances build analysis by integrating Rsdoctor's capabilities directly into the build process.
 
 ## Key Features
 
-- **Plugins**: Both plugins offer a range of options to customize the build analysis, including enabling or disabling specific features and modes.
+- **Plugin options**: The plugin offers a range of options to customize the build analysis, including enabling or disabling specific features and modes.
 - **Modes**: Users can choose between `normal`, `brief`, and `lite` modes, each offering different levels of detail and performance optimizations.
 - **Features**: The plugins support a variety of features such as loader and plugin analysis, bundle analysis, and resolver analysis.
 - **Output Configuration**: Options are available to configure the output directory, compress data, and select specific types of analysis data to output.
@@ -12,13 +12,13 @@ The Rsdoctor suite provides plugins for both Rspack and Webpack, namely `Rsdocto
 
 ## Usage
 
-The plugins can be configured using CommonJS or ES Module syntax, and they provide a flexible API to tailor the analysis to specific project needs. The configuration options are extensive, allowing for detailed customization of the analysis process.
+The plugin can be configured using CommonJS or ES Module syntax, and it provides a flexible API to tailor the analysis to specific project needs. The configuration options are extensive, allowing for detailed customization of the analysis process.
 
 For more detailed information on each option and its usage, refer to the specific sections in the `options.mdx` file.
 
 ## Detailed Configuration Options
 
-The Rsdoctor plugins offer a comprehensive set of configuration options:
+The Rsdoctor plugin offers a comprehensive set of configuration options:
 
 - **Brief Mode**: Allows for a simplified report with options to customize the HTML report name and decide whether to write additional data to JSON.
 - **Disable Client Server**: Option to prevent automatic opening of the Rsdoctor report page.

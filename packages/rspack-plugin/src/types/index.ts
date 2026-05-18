@@ -10,12 +10,12 @@ export interface RsdoctorRspackPluginOptions {
   /**
    * the switch for the Rsdoctor features.
    */
-  features?: Plugin.RsdoctorWebpackPluginOptions<[]>['features'];
+  features?: Plugin.RsdoctorPluginOptions<[]>['features'];
   /**
-   * configuration of the interceptor for webpack loaders.
+   * configuration of the interceptor for bundler loaders.
    * @description worked when the `features.loader === true`.
    */
-  loaderInterceptorOptions?: Plugin.RsdoctorWebpackPluginOptions<
+  loaderInterceptorOptions?: Plugin.RsdoctorPluginOptions<
     []
   >['loaderInterceptorOptions'];
 }

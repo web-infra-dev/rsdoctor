@@ -41,7 +41,7 @@ export class InternalErrorReporterPlugin<
     }
   };
 
-  public handleWebpackError(
+  public handleBuildError(
     err: Plugin.BuildError,
     category: Rule.RuleMessageCategory,
     level: keyof typeof Err.ErrorLevel,
@@ -61,7 +61,7 @@ export class InternalErrorReporterPlugin<
     time('InternalErrorReporterPlugin.reportWarnings');
     try {
       const arr = warnings.map((warning) => {
-        return this.handleWebpackError(
+        return this.handleBuildError(
           warning,
           Rule.RuleMessageCategory.Compile,
           'Warn',
@@ -77,7 +77,7 @@ export class InternalErrorReporterPlugin<
     time('InternalErrorReporterPlugin.reportErrors');
     try {
       const arr = errors.map((err) => {
-        return this.handleWebpackError(
+        return this.handleBuildError(
           err,
           Rule.RuleMessageCategory.Bundle,
           'Error',

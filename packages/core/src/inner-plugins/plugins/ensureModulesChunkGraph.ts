@@ -1,5 +1,5 @@
 import { RsdoctorPluginInstance } from '@/types';
-import { Linter, Plugin, Manifest, SDK } from '@rsdoctor/types';
+import { Linter, Plugin, SDK } from '@rsdoctor/types';
 import { Process } from '@rsdoctor/utils/build';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 import {
@@ -11,8 +11,8 @@ import {
   pluginTapPostOptions,
 } from '../constants';
 import { applyRspackNativePlugin } from './rspack';
-import { handleEmitAssets, handleAfterEmitAssets } from './sourcemapTool';
-import type { TransformContext } from '@/build-utils/build/module-graph/webpack/transform';
+import { handleAfterEmitAssets } from './sourcemapTool';
+import type { TransformContext } from '@/build-utils/build/module-graph/bundler/transform';
 
 /**
  * Represents a mapping item from a source map.
@@ -29,10 +29,8 @@ export interface MappingItem {
 let hasConsole = false;
 
 /**
- * Main function to generate ModuleGraph and ChunkGraph from stats and Webpack module APIs.
- * Sets up hooks to process stats, generate graphs, handle tree shaking, and collect source maps.
- * @param compiler - The Webpack or Rspack compiler instance.
- * @param _this - The Rsdoctor plugin instance.
+ * Main function to generate ModuleGraph and ChunkGraph from stats and Rspack module APIs.
+ * Sets up hooks to process stats, generate graphs, and collect source maps.
  */
 export const ensureModulesChunksGraphFn = (
   compiler: Plugin.BaseCompiler,
@@ -103,24 +101,14 @@ export const ensureModulesChunksGraphFn = (
       }
     },
   );
-
-  // Hook: During emit, collect source maps (Webpack only)
-  compiler.hooks.emit.tapAsync(
-    {
-      ...pluginTapPostOptions,
-      stage: pluginTapPostOptions.stage! + 100,
-    },
-    // webpack only, webpack use emitHandler to collect source maps
-    emitHandler.bind(null, _this, compiler),
-  );
 };
 
 /**
- * Handler function for the done hook. Generates graphs, processes stats, handles tree shaking, and reports results.
+ * Handler function for the done hook. Generates graphs, processes stats, and reports results.
  * @param _stats - The stats object from the compiler.
  * @param _this - The Rsdoctor plugin instance.
  * @param context - The module graph transformation context.
- * @param compiler - The Webpack or Rspack compiler instance.
+ * @param compiler - The Rspack compiler instance.
  */
 async function doneHandler(
   _stats: any,
@@ -183,26 +171,14 @@ async function doneHandler(
   );
 
   /**
-   * Tree Shaking: If enabled, attempt to append tree shaking info to the module graph.
-   * Note: Rspack currently does not support tree shaking.
+   * Tree shaking data is not emitted by the current Rspack integration.
    */
   if (_this.options.features.treeShaking) {
-    if ('rspackVersion' in compiler.webpack) {
-      logger.info(
-        chalk.yellow(
-          'Rspack currently does not support treeShaking capabilities.',
-        ),
-      );
-    } else {
-      _this.modulesGraph =
-        ModuleGraphBuildUtils.appendTreeShaking(
-          _this.modulesGraph,
-          stats.compilation,
-        ) || _this.modulesGraph;
-      _this.sdk.addClientRoutes([
-        Manifest.RsdoctorManifestClientRoutes.TreeShaking,
-      ]);
-    }
+    logger.info(
+      chalk.yellow(
+        'Rspack currently does not support treeShaking capabilities.',
+      ),
+    );
     logger.debug(
       `${
         (Process.getMemoryUsageMessage(),
@@ -252,7 +228,7 @@ async function doneHandler(
 /**
  * Checks if source map processing is enabled and supported by the current compiler configuration.
  * Warns if eval-based source maps are used (unsupported).
- * @param compiler - The Webpack or Rspack compiler instance.
+ * @param compiler - The Rspack compiler instance.
  * @returns true if source maps are enabled and supported, false otherwise.
  */
 export const ensureDevtools = (compiler: Plugin.BaseCompiler) => {
@@ -268,26 +244,13 @@ export const ensureDevtools = (compiler: Plugin.BaseCompiler) => {
     return false;
   }
 
-  // rspack no need open the sourcemap options
-  if ('rspack' in compiler) {
-    return true;
-  }
-
-  const sourceMapEnabled =
-    typeof devtool === 'string' && /source-?map/i.test(devtool);
-
-  if (!sourceMapEnabled) {
-    logger.debug('SourceMap is not enabled. Skipping sourcemap processing.');
-    return false;
-  }
-
   return true;
 };
 
 /**
  * Collects parsed code and size information for all modules in the module graph.
  * Used to enrich the module graph with additional data for analysis and reporting.
- * @param compiler - The Webpack or Rspack compiler instance.
+ * @param compiler - The Rspack compiler instance.
  * @param moduleGraph - The module graph instance.
  * @param chunkGraph - The chunk graph instance.
  * @param parseBundle - Whether to parse the bundle for additional info.
@@ -329,7 +292,7 @@ function escapeRegExp(str: string) {
 
 /**
  * Calculates namespace and source map filename regex for source map resolution.
- * @param compiler - The Webpack or Rspack compiler instance.
+ * @param compiler - The Rspack compiler instance.
  * @returns An object containing namespace and sourceMapFilenameRegex.
  */
 export function calculateNamespaceAndRegex(compiler: Plugin.BaseCompiler) {
@@ -355,34 +318,4 @@ export function calculateNamespaceAndRegex(compiler: Plugin.BaseCompiler) {
     namespace: namespace as string,
     sourceMapFilenameRegex,
   };
-}
-
-/**
- * Handler function for the emit hook. Collects source maps for Webpack assets.
- * @param _this - The Rsdoctor plugin instance.
- * @param compiler - The Webpack compiler instance.
- * @param compilation - The current compilation object.
- * @param callback - The callback to signal completion.
- */
-async function emitHandler(
-  _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
-  compiler: Plugin.BaseCompiler,
-  compilation: Plugin.BaseCompilation,
-  callback: () => void,
-) {
-  if (!ensureDevtools(compiler)) {
-    callback();
-    return;
-  }
-
-  const { namespace, sourceMapFilenameRegex } =
-    calculateNamespaceAndRegex(compiler);
-
-  await handleEmitAssets({
-    compilation,
-    pluginInstance: _this,
-    sourceMapFilenameRegex,
-    namespace,
-  });
-  callback();
 }

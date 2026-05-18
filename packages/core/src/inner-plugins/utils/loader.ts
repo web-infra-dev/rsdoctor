@@ -151,7 +151,7 @@ export async function reportLoader(
   code: string,
   err: Error | null | undefined,
   res: string | Buffer | null,
-  sourceMap?: Plugin.SourceMapInput,
+  sourceMap?: Plugin.RspackSourceMapInput,
 ) {
   const end = Time.getCurrentTimestamp(start, startHRTime);
   const { loader, host } = getInternalLoaderOptions(ctx);
@@ -226,14 +226,14 @@ export async function reportLoader(
       loaderData,
       8888,
     ).catch((err: Error) => {
-      logger.debug(`${err.message}`, '[WebpackPlugin.ReportLoader][error]');
+      logger.debug(`${err.message}`, '[RspackPlugin.ReportLoader][error]');
     }),
     Fetch.postJSON(
       `${host}${SDK.ServerAPI.API.ReportSourceMap}`,
       sourceMapData,
       8888,
     ).catch((err: Error) => {
-      logger.debug(`${err.message}`, '[WebpackPlugin.ReportSourceMap][error]');
+      logger.debug(`${err.message}`, '[RspackPlugin.ReportSourceMap][error]');
     }),
   ]);
 

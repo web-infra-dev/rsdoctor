@@ -2,7 +2,7 @@ import { Manifest, Plugin } from '@rsdoctor/types';
 import type { HookInterceptor } from 'tapable';
 import { Loader } from '@rsdoctor/utils/common';
 import { isEqual, omit } from 'es-toolkit/compat';
-import { LoaderContext, NormalModule } from 'webpack';
+import type { LoaderContext, NormalModule } from '@rspack/core';
 import { interceptLoader, type CompatibleResolve } from '../utils';
 import { InternalBasePlugin } from './base';
 import { ProxyLoaderOptions } from '@/types';
@@ -14,6 +14,20 @@ import { safeCloneDeep } from '../utils/plugin-common';
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+type MutableLoaderItem = {
+  loader: string;
+  options?: unknown;
+  [key: string]: unknown;
+};
+
+type MutableNormalModule = NormalModule & {
+  loaders?: MutableLoaderItem[];
+};
+
+type LoaderContextWithLoaders = LoaderContext<unknown> & {
+  loaders?: MutableLoaderItem[];
+};
 
 export class InternalLoaderPlugin<
   T extends Plugin.BaseCompiler,
@@ -65,9 +79,7 @@ export class InternalLoaderPlugin<
       ) as Plugin.BuildRuleSetRules;
 
       // add loader page to client
-      this.sdk.addClientRoutes([
-        Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
-      ]);
+      this.sdk.addClientRoutes([Manifest.RsdoctorManifestClientRoutes.Loaders]);
     } finally {
       timeEnd('InternalLoaderPlugin.afterPlugins');
     }
@@ -78,16 +90,18 @@ export class InternalLoaderPlugin<
     try {
       if (compiler.isChild()) return;
 
-      /**
-       * some plugin will overwrite and validate loader or loader options in [normalModuleLoader](https://webpack.js.org/api/compilation-hooks/#normalmoduleloader) hook.
-       * such as (@arco-plugins/webpack-react)[https://github.com/arco-design/arco-plugins/blob/main/packages/plugin-webpack-react/src/arco-design-plugin/utils/index.ts#L134]
-       */
-      // TODO: compatible rspack normalmodule type
+      // Some plugins overwrite and validate loader options in the normal
+      // module loader hook, so Rsdoctor keeps its proxy view stable here.
       const wrapper =
         (callback: Function) =>
         (loaderContext: LoaderContext<unknown>, module: NormalModule) => {
+          const mutableModule = module as MutableNormalModule;
+          const loaderContextWithLoaders =
+            loaderContext as LoaderContextWithLoaders;
           // loaders which are already intercepted in afterPlugins hook by Rsdoctor.
-          const proxyLoaders = module?.loaders || loaderContext?.loaders || [];
+          const proxyLoaders = (mutableModule.loaders ||
+            loaderContextWithLoaders.loaders ||
+            []) as MutableLoaderItem[];
 
           // return origin loaders not doctor internal loaders
           const originLoaders = proxyLoaders.map((loader) => {
@@ -155,7 +169,11 @@ export class InternalLoaderPlugin<
               }),
             );
 
-            module.loaders = rules.map((e, i) => {
+            (
+              mutableModule as unknown as {
+                loaders: MutableLoaderItem[];
+              }
+            ).loaders = rules.map((e, i) => {
               return {
                 ...newLoaders[i],
                 loader: e.loader!,
@@ -176,8 +194,7 @@ export class InternalLoaderPlugin<
       };
 
       compiler.webpack.NormalModule.getCompilationHooks(
-        compilation as Plugin.BaseCompilationType &
-          Plugin.BaseCompilationType<'rspack'>,
+        compilation as Plugin.BaseCompilationType<'rspack'>,
       ).loader.intercept(interceptor);
     } finally {
       timeEnd('InternalLoaderPlugin.compilation');

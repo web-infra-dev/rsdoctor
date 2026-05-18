@@ -56,42 +56,13 @@ export class InternalBundlePlugin<
     time('InternalBundlePlugin.thisCompilation');
     try {
       // save asset content to map
-      if (
-        compilation.hooks.processAssets &&
-        'afterOptimizeAssets' in compilation.hooks
-      ) {
-        compilation.hooks.afterOptimizeAssets.tap(
-          this.tapPostOptions,
-          (assets: any) => {
-            Object.keys(assets).forEach((file) => {
-              const v = this.ensureAssetContent(file);
-              v.content = assets[file].source().toString();
-            });
-          },
-        );
-      } else if (
-        compilation.hooks.processAssets &&
-        'afterProcessAssets' in compilation.hooks
-      ) {
-        // This is for rspack hooks.
+      if (compilation.hooks.afterProcessAssets) {
         compilation.hooks.afterProcessAssets.tap(this.tapPostOptions, () => {
           Object.keys(compilation.assets).forEach((file) => {
             const v = this.ensureAssetContent(file);
             v.content = compilation.assets[file].source().toString();
           });
         });
-      } else if ('afterOptimizeChunkAssets' in compilation.hooks) {
-        compilation.hooks.afterOptimizeChunkAssets.tap(
-          this.tapPostOptions,
-          (chunks) => {
-            [...chunks]
-              .reduce<string[]>((t, chunk) => t.concat([...chunk.files]), [])
-              .forEach((file) => {
-                const v = this.ensureAssetContent(file);
-                v.content = compilation.assets[file].source().toString();
-              });
-          },
-        );
       }
     } finally {
       timeEnd('InternalBundlePlugin.thisCompilation');

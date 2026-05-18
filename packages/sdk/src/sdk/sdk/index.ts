@@ -9,7 +9,7 @@ import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/graph';
 import { logger } from '@rsdoctor/utils/logger';
 import { RsdoctorServer } from '../server';
 import { RsdoctorFakeServer } from '../server/fakeServer';
-import { RsdoctorWebpackSDKOptions } from './types';
+import { RsdoctorSDKOptions } from './types';
 import { SDKCore } from './core';
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Lodash } from '@rsdoctor/utils/common';
@@ -20,9 +20,7 @@ export * from '../utils/openBrowser';
 export * from '../utils/base';
 
 const require = createRequire(import.meta.url);
-export class RsdoctorSDK<
-  T extends RsdoctorWebpackSDKOptions = RsdoctorWebpackSDKOptions,
->
+export class RsdoctorSDK<T extends RsdoctorSDKOptions = RsdoctorSDKOptions>
   extends SDKCore<T>
   implements SDK.RsdoctorBuilderSDKInstance
 {

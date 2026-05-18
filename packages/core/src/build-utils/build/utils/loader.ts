@@ -7,14 +7,12 @@ import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule } from '../../../types';
 import { readPackageJson } from '@rsdoctor/graph';
 import { RuleSetUseItem } from '@rspack/core';
-import { RuleSetUseItem as WebpackRuleSetUseItem } from 'webpack';
 import { logger } from '@rsdoctor/utils/logger';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// webpack https://github.com/webpack/webpack/blob/2953d23a87d89b3bd07cf73336ee34731196c62e/lib/util/identifier.js#L311
 // rspack https://github.com/web-infra-dev/rspack/blob/d22f049d4bce4f8ac20c1cbabeab3706eddaecc1/packages/rspack/src/loader-runner/index.ts#L47
 const PATH_QUERY_FRAGMENT_REGEXP =
   /^((?:\0.|[^?#\0])*)(\?(?:\0.|[^#\0])*)?(#.*)?$/;
@@ -97,12 +95,10 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
       } as unknown as T);
     }
 
-    // https://webpack.js.org/configuration/module/#ruleloader
     if (rule.loader && typeof rule.loader === 'string') {
       return callback(rule);
     }
 
-    // https://webpack.js.org/configuration/module/#ruleloaders
     if (Array.isArray((rule as Rule).loaders)) {
       const { loaders, ...rest } = rule as Rule;
       return {
@@ -151,7 +147,6 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
       };
     }
 
-    // nested rule, https://webpack.js.org/configuration/module/#nested-rules
     if ('rules' in rule && Array.isArray(rule.rules)) {
       return {
         ...rule,
@@ -207,7 +202,7 @@ export function isESMLoader(r: Plugin.BuildRuleSetRule) {
 
 function appendProbeLoaders(
   compiler: Plugin.BaseCompiler,
-  loaderConfig: RuleSetUseItem | WebpackRuleSetUseItem,
+  loaderConfig: RuleSetUseItem,
 ): RuleSetUseItem[] {
   const _options =
     typeof loaderConfig === 'object'
@@ -349,7 +344,7 @@ export function createLoaderContextTrap(
   final: (
     err: Error | null | undefined,
     res: string | Buffer | null,
-    sourceMap?: Plugin.SourceMapInput,
+    sourceMap?: Plugin.RspackSourceMapInput,
   ) => void,
 ) {
   // callback
@@ -363,7 +358,7 @@ export function createLoaderContextTrap(
   let async: typeof this.async = (...args) => {
     const cb = ac(...args);
     return (...args) => {
-      final(args[0], args[1] ?? null, args[2] as Plugin.SourceMapInput);
+      final(args[0], args[1] ?? null, args[2] as Plugin.RspackSourceMapInput);
       return cb(...args);
     };
   };
@@ -394,7 +389,7 @@ export function createLoaderContextTrap(
             if (typeof target.query === 'object') {
               const options = target.query[Loader.LoaderInternalPropertyName];
 
-              // webpack5 https://webpack.js.org/api/loaders/#thisquery
+              // Preserve `this.query` behavior for loader option objects.
               if (options.hasOptions) {
                 return omit(target.query, [Loader.LoaderInternalPropertyName]);
               }

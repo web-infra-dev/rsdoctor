@@ -1,6 +1,6 @@
 ## chunk:
 
-In the context of bundling tools like Webpack and Rspack, a chunk is a collection of modules that are bundled together into a single file. Chunks are created by dividing the application code into smaller, more manageable pieces, which can be loaded dynamically or in parallel. This strategy enhances application performance and scalability by reducing the initial load size and enabling more efficient caching.
+In the context of Rspack, a chunk is a collection of modules that are bundled together into a single file. Chunks are created by dividing the application code into smaller, more manageable pieces, which can be loaded dynamically or in parallel. This strategy enhances application performance and scalability by reducing the initial load size and enabling more efficient caching.
 
 ## module:
 

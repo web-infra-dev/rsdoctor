@@ -21,7 +21,7 @@ const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, {}> = function (
   const mod = getOriginLoaderModule(this);
 
   if (mod.default) {
-    // https://webpack.js.org/api/loaders/#raw-loader
+    // Preserve raw-loader behavior when the original loader expects text input.
     if (mod.raw === false && Buffer.isBuffer(args[0])) {
       args[0] = args[0].toString();
     }

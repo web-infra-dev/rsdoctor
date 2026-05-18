@@ -8,7 +8,7 @@ export function getModuleGraphByStats(
   stats: Plugin.StatsCompilation,
   root: string,
   chunkGraph: SDK.ChunkGraphInstance,
-  features?: Plugin.RsdoctorWebpackPluginFeatures,
+  features?: Plugin.RsdoctorPluginFeatures,
   context?: TransformContext,
 ) {
   return appendModuleGraphByCompilation(

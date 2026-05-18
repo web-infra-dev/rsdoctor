@@ -38,14 +38,6 @@ export type RspackExportsExperiments = typeof rspack.experiments;
 
 export type RspackSourceMapInput = Parameters<LoaderDefinitionFunction>[1];
 // export type SourceMap = Exclude<SourceMapInput, string | undefined>;
-export type RspackEntryPoint = boolean | 'auto';
-export interface RspackExportInfo {
-  used: boolean;
-  provideInfo: boolean | null | undefined;
-  useInfo: boolean | null | undefined;
-  canMangle: boolean;
-}
-
 export type RspackExportsInfo = ReturnType<ModuleGraph['getExportsInfo']>;
 
 export interface RspackHarmonyImportSpecifierDependency extends Dependency {

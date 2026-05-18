@@ -16,7 +16,7 @@ There is a package with the same version that is duplicated across different chu
 
 To address this issue, you can use Rspack's **SplitChunksPlugin** to extract common dependencies into a separate chunk. This ensures that the same package is not duplicated across multiple chunks, thereby reducing the bundle size.
 
-For example, if **lodash** is being duplicated across different chunks, you can configure the **optimization.splitChunks** option in your Webpack configuration to extract **lodash** into a separate chunk:
+For example, if **lodash** is being duplicated across different chunks, you can configure the **optimization.splitChunks** option in your Rspack configuration to extract **lodash** into a separate chunk:
 
 \`\`\`
 module.exports = {

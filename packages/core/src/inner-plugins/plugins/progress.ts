@@ -4,7 +4,7 @@ import { InternalBasePlugin } from './base';
 import { logger } from '@rsdoctor/utils/logger';
 
 export class InternalProgressPlugin<
-  T extends Plugin.BaseCompilerType<'webpack'>,
+  T extends Plugin.BaseCompilerType<'rspack'>,
 > extends InternalBasePlugin<T> {
   public readonly name = 'progress';
 
@@ -17,8 +17,8 @@ export class InternalProgressPlugin<
   public apply(compiler: T): void {
     const { sdk, currentProgress } = this;
     if (compiler.webpack && compiler.webpack.ProgressPlugin) {
-      const progress = new compiler.webpack.ProgressPlugin({
-        handler(percentage: number, msg: string) {
+      const progress = new compiler.webpack.ProgressPlugin(
+        (percentage: number, msg: string) => {
           currentProgress.percentage = percentage;
           currentProgress.message = msg || '';
 
@@ -36,7 +36,7 @@ export class InternalProgressPlugin<
             logger.debug(e);
           }
         },
-      });
+      );
       progress.apply(compiler);
     }
   }

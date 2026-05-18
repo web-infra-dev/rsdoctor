@@ -1,14 +1,8 @@
 import type {
-  Compiler,
-  Compilation,
-  Stats,
-  StatsError,
-  RuleSetRule,
-} from 'webpack';
-import type {
   Compiler as RspackCompiler,
   Compilation as RspackCompilation,
   Stats as RspackStats,
+  StatsError,
   RuleSetRule as RspackRuleSetRule,
   MultiCompiler,
 } from '@rspack/core';
@@ -29,17 +23,16 @@ type RspackRuleSetRuleWrapper = any extends RspackRuleSetRule
   ? never
   : RspackRuleSetRule;
 
-export type BaseCompilerType<T extends 'rspack' | 'webpack' = 'webpack'> =
-  T extends 'rspack' ? RspackCompilerWrapper : Compiler;
-export type BaseCompiler = BaseCompilerType | BaseCompilerType<'rspack'>;
+export type BaseCompilerType<T extends 'rspack' = 'rspack'> = T extends 'rspack'
+  ? RspackCompilerWrapper
+  : never;
+export type BaseCompiler = BaseCompilerType;
 
-export type BaseCompilationType<T extends 'rspack' | 'webpack' = 'webpack'> =
-  T extends 'rspack' ? Compilation : RspackCompilation;
-export type BaseCompilation =
-  | BaseCompilationType
-  | BaseCompilationType<'rspack'>;
+export type BaseCompilationType<T extends 'rspack' = 'rspack'> =
+  T extends 'rspack' ? RspackCompilation : never;
+export type BaseCompilation = BaseCompilationType;
 
-export type BaseStats = Stats | RspackStatsWrapper;
+export type BaseStats = RspackStatsWrapper;
 
 export interface JsStatsError {
   message: string;
@@ -69,9 +62,9 @@ export type BuildRuleSetRules = (
   | false
   | ''
   | 0
-  | RuleSetRule
+  | RspackRuleSetRuleWrapper
   | '...'
   | null
   | undefined
 )[];
-export type BuildRuleSetRule = RuleSetRule | RspackRuleSetRuleWrapper;
+export type BuildRuleSetRule = RspackRuleSetRuleWrapper;

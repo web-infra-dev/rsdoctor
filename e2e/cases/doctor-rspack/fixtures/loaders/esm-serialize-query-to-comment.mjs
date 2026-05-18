@@ -1,7 +1,7 @@
 import { parseQuery } from 'loader-utils';
 
 /**
- * @type {import("webpack").LoaderDefinitionFunction<{}, {}>}
+ * @type {import("@rspack/core").LoaderDefinitionFunction<{}, {}>}
  */
 const loader = (input) => {
   const res = [input, `// ${JSON.stringify(this?.query || '')}`];

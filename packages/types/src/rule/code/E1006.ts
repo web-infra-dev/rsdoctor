@@ -27,7 +27,7 @@ In the **Module Mixed Chunks** tab of Bundle Alerts, each entry shows the module
 
 1. **Use a single import style**: Prefer one way to reference a module—either all synchronous imports (initial) or all dynamic \`import()\` (async). Avoid the same file being both synchronously imported in the main bundle and dynamically imported elsewhere.
 2. **Review entry vs dynamic loading**: If a file is both an entry and part of an async chunk, remove one of those usages or extract it into a single shared chunk via build config so both initial and async chunks reference it instead of duplicating it.
-3. **Adjust splitChunks**: Check rules for that module path in \`optimization.splitChunks\` (Rspack/Webpack) or \`performance.chunkSplit\` (Rsbuild), and avoid the same module being split into both initial and async chunks. Use \`chunks: 'async'\` or \`chunks: 'initial'\` where appropriate, or control which chunk type it goes into via \`cacheGroups\` and \`test\` / \`chunks\`.
+3. **Adjust splitChunks**: Check rules for that module path in \`optimization.splitChunks\` (Rspack) or \`performance.chunkSplit\` (Rsbuild), and avoid the same module being split into both initial and async chunks. Use \`chunks: 'async'\` or \`chunks: 'initial'\` where appropriate, or control which chunk type it goes into via \`cacheGroups\` and \`test\` / \`chunks\`.
 4. **Trace dependencies**: From the reported module path and chunk list, search the codebase for references to that module, distinguish sync vs dynamic imports, then converge to a single chunk type or extract a common chunk.
 `,
 };

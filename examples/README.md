@@ -18,7 +18,6 @@ npm run test:cjs     # Test CJS functionality
 - `rspack-minimal/` - Basic Rspack setup with Rsdoctor
 - `rspack-banner-minimal/` - Rspack with banner plugin
 - `rspack-layers-minimal/` - Rspack with layer support
-- `webpack-minimal/` - Basic Webpack setup with Rsdoctor
 - `multiple-minimal/` - Multiple build tools example
 - `modern-minimal/` - Modern build setup
 - `rsbuild-minimal/` - Rsbuild with Rsdoctor

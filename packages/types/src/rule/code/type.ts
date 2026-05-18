@@ -9,7 +9,7 @@ export enum RuleMessageCodeEnumerated {
    */
   Extend = 'EXTEND',
   /**
-   * errors show in the overlay at the client, such as Webpack compile errors in development
+   * errors shown in the overlay at the client, such as compile errors in development
    */
   Overlay = 'OVERLAY',
 }

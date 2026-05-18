@@ -1,7 +1,7 @@
 const { parseQuery } = require('loader-utils');
 
 /**
- * @type {import("webpack").LoaderDefinitionFunction<{}, {}>}
+ * @type {import("@rspack/core").LoaderDefinitionFunction<{}, {}>}
  */
 module.exports = function (input) {
   const res = [input, `// ${JSON.stringify(this.resourceQuery)}`];

@@ -3,7 +3,7 @@ import { Divider, Row, Select, Space, Typography } from 'antd';
 import { RightOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import ReactJson from 'react-json-view';
-import { useWebpackConfigurationByConfigs } from '../../utils';
+import { useBundlerConfigurationByConfigs } from '../../utils';
 import { withServerAPI } from '../Manifest';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
@@ -11,15 +11,15 @@ import { Title } from '../Title';
 import styles from './builder.module.scss';
 import { Lodash } from '@rsdoctor/utils/common';
 
-interface WebpackConfigurationViewerBaseProps {
+interface BundlerConfigurationViewerBaseProps {
   defaultKeys?: string[];
   configs: SDK.ConfigData;
 }
 
-export const WebpackConfigurationViewerBase: React.FC<
-  WebpackConfigurationViewerBaseProps
+export const BundlerConfigurationViewerBase: React.FC<
+  BundlerConfigurationViewerBaseProps
 > = ({ defaultKeys, configs }) => {
-  const builderConfigData = useWebpackConfigurationByConfigs(configs || []);
+  const builderConfigData = useBundlerConfigurationByConfigs(configs || []);
 
   if (!builderConfigData) return null;
 
@@ -70,7 +70,7 @@ export const WebpackConfigurationViewerBase: React.FC<
         name={
           version && version !== 'unknown'
             ? `${name}@${version}`
-            : `webpack.config`
+            : `rspack.config`
         }
         theme="monokai"
         src={
@@ -86,10 +86,10 @@ export const WebpackConfigurationViewerBase: React.FC<
   );
 };
 
-export const WebpackConfigurationViewer: React.FC<
-  Omit<WebpackConfigurationViewerBaseProps, 'configs'>
+export const BundlerConfigurationViewer: React.FC<
+  Omit<BundlerConfigurationViewerBaseProps, 'configs'>
 > = withServerAPI({
-  Component: WebpackConfigurationViewerBase,
+  Component: BundlerConfigurationViewerBase,
   api: SDK.ServerAPI.API.LoadDataByKey,
   responsePropName: 'configs',
   body: {

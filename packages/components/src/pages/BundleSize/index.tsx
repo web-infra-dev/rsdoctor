@@ -2,13 +2,13 @@ import { Col, Row } from 'antd';
 import React from 'react';
 
 import { Size } from '../../constants';
-import { WebpackModulesOverall } from './components';
+import { BundleModulesOverall } from './components';
 
 export const Page: React.FC = () => {
   return (
     <Row>
       <Col span={24} style={{ marginBottom: Size.BasePadding }}>
-        <WebpackModulesOverall />
+        <BundleModulesOverall />
       </Col>
     </Row>
   );

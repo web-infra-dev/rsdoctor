@@ -140,7 +140,7 @@ export const getModuleById = async (
   module: {
     id: number;
     renderId?: string;
-    webpackId: string;
+    identifier: string;
     path: string;
     isPreferSource: boolean;
     imported: number[];
@@ -169,7 +169,7 @@ export const getModuleById = async (
       dependencies,
       id: res.module.id,
       renderId: res.module.renderId,
-      webpackId: res.module.webpackId,
+      identifier: res.module.identifier,
       path: res.module.path,
       isPreferSource: res.module.isPreferSource,
       imported: res.module.imported,
@@ -334,7 +334,7 @@ export const getLargeChunks = async () => {
         tools: Tools.GetLargeChunks,
         type: 'text',
         description:
-          'For filtered large resources, provide splitChunks optimization suggestions based on webpack best practices',
+          'For filtered large resources, provide splitChunks optimization suggestions based on Rspack best practices',
         text: JSON.stringify(largeChunks),
       },
     ],

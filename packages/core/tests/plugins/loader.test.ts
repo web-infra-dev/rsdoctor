@@ -11,9 +11,9 @@ describe('test src/utils/loader.ts', () => {
     const tsLoader = 'ts-loader';
     const resolvedBabelLoader = require.resolve(babelLoader);
     const resolvedStringLoader = require.resolve(stringLoader);
-    const exampleWebpackPath = path.resolve(__dirname, '../../');
+    const exampleRspackPath = path.resolve(__dirname, '../../');
     const resolvedTsLoader = require.resolve(tsLoader, {
-      paths: [exampleWebpackPath],
+      paths: [exampleRspackPath],
     });
     const proxyLoaderPath = path.resolve(
       __dirname,
@@ -302,7 +302,7 @@ describe('test src/utils/loader.ts', () => {
           internalOptions,
           undefined,
           {
-            modules: [path.join(exampleWebpackPath, 'node_modules')],
+            modules: [path.join(exampleRspackPath, 'node_modules')],
           },
         ),
       ).toStrictEqual([

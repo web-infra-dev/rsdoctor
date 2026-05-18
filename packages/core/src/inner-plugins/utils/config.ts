@@ -72,7 +72,7 @@ function isValidMode(mode: any): mode is keyof typeof SDK.IMode {
 }
 
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
-  config: Plugin.RsdoctorWebpackPluginOptions<Rules> = {},
+  config: Plugin.RsdoctorPluginOptions<Rules> = {},
 ): Plugin.RsdoctorPluginOptionsNormalized<Rules> {
   const userOutput = config.output;
   const defaultOutput = getDefaultOutput();

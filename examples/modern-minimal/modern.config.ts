@@ -1,5 +1,5 @@
 import { appTools, defineConfig } from '@modern-js/app-tools';
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 
 const pluginName = 'Rsdoctor';
 
@@ -23,7 +23,7 @@ export default defineConfig({
 
   tools: {
     bundlerChain: (chain) => {
-      chain.plugin(pluginName).use(RsdoctorWebpackPlugin, [
+      chain.plugin(pluginName).use(RsdoctorRspackPlugin, [
         {
           linter: {
             rules: {

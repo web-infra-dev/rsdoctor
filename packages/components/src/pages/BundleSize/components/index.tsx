@@ -51,16 +51,19 @@ const { Option } = Select;
 
 const cardBodyHeight = 600;
 
-interface WebpackModulesOverallProps {
+interface BundleModulesOverallProps {
   cwd: string;
   errors: SDK.ErrorsData;
   summary: Client.RsdoctorClientAssetsSummary;
   entryPoints: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetEntryPoints>;
 }
 
-export const WebpackModulesOverallBase: React.FC<
-  WebpackModulesOverallProps
-> = ({ errors, cwd, summary, entryPoints }) => {
+export const BundleModulesOverallBase: React.FC<BundleModulesOverallProps> = ({
+  errors,
+  cwd,
+  summary,
+  entryPoints,
+}) => {
   const [selectedEntryPoints, setEntryPoints] = useState<SDK.EntryPointData[]>(
     [],
   );
@@ -601,7 +604,7 @@ export const WebpackModulesOverallBase: React.FC<
   );
 };
 
-export const WebpackModulesOverall: React.FC = () => {
+export const BundleModulesOverall: React.FC = () => {
   const { project } = useProjectInfo();
 
   if (!project) {
@@ -618,7 +621,7 @@ export const WebpackModulesOverall: React.FC = () => {
         return (
           <ServerAPIProvider api={SDK.ServerAPI.API.GetEntryPoints}>
             {(entryPoints) => (
-              <WebpackModulesOverallBase
+              <BundleModulesOverallBase
                 cwd={root}
                 errors={errors}
                 summary={summary}

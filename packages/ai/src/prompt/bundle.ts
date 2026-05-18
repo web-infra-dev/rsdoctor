@@ -3,8 +3,8 @@ export const toolDescriptions = {
   getChunkById:
     'get chunk by id, if chunk not found, return `Chunk not found`, and stop the execution',
   getModuleById: `
-    get module detail by id (Rspack or Webpack module id)：
-    - id: the id of the module (corresponds to Rspack or Webpack's internal module id)
+    get module detail by id (Rspack module id)：
+    - id: the id of the module (corresponds to Rspack's internal module id)
     - issuerPath: the referrer chain (array of module ids, from entry to this module)
     - dependencies: direct dependencies (array of module ids this module imports/requires)
     - allDependencies: all transitive dependencies (if user asks for detail)
@@ -12,15 +12,15 @@ export const toolDescriptions = {
     - imported: array of module ids that import this module
     - isEntry: whether this module is an entry point
     - size: { sourceSize, transformedSize, parsedSize }
-    - layer, modules, rootModule, webpackId: advanced info
+    - layer, modules, rootModule, identifier: advanced info
     - bailoutReason: if present, the reason why this module is not tree-shaken or optimized away (e.g. "side effects", "dynamic import", "unknown exports", etc.)
-    - Please use Rspack or Webpack's terminology for all fields.
+    - Please use Rspack terminology for all fields.
     - If user asks for "why not tree-shaken", always return bailoutReason and explain in plain language.
     - If user asks for "who imported this module", return issuerPath as a dependency chain.
     - If user asks for "all dependencies", return allDependencies.
   `,
   getModuleByPath: `
-    get module detail by module name or path (absolute or relative, as in Rspack or Webpack stats)
+    get module detail by module name or path (absolute or relative, as in Rspack stats)
     - If multiple modules match, return all matched module paths and stop, let user select.
     - Otherwise, return the same fields as getModuleById.
     - Always include bailoutReason if present.
@@ -50,7 +50,7 @@ export const toolDescriptions = {
 
       #### General Solution
 
-      add an entry in \`resolve.alias\` which will configure Webpack to route any package references to a single specified path.
+      add an entry in \`resolve.alias\` which will configure Rspack to route any package references to a single specified path.
 
       For example, if \`lodash\` is duplicated in your bundle, the following configuration would render all Lodash imports to always refer to the \`lodash\` instance found at \`./node_modules/lodash\`:
 
@@ -69,7 +69,7 @@ export const toolDescriptions = {
 
     To address this issue, you can use Rspack's **SplitChunksPlugin** to extract common dependencies into a separate chunk. This ensures that the same package is not duplicated across multiple chunks, thereby reducing the bundle size.
 
-    For example, if **lodash** is being duplicated across different chunks, you can configure the **optimization.splitChunks** option in your Webpack configuration to extract **lodash** into a separate chunk:
+    For example, if **lodash** is being duplicated across different chunks, you can configure the **optimization.splitChunks** option in your Rspack configuration to extract **lodash** into a separate chunk:
 
     \`\`\`
     module.exports = {
@@ -178,7 +178,7 @@ export const toolDescriptions = {
   `,
 
   analysisExamples: `
-    # Rspack or Webpack Analysis Examples
+    # Rspack Analysis Examples
 
     1. "Why is node_modules/rc-tree/lib/util.js not tree-shaken?"
       - Return the module's bailoutReason, explain it in plain language.

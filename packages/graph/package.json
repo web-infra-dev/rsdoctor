@@ -40,14 +40,22 @@
     "source-map": "catalog:"
   },
   "devDependencies": {
+    "@rspack/core": "catalog:",
     "@types/body-parser": "catalog:",
     "@types/estree": "catalog:",
     "@types/path-browserify": "catalog:",
     "@types/node": "catalog:",
     "fs-extra": "catalog:",
     "tslib": "catalog:",
-    "typescript": "catalog:",
-    "webpack": "^5.105.4"
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "@rspack/core": "*"
+  },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",

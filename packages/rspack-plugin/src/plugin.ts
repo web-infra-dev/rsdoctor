@@ -2,7 +2,6 @@ import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
 import {
   ensureModulesChunksGraphFn,
   InternalBundlePlugin,
-  InternalBundleTagPlugin,
   InternalErrorReporterPlugin,
   InternalLoaderPlugin,
   InternalPluginsPlugin,
@@ -41,9 +40,9 @@ import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
 
-export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
-  implements RsdoctorRspackPluginInstance<Rules>
-{
+export class RsdoctorRspackPlugin<
+  Rules extends Linter.ExtendRuleData[],
+> implements RsdoctorRspackPluginInstance<Rules> {
   public readonly name = pluginTapName;
 
   public readonly sdk: SDK.RsdoctorBuilderSDKInstance | RsdoctorPrimarySDK;
@@ -107,7 +106,8 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       }
 
       // bootstrap sdk in apply()
-      // avoid to has different sdk instance in one plugin, because of webpack-chain toConfig() will new every webpack plugins.
+      // Avoid creating multiple SDK instances when chained config helpers
+      // materialize plugin instances more than once.
       if (!this._bootstrapTask) {
         this._bootstrapTask = this.sdk.bootstrap();
       }
@@ -140,7 +140,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         new BuildUtilLoader.ProbeLoaderPlugin().apply(compiler);
         // add loader page to client
         this.sdk.addClientRoutes([
-          Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
+          Manifest.RsdoctorManifestClientRoutes.Loaders,
         ]);
 
         if (!Loader.isVue(compiler)) {
@@ -160,9 +160,6 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
         new InternalBundlePlugin<Plugin.BaseCompilerType<'rspack'>>(this).apply(
           compiler,
         );
-        new InternalBundleTagPlugin<Plugin.BaseCompilerType<'rspack'>>(
-          this,
-        ).apply(compiler);
       }
 
       if (this.options.features.resolver) {
@@ -173,7 +170,8 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
 
       new InternalRulesPlugin(this).apply(compiler);
 
-      // InternalErrorReporterPlugin must called before InternalRulesPlugin, to avoid treat Rsdoctor's lint warnings/errors as Webpack's warnings/errors.
+      // InternalErrorReporterPlugin must be registered before InternalRulesPlugin,
+      // so Rsdoctor lint findings stay separate from compiler warnings/errors.
       new InternalErrorReporterPlugin(this).apply(compiler);
 
       // apply Rspack native plugin to improve the performance
@@ -197,10 +195,7 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
   }
 
   /**
-   * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
-   * @param {Compiler} compiler
-   * @return {*}
-   * @memberof RsdoctorWebpackPlugin
+   * @description Generate ModuleGraph and ChunkGraph from stats and Rspack module APIs.
    */
   public ensureModulesChunksGraphApplied(
     compiler: Plugin.BaseCompilerType<'rspack'>,
@@ -286,13 +281,13 @@ export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
       // Use extracted common function to process configuration
       const configuration = processCompilerConfig(compiler.options);
 
-      const rspackVersion = compiler.webpack?.rspackVersion;
-      const webpackVersion = compiler.webpack?.version;
+      const rspackVersion =
+        compiler.webpack?.rspackVersion || compiler.webpack?.version;
 
-      // save webpack or rspack configuration to sdk
+      // Save Rspack configuration to the SDK.
       this.sdk.reportConfiguration({
-        name: rspackVersion ? 'rspack' : 'webpack',
-        version: rspackVersion || webpackVersion || 'unknown',
+        name: 'rspack',
+        version: rspackVersion || 'unknown',
         config: configuration,
         root: findRoot() || '',
       });

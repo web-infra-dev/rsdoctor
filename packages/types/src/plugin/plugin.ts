@@ -1,14 +1,14 @@
 import { Common, Config, Linter as LinterType, SDK } from '..';
 import { InternalRules } from './internal-rules';
 
-export interface RsdoctorWebpackPluginFeatures {
+export interface RsdoctorPluginFeatures {
   /**
-   * turn off it if you need not to analyze the executions of webpack loaders.
+   * turn off it if you need not to analyze the executions of Rspack loaders.
    * @default true
    */
   loader?: boolean;
   /**
-   * turn off it if you need not to analyze the executions of webpack plugins.
+   * turn off it if you need not to analyze the executions of Rspack plugins.
    * @default true
    */
   plugins?: boolean;
@@ -37,18 +37,12 @@ export interface RsdoctorWebpackPluginFeatures {
 export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends Common.DeepRequired<
-    Omit<
-      RsdoctorWebpackPluginOptions<Rules>,
-      | 'sdkInstance'
-      | 'linter'
-      | 'output'
-      | 'supports'
-      | 'port'
-      | 'brief'
-      | 'mode'
-    >
-  > {
-  features: Common.DeepRequired<RsdoctorWebpackPluginFeatures>;
+  Omit<
+    RsdoctorPluginOptions<Rules>,
+    'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief' | 'mode'
+  >
+> {
+  features: Common.DeepRequired<RsdoctorPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: SDK.RsdoctorBuilderSDKInstance;
   output: {
@@ -99,7 +93,7 @@ export type NewReportCodeType =
   | 'noAssetsAndModuleSource'
   | 'noCode';
 
-export interface RsdoctorWebpackPluginOptions<
+export interface RsdoctorPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
   /** Checker configuration */
@@ -107,9 +101,7 @@ export interface RsdoctorWebpackPluginOptions<
   /**
    * the switch for the Rsdoctor features.
    */
-  features?:
-    | RsdoctorWebpackPluginFeatures
-    | Array<keyof RsdoctorWebpackPluginFeatures>;
+  features?: RsdoctorPluginFeatures | Array<keyof RsdoctorPluginFeatures>;
 
   /**
    * @deprecated  Use `output.mode` instead, if you're using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead.
@@ -121,12 +113,12 @@ export interface RsdoctorWebpackPluginOptions<
   mode?: 'brief' | 'normal' | 'lite';
 
   /**
-   * configuration of the interceptor for webpack loaders. TODO: delete this options.
+   * configuration of the interceptor for Rspack loaders. TODO: delete this options.
    * @description worked when the `features.loader === true`.
    */
   loaderInterceptorOptions?: {
     /**
-     * loaders which you want to skip it (will not report the target loader data when webpack compile).
+     * loaders which you want to skip it (will not report the target loader data during Rspack compilation).
      */
     skipLoaders?: string[];
   };
@@ -185,8 +177,10 @@ export interface NormalModeOptions {
 }
 
 // Normal Mode Type
-interface NormalModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+interface NormalModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'normal';
   reportCodeType?: ReportCodeTypeByMode<'normal'>;
   options?: NormalModeOptions;
@@ -200,8 +194,10 @@ export interface BriefModeOptions {
   htmlOptions?: Config.BriefConfig;
 }
 
-export interface BriefModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+export interface BriefModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'brief';
   reportCodeType?: ReportCodeTypeByMode<'brief'>;
   options?: BriefModeOptions;

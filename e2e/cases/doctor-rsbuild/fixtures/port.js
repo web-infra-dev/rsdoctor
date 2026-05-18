@@ -1,6 +1,6 @@
-const { RsdoctorWebpackPlugin } = require('../../dist/index');
+const { RsdoctorRspackPlugin } = require('../../dist/index');
 
-const plugin = new RsdoctorWebpackPlugin({});
+const plugin = new RsdoctorRspackPlugin({});
 
 plugin.sdk.bootstrap().then(() => {
   console.log(plugin.sdk.server.port);

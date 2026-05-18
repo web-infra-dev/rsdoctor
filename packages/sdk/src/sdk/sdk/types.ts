@@ -14,12 +14,6 @@ export interface DataWithUrl {
 export interface RsdoctorSDKOptions {
   name: string;
   root: string;
-}
-
-/**
- * sdk options for builder.
- */
-export interface RsdoctorBuilderSDK extends RsdoctorSDKOptions {
   type?: SDK.ToDataType;
   /**
    * port for client server
@@ -28,6 +22,6 @@ export interface RsdoctorBuilderSDK extends RsdoctorSDKOptions {
   config?: SDK.SDKOptionsType;
 }
 
-export interface RsdoctorWebpackSDKOptions extends RsdoctorBuilderSDK {}
+export interface RsdoctorBuilderSDK extends RsdoctorSDKOptions {}
 
 export interface RsdoctorEMOSDKOptions extends RsdoctorSDKOptions {}

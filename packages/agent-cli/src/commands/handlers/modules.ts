@@ -30,7 +30,7 @@ export async function getModuleById(
   return {
     ok: true,
     data: module,
-    description: 'Get module detail by id (webpack/rspack).',
+    description: 'Get module detail by id (Rspack).',
   };
 }
 

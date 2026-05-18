@@ -16,7 +16,7 @@ This negatively impacts the bundle size of your application.
 
 #### General Solution
 
-Add an entry in \`resolve.alias\` to configure Webpack to route any package references to a single specified path.
+Add an entry in \`resolve.alias\` so Rspack routes any package references to a single specified path.
 
 For example, if \`lodash\` is duplicated in your bundle, the following configuration would make all Lodash imports refer to the \`lodash\` instance found at \`./node_modules/lodash\`:
 

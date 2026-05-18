@@ -54,12 +54,12 @@ export const rule = defineRule<typeof title, Config>(() => {
           issuerModule: {
             id: dep.module.id,
             path: dep.module.path,
-            webpackId: dep.module.webpackId,
+            identifier: dep.module.identifier,
           },
           requiredModule: {
             id: requiredModule.id,
             path: requiredModule.path,
-            webpackId: requiredModule.webpackId,
+            identifier: requiredModule.identifier,
           },
           request: dep.request,
         };

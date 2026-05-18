@@ -25,10 +25,7 @@ export const statsAnalyze: Command<
     `use ${name} to open "${Constants.RsdoctorOutputManifestPath}" in browser for analysis.example: ${bin} ${Commands.StatsAnalyze} --profile "${Constants.StatsFilePath}"`.trim(),
   options(cli) {
     cli
-      .option(
-        '--profile <path>',
-        'Path to webpack stats.json file for analysis',
-      )
+      .option('--profile <path>', 'Path to Rspack stats.json file for analysis')
       .option('--port <number>', 'port for Rsdoctor Server')
       .option('--type <mode>', 'Bundle analysis mode (normal or lite)');
   },

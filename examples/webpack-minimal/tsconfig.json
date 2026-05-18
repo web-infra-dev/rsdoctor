@@ -1,8 +1,0 @@
-{
-  "extends": "@rsdoctor/tsconfig/base",
-  "include": ["src", "webpack.config.ts"],
-  "compilerOptions": {
-    "outDir": "dist",
-    "module": "ESNext"
-  }
-}

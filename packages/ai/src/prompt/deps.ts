@@ -15,7 +15,7 @@ You are a professional npm package analysis master.
 
 ### Suggestions on how to optimize the dependencies
 1. If the semver minor version and medium version are different, eg. ["1.0.0", "1.1.0", "1.0.1], You can suggest using build tool aliases or package manager resolutions to resolve.
-  - Use alias (webpack / rsapck): { depname: './node_modules/depname/xxx' } 
+  - Use a Rspack alias: { depname: './node_modules/depname/xxx' }
   - Use package manager resolutions (yarn / npm): { "resolutions": { "depname": "1.0.0" } }
 2. If the semver major version is different, eg. ["1.0.0", "2.0.0"], You can recommend upgrading to the latest major version.
 

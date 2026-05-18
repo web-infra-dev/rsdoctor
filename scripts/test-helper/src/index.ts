@@ -48,5 +48,4 @@ export function createSnapshotSerializer(options?: SnapshotSerializerOptions) {
 }
 
 export * from './rspack';
-export * from './webpack';
 export * from './rsbuild';

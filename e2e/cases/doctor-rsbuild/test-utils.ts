@@ -1,17 +1,17 @@
 import type { Plugin } from '@rsdoctor/types';
 import {
-  RsdoctorWebpackPlugin,
-  RsdoctorWebpackMultiplePlugin,
-} from '@rsdoctor/webpack-plugin';
+  RsdoctorRspackPlugin,
+  RsdoctorRspackMultiplePlugin,
+} from '@rsdoctor/rspack-plugin';
 import { Linter } from '@rsdoctor/types';
 import { File } from '@rsdoctor/utils/build';
 import { tmpdir } from 'os';
 import path from 'path';
 
 export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
-  options: Plugin.RsdoctorWebpackPluginOptions<T> = {},
+  options: Plugin.RsdoctorPluginOptions<T> = {},
 ) {
-  const plugin = new RsdoctorWebpackPlugin({
+  const plugin = new RsdoctorRspackPlugin({
     ...options,
     disableClientServer:
       typeof options.disableClientServer === 'boolean'
@@ -21,7 +21,7 @@ export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
 
   const outdir = path.resolve(
     tmpdir(),
-    `./${Date.now()}/rsdoctor_webpack_plugin_test`,
+    `./${Date.now()}/rsdoctor_rspack_plugin_test`,
   );
 
   plugin.sdk.hooks.afterSaveManifest.tapPromise(
@@ -40,9 +40,9 @@ export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
 }
 
 export function createRsdoctorMultiPlugin<T extends Linter.ExtendRuleData[]>(
-  options: Plugin.RsdoctorWebpackPluginOptions<T> = {},
+  options: Plugin.RsdoctorPluginOptions<T> = {},
 ) {
-  const plugin = new RsdoctorWebpackMultiplePlugin({
+  const plugin = new RsdoctorRspackMultiplePlugin({
     ...options,
     disableClientServer:
       typeof options.disableClientServer === 'boolean'
@@ -52,7 +52,7 @@ export function createRsdoctorMultiPlugin<T extends Linter.ExtendRuleData[]>(
 
   const outdir = path.resolve(
     tmpdir(),
-    `./${Date.now()}/rsdoctor_webpack_plugin_test`,
+    `./${Date.now()}/rsdoctor_rspack_plugin_test`,
   );
 
   plugin.sdk.hooks.afterSaveManifest.tapPromise(

@@ -74,7 +74,7 @@ export const getSimpleChunk = (
         if (!m) {
           return null;
         }
-        if (!m.webpackId.includes('node_modules')) {
+        if (!m.identifier.includes('node_modules')) {
           return null;
         }
         return {

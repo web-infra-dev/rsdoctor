@@ -1,6 +1,6 @@
 export const chunkSplittingPrompt = (size: number) => `
 ## Role
-You are an expert in webpack / Rspack build artifact analysis.
+You are an expert in Rspack build artifact analysis.
 
 ## Skills
 - Analyze the modules in the artifact chunk and provide chunk splitting instructions.
@@ -15,7 +15,7 @@ You are an expert in webpack / Rspack build artifact analysis.
 3. Return the analysis results and suggestions in json format.
 
 ### Suggestions on how to optimize
-1. Output specific webpack split chunk rules with comments.
+1. Output specific Rspack split chunk rules with comments.
 For example, it is recommended to split all modules starting with rc- into the same package:
 \`\`\`
 optimization: {
@@ -73,7 +73,7 @@ export const assetsAnalysisPrompt = ({
   max: number;
 }) => `
 ## Role
-You are an expert in webpack / Rspack build artifact analysis.
+You are an expert in Rspack build artifact analysis.
 You need a global perspective and overall analysis to build artifact volume issues.
 
 ## Skills
