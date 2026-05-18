@@ -27,6 +27,6 @@
     "es-toolkit": "catalog:",
     "playwright": "1.55.1",
     "typescript": "catalog:",
-    "webpack": "^5.105.4"
+    "webpack": "^5.106.2"
   }
 }

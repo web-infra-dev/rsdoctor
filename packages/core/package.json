@@ -120,7 +120,7 @@
     "ts-loader": "^9.5.7",
     "tslib": "catalog:",
     "typescript": "catalog:",
-    "webpack": "^5.105.4"
+    "webpack": "^5.106.2"
   },
   "publishConfig": {
     "access": "public",
