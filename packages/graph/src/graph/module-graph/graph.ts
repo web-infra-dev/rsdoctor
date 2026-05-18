@@ -22,7 +22,10 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
       new Statement(moduleGraph.getModuleById(data.module)!, data.position);
     const usedModuleIdentifiers = new Set<string>();
     const getUniqueModuleIdentifier = (item: SDK.ModuleData) => {
-      let identifier = item.identifier || String(item.id);
+      let identifier =
+        item.identifier ||
+        (item as SDK.ModuleData & { webpackId?: string }).webpackId ||
+        String(item.id);
 
       if (usedModuleIdentifiers.has(identifier)) {
         identifier = String(item.id);

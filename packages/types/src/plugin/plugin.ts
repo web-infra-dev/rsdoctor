@@ -3,12 +3,12 @@ import { InternalRules } from './internal-rules';
 
 export interface RsdoctorWebpackPluginFeatures {
   /**
-   * turn off it if you need not to analyze the executions of bundler loaders.
+   * Turn it off if you do not need to analyze the executions of bundler loaders.
    * @default true
    */
   loader?: boolean;
   /**
-   * turn off it if you need not to analyze the executions of bundler plugins.
+   * Turn it off if you do not need to analyze the executions of bundler plugins.
    * @default true
    */
   plugins?: boolean;
@@ -115,12 +115,12 @@ export interface RsdoctorWebpackPluginOptions<
   mode?: 'brief' | 'normal' | 'lite';
 
   /**
-   * configuration of the interceptor for bundler loaders. TODO: delete this options.
+   * Configuration for the bundler loader interceptor. TODO: delete this option.
    * @description worked when the `features.loader === true`.
    */
   loaderInterceptorOptions?: {
     /**
-     * loaders which you want to skip it (will not report the target loader data when webpack compile).
+     * Loaders that should be skipped and not reported when the bundler compiles.
      */
     skipLoaders?: string[];
   };

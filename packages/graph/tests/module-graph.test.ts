@@ -143,13 +143,20 @@ describe('module graph', () => {
         createModuleData(1, '/path/to/shared.js'),
         createModuleData(2, '/path/to/shared.js'),
         createModuleData(3, ''),
+        {
+          ...createModuleData(4, ''),
+          webpackId: '/path/to/legacy.js',
+        } as SDK.ModuleData & { webpackId: string },
       ],
     });
 
-    expect(moduleGraph.getModules().map((item) => item.id)).toEqual([1, 2, 3]);
+    expect(moduleGraph.getModules().map((item) => item.id)).toEqual([
+      1, 2, 3, 4,
+    ]);
     expect(moduleGraph.getModuleById(1)?.identifier).toBe('/path/to/shared.js');
     expect(moduleGraph.getModuleById(2)?.identifier).toBe('2');
     expect(moduleGraph.getModuleById(3)?.identifier).toBe('3');
+    expect(moduleGraph.getModuleById(4)?.identifier).toBe('/path/to/legacy.js');
   });
 
   it('getModuleByFile should return modules by file path', async () => {
