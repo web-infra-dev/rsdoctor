@@ -43,7 +43,7 @@
     "@types/tapable": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:",
-    "webpack": "^5.105.4"
+    "webpack": "^5.106.2"
   },
   "peerDependencies": {
     "webpack": "5.x"
