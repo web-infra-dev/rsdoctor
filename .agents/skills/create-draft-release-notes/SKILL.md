@@ -16,6 +16,8 @@ Input: a release tag/title such as `v2.0.6`. If title and tag differ, ask for th
 1. Resolve `repo` as `<owner>/<repo>`.
    Prefer an explicit repo from the user. Otherwise infer the current project's main GitHub repository from project metadata or the current GitHub remote. For npm projects, `package.json` `repository` is a useful signal; in monorepos, inspect the package or project being released rather than assuming the workspace root. Ignore subdirectory metadata such as `repository.directory` because GitHub releases are repository-level. If the repo is ambiguous, ask.
 
+   Respect the major release line when preparing notes.
+
 2. Set variables:
 
    ```bash
@@ -34,14 +36,16 @@ Input: a release tag/title such as `v2.0.6`. If title and tag differ, ask for th
 
    If the release exists, stop unless the user explicitly asked to update that draft.
 
-4. Infer the previous tag:
+4. Infer the previous tag from the same major release line:
 
    ```bash
-   previous_tag="$(gh release list -R "$repo" --exclude-drafts --exclude-pre-releases --limit 1 --json tagName --jq '.[0].tagName')"
+   major="${release_tag#v}"
+   major="${major%%.*}"
+   previous_tag="$(gh release list -R "$repo" --exclude-drafts --exclude-pre-releases --limit 100 --json tagName --jq "[.[].tagName | select(startswith(\"v${major}.\"))][0]")"
    gh release list -R "$repo" --exclude-drafts --exclude-pre-releases --limit 5
    ```
 
-   Ask for confirmation if the previous tag is missing, surprising, or part of a non-standard range.
+   Ask for confirmation if the previous tag is missing, surprising, or part of a non-standard range. For v1 releases, do not use a v2 tag as the previous tag.
 
 5. Before creating anything, state the repo and range: `previous_tag -> release_tag`. If the user did not explicitly ask to create the draft in this turn, ask for confirmation.
 
