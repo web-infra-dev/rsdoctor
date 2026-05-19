@@ -8,7 +8,8 @@ description: Use when asked to create a pull request for the Rsdoctor repository
 ## Steps
 
 1. Confirm the current branch with `git branch --show-current`.
-   Never make changes directly on `main` or `v1.x`.
+   If it is `main` or `v1.x`, create and switch to a new branch before doing anything else.
+   Use a descriptive branch name, for example `feat/add-xxx` or `fix/resolve-xxx`.
 
 2. Choose the PR target branch from the working branch base.
    If the working branch was created from `v1.x`, target `v1.x`; otherwise target `main`.
