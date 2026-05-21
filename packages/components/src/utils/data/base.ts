@@ -76,17 +76,25 @@ export abstract class BaseDataLoader implements Manifest.ManifestDataLoader {
 
   abstract loadAPI<
     T extends SDK.ServerAPI.API,
-    B extends
-      SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-    R extends
-      SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+    B extends SDK.ServerAPI.InferRequestBodyType<T> =
+      SDK.ServerAPI.InferRequestBodyType<T>,
+    R extends SDK.ServerAPI.InferResponseType<T> =
+      SDK.ServerAPI.InferResponseType<T>,
   >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R>;
 
   public abstract onDataUpdate<
     T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
-  >(api: T, fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void): void;
+  >(
+    api: T,
+    body: SDK.ServerAPI.InferRequestBodyType<T, null> | null,
+    fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void,
+  ): void;
 
   public abstract removeOnDataUpdate<
     T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
-  >(api: T, fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void): void;
+  >(
+    api: T,
+    body: SDK.ServerAPI.InferRequestBodyType<T, null> | null,
+    fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void,
+  ): void;
 }

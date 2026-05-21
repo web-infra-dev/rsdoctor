@@ -58,4 +58,26 @@ describe('request utils', () => {
     });
     expect(result).toStrictEqual({ ok: true });
   });
+
+  it('postServerAPI() omits request body when body is null', async () => {
+    const fetchMock = rs.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ ok: true }),
+    });
+    globalThis.fetch = fetchMock as typeof fetch;
+    process.env.NODE_ENV = 'production';
+
+    const result = await (postServerAPI as any)('/api/demo', null);
+    const [url, init] = fetchMock.mock.calls[0];
+
+    expect(url).toContain('/api/demo?_t=');
+    expect(init).toMatchObject({
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    expect(init).not.toHaveProperty('body');
+    expect(result).toStrictEqual({ ok: true });
+  });
 });
