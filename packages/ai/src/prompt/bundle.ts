@@ -12,7 +12,7 @@ export const toolDescriptions = {
     - imported: array of module ids that import this module
     - isEntry: whether this module is an entry point
     - size: { sourceSize, transformedSize, parsedSize }
-    - layer, modules, rootModule, identifier: advanced info
+    - layer, modules, rootModule, webpackId: advanced info
     - bailoutReason: if present, the reason why this module is not tree-shaken or optimized away (e.g. "side effects", "dynamic import", "unknown exports", etc.)
     - Please use Rspack or Webpack's terminology for all fields.
     - If user asks for "why not tree-shaken", always return bailoutReason and explain in plain language.

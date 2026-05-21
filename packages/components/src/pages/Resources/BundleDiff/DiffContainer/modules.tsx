@@ -112,7 +112,7 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
 
     bModules.forEach((mod) => {
       const modPath =
-        mod.identifier?.replace(ModuleHashPattern, '') ||
+        mod.webpackId?.replace(ModuleHashPattern, '') ||
         mod.path?.replace(ModuleHashPattern, '');
 
       if (!res[modPath]) {
@@ -127,7 +127,7 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
 
     cModules.forEach((mod) => {
       const modPath =
-        mod.identifier?.replace(ModuleHashPattern, '') ||
+        mod.webpackId?.replace(ModuleHashPattern, '') ||
         mod.path?.replace(ModuleHashPattern, '');
 
       if (!res[modPath]) {

@@ -42,12 +42,12 @@ describe('module graph transform from stats', () => {
     expect(graph.getModules().length).toEqual(5);
     expect(graph.getDependencies().length).toEqual(2);
     const graphData = graph.toData();
-    expect(graphData.modules[0].identifier.length).toBeTruthy();
+    expect(graphData.modules[0].webpackId.length).toBeTruthy();
     expect(graphData.modules[2]?.issuerPath?.[0]).toBeTruthy();
 
     graphData.modules.forEach((mod) => {
       // prevent ci failed on win32
-      mod.identifier = '';
+      mod.webpackId = '';
       mod.size.sourceSize = -1;
       mod.size.transformedSize = -1;
       mod.size.parsedSize = -1;

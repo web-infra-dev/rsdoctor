@@ -161,20 +161,20 @@ test('rspack data store', async () => {
 
   core.debug(`graphData.modules[0]: ${JSON.stringify(graphData.modules[0])}`);
   core.debug(
-    `graphData.modules[0].identifier: ${graphData.modules[0].identifier}`,
+    `graphData.modules[0].webpackId: ${graphData.modules[0].webpackId}`,
   );
 
   if (os.EOL === '\n') {
     expect(
-      graphData.modules[0].identifier.indexOf('/fixtures/'),
+      graphData.modules[0].webpackId.indexOf('/fixtures/'),
     ).toBeGreaterThan(0);
   } else {
     expect(
-      graphData.modules[0].identifier.indexOf('\\fixtures\\'),
+      graphData.modules[0].webpackId.indexOf('\\fixtures\\'),
     ).toBeGreaterThan(0);
   }
 
-  graphData.modules.forEach((mod) => (mod.identifier = ''));
+  graphData.modules.forEach((mod) => (mod.webpackId = ''));
   expect(graphData.modules[0].size.sourceSize).toBeGreaterThan(0);
   expect(graphData.modules[0].path).toMatch('/fixtures/');
 

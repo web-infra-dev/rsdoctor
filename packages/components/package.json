@@ -79,6 +79,7 @@
     "react-i18next": "12.0.0",
     "react-json-view": "1.21.3",
     "react-markdown": "catalog:",
+    "socket.io-client": "catalog:",
     "url-parse": "1.5.10"
   },
   "peerDependencies": {

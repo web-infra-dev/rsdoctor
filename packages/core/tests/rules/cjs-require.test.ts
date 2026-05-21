@@ -24,12 +24,12 @@ async function runRule(options: RunRuleOptions) {
     module: {
       id: 1,
       path: issuerPath,
-      identifier: '1',
+      webpackId: '1',
     },
     dependency: {
       id: 2,
       path: requiredPath,
-      identifier: '2',
+      webpackId: '2',
     },
   };
 

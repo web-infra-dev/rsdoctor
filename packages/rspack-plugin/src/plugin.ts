@@ -41,9 +41,9 @@ import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
 
-export class RsdoctorRspackPlugin<
-  Rules extends Linter.ExtendRuleData[],
-> implements RsdoctorRspackPluginInstance<Rules> {
+export class RsdoctorRspackPlugin<Rules extends Linter.ExtendRuleData[]>
+  implements RsdoctorRspackPluginInstance<Rules>
+{
   public readonly name = pluginTapName;
 
   public readonly sdk: SDK.RsdoctorBuilderSDKInstance | RsdoctorPrimarySDK;
@@ -140,7 +140,7 @@ export class RsdoctorRspackPlugin<
         new BuildUtilLoader.ProbeLoaderPlugin().apply(compiler);
         // add loader page to client
         this.sdk.addClientRoutes([
-          Manifest.RsdoctorManifestClientRoutes.Loaders,
+          Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
         ]);
 
         if (!Loader.isVue(compiler)) {

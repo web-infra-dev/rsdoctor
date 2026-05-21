@@ -51,6 +51,7 @@ catalog:
   react-markdown: ^9.1.0
   react-router-dom: 6.30.3
   sirv: 3.0.2
+  socket.io-client: 4.8.1
   source-map: ^0.7.6
   tslib: 2.8.1
   typescript: ^6.0.3
@@ -65,8 +66,6 @@ minimumReleaseAgeExclude:
   - '@rstest/*'
   - '@rsdoctor/*'
   - '@rslint/*'
-  # Renovate security update: ws@8.20.1
-  - ws@8.20.1
 
 overrides:
   '@remix-run/router': 1.23.2

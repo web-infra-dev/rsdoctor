@@ -1,205 +1,73 @@
 import { Common, SDK } from '@rsdoctor/types';
 import type { Server } from 'http';
-import WebSocket, { WebSocketServer } from 'ws';
+import {
+  Server as SocketServer,
+  ServerOptions as SocketServerOptions,
+  Socket as SocketType,
+} from 'socket.io';
+import { isDeepStrictEqual } from 'util';
 import { SocketAPILoader } from './api';
 
 interface SocketOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
   server: Server;
   port: number;
+  socketOptions?: SocketServerOptions;
 }
 
-type Subscription = {
-  api: SDK.ServerAPI.API;
-  body: Common.PlainObject | null;
-};
-
-type SubscriptionRecord = Subscription & {
-  count: number;
-};
-
-type ClientMessage = {
-  type?: string;
-  id?: string;
-  api?: SDK.ServerAPI.API;
-  body?: Common.PlainObject | null;
-};
-
 export class Socket {
-  protected server?: WebSocketServer;
-
-  protected clients = new Set<WebSocket>();
+  protected io!: SocketServer;
 
   protected loader: SocketAPILoader;
 
-  protected map: Map<string, SubscriptionRecord> = new Map();
-
-  protected clientSubscriptions: Map<WebSocket, Set<string>> = new Map();
+  protected map: Map<SDK.ServerAPI.API, (Common.PlainObject | null)[]> =
+    new Map();
 
   constructor(protected options: SocketOptions) {
     this.loader = new SocketAPILoader({ sdk: options.sdk });
   }
 
   public bootstrap() {
-    this.server = new WebSocketServer({ server: this.options.server });
-    this.server.on('connection', (client) => {
-      this.attachClient(client);
+    this.io = new SocketServer(this.options.server, {
+      cors: {
+        origin: '*',
+      },
+      ...this.options.socketOptions,
+    });
+    this.io.on('connection', (socket) => {
+      // setup event listeners for every socket which connected
+      this.setupSocket(socket);
     });
   }
 
-  public attachClient(client: WebSocket) {
-    this.clients.add(client);
+  protected setupSocket(socket: SocketType) {
+    // setup server api load request
+    Object.values(SDK.ServerAPI.API).forEach((api) => {
+      // server received the request for server api
+      // and the first argument is request body.
+      socket.on(api, async (body, callback) => {
+        // save to map for server side emit event to client.
+        this.saveRequestToMap(api, body);
 
-    if (typeof client.on === 'function') {
-      client.on('message', (message) => {
-        this.handleClientMessage(message.toString(), client);
+        // server will send the response for server api
+        callback(await this.getAPIResponse(api, body));
       });
-      client.on('close', () => {
-        this.clients.delete(client);
-        this.removeClientSubscriptions(client);
-      });
-    }
-  }
-
-  public async handleClientMessage(raw: string, client?: WebSocket) {
-    let message: ClientMessage;
-    try {
-      message = JSON.parse(raw) as ClientMessage;
-    } catch {
-      return;
-    }
-
-    if (
-      !message.api ||
-      !Object.values(SDK.ServerAPI.API).includes(message.api)
-    ) {
-      return;
-    }
-
-    if (message.type === 'request') {
-      await this.handleAPIRequestMessage(message, client);
-      return;
-    }
-
-    if (message.type === 'subscribe') {
-      this.saveRequestToMap(message.api, message.body ?? null, client);
-      return;
-    }
-
-    if (message.type === 'unsubscribe') {
-      this.removeRequestFromMap(message.api, message.body ?? null, client);
-    }
-  }
-
-  protected async handleAPIRequestMessage(
-    message: ClientMessage,
-    client?: WebSocket,
-  ) {
-    if (!message.id || !client || client.readyState !== WebSocket.OPEN) {
-      return;
-    }
-
-    try {
-      const response = await this.getAPIResponse(message.api!, message.body!);
-      client.send(
-        JSON.stringify({
-          type: 'response',
-          id: message.id,
-          payload: response.res,
-        }),
-      );
-    } catch (err) {
-      client.send(
-        JSON.stringify({
-          type: 'response',
-          id: message.id,
-          error: err instanceof Error ? err.message : String(err),
-        }),
-      );
-    }
-  }
-
-  public getSubscriptions(): Subscription[] {
-    return [...this.map.values()].map(({ api, body }) => ({ api, body }));
+    });
   }
 
   protected saveRequestToMap<T extends SDK.ServerAPI.API>(
     api: T,
     body: SDK.ServerAPI.InferRequestBodyType<T, null> | null = null,
-    client?: WebSocket,
   ) {
-    const key = this.getSubscriptionKey(api, body);
-    if (client) {
-      if (!this.clientSubscriptions.has(client)) {
-        this.clientSubscriptions.set(client, new Set());
-      }
-      const subscriptions = this.clientSubscriptions.get(client)!;
-      if (subscriptions.has(key)) {
-        return;
-      }
-      subscriptions.add(key);
+    if (!this.map.has(api)) {
+      this.map.set(api, []);
     }
 
-    const record = this.map.get(key);
-    if (record) {
-      record.count += 1;
-      return;
+    const list = this.map.get(api)!;
+
+    if (!list.some((e) => e === body || isDeepStrictEqual(e, body))) {
+      list.push(body);
     }
-
-    this.map.set(key, {
-      api,
-      body,
-      count: 1,
-    });
-  }
-
-  protected removeRequestFromMap<T extends SDK.ServerAPI.API>(
-    api: T,
-    body: SDK.ServerAPI.InferRequestBodyType<T, null> | null = null,
-    client?: WebSocket,
-  ) {
-    const key = this.getSubscriptionKey(api, body);
-    if (client) {
-      const subscriptions = this.clientSubscriptions.get(client);
-      if (!subscriptions?.has(key)) {
-        return;
-      }
-      subscriptions.delete(key);
-      if (subscriptions.size === 0) {
-        this.clientSubscriptions.delete(client);
-      }
-    }
-
-    this.removeSubscriptionKey(key);
-  }
-
-  protected removeClientSubscriptions(client: WebSocket) {
-    const subscriptions = this.clientSubscriptions.get(client);
-    if (!subscriptions) {
-      return;
-    }
-
-    subscriptions.forEach((key) => this.removeSubscriptionKey(key));
-    this.clientSubscriptions.delete(client);
-  }
-
-  protected removeSubscriptionKey(key: string) {
-    const record = this.map.get(key);
-    if (!record) {
-      return;
-    }
-
-    record.count -= 1;
-    if (record.count <= 0) {
-      this.map.delete(key);
-    }
-  }
-
-  protected getSubscriptionKey(
-    api: SDK.ServerAPI.API,
-    body: Common.PlainObject | null,
-  ) {
-    return `${api}:${JSON.stringify(body ?? null)}`;
   }
 
   protected async getAPIResponse<T extends SDK.ServerAPI.API>(
@@ -227,13 +95,15 @@ export class Socket {
     this.timer = setImmediate(async () => {
       const promises: Promise<void>[] = [];
 
-      this.map.forEach(({ api, body }) => {
-        promises.push(
-          (async () => {
-            const res = await this.getAPIResponse(api, body!);
-            this.sendAPIData(api, res);
-          })(),
-        );
+      this.map.forEach((bodies, api) => {
+        bodies.forEach((body) => {
+          promises.push(
+            (async () => {
+              const res = await this.getAPIResponse(api, body!);
+              this.io.emit(api, res);
+            })(),
+          );
+        });
       });
 
       await Promise.all(promises);
@@ -242,21 +112,13 @@ export class Socket {
 
   public sendAPIData<T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends>(
     api: T,
-    payload: SDK.ServerAPI.SocketResponseType<T>,
+    msg: SDK.ServerAPI.SocketResponseType<T>,
   ) {
-    const message = JSON.stringify({ api, payload });
-    this.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
+    this.io.sockets.emit(api, msg);
   }
 
   public dispose() {
-    this.clients.forEach((client) => {
-      client.close();
-    });
-    this.clients.clear();
-    this.server?.close();
+    this.io.disconnectSockets();
+    this.io.close();
   }
 }

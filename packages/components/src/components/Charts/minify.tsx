@@ -5,7 +5,7 @@ import { TextDrawer } from '../TextDrawer';
 import { Summary } from '@rsdoctor/utils/common';
 import { Card } from '../Card';
 import { ServerAPIProvider } from '../Manifest';
-import { PluginsDataTable } from '../Plugins/plugins';
+import { WebpackPluginsDataTable } from '../Plugins/webpack';
 import {
   CommonChartProps,
   CommonExecutionEmptyTips,
@@ -37,7 +37,7 @@ export const MinifyChartContainer: React.FC<CommonChartProps> = ({
           res && res.length ? (
             <Space direction="vertical" style={{ width: '100%' }}>
               <Card title='Plugin DataSource of the "Minify"' collapsable>
-                <PluginsDataTable dataSource={res} />
+                <WebpackPluginsDataTable dataSource={res} />
               </Card>
               <Divider />
               <Card title='Chart of the "Minify"'>

@@ -234,7 +234,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
 
   private _connectionsOnlyImports: SDK.ConnectionsOnlyImportData[] = [];
 
-  private _moduleIdentifierMap: Map<string, SDK.ModuleInstance> = new Map();
+  private _moduleWebpackIdMap: Map<string, SDK.ModuleInstance> = new Map();
 
   private _moduleIdMap: Map<number, SDK.ModuleInstance> = new Map();
 
@@ -253,7 +253,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
 
   clear() {
     this._dependenciesIdMap = new Map();
-    this._moduleIdentifierMap = new Map();
+    this._moduleWebpackIdMap = new Map();
     this._moduleIdMap = new Map();
     this._moduleGraphModules = new Map();
     this._exportIdMap = new Map();
@@ -305,7 +305,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
   }
 
   getModules() {
-    return Array.from(this._moduleIdentifierMap.values());
+    return Array.from(this._moduleWebpackIdMap.values());
   }
 
   getDependencies() {
@@ -326,8 +326,8 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
     return this._dependenciesIdMap.get(id);
   }
 
-  getModuleByIdentifier(id: string) {
-    return this._moduleIdentifierMap.get(id);
+  getModuleByWebpackId(id: string) {
+    return this._moduleWebpackIdMap.get(id);
   }
 
   getModuleByFile(file: string, layer?: string) {
@@ -346,7 +346,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
   addModule(...modules: SDK.ModuleInstance[]) {
     for (const module of modules) {
       if (!this._moduleIdMap.has(module.id)) {
-        this._moduleIdentifierMap.set(module.identifier, module);
+        this._moduleWebpackIdMap.set(module.webpackId, module);
         this._moduleIdMap.set(module.id, module);
         if (module.layer) {
           this.addLayer(module.layer);
@@ -367,7 +367,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
 
   removeModule(module: SDK.ModuleInstance) {
     this._moduleIdMap.delete(module.id);
-    this._moduleIdentifierMap.delete(module.identifier);
+    this._moduleWebpackIdMap.delete(module.webpackId);
 
     for (const dep of module.getDependencies()) {
       this.removeDependency(dep);
@@ -471,7 +471,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
 
   setModules(modules: SDK.ModuleInstance[]) {
     this._moduleIdMap = new Map(modules.map((m) => [m.id, m]));
-    this._moduleIdentifierMap = new Map(modules.map((m) => [m.identifier, m]));
+    this._moduleWebpackIdMap = new Map(modules.map((m) => [m.webpackId, m]));
     this._layers = new Map(
       modules.filter((m) => m.layer).map((m) => [m.layer!, 1]),
     );

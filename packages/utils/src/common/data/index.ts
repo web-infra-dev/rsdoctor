@@ -343,7 +343,7 @@ export class APIDataLoader {
 
           const searchedChunksMap = new Map();
           moduleGraph?.modules.filter((module) => {
-            if (module.identifier.includes(moduleName)) {
+            if (module.webpackId.includes(moduleName)) {
               module.chunks.forEach((chunk) => {
                 if (searchedChunksMap.has(chunk)) {
                   return;
@@ -373,7 +373,7 @@ export class APIDataLoader {
           const filteredModules = moduleGraph?.modules
             .filter(
               (module) =>
-                module.identifier.includes(moduleName) &&
+                module.webpackId.includes(moduleName) &&
                 module.chunks.includes(chunk),
             )
             .map((filteredModule) => ({
@@ -495,7 +495,7 @@ export class APIDataLoader {
         return this.loader.loadData('moduleGraph').then((moduleGraph) => {
           return moduleGraph?.modules.map((m) => ({
             id: m.id,
-            identifier: m.identifier,
+            webpackId: m.webpackId,
             path: m.path,
             size: m.size,
             chunks: m.chunks,

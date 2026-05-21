@@ -111,10 +111,10 @@ export const ServerAPIProvider = <
   useEffect(() => {
     if (!loader) return;
     // add update event listener
-    loader.onDataUpdate(api, body, update);
+    loader.onDataUpdate(api, update);
     return () => {
       // remove update event when the component unmount.
-      loader.removeOnDataUpdate(api, body, update);
+      loader.removeOnDataUpdate(api, update);
     };
   }, [loader, api, body]);
 

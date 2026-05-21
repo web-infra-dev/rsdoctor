@@ -130,7 +130,7 @@ export function transformAssetsModulesData(
 ) {
   if (!moduleGraph) return;
   Object.entries(parsedModulesData).forEach(([moduleId, parsedData]) => {
-    const module = moduleGraph.getModuleByIdentifier(moduleId ?? '');
+    const module = moduleGraph.getModuleByWebpackId(moduleId ?? '');
     // 计算 gzip size
     let gzipSize = undefined;
     try {
