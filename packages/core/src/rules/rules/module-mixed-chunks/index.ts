@@ -48,7 +48,7 @@ export const rule = defineRule<typeof title, Config>(() => {
               module: {
                 id: module.id,
                 path: module.path,
-                webpackId: module.webpackId,
+                identifier: module.identifier,
               },
               initialChunks: initialChunks.map((chunk) => ({
                 id: chunk.id,

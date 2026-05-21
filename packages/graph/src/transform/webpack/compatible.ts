@@ -143,7 +143,7 @@ export function getExportStatement(
   }
 
   // TODO: When there are multiple statements, the transform position can be matched, and there is no need to calculate it again.
-  const sdkModule = graph.getModuleByWebpackId(
+  const sdkModule = graph.getModuleByIdentifier(
     getWebpackModuleId(normalModule),
   );
 

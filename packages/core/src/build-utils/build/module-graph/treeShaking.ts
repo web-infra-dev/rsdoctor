@@ -27,7 +27,7 @@ function transformMgm(
   graph: SDK.ModuleGraphInstance,
   cache: ExportData,
 ) {
-  const module = graph.getModuleByWebpackId(origin.identifier());
+  const module = graph.getModuleByIdentifier(origin.identifier());
 
   if (!module) {
     return;
@@ -91,7 +91,7 @@ function appendExportConnection(
   graph: SDK.ModuleGraphInstance,
   cache: ExportData,
 ) {
-  const module = graph.getModuleByWebpackId(origin.identifier());
+  const module = graph.getModuleByIdentifier(origin.identifier());
   const mgm = graph.getModuleGraphModule(module!);
   const originalMgm = webpackGraph.getExportsInfo(origin);
 
@@ -121,7 +121,7 @@ function appendImportConnection(
   origin: WebpackNormalModule,
   graph: SDK.ModuleGraphInstance,
 ) {
-  const module = graph.getModuleByWebpackId(origin.identifier());
+  const module = graph.getModuleByIdentifier(origin.identifier());
   const mgm = graph.getModuleGraphModule(module!);
 
   if (!mgm || !module) {

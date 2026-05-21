@@ -304,7 +304,7 @@ export const rule = defineRule<typeof title, Config>(() => {
             resolvedModule: {
               id: dep.dependency.id,
               path: dep.dependency.path,
-              webpackId: dep.dependency.webpackId,
+              identifier: dep.dependency.identifier,
             },
             issuers: [issuer],
           });
