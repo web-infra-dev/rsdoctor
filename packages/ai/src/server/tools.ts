@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { getWsUrl, sendRequest } from './socket.js';
+import { getServerUrl, sendRequest } from './request.js';
 import { toolDescriptions } from '@/prompt/bundle.js';
 
 export enum Tools {
@@ -140,7 +140,7 @@ export const getModuleById = async (
   module: {
     id: number;
     renderId?: string;
-    webpackId: string;
+    identifier: string;
     path: string;
     isPreferSource: boolean;
     imported: number[];
@@ -169,7 +169,7 @@ export const getModuleById = async (
       dependencies,
       id: res.module.id,
       renderId: res.module.renderId,
-      webpackId: res.module.webpackId,
+      identifier: res.module.identifier,
       path: res.module.path,
       isPreferSource: res.module.isPreferSource,
       imported: res.module.imported,
@@ -375,5 +375,5 @@ export const getLoaderTimes = async () => {
 };
 
 export const getPort = async () => {
-  return getWsUrl();
+  return getServerUrl();
 };

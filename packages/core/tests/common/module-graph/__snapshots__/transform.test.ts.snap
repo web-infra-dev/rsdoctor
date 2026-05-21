@@ -880,6 +880,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
       "chunks": [],
       "dependencies": [],
       "id": 1,
+      "identifier": "javascript/esm|/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/node_modules/@angular/common/fesm2022/common.mjs",
       "imported": [
         3,
         4,
@@ -896,7 +897,6 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
         "sourceSize": 267758,
         "transformedSize": 267758,
       },
-      "webpackId": "javascript/esm|/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/node_modules/@angular/common/fesm2022/common.mjs",
     },
     {
       "bailoutReason": [
@@ -908,6 +908,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
         3,
       ],
       "id": 2,
+      "identifier": "javascript/esm|/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/node_modules/@angular/common/fesm2022/http.mjs",
       "imported": [
         3,
       ],
@@ -924,7 +925,6 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
         "sourceSize": 94775,
         "transformedSize": 94775,
       },
-      "webpackId": "javascript/esm|/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/node_modules/@angular/common/fesm2022/http.mjs",
     },
     {
       "bailoutReason": [
@@ -936,6 +936,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
         4,
       ],
       "id": 3,
+      "identifier": "javascript/esm|/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "imported": [
         4,
       ],
@@ -950,7 +951,6 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
         "sourceSize": 76943,
         "transformedSize": 76943,
       },
-      "webpackId": "javascript/esm|/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
     },
     {
       "bailoutReason": [
@@ -962,6 +962,7 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
         5,
       ],
       "id": 4,
+      "identifier": "javascript/esm|/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/node_modules/@angular/router/fesm2022/router.mjs",
       "imported": [],
       "isPreferSource": false,
       "issuerPath": [],
@@ -974,7 +975,6 @@ exports[`module graph transform from stats > module type === from origin 1`] = `
         "sourceSize": 268651,
         "transformedSize": 268651,
       },
-      "webpackId": "javascript/esm|/Users/demo/examples/angular/node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js??ruleSet[1].rules[3].use[0]!/Users/demo/node_modules/@angular/router/fesm2022/router.mjs",
     },
   ],
   "sideEffects": [],
@@ -1049,6 +1049,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       ],
       "dependencies": [],
       "id": 1,
+      "identifier": "",
       "imported": [],
       "isEntry": true,
       "isPreferSource": false,
@@ -1067,7 +1068,6 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         "sourceSize": -1,
         "transformedSize": -1,
       },
-      "webpackId": "",
     },
     {
       "bailoutReason": [],
@@ -1081,6 +1081,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         1,
       ],
       "id": 2,
+      "identifier": "",
       "imported": [],
       "isEntry": true,
       "isPreferSource": false,
@@ -1094,7 +1095,6 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         "sourceSize": -1,
         "transformedSize": -1,
       },
-      "webpackId": "",
     },
     {
       "bailoutReason": [],
@@ -1108,6 +1108,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       ],
       "dependencies": [],
       "id": 3,
+      "identifier": "",
       "imported": [
         2,
         5,
@@ -1123,7 +1124,6 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         "sourceSize": -1,
         "transformedSize": -1,
       },
-      "webpackId": "",
     },
     {
       "bailoutReason": [],
@@ -1132,6 +1132,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
       ],
       "dependencies": [],
       "id": 4,
+      "identifier": "",
       "imported": [],
       "isEntry": true,
       "isPreferSource": false,
@@ -1150,7 +1151,6 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         "sourceSize": -1,
         "transformedSize": -1,
       },
-      "webpackId": "",
     },
     {
       "bailoutReason": [],
@@ -1164,6 +1164,7 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         2,
       ],
       "id": 5,
+      "identifier": "",
       "imported": [],
       "isEntry": true,
       "isPreferSource": false,
@@ -1177,7 +1178,6 @@ exports[`module graph transform from stats > normal module in multi concatenatio
         "sourceSize": -1,
         "transformedSize": -1,
       },
-      "webpackId": "",
     },
   ],
   "sideEffects": [],

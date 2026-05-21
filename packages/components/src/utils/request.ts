@@ -155,14 +155,19 @@ export async function postServerAPI<
 >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
   const [api, body] = args;
   const timeout = process.env.NODE_ENV === 'development' ? 10000 : 60000;
+  const requestInit: Fetch.FetchOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    timeout,
+  };
+
+  if (body != null) {
+    requestInit.body = JSON.stringify(body);
+  }
+
   const res = await Fetch.fetchWithTimeout(
     resolveRequestUrl(`${api}?_t=${random()}`),
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: body === undefined ? undefined : JSON.stringify(body),
-      timeout,
-    },
+    requestInit,
   );
   return (await res.json()) as R;
 }

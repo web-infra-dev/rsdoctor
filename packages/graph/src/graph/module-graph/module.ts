@@ -31,7 +31,7 @@ export class Module implements SDK.ModuleInstance {
   /** Side effect code snippets */
   private sideEffectCodes: SDK.SideEffectCodeData[] = [];
 
-  readonly webpackId: string;
+  readonly identifier: string;
 
   readonly path: string;
 
@@ -76,7 +76,7 @@ export class Module implements SDK.ModuleInstance {
   };
 
   constructor(
-    webpackId: string,
+    identifier: string,
     path: string,
     isEntry = false,
     kind = SDK.ModuleKind.Normal,
@@ -84,7 +84,7 @@ export class Module implements SDK.ModuleInstance {
     layer = '',
   ) {
     this.id = id++;
-    this.webpackId = webpackId;
+    this.identifier = identifier;
     this.path = path;
     this.isEntry = isEntry;
     this.kind = kind;
@@ -377,14 +377,14 @@ export class Module implements SDK.ModuleInstance {
 
   toData(contextPath?: string, isBrief?: boolean): SDK.ModuleData {
     const { isPreferSource } = this;
-    const moduleName = getModuleName(this.webpackId);
+    const moduleName = getModuleName(this.identifier);
     const data: SDK.ModuleData = {
       id: this.id,
       renderId: this.renderId,
-      webpackId:
+      identifier:
         contextPath && moduleName.indexOf('.') > 0
           ? path.relative(contextPath, moduleName)
-          : this.webpackId,
+          : this.identifier,
       path: this.path,
       isPreferSource,
       dependencies: this.dependencies.map((item) => item.id),

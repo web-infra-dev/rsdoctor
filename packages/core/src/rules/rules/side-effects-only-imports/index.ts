@@ -120,7 +120,7 @@ export const rule = defineRule<typeof title, Config>(() => {
             module: {
               id: module.id,
               path: module.path,
-              webpackId: module.webpackId,
+              identifier: module.identifier,
             },
             connections: sideEffectConnections.map((c) => ({
               originModule: c.originModule ?? module.id,

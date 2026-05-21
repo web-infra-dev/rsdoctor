@@ -133,10 +133,10 @@ export enum ToDataType {
 export interface ModuleInstance {
   /** Module identifier */
   readonly id: number;
-  /** webpack render identifier */
+  /** Bundler render identifier */
   readonly renderId?: string;
-  /** webpack identifier */
-  readonly webpackId: string;
+  /** Bundler identifier */
+  readonly identifier: string;
   /** Module path */
   readonly path: string;
   readonly isEntry: boolean;
@@ -350,8 +350,8 @@ export interface ModuleGraphInstance {
   /** Get module by id */
   getModuleById(id: number): ModuleInstance | undefined;
 
-  /** get module by webpackId */
-  getModuleByWebpackId(webpackId: string): ModuleInstance | undefined;
+  /** get module by identifier */
+  getModuleByIdentifier(identifier: string): ModuleInstance | undefined;
 
   /** Get module by path */
   getModuleByFile(file: string, layer?: string): ModuleInstance[] | [];
@@ -428,7 +428,7 @@ export interface ModuleData extends Omit<
   /** Affiliated aggregation module number */
   concatenationModules?: number[];
   /** Module Id */
-  webpackId: string;
+  identifier: string;
 
   /** Build original attributes */
   meta?: Partial<Omit<ModuleBuildMeta, 'packageData'>>;

@@ -7,7 +7,10 @@ export class BaseAPI implements Manifest.ManifestDataLoader {
 
   protected dataLoader: Data.APIDataLoader;
 
-  constructor(sdk: SDK.RsdoctorSDKInstance, server: SDK.RsdoctorServerInstance) {
+  constructor(
+    sdk: SDK.RsdoctorSDKInstance,
+    server: SDK.RsdoctorServerInstance,
+  ) {
     this.ctx = { sdk, server } as SDK.ServerAPI.APIContext;
     this.dataLoader = new Data.APIDataLoader(this);
   }
