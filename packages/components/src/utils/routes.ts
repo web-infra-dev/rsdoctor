@@ -2,9 +2,9 @@ import { Manifest } from '@rsdoctor/types';
 
 export function hasCompile(routes: Manifest.RsdoctorManifestClientRoutes[]) {
   const hasCompile =
-    routes.includes(Manifest.RsdoctorManifestClientRoutes.WebpackLoaders) ||
+    routes.includes(Manifest.RsdoctorManifestClientRoutes.Loaders) ||
     routes.includes(Manifest.RsdoctorManifestClientRoutes.ModuleResolve) ||
-    routes.includes(Manifest.RsdoctorManifestClientRoutes.WebpackPlugins);
+    routes.includes(Manifest.RsdoctorManifestClientRoutes.Plugins);
   return hasCompile;
 }
 

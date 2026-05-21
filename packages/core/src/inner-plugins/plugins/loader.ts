@@ -65,9 +65,7 @@ export class InternalLoaderPlugin<
       ) as Plugin.BuildRuleSetRules;
 
       // add loader page to client
-      this.sdk.addClientRoutes([
-        Manifest.RsdoctorManifestClientRoutes.WebpackLoaders,
-      ]);
+      this.sdk.addClientRoutes([Manifest.RsdoctorManifestClientRoutes.Loaders]);
     } finally {
       timeEnd('InternalLoaderPlugin.afterPlugins');
     }

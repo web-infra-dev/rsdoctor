@@ -52,7 +52,7 @@ function matchesModuleFilters(
   const candidates = [
     String(module.id),
     module.path,
-    module.webpackId,
+    module.identifier,
     module.name,
   ].filter((item): item is string => !!item);
   return normalizedFilters.some((filter) =>
@@ -67,7 +67,7 @@ function matchesModuleFilters(
 function toBailoutModule(module: Module): BailoutModule {
   return {
     id: module.id,
-    path: module.path || module.webpackId || module.name || '',
+    path: module.path || module.identifier || module.name || '',
     bailoutReason: module.bailoutReason!,
     size: (module.size as Record<string, number>) || {},
     chunks: module.chunks || [],
