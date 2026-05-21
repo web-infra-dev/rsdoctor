@@ -217,7 +217,7 @@ export function patchNativeModuleSources(
   ).jsonModuleSizes;
   if (jsonModuleSizes && jsonModuleSizes.length > 0) {
     for (const jsonModuleSize of jsonModuleSizes) {
-      const module = mg.getModuleByIdentifier(jsonModuleSize.identifier);
+      const module = mg.getModuleByWebpackId(jsonModuleSize.identifier);
       if (module) {
         // Set parsedSize for JSON modules from Rspack's tree-shaken size
         module.setSize({

@@ -13,7 +13,7 @@ export interface Module {
   id: number;
   path: string;
   name: string;
-  identifier?: string;
+  webpackId?: string;
   size?: Record<string, unknown>;
   issuerPath?: unknown[];
   dependencies?: unknown[];
@@ -220,9 +220,9 @@ export function getModules(): Module[] {
   const modules = moduleGraph.modules || [];
   return modules.map((module) => ({
     id: module.id,
-    path: module.path || module.identifier || module.name || '',
-    name: module.identifier || module.name || module.path || '',
-    identifier: module.identifier,
+    path: module.path || module.webpackId || module.name || '',
+    name: module.webpackId || module.name || module.path || '',
+    webpackId: module.webpackId,
     size: module.size || {},
     issuerPath: module.issuerPath || [],
     dependencies: module.dependencies || [],
@@ -237,7 +237,7 @@ export function getModules(): Module[] {
 
 export function getModulesByPath(
   modulePath: string,
-): Array<{ id: number; path: string; name: string; identifier?: string }> {
+): Array<{ id: number; path: string; name: string; webpackId?: string }> {
   const modules = getModules();
   const lowerPath = modulePath.toLowerCase();
   return modules
@@ -245,13 +245,13 @@ export function getModulesByPath(
       (module) =>
         module.path?.toLowerCase().includes(lowerPath) ||
         module.name?.toLowerCase().includes(lowerPath) ||
-        module.identifier?.toLowerCase().includes(lowerPath),
+        module.webpackId?.toLowerCase().includes(lowerPath),
     )
     .map((module) => ({
       id: module.id,
       path: module.path,
       name: module.name,
-      identifier: module.identifier,
+      webpackId: module.webpackId,
     }));
 }
 
@@ -286,8 +286,8 @@ export function getModuleIssuerPath(
       if (issuer) {
         issuerPath.push({
           id: issuer.id,
-          path: issuer.path || issuer.identifier || '',
-          name: issuer.identifier || issuer.name || '',
+          path: issuer.path || issuer.webpackId || '',
+          name: issuer.webpackId || issuer.name || '',
         });
         findIssuers(issuerId);
       }

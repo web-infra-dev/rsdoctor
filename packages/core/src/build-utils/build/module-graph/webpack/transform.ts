@@ -166,7 +166,7 @@ async function appendModuleData(
   features?: Plugin.RsdoctorWebpackPluginFeatures,
   context?: TransformContext,
 ) {
-  const module = graph.getModuleByIdentifier(
+  const module = graph.getModuleByWebpackId(
     WebpackGraph.getWebpackModuleId(origin),
   );
 

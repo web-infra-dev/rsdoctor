@@ -21,7 +21,7 @@ import type { ParseBundle } from '@rsdoctor/graph';
  */
 export const parseBundle: ParseBundle = (
   bundlePath: string,
-  modulesData: Pick<SDK.ModuleInstance, 'renderId' | 'identifier'>[],
+  modulesData: Pick<SDK.ModuleInstance, 'renderId' | 'webpackId'>[],
 ) => {
   if (bundlePath.indexOf('.worker.') > 0) {
     return {};
@@ -259,8 +259,7 @@ export const parseBundle: ParseBundle = (
 
     const moduleContent = modules[module];
     const size = moduleContent && Buffer.byteLength(moduleContent);
-    const identifier =
-      find(modulesData, { renderId: module })?.identifier || '';
+    const identifier = find(modulesData, { renderId: module })?.webpackId || '';
     modulesObj[identifier] = {
       size,
       sizeConvert: filesize(size || 0),

@@ -22,13 +22,13 @@ describe('parseBundle', function () {
       it(`should parse ${lowerCase(bundleName)}`, function () {
         const bundleFile = `${BUNDLES_DIR}/${bundleName}.js`;
         const modules = [
-          { renderId: '0', identifier: '0' },
-          { renderId: '1', identifier: '1' },
-          { renderId: '2', identifier: '2' },
-          { renderId: '3', identifier: '33' },
-          { renderId: '5', identifier: '5' },
-          { renderId: '6', identifier: '6' },
-          { renderId: '/x1Yz5', identifier: '/x1Yz5' },
+          { renderId: '0', webpackId: '0' },
+          { renderId: '1', webpackId: '1' },
+          { renderId: '2', webpackId: '2' },
+          { renderId: '3', webpackId: '33' },
+          { renderId: '5', webpackId: '5' },
+          { renderId: '6', webpackId: '6' },
+          { renderId: '/x1Yz5', webpackId: '/x1Yz5' },
         ];
         const bundle = parseBundle(bundleFile, modules);
 
@@ -57,7 +57,7 @@ describe('parseBundle', function () {
     try {
       fs.writeFileSync(testBundlePath, bundleCode, 'utf8');
 
-      const modules = [{ renderId: '0', identifier: '0' }];
+      const modules = [{ renderId: '0', webpackId: '0' }];
       const result = parseBundle(testBundlePath, modules);
 
       // Verify that sourcemap is removed from src
@@ -85,7 +85,7 @@ describe('parseBundle', function () {
     try {
       fs.writeFileSync(testBundlePath, bundleCode, 'utf8');
 
-      const modules = [{ renderId: '0', identifier: '0' }];
+      const modules = [{ renderId: '0', webpackId: '0' }];
       const result = parseBundle(testBundlePath, modules);
 
       // Verify that sourcemap is removed from src
@@ -103,13 +103,13 @@ describe('parseBundle', function () {
   it('should parse bundle files with .bundle extension', function () {
     const bundleFile = `${BUNDLES_DIR}/validBundleWithArrowFunction.bundle`;
     const modules = [
-      { renderId: '0', identifier: '0' },
-      { renderId: '1', identifier: '1' },
-      { renderId: '2', identifier: '2' },
-      { renderId: '3', identifier: '33' },
-      { renderId: '5', identifier: '5' },
-      { renderId: '6', identifier: '6' },
-      { renderId: '/x1Yz5', identifier: '/x1Yz5' },
+      { renderId: '0', webpackId: '0' },
+      { renderId: '1', webpackId: '1' },
+      { renderId: '2', webpackId: '2' },
+      { renderId: '3', webpackId: '33' },
+      { renderId: '5', webpackId: '5' },
+      { renderId: '6', webpackId: '6' },
+      { renderId: '/x1Yz5', webpackId: '/x1Yz5' },
     ];
     const bundle = parseBundle(bundleFile, modules);
 
@@ -134,7 +134,7 @@ describe('parseBundle', function () {
     try {
       fs.writeFileSync(testFilePath, '.test { color: red; }', 'utf8');
 
-      const modules = [{ renderId: '0', identifier: '0' }];
+      const modules = [{ renderId: '0', webpackId: '0' }];
       const result = parseBundle(testFilePath, modules);
 
       // Should return empty object for non-JS/bundle files

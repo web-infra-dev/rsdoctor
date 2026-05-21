@@ -4,7 +4,6 @@ import { Router } from '../router';
 
 export class BundleDiffAPI extends BaseAPI {
   @Router.get(SDK.ServerAPI.API.GetBundleDiffSummary)
-  @Router.post(SDK.ServerAPI.API.GetBundleDiffSummary)
   public async getBundleDiffSummary(): Promise<
     SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetBundleDiffSummary>
   > {

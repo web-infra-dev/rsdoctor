@@ -220,7 +220,7 @@ export const ModuleRowForAsset: React.FC<
     // group by module.path
     mods.forEach((mod) => {
       const modPath =
-        mod.identifier?.replace(ModuleHashPattern, '') ||
+        mod.webpackId?.replace(ModuleHashPattern, '') ||
         mod.path?.replace(ModuleHashPattern, '');
       let t: BundleDiffTableModulesData = map.get(modPath)!;
 

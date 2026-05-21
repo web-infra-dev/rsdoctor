@@ -39,7 +39,7 @@ interface Size {
 
 interface FilteredModule {
   id: number; // module id
-  identifier: string; // module's bundler identifier
+  webpackId: string; // module's webpack id
   path: string; // module path
   packageName: string // The npm package to which this module belongs, if it is null, it does not belong to the npm package.
   size: Size; // module size

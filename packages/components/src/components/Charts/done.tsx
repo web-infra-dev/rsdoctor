@@ -9,7 +9,7 @@ import {
   CommonExecutionsChart,
   CommonExecutionEmptyTips,
 } from './common';
-import { PluginsDataTable } from '../Plugins/plugins';
+import { WebpackPluginsDataTable } from '../Plugins/webpack';
 import { ServerAPIProvider } from '../Manifest';
 
 import './loader.scss';
@@ -48,7 +48,7 @@ export const DoneChartContainer: React.FC<CommonChartProps> = ({
           res && res.length ? (
             <Space direction="vertical" style={{ width: '100%' }}>
               <Card title={`Plugin DataSource of ${suffix}`} collapsable>
-                <PluginsDataTable dataSource={res} />
+                <WebpackPluginsDataTable dataSource={res} />
               </Card>
               <Divider />
               <Card title={`Chart ${suffix}`}>

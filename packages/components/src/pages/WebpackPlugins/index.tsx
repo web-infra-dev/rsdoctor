@@ -4,7 +4,7 @@ import { Button, Card, Input, Select, Space, Typography } from 'antd';
 import React, { useState } from 'react';
 import { WebpackConfigurationViewer } from '../../components/Configuration';
 import { ServerAPIProvider } from '../../components/Manifest';
-import { PluginsDataTable } from '../../components/Plugins/plugins';
+import { WebpackPluginsDataTable } from '../../components/Plugins/webpack';
 import { Size } from '../../constants';
 import './index.scss';
 
@@ -81,7 +81,7 @@ export const Page: React.FC = () => {
             api={SDK.ServerAPI.API.GetPluginData}
             body={{ hooks: selectedHooks, tapNames: selectedTapNames }}
           >
-            {(res) => <PluginsDataTable dataSource={res} />}
+            {(res) => <WebpackPluginsDataTable dataSource={res} />}
           </ServerAPIProvider>
         </Space>
       </Card>

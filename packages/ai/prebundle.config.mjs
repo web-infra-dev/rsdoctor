@@ -1,6 +1,6 @@
 /** @type {import('prebundle').Config} */
 export default {
-  dependencies: [],
+  dependencies: ['socket.io-client'],
   exclude: ['@rsdoctor/types', '@rsdoctor/utils'],
 
   build: {

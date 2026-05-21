@@ -18,15 +18,15 @@ export default defineConfig({
         {
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
           features: ['resolver', 'bundle', 'plugins', 'loader'],
-          // output: {
-          //   mode: 'brief',
-          //   options: {
-          //     type: ['json', 'html'],
-          //   },
-          //   reportCodeType: {
-          //     noCode: true,
-          //   },
-          // },
+          output: {
+            mode: 'brief',
+            options: {
+              type: ['json', 'html'],
+            },
+            reportCodeType: {
+              noCode: true,
+            },
+          },
           linter: {
             level: 'Error',
             extends: [AssetsCountLimit],

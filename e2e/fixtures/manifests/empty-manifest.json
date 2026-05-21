@@ -2,9 +2,9 @@
   "client": {
     "enableRoutes": [
       "Overall",
-      "Compile.Loaders",
+      "Compile.WebpackLoaders",
       "Compile.ModuleResolve",
-      "Compile.Plugins",
+      "Compile.WebpackPlugins",
       "Bundle.TreeShaking",
       "Bundle.ModuleGraph",
       "Bundle.BundleSize"

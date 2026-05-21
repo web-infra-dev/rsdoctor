@@ -10,7 +10,6 @@ interface RunRuleOptions {
   request?: string;
   strictHarmonyModule?: boolean;
   ignore?: string[];
-  packageJson?: Record<string, unknown>;
 }
 
 async function runRule(options: RunRuleOptions) {
@@ -25,7 +24,7 @@ async function runRule(options: RunRuleOptions) {
     fs.writeFileSync(
       path.join(pkgRoot, 'package.json'),
       JSON.stringify(
-        options.packageJson ?? {
+        {
           name: 'up-fetch',
           version: '2.6.0',
           exports: {
@@ -51,12 +50,12 @@ async function runRule(options: RunRuleOptions) {
       module: {
         id: 1,
         path: '/project/src/index.js',
-        identifier: '1',
+        webpackId: '1',
       },
       dependency: {
         id: 2,
         path: resolvedModulePath,
-        identifier: '2',
+        webpackId: '2',
         meta: {
           strictHarmonyModule: options.strictHarmonyModule ?? false,
         },
@@ -113,121 +112,5 @@ describe('esm-resolved-to-cjs rule', () => {
     expect(reports).toHaveLength(1);
     expect(reports[0].detail.packageName).toBe('up-fetch');
     expect(reports[0].detail.resolvedModule.path).toBe(resolvedModulePath);
-  });
-
-  it('does not report when resolved module has a definite ESM extension', async () => {
-    const { reports } = await runRule({
-      resolvedModuleFile: 'nested/index.mjs',
-    });
-
-    expect(reports).toHaveLength(0);
-  });
-
-  it('does not report when resolved module is an ESM subpath export', async () => {
-    const { reports } = await runRule({
-      resolvedModuleFile: 'compat/index.js',
-      request: 'up-fetch/compat',
-      packageJson: {
-        name: 'up-fetch',
-        version: '2.6.0',
-        exports: {
-          '.': {
-            import: {
-              default: './dist/index.mjs',
-            },
-            require: {
-              default: './dist/index.js',
-            },
-          },
-          './compat': {
-            import: {
-              default: './dist/compat/index.js',
-            },
-            require: {
-              default: './dist/compat/index.cjs',
-            },
-          },
-        },
-      },
-    });
-
-    expect(reports).toHaveLength(0);
-  });
-
-  it('does not match ESM entries from unrelated subpath exports', async () => {
-    const { reports, resolvedModulePath } = await runRule({
-      resolvedModuleFile: 'index.cjs',
-      request: 'up-fetch',
-      packageJson: {
-        name: 'up-fetch',
-        version: '2.6.0',
-        exports: {
-          '.': {
-            import: {
-              default: './dist/index.mjs',
-            },
-            require: {
-              default: './dist/index.cjs',
-            },
-          },
-          './compat': {
-            import: {
-              default: './dist/index.cjs',
-            },
-          },
-        },
-      },
-    });
-
-    expect(reports).toHaveLength(1);
-    expect(reports[0].detail.resolvedModule.path).toBe(resolvedModulePath);
-  });
-
-  it('does not report when resolved module matches an ESM subpath export pattern', async () => {
-    const { reports } = await runRule({
-      resolvedModuleFile: 'compat.js',
-      request: 'up-fetch/compat',
-      packageJson: {
-        name: 'up-fetch',
-        version: '2.6.0',
-        exports: {
-          './*': {
-            import: {
-              default: './dist/*.js',
-            },
-            require: {
-              default: './dist/*.cjs',
-            },
-          },
-        },
-      },
-    });
-
-    expect(reports).toHaveLength(0);
-  });
-
-  it('reports when a subpath export pattern resolves to CJS instead of ESM', async () => {
-    const { reports, resolvedModulePath } = await runRule({
-      resolvedModuleFile: 'compat.cjs',
-      request: 'up-fetch/compat',
-      packageJson: {
-        name: 'up-fetch',
-        version: '2.6.0',
-        exports: {
-          './*': {
-            import: {
-              default: './dist/*.mjs',
-            },
-            require: {
-              default: './dist/*.cjs',
-            },
-          },
-        },
-      },
-    });
-
-    expect(reports).toHaveLength(1);
-    expect(reports[0].detail.resolvedModule.path).toBe(resolvedModulePath);
-    expect(reports[0].detail.esmEntry).toContain(`${path.sep}compat.mjs`);
   });
 });

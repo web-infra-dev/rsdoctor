@@ -19,13 +19,4 @@ describe('ensure all of the apis implementation for server', () => {
 
     expect(list.length).toBeGreaterThanOrEqual(30);
   });
-
-  it('ensure bundle diff APIs are registered', async () => {
-    const { get, post } = Router.routes;
-    const getRoutes = [...get.values()].flat().map((el) => el[1]);
-    const postRoutes = [...post.values()].flat().map((el) => el[1]);
-
-    expect(getRoutes).toContain(SDK.ServerAPI.API.BundleDiffManifest);
-    expect(postRoutes).toContain(SDK.ServerAPI.API.GetBundleDiffSummary);
-  });
 });

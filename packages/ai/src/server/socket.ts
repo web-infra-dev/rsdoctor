@@ -1,9 +1,25 @@
-import { GlobalConfig } from '@rsdoctor/utils/common';
+import { Socket, io } from 'socket.io-client';
 import { logger } from '@rsdoctor/utils/logger';
+import { GlobalConfig } from '@rsdoctor/utils/common';
 import fs from 'node:fs';
 
+const map: Record<string, Socket> = {};
+
+// 使用 logger.error 输出日志
+export const createSocket = (url: string): Socket => {
+  logger.error(map[url]);
+  if (map[url]) return map[url];
+  const socket = io(url, {});
+  logger.error('socket created', url);
+  socket.on('connect', () => {
+    logger.error(`Socket Connect ${url}`);
+  });
+  map[url] = socket;
+  return socket;
+};
+
 export function getPortFromArgs(): number {
-  const args = process.argv.slice(2);
+  const args = process.argv.slice(2); // Skip the first two elements
   const portIndex = args.indexOf('--port');
   const compilerIndex = args.indexOf('--compiler');
   if (portIndex !== -1 && args[portIndex + 1]) {
@@ -18,27 +34,26 @@ export function getPortFromArgs(): number {
     }
   }
 
+  // If no port is specified, use the default port.
   return 3000;
 }
 
-export const getServerUrl = async () => {
+export const getWsUrl = async () => {
   const port = getPortFromArgs();
-  logger.error(`HTTP requests will use port: ${port}`);
-  return `http://localhost:${port}`;
+  logger.error(`Socket will start on port: ${port}`);
+  return `ws://localhost:${port}`;
 };
 
 export const sendRequest = async (api: string, params = {}) => {
-  const response = await fetch(`${await getServerUrl()}${api}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(params),
+  const url = await getWsUrl();
+  const socket = createSocket(url);
+  logger.error('[mcp]socket client is started');
+  const res = await new Promise((resolve) => {
+    socket.emit(api, params, (res: any) => {
+      resolve(res.res);
+    });
   });
-
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
-  }
-
-  return response.json();
+  return res;
 };
 
 export const getMcpPort = (compiler?: string) => {

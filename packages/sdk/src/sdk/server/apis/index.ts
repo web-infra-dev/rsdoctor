@@ -1,5 +1,4 @@
 export * from './alerts';
-export * from './bundle-diff';
 export { DataAPI } from './data';
 export * from './fs';
 export * from './loader';

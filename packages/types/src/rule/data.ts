@@ -153,7 +153,7 @@ export interface ModuleMixedChunksRuleStoreData extends BaseRuleStoreData {
   module: {
     id: number | string;
     path: string;
-    identifier?: string | number;
+    webpackId?: string | number;
   };
   initialChunks: Array<{
     id: string;
@@ -174,7 +174,7 @@ export interface ConnectionsOnlyImportsRuleStoreData extends BaseRuleStoreData {
   module: {
     id: number | string;
     path: string;
-    identifier?: string | number;
+    webpackId?: string | number;
   };
 
   connections: Array<{
@@ -194,13 +194,13 @@ export interface CjsRequireRuleStoreData extends BaseRuleStoreData {
   issuerModule: {
     id: number | string;
     path: string;
-    identifier?: string | number;
+    webpackId?: string | number;
   };
   /** The module being required */
   requiredModule: {
     id: number | string;
     path: string;
-    identifier?: string | number;
+    webpackId?: string | number;
   };
   /** The original require string (e.g. 'lodash') */
   request: string;
@@ -222,7 +222,7 @@ export interface EsmResolvedToCjsRuleStoreData extends BaseRuleStoreData {
   resolvedModule: {
     id: number | string;
     path: string;
-    identifier?: string | number;
+    webpackId?: string | number;
   };
   /** All issuer modules that imported this package via ESM import */
   issuers: Array<{

@@ -19,7 +19,7 @@ export interface Size {
 
 interface FilteredModule {
   id: number;
-  identifier: string;
+  webpackId: string;
   path: string;
   size: Size;
   chunks: string[];
