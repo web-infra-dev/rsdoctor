@@ -28,53 +28,187 @@ function normalizePathForCompare(filePath: string): string {
   return path.normalize(cleanPath);
 }
 
-/**
- * Extract the ESM entry path from a package.json object.
- * Checks (in priority order):
- *   1. exports["."]["import"]          — official conditional exports
- *   2. exports["."]["import"]["default"] — nested form
- *   3. exports["import"]               — top-level shorthand
- *   4. module                          — legacy bundler convention
- *
- * Returns an absolute path, or null if no ESM entry is declared.
- */
-function extractEsmEntry(pkgJson: FullPkgJson, pkgRoot: string): string | null {
-  const { exports: exportsField, module: moduleField } = pkgJson;
+function isDefinitelyEsmFile(filePath: string): boolean {
+  return path.extname(normalizePathForCompare(filePath)) === '.mjs';
+}
 
-  if (exportsField !== null && typeof exportsField === 'object') {
-    const exports = exportsField as Record<string, unknown>;
-    const dotEntry = exports['.'];
+function isDeclaredEsmEntry(
+  filePath: string,
+  esmEntries: string[],
+  toRealPath: (filePath: string) => string,
+): boolean {
+  const realPath = toRealPath(filePath);
+  return esmEntries.some((esmEntry) => realPath === toRealPath(esmEntry));
+}
 
-    if (dotEntry !== null && typeof dotEntry === 'object') {
-      const dot = dotEntry as Record<string, unknown>;
-      const importEntry = dot['import'];
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
 
-      if (typeof importEntry === 'string') {
-        return path.resolve(pkgRoot, importEntry);
-      }
-      if (importEntry !== null && typeof importEntry === 'object') {
-        const nested = (importEntry as Record<string, unknown>)['default'];
-        if (typeof nested === 'string') {
-          return path.resolve(pkgRoot, nested);
-        }
-      }
-    }
+function substituteExportPattern(target: string, wildcard: string): string {
+  return target.replace(/\*/g, wildcard);
+}
 
-    // exports["import"] top-level shorthand (no subpath)
-    const topImport = exports['import'];
-    if (typeof topImport === 'string') {
-      return path.resolve(pkgRoot, topImport);
-    }
-    if (topImport !== null && typeof topImport === 'object') {
-      const nested = (topImport as Record<string, unknown>)['default'];
-      if (typeof nested === 'string') {
-        return path.resolve(pkgRoot, nested);
-      }
-    }
+function toPackagePath(
+  pkgRoot: string,
+  target: string,
+  wildcard: string,
+): string {
+  return path.resolve(pkgRoot, substituteExportPattern(target, wildcard));
+}
+
+function collectStringTargets(value: unknown, wildcard: string): string[] {
+  if (typeof value === 'string') {
+    return [substituteExportPattern(value, wildcard)];
   }
 
-  if (typeof moduleField === 'string') {
-    return path.resolve(pkgRoot, moduleField);
+  if (Array.isArray(value)) {
+    return value.flatMap((item) => collectStringTargets(item, wildcard));
+  }
+
+  if (!isRecord(value)) return [];
+
+  return Object.values(value).flatMap((child) =>
+    collectStringTargets(child, wildcard),
+  );
+}
+
+function collectEsmTargets(
+  exportEntry: unknown,
+  pkgRoot: string,
+  wildcard: string,
+): Set<string> {
+  const entries = new Set<string>();
+
+  const addTargets = (value: unknown): void => {
+    for (const target of collectStringTargets(value, wildcard)) {
+      entries.add(toPackagePath(pkgRoot, target, ''));
+    }
+  };
+
+  const visit = (value: unknown): void => {
+    if (typeof value === 'string' || Array.isArray(value)) {
+      addTargets(value);
+      return;
+    }
+
+    if (!isRecord(value)) return;
+
+    addTargets(value['import']);
+    addTargets(value['module']);
+
+    for (const child of Object.values(value)) {
+      if (isRecord(child) || Array.isArray(child)) {
+        visit(child);
+      }
+    }
+  };
+
+  visit(exportEntry);
+  return entries;
+}
+
+function hasSubpathExportKeys(exports: Record<string, unknown>): boolean {
+  return Object.keys(exports).some(
+    (key) => key === '.' || key.startsWith('./'),
+  );
+}
+
+function matchPatternExportKey(
+  patternKey: string,
+  exportKey: string,
+): string | null {
+  const wildcardIndex = patternKey.indexOf('*');
+  if (wildcardIndex < 0) return null;
+
+  const prefix = patternKey.slice(0, wildcardIndex);
+  const suffix = patternKey.slice(wildcardIndex + 1);
+  if (!exportKey.startsWith(prefix) || !exportKey.endsWith(suffix)) {
+    return null;
+  }
+
+  return exportKey.slice(prefix.length, exportKey.length - suffix.length);
+}
+
+function isPatternExportKey(key: string): boolean {
+  return key.indexOf('*') === key.lastIndexOf('*') && key.includes('*');
+}
+
+function patternKeyCompare(keyA: string, keyB: string): number {
+  const baseLengthA = keyA.includes('*') ? keyA.indexOf('*') + 1 : keyA.length;
+  const baseLengthB = keyB.includes('*') ? keyB.indexOf('*') + 1 : keyB.length;
+
+  if (baseLengthA > baseLengthB) return -1;
+  if (baseLengthB > baseLengthA) return 1;
+  if (!keyA.includes('*')) return 1;
+  if (!keyB.includes('*')) return -1;
+  if (keyA.length > keyB.length) return -1;
+  if (keyB.length > keyA.length) return 1;
+  return 0;
+}
+
+function resolveExportEntry(
+  exports: Record<string, unknown>,
+  exportKey: string,
+): { value: unknown; wildcard: string } | null {
+  if (Object.prototype.hasOwnProperty.call(exports, exportKey)) {
+    return { value: exports[exportKey], wildcard: '' };
+  }
+
+  const patternEntries = Object.entries(exports)
+    .filter(([key]) => isPatternExportKey(key))
+    .sort(([keyA], [keyB]) => patternKeyCompare(keyA, keyB));
+
+  for (const [key, value] of patternEntries) {
+    const wildcard = matchPatternExportKey(key, exportKey);
+    if (wildcard !== null) return { value, wildcard };
+  }
+
+  return null;
+}
+
+function resolveExportEntryForKey(
+  exportsField: unknown,
+  exportKey: string,
+): { value: unknown; wildcard: string } | null {
+  if (!isRecord(exportsField)) return null;
+  if (!hasSubpathExportKeys(exportsField)) {
+    return exportKey === '.' ? { value: exportsField, wildcard: '' } : null;
+  }
+
+  return resolveExportEntry(exportsField, exportKey);
+}
+
+/**
+ * Extract ESM entry paths from a package.json object.
+ * Resolves the export entry for the current request first, so another subpath
+ * cannot suppress a real ESM-to-CJS mismatch.
+ */
+function extractEsmEntries(
+  pkgJson: FullPkgJson,
+  pkgRoot: string,
+  exportKey: string,
+): Set<string> {
+  const { exports: exportsField, module: moduleField } = pkgJson;
+  const resolvedExport = resolveExportEntryForKey(exportsField, exportKey);
+  const entries = resolvedExport
+    ? collectEsmTargets(resolvedExport.value, pkgRoot, resolvedExport.wildcard)
+    : new Set<string>();
+
+  if (exportKey === '.' && typeof moduleField === 'string') {
+    entries.add(path.resolve(pkgRoot, moduleField));
+  }
+
+  return entries;
+}
+
+function getExportKeyFromRequest(
+  packageName: string,
+  request: string,
+): string | null {
+  if (request === packageName) return '.';
+  if (request.startsWith(`${packageName}/`)) {
+    return `.${request.slice(packageName.length)}`;
   }
 
   return null;
@@ -156,14 +290,23 @@ export const rule = defineRule<typeof title, Config>(() => {
         if (!pkg?.root) continue;
 
         const pkgJson = readPkgJson(pkg.root);
-        const esmEntry =
-          !ruleConfig.ignore.some((p) => pkg.name.includes(p)) &&
-          pkgJson &&
-          extractEsmEntry(pkgJson, pkg.root);
-        if (!esmEntry) continue;
+        if (ruleConfig.ignore.some((p) => pkg.name.includes(p)) || !pkgJson)
+          continue;
+
+        const exportKey = getExportKeyFromRequest(pkg.name, dep.request);
+        if (!exportKey) continue;
+
+        const esmEntries = extractEsmEntries(pkgJson, pkg.root, exportKey);
+        if (esmEntries.size === 0) continue;
+        const esmEntryList = Array.from(esmEntries);
 
         const resolvedModuleRealPath = toRealPath(dep.dependency.path);
-        if (resolvedModuleRealPath === toRealPath(esmEntry)) continue;
+        if (isDefinitelyEsmFile(resolvedModuleRealPath)) continue;
+
+        if (
+          isDeclaredEsmEntry(resolvedModuleRealPath, esmEntryList, toRealPath)
+        )
+          continue;
 
         const groupKey = `${pkg.name}::${resolvedModuleRealPath}`;
         const issuer = {
@@ -178,7 +321,7 @@ export const rule = defineRule<typeof title, Config>(() => {
           groups.set(groupKey, {
             packageName: pkg.name,
             packageVersion: pkg.version,
-            esmEntry,
+            esmEntry: esmEntryList[0]!,
             resolvedModule: {
               id: dep.dependency.id,
               path: dep.dependency.path,
