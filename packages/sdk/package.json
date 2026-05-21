@@ -42,7 +42,7 @@
     "launch-editor": "^2.13.2",
     "safer-buffer": "2.1.2",
     "tapable": "2.3.3",
-    "ws": "8.18.3"
+    "ws": "8.20.1"
   },
   "devDependencies": {
     "@types/body-parser": "catalog:",
