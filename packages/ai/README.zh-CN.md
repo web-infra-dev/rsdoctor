@@ -74,7 +74,6 @@ new RsdoctorRspackPlugin({
 需要使用以下 rsdoctor 插件（版本要求）：
 
 - @rsdoctor/rspack-plugin >= 1.1.2
-- @rsdoctor/webpack-plugin >= 1.1.2
 
 注意：请确保使用最新版本以获得最佳体验。
 

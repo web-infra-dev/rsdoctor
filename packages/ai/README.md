@@ -78,7 +78,6 @@ new RsdoctorRspackPlugin({
 The following Rsdoctor plugins are required (version requirements):
 
 - @rsdoctor/rspack-plugin >= 1.1.2
-- @rsdoctor/webpack-plugin >= 1.1.2
 
 **Note: Please ensure you are using the latest version for the best experience.**
 
