@@ -1,6 +1,6 @@
 # features
 
-- **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **Type:** [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
 - **Optional:** `true`
 - **Default:** `['loader', 'plugins', 'bundle']`
 
@@ -52,14 +52,6 @@ new RsdoctorRspackPlugin({
 - Difference: The difference between `lite` mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged.
 
 :::
-
-## RsdoctorWebpackPluginFeatures
-
-`features` type:
-
-import Features from '@en/shared/features.md';
-
-<Features />
 
 ## RsdoctorRspackPluginFeatures
 

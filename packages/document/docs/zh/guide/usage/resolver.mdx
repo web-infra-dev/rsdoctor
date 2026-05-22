@@ -2,12 +2,10 @@
 
 :::tip
 
-- Rspack 项目中暂未支持 Resolve 分析能力。
-
-- Resolver 分析能力默认关闭，如需开启，可以在 `features` 数组中添加 `resolver`，如下示例。[features 配置](../../config/options/options)。
+Resolver 分析能力默认关闭，如需开启，可以在 `features` 数组中添加 `resolver`，如下示例。[features 配置](../../config/options/options)。
 
 ```js
-new rsdoctorRspackPlugin({
+new RsdoctorRspackPlugin({
   features: [
     'resolver',
     // ...other features

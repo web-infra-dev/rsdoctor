@@ -1,12 +1,12 @@
 ```ts
 interface RsdoctorRspackPluginFeatures {
   /**
-   * turn off it if you need not to analyze the executions of webpack loaders.
+   * turn off it if you need not to analyze the executions of Rspack loaders.
    * @default true
    */
   loader?: boolean;
   /**
-   * turn off it if you need not to analyze the executions of webpack plugins.
+   * turn off it if you need not to analyze the executions of Rspack plugins.
    * @default true
    */
   plugins?: boolean;

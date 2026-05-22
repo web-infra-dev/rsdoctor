@@ -1,6 +1,6 @@
 # features
 
-- **类型：** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **类型：** [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
 - **可选：** `true`
 - **默认值：** `["loader", "plugins", "bundle"]`
 
@@ -52,14 +52,6 @@ new RsdoctorRspackPlugin({
 - 区别：`lite` 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。
 
 :::
-
-## RsdoctorWebpackPluginFeatures
-
-`features` 类型如下：
-
-import Features from '@zh/shared/features.md';
-
-<Features />
 
 ## RsdoctorRspackPluginFeatures
 
