@@ -19,7 +19,6 @@
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "@rsdoctor/webpack-plugin": "workspace:*",
     "@rspack/core": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

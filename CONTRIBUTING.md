@@ -123,7 +123,6 @@ When you make changes to the code and want to view the `Rsdoctor` analysis repor
 pnpm run build:analysis
 ```
 
-- Based on the **Webpack** project: `modern-minimal` and `webpack-minimal`.
 - Based on the **Rspack** project: `rspack-minimal` and `rsbuild-minimal`.
 
 ---

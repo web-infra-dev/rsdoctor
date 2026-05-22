@@ -1,8 +1,0 @@
-{
-  "extends": "@rsdoctor/tsconfig/base",
-  "include": ["src"],
-  "compilerOptions": {
-    "outDir": "dist",
-    "module": "ESNext"
-  }
-}

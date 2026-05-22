@@ -200,7 +200,7 @@ export class RsdoctorRspackPlugin<
    * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
    * @param {Compiler} compiler
    * @return {*}
-   * @memberof RsdoctorWebpackPlugin
+   * @memberof RsdoctorRspackPlugin
    */
   public ensureModulesChunksGraphApplied(
     compiler: Plugin.BaseCompilerType<'rspack'>,

@@ -3,7 +3,7 @@
     {
       "id": 1,
       "request": "./utils",
-      "resolvedRequest": "examples/webpack-minimal/src/utils.ts",
+      "resolvedRequest": "examples/rspack-minimal/src/utils.ts",
       "kind": 1,
       "module": 2,
       "dependency": 3,
@@ -42,7 +42,7 @@
     {
       "id": 2,
       "request": "./utils",
-      "resolvedRequest": "examples/webpack-minimal/src/utils.ts",
+      "resolvedRequest": "examples/rspack-minimal/src/utils.ts",
       "kind": 1,
       "module": 5,
       "dependency": 3,
@@ -81,7 +81,7 @@
     {
       "id": 3,
       "request": "./html",
-      "resolvedRequest": "examples/webpack-minimal/src/html.ts",
+      "resolvedRequest": "examples/rspack-minimal/src/html.ts",
       "kind": 1,
       "module": 2,
       "dependency": 4,
@@ -120,7 +120,7 @@
     {
       "id": 4,
       "request": "./html",
-      "resolvedRequest": "examples/webpack-minimal/src/html.ts",
+      "resolvedRequest": "examples/rspack-minimal/src/html.ts",
       "kind": 1,
       "module": 5,
       "dependency": 4,
@@ -159,7 +159,7 @@
     {
       "id": 5,
       "request": "./utils2",
-      "resolvedRequest": "examples/webpack-minimal/src/utils2.ts",
+      "resolvedRequest": "examples/rspack-minimal/src/utils2.ts",
       "kind": 1,
       "module": 2,
       "dependency": 5,
@@ -198,7 +198,7 @@
     {
       "id": 6,
       "request": "./utils6",
-      "resolvedRequest": "examples/webpack-minimal/src/utils6.ts",
+      "resolvedRequest": "examples/rspack-minimal/src/utils6.ts",
       "kind": 1,
       "module": 5,
       "dependency": 6,
@@ -237,7 +237,7 @@
     {
       "id": 7,
       "request": "./utils6",
-      "resolvedRequest": "examples/webpack-minimal/src/utils6.ts",
+      "resolvedRequest": "examples/rspack-minimal/src/utils6.ts",
       "kind": 1,
       "module": 8,
       "dependency": 6,
@@ -276,7 +276,7 @@
     {
       "id": 8,
       "request": "./utils4",
-      "resolvedRequest": "examples/webpack-minimal/src/utils4.ts",
+      "resolvedRequest": "examples/rspack-minimal/src/utils4.ts",
       "kind": 1,
       "module": 5,
       "dependency": 7,
@@ -315,7 +315,7 @@
     {
       "id": 9,
       "request": "./utils5",
-      "resolvedRequest": "examples/webpack-minimal/src/utils5.ts",
+      "resolvedRequest": "examples/rspack-minimal/src/utils5.ts",
       "kind": 1,
       "module": 7,
       "dependency": 8,
@@ -2704,7 +2704,7 @@
   "modules": [
     {
       "id": 1,
-      "path": "examples/webpack-minimal/src/index.ts",
+      "path": "examples/rspack-minimal/src/index.ts",
       "source": {
         "source": "source",
         "transformed": "transformed",
@@ -2726,7 +2726,7 @@
     },
     {
       "id": 2,
-      "path": "examples/webpack-minimal/src/index.ts",
+      "path": "examples/rspack-minimal/src/index.ts",
       "source": {
         "source": "source",
         "transformed": "transformed",
@@ -2747,7 +2747,7 @@
     },
     {
       "id": 3,
-      "path": "examples/webpack-minimal/src/utils.ts",
+      "path": "examples/rspack-minimal/src/utils.ts",
       "source": {
         "source": "source",
         "transformed": "transformed",
@@ -2767,7 +2767,7 @@
     },
     {
       "id": 4,
-      "path": "examples/webpack-minimal/src/html.ts",
+      "path": "examples/rspack-minimal/src/html.ts",
       "source": {
         "source": "source",
         "transformed": "transformed",
@@ -2787,7 +2787,7 @@
     },
     {
       "id": 5,
-      "path": "examples/webpack-minimal/src/utils2.ts",
+      "path": "examples/rspack-minimal/src/utils2.ts",
       "source": {
         "source": "source",
         "transformed": "transformed",
@@ -2807,7 +2807,7 @@
     },
     {
       "id": 6,
-      "path": "examples/webpack-minimal/src/utils6.ts",
+      "path": "examples/rspack-minimal/src/utils6.ts",
       "source": {
         "source": "source",
         "transformed": "transformed",
@@ -2827,7 +2827,7 @@
     },
     {
       "id": 7,
-      "path": "examples/webpack-minimal/src/utils4.ts",
+      "path": "examples/rspack-minimal/src/utils4.ts",
       "source": {
         "source": "source",
         "transformed": "transformed",
@@ -2847,7 +2847,7 @@
     },
     {
       "id": 8,
-      "path": "examples/webpack-minimal/src/utils5.ts",
+      "path": "examples/rspack-minimal/src/utils5.ts",
       "source": {
         "source": "source",
         "transformed": "transformed",
