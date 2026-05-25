@@ -13,7 +13,7 @@ allowBuilds:
   nx: false
 
 catalog:
-  '@rsbuild/core': 2.0.6
+  '@rsbuild/core': 2.0.7
   '@rsbuild/plugin-check-syntax': 1.6.1
   '@rsbuild/plugin-less': 1.6.3
   '@rsbuild/plugin-node-polyfill': ^1.4.4
@@ -22,18 +22,18 @@ catalog:
   '@rsbuild/plugin-svgr': 2.0.2
   '@rsbuild/plugin-type-check': ^1.3.4
   '@rslint/core': ^0.5.3
-  '@rspack/cli': 2.0.3
-  '@rspack/core': 2.0.3
+  '@rspack/cli': 2.0.4
+  '@rspack/core': 2.0.4
   '@rspack/plugin-react-refresh': 2.0.0
   '@rspack/resolver': 0.2.8
-  '@rstest/core': 0.10.0
+  '@rstest/core': 0.10.2
   '@types/body-parser': 1.19.6
   '@types/connect': 3.4.38
   '@types/estree': 1.0.5
   '@types/fs-extra': ^11.0.4
   '@types/node': ^24.12.3
   '@types/path-browserify': 1.0.3
-  '@types/react': ^19.2.14
+  '@types/react': ^19.2.15
   '@types/react-dom': ^19.2.3
   '@types/tapable': 2.3.0
   antd: 5.19.1
@@ -71,7 +71,7 @@ minimumReleaseAgeExclude:
 overrides:
   '@remix-run/router': 1.23.2
   call-bind-apply-helpers: 1.0.2
-  es-object-atoms: 1.1.1
+  es-object-atoms: 1.1.2
   get-intrinsic: 1.3.0
   minimatch: ^9.0.9
   node-forge: 1.4.0
