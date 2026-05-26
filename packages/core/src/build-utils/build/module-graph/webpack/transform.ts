@@ -163,7 +163,7 @@ async function appendModuleData(
   webpackGraph: Webpack.ModuleGraph,
   graph: SDK.ModuleGraphInstance,
   wbFs: WebpackFs,
-  features?: Plugin.RsdoctorWebpackPluginFeatures,
+  features?: Plugin.RsdoctorRspackPluginFeatures,
   context?: TransformContext,
 ) {
   const module = graph.getModuleByIdentifier(
@@ -266,7 +266,7 @@ async function appendModuleData(
 export async function appendModuleGraphByCompilation(
   compilation: Plugin.BaseCompilation,
   graph: SDK.ModuleGraphInstance,
-  features?: Plugin.RsdoctorWebpackPluginFeatures,
+  features?: Plugin.RsdoctorRspackPluginFeatures,
   context?: TransformContext,
 ) {
   try {
