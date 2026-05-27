@@ -34,43 +34,11 @@ new RsdoctorRspackPlugin({
 
 </Tabs>
 
-## RsdoctorWebpackPlugin 插件
-
-**RsdoctorWebpackPlugin** 类由 `@rsdoctor/webpack-plugin` 导出，配置项是 [RsdoctorWebpackPluginOptions](#rsdoctorwebpackpluginoptions)。
-
-<Tabs>
-
-<Tab label="esm">
-
-```ts
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
-
-new RsdoctorWebpackPlugin({
-  /** RsdoctorWebpackPluginOptions */
-});
-```
-
-</Tab>
-
-<Tab label="cjs">
-
-```js
-const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
-
-new RsdoctorWebpackPlugin({
-  /** RsdoctorWebpackPluginOptions */
-});
-```
-
-</Tab>
-
-</Tabs>
-
 ## 配置项
 
 **类型：** `Object`
 
-这个 `Options` 是 [RsdoctorRspackPlugin](#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 和 [RsdoctorWebpackPlugin](#rsdoctorwebpackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
+这个 `Options` 是 [RsdoctorRspackPlugin](#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
 
 - [disableClientServer](./disableClientServer.mdx) - **客户端服务控制**：是否在分析完成后不自动打开 Rsdoctor 报告服务。
 - [experiments](./experiments.mdx) - **实验性功能配置**：启用 Rspack 插件的实验性功能，如原生插件性能优化。
@@ -84,15 +52,15 @@ new RsdoctorWebpackPlugin({
 ### RsdoctorRspackPluginOptions
 
 ```ts
-interface RsdoctorWebpackPluginOptions<
+interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
   linter?: LinterType.Options<Rules, InternalRules>;
 
   /** Rsdoctor 功能开关 */
   features?:
-    | Plugin.RsdoctorWebpackPluginFeatures
-    | Array<keyof Plugin.RsdoctorWebpackPluginFeatures>;
+    | RsdoctorRspackPluginFeatures
+    | Array<keyof RsdoctorRspackPluginFeatures>;
 
   /**
    * @deprecated 使用 `output.mode` 代替，如果使用 `lite` 模式，请使用 `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` 代替
@@ -126,7 +94,3 @@ interface RsdoctorRspackPluginExperiments {
   enableNativePlugin?: boolean;
 }
 ```
-
-### RsdoctorWebpackPluginOptions
-
-RsdoctorWebpackPlugin 同 `Omit<RsdoctorRspackPluginOptions, 'experiments'>` 类型。
