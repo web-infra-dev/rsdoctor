@@ -7,25 +7,33 @@ import { SDK } from '@rsdoctor/types';
 import {
   Button,
   Card,
-  Col,
   Divider,
   Empty,
-  Popover,
-  Row,
+  Popover as BasePopover,
   Space,
   Tag,
-  Tooltip,
+  type TagProps,
+  type TooltipProps,
+  type PopoverProps,
+  Tooltip as BaseTooltip,
   Tree,
   Typography,
 } from 'antd';
 import { DataNode as AntdDataNode } from 'antd/es/tree';
-import { omitBy, sumBy } from 'es-toolkit/compat';
+import { debounce, omitBy, sumBy } from 'es-toolkit/compat';
 import { dirname, relative } from 'path';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  memo,
+  useCallback,
+  use,
+  createContext,
+} from 'react';
 import { CodeViewer } from 'src/components/base';
 import { Badge as Bdg } from '../../../components/Badge';
 import { KeywordInput } from '../../../components/Form/keyword';
-import { Keyword } from '../../../components/Keyword';
 import { ServerAPIProvider } from '../../../components/Manifest';
 import { TextDrawer } from '../../../components/TextDrawer';
 import { Size } from '../../../constants';
@@ -34,24 +42,44 @@ import {
   createFileStructures,
   formatSize,
   isJsDataUrl,
+  useElementSize,
   useI18n,
 } from '../../../utils';
 import { ModuleAnalyzeComponent } from '../../ModuleAnalyze';
 import { ModuleGraphListContext } from '../config';
-import styles from './index.module.scss';
+import styles from './asset.module.scss';
+import { ModuleData } from '@rsdoctor/graph';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const { DirectoryTree } = Tree;
 
-let expandedModulesKeys: React.Key[] = [];
 const TAB_MAP = {
   source: 'source code',
   transformed: 'Transformed Code (After compile)',
   parsedSource: 'Bundled Code (After bundle and tree-shaking)',
 };
 
-const tagStyle = {
-  margin: 'none',
-  marginInlineEnd: 0,
+// antd's tooltip/popover component often throws 185 error when rendered inside a virtual list.
+// this is used as a reset mechanism for the error boundary.
+// also these tooltips are a real performance killer
+// and they can be easily turned off by wrapping the problematic subtree in DisablePopups
+const POPUPS_ENABLED_BY_DEFAULT = true;
+const PopupContext = createContext({ enabled: POPUPS_ENABLED_BY_DEFAULT });
+const DisablePopups = ({ children }: { children: any }) => (
+  <PopupContext.Provider value={{ enabled: false }}>
+    {children}
+  </PopupContext.Provider>
+);
+const usePopupsEnabled = (): boolean => use(PopupContext)?.enabled ?? true;
+const Tooltip = (props: TooltipProps) => {
+  const enabled = usePopupsEnabled();
+  if (enabled) return <BaseTooltip {...props} />;
+  else return props.children ?? null;
+};
+const Popover = (props: PopoverProps) => {
+  const enabled = usePopupsEnabled();
+  if (enabled) return <BasePopover {...props} />;
+  else return props.children ?? null;
 };
 
 const EmptyCodeItem = () => (
@@ -243,7 +271,7 @@ export const ModulesStatistics: React.FC<{
   modules: SDK.ModuleData[];
   chunks: SDK.ChunkData[];
   filteredModules: SDK.ModuleData[];
-}> = ({ modules, chunks, filteredModules }) => {
+}> = memo(({ modules, chunks, filteredModules }) => {
   const { sourceSize, parsedSize, filteredParsedSize, filteredSourceSize } =
     useMemo(() => {
       return {
@@ -326,114 +354,98 @@ export const ModulesStatistics: React.FC<{
       </Tooltip>
     </Space>
   );
-};
+});
 
+const defaultTagStyle: React.CSSProperties = {
+  margin: 'none',
+  marginInlineEnd: 0,
+};
+const AbstractTag = ({
+  color,
+  tooltipTitle,
+  style = defaultTagStyle,
+  children,
+}: {
+  color: TagProps['color'];
+  children: string;
+  tooltipTitle: string;
+  style?: React.CSSProperties | null;
+}) => {
+  return (
+    <Tooltip
+      title={
+        <Space>
+          <Typography.Text style={{ color: 'inherit' }}>
+            {tooltipTitle}
+          </Typography.Text>
+        </Space>
+      }
+    >
+      <Tag color={color} style={style || undefined}>
+        {children}
+      </Tag>
+    </Tooltip>
+  );
+};
 const ConcatenatedTag = ({ moduleCount }: { moduleCount: number }) => {
   return (
-    <Tooltip
-      title={
-        <Space>
-          <Typography.Text style={{ color: 'inherit' }}>
-            This is a concatenated container module that includes {moduleCount}{' '}
-            modules
-          </Typography.Text>
-        </Space>
-      }
+    <AbstractTag
+      color="blue"
+      tooltipTitle={`This is a concatenated container module that includes ${moduleCount} modules`}
     >
-      <Tag color="blue" style={tagStyle}>
-        concatenated container
-      </Tag>
-    </Tooltip>
+      concatenated container
+    </AbstractTag>
   );
 };
-
 const TotalBundledSizeTag = ({ size }: { size: number }) => {
   return (
-    <Tooltip
-      title={
-        <Space>
-          <Typography.Text style={{ color: 'inherit' }}>
-            The total output size of all the files in this folder. If you
-            enabled minification, this value shows the minified size.
-          </Typography.Text>
-        </Space>
-      }
+    <AbstractTag
+      color="geekblue"
+      tooltipTitle="The total output size of all the files in this folder. If you enabled minification, this value shows the minified size."
     >
-      <Tag style={tagStyle} color={'geekblue'}>
-        {`bundled size: ${formatSize(size)}`}
-      </Tag>
-    </Tooltip>
+      {`bundled size: ${formatSize(size)}`}
+    </AbstractTag>
   );
 };
-
 const BundledSizeTag = ({ size }: { size: number }) => {
   return (
-    <Tooltip
-      title={
-        <Space>
-          <Typography.Text style={{ color: 'inherit' }}>
-            The final output size of this file. If you enabled minification,
-            this value shows the minified size.
-          </Typography.Text>
-        </Space>
-      }
+    <AbstractTag
+      color="geekblue"
+      style={null}
+      tooltipTitle="The final output size of this file. If you enabled minification, this value shows the minified size."
     >
-      <Tag color={'geekblue'}>{`bundled size: ${formatSize(size)}`}</Tag>
-    </Tooltip>
+      {`bundled size: ${formatSize(size)}`}
+    </AbstractTag>
   );
 };
-
 const GzippedSizeTag = ({ size }: { size: number }) => {
   return (
-    <Tooltip
-      title={
-        <Space>
-          <Typography.Text style={{ color: 'inherit' }}>
-            The compressed file size that users actually download, as most web
-            servers use gzip compression.
-          </Typography.Text>
-        </Space>
-      }
+    <AbstractTag
+      color="orange"
+      style={null}
+      tooltipTitle="The compressed file size that users actually download, as most web servers use gzip compression."
     >
-      <Tag color={'orange'}>{`gzipped: ${formatSize(size)}`}</Tag>
-    </Tooltip>
+      {`gzipped: ${formatSize(size)}`}
+    </AbstractTag>
   );
 };
-
 const TotalSourceSizeTag = ({ size }: { size: number }) => {
   return (
-    <Tooltip
-      title={
-        <Space>
-          <Typography.Text style={{ color: 'inherit' }}>
-            The total original size of all the files in this folder, before any
-            transformations and minification.
-          </Typography.Text>
-        </Space>
-      }
-    >
-      <Tag
-        style={tagStyle}
-        color={'cyan'}
-      >{`source size: ${formatSize(size)}`}</Tag>
-    </Tooltip>
+    <AbstractTag
+      tooltipTitle="The total original size of all the files in this folder, before any transformations and minification."
+      color="cyan"
+    >{`source size: ${formatSize(size)}`}</AbstractTag>
   );
 };
-
 const SourceSizeTag = ({ size }: { size: number }) => {
   return (
-    <Tooltip
-      title={
-        <Space>
-          <Typography.Text style={{ color: 'inherit' }}>
-            The original size of this file, before any transformations and
-            minification.
-          </Typography.Text>
-        </Space>
-      }
+    <AbstractTag
+      color="cyan"
+      style={null}
+      tooltipTitle="The original size of this file, before any transformations and minification."
     >
-      <Tag color={'cyan'}>{`source size: ${formatSize(size)}`}</Tag>
-    </Tooltip>
+      {`source size: ${formatSize(size)}`}
+    </AbstractTag>
   );
 };
 
@@ -455,8 +467,7 @@ export const AssetDetail: React.FC<{
   const [moduleKeyword, setModuleKeyword] = useState('');
   const [defaultExpandAll, setDefaultExpandAll] = useState(false);
   const [moduleJumpList, setModuleJumpList] = useState([] as number[]);
-  const [show, setShow] = useState(false);
-
+  const [showModuleGraphViewer, setShowModuleGraphViewer] = useState(false);
   const filteredModules = useMemo(() => {
     let res = includeModules.slice();
     if (moduleKeyword) {
@@ -471,181 +482,11 @@ export const AssetDetail: React.FC<{
     return res;
   }, [includeModules, moduleKeyword, moduleSizeLimit]);
 
-  const fileStructures = useMemo(() => {
-    // Normalize paths for comparison - convert backslashes to forward slashes
-    const normalizePath = (path: string) => path.replace(/\\/g, '/');
-    const res = createFileStructures({
-      files: filteredModules.map((e) => e.path).filter(Boolean),
-      inlinedResourcePathKey,
-      fileTitle(file, basename) {
-        const mod = filteredModules.find(
-          (e) => normalizePath(e.path) === normalizePath(file),
-        )!;
-
-        if (!mod) return basename;
-
-        const { parsedSize = 0, sourceSize = 0, gzipSize = 0 } = mod.size;
-        const isConcatenation = mod.kind === SDK.ModuleKind.Concatenation;
-
-        const containedOtherModules =
-          !isConcatenation &&
-          parsedSize === 0 &&
-          includeModules.filter(
-            (e) => e !== mod && e.modules && e.modules.indexOf(mod.id) > -1,
-          );
-
-        return (
-          <div className={styles['bundle-tree']}>
-            <Popover
-              content={`Open the ${basename}’s module reasons tree.`}
-              placement="bottom"
-            >
-              <div
-                className={styles.box}
-                onClick={() => {
-                  setModuleJumpList([mod.id]);
-                  setShow(true);
-                }}
-              >
-                <div className={styles.keywords}>
-                  <Keyword ellipsis text={basename} keyword={''} />
-                </div>
-                <div className={styles.dividerDiv}>
-                  <Divider className={styles.divider} dashed />
-                </div>
-              </div>
-            </Popover>
-            <Space>
-              {parsedSize !== 0 ? (
-                <>
-                  {typeof gzipSize === 'number' ? (
-                    <Popover
-                      placement="bottom"
-                      content={<SourceSizeTag size={sourceSize} />}
-                    >
-                      <Space direction="horizontal">
-                        <BundledSizeTag size={parsedSize} />
-                        <GzippedSizeTag size={gzipSize} />
-                      </Space>
-                    </Popover>
-                  ) : (
-                    <Space direction="horizontal">
-                      <BundledSizeTag size={parsedSize} />
-                      <SourceSizeTag size={sourceSize} />
-                    </Space>
-                  )}
-                </>
-              ) : sourceSize !== 0 ? (
-                // fallback to display tag for source size
-                <SourceSizeTag size={sourceSize} />
-              ) : null}
-              {isConcatenation ? (
-                <ConcatenatedTag moduleCount={mod.modules?.length || 0} />
-              ) : null}
-              {containedOtherModules && containedOtherModules.length ? (
-                <Tooltip
-                  title={
-                    <Space direction="vertical">
-                      <Typography.Text style={{ color: 'inherit' }}>
-                        This module is concatenated into another container
-                        module:
-                      </Typography.Text>
-                      {containedOtherModules.map(({ id, path }) => {
-                        if (isJsDataUrl(path)) {
-                          return (
-                            <Typography.Paragraph
-                              ellipsis={{ rows: 4 }}
-                              key={id}
-                              style={{ color: 'inherit', maxWidth: '100%' }}
-                              code
-                            >
-                              {path}
-                            </Typography.Paragraph>
-                          );
-                        }
-
-                        const p = relative(dirname(mod.path), path);
-                        if (p.startsWith('javascript;charset=utf-8;base64,')) {
-                          return (
-                            <Typography.Text
-                              key={id}
-                              style={{ color: 'inherit', maxWidth: '100%' }}
-                              code
-                            >
-                              {p[0] === '.' ? p : `./${p}`}
-                            </Typography.Text>
-                          );
-                        }
-
-                        return (
-                          <Typography.Text
-                            key={id}
-                            style={{ color: 'inherit' }}
-                            code
-                          >
-                            {p[0] === '.' ? p : `./${p}`}
-                          </Typography.Text>
-                        );
-                      })}
-                    </Space>
-                  }
-                >
-                  <Tag color="green">concatenated</Tag>
-                </Tooltip>
-              ) : null}
-
-              <ModuleCodeViewer data={mod} />
-            </Space>
-          </div>
-        );
-      },
-      dirTitle(dir, defaultTitle) {
-        const mods: string[] = [];
-        const paths = getChildrenModule(dir, mods);
-        if (paths.length) {
-          // Normalize paths for comparison - convert backslashes to forward slashes
-          const normalizePath = (path: string) => path.replace(/\\/g, '/');
-          const mods = paths.map(
-            (e) =>
-              includeModules.find(
-                (m) => normalizePath(m.path) === normalizePath(e),
-              )!,
-          );
-
-          const parsedSize = sumBy(mods, (e) => e?.size?.parsedSize || 0);
-          const sourceSize = sumBy(mods, (e) => e?.size?.sourceSize || 0);
-          return (
-            <div className={styles['bundle-tree']}>
-              <div className={styles.box}>
-                <div className={styles.keywords}>
-                  <Keyword ellipsis text={defaultTitle} keyword={''} />
-                </div>
-                <div className={styles.dividerDiv}>
-                  <Divider className={styles.divider} dashed />
-                </div>
-              </div>
-              <Space>
-                {parsedSize > 0 ? (
-                  <>
-                    <TotalBundledSizeTag size={parsedSize} />
-                    <TotalSourceSizeTag size={sourceSize} />
-                  </>
-                ) : (
-                  <TotalSourceSizeTag size={sourceSize} />
-                )}
-              </Space>
-            </div>
-          );
-        }
-
-        return defaultTitle;
-      },
-      page: 'bundle',
-    });
-    return res;
-  }, [filteredModules]);
-
   const onSearch = (value: string) => setModuleKeyword(value);
+  const openModuleGraphViewer = useCallback((modId: number[]) => {
+    setShowModuleGraphViewer(true);
+    setModuleJumpList(modId);
+  }, []);
 
   useEffect(() => {
     setModuleKeyword('');
@@ -663,19 +504,26 @@ export const AssetDetail: React.FC<{
       <Card
         className={styles.bundle}
         title={`Modules of "${asset.path}"`}
-        bodyStyle={{ minHeight: height }}
+        style={
+          {
+            '--body-min-height': height + 'px',
+          } as React.CSSProperties
+        }
+        classNames={{
+          body: styles.bundleBody,
+        }}
         size="small"
       >
         {includeModules.length ? (
-          <Row>
-            <Col span={24}>
+          <>
+            <div>
               <ModulesStatistics
                 modules={includeModules}
                 chunks={includeChunks}
                 filteredModules={filteredModules}
               />
-            </Col>
-            <Col span={24}>
+            </div>
+            <div>
               <Space>
                 <KeywordInput
                   placeholder="search module by keyword"
@@ -688,46 +536,16 @@ export const AssetDetail: React.FC<{
                   icon={<ColumnHeightOutlined />}
                 />
               </Space>
-            </Col>
-            <Col span={24} style={{ marginTop: Size.BasePadding }}>
-              {filteredModules.length ? (
-                <DirectoryTree
-                  key={`tree_${moduleKeyword}_${defaultExpandAll}_${asset.path}`}
-                  selectable={false}
-                  defaultExpandAll={
-                    defaultExpandAll || filteredModules.length <= 20
-                  }
-                  onExpand={(expandedKeys) => {
-                    expandedModulesKeys = expandedKeys;
-                  }}
-                  defaultExpandParent
-                  // @ts-ignore
-                  defaultExpandedKeys={
-                    expandedModulesKeys?.length
-                      ? expandedModulesKeys
-                      : fileStructures.length === 1
-                        ? [fileStructures[0].key]
-                        : []
-                  }
-                  treeData={fileStructures as AntdDataNode[]}
-                  rootStyle={{
-                    maxHeight: '500px',
-                    overflow: 'auto',
-                    border: '1px solid rgba(235, 237, 241)',
-                    padding: '14px 20px',
-                  }}
-                />
-              ) : (
-                <Empty
-                  description={
-                    <Typography.Text
-                      strong
-                    >{`"${moduleKeyword}" can't match any modules`}</Typography.Text>
-                  }
-                />
-              )}
-            </Col>
-          </Row>
+            </div>
+            <AssetDetailTree
+              assetPath={asset.path}
+              includeModules={includeModules}
+              filteredModules={filteredModules}
+              defaultExpandAll={defaultExpandAll}
+              moduleKeyword={moduleKeyword}
+              openModuleGraphViewer={openModuleGraphViewer}
+            />
+          </>
         ) : (
           <Empty
             description={
@@ -737,18 +555,378 @@ export const AssetDetail: React.FC<{
             }
           />
         )}
-
         <ModuleGraphViewer
           id={
             moduleJumpList?.length
               ? moduleJumpList[moduleJumpList.length - 1]
               : ''
           }
-          show={show}
-          setShow={setShow}
+          show={showModuleGraphViewer}
+          setShow={setShowModuleGraphViewer}
           cwd={root}
         />
       </Card>
     </ModuleGraphListContext.Provider>
   );
 };
+
+let defaultExpandedModulesKeys: React.Key[] = [];
+const AssetDetailTree = memo(
+  ({
+    filteredModules,
+    includeModules,
+    defaultExpandAll,
+    moduleKeyword,
+    openModuleGraphViewer,
+    assetPath,
+  }: {
+    filteredModules: SDK.ModuleData[];
+    includeModules: SDK.ModuleData[];
+    defaultExpandAll: boolean;
+    moduleKeyword: string;
+    openModuleGraphViewer: (moduleId: number[]) => void;
+    assetPath: string;
+  }) => {
+    const ITEM_HEIGHT = 30;
+    const PERMANENT_PERF_MODE = false;
+    const DISABLE_PERF_MODE_SCROLL_DELAY = 150;
+
+    // disable all the tooltips and popovers inside the tree?
+    const [performanceMode, setPerformanceMode] = useState(PERMANENT_PERF_MODE);
+    const [
+      bundleTreeRef,
+      { height: bundleTreeHeight, width: bundleTreeWidth },
+    ] = useElementSize();
+
+    const onScroll = useMemo(() => {
+      if (PERMANENT_PERF_MODE) return undefined;
+      const disablePerformanceMode = debounce(() => {
+        setPerformanceMode(false);
+      }, DISABLE_PERF_MODE_SCROLL_DELAY);
+      const onScroll = () => {
+        setPerformanceMode(true);
+        disablePerformanceMode();
+      };
+      return onScroll;
+    }, []);
+
+    const treeData = useMemo(() => {
+      // Normalize paths for comparison - convert backslashes to forward slashes
+      const normalizePath = (path: string) => path.replace(/\\/g, '/');
+
+      const filteredModulesMap: Map<string, ModuleData> = new Map();
+      const files: string[] = [];
+      for (const mod of filteredModules) {
+        if (mod.path) {
+          filteredModulesMap.set(normalizePath(mod.path), mod);
+          files.push(mod.path);
+        }
+      }
+      const includeModulesMap: Map<string, ModuleData> = new Map();
+      for (const mod of includeModules) {
+        if (mod.path) {
+          includeModulesMap.set(normalizePath(mod.path), mod);
+        }
+      }
+
+      const onFileEntryClick = (modId: number) =>
+        openModuleGraphViewer([modId]);
+
+      const treeData = createFileStructures({
+        files,
+        inlinedResourcePathKey,
+        fileTitle(file, basename) {
+          const mod = filteredModulesMap.get(normalizePath(file));
+
+          if (!mod) return basename;
+
+          return (
+            <AssetDetailTreeFileEntry
+              mod={mod}
+              basename={basename}
+              includeModules={includeModules}
+              onClick={onFileEntryClick}
+            />
+          );
+        },
+        dirTitle(dir, defaultTitle) {
+          // all these calculations can be done directly in AssetDetailTreeDirEntry component
+          // but in that case they'll run on every component render
+          // and here it happens only once on dependencies change
+          const paths = getChildrenModule(dir, []);
+
+          if (!paths.length) return defaultTitle;
+
+          const { parsedSize, sourceSize } = paths.reduce(
+            (acc, path) => {
+              const mod = includeModulesMap.get(normalizePath(path));
+              if (mod) {
+                acc.mods.push(mod);
+                acc.sourceSize += mod.size?.sourceSize || 0;
+                acc.parsedSize += mod.size?.parsedSize || 0;
+              }
+              return acc;
+            },
+            { sourceSize: 0, parsedSize: 0, mods: [] as SDK.ModuleData[] },
+          );
+          return (
+            <AssetDetailTreeDirEntry
+              title={defaultTitle}
+              parsedSize={parsedSize}
+              sourceSize={sourceSize}
+            />
+          );
+        },
+        page: 'bundle',
+      });
+      return treeData;
+    }, [filteredModules, openModuleGraphViewer]);
+
+    return (
+      <PopupContext.Provider value={{ enabled: !performanceMode }}>
+        <div
+          className={styles.bundleTree}
+          style={
+            {
+              marginTop: Size.BasePadding,
+              '--item-height': ITEM_HEIGHT + 'px',
+            } as React.CSSProperties
+          }
+        >
+          <div className={styles.bundleTreeViewport}>
+            <div className={styles.bundleTreeInnerViewport} ref={bundleTreeRef}>
+              {bundleTreeHeight > 0 && (
+                <>
+                  {filteredModules.length ? (
+                    <DirectoryTree
+                      onScroll={onScroll}
+                      key={`tree_${moduleKeyword}_${defaultExpandAll}_${assetPath}`}
+                      selectable={false}
+                      virtual
+                      itemHeight={ITEM_HEIGHT}
+                      height={bundleTreeHeight}
+                      style={
+                        bundleTreeWidth
+                          ? { width: bundleTreeWidth + 'px' }
+                          : undefined
+                      }
+                      defaultExpandAll={
+                        defaultExpandAll || filteredModules.length <= 20
+                      }
+                      onExpand={(expandedKeys) => {
+                        defaultExpandedModulesKeys = expandedKeys;
+                      }}
+                      defaultExpandParent
+                      // @ts-ignore
+                      defaultExpandedKeys={
+                        defaultExpandedModulesKeys?.length
+                          ? defaultExpandedModulesKeys
+                          : treeData.length === 1
+                            ? [treeData[0].key]
+                            : []
+                      }
+                      treeData={treeData as AntdDataNode[]}
+                    />
+                  ) : (
+                    <Empty
+                      description={
+                        <Typography.Text
+                          strong
+                        >{`"${moduleKeyword}" can't match any modules`}</Typography.Text>
+                      }
+                    />
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </PopupContext.Provider>
+    );
+  },
+);
+
+const AssetDetailTreeDirEntry = memo(
+  ({
+    title,
+    parsedSize,
+    sourceSize,
+  }: {
+    title: string;
+    parsedSize: number;
+    sourceSize: number;
+  }) => {
+    const render = () => {
+      return (
+        <div className={styles.bundleTreeEntryContent}>
+          <Popover content={title}>
+            <Typography.Text className={styles.bundleTreeEntryTitle}>
+              {title}
+            </Typography.Text>
+          </Popover>
+          <div className={styles.divider} />
+          <Space>
+            {parsedSize > 0 ? (
+              <>
+                <TotalBundledSizeTag size={parsedSize} />
+                <TotalSourceSizeTag size={sourceSize} />
+              </>
+            ) : (
+              <TotalSourceSizeTag size={sourceSize} />
+            )}
+          </Space>
+        </div>
+      );
+    };
+    const renderWithoutPopups = () => <DisablePopups>{render()}</DisablePopups>;
+    return (
+      <div className={styles.bundleTreeEntry}>
+        <ErrorBoundary fallbackRender={renderWithoutPopups}>
+          {render()}
+        </ErrorBoundary>
+      </div>
+    );
+  },
+);
+
+const AssetDetailTreeFileEntry = memo(
+  ({
+    mod,
+    basename,
+    includeModules,
+    onClick,
+  }: {
+    mod: SDK.ModuleData;
+    basename: string;
+    includeModules: SDK.ModuleData[];
+    onClick: (modId: number) => void;
+  }) => {
+    const isConcatenation = mod.kind === SDK.ModuleKind.Concatenation;
+    const { parsedSize = 0, sourceSize = 0, gzipSize = 0 } = mod.size;
+
+    const renderSize = () => {
+      if (parsedSize !== 0) {
+        const sourceSizeTag = <SourceSizeTag size={sourceSize} />;
+        const bundledSizeTag = <BundledSizeTag size={parsedSize} />;
+        if (typeof gzipSize === 'number') {
+          return (
+            <Popover placement="bottom" content={sourceSizeTag}>
+              <Space direction="horizontal">
+                {bundledSizeTag}
+                <GzippedSizeTag size={gzipSize} />
+              </Space>
+            </Popover>
+          );
+        } else {
+          return (
+            <Space direction="horizontal">
+              {bundledSizeTag}
+              {sourceSizeTag}
+            </Space>
+          );
+        }
+      } else if (sourceSize !== 0) {
+        // fallback to display tag for source size
+        return <SourceSizeTag size={sourceSize} />;
+      } else {
+        return null;
+      }
+    };
+    const renderContainedOtherModules = () => {
+      const containedOtherModules =
+        !isConcatenation &&
+        parsedSize === 0 &&
+        includeModules.filter(
+          (e) => e !== mod && e.modules && e.modules.indexOf(mod.id) > -1,
+        );
+      if (containedOtherModules && containedOtherModules.length) {
+        return (
+          <Tooltip
+            title={
+              <Space direction="vertical">
+                <Typography.Text style={{ color: 'inherit' }}>
+                  This module is concatenated into another container module:
+                </Typography.Text>
+                {containedOtherModules.map(({ id, path }) => {
+                  if (isJsDataUrl(path)) {
+                    return (
+                      <Typography.Paragraph
+                        ellipsis={{ rows: 4 }}
+                        key={id}
+                        style={{ color: 'inherit', maxWidth: '100%' }}
+                        code
+                      >
+                        {path}
+                      </Typography.Paragraph>
+                    );
+                  }
+
+                  const p = relative(dirname(mod.path), path);
+                  if (p.startsWith('javascript;charset=utf-8;base64,')) {
+                    return (
+                      <Typography.Text
+                        key={id}
+                        style={{ color: 'inherit', maxWidth: '100%' }}
+                        code
+                      >
+                        {p[0] === '.' ? p : `./${p}`}
+                      </Typography.Text>
+                    );
+                  }
+
+                  return (
+                    <Typography.Text key={id} style={{ color: 'inherit' }} code>
+                      {p[0] === '.' ? p : `./${p}`}
+                    </Typography.Text>
+                  );
+                })}
+              </Space>
+            }
+          >
+            <Tag color="green">concatenated</Tag>
+          </Tooltip>
+        );
+      } else {
+        return null;
+      }
+    };
+    const render = () => {
+      return (
+        <div className={styles.bundleTreeEntryContent}>
+          <Popover
+            content={`Open the ${basename}’s module reasons tree.`}
+            placement="bottom"
+          >
+            <div
+              className={styles.bundleTreeEntryTitleWrap}
+              onClick={() => onClick(mod.id)}
+            >
+              <Popover content={basename}>
+                <Typography.Text className={styles.bundleTreeEntryTitle}>
+                  {basename}
+                </Typography.Text>
+              </Popover>
+              <div className={styles.divider} />
+            </div>
+          </Popover>
+          <Space>
+            {renderSize()}
+            {isConcatenation && (
+              <ConcatenatedTag moduleCount={mod.modules?.length || 0} />
+            )}
+            {renderContainedOtherModules()}
+            <ModuleCodeViewer data={mod} />
+          </Space>
+        </div>
+      );
+    };
+    const renderWithoutPopups = () => <DisablePopups>{render()}</DisablePopups>;
+    return (
+      <div className={styles.bundleTreeEntry}>
+        <ErrorBoundary fallbackRender={renderWithoutPopups}>
+          {render()}
+        </ErrorBoundary>
+      </div>
+    );
+  },
+);

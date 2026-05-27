@@ -1,0 +1,107 @@
+.bundle {
+  display: flex;
+  flex-direction: column;
+
+  :global {
+    .rc-tree-node-content-wrapper {
+      // width: 100%;
+      font-size: 14px;
+    }
+
+    .file-icon {
+      margin-left: 0;
+    }
+
+    .ant-tree-indent-unit {
+      width: 10px;
+    }
+
+    .ant-tree-iconEle {
+      margin-right: 2px;
+    }
+
+    .ant-tree-node-content-wrapper {
+      display: flex;
+    }
+  }
+}
+
+.bundleBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: var(--body-min-height, 600px);
+}
+
+.bundleTree {
+  --x-pad: 20px;
+  --y-pad: 14px;
+  --scrollbar-width: 10px;
+  --x-pad-minus-scrollbar: calc(var(--x-pad) - var(--scrollbar-width));
+  display: flex;
+  flex: 1;
+  padding: var(--y-pad) var(--x-pad-minus-scrollbar) var(--y-pad) var(--x-pad);
+  border: 1px solid rgba(235, 237, 241);
+  border-radius: 8px;
+}
+
+.bundleTreeViewport {
+  flex: 1;
+  position: relative;
+}
+
+.bundleTreeInnerViewport {
+  position: absolute;
+  inset: 0;
+}
+
+.bundleTreeEntry {
+  display: flex;
+  position: relative;
+  height: var(--item-height, 30px);
+
+  :global {
+    span.ant-tag {
+      margin: none;
+      margin-inline-end: 0px;
+    }
+  }
+}
+
+.bundleTreeEntryContent {
+  /* escape css box hell to make text-overflow work on the children */
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  /* give it some space for the virtual scroll bar */
+  padding-inline-end: var(--x-pad-minus-scrollbar, 0px);
+}
+
+.bundleTreeEntryTitle {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-wrap: nowrap;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.bundleTreeEntryTitleWrap {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  overflow: hidden;
+}
+
+.divider {
+  position: relative;
+  top: 4px;
+  height: 1px;
+  min-width: 10px;
+  flex-grow: 1;
+  margin: 0 10px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+}

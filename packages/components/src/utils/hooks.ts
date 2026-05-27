@@ -1,7 +1,7 @@
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
 import { uniqBy, defaults } from 'es-toolkit/compat';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import parse from 'url-parse';
@@ -264,4 +264,45 @@ export function useWindowWidth() {
   }, []);
 
   return windowWidth;
+}
+
+export function useElementSize<T extends HTMLElement = HTMLDivElement>() {
+  const ref = useRef<T>(null);
+  const [width, setWidth_] = useState(0);
+  const [height, setHeight_] = useState(0);
+
+  useLayoutEffect(() => {
+    const $el = ref.current;
+    if (!$el) return;
+    const setWidth = (n: number) => setWidth_(Math.ceil(n));
+    const setHeight = (n: number) => setHeight_(Math.ceil(n));
+
+    const initialRect = $el.getBoundingClientRect();
+    setWidth(initialRect.width);
+    setHeight(initialRect.height);
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+
+      const borderBox = entry.borderBoxSize?.[0];
+
+      if (borderBox) {
+        setWidth(borderBox.inlineSize);
+        setHeight(borderBox.blockSize);
+      } else {
+        // fallback for dead browsers
+        setWidth(entry.contentRect.width);
+        setHeight(entry.contentRect.height);
+      }
+    });
+
+    observer.observe($el);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return [ref, { width, height }] as const;
 }
