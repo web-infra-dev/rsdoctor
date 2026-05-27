@@ -1,8 +1,4 @@
 import type {
-  RuleSetRule as WebpackRuleSetRule,
-  Configuration as WebpackConfiguration,
-} from 'webpack';
-import type {
   Configuration as RspackConfiguration,
   RuleSetRule as RspackRuleSetRule,
 } from '@rspack/core';
@@ -24,12 +20,12 @@ type RspackRuleSetRuleWrapper = any extends RspackRuleSetRule
   ? never
   : RspackRuleSetRule;
 
-export type RuleSetRule = RspackRuleSetRuleWrapper | WebpackRuleSetRule;
-export type Configuration = WebpackConfiguration | RspackConfigurationWrapper;
+export type RuleSetRule = RspackRuleSetRuleWrapper;
+export type Configuration = RspackConfigurationWrapper;
 
 declare interface AdditionalData {
   [index: string]: any;
-  webpackAST: object;
+  bundlerAST: object;
 }
 
 export interface LoaderDefinitionFunction<

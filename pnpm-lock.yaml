@@ -786,9 +786,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
-      webpack:
-        specifier: ^5.105.4
-        version: 5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.21))
 
   packages/document:
     dependencies:
@@ -1028,9 +1025,6 @@ importers:
       source-map:
         specifier: 'catalog:'
         version: 0.7.6
-      webpack:
-        specifier: 5.x
-        version: 5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.21))
     devDependencies:
       '@rspack/core':
         specifier: 'catalog:'

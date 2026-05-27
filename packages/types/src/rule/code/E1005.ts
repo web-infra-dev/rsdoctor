@@ -10,7 +10,7 @@ export const message: RuleMessage = {
   description: `
 #### Description
 
-Usually webpack will automatically compatible different modules that has different types, but in a special case, the operation of compatibility will fail.
+Usually the bundler will automatically compatible different modules that has different types, but in a special case, the operation of compatibility will fail.
 That is, when you use \`Default Import\` to import a cjs module, and this cjs module do not have the compatible statement, such as \`exports.default = \`.
 
 #### General Solution

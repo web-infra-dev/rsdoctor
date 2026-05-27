@@ -43,14 +43,10 @@
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@rspack/core": "*",
-    "webpack": "5.x"
+    "@rspack/core": "*"
   },
   "peerDependenciesMeta": {
     "@rspack/core": {
-      "optional": true
-    },
-    "webpack": {
       "optional": true
     }
   },

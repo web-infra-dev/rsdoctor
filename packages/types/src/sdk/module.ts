@@ -241,10 +241,7 @@ export interface ModuleInstance {
 export interface DependencyBuildMeta {
   /**
    * Types of dependencies between modules
-   *   - The basis for webpack to add runtime to modules.
-   *
-   * @link https://github.com/webpack/webpack/blob/v5.75.0/lib/Module.js#L428
-   * @link https://github.com/webpack/webpack/blob/v4.46.0/lib/RuntimeTemplate.js#L215
+   *   - The basis for the bundler to add runtime to modules.
    */
   exportsType: 'namespace' | 'default-only' | 'default-with-named' | 'dynamic';
 }

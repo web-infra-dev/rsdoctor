@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { RuleSetRule } from 'webpack';
+import type { RuleSetRule } from '@rspack/core';
 import {
   makeRulesSerializable,
   normalizeRspackUserOptions,

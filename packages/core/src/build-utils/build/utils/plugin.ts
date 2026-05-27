@@ -1,12 +1,11 @@
 import type { Common } from '@rsdoctor/types';
-import { ModuleGraphTrans } from '@rsdoctor/graph';
 import { Plugin } from '@rsdoctor/types';
 
 export type IHook =
   Plugin.BaseCompiler['hooks'][keyof Plugin.BaseCompiler['hooks']];
 
 export function shouldInterceptPluginHook<T extends IHook>(hook: T) {
-  // webpack5 use fakehook for deprecated hook.
+  // Rspack can expose fake hooks for deprecated compatibility hooks.
   if (hook && (hook as Common.PlainObject)._fakeHook) {
     return false;
   }
@@ -44,15 +43,7 @@ export function interceptCompilationHooks(
   interceptor: (name: string, hook: IHook, scope: 'compilation') => void,
 ) {
   Object.keys(compilation.hooks).forEach((hook) => {
-    /**
-     * @link: https://webpack.js.org/blog/2020-10-10-webpack-5-release/#minor-changes
-     * Compilation.hooks.normalModuleLoader is deprecated
-     *   MIGRATION: Use NormalModule.getCompilationHooks(compilation).loader instead
-     */
-    if (
-      hook === 'normalModuleLoader' &&
-      ModuleGraphTrans.isWebpack5orRspack(compilation)
-    ) {
+    if (hook === 'normalModuleLoader') {
       return;
     }
 

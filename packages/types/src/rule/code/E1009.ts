@@ -24,6 +24,6 @@ This prevents tree-shaking of the package, leading to larger bundle sizes than n
 
 1. **Add \`module\` to \`resolve.mainFields\`**: Ensure your bundler config includes \`"module"\` before \`"main"\`.
 2. **Add \`import\` to \`resolve.conditionNames\`**: For packages using the \`exports\` field, ensure the \`import\` condition is listed.
-3. **Check bundler version**: Older versions of webpack/rspack may not support \`exports\` conditional resolution. Upgrade if necessary.
+3. **Check bundler version**: Older Rspack versions may not support \`exports\` conditional resolution. Upgrade if necessary.
 `,
 };

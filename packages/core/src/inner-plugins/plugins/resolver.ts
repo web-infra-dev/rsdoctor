@@ -1,7 +1,6 @@
 import { Manifest, Plugin, SDK } from '@rsdoctor/types';
 import { Time } from '@rsdoctor/utils/common';
 import { InternalBasePlugin } from './base';
-import type { Compiler as WebpackCompiler } from 'webpack';
 
 export class InternalResolverPlugin<
   T extends Plugin.BaseCompiler,
@@ -28,9 +27,7 @@ export class InternalResolverPlugin<
   }
 
   protected handleNormalModuleFactory = (
-    normalModuleFactory:
-      | Plugin.RspackNormalModuleFactory
-      | ReturnType<WebpackCompiler['createNormalModuleFactory']>,
+    normalModuleFactory: Plugin.RspackNormalModuleFactory,
   ) => {
     // Hook into beforeResolve to capture the start time
     normalModuleFactory.hooks.beforeResolve.tap(

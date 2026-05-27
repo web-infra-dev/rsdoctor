@@ -1,7 +1,7 @@
 import { Common, Config, Linter as LinterType, SDK } from '..';
 import { InternalRules } from './internal-rules';
 
-export interface RsdoctorWebpackPluginFeatures {
+export interface RsdoctorRspackPluginFeatures {
   /**
    * Turn it off if you do not need to analyze the executions of bundler loaders.
    * @default true
@@ -23,7 +23,7 @@ export interface RsdoctorWebpackPluginFeatures {
    */
   bundle?: boolean;
   /**
-   * turn off it if you need not to analyze the result of tree shaking.
+   * Turn it on if you need to analyze tree-shaking side effects.
    * @default false
    */
   treeShaking?: boolean;
@@ -38,11 +38,11 @@ export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends Common.DeepRequired<
   Omit<
-    RsdoctorWebpackPluginOptions<Rules>,
+    RsdoctorRspackPluginOptions<Rules>,
     'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief' | 'mode'
   >
 > {
-  features: Common.DeepRequired<RsdoctorWebpackPluginFeatures>;
+  features: Common.DeepRequired<RsdoctorRspackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: SDK.RsdoctorBuilderSDKInstance;
   output: {
@@ -56,7 +56,6 @@ export interface RsdoctorPluginOptionsNormalized<
 }
 
 interface ISupport {
-  banner?: boolean;
   parseBundle?: boolean;
   generateTileGraph?: boolean;
   gzip?: boolean;
@@ -93,7 +92,7 @@ export type NewReportCodeType =
   | 'noAssetsAndModuleSource'
   | 'noCode';
 
-export interface RsdoctorWebpackPluginOptions<
+export interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
   /** Checker configuration */
@@ -102,8 +101,8 @@ export interface RsdoctorWebpackPluginOptions<
    * the switch for the Rsdoctor features.
    */
   features?:
-    | RsdoctorWebpackPluginFeatures
-    | Array<keyof RsdoctorWebpackPluginFeatures>;
+    | RsdoctorRspackPluginFeatures
+    | Array<keyof RsdoctorRspackPluginFeatures>;
 
   /**
    * @deprecated  Use `output.mode` instead, if you're using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead.
@@ -135,9 +134,7 @@ export interface RsdoctorWebpackPluginOptions<
    */
   sdkInstance?: SDK.RsdoctorBuilderSDKInstance;
 
-  /**
-   * Whether to turn on some characteristic analysis capabilities, such as: the support for the BannerPlugin.
-   */
+  /** Whether to turn on specific analysis capabilities. */
   supports?: ISupport;
 
   /**
