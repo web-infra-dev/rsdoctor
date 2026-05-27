@@ -14,7 +14,7 @@ The `features` attribute is used for analysis feature toggles, and the specific 
 - **resolver**: Resolver analysis, disabled by default.
 - **lite**: **(lite mode will be deprecated in V2, refer to [lite mode deprecation notice](/config/options/options-v2#lite))** lite mode. The difference between lite mode and normal mode is that source code information is no longer displayed, only packaged code information is displayed, so the code analyzed on the page will also be packaged. Default is normal mode.
 
-Therefore, **the default configuration enables Bundle analysis capabilities, Loader and Plugin build-time analysis**. Resolver analysis capability is not enabled, and Rspack currently does not support Resolver analysis capabilities.
+Therefore, **the default configuration enables Bundle analysis capabilities, Loader and Plugin build-time analysis**. Resolver analysis is not enabled by default. To enable it, explicitly configure `resolver` in `features`.
 
 ### Types
 

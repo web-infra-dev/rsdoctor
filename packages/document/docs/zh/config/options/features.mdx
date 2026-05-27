@@ -11,10 +11,10 @@ features 属性是用于分析功能开关的，具体的功能项如下：
 - **loader**：Loaders 耗时及代码编译变化分析，默认开启。
 - **plugins**：Plugins 调用以及耗时分析，默认开启。
 - **bundle**：构建产物分析，默认开启。
-- **resolver**：resolver 分析，默认关闭。
+- **resolver**：Resolver 分析，默认关闭。
 - **lite**: **(lite 模式即将在 V2 废弃，参考[lite 模式废弃说明](/config/options/options-v2#lite))** lite 模式。lite 模式和普通模式的区别就是不再展示源码信息，只展示打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
 
-所以，**默认配置是开启了 Bundle 分析能力、 Loader 和 Plugin 构建时分析**。没有开启 Resolver 分析能力， Rspack 暂不支持 Resolver 分析能力。
+所以，**默认配置是开启了 Bundle 分析能力、 Loader 和 Plugin 构建时分析**，没有开启 Resolver 分析能力。如需启用 Resolver 分析，可以在 `features` 中显式配置 `resolver`。
 
 ### 类型
 
