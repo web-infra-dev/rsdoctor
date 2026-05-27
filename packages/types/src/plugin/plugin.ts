@@ -1,7 +1,7 @@
 import { Common, Config, Linter as LinterType, SDK } from '..';
 import { InternalRules } from './internal-rules';
 
-export interface RsdoctorRspackPluginFeatures {
+export interface RsdoctorWebpackPluginFeatures {
   /**
    * Turn it off if you do not need to analyze the executions of bundler loaders.
    * @default true
@@ -42,7 +42,7 @@ export interface RsdoctorPluginOptionsNormalized<
     'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief' | 'mode'
   >
 > {
-  features: Common.DeepRequired<RsdoctorRspackPluginFeatures>;
+  features: Common.DeepRequired<RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: SDK.RsdoctorBuilderSDKInstance;
   output: {
@@ -102,8 +102,8 @@ export interface RsdoctorWebpackPluginOptions<
    * the switch for the Rsdoctor features.
    */
   features?:
-    | RsdoctorRspackPluginFeatures
-    | Array<keyof RsdoctorRspackPluginFeatures>;
+    | RsdoctorWebpackPluginFeatures
+    | Array<keyof RsdoctorWebpackPluginFeatures>;
 
   /**
    * @deprecated  Use `output.mode` instead, if you're using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead.
