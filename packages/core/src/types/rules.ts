@@ -1,8 +1,8 @@
-import { RuleSetRule } from 'webpack';
+import type { RuleSetRule } from '@rspack/core';
 
-export interface Rule extends RuleSetRule {
+export type Rule = RuleSetRule & {
   /**
-   * https://webpack.js.org/configuration/module/#ruleloaders
+   * The legacy `loaders` field used by rule normalizers.
    */
   loaders: RuleSetRule['use'];
-}
+};

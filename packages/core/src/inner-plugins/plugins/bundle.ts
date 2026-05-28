@@ -1,4 +1,5 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
+import type { Assets } from '@rspack/core';
 import { InternalBasePlugin } from './base';
 import { Chunks } from '@rsdoctor/graph';
 import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
@@ -56,40 +57,14 @@ export class InternalBundlePlugin<
     time('InternalBundlePlugin.thisCompilation');
     try {
       // save asset content to map
-      if (
-        compilation.hooks.processAssets &&
-        'afterOptimizeAssets' in compilation.hooks
-      ) {
-        compilation.hooks.afterOptimizeAssets.tap(
+      if (compilation.hooks.processAssets) {
+        compilation.hooks.afterProcessAssets.tap(
           this.tapPostOptions,
-          (assets: any) => {
+          (assets: Assets) => {
             Object.keys(assets).forEach((file) => {
               const v = this.ensureAssetContent(file);
               v.content = assets[file].source().toString();
             });
-          },
-        );
-      } else if (
-        compilation.hooks.processAssets &&
-        'afterProcessAssets' in compilation.hooks
-      ) {
-        // This is for rspack hooks.
-        compilation.hooks.afterProcessAssets.tap(this.tapPostOptions, () => {
-          Object.keys(compilation.assets).forEach((file) => {
-            const v = this.ensureAssetContent(file);
-            v.content = compilation.assets[file].source().toString();
-          });
-        });
-      } else if ('afterOptimizeChunkAssets' in compilation.hooks) {
-        compilation.hooks.afterOptimizeChunkAssets.tap(
-          this.tapPostOptions,
-          (chunks) => {
-            [...chunks]
-              .reduce<string[]>((t, chunk) => t.concat([...chunk.files]), [])
-              .forEach((file) => {
-                const v = this.ensureAssetContent(file);
-                v.content = compilation.assets[file].source().toString();
-              });
           },
         );
       }

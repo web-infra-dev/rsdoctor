@@ -2,7 +2,6 @@ import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
 import {
   ensureModulesChunksGraphFn,
   InternalBundlePlugin,
-  InternalBundleTagPlugin,
   InternalErrorReporterPlugin,
   InternalLoaderPlugin,
   InternalPluginsPlugin,
@@ -107,7 +106,7 @@ export class RsdoctorRspackPlugin<
       }
 
       // bootstrap sdk in apply()
-      // avoid to has different sdk instance in one plugin, because of webpack-chain toConfig() will new every webpack plugins.
+      // Avoid creating different sdk instances when config generators recreate plugin instances.
       if (!this._bootstrapTask) {
         this._bootstrapTask = this.sdk.bootstrap();
       }
@@ -160,9 +159,6 @@ export class RsdoctorRspackPlugin<
         new InternalBundlePlugin<Plugin.BaseCompilerType<'rspack'>>(this).apply(
           compiler,
         );
-        new InternalBundleTagPlugin<Plugin.BaseCompilerType<'rspack'>>(
-          this,
-        ).apply(compiler);
       }
 
       if (this.options.features.resolver) {
@@ -173,7 +169,7 @@ export class RsdoctorRspackPlugin<
 
       new InternalRulesPlugin(this).apply(compiler);
 
-      // InternalErrorReporterPlugin must called before InternalRulesPlugin, to avoid treat Rsdoctor's lint warnings/errors as Webpack's warnings/errors.
+      // Keep bundler diagnostics reporting separate from Rsdoctor lint messages.
       new InternalErrorReporterPlugin(this).apply(compiler);
 
       // apply Rspack native plugin to improve the performance
@@ -197,7 +193,7 @@ export class RsdoctorRspackPlugin<
   }
 
   /**
-   * @description Generate ModuleGraph and ChunkGraph from stats and webpack module apis;
+   * @description Generate ModuleGraph and ChunkGraph from stats and Rspack module APIs.
    * @param {Compiler} compiler
    * @return {*}
    * @memberof RsdoctorRspackPlugin
@@ -286,13 +282,13 @@ export class RsdoctorRspackPlugin<
       // Use extracted common function to process configuration
       const configuration = processCompilerConfig(compiler.options);
 
-      const rspackVersion = compiler.webpack?.rspackVersion;
-      const webpackVersion = compiler.webpack?.version;
+      const rspackVersion =
+        compiler.webpack?.rspackVersion || compiler.webpack?.version;
 
-      // save webpack or rspack configuration to sdk
+      // Save Rspack configuration to sdk.
       this.sdk.reportConfiguration({
-        name: rspackVersion ? 'rspack' : 'webpack',
-        version: rspackVersion || webpackVersion || 'unknown',
+        name: 'rspack',
+        version: rspackVersion || 'unknown',
         config: configuration,
         root: findRoot() || '',
       });

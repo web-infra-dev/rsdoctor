@@ -16,7 +16,7 @@ And the loaders always pre-process many unnecessary files, such as \`node_module
 
 #### General Solution
 
-Set \`exclude\` to the \`module.rules\` of webpack configuration for target loader.
+Set \`exclude\` to the \`module.rules\` of Rspack configuration for target loader.
 
 For example, if \`node_modules/lodash\` is processed by the \`babel-loader\` that make the compile slowly:
 

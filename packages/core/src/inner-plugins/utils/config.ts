@@ -29,7 +29,6 @@ function getDefaultOutput() {
 function getDefaultSupports() {
   return {
     parseBundle: true,
-    banner: undefined,
     gzip: true, // change the gzip to true by default.
   };
 }
@@ -72,7 +71,7 @@ function isValidMode(mode: any): mode is keyof typeof SDK.IMode {
 }
 
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
-  config: Plugin.RsdoctorWebpackPluginOptions<Rules> = {},
+  config: Plugin.RsdoctorRspackPluginOptions<Rules> = {},
 ): Plugin.RsdoctorPluginOptionsNormalized<Rules> {
   const userOutput = config.output;
   const defaultOutput = getDefaultOutput();

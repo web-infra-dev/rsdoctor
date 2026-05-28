@@ -7,7 +7,9 @@ import type {
 } from '@rsdoctor/types';
 export interface RsdoctorMultiplePluginOptions<
   Rules extends LinterType.ExtendRuleData[] = LinterType.ExtendRuleData[],
-> extends Omit<Plugin.RsdoctorWebpackPluginOptions<Rules>, 'sdkInstance'>,
+>
+  extends
+    Omit<Plugin.RsdoctorRspackPluginOptions<Rules>, 'sdkInstance'>,
     Pick<ConstructorParameters<typeof RsdoctorPrimarySDK>[0], 'stage'> {
   /**
    * name of builder
@@ -65,7 +67,7 @@ export interface RsdoctorRspackPluginExperimentsNormalized {
 
 export interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
-> extends Plugin.RsdoctorWebpackPluginOptions<Rules> {
+> extends Plugin.RsdoctorRspackPluginOptions<Rules> {
   /**
    * The experiments of the Rsdoctor Rspack plugin.
    */

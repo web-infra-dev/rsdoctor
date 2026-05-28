@@ -1,16 +1,15 @@
-import type { Configuration } from 'webpack';
 import type { Configuration as RspackConfiguration } from '@rspack/core';
 
 type RspackConfigurationWrapper = any extends RspackConfiguration
   ? never
   : RspackConfiguration;
 
-export interface WebpackConfigData {
+export interface BundlerConfigData {
   name: string;
   version: string | number;
   bin?: string;
-  config: Configuration | RspackConfigurationWrapper;
+  config: RspackConfigurationWrapper;
   root: string;
 }
 
-export type ConfigData = WebpackConfigData[];
+export type ConfigData = BundlerConfigData[];
