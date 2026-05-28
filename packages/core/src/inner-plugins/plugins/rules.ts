@@ -64,7 +64,7 @@ export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler>
 
       if (Array.isArray(compilation.errors)) {
         errors.forEach((err) => {
-          compilation.warnings.push(toRspackError(err));
+          compilation.errors.push(toRspackError(err));
         });
       }
 
