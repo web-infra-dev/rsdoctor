@@ -47,7 +47,7 @@
     "fs-extra": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:",
-    "webpack": "^5.105.4"
+    "webpack": "^5.107.2"
   },
   "publishConfig": {
     "access": "public",
