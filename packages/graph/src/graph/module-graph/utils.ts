@@ -142,18 +142,15 @@ export function parseLocation(location: string): {
 }
 
 /**
- * Extract code snippet from source based on location
- * @param source The source code string
- * @param location Parsed location object
- * @returns Extracted code snippet
+ * Extract code from pre-split source lines. This helper intentionally does not
+ * split the source string so callers can reuse one lines array for many ranges.
  */
-export function extractCodeFromLocation(
-  source: string,
+export function extractCodeFromSourceLines(
+  lines: string[],
   location: ReturnType<typeof parseLocation>,
 ): string {
-  if (!source || !location) return '';
+  if (!lines.length || !location) return '';
 
-  const lines = source.split('\n');
   const {
     startLine,
     startColumn: OriginalStartColumn,

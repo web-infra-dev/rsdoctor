@@ -1,6 +1,6 @@
 import {
   Dependency,
-  extractCodeFromLocation,
+  extractCodeFromSourceLines,
   Module,
   parseLocation,
 } from '@rsdoctor/graph';
@@ -243,6 +243,7 @@ export function extractSideEffectCodes(mg: SDK.ModuleGraphInstance) {
     const moduleSource = module.getSource();
     const source = moduleSource.source || moduleSource.parsedSource;
     if (!source) continue;
+    const sourceLines = source.split('\n');
 
     // Process each side effect location
     for (const sideEffectLocation of sideEffectLocations) {
@@ -251,7 +252,7 @@ export function extractSideEffectCodes(mg: SDK.ModuleGraphInstance) {
       if (!parsedLocation) continue;
 
       // Extract the code snippet
-      const code = extractCodeFromLocation(source, parsedLocation);
+      const code = extractCodeFromSourceLines(sourceLines, parsedLocation);
       if (code) {
         // Store the code in a separate data structure
         module.addSideEffectCode({
