@@ -1,6 +1,6 @@
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
-import { uniqBy, defaults } from 'es-toolkit/compat';
+import { uniqBy, defaults, throttle } from 'es-toolkit/compat';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -281,7 +281,7 @@ export function useElementSize<T extends HTMLElement = HTMLDivElement>() {
     setWidth(initialRect.width);
     setHeight(initialRect.height);
 
-    const observer = new ResizeObserver((entries) => {
+    const onResize = throttle((entries: ResizeObserverEntry[]) => {
       const entry = entries[0];
       if (!entry) return;
 
@@ -295,12 +295,14 @@ export function useElementSize<T extends HTMLElement = HTMLDivElement>() {
         setWidth(entry.contentRect.width);
         setHeight(entry.contentRect.height);
       }
-    });
+    }, 100);
+    const observer = new ResizeObserver(onResize);
 
     observer.observe($el);
 
     return () => {
       observer.disconnect();
+      onResize.cancel();
     };
   }, []);
 
