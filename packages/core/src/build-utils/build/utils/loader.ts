@@ -1,13 +1,13 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fse from 'fs-extra';
-import { omit } from 'es-toolkit/compat';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule } from '../../../types';
 import { readPackageJson } from '@rsdoctor/graph';
 import { RuleSetUseItem } from '@rspack/core';
 import { logger } from '@rsdoctor/utils/logger';
+import { omit } from '@/utils/collection';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);

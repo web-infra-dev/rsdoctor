@@ -1,8 +1,8 @@
 import { Build } from '@/build-utils';
 import { getSDK } from '@/inner-plugins';
+import { omit } from '@/utils/collection';
 import { Plugin, SDK } from '@rsdoctor/types';
 import type { LoaderDefinitionFunction } from '@rspack/core';
-import { omit } from 'es-toolkit/compat';
 import path from 'path';
 
 export const loaderModule: Plugin.LoaderDefinition<

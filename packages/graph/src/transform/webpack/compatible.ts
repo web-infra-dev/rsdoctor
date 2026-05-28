@@ -1,4 +1,3 @@
-import { unionBy } from 'es-toolkit/compat';
 import {
   Compilation,
   Dependency,
@@ -9,6 +8,7 @@ import {
 } from 'webpack';
 import { SDK, Plugin } from '@rsdoctor/types';
 import { Statement } from '@/graph';
+import { unionBy } from '@/utils/array';
 
 export function isNormalModule(mod: Module): mod is NormalModule {
   return 'request' in mod && 'rawRequest' in mod && 'resource' in mod;

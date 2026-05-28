@@ -731,9 +731,6 @@ importers:
       browserslist-load-config:
         specifier: ^1.0.1
         version: 1.0.1
-      es-toolkit:
-        specifier: 'catalog:'
-        version: 1.45.1
       filesize:
         specifier: 'catalog:'
         version: 11.0.17
@@ -862,9 +859,6 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
-      es-toolkit:
-        specifier: 'catalog:'
-        version: 1.45.1
       path-browserify:
         specifier: 'catalog:'
         version: 1.0.1

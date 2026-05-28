@@ -1,4 +1,3 @@
-import { lowerCase } from 'es-toolkit/compat';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -6,6 +5,11 @@ import { describe, it, expect } from '@rstest/core';
 import { parseBundle } from '@/build-utils/build/utils/parseBundle';
 
 const BUNDLES_DIR = `${__dirname}/bundles`;
+const lowerCase = (value: string | undefined) =>
+  String(value)
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/[-_]+/g, ' ')
+    .toLowerCase();
 
 /**
  * Based on [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer/blob/44bd8d0f9aa3b098e271af220096ea70cc44bc9e/test/parseUtils.js#L8)
