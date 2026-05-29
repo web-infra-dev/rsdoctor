@@ -1,9 +1,17 @@
 type PropertyKeyPath = string | number | symbol;
-type PropertyPath = PropertyKeyPath | readonly PropertyKeyPath[];
+type PropertyPath =
+  | PropertyKeyPath
+  | readonly PropertyKeyPath[]
+  | null
+  | undefined;
 
 const objectToString = Object.prototype.toString;
 
 function toPath(path: PropertyPath): readonly PropertyKeyPath[] {
+  if (path == null) {
+    return [];
+  }
+
   if (typeof path === 'string') {
     return path
       .replace(/\[(\w+)\]/g, '.$1')
@@ -23,9 +31,15 @@ export function get<T = unknown>(
   path: PropertyPath,
   defaultValue?: T,
 ): T | undefined {
+  const paths = toPath(path);
+
+  if (!paths.length) {
+    return defaultValue;
+  }
+
   let result = object as Record<PropertyKey, unknown> | undefined | null;
 
-  for (const key of toPath(path)) {
+  for (const key of paths) {
     if (result == null) {
       return defaultValue;
     }
@@ -48,9 +62,13 @@ export function sumBy<T>(
 }
 
 export function minBy<T>(
-  items: readonly T[],
+  items: readonly T[] | null | undefined,
   iteratee: (item: T) => number,
 ): T | undefined {
+  if (!items) {
+    return undefined;
+  }
+
   let result: T | undefined;
   let resultValue = Infinity;
 
@@ -67,9 +85,13 @@ export function minBy<T>(
 }
 
 export function maxBy<T>(
-  items: readonly T[],
+  items: readonly T[] | null | undefined,
   iteratee: (item: T) => number,
 ): T | undefined {
+  if (!items) {
+    return undefined;
+  }
+
   let result: T | undefined;
   let resultValue = -Infinity;
 
@@ -85,14 +107,22 @@ export function maxBy<T>(
   return result;
 }
 
-export function uniq<T>(items: readonly T[]): T[] {
+export function uniq<T>(items: readonly T[] | null | undefined): T[] {
+  if (!items) {
+    return [];
+  }
+
   return Array.from(new Set(items));
 }
 
 export function uniqBy<T>(
-  items: readonly T[],
+  items: readonly T[] | null | undefined,
   iteratee: (item: T) => unknown,
 ): T[] {
+  if (!items) {
+    return [];
+  }
+
   const seen = new Set<unknown>();
   const result: T[] = [];
 
@@ -109,9 +139,13 @@ export function uniqBy<T>(
 }
 
 export function groupBy<T>(
-  items: readonly T[],
+  items: readonly T[] | null | undefined,
   iteratee: (item: T) => PropertyKey,
 ): Record<string, T[]> {
+  if (!items) {
+    return {};
+  }
+
   return items.reduce<Record<string, T[]>>((result, item) => {
     const key = String(iteratee(item));
     result[key] ??= [];
@@ -121,9 +155,13 @@ export function groupBy<T>(
 }
 
 export function omitBy<T extends object>(
-  object: T,
+  object: T | null | undefined,
   predicate: (value: T[keyof T], key: keyof T) => boolean,
 ): Partial<T> {
+  if (!object) {
+    return {};
+  }
+
   return Object.fromEntries(
     Object.entries(object).filter(
       ([key, value]) => !predicate(value as T[keyof T], key as keyof T),
@@ -132,12 +170,16 @@ export function omitBy<T extends object>(
 }
 
 export function defaults<T extends object>(
-  object: T,
-  ...sources: Array<Partial<T>>
+  object: T | null | undefined,
+  ...sources: Array<Partial<T> | null | undefined>
 ): T {
-  const result = object as Record<PropertyKey, unknown>;
+  const result = (object ?? {}) as Record<PropertyKey, unknown>;
 
   for (const source of sources) {
+    if (!source) {
+      continue;
+    }
+
     for (const [key, value] of Object.entries(source)) {
       if (result[key] === undefined) {
         result[key] = value;
@@ -145,7 +187,7 @@ export function defaults<T extends object>(
     }
   }
 
-  return object;
+  return result as T;
 }
 
 export function debounce<T extends (...args: any[]) => void>(
@@ -169,10 +211,18 @@ export function debounce<T extends (...args: any[]) => void>(
 }
 
 export function orderBy<T>(
-  items: readonly T[],
-  paths: readonly PropertyPath[],
+  items: readonly T[] | null | undefined,
+  paths: readonly PropertyPath[] | null | undefined,
   orders: readonly ('asc' | 'desc')[] = [],
 ): T[] {
+  if (!items) {
+    return [];
+  }
+
+  if (!paths?.length) {
+    return items.slice();
+  }
+
   return items.slice().sort((left, right) => {
     for (let index = 0; index < paths.length; index++) {
       const leftValue = get(left, paths[index]);
