@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { find, mapValues } from 'es-toolkit/compat';
 import { filesize } from 'filesize';
 
 import { parser } from '@rsdoctor/utils/ruleUtils';
@@ -8,6 +7,7 @@ import { extname } from 'path';
 import { Constants, SDK } from '@rsdoctor/types';
 import { logger } from '@rsdoctor/utils/logger';
 import type { ParseBundle } from '@rsdoctor/graph';
+import { find, mapValues } from '@/utils/collection';
 
 /**
  * The following code is based on

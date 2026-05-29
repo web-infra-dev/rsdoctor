@@ -15,7 +15,12 @@
     "build": {
       "cache": true,
       "dependsOn": ["^build"],
-      "inputs": ["build", "^build"]
+      "inputs": ["build", "^build"],
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/compiled",
+        "{projectRoot}/doc_build"
+      ]
     }
   },
   "defaultBase": "main"

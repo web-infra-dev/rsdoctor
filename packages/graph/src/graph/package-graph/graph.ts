@@ -1,9 +1,9 @@
-import { unionBy } from 'es-toolkit/compat';
 import { resolve } from 'path';
 import { SDK } from '@rsdoctor/types';
 import { Package } from './package';
 import { PackageDependency } from './dependency';
 import { readPackageJson } from './utils';
+import { unionBy } from '@/utils/array';
 export { readPackageJson } from './utils';
 
 export class PackageGraph implements SDK.PackageGraphInstance {

@@ -1,6 +1,6 @@
-import { isNumber } from 'es-toolkit/compat';
 import { parser, Node } from '@rsdoctor/utils/ruleUtils';
 import { SDK } from '@rsdoctor/types';
+import { isNumber } from '@/utils/collection';
 function getDefaultExportIdentifier(
   node: Node.ExportDefaultDeclaration,
   module: SDK.ModuleInstance,
