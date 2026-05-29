@@ -48,6 +48,7 @@ catalog:
   prebundle: 1.6.4
   react: 19.2.6
   react-dom: 19.2.6
+  react-error-boundary: ^4.1.2
   react-markdown: ^9.1.0
   react-router-dom: 6.30.3
   sirv: 3.0.2

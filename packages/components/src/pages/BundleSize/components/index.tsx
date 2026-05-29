@@ -325,7 +325,7 @@ export const WebpackModulesOverallBase: React.FC<
                   </Space>
                 ),
                 children: (
-                  <Space direction="vertical">
+                  <Space style={{ display: 'flex' }} direction="vertical">
                     <Row
                       align="middle"
                       gutter={[Size.BasePadding, Size.BasePadding]}
