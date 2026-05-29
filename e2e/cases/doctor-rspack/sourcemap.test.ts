@@ -40,7 +40,7 @@ async function rspackCompile2(_tapName: string) {
     output: {
       path: path.join(__dirname, 'dist'),
       devtoolModuleFilenameTemplate:
-        'webpack://[namespace]/[resource-path]?[loaders]',
+        'rspack://[namespace]/[resource-path]?[loaders]',
     },
     plugins: [createRsdoctorPlugin({})],
   });

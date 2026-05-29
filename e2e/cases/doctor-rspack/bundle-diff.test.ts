@@ -45,7 +45,7 @@ test.afterEach(async ({ page }) => {
   await page.close();
 });
 
-test('use Webpack stats.json', async () => {
+test('use Rsdoctor manifest data', async () => {
   // Usage
   const manifestPath = path.resolve(
     __dirname,

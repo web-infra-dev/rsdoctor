@@ -25,7 +25,6 @@
     "loader-utils": "^2.0.4",
     "es-toolkit": "catalog:",
     "playwright": "1.55.1",
-    "typescript": "catalog:",
-    "webpack": "^5.105.4"
+    "typescript": "catalog:"
   }
 }
