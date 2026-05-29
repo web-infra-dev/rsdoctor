@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { Table, Tooltip } from 'antd';
-import { sumBy, uniq } from 'es-toolkit/compat';
 import { SDK } from '@rsdoctor/types';
-import { formatCosts } from '../../utils';
+import { formatCosts, sumBy, uniq } from '../../utils';
 
 interface PluginsTableDataItem {
   tapName: string;

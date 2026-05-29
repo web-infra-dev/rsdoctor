@@ -13,14 +13,13 @@ import {
   Empty,
   Grid,
 } from 'antd';
-import { sumBy } from 'es-toolkit/compat';
 import {
   ExpandAltOutlined,
   InfoCircleOutlined,
   DoubleRightOutlined,
 } from '@ant-design/icons';
 
-import { useRuleIndexNavigate, formatSize } from '../../utils';
+import { useRuleIndexNavigate, formatSize, sumBy } from '../../utils';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 import { Size, Color } from '../../constants';

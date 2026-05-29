@@ -1,10 +1,17 @@
 import os from 'os';
-import { snakeCase } from 'es-toolkit/compat';
 import {
   splitPathString,
   compilePathMatcherRegExp,
   getRealTemporaryDirectory,
 } from './path';
+
+const snakeCase = (value: string) =>
+  value
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .replace(/[\s-]+/g, '_')
+    .replace(/[^a-zA-Z0-9_]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .toLowerCase();
 
 /** Different from  */
 export type PathMatchExpression = string | RegExp;

@@ -1,13 +1,12 @@
 import { Module } from '@rsdoctor/graph';
 import { SDK } from '@rsdoctor/types';
 import { Space, Tag } from 'antd';
-import { escape, get } from 'es-toolkit/compat';
 import type { editor, Range as RangeClass } from 'monaco-editor';
 import path from 'path-browserify';
 import { useMemo } from 'react';
 import { getSelectionRange } from 'src/components/base/CodeViewer/utils';
 import { Keyword } from '../../components/Keyword';
-import { createFileStructures, mapFileKey } from '../../utils';
+import { createFileStructures, escape, get, mapFileKey } from '../../utils';
 import { getOpenTagText } from './open-tag';
 import { Range } from './range';
 

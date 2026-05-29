@@ -14,7 +14,6 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { get } from 'es-toolkit/compat';
 import React, { useMemo, useState } from 'react';
 import { drawerWidth, Size } from '../../../constants';
 import {
@@ -22,6 +21,7 @@ import {
   DataNode,
   filterLoader,
   formatCosts,
+  get,
   mapFileKey,
 } from '../../../utils';
 import { FileTree } from '../../FileTree';

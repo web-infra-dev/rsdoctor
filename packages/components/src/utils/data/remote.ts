@@ -1,8 +1,8 @@
 import { Manifest, SDK } from '@rsdoctor/types';
 import { Manifest as ManifestShared } from '@rsdoctor/utils/common';
-import { get } from 'es-toolkit/compat';
 import { BaseDataLoader } from './base';
 import { fetchShardingFile } from '../request';
+import { get } from '../collection';
 
 export class RemoteDataLoader extends BaseDataLoader {
   public isLocal() {
@@ -48,10 +48,10 @@ export class RemoteDataLoader extends BaseDataLoader {
 
   public async loadAPI<
     T extends SDK.ServerAPI.API,
-    B extends
-      SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-    R extends
-      SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+    B extends SDK.ServerAPI.InferRequestBodyType<T> =
+      SDK.ServerAPI.InferRequestBodyType<T>,
+    R extends SDK.ServerAPI.InferResponseType<T> =
+      SDK.ServerAPI.InferResponseType<T>,
   >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
     const [api, body] = args;
     // request limitation key

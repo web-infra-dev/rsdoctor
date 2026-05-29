@@ -10,10 +10,9 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { sumBy, uniq } from 'es-toolkit/compat';
 import { SDK } from '@rsdoctor/types';
 import { BundleDiffTablePackagesData } from './types';
-import { formatSize } from '../../../../utils';
+import { formatSize, sumBy, uniq } from '../../../../utils';
 import { Size } from '../../../../constants';
 import { FileUpdateTypeTag } from './modules';
 import { UpdateType } from './constants';

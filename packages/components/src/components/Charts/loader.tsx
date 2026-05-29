@@ -5,10 +5,10 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { groupBy } from 'es-toolkit/compat';
 import { Empty } from 'antd';
 import './loader.scss';
 import { useTheme } from 'src/utils/manifest';
+import { groupBy } from 'src/utils';
 import { findLoaderTotalTiming } from 'src/utils/loader';
 import { beautifyPath } from 'src/utils/file';
 import { TimelineCom } from './TimelineCharts';

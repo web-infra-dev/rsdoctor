@@ -29,8 +29,7 @@
     "@rspack/core": "catalog:",
     "@types/lodash": "^4.17.24",
     "@types/node": "catalog:",
-    "es-toolkit": "catalog:",
-    "memfs": "4.57.3",
+    "memfs": "4.57.2",
     "typescript": "catalog:",
     "upath": "2.0.1"
   },

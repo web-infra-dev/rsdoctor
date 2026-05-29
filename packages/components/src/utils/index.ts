@@ -1,4 +1,5 @@
 export * from './data';
+export * from './collection';
 export * from './file';
 export * from './hooks';
 export * from './loader';

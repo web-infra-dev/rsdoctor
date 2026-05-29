@@ -3,10 +3,14 @@ import { CloseCircleOutlined, FileSearchOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
 import { Resolver } from '@rsdoctor/utils/common';
 import { Card, Col, Row, Space, Table, Tabs, Typography } from 'antd';
-import { get } from 'es-toolkit/compat';
 import React, { useMemo, useState } from 'react';
 import { Size } from '../../constants';
-import { createFileStructures, formatCosts, mapFileKey } from '../../utils';
+import {
+  createFileStructures,
+  formatCosts,
+  get,
+  mapFileKey,
+} from '../../utils';
 import { FileTree } from '../FileTree';
 import { KeywordInput } from '../Form/keyword';
 import { ServerAPIProvider, withServerAPI } from '../Manifest';
