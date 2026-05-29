@@ -661,13 +661,12 @@ const AssetDetailTree = memo(
             (acc, path) => {
               const mod = includeModulesMap.get(normalizePath(path));
               if (mod) {
-                acc.mods.push(mod);
                 acc.sourceSize += mod.size?.sourceSize || 0;
                 acc.parsedSize += mod.size?.parsedSize || 0;
               }
               return acc;
             },
-            { sourceSize: 0, parsedSize: 0, mods: [] as SDK.ModuleData[] },
+            { sourceSize: 0, parsedSize: 0 },
           );
           return (
             <AssetDetailTreeDirEntry
