@@ -30,7 +30,7 @@
     "@types/lodash": "^4.17.24",
     "@types/node": "catalog:",
     "es-toolkit": "catalog:",
-    "memfs": "4.57.2",
+    "memfs": "4.57.3",
     "typescript": "catalog:",
     "upath": "2.0.1",
     "webpack": "^5.105.4"

@@ -57,7 +57,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@ant-design/icons": "6.2.3",
+    "@ant-design/icons": "6.2.5",
     "@monaco-editor/react": "4.7.0",
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
