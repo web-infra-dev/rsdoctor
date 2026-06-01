@@ -1,4 +1,5 @@
 import { describe, expect, it } from '@rstest/core';
+import { setTimeout as sleep } from 'node:timers/promises';
 import {
   defaults,
   get,
@@ -7,6 +8,7 @@ import {
   minBy,
   omitBy,
   orderBy,
+  throttle,
   uniq,
   uniqBy,
 } from './collection';
@@ -28,5 +30,41 @@ describe('collection utils', () => {
     expect(defaults(undefined, null, { name: 'rsdoctor' })).toStrictEqual({
       name: 'rsdoctor',
     });
+  });
+
+  it('throttles calls and keeps the latest trailing arguments', async () => {
+    const calls: string[] = [];
+    const throttled = throttle((value: string) => {
+      calls.push(value);
+    }, 20);
+
+    throttled('first');
+    throttled('second');
+    throttled('third');
+
+    expect(calls).toStrictEqual(['first']);
+
+    await sleep(40);
+
+    expect(calls).toStrictEqual(['first', 'third']);
+  });
+
+  it('cancels pending throttled calls', async () => {
+    const calls: string[] = [];
+    const throttled = throttle((value: string) => {
+      calls.push(value);
+    }, 20);
+
+    throttled('first');
+    throttled('second');
+    throttled.cancel();
+
+    await sleep(40);
+
+    expect(calls).toStrictEqual(['first']);
+
+    throttled('third');
+
+    expect(calls).toStrictEqual(['first', 'third']);
   });
 });

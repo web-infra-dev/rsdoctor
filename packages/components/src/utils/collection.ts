@@ -210,6 +210,68 @@ export function debounce<T extends (...args: any[]) => void>(
   } as T;
 }
 
+export type Throttled<T extends (...args: any[]) => void> = ((
+  this: ThisParameterType<T>,
+  ...args: Parameters<T>
+) => void) & {
+  cancel: () => void;
+};
+
+export function throttle<T extends (...args: any[]) => void>(
+  fn: T,
+  wait: number,
+): Throttled<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let lastInvokeTime = 0;
+  let lastCall: (() => void) | undefined;
+
+  const invoke = () => {
+    const call = lastCall;
+    lastCall = undefined;
+    lastInvokeTime = Date.now();
+    call?.();
+  };
+
+  const throttled = function throttled(
+    this: ThisParameterType<T>,
+    ...args: Parameters<T>
+  ) {
+    const now = Date.now();
+    const remaining = wait - (now - lastInvokeTime);
+
+    lastCall = () => {
+      fn.apply(this, args);
+    };
+
+    if (remaining <= 0 || remaining > wait) {
+      if (timer) {
+        clearTimeout(timer);
+        timer = undefined;
+      }
+      invoke();
+      return;
+    }
+
+    if (!timer) {
+      timer = setTimeout(() => {
+        timer = undefined;
+        invoke();
+      }, remaining);
+    }
+  } as Throttled<T>;
+
+  throttled.cancel = () => {
+    if (timer) {
+      clearTimeout(timer);
+      timer = undefined;
+    }
+    lastInvokeTime = 0;
+    lastCall = undefined;
+  };
+
+  return throttled;
+}
+
 export function orderBy<T>(
   items: readonly T[] | null | undefined,
   paths: readonly PropertyPath[] | null | undefined,

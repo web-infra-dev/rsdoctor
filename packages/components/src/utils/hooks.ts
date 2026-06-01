@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import parse from 'url-parse';
 
 import './i18n';
-import { defaults, uniqBy } from './collection';
+import { defaults, throttle, uniqBy } from './collection';
 import { Language } from '../constants';
 import { setLocaleToStorage } from './storage';
 
