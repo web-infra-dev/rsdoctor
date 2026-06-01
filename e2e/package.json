@@ -23,7 +23,6 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "loader-utils": "^2.0.4",
-    "es-toolkit": "catalog:",
     "playwright": "1.55.1",
     "typescript": "catalog:"
   }

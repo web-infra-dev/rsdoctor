@@ -21,6 +21,9 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
     resolve: {
       extensions: ['.ts', '.js'],
     },
+    output: {
+      path: path.join(__dirname, './dist/plugin'),
+    },
     module: {
       rules: [
         {

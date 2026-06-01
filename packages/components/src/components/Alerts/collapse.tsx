@@ -1,12 +1,11 @@
 import { Collapse, Typography, Divider, Space, Tabs, Tag, Tooltip } from 'antd';
 import Icon from '@ant-design/icons';
-import { sumBy } from 'es-toolkit/compat';
 
 import Overview from '../Overall/overview';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 import { Size } from '../../constants';
-import { formatSize } from '../../utils';
+import { formatSize, sumBy } from '../../utils';
 import BundleSizeSvg from '../../common/svg/bundle-size.svg';
 import SourceSizeSvg from '../../common/svg/source-size.svg';
 import TotalSizeSvg from '../../common/svg/total-size.svg';

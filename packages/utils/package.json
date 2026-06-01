@@ -98,7 +98,6 @@
     "@rsdoctor/types": "workspace:*",
     "@types/estree": "catalog:",
     "acorn": "^8.10.0",
-    "acorn-import-attributes": "^1.9.5",
     "acorn-walk": "8.3.5",
     "deep-eql": "4.1.4",
     "envinfo": "7.21.0",

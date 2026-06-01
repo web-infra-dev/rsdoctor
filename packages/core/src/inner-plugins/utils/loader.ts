@@ -1,5 +1,4 @@
 import { ResolverFactory } from '@rspack/resolver';
-import { omit } from 'es-toolkit/compat';
 import path from 'path';
 import { logger } from '@rsdoctor/utils/logger';
 import { Loader } from '@rsdoctor/utils/common';
@@ -12,6 +11,7 @@ import { ProxyLoaderInternalOptions, ProxyLoaderOptions } from '@/types';
 import { Utils as BuildUtils } from '@/build-utils/build';
 import { isESMLoader, parseQuery } from '@/build-utils/build/utils';
 import { Fetch, Lodash } from '@rsdoctor/utils/common';
+import { omit } from '@/utils/collection';
 
 export function getInternalLoaderOptions(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,

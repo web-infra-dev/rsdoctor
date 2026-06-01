@@ -10,13 +10,12 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { uniq } from 'es-toolkit/compat';
 import { InfoCircleOutlined, FileSearchOutlined } from '@ant-design/icons';
 import {
   BundleDiffComponentCardProps,
   BundleDiffTableModulesData,
 } from './types';
-import { beautifyModulePath, useUniqModules } from '../../../../utils';
+import { beautifyModulePath, uniq, useUniqModules } from '../../../../utils';
 import { Size } from '../../../../constants';
 import { KeywordInput } from '../../../../components/Form/keyword';
 import { ViewChanges } from './changes';

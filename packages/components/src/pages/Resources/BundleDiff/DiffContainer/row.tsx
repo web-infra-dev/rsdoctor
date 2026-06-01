@@ -15,7 +15,6 @@ import {
   ColumnType,
   FilterConfirmProps,
 } from 'antd/es/table/interface';
-import { upperFirst } from 'es-toolkit/compat';
 import React, { useMemo, useRef, useState } from 'react';
 import { Client } from '@rsdoctor/types';
 import { CompareFn } from 'antd/lib/table/interface';
@@ -24,6 +23,7 @@ import {
   beautifyModulePath,
   formatPercent,
   formatSize,
+  upperFirst,
 } from '../../../../utils';
 import { ViewChanges } from './changes';
 import { FileUpdateTypeTag, getUpdateType } from './modules';

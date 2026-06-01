@@ -51,35 +51,38 @@ test('use Rsdoctor manifest data', async () => {
     __dirname,
     '../../fixtures/rsdoctor/manifest.json',
   );
+  const manifestContent = fs.readFileSync(manifestPath, 'utf-8');
   const oldPath = '<root>/rsdoctor';
   const newPath = path.resolve(__dirname, '../../../');
+  let dispose: (() => Promise<void>) | undefined;
 
-  replacePaths(manifestPath, oldPath, newPath);
+  try {
+    replacePaths(manifestPath, oldPath, newPath);
 
-  const { dispose, page } = await openBrowserByDiffCLI(
-    getRsdoctorManifestPath(),
-  );
+    const res = await openBrowserByDiffCLI(getRsdoctorManifestPath());
+    dispose = res.dispose;
+    const { page } = res;
 
-  await page.evaluate(
-    `window.location.hash = ${JSON.stringify(Client.RsdoctorClientRoutes.BundleDiff)}`,
-  );
+    await page.evaluate(
+      `window.location.hash = ${JSON.stringify(Client.RsdoctorClientRoutes.BundleDiff)}`,
+    );
 
-  replacePaths(manifestPath, newPath, oldPath);
+    // card for bundle diff.
+    await page.waitForSelector('.statistic-card', { timeout: 20000 });
+    const tabs = await page.$$(`#root .ant-tabs-tab`);
 
-  // card for bundle diff.
-  await page.waitForSelector('.statistic-card', { timeout: 20000 });
-  const tabs = await page.$$(`#root .ant-tabs-tab`);
+    expect(tabs.length).toBeGreaterThan(0);
 
-  expect(tabs.length).toBeGreaterThan(0);
+    const tabTexts = await Promise.all(
+      tabs.map((tab) => page.evaluate((node) => node.textContent, tab)),
+    );
 
-  const tabTexts = await Promise.all(
-    tabs.map((tab) => page.evaluate((node) => node.textContent, tab)),
-  );
-
-  expect(tabTexts).toContain('Overview');
-  expect(tabTexts).toContain('Assets');
-  expect(tabTexts).toContain('Modules');
-  expect(tabTexts).toContain('Packages');
-
-  await dispose();
+    expect(tabTexts).toContain('Overview');
+    expect(tabTexts).toContain('Assets');
+    expect(tabTexts).toContain('Modules');
+    expect(tabTexts).toContain('Packages');
+  } finally {
+    await dispose?.();
+    fs.writeFileSync(manifestPath, manifestContent, 'utf-8');
+  }
 });

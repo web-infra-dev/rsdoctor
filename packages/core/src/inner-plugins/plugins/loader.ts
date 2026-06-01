@@ -1,7 +1,6 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import type { HookInterceptor } from 'tapable';
 import { Loader } from '@rsdoctor/utils/common';
-import { isEqual, omit } from 'es-toolkit/compat';
 import type { LoaderContext, NormalModule } from '@rspack/core';
 import { interceptLoader, type CompatibleResolve } from '../utils';
 import { InternalBasePlugin } from './base';
@@ -10,6 +9,7 @@ import { time, timeEnd } from '@rsdoctor/utils/logger';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { safeCloneDeep } from '../utils/plugin-common';
+import { isEqual, omit } from '@/utils/collection';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);

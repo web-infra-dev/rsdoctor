@@ -1,12 +1,12 @@
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
-import { uniqBy, defaults, throttle } from 'es-toolkit/compat';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import parse from 'url-parse';
 
 import './i18n';
+import { defaults, throttle, uniqBy } from './collection';
 import { Language } from '../constants';
 import { setLocaleToStorage } from './storage';
 

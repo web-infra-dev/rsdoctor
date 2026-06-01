@@ -20,7 +20,6 @@ import {
   Typography,
 } from 'antd';
 import { DataNode as AntdDataNode } from 'antd/es/tree';
-import { debounce, omitBy, sumBy } from 'es-toolkit/compat';
 import { dirname, relative } from 'path';
 import React, {
   useEffect,
@@ -40,8 +39,11 @@ import { Size } from '../../../constants';
 import {
   DataNode,
   createFileStructures,
+  debounce,
   formatSize,
   isJsDataUrl,
+  omitBy,
+  sumBy,
   useElementSize,
   useI18n,
 } from '../../../utils';

@@ -1,4 +1,3 @@
-import { get } from 'es-toolkit/compat';
 import { Common, SDK } from '@rsdoctor/types';
 import { message, Space, TreeNodeProps, UploadFile } from 'antd';
 import { FieldDataNode } from 'rc-tree';
@@ -9,6 +8,7 @@ import {
   RightOutlined,
 } from '@ant-design/icons';
 import { getFileCom } from 'src/components/FileTree';
+import { get } from './collection';
 
 export type DataNode = FieldDataNode<{
   key: string | number;

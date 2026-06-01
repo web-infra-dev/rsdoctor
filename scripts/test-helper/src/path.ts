@@ -1,8 +1,10 @@
 import path from 'path';
 import os from 'os';
 import fs from 'fs';
-import { escapeRegExp } from 'es-toolkit/compat';
 import upath from 'upath';
+
+const escapeRegExp = (value: string) =>
+  value.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
 
 export const isPathString = (test: string): boolean =>
   path.posix.basename(test) !== test || path.win32.basename(test) !== test;

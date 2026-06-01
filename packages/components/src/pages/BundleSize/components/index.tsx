@@ -20,7 +20,6 @@ import {
   Typography,
   Tabs,
 } from 'antd';
-import { debounce, sumBy } from 'es-toolkit/compat';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useCodeDrawer } from 'src/components/base/CodeViewer/useCodeDrawer';
 import { Badge as Bdg } from '../../../components/Badge';
@@ -32,8 +31,10 @@ import { Size } from '../../../constants';
 import { useProjectInfo } from '../../../components/Layout/project-info-context';
 import {
   createFileStructures,
+  debounce,
   flattenTreemapData,
   formatSize,
+  sumBy,
   useI18n,
 } from '../../../utils';
 import { AssetDetail } from './asset';

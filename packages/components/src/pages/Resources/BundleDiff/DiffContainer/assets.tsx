@@ -11,7 +11,6 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { sumBy } from 'es-toolkit/compat';
 import {
   CheckSquareOutlined,
   InfoCircleOutlined,
@@ -23,7 +22,7 @@ import {
 } from '@ant-design/icons';
 import { Constants, SDK, Client } from '@rsdoctor/types';
 import { BundleDiffTableAssetsData } from './types';
-import { formatPercent, formatSize } from '../../../../utils';
+import { formatPercent, formatSize, sumBy } from '../../../../utils';
 import { Color, Size } from '../../../../constants';
 import { Percent, SizePercent } from '../../../../components/Card/diff';
 import { KeywordInput } from '../../../../components/Form/keyword';
