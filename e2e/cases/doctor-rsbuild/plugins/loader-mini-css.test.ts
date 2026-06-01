@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { pluginLess } from '@rsbuild/plugin-less';
 import { createStubRsbuild } from '@scripts/test-helper';
 import path from 'path';
-import type { NormalModule } from 'webpack';
+import type { NormalModule } from '@rspack/core';
 import { createRsdoctorPlugin } from '../test-utils';
 
 const testLoaderPath = path.resolve(

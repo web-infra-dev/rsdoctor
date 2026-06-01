@@ -32,8 +32,7 @@
     "es-toolkit": "catalog:",
     "memfs": "4.57.3",
     "typescript": "catalog:",
-    "upath": "2.0.1",
-    "webpack": "^5.105.4"
+    "upath": "2.0.1"
   },
   "publishConfig": {
     "access": "public",

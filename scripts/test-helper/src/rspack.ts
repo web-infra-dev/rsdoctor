@@ -1,11 +1,17 @@
-import { Compiler, Configuration, rspack, Stats } from '@rspack/core';
+import {
+  rspack,
+  type Compiler,
+  type Configuration,
+  type Stats,
+  type StatsValue,
+} from '@rspack/core';
 import { createFsFromVolume, Volume } from 'memfs';
 import path from 'path';
 
 function promisifyCompilerRun<
   T extends Compiler,
   P = ReturnType<Stats['toJson']>,
->(compiler: T): Promise<P> {
+>(compiler: T, statsOptions?: StatsValue): Promise<P> {
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
       if (err) {
@@ -20,11 +26,14 @@ function promisifyCompilerRun<
         return;
       }
 
+      const statsData = stats.toJson(statsOptions);
+
       if (stats.hasErrors()) {
-        reject(stats.toJson().errors);
+        reject(statsData.errors);
+        return;
       }
 
-      resolve(stats.toJson() as P);
+      resolve(statsData as P);
     });
   });
 }
@@ -32,6 +41,7 @@ function promisifyCompilerRun<
 export function compileByRspack(
   absPath: Configuration['entry'],
   options: Configuration = {},
+  statsOptions?: StatsValue,
 ) {
   const compiler = rspack({
     entry: absPath,
@@ -49,12 +59,13 @@ export function compileByRspack(
   // @ts-ignore
   compiler.outputFileSystem = createFsFromVolume(new Volume());
 
-  return promisifyCompilerRun(compiler);
+  return promisifyCompilerRun(compiler, statsOptions);
 }
 
 export function compileByRspackLayers(
   entry: Configuration['entry'],
   options: Configuration = {},
+  statsOptions?: StatsValue,
 ) {
   const compiler = rspack({
     entry,
@@ -76,5 +87,5 @@ export function compileByRspackLayers(
   // @ts-ignore
   compiler.outputFileSystem = createFsFromVolume(new Volume());
 
-  return promisifyCompilerRun(compiler);
+  return promisifyCompilerRun(compiler, statsOptions);
 }

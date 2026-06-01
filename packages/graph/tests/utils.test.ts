@@ -8,15 +8,15 @@ import { readPackageJson } from '../src/graph/package-graph/utils';
 import { join } from 'path';
 import { readFileSync } from 'node:fs';
 /**
- * The following code is modified based on
- * https://github.com/relative-ci/bundle-stats/blob/master/packages/utils/src/webpack/__tests__/utils-get-module-name.js
+ * The following code is modified based on relative-ci bundle-stats
+ * getModuleName tests.
  *
  * MIT Licensed
  * Author Viorel Cojocaru
  * Copyright 2019 Viorel Cojocaru, contributors.
  * https://github.com/relative-ci/bundle-stats/blob/master/LICENSE.md
  */
-describe('Webpack/utils/getModuleName', () => {
+describe('module-graph/utils/getModuleName', () => {
   it('should return empty name if missing', () => {
     expect(getModuleName()).toBe('');
   });
@@ -43,7 +43,7 @@ describe('Webpack/utils/getModuleName', () => {
     ).toBe('plugin/src/loader.js?{"modules":["./src/main.js"]}!');
   });
 
-  it('should remove webpack module details', () => {
+  it('should remove concatenated module details', () => {
     expect(getModuleName('./node_modules/lodash/_apply.js + 7 modules')).toBe(
       './node_modules/lodash/_apply.js',
     );

@@ -8,7 +8,6 @@ description: Use when adding or updating Rsdoctor end-to-end tests in `e2e/cases
 Rsdoctor E2E tests use **Playwright** and live under `e2e/cases/`. Each bundler has its own directory:
 
 - `e2e/cases/doctor-rspack/` — tests using Rspack compilation
-- `e2e/cases/doctor-webpack/` — tests using webpack compilation
 - `e2e/cases/doctor-rsbuild/` — tests using Rsbuild
 - `e2e/cases/doctor-rspeedy/` — tests using Rspeedy
 
@@ -18,7 +17,7 @@ Rsdoctor E2E tests use **Playwright** and live under `e2e/cases/`. Each bundler 
 
 2. Read `e2e/README.md` and follow its conventions.
 
-3. Use helpers from `@scripts/test-helper` (for example `compileByRspack`, `compileByWebpack5`) to compile fixtures. Do **not** call bundler APIs directly.
+3. Use helpers from `@scripts/test-helper` (for example `compileByRspack`) to compile fixtures. Do **not** call bundler APIs directly.
 
 4. Add Playwright test files under the appropriate `e2e/cases/doctor-*` directory, following existing patterns.
 
@@ -30,7 +29,7 @@ Rsdoctor E2E tests use **Playwright** and live under `e2e/cases/`. Each bundler 
 
 ## Case Structure
 
-- Each test file creates an Rsdoctor plugin instance (e.g., `createRsdoctorPlugin` from a local `test-utils.ts`), compiles a fixture via `compileByRspack` or `compileByWebpack5`, and asserts on the SDK store data.
+- Each test file creates an Rsdoctor plugin instance (e.g., `createRsdoctorPlugin` from a local `test-utils.ts`), compiles a fixture via `compileByRspack`, and asserts on the SDK store data.
 - Fixtures are plain JS/TS files and loaders in `fixtures/` — not full application directories.
 - Use `@rsdoctor/core/plugins` for `getSDK` / `setSDK` when inspecting analysis results.
 
