@@ -1041,9 +1041,6 @@ importers:
       acorn:
         specifier: ^8.10.0
         version: 8.14.0
-      acorn-import-attributes:
-        specifier: ^1.9.5
-        version: 1.9.5(acorn@8.14.0)
       acorn-walk:
         specifier: 8.3.5
         version: 8.3.5
@@ -11028,10 +11025,6 @@ snapshots:
     dependencies:
       mime-types: 3.0.1
       negotiator: 1.0.0
-
-  acorn-import-attributes@1.9.5(acorn@8.14.0):
-    dependencies:
-      acorn: 8.14.0
 
   acorn-import-attributes@1.9.5(acorn@8.16.0):
     dependencies:
