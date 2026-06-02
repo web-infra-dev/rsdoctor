@@ -75,4 +75,11 @@ export function isNumber(value: unknown): value is number {
   return typeof value === 'number' && !Number.isNaN(value);
 }
 
+export function lowerCase(value: string | undefined): string {
+  return String(value)
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/[-_]+/g, ' ')
+    .toLowerCase();
+}
+
 export const isEqual = isDeepStrictEqual;
