@@ -1,7 +1,7 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import type { HookInterceptor } from 'tapable';
 import { Loader } from '@rsdoctor/utils/common';
-import { isEqual, omit } from 'es-toolkit/compat';
+import { isEqual, omit } from '@rsdoctor/utils/collection';
 import type { LoaderContext, NormalModule } from '@rspack/core';
 import { interceptLoader, type CompatibleResolve } from '../utils';
 import { InternalBasePlugin } from './base';

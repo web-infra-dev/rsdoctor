@@ -29,6 +29,16 @@
         "default": "./dist/build.cjs"
       }
     },
+    "./collection": {
+      "import": {
+        "types": "./dist/common/collection.d.ts",
+        "default": "./dist/collection.js"
+      },
+      "require": {
+        "types": "./dist/common/collection.d.cts",
+        "default": "./dist/collection.cjs"
+      }
+    },
     "./error": {
       "import": {
         "types": "./dist/error/index.d.ts",
@@ -67,6 +77,9 @@
       ],
       "build": [
         "./dist/build/index.d.ts"
+      ],
+      "collection": [
+        "./dist/common/collection.d.ts"
       ],
       "error": [
         "./dist/error/index.d.ts"
@@ -120,6 +133,7 @@
     "prebundle": "catalog:",
     "filesize": "catalog:",
     "connect": "3.7.0",
+    "es-toolkit": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:"
   },

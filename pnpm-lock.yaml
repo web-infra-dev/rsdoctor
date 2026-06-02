@@ -631,9 +631,6 @@ importers:
       echarts-for-react:
         specifier: ^3.0.6
         version: 3.0.6(echarts@5.6.0)(react@19.2.6)
-      es-toolkit:
-        specifier: 'catalog:'
-        version: 1.45.1
       i18next:
         specifier: 22.0.4
         version: 22.0.4
@@ -734,9 +731,6 @@ importers:
       browserslist-load-config:
         specifier: ^1.0.2
         version: 1.0.2
-      es-toolkit:
-        specifier: 'catalog:'
-        version: 1.45.1
       filesize:
         specifier: 'catalog:'
         version: 11.0.17
@@ -865,9 +859,6 @@ importers:
       '@rsdoctor/utils':
         specifier: workspace:*
         version: link:../utils
-      es-toolkit:
-        specifier: 'catalog:'
-        version: 1.45.1
       path-browserify:
         specifier: 'catalog:'
         version: 1.0.1
@@ -1111,6 +1102,9 @@ importers:
       connect:
         specifier: 3.7.0
         version: 3.7.0
+      es-toolkit:
+        specifier: 'catalog:'
+        version: 1.45.1
       filesize:
         specifier: 'catalog:'
         version: 11.0.17

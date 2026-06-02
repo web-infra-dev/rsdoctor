@@ -42,6 +42,7 @@ export default defineConfig({
     entry: {
       common: './src/common/index.ts',
       build: './src/build/index.ts',
+      collection: './src/common/collection.ts',
       error: './src/error/index.ts',
       ruleUtils: './src/rule-utils/index.ts',
       logger: './src/logger.ts',

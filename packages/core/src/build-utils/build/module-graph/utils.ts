@@ -1,4 +1,4 @@
-import { isNumber } from 'es-toolkit/compat';
+import { isNumber } from '@rsdoctor/utils/collection';
 import { parser, Node } from '@rsdoctor/utils/ruleUtils';
 import { SDK } from '@rsdoctor/types';
 function getDefaultExportIdentifier(
