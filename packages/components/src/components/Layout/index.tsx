@@ -16,6 +16,7 @@ import { ConfigContext } from '../../config';
 import { SDK } from '@rsdoctor/types';
 import { ServerAPIProvider } from '../Manifest';
 import { ProjectInfoContext } from './project-info-context';
+import styles from './index.module.scss';
 
 export interface LayoutProps {
   children: React.JSX.Element;
@@ -72,6 +73,13 @@ export const Layout = (
   }, [query]);
 
   const ctx = useContext(ConfigContext);
+  const showHeader = !ctx.embedded;
+
+  const globalCssVars = {
+    '--spacing-base': Size.BasePadding + 'px',
+    '--layout-nav-height': showHeader ? Size.NavBarHeight + 'px' : '0px',
+    '--color-bg-main': MAIN_BG,
+  } as React.CSSProperties;
 
   return (
     <ServerAPIProvider
@@ -80,19 +88,11 @@ export const Layout = (
     >
       {(project) => (
         <ProjectInfoContext.Provider value={{ project }}>
-          <L>
+          <L style={globalCssVars}>
             <TitleUpdater name={project?.name} />
-            {!ctx.embedded ? <Header enableRoutes={enableRoutes} /> : null}
+            {showHeader && <Header enableRoutes={enableRoutes} />}
             <Progress />
-            <L.Content
-              style={{
-                height: '100%',
-                minHeight: '100vh',
-                padding: Size.BasePadding,
-                marginTop: !ctx.embedded ? Size.NavBarHeight : 0,
-                background: MAIN_BG,
-              }}
-            >
+            <L.Content className={styles.content}>
               {children}
               <FloatButton.BackTop />
             </L.Content>

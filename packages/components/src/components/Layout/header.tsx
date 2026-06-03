@@ -1,14 +1,15 @@
 import { TranslationOutlined } from '@ant-design/icons';
 import { Col, Dropdown, Layout, Row } from 'antd';
 import React from 'react';
-import { Language, Size } from '../../constants';
+import { Language } from '../../constants';
 import { useI18n, useTheme } from '../../utils';
 import { OverlayAlertsWithButton } from '../Alerts';
 import { BuilderSelect } from './builder-select';
 import { Menus } from './menus';
-import './header.sass';
 import { Client } from '@rsdoctor/types';
 import { useNavigate } from 'react-router-dom';
+import styles from './header.module.scss';
+import clsx from 'clsx';
 
 export interface HeaderProps {
   enableRoutes?: string[];
@@ -18,58 +19,22 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
   const { i18n } = useI18n();
 
   const navigate = useNavigate();
-  const { isLight } = useTheme();
-  const iconStyle: React.CSSProperties = {
-    display: 'inline-block',
-    fontSize: 20,
-    textAlign: 'center',
-    verticalAlign: 'middle',
-    cursor: 'pointer',
-    width: 30,
-    transition: 'all 0.3s ease',
-  };
+  const { isDark } = useTheme();
   const languages = [
     { value: Language.Cn, label: '中文' },
     { value: Language.En, label: 'English' },
   ];
 
   return (
-    <Layout.Header
-      style={{
-        height: Size.NavBarHeight,
-        padding: 0,
-        paddingLeft: Size.BasePadding,
-        paddingRight: Size.BasePadding,
-        position: 'fixed',
-        zIndex: 999,
-        width: '100%',
-        backgroundColor: isLight ? '#fff' : '#141414',
-        transition: 'none',
-      }}
-    >
-      <Row
-        justify="space-between"
-        align="middle"
-        style={{ height: Size.NavBarHeight }}
-        wrap={false}
-      >
-        <Col
-          style={{
-            height: Size.NavBarHeight,
-            lineHeight: `${Size.NavBarHeight + 2}px`,
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
+    <Layout.Header className={clsx(styles.root, isDark && styles.rootDark)}>
+      <Row className={styles.innerRoot}>
+        <Col className={styles.leftCol}>
+          <div className={styles.leftColInner}>
             <img
+              width="1604"
+              height="380"
               src="https://assets.rspack.rs/rsdoctor/rsdoctor-title-logo.png"
-              className="rsdoctor-logo"
+              className={styles.rsdoctorLogo}
               alt="logo"
               onClick={() => {
                 if (
@@ -92,14 +57,8 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
           style={{ transition: 'none' }}
         />
 
-        <Col flex={1}>
-          <Row
-            align="middle"
-            justify="end"
-            style={{ height: Size.NavBarHeight }}
-            wrap={false}
-            gutter={[Size.BasePadding / 3, 0]}
-          >
+        <Col className={styles.rightCol}>
+          <Row className={styles.rightColInner}>
             <Col>
               <OverlayAlertsWithButton />
             </Col>
@@ -130,10 +89,7 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
                   selectedKeys: [i18n.language],
                 }}
               >
-                <TranslationOutlined
-                  className="header-icon"
-                  style={iconStyle}
-                />
+                <TranslationOutlined className={styles.translationsIcon} />
               </Dropdown>
             </Col>
           </Row>
