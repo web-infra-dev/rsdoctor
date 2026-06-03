@@ -1,0 +1,8 @@
+.content {
+  height: 100%;
+  min-height: 100vh;
+  /* this is overridden with !important in pages/Overall/index.module.scss for whatever reason */
+  padding: var(--spacing-base);
+  margin-top: var(--layout-nav-height);
+  background: var(--color-bg-main, initial);
+}
