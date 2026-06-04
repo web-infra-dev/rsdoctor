@@ -1,7 +1,16 @@
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
 import { uniqBy, defaults, throttle } from 'es-toolkit/compat';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+  type SetStateAction,
+  type Dispatch,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import parse from 'url-parse';
@@ -307,4 +316,51 @@ export function useElementSize<T extends HTMLElement = HTMLDivElement>() {
   }, []);
 
   return [ref, { width, height }] as const;
+}
+
+export function usePersistedState<T>(
+  baseKey: string,
+  initialValue: T | (() => T),
+): [T, Dispatch<SetStateAction<T>>] {
+  const NS = 'RSDOC:';
+
+  const key = NS + baseKey;
+  const [state, setState] = useState<T>(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      if (item !== null) {
+        return JSON.parse(item);
+      }
+
+      return typeof initialValue === 'function'
+        ? (initialValue as () => T)()
+        : initialValue;
+    } catch (error) {
+      console.warn(`Error reading localStorage key "${key}":`, error);
+      return typeof initialValue === 'function'
+        ? (initialValue as () => T)()
+        : initialValue;
+    }
+  });
+
+  const setPersistedState = useCallback(
+    (value: SetStateAction<T>) => {
+      try {
+        setState((prevState) => {
+          const nextState =
+            value instanceof Function
+              ? (value as (prevState: T) => T)(prevState)
+              : value;
+
+          window.localStorage.setItem(key, JSON.stringify(nextState));
+          return nextState;
+        });
+      } catch (error) {
+        console.warn(`Error setting localStorage key "${key}":`, error);
+      }
+    },
+    [key],
+  );
+
+  return [state, setPersistedState];
 }
