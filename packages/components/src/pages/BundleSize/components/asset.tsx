@@ -505,9 +505,11 @@ export const AssetDetail: React.FC<{
         className={styles.bundle}
         title={`Modules of "${asset.path}"`}
         style={
-          {
-            '--body-min-height': height + 'px',
-          } as React.CSSProperties
+          height
+            ? ({
+                '--body-min-height': height + 'px',
+              } as React.CSSProperties)
+            : undefined
         }
         classNames={{
           body: styles.bundleBody,

@@ -49,8 +49,6 @@ import { Rspack } from '@rsdoctor/utils/common';
 
 const { Option } = Select;
 
-const cardBodyHeight = 600;
-
 interface WebpackModulesOverallProps {
   cwd: string;
   errors: SDK.ErrorsData;
@@ -200,132 +198,131 @@ export const WebpackModulesOverallBase: React.FC<
   };
   return (
     <>
-      <div>
-        <BundleCards cwd={cwd} errors={errors} summary={summary} />
-        <Card styles={{ body: { paddingTop: 0 } }}>
-          <Tabs
-            size="middle"
-            items={[
-              {
-                key: 'tree',
-                label: (
-                  <Space>
-                    <Typography.Text>Tree Graph</Typography.Text>
-                    <Tooltip
-                      overlayStyle={{ maxWidth: 380 }}
-                      overlayInnerStyle={{ marginLeft: 16, padding: 10 }}
-                      color="white"
-                      title={
-                        <Space direction="vertical" color="white" size="middle">
-                          <Row>
-                            <Col>
-                              <Tag color="cyan" style={{ margin: 0 }}>
-                                initial
-                              </Tag>
-                              <Typography.Text style={{ marginLeft: 4 }}>
-                                Identify whether the chunk is an initial chunk.
-                              </Typography.Text>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <Tag color="green" style={{ margin: 0 }}>
-                                concatenated
-                              </Tag>
-                              <Typography.Text style={{ marginLeft: 4 }}>
-                                Identify whether the module is a concatenated
-                                module
-                              </Typography.Text>
-                              <Tooltip
-                                overlayStyle={{ maxWidth: 408 }}
-                                placement="bottom"
-                                color="white"
-                                title={
-                                  <Space direction="vertical" color="white">
-                                    <Row>
-                                      <Col>
-                                        <Typography.Text strong>
-                                          Concatenated Module
-                                        </Typography.Text>
-                                        <Typography.Text>
-                                          : A performance optimization where
-                                          multiple modules are merged (or
-                                          "hoisted") into a single scope instead
-                                          of wrapping each module in separate
-                                          function closures. This reduces the
-                                          bundle size and improves runtime
-                                          performance by minimizing function
-                                          call overhead.
-                                        </Typography.Text>
-                                      </Col>
-                                    </Row>
-                                  </Space>
-                                }
-                              >
-                                <InfoCircleOutlined
-                                  style={{
-                                    color: 'rgba(0,0,0,.45)',
-                                    marginLeft: 4,
-                                  }}
-                                />
-                              </Tooltip>
-                              <Typography.Text>.</Typography.Text>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <Button
-                                size="small"
-                                icon={<CodepenCircleOutlined />}
+      <BundleCards cwd={cwd} errors={errors} summary={summary} />
+      <Card className={styles.root} classNames={{ body: styles.rootBody }}>
+        <Tabs
+          size="middle"
+          className={styles.tabsRoot}
+          items={[
+            {
+              key: 'tree',
+              label: (
+                <Space>
+                  <Typography.Text>Tree Graph</Typography.Text>
+                  <Tooltip
+                    overlayStyle={{ maxWidth: 380 }}
+                    overlayInnerStyle={{ marginLeft: 16, padding: 10 }}
+                    color="white"
+                    title={
+                      <Space direction="vertical" color="white" size="middle">
+                        <Row>
+                          <Col>
+                            <Tag color="cyan" style={{ margin: 0 }}>
+                              initial
+                            </Tag>
+                            <Typography.Text style={{ marginLeft: 4 }}>
+                              Identify whether the chunk is an initial chunk.
+                            </Typography.Text>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <Tag color="green" style={{ margin: 0 }}>
+                              concatenated
+                            </Tag>
+                            <Typography.Text style={{ marginLeft: 4 }}>
+                              Identify whether the module is a concatenated
+                              module
+                            </Typography.Text>
+                            <Tooltip
+                              overlayStyle={{ maxWidth: 408 }}
+                              placement="bottom"
+                              color="white"
+                              title={
+                                <Space direction="vertical" color="white">
+                                  <Row>
+                                    <Col>
+                                      <Typography.Text strong>
+                                        Concatenated Module
+                                      </Typography.Text>
+                                      <Typography.Text>
+                                        : A performance optimization where
+                                        multiple modules are merged (or
+                                        "hoisted") into a single scope instead
+                                        of wrapping each module in separate
+                                        function closures. This reduces the
+                                        bundle size and improves runtime
+                                        performance by minimizing function call
+                                        overhead.
+                                      </Typography.Text>
+                                    </Col>
+                                  </Row>
+                                </Space>
+                              }
+                            >
+                              <InfoCircleOutlined
+                                style={{
+                                  color: 'rgba(0,0,0,.45)',
+                                  marginLeft: 4,
+                                }}
                               />
-                              <Typography.Text style={{ marginLeft: 4 }}>
-                                Open the code.
-                              </Typography.Text>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <Button
-                                size="small"
-                                icon={<DeploymentUnitOutlined />}
-                              />
-                              <Typography.Text style={{ marginLeft: 4 }}>
-                                View the module dependency, that is, module
-                                reasons in stats.json.
-                              </Typography.Text>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <Tag color={'purple'}>{'Bundled: 15.77 KB'}</Tag>
-                              <Typography.Text>
-                                The final size of the output files after
-                                processing, bundling, and optimization. This is
-                                what is delivered to the browser.
-                              </Typography.Text>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <Tag color={'orange'}>{'Source: 60.46 KB'}</Tag>
-                              <Typography.Text>
-                                The original size of your source code files
-                                before any processing or transformations. This
-                                is the raw size of your code as you wrote it.
-                              </Typography.Text>
-                            </Col>
-                          </Row>
-                        </Space>
-                      }
-                    >
-                      <InfoCircleOutlined
-                        style={{ color: 'rgba(0,0,0,.45)' }}
-                      />
-                    </Tooltip>
-                  </Space>
-                ),
-                children: (
-                  <Space style={{ display: 'flex' }} direction="vertical">
+                            </Tooltip>
+                            <Typography.Text>.</Typography.Text>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <Button
+                              size="small"
+                              icon={<CodepenCircleOutlined />}
+                            />
+                            <Typography.Text style={{ marginLeft: 4 }}>
+                              Open the code.
+                            </Typography.Text>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <Button
+                              size="small"
+                              icon={<DeploymentUnitOutlined />}
+                            />
+                            <Typography.Text style={{ marginLeft: 4 }}>
+                              View the module dependency, that is, module
+                              reasons in stats.json.
+                            </Typography.Text>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <Tag color={'purple'}>{'Bundled: 15.77 KB'}</Tag>
+                            <Typography.Text>
+                              The final size of the output files after
+                              processing, bundling, and optimization. This is
+                              what is delivered to the browser.
+                            </Typography.Text>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <Tag color={'orange'}>{'Source: 60.46 KB'}</Tag>
+                            <Typography.Text>
+                              The original size of your source code files before
+                              any processing or transformations. This is the raw
+                              size of your code as you wrote it.
+                            </Typography.Text>
+                          </Col>
+                        </Row>
+                      </Space>
+                    }
+                  >
+                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                  </Tooltip>
+                </Space>
+              ),
+              children: (
+                <>
+                  <div className={styles.treeGraph}>
                     <Row
                       align="middle"
                       gutter={[Size.BasePadding, Size.BasePadding]}
@@ -438,51 +435,49 @@ export const WebpackModulesOverallBase: React.FC<
                     <Row>
                       <SearchModal />
                     </Row>
-                    <Row
-                      align="middle"
-                      gutter={[Size.BasePadding, Size.BasePadding]}
-                    >
-                      <Col span={24}>
-                        {filteredAssets.length ? (
-                          <Row gutter={Size.BasePadding}>
-                            <Col span={6}>
-                              <Card
-                                title={
-                                  <Space>
-                                    <Typography.Text>
-                                      {t('Output Assets List')}
-                                    </Typography.Text>
-                                    <Divider type="vertical" />
-                                    <Tooltip
-                                      title={`total assets count is ${assets.length}, the filtered assets count is ${filteredAssets.length}`}
-                                    >
-                                      <Typography.Text
-                                        type="secondary"
-                                        style={{
-                                          fontSize: 12,
-                                          fontWeight: 400,
-                                        }}
-                                      >
-                                        {filteredAssets.length} /{' '}
-                                        {assets.length}
-                                      </Typography.Text>
-                                    </Tooltip>
-                                    <Divider type="vertical" />
-                                    <Typography.Text
-                                      type="secondary"
-                                      style={{ fontSize: 12, fontWeight: 400 }}
-                                    >
-                                      {formatSize(
-                                        sumBy(filteredAssets, (e) => e.size),
-                                      )}
-                                    </Typography.Text>
-                                  </Space>
-                                }
-                                size="small"
-                                bodyStyle={{
-                                  overflow: 'scroll',
-                                  height: cardBodyHeight,
-                                }}
+                    {filteredAssets.length ? (
+                      <div className={styles.assetDetailRoot}>
+                        <div className={styles.assetDetailCol}>
+                          <Card
+                            className={styles.assetDetailFileTreeRoot}
+                            classNames={{
+                              body: styles.assetDetailFileTreeBody,
+                            }}
+                            title={
+                              <Space>
+                                <Typography.Text>
+                                  {t('Output Assets List')}
+                                </Typography.Text>
+                                <Divider type="vertical" />
+                                <Tooltip
+                                  title={`total assets count is ${assets.length}, the filtered assets count is ${filteredAssets.length}`}
+                                >
+                                  <Typography.Text
+                                    type="secondary"
+                                    style={{
+                                      fontSize: 12,
+                                      fontWeight: 400,
+                                    }}
+                                  >
+                                    {filteredAssets.length} / {assets.length}
+                                  </Typography.Text>
+                                </Tooltip>
+                                <Divider type="vertical" />
+                                <Typography.Text
+                                  type="secondary"
+                                  style={{ fontSize: 12, fontWeight: 400 }}
+                                >
+                                  {formatSize(
+                                    sumBy(filteredAssets, (e) => e.size),
+                                  )}
+                                </Typography.Text>
+                              </Space>
+                            }
+                            size="small"
+                          >
+                            <div className={styles.assetDetailFileTreeViewport}>
+                              <div
+                                className={styles.assetDetailFileTreeScrollArea}
                               >
                                 <FileTree
                                   className={styles.assets}
@@ -494,109 +489,102 @@ export const WebpackModulesOverallBase: React.FC<
                                   }
                                   key={`tree_${inputAssetName}_${defaultExpandAll}`}
                                 />
-                              </Card>
-                            </Col>
-                            <Col span={18}>
-                              {assetPath ? (
-                                <ServerAPIProvider
-                                  api={SDK.ServerAPI.API.GetAssetDetails}
-                                  body={{ assetPath }}
-                                >
-                                  {(details) => (
-                                    <AssetDetail
-                                      asset={details.asset}
-                                      chunks={details.chunks}
-                                      modules={details.modules}
-                                      height={cardBodyHeight}
-                                      moduleSizeLimit={inputModule}
-                                      root={cwd}
-                                    />
-                                  )}
-                                </ServerAPIProvider>
-                              ) : (
-                                <Card
-                                  bodyStyle={{
-                                    height: cardBodyHeight,
-                                  }}
-                                >
-                                  <Empty
-                                    description={
-                                      <Typography.Text strong>
-                                        Click the file path on the left to show
-                                        the modules of the asset
-                                      </Typography.Text>
-                                    }
-                                  />
-                                </Card>
+                              </div>
+                            </div>
+                          </Card>
+                        </div>
+                        <div className={styles.assetDetailCol}>
+                          {assetPath ? (
+                            <ServerAPIProvider
+                              api={SDK.ServerAPI.API.GetAssetDetails}
+                              body={{ assetPath }}
+                            >
+                              {(details) => (
+                                <AssetDetail
+                                  asset={details.asset}
+                                  chunks={details.chunks}
+                                  modules={details.modules}
+                                  moduleSizeLimit={inputModule}
+                                  root={cwd}
+                                />
                               )}
-                            </Col>
-                          </Row>
-                        ) : (
-                          <Empty />
-                        )}
-                      </Col>
-                    </Row>
-                  </Space>
-                ),
-              },
-              {
-                key: 'treemap',
-                label: 'Treemap',
-                children: (
-                  <ServerAPIProvider api={SDK.ServerAPI.API.GetProjectInfo}>
-                    {(data) => {
-                      const { isRspack, hasSourceMap } =
-                        Rspack.checkSourceMapSupport(data.configs);
-                      return (
-                        <ServerAPIProvider
-                          api={SDK.ServerAPI.API.GetSummaryBundles}
-                        >
-                          {(data) => {
-                            // Filter assets to only show JS (js, cjs, mjs), .bundle, CSS, and HTML files
-                            const isTargetFileType = (
-                              filePath: string,
-                            ): boolean => {
-                              const ext =
-                                filePath.toLowerCase().split('.').pop() || '';
-                              return (
-                                ext === 'js' ||
-                                ext === 'cjs' ||
-                                ext === 'mjs' ||
-                                ext === 'bundle' ||
-                                ext === 'css' ||
-                                ext === 'html'
-                              );
-                            };
-
-                            const computedTreeData: TreeNode[] = data
-                              .filter((item) =>
-                                isTargetFileType(item.asset.path),
-                              )
-                              .map((item) => ({
-                                name: item.asset.path,
-                                value: item.asset.size,
-                                children: flattenTreemapData(item.modules)
-                                  .children,
-                              }));
-                            return (
-                              <AssetTreemapWithFilter
-                                treeData={computedTreeData}
-                                bundledSize={hasSourceMap || isRspack}
+                            </ServerAPIProvider>
+                          ) : (
+                            <Card>
+                              <Empty
+                                description={
+                                  <Typography.Text strong>
+                                    Click the file path on the left to show the
+                                    modules of the asset
+                                  </Typography.Text>
+                                }
                               />
+                            </Card>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <Empty />
+                    )}
+                  </div>
+                  {codeDrawerComponent}
+                </>
+              ),
+            },
+            {
+              key: 'treemap',
+              label: 'Treemap',
+              children: (
+                <ServerAPIProvider api={SDK.ServerAPI.API.GetProjectInfo}>
+                  {(data) => {
+                    const { isRspack, hasSourceMap } =
+                      Rspack.checkSourceMapSupport(data.configs);
+                    return (
+                      <ServerAPIProvider
+                        api={SDK.ServerAPI.API.GetSummaryBundles}
+                      >
+                        {(data) => {
+                          // Filter assets to only show JS (js, cjs, mjs), .bundle, CSS, and HTML files
+                          const isTargetFileType = (
+                            filePath: string,
+                          ): boolean => {
+                            const ext =
+                              filePath.toLowerCase().split('.').pop() || '';
+                            return (
+                              ext === 'js' ||
+                              ext === 'cjs' ||
+                              ext === 'mjs' ||
+                              ext === 'bundle' ||
+                              ext === 'css' ||
+                              ext === 'html'
                             );
-                          }}
-                        </ServerAPIProvider>
-                      );
-                    }}
-                  </ServerAPIProvider>
-                ),
-              },
-            ]}
-            defaultActiveKey="tree"
-          />
-        </Card>
-      </div>
-      {codeDrawerComponent}
+                          };
+
+                          const computedTreeData: TreeNode[] = data
+                            .filter((item) => isTargetFileType(item.asset.path))
+                            .map((item) => ({
+                              name: item.asset.path,
+                              value: item.asset.size,
+                              children: flattenTreemapData(item.modules)
+                                .children,
+                            }));
+                          return (
+                            <AssetTreemapWithFilter
+                              treeData={computedTreeData}
+                              bundledSize={hasSourceMap || isRspack}
+                            />
+                          );
+                        }}
+                      </ServerAPIProvider>
+                    );
+                  }}
+                </ServerAPIProvider>
+              ),
+            },
+          ]}
+          defaultActiveKey="tree"
+        />
+      </Card>
     </>
   );
 };

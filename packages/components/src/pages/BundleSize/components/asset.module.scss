@@ -1,7 +1,4 @@
 .bundle {
-  display: flex;
-  flex-direction: column;
-
   :global {
     .rc-tree-node-content-wrapper {
       // width: 100%;
@@ -27,22 +24,36 @@
 }
 
 .bundleBody {
+  justify-content: flex-start;
+  min-height: var(--body-min-height, initial);
+}
+
+.bundle,
+.bundleBody {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  min-height: var(--body-min-height, 600px);
+  flex: 1;
 }
 
 .bundleTree {
+  --tree-min-height: 300px;
   --x-pad: 20px;
   --y-pad: 14px;
   --scrollbar-width: 10px;
   --x-pad-minus-scrollbar: calc(var(--x-pad) - var(--scrollbar-width));
+
   display: flex;
   flex: 1;
+  min-height: var(--tree-min-height);
   padding: var(--y-pad) var(--x-pad-minus-scrollbar) var(--y-pad) var(--x-pad);
   border: 1px solid rgba(235, 237, 241);
   border-radius: 8px;
+  resize: vertical;
+
+  /* on smaller devices stop trying to keep the whole tree in viewport: let's expand it a little bit */
+  @media (max-height: 900px) {
+    --tree-min-height: 450px;
+  }
 }
 
 .bundleTreeViewport {
