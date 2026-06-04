@@ -592,6 +592,7 @@ const AssetDetailTree = memo(
     const ITEM_HEIGHT = 30;
     const PERMANENT_PERF_MODE = false;
     const DISABLE_PERF_MODE_SCROLL_DELAY = 150;
+    const ENABLE_ANIMATIONS = false;
 
     // disable all the tooltips and popovers inside the tree?
     const [performanceMode, setPerformanceMode] = useState(PERMANENT_PERF_MODE);
@@ -727,6 +728,7 @@ const AssetDetailTree = memo(
                             : []
                       }
                       treeData={treeData as AntdDataNode[]}
+                      motion={ENABLE_ANIMATIONS ? undefined : false}
                     />
                   ) : (
                     <Empty
