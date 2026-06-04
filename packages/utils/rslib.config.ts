@@ -36,23 +36,46 @@ const externals = [
   },
 ];
 
+const commonEntries = {
+  common: './src/common/index.ts',
+  build: './src/build/index.ts',
+  error: './src/error/index.ts',
+  ruleUtils: './src/rule-utils/index.ts',
+  logger: './src/logger.ts',
+};
+
+const collectionEntry = {
+  collection: './src/common/collection.ts',
+};
+
 export default defineConfig({
   ...dualPackage,
-  source: {
-    entry: {
-      common: './src/common/index.ts',
-      build: './src/build/index.ts',
-      collection: './src/common/collection.ts',
-      error: './src/error/index.ts',
-      ruleUtils: './src/rule-utils/index.ts',
-      logger: './src/logger.ts',
+  lib: dualPackage.lib.flatMap((libConfig) => [
+    {
+      ...libConfig,
+      source: {
+        entry: commonEntries,
+      },
+      output: {
+        ...libConfig.output,
+        externals,
+      },
     },
-  },
-  lib: dualPackage.lib.map((libConfig) => ({
-    ...libConfig,
-    output: {
-      ...libConfig.output,
-      externals,
+    {
+      ...libConfig,
+      source: {
+        entry: collectionEntry,
+      },
+      output: {
+        ...libConfig.output,
+        externals,
+      },
+      dts: {
+        bundle: {
+          bundledPackages: ['es-toolkit'],
+        },
+        autoExtension: libConfig.format === 'cjs',
+      },
     },
-  })),
+  ]),
 });

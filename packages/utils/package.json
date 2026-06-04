@@ -31,11 +31,11 @@
     },
     "./collection": {
       "import": {
-        "types": "./dist/common/collection.d.ts",
+        "types": "./dist/collection.d.ts",
         "default": "./dist/collection.js"
       },
       "require": {
-        "types": "./dist/common/collection.d.cts",
+        "types": "./dist/collection.d.cts",
         "default": "./dist/collection.cjs"
       }
     },
@@ -79,7 +79,7 @@
         "./dist/build/index.d.ts"
       ],
       "collection": [
-        "./dist/common/collection.d.ts"
+        "./dist/collection.d.ts"
       ],
       "error": [
         "./dist/error/index.d.ts"
@@ -124,16 +124,17 @@
     "strip-ansi": "^6.0.1"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.58.7",
     "@types/babel__code-frame": "7.27.0",
     "@types/connect": "catalog:",
     "@types/deep-eql": "4.0.2",
     "@types/envinfo": "7.8.4",
     "@types/fs-extra": "catalog:",
     "@types/node": "catalog:",
-    "prebundle": "catalog:",
-    "filesize": "catalog:",
     "connect": "3.7.0",
     "es-toolkit": "catalog:",
+    "filesize": "catalog:",
+    "prebundle": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:"
   },
