@@ -1,7 +1,7 @@
 import { Loader } from '@rsdoctor/utils/common';
 import { SDK } from '@rsdoctor/types';
 import dayjs from 'dayjs';
-import { maxBy, minBy } from 'es-toolkit/compat';
+import { maxBy, minBy } from '@rsdoctor/utils/collection';
 import { formatCosts } from 'src/utils';
 
 import './tooltips.scss';

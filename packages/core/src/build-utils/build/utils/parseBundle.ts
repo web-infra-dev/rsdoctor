@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { find, mapValues } from 'es-toolkit/compat';
+import { find, mapValues } from '@rsdoctor/utils/collection';
 import { filesize } from 'filesize';
 
 import { parser } from '@rsdoctor/utils/ruleUtils';

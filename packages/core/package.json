@@ -100,7 +100,6 @@
     "browserslist-load-config": "^1.0.2",
     "@rsbuild/plugin-check-syntax": "catalog:",
     "@rspack/resolver": "catalog:",
-    "es-toolkit": "catalog:",
     "filesize": "catalog:",
     "fs-extra": "catalog:",
     "semver": "^7.7.4",

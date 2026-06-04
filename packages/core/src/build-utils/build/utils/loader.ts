@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fse from 'fs-extra';
-import { omit } from 'es-toolkit/compat';
+import { omit } from '@rsdoctor/utils/collection';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule } from '../../../types';

@@ -13,7 +13,7 @@ import {
   Empty,
   Grid,
 } from 'antd';
-import { sumBy } from 'es-toolkit/compat';
+import { sumBy } from '@rsdoctor/utils/collection';
 import {
   ExpandAltOutlined,
   InfoCircleOutlined,

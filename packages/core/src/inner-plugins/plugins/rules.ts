@@ -1,7 +1,7 @@
 import { InternalBasePlugin } from './base';
 import { Linter } from '../../rules';
 import { DevToolError } from '@rsdoctor/utils/error';
-import { pull } from 'es-toolkit/compat';
+import { pull } from '@rsdoctor/utils/collection';
 import { Plugin } from '@rsdoctor/types';
 import type { RspackError } from '@rspack/core';
 import { time, timeEnd } from '@rsdoctor/utils/logger';

@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { groupBy } from 'es-toolkit/compat';
+import { groupBy } from '@rsdoctor/utils/collection';
 import { Empty } from 'antd';
 import './loader.scss';
 import { useTheme } from 'src/utils/manifest';

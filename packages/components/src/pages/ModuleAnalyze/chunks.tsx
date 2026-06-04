@@ -1,6 +1,6 @@
 import { SDK } from '@rsdoctor/types';
 import { Empty, Table, Tag } from 'antd';
-import { orderBy } from 'es-toolkit/compat';
+import { orderBy } from '@rsdoctor/utils/collection';
 import React, { useMemo } from 'react';
 import { formatSize } from 'src/utils';
 import './index.sass';

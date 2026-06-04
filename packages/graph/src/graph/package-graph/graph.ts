@@ -1,4 +1,4 @@
-import { unionBy } from 'es-toolkit/compat';
+import { unionBy } from '@rsdoctor/utils/collection';
 import { resolve } from 'path';
 import { SDK } from '@rsdoctor/types';
 import { Package } from './package';

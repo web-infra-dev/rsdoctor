@@ -1,6 +1,6 @@
 import { Algorithm } from '@rsdoctor/utils/common';
 import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
-import { uniqBy, defaults, throttle } from 'es-toolkit/compat';
+import { uniqBy, defaults, throttle } from '@rsdoctor/utils/collection';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';

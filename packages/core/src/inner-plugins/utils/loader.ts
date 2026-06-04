@@ -1,5 +1,5 @@
 import { ResolverFactory } from '@rspack/resolver';
-import { omit } from 'es-toolkit/compat';
+import { omit } from '@rsdoctor/utils/collection';
 import path from 'path';
 import { logger } from '@rsdoctor/utils/logger';
 import { Loader } from '@rsdoctor/utils/common';
