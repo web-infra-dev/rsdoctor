@@ -2,6 +2,8 @@ import {
   CodepenCircleOutlined,
   DeploymentUnitOutlined,
   InfoCircleOutlined,
+  ShrinkOutlined,
+  ArrowsAltOutlined,
 } from '@ant-design/icons';
 import { type Client, SDK } from '@rsdoctor/types';
 import {
@@ -15,10 +17,10 @@ import {
   Typography,
   Tabs,
 } from 'antd';
-import React from 'react';
+import React, { useId } from 'react';
 import { ServerAPIProvider } from '../../../components/Manifest';
 import { useProjectInfo } from '../../../components/Layout/project-info-context';
-import { flattenTreemapData } from '../../../utils';
+import { flattenTreemapData, usePersistedState } from '../../../utils';
 import { BundleCards } from './cards';
 import styles from './index.module.scss';
 import './index.sass';
@@ -39,13 +41,45 @@ interface WebpackModulesOverallProps {
 export const WebpackModulesOverallBase: React.FC<
   WebpackModulesOverallProps
 > = ({ errors, cwd, summary, entryPoints }) => {
+  const [expanded, setExpanded] = usePersistedState(
+    'bundle-size-tabs-card-expanded',
+    false,
+  );
+  const cardDomId = useId();
+  const expandActionText = expanded ? 'Shrink card' : 'Expand card';
   return (
     <>
-      <BundleCards cwd={cwd} errors={errors} summary={summary} />
-      <Card className={styles.root} classNames={{ body: styles.rootBody }}>
+      <React.Activity mode={expanded ? 'hidden' : 'visible'}>
+        <BundleCards cwd={cwd} errors={errors} summary={summary} />
+      </React.Activity>
+      <Card
+        className={styles.root}
+        classNames={{ body: styles.rootBody }}
+        id={cardDomId}
+      >
         <Tabs
           size="middle"
           className={styles.tabsRoot}
+          tabBarExtraContent={{
+            right: (
+              <Tooltip
+                // the content collapses/expands, but the cursor stays at the same position (outside the button now, cause layout has shifted)
+                // antd doesn't know that and keeps the tooltip open, so we need to force rerender it on every state change
+                key={String(expanded)}
+                title={expandActionText}
+              >
+                <Button
+                  // TODO:: does it make sense here? the content basically stays the same and we're actually controlling other elements
+                  aria-controls={cardDomId}
+                  aria-expanded={expanded}
+                  aria-label={expandActionText}
+                  onClick={() => setExpanded(!expanded)}
+                  icon={expanded ? <ShrinkOutlined /> : <ArrowsAltOutlined />}
+                  size="small"
+                ></Button>
+              </Tooltip>
+            ),
+          }}
           items={[
             {
               key: 'tree',
