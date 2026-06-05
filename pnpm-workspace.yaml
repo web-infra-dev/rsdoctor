@@ -13,20 +13,20 @@ allowBuilds:
   nx: false
 
 catalog:
-  '@rsbuild/core': 2.0.6
-  '@rsbuild/plugin-check-syntax': 1.6.1
-  '@rsbuild/plugin-less': 1.6.3
-  '@rsbuild/plugin-node-polyfill': ^1.4.4
-  '@rsbuild/plugin-react': 2.0.0
-  '@rsbuild/plugin-sass': ^1.5.2
-  '@rsbuild/plugin-svgr': 2.0.2
-  '@rsbuild/plugin-type-check': ^1.3.4
+  '@rsbuild/core': ^2.0.9
+  '@rsbuild/plugin-check-syntax': ^1.6.1
+  '@rsbuild/plugin-less': ^1.6.4
+  '@rsbuild/plugin-node-polyfill': ^1.4.5
+  '@rsbuild/plugin-react': ^2.0.1
+  '@rsbuild/plugin-sass': ^1.5.3
+  '@rsbuild/plugin-svgr': ^2.0.3
+  '@rsbuild/plugin-type-check': ^1.3.5
   '@rslint/core': ^0.5.3
-  '@rspack/cli': 2.0.3
-  '@rspack/core': 2.0.3
-  '@rspack/plugin-react-refresh': 2.0.0
-  '@rspack/resolver': 0.2.8
-  '@rstest/core': 0.10.0
+  '@rspack/cli': ^2.0.5
+  '@rspack/core': ^2.0.5
+  '@rspack/plugin-react-refresh': ^2.0.1
+  '@rspack/resolver': ^0.2.8
+  '@rstest/core': 0.10.3
   '@types/body-parser': 1.19.6
   '@types/connect': 3.4.38
   '@types/estree': 1.0.5
