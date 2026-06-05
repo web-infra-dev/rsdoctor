@@ -7,7 +7,7 @@ settings:
 catalogs:
   default:
     '@rsbuild/core':
-      specifier: ^2.0.0
+      specifier: ^2.0.9
       version: 2.0.9
     '@rsbuild/plugin-check-syntax':
       specifier: ^1.6.1
@@ -19,13 +19,13 @@ catalogs:
       specifier: ^1.4.5
       version: 1.4.5
     '@rsbuild/plugin-react':
-      specifier: ^2.0.0
+      specifier: ^2.0.1
       version: 2.0.1
     '@rsbuild/plugin-sass':
       specifier: ^1.5.3
       version: 1.5.3
     '@rsbuild/plugin-svgr':
-      specifier: ^2.0.0
+      specifier: ^2.0.3
       version: 2.0.3
     '@rsbuild/plugin-type-check':
       specifier: ^1.3.5
@@ -34,13 +34,13 @@ catalogs:
       specifier: ^0.5.3
       version: 0.5.3
     '@rspack/cli':
-      specifier: ^2.0.0
+      specifier: ^2.0.5
       version: 2.0.5
     '@rspack/core':
-      specifier: ^2.0.0
+      specifier: ^2.0.5
       version: 2.0.5
     '@rspack/plugin-react-refresh':
-      specifier: ^2.0.0
+      specifier: ^2.0.1
       version: 2.0.1
     '@rspack/resolver':
       specifier: ^0.2.8
