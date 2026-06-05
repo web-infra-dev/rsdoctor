@@ -37,78 +37,12 @@
   }
 }
 
-.bundle-tree {
-  display: flex;
-
-  :global {
-    span.ant-tag {
-      margin: none;
-      margin-inline-end: 0px;
-    }
-  }
-}
-
-.box {
-  display: flex;
-  height: 30px;
-  width: 100%;
-
-  .keyword {
-    flex: 0 0 auto;
-    padding-right: 5;
-  }
-}
-
-.divider {
-  border-color: rgba(0, 0, 0, 0.12);
-  position: relative;
-  bottom: 20%;
-}
-
-.dividerDiv {
-  flex-grow: 1;
-  margin: 0 10px;
-  bottom: 10%;
-  position: relative;
-}
-
 .assetsTag {
   height: 30px;
 
   :global {
     .ant-divider-vertical {
       margin-inline: 0;
-    }
-  }
-}
-
-.bundle {
-  :global {
-    font-size: 14px;
-
-    .rc-tree-node-content-wrapper {
-      // width: 100%;
-      font-size: 14px;
-    }
-    .file-icon {
-      margin-left: 0;
-    }
-
-    .ant-tree-indent-unit {
-      width: 10px;
-    }
-
-    .ant-tree-iconEle {
-      margin-right: 2px;
-    }
-
-    .ant-tree-node-content-wrapper {
-      &-open {
-        display: flex;
-      }
-      &-close {
-        display: flex;
-      }
     }
   }
 }
