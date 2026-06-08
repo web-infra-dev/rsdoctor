@@ -36,7 +36,7 @@ Tree Graph is a **file tree-based** build artifact analysis view that helps deve
 ## 🪐 Glossary
 
 - **`Assets`**: Resources are files that ultimately exist in the output folder, including JavaScript, CSS, images, fonts, media, and other file types. Each Chunk has corresponding [Assets resources](https://webpack.js.org/concepts/under-the-hood/#chunks).
-- **`Module`**: Multiple Modules combine to form a Chunk. For more information about Module types, please refer to [Rspack Modules](https://www.rspack.rs/api/modules.html) and [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module).
+- **`Module`**: Multiple Modules combine to form a Chunk. For more information about Module types, please refer to [Rspack Modules](https://rspack.rs/misc/glossary#module-type) and [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module).
 - **`Source Size`**: The original size of the file, before any transformations and minification.
 - **`Bundle Size`**: The final output size of the files. If you enabled minification, this value shows the minified size.
 - **`Gzip Size`**: The size of the file after gzip compression.
@@ -184,7 +184,7 @@ The **Modules** tag is shown in the right image, from left to right representing
 
 ### Support for concatenated module analysis
 
-**[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** refers to multiple modules that are merged into a single closure, which cannot be analyzed through AST syntax analysis. However, concatenated modules may contain code from different packages, making the analysis of sub-modules within concatenated modules a key focus, especially for projects using the ["all-in-one"](https://rsbuild.rs/guide/optimization/code-splitting#all-in-one) bundling approach.
+**[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** refers to multiple modules that are merged into a single closure, which cannot be analyzed through AST syntax analysis. However, concatenated modules may contain code from different packages, making the analysis of sub-modules within concatenated modules a key focus, especially for projects using the ["all-in-one"](https://v1.rsbuild.rs/guide/optimization/code-splitting#all-in-one) bundling approach.
 
 Rsdoctor supports the analyze of **[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** and accurately calculates the real bundled size of sub-modules within concatenated modules, helping developers accurately identify the actual build size after Tree Shaking, analyze the impact of merged modules on final bundle size, and optimize code splitting strategies.
 

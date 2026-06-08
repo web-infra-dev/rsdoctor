@@ -127,7 +127,7 @@ In large projects, enabling Rsdoctor can increase the overall build time. To sol
 
 This optimization effectively improves the build analysis performance of Rsdoctor, and reduces the overall analysis time by more than **20%**. In the future, we will continue to native more modules to further improve the analysis efficiency.
 
-This optimization can be enabled through the [enableNativePlugin](/config/options/options#enablenativeplugin) option:
+This optimization can be enabled through the [enableNativePlugin](/config/options/experiments#enablenativeplugin) option:
 
 ```ts
 new RsdoctorRspackPlugin({
@@ -139,7 +139,7 @@ new RsdoctorRspackPlugin({
 
 ### 🔍 Module searching
 
-- **Search Module Capability**: In the `Bundle Size` page, we have added a module search function. Users can quickly locate and view the `Assets` where the module is located by entering the module name, making it more convenient to analyze the reference relationship and size of the module. [Details](/guide/usage/bundle-size#%E6%A8%A1%E5%9D%97%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD)
+- **Search Module Capability**: In the `Bundle Size` page, we have added a module search function. Users can quickly locate and view the `Assets` where the module is located by entering the module name, making it more convenient to analyze the reference relationship and size of the module. [Details](/guide/usage/bundle-size#search-module)
 
 <img
   style={{ width: '80%', margin: 'auto', borderRadius: 12 }}
@@ -170,7 +170,7 @@ new RsdoctorRspackPlugin({
 
 - If you are using any tool or framework based on Rspack or webpack, you can refer to the [Quick Start](/guide/start/quick-start) to start using Rsdoctor.
 - If you are using Rsdoctor 0.4 or earlier, please note that 1.0 contains a few incompatible updates:
-  - The `reportCodeType` and `reportDir` configuration items in the plugin configuration have been moved to [output](/config/options/options#reportcodetype).
+  - The `reportCodeType` and `reportDir` configuration items in the plugin configuration have been moved to [output](/config/options/output#reportcodetype).
 
 > Welcome to give a star 🌟 to the [Rsdoctor GitHub](https://github.com/web-infra-dev/rsdoctor) repository.
 
@@ -178,7 +178,7 @@ new RsdoctorRspackPlugin({
 
 - **AI powered analysis**: The build analysis data collected by Rsdoctor is very rich, but there may be a certain learning curve for new users. Therefore, we will integrate AI capabilities into Rsdoctor to help users quickly extract key information from massive data, provide intelligent optimization suggestions, and reduce the threshold of build analysis.
 - **CI proactive monitoring**: Rsdoctor will extend its capabilities in CI environments by introducing [Rsdoctor CI Action](https://github.com/web-infra-dev/rsdoctor/discussions/491), based on the existing [Bundle Diff](/guide/usage/bundle-diff) feature. This will provide automated monitoring of bundle sizes and alerts for performance issues to ensure quality.
-- **Further Native**: Due to the implementation of Rspack in Rust and the use of a multi-threaded architecture, the current analysis of the built-in loader of Rspack by Rsdoctor is not accurate enough. We plan to optimize the analysis mechanism based on [Rspack Native Plugin](/config/options/options#enablenativeplugin), and provide more accurate loader performance data and compilation behavior insights.
+- **Further Native**: Due to the implementation of Rspack in Rust and the use of a multi-threaded architecture, the current analysis of the built-in loader of Rspack by Rsdoctor is not accurate enough. We plan to optimize the analysis mechanism based on [Rspack Native Plugin](/config/options/experiments#enablenativeplugin), and provide more accurate loader performance data and compilation behavior insights.
 
 **Finally, thank you to all the developers who have contributed to Rsdoctor ❤️**:
 
