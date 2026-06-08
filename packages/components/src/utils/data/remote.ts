@@ -16,10 +16,12 @@ export class RemoteDataLoader extends BaseDataLoader {
   public async loadData(key: string): Promise<unknown> {
     return this.limit(key, async () => {
       const [scope, ...rest] = this.getKeys(key);
-      const data = this.getData(
-        scope as keyof Manifest.RsdoctorManifestData,
-        'cloudData',
-      );
+      const data =
+        this.getData(
+          scope as keyof Manifest.RsdoctorManifestData,
+          'cloudData',
+        ) ??
+        this.getData(scope as keyof Manifest.RsdoctorManifestData, 'data');
 
       if (!data) return;
 

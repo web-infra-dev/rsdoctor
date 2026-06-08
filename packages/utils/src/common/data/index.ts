@@ -284,6 +284,11 @@ export class APIDataLoader {
           return Graph.getEntryPoints(entrypoints) as R;
         });
 
+      case SDK.ServerAPI.API.GetChunkGroupGraph:
+        return this.loader.loadData('otherReports').then((reports) => {
+          return reports?.chunkGroupGraph as R;
+        });
+
       case SDK.ServerAPI.API.GetModuleCodeByModuleId:
         return this.loader.loadData('moduleCodeMap').then((moduleCodeMap) => {
           const { moduleId } =

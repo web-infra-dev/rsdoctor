@@ -148,4 +148,6 @@ export interface PackageGraphData {
   dependencies: PackageDependencyData[];
 }
 
-export interface OtherReports {}
+export interface OtherReports {
+  chunkGroupGraph?: import('./chunk-group').ChunkGroupGraphData;
+}

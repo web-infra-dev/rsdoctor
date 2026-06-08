@@ -18,6 +18,7 @@ import { BriefModeOptions } from '../config';
 import { EmoCheckData } from '../emo';
 import { SummaryData } from './summary';
 import { ConfigData } from './config';
+import { OtherReports } from './package';
 
 export type WriteStoreOptionsType = {};
 
@@ -47,6 +48,7 @@ export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   /** Report module chart data */
   reportModuleGraph(data: ModuleGraphInstance): void;
   reportChunkGraph(data: ChunkGraphInstance): void;
+  reportOtherReports(part: Partial<OtherReports>): void;
   /** report the data of summary */
   reportSummaryData(part: Partial<SummaryData>): void;
   /** Report sourceMap data */

@@ -38,6 +38,7 @@ import {
 } from '../../../utils';
 import { AssetDetail } from './asset';
 import { BundleCards } from './cards';
+import { ChunkGroupGraphPanel } from './chunk-group';
 import styles from './index.module.scss';
 import './index.sass';
 import { SearchModal } from './search-modal';
@@ -71,6 +72,7 @@ export const WebpackModulesOverallBase: React.FC<
   const [inputModuleUnit, setModuleUnit] = useState('');
   const [inputChunkUnit, setChunkUnit] = useState('');
   const [assetPath, setAssetPath] = useState<string | null>(null);
+  const [activeTabKey, setActiveTabKey] = useState('tree');
   const { showCode, codeDrawerComponent } = useCodeDrawer(
     'Do not have the codes of assets. If you use the lite or brief mode, there will have codes.',
   );
@@ -205,6 +207,8 @@ export const WebpackModulesOverallBase: React.FC<
         <Card styles={{ body: { paddingTop: 0 } }}>
           <Tabs
             size="middle"
+            activeKey={activeTabKey}
+            onChange={setActiveTabKey}
             items={[
               {
                 key: 'tree',
@@ -591,8 +595,18 @@ export const WebpackModulesOverallBase: React.FC<
                   </ServerAPIProvider>
                 ),
               },
+              {
+                key: 'chunk-group',
+                label: 'Chunk Group Graph',
+                children: (
+                  activeTabKey === 'chunk-group' ? (
+                    <ServerAPIProvider api={SDK.ServerAPI.API.GetChunkGroupGraph}>
+                      {(report) => <ChunkGroupGraphPanel report={report} />}
+                    </ServerAPIProvider>
+                  ) : null
+                ),
+              },
             ]}
-            defaultActiveKey="tree"
           />
         </Card>
       </div>

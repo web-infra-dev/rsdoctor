@@ -181,6 +181,19 @@ async function doneHandler(
   logger.debug('reportChunkGraph start');
   await _this.sdk.reportChunkGraph(_this.chunkGraph!);
   logger.debug('reportChunkGraph done');
+
+  if (_this.options.features.bundle) {
+    const chunkGroupGraph = ChunksBuildUtils.buildChunkGroupGraphReport(
+      stats.compilation,
+      compiler.context || process.cwd(),
+    );
+    if (chunkGroupGraph) {
+      _this.sdk.reportOtherReports({
+        chunkGroupGraph,
+      });
+    }
+  }
+
   // Warn if deprecated treemap option is enabled
   if (_this.options.supports.generateTileGraph) {
     logger.warn(
