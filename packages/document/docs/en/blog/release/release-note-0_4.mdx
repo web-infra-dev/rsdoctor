@@ -19,7 +19,7 @@ The new features of Rsdoctor 0.4 include:
 In Rsdoctor 0.4, a new **Brief mode** has been added, designed specifically for CI/CD scenarios. Brief mode consolidates the data report into a single HTML page, making it convenient for users to view historical build data in CI/CD and other scenarios. The main features of Brief mode are:
 
 - **Single report file**: Previously, Rsdoctor output multiple report data and `Manifest.json`, which was inconvenient for CDN upload and sharing. Brief mode outputs a single report, making it convenient for use in CI processes.
-- **Easy to configure**: Enable by configuring the [mode.brief](/config/options/options#mode) option in the Rsdoctor plugin.
+- **Easy to configure**: Enable by configuring the [mode.brief](/config/options/mode) option in the Rsdoctor plugin.
 - **Report output**: The report will be generated in the build artifacts directory, and the output directory and filename of the Brief report can be configured.
 
 This feature greatly enhances the convenience of using Rsdoctor analysis reports in CI processes. The report can be uploaded to a CDN in the pipeline to display historical reports. [For more details, please refer to](/guide/start/cicd)

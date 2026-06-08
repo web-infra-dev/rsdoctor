@@ -11,10 +11,10 @@ import { Badge } from '@theme';
 Rsdoctor report mode, default is `normal`.
 
 - **normal:** Generates a `.rsdoctor` folder in the build output directory, containing various data files and displaying code in the report page. The output directory can be configured via [reportDir](#reportdir).
-- **brief:** Generates an HTML report file in the `.rsdoctor` folder of the build output directory. All build analysis data is integrated and injected into this HTML file, which can be opened in a browser to view the report. Brief mode has more configuration options, see [brief](#brief) for details.
+- **brief:** Generates an HTML report file in the `.rsdoctor` folder of the build output directory. All build analysis data is integrated and injected into this HTML file, which can be opened in a browser to view the report. Brief mode has more configuration options, see [mode: 'brief'](#mode-brief) for details.
 
 :::tip
-Mode does not have a lite configuration option. The lite mode will be deprecated. Refer to [lite mode deprecation notice](./options-v2.mdx#lite-mode-deprecation-notice).
+Mode does not have a lite configuration option. The lite mode will be deprecated. Refer to [lite mode deprecation notice](./options-v2.mdx#lite).
 :::
 
 ## options
@@ -211,7 +211,7 @@ The output directory for Rsdoctor reports. By default, it is the build output di
 ## compressData
 
 :::warning
-Deprecated in V2, please use `output.mode: 'brief'` and `output.options.type: 'json'` instead. Refer to [compressData configuration migration](/config/options/options-v2#compressdata).
+Deprecated in V2, please use `output.mode: 'brief'` and `output.options.type: 'json'` instead. Refer to [compressData configuration migration](/config/options/options-v2#outputcompressdata).
 :::
 
 - **Type:** `boolean`
