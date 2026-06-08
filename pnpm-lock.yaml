@@ -790,8 +790,8 @@ importers:
         specifier: 2.0.13
         version: 2.0.13(@rspack/core@2.0.5(@swc/helpers@0.5.23))(@types/mdast@4.0.4)(@types/react@19.2.15)(core-js@3.49.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
       '@rstack-dev/doc-ui':
-        specifier: 1.13.3
-        version: 1.13.3
+        specifier: 1.14.3
+        version: 1.14.3(@rspress/core@2.0.13(@rspack/core@2.0.5(@swc/helpers@0.5.23))(@types/mdast@4.0.4)(@types/react@19.2.15)(core-js@3.49.0)(micromark-util-types@2.0.1)(micromark@4.0.1))
       clsx:
         specifier: 'catalog:'
         version: 2.1.1
@@ -3411,8 +3411,13 @@ packages:
   '@rspress/shared@2.0.13':
     resolution: {integrity: sha512-LmDfr7+MDNWRBbxcNoWkW68A35oRonpDJq2Jlx3L8GCzG4sAsyd6Yw0DebTWAxx7hVOXGMf37nEf1J4aOLEZfg==}
 
-  '@rstack-dev/doc-ui@1.13.3':
-    resolution: {integrity: sha512-g9T8mG1I5ch3CHnzktl/PPFwJmxgRBLUi8NC6pGDwp3JQfKzaylDNK2LcPM4kjLP60+9fv2gFDSrLHE6jFu8uQ==}
+  '@rstack-dev/doc-ui@1.14.3':
+    resolution: {integrity: sha512-aJ+B7uW0xKiHiIYdPOicrHwBYIYTT8u/tN1qLrfbx45ZQ2qEFiYi7QMG2sUkbiZPNxWv2SAi4mapoT8waEKA4A==}
+    peerDependencies:
+      '@rspress/core': '>=2.0.0'
+    peerDependenciesMeta:
+      '@rspress/core':
+        optional: true
 
   '@rstest/core@0.10.3':
     resolution: {integrity: sha512-UiJ1td7KszgAfPVroNKnQQ60S0EeyHdPZArng08ffMMCmwo/6aeLmjk4s+W/ojR5iredelM9Z0Yc01vN3kSaeA==}
@@ -10681,7 +10686,9 @@ snapshots:
       - '@module-federation/runtime-tools'
       - core-js
 
-  '@rstack-dev/doc-ui@1.13.3': {}
+  '@rstack-dev/doc-ui@1.14.3(@rspress/core@2.0.13(@rspack/core@2.0.5(@swc/helpers@0.5.23))(@types/mdast@4.0.4)(@types/react@19.2.15)(core-js@3.49.0)(micromark-util-types@2.0.1)(micromark@4.0.1))':
+    optionalDependencies:
+      '@rspress/core': 2.0.13(@rspack/core@2.0.5(@swc/helpers@0.5.23))(@types/mdast@4.0.4)(@types/react@19.2.15)(core-js@3.49.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
 
   '@rstest/core@0.10.3(core-js@3.49.0)':
     dependencies:
