@@ -184,7 +184,7 @@ The **Modules** tag is shown in the right image, from left to right representing
 
 ### Support for concatenated module analysis
 
-**[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** refers to multiple modules that are merged into a single closure, which cannot be analyzed through AST syntax analysis. However, concatenated modules may contain code from different packages, making the analysis of sub-modules within concatenated modules a key focus, especially for projects using the ["all-in-one"](https://v1.rsbuild.rs/guide/optimization/code-splitting#all-in-one) bundling approach.
+**[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** refers to multiple modules that are merged into a single closure, which cannot be analyzed through AST syntax analysis. However, concatenated modules may contain code from different packages, making the analysis of sub-modules within concatenated modules a key focus, especially for projects using the ["all-in-one"](https://rsbuild.rs/config/split-chunks#disable-chunk-splitting) bundling approach.
 
 Rsdoctor supports the analyze of **[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** and accurately calculates the real bundled size of sub-modules within concatenated modules, helping developers accurately identify the actual build size after Tree Shaking, analyze the impact of merged modules on final bundle size, and optimize code splitting strategies.
 
