@@ -27,27 +27,6 @@ module.exports = {
 
 Rsbuild has built-in support for Rsdoctor, so you don't need to manually register plugins. See [Rsbuild - Use Rsdoctor](https://rsbuild.rs/guide/debug/rsdoctor) for more details.
 
-### Webpack
-
-Initialize the RsdoctorWebpackPlugin in the [plugins](https://webpack.js.org/configuration/plugins/#plugins) of `webpack.config.js`:
-
-```js title="webpack.config.js"
-const { RsdoctorWebpackPlugin } = require('@rsdoctor/webpack-plugin');
-
-module.exports = {
-  // ...
-  plugins: [
-    // Only register the plugin when RSDOCTOR is true, as the plugin will increase the build time.
-    process.env.RSDOCTOR &&
-      new RsdoctorWebpackPlugin({
-        // plugin options
-      }),
-  ].filter(Boolean),
-};
-```
-
-- **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
-
 ### Modern.js
 
 Initialize the plugin in the [tools.rspack](https://modernjs.dev/configure/app/tools/rspack) of `modern.config.ts`:
@@ -74,21 +53,11 @@ export default {
 
 - **Options:** The plugin provides some configurations, please refer to [Options](../../config/options/options).
 
-:::tip
-For projects using Modern.js's webpack mode, please register the `RsdoctorWebpackPlugin` plugin through [tools.webpack](https://modernjs.dev/configure/app/tools/webpack).
-:::
-
 ### Next.js
 
 #### Step 1: Register the Rsdoctor plugin
 
-Initialize the [RsdoctorRspackPlugin](#rspack)([RsdoctorWebpackPlugin](#webpack)) plugin in the [Rspack Config](https://rspack.rs/guide/tech/next)([webpack config](https://nextjs.org/docs/pages/api-reference/config/next-config-js/webpack)) of `next.config.ts`.
-
-import { Tab, Tabs } from '@rspress/core/theme';
-
-<Tabs>
-
-<Tab label="Rspack">
+Initialize the [RsdoctorRspackPlugin](#rspack) plugin in the [Rspack Config](https://rspack.rs/guide/tech/next) of `next.config.ts`.
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
@@ -119,43 +88,6 @@ const nextConfig: NextConfig = {
 
 export default nextConfig;
 ```
-
-</Tab>
-
-<Tab label="webpack">
-
-```ts title="next.config.ts"
-import type { NextConfig } from 'next';
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  webpack: (config) => {
-    if (config.name === 'client') {
-      config.plugins.push(
-        new RsdoctorWebpackPlugin({
-          disableClientServer: true,
-        }),
-      );
-    } else if (config.name === 'server') {
-      config.plugins.push(
-        new RsdoctorWebpackPlugin({
-          disableClientServer: true,
-          output: {
-            reportDir: './.next/server',
-          },
-        }),
-      );
-    }
-    return config;
-  },
-};
-
-export default nextConfig;
-```
-
-</Tab>
-</Tabs>
 
 - **Options:** The plugin provides some configuration options, please refer to [Options](../../config/options/options).
 
@@ -193,7 +125,7 @@ rsdoctor analyze --profile .next/server/chunks/.rsdoctor/manifest.json
 
 ### Vue project
 
-Initialize the `@rsdoctor/webpack-plugin` or `@rsdoctor/rspack-plugin` plugin in the configuration file. Here is an example using `rsbuild`:
+Initialize the `@rsdoctor/rspack-plugin` plugin in the configuration file. Here is an example using `rsbuild`:
 
 ```ts title="rsbuild.config.ts"
 import { defineConfig } from '@rsbuild/core';

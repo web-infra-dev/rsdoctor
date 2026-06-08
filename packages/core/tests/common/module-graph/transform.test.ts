@@ -1,21 +1,34 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, expect, it } from '@rstest/core';
 import path from 'path';
-import fs from 'fs';
 
 import { Chunks } from '@/build-utils/build';
-import { removeAbsModulePath } from '../utils';
-import { compileByWebpack5 } from '@scripts/test-helper';
-import type { Plugin } from '@rsdoctor/types';
 import { ModuleGraphTrans } from '@rsdoctor/graph';
+import { SDK, type Plugin } from '@rsdoctor/types';
+import { compileByRspack } from '@scripts/test-helper';
+import { removeAbsModulePath } from '../utils';
 
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, '../../fixtures', ...paths);
 };
-// TODO: migrate to e2e
-describe('module graph transform from stats', () => {
+
+const statsOptions = {
+  all: false,
+  assets: true,
+  chunks: true,
+  chunkModules: true,
+  ids: true,
+  modules: true,
+  nestedModules: true,
+  orphanModules: true,
+  reasons: true,
+  source: true,
+};
+
+describe('module graph transform from rspack stats', () => {
   it('normal module in multi concatenation module', async () => {
     const fixtureName = 'normal-module-in-multi-concatenation';
-    const stats = (await compileByWebpack5(
+    const fixtureRoot = resolveFixture(fixtureName);
+    const stats = (await compileByRspack(
       {
         entry1: resolveFixture(fixtureName, 'entry1.js'),
         entry2: resolveFixture(fixtureName, 'entry2.js'),
@@ -26,50 +39,66 @@ describe('module graph transform from stats', () => {
           filename: '[name].js',
           chunkFilename: '[name].js',
         },
+        optimization: {
+          concatenateModules: true,
+        },
       },
+      statsOptions,
     )) as Plugin.StatsCompilation;
 
-    const chunkGraph = Chunks.chunkTransform(new Map(), stats);
+    expect(stats.modules?.length).toBeGreaterThan(0);
 
+    const chunkGraph = Chunks.chunkTransform(new Map(), stats);
+    const chunkData = chunkGraph.toData();
     const graph = ModuleGraphTrans.getModuleGraphByStats(
       stats,
-      resolveFixture(fixtureName, 'dist'),
+      fixtureRoot,
       chunkGraph,
     );
 
-    removeAbsModulePath(graph, resolveFixture(fixtureName));
+    removeAbsModulePath(graph, fixtureRoot);
 
-    expect(graph.getModules().length).toEqual(5);
-    expect(graph.getDependencies().length).toEqual(2);
     const graphData = graph.toData();
-    expect(graphData.modules[0].webpackId.length).toBeTruthy();
-    expect(graphData.modules[2]?.issuerPath?.[0]).toBeTruthy();
+    const modulePaths = graphData.modules.map((item) => item.path).sort();
 
-    graphData.modules.forEach((mod) => {
-      // prevent ci failed on win32
-      mod.webpackId = '';
-      mod.size.sourceSize = -1;
-      mod.size.transformedSize = -1;
-      mod.size.parsedSize = -1;
-      mod.issuerPath = [];
-    });
-    expect(graphData).toMatchSnapshot();
-  });
-
-  it('module type === from origin', async () => {
-    const json = fs.readFileSync(
-      path.join(__dirname, '../../fixtures/assets/webpack-stats.json'),
+    expect(graphData.modules.length).toBeGreaterThanOrEqual(3);
+    expect(modulePaths).toEqual(
+      expect.arrayContaining(['common.js', 'entry1.js', 'entry2.js']),
+    );
+    expect(
+      chunkData.chunks
+        .map((item) => ({
+          name: item.name,
+          assets: item.assets,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    ).toEqual([
       {
-        encoding: 'utf-8',
+        name: 'entry1',
+        assets: ['entry1.js'],
       },
+      {
+        name: 'entry2',
+        assets: ['entry2.js'],
+      },
+    ]);
+
+    const concatenatedModules = graphData.modules.filter(
+      (item) => item.kind === SDK.ModuleKind.Concatenation,
     );
-    const statsData = JSON.parse(json);
-    const chunkGraph = Chunks.chunkTransform(new Map(), statsData);
-    const moduleGraph = ModuleGraphTrans.getModuleGraphByStats(
-      statsData,
-      '.',
-      chunkGraph,
+    const commonModule = graphData.modules.find(
+      (item) => item.path === 'common.js',
     );
-    expect(moduleGraph.toData()).toMatchSnapshot();
+
+    expect(concatenatedModules.length).toBe(2);
+    expect(
+      concatenatedModules.every((item) => item.modules?.length === 2),
+    ).toBe(true);
+    expect(commonModule?.chunks.sort()).toEqual(['0', '1']);
+    expect(graphData.dependencies.length).toBe(2);
+    expect(
+      graphData.dependencies.every((item) => item.request === './common.js'),
+    ).toBe(true);
+    expect(graphData.modules.every((item) => item.identifier)).toBe(true);
   });
 });

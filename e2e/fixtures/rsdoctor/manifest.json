@@ -2,16 +2,16 @@
   "client": {
     "enableRoutes": [
       "Overall",
-      "Compile.WebpackLoaders",
+      "Compile.Loaders",
       "Compile.ModuleResolve",
-      "Compile.WebpackPlugins",
+      "Compile.Plugins",
       "Bundle.ModuleGraph",
       "Bundle.BundleSize"
     ]
   },
   "data": {
     "hash": "2f92ad3f7425c572ea80ab34001e41fe",
-    "root": "<root>/rsdoctor/examples/modern-minimal",
+    "root": "<root>/rsdoctor/examples/rsbuild-minimal",
     "envinfo": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/envinfo/0"],
     "pid": 61791,
     "errors": ["<root>/rsdoctor/e2e/fixtures/rsdoctor/errors/0"],

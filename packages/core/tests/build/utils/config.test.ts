@@ -69,10 +69,11 @@ describe('normalizeUserConfig', () => {
 
   it('should respect custom features array', () => {
     const result = normalizeUserConfig({
-      features: ['loader', 'plugins', 'lite'],
+      features: ['loader', 'plugins', 'treeShaking', 'lite'],
     });
     expect(result.features.loader).toBe(true);
     expect(result.features.plugins).toBe(true);
+    expect(result.features.treeShaking).toBe(true);
     expect(result.features.lite).toBe(true);
     expect(result.features.resolver).toBe(false);
     expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoSourceAndAssets);
@@ -84,6 +85,7 @@ describe('normalizeUserConfig', () => {
     });
     expect(result.features.loader).toBe(false);
     expect(result.features.plugins).toBe(true);
+    expect(result.features.treeShaking).toBe(false);
     expect(result.features.lite).toBe(true);
   });
 
@@ -105,7 +107,6 @@ describe('normalizeUserConfig', () => {
 
   it('should use default supports when not provided', () => {
     const result = normalizeUserConfig();
-    expect(result.supports.banner).toEqual(undefined);
     expect(result.supports.gzip).toEqual(true);
     expect(result.supports.parseBundle).toEqual(true);
   });
@@ -113,7 +114,6 @@ describe('normalizeUserConfig', () => {
   it('should respect custom supports', () => {
     const customSupports = {
       parseBundle: false,
-      banner: true,
       gzip: true,
     };
     const result = normalizeUserConfig({ supports: customSupports });

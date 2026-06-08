@@ -2,21 +2,21 @@ import { expect, describe, it } from '@rstest/core';
 import {
   getModuleName,
   parseLocation,
-  extractCodeFromLocation,
+  extractCodeFromSourceLines,
 } from '../src/graph/module-graph/utils';
 import { readPackageJson } from '../src/graph/package-graph/utils';
 import { join } from 'path';
-import fse from 'fs-extra';
+import { readFileSync } from 'node:fs';
 /**
- * The following code is modified based on
- * https://github.com/relative-ci/bundle-stats/blob/master/packages/utils/src/webpack/__tests__/utils-get-module-name.js
+ * The following code is modified based on relative-ci bundle-stats
+ * getModuleName tests.
  *
  * MIT Licensed
  * Author Viorel Cojocaru
  * Copyright 2019 Viorel Cojocaru, contributors.
  * https://github.com/relative-ci/bundle-stats/blob/master/LICENSE.md
  */
-describe('Webpack/utils/getModuleName', () => {
+describe('module-graph/utils/getModuleName', () => {
   it('should return empty name if missing', () => {
     expect(getModuleName()).toBe('');
   });
@@ -43,7 +43,7 @@ describe('Webpack/utils/getModuleName', () => {
     ).toBe('plugin/src/loader.js?{"modules":["./src/main.js"]}!');
   });
 
-  it('should remove webpack module details', () => {
+  it('should remove concatenated module details', () => {
     expect(getModuleName('./node_modules/lodash/_apply.js + 7 modules')).toBe(
       './node_modules/lodash/_apply.js',
     );
@@ -130,8 +130,9 @@ describe('parseLocation', () => {
   });
 });
 
-describe('extractCodeFromLocation', () => {
+describe('extractCodeFromSourceLines', () => {
   const SOURCE = 'ABCDE\nFGHIJ\nKLMNO\nPQRST\nUVWXY';
+  const SOURCE_LINES = SOURCE.split('\n');
   // lines (1-indexed):
   //   1 → "ABCDE"
   //   2 → "FGHIJ"
@@ -141,14 +142,14 @@ describe('extractCodeFromLocation', () => {
 
   // ── Guard conditions ───────────────────────────────────────────────────────
   describe('guard conditions', () => {
-    it('returns empty string when source is empty', () => {
+    it('returns empty string when source lines are empty', () => {
       expect(
-        extractCodeFromLocation('', { startLine: 1, startColumn: 0 }),
+        extractCodeFromSourceLines([], { startLine: 1, startColumn: 0 }),
       ).toBe('');
     });
 
     it('returns empty string when location is null', () => {
-      expect(extractCodeFromLocation(SOURCE, null)).toBe('');
+      expect(extractCodeFromSourceLines(SOURCE_LINES, null)).toBe('');
     });
   });
 
@@ -157,7 +158,10 @@ describe('extractCodeFromLocation', () => {
     it('returns from startColumn to end of line (column 1-indexed → adjusted)', () => {
       // startColumn 1 → adjusted to 0 → "ABCDE".substring(0) = "ABCDE"
       expect(
-        extractCodeFromLocation(SOURCE, { startLine: 1, startColumn: 1 }),
+        extractCodeFromSourceLines(SOURCE_LINES, {
+          startLine: 1,
+          startColumn: 1,
+        }),
       ).toBe('ABCDE');
     });
   });
@@ -168,7 +172,7 @@ describe('extractCodeFromLocation', () => {
       // startColumn 1 → adjusted 0; endColumn 3 → used as-is
       // "ABCDE".substring(0, 3) = "ABC"
       expect(
-        extractCodeFromLocation(SOURCE, {
+        extractCodeFromSourceLines(SOURCE_LINES, {
           startLine: 1,
           startColumn: 1,
           endLine: 1,
@@ -186,7 +190,7 @@ describe('extractCodeFromLocation', () => {
       // line2: "FGHIJ" (full)
       // line3: "KLMNO".substring(0, 3) = "KLM"
       expect(
-        extractCodeFromLocation(SOURCE, {
+        extractCodeFromSourceLines(SOURCE_LINES, {
           startLine: 1,
           startColumn: 3,
           endLine: 3,
@@ -200,7 +204,10 @@ describe('extractCodeFromLocation', () => {
   describe('out-of-range line numbers', () => {
     it('returns empty string when startLine exceeds total line count', () => {
       expect(
-        extractCodeFromLocation('one line', { startLine: 5, startColumn: 0 }),
+        extractCodeFromSourceLines(['one line'], {
+          startLine: 5,
+          startColumn: 0,
+        }),
       ).toBe('');
     });
   });
@@ -211,7 +218,7 @@ describe('readPackageJson util', () => {
     expect(
       readPackageJson(join(__dirname, './fixture/index/index.js'), (file) => {
         try {
-          return fse.readJsonSync(file, { encoding: 'utf8' });
+          return JSON.parse(readFileSync(file, 'utf8'));
         } catch (e) {
           // console.log(e)
         }

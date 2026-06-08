@@ -1,20 +1,18 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fse from 'fs-extra';
-import { omit } from 'es-toolkit/compat';
+import { omit } from '@rsdoctor/utils/collection';
 import { Loader } from '@rsdoctor/utils/common';
 import type { Common, Plugin } from '@rsdoctor/types';
 import { Rule } from '../../../types';
 import { readPackageJson } from '@rsdoctor/graph';
 import { RuleSetUseItem } from '@rspack/core';
-import { RuleSetUseItem as WebpackRuleSetUseItem } from 'webpack';
 import { logger } from '@rsdoctor/utils/logger';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// webpack https://github.com/webpack/webpack/blob/2953d23a87d89b3bd07cf73336ee34731196c62e/lib/util/identifier.js#L311
 // rspack https://github.com/web-infra-dev/rspack/blob/d22f049d4bce4f8ac20c1cbabeab3706eddaecc1/packages/rspack/src/loader-runner/index.ts#L47
 const PATH_QUERY_FRAGMENT_REGEXP =
   /^((?:\0.|[^?#\0])*)(\?(?:\0.|[^#\0])*)?(#.*)?$/;
@@ -207,7 +205,7 @@ export function isESMLoader(r: Plugin.BuildRuleSetRule) {
 
 function appendProbeLoaders(
   compiler: Plugin.BaseCompiler,
-  loaderConfig: RuleSetUseItem | WebpackRuleSetUseItem,
+  loaderConfig: RuleSetUseItem,
 ): RuleSetUseItem[] {
   const _options =
     typeof loaderConfig === 'object'

@@ -28,7 +28,7 @@ export const rule = defineRule<typeof title, Config>(() => {
 
       if (loader.length === 0) return;
 
-      const { config } = configs.find((e) => e.name === 'webpack')! || {
+      const { config } = configs.find((e) => e.name === 'rspack')! || {
         config: undefined,
       };
 

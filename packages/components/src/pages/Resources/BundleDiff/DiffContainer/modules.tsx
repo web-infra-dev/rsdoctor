@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { uniq } from 'es-toolkit/compat';
+import { uniq } from '@rsdoctor/utils/collection';
 import { InfoCircleOutlined, FileSearchOutlined } from '@ant-design/icons';
 import {
   BundleDiffComponentCardProps,
@@ -112,7 +112,7 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
 
     bModules.forEach((mod) => {
       const modPath =
-        mod.webpackId?.replace(ModuleHashPattern, '') ||
+        mod.identifier?.replace(ModuleHashPattern, '') ||
         mod.path?.replace(ModuleHashPattern, '');
 
       if (!res[modPath]) {
@@ -127,7 +127,7 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
 
     cModules.forEach((mod) => {
       const modPath =
-        mod.webpackId?.replace(ModuleHashPattern, '') ||
+        mod.identifier?.replace(ModuleHashPattern, '') ||
         mod.path?.replace(ModuleHashPattern, '');
 
       if (!res[modPath]) {

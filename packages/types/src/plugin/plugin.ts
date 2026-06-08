@@ -1,14 +1,14 @@
 import { Common, Config, Linter as LinterType, SDK } from '..';
 import { InternalRules } from './internal-rules';
 
-export interface RsdoctorWebpackPluginFeatures {
+export interface RsdoctorRspackPluginFeatures {
   /**
-   * turn off it if you need not to analyze the executions of webpack loaders.
+   * Turn it off if you do not need to analyze the executions of bundler loaders.
    * @default true
    */
   loader?: boolean;
   /**
-   * turn off it if you need not to analyze the executions of webpack plugins.
+   * Turn it off if you do not need to analyze the executions of bundler plugins.
    * @default true
    */
   plugins?: boolean;
@@ -23,7 +23,7 @@ export interface RsdoctorWebpackPluginFeatures {
    */
   bundle?: boolean;
   /**
-   * turn off it if you need not to analyze the result of tree shaking.
+   * Turn it on if you need to analyze tree-shaking side effects.
    * @default false
    */
   treeShaking?: boolean;
@@ -37,18 +37,12 @@ export interface RsdoctorWebpackPluginFeatures {
 export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends Common.DeepRequired<
-    Omit<
-      RsdoctorWebpackPluginOptions<Rules>,
-      | 'sdkInstance'
-      | 'linter'
-      | 'output'
-      | 'supports'
-      | 'port'
-      | 'brief'
-      | 'mode'
-    >
-  > {
-  features: Common.DeepRequired<RsdoctorWebpackPluginFeatures>;
+  Omit<
+    RsdoctorRspackPluginOptions<Rules>,
+    'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief' | 'mode'
+  >
+> {
+  features: Common.DeepRequired<RsdoctorRspackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: SDK.RsdoctorBuilderSDKInstance;
   output: {
@@ -62,7 +56,6 @@ export interface RsdoctorPluginOptionsNormalized<
 }
 
 interface ISupport {
-  banner?: boolean;
   parseBundle?: boolean;
   generateTileGraph?: boolean;
   gzip?: boolean;
@@ -99,7 +92,7 @@ export type NewReportCodeType =
   | 'noAssetsAndModuleSource'
   | 'noCode';
 
-export interface RsdoctorWebpackPluginOptions<
+export interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
   /** Checker configuration */
@@ -108,8 +101,8 @@ export interface RsdoctorWebpackPluginOptions<
    * the switch for the Rsdoctor features.
    */
   features?:
-    | RsdoctorWebpackPluginFeatures
-    | Array<keyof RsdoctorWebpackPluginFeatures>;
+    | RsdoctorRspackPluginFeatures
+    | Array<keyof RsdoctorRspackPluginFeatures>;
 
   /**
    * @deprecated  Use `output.mode` instead, if you're using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead.
@@ -121,12 +114,12 @@ export interface RsdoctorWebpackPluginOptions<
   mode?: 'brief' | 'normal' | 'lite';
 
   /**
-   * configuration of the interceptor for webpack loaders. TODO: delete this options.
+   * Configuration for the bundler loader interceptor. TODO: delete this option.
    * @description worked when the `features.loader === true`.
    */
   loaderInterceptorOptions?: {
     /**
-     * loaders which you want to skip it (will not report the target loader data when webpack compile).
+     * Loaders that should be skipped and not reported when the bundler compiles.
      */
     skipLoaders?: string[];
   };
@@ -141,9 +134,7 @@ export interface RsdoctorWebpackPluginOptions<
    */
   sdkInstance?: SDK.RsdoctorBuilderSDKInstance;
 
-  /**
-   * Whether to turn on some characteristic analysis capabilities, such as: the support for the BannerPlugin.
-   */
+  /** Whether to turn on specific analysis capabilities. */
   supports?: ISupport;
 
   /**
@@ -185,8 +176,10 @@ export interface NormalModeOptions {
 }
 
 // Normal Mode Type
-interface NormalModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+interface NormalModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'normal';
   reportCodeType?: ReportCodeTypeByMode<'normal'>;
   options?: NormalModeOptions;
@@ -200,8 +193,10 @@ export interface BriefModeOptions {
   htmlOptions?: Config.BriefConfig;
 }
 
-export interface BriefModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+export interface BriefModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'brief';
   reportCodeType?: ReportCodeTypeByMode<'brief'>;
   options?: BriefModeOptions;

@@ -29,7 +29,7 @@ interface StatsOptionsObj {
   groupAssetsByEmitStatus?: boolean;
 }
 
-/** webpack not support boolean or string */
+/** Boolean or string stats options are intentionally narrowed here. */
 type StatsOptions = StatsOptionsObj;
 
 interface StatsAssetInfo {

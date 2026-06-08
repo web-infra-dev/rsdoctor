@@ -1,10 +1,10 @@
 # Rsdoctor Configuration Overview
 
-The Rsdoctor suite provides plugins for both Rspack and Webpack, namely `RsdoctorRspackPlugin` and `RsdoctorWebpackPlugin`. These plugins are designed to enhance build analysis by integrating Rsdoctor's capabilities directly into the build process.
+The Rsdoctor suite provides the `RsdoctorRspackPlugin` plugin to enhance build analysis by integrating Rsdoctor's capabilities directly into the build process.
 
 ## Key Features
 
-- **Plugins**: Both plugins offer a range of options to customize the build analysis, including enabling or disabling specific features and modes.
+- **Plugin**: The plugin offers a range of options to customize the build analysis, including enabling or disabling specific features and modes.
 - **Modes**: Users can choose between `normal`, `brief`, and `lite` modes, each offering different levels of detail and performance optimizations.
 - **Features**: The plugins support a variety of features such as loader and plugin analysis, bundle analysis, and resolver analysis.
 - **Output Configuration**: Options are available to configure the output directory, compress data, and select specific types of analysis data to output.

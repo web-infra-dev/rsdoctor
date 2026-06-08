@@ -1,9 +1,8 @@
 import { InternalBasePlugin } from './base';
 import { Linter } from '../../rules';
 import { DevToolError } from '@rsdoctor/utils/error';
-import { pull } from 'es-toolkit/compat';
+import { pull } from '@rsdoctor/utils/collection';
 import { Plugin } from '@rsdoctor/types';
-import type { WebpackError } from 'webpack';
 import type { RspackError } from '@rspack/core';
 import { time, timeEnd } from '@rsdoctor/utils/logger';
 
@@ -45,8 +44,8 @@ export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler>
 
       const errors = validateErrors.filter((item) => item.level === 'Error');
       const warnings = validateErrors.filter((item) => item.level === 'Warn');
-      const toWebpackError = (err: DevToolError) =>
-        err.toError() as unknown as WebpackError & RspackError;
+      const toRspackError = (err: DevToolError) =>
+        err.toError() as unknown as RspackError;
 
       result.replace.forEach((item) => {
         if (
@@ -65,13 +64,13 @@ export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler>
 
       if (Array.isArray(compilation.errors)) {
         errors.forEach((err) => {
-          compilation.warnings.push(toWebpackError(err));
+          compilation.errors.push(toRspackError(err));
         });
       }
 
       if (Array.isArray(compilation.warnings)) {
         warnings.forEach((err) => {
-          compilation.warnings.push(toWebpackError(err));
+          compilation.warnings.push(toRspackError(err));
         });
       }
 

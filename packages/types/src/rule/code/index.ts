@@ -25,7 +25,7 @@ export type RuleErrorCodes = {
 /**
  * The format is E + "4 digits".
  * - The first number represents the category:
- * - 1 for Webpack build related indexes
+ * - 1 for Rspack build related indexes
  * - ...
  * - The rest of the numbers can be increased by adding zeros
  */

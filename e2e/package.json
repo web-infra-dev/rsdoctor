@@ -9,8 +9,8 @@
   },
   "devDependencies": {
     "@actions/core": "^1.11.1",
-    "@lynx-js/react": "^0.120.0",
-    "@lynx-js/rspeedy": "^0.14.3",
+    "@lynx-js/react": "^0.121.1",
+    "@lynx-js/rspeedy": "^0.14.5",
     "@playwright/test": "1.55.1",
     "@rsbuild/plugin-less": "catalog:",
     "@rsdoctor/cli": "workspace:*",
@@ -19,14 +19,12 @@
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "@rsdoctor/webpack-plugin": "workspace:*",
     "@rspack/core": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "loader-utils": "^2.0.4",
     "es-toolkit": "catalog:",
     "playwright": "1.55.1",
-    "typescript": "catalog:",
-    "webpack": "^5.105.4"
+    "typescript": "catalog:"
   }
 }

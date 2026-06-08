@@ -57,7 +57,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@ant-design/icons": "6.2.3",
+    "@ant-design/icons": "6.2.5",
     "@monaco-editor/react": "4.7.0",
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
@@ -68,18 +68,17 @@
     "dayjs": "catalog:",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.6",
-    "es-toolkit": "catalog:",
     "i18next": "22.0.4",
     "monaco-editor": "0.49.0",
     "path-browserify": "catalog:",
     "rc-dialog": "9.1.0",
     "rc-tree": "5.7.2",
+    "react-error-boundary": "catalog:",
     "react-highlight-words": "^0.21.0",
     "react-hyper-tree": "0.3.12",
     "react-i18next": "12.0.0",
     "react-json-view": "1.21.3",
     "react-markdown": "catalog:",
-    "socket.io-client": "catalog:",
     "url-parse": "1.5.10"
   },
   "peerDependencies": {

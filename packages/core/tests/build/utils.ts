@@ -1,4 +1,4 @@
-import type { Compiler, NormalModule, Stats } from 'webpack';
+import type { Compiler, Module as RspackModule, Stats } from '@rspack/core';
 import { ModuleGraph } from '@rsdoctor/graph';
 import { removeAbsModulePath } from '../common/utils';
 import {
@@ -14,7 +14,7 @@ export class ModuleGraphTestPlugin {
 
   public modulesGraph: SDK.ModuleGraphInstance = new ModuleGraph();
 
-  private astCache = new Map<NormalModule, any>();
+  private astCache = new Map<RspackModule, any>();
 
   constructor(root: string) {
     this.root = root;
@@ -57,14 +57,6 @@ export class ModuleGraphTestPlugin {
       statsData as Plugin.StatsCompilation,
       this.root,
       chunkGraph,
-      undefined,
-      {
-        astCache: this.astCache,
-      },
-    );
-    this.modulesGraph = ModuleGraphBuildUtils.appendTreeShaking(
-      this.modulesGraph,
-      stats.compilation,
     );
   }
 

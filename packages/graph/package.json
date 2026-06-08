@@ -35,7 +35,6 @@
   "dependencies": {
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "es-toolkit": "catalog:",
     "path-browserify": "catalog:",
     "source-map": "catalog:"
   },
@@ -46,8 +45,7 @@
     "@types/node": "catalog:",
     "fs-extra": "catalog:",
     "tslib": "catalog:",
-    "typescript": "catalog:",
-    "webpack": "^5.105.4"
+    "typescript": "catalog:"
   },
   "publishConfig": {
     "access": "public",

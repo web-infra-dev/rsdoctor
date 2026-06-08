@@ -90,6 +90,15 @@ It is recommended to develop on a new branch, as it will make things easier late
 git checkout -b MY_BRANCH_NAME
 ```
 
+### Branch policy
+
+Starting from Rsdoctor 2.0 development, the `main` branch is used for v2 development, and the `v1.x` branch is used for v1 maintenance and releases.
+
+- Changes should be merged into `main` first whenever possible, so v2 stays up to date with bug fixes and improvements.
+- If a change also needs to be released in v1, backport it from `main` to the `v1.x` branch.
+- v1 releases must be prepared from the `v1.x` branch. Do not release v1 versions from `main`.
+- Changes that only apply to v1 may target `v1.x` directly, but the pull request should explain why the change does not apply to `main`.
+
 ### Build the package
 
 Use [nx build](https://nx.dev/nx-api/nx/documents/run) to build the package you want to change:
@@ -114,7 +123,6 @@ When you make changes to the code and want to view the `Rsdoctor` analysis repor
 pnpm run build:analysis
 ```
 
-- Based on the **Webpack** project: `modern-minimal` and `webpack-minimal`.
 - Based on the **Rspack** project: `rspack-minimal` and `rsbuild-minimal`.
 
 ---
@@ -216,9 +224,9 @@ Dependencies installation-related metrics base on publishing process, so the dat
 
 Repository maintainers can publish a new version of changed packages to npm.
 
-1. Checkout a new release branch, for example `release_v1.2.0`
+1. Checkout a new release branch from the target release line, for example `release_v1.2.0` from `v1.x` for v1 releases, or from `main` for v2 releases.
 2. Run [changesets](https://github.com/changesets/changesets) to bump changed packages and commit the changes.
 3. Create a pull request, the title should be `release: v1.2.0`.
 4. Run the [release action](https://github.com/web-infra-dev/rsdoctor/actions/workflows/release.yml) to publish packages to npm.
-5. Merge the release pull request to `main`.
+5. Merge the release pull request back to its target branch.
 6. Use the `create-draft-release-notes` skill to create a draft [GitHub release note](https://github.com/web-infra-dev/rsdoctor/releases). Review the draft release note, optionally add release highlights, and publish it.

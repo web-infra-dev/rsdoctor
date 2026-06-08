@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { find, mapValues } from 'es-toolkit/compat';
+import { find, mapValues } from '@rsdoctor/utils/collection';
 import { filesize } from 'filesize';
 
 import { parser } from '@rsdoctor/utils/ruleUtils';
@@ -21,7 +21,7 @@ import type { ParseBundle } from '@rsdoctor/graph';
  */
 export const parseBundle: ParseBundle = (
   bundlePath: string,
-  modulesData: Pick<SDK.ModuleInstance, 'renderId' | 'webpackId'>[],
+  modulesData: Pick<SDK.ModuleInstance, 'renderId' | 'identifier'>[],
 ) => {
   if (bundlePath.indexOf('.worker.') > 0) {
     return {};
@@ -259,7 +259,8 @@ export const parseBundle: ParseBundle = (
 
     const moduleContent = modules[module];
     const size = moduleContent && Buffer.byteLength(moduleContent);
-    const identifier = find(modulesData, { renderId: module })?.webpackId || '';
+    const identifier =
+      find(modulesData, { renderId: module })?.identifier || '';
     modulesObj[identifier] = {
       size,
       sizeConvert: filesize(size || 0),

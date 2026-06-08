@@ -2,7 +2,7 @@
 
 **类型：** `Object`
 
-这个 `Options` 是 [RsdoctorWebpackPlugin](./options#rsdoctorwebpackplugin-%E6%8F%92%E4%BB%B6) 和 [RsdoctorRspackPlugin](./options#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
+这个 `Options` 是 [RsdoctorRspackPlugin](./options#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
 
 - [disableClientServer](#disableclientserver)
 - [features](#features)
@@ -21,7 +21,7 @@
 
 ### features
 
-- **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **Type:** [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
 - **Optional:** `true`
 - **Default:** `['loader', 'plugins', 'bundle']`
 
@@ -32,10 +32,10 @@ features 属性是用于分析功能开关的，具体的功能项如下：
 - **loader**：Loaders 耗时及代码编译变化分析，默认开启。
 - **plugins**：Plugins 调用以及耗时分析，默认开启。
 - **bundle**：构建产物分析，默认开启。
-- **resolver**：resolver 分析，默认关闭。
+- **resolver**：Resolver 分析，默认关闭。
 - **lite**: **(废弃，参考：[mode.lite](/config/options/mode))** lite 模式。lite 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
 
-所以，**默认配置是开启了 Bundle 分析能力、 Loader 和 Plugin 构建时分析**。没有开启 Resolver 分析能力， Rspack 暂不支持 Resolver 分析能力。
+所以，**默认配置是开启了 Bundle 分析能力、 Loader 和 Plugin 构建时分析**，没有开启 Resolver 分析能力。如需启用 Resolver 分析，可以在 `features` 中显式配置 `resolver`。
 
 :::tip
 **如果出现了 out of memory 的报错，可以尝试：**
@@ -52,14 +52,6 @@ features 属性是用于分析功能开关的，具体的功能项如下：
 
 - 如果你将 `features` 设置为**数组**类型，该插件**只会开启**你在 `features` 数组中定义的功能。
 - 如果你将 `features` 设置为**简单对象**类型，该插件**只会关闭**你在 `features` 对象中值为 `false` 的功能。
-
-#### RsdoctorWebpackPluginFeatures
-
-`features` 类型如下：
-
-import Features from '@zh/shared/features.md';
-
-<Features />
 
 #### RsdoctorRspackPluginFeatures
 

@@ -7,5 +7,4 @@ export * from './base';
 export * from './bundle';
 export * from './ensureModulesChunkGraph';
 export * from './rules';
-export * from './bundleTagPlugin';
 export * from './resolver';

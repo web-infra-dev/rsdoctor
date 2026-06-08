@@ -46,8 +46,6 @@ export function getPositionByStatsLocation(
   }
 }
 
-export function isWebpack5orRspack(
-  compilation: Plugin.BaseCompilation,
-): Boolean {
+export function hasModuleGraph(compilation: Plugin.BaseCompilation): Boolean {
   return 'moduleGraph' in compilation && Boolean(compilation.moduleGraph);
 }

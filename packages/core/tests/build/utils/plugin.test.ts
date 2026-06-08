@@ -37,7 +37,7 @@ describe('test src/build/utils/plugin.ts', () => {
     expect(fn).toBeCalledWith('a', 1, 'compilation');
   });
 
-  it('interceptCompilationHooks(): normalModuleLoader && webpack5 ', () => {
+  it('interceptCompilationHooks(): skips normalModuleLoader', () => {
     const fn = rs.fn();
     interceptCompilationHooks(
       // @ts-ignore

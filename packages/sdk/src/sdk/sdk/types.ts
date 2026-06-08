@@ -28,6 +28,6 @@ export interface RsdoctorBuilderSDK extends RsdoctorSDKOptions {
   config?: SDK.SDKOptionsType;
 }
 
-export interface RsdoctorWebpackSDKOptions extends RsdoctorBuilderSDK {}
+export interface RsdoctorRspackSDKOptions extends RsdoctorBuilderSDK {}
 
 export interface RsdoctorEMOSDKOptions extends RsdoctorSDKOptions {}

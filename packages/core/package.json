@@ -97,10 +97,9 @@
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "browserslist-load-config": "^1.0.1",
+    "browserslist-load-config": "^1.0.2",
     "@rsbuild/plugin-check-syntax": "catalog:",
     "@rspack/resolver": "catalog:",
-    "es-toolkit": "catalog:",
     "filesize": "catalog:",
     "fs-extra": "catalog:",
     "semver": "^7.7.4",
@@ -119,8 +118,7 @@
     "string-loader": "0.0.1",
     "ts-loader": "^9.5.7",
     "tslib": "catalog:",
-    "typescript": "catalog:",
-    "webpack": "^5.105.4"
+    "typescript": "catalog:"
   },
   "publishConfig": {
     "access": "public",

@@ -2,7 +2,7 @@
 
 **Type:** `Object`
 
-This is the options for the [RsdoctorWebpackPlugin](./options#rsdoctorwebpackplugin) and [RsdoctorRspackPlugin](./options#rsdoctorrspackplugin). It contains these properties:
+This is the options for the [RsdoctorRspackPlugin](./options#rsdoctorrspackplugin). It contains these properties:
 
 - [disableClientServer](#disableclientserver)
 - [features](#features)
@@ -17,7 +17,7 @@ Whether to automatically open the Rsdoctor report page. If you do not need to vi
 
 ### features
 
-- **Type:** [RsdoctorWebpackPluginFeatures](#rsdoctorwebpackpluginfeatures) | [Array\<keyof RsdoctorWebpackPluginFeatures\>](#rsdoctorwebpackpluginfeatures) | [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
+- **Type:** [RsdoctorRspackPluginFeatures](#rsdoctorrspackpluginfeatures) | [Array\<keyof RsdoctorRspackPluginFeatures\>](#rsdoctorrspackpluginfeatures)
 - **Optional:** `true`
 - **Default:** `['loader', 'plugins', 'bundle']`
 
@@ -50,14 +50,6 @@ Therefore, **the default configuration enables bundle analysis capabilities and 
 
 - if the `features` is set as an `Array`, it will **open** the features which you define in this array **only**.
 - if the `features` is set as an `Object`, it will **close** the features which you set the value is `false`.
-
-#### RsdoctorWebpackPluginFeatures
-
-The types of `features` are as follows：
-
-import Features from '@zh/shared/features.md';
-
-<Features />
 
 #### RsdoctorRspackPluginFeatures
 

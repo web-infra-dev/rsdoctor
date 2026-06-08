@@ -6,7 +6,7 @@
  */
 
 /**
- * @type {import("webpack").LoaderDefinitionFunction<Options, {}>}
+ * @type {import("@rspack/core").LoaderDefinitionFunction<Options, {}>}
  */
 module.exports = function (input) {
   /**

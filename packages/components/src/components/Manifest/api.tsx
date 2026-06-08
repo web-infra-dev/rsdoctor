@@ -1,7 +1,7 @@
 import { Constants, Manifest, SDK } from '@rsdoctor/types';
 import { Skeleton, Spin } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { isEqual } from 'es-toolkit/compat';
+import { isEqual } from '@rsdoctor/utils/collection';
 import { fetchManifest, useDataLoader } from '../../utils';
 import { ComponentState } from '../../constants';
 import { FailedStatus } from '../Status';
@@ -111,10 +111,10 @@ export const ServerAPIProvider = <
   useEffect(() => {
     if (!loader) return;
     // add update event listener
-    loader.onDataUpdate(api, update);
+    loader.onDataUpdate(api, body, update);
     return () => {
       // remove update event when the component unmount.
-      loader.removeOnDataUpdate(api, update);
+      loader.removeOnDataUpdate(api, body, update);
     };
   }, [loader, api, body]);
 

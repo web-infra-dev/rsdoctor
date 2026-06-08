@@ -2,12 +2,14 @@ import { expect, test } from '@playwright/test';
 import path from 'path';
 import fs from 'fs/promises';
 import { getSDK, setSDK } from '@rsdoctor/core/plugins';
-import { createRsdoctorPlugin } from '../doctor-rsbuild/test-utils';
+import { createRsdoctorPlugin } from './test-utils';
 
 // Dynamic imports to avoid rspack binding issues
 let compileByRspack: any;
 let Compiler: any;
 const originalEnvRSTEST = process.env.RSTEST;
+const rspackOutputDir = path.join(__dirname, './dist');
+const manifestFileName = 'rsdoctor-data.json';
 
 try {
   const testHelper = require('@scripts/test-helper');
@@ -26,7 +28,7 @@ async function rspackCompile(_tapName: string, compile: any) {
       extensions: ['.ts', '.js'],
     },
     output: {
-      path: path.join(__dirname, './dist'),
+      path: rspackOutputDir,
     },
     module: {
       rules: [
@@ -52,6 +54,7 @@ async function rspackCompile(_tapName: string, compile: any) {
       createRsdoctorPlugin({
         disableClientServer: false,
         output: {
+          reportDir: rspackOutputDir,
           mode: 'brief',
           options: {
             type: ['json', 'html'],
@@ -105,7 +108,7 @@ test.describe('Uploader Integration Tests', () => {
   let manifestData: any;
 
   test.beforeAll(async () => {
-    // Set RSTEST to true to disable client server
+    // RSTEST keeps the client server enabled in integration tests.
     process.env.RSTEST = 'true';
 
     // Skip test if rspack binding is not available
@@ -116,10 +119,7 @@ test.describe('Uploader Integration Tests', () => {
     const tapName = 'Foo';
     await rspackCompile(tapName, compileByRspack);
 
-    manifestPath = path.resolve(
-      __dirname,
-      '../../.rsdoctor/rsdoctor-data.json',
-    );
+    manifestPath = path.resolve(rspackOutputDir, manifestFileName);
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -127,24 +127,11 @@ test.describe('Uploader Integration Tests', () => {
       const manifestContent = await fs.readFile(manifestPath, 'utf-8');
       manifestData = JSON.parse(manifestContent);
     } catch (error) {
-      console.error('Failed to read manifest file:', error);
-      // Create minimal test data if file doesn't exist
-      manifestData = {
-        data: {
-          errors: [],
-          moduleGraph: {
-            dependencies: [],
-            modules: [],
-            moduleGraphModules: [],
-            exports: [],
-            sideEffects: [],
-            variables: [],
-            layers: [],
-          },
-          chunkGraph: { assets: [], chunks: [], entrypoints: [] },
-        },
-        clientRoutes: ['Overall', 'Bundle.ModuleGraph', 'Bundle.BundleSize'],
-      };
+      throw new Error(
+        `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
     }
   });
 
@@ -269,11 +256,10 @@ test.describe('Uploader Integration Tests', () => {
   });
 
   test.afterAll(async () => {
-    // Set RSTEST to false
     process.env.RSTEST = originalEnvRSTEST;
 
     try {
-      await fs.rm(path.resolve(__dirname, './dist'), {
+      await fs.rm(rspackOutputDir, {
         recursive: true,
         force: true,
       });

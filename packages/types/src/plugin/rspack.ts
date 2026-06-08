@@ -1,11 +1,12 @@
 import type {
   RsdoctorPluginData,
-  NormalModuleFactory,
+  NormalModuleFactory as RspackCoreNormalModuleFactory,
   LoaderDefinitionFunction,
   ModuleGraph,
   Dependency,
 } from '@rspack/core';
-export type RspackNormalModuleFactory = NormalModuleFactory;
+export type RspackNormalModuleFactory = RspackCoreNormalModuleFactory;
+export type NormalModuleFactory = RspackNormalModuleFactory;
 
 export type RspackNativeAsset = RsdoctorPluginData.RsdoctorAsset;
 export type RspackNativeChunkGraph = RsdoctorPluginData.RsdoctorChunkGraph;
@@ -37,19 +38,28 @@ import rspack from '@rspack/core';
 export type RspackExportsExperiments = typeof rspack.experiments;
 
 export type RspackSourceMapInput = Parameters<LoaderDefinitionFunction>[1];
+export type SourceMapInput = RspackSourceMapInput;
 // export type SourceMap = Exclude<SourceMapInput, string | undefined>;
 export type RspackEntryPoint = boolean | 'auto';
+export interface EntryPoint {
+  getRuntimeChunk(): any;
+}
 export interface RspackExportInfo {
   used: boolean;
   provideInfo: boolean | null | undefined;
   useInfo: boolean | null | undefined;
   canMangle: boolean;
 }
-
 export type RspackExportsInfo = ReturnType<ModuleGraph['getExportsInfo']>;
+export interface ExportInfo {
+  name?: string;
+  findTarget(graph: any, filter: () => boolean): any;
+}
+export type ExportsInfo = RspackExportsInfo;
 
 export interface RspackHarmonyImportSpecifierDependency extends Dependency {
   getIds(graph: ModuleGraph): string[];
   name: string;
   userRequest: string;
 }
+export interface HarmonyImportSpecifierDependency extends RspackHarmonyImportSpecifierDependency {}

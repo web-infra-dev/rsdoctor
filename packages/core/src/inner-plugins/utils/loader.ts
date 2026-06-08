@@ -1,5 +1,5 @@
 import { ResolverFactory } from '@rspack/resolver';
-import { omit } from 'es-toolkit/compat';
+import { omit } from '@rsdoctor/utils/collection';
 import path from 'path';
 import { logger } from '@rsdoctor/utils/logger';
 import { Loader } from '@rsdoctor/utils/common';
@@ -226,14 +226,14 @@ export async function reportLoader(
       loaderData,
       8888,
     ).catch((err: Error) => {
-      logger.debug(`${err.message}`, '[WebpackPlugin.ReportLoader][error]');
+      logger.debug(`${err.message}`, '[RspackPlugin.ReportLoader][error]');
     }),
     Fetch.postJSON(
       `${host}${SDK.ServerAPI.API.ReportSourceMap}`,
       sourceMapData,
       8888,
     ).catch((err: Error) => {
-      logger.debug(`${err.message}`, '[WebpackPlugin.ReportSourceMap][error]');
+      logger.debug(`${err.message}`, '[RspackPlugin.ReportSourceMap][error]');
     }),
   ]);
 

@@ -15,7 +15,7 @@ import {
   ColumnType,
   FilterConfirmProps,
 } from 'antd/es/table/interface';
-import { upperFirst } from 'es-toolkit/compat';
+import { upperFirst } from '@rsdoctor/utils/collection';
 import React, { useMemo, useRef, useState } from 'react';
 import { Client } from '@rsdoctor/types';
 import { CompareFn } from 'antd/lib/table/interface';
@@ -220,7 +220,7 @@ export const ModuleRowForAsset: React.FC<
     // group by module.path
     mods.forEach((mod) => {
       const modPath =
-        mod.webpackId?.replace(ModuleHashPattern, '') ||
+        mod.identifier?.replace(ModuleHashPattern, '') ||
         mod.path?.replace(ModuleHashPattern, '');
       let t: BundleDiffTableModulesData = map.get(modPath)!;
 
