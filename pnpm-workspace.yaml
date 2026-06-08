@@ -40,7 +40,7 @@ catalog:
   clsx: ^2.1.1
   cross-env: ^10.1.0
   dayjs: 1.11.21
-  es-toolkit: ^1.45.1
+  es-toolkit: ^1.47.0
   filesize: ^11.0.17
   fs-extra: ^11.1.1
   path-browserify: 1.0.1
