@@ -195,8 +195,8 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
       '@lynx-js/react':
-        specifier: ^0.120.0
-        version: 0.120.0(@types/react@19.2.15)
+        specifier: ^0.121.1
+        version: 0.121.1(@types/react@19.2.15)
       '@lynx-js/rspeedy':
         specifier: ^0.14.5
         version: 0.14.5(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.5(@swc/helpers@0.5.21))(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
@@ -2421,11 +2421,11 @@ packages:
     resolution: {integrity: sha512-SHe1STEa2oUJodcEU8sHphFT2NaM/PB1h4fC7Wr/3miquaPDudmpEXTrHt9YBuqQMVm0JAVXXJTsTPkGHZrPqQ==}
     engines: {node: '>=18'}
 
-  '@lynx-js/internal-preact@10.29.1-20260424024911-12b794f':
-    resolution: {integrity: sha512-MQ+xjPL2f1P9/eCAdkT2h9cJRXl1qqhSJDX9GkPETt3UAepLo5N+HbGB8Qr3IUzqGDWMr3Mj76my1P0pLkKVDg==}
+  '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c':
+    resolution: {integrity: sha512-h2pRrt5oLK9LT1NkjyprtzJij/AdZGvv3CN6B5edL4chixqvITbxoCSdYy667Hl6+uKOBuxmCNZoDddgRfcLnw==}
 
-  '@lynx-js/react@0.120.0':
-    resolution: {integrity: sha512-XDDiMeQdK+FVlCHmeY3rUbvuTA2WPH/+8JznkUDVwUIwKmojoeEUOMCCXny434hIpBEtDeOtBoIEhxg569QGTw==}
+  '@lynx-js/react@0.121.1':
+    resolution: {integrity: sha512-nHlm73FiArjRoJyL23Ja7J7be3TLpSZLz1XZEumxXObeW0P+4iSWuOqalvkCm02bPkUg89j3cyO0dhTOXkqb6Q==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18
@@ -9500,12 +9500,12 @@ snapshots:
     dependencies:
       '@lynx-js/webpack-runtime-globals': 0.0.6
 
-  '@lynx-js/internal-preact@10.29.1-20260424024911-12b794f': {}
+  '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c': {}
 
-  '@lynx-js/react@0.120.0(@types/react@19.2.15)':
+  '@lynx-js/react@0.121.1(@types/react@19.2.15)':
     dependencies:
       '@types/react': 19.2.15
-      preact: '@lynx-js/internal-preact@10.29.1-20260424024911-12b794f'
+      preact: '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c'
 
   '@lynx-js/rspeedy@0.14.5(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.5(@swc/helpers@0.5.21))(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
     dependencies:
