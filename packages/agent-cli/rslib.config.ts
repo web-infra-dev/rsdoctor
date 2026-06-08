@@ -15,8 +15,13 @@ export default defineConfig({
         },
       },
       bundle: true,
-      dts: false,
+      dts: true,
       format: 'esm',
+      redirect: {
+        dts: {
+          extension: true,
+        },
+      },
       syntax: 'es2021',
     },
   ],

@@ -12,7 +12,7 @@ function parseAiArgs(argv: string[]) {
     .parse(['node', 'rsdoctor-agent', ...argv], { run: false });
 
   return {
-    args: parsed.args,
+    args: [...parsed.args],
     dataFile:
       typeof parsed.options.dataFile === 'string'
         ? parsed.options.dataFile

@@ -1,8 +1,11 @@
 import { cac } from 'cac';
+import { createRequire } from 'node:module';
 
-import packageJson from '../package.json';
 import { createRsdoctorCliToolExecutor } from './executor';
 import { describeSubcommands, getToolCatalog, runAiCli } from './commands';
+
+const require = createRequire(import.meta.url);
+const packageJson = require('../package.json') as { version: string };
 
 function parseStringOption(value: unknown, fallback: string) {
   return typeof value === 'string' ? value : fallback;

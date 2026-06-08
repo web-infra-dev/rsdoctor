@@ -3,11 +3,12 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "outDir": "./dist",
+    "types": ["node"],
     "paths": {
       "@/*": ["./src/*"]
     },
-    "rootDir": "."
+    "rootDir": "src"
   },
-  "include": ["src", "tests"],
+  "include": ["src"],
   "exclude": ["**/node_modules"]
 }
