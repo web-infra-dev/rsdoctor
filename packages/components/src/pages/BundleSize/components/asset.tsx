@@ -505,9 +505,11 @@ export const AssetDetail: React.FC<{
         className={styles.bundle}
         title={`Modules of "${asset.path}"`}
         style={
-          {
-            '--body-min-height': height + 'px',
-          } as React.CSSProperties
+          height
+            ? ({
+                '--body-min-height': height + 'px',
+              } as React.CSSProperties)
+            : undefined
         }
         classNames={{
           body: styles.bundleBody,
@@ -590,6 +592,7 @@ const AssetDetailTree = memo(
     const ITEM_HEIGHT = 30;
     const PERMANENT_PERF_MODE = false;
     const DISABLE_PERF_MODE_SCROLL_DELAY = 150;
+    const ENABLE_ANIMATIONS = false;
 
     // disable all the tooltips and popovers inside the tree?
     const [performanceMode, setPerformanceMode] = useState(PERMANENT_PERF_MODE);
@@ -725,6 +728,7 @@ const AssetDetailTree = memo(
                             : []
                       }
                       treeData={treeData as AntdDataNode[]}
+                      motion={ENABLE_ANIMATIONS ? undefined : false}
                     />
                   ) : (
                     <Empty
