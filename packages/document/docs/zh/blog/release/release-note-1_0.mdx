@@ -125,7 +125,7 @@ Rsdoctor 提供了丰富的功能，详细内容可参考 [功能导航](/guide/
 
 在大型项目中，启用 Rsdoctor 会导致整体构建时间增加。为解决这一问题，我们将 Rsdoctor 中耗时较长的数据处理逻辑使用 Rust 重写，并集成到 Rspack 中。这一优化有效提升了 Rsdoctor 的构建分析性能，整体分析时间减少了 20% 以上。后续我们将继续将更多模块原生化来进一步提升分析效率。
 
-这一优化可以通过 [enableNativePlugin](/config/options/options#enablenativeplugin) 选项开启：
+这一优化可以通过 [enableNativePlugin](/config/options/experiments#enablenativeplugin) 选项开启：
 
 ```ts
 new RsdoctorRspackPlugin({
@@ -168,7 +168,7 @@ new RsdoctorRspackPlugin({
 
 - 如果你在使用任何基于 Rspack 或 webpack 的工具或框架，可以参考 [快速开始](/guide/start/quick-start) 来开始使用 Rsdoctor。
 - 如果你在使用 Rsdoctor 0.4 或更早的版本，请留意 1.0 包含少量不兼容更新：
-  - 插件配置中的 `reportCodeType` 和 `reportDir` 配置项移动到 [output](/config/options/options#reportcodetype) 下。
+  - 插件配置中的 `reportCodeType` 和 `reportDir` 配置项移动到 [output](/config/options/output#reportcodetype) 下。
 
 > 欢迎为 [Rsdoctor GitHub](https://github.com/web-infra-dev/rsdoctor) 仓库点亮一颗 Star 🌟。
 
@@ -176,7 +176,7 @@ new RsdoctorRspackPlugin({
 
 - **AI 智能分析**：Rsdoctor 收集的构建分析数据非常丰富，但对新用户而言可能存在一定的学习成本。为此，我们将整合 AI 能力到 Rsdoctor 中，帮助用户从海量数据中快速提取关键信息，提供智能优化建议，从而降低构建分析的门槛。
 - **CI 主动防劣化**：基于现有的 [Bundle Diff](/guide/usage/bundle-diff) 功能，Rsdoctor 将拓展 CI 环境下的主动防劣化能力，推出 [Rsdoctor CI Action](https://github.com/web-infra-dev/rsdoctor/discussions/491)，实现自动化的产物体积监控和性能劣化预警，为工程质量提供保障。
-- **进一步原生化**：由于 Rspack 基于 Rust 实现且采用多线程架构，当前 Rsdoctor 对 Rspack 内置 loader 的分析不够精确。我们计划在 [Rspack Native Plugin](/config/options/options#enablenativeplugin) 的基础上优化分析机制，提供更准确的 loader 性能数据和编译行为洞察。
+- **进一步原生化**：由于 Rspack 基于 Rust 实现且采用多线程架构，当前 Rsdoctor 对 Rspack 内置 loader 的分析不够精确。我们计划在 [Rspack Native Plugin](/config/options/experiments#enablenativeplugin) 的基础上优化分析机制，提供更准确的 loader 性能数据和编译行为洞察。
 
 **最后，感谢所有为 Rsdoctor 贡献过的开发者 ❤️**：
 

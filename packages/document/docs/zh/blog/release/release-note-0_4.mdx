@@ -19,7 +19,7 @@ Rsdoctor 0.4 的新特性有:
 在 Rsdoctor 0.4 中，新增了 **Brief 模式**，专为 CI/CD 场景设计。Brief 模式将数据报告整合到一个 HTML 页面中，方便用户在 CI/CD 及其他场景下查看历史构建数据。以下是 Brief 模式的主要特点：
 
 - **单个报告文件**：之前 Rsdoctor 输出的多个报告数据与 `Manifest.json`，不方便进行 CDN 上传和共享，Brief 模式输出单一报告方便 CI 流程中使用。
-- **易于配置**：通过配置 Rsdoctor 插件的 [mode.brief](/config/options/options#mode) 选项即可开启 Brief 模式。
+- **易于配置**：通过配置 Rsdoctor 插件的 [mode.brief](/config/options/mode) 选项即可开启 Brief 模式。
 - **报告输出**：报告会生成在构建产物目录中，同时可配置 Brief 报告生成目录和文件名。
 
 此功能极大地提升了在 CI 流程中使用 Rsdoctor 分析报告的便捷性，可以在 Pipeline 中将报告上传到 CDN 以便展示历史报告。[详情请参阅](/guide/start/cicd)

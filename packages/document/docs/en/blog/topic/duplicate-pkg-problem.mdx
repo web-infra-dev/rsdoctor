@@ -28,7 +28,7 @@ Package managers provide the `dedupe` command, such as `npm/yarn/pnpm dedupe`, t
 
 Under the constraints of semver, the effectiveness of the dedupe command may not be ideal. For example, if the artifact contains dependencies `debug@4.3.4` and `debug@3.0.0`, where they are respectively depended on by `"debug": "^4"` and another package's `"debug": "^3"`.
 
-In this case, you can try using the `resolutions` feature of the package manager, such as pnpm's [**pnpm.overrides**](https://pnpm.io/package_json#pnpmoverrides), [**.pnpmfile.cjs**](https://pnpm.io/pnpmfile#hooksreadpackagepkg-context-pkg--promisepkg), or **yarn's resolutions**.
+In this case, you can try using the `resolutions` feature of the package manager, such as pnpm's [**pnpm.overrides**](https://pnpm.io/settings#overrides), [**.pnpmfile.cjs**](https://pnpm.io/pnpmfile), or **yarn's resolutions**.
 
 The advantage of these features is that they can break free from the constraints of semver and change the version declared in `package.json` during installation to precisely control the installed version.
 
