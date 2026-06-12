@@ -1,0 +1,9 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - var(--layout-nav-height));
+  /* this is overridden with !important in pages/Overall/index.module.scss for whatever reason */
+  padding: var(--spacing-base);
+  margin-top: var(--layout-nav-height);
+  background: var(--color-bg-main, initial);
+}

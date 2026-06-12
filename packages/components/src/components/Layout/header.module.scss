@@ -1,0 +1,88 @@
+.root {
+  --bg-color: white;
+  --height: var(--layout-nav-height, 54px);
+
+  width: 100%;
+  height: var(--height);
+  position: fixed;
+  padding: 0;
+  padding-inline: var(--spacing-base);
+  z-index: 999;
+  background-color: var(--bg-color);
+  transition: none;
+
+  :global {
+    .ant-switch-handle {
+      top: 1px !important;
+    }
+  }
+}
+
+.rootDark {
+  --bg-color: #141414;
+}
+
+.innerRoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  height: var(--height);
+}
+
+.leftCol {
+  height: var(--height);
+  line-height: calc(var(--height) + 2px);
+}
+
+.leftColInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.rightCol {
+  flex: 1;
+}
+
+.rightColInner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  column-gap: calc(var(--spacing-base) / 3);
+  height: var(--height);
+}
+
+.rsdoctorLogo {
+  width: auto;
+  height: 30px;
+  cursor: pointer;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.translationsIcon {
+  --color-active: #40a9ff;
+  --color-hover: #1668dc;
+
+  display: inline-block;
+  font-size: 20px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  width: 30px;
+  transition: all 0.3s ease;
+  user-select: none;
+
+  &:hover {
+    color: var(--color-hover);
+  }
+
+  &:active {
+    color: var(--color-active);
+  }
+}

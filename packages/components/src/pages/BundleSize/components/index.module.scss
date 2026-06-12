@@ -1,3 +1,48 @@
+/* higher specificity then antd */
+.root .rootBody {
+  padding-top: 0;
+}
+
+/* 
+ * allows the deepest node in the tree to take the rest of the parent's height without using fixed values  
+ */
+.root,
+.rootBody,
+.treeGraph,
+.tabsRoot,
+.assetDetailCol,
+.assetDetailFileTreeRoot,
+.assetDetailFileTreeBody,
+.assetDetailFileTreeViewport,
+.tabsRoot :global(.ant-tabs-content-holder),
+.tabsRoot :global(.ant-tabs-content),
+.tabsRoot :global(.ant-tabs-tabpane-active) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.treeGraph {
+  row-gap: 8px;
+}
+
+.assetDetailRoot {
+  display: grid;
+  column-gap: var(--spacing-base);
+  grid-template-columns: 1fr 3fr;
+  flex: 1;
+}
+
+.assetDetailFileTreeViewport {
+  position: relative;
+}
+
+.assetDetailFileTreeScrollArea {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+}
+
 .assets {
   :global {
     .rc-tree-indent-unit {
@@ -84,6 +129,7 @@
       overflow: auto;
       max-height: 30rem;
     }
+
     .search-list-item {
       &.clickable:hover {
         background-color: #eee;
