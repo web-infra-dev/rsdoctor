@@ -20,7 +20,11 @@ import {
 import React, { useId } from 'react';
 import { ServerAPIProvider } from '../../../components/Manifest';
 import { useProjectInfo } from '../../../components/Layout/project-info-context';
-import { flattenTreemapData, usePersistedState } from '../../../utils';
+import {
+  flattenTreemapData,
+  usePersistedState,
+  useTheme,
+} from '../../../utils';
 import { BundleCards } from './cards';
 import styles from './index.module.scss';
 import './index.sass';
@@ -47,6 +51,9 @@ export const WebpackModulesOverallBase: React.FC<
   );
   const cardDomId = useId();
   const expandActionText = expanded ? 'Shrink card' : 'Expand card';
+  const { isLight } = useTheme();
+  // In light mode the tooltip's background is dark and the text is also dark cause Typography is used inside. dark mode is ok
+  const treeGraphTooltipColor = isLight ? 'white' : undefined;
   return (
     <>
       <React.Activity mode={expanded ? 'hidden' : 'visible'}>
@@ -89,9 +96,13 @@ export const WebpackModulesOverallBase: React.FC<
                   <Tooltip
                     overlayStyle={{ maxWidth: 380 }}
                     overlayInnerStyle={{ marginLeft: 16, padding: 10 }}
-                    color="white"
+                    color={treeGraphTooltipColor}
                     title={
-                      <Space direction="vertical" color="white" size="middle">
+                      <Space
+                        direction="vertical"
+                        color={treeGraphTooltipColor}
+                        size="middle"
+                      >
                         <Row>
                           <Col>
                             <Tag color="cyan" style={{ margin: 0 }}>
@@ -111,10 +122,11 @@ export const WebpackModulesOverallBase: React.FC<
                               Identify whether the module is a concatenated
                               module
                             </Typography.Text>
+                            {/* TODO:: it's literally a tooltip inside another tooltip */}
                             <Tooltip
                               overlayStyle={{ maxWidth: 408 }}
                               placement="bottom"
-                              color="white"
+                              color={treeGraphTooltipColor}
                               title={
                                 <Space direction="vertical" color="white">
                                   <Row>
@@ -137,12 +149,12 @@ export const WebpackModulesOverallBase: React.FC<
                                 </Space>
                               }
                             >
-                              <InfoCircleOutlined
-                                style={{
-                                  color: 'rgba(0,0,0,.45)',
-                                  marginLeft: 4,
-                                }}
-                              />
+                              <Typography.Text
+                                type="secondary"
+                                style={{ marginLeft: 4 }}
+                              >
+                                <InfoCircleOutlined />
+                              </Typography.Text>
                             </Tooltip>
                             <Typography.Text>.</Typography.Text>
                           </Col>
@@ -193,7 +205,9 @@ export const WebpackModulesOverallBase: React.FC<
                       </Space>
                     }
                   >
-                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                    <InfoCircleOutlined
+                      style={{ color: 'var(--text-color-secondary)' }}
+                    />
                   </Tooltip>
                 </Space>
               ),

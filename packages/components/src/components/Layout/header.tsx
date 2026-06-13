@@ -1,7 +1,7 @@
 import { TranslationOutlined } from '@ant-design/icons';
-import { Col, Dropdown, Layout, Row } from 'antd';
+import { Col, Dropdown, Layout, Row, Switch } from 'antd';
 import React from 'react';
-import { Language } from '../../constants';
+import { Language, Theme } from '../../constants';
 import { useI18n, useTheme } from '../../utils';
 import { OverlayAlertsWithButton } from '../Alerts';
 import { BuilderSelect } from './builder-select';
@@ -9,7 +9,8 @@ import { Menus } from './menus';
 import { Client } from '@rsdoctor/types';
 import { useNavigate } from 'react-router-dom';
 import styles from './header.module.scss';
-import clsx from 'clsx';
+import logoDark from './rsdoctor-title-logo-dark.png';
+const logoLight = 'https://assets.rspack.rs/rsdoctor/rsdoctor-title-logo.png';
 
 export interface HeaderProps {
   enableRoutes?: string[];
@@ -19,21 +20,21 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
   const { i18n } = useI18n();
 
   const navigate = useNavigate();
-  const { isDark } = useTheme();
+  const { setTheme, isLight, isDark } = useTheme();
   const languages = [
     { value: Language.Cn, label: '中文' },
     { value: Language.En, label: 'English' },
   ];
 
   return (
-    <Layout.Header className={clsx(styles.root, isDark && styles.rootDark)}>
+    <Layout.Header className={styles.root}>
       <Row className={styles.innerRoot}>
         <Col className={styles.leftCol}>
           <div className={styles.leftColInner}>
             <img
               width="1604"
               height="380"
-              src="https://assets.rspack.rs/rsdoctor/rsdoctor-title-logo.png"
+              src={isLight ? logoLight : logoDark}
               className={styles.rsdoctorLogo}
               alt="logo"
               onClick={() => {
@@ -63,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
               <OverlayAlertsWithButton />
             </Col>
 
-            {/* <Col> TODO:  dark mode has some error need fix.
+            <Col>
               <Switch
                 className="header-switch"
                 checkedChildren="🌛"
@@ -72,9 +73,12 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
                 onChange={(checked) => {
                   setTheme(checked ? Theme.Dark : Theme.Light);
                 }}
-                style={{ border: `1px solid ${isLight ? '#ddd' : '#fff'}`, background: isLight ? '#eee' : '#141414' }}
+                style={{
+                  border: `1px solid ${isLight ? '#ddd' : '#fff'}`,
+                  background: isLight ? '#eee' : '#141414',
+                }}
               />
-            </Col> */}
+            </Col>
             <Col>
               <Dropdown
                 overlayStyle={{ zIndex: 1000 }}

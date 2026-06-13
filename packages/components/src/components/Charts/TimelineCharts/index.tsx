@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { ChartProps, DurationMetric, ITraceEventData } from '../types';
 import { groupBy } from '@rsdoctor/utils/collection';
 import { ChartTypes, PALETTE_COLORS } from '../constants';
+import { useThemeToken } from 'src/utils';
 
 interface CoordSysType {
   x: number;
@@ -46,6 +47,7 @@ export const TimelineCom: React.FC<{
     const data: LoaderType[] = [];
     let categories: string[] = [];
     const [optionsData, setOptionsData] = useState({});
+    const themeToken = useThemeToken();
 
     // Register the required components
     echarts.use([
@@ -246,7 +248,7 @@ export const TimelineCom: React.FC<{
             lineHeight: 20,
             width: 100,
             fontSize: 12,
-            color: '#000',
+            color: themeToken.colorText,
             verticalAlign: 'bottom',
           },
           axisLine: {
@@ -273,7 +275,7 @@ export const TimelineCom: React.FC<{
         ],
       };
       setOptionsData(option);
-    }, [loaderData, pluginsData, exts]);
+    }, [loaderData, pluginsData, exts, themeToken]);
 
     return (
       <ReactEChartsCore
@@ -288,7 +290,7 @@ export const TimelineCom: React.FC<{
                 ? '100px'
                 : '200px',
           maxHeight: chartType === ChartTypes.Minify ? '100px' : '1000px',
-          border: '1px solid #eee',
+          border: '1px solid var(--color-border)',
           borderRadius: '10px',
         }}
       />

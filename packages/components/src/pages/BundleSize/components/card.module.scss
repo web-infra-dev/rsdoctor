@@ -1,7 +1,7 @@
 .container {
   display: flex;
   align-items: center;
-  background-color: #fff;
+  background-color: var(--color-bg-box);
   padding: 20px 0;
   margin-bottom: 20px;
 
@@ -56,6 +56,6 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
-    color: #000;
+    color: var(--text-color);
   }
 }

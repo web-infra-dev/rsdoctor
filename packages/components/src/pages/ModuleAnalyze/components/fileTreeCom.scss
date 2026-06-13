@@ -50,9 +50,14 @@ $treeNodePrefixCls: '#{$treePrefixCls}-treenode';
     cursor: pointer;
   }
 
+  &-titles-box {
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+  }
   &-titles-box:hover {
-    background-color: #f0f3f5;
-    border: 1px solid #e5e6eb;
+    background-color: var(--color-bg-box-elevated, #f0f3f5);
+    border-color: var(--color-border, #e5e6eb);
     cursor: pointer;
     width: 80%;
 

@@ -16,6 +16,7 @@ import {
   hasBundle,
   hasCompile,
   getEnableRoutesFromUrlQuery,
+  useTheme,
 } from '../../utils';
 import { withServerAPI } from '../Manifest';
 import OverallActive from 'src/common/svg/navbar/overall-active.svg';
@@ -147,9 +148,11 @@ const MenusBase: React.FC<{
     });
   }
 
+  const { theme } = useTheme();
   const MenuComponent = (
     <Menu
       items={items}
+      theme={theme}
       mode="horizontal"
       key={enableRoutes.join('')}
       onClick={(e) => {
