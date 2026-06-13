@@ -36,8 +36,7 @@ export interface DiffViewerProps {
    */
   isEmbed?: boolean;
   /**
-   * Whether to use light theme
-   * @default true
+   * Whether to use light theme. If not specified the global theme is used.
    */
   isLightTheme?: boolean;
   /**

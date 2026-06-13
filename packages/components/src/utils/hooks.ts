@@ -14,6 +14,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import parse from 'url-parse';
+import { theme } from 'antd';
 
 import './i18n';
 import { Language } from '../constants';
@@ -364,3 +365,8 @@ export function usePersistedState<T>(
 
   return [state, setPersistedState];
 }
+
+export const useThemeToken = () => {
+  const { token } = theme.useToken();
+  return token;
+};

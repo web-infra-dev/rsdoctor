@@ -2,6 +2,7 @@ import { Collapse, Space, Tag } from 'antd';
 
 import Overview from '../Overall/overview';
 import styles from './collapse.module.scss';
+import utilStyles from './index.module.scss';
 import { beautifyPath } from '../../utils/file';
 import { LabelComponent, IdeIcons } from './collapse-shared';
 
@@ -47,14 +48,12 @@ export const CjsRequireAlertCollapse = (props: {
     const ChildComponent = () => (
       <div className={styles.collapseContainer}>
         <Overview
-          style={{ backgroundColor: '#fff' }}
           title={
             <Space align="center">
               <span
                 style={{
                   fontSize: 13,
                   fontWeight: 500,
-                  color: 'rgba(28, 31, 35, 0.85)',
                 }}
               >
                 Required Module:
@@ -62,7 +61,7 @@ export const CjsRequireAlertCollapse = (props: {
               <span
                 style={{
                   fontSize: 12,
-                  color: 'rgba(28, 31, 35, 0.6)',
+                  color: 'var(--text-color-secondary)',
                   fontWeight: 300,
                   maxWidth: innerWidth > 1500 ? 900 : 700,
                   overflow: 'hidden',
@@ -81,7 +80,6 @@ export const CjsRequireAlertCollapse = (props: {
                 style={{
                   marginBottom: 8,
                   fontWeight: 500,
-                  color: 'rgba(28, 31, 35, 0.85)',
                 }}
               >
                 CJS Require Callers:
@@ -101,10 +99,9 @@ export const CjsRequireAlertCollapse = (props: {
                       {beautifyPath(issuer.issuerPath, cwd)}
                     </span>
                     <Tag
+                      className={utilStyles.tag}
                       style={{
                         marginLeft: 8,
-                        backgroundColor: '#EAEDF1',
-                        borderRadius: '2px',
                         fontSize: 11,
                         fontFamily: 'Menlo',
                       }}
@@ -127,7 +124,7 @@ export const CjsRequireAlertCollapse = (props: {
         <LabelComponent
           title={
             <Space size={4} align="center">
-              <Tag style={{ backgroundColor: '#EAEDF1', borderRadius: '2px' }}>
+              <Tag className={utilStyles.tag}>
                 <span className={styles.pkgName}>{requiredDisplayPath}</span>
               </Tag>
             </Space>

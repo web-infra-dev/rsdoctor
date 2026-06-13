@@ -1,4 +1,5 @@
 import Icon from '@ant-design/icons';
+import { Alert } from 'antd';
 
 import TotalSizeSvg from '../../common/svg/total-size.svg';
 import FileSvg from '../../common/svg/file.svg';
@@ -19,13 +20,19 @@ export const DataSummary = ({
   description,
 }: DataSummaryProps) => {
   return (
-    <div className={`${styles.container} ${styles[theme]}`}>
-      <Icon
-        style={{ fontSize: '18px', margin: '0 5px' }}
-        component={theme === 'common' ? FileSvg : TotalSizeSvg}
-      />
-      <span className={styles.description}>{description}</span>
-      <span className={styles.data}>{number}</span>
-    </div>
+    <Alert
+      message={
+        <>
+          <Icon
+            className={styles.icon}
+            component={theme === 'common' ? FileSvg : TotalSizeSvg}
+          />
+          <span className={styles.description}>{description}</span>
+          <span className={styles.data}>{number}</span>
+        </>
+      }
+      className={styles.container}
+      type={theme === 'common' ? 'info' : theme}
+    ></Alert>
   );
 };

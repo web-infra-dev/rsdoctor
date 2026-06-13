@@ -2,13 +2,13 @@ import React from 'react';
 import { LoaderAnalysis } from '../../../components/Loader/Analysis';
 import { WebpackConfigurationViewer } from '../../../components/Configuration';
 import { Card } from '../../../components/Card';
-import { Popover, Space, Tag, theme, Typography } from 'antd';
+import { Popover, Space, Tag, Typography } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { t } from 'i18next';
-const { useToken } = theme;
+import { useThemeToken } from 'src/utils';
 
 export const Page: React.FC = () => {
-  const { token } = useToken();
+  const token = useThemeToken();
 
   return (
     <Card

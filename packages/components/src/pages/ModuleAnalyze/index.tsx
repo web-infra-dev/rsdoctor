@@ -50,9 +50,7 @@ export const ModuleAnalyzeComponent: React.FC<{
             title={
               <div className="module-analyze-box">
                 <Typography.Text>{getShortPath(module.path)}</Typography.Text>
-                <Typography.Text
-                  style={{ fontSize: 12, color: 'rgba(0, 0, 0, 0.45)' }}
-                >
+                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
                   {`Current Module: ${module.path}`}
                 </Typography.Text>
               </div>
@@ -102,12 +100,7 @@ export const ModuleAnalyzeComponent: React.FC<{
                                           setModuleJumpList(_list);
                                         }}
                                       />
-                                      <Typography.Text
-                                        style={{
-                                          fontSize: 14,
-                                          color: 'rgba(28, 31, 35, 0.8)',
-                                        }}
-                                      >
+                                      <Typography.Text style={{ fontSize: 14 }}>
                                         Current Module Imported Reasons Tree
                                       </Typography.Text>
                                       <Popover
