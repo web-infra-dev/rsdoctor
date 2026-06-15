@@ -941,8 +941,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       launch-editor:
-        specifier: ^2.13.2
-        version: 2.13.2
+        specifier: ^2.14.1
+        version: 2.14.1
       safer-buffer:
         specifier: 2.1.2
         version: 2.1.2
@@ -5497,8 +5497,8 @@ packages:
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
 
-  launch-editor@2.13.2:
-    resolution: {integrity: sha512-4VVDnbOpLXy/s8rdRCSXb+zfMeFR0WlJWpET1iA9CQdlZDfwyLjUuGQzXU4VeOoey6AicSAluWan7Etga6Kcmg==}
+  launch-editor@2.14.1:
+    resolution: {integrity: sha512-QWBrQsMpH7gPr965dsKD/3cKWiNoTjpATQf++Xq63N6sKRGMwlVXz41O1IZTMfZQgBctD/K5Zt06+/I6pP6+HA==}
 
   less-loader@11.1.4:
     resolution: {integrity: sha512-6/GrYaB6QcW6Vj+/9ZPgKKs6G10YZai/l/eJ4SLwbzqNTBsAqt5hSLVF47TgsiBxV1P6eAU0GYRH3YRuQU9V3A==}
@@ -7330,8 +7330,8 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  shell-quote@1.8.3:
-    resolution: {integrity: sha512-ObmnIF4hXNg1BqhnHmgbDETF8dLPCggZWBjkQfhZpbszZnYur5DUljTcCHii5LC3J5E0yeO/1LIMyH+UvHQgyw==}
+  shell-quote@1.8.4:
+    resolution: {integrity: sha512-VsC6n6vz1ihYYyZZwX7YZSF5l5x36ca17OC+a69h94YqB7X6XLwf+5MOgynYir2SLFUbl8gIYvBo8K8RoNQ6bQ==}
     engines: {node: '>= 0.4'}
 
   shiki@4.0.2:
@@ -10215,7 +10215,7 @@ snapshots:
       '@rsdoctor/graph': 1.5.9(@rspack/core@2.0.5(@swc/helpers@0.5.21))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/types': 1.5.9(@rspack/core@2.0.5(@swc/helpers@0.5.21))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/utils': 1.5.9(@rspack/core@2.0.5(@swc/helpers@0.5.21))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
-      launch-editor: 2.13.2
+      launch-editor: 2.14.1
       safer-buffer: 2.1.2
       socket.io: 4.8.1
       tapable: 2.3.2
@@ -13001,10 +13001,10 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  launch-editor@2.13.2:
+  launch-editor@2.14.1:
     dependencies:
       picocolors: 1.1.1
-      shell-quote: 1.8.3
+      shell-quote: 1.8.4
 
   less-loader@11.1.4(less@4.6.4)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23))):
     dependencies:
@@ -15348,7 +15348,7 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  shell-quote@1.8.3: {}
+  shell-quote@1.8.4: {}
 
   shiki@4.0.2:
     dependencies:
