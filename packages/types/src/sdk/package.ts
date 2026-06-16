@@ -147,4 +147,5 @@ export interface PackageGraphData {
   dependencies: PackageDependencyData[];
 }
 
-export type OtherReports = Record<string, unknown>;
+// rslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface OtherReports {}

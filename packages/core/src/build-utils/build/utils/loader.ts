@@ -380,7 +380,6 @@ export function createLoaderContextTrap(
             // FIXME: useless in theory, in proxy-loader this.query always hits rule.options
             if (typeof target.query === 'string') {
               const res = target.query.replace(
-                // eslint-disable-next-line no-useless-escape
                 new RegExp(
                   `"${Loader.LoaderInternalPropertyName}":{[^}]*},{0,1}`,
                 ),

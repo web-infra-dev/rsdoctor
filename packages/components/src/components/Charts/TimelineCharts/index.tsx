@@ -32,7 +32,8 @@ const LINE_HEIGHT = 60;
 export const TimelineCom: React.FC<{
   loaderData?: DurationMetric[];
   pluginsData?: ITraceEventData[];
-  formatterFn: (...args: any[]) => unknown;
+  // rslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  formatterFn: Function;
   chartType?: ChartTypes;
   exts?: { endTimestamp: number; startTimestamp: number };
 }> = memo(
