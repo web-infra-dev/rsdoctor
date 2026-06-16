@@ -120,6 +120,14 @@ describe('test src/common/graph.ts', () => {
     const bundleAsset = { path: 'main.bundle', type: 'asset' as const };
     const jsAsset = { path: 'main.js', type: 'asset' as const };
     const cssAsset = { path: 'main.css', type: 'asset' as const };
+    const cssAssetWithQuery = {
+      path: 'assets/style.css?hash=123',
+      type: 'asset' as const,
+    };
+    const svgAssetWithHash = {
+      path: 'assets/logo.svg#icon',
+      type: 'asset' as const,
+    };
 
     // Test .bundle extension matching
     expect(Graph.isAssetMatchExtension(bundleAsset, '.bundle')).toBe(true);
@@ -132,6 +140,8 @@ describe('test src/common/graph.ts', () => {
     // Test other extensions
     expect(Graph.isAssetMatchExtension(cssAsset, '.css')).toBe(true);
     expect(Graph.isAssetMatchExtension(cssAsset, '.js')).toBe(false);
+    expect(Graph.isAssetMatchExtension(cssAssetWithQuery, '.css')).toBe(true);
+    expect(Graph.isAssetMatchExtension(svgAssetWithHash, '.svg')).toBe(true);
   });
 
   it('isAssetMatchExtensions should match .bundle files in array', () => {
