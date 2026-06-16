@@ -236,12 +236,22 @@ export const WebpackModulesOverallBase: React.FC<
 
                           const computedTreeData: TreeNode[] = data
                             .filter((item) => isTargetFileType(item.asset.path))
-                            .map((item) => ({
-                              name: item.asset.path,
-                              value: item.asset.size,
-                              children: flattenTreemapData(item.modules)
-                                .children,
-                            }));
+                            .map((item) => {
+                              const moduleTree = flattenTreemapData(
+                                item.modules,
+                              );
+                              const hasModules = item.modules.length > 0;
+                              return {
+                                name: item.asset.path,
+                                sourceSize: hasModules
+                                  ? (moduleTree.sourceSize ?? 0)
+                                  : item.asset.size,
+                                bundledSize: item.asset.size,
+                                gzipSize: item.asset.gzipSize ?? 0,
+                                children: moduleTree.children,
+                              };
+                            });
+
                           return (
                             <AssetTreemapWithFilter
                               treeData={computedTreeData}
