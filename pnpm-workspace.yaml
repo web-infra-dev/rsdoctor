@@ -67,8 +67,8 @@ minimumReleaseAgeExclude:
   - '@rstest/*'
   - '@rsdoctor/*'
   - '@rslint/*'
-  # Renovate security update: ws@8.21.0
-  - ws@8.21.0
+  # Renovate security update: ws@8.20.1
+  - ws@8.20.1
 
 overrides:
   '@remix-run/router': 1.23.3
@@ -84,6 +84,6 @@ overrides:
   socket.io-parser: 4.2.6
   tar: 7.5.15
   tslib: 2.8.1
-  ws: 8.21.0
+  ws: 8.20.1
 
 strictDepBuilds: true

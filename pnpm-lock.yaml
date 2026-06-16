@@ -144,7 +144,7 @@ overrides:
   socket.io-parser: 4.2.6
   tar: 7.5.15
   tslib: 2.8.1
-  ws: 8.21.0
+  ws: 8.20.1
 
 importers:
 
@@ -9705,8 +9705,8 @@ packages:
   write-file-atomic@3.0.3:
     resolution: {integrity: sha512-AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==}
 
-  ws@8.21.0:
-    resolution: {integrity: sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==}
+  ws@8.20.1:
+    resolution: {integrity: sha512-It4dO0K5v//JtTXuPkfEOaI3uUN87iYPnqo/ZzqCoG3g8uhA66QUMs/SrM0YK7/NAu+r4LMh/9dq2A7k+rHs+w==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -11831,7 +11831,7 @@ snapshots:
       http-compression: 1.0.6
       minimatch: 9.0.9
       path-to-regexp: 6.3.0
-      ws: 8.21.0
+      ws: 8.20.1
     optionalDependencies:
       tsconfig-paths: 4.2.0
     transitivePeerDependencies:
@@ -14859,7 +14859,7 @@ snapshots:
       '@socket.io/component-emitter': 3.1.2
       debug: 4.3.7
       engine.io-parser: 5.2.3
-      ws: 8.21.0
+      ws: 8.20.1
       xmlhttprequest-ssl: 2.1.2
     transitivePeerDependencies:
       - bufferutil
@@ -14879,7 +14879,7 @@ snapshots:
       cors: 2.8.6
       debug: 4.3.7
       engine.io-parser: 5.2.3
-      ws: 8.21.0
+      ws: 8.20.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -19077,7 +19077,7 @@ snapshots:
   socket.io-adapter@2.5.5:
     dependencies:
       debug: 4.3.7
-      ws: 8.21.0
+      ws: 8.20.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -19851,7 +19851,7 @@ snapshots:
       signal-exit: 3.0.7
       typedarray-to-buffer: 3.1.5
 
-  ws@8.21.0: {}
+  ws@8.20.1: {}
 
   wsl-utils@0.1.0:
     dependencies:
