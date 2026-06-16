@@ -179,8 +179,6 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
         else if (sizeType === 'gzip') val = node.gzipSize || 0;
         else if (sizeType === 'value') val = node.value || 0;
 
-        if (!val && node.value) val = node.value;
-
         // Include chunk path in nodeId for non-root nodes to ensure uniqueness across chunks
         const nodeIdString =
           level === 0
@@ -917,7 +915,7 @@ const AssetTreemapWithFilterInner: React.FC<{
                       <span title={name}>{name}</span>
                     </Checkbox>
                     <span className={Styles['size-tag']}>
-                      {formatSize(getChunkSize(name, 'value'))}
+                      {formatSize(getChunkSize(name, sizeType))}
                     </span>
                   </div>
                 ))}
