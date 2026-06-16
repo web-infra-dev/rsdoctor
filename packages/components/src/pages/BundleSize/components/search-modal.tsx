@@ -12,7 +12,7 @@ import {
 import { SearchProps } from 'antd/es/input';
 import { ServerAPIProvider } from 'src/components';
 import { SDK } from '@rsdoctor/types';
-import styles from './index.module.scss';
+import styles from './search-modal.module.scss';
 import { SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
@@ -66,11 +66,7 @@ export const SearchModal: React.FC<{
       {isIcon ? (
         <SearchOutlined onClick={showModal} />
       ) : (
-        <Button
-          className={styles['search-btn']}
-          color="cyan"
-          onClick={showModal}
-        >
+        <Button className={styles.searchBtn} color="cyan" onClick={showModal}>
           Search Module
         </Button>
       )}
@@ -146,7 +142,7 @@ const ModulesModal = (
         <>
           {modules?.length !== 0 ? (
             <List
-              className={styles['search-modal-list']}
+              className={styles.list}
               loading={!modules.length}
               itemLayout="horizontal"
               pagination={{ position: 'bottom', align: 'center' }}
@@ -155,11 +151,7 @@ const ModulesModal = (
                 const itemPathArr = item.relativePath.split(searchModule);
                 return (
                   <List.Item
-                    className={
-                      onModuleClick
-                        ? 'search-list-item clickable'
-                        : 'search-list-item'
-                    }
+                    className={onModuleClick && styles.listItemInteractive}
                     key={`${item.path}-${item.relativePath}`}
                     onClick={
                       onModuleClick ? () => onModuleClick(item) : undefined

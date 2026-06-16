@@ -1,10 +1,14 @@
 /* rslint-disable react/jsx-key */
 import React, { useState, useMemo } from 'react';
-import { Divider, Segmented, theme, Avatar, Tree } from 'antd';
+import { Divider, Segmented, Avatar, Tree } from 'antd';
 import { Client, SDK } from '@rsdoctor/types';
 import { RightOutlined, FileFilled, GoldenFilled } from '@ant-design/icons';
 
-import { formatSize, useDuplicatePackagesByErrors } from '../../../utils';
+import {
+  formatSize,
+  useDuplicatePackagesByErrors,
+  useThemeToken,
+} from '../../../utils';
 import { StatisticCard } from '../../../components/Card/statistic';
 import { SizeCard, bgColorType } from '../../../components/Card/size';
 import Overview from '../../../components/Overall/overview';
@@ -15,7 +19,6 @@ import { TextDrawer } from '../../..//components/TextDrawer';
 import styles from './card.module.scss';
 
 const { DirectoryTree } = Tree;
-const { useToken } = theme;
 const { innerWidth } = window;
 
 interface CardProps {
@@ -33,7 +36,7 @@ const AssetCard: React.FC<CardProps> = ({
   tagBgColor,
   type,
 }) => {
-  const { token } = useToken();
+  const token = useThemeToken();
   const _tagBgColor = tagBgColor || token.colorPrimaryBorderHover;
   return (
     <SizeCard
@@ -201,7 +204,7 @@ export const BundleCards: React.FC<{
                       title: 'Files',
                     }}
                     text={
-                      <div style={{ color: '#000000a6' }}>
+                      <div style={{ color: 'var(--text-color-secondary)' }}>
                         <span style={{ marginRight: '5px' }}>Total Files</span>
                         <RightOutlined />
                       </div>
@@ -213,7 +216,7 @@ export const BundleCards: React.FC<{
                       treeData={treeData}
                       rootStyle={{
                         minHeight: '800px',
-                        border: '1px solid rgba(235, 237, 241)',
+                        border: '1px solid var(--color-border)',
                       }}
                     />
                   </TextDrawer>

@@ -11,8 +11,7 @@ export interface CodeViewerProps {
    */
   isEmbed?: boolean;
   /**
-   * Whether to use light theme configuration
-   * @default true
+   * Whether to use light theme configuration. If not specified the global theme is used.
    */
   isLightTheme?: boolean;
   /**

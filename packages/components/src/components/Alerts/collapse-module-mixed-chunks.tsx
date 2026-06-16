@@ -3,6 +3,7 @@ import { Collapse, Space, Tag, Typography } from 'antd';
 
 import Overview from '../Overall/overview';
 import styles from './collapse.module.scss';
+import utilStyles from './index.module.scss';
 import TotalSizeSvg from '../../common/svg/total-size.svg';
 import { beautifyPath } from '../../utils/file';
 import { LabelComponent } from './collapse-shared';
@@ -30,16 +31,15 @@ export const ModuleMixedChunksAlertCollapse = (props: {
       return (
         <div className={styles.collapseContainer}>
           <Overview
-            style={{ backgroundColor: '#fff' }}
             title={
               <Space>
                 <Icon style={{ fontSize: '18px' }} component={TotalSizeSvg} />
                 <Text style={{ width: innerWidth > 1500 ? 900 : 700 }}>
                   Module:{' '}
                   <Text
+                    type="secondary"
                     style={{
                       fontSize: 12,
-                      color: 'rgba(28, 31, 35, 0.6)',
                       fontWeight: 300,
                     }}
                   >
@@ -56,7 +56,6 @@ export const ModuleMixedChunksAlertCollapse = (props: {
                       style={{
                         marginBottom: 8,
                         fontWeight: 500,
-                        color: 'rgba(28, 31, 35, 0.85)',
                       }}
                     >
                       Initial Chunks:
@@ -82,7 +81,6 @@ export const ModuleMixedChunksAlertCollapse = (props: {
                       style={{
                         marginBottom: 8,
                         fontWeight: 500,
-                        color: 'rgba(28, 31, 35, 0.85)',
                       }}
                     >
                       Async Chunks:
@@ -115,7 +113,7 @@ export const ModuleMixedChunksAlertCollapse = (props: {
       label: (
         <LabelComponent
           title={
-            <Tag style={{ backgroundColor: '#EAEDF1', borderRadius: '2px' }}>
+            <Tag className={utilStyles.tag}>
               <span className={styles.pkgName}>{modulePath}</span>
             </Tag>
           }

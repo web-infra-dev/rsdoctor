@@ -1,0 +1,46 @@
+.modal {
+  :global {
+    .ant-input-affix-wrapper {
+      padding: 4px 5px;
+      width: 490px;
+    }
+  }
+}
+
+.list {
+  :global {
+    .ant-spin-container {
+      overflow: auto;
+      max-height: 30rem;
+    }
+  }
+}
+
+.listItemInteractive {
+  &:hover {
+    background-color: var(--color-bg-box-elevated);
+    cursor: pointer;
+  }
+}
+
+.searchBtn {
+  color: white;
+
+  > span {
+    position: relative;
+  }
+
+  &::before {
+    content: '';
+    background: linear-gradient(135deg, #6253e1, #04befe);
+    position: absolute;
+    inset: -1px;
+    opacity: 1;
+    transition: all 0.3s;
+    border-radius: inherit;
+  }
+
+  &:hover::before {
+    opacity: 0;
+  }
+}

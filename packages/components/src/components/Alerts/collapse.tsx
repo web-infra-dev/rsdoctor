@@ -17,6 +17,7 @@ import type { Rule } from '@rsdoctor/types';
 import type { AlertProps } from '../Alert/types';
 
 import styles from './collapse.module.scss';
+import utilStyles from './index.module.scss';
 import { LabelComponent } from './collapse-shared';
 
 const { Paragraph, Text } = Typography;
@@ -60,7 +61,6 @@ export const AlertCollapse = (props: {
           return (
             <div className={styles.collapseContainer}>
               <Overview
-                style={{ backgroundColor: '#fff' }}
                 title={
                   <Text
                     style={{ width: innerWidth > 1500 ? 900 : 700 }}
@@ -131,7 +131,7 @@ export const AlertCollapse = (props: {
         label: (
           <LabelComponent
             title={
-              <Tag style={{ backgroundColor: '#EAEDF1', borderRadius: '2px' }}>
+              <Tag className={utilStyles.tag}>
                 <span className={styles.pkgName}>{name}</span>
               </Tag>
             }
@@ -160,11 +160,7 @@ export const AlertCollapse = (props: {
                         }}
                       >
                         <Title
-                          text={
-                            <Tag style={{ backgroundColor: '#EAEDF1' }}>
-                              {name}
-                            </Tag>
-                          }
+                          text={<Tag className={utilStyles.tag}>{name}</Tag>}
                           upperFirst={false}
                         />
                         <Typography.Text strong>

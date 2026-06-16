@@ -5,6 +5,7 @@ import { ServerAPIProvider, withServerAPI } from '../Manifest';
 import { LoaderExecutionsChart } from './loader';
 import { filterLoader } from 'src/utils/loader';
 import { Space } from 'antd';
+import { useTheme } from 'src/utils';
 
 enum ChartDimension {
   Loader,
@@ -23,6 +24,7 @@ export const LoaderChartBase: React.FC<{
   // @ts-ignore
   const [dimension] = useState<ChartDimension>(ChartDimension.Loader);
 
+  const { theme } = useTheme();
   return (
     <Space direction="vertical" style={{ width: '100%' }}>
       <ServerAPIProvider api={SDK.ServerAPI.API.GetLoaderNames}>
@@ -43,7 +45,12 @@ export const LoaderChartBase: React.FC<{
             ),
           );
           return dimension === ChartDimension.Loader ? (
-            <LoaderExecutionsChart loaders={loaders} cwd={cwd} />
+            <LoaderExecutionsChart
+              // changing the theme breaks the chart. force rerender on every theme change.
+              key={theme}
+              loaders={loaders}
+              cwd={cwd}
+            />
           ) : (
             // <ProcessExecutionsChart loaders={loaders} cwd={cwd} pid={pid} />
             <></>
