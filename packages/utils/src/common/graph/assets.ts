@@ -441,6 +441,6 @@ export function extname(filename: string) {
   // 移除查询参数部分
   const baseName = filename.split('?')[0];
   // 使用正则表达式匹配扩展名
-  const matches = baseName.match(/\.([0-9a-z]+)(?:[\?#]|$)/i);
+  const matches = baseName.match(/\.([0-9a-z]+)(?:[?#]|$)/i);
   return matches ? `.${matches[1]}` : '';
 }
