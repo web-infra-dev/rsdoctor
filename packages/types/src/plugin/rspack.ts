@@ -62,4 +62,5 @@ export interface RspackHarmonyImportSpecifierDependency extends Dependency {
   name: string;
   userRequest: string;
 }
-export interface HarmonyImportSpecifierDependency extends RspackHarmonyImportSpecifierDependency {}
+export type HarmonyImportSpecifierDependency =
+  RspackHarmonyImportSpecifierDependency;

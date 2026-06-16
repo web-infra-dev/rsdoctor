@@ -81,11 +81,10 @@ export interface PackageDependencyInstance {
   toData(): PackageDependencyData;
 }
 
-export interface PackageDependencyData
-  extends Omit<
-    NonFunctionProperties<PackageDependencyInstance>,
-    'dependency' | 'package' | 'refDependency'
-  > {
+export interface PackageDependencyData extends Omit<
+  NonFunctionProperties<PackageDependencyInstance>,
+  'dependency' | 'package' | 'refDependency'
+> {
   dependency: number;
   package: number;
   refDependency: number;
@@ -148,4 +147,5 @@ export interface PackageGraphData {
   dependencies: PackageDependencyData[];
 }
 
+// rslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface OtherReports {}

@@ -48,6 +48,7 @@ export interface RsdoctorManifestClient {
   enableRoutes: RsdoctorManifestClientRoutes[];
 }
 
+// rslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface RsdoctorManifestData extends StoreData {}
 
 export enum RsdoctorManifestClientRoutes {

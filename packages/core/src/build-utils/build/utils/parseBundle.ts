@@ -53,7 +53,7 @@ export const parseBundle: ParseBundle = (
     tagCache.set(bundlePath, tagMatchResult.loc);
     hasBannerPlugin = true;
     // biome-ignore lint/suspicious/noDuplicateElseIf: waiting for confirmation
-  } else if (hasBannerPlugin && !tagCache.get(bundlePath)) {
+  } else if (hasBannerPlugin && tagCache.get(bundlePath)) {
     const loc = tagCache.get(bundlePath);
     content = content.slice(loc.start, loc.end);
     hasBannerPlugin = true;

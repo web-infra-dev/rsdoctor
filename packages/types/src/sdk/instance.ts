@@ -19,6 +19,7 @@ import { EmoCheckData } from '../emo';
 import { SummaryData } from './summary';
 import { ConfigData } from './config';
 
+// rslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type WriteStoreOptionsType = {};
 
 export enum IMode {

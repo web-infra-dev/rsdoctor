@@ -26,4 +26,5 @@ export interface RuntimeContext {
   otherReports?: OtherReports | undefined;
 }
 
+// rslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface RuntimeContextOptions {}

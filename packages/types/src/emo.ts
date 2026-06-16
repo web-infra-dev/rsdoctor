@@ -15,7 +15,7 @@ export type WorkspaceCheckDataType = {
 };
 
 export type EmoCheckData = {
-  projectInfo: Record<string, string | Object>;
+  projectInfo: Record<string, string | object>;
   workspaceRes: Record<string, WorkspaceCheckDataType[]>;
 };
 

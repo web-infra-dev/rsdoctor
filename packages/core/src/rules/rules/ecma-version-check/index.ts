@@ -10,7 +10,10 @@ export type { Config } from './types';
 
 const title = 'ecma-version-check';
 
-export const rule = defineRule<typeof title, Config>(() => {
+export const rule: Linter.RuleData<Config, typeof title> = defineRule<
+  typeof title,
+  Config
+>(() => {
   return {
     meta: {
       code: 'E1004' as const,

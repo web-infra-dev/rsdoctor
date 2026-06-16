@@ -45,8 +45,8 @@ export interface GraphAPIRequestBody {
   [API.GetModuleCodeByModuleIds]: {
     moduleIds: number[];
   };
-  [API.GetAllModuleGraph]: {};
-  [API.GetAllChunkGraph]: {};
+  [API.GetAllModuleGraph]: Record<string, never>;
+  [API.GetAllChunkGraph]: Record<string, never>;
   [API.GetSearchModules]: {
     moduleName: string;
   };
