@@ -19,6 +19,11 @@ type MutableNormalModule = Omit<NormalModule, 'loaders'> & {
   loaders: Array<{ loader: string; options?: unknown }>;
 };
 
+type LoaderHookCallback = (
+  loaderContext: LoaderContext<unknown>,
+  module: MutableNormalModule,
+) => void;
+
 export class InternalLoaderPlugin<
   T extends Plugin.BaseCompiler,
 > extends InternalBasePlugin<T> {
@@ -84,7 +89,7 @@ export class InternalLoaderPlugin<
        * Some plugins overwrite and validate loader or loader options in the normalModuleLoader hook.
        */
       const wrapper =
-        (callback: Function) =>
+        (callback: LoaderHookCallback) =>
         (
           loaderContext: LoaderContext<unknown>,
           module: MutableNormalModule,
@@ -173,7 +178,7 @@ export class InternalLoaderPlugin<
           register(tap) {
             const originFn = tap.fn;
             if (typeof originFn === 'function') {
-              tap.fn = wrapper(originFn);
+              tap.fn = wrapper(originFn as LoaderHookCallback);
             }
             return tap;
           },

@@ -19,7 +19,7 @@ import { EmoCheckData } from '../emo';
 import { SummaryData } from './summary';
 import { ConfigData } from './config';
 
-export type WriteStoreOptionsType = {};
+export type WriteStoreOptionsType = Record<string, never>;
 
 export enum IMode {
   brief = 'brief',

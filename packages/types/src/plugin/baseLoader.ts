@@ -29,8 +29,8 @@ declare interface AdditionalData {
 }
 
 export interface LoaderDefinitionFunction<
-  OptionsType = {},
-  ContextAdditions = {},
+  OptionsType = object,
+  ContextAdditions = object,
 > {
   (
     this: LoaderContext<OptionsType> & ContextAdditions,
@@ -39,7 +39,7 @@ export interface LoaderDefinitionFunction<
   ): string | void | Buffer | Promise<string | Buffer>;
 }
 
-export interface LoaderContext<OptionsType = {}> {
+export interface LoaderContext<OptionsType = object> {
   _module?: {
     layer: string;
   };
@@ -97,8 +97,8 @@ export interface LoaderContext<OptionsType = {}> {
   loaderIndex: number;
 }
 export declare interface PitchLoaderDefinitionFunction<
-  OptionsType = {},
-  ContextAdditions = {},
+  OptionsType = object,
+  ContextAdditions = object,
 > {
   (
     this: LoaderContext<OptionsType> & ContextAdditions,
@@ -109,8 +109,8 @@ export declare interface PitchLoaderDefinitionFunction<
 }
 
 export interface RspackPitchLoaderDefinitionFunction<
-  OptionsType = {},
-  ContextAdditions = {},
+  OptionsType = object,
+  ContextAdditions = object,
 > {
   (
     this: LoaderContext<OptionsType> & ContextAdditions,

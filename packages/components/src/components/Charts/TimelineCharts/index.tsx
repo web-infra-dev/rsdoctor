@@ -32,7 +32,7 @@ const LINE_HEIGHT = 60;
 export const TimelineCom: React.FC<{
   loaderData?: DurationMetric[];
   pluginsData?: ITraceEventData[];
-  formatterFn: Function;
+  formatterFn: (...args: any[]) => unknown;
   chartType?: ChartTypes;
   exts?: { endTimestamp: number; startTimestamp: number };
 }> = memo(

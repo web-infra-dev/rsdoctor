@@ -26,4 +26,4 @@ export interface RuntimeContext {
   otherReports?: OtherReports | undefined;
 }
 
-export interface RuntimeContextOptions {}
+export type RuntimeContextOptions = Record<string, never>;

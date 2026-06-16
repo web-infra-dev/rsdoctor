@@ -46,6 +46,6 @@ export function getPositionByStatsLocation(
   }
 }
 
-export function hasModuleGraph(compilation: Plugin.BaseCompilation): Boolean {
+export function hasModuleGraph(compilation: Plugin.BaseCompilation): boolean {
   return 'moduleGraph' in compilation && Boolean(compilation.moduleGraph);
 }

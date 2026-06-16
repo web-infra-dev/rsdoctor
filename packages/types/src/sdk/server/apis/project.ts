@@ -22,4 +22,4 @@ export interface ProjectAPIResponse {
   };
 }
 
-export interface ProjectAPIRequestBody {}
+export type ProjectAPIRequestBody = object;

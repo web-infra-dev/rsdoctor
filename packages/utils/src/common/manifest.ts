@@ -31,7 +31,7 @@ export async function fetchShardingFiles(
   data: Manifest.RsdoctorManifestWithShardingFiles['data'],
   fetchImplement: (url: string) => Promise<string>,
   filterKeys?: Array<keyof Manifest.RsdoctorManifestData>,
-) {
+): Promise<Manifest.RsdoctorManifestData> {
   const datas = await Promise.all(
     Object.keys(data).map(async (_key) => {
       const key = _key as keyof Manifest.RsdoctorManifestData;

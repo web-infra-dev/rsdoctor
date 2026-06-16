@@ -81,11 +81,10 @@ export interface PackageDependencyInstance {
   toData(): PackageDependencyData;
 }
 
-export interface PackageDependencyData
-  extends Omit<
-    NonFunctionProperties<PackageDependencyInstance>,
-    'dependency' | 'package' | 'refDependency'
-  > {
+export interface PackageDependencyData extends Omit<
+  NonFunctionProperties<PackageDependencyInstance>,
+  'dependency' | 'package' | 'refDependency'
+> {
   dependency: number;
   package: number;
   refDependency: number;
@@ -148,4 +147,4 @@ export interface PackageGraphData {
   dependencies: PackageDependencyData[];
 }
 
-export interface OtherReports {}
+export type OtherReports = Record<string, unknown>;

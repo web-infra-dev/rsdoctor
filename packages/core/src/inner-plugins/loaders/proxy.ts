@@ -8,82 +8,81 @@ import {
   shouldSkipLoader,
 } from '../utils';
 
-const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, {}> = function (
-  ...args
-) {
-  if (shouldSkipLoader(this)) {
-    this.callback(null, ...args);
-    return;
-  }
-
-  this.cacheable(false);
-
-  const mod = getOriginLoaderModule(this);
-
-  if (mod.default) {
-    // https://webpack.js.org/api/loaders/#raw-loader
-    if (mod.raw === false && Buffer.isBuffer(args[0])) {
-      args[0] = args[0].toString();
+const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, object> =
+  function (...args) {
+    if (shouldSkipLoader(this)) {
+      this.callback(null, ...args);
+      return;
     }
-    let start: number = 0;
-    let startHRTime: [number, number] = [0, 0];
 
-    const trap = BuildUtils.createLoaderContextTrap.call(
-      this,
-      (err, res, sourceMap) => {
-        reportLoader(
-          this,
-          start,
-          startHRTime,
-          false,
-          false,
-          args[0].toString(),
-          err,
-          res,
-          sourceMap,
-        );
-      },
-    );
+    this.cacheable(false);
 
-    start = Date.now();
-    startHRTime = process.hrtime();
+    const mod = getOriginLoaderModule(this);
 
-    try {
-      const result = mod.default.apply(trap, args);
+    if (mod.default) {
+      // https://webpack.js.org/api/loaders/#raw-loader
+      if (mod.raw === false && Buffer.isBuffer(args[0])) {
+        args[0] = args[0].toString();
+      }
+      let start: number = 0;
+      let startHRTime: [number, number] = [0, 0];
 
-      // sync function
-      if (result) {
-        if (!(result instanceof Promise)) {
+      const trap = BuildUtils.createLoaderContextTrap.call(
+        this,
+        (err, res, sourceMap) => {
           reportLoader(
             this,
             start,
             startHRTime,
             false,
-            true,
+            false,
             args[0].toString(),
-            null,
-            result,
+            err,
+            res,
+            sourceMap,
           );
-        }
-      }
-
-      return result || '';
-    } catch (error) {
-      reportLoader(
-        this,
-        start,
-        startHRTime,
-        false,
-        true,
-        args[0].toString(),
-        error as Error,
-        null,
+        },
       );
-      throw error;
+
+      start = Date.now();
+      startHRTime = process.hrtime();
+
+      try {
+        const result = mod.default.apply(trap, args);
+
+        // sync function
+        if (result) {
+          if (!(result instanceof Promise)) {
+            reportLoader(
+              this,
+              start,
+              startHRTime,
+              false,
+              true,
+              args[0].toString(),
+              null,
+              result,
+            );
+          }
+        }
+
+        return result || '';
+      } catch (error) {
+        reportLoader(
+          this,
+          start,
+          startHRTime,
+          false,
+          true,
+          args[0].toString(),
+          error as Error,
+          null,
+        );
+        throw error;
+      }
     }
-  }
-  this.callback(null, ...args);
-};
+    this.callback(null, ...args);
+  };
 
 export const pitch = function (
   this: PluginType.LoaderContext<ProxyLoaderOptions>,

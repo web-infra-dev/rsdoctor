@@ -44,9 +44,9 @@ export interface RsdoctorPluginInstance<
   ensureModulesChunksGraphApplied(compiler: T): void;
 }
 
-export interface RsdoctorRspackPluginInstance<
+export type RsdoctorRspackPluginInstance<
   Rules extends LinterType.ExtendRuleData[] = [],
-> extends RsdoctorPluginInstance<Plugin.BaseCompilerType<'rspack'>, Rules> {}
+> = RsdoctorPluginInstance<Plugin.BaseCompilerType<'rspack'>, Rules>;
 
 export interface NativePluginConfig {
   moduleGraph?: boolean;

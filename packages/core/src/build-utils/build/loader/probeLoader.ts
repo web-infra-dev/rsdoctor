@@ -7,7 +7,7 @@ import path from 'path';
 
 export const loaderModule: Plugin.LoaderDefinition<
   Parameters<LoaderDefinitionFunction>,
-  {}
+  object
 > = function (...args) {
   const time = Date.now();
   const code = args[0];

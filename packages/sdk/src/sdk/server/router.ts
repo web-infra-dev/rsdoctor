@@ -8,13 +8,21 @@ interface RouterOptions {
   server: SDK.RsdoctorServerInstance;
 }
 
+type APIConstructor = Common.Constructor<typeof BaseAPI>;
+
 export class Router {
   static routes = {
     /**
      * - `key` is the constructor of object which used to match the API class
      */
-    get: new Map<Function, Array<[apiKey: PropertyKey, pathname: string]>>(),
-    post: new Map<Function, Array<[apiKey: PropertyKey, pathname: string]>>(),
+    get: new Map<
+      APIConstructor,
+      Array<[apiKey: PropertyKey, pathname: string]>
+    >(),
+    post: new Map<
+      APIConstructor,
+      Array<[apiKey: PropertyKey, pathname: string]>
+    >(),
   };
 
   static get(pathname: string): MethodDecorator {
@@ -24,10 +32,11 @@ export class Router {
       descriptor: TypedPropertyDescriptor<T>,
     ) => {
       const routes = Router.routes.get;
-      if (!routes.has(target.constructor)) {
-        routes.set(target.constructor, []);
+      const constructor = target.constructor as APIConstructor;
+      if (!routes.has(constructor)) {
+        routes.set(constructor, []);
       }
-      routes.get(target.constructor)!.push([propertyKey, pathname]);
+      routes.get(constructor)!.push([propertyKey, pathname]);
       return descriptor;
     }) as MethodDecorator;
   }
@@ -39,10 +48,11 @@ export class Router {
       descriptor: TypedPropertyDescriptor<T>,
     ) => {
       const routes = Router.routes.post;
-      if (!routes.has(target.constructor)) {
-        routes.set(target.constructor, []);
+      const constructor = target.constructor as APIConstructor;
+      if (!routes.has(constructor)) {
+        routes.set(constructor, []);
       }
-      routes.get(target.constructor)!.push([propertyKey, pathname]);
+      routes.get(constructor)!.push([propertyKey, pathname]);
       return descriptor;
     }) as MethodDecorator;
   }
@@ -105,7 +115,7 @@ export class Router {
         },
       });
 
-      const fn = api[key] as Function;
+      const fn = api[key] as Common.Function<[T], unknown>;
       const result = await fn.call(trap, trap);
       // transform to Buffer
       if (typeof result === 'string') {

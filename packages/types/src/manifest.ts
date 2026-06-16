@@ -48,7 +48,7 @@ export interface RsdoctorManifestClient {
   enableRoutes: RsdoctorManifestClientRoutes[];
 }
 
-export interface RsdoctorManifestData extends StoreData {}
+export type RsdoctorManifestData = StoreData;
 
 export enum RsdoctorManifestClientRoutes {
   Overall = 'Overall',
