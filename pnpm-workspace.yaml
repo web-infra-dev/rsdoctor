@@ -66,8 +66,8 @@ minimumReleaseAgeExclude:
   - '@rstest/*'
   - '@rsdoctor/*'
   - '@rslint/*'
-  # Renovate security update: ws@8.20.1
-  - ws@8.20.1
+  # Renovate security update: ws@8.20.1 || 8.21.0
+  - ws@8.20.1 || 8.21.0
 
 overrides:
   '@remix-run/router': 1.23.3
