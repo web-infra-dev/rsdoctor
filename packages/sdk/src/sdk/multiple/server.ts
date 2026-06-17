@@ -1,4 +1,4 @@
-import { Server } from '@rsdoctor/utils/build';
+import { Server } from '@rsdoctor/core/build';
 import { RsdoctorServer, type RsdoctorServerOptions } from '../server';
 import type { RsdoctorPrimarySDK } from './primary';
 

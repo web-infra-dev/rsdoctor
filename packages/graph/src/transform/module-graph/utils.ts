@@ -1,5 +1,8 @@
 import { SDK } from '@rsdoctor/types';
-import { File } from '@rsdoctor/utils/common';
+
+function isStyleExt(path: string) {
+  return /\.(c|le|sa|sc)ss(\?.*)?$/.test(path);
+}
 
 interface DependencyData {
   type?: string;
@@ -50,7 +53,7 @@ export function getImportKind(dep: DependencyData): SDK.DependencyKind {
 export function removeNoImportStyle(graph: SDK.ModuleGraphInstance) {
   graph
     .getModules()
-    .filter((module) => File.isStyleExt(module.path))
+    .filter((module) => isStyleExt(module.path))
     .filter((item) => item.getImported().length === 0)
     .forEach((item) => graph.removeModule(item));
 }

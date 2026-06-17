@@ -3,7 +3,7 @@ import { SDK } from '@rsdoctor/types';
 import {
   getLoaderFileDetails,
   getLoaderFileInputAndOutput,
-} from '../../src/common/loader';
+} from '../../../src/common/loader';
 
 describe('test src/common/loader.ts', () => {
   const mockLoaderData: SDK.LoaderData = [

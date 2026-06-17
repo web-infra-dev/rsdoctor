@@ -1,7 +1,7 @@
 /** @type {import('prebundle').Config} */
 export default {
   dependencies: [],
-  exclude: ['@rsdoctor/types', '@rsdoctor/utils'],
+  exclude: ['@rsdoctor/core', '@rsdoctor/types'],
 
   build: {
     platform: 'node',

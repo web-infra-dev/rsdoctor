@@ -1,5 +1,5 @@
 import type { Common } from '@rsdoctor/types';
-import { Plugin } from '@rsdoctor/types';
+import type { Plugin } from '@rsdoctor/types';
 
 export type IHook =
   Plugin.BaseCompiler['hooks'][keyof Plugin.BaseCompiler['hooks']];

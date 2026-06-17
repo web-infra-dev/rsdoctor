@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { Lodash } from '@rsdoctor/utils/common';
+import { Lodash } from '@rsdoctor/core/common';
 
 export const getImporteds = (
   curModule: SDK.ModuleData,

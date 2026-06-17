@@ -1,4 +1,4 @@
-import { parser, Node } from '@rsdoctor/utils/ruleUtils';
+import { parser, Node } from '@rsdoctor/core/rule-utils';
 
 const esmLabelStatement = parser.internal.parseExpressionAt(
   'Object.defineProperty(exports, "__esModule", { value: true })',

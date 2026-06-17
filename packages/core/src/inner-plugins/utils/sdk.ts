@@ -1,4 +1,3 @@
-import { RsdoctorPrimarySDK } from '@rsdoctor/sdk';
 import { SDK } from '@rsdoctor/types';
 
 const globalKey = '__rsdoctor_sdks__';
@@ -25,8 +24,12 @@ export function getSDK(builderName?: string) {
     sdk = builderName ? sdks.find((s) => s.name === builderName) || sdk : sdk;
   }
   if (sdk && builderName && 'parent' in sdk) {
-    const _sdk = sdk as RsdoctorPrimarySDK;
-    const slaveSDK = _sdk.parent.slaves.find(
+    const parent = (
+      sdk as SDK.RsdoctorBuilderSDKInstance & {
+        parent?: { slaves: SDK.RsdoctorBuilderSDKInstance[] };
+      }
+    ).parent;
+    const slaveSDK = parent?.slaves.find(
       (_sdk: { name: string }) => _sdk.name === builderName,
     );
     return slaveSDK || sdk;

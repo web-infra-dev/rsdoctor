@@ -2,7 +2,7 @@ import { Manifest, Plugin } from '@rsdoctor/types';
 import { Utils as BuildUtils } from '@/build-utils/build';
 import { interceptPluginHook } from '../utils';
 import { InternalBasePlugin } from './base';
-import { time, timeEnd } from '@rsdoctor/utils/logger';
+import { time, timeEnd } from '@rsdoctor/core/logger';
 
 export class InternalPluginsPlugin<
   T extends Plugin.BaseCompiler,

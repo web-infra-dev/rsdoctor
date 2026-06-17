@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Crypto } from '../src/common';
+import { Crypto } from '../../src/common';
 
 describe('test src/crypto.ts', () => {
   describe('encode & decode', () => {

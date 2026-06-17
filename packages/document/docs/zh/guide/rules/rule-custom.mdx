@@ -69,7 +69,7 @@ export default {
 
 ### 1. 安装
 
-编写自定义规则时，除了安装基本的 @rsdoctor/rspack-plugin 依赖，还需要安装 @rsdoctor/core 并使用 @rsdoctor/core/rules 中的 defineRule 函数来定义统一的 Rsdoctor 规则。
+编写自定义规则时，安装 @rsdoctor/core 并使用 @rsdoctor/core/rules 中的 defineRule 函数来定义统一的 Rsdoctor 规则。
 
 import { PackageManagerTabs } from '@theme';
 
@@ -474,7 +474,7 @@ interface SourceRange {
 
 ### AST 处理
 
-在进行规则检测分析时，对模块进行AST分析等操作是常见的。为了提供更多辅助功能，我们还提供了 `@rsdoctor/utils` 包中的 `@rsdoctor/utils/rule-utils`，其中包含了许多实用的工具函数和方法。
+在进行规则检测分析时，对模块进行AST分析等操作是常见的。为了提供更多辅助功能，我们还提供了 `@rsdoctor/core/rule-utils`，其中包含了许多实用的工具函数和方法。
 
 ```ts
 /** 这里包含了 AST 所有节点的类型定义 */

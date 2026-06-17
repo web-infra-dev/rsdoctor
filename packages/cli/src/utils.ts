@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { Ora } from 'ora';
 import { Command } from './types';
 import { Common } from '@rsdoctor/types';
-import { Url } from '@rsdoctor/utils/common';
+import { Url } from '@rsdoctor/core/common';
 import { fetchWithTimeout } from './fetch-http';
 
 export function enhanceCommand<CMD extends string, Options, Result>(

@@ -25,13 +25,14 @@
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "1.29.0",
-    "@rsdoctor/types": "workspace:*",
-    "@rsdoctor/utils": "workspace:*",
     "@rstest/core": "catalog:",
     "@types/node": "catalog:",
+    "dotenv": "^16.4.7",
     "prebundle": "catalog:",
     "typescript": "catalog:",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "@rsdoctor/core": "workspace:*",
+    "@rsdoctor/types": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

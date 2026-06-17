@@ -1,5 +1,5 @@
-import { Node, parser, getDocument, Range } from '@rsdoctor/utils/ruleUtils';
-import { Lodash } from '@rsdoctor/utils/common';
+import { Node, parser, getDocument, Range } from '@rsdoctor/core/rule-utils';
+import { Lodash } from '@rsdoctor/core/common';
 import type { SDK, Linter } from '@rsdoctor/types';
 
 export function getDefaultImportByRequest(node: Node.Program, request: string) {

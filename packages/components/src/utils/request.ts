@@ -1,5 +1,5 @@
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Fetch, Manifest as ManifestMethod, Url } from '@rsdoctor/utils/common';
+import { Fetch, Manifest as ManifestMethod, Url } from '@rsdoctor/core/common';
 import { APILoaderMode4Dev } from '../constants';
 import { getManifestUrlFromUrlQuery } from './url';
 import { getAPILoaderModeFromStorage } from './storage';

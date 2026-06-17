@@ -3,7 +3,7 @@ import os from 'os';
 import fse from 'fs-extra/esm';
 import fs from 'node:fs';
 import path from 'path';
-import { File } from '../../src/build';
+import { File } from '../../../src/build-utils/build';
 
 describe('test src/file/sharding.ts', () => {
   const tmpFolders: string[] = [];

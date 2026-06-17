@@ -1,15 +1,15 @@
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
-import { File, Json, EnvInfo } from '@rsdoctor/utils/build';
+import { File, Json, EnvInfo } from '@rsdoctor/core/build-utils';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import process from 'node:process';
 import { AsyncSeriesHook } from 'tapable';
-import { decycle } from '@rsdoctor/utils/common';
-import { logger } from '@rsdoctor/utils/logger';
+import { decycle } from '@rsdoctor/core/common';
+import { logger } from '@rsdoctor/core/logger';
 import { transformDataUrls } from '../utils';
 import { RsdoctorSDKOptions, DataWithUrl } from './types';
-import { Algorithm } from '@rsdoctor/utils/common';
+import { Algorithm } from '@rsdoctor/core/common';
 
 export abstract class SDKCore<T extends RsdoctorSDKOptions>
   implements SDK.RsdoctorSDKInstance

@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { Server } from '@rsdoctor/utils/build';
+import { Server } from '@rsdoctor/core/build-utils';
 import { RsdoctorServer } from '.';
 
 export class RsdoctorFakeServer extends RsdoctorServer {

@@ -14,7 +14,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { get } from '@rsdoctor/utils/collection';
+import { get } from '@rsdoctor/core/collection';
 import React, { useMemo, useState } from 'react';
 import { drawerWidth, Size } from '../../../constants';
 import {

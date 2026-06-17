@@ -36,11 +36,11 @@
   },
   "type": "module",
   "dependencies": {
-    "ora": "^5.4.1",
+    "@rsdoctor/core": "workspace:*",
+    "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
-    "@rsdoctor/utils": "workspace:*",
-    "@rsdoctor/graph": "workspace:*"
+    "ora": "^5.4.1"
   },
   "devDependencies": {
     "@rsdoctor/client": "workspace:*",

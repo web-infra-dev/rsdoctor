@@ -1,7 +1,7 @@
 import { Common, SDK, Thirdparty, Client } from '@rsdoctor/types';
-import { Server } from '@rsdoctor/utils/build';
+import { Server } from '@rsdoctor/core/build-utils';
 import serve from 'sirv';
-import { Bundle, GlobalConfig } from '@rsdoctor/utils/common';
+import { Bundle, GlobalConfig } from '@rsdoctor/core/common';
 import assert from 'assert';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -9,7 +9,7 @@ import { PassThrough } from 'stream';
 import { Socket } from './socket';
 import { Router } from './router';
 import * as APIs from './apis';
-import { chalk, logger } from '@rsdoctor/utils/logger';
+import { chalk, logger } from '@rsdoctor/core/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
 import { Lodash } from '@rsdoctor/utils/common';
@@ -200,8 +200,6 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       this.app.use(cors(corsOptions));
     }
     this.app.use(bodyParser.json({ limit: '500mb' }));
-    await this._router.setup();
-
     const clientHtmlPath = this._innerClientPath
       ? this._innerClientPath
       : require.resolve('@rsdoctor/client');

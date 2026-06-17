@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Json } from '../src/build';
+import { Json } from '../../src/build-utils/build';
 
 describe('test src/json.ts', () => {
   describe('stringify()', () => {

@@ -11,9 +11,6 @@
       "path": "./packages/types/tsconfig.json"
     },
     {
-      "path": "./packages/utils/tsconfig.json"
-    },
-    {
       "path": "./packages/graph/tsconfig.json"
     },
     {

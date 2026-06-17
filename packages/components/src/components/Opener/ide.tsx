@@ -1,4 +1,4 @@
-import { Lodash } from '@rsdoctor/utils/common';
+import { Lodash } from '@rsdoctor/core/common';
 import React from 'react';
 import VSCodeIcon from '../../common/svg/vscode.svg';
 

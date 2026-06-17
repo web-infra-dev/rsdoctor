@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Algorithm, Manifest } from '../../src/common';
+import { Algorithm, Manifest } from '../../../src/common';
 
 describe('test src/common/manifest.ts', () => {
   it('isShardingData', () => {

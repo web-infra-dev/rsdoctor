@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Time } from '../../src/common';
+import { Time } from '../../../src/common';
 
 describe('test src/common/time.ts', () => {
   it('toFixedDigits', () => {

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Card, Col, Row, Radio } from 'antd';
-import { Lodash } from '@rsdoctor/utils/common';
+import { Lodash } from '@rsdoctor/core/common';
 import { FileSearchOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
 import path from 'path-browserify';

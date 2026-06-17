@@ -1,9 +1,35 @@
 import path from 'path';
-import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 import { SDK } from '@rsdoctor/types';
-import { Lodash } from '@rsdoctor/utils/common';
+import { isEmpty, pick } from 'es-toolkit/compat';
 import { gzipSync } from 'node:zlib';
 import { ParseBundle } from '@/types/transform';
+
+const timers = new Map<string, number>();
+
+const time = (label: string) => {
+  if (!process.env.DEBUG || timers.has(label)) {
+    return;
+  }
+  timers.set(label, Date.now());
+};
+
+const timeEnd = (label: string) => {
+  if (!process.env.DEBUG) {
+    return;
+  }
+  const start = timers.get(label);
+  if (start == null) {
+    return;
+  }
+  console.debug(`Timer '${label}' ended: ${Date.now() - start}ms`);
+  timers.delete(label);
+};
+
+const logger = {
+  warn(message: string) {
+    console.warn(message);
+  },
+};
 
 export type ParsedModuleSizeData = {
   [x: string]: { size: number; sizeConvert: string; content: string };
@@ -99,14 +125,11 @@ export async function getAssetsModulesData(
           continue;
         }
 
-        bundlesSources[asset.path] = Lodash.pick(bundleInfo, [
-          'src',
-          'runtimeSrc',
-        ]);
+        bundlesSources[asset.path] = pick(bundleInfo, ['src', 'runtimeSrc']);
         Object.assign(parsedModules, bundleInfo?.modules || {});
       }
 
-      if (Lodash.isEmpty(bundlesSources)) {
+      if (isEmpty(bundlesSources)) {
         bundlesSources = null;
         parsedModules = null;
         if (process.env.DEVTOOLS_DEV) {

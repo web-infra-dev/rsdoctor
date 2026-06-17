@@ -1,1 +1,11 @@
 export * as Build from './build';
+export * as EnvInfo from './build/envinfo';
+export * as File from './build/file';
+export * as Json from './build/json';
+export * as Process from './build/process';
+export * as Server from './build/server';
+export * as Chunks from './build/chunks';
+export * as Utils from './build/utils';
+export * as Loader from './build/loader';
+export * as Types from '../types';
+export * as ModuleGraph from './build/module-graph';

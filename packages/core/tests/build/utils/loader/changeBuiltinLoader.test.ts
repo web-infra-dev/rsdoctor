@@ -83,11 +83,35 @@ const mockCompiler: Plugin.BaseCompiler = {
   },
 } as Plugin.BaseCompiler;
 
+function normalizeSnapshotPaths<T>(value: T): T {
+  if (typeof value === 'string') {
+    return value.replace(process.cwd(), '<ROOT>/packages/core') as T;
+  }
+  if (value instanceof RegExp || value === null || typeof value !== 'object') {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.map(normalizeSnapshotPaths) as T;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, item]) => [
+      key,
+      normalizeSnapshotPaths(item),
+    ]),
+  ) as T;
+}
+
 describe('test src/build/utils/loader.ts addProbeLoader2Rules', () => {
   it('addProbeLoader2Rules()', () => {
     expect(
-      addProbeLoader2Rules(rules, mockCompiler, (r: Plugin.BuildRuleSetRule) =>
-        Utils.getLoaderNameMatch(r, 'builtin:swc-loader', true),
+      normalizeSnapshotPaths(
+        addProbeLoader2Rules(
+          rules,
+          mockCompiler,
+          (r: Plugin.BuildRuleSetRule) =>
+            Utils.getLoaderNameMatch(r, 'builtin:swc-loader', true),
+        ),
       ),
     ).toMatchSnapshot();
   });

@@ -1,6 +1,6 @@
 import { describe, it, expect, rs } from '@rstest/core';
 import { hrtime } from 'process';
-import { Time } from '../../src/common';
+import { Time } from '../../../src/common';
 
 rs.setConfig({ testTimeout: 100000 });
 

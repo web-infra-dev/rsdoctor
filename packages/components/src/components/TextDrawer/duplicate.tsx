@@ -2,7 +2,7 @@ import { Col, Row, Space, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { Rule, SDK } from '@rsdoctor/types';
 import { ExceptionOutlined } from '@ant-design/icons';
-import { Alerts } from '@rsdoctor/utils/common';
+import { Alerts } from '@rsdoctor/core/common';
 import { Size } from '../../constants';
 import { TextDrawer, TextDrawerProps } from './index';
 import {
@@ -13,24 +13,27 @@ import {
 import { PackageRelationAlertProps } from '../Alert/types';
 import { ServerAPIProvider } from '../Manifest';
 
-interface DuplicatePackageDrawerContentProps extends Omit<TextDrawerProps, 'text'> {
+interface DuplicatePackageDrawerContentProps extends Omit<
+  TextDrawerProps,
+  'text'
+> {
   duplicatePackages: Rule.PackageRelationDiffRuleStoreData[];
   cwd: string;
   textStyle?: React.CSSProperties;
   children: PackageRelationAlertProps['getPackageRelationContentComponent'];
 }
 
-interface DuplicatePackageDrawerProps extends Omit<DuplicatePackageDrawerContentProps, 'children'> {
+interface DuplicatePackageDrawerProps extends Omit<
+  DuplicatePackageDrawerContentProps,
+  'children'
+> {
   moduleGraph: Pick<SDK.ModuleGraphData, 'dependencies' | 'modules'>;
   moduleCodeMap: SDK.ModuleCodeData;
 }
 
-const DuplicatePackageDrawerContent: React.FC<DuplicatePackageDrawerContentProps> = ({
-  duplicatePackages = [],
-  cwd,
-  children,
-  ...props
-}) => {
+const DuplicatePackageDrawerContent: React.FC<
+  DuplicatePackageDrawerContentProps
+> = ({ duplicatePackages = [], cwd, children, ...props }) => {
   return (
     <TextDrawer
       {...props}
@@ -39,7 +42,14 @@ const DuplicatePackageDrawerContent: React.FC<DuplicatePackageDrawerContentProps
       text={
         <Tooltip title="Click to show the details of duplicate packages">
           <Space style={{ fontSize: 'inherit' }}>
-            <Typography.Text strong style={{ fontSize: 'inherit', color: 'inherit', ...props.textStyle }}>
+            <Typography.Text
+              strong
+              style={{
+                fontSize: 'inherit',
+                color: 'inherit',
+                ...props.textStyle,
+              }}
+            >
               {duplicatePackages.length}
             </Typography.Text>
             <ExceptionOutlined />
@@ -52,7 +62,11 @@ const DuplicatePackageDrawerContent: React.FC<DuplicatePackageDrawerContentProps
         {duplicatePackages.map((err, i) => {
           return (
             <Col span={24} key={i}>
-              <PackageRelationAlert data={err} cwd={cwd} getPackageRelationContentComponent={children} />
+              <PackageRelationAlert
+                data={err}
+                cwd={cwd}
+                getPackageRelationContentComponent={children}
+              />
             </Col>
           );
         })}
@@ -61,7 +75,10 @@ const DuplicatePackageDrawerContent: React.FC<DuplicatePackageDrawerContentProps
   );
 };
 
-export const DuplicatePackageDrawer: React.FC<DuplicatePackageDrawerProps> = ({ moduleGraph, ...props }) => {
+export const DuplicatePackageDrawer: React.FC<DuplicatePackageDrawerProps> = ({
+  moduleGraph,
+  ...props
+}) => {
   return (
     <DuplicatePackageDrawerContent {...props}>
       {(res) => {
@@ -89,14 +106,17 @@ export const DuplicatePackageDrawer: React.FC<DuplicatePackageDrawerProps> = ({ 
   );
 };
 
-export const DuplicatePackageDrawerWithServer: React.FC<Omit<DuplicatePackageDrawerContentProps, 'children'>> = (
-  props,
-) => {
+export const DuplicatePackageDrawerWithServer: React.FC<
+  Omit<DuplicatePackageDrawerContentProps, 'children'>
+> = (props) => {
   return (
     <DuplicatePackageDrawerContent {...props}>
       {(res) => {
         return (
-          <PackageRelationReasonsWithServer body={{ id: res.data.id, target: res.package.target }} cwd={props.cwd} />
+          <PackageRelationReasonsWithServer
+            body={{ id: res.data.id, target: res.package.target }}
+            cwd={props.cwd}
+          />
         );
       }}
     </DuplicatePackageDrawerContent>

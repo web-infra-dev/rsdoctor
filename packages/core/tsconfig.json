@@ -5,24 +5,15 @@
     "declarationMap": false,
     "outDir": "dist",
     "paths": {
-      "@/*": ["./src/*"]
+      "@rsdoctor/core": ["./src/index.ts"],
+      "@rsdoctor/core/*": ["./src/*"],
+      "@rsdoctor/core/plugins": ["./src/inner-plugins/index.ts"],
+      "@/*": ["./src/*"],
+      "src": ["./src"],
+      "src/*": ["./src/*"]
     },
     "rootDir": "src"
   },
   "include": ["src"],
-  "exclude": ["**/node_modules"],
-  "references": [
-    {
-      "path": "../types/tsconfig.json"
-    },
-    {
-      "path": "../utils/tsconfig.json"
-    },
-    {
-      "path": "../graph/tsconfig.json"
-    },
-    {
-      "path": "../sdk/tsconfig.json"
-    }
-  ]
+  "exclude": ["**/node_modules"]
 }

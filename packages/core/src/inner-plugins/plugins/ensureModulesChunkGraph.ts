@@ -1,7 +1,7 @@
-import { RsdoctorPluginInstance } from '@/types';
+import { RsdoctorPluginInstance } from '@rsdoctor/core/types';
 import { Linter, Plugin, SDK } from '@rsdoctor/types';
-import { Process } from '@rsdoctor/utils/build';
-import { chalk, logger } from '@rsdoctor/utils/logger';
+import { Process } from '@rsdoctor/core/build-utils';
+import { chalk, logger } from '@rsdoctor/core/logger';
 import {
   Chunks as ChunksBuildUtils,
   ModuleGraph as ModuleGraphBuildUtils,

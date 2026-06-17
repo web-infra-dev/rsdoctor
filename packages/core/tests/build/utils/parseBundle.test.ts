@@ -1,4 +1,4 @@
-import { lowerCase } from '@rsdoctor/utils/collection';
+import { lowerCase } from '@rsdoctor/core/collection';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';

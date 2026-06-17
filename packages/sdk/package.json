@@ -38,7 +38,7 @@
     "@rsdoctor/client": "workspace:*",
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
-    "@rsdoctor/utils": "workspace:*",
+    "@rsdoctor/core": "workspace:*",
     "launch-editor": "^2.14.1",
     "safer-buffer": "2.1.2",
     "tapable": "2.3.3",

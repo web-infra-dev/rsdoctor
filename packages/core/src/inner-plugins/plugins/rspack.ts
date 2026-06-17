@@ -5,13 +5,13 @@ import type {
 } from '@rspack/core';
 import { Linter, Plugin } from '@rsdoctor/types';
 import type { experiments } from '@rspack/core';
-import { RsdoctorPluginInstance } from '@/types';
+import { RsdoctorPluginInstance } from '@rsdoctor/core/types';
 import {
   Chunks as ChunksBuildUtils,
   ModuleGraph as ModuleGraphBuildUtils,
 } from '@/build-utils/build';
 import { internalPluginTapPreOptions } from '../constants';
-import { logger } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/core/logger';
 
 export function applyRspackNativePlugin(
   compiler: Plugin.BaseCompiler,

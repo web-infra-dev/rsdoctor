@@ -9,7 +9,7 @@ import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 
 import styles from './builder.module.scss';
-import { Lodash } from '@rsdoctor/utils/common';
+import { Lodash } from '@rsdoctor/core/common';
 
 interface WebpackConfigurationViewerBaseProps {
   defaultKeys?: string[];

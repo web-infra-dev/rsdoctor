@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, afterEach, beforeEach } from '@rstest/core';
-import { File, Server } from '@rsdoctor/utils/build';
+import { File, Server } from '@rsdoctor/core/build-utils';
 import { Common, SDK } from '@rsdoctor/types';
 import { request } from 'http';
 import { tmpdir } from 'os';

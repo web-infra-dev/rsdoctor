@@ -1,7 +1,7 @@
 import { describe, it, expect, rs } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 
-import { APIDataLoader } from '../../src/common/data';
+import { APIDataLoader } from '../../../src/common/data';
 
 describe('test src/common/data/index.ts', () => {
   const excludeAPIs = [

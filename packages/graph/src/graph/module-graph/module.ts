@@ -1,6 +1,6 @@
 import { SDK, Plugin } from '@rsdoctor/types';
 import path from 'path';
-import { Lodash } from '@rsdoctor/utils/common';
+import { isNumber } from 'es-toolkit/compat';
 import type { SourceMapConsumer } from 'source-map';
 import type { Program } from 'estree';
 import { Dependency } from './dependency';
@@ -318,7 +318,7 @@ export class Module implements SDK.ModuleInstance {
       bias: 1,
     });
 
-    if (Lodash.isNumber(startInSource.line)) {
+    if (isNumber(startInSource.line)) {
       source.start = {
         line: startInSource.line,
         column: startInSource.column ?? undefined,
@@ -333,7 +333,7 @@ export class Module implements SDK.ModuleInstance {
         // bias: 2,
       });
 
-      if (Lodash.isNumber(endInSource.line)) {
+      if (isNumber(endInSource.line)) {
         source.end = {
           line: endInSource.line,
           column: endInSource.column ?? undefined,

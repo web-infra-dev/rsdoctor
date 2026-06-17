@@ -1,4 +1,4 @@
-import { Manifest } from '@rsdoctor/utils/common';
+import { Manifest } from '@rsdoctor/core/common';
 import { Constants, Manifest as ManifestType, SDK } from '@rsdoctor/types';
 import { RsdoctorSDK } from '@rsdoctor/sdk';
 import ora from 'ora';

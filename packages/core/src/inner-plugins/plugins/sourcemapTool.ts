@@ -1,7 +1,7 @@
-import { RsdoctorPluginInstance } from '@/types';
+import { RsdoctorPluginInstance } from '@rsdoctor/core/types';
 import { Linter, Plugin } from '@rsdoctor/types';
-import { Graph } from '@rsdoctor/utils/common';
-import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
+import { Graph } from '@rsdoctor/core/common';
+import { logger, time, timeEnd } from '@rsdoctor/core/logger';
 import { Asset } from '@rspack/core';
 import { resolve, dirname, isAbsolute } from 'path';
 import { SourceMapConsumer, RawSourceMap, MappingItem } from 'source-map';

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import zlib from 'node:zlib';
 import { tmpdir } from 'os';
 import { describe, it, expect, afterEach } from '@rstest/core';
-import { File } from '@rsdoctor/utils/build';
+import { File } from '@rsdoctor/core/build-utils';
 import { createSDK, type MockSDKResponse } from '../../utils';
 
 /**

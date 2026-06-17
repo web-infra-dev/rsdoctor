@@ -2,7 +2,7 @@ import { Linter, Rule } from '@rsdoctor/types';
 import { Config } from './types';
 import { defineRule } from '../../rule';
 import { getErrorMsgForDupPckChunks } from './utils';
-import { uniq } from '@rsdoctor/utils/collection';
+import { uniq } from '@rsdoctor/core/collection';
 
 export type { Config } from './types';
 

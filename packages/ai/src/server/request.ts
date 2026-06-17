@@ -1,5 +1,5 @@
-import { GlobalConfig } from '@rsdoctor/utils/common';
-import { logger } from '@rsdoctor/utils/logger';
+import { GlobalConfig } from '@rsdoctor/core/common';
+import { logger } from '@rsdoctor/core/logger';
 import fs from 'node:fs';
 
 export function getPortFromArgs(): number {

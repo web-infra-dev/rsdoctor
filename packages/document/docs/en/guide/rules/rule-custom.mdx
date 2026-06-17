@@ -68,7 +68,7 @@ You can follow the detailed steps below to define and write custom rules.
 
 ### 1. Installation
 
-When writing custom rules, in addition to installing the basic `@rsdoctor/rspack-plugin` dependencies, you also need to install `@rsdoctor/core` and use the defineRule function from `@rsdoctor/core/rules` to define unified Rsdoctor rules.
+When writing custom rules, install `@rsdoctor/core` and use the defineRule function from `@rsdoctor/core/rules` to define unified Rsdoctor rules.
 
 import { PackageManagerTabs } from '@theme';
 
@@ -473,7 +473,7 @@ interface SourceRange {
 
 ### AST processing
 
-When performing rule detection and analysis, it is common to perform AST analysis on modules and other operations. To provide more auxiliary functions, we also provide `@rsdoctor/utils/rule-utils` in the `@rsdoctor/utils` package, which contains many useful utility functions and methods.
+When performing rule detection and analysis, it is common to perform AST analysis on modules and other operations. To provide more auxiliary functions, we also provide `@rsdoctor/core/rule-utils`, which contains many useful utility functions and methods.
 
 ```ts
 /** This includes the type definitions for all AST nodes */

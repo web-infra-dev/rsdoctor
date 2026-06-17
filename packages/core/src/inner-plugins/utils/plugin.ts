@@ -1,5 +1,5 @@
 import type { SDK } from '@rsdoctor/types';
-import { DevToolError } from '@rsdoctor/utils/error';
+import { DevToolError } from '@rsdoctor/core/error';
 import { IHook } from '@/build-utils/build/utils';
 
 export function reportPluginData(

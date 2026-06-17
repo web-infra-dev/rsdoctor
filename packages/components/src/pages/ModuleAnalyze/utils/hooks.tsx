@@ -2,7 +2,7 @@ import { SDK } from '@rsdoctor/types';
 import { useMemo } from 'react';
 import { formatSize, getShortPath } from 'src/utils';
 import { getImporteds } from '.';
-import { Lodash } from '@rsdoctor/utils/common';
+import { Lodash } from '@rsdoctor/core/common';
 
 export type NewTreeNodeType = {
   __RESOURCEPATH__: string;

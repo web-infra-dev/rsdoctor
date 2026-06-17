@@ -1,4 +1,4 @@
-import { get } from '@rsdoctor/utils/collection';
+import { get } from '@rsdoctor/core/collection';
 import { Common, SDK } from '@rsdoctor/types';
 import { message, Space, TreeNodeProps, UploadFile } from 'antd';
 import { FieldDataNode } from 'rc-tree';

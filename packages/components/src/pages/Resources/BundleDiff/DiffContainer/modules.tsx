@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { uniq } from '@rsdoctor/utils/collection';
+import { uniq } from '@rsdoctor/core/collection';
 import { InfoCircleOutlined, FileSearchOutlined } from '@ant-design/icons';
 import {
   BundleDiffComponentCardProps,
@@ -23,7 +23,7 @@ import { ViewChanges } from './changes';
 import { UpdateType } from './constants';
 import { Badge as Bdg } from '../../../../components/Badge';
 import { ModuleHashPattern, getTargetColumnPropsForModuleRow } from './row';
-import { Graph } from '@rsdoctor/utils/common';
+import { Graph } from '@rsdoctor/core/common';
 
 export function getUpdateType(e: BundleDiffTableModulesData): UpdateType {
   if (e.baseline && !e.current) {

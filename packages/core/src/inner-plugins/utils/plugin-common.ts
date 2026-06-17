@@ -1,9 +1,9 @@
 import type { Configuration, RuleSetRule } from '@rspack/core';
-import { openBrowser } from '@rsdoctor/sdk';
 import { makeRulesSerializable } from '@rsdoctor/core/plugins';
 import { SDK } from '@rsdoctor/types';
-import { chalk } from '@rsdoctor/utils/logger';
+import { chalk } from '@rsdoctor/core/logger';
 import path from 'path';
+import { openBrowser } from './openBrowser';
 
 /**
  * Safe cloneDeep implementation that skips read-only properties (getters without setters)
