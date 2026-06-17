@@ -53,6 +53,7 @@
     "@types/react-highlight-words": "^0.20.1",
     "@types/url-parse": "1.4.11",
     "react": "catalog:",
+    "react-dom": "catalog:",
     "react-router-dom": "catalog:",
     "typescript": "catalog:"
   },
