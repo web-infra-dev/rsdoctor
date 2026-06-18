@@ -1,6 +1,11 @@
 import { describe, it, expect } from '@rstest/core';
+import type { AddressInfo } from 'net';
 import { Server } from '../src/build';
-import { getPortSync } from '../src/build/server';
+import {
+  createGetPortSyncFunctionString,
+  defaultHost,
+  getPortSync,
+} from '../src/build/server';
 
 describe('test src/server.ts', () => {
   it('getPort()', async () => {
@@ -17,5 +22,19 @@ describe('test src/server.ts', () => {
     const { close } = await Server.createServer(8262);
     expect(getPortSync(8262)).not.toEqual(8262);
     await close();
+  });
+
+  it('binds to 127.0.0.1 by default', async () => {
+    const { server, close } = await Server.createServer(0);
+
+    try {
+      const address = server.address() as AddressInfo;
+      expect(address.address).toEqual(defaultHost);
+      expect(createGetPortSyncFunctionString(3543)).toContain(
+        `getPort(port, ${JSON.stringify(defaultHost)})`,
+      );
+    } finally {
+      await close();
+    }
   });
 });
