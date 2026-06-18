@@ -155,7 +155,8 @@ export async function postServerAPI<
     SDK.ServerAPI.InferRequestBodyType<T>,
   R extends SDK.ServerAPI.InferResponseType<T> =
     SDK.ServerAPI.InferResponseType<T>,
->(api: T, body?: B | null): Promise<R> {
+>(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
+  const [api, body] = args;
   const timeout = process.env.NODE_ENV === 'development' ? 10000 : 60000;
   const requestInit: Fetch.FetchOptions = {
     method: 'POST',

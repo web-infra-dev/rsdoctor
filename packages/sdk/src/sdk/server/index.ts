@@ -20,7 +20,7 @@ export * from './utils';
 
 /** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
-const LOCAL_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]']);
+const LOCAL_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
 const LISTEN_RETRY_LIMIT = 10;
 
 export type ISocketType = { port: number; socketUrl: string };
