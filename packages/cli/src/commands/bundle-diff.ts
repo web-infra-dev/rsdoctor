@@ -11,9 +11,9 @@ import {
 import { Commands } from '../constants';
 import {
   Client,
+  Constants,
   Manifest as ManifestType,
   SDK,
-  Constants,
 } from '@rsdoctor/types';
 import { Manifest, Algorithm, Graph } from '@rsdoctor/utils/common';
 import { RsdoctorSDK } from '@rsdoctor/sdk';
@@ -135,7 +135,9 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
 
     if (json && html) {
       spinner.fail(
-        red('Options "--json" and "--html" cannot be used together. Please choose one.'),
+        red(
+          'Options "--json" and "--html" cannot be used together. Please choose one.',
+        ),
       );
       return null;
     } else if (json) {
@@ -201,10 +203,8 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
 
       spinner.text = `server bootstrap success`;
 
-      const localBaselineManifestUrl =
-        baselineSdk.server.origin + SDK.ServerAPI.API.BundleDiffManifest;
-      const localCurrentManifestUrl =
-        currentSdk.server.origin + SDK.ServerAPI.API.BundleDiffManifest;
+      const localBaselineManifestUrl = `${baselineSdk.server.origin}${SDK.ServerAPI.API.BundleDiffManifest}`;
+      const localCurrentManifestUrl = `${currentSdk.server.origin}${SDK.ServerAPI.API.BundleDiffManifest}`;
 
       baselineSdk.server.getClientUrl(
         Client.RsdoctorClientRoutes.BundleDiff,

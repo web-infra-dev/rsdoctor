@@ -26,9 +26,11 @@ async function openInEditor(
     const base =
       typeof window !== 'undefined' && window.location?.origin
         ? window.location.origin
-        : '';
-    const url = `${base}${OPEN_IN_EDITOR_PATH}?file=${encodeURIComponent(fileSpec)}&editor=${editor}`;
-    const res = await fetch(url, { method: 'GET' });
+        : 'http://127.0.0.1';
+    const url = new URL(OPEN_IN_EDITOR_PATH, base);
+    url.searchParams.set('file', fileSpec);
+    url.searchParams.set('editor', editor);
+    const res = await fetch(url.toString(), { method: 'GET' });
     if (!res.ok) {
       urlSchemeFallback();
     }

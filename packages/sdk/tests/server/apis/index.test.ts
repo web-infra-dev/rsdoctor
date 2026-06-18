@@ -1,12 +1,16 @@
 import { describe, expect, it } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 import { Router } from '../../../src/sdk/server/router';
-
-// make sure the decorators work.
-import '../../../src/sdk/server/apis';
+import * as APIs from '../../../src/sdk/server/apis';
 
 describe('ensure all of the apis implementation for server', () => {
   const apis = Object.values(SDK.ServerAPI.API);
+
+  Object.values(APIs).forEach((API) => {
+    if (typeof API === 'function') {
+      new API({} as never, {} as never);
+    }
+  });
 
   it(`ensure server`, async () => {
     const { get, post } = Router.routes;

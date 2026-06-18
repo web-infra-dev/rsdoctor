@@ -75,7 +75,7 @@ describe('LocalServerDataLoader', () => {
     globalThis.fetch = fetchMock as typeof fetch;
     const loader = new LocalServerDataLoader({
       data: {},
-      __SOCKET__PORT__: '3083',
+      __SOCKET__URL__: 'ws://127.0.0.1:3083',
     } as any);
 
     const task = loader.loadAPI(SDK.ServerAPI.API.GetAllModuleGraph, {} as any);
@@ -93,6 +93,7 @@ describe('LocalServerDataLoader', () => {
     );
 
     await expect(task).resolves.toStrictEqual([{ id: 1 }]);
+    expect(socket.url).toBe('ws://127.0.0.1:3083');
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });

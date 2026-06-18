@@ -25,7 +25,10 @@ function resolveRequestUrl(url: string): string {
 }
 
 async function requestText(url: string, timeout: number) {
-  const res = await Fetch.fetchWithTimeout(resolveRequestUrl(url), { timeout });
+  const requestUrl = resolveRequestUrl(url);
+  const res = await Fetch.fetchWithTimeout(requestUrl, {
+    timeout,
+  });
   return res.text();
 }
 
@@ -152,12 +155,13 @@ export async function postServerAPI<
     SDK.ServerAPI.InferRequestBodyType<T>,
   R extends SDK.ServerAPI.InferResponseType<T> =
     SDK.ServerAPI.InferResponseType<T>,
->(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
-  const [api, body] = args;
+>(api: T, body?: B | null): Promise<R> {
   const timeout = process.env.NODE_ENV === 'development' ? 10000 : 60000;
   const requestInit: Fetch.FetchOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+    },
     timeout,
   };
 

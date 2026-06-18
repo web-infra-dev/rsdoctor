@@ -19,4 +19,12 @@ describe('test server/apis/data.ts', () => {
 
     spy.mockRestore();
   });
+
+  it('rejects invalid data keys', async () => {
+    const res = await target.post(SDK.ServerAPI.API.LoadDataByKey, {
+      key: '__proto__.polluted',
+    } as never);
+
+    expect(res.text).toBe('Invalid data key: __proto__.polluted');
+  });
 });

@@ -64,6 +64,10 @@ function getDefaultSocketUrl() {
 }
 
 function getSocketUrl(socketPort?: string) {
+  if (socketPort?.startsWith('ws://') || socketPort?.startsWith('wss://')) {
+    return socketPort;
+  }
+
   if (typeof location === 'undefined') {
     return socketPort ? `ws://localhost:${socketPort}` : '';
   }
