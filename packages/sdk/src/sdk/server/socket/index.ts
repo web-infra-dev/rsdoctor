@@ -7,6 +7,7 @@ interface SocketOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
   server: Server;
   port: number;
+  isOriginAllowed?: (origin?: string) => boolean;
 }
 
 type Subscription = {
@@ -40,8 +41,18 @@ export class Socket {
     this.loader = new SocketAPILoader({ sdk: options.sdk });
   }
 
+  protected isOriginAllowed(origin?: string) {
+    return !origin || this.options.isOriginAllowed?.(origin) !== false;
+  }
+
   public bootstrap() {
-    this.server = new WebSocketServer({ server: this.options.server });
+    const verifyClient = (info: { origin?: string }) =>
+      this.isOriginAllowed(info.origin);
+
+    this.server = new WebSocketServer({
+      server: this.options.server,
+      verifyClient,
+    });
     this.server.on('connection', (client) => {
       this.attachClient(client);
     });

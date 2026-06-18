@@ -157,6 +157,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       sdk: this.sdk,
       server: this._server.server,
       port: this.port,
+      isOriginAllowed: (origin) => !origin || this.isLocalOrigin(origin),
     });
     await this._socket.bootstrap();
 
