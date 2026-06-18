@@ -87,8 +87,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       const url = new URL(origin);
       return (
         (url.protocol === 'http:' || url.protocol === 'https:') &&
-        LOCAL_HOSTNAMES.has(url.hostname) &&
-        url.port === String(this.port)
+        LOCAL_HOSTNAMES.has(url.hostname)
       );
     } catch {
       return false;

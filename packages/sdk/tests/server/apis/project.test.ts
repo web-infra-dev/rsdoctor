@@ -49,7 +49,7 @@ describe('test server/apis/project.ts', () => {
     expect(env.port).toEqual(target.server.port);
   });
 
-  it('only allows local same-port CORS preflight requests', async () => {
+  it('only allows local CORS preflight requests', async () => {
     await expect(
       optionsWithOrigin('https://example.com'),
     ).resolves.toStrictEqual({
@@ -62,6 +62,13 @@ describe('test server/apis/project.ts', () => {
     ).resolves.toStrictEqual({
       statusCode: 204,
       allowOrigin: `http://127.0.0.1:${target.server.port}`,
+    });
+
+    await expect(
+      optionsWithOrigin(`http://127.0.0.1:${target.server.port + 1}`),
+    ).resolves.toStrictEqual({
+      statusCode: 204,
+      allowOrigin: `http://127.0.0.1:${target.server.port + 1}`,
     });
   });
 
