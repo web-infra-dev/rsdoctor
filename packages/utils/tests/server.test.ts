@@ -37,4 +37,17 @@ describe('test src/server.ts', () => {
       await close();
     }
   });
+
+  it('rejects when the requested port is already in use', async () => {
+    const { server, close } = await Server.createServer(0);
+    const { port } = server.address() as AddressInfo;
+
+    try {
+      await expect(Server.createServer(port)).rejects.toMatchObject({
+        code: 'EADDRINUSE',
+      });
+    } finally {
+      await close();
+    }
+  });
 });

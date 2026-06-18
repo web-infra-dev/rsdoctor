@@ -1,4 +1,7 @@
 import { describe, it, expect } from '@rstest/core';
+import { Server } from '@rsdoctor/utils/build';
+import type { AddressInfo } from 'net';
+import { RsdoctorSDK } from '../../src/sdk';
 import { getDataByPagination } from '../../src/sdk/server/utils';
 
 describe('test server/utils.ts', () => {
@@ -321,5 +324,48 @@ describe('test server/utils.ts', () => {
         hasNextPage: false,
       },
     });
+  });
+});
+
+describe('test server bootstrap', () => {
+  it('retries with another port when the preferred port is occupied', async () => {
+    const occupied = await Server.createServer(0);
+    const { port } = occupied.server.address() as AddressInfo;
+    const sdk = new RsdoctorSDK({
+      name: 'test',
+      root: process.cwd(),
+      port,
+    });
+
+    try {
+      await sdk.bootstrap();
+      expect(sdk.server.port).not.toEqual(port);
+    } finally {
+      await sdk.dispose();
+      await occupied.close();
+    }
+  });
+
+  it('retries when concurrent servers race for the same port', async () => {
+    const port = await Server.getPort(
+      10000 + Math.floor(Math.random() * 10000),
+    );
+    const first = new RsdoctorSDK({
+      name: 'test-first',
+      root: process.cwd(),
+      port,
+    });
+    const second = new RsdoctorSDK({
+      name: 'test-second',
+      root: process.cwd(),
+      port,
+    });
+
+    try {
+      await Promise.all([first.bootstrap(), second.bootstrap()]);
+      expect(first.server.port).not.toEqual(second.server.port);
+    } finally {
+      await Promise.all([first.dispose(), second.dispose()]);
+    }
   });
 });
