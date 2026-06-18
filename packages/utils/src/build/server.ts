@@ -2,12 +2,14 @@ import connect from 'connect';
 import http from 'http';
 import os from 'os';
 import gp from 'get-port';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import { Thirdparty } from '@rsdoctor/types';
 import { random } from '../common/algorithm';
 
 // see https://neo4j.com/developer/kb/list-of-restricted-ports-in-browsers
 const RESTRICTED_PORTS = [3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669];
+
+export const defaultHost = '127.0.0.1';
 
 function getRandomPort(min: number, max: number) {
   let port: number;
@@ -19,21 +21,24 @@ function getRandomPort(min: number, max: number) {
 
 export const defaultPort = getRandomPort(3000, 8999);
 
-export async function getPort(expectPort: number) {
-  return gp({ port: expectPort });
+export async function getPort(expectPort: number, host = defaultHost) {
+  return gp({ port: expectPort, host });
 }
 
-export const createGetPortSyncFunctionString = (expectPort: number) =>
+export const createGetPortSyncFunctionString = (
+  expectPort: number,
+  host = defaultHost,
+) =>
   `
 (() => {
 const net = require('net');
 
-function getPort(expectPort) {
+function getPort(expectPort, host) {
   return new Promise((resolve, reject) => {
     const server = net.createServer();
     server.unref();
     server.on('error', reject);
-    server.listen(expectPort, () => {
+    server.listen(expectPort, host, () => {
       const { port } = server.address();
       server.close(() => {
         resolve(port);
@@ -46,7 +51,7 @@ async function getAvailablePort(expectPort) {
   let port = expectPort;
   while (true) {
     try {
-      const res = await getPort(port);
+      const res = await getPort(port, ${JSON.stringify(host)});
       return res;
     } catch (error) {
       port += Math.floor(Math.random() * 100 + 1);
@@ -58,13 +63,18 @@ getAvailablePort(${expectPort}).then(port => process.stdout.write(port.toString(
 })();
 `.trim();
 
-export function getPortSync(expectPort: number): number | never {
+export function getPortSync(
+  expectPort: number,
+  host = defaultHost,
+): number | never {
   const statement =
     os.EOL === '\n'
-      ? createGetPortSyncFunctionString(expectPort)
-      : createGetPortSyncFunctionString(expectPort).replace(/\n/g, '');
+      ? createGetPortSyncFunctionString(expectPort, host)
+      : createGetPortSyncFunctionString(expectPort, host).replace(/\n/g, '');
 
-  const port = execSync(`node -e "${statement}"`, { encoding: 'utf-8' });
+  const port = execFileSync(process.execPath, ['-e', statement], {
+    encoding: 'utf-8',
+  });
 
   return Number(port);
 }
@@ -73,7 +83,10 @@ export function createApp() {
   return connect();
 }
 
-export async function createServer(port: number): Promise<{
+export async function createServer(
+  port: number,
+  host = defaultHost,
+): Promise<{
   app: Thirdparty.connect.Server;
   server: http.Server;
   port: number;
@@ -103,8 +116,13 @@ export async function createServer(port: number): Promise<{
     },
   };
 
-  return new Promise<typeof res>((resolve) => {
-    server.listen(port, () => {
+  return new Promise<typeof res>((resolve, reject) => {
+    const onError = (error: Error) => {
+      reject(error);
+    };
+    server.once('error', onError);
+    server.listen(port, host, () => {
+      server.off('error', onError);
       resolve(res);
     });
   });
