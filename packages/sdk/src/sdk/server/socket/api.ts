@@ -1,5 +1,6 @@
 import { Data } from '@rsdoctor/utils/common';
 import { Manifest, SDK } from '@rsdoctor/types';
+import { getStoreDataByKey } from '../dataKey';
 
 interface SocketAPILoaderOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
@@ -25,15 +26,7 @@ export class SocketAPILoader implements Manifest.ManifestDataLoader {
   public async loadData(key: string) {
     const data = this.options.sdk.getStoreData();
 
-    const sep = '.';
-
-    let res = data[key];
-
-    if (key.includes(sep)) {
-      res = key.split(sep).reduce((t, k) => t[k], data);
-    }
-
-    return res;
+    return getStoreDataByKey(data, key);
   }
 
   get loadAPIData() {

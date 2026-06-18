@@ -13,14 +13,14 @@ import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
 import { Lodash } from '@rsdoctor/utils/common';
 import { createRequire } from 'module';
-import { IncomingMessage, ServerResponse } from 'http';
+import { ServerResponse } from 'http';
+import { setCorsHeaders } from './security';
 
 const require = createRequire(import.meta.url);
 export * from './utils';
 
 /** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
-const LOCAL_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
 const LISTEN_RETRY_LIMIT = 10;
 
 export type ISocketType = { port: number; socketUrl: string };
@@ -74,7 +74,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   public get socketUrl(): ISocketType {
     return {
       port: this.port,
-      socketUrl: `ws://localhost:${this.port}`,
+      socketUrl: `ws://${this.host}:${this.port}`,
     };
   }
 
@@ -82,34 +82,9 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     return this._innerClientPath;
   }
 
-  private isLocalOrigin(origin: string) {
-    try {
-      const url = new URL(origin);
-      return (
-        (url.protocol === 'http:' || url.protocol === 'https:') &&
-        LOCAL_HOSTNAMES.has(url.hostname)
-      );
-    } catch {
-      return false;
-    }
-  }
-
-  private setCorsHeaders(req: IncomingMessage, res: ServerResponse) {
-    const origin = req.headers.origin;
-    if (typeof origin !== 'string' || !this.isLocalOrigin(origin)) {
-      return false;
-    }
-
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    return true;
-  }
-
   private createSecurityMiddleware(): Thirdparty.connect.NextHandleFunction {
     return (req, res, next) => {
-      const isCorsAllowed = this.setCorsHeaders(req, res);
+      const isCorsAllowed = setCorsHeaders(req, res);
       if (req.method?.toUpperCase() === 'OPTIONS') {
         res.statusCode = isCorsAllowed ? 204 : 403;
         res.end();
@@ -357,8 +332,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
     const needEncodeURI = args[0] === Client.RsdoctorClientRoutes.BundleDiff;
     const url = `http://${this.host}:${this.port}${relativeUrl}`;
-    const localhostUrl = `http://localhost:${this.port}${relativeUrl}`;
-    await openBrowser(localhostUrl, !needEncodeURI);
+    await openBrowser(url, !needEncodeURI);
     if (this._printServerUrl) {
       logger.info(
         `${chalk.green(`${this.sdk.name} compiler's`)} analyzer running on: ${chalk.cyan(url)}`,
