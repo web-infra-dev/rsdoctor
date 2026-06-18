@@ -8,6 +8,24 @@ interface RouterOptions {
   server: SDK.RsdoctorServerInstance;
 }
 
+type APIConstructor = Common.Constructor<typeof BaseAPI>;
+
+type StandardMethodDecoratorContext = {
+  name: PropertyKey;
+  addInitializer(initializer: (this: unknown) => void): void;
+};
+
+function isStandardMethodDecoratorContext(
+  value: unknown,
+): value is StandardMethodDecoratorContext {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'name' in value &&
+    typeof (value as { addInitializer?: unknown }).addInitializer === 'function'
+  );
+}
+
 export class Router {
   static routes = {
     /**
@@ -17,33 +35,79 @@ export class Router {
     post: new Map<Function, Array<[apiKey: PropertyKey, pathname: string]>>(),
   };
 
+  private static addRoute(
+    method: keyof typeof Router.routes,
+    constructor: APIConstructor,
+    propertyKey: PropertyKey,
+    pathname: string,
+  ) {
+    const routes = Router.routes[method];
+    if (!routes.has(constructor)) {
+      routes.set(constructor, []);
+    }
+
+    const apiRoutes = routes.get(constructor)!;
+    if (
+      !apiRoutes.some(
+        ([registeredKey, registeredPathname]) =>
+          registeredKey === propertyKey && registeredPathname === pathname,
+      )
+    ) {
+      apiRoutes.push([propertyKey, pathname]);
+    }
+  }
+
   static get(pathname: string): MethodDecorator {
-    return (<T extends Common.Function>(
-      target: Common.Constructor<typeof BaseAPI>,
-      propertyKey: PropertyKey,
-      descriptor: TypedPropertyDescriptor<T>,
+    return ((
+      target: object,
+      contextOrKey: PropertyKey | StandardMethodDecoratorContext,
     ) => {
-      const routes = Router.routes.get;
-      if (!routes.has(target.constructor)) {
-        routes.set(target.constructor, []);
+      if (isStandardMethodDecoratorContext(contextOrKey)) {
+        contextOrKey.addInitializer(function (this: unknown) {
+          Router.addRoute(
+            'get',
+            (this as BaseAPI).constructor as APIConstructor,
+            contextOrKey.name,
+            pathname,
+          );
+        });
+        return target;
       }
-      routes.get(target.constructor)!.push([propertyKey, pathname]);
-      return descriptor;
+
+      Router.addRoute(
+        'get',
+        (target as { constructor: APIConstructor }).constructor,
+        contextOrKey,
+        pathname,
+      );
+      return;
     }) as MethodDecorator;
   }
 
   static post(pathname: string): MethodDecorator {
-    return (<T extends Common.Function>(
-      target: Common.Constructor<typeof BaseAPI>,
-      propertyKey: PropertyKey,
-      descriptor: TypedPropertyDescriptor<T>,
+    return ((
+      target: object,
+      contextOrKey: PropertyKey | StandardMethodDecoratorContext,
     ) => {
-      const routes = Router.routes.post;
-      if (!routes.has(target.constructor)) {
-        routes.set(target.constructor, []);
+      if (isStandardMethodDecoratorContext(contextOrKey)) {
+        contextOrKey.addInitializer(function (this: unknown) {
+          Router.addRoute(
+            'post',
+            (this as BaseAPI).constructor as APIConstructor,
+            contextOrKey.name,
+            pathname,
+          );
+        });
+        return target;
       }
-      routes.get(target.constructor)!.push([propertyKey, pathname]);
-      return descriptor;
+
+      Router.addRoute(
+        'post',
+        (target as { constructor: APIConstructor }).constructor,
+        contextOrKey,
+        pathname,
+      );
+      return;
     }) as MethodDecorator;
   }
 
@@ -51,25 +115,32 @@ export class Router {
 
   public async setup() {
     const { apis, sdk, server } = this.options;
+    const instances = new Map<APIConstructor, BaseAPI>();
 
     apis.forEach((API) => {
-      const obj = new API(sdk, server);
-      Router.routes.get.forEach((v, cons) => {
-        v.forEach(([key, pathname]) => {
-          if (cons === API) {
-            // api class match
-            server.get(pathname, this.wrapAPIFunction(obj, key));
-          }
-        });
-      });
+      if (typeof API === 'function' && !instances.has(API)) {
+        instances.set(API, new API(sdk, server));
+      }
+    });
 
-      Router.routes.post.forEach((v, cons) => {
-        v.forEach(([key, pathname]) => {
-          if (cons === API) {
-            // api class match
-            server.post(pathname, this.wrapAPIFunction(obj, key));
-          }
-        });
+    const getInstance = (API: APIConstructor) => {
+      if (!instances.has(API)) {
+        instances.set(API, new API(sdk, server));
+      }
+      return instances.get(API)!;
+    };
+
+    Router.routes.get.forEach((routes, API) => {
+      const obj = getInstance(API);
+      routes.forEach(([key, pathname]) => {
+        server.get(pathname, this.wrapAPIFunction(obj, key));
+      });
+    });
+
+    Router.routes.post.forEach((routes, API) => {
+      const obj = getInstance(API);
+      routes.forEach(([key, pathname]) => {
+        server.post(pathname, this.wrapAPIFunction(obj, key));
       });
     });
   }
