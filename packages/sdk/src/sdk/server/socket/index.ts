@@ -13,7 +13,54 @@ interface SocketOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
   server: Server;
   port: number;
-  socketOptions?: SocketServerOptions;
+  socketOptions?: Partial<SocketServerOptions>;
+}
+
+function isAllowedCorsOrigin(
+  origin: string | undefined,
+  allowedOrigin: SDK.RsdoctorServerCorsStaticOrigin | undefined,
+  defaultAllowed: boolean,
+): boolean {
+  if (origin === undefined) {
+    return true;
+  }
+
+  if (typeof allowedOrigin === 'undefined') {
+    return defaultAllowed;
+  }
+
+  if (typeof allowedOrigin === 'boolean') {
+    return allowedOrigin;
+  }
+
+  if (typeof allowedOrigin === 'string') {
+    return allowedOrigin === '*' || allowedOrigin === origin;
+  }
+
+  if (Array.isArray(allowedOrigin)) {
+    return allowedOrigin.some((item) =>
+      isAllowedCorsOrigin(origin, item, defaultAllowed),
+    );
+  }
+
+  return allowedOrigin.test(origin);
+}
+
+function checkCorsOrigin(
+  origin: string | undefined,
+  corsOptions: SDK.RsdoctorServerCorsOptions | undefined,
+  callback: (allowed: boolean) => void,
+) {
+  const allowedOrigin = corsOptions?.origin;
+
+  if (typeof allowedOrigin === 'function') {
+    allowedOrigin(origin, (err, result) => {
+      callback(!err && isAllowedCorsOrigin(origin, result, false));
+    });
+    return;
+  }
+
+  callback(isAllowedCorsOrigin(origin, allowedOrigin, true));
 }
 
 export class Socket {
@@ -30,37 +77,52 @@ export class Socket {
 
   public bootstrap() {
     const { socketOptions } = this.options;
-    const corsOptions =
-      socketOptions?.cors &&
-      typeof socketOptions.cors === 'object' &&
-      !Array.isArray(socketOptions.cors)
-        ? socketOptions.cors
-        : {};
+    const hasCustomCorsOptions = typeof socketOptions?.cors !== 'undefined';
 
     this.io = new SocketServer(this.options.server, {
       ...socketOptions,
-      cors: {
-        ...corsOptions,
-        origin: (origin, callback) => {
-          callback(null, isAllowedRequestOrigin(origin));
-        },
-      },
+      cors: hasCustomCorsOptions
+        ? socketOptions?.cors
+        : {
+            origin: (origin, callback) => {
+              callback(null, isAllowedRequestOrigin(origin));
+            },
+          },
       allowRequest: (req, callback) => {
         const host = req.headers.host || req.headers[':authority'];
-        if (
-          !isAllowedRequestHost(host) ||
-          !isAllowedRequestOrigin(req.headers.origin)
-        ) {
+        if (!isAllowedRequestHost(host)) {
           callback(null, false);
           return;
         }
 
-        if (socketOptions?.allowRequest) {
-          socketOptions.allowRequest(req, callback);
-          return;
-        }
+        const origin = Array.isArray(req.headers.origin)
+          ? req.headers.origin[0]
+          : req.headers.origin;
+        const checkOrigin = hasCustomCorsOptions
+          ? (next: (allowed: boolean) => void) => {
+              checkCorsOrigin(
+                origin,
+                socketOptions?.cors as SDK.RsdoctorServerCorsOptions,
+                next,
+              );
+            }
+          : (next: (allowed: boolean) => void) => {
+              next(isAllowedRequestOrigin(origin));
+            };
 
-        callback(null, true);
+        checkOrigin((allowed) => {
+          if (!allowed) {
+            callback(null, false);
+            return;
+          }
+
+          if (socketOptions?.allowRequest) {
+            socketOptions.allowRequest(req, callback);
+            return;
+          }
+
+          callback(null, true);
+        });
       },
     });
     this.io.on('connection', (socket) => {

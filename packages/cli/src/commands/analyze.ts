@@ -70,7 +70,16 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
 
       spinner.text = `start server`;
 
-      const sdk = new RsdoctorSDK({ name, root: cwd, port, type });
+      const sdk = new RsdoctorSDK({
+        name,
+        root: cwd,
+        type,
+        config: {
+          server: {
+            port,
+          },
+        },
+      });
 
       await sdk.bootstrap();
 

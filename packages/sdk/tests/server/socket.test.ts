@@ -1,13 +1,24 @@
 import { describe, it, expect, rs } from '@rstest/core';
 import { request } from 'http';
-import { setupSDK } from '../utils';
+import { setupSDK, type MockSDKResponse } from '../utils';
 
 rs.setConfig({ testTimeout: 50000 });
 
 describe('test server/socket.ts', () => {
   const target = setupSDK();
+  const customCorsTarget = setupSDK({
+    server: {
+      cors: {
+        origin: 'https://example.com',
+      },
+    },
+  });
 
-  function requestSocketHandshake(origin?: string, host?: string) {
+  function requestSocketHandshake(
+    target: MockSDKResponse,
+    origin?: string,
+    host?: string,
+  ) {
     return new Promise<{
       statusCode: number;
       allowOrigin: string | string[] | undefined;
@@ -48,7 +59,7 @@ describe('test server/socket.ts', () => {
 
   it('rejects socket handshakes from non-local origins', async () => {
     await expect(
-      requestSocketHandshake('https://example.com'),
+      requestSocketHandshake(target, 'https://example.com'),
     ).resolves.toMatchObject({
       statusCode: 403,
       allowOrigin: undefined,
@@ -58,17 +69,40 @@ describe('test server/socket.ts', () => {
   it('allows socket handshakes from local origins', async () => {
     const origin = `http://foo.localhost:${target.server.port}`;
 
-    await expect(requestSocketHandshake(origin)).resolves.toMatchObject({
-      statusCode: 200,
-      allowOrigin: origin,
-    });
+    await expect(requestSocketHandshake(target, origin)).resolves.toMatchObject(
+      {
+        statusCode: 200,
+        allowOrigin: origin,
+      },
+    );
   });
 
   it('rejects socket handshakes with non-local Host headers', async () => {
     const origin = `http://foo.localhost:${target.server.port}`;
 
     await expect(
-      requestSocketHandshake(origin, `evil.example.com:${target.server.port}`),
+      requestSocketHandshake(
+        target,
+        origin,
+        `evil.example.com:${target.server.port}`,
+      ),
+    ).resolves.toMatchObject({
+      statusCode: 403,
+    });
+  });
+
+  it('allows socket handshakes from custom CORS origins', async () => {
+    await expect(
+      requestSocketHandshake(customCorsTarget, 'https://example.com'),
+    ).resolves.toMatchObject({
+      statusCode: 200,
+      allowOrigin: 'https://example.com',
+    });
+  });
+
+  it('rejects socket handshakes from disallowed custom CORS origins', async () => {
+    await expect(
+      requestSocketHandshake(customCorsTarget, 'https://evil.example.com'),
     ).resolves.toMatchObject({
       statusCode: 403,
     });

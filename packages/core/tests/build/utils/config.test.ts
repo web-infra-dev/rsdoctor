@@ -318,6 +318,73 @@ describe('normalizeUserConfig', () => {
     });
   });
 
+  describe('server configuration', () => {
+    it('should preserve port and apply it to server.port', () => {
+      const result = normalizeUserConfig({
+        port: 9876,
+      });
+
+      expect(result.port).toBe(9876);
+      expect(result.server.port).toBe(9876);
+    });
+
+    it('should preserve server.port', () => {
+      const result = normalizeUserConfig({
+        server: {
+          port: 9876,
+        },
+      });
+
+      expect(result.server.port).toBe(9876);
+    });
+
+    it('should prefer server.port over port', () => {
+      const result = normalizeUserConfig({
+        port: 9876,
+        server: {
+          port: 9877,
+        },
+      });
+
+      expect(result.port).toBe(9876);
+      expect(result.server.port).toBe(9877);
+    });
+
+    it('should preserve server.cors options', () => {
+      const result = normalizeUserConfig({
+        server: {
+          cors: {
+            origin: 'https://example.com',
+            credentials: true,
+          },
+        },
+      });
+
+      expect(result.server.cors).toEqual({
+        origin: 'https://example.com',
+        credentials: true,
+      });
+    });
+
+    it('should preserve server.cors boolean values', () => {
+      expect(
+        normalizeUserConfig({
+          server: {
+            cors: false,
+          },
+        }).server.cors,
+      ).toBe(false);
+
+      expect(
+        normalizeUserConfig({
+          server: {
+            cors: true,
+          },
+        }).server.cors,
+      ).toBe(true);
+    });
+  });
+
   describe('output.reportCodeType', () => {
     it('should return NoCode when mode is brief regardless of reportCodeType', () => {
       const result = normalizeUserConfig({

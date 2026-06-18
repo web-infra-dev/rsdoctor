@@ -29,9 +29,9 @@ import path from 'path';
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
 
-export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
-  implements RsdoctorPluginInstance<Compiler, Rules>
-{
+export class RsdoctorWebpackPlugin<
+  Rules extends Linter.ExtendRuleData[],
+> implements RsdoctorPluginInstance<Compiler, Rules> {
   public readonly name = pluginTapName;
 
   public readonly options: Plugin.RsdoctorPluginOptionsNormalized<Rules>;
@@ -52,7 +52,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
 
   constructor(options?: Plugin.RsdoctorWebpackPluginOptions<Rules>) {
     this.options = normalizeUserConfig<Rules>(options);
-    const { port, output, innerClientPath, printLog, sdkInstance } =
+    const { port, server, output, innerClientPath, printLog, sdkInstance } =
       this.options;
 
     this.sdk =
@@ -65,6 +65,7 @@ export class RsdoctorWebpackPlugin<Rules extends Linter.ExtendRuleData[]>
         config: {
           innerClientPath: innerClientPath,
           printLog: printLog,
+          server,
           mode: output.mode,
           brief:
             output.mode === SDK.IMode[SDK.IMode.brief]
