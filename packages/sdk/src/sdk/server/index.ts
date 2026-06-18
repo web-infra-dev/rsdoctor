@@ -4,7 +4,6 @@ import serve from 'sirv';
 import { Bundle, GlobalConfig } from '@rsdoctor/utils/common';
 import assert from 'assert';
 import bodyParser from 'body-parser';
-import cors from 'cors';
 import { PassThrough } from 'stream';
 import { Socket } from './socket';
 import { Router } from './router';
@@ -12,18 +11,23 @@ import * as APIs from './apis';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
-import { getLocalIpAddress } from './utils';
 import { Lodash } from '@rsdoctor/utils/common';
 import { createRequire } from 'module';
-import { ServerResponse } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 
 const require = createRequire(import.meta.url);
 export * from './utils';
 
 /** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
+const LOCAL_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+const LISTEN_RETRY_LIMIT = 10;
 
 export type ISocketType = { port: number; socketUrl: string };
+
+function isAddressInUseError(error: unknown) {
+  return (error as { code?: string }).code === 'EADDRINUSE';
+}
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   private _server!: Common.PromiseReturnType<typeof Server.createServer>;
@@ -60,8 +64,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   }
 
   public get host(): string {
-    const host = getLocalIpAddress();
-    return host;
+    return Server.defaultHost;
   }
 
   public get origin(): string {
@@ -79,15 +82,77 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     return this._innerClientPath;
   }
 
+  private isLocalOrigin(origin: string) {
+    try {
+      const url = new URL(origin);
+      return (
+        (url.protocol === 'http:' || url.protocol === 'https:') &&
+        LOCAL_HOSTNAMES.has(url.hostname)
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  private setCorsHeaders(req: IncomingMessage, res: ServerResponse) {
+    const origin = req.headers.origin;
+    if (typeof origin !== 'string' || !this.isLocalOrigin(origin)) {
+      return false;
+    }
+
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    return true;
+  }
+
+  private createSecurityMiddleware(): Thirdparty.connect.NextHandleFunction {
+    return (req, res, next) => {
+      const isCorsAllowed = this.setCorsHeaders(req, res);
+      if (req.method?.toUpperCase() === 'OPTIONS') {
+        res.statusCode = isCorsAllowed ? 204 : 403;
+        res.end();
+        return;
+      }
+
+      next();
+    };
+  }
+
+  private async createInnerServer() {
+    let expectedPort = this.port;
+    let lastError: unknown;
+
+    for (let retry = 0; retry < LISTEN_RETRY_LIMIT; retry++) {
+      const port = Server.getPortSync(expectedPort, this.host);
+
+      try {
+        return {
+          port,
+          server: await Server.createServer(port, this.host),
+        };
+      } catch (error) {
+        if (!isAddressInUseError(error)) {
+          throw error;
+        }
+        lastError = error;
+        expectedPort = port + 1;
+      }
+    }
+
+    throw lastError;
+  }
+
   async bootstrap() {
     if (!this.disposed) {
       return;
     }
 
-    const port = Server.getPortSync(this.port);
+    const { port, server } = await this.createInnerServer();
     // rewrite port when the default port is unavailable
     this.port = port;
-    this._server = await Server.createServer(port);
+    this._server = server;
     this._socket = new Socket({
       sdk: this.sdk,
       server: this._server.server,
@@ -103,7 +168,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
     this.disposed = false;
 
-    this.app.use(cors());
+    this.app.use(this.createSecurityMiddleware());
     this.app.use(bodyParser.json({ limit: '500mb' }));
     const clientHtmlPath = this._innerClientPath
       ? this._innerClientPath
@@ -199,9 +264,6 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       if (m === method) {
         try {
           const body = await cb(req, res, next);
-
-          res.setHeader('Access-Control-Allow-Origin', '*');
-          res.setHeader('Access-Control-Allow-Credentials', 'true');
           res.statusCode = 200;
 
           if (Buffer.isBuffer(body)) {
