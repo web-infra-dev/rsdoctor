@@ -21,8 +21,13 @@ export * from './utils';
 /** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
 const LOCAL_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+const LISTEN_RETRY_LIMIT = 10;
 
 export type ISocketType = { port: number; socketUrl: string };
+
+function isAddressInUseError(error: unknown) {
+  return (error as { code?: string }).code === 'EADDRINUSE';
+}
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   private _server!: Common.PromiseReturnType<typeof Server.createServer>;
@@ -115,15 +120,39 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     };
   }
 
+  private async createInnerServer() {
+    let expectedPort = this.port;
+    let lastError: unknown;
+
+    for (let retry = 0; retry < LISTEN_RETRY_LIMIT; retry++) {
+      const port = Server.getPortSync(expectedPort, this.host);
+
+      try {
+        return {
+          port,
+          server: await Server.createServer(port, this.host),
+        };
+      } catch (error) {
+        if (!isAddressInUseError(error)) {
+          throw error;
+        }
+        lastError = error;
+        expectedPort = port + 1;
+      }
+    }
+
+    throw lastError;
+  }
+
   async bootstrap() {
     if (!this.disposed) {
       return;
     }
 
-    const port = Server.getPortSync(this.port, this.host);
+    const { port, server } = await this.createInnerServer();
     // rewrite port when the default port is unavailable
     this.port = port;
-    this._server = await Server.createServer(port, this.host);
+    this._server = server;
     this._socket = new Socket({
       sdk: this.sdk,
       server: this._server.server,

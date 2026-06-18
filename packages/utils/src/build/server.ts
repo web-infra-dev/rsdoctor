@@ -116,8 +116,13 @@ export async function createServer(
     },
   };
 
-  return new Promise<typeof res>((resolve) => {
+  return new Promise<typeof res>((resolve, reject) => {
+    const onError = (error: Error) => {
+      reject(error);
+    };
+    server.once('error', onError);
     server.listen(port, host, () => {
+      server.off('error', onError);
       resolve(res);
     });
   });
