@@ -31,8 +31,14 @@ export class Router {
     /**
      * - `key` is the constructor of object which used to match the API class
      */
-    get: new Map<Function, Array<[apiKey: PropertyKey, pathname: string]>>(),
-    post: new Map<Function, Array<[apiKey: PropertyKey, pathname: string]>>(),
+    get: new Map<
+      APIConstructor,
+      Array<[apiKey: PropertyKey, pathname: string]>
+    >(),
+    post: new Map<
+      APIConstructor,
+      Array<[apiKey: PropertyKey, pathname: string]>
+    >(),
   };
 
   private static addRoute(
