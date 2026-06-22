@@ -1,10 +1,17 @@
 import { describe, it, expect } from '@rstest/core';
 import os from 'os';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { Plugin } from '@rsdoctor/types';
 import { Utils } from '@/build-utils/build';
 import { addProbeLoader2Rules } from '@/build-utils/build/utils';
 
 process.env.DOCTOR_TEST = 'true';
+
+const corePackageRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '../../../..',
+);
 
 const rules = [
   {
@@ -85,7 +92,7 @@ const mockCompiler: Plugin.BaseCompiler = {
 
 function normalizeSnapshotPaths<T>(value: T): T {
   if (typeof value === 'string') {
-    return value.replace(process.cwd(), '<ROOT>/packages/core') as T;
+    return value.replace(corePackageRoot, '<ROOT>/packages/core') as T;
   }
   if (value instanceof RegExp || value === null || typeof value !== 'object') {
     return value;
