@@ -10,7 +10,7 @@ rs.setConfig({ testTimeout: 50000 });
 describe('test server/apis/project.ts', () => {
   const target = setupSDK();
 
-  function optionsWithOrigin(origin: string) {
+  function optionsWithOrigin(origin: string, host?: string) {
     return new Promise<{
       statusCode: number;
       allowOrigin: string | string[] | undefined;
@@ -24,7 +24,10 @@ describe('test server/apis/project.ts', () => {
           port: url.port,
           path: url.pathname,
           method: 'OPTIONS',
-          headers: { Origin: origin },
+          headers: {
+            Origin: origin,
+            ...(host ? { Host: host } : {}),
+          },
         },
         (res) => {
           res.on('data', () => {});
@@ -33,6 +36,30 @@ describe('test server/apis/project.ts', () => {
               statusCode: res.statusCode || 0,
               allowOrigin: res.headers['access-control-allow-origin'],
             });
+          });
+        },
+      );
+
+      req.on('error', reject);
+      req.end();
+    });
+  }
+
+  function requestWithHost(pathname: string, host: string) {
+    return new Promise<{ statusCode: number }>((resolve, reject) => {
+      const url = new URL(`${target.server.origin}${pathname}`);
+      const req = request(
+        {
+          hostname: url.hostname,
+          port: url.port,
+          path: `${url.pathname}${url.search}`,
+          method: 'GET',
+          headers: { Host: host },
+        },
+        (res) => {
+          res.on('data', () => {});
+          res.on('close', () => {
+            resolve({ statusCode: res.statusCode || 0 });
           });
         },
       );
@@ -76,6 +103,34 @@ describe('test server/apis/project.ts', () => {
     ).resolves.toStrictEqual({
       statusCode: 204,
       allowOrigin: `http://foo.localhost:${target.server.port}`,
+    });
+
+    await expect(
+      optionsWithOrigin(
+        `http://foo.localhost:${target.server.port}`,
+        `foo.localhost:${target.server.port}`,
+      ),
+    ).resolves.toStrictEqual({
+      statusCode: 204,
+      allowOrigin: `http://foo.localhost:${target.server.port}`,
+    });
+  });
+
+  it('rejects requests with non-local Host headers', async () => {
+    const host = `evil.example.com:${target.server.port}`;
+
+    await expect(requestWithHost('/', host)).resolves.toStrictEqual({
+      statusCode: 403,
+    });
+    await expect(
+      requestWithHost(SDK.ServerAPI.API.Manifest, host),
+    ).resolves.toStrictEqual({
+      statusCode: 403,
+    });
+    await expect(
+      requestWithHost('/__open-in-editor?file=/tmp/example.js', host),
+    ).resolves.toStrictEqual({
+      statusCode: 403,
     });
   });
 
