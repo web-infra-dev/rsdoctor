@@ -833,8 +833,8 @@ importers:
         specifier: 'catalog:'
         version: 19.2.7(react@19.2.7)
       react-render-to-markdown:
-        specifier: ^19.0.1
-        version: 19.0.1(react@19.2.7)
+        specifier: ^19.1.0
+        version: 19.1.0(react@19.2.7)
       rsbuild-plugin-google-analytics:
         specifier: ^1.0.6
         version: 1.0.6(@rsbuild/core@2.0.9(core-js@3.49.0))
@@ -14646,11 +14646,6 @@ snapshots:
     dependencies:
       react: 19.2.6
       react-reconciler: 0.33.0(react@19.2.6)
-
-  react-render-to-markdown@19.0.1(react@19.2.7):
-    dependencies:
-      react: 19.2.7
-      react-reconciler: 0.33.0(react@19.2.7)
 
   react-render-to-markdown@19.1.0(react@19.2.7):
     dependencies:
