@@ -51,7 +51,7 @@
     "@types/fs-extra": "catalog:",
     "@types/node": "catalog:",
     "@types/ws": "^8.18.1",
-    "body-parser": "2.2.2",
+    "body-parser": "2.3.0",
     "cors": "2.8.6",
     "dayjs": "catalog:",
     "fs-extra": "catalog:",
