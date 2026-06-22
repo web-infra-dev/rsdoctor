@@ -14,14 +14,13 @@ import path from 'path';
 import { Lodash } from '@rsdoctor/utils/common';
 import { createRequire } from 'module';
 import { ServerResponse } from 'http';
+import { DEFAULT_ALLOWED_CORS_ORIGINS, isAllowedRequestHost } from './security';
 
 const require = createRequire(import.meta.url);
 export * from './utils';
 
 /** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
-const DEFAULT_ALLOWED_CORS_ORIGINS =
-  /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/;
 const LISTEN_RETRY_LIMIT = 10;
 
 export type ISocketType = { port: number; socketUrl: string };
@@ -132,6 +131,16 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     this.disposed = false;
     const { default: cors } = await import('cors');
 
+    this.app.use((req, res, next) => {
+      const host = req.headers.host || req.headers[':authority'];
+      if (!isAllowedRequestHost(host)) {
+        res.statusCode = 403;
+        res.end();
+        return;
+      }
+
+      next();
+    });
     this.app.use(
       cors({
         origin: DEFAULT_ALLOWED_CORS_ORIGINS,

@@ -7,6 +7,7 @@ import {
 } from 'socket.io';
 import { isDeepStrictEqual } from 'util';
 import { SocketAPILoader } from './api';
+import { isAllowedRequestHost, isAllowedRequestOrigin } from '../security';
 
 interface SocketOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
@@ -28,11 +29,39 @@ export class Socket {
   }
 
   public bootstrap() {
+    const { socketOptions } = this.options;
+    const corsOptions =
+      socketOptions?.cors &&
+      typeof socketOptions.cors === 'object' &&
+      !Array.isArray(socketOptions.cors)
+        ? socketOptions.cors
+        : {};
+
     this.io = new SocketServer(this.options.server, {
+      ...socketOptions,
       cors: {
-        origin: '*',
+        ...corsOptions,
+        origin: (origin, callback) => {
+          callback(null, isAllowedRequestOrigin(origin));
+        },
       },
-      ...this.options.socketOptions,
+      allowRequest: (req, callback) => {
+        const host = req.headers.host || req.headers[':authority'];
+        if (
+          !isAllowedRequestHost(host) ||
+          !isAllowedRequestOrigin(req.headers.origin)
+        ) {
+          callback(null, false);
+          return;
+        }
+
+        if (socketOptions?.allowRequest) {
+          socketOptions.allowRequest(req, callback);
+          return;
+        }
+
+        callback(null, true);
+      },
     });
     this.io.on('connection', (socket) => {
       // setup event listeners for every socket which connected
