@@ -20,6 +20,7 @@
   "scripts": {
     "build": "rslib build",
     "dev": "rslib build --watch",
+    "prepublishOnly": "pnpm run build",
     "test": "rstest run"
   },
   "devDependencies": {
