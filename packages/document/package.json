@@ -34,7 +34,7 @@
     "cross-env": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-render-to-markdown": "^19.0.1",
+    "react-render-to-markdown": "^19.1.0",
     "rsbuild-plugin-google-analytics": "^1.0.6",
     "rsbuild-plugin-open-graph": "^1.1.3",
     "rspress-plugin-font-open-sans": "^1.0.4",
