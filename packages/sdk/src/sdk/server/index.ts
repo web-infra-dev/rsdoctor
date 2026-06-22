@@ -13,14 +13,15 @@ import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
 import { Lodash } from '@rsdoctor/utils/common';
 import { createRequire } from 'module';
-import { IncomingMessage, ServerResponse } from 'http';
+import { ServerResponse } from 'http';
 
 const require = createRequire(import.meta.url);
 export * from './utils';
 
 /** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
-const LOCAL_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+const DEFAULT_ALLOWED_CORS_ORIGINS =
+  /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/;
 const LISTEN_RETRY_LIMIT = 10;
 
 export type ISocketType = { port: number; socketUrl: string };
@@ -82,44 +83,6 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     return this._innerClientPath;
   }
 
-  private isLocalOrigin(origin: string) {
-    try {
-      const url = new URL(origin);
-      return (
-        (url.protocol === 'http:' || url.protocol === 'https:') &&
-        LOCAL_HOSTNAMES.has(url.hostname)
-      );
-    } catch {
-      return false;
-    }
-  }
-
-  private setCorsHeaders(req: IncomingMessage, res: ServerResponse) {
-    const origin = req.headers.origin;
-    if (typeof origin !== 'string' || !this.isLocalOrigin(origin)) {
-      return false;
-    }
-
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    return true;
-  }
-
-  private createSecurityMiddleware(): Thirdparty.connect.NextHandleFunction {
-    return (req, res, next) => {
-      const isCorsAllowed = this.setCorsHeaders(req, res);
-      if (req.method?.toUpperCase() === 'OPTIONS') {
-        res.statusCode = isCorsAllowed ? 204 : 403;
-        res.end();
-        return;
-      }
-
-      next();
-    };
-  }
-
   private async createInnerServer() {
     let expectedPort = this.port;
     let lastError: unknown;
@@ -167,8 +130,13 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     );
 
     this.disposed = false;
+    const { default: cors } = await import('cors');
 
-    this.app.use(this.createSecurityMiddleware());
+    this.app.use(
+      cors({
+        origin: DEFAULT_ALLOWED_CORS_ORIGINS,
+      }),
+    );
     this.app.use(bodyParser.json({ limit: '500mb' }));
     const clientHtmlPath = this._innerClientPath
       ? this._innerClientPath

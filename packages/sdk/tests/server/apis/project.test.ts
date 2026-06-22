@@ -53,7 +53,7 @@ describe('test server/apis/project.ts', () => {
     await expect(
       optionsWithOrigin('https://example.com'),
     ).resolves.toStrictEqual({
-      statusCode: 403,
+      statusCode: 204,
       allowOrigin: undefined,
     });
 
@@ -69,6 +69,13 @@ describe('test server/apis/project.ts', () => {
     ).resolves.toStrictEqual({
       statusCode: 204,
       allowOrigin: `http://127.0.0.1:${target.server.port + 1}`,
+    });
+
+    await expect(
+      optionsWithOrigin(`http://foo.localhost:${target.server.port}`),
+    ).resolves.toStrictEqual({
+      statusCode: 204,
+      allowOrigin: `http://foo.localhost:${target.server.port}`,
     });
   });
 
