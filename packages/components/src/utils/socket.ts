@@ -26,14 +26,17 @@ function ensureSocket(socketUrl: string = defaultSocketUrl) {
   return map.get(socketUrl)!;
 }
 
-export function getSocket(socketPort?: string, socketToken?: string): Socket {
-  const socketUrl = formatURL({
-    port: socketPort,
-    hostname: location.hostname,
-    protocol: location.protocol,
-    token: socketToken,
-  });
-  const socket = ensureSocket(socketPort ? socketUrl : defaultSocketUrl);
+export function getSocket(socketPort?: string, socketUrl?: string): Socket {
+  const resolvedSocketUrl =
+    socketUrl ||
+    formatURL({
+      port: socketPort,
+      hostname: location.hostname,
+      protocol: location.protocol,
+    });
+  const socket = ensureSocket(
+    socketPort || socketUrl ? resolvedSocketUrl : defaultSocketUrl,
+  );
   return socket;
 }
 
@@ -41,27 +44,22 @@ export function formatURL({
   port,
   protocol,
   hostname,
-  token,
 }: {
   port?: string;
   protocol: string;
   hostname: string;
-  token?: string;
 }) {
   if (typeof URL !== 'undefined') {
     const url = new URL('http://localhost');
     url.port = String(port);
     url.hostname = hostname;
     url.protocol = location.protocol.includes('https') ? 'wss' : 'ws';
-    if (token) {
-      url.searchParams.set('token', token);
-    }
     return ipv4Pattern.test(hostname) || hostname.includes('localhost')
       ? url.toString()
-      : `${protocol}//${hostname}${token ? `?token=${token}` : ''}`;
+      : `${protocol}//${hostname}`;
   }
 
   // compatible with IE11
   const colon = protocol.indexOf(':') === -1 ? ':' : '';
-  return `${protocol}${colon}//${hostname}:${port}${token ? `?token=${token}` : ''}`;
+  return `${protocol}${colon}//${hostname}:${port}`;
 }

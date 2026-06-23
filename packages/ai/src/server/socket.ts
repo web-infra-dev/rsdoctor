@@ -41,24 +41,10 @@ export function getPortFromArgs(): number {
   return 3000;
 }
 
-export function getTokenFromArgs(): string | undefined {
-  const args = process.argv.slice(2); // Skip the first two elements
-  const tokenIndex = args.indexOf('--token');
-  const compilerIndex = args.indexOf('--compiler');
-  if (tokenIndex !== -1 && args[tokenIndex + 1]) {
-    return args[tokenIndex + 1];
-  }
-
-  return getMcpToken(
-    compilerIndex !== -1 ? args[compilerIndex + 1] : undefined,
-  );
-}
-
 export const getWsUrl = async () => {
   const port = getPortFromArgs();
-  const token = getTokenFromArgs();
   logger.error(`Socket will start on port: ${port}`);
-  return `ws://localhost:${port}${token ? `?token=${token}` : ''}`;
+  return `ws://localhost:${port}`;
 };
 
 export const sendRequest = async (api: string, params = {}) => {
@@ -90,23 +76,4 @@ export const getMcpPort = (compiler?: string) => {
   }
 
   return mcpJson.port;
-};
-
-export const getMcpToken = (compiler?: string) => {
-  const mcpPortFilePath = GlobalConfig.getMcpConfigPath();
-
-  if (!fs.existsSync(mcpPortFilePath)) {
-    return undefined;
-  }
-
-  const mcpJson = JSON.parse(fs.readFileSync(mcpPortFilePath, 'utf8'));
-
-  if (compiler) {
-    const compilerToken = mcpJson.tokenList?.[compiler];
-    if (compilerToken) {
-      return compilerToken;
-    }
-  }
-
-  return mcpJson.token;
 };

@@ -16,7 +16,11 @@ import { Lodash } from '@rsdoctor/utils/common';
 import { createRequire } from 'module';
 import { ServerResponse } from 'http';
 import { randomBytes } from 'crypto';
-import { DEFAULT_ALLOWED_CORS_ORIGINS, isAllowedRequestHost } from './security';
+import {
+  DEFAULT_ALLOWED_CORS_ORIGINS,
+  isAllowedCorsRequest,
+  isAllowedRequestHost,
+} from './security';
 
 const require = createRequire(import.meta.url);
 export * from './utils';
@@ -26,12 +30,6 @@ const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
 const LISTEN_RETRY_LIMIT = 10;
 
 export type ISocketType = { port: number; socketUrl: string; token: string };
-
-export type RsdoctorServerOptions = {
-  innerClientPath?: string;
-  printServerUrl?: boolean;
-  cors?: SDK.RsdoctorServerConfig['cors'];
-};
 
 export type RsdoctorServerOptions = {
   innerClientPath?: string;
@@ -171,13 +169,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     });
     await this._socket.bootstrap();
 
-    (
-      GlobalConfig.writeMcpPort as (
-        port: number,
-        builderName?: string,
-        token?: string,
-      ) => void
-    )(this.port, this.sdk.name, this._socketToken);
+    GlobalConfig.writeMcpPort(this.port, this.sdk.name);
 
     logger.debug(
       `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,
@@ -195,10 +187,26 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
       next();
     });
+    if (
+      corsOptions !== false &&
+      corsOptions.origin === DEFAULT_ALLOWED_CORS_ORIGINS
+    ) {
+      this.app.use((req, res, next) => {
+        const host = req.headers.host || req.headers[':authority'];
+        if (!isAllowedCorsRequest(req.headers.origin, host)) {
+          res.statusCode = 403;
+          res.end();
+          return;
+        }
+
+        next();
+      });
+    }
     if (corsOptions !== false) {
       this.app.use(cors(corsOptions));
     }
     this.app.use(bodyParser.json({ limit: '500mb' }));
+    await this._router.setup();
 
     const clientHtmlPath = this._innerClientPath
       ? this._innerClientPath

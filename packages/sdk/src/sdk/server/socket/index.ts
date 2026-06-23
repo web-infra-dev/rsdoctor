@@ -52,34 +52,12 @@ export class Socket {
           return;
         }
 
-        const origin = Array.isArray(req.headers.origin)
-          ? req.headers.origin[0]
-          : req.headers.origin;
-        const checkOrigin = hasCustomCorsOptions
-          ? (next: (allowed: boolean) => void) => {
-              checkCorsOrigin(
-                origin,
-                socketOptions?.cors as SDK.RsdoctorServerCorsOptions,
-                next,
-              );
-            }
-          : (next: (allowed: boolean) => void) => {
-              next(isAllowedRequestOrigin(origin));
-            };
+        if (socketOptions?.allowRequest) {
+          socketOptions.allowRequest(req, callback);
+          return;
+        }
 
-        checkOrigin((allowed) => {
-          if (!allowed) {
-            callback(null, false);
-            return;
-          }
-
-          if (socketOptions?.allowRequest) {
-            socketOptions.allowRequest(req, callback);
-            return;
-          }
-
-          callback(null, true);
-        });
+        callback(null, true);
       },
     });
     this.io.on('connection', (socket) => {

@@ -5,11 +5,6 @@ import type { Socket } from 'socket.io-client';
 import { BaseDataLoader } from './base';
 import { getSocket } from '../socket';
 
-function getSocketToken(socketUrl: string) {
-  const tokenMatch = /[?&]token=([^&]+)/.exec(socketUrl);
-  return tokenMatch ? decodeURIComponent(tokenMatch[1]) : '';
-}
-
 export class LocalServerDataLoader extends BaseDataLoader {
   protected events: Map<
     SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
@@ -134,6 +129,6 @@ export class LocalServerDataLoader extends BaseDataLoader {
   protected getSocket(): Socket {
     const socketPort = this.get('__SOCKET__PORT__') ?? '';
     const socketUrl = this.get('__SOCKET__URL__') ?? '';
-    return getSocket(socketPort, getSocketToken(socketUrl));
+    return getSocket(socketPort, socketUrl);
   }
 }

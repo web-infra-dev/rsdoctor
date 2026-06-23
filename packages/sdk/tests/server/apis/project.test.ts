@@ -176,7 +176,7 @@ describe('test server/apis/project.ts', () => {
     await expect(
       optionsWithOrigin(partialCorsTarget, 'https://example.com'),
     ).resolves.toStrictEqual({
-      statusCode: 204,
+      statusCode: 403,
       allowOrigin: undefined,
     });
 
