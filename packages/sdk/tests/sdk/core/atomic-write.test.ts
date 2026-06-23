@@ -62,8 +62,12 @@ describe('atomic write manifest', () => {
           const sdk = new RsdoctorSDK({
             name: 'test',
             root: process.cwd(),
-            port,
-            config: { noServer: true },
+            config: {
+              noServer: true,
+              server: {
+                port,
+              },
+            },
           });
 
           try {

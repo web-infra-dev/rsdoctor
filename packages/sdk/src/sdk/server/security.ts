@@ -15,6 +15,17 @@ export function isAllowedRequestOrigin(origin: string | string[] | undefined) {
   );
 }
 
+function getHostnameFromOrigin(origin: string) {
+  try {
+    const hostname = new URL(origin).hostname.toLowerCase();
+    return hostname.startsWith('[') && hostname.endsWith(']')
+      ? hostname.slice(1, -1)
+      : hostname;
+  } catch {
+    return '';
+  }
+}
+
 function isIpAddress(hostname: string) {
   return isIP(hostname) !== 0;
 }
@@ -35,4 +46,29 @@ export function isAllowedRequestHost(host: string | string[] | undefined) {
 
   const hostname = getHostnameFromHost(host).toLowerCase();
   return LOCAL_HOSTNAMES.test(hostname) || isIpAddress(hostname);
+}
+
+export function isAllowedCorsRequest(
+  origin: string | string[] | undefined,
+  host: string | string[] | undefined,
+) {
+  if (origin === undefined) {
+    return true;
+  }
+  if (
+    typeof origin !== 'string' ||
+    typeof host !== 'string' ||
+    !isAllowedRequestOrigin(origin)
+  ) {
+    return false;
+  }
+
+  const originHostname = getHostnameFromOrigin(origin);
+  const hostHostname = getHostnameFromHost(host).toLowerCase();
+
+  if (originHostname.endsWith('.localhost')) {
+    return originHostname === hostHostname;
+  }
+
+  return true;
 }

@@ -32,6 +32,7 @@ export class RsdoctorWebpackMultiplePlugin<
       extraConfig: {
         innerClientPath: normallizedOptions.innerClientPath,
         printLog: normallizedOptions.printLog,
+        server: normallizedOptions.server,
         mode: normallizedOptions.output.mode
           ? normallizedOptions.output.mode
           : undefined,

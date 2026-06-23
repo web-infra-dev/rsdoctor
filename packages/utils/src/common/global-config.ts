@@ -12,7 +12,7 @@ import { logger } from '../logger';
  *     builder1: portNumber,
  *     builder2: portNumber,
  *   },
- *   port: portNumber // The port of the last builder is used by default
+ *   port: portNumber, // The port of the last builder is used by default
  * }
  *
  * @param {number} port - The port number to write.
@@ -27,7 +27,10 @@ export function writeMcpPort(port: number, builderName?: string) {
     fs.mkdirSync(rsdoctorDir, { recursive: true });
   }
 
-  let mcpJson: { portList: Record<string, number>; port: number } = {
+  let mcpJson: {
+    portList: Record<string, number>;
+    port: number;
+  } = {
     portList: {},
     port: 0,
   };

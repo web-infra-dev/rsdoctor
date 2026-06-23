@@ -37,17 +37,18 @@ export interface RsdoctorWebpackPluginFeatures {
 export interface RsdoctorPluginOptionsNormalized<
   Rules extends LinterType.ExtendRuleData[] = [],
 > extends Common.DeepRequired<
-    Omit<
-      RsdoctorWebpackPluginOptions<Rules>,
-      | 'sdkInstance'
-      | 'linter'
-      | 'output'
-      | 'supports'
-      | 'port'
-      | 'brief'
-      | 'mode'
-    >
-  > {
+  Omit<
+    RsdoctorWebpackPluginOptions<Rules>,
+    | 'sdkInstance'
+    | 'linter'
+    | 'output'
+    | 'supports'
+    | 'port'
+    | 'brief'
+    | 'mode'
+    | 'server'
+  >
+> {
   features: Common.DeepRequired<RsdoctorWebpackPluginFeatures>;
   linter: Required<LinterType.Options<Rules, InternalRules>>;
   sdkInstance?: SDK.RsdoctorBuilderSDKInstance;
@@ -58,6 +59,7 @@ export interface RsdoctorPluginOptionsNormalized<
     options: Config.BriefModeOptions | Config.NormalModeOptions;
   };
   port?: number;
+  server: SDK.RsdoctorServerConfig;
   supports: ISupport;
 }
 
@@ -152,6 +154,11 @@ export interface RsdoctorWebpackPluginOptions<
   port?: number;
 
   /**
+   * Configure the Rsdoctor report server.
+   */
+  server?: SDK.RsdoctorServerConfig;
+
+  /**
    * Options to control the log printing.
    */
   printLog?: SDK.IPrintLog;
@@ -185,8 +192,10 @@ export interface NormalModeOptions {
 }
 
 // Normal Mode Type
-interface NormalModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+interface NormalModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'normal';
   reportCodeType?: ReportCodeTypeByMode<'normal'>;
   options?: NormalModeOptions;
@@ -200,8 +209,10 @@ export interface BriefModeOptions {
   htmlOptions?: Config.BriefConfig;
 }
 
-export interface BriefModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+export interface BriefModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'brief';
   reportCodeType?: ReportCodeTypeByMode<'brief'>;
   options?: BriefModeOptions;

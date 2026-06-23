@@ -121,6 +121,50 @@ export interface IPrintLog {
   serverUrls: boolean;
 }
 
+export type RsdoctorServerCorsStaticOrigin =
+  | boolean
+  | string
+  | RegExp
+  | Array<boolean | string | RegExp>;
+
+export type RsdoctorServerCorsOrigin =
+  | RsdoctorServerCorsStaticOrigin
+  | ((
+      requestOrigin: string | undefined,
+      callback: (
+        err: Error | null,
+        origin?: RsdoctorServerCorsStaticOrigin,
+      ) => void,
+    ) => void);
+
+export interface RsdoctorServerCorsOptions {
+  origin?: RsdoctorServerCorsOrigin;
+  methods?: string | string[];
+  allowedHeaders?: string | string[];
+  exposedHeaders?: string | string[];
+  credentials?: boolean;
+  maxAge?: number;
+  preflightContinue?: boolean;
+  optionsSuccessStatus?: number;
+}
+
+export interface RsdoctorServerConfig {
+  /**
+   * The port of the Rsdoctor report server.
+   */
+  port?: number;
+  /**
+   * Configure CORS for the Rsdoctor report server.
+   *
+   * - `false`: disable CORS middleware
+   * - `true`: use the cors middleware defaults
+   * - object: pass options to the cors middleware
+   *
+   * By default, Rsdoctor only allows local origins.
+   */
+  cors?: boolean | RsdoctorServerCorsOptions;
+}
+
 export type SDKOptionsType = {
   innerClientPath?: string;
   disableClientServer?: boolean;
@@ -129,4 +173,5 @@ export type SDKOptionsType = {
   mode?: keyof typeof IMode;
   brief?: BriefModeOptions;
   features?: { treeShaking?: boolean };
+  server?: RsdoctorServerConfig;
 };

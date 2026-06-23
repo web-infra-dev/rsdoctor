@@ -60,11 +60,14 @@ export class RsdoctorSDK<
 
   constructor(options: T) {
     super(options);
+    const serverConfig = options.config?.server;
+    const port = serverConfig?.port ?? options.port;
     this.server = options.config?.noServer
-      ? new RsdoctorFakeServer(this, undefined)
-      : new RsdoctorServer(this, options.port, {
+      ? new RsdoctorFakeServer(this, port)
+      : new RsdoctorServer(this, port, {
           innerClientPath: options.config?.innerClientPath || '',
           printServerUrl: options.config?.printLog?.serverUrls,
+          cors: serverConfig?.cors,
         });
     this.type = Lodash.isNumber(options.type)
       ? options.type

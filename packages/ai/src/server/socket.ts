@@ -5,14 +5,17 @@ import fs from 'node:fs';
 
 const map: Record<string, Socket> = {};
 
-// 使用 logger.error 输出日志
+function redactSocketToken(url: string) {
+  return url.replace(/([?&]token=)[^&]+/, '$1<redacted>');
+}
+
+// Use logger.error to output logs.
 export const createSocket = (url: string): Socket => {
-  logger.error(map[url]);
   if (map[url]) return map[url];
   const socket = io(url, {});
-  logger.error('socket created', url);
+  logger.error('socket created', redactSocketToken(url));
   socket.on('connect', () => {
-    logger.error(`Socket Connect ${url}`);
+    logger.error(`Socket Connect ${redactSocketToken(url)}`);
   });
   map[url] = socket;
   return socket;

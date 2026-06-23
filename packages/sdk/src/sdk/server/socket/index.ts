@@ -7,13 +7,22 @@ import {
 } from 'socket.io';
 import { isDeepStrictEqual } from 'util';
 import { SocketAPILoader } from './api';
-import { isAllowedRequestHost, isAllowedRequestOrigin } from '../security';
+import { isAllowedRequestHost } from '../security';
 
 interface SocketOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
   server: Server;
   port: number;
-  socketOptions?: SocketServerOptions;
+  token: string;
+  socketOptions?: Partial<SocketServerOptions>;
+}
+
+function isAllowedSocketToken(url: string | undefined, token: string) {
+  if (!url) {
+    return false;
+  }
+
+  return new URL(url, 'http://localhost').searchParams.get('token') === token;
 }
 
 export class Socket {
@@ -30,26 +39,14 @@ export class Socket {
 
   public bootstrap() {
     const { socketOptions } = this.options;
-    const corsOptions =
-      socketOptions?.cors &&
-      typeof socketOptions.cors === 'object' &&
-      !Array.isArray(socketOptions.cors)
-        ? socketOptions.cors
-        : {};
 
     this.io = new SocketServer(this.options.server, {
       ...socketOptions,
-      cors: {
-        ...corsOptions,
-        origin: (origin, callback) => {
-          callback(null, isAllowedRequestOrigin(origin));
-        },
-      },
       allowRequest: (req, callback) => {
         const host = req.headers.host || req.headers[':authority'];
         if (
           !isAllowedRequestHost(host) ||
-          !isAllowedRequestOrigin(req.headers.origin)
+          !isAllowedSocketToken(req.url, this.options.token)
         ) {
           callback(null, false);
           return;

@@ -11,24 +11,32 @@ const defaultSocketUrl =
 const ipv4Pattern =
   /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
+function redactSocketToken(socketUrl: string) {
+  return socketUrl.replace(/([?&]token=)[^&]+/, '$1<redacted>');
+}
+
 function ensureSocket(socketUrl: string = defaultSocketUrl) {
   if (!map.has(socketUrl)) {
     const socket = io(socketUrl, {});
     socket.on('connect', () => {
-      console.log(`Socket Connect ${socketUrl}`);
+      console.log(`Socket Connect ${redactSocketToken(socketUrl)}`);
     });
     map.set(socketUrl, socket);
   }
   return map.get(socketUrl)!;
 }
 
-export function getSocket(socketPort?: string): Socket {
-  const socketUrl = formatURL({
-    port: socketPort,
-    hostname: location.hostname,
-    protocol: location.protocol,
-  });
-  const socket = ensureSocket(socketPort ? socketUrl : defaultSocketUrl);
+export function getSocket(socketPort?: string, socketUrl?: string): Socket {
+  const resolvedSocketUrl =
+    socketUrl ||
+    formatURL({
+      port: socketPort,
+      hostname: location.hostname,
+      protocol: location.protocol,
+    });
+  const socket = ensureSocket(
+    socketPort || socketUrl ? resolvedSocketUrl : defaultSocketUrl,
+  );
   return socket;
 }
 

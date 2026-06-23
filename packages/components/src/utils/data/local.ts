@@ -1,6 +1,7 @@
 import { Manifest as ManifestShared } from '@rsdoctor/utils/common';
 import { Common, Manifest, SDK } from '@rsdoctor/types';
 import { get } from 'es-toolkit/compat';
+import type { Socket } from 'socket.io-client';
 import { BaseDataLoader } from './base';
 import { getSocket } from '../socket';
 
@@ -31,7 +32,7 @@ export class LocalServerDataLoader extends BaseDataLoader {
       if (ManifestShared.isShardingData(res)) {
         if (!this.shardingDataMap.has(key)) {
           const task = new Promise((resolve) => {
-            getSocket().emit(
+            this.getSocket().emit(
               SDK.ServerAPI.API.LoadDataByKey,
               { key },
               (
@@ -60,19 +61,18 @@ export class LocalServerDataLoader extends BaseDataLoader {
 
   public async loadAPI<
     T extends SDK.ServerAPI.API,
-    B extends
-      SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-    R extends
-      SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+    B extends SDK.ServerAPI.InferRequestBodyType<T> =
+      SDK.ServerAPI.InferRequestBodyType<T>,
+    R extends SDK.ServerAPI.InferResponseType<T> =
+      SDK.ServerAPI.InferResponseType<T>,
   >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
     const [api, body] = args;
     // request limitation key
     const key = body ? `${api}_${JSON.stringify(body)}` : `${api}`;
-    const socketPort = this.get('__SOCKET__PORT__') ?? '';
 
     return this.limit(key, async () => {
       return new Promise((resolve) => {
-        getSocket(socketPort).emit(
+        this.getSocket().emit(
           api,
           body,
           (res: SDK.ServerAPI.SocketResponseType<T>) => {
@@ -116,13 +116,19 @@ export class LocalServerDataLoader extends BaseDataLoader {
     }
 
     this.events.get(api)!.add(fn);
-    getSocket().on(api as string, fn);
+    this.getSocket().on(api as string, fn);
   }
 
   public removeOnDataUpdate<
     T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
   >(api: T, fn: (response: SDK.ServerAPI.SocketResponseType<T>) => void) {
-    getSocket().off(api as string, fn);
+    this.getSocket().off(api as string, fn);
     this.events.get(api)!.delete(fn);
+  }
+
+  protected getSocket(): Socket {
+    const socketPort = this.get('__SOCKET__PORT__') ?? '';
+    const socketUrl = this.get('__SOCKET__URL__') ?? '';
+    return getSocket(socketPort, socketUrl);
   }
 }
