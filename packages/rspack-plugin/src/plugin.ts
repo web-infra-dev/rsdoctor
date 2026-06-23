@@ -67,7 +67,7 @@ export class RsdoctorRspackPlugin<
         },
       }),
     );
-    const { port, output, innerClientPath, printLog, sdkInstance } =
+    const { port, server, output, innerClientPath, printLog, sdkInstance } =
       this.options;
 
     this.sdk =
@@ -80,6 +80,7 @@ export class RsdoctorRspackPlugin<
         config: {
           innerClientPath,
           printLog,
+          server,
           mode: output.mode ? output.mode : undefined,
           brief:
             output.mode === SDK.IMode[SDK.IMode.brief]

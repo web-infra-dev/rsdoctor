@@ -63,7 +63,11 @@ function getDefaultSocketUrl() {
     : `${socketProtocol}://${location.host}`;
 }
 
-function getSocketUrl(socketPort?: string) {
+function getSocketUrl(socketPort?: string, socketUrl?: string) {
+  if (socketUrl) {
+    return socketUrl;
+  }
+
   if (typeof location === 'undefined') {
     return socketPort ? `ws://localhost:${socketPort}` : '';
   }
@@ -201,9 +205,14 @@ export function requestServerAPI<
     SDK.ServerAPI.InferRequestBodyType<T>,
   R extends SDK.ServerAPI.InferResponseType<T> =
     SDK.ServerAPI.InferResponseType<T>,
->(api: T, body: B | null | undefined, socketPort?: string): Promise<R> {
-  const socketUrl = getSocketUrl(socketPort);
-  if (!socketUrl) {
+>(
+  api: T,
+  body: B | null | undefined,
+  socketPort?: string,
+  socketUrl?: string,
+): Promise<R> {
+  const resolvedSocketUrl = getSocketUrl(socketPort, socketUrl);
+  if (!resolvedSocketUrl) {
     return Promise.reject(new Error('WebSocket URL is not available.'));
   }
 
@@ -211,7 +220,7 @@ export function requestServerAPI<
     return Promise.reject(new Error('WebSocket is not available.'));
   }
 
-  const client = getClient(socketUrl);
+  const client = getClient(resolvedSocketUrl);
   const id = `${Date.now()}-${++requestId}`;
 
   return new Promise<R>((resolve, reject) => {
@@ -235,8 +244,9 @@ export function subscribeServerAPI<T extends SocketAPI>(
   body: SDK.ServerAPI.InferRequestBodyType<T, null> | null,
   listener: SocketListener<T>,
   socketPort?: string,
+  socketUrl?: string,
 ) {
-  const client = getClient(getSocketUrl(socketPort));
+  const client = getClient(getSocketUrl(socketPort, socketUrl));
   const bodyValue = body ?? null;
   const key = getSubscriptionKey(api, bodyValue);
   if (!client.listeners.has(key)) {
@@ -253,7 +263,7 @@ export function subscribeServerAPI<T extends SocketAPI>(
   sendSubscription(client, subscription);
 
   return () => {
-    unsubscribeServerAPI(api, bodyValue, listener, socketPort);
+    unsubscribeServerAPI(api, bodyValue, listener, socketPort, socketUrl);
   };
 }
 
@@ -262,8 +272,9 @@ export function unsubscribeServerAPI<T extends SocketAPI>(
   body: SDK.ServerAPI.InferRequestBodyType<T, null> | null,
   listener: SocketListener<T>,
   socketPort?: string,
+  socketUrl?: string,
 ) {
-  const client = getClient(getSocketUrl(socketPort));
+  const client = getClient(getSocketUrl(socketPort, socketUrl));
   const key = getSubscriptionKey(api, body);
   const listeners = client.listeners.get(key);
   listeners?.delete(listener as SocketListener);

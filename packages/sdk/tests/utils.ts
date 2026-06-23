@@ -38,7 +38,17 @@ export async function createSDK(
   config?: SDK.SDKOptionsType,
 ): Promise<MockSDKResponse> {
   const port = await Server.getPort(getPreferredTestPort());
-  const sdk = new RsdoctorSDK({ name: 'test', root: cwd, port, config });
+  const sdk = new RsdoctorSDK({
+    name: 'test',
+    root: cwd,
+    config: {
+      ...config,
+      server: {
+        ...config?.server,
+        port: config?.server?.port ?? port,
+      },
+    },
+  });
 
   await sdk.bootstrap();
 

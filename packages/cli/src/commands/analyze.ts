@@ -70,7 +70,16 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
 
       spinner.text = `start server`;
 
-      const sdk = new RsdoctorSDK({ name, root: cwd, port, type });
+      const sdk = new RsdoctorSDK({
+        name,
+        root: cwd,
+        type,
+        config: {
+          server: {
+            port,
+          },
+        },
+      });
 
       await sdk.bootstrap();
 
@@ -78,7 +87,12 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
       sdk.getManifestData = () => json;
 
       const manifestBuffer = Buffer.from(
-        JSON.stringify({ ...json, __LOCAL__SERVER__: true }),
+        JSON.stringify({
+          ...json,
+          __LOCAL__SERVER__: true,
+          __SOCKET__PORT__: sdk.server.socketUrl.port.toString(),
+          __SOCKET__URL__: sdk.server.socketUrl.socketUrl,
+        }),
       );
 
       sdk.server.proxy(SDK.ServerAPI.API.Manifest, 'GET', () => manifestBuffer);

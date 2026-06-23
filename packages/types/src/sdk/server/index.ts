@@ -19,6 +19,11 @@ export interface RsdoctorServerInstance {
 
   readonly port: number;
   readonly origin: string;
+  readonly socketUrl: {
+    port: number;
+    socketUrl: string;
+    token: string;
+  };
 
   innerClientPath?: string;
 

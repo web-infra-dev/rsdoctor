@@ -39,7 +39,14 @@ export interface RsdoctorPluginOptionsNormalized<
 > extends Common.DeepRequired<
   Omit<
     RsdoctorRspackPluginOptions<Rules>,
-    'sdkInstance' | 'linter' | 'output' | 'supports' | 'port' | 'brief' | 'mode'
+    | 'sdkInstance'
+    | 'linter'
+    | 'output'
+    | 'supports'
+    | 'port'
+    | 'brief'
+    | 'mode'
+    | 'server'
   >
 > {
   features: Common.DeepRequired<RsdoctorRspackPluginFeatures>;
@@ -52,6 +59,7 @@ export interface RsdoctorPluginOptionsNormalized<
     options: Config.BriefModeOptions | Config.NormalModeOptions;
   };
   port?: number;
+  server: SDK.RsdoctorServerConfig;
   supports: ISupport;
 }
 
