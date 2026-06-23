@@ -11,5 +11,9 @@ export class RsdoctorFakeServer extends RsdoctorServer {
     this.sdk = sdk;
   }
 
+  async bootstrap() {}
+
   async openClientPage() {}
+
+  dispose = async () => {};
 }

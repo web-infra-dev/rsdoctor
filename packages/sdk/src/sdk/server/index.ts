@@ -160,12 +160,6 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       server: this._server.server,
       port: this.port,
       token: this._socketToken,
-      socketOptions:
-        corsOptions === false
-          ? undefined
-          : {
-              cors: corsOptions,
-            },
     });
     await this._socket.bootstrap();
 
@@ -426,7 +420,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       await this._server.close();
     }
 
-    // must close socket after server to avoid socket.io close error.
+    // Close sockets after the HTTP server stops accepting new connections.
     if (this._socket) {
       this._socket.dispose();
     }

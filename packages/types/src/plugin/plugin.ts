@@ -147,8 +147,15 @@ export interface RsdoctorRspackPluginOptions<
 
   /**
    * The port of the Rsdoctor server.
+   *
+   * @deprecated Use `server.port` instead.
    */
   port?: number;
+
+  /**
+   * Options for the Rsdoctor report server.
+   */
+  server?: SDK.RsdoctorServerConfig;
 
   /**
    * Options to control the log printing.

@@ -79,6 +79,7 @@ export class RsdoctorRspackPlugin<
         type: output.reportCodeType,
         config: {
           innerClientPath,
+          noServer: this.options.disableClientServer,
           printLog,
           server,
           mode: output.mode ? output.mode : undefined,
