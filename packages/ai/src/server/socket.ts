@@ -5,14 +5,17 @@ import fs from 'node:fs';
 
 const map: Record<string, Socket> = {};
 
+function redactSocketToken(url: string) {
+  return url.replace(/([?&]token=)[^&]+/, '$1<redacted>');
+}
+
 // 使用 logger.error 输出日志
 export const createSocket = (url: string): Socket => {
-  logger.error(map[url]);
   if (map[url]) return map[url];
   const socket = io(url, {});
-  logger.error('socket created', url);
+  logger.error('socket created', redactSocketToken(url));
   socket.on('connect', () => {
-    logger.error(`Socket Connect ${url}`);
+    logger.error(`Socket Connect ${redactSocketToken(url)}`);
   });
   map[url] = socket;
   return socket;
@@ -38,10 +41,24 @@ export function getPortFromArgs(): number {
   return 3000;
 }
 
+export function getTokenFromArgs(): string | undefined {
+  const args = process.argv.slice(2); // Skip the first two elements
+  const tokenIndex = args.indexOf('--token');
+  const compilerIndex = args.indexOf('--compiler');
+  if (tokenIndex !== -1 && args[tokenIndex + 1]) {
+    return args[tokenIndex + 1];
+  }
+
+  return getMcpToken(
+    compilerIndex !== -1 ? args[compilerIndex + 1] : undefined,
+  );
+}
+
 export const getWsUrl = async () => {
   const port = getPortFromArgs();
+  const token = getTokenFromArgs();
   logger.error(`Socket will start on port: ${port}`);
-  return `ws://localhost:${port}`;
+  return `ws://localhost:${port}${token ? `?token=${token}` : ''}`;
 };
 
 export const sendRequest = async (api: string, params = {}) => {
@@ -73,4 +90,23 @@ export const getMcpPort = (compiler?: string) => {
   }
 
   return mcpJson.port;
+};
+
+export const getMcpToken = (compiler?: string) => {
+  const mcpPortFilePath = GlobalConfig.getMcpConfigPath();
+
+  if (!fs.existsSync(mcpPortFilePath)) {
+    return undefined;
+  }
+
+  const mcpJson = JSON.parse(fs.readFileSync(mcpPortFilePath, 'utf8'));
+
+  if (compiler) {
+    const compilerToken = mcpJson.tokenList?.[compiler];
+    if (compilerToken) {
+      return compilerToken;
+    }
+  }
+
+  return mcpJson.token;
 };

@@ -16,6 +16,13 @@ describe('test server/apis/project.ts', () => {
       },
     },
   });
+  const partialCorsTarget = setupSDK({
+    server: {
+      cors: {
+        credentials: true,
+      },
+    },
+  });
 
   function optionsWithOrigin(
     target: MockSDKResponse,
@@ -87,7 +94,7 @@ describe('test server/apis/project.ts', () => {
     expect(env.port).toEqual(target.server.port);
   });
 
-  it('only allows local CORS preflight requests', async () => {
+  it('uses local origins for default CORS preflight requests', async () => {
     await expect(
       optionsWithOrigin(target, 'https://example.com'),
     ).resolves.toStrictEqual({
@@ -162,6 +169,25 @@ describe('test server/apis/project.ts', () => {
     ).resolves.toStrictEqual({
       statusCode: 204,
       allowOrigin: 'https://example.com',
+    });
+  });
+
+  it('preserves default CORS origins for partial server.cors options', async () => {
+    await expect(
+      optionsWithOrigin(partialCorsTarget, 'https://example.com'),
+    ).resolves.toStrictEqual({
+      statusCode: 204,
+      allowOrigin: undefined,
+    });
+
+    await expect(
+      optionsWithOrigin(
+        partialCorsTarget,
+        `http://127.0.0.1:${partialCorsTarget.server.port}`,
+      ),
+    ).resolves.toStrictEqual({
+      statusCode: 204,
+      allowOrigin: `http://127.0.0.1:${partialCorsTarget.server.port}`,
     });
   });
 

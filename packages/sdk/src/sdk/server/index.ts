@@ -15,11 +15,8 @@ import path from 'path';
 import { Lodash } from '@rsdoctor/utils/common';
 import { createRequire } from 'module';
 import { ServerResponse } from 'http';
-import {
-  DEFAULT_ALLOWED_CORS_ORIGINS,
-  isAllowedCorsRequest,
-  isAllowedRequestHost,
-} from './security';
+import { randomBytes } from 'crypto';
+import { DEFAULT_ALLOWED_CORS_ORIGINS, isAllowedRequestHost } from './security';
 
 const require = createRequire(import.meta.url);
 export * from './utils';
@@ -28,7 +25,13 @@ export * from './utils';
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
 const LISTEN_RETRY_LIMIT = 10;
 
-export type ISocketType = { port: number; socketUrl: string };
+export type ISocketType = { port: number; socketUrl: string; token: string };
+
+export type RsdoctorServerOptions = {
+  innerClientPath?: string;
+  printServerUrl?: boolean;
+  cors?: SDK.RsdoctorServerConfig['cors'];
+};
 
 export type RsdoctorServerOptions = {
   innerClientPath?: string;
@@ -56,6 +59,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   private _printServerUrl: boolean;
 
   private _cors: SDK.RsdoctorServerConfig['cors'];
+
+  private _socketToken = randomBytes(16).toString('hex');
 
   constructor(
     protected sdk: SDK.RsdoctorBuilderSDKInstance,
@@ -88,7 +93,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   public get socketUrl(): ISocketType {
     return {
       port: this.port,
-      socketUrl: `ws://localhost:${this.port}`,
+      socketUrl: `ws://localhost:${this.port}?token=${this._socketToken}`,
+      token: this._socketToken,
     };
   }
 
@@ -120,20 +126,25 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     throw lastError;
   }
 
-  private resolveCorsOptions():
-    | false
-    | SDK.RsdoctorServerCorsOptions
-    | undefined {
-    if (typeof this._cors === 'undefined') {
-      return undefined;
-    }
+  private resolveCorsOptions(): false | SDK.RsdoctorServerCorsOptions {
     if (this._cors === false) {
       return false;
     }
     if (this._cors === true) {
       return {};
     }
-    return this._cors;
+    if (typeof this._cors === 'undefined') {
+      return {
+        origin: DEFAULT_ALLOWED_CORS_ORIGINS,
+      };
+    }
+    return {
+      ...this._cors,
+      origin:
+        typeof this._cors.origin === 'undefined'
+          ? DEFAULT_ALLOWED_CORS_ORIGINS
+          : this._cors.origin,
+    };
   }
 
   async bootstrap() {
@@ -150,8 +161,9 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       sdk: this.sdk,
       server: this._server.server,
       port: this.port,
+      token: this._socketToken,
       socketOptions:
-        corsOptions === false || typeof corsOptions === 'undefined'
+        corsOptions === false
           ? undefined
           : {
               cors: corsOptions,
@@ -159,7 +171,13 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     });
     await this._socket.bootstrap();
 
-    GlobalConfig.writeMcpPort(this.port, this.sdk.name);
+    (
+      GlobalConfig.writeMcpPort as (
+        port: number,
+        builderName?: string,
+        token?: string,
+      ) => void
+    )(this.port, this.sdk.name, this._socketToken);
 
     logger.debug(
       `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,
@@ -177,27 +195,10 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
       next();
     });
-    if (typeof corsOptions === 'undefined') {
-      this.app.use((req, res, next) => {
-        const host = req.headers.host || req.headers[':authority'];
-        if (!isAllowedCorsRequest(req.headers.origin, host)) {
-          res.statusCode = 403;
-          res.end();
-          return;
-        }
-
-        next();
-      });
-      this.app.use(
-        cors({
-          origin: DEFAULT_ALLOWED_CORS_ORIGINS,
-        }),
-      );
-    } else if (corsOptions !== false) {
+    if (corsOptions !== false) {
       this.app.use(cors(corsOptions));
     }
     this.app.use(bodyParser.json({ limit: '500mb' }));
-    await this._router.setup();
 
     const clientHtmlPath = this._innerClientPath
       ? this._innerClientPath

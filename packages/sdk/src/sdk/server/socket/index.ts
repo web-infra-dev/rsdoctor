@@ -7,60 +7,22 @@ import {
 } from 'socket.io';
 import { isDeepStrictEqual } from 'util';
 import { SocketAPILoader } from './api';
-import { isAllowedRequestHost, isAllowedRequestOrigin } from '../security';
+import { isAllowedRequestHost } from '../security';
 
 interface SocketOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
   server: Server;
   port: number;
+  token: string;
   socketOptions?: Partial<SocketServerOptions>;
 }
 
-function isAllowedCorsOrigin(
-  origin: string | undefined,
-  allowedOrigin: SDK.RsdoctorServerCorsStaticOrigin | undefined,
-  defaultAllowed: boolean,
-): boolean {
-  if (origin === undefined) {
-    return true;
+function isAllowedSocketToken(url: string | undefined, token: string) {
+  if (!url) {
+    return false;
   }
 
-  if (typeof allowedOrigin === 'undefined') {
-    return defaultAllowed;
-  }
-
-  if (typeof allowedOrigin === 'boolean') {
-    return allowedOrigin;
-  }
-
-  if (typeof allowedOrigin === 'string') {
-    return allowedOrigin === '*' || allowedOrigin === origin;
-  }
-
-  if (Array.isArray(allowedOrigin)) {
-    return allowedOrigin.some((item) =>
-      isAllowedCorsOrigin(origin, item, defaultAllowed),
-    );
-  }
-
-  return allowedOrigin.test(origin);
-}
-
-function checkCorsOrigin(
-  origin: string | undefined,
-  corsOptions: SDK.RsdoctorServerCorsOptions | undefined,
-  callback: (allowed: boolean) => void,
-) {
-  const allowedOrigin = corsOptions?.origin;
-
-  if (typeof allowedOrigin === 'function') {
-    allowedOrigin(origin, (err, result) => {
-      callback(!err && isAllowedCorsOrigin(origin, result, false));
-    });
-    return;
-  }
-
-  callback(isAllowedCorsOrigin(origin, allowedOrigin, true));
+  return new URL(url, 'http://localhost').searchParams.get('token') === token;
 }
 
 export class Socket {
@@ -77,20 +39,15 @@ export class Socket {
 
   public bootstrap() {
     const { socketOptions } = this.options;
-    const hasCustomCorsOptions = typeof socketOptions?.cors !== 'undefined';
 
     this.io = new SocketServer(this.options.server, {
       ...socketOptions,
-      cors: hasCustomCorsOptions
-        ? socketOptions?.cors
-        : {
-            origin: (origin, callback) => {
-              callback(null, isAllowedRequestOrigin(origin));
-            },
-          },
       allowRequest: (req, callback) => {
         const host = req.headers.host || req.headers[':authority'];
-        if (!isAllowedRequestHost(host)) {
+        if (
+          !isAllowedRequestHost(host) ||
+          !isAllowedSocketToken(req.url, this.options.token)
+        ) {
           callback(null, false);
           return;
         }

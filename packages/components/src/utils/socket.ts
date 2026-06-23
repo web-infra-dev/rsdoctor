@@ -11,22 +11,27 @@ const defaultSocketUrl =
 const ipv4Pattern =
   /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
+function redactSocketToken(socketUrl: string) {
+  return socketUrl.replace(/([?&]token=)[^&]+/, '$1<redacted>');
+}
+
 function ensureSocket(socketUrl: string = defaultSocketUrl) {
   if (!map.has(socketUrl)) {
     const socket = io(socketUrl, {});
     socket.on('connect', () => {
-      console.log(`Socket Connect ${socketUrl}`);
+      console.log(`Socket Connect ${redactSocketToken(socketUrl)}`);
     });
     map.set(socketUrl, socket);
   }
   return map.get(socketUrl)!;
 }
 
-export function getSocket(socketPort?: string): Socket {
+export function getSocket(socketPort?: string, socketToken?: string): Socket {
   const socketUrl = formatURL({
     port: socketPort,
     hostname: location.hostname,
     protocol: location.protocol,
+    token: socketToken,
   });
   const socket = ensureSocket(socketPort ? socketUrl : defaultSocketUrl);
   return socket;
@@ -36,22 +41,27 @@ export function formatURL({
   port,
   protocol,
   hostname,
+  token,
 }: {
   port?: string;
   protocol: string;
   hostname: string;
+  token?: string;
 }) {
   if (typeof URL !== 'undefined') {
     const url = new URL('http://localhost');
     url.port = String(port);
     url.hostname = hostname;
     url.protocol = location.protocol.includes('https') ? 'wss' : 'ws';
+    if (token) {
+      url.searchParams.set('token', token);
+    }
     return ipv4Pattern.test(hostname) || hostname.includes('localhost')
       ? url.toString()
-      : `${protocol}//${hostname}`;
+      : `${protocol}//${hostname}${token ? `?token=${token}` : ''}`;
   }
 
   // compatible with IE11
   const colon = protocol.indexOf(':') === -1 ? ':' : '';
-  return `${protocol}${colon}//${hostname}:${port}`;
+  return `${protocol}${colon}//${hostname}:${port}${token ? `?token=${token}` : ''}`;
 }

@@ -12,13 +12,23 @@ import { logger } from '../logger';
  *     builder1: portNumber,
  *     builder2: portNumber,
  *   },
- *   port: portNumber // The port of the last builder is used by default
+ *   tokenList: {
+ *     builder1: token,
+ *     builder2: token,
+ *   },
+ *   port: portNumber, // The port of the last builder is used by default
+ *   token: token // The token of the last builder is used by default
  * }
  *
  * @param {number} port - The port number to write.
  * @param {string} [builderName] - The name of the builder.
+ * @param {string} [token] - The socket token to write.
  */
-export function writeMcpPort(port: number, builderName?: string) {
+export function writeMcpPort(
+  port: number,
+  builderName?: string,
+  token?: string,
+) {
   const homeDir = os.homedir();
   const rsdoctorDir = path.join(homeDir, '.cache/rsdoctor');
   const mcpPortFilePath = path.join(rsdoctorDir, 'mcp.json');
@@ -27,7 +37,12 @@ export function writeMcpPort(port: number, builderName?: string) {
     fs.mkdirSync(rsdoctorDir, { recursive: true });
   }
 
-  let mcpJson: { portList: Record<string, number>; port: number } = {
+  let mcpJson: {
+    portList: Record<string, number>;
+    tokenList?: Record<string, string>;
+    port: number;
+    token?: string;
+  } = {
     portList: {},
     port: 0,
   };
@@ -42,9 +57,14 @@ export function writeMcpPort(port: number, builderName?: string) {
 
   if (!mcpJson.portList) mcpJson.portList = {};
   mcpJson.portList[builderName || 'builder'] = port;
+  if (token) {
+    if (!mcpJson.tokenList) mcpJson.tokenList = {};
+    mcpJson.tokenList[builderName || 'builder'] = token;
+  }
 
   // Use the latest generated port.
   mcpJson.port = port;
+  mcpJson.token = token;
 
   fs.writeFileSync(mcpPortFilePath, JSON.stringify(mcpJson, null, 2), 'utf8');
 }
