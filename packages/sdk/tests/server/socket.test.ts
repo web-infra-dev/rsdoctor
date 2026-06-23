@@ -1,5 +1,6 @@
 import { describe, it, expect, rs } from '@rstest/core';
-import { request } from 'http';
+import { createServer, request, type Server } from 'http';
+import { Socket } from '../../src/sdk/server/socket';
 import { setupSDK } from '../utils';
 
 rs.setConfig({ testTimeout: 50000 });
@@ -7,13 +8,17 @@ rs.setConfig({ testTimeout: 50000 });
 describe('test server/socket.ts', () => {
   const target = setupSDK();
 
-  function requestSocketHandshake(origin?: string, host?: string) {
+  function requestSocketHandshake(
+    origin?: string,
+    host?: string,
+    port = target.server.port,
+  ) {
     return new Promise<{
       statusCode: number;
       allowOrigin: string | string[] | undefined;
     }>((resolve, reject) => {
       const url = new URL(
-        `${target.server.origin}/socket.io/?EIO=4&transport=polling`,
+        `http://127.0.0.1:${port}/socket.io/?EIO=4&transport=polling`,
       );
       const headers =
         origin || host
@@ -46,6 +51,20 @@ describe('test server/socket.ts', () => {
     });
   }
 
+  function listen(server: Server) {
+    return new Promise<number>((resolve, reject) => {
+      server.once('error', reject);
+      server.listen(0, '127.0.0.1', () => {
+        const address = server.address();
+        if (!address || typeof address === 'string') {
+          reject(new Error('Failed to listen on a local port'));
+          return;
+        }
+        resolve(address.port);
+      });
+    });
+  }
+
   it('rejects socket handshakes from non-local origins', async () => {
     await expect(
       requestSocketHandshake('https://example.com'),
@@ -72,5 +91,52 @@ describe('test server/socket.ts', () => {
     ).resolves.toMatchObject({
       statusCode: 403,
     });
+    await expect(
+      requestSocketHandshake(origin, `192.168.1.10:${target.server.port}`),
+    ).resolves.toMatchObject({
+      statusCode: 403,
+    });
+  });
+
+  it('enforces custom socket origins during handshakes', async () => {
+    const server = createServer();
+    const port = await listen(server);
+    const socket = new Socket({
+      sdk: {} as any,
+      server,
+      port,
+      socketOptions: {
+        cors: {
+          origin: 'https://allowed.example',
+        },
+      },
+    });
+
+    socket.bootstrap();
+
+    try {
+      await expect(
+        requestSocketHandshake(
+          'https://allowed.example',
+          `127.0.0.1:${port}`,
+          port,
+        ),
+      ).resolves.toMatchObject({
+        statusCode: 200,
+        allowOrigin: 'https://allowed.example',
+      });
+      await expect(
+        requestSocketHandshake(
+          'https://evil.example',
+          `127.0.0.1:${port}`,
+          port,
+        ),
+      ).resolves.toMatchObject({
+        statusCode: 403,
+      });
+    } finally {
+      socket.dispose();
+      server.close();
+    }
   });
 });

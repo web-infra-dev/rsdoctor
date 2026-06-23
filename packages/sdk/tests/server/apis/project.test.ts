@@ -118,12 +118,21 @@ describe('test server/apis/project.ts', () => {
 
   it('rejects requests with non-local Host headers', async () => {
     const host = `evil.example.com:${target.server.port}`;
+    const ipHost = `192.168.1.10:${target.server.port}`;
 
     await expect(requestWithHost('/', host)).resolves.toStrictEqual({
       statusCode: 403,
     });
+    await expect(requestWithHost('/', ipHost)).resolves.toStrictEqual({
+      statusCode: 403,
+    });
     await expect(
       requestWithHost(SDK.ServerAPI.API.Manifest, host),
+    ).resolves.toStrictEqual({
+      statusCode: 403,
+    });
+    await expect(
+      requestWithHost(SDK.ServerAPI.API.Manifest, ipHost),
     ).resolves.toStrictEqual({
       statusCode: 403,
     });

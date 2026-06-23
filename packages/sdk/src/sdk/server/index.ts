@@ -241,7 +241,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       if (m === method) {
         try {
           const body = await cb(req, res, next);
-          res.statusCode = 200;
+          const statusCode = res.statusCode === 200 ? 200 : res.statusCode;
 
           if (Buffer.isBuffer(body)) {
             res.setHeader('Content-Length', body.byteLength);
@@ -250,13 +250,13 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
             ps.end();
             ps.pipe(res);
           } else if (body && typeof body === 'object') {
-            res.writeHead(200, {
+            res.writeHead(statusCode, {
               'Content-Type': 'application/json;utf-8',
             });
             res.write(JSON.stringify(body));
             res.end();
           } else {
-            res.writeHead(200).end(body);
+            res.writeHead(statusCode).end(body);
           }
         } catch (error) {
           res.statusCode = 500;

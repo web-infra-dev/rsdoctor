@@ -13,6 +13,7 @@ export interface MockSDKResponse {
   get<T extends SDK.ServerAPI.API>(
     pathname: T,
   ): Promise<{
+    statusCode: number;
     toJSON(): SDK.ServerAPI.InferResponseType<T>;
     toString(): string;
     text: string;
@@ -21,6 +22,7 @@ export interface MockSDKResponse {
     pathname: T,
     body: SDK.ServerAPI.InferRequestBodyType<T>,
   ): Promise<{
+    statusCode: number;
     toJSON(): SDK.ServerAPI.InferResponseType<T>;
     toString(): string;
     text: string;
@@ -62,6 +64,7 @@ export async function createSDK(
             });
             res.on('close', () => {
               resolve({
+                statusCode: res.statusCode || 0,
                 toJSON: () => JSON.parse(data),
                 toString: () => data.toString(),
                 text: data,
@@ -97,6 +100,7 @@ export async function createSDK(
             });
             res.on('close', () => {
               resolve({
+                statusCode: res.statusCode || 0,
                 toJSON: () => JSON.parse(data),
                 toString: () => data.toString(),
                 text: data,

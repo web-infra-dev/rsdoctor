@@ -3,6 +3,18 @@ import { BaseAPI } from './base';
 import { Router } from '../router';
 
 export class DataAPI extends BaseAPI {
+  private isPublicDataKey(
+    key: unknown,
+  ): key is Manifest.RsdoctorManifestRootKeys {
+    return (
+      typeof key === 'string' &&
+      Object.prototype.hasOwnProperty.call(
+        this.ctx.sdk.getManifestData().data,
+        key,
+      )
+    );
+  }
+
   @Router.post(SDK.ServerAPI.API.LoadDataByKey)
   public async loadDataByKey(): Promise<
     SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.LoadDataByKey>
@@ -24,6 +36,11 @@ export class DataAPI extends BaseAPI {
         /^\//,
         '',
       ) as Manifest.RsdoctorManifestMappingKeys;
+    }
+
+    if (!this.isPublicDataKey(key)) {
+      this.ctx.res.statusCode = 403;
+      return;
     }
 
     const data = await this.loadData(key);

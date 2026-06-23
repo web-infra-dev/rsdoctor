@@ -9,6 +9,17 @@ import { isDeepStrictEqual } from 'util';
 import { SocketAPILoader } from './api';
 import { isAllowedRequestHost, isAllowedRequestOrigin } from '../security';
 
+type StaticCorsOrigin =
+  | boolean
+  | string
+  | RegExp
+  | Array<boolean | string | RegExp>;
+type CustomCorsOrigin = (
+  requestOrigin: string | undefined,
+  callback: (error: Error | null, origin?: StaticCorsOrigin) => void,
+) => void;
+type CorsOrigin = StaticCorsOrigin | CustomCorsOrigin | undefined;
+
 interface SocketOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
   server: Server;
@@ -28,6 +39,45 @@ export class Socket {
     this.loader = new SocketAPILoader({ sdk: options.sdk });
   }
 
+  private isAllowedSocketOrigin(
+    origin: string | undefined,
+    corsOrigin: CorsOrigin,
+    callback: (allowed: boolean) => void,
+  ) {
+    if (corsOrigin === undefined) {
+      callback(isAllowedRequestOrigin(origin));
+      return;
+    }
+
+    if (typeof corsOrigin === 'function') {
+      corsOrigin(origin, (error, result) => {
+        callback(!error && this.matchCorsOrigin(origin, result));
+      });
+      return;
+    }
+
+    callback(this.matchCorsOrigin(origin, corsOrigin));
+  }
+
+  private matchCorsOrigin(
+    origin: string | undefined,
+    corsOrigin: StaticCorsOrigin | undefined,
+  ): boolean {
+    if (origin === undefined) {
+      return true;
+    }
+
+    if (Array.isArray(corsOrigin)) {
+      return corsOrigin.some((item) => this.matchCorsOrigin(origin, item));
+    }
+
+    if (corsOrigin instanceof RegExp) {
+      return corsOrigin.test(origin);
+    }
+
+    return corsOrigin === true || corsOrigin === origin;
+  }
+
   public bootstrap() {
     const { socketOptions } = this.options;
     const corsOptions =
@@ -42,25 +92,30 @@ export class Socket {
       cors: {
         ...corsOptions,
         origin: (origin, callback) => {
-          callback(null, isAllowedRequestOrigin(origin));
+          this.isAllowedSocketOrigin(origin, corsOptions.origin, (allowed) => {
+            callback(null, allowed);
+          });
         },
       },
       allowRequest: (req, callback) => {
         const host = req.headers.host || req.headers[':authority'];
-        if (
-          !isAllowedRequestHost(host) ||
-          !isAllowedRequestOrigin(req.headers.origin)
-        ) {
+        if (!isAllowedRequestHost(host)) {
           callback(null, false);
           return;
         }
 
-        if (socketOptions?.allowRequest) {
-          socketOptions.allowRequest(req, callback);
-          return;
-        }
+        this.isAllowedSocketOrigin(
+          req.headers.origin,
+          corsOptions.origin,
+          (allowed) => {
+            if (!allowed) {
+              callback(null, false);
+              return;
+            }
 
-        callback(null, true);
+            callback(null, true);
+          },
+        );
       },
     });
     this.io.on('connection', (socket) => {

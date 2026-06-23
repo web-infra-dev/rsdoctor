@@ -15,8 +15,18 @@ export function isAllowedRequestOrigin(origin: string | string[] | undefined) {
   );
 }
 
-function isIpAddress(hostname: string) {
-  return isIP(hostname) !== 0;
+function isLoopbackAddress(hostname: string) {
+  const version = isIP(hostname);
+
+  if (version === 4) {
+    return hostname.startsWith('127.');
+  }
+
+  if (version === 6) {
+    return hostname === '::1';
+  }
+
+  return false;
 }
 
 function getHostnameFromHost(host: string) {
@@ -34,5 +44,5 @@ export function isAllowedRequestHost(host: string | string[] | undefined) {
   }
 
   const hostname = getHostnameFromHost(host).toLowerCase();
-  return LOCAL_HOSTNAMES.test(hostname) || isIpAddress(hostname);
+  return LOCAL_HOSTNAMES.test(hostname) || isLoopbackAddress(hostname);
 }
