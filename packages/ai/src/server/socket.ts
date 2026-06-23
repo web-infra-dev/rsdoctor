@@ -9,7 +9,7 @@ function redactSocketToken(url: string) {
   return url.replace(/([?&]token=)[^&]+/, '$1<redacted>');
 }
 
-// 使用 logger.error 输出日志
+// Use logger.error to output logs.
 export const createSocket = (url: string): Socket => {
   if (map[url]) return map[url];
   const socket = io(url, {});
