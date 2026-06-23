@@ -27,12 +27,23 @@ const getTargetBrowser = async () => {
   return targetBrowser;
 };
 
+const openWithDefaultBrowser = async (url: string) => {
+  try {
+    const { default: open } = await import('open');
+    await open(url);
+    return true;
+  } catch (err) {
+    logger.error('Failed to open Rsdoctor URL.');
+    logger.error(err);
+    return false;
+  }
+};
+
 export async function openBrowser(
   url: string,
   needEncodeURI = true,
 ): Promise<boolean | undefined> {
-  const shouldTryOpenChromeWithAppleScript =
-    process.platform === 'darwin' || process.platform === 'win32';
+  const shouldTryOpenChromeWithAppleScript = process.platform === 'darwin';
   if (shouldTryOpenChromeWithAppleScript) {
     try {
       const targetBrowser = await getTargetBrowser();
@@ -48,22 +59,10 @@ export async function openBrowser(
         return true;
       }
       logger.debug('Failed to find the target browser.');
-      const { default: open } = await import('open');
-      await open(url);
-      return true;
     } catch (err) {
       logger.debug('Failed to open Rsdoctor URL with apple script.');
       logger.debug(err);
     }
-  } else {
-    try {
-      const { default: open } = await import('open');
-      await open(url);
-      return true;
-    } catch (err) {
-      logger.error('Failed to open Rsdoctor URL.');
-      logger.error(err);
-      return false;
-    }
   }
+  return openWithDefaultBrowser(url);
 }
