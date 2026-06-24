@@ -16,7 +16,16 @@ interface Options {
 }
 
 export function coercePort(port?: number | string) {
-  return typeof port === 'undefined' ? undefined : Number(port);
+  if (typeof port === 'undefined') {
+    return undefined;
+  }
+
+  const value = Number(port);
+  if (!Number.isFinite(value)) {
+    throw new Error(`Invalid port: ${port}`);
+  }
+
+  return value;
 }
 
 export const statsAnalyze: Command<
