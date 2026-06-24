@@ -123,6 +123,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   const server: SDK.RsdoctorServerConfig = {
     ...userServer,
   };
+  assert(typeof server.port === 'undefined' || typeof server.port === 'number');
   if (typeof server.port === 'undefined' && typeof port !== 'undefined') {
     server.port = port;
   }
