@@ -169,11 +169,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     });
     await this._socket.bootstrap();
 
-    GlobalConfig.writeMcpPort(
-      this.port,
-      this.sdk.name,
-      this.socketUrl.socketUrl,
-    );
+    GlobalConfig.writeMcpPort(this.port, this.sdk.name, this._socketToken);
 
     logger.debug(
       `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,

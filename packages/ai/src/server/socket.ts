@@ -1,7 +1,6 @@
 import { Socket, io } from 'socket.io-client';
 import { logger } from '@rsdoctor/utils/logger';
 import { GlobalConfig } from '@rsdoctor/utils/common';
-import fs from 'node:fs';
 
 const map: Record<string, Socket> = {};
 
@@ -56,15 +55,18 @@ export function getSocketUrlFromArgs(): string | undefined {
 }
 
 export const getWsUrl = async () => {
-  const socketUrl = getSocketUrlFromArgs();
-  if (socketUrl) {
-    logger.error(`Socket will start on url: ${redactSocketToken(socketUrl)}`);
-    return socketUrl;
-  }
-
+  const args = process.argv.slice(2);
+  const portIndex = args.indexOf('--port');
+  const compilerIndex = args.indexOf('--compiler');
+  const compiler = compilerIndex !== -1 ? args[compilerIndex + 1] : undefined;
+  const serverInfo = GlobalConfig.getMcpServerInfo(compiler);
   const port = getPortFromArgs();
+  const socketUrl =
+    serverInfo.socketUrl && (portIndex === -1 || serverInfo.port === port)
+      ? serverInfo.socketUrl
+      : `ws://localhost:${port}`;
   logger.error(`Socket will start on port: ${port}`);
-  return `ws://localhost:${port}`;
+  return socketUrl;
 };
 
 export const sendRequest = async (api: string, params = {}) => {
@@ -80,22 +82,7 @@ export const sendRequest = async (api: string, params = {}) => {
 };
 
 export const getMcpPort = (compiler?: string) => {
-  const mcpPortFilePath = GlobalConfig.getMcpConfigPath();
-
-  if (!fs.existsSync(mcpPortFilePath)) {
-    return undefined;
-  }
-
-  const mcpJson = JSON.parse(fs.readFileSync(mcpPortFilePath, 'utf8'));
-
-  if (compiler) {
-    const compilerPort = mcpJson.portList[compiler];
-    if (compilerPort) {
-      return compilerPort;
-    }
-  }
-
-  return mcpJson.port;
+  return GlobalConfig.getMcpServerInfo(compiler).port;
 };
 
 export const getMcpSocketUrl = (compiler?: string) => {
