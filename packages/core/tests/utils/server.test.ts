@@ -1,11 +1,11 @@
 import { describe, it, expect } from '@rstest/core';
 import type { AddressInfo } from 'net';
-import { Server } from '../src/build-utils/build';
+import { Server } from '../../src/build-utils/build';
 import {
   createGetPortSyncFunctionString,
   defaultHost,
   getPortSync,
-} from '../src/build-utils/build/server';
+} from '../../src/build-utils/build/server';
 
 describe('test src/server.ts', () => {
   it('getPort()', async () => {
