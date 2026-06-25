@@ -79,6 +79,37 @@ export function getMcpServerInfo(builderName?: string): {
   };
 }
 
+export function getMcpServerInfoByPort(port: number): {
+  port?: number;
+  socketUrl?: string;
+} {
+  const mcpJson = readMcpConfig();
+
+  if (!mcpJson) {
+    return {};
+  }
+
+  const builderName = Object.entries(mcpJson.portList || {}).find(
+    ([, builderPort]) => builderPort === port,
+  )?.[0];
+
+  if (builderName) {
+    return {
+      port,
+      socketUrl: mcpJson.socketUrlList?.[builderName],
+    };
+  }
+
+  if (mcpJson.port === port) {
+    return {
+      port,
+      socketUrl: mcpJson.socketUrl,
+    };
+  }
+
+  return { port };
+}
+
 export function writeMcpPort(
   port: number,
   builderName?: string,

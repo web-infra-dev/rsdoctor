@@ -59,12 +59,12 @@ export const getWsUrl = async () => {
   const portIndex = args.indexOf('--port');
   const compilerIndex = args.indexOf('--compiler');
   const compiler = compilerIndex !== -1 ? args[compilerIndex + 1] : undefined;
-  const serverInfo = GlobalConfig.getMcpServerInfo(compiler);
   const port = getPortFromArgs();
-  const socketUrl =
-    serverInfo.socketUrl && (portIndex === -1 || serverInfo.port === port)
-      ? serverInfo.socketUrl
-      : `ws://localhost:${port}`;
+  const serverInfo =
+    portIndex !== -1
+      ? GlobalConfig.getMcpServerInfoByPort(port)
+      : GlobalConfig.getMcpServerInfo(compiler);
+  const socketUrl = serverInfo.socketUrl || `ws://localhost:${port}`;
   logger.error(`Socket will start on port: ${port}`);
   return socketUrl;
 };

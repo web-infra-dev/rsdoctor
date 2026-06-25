@@ -1,58 +1,33 @@
-import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
-import { afterEach, describe, expect, it, rs } from '@rstest/core';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import { afterEach, beforeEach, describe, expect, it, rs } from '@rstest/core';
 import { GlobalConfig } from '@rsdoctor/utils/common';
-import { getMcpPort, getMcpSocketUrl } from '../src/server/socket';
+import { getWsUrl } from '../src/server/socket';
 
 describe('server/socket', () => {
-  let mcpConfigDir: string | undefined;
-  let getMcpConfigPathSpy: { mockRestore: () => void } | undefined;
+  const originalArgv = process.argv;
+  let tempHome = '';
+  let homedirSpy: ReturnType<typeof rs.spyOn>;
+
+  beforeEach(() => {
+    tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'rsdoctor-mcp-'));
+    homedirSpy = rs.spyOn(os, 'homedir').mockReturnValue(tempHome);
+    process.argv = ['node', 'rsdoctor-mcp'];
+  });
 
   afterEach(() => {
-    getMcpConfigPathSpy?.mockRestore();
-    if (mcpConfigDir) {
-      fs.rmSync(mcpConfigDir, { recursive: true, force: true });
-    }
-    mcpConfigDir = undefined;
-    getMcpConfigPathSpy = undefined;
+    process.argv = originalArgv;
+    homedirSpy.mockRestore();
+    fs.rmSync(tempHome, { recursive: true, force: true });
   });
 
-  function writeMcpConfig(data: unknown) {
-    mcpConfigDir = fs.mkdtempSync(path.join(os.tmpdir(), 'rsdoctor-mcp-'));
-    const mcpConfigPath = path.join(mcpConfigDir, 'mcp.json');
-    fs.writeFileSync(mcpConfigPath, JSON.stringify(data), 'utf8');
-    getMcpConfigPathSpy = rs
-      .spyOn(GlobalConfig, 'getMcpConfigPath')
-      .mockReturnValue(mcpConfigPath);
-  }
+  it('uses tokenized socket url for explicit port MCP clients', async () => {
+    GlobalConfig.writeMcpPort(3001, 'web', 'token-a');
+    GlobalConfig.writeMcpPort(3002, 'server', 'token-b');
 
-  it('reads socket url from mcp config', () => {
-    writeMcpConfig({
-      portList: {
-        web: 9988,
-      },
-      port: 9988,
-      socketUrlList: {
-        web: 'ws://localhost:9988?token=web-token',
-      },
-      socketUrl: 'ws://localhost:9988?token=default-token',
-    });
+    process.argv = ['node', 'rsdoctor-mcp', '--port', '3001'];
 
-    expect(getMcpSocketUrl('web')).toBe('ws://localhost:9988?token=web-token');
-    expect(getMcpSocketUrl()).toBe('ws://localhost:9988?token=default-token');
-  });
-
-  it('keeps port fallback for old mcp config', () => {
-    writeMcpConfig({
-      portList: {
-        web: 9988,
-      },
-      port: 3000,
-    });
-
-    expect(getMcpSocketUrl('web')).toBeUndefined();
-    expect(getMcpPort('web')).toBe(9988);
-    expect(getMcpPort()).toBe(3000);
+    await expect(getWsUrl()).resolves.toBe('ws://localhost:3001?token=token-a');
   });
 });

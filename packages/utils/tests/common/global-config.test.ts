@@ -1,25 +1,22 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { afterEach, beforeEach, describe, expect, it } from '@rstest/core';
+import { afterEach, beforeEach, describe, expect, it, rs } from '@rstest/core';
 
 import { GlobalConfig } from '../../src/common';
 
 describe('test src/common/global-config.ts', () => {
-  const originalHome = process.env.HOME;
   let tempHome = '';
+  let homedirSpy: ReturnType<typeof rs.spyOn>;
 
   beforeEach(() => {
     tempHome = fs.mkdtempSync(path.join(os.tmpdir(), 'rsdoctor-mcp-'));
-    process.env.HOME = tempHome;
+    homedirSpy = rs.spyOn(os, 'homedir').mockReturnValue(tempHome);
+    fs.rmSync(GlobalConfig.getMcpConfigPath(), { force: true });
   });
 
   afterEach(() => {
-    if (originalHome) {
-      process.env.HOME = originalHome;
-    } else {
-      delete process.env.HOME;
-    }
+    homedirSpy.mockRestore();
     fs.rmSync(tempHome, { recursive: true, force: true });
   });
 
@@ -51,6 +48,17 @@ describe('test src/common/global-config.ts', () => {
     expect(GlobalConfig.getMcpServerInfo('missing')).toStrictEqual({
       port: 3002,
       socketUrl: 'ws://localhost:3002?token=token-b',
+    });
+    expect(GlobalConfig.getMcpServerInfoByPort(3001)).toStrictEqual({
+      port: 3001,
+      socketUrl: 'ws://localhost:3001?token=token-a',
+    });
+    expect(GlobalConfig.getMcpServerInfoByPort(3002)).toStrictEqual({
+      port: 3002,
+      socketUrl: 'ws://localhost:3002?token=token-b',
+    });
+    expect(GlobalConfig.getMcpServerInfoByPort(3003)).toStrictEqual({
+      port: 3003,
     });
   });
 
