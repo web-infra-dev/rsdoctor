@@ -91,7 +91,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   public get socketUrl(): ISocketType {
     return {
       port: this.port,
-      socketUrl: `ws://localhost:${this.port}?token=${this._socketToken}`,
+      socketUrl: `ws://${this.host}:${this.port}?token=${this._socketToken}`,
       token: this._socketToken,
     };
   }
@@ -169,7 +169,11 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     });
     await this._socket.bootstrap();
 
-    GlobalConfig.writeMcpPort(this.port, this.sdk.name);
+    GlobalConfig.writeMcpPort(
+      this.port,
+      this.sdk.name,
+      this.socketUrl.socketUrl,
+    );
 
     logger.debug(
       `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,

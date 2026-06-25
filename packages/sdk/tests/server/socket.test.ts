@@ -68,6 +68,12 @@ describe('test server/socket.ts', () => {
     });
   }
 
+  it('uses the server host in the generated socket URL', () => {
+    expect(target.server.socketUrl.socketUrl).toContain(
+      `ws://127.0.0.1:${target.server.port}`,
+    );
+  });
+
   it('rejects socket handshakes without tokens', async () => {
     const origin = `http://127.0.0.1:${target.server.port}`;
 
