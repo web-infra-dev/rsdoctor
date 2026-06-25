@@ -59,6 +59,8 @@ target_branch: ${{ github.event_name == 'pull_request' && github.event.pull_requ
 ```
 
 - `dispatch_target_branch`: Optional, used to specify the target branch when manually triggered (workflow_dispatch).
+- `AI_TOKEN`: Optional, used to enable AI-assisted bundle degradation analysis. Configure it as a GitHub Actions secret and pass it to the action step through `env`.
+- `ai_model`: Optional, AI model used for degradation analysis. The default is `claude-3-5-haiku-latest`. The provider is automatically detected from the model name prefix. Supported prefixes include `claude`, `gemini`, `deepseek`, and `qwen`; other model names use the OpenAI provider.
 
 - `on` indicates when the workflow runs, commonly set to `pull_request` and `push`, and also supports `workflow_dispatch` for manual triggering.
   - On `pull_request`, Rsdoctor Action fetches baseline and current and performs bundle diff analysis.
@@ -122,6 +124,9 @@ jobs:
 
       - name: Bundle Analysis
         uses: web-infra-dev/rsdoctor-action@main
+        env:
+          # Optional. Required only when you want AI-assisted analysis.
+          AI_TOKEN: ${{ secrets.AI_TOKEN }}
         with:
           file_path: 'dist/.rsdoctor/rsdoctor-data.json'
           # Default 'main'. If you want to use a dynamic target branch, i.e., automatically get the target branch of the current pull request instead of a fixed main branch, you can use the following configuration:
@@ -129,7 +134,38 @@ jobs:
           target_branch: 'main'
           # Target branch for manual trigger
           dispatch_target_branch: ${{ github.event.inputs.target_branch }}
+          # Optional. Defaults to 'claude-3-5-haiku-latest'.
+          ai_model: 'claude-3-5-haiku-latest'
 ```
+
+## AI-assisted analysis
+
+Rsdoctor Action can use AI to summarize bundle degradation in pull requests and workflow summaries. AI-assisted analysis runs only when baseline data exists and the bundle size changes. To enable it, add an AI provider token as a repository secret and pass it to the action step:
+
+1. Open your GitHub repository, then go to `Settings` -> `Secrets and variables` -> `Actions`.
+2. Create a repository secret named `AI_TOKEN`.
+3. Pass the secret to `rsdoctor-action` with `env.AI_TOKEN`.
+4. Optionally set `ai_model` if you want to use a model other than the default `claude-3-5-haiku-latest`.
+
+```yaml
+- name: Bundle Analysis
+  uses: web-infra-dev/rsdoctor-action@main
+  env:
+    AI_TOKEN: ${{ secrets.AI_TOKEN }}
+  with:
+    file_path: 'dist/.rsdoctor/rsdoctor-data.json'
+    target_branch: 'main'
+    ai_model: 'claude-3-5-haiku-latest'
+```
+
+<div style={{ flex: '0 1 320px', maxWidth: 560, margin: 'auto' }}>
+  <img
+    src="/actions-ai-detail.png"
+    style={{ display: 'block', width: '100%' }}
+  />
+</div>
+
+If `AI_TOKEN` is not provided, the Action still runs the regular bundle diff analysis, but AI-assisted analysis will be skipped. The token must match the provider detected from `ai_model`. For example, use an Anthropic token with `claude-*`, a Google token with `gemini-*`, a DeepSeek token with `deepseek-*`, a Qwen token with `qwen*`, or an OpenAI token with OpenAI model names such as `gpt-4o-mini`.
 
 ## View Reports
 
@@ -160,6 +196,14 @@ Additionally, clicking "Download Bundle Diff Report" allows you to download Rsdo
 
 - This is normal for the first run or for new repositories, because no baseline has been uploaded yet. The baseline data will be created after the first merge into the main branch.
 
+**Q: AI-assisted analysis is not shown**
+
+- Ensure the `AI_TOKEN` secret has been created in repository settings and passed to the action step through `env`.
+- Check whether the selected `ai_model` matches the provider token. The provider is detected from the model name prefix.
+- Confirm that baseline data exists and the bundle size changed in the current run.
+- For pull requests from forks, GitHub may not expose repository secrets to the workflow for security reasons.
+
 ## More Resources
 
 - [rsdoctor-action GitHub Repository](https://github.com/web-infra-dev/rsdoctor-action)
+- [Rsdoctor AI Guide](/guide/start/ai)

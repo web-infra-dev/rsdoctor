@@ -59,6 +59,8 @@ target_branch: ${{ github.event_name == 'pull_request' && github.event.pull_requ
 ```
 
 - `dispatch_target_branch`：非必需，用于手动触发 (workflow_dispatch) 时指定目标分支。
+- `AI_TOKEN`：非必需，用于开启 AI 辅助的产物劣化分析。请将其配置为 GitHub Actions Secret，并通过 action step 的 `env` 传入。
+- `ai_model`：非必需，用于指定产物劣化分析使用的 AI 模型。默认值为 `claude-3-5-haiku-latest`。Action 会根据模型名称前缀自动识别 provider。支持的前缀包括 `claude`、`gemini`、`deepseek` 和 `qwen`；其他模型名称会使用 OpenAI provider。
 
 - `on` 是指 workflow 运行的时机，通常设置为 `pull_request` 和 `push`，也支持 `workflow_dispatch` 手动触发。
   - 在 `pull_request` 时，Rsdoctor Action 会拉取 baseline 和 current，进行 bundle diff 分析。
@@ -122,6 +124,9 @@ jobs:
 
       - name: Bundle Analysis
         uses: web-infra-dev/rsdoctor-action@main
+        env:
+          # 可选，仅在需要 AI 辅助分析时配置。
+          AI_TOKEN: ${{ secrets.AI_TOKEN }}
         with:
           file_path: 'dist/.rsdoctor/rsdoctor-data.json'
           # 默认 'main'，如果想用不固定的目标分支，即自动获取当前 pull request 的 target branch，则可以使用下方配置：
@@ -129,7 +134,38 @@ jobs:
           target_branch: 'main'
           # 手动触发时使用的目标分支
           dispatch_target_branch: ${{ github.event.inputs.target_branch }}
+          # 可选，默认值为 'claude-3-5-haiku-latest'。
+          ai_model: 'claude-3-5-haiku-latest'
 ```
+
+## AI 辅助分析
+
+Rsdoctor Action 可以借助 AI 在 Pull Request 评论和 workflow summary 中总结产物劣化原因。AI 辅助分析只会在存在 baseline 数据且产物体积发生变化时运行。启用方式如下：
+
+1. 打开 GitHub 仓库，进入 `Settings` -> `Secrets and variables` -> `Actions`。
+2. 创建名为 `AI_TOKEN` 的 repository secret。
+3. 通过 `env.AI_TOKEN` 将 Secret 传入 `rsdoctor-action`。
+4. 如果不想使用默认的 `claude-3-5-haiku-latest`，可以通过 `ai_model` 指定其他模型。
+
+```yaml
+- name: Bundle Analysis
+  uses: web-infra-dev/rsdoctor-action@main
+  env:
+    AI_TOKEN: ${{ secrets.AI_TOKEN }}
+  with:
+    file_path: 'dist/.rsdoctor/rsdoctor-data.json'
+    target_branch: 'main'
+    ai_model: 'claude-3-5-haiku-latest'
+```
+
+<div style={{ flex: '0 1 320px', maxWidth: 560, margin: 'auto' }}>
+  <img
+    src="/actions-ai-detail.png"
+    style={{ display: 'block', width: '100%' }}
+  />
+</div>
+
+如果未提供 `AI_TOKEN`，Action 仍会执行常规的 bundle diff 分析，但会跳过 AI 辅助分析。`AI_TOKEN` 需要与 `ai_model` 自动识别出的 provider 匹配。例如，`claude-*` 使用 Anthropic token，`gemini-*` 使用 Google token，`deepseek-*` 使用 DeepSeek token，`qwen*` 使用 Qwen token，`gpt-4o-mini` 等 OpenAI 模型使用 OpenAI token。
 
 ## 查看报告
 
@@ -160,6 +196,14 @@ jobs:
 
 - 这对于首次运行或新仓库是正常的，因为还没有上传 Baseline。因为基线数据将在首次合并到主分支后创建。
 
+**Q: 没有展示 AI 辅助分析**
+
+- 确保已经在仓库设置中创建 `AI_TOKEN` Secret，并通过 action step 的 `env` 传入。
+- 检查当前 `ai_model` 是否与传入的 provider token 匹配。Action 会根据模型名称前缀识别 provider。
+- 确认当前 workflow 已存在 baseline 数据，并且本次产物体积发生了变化。
+- 对于来自 fork 仓库的 Pull Request，GitHub 出于安全原因可能不会向 workflow 暴露仓库 Secrets。
+
 ## 更多资源
 
 - [rsdoctor-action GitHub 仓库](https://github.com/web-infra-dev/rsdoctor-action)
+- [Rsdoctor AI 指南](/guide/start/ai)
