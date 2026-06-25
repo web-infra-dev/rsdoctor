@@ -1,12 +1,15 @@
 import { Common, SDK } from '@rsdoctor/types';
 import type { Server } from 'http';
 import WebSocket, { WebSocketServer } from 'ws';
+import type { VerifyClientCallbackSync } from 'ws';
 import { SocketAPILoader } from './api';
+import { isAllowedRequestHost } from '../security';
 
 interface SocketOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;
   server: Server;
   port: number;
+  token: string;
 }
 
 type Subscription = {
@@ -25,6 +28,14 @@ type ClientMessage = {
   body?: Common.PlainObject | null;
 };
 
+function isAllowedSocketToken(url: string | undefined, token: string) {
+  if (!url) {
+    return false;
+  }
+
+  return new URL(url, 'http://localhost').searchParams.get('token') === token;
+}
+
 export class Socket {
   protected server?: WebSocketServer;
 
@@ -41,7 +52,16 @@ export class Socket {
   }
 
   public bootstrap() {
-    this.server = new WebSocketServer({ server: this.options.server });
+    this.server = new WebSocketServer({
+      server: this.options.server,
+      verifyClient: (({ req }) => {
+        const host = req.headers.host || req.headers[':authority'];
+        return (
+          isAllowedRequestHost(host) &&
+          isAllowedSocketToken(req.url, this.options.token)
+        );
+      }) satisfies VerifyClientCallbackSync,
+    });
     this.server.on('connection', (client) => {
       this.attachClient(client);
     });

@@ -70,6 +70,7 @@ export class LocalServerDataLoader extends BaseDataLoader {
     // request limitation key
     const key = body ? `${api}_${JSON.stringify(body)}` : `${api}`;
     const socketPort = this.get('__SOCKET__PORT__') ?? '';
+    const socketUrl = this.get('__SOCKET__URL__') ?? '';
 
     return this.limit(key, async () => {
       try {
@@ -77,6 +78,7 @@ export class LocalServerDataLoader extends BaseDataLoader {
           api,
           body as SDK.ServerAPI.InferRequestBodyType<T>,
           socketPort,
+          socketUrl,
         )) as R;
       } catch (err) {
         this.log(`loadAPI error: `, key);
@@ -121,7 +123,8 @@ export class LocalServerDataLoader extends BaseDataLoader {
 
     subscription.listeners.add(fn);
     const socketPort = this.get('__SOCKET__PORT__') ?? '';
-    subscribeServerAPI(api, normalizedBody, fn, socketPort);
+    const socketUrl = this.get('__SOCKET__URL__') ?? '';
+    subscribeServerAPI(api, normalizedBody, fn, socketPort, socketUrl);
   }
 
   public removeOnDataUpdate<
@@ -133,7 +136,8 @@ export class LocalServerDataLoader extends BaseDataLoader {
   ) {
     const key = `${api}::${JSON.stringify(body ?? null)}`;
     const socketPort = this.get('__SOCKET__PORT__') ?? '';
-    unsubscribeServerAPI(api, body, fn, socketPort);
+    const socketUrl = this.get('__SOCKET__URL__') ?? '';
+    unsubscribeServerAPI(api, body, fn, socketPort, socketUrl);
     this.events.get(key)?.listeners.delete(fn);
   }
 }

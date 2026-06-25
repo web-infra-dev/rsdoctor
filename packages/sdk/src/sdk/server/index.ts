@@ -12,18 +12,34 @@ import * as APIs from './apis';
 import { chalk, logger } from '@rsdoctor/utils/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
-import { getLocalIpAddress } from './utils';
 import { Lodash } from '@rsdoctor/utils/common';
 import { createRequire } from 'module';
 import { ServerResponse } from 'http';
+import { randomBytes } from 'crypto';
+import {
+  DEFAULT_ALLOWED_CORS_ORIGINS,
+  isAllowedCorsRequest,
+  isAllowedRequestHost,
+} from './security';
 
 const require = createRequire(import.meta.url);
 export * from './utils';
 
 /** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
+const LISTEN_RETRY_LIMIT = 10;
 
-export type ISocketType = { port: number; socketUrl: string };
+export type ISocketType = { port: number; socketUrl: string; token: string };
+
+export type RsdoctorServerOptions = {
+  innerClientPath?: string;
+  printServerUrl?: boolean;
+  cors?: SDK.RsdoctorServerConfig['cors'];
+};
+
+function isAddressInUseError(error: unknown) {
+  return (error as { code?: string }).code === 'EADDRINUSE';
+}
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   private _server!: Common.PromiseReturnType<typeof Server.createServer>;
@@ -40,10 +56,14 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
   private _printServerUrl: boolean;
 
+  private _cors: SDK.RsdoctorServerConfig['cors'];
+
+  private _socketToken = randomBytes(16).toString('hex');
+
   constructor(
     protected sdk: SDK.RsdoctorBuilderSDKInstance,
     port = Server.defaultPort,
-    config?: { innerClientPath?: string; printServerUrl?: boolean },
+    config?: RsdoctorServerOptions,
   ) {
     assert(typeof port === 'number');
     // maybe the port will be rewrite in bootstrap()
@@ -53,6 +73,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     this._printServerUrl = Lodash.isUndefined(config?.printServerUrl)
       ? true
       : config?.printServerUrl;
+    this._cors = config?.cors;
   }
 
   public get app(): SDK.RsdoctorServerInstance['app'] {
@@ -60,8 +81,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   }
 
   public get host(): string {
-    const host = getLocalIpAddress();
-    return host;
+    return Server.defaultHost;
   }
 
   public get origin(): string {
@@ -71,7 +91,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   public get socketUrl(): ISocketType {
     return {
       port: this.port,
-      socketUrl: `ws://localhost:${this.port}`,
+      socketUrl: `ws://localhost:${this.port}?token=${this._socketToken}`,
+      token: this._socketToken,
     };
   }
 
@@ -79,19 +100,66 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     return this._innerClientPath;
   }
 
+  private async createInnerServer() {
+    let expectedPort = this.port;
+    let lastError: unknown;
+
+    for (let retry = 0; retry < LISTEN_RETRY_LIMIT; retry++) {
+      const port = Server.getPortSync(expectedPort, this.host);
+
+      try {
+        return {
+          port,
+          server: await Server.createServer(port, this.host),
+        };
+      } catch (error) {
+        if (!isAddressInUseError(error)) {
+          throw error;
+        }
+        lastError = error;
+        expectedPort = port + 1;
+      }
+    }
+
+    throw lastError;
+  }
+
+  private resolveCorsOptions(): false | SDK.RsdoctorServerCorsOptions {
+    if (this._cors === false) {
+      return false;
+    }
+    if (this._cors === true) {
+      return {};
+    }
+    if (typeof this._cors === 'undefined') {
+      return {
+        origin: DEFAULT_ALLOWED_CORS_ORIGINS,
+      };
+    }
+    return {
+      ...this._cors,
+      origin:
+        typeof this._cors.origin === 'undefined'
+          ? DEFAULT_ALLOWED_CORS_ORIGINS
+          : this._cors.origin,
+    };
+  }
+
   async bootstrap() {
     if (!this.disposed) {
       return;
     }
 
-    const port = Server.getPortSync(this.port);
+    const { port, server } = await this.createInnerServer();
+    const corsOptions = this.resolveCorsOptions();
     // rewrite port when the default port is unavailable
     this.port = port;
-    this._server = await Server.createServer(port);
+    this._server = server;
     this._socket = new Socket({
       sdk: this.sdk,
       server: this._server.server,
       port: this.port,
+      token: this._socketToken,
     });
     await this._socket.bootstrap();
 
@@ -103,8 +171,37 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
     this.disposed = false;
 
-    this.app.use(cors());
+    this.app.use((req, res, next) => {
+      const host = req.headers.host || req.headers[':authority'];
+      if (!isAllowedRequestHost(host)) {
+        res.statusCode = 403;
+        res.end();
+        return;
+      }
+
+      next();
+    });
+    if (
+      corsOptions !== false &&
+      corsOptions.origin === DEFAULT_ALLOWED_CORS_ORIGINS
+    ) {
+      this.app.use((req, res, next) => {
+        const host = req.headers.host || req.headers[':authority'];
+        if (!isAllowedCorsRequest(req.headers.origin, host)) {
+          res.statusCode = 403;
+          res.end();
+          return;
+        }
+
+        next();
+      });
+    }
+    if (corsOptions !== false) {
+      this.app.use(cors(corsOptions));
+    }
     this.app.use(bodyParser.json({ limit: '500mb' }));
+    await this._router.setup();
+
     const clientHtmlPath = this._innerClientPath
       ? this._innerClientPath
       : require.resolve('@rsdoctor/client');
@@ -168,8 +265,6 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       },
     );
 
-    await this._router.setup();
-
     process.once('exit', () => this.dispose());
     process.once('SIGINT', () => this.dispose(0));
     process.once('SIGTERM', () => this.dispose(0));
@@ -199,9 +294,6 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       if (m === method) {
         try {
           const body = await cb(req, res, next);
-
-          res.setHeader('Access-Control-Allow-Origin', '*');
-          res.setHeader('Access-Control-Allow-Credentials', 'true');
           res.statusCode = 200;
 
           if (Buffer.isBuffer(body)) {
@@ -324,12 +416,13 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     }
     this.disposed = true;
 
-    if (this._socket) {
-      this._socket.dispose();
-    }
-
     if (this._server) {
       await this._server.close();
+    }
+
+    // Close sockets after the HTTP server stops accepting new connections.
+    if (this._socket) {
+      this._socket.dispose();
     }
 
     if (exitCode !== undefined) {

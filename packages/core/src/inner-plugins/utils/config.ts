@@ -101,6 +101,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     output = outputConfig,
     supports = getDefaultSupports(),
     port,
+    server: userServer = {},
     printLog = { serverUrls: true },
     mode = undefined,
     brief = undefined,
@@ -117,6 +118,15 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   assert(typeof features === 'object' || Array.isArray(features));
   assert(typeof loaderInterceptorOptions === 'object');
   assert(typeof disableClientServer === 'boolean');
+  assert(typeof port === 'undefined' || typeof port === 'number');
+  assert(typeof userServer === 'object' && userServer !== null);
+  const server: SDK.RsdoctorServerConfig = {
+    ...userServer,
+  };
+  assert(typeof server.port === 'undefined' || typeof server.port === 'number');
+  if (typeof server.port === 'undefined' && typeof port !== 'undefined') {
+    server.port = port;
+  }
   let finalMode: keyof typeof SDK.IMode =
     ('mode' in output && isValidMode(output.mode)
       ? output.mode === ('lite' as SDK.IMode.normal)
@@ -174,6 +184,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     innerClientPath,
     supports,
     port,
+    server,
     printLog,
   };
 

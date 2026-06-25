@@ -11,8 +11,21 @@ import { TransUtils } from '@rsdoctor/graph';
 interface Options {
   profile: string;
   open?: boolean;
-  port?: number;
+  port?: number | string;
   type?: SDK.ToDataType;
+}
+
+export function coercePort(port?: number | string) {
+  if (typeof port === 'undefined') {
+    return undefined;
+  }
+
+  const value = Number(port);
+  if (!Number.isFinite(value)) {
+    throw new Error(`Invalid port: ${port}`);
+  }
+
+  return value;
 }
 
 export const statsAnalyze: Command<
@@ -32,7 +45,8 @@ export const statsAnalyze: Command<
       .option('--port <number>', 'port for Rsdoctor Server')
       .option('--type <mode>', 'Bundle analysis mode (normal or lite)');
   },
-  async action({ profile, open = true, type = SDK.ToDataType.Normal }) {
+  async action({ profile, open = true, port, type = SDK.ToDataType.Normal }) {
+    const serverPort = coercePort(port);
     const spinner = ora({ prefixText: cyan(`[${name}]`) }).start(
       `start to loading "${profile}"`,
     );
@@ -46,7 +60,11 @@ export const statsAnalyze: Command<
       name: 'stats-analyze',
       root: process.cwd(),
       type,
-      noServer: false,
+      config: {
+        server: {
+          port: serverPort,
+        },
+      },
     });
 
     await sdk.bootstrap();
