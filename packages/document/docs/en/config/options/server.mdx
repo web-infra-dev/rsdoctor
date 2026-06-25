@@ -1,0 +1,124 @@
+# server
+
+- **Type:** `RsdoctorServerConfig`
+- **Optional:** `true`
+- **Default:** `{}`
+
+Configure the Rsdoctor report server.
+
+## port
+
+- **Type:** `number`
+- **Optional:** `true`
+- **Default:** `random(3000, 8999)`
+
+Configure the port for the Rsdoctor report server.
+
+If `server.port` is not set, Rsdoctor uses the top-level [`port`](./port.mdx) option. If both options are set, `server.port` takes priority.
+
+```js
+new RsdoctorRspackPlugin({
+  server: {
+    port: 3001,
+  },
+});
+```
+
+## cors
+
+- **Type:** `boolean | RsdoctorServerCorsOptions`
+- **Optional:** `true`
+- **Default:** Allows local origins only.
+
+Configure CORS response headers for the Rsdoctor report server.
+
+By default, Rsdoctor allows local origins only:
+
+- `http://localhost` and `https://localhost`
+- `localhost` subdomains, such as `http://foo.localhost`
+- `http://127.0.0.1` and `https://127.0.0.1`
+- `http://[::1]` and `https://[::1]`
+
+All default local origins can include any port.
+
+### Values
+
+- `false`: Disable the CORS middleware.
+- `true`: Use the defaults from the `cors` package.
+- `object`: Pass options to the `cors` middleware. If `origin` is omitted, Rsdoctor keeps the default local-origin policy. If `origin` is set, it replaces the default local-origin policy.
+
+Rsdoctor still validates local request hosts separately. The `cors` option only controls CORS middleware behavior and response headers.
+
+### Examples
+
+Allow a custom origin:
+
+```js
+new RsdoctorRspackPlugin({
+  server: {
+    cors: {
+      origin: 'https://example.com',
+      credentials: true,
+    },
+  },
+});
+```
+
+Keep the default local-origin policy and add other CORS options:
+
+```js
+new RsdoctorRspackPlugin({
+  server: {
+    cors: {
+      credentials: true,
+      methods: ['GET', 'POST', 'OPTIONS'],
+    },
+  },
+});
+```
+
+Use the `cors` package defaults:
+
+```js
+new RsdoctorRspackPlugin({
+  server: {
+    cors: true,
+  },
+});
+```
+
+### Type definitions
+
+```ts
+interface RsdoctorServerConfig {
+  port?: number;
+  cors?: boolean | RsdoctorServerCorsOptions;
+}
+
+type RsdoctorServerCorsStaticOrigin =
+  | boolean
+  | string
+  | RegExp
+  | Array<boolean | string | RegExp>;
+
+type RsdoctorServerCorsOrigin =
+  | RsdoctorServerCorsStaticOrigin
+  | ((
+      requestOrigin: string | undefined,
+      callback: (
+        err: Error | null,
+        origin?: RsdoctorServerCorsStaticOrigin,
+      ) => void,
+    ) => void);
+
+interface RsdoctorServerCorsOptions {
+  origin?: RsdoctorServerCorsOrigin;
+  methods?: string | string[];
+  allowedHeaders?: string | string[];
+  exposedHeaders?: string | string[];
+  credentials?: boolean;
+  maxAge?: number;
+  preflightContinue?: boolean;
+  optionsSuccessStatus?: number;
+}
+```
