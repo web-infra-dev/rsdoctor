@@ -12,7 +12,6 @@ import * as APIs from './apis';
 import { chalk, logger } from '@rsdoctor/core/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
-import { Lodash } from '@rsdoctor/utils/common';
 import { createRequire } from 'module';
 import { ServerResponse } from 'http';
 import { randomBytes } from 'crypto';
@@ -70,9 +69,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     this.port = port;
     this._router = new Router({ sdk, server: this, apis: Object.values(APIs) });
     this._innerClientPath = config?.innerClientPath || '';
-    this._printServerUrl = Lodash.isUndefined(config?.printServerUrl)
-      ? true
-      : config?.printServerUrl;
+    this._printServerUrl = config?.printServerUrl ?? true;
     this._cors = config?.cors;
   }
 
@@ -200,6 +197,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       this.app.use(cors(corsOptions));
     }
     this.app.use(bodyParser.json({ limit: '500mb' }));
+    await this._router.setup();
+
     const clientHtmlPath = this._innerClientPath
       ? this._innerClientPath
       : require.resolve('@rsdoctor/client');
