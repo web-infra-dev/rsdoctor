@@ -1,7 +1,7 @@
 import React from 'react';
 import { Divider, Space } from 'antd';
 import { SDK } from '@rsdoctor/types';
-import { Summary } from '@rsdoctor/core/common';
+import { Summary } from '@rsdoctor/core/common-browser';
 import { TextDrawer } from '../TextDrawer';
 import { Card } from '../Card';
 import {

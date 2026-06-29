@@ -1,4 +1,6 @@
-import { isAbsolute } from 'path';
+import path from 'path-browserify';
+
+const { isAbsolute } = path;
 
 export function isUrl(uri: string) {
   return /^https?:\/\//.test(uri);

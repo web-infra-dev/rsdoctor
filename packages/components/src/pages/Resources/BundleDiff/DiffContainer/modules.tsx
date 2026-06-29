@@ -23,7 +23,7 @@ import { ViewChanges } from './changes';
 import { UpdateType } from './constants';
 import { Badge as Bdg } from '../../../../components/Badge';
 import { ModuleHashPattern, getTargetColumnPropsForModuleRow } from './row';
-import { Graph } from '@rsdoctor/core/common';
+import { Graph } from '@rsdoctor/core/common-browser';
 
 export function getUpdateType(e: BundleDiffTableModulesData): UpdateType {
   if (e.baseline && !e.current) {

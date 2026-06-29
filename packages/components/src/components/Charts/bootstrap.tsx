@@ -11,7 +11,7 @@ import {
   CommonExecutionsChart,
 } from './common';
 import { ServerAPIProvider } from '../Manifest';
-import { Summary } from '@rsdoctor/core/common';
+import { Summary } from '@rsdoctor/core/common-browser';
 import { ChartTypes } from './constants';
 
 export const BootstrapChartContainer: React.FC<CommonChartProps> = ({

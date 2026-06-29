@@ -1,12 +1,14 @@
 import { Rule, SDK, Manifest, Constants } from '@rsdoctor/types';
+import path from 'path-browserify';
 
 import * as Loader from '../loader';
 import * as Resolver from '../resolver';
 import * as Plugin from '../plugin';
 import * as Graph from '../graph';
 import * as Alerts from '../alerts';
-import { relative } from 'path';
 import { checkSourceMapSupport } from '../rspack';
+
+const { relative } = path;
 
 /**
  * this class will run at both browser and node environment.

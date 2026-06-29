@@ -1,4 +1,4 @@
-import { Loader } from '@rsdoctor/core/common';
+import { Loader } from '@rsdoctor/core/common-browser';
 import { SDK } from '@rsdoctor/types';
 import dayjs from 'dayjs';
 import { maxBy, minBy } from '@rsdoctor/core/collection';
