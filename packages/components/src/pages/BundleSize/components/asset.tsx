@@ -20,7 +20,7 @@ import {
   Typography,
 } from 'antd';
 import { DataNode as AntdDataNode } from 'antd/es/tree';
-import { debounce, omitBy, sumBy } from '@rsdoctor/utils/collection';
+import { debounce, omitBy, sumBy } from '@rsdoctor/core/collection';
 import { dirname, relative } from 'path';
 import React, {
   useEffect,

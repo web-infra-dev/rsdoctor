@@ -1,9 +1,9 @@
 import {
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
-} from '@/types';
+} from '@rsdoctor/core/types';
 import { Config, Linter, Plugin, SDK } from '@rsdoctor/types';
-import { chalk, logger } from '@rsdoctor/utils/logger';
+import { chalk, logger } from '@rsdoctor/core/logger';
 import assert from 'assert';
 import {
   convertReportCodeTypeObject,

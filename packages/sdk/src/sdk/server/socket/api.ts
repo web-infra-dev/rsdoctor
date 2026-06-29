@@ -1,4 +1,4 @@
-import { Data } from '@rsdoctor/utils/common';
+import { Data } from '@rsdoctor/core/common';
 import { Manifest, SDK } from '@rsdoctor/types';
 
 interface SocketAPILoaderOptions {

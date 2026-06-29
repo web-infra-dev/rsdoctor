@@ -1,3 +1,8 @@
+export * as File from './file';
+export * as Json from './json';
+export * as Server from './server';
+export * as EnvInfo from './envinfo';
+export * as Process from './process';
 export * as Chunks from './chunks';
 export * as Utils from './utils';
 export * as Loader from './loader';

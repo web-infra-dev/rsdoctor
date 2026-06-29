@@ -1,4 +1,3 @@
-import type { RsdoctorPrimarySDK } from '@rsdoctor/sdk';
 import type {
   Linter,
   Linter as LinterType,
@@ -10,7 +9,7 @@ export interface RsdoctorMultiplePluginOptions<
 >
   extends
     Omit<Plugin.RsdoctorRspackPluginOptions<Rules>, 'sdkInstance'>,
-    Pick<ConstructorParameters<typeof RsdoctorPrimarySDK>[0], 'stage'> {
+    Pick<{ stage?: number }, 'stage'> {
   /**
    * name of builder
    */

@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { sumBy, uniq } from '@rsdoctor/utils/collection';
+import { sumBy, uniq } from '@rsdoctor/core/collection';
 import { SDK } from '@rsdoctor/types';
 import { BundleDiffTablePackagesData } from './types';
 import { formatSize } from '../../../../utils';

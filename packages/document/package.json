@@ -40,7 +40,9 @@
     "rspress-plugin-font-open-sans": "^1.0.4",
     "rspress-plugin-sitemap": "^1.2.1",
     "typescript": "catalog:",
-    "@rsbuild/plugin-sass": "catalog:"
+    "@rsbuild/plugin-sass": "catalog:",
+    "@rsdoctor/core": "workspace:*",
+    "@rsdoctor/types": "workspace:*"
   },
   "dependencies": {
     "@rstack-dev/doc-ui": "1.14.5",

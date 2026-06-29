@@ -3,11 +3,14 @@ import {
   internalPluginTapPostOptions,
   internalPluginTapPreOptions,
 } from '../constants';
-import type { InternalPlugin, RsdoctorPluginInstance } from '@/types';
+import type {
+  InternalPlugin,
+  RsdoctorPluginInstance,
+} from '@rsdoctor/core/types';
 
-export abstract class InternalBasePlugin<T extends Plugin.BaseCompiler>
-  implements InternalPlugin<T, Linter.ExtendRuleData[]>
-{
+export abstract class InternalBasePlugin<
+  T extends Plugin.BaseCompiler,
+> implements InternalPlugin<T, Linter.ExtendRuleData[]> {
   abstract name: string;
 
   constructor(

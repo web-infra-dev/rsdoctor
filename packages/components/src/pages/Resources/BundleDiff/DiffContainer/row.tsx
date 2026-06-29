@@ -15,7 +15,7 @@ import {
   ColumnType,
   FilterConfirmProps,
 } from 'antd/es/table/interface';
-import { upperFirst } from '@rsdoctor/utils/collection';
+import { upperFirst } from '@rsdoctor/core/collection';
 import React, { useMemo, useRef, useState } from 'react';
 import { Client } from '@rsdoctor/types';
 import { CompareFn } from 'antd/lib/table/interface';
@@ -34,7 +34,7 @@ import {
 } from './types';
 import { UpdateType } from './constants';
 import { formatDiffSize } from './utils';
-import { Graph } from '@rsdoctor/utils/common';
+import { Graph } from '@rsdoctor/core/common-browser';
 
 export const ModuleHashPattern = /[a-fA-F0-9]{20,}/;
 

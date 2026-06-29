@@ -1,8 +1,8 @@
-import { Build } from '@/build-utils';
-import { getSDK } from '@/inner-plugins';
-import { Plugin, SDK } from '@rsdoctor/types';
+import { parseQuery } from '@/build-utils/build/utils';
+import { getSDK } from '@/inner-plugins/utils/sdk';
+import type { Plugin, SDK } from '@rsdoctor/types';
 import type { LoaderDefinitionFunction } from '@rspack/core';
-import { omit } from '@rsdoctor/utils/collection';
+import { omit } from '@rsdoctor/core/collection';
 import path from 'path';
 
 export const loaderModule: Plugin.LoaderDefinition<
@@ -24,7 +24,7 @@ export const loaderModule: Plugin.LoaderDefinition<
       path: this._module?.layer
         ? `${this.resourcePath}[${this._module.layer}]`
         : this.resourcePath,
-      query: Build.Utils.parseQuery(this.resourceQuery),
+      query: parseQuery(this.resourceQuery),
       queryRaw: this.resourceQuery,
       ext: path.extname(this.resourcePath).slice(1),
       ...(this._module?.layer ? { layer: this._module.layer } : {}),

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Table, Tooltip } from 'antd';
-import { sumBy, uniq } from '@rsdoctor/utils/collection';
+import { sumBy, uniq } from '@rsdoctor/core/collection';
 import { SDK } from '@rsdoctor/types';
 import { formatCosts } from '../../utils';
 

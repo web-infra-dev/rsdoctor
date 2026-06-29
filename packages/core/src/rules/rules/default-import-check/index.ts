@@ -1,6 +1,6 @@
 import { builtinModules } from 'module';
 import { Linter, Rule } from '@rsdoctor/types';
-import { parser, getDocument, Node } from '@rsdoctor/utils/ruleUtils';
+import { parser, getDocument, Node } from '@rsdoctor/core/rule-utils';
 
 import type { Config } from './types';
 import {

@@ -1,7 +1,7 @@
 import type { Plugin as PluginType } from '@rsdoctor/types';
 import { Plugin } from '@rsdoctor/types';
 import { Utils as BuildUtils } from '@/build-utils/build';
-import type { ProxyLoaderOptions } from '@/types';
+import type { ProxyLoaderOptions } from '@rsdoctor/core/types';
 import {
   getOriginLoaderModule,
   reportLoader,

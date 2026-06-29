@@ -1,4 +1,4 @@
-import { Fetch } from '@rsdoctor/utils/common';
+import { Fetch } from '@rsdoctor/core/common';
 
 /** Thin wrapper so tests can `rs.mock('./fetch-http')` without depending on `Fetch.getFetch` internals. */
 export function fetchWithTimeout(

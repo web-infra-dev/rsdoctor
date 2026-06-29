@@ -1,4 +1,4 @@
-import { File } from '@rsdoctor/utils/build';
+import { File } from '@rsdoctor/core/build-utils';
 import { describe, it, expect } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 import { setupSDK } from '../../utils';

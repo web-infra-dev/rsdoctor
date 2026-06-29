@@ -1,12 +1,12 @@
 import fs from 'fs';
-import { find, mapValues } from '@rsdoctor/utils/collection';
+import { find, mapValues } from '@rsdoctor/core/collection';
 import { filesize } from 'filesize';
 
-import { parser } from '@rsdoctor/utils/ruleUtils';
+import { parser } from '@rsdoctor/core/rule-utils';
 import { extname } from 'path';
 
 import { Constants, SDK } from '@rsdoctor/types';
-import { logger } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/core/logger';
 import type { ParseBundle } from '@rsdoctor/graph';
 
 /**

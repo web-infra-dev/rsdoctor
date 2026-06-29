@@ -1,5 +1,5 @@
-import { isNumber } from '@rsdoctor/utils/collection';
-import { parser, Node } from '@rsdoctor/utils/ruleUtils';
+import { isNumber } from '@rsdoctor/core/collection';
+import { parser, Node } from '@rsdoctor/core/rule-utils';
 import { SDK } from '@rsdoctor/types';
 function getDefaultExportIdentifier(
   node: Node.ExportDefaultDeclaration,

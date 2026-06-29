@@ -1,10 +1,10 @@
 import { SDK } from '@rsdoctor/types';
 import { Empty, Table, Tag } from 'antd';
-import { orderBy } from '@rsdoctor/utils/collection';
+import { orderBy } from '@rsdoctor/core/collection';
 import React, { useMemo } from 'react';
 import { formatSize } from 'src/utils';
 import './index.sass';
-import { Lodash } from '@rsdoctor/utils/common';
+import { Lodash } from '@rsdoctor/core/common-browser';
 
 type ChunksDataType = {
   key: string | number;

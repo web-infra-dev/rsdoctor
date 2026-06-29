@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { Summary } from '@rsdoctor/utils/common';
+import { Summary } from '@rsdoctor/core/common-browser';
 import { Divider, Progress, Space, Typography } from 'antd';
 import React from 'react';
 import { formatCosts, useI18n } from '../../utils';

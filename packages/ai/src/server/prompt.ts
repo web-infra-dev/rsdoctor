@@ -1,5 +1,5 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { logger } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/core/logger';
 import { z } from 'zod';
 
 interface Argument {

@@ -31,7 +31,7 @@ describe('test src/utils/config.ts', () => {
 
     makeRulesSerializable(rules);
 
-    expect(JSON.stringify(rules, null, 2)).toMatchSnapshot();
+    expect(JSON.parse(JSON.stringify(rules))).toMatchSnapshot();
   });
 
   describe('normalizeRspackUserOptions enableNativePlugin', () => {

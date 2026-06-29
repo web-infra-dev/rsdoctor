@@ -1,5 +1,5 @@
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Algorithm } from '@rsdoctor/utils/common';
+import { Algorithm } from '@rsdoctor/core/common-browser';
 import { BaseDataLoader } from './base';
 import { Constants } from '@rsdoctor/types';
 
@@ -57,10 +57,10 @@ export class BriefDataLoader extends BaseDataLoader {
 
   public async loadAPI<
     T extends SDK.ServerAPI.API,
-    B extends
-      SDK.ServerAPI.InferRequestBodyType<T> = SDK.ServerAPI.InferRequestBodyType<T>,
-    R extends
-      SDK.ServerAPI.InferResponseType<T> = SDK.ServerAPI.InferResponseType<T>,
+    B extends SDK.ServerAPI.InferRequestBodyType<T> =
+      SDK.ServerAPI.InferRequestBodyType<T>,
+    R extends SDK.ServerAPI.InferResponseType<T> =
+      SDK.ServerAPI.InferResponseType<T>,
   >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
     return this.loader.loadAPI(...args) as R;
   }

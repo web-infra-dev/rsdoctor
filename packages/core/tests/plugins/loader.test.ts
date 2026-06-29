@@ -1,4 +1,4 @@
-import { Loader } from '@rsdoctor/utils/common';
+import { Loader } from '@rsdoctor/core/common';
 import { describe, it, expect } from '@rstest/core';
 import path from 'path';
 import { ProxyLoaderInternalOptions } from '@/types';

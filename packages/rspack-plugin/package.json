@@ -35,8 +35,7 @@
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
-    "@rsdoctor/types": "workspace:*",
-    "@rsdoctor/utils": "workspace:*"
+    "@rsdoctor/types": "workspace:*"
   },
   "devDependencies": {
     "@rspack/core": "catalog:",

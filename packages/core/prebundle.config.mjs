@@ -5,7 +5,7 @@ export default {
     '@rsdoctor/client',
     '@rsdoctor/graph',
     '@rsdoctor/types',
-    '@rsdoctor/utils',
+    '@rspack/core',
     'safer-buffer',
   ],
 

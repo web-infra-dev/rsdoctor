@@ -1,48 +1,14 @@
 import { defineConfig, rspack } from '@rslib/core';
 import { dualPackageBundleless } from '../../scripts/rslib.base.config';
-import prebundleConfig from './prebundle.config.mjs';
-
-const regexpMap: Record<string, RegExp> = {};
-
-for (const item of prebundleConfig.dependencies) {
-  const depName = typeof item === 'string' ? item : item.name;
-  if (typeof item !== 'string' && item.dtsOnly) {
-    continue;
-  }
-
-  regexpMap[depName] = new RegExp(`compiled[\\/]${depName}(?:[\\/]|$)`);
-}
-
-const externalsPrebundle = [
-  ({ request }: { request?: string }, callback: any) => {
-    if (request) {
-      if (
-        prebundleConfig.dependencies.includes(request) &&
-        request !== '@rsbuild/plugin-check-syntax'
-      ) {
-        return callback(undefined, `../../../compiled/${request}/index.js`);
-      }
-      const entries = Object.entries(regexpMap);
-      for (const [name, test] of entries) {
-        if (test.test(request)) {
-          return callback(undefined, `../compiled/${name}/index.js`);
-        }
-      }
-    }
-    callback();
-  },
-];
 
 const externals = [
-  // Externalize workspace packages
+  '@rsdoctor/client',
   '@rsdoctor/graph',
-  '@rsdoctor/sdk',
   '@rsdoctor/types',
-  '@rsdoctor/utils',
+  '@rspack/core',
   'lodash',
   'semver',
   'source-map',
-  ...externalsPrebundle,
 ];
 
 export default defineConfig({

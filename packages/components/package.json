@@ -60,9 +60,6 @@
   "dependencies": {
     "@ant-design/icons": "6.3.2",
     "@monaco-editor/react": "4.7.0",
-    "@rsdoctor/graph": "workspace:*",
-    "@rsdoctor/types": "workspace:*",
-    "@rsdoctor/utils": "workspace:*",
     "ansi-to-react": "6.2.6",
     "antd": "catalog:",
     "clsx": "catalog:",
@@ -80,7 +77,10 @@
     "react-i18next": "12.0.0",
     "react-json-view": "1.21.3",
     "react-markdown": "catalog:",
-    "url-parse": "1.5.10"
+    "url-parse": "1.5.10",
+    "@rsdoctor/core": "workspace:*",
+    "@rsdoctor/graph": "workspace:*",
+    "@rsdoctor/types": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=19",

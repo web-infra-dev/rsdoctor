@@ -1,17 +1,19 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import fse from 'fs-extra';
-import { omit } from '@rsdoctor/utils/collection';
-import { Loader } from '@rsdoctor/utils/common';
+import { omit } from '@rsdoctor/core/collection';
+import { Loader } from '@rsdoctor/core/common';
 import type { Common, Plugin } from '@rsdoctor/types';
-import { Rule } from '../../../types';
-import { readPackageJson } from '@rsdoctor/graph';
-import { RuleSetUseItem } from '@rspack/core';
-import { logger } from '@rsdoctor/utils/logger';
+import type { Rule } from '../../../types/rules';
+import { readPackageJson } from '../json';
+import type { RuleSetUseItem } from '@rspack/core';
+import { logger } from '@rsdoctor/core/logger';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 
 // rspack https://github.com/web-infra-dev/rspack/blob/d22f049d4bce4f8ac20c1cbabeab3706eddaecc1/packages/rspack/src/loader-runner/index.ts#L47
 const PATH_QUERY_FRAGMENT_REGEXP =
@@ -40,14 +42,10 @@ export function loadLoaderModule(
 } {
   const cleanLoaderPath = parsePathQueryFragment(loaderPath).path;
 
-  // Use createRequire for ESM compatibility
-  const { createRequire } = require('module');
-  const requireFn = createRequire(import.meta.url);
-
-  const mod = requireFn(
+  const mod = require(
     process.env.DOCTOR_TEST
       ? path.resolve(cwd, cleanLoaderPath)
-      : requireFn.resolve(cleanLoaderPath, {
+      : require.resolve(cleanLoaderPath, {
           paths: [cwd, path.resolve(cwd, 'node_modules')],
         }),
   );

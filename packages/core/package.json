@@ -11,7 +11,8 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "compiled"
+    "compiled",
+    "static"
   ],
   "type": "module",
   "exports": {
@@ -27,12 +28,62 @@
     },
     "./build-utils": {
       "import": {
-        "types": "./dist/build-utils/build/index.d.ts",
-        "default": "./dist/build-utils/build/index.js"
+        "types": "./dist/build-utils/index.d.ts",
+        "default": "./dist/build-utils/index.js"
       },
       "require": {
-        "types": "./dist/build-utils/build/index.d.cts",
-        "default": "./dist/build-utils/build/index.cjs"
+        "types": "./dist/build-utils/index.d.cts",
+        "default": "./dist/build-utils/index.cjs"
+      }
+    },
+    "./collection": {
+      "import": {
+        "types": "./dist/collection.d.ts",
+        "default": "./dist/collection.js"
+      },
+      "require": {
+        "types": "./dist/collection.d.cts",
+        "default": "./dist/collection.cjs"
+      }
+    },
+    "./common": {
+      "import": {
+        "types": "./dist/common/index.d.ts",
+        "default": "./dist/common/index.js"
+      },
+      "require": {
+        "types": "./dist/common/index.d.cts",
+        "default": "./dist/common/index.cjs"
+      }
+    },
+    "./common-browser": {
+      "import": {
+        "types": "./dist/common-browser.d.ts",
+        "default": "./dist/common-browser.js"
+      },
+      "require": {
+        "types": "./dist/common-browser.d.cts",
+        "default": "./dist/common-browser.cjs"
+      }
+    },
+    "./error": {
+      "import": {
+        "types": "./dist/error/index.d.ts",
+        "default": "./dist/error/index.js"
+      },
+      "require": {
+        "types": "./dist/error/index.d.cts",
+        "default": "./dist/error/index.cjs"
+      }
+    },
+    "./logger": {
+      "import": {
+        "types": "./dist/logger.d.ts",
+        "default": "./dist/logger.js"
+      },
+      "require": {
+        "types": "./dist/logger.d.cts",
+        "default": "./dist/logger.cjs"
       }
     },
     "./plugins": {
@@ -55,6 +106,16 @@
         "default": "./dist/rules/index.cjs"
       }
     },
+    "./rule-utils": {
+      "import": {
+        "types": "./dist/rule-utils/index.d.ts",
+        "default": "./dist/rule-utils/index.js"
+      },
+      "require": {
+        "types": "./dist/rule-utils/index.d.cts",
+        "default": "./dist/rule-utils/index.cjs"
+      }
+    },
     "./types": {
       "import": {
         "types": "./dist/types/index.d.ts",
@@ -72,13 +133,31 @@
         "./dist/index.d.ts"
       ],
       "build-utils": [
-        "./dist/build-utils/build/index.d.ts"
+        "./dist/build-utils/index.d.ts"
+      ],
+      "collection": [
+        "./dist/collection.d.ts"
+      ],
+      "common": [
+        "./dist/common/index.d.ts"
+      ],
+      "common-browser": [
+        "./dist/common-browser.d.ts"
+      ],
+      "error": [
+        "./dist/error/index.d.ts"
+      ],
+      "logger": [
+        "./dist/logger.d.ts"
       ],
       "plugins": [
         "./dist/inner-plugins/index.d.ts"
       ],
       "rules": [
         "./dist/rules/index.d.ts"
+      ],
+      "rule-utils": [
+        "./dist/rule-utils/index.d.ts"
       ],
       "types": [
         "./dist/types/index.d.ts"
@@ -93,24 +172,44 @@
     "prebundle": "prebundle"
   },
   "dependencies": {
-    "@rsdoctor/graph": "workspace:*",
-    "@rsdoctor/sdk": "workspace:*",
-    "@rsdoctor/types": "workspace:*",
-    "@rsdoctor/utils": "workspace:*",
-    "browserslist-load-config": "^1.0.3",
+    "@babel/code-frame": "7.26.2",
     "@rsbuild/plugin-check-syntax": "catalog:",
+    "@rsdoctor/graph": "workspace:*",
+    "@rsdoctor/types": "workspace:*",
     "@rspack/resolver": "catalog:",
+    "@types/estree": "catalog:",
+    "acorn": "^8.10.0",
+    "acorn-import-attributes": "^1.9.5",
+    "acorn-walk": "8.3.5",
+    "browserslist-load-config": "^1.0.3",
+    "connect": "3.7.0",
+    "deep-eql": "4.1.4",
+    "envinfo": "7.21.0",
+    "es-toolkit": "catalog:",
     "filesize": "catalog:",
     "fs-extra": "catalog:",
+    "get-port": "5.1.1",
+    "json-stream-stringify": "3.0.1",
+    "lines-and-columns": "2.0.4",
+    "open": "^10.2.0",
+    "path-browserify": "catalog:",
+    "picocolors": "catalog:",
+    "rslog": "^2.1.2",
     "semver": "^7.7.4",
-    "source-map": "catalog:"
+    "source-map": "catalog:",
+    "strip-ansi": "^6.0.1"
   },
   "devDependencies": {
     "@rspack/core": "catalog:",
     "@scripts/test-helper": "workspace:*",
+    "@types/babel__code-frame": "7.27.0",
+    "@types/connect": "catalog:",
+    "@types/deep-eql": "4.0.2",
+    "@types/envinfo": "7.8.4",
     "@types/fs-extra": "catalog:",
     "@types/node": "catalog:",
     "@types/node-fetch": "^2.6.13",
+    "@types/path-browserify": "catalog:",
     "@types/semver": "^7.7.1",
     "@types/tapable": "catalog:",
     "babel-loader": "10.1.1",

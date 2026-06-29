@@ -215,14 +215,22 @@ describe('extractCodeFromSourceLines', () => {
 
 describe('readPackageJson util', () => {
   it('readPackageJson util', () => {
-    expect(
-      readPackageJson(join(__dirname, './fixture/index/index.js'), (file) => {
+    const result = readPackageJson(
+      join(__dirname, './fixture/index/index.js'),
+      (file) => {
         try {
           return JSON.parse(readFileSync(file, 'utf8'));
         } catch (e) {
           // console.log(e)
         }
-      }),
+      },
+    );
+
+    expect(
+      result && {
+        ...result,
+        root: result.root.replace(join(__dirname, '../../..'), '<ROOT>'),
+      },
     ).toMatchSnapshot();
   });
 });

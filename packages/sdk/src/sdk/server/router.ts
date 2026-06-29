@@ -10,6 +10,13 @@ interface RouterOptions {
 
 type APIConstructor = Common.Constructor<typeof BaseAPI>;
 
+const normalizeAPIKey = (key: unknown): PropertyKey => {
+  if (key && typeof key === 'object' && 'name' in key) {
+    return (key as { name: PropertyKey }).name;
+  }
+  return key as PropertyKey;
+};
+
 export class Router {
   static routes = {
     /**
@@ -36,7 +43,7 @@ export class Router {
       if (!routes.has(constructor)) {
         routes.set(constructor, []);
       }
-      routes.get(constructor)!.push([propertyKey, pathname]);
+      routes.get(constructor)!.push([normalizeAPIKey(propertyKey), pathname]);
       return descriptor;
     }) as MethodDecorator;
   }
@@ -52,7 +59,7 @@ export class Router {
       if (!routes.has(constructor)) {
         routes.set(constructor, []);
       }
-      routes.get(constructor)!.push([propertyKey, pathname]);
+      routes.get(constructor)!.push([normalizeAPIKey(propertyKey), pathname]);
       return descriptor;
     }) as MethodDecorator;
   }
@@ -64,22 +71,12 @@ export class Router {
 
     apis.forEach((API) => {
       const obj = new API(sdk, server);
-      Router.routes.get.forEach((v, cons) => {
-        v.forEach(([key, pathname]) => {
-          if (cons === API) {
-            // api class match
-            server.get(pathname, this.wrapAPIFunction(obj, key));
-          }
-        });
+      Router.routes.get.get(API)?.forEach(([key, pathname]) => {
+        server.get(pathname, this.wrapAPIFunction(obj, key));
       });
 
-      Router.routes.post.forEach((v, cons) => {
-        v.forEach(([key, pathname]) => {
-          if (cons === API) {
-            // api class match
-            server.post(pathname, this.wrapAPIFunction(obj, key));
-          }
-        });
+      Router.routes.post.get(API)?.forEach(([key, pathname]) => {
+        server.post(pathname, this.wrapAPIFunction(obj, key));
       });
     });
   }

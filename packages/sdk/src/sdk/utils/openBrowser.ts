@@ -9,7 +9,7 @@
  */
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
-import { logger } from '@rsdoctor/utils/logger';
+import { logger } from '@rsdoctor/core/logger';
 import { join } from 'node:path';
 
 const execAsync = promisify(exec);
@@ -36,6 +36,18 @@ const getTargetBrowser = async () => {
   return targetBrowser;
 };
 
+const openWithDefaultBrowser = async (url: string) => {
+  try {
+    const { default: open } = await import('open');
+    await open(url);
+    return true;
+  } catch (err) {
+    logger.error('Failed to open Rsdoctor URL.');
+    logger.error(err);
+    return false;
+  }
+};
+
 /**
  * Reads the BROWSER environment variable and decides what to do with it.
  */
@@ -47,8 +59,7 @@ export async function openBrowser(
   // requested a different browser, we can try opening
   // a Chromium browser with AppleScript. This lets us reuse an
   // existing tab when possible instead of creating a new one.
-  const shouldTryOpenChromeWithAppleScript =
-    process.platform === 'darwin' || process.platform === 'win32';
+  const shouldTryOpenChromeWithAppleScript = process.platform === 'darwin';
   if (shouldTryOpenChromeWithAppleScript) {
     try {
       const targetBrowser = await getTargetBrowser();
@@ -65,24 +76,11 @@ export async function openBrowser(
         return true;
       }
       logger.debug('Failed to find the target browser.');
-      const { default: open } = await import('open');
-      await open(url);
-      return true;
     } catch (err) {
       logger.debug('Failed to open Rsdoctor URL with apple script.');
       logger.debug(err);
     }
-  } else {
-    // Fallback to open
-    // (It will always open new tab)
-    try {
-      const { default: open } = await import('open');
-      await open(url);
-      return true;
-    } catch (err) {
-      logger.error('Failed to open Rsdoctor URL.');
-      logger.error(err);
-      return false;
-    }
   }
+  // Fallback to open. It will always open a new tab.
+  return openWithDefaultBrowser(url);
 }

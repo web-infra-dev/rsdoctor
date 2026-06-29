@@ -15,7 +15,7 @@ import {
   SDK,
   Constants,
 } from '@rsdoctor/types';
-import { Manifest, Algorithm, Graph } from '@rsdoctor/utils/common';
+import { Manifest, Algorithm, Graph } from '@rsdoctor/core/common';
 import { RsdoctorSDK } from '@rsdoctor/sdk';
 import { createRequire } from 'node:module';
 
@@ -135,7 +135,9 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
 
     if (json && html) {
       spinner.fail(
-        red('Options "--json" and "--html" cannot be used together. Please choose one.'),
+        red(
+          'Options "--json" and "--html" cannot be used together. Please choose one.',
+        ),
       );
       return null;
     } else if (json) {

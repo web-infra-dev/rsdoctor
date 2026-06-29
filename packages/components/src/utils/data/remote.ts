@@ -1,6 +1,6 @@
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Manifest as ManifestShared } from '@rsdoctor/utils/common';
-import { get } from '@rsdoctor/utils/collection';
+import { Manifest as ManifestShared } from '@rsdoctor/core/common-browser';
+import { get } from '@rsdoctor/core/collection';
 import { BaseDataLoader } from './base';
 import { fetchShardingFile } from '../request';
 

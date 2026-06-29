@@ -34,8 +34,8 @@ import {
 } from '@rsdoctor/core/plugins';
 
 import { ModuleGraph } from '@rsdoctor/graph';
-import { Loader } from '@rsdoctor/utils/common';
-import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
+import { Loader } from '@rsdoctor/core/common';
+import { logger, time, timeEnd } from '@rsdoctor/core/logger';
 
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
@@ -90,7 +90,7 @@ export class RsdoctorRspackPlugin<
         },
       });
     this.outsideInstance = Boolean(sdkInstance);
-    this.modulesGraph = new ModuleGraph();
+    this.modulesGraph = new ModuleGraph() as SDK.ModuleGraphInstance;
     this.isRsdoctorPlugin = true;
   }
 

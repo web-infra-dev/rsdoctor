@@ -2,7 +2,7 @@ import { SDK } from '@rsdoctor/types';
 import { Divider, Space } from 'antd';
 import React from 'react';
 import { TextDrawer } from '../TextDrawer';
-import { Summary } from '@rsdoctor/utils/common';
+import { Summary } from '@rsdoctor/core/common-browser';
 import { Card } from '../Card';
 import { ServerAPIProvider } from '../Manifest';
 import { PluginsDataTable } from '../Plugins/plugins';

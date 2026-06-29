@@ -2,7 +2,7 @@ import path from 'path';
 import { tmpdir } from 'os';
 import { describe, it, expect, afterEach, beforeAll } from '@rstest/core';
 import { Worker } from 'node:worker_threads';
-import { File } from '@rsdoctor/utils/build';
+import { File } from '@rsdoctor/core/build-utils';
 import { execSync } from 'node:child_process';
 
 // Skip on Windows because rename may throw EPERM/EBUSY under concurrent access
@@ -51,7 +51,7 @@ describe('atomic write manifest', () => {
 
       const workerScript = `
         const { parentPort, workerData } = require('node:worker_threads');
-        const { File, Server } = require('@rsdoctor/utils/build');
+        const { File, Server } = require('@rsdoctor/core/build-utils');
         const { RsdoctorSDK } = require('@rsdoctor/sdk');
 
         (async () => {
