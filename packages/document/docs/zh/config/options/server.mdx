@@ -1,0 +1,124 @@
+# server
+
+- **类型：** `RsdoctorServerConfig`
+- **可选：** `true`
+- **默认值：** `{}`
+
+配置 Rsdoctor 报告服务。
+
+## port
+
+- **类型：** `number`
+- **可选：** `true`
+- **默认值：** `random(3000, 8999)`
+
+配置 Rsdoctor 报告服务的端口。
+
+如果没有配置 `server.port`，Rsdoctor 会使用顶层 [`port`](./port.mdx) 配置。如果两个配置同时存在，`server.port` 优先级更高。
+
+```js
+new RsdoctorRspackPlugin({
+  server: {
+    port: 3001,
+  },
+});
+```
+
+## cors
+
+- **类型：** `boolean | RsdoctorServerCorsOptions`
+- **可选：** `true`
+- **默认值：** 只允许本地来源。
+
+配置 Rsdoctor 报告服务的 CORS 响应头。
+
+默认情况下，Rsdoctor 只允许以下本地来源：
+
+- `http://localhost` 和 `https://localhost`
+- `localhost` 子域名，例如 `http://foo.localhost`
+- `http://127.0.0.1` 和 `https://127.0.0.1`
+- `http://[::1]` 和 `https://[::1]`
+
+以上默认本地来源都可以携带任意端口。
+
+### 可选值
+
+- `false`：关闭 CORS 中间件。
+- `true`：使用 `cors` 包的默认配置。
+- `object`：传递给 `cors` 中间件的配置对象。如果没有配置 `origin`，Rsdoctor 会保留默认的本地来源策略。如果配置了 `origin`，它会替换默认的本地来源策略。
+
+Rsdoctor 仍然会单独校验本地请求 Host。`cors` 配置只控制 CORS 中间件行为和响应头。
+
+### 示例
+
+允许一个自定义来源：
+
+```js
+new RsdoctorRspackPlugin({
+  server: {
+    cors: {
+      origin: 'https://example.com',
+      credentials: true,
+    },
+  },
+});
+```
+
+保留默认本地来源策略，并添加其他 CORS 选项：
+
+```js
+new RsdoctorRspackPlugin({
+  server: {
+    cors: {
+      credentials: true,
+      methods: ['GET', 'POST', 'OPTIONS'],
+    },
+  },
+});
+```
+
+使用 `cors` 包的默认配置：
+
+```js
+new RsdoctorRspackPlugin({
+  server: {
+    cors: true,
+  },
+});
+```
+
+### 类型定义
+
+```ts
+interface RsdoctorServerConfig {
+  port?: number;
+  cors?: boolean | RsdoctorServerCorsOptions;
+}
+
+type RsdoctorServerCorsStaticOrigin =
+  | boolean
+  | string
+  | RegExp
+  | Array<boolean | string | RegExp>;
+
+type RsdoctorServerCorsOrigin =
+  | RsdoctorServerCorsStaticOrigin
+  | ((
+      requestOrigin: string | undefined,
+      callback: (
+        err: Error | null,
+        origin?: RsdoctorServerCorsStaticOrigin,
+      ) => void,
+    ) => void);
+
+interface RsdoctorServerCorsOptions {
+  origin?: RsdoctorServerCorsOrigin;
+  methods?: string | string[];
+  allowedHeaders?: string | string[];
+  exposedHeaders?: string | string[];
+  credentials?: boolean;
+  maxAge?: number;
+  preflightContinue?: boolean;
+  optionsSuccessStatus?: number;
+}
+```
