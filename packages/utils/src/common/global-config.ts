@@ -17,17 +17,103 @@ import { logger } from '../logger';
  *     builder2: socketUrl,
  *   },
  *   port: portNumber, // The port of the last builder is used by default
- *   socketUrl: socketUrl, // The socket url of the last builder is used by default
+ *   socketUrl: socketUrl, // The socket URL of the last builder is used by default
  * }
  *
  * @param {number} port - The port number to write.
  * @param {string} [builderName] - The name of the builder.
- * @param {string} [socketUrl] - The socket URL to write.
+ * @param {string} [socketToken] - The socket token of the builder.
  */
+export interface McpConfig {
+  portList: Record<string, number>;
+  port: number;
+  socketUrlList?: Record<string, string>;
+  socketUrl?: string;
+}
+
+function getMcpSocketUrl(port: number | undefined, socketToken?: string) {
+  if (!port || !socketToken) {
+    return undefined;
+  }
+
+  return `ws://localhost:${port}?token=${encodeURIComponent(socketToken)}`;
+}
+
+export function readMcpConfig(): McpConfig | undefined {
+  const mcpPortFilePath = getMcpConfigPath();
+
+  if (!fs.existsSync(mcpPortFilePath)) {
+    return undefined;
+  }
+
+  try {
+    return JSON.parse(fs.readFileSync(mcpPortFilePath, 'utf8'));
+  } catch (error) {
+    logger.debug('Failed to parse mcp.json', error);
+    return undefined;
+  }
+}
+
+export function getMcpServerInfo(builderName?: string): {
+  port?: number;
+  socketUrl?: string;
+} {
+  const mcpJson = readMcpConfig();
+
+  if (!mcpJson) {
+    return {};
+  }
+
+  if (builderName) {
+    const port = mcpJson.portList?.[builderName];
+    const socketUrl = mcpJson.socketUrlList?.[builderName];
+
+    if (port || socketUrl) {
+      return { port, socketUrl };
+    }
+  }
+
+  return {
+    port: mcpJson.port,
+    socketUrl: mcpJson.socketUrl,
+  };
+}
+
+export function getMcpServerInfoByPort(port: number): {
+  port?: number;
+  socketUrl?: string;
+} {
+  const mcpJson = readMcpConfig();
+
+  if (!mcpJson) {
+    return {};
+  }
+
+  const builderName = Object.entries(mcpJson.portList || {}).find(
+    ([, builderPort]) => builderPort === port,
+  )?.[0];
+
+  if (builderName) {
+    return {
+      port,
+      socketUrl: mcpJson.socketUrlList?.[builderName],
+    };
+  }
+
+  if (mcpJson.port === port) {
+    return {
+      port,
+      socketUrl: mcpJson.socketUrl,
+    };
+  }
+
+  return { port };
+}
+
 export function writeMcpPort(
   port: number,
   builderName?: string,
-  socketUrl?: string,
+  socketToken?: string,
 ) {
   const homeDir = os.homedir();
   const rsdoctorDir = path.join(homeDir, '.cache/rsdoctor');
@@ -37,26 +123,24 @@ export function writeMcpPort(
     fs.mkdirSync(rsdoctorDir, { recursive: true });
   }
 
-  let mcpJson: {
-    portList: Record<string, number>;
-    socketUrlList?: Record<string, string>;
-    port: number;
-    socketUrl?: string;
-  } = {
+  const builderKey = builderName || 'builder';
+  const socketUrl = getMcpSocketUrl(port, socketToken);
+  const mcpJson: McpConfig = readMcpConfig() ?? {
     portList: {},
     port: 0,
   };
 
-  if (fs.existsSync(mcpPortFilePath)) {
-    try {
-      mcpJson = JSON.parse(fs.readFileSync(mcpPortFilePath, 'utf8'));
-    } catch (error) {
-      logger.debug('Failed to parse mcp.json', error);
-    }
-  }
-
   if (!mcpJson.portList) mcpJson.portList = {};
-  mcpJson.portList[builderName || 'builder'] = port;
+  mcpJson.portList[builderKey] = port;
+
+  if (!mcpJson.socketUrlList) mcpJson.socketUrlList = {};
+  if (socketUrl) {
+    mcpJson.socketUrlList[builderKey] = socketUrl;
+    mcpJson.socketUrl = socketUrl;
+  } else {
+    delete mcpJson.socketUrlList[builderKey];
+    delete mcpJson.socketUrl;
+  }
 
   // Use the latest generated port.
   mcpJson.port = port;
