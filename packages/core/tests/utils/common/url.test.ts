@@ -23,6 +23,9 @@ describe('test src/common/url.ts', () => {
     expect(Url.isFilePath('http://ssaf')).toBeFalsy();
     expect(Url.isFilePath('https://sdsfa')).toBeFalsy();
     expect(Url.isFilePath('/Users/a')).toBeTruthy();
+    expect(Url.isFilePath('C:\\Users\\a')).toBeTruthy();
+    expect(Url.isFilePath('C:/Users/a')).toBeTruthy();
+    expect(Url.isFilePath('\\\\server\\share\\a')).toBeTruthy();
   });
 
   it('isRemoteUrl', () => {
@@ -35,5 +38,6 @@ describe('test src/common/url.ts', () => {
     expect(Url.isRemoteUrl('http://ssaf')).toBeTruthy();
     expect(Url.isRemoteUrl('https://sdsfa')).toBeTruthy();
     expect(Url.isRemoteUrl('/Users/a')).toBeTruthy();
+    expect(Url.isRemoteUrl('C:\\Users\\a')).toBeTruthy();
   });
 });
