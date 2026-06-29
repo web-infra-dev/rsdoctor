@@ -99,13 +99,14 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     sdkInstance,
     innerClientPath = '',
     output = outputConfig,
-    supports = getDefaultSupports(),
+    supports: userSupports = {},
     port,
     server: userServer = {},
     printLog = { serverUrls: true },
     mode = undefined,
     brief = undefined,
   } = normalizedConfig;
+  const supports = { ...getDefaultSupports(), ...userSupports };
   // If process.env.RSTEST is set to true, disableClientServer should be false
   // Otherwise, if process.env.CI is set, disableClientServer should be true
   const disableClientServer =
