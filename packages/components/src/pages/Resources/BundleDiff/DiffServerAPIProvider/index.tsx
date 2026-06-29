@@ -1,7 +1,7 @@
 import { Client, SDK, Constants } from '@rsdoctor/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
 import { fetchManifest, useUrlQuery } from 'src/utils';
-import { Algorithm } from '@rsdoctor/core/common';
+import { Algorithm } from '@rsdoctor/core/common-browser';
 import { BundleDiffServerAPIProviderComponentCommonProps } from '../DiffContainer/types';
 
 export const DiffServerAPIProvider = <

@@ -4,7 +4,7 @@ import { orderBy } from '@rsdoctor/core/collection';
 import React, { useMemo } from 'react';
 import { formatSize } from 'src/utils';
 import './index.sass';
-import { Lodash } from '@rsdoctor/core/common';
+import { Lodash } from '@rsdoctor/core/common-browser';
 
 type ChunksDataType = {
   key: string | number;

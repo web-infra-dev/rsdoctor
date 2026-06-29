@@ -1,4 +1,4 @@
-import { Algorithm } from '@rsdoctor/core/common';
+import { Algorithm } from '@rsdoctor/core/common-browser';
 import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
 import { uniqBy, defaults, throttle } from '@rsdoctor/core/collection';
 import {

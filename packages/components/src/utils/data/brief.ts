@@ -1,5 +1,5 @@
 import { Manifest, SDK } from '@rsdoctor/types';
-import { Algorithm } from '@rsdoctor/core/common';
+import { Algorithm } from '@rsdoctor/core/common-browser';
 import { BaseDataLoader } from './base';
 import { Constants } from '@rsdoctor/types';
 

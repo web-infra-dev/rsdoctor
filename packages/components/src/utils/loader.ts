@@ -1,4 +1,4 @@
-import { Loader } from '@rsdoctor/core/common';
+import { Loader } from '@rsdoctor/core/common-browser';
 import { SDK } from '@rsdoctor/types';
 
 const { findLoaderTotalTiming, getLoaderCosts } = Loader;

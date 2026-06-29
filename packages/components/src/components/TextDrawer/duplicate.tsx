@@ -2,7 +2,7 @@ import { Col, Row, Space, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { Rule, SDK } from '@rsdoctor/types';
 import { ExceptionOutlined } from '@ant-design/icons';
-import { Alerts } from '@rsdoctor/core/common';
+import { Alerts } from '@rsdoctor/core/common-browser';
 import { Size } from '../../constants';
 import { TextDrawer, TextDrawerProps } from './index';
 import {

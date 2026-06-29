@@ -6,7 +6,7 @@ import { fetchManifest, useDataLoader } from '../../utils';
 import { ComponentState } from '../../constants';
 import { FailedStatus } from '../Status';
 import { BaseDataLoader } from '../../utils/data/base';
-import { Lodash } from '@rsdoctor/core/common';
+import { Lodash } from '@rsdoctor/core/common-browser';
 import { Client } from '@rsdoctor/types';
 
 /**

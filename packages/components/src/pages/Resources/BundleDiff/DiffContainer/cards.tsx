@@ -11,7 +11,7 @@ import {
 import { DuplicatePackageDrawer } from '../../../../components/TextDrawer';
 import { BundleDiffComponentCardProps } from './types';
 import { getPackagesTableDataSource, PackagesStatistic } from './packages';
-import { Graph } from '@rsdoctor/core/common';
+import { Graph } from '@rsdoctor/core/common-browser';
 
 export const DiffCards: React.FC<BundleDiffComponentCardProps> = ({
   baseline,

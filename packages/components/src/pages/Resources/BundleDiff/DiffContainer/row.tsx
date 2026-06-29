@@ -34,7 +34,7 @@ import {
 } from './types';
 import { UpdateType } from './constants';
 import { formatDiffSize } from './utils';
-import { Graph } from '@rsdoctor/core/common';
+import { Graph } from '@rsdoctor/core/common-browser';
 
 export const ModuleHashPattern = /[a-fA-F0-9]{20,}/;
 

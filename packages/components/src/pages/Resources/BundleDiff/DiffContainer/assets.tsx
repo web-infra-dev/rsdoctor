@@ -31,7 +31,7 @@ import { ModuleRowForAsset } from './row';
 import { ViewChanges } from './changes';
 import { UpdateType, SortType } from './constants';
 import { formatDiffSize } from './utils';
-import { Graph } from '@rsdoctor/core/common';
+import { Graph } from '@rsdoctor/core/common-browser';
 
 const fileTypes = {
   JS: Constants.JSExtensions,

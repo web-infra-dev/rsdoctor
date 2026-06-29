@@ -1,5 +1,7 @@
 import { Rule, SDK } from '@rsdoctor/types';
-import { relative } from 'path';
+import path from 'path-browserify';
+
+const { relative } = path;
 
 export function getPackageRelationAlertDetails(
   modules: SDK.ModuleGraphData['modules'],

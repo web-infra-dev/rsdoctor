@@ -56,6 +56,16 @@
         "default": "./dist/common/index.cjs"
       }
     },
+    "./common-browser": {
+      "import": {
+        "types": "./dist/common-browser.d.ts",
+        "default": "./dist/common-browser.js"
+      },
+      "require": {
+        "types": "./dist/common-browser.d.cts",
+        "default": "./dist/common-browser.cjs"
+      }
+    },
     "./error": {
       "import": {
         "types": "./dist/error/index.d.ts",
@@ -130,6 +140,9 @@
       ],
       "common": [
         "./dist/common/index.d.ts"
+      ],
+      "common-browser": [
+        "./dist/common-browser.d.ts"
       ],
       "error": [
         "./dist/error/index.d.ts"
