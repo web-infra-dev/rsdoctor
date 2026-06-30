@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { ModuleGraph, ChunkGraph, Chunk } from '@rsdoctor/graph';
+import { ModuleGraph, ChunkGraph, Chunk } from '@rsdoctor/core/graph';
 import {
   extractSideEffectCodes,
   patchNativeModuleGraph,

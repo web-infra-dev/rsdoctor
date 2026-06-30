@@ -1,4 +1,4 @@
-import { Asset, Chunk, EntryPoint } from '@rsdoctor/graph';
+import { Asset, Chunk, EntryPoint } from '@rsdoctor/core/graph';
 import { Plugin, SDK } from '@rsdoctor/types';
 
 /**

@@ -1,6 +1,8 @@
-import { dirname, join } from 'path';
 import { SDK } from '@rsdoctor/types';
 import { compact, isEmpty, last } from 'es-toolkit/compat';
+import path from 'path-browserify';
+
+const { dirname, join } = path;
 
 export function isPackagePath(path: string) {
   return /(^|[/\\])node_modules[/\\]/.test(path);

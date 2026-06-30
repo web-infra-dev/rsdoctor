@@ -1,8 +1,8 @@
-import path from 'path';
+import path from 'path-browserify';
 import { SDK } from '@rsdoctor/types';
 import { isEmpty, pick } from 'es-toolkit/compat';
 import { gzipSync } from 'node:zlib';
-import { ParseBundle } from '@/types/transform';
+import { ParseBundle } from '../../types/transform';
 
 const timers = new Map<string, number>();
 

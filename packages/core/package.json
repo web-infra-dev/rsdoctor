@@ -66,6 +66,16 @@
         "default": "./dist/common-browser.cjs"
       }
     },
+    "./graph": {
+      "import": {
+        "types": "./dist/graph/index.d.ts",
+        "default": "./dist/graph/index.js"
+      },
+      "require": {
+        "types": "./dist/graph/index.d.cts",
+        "default": "./dist/graph/index.cjs"
+      }
+    },
     "./error": {
       "import": {
         "types": "./dist/error/index.d.ts",
@@ -144,6 +154,9 @@
       "common-browser": [
         "./dist/common-browser.d.ts"
       ],
+      "graph": [
+        "./dist/graph/index.d.ts"
+      ],
       "error": [
         "./dist/error/index.d.ts"
       ],
@@ -174,7 +187,6 @@
   "dependencies": {
     "@babel/code-frame": "7.26.2",
     "@rsbuild/plugin-check-syntax": "catalog:",
-    "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rspack/resolver": "catalog:",
     "@types/estree": "catalog:",

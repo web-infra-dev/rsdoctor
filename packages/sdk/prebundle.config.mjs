@@ -2,7 +2,6 @@ export default {
   dependencies: ['cors', 'dayjs', 'fs-extra'],
   exclude: [
     '@rsdoctor/client',
-    '@rsdoctor/graph',
     '@rsdoctor/types',
     '@rsdoctor/core',
     'safer-buffer',

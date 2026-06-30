@@ -7,7 +7,7 @@ import { extname } from 'path';
 
 import { Constants, SDK } from '@rsdoctor/types';
 import { logger } from '@rsdoctor/core/logger';
-import type { ParseBundle } from '@rsdoctor/graph';
+import type { ParseBundle } from '@rsdoctor/core/graph';
 
 /**
  * The following code is based on

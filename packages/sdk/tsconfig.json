@@ -19,9 +19,6 @@
       "path": "../core/tsconfig.json"
     },
     {
-      "path": "../graph/tsconfig.json"
-    },
-    {
       "path": "../client/tsconfig.json"
     }
   ]

@@ -1,6 +1,6 @@
 import { SDK, Plugin } from '@rsdoctor/types';
 import path from 'path-browserify';
-import { Statement, ModuleGraph, Module } from '@/graph';
+import { Statement, ModuleGraph, Module } from '../../graph';
 import { isImportDependency, getImportKind } from './utils';
 import { getPositionByStatsLocation } from './compatible';
 

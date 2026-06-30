@@ -1,4 +1,4 @@
-import { ChunkGraph } from '@rsdoctor/graph';
+import { ChunkGraph } from '@rsdoctor/core/graph';
 import type {
   Compilation as RspackCompilation,
   RsdoctorPluginHooks,

@@ -1,5 +1,5 @@
 import { SDK, Plugin } from '@rsdoctor/types';
-import path from 'path';
+import path from 'path-browserify';
 import { isNumber } from 'es-toolkit/compat';
 import type { SourceMapConsumer } from 'source-map';
 import type { Program } from 'estree';
