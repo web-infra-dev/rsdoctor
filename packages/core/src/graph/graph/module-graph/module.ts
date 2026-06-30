@@ -1,5 +1,4 @@
 import { SDK, Plugin } from '@rsdoctor/types';
-import path from 'path-browserify';
 import { isNumber } from 'es-toolkit/compat';
 import type { SourceMapConsumer } from 'source-map';
 import type { Program } from 'estree';
@@ -7,6 +6,7 @@ import { Dependency } from './dependency';
 import { Statement } from './statement';
 import { getModuleName } from './utils';
 import { gzipSync } from 'node:zlib';
+import { relativeByPathType } from '../../../common/path';
 
 let id = 1;
 
@@ -383,7 +383,7 @@ export class Module implements SDK.ModuleInstance {
       renderId: this.renderId,
       identifier:
         contextPath && moduleName.indexOf('.') > 0
-          ? path.relative(contextPath, moduleName)
+          ? relativeByPathType(contextPath, moduleName)
           : this.identifier,
       path: this.path,
       isPreferSource,

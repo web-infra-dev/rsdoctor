@@ -114,6 +114,12 @@ describe('module graph', () => {
     expect(Object.keys(moduleData)).not.toContain('webpack' + 'Id');
   });
 
+  it('serializes windows module identifiers relative to context', async () => {
+    const module = new Module('C:\\repo\\src\\a.ts', 'C:\\repo\\src\\a.ts');
+
+    expect(module.toData('C:\\repo').identifier).toBe('src\\a.ts');
+  });
+
   it('keeps stable module keys when deserialized identifiers collide', async () => {
     const createModuleData = (
       id: number,

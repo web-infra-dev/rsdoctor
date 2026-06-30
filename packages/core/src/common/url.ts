@@ -1,15 +1,11 @@
-import path from 'path-browserify';
-
-const { isAbsolute } = path;
-
-const WINDOWS_ABSOLUTE_PATH_REGEXP = /^(?:[a-zA-Z]:[\\/]|\\\\)/;
+import { isAbsolutePath } from './path';
 
 export function isUrl(uri: string) {
   return /^https?:\/\//.test(uri);
 }
 
 export function isFilePath(uri: string) {
-  return isAbsolute(uri) || WINDOWS_ABSOLUTE_PATH_REGEXP.test(uri);
+  return isAbsolutePath(uri);
 }
 
 export function isRemoteUrl(uri: unknown) {
