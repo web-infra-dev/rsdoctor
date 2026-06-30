@@ -4,6 +4,9 @@
     "experimentalDecorators": true,
     "outDir": "./dist",
     "paths": {
+      "@rsdoctor/core/graph": ["../core/src/graph/index.ts"],
+      "@rsdoctor/core/logger": ["../core/src/logger.ts"],
+      "@rsdoctor/core/sdk": ["../core/src/sdk.ts"],
       "@/*": ["./src/*"]
     },
     "rootDir": "src"
@@ -16,12 +19,6 @@
     },
     {
       "path": "../core/tsconfig.json"
-    },
-    {
-      "path": "../sdk/tsconfig.json"
-    },
-    {
-      "path": "../client/tsconfig.json"
     }
   ]
 }

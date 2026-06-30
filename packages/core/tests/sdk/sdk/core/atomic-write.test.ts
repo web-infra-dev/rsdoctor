@@ -29,7 +29,7 @@ describe('atomic write manifest', () => {
     // Build SDK package before running tests to ensure dist exists
     beforeAll(() => {
       try {
-        execSync('pnpm --filter @rsdoctor/sdk run build', {
+        execSync('pnpm --filter @rsdoctor/core run build', {
           stdio: 'ignore',
           cwd: path.resolve(__dirname, '../../../../..'),
         });
@@ -52,7 +52,7 @@ describe('atomic write manifest', () => {
       const workerScript = `
         const { parentPort, workerData } = require('node:worker_threads');
         const { File, Server } = require('@rsdoctor/core/build-utils');
-        const { RsdoctorSDK } = require('@rsdoctor/sdk');
+        const { RsdoctorSDK } = require('@rsdoctor/core/sdk');
 
         (async () => {
           const { outputDir, readAttempts } = workerData;

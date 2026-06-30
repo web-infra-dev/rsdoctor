@@ -3,7 +3,7 @@ import {
   isAllowedCorsRequest,
   isAllowedRequestHost,
   isAllowedRequestOrigin,
-} from '../../src/sdk/server/security';
+} from '../../../src/sdk/server/security';
 
 describe('test server/security.ts', () => {
   it('allows local request origins', () => {

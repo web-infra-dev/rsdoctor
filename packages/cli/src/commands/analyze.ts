@@ -1,6 +1,6 @@
 import { Manifest } from '@rsdoctor/core/common';
 import { Constants, Manifest as ManifestType, SDK } from '@rsdoctor/types';
-import { RsdoctorSDK } from '@rsdoctor/sdk';
+import { RsdoctorSDK } from '@rsdoctor/core/sdk';
 import ora from 'ora';
 import { cyan, red } from 'picocolors';
 import { Command } from '../types';

@@ -4,7 +4,7 @@ import { Common, SDK } from '@rsdoctor/types';
 import { request } from 'http';
 import { tmpdir } from 'os';
 import path from 'node:path';
-import { RsdoctorSDK } from '../src/sdk';
+import { RsdoctorSDK } from '../../src/sdk';
 
 export interface MockSDKResponse {
   sdk: SDK.RsdoctorSDKInstance;

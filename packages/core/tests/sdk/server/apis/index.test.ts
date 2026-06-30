@@ -1,9 +1,9 @@
 import { describe, expect, it } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
-import { Router } from '../../../src/sdk/server/router';
+import { Router } from '../../../../src/sdk/server/router';
 
 // make sure the decorators work.
-import '../../../src/sdk/server/apis';
+import '../../../../src/sdk/server/apis';
 
 describe('ensure all of the apis implementation for server', () => {
   const apis = Object.values(SDK.ServerAPI.API);

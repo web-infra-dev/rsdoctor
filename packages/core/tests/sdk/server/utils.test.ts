@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { getDataByPagination } from '../../src/sdk/server/utils';
+import { getDataByPagination } from '../../../src/sdk/server/utils';
 
 describe('test server/utils.ts', () => {
   it('getDataByPagination()', () => {

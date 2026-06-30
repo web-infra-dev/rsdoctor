@@ -8,8 +8,6 @@ interface RouterOptions {
   server: SDK.RsdoctorServerInstance;
 }
 
-type APIConstructor = Common.Constructor<typeof BaseAPI>;
-
 const normalizeAPIKey = (key: unknown): PropertyKey => {
   if (key && typeof key === 'object' && 'name' in key) {
     return (key as { name: PropertyKey }).name;
@@ -23,11 +21,11 @@ export class Router {
      * - `key` is the constructor of object which used to match the API class
      */
     get: new Map<
-      APIConstructor,
+      Common.Constructor<typeof BaseAPI>,
       Array<[apiKey: PropertyKey, pathname: string]>
     >(),
     post: new Map<
-      APIConstructor,
+      Common.Constructor<typeof BaseAPI>,
       Array<[apiKey: PropertyKey, pathname: string]>
     >(),
   };
@@ -39,7 +37,9 @@ export class Router {
       descriptor: TypedPropertyDescriptor<T>,
     ) => {
       const routes = Router.routes.get;
-      const constructor = target.constructor as APIConstructor;
+      const constructor = target.constructor as Common.Constructor<
+        typeof BaseAPI
+      >;
       if (!routes.has(constructor)) {
         routes.set(constructor, []);
       }
@@ -55,7 +55,9 @@ export class Router {
       descriptor: TypedPropertyDescriptor<T>,
     ) => {
       const routes = Router.routes.post;
-      const constructor = target.constructor as APIConstructor;
+      const constructor = target.constructor as Common.Constructor<
+        typeof BaseAPI
+      >;
       if (!routes.has(constructor)) {
         routes.set(constructor, []);
       }

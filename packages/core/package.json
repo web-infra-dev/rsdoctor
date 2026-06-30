@@ -96,6 +96,16 @@
         "default": "./dist/logger.cjs"
       }
     },
+    "./sdk": {
+      "import": {
+        "types": "./dist/sdk.d.ts",
+        "default": "./dist/sdk.js"
+      },
+      "require": {
+        "types": "./dist/sdk.d.cts",
+        "default": "./dist/sdk.cjs"
+      }
+    },
     "./plugins": {
       "import": {
         "types": "./dist/inner-plugins/index.d.ts",
@@ -163,6 +173,9 @@
       "logger": [
         "./dist/logger.d.ts"
       ],
+      "sdk": [
+        "./dist/sdk.d.ts"
+      ],
       "plugins": [
         "./dist/inner-plugins/index.d.ts"
       ],
@@ -209,7 +222,16 @@
     "rslog": "^2.1.2",
     "semver": "^7.7.4",
     "source-map": "catalog:",
-    "strip-ansi": "^6.0.1"
+    "strip-ansi": "^6.0.1",
+    "@rsdoctor/client": "workspace:*",
+    "body-parser": "2.3.0",
+    "cors": "2.8.6",
+    "dayjs": "catalog:",
+    "launch-editor": "^2.14.1",
+    "safer-buffer": "2.1.2",
+    "sirv": "catalog:",
+    "tapable": "2.3.3",
+    "ws": "8.21.0"
   },
   "devDependencies": {
     "@rspack/core": "catalog:",
@@ -229,7 +251,10 @@
     "string-loader": "0.0.1",
     "ts-loader": "^9.5.7",
     "tslib": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "@types/body-parser": "catalog:",
+    "@types/cors": "2.8.19",
+    "@types/ws": "^8.18.1"
   },
   "publishConfig": {
     "access": "public",

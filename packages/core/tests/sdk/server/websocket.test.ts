@@ -1,6 +1,6 @@
 import { describe, expect, it, rs } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
-import { Socket } from '../../src/sdk/server/socket';
+import { Socket } from '../../../src/sdk/server/socket';
 
 function createMockClient() {
   const listeners = new Map<string, Set<(...args: any[]) => void>>();
