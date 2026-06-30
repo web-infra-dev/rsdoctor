@@ -3,7 +3,6 @@ import { dualPackageBundleless } from '../../scripts/rslib.base.config';
 
 const externals = [
   '@rsdoctor/client',
-  '@rsdoctor/graph',
   '@rsdoctor/types',
   '@rspack/core',
   'lodash',

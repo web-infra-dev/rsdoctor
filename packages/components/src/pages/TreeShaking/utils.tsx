@@ -1,4 +1,4 @@
-import { Module } from '@rsdoctor/graph';
+import { Module } from '@rsdoctor/core/graph';
 import { SDK } from '@rsdoctor/types';
 import { Space, Tag } from 'antd';
 import { escape, get } from '@rsdoctor/core/collection';

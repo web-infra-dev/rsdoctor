@@ -1,7 +1,7 @@
 import { Manifest, Plugin } from '@rsdoctor/types';
 import type { Assets } from '@rspack/core';
 import { InternalBasePlugin } from './base';
-import { Chunks } from '@rsdoctor/graph';
+import { Chunks } from '@rsdoctor/core/graph';
 import { logger, time, timeEnd } from '@rsdoctor/core/logger';
 
 export class InternalBundlePlugin<

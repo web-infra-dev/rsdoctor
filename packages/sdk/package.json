@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "@rsdoctor/client": "workspace:*",
-    "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "launch-editor": "^2.14.1",

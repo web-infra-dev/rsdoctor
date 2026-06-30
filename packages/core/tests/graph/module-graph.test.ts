@@ -1,9 +1,9 @@
 import path from 'path';
 import { expect, describe, it } from '@rstest/core';
 import { SDK, Plugin } from '@rsdoctor/types';
-import { Module, ModuleGraph, PackageGraph } from '../src/graph';
-import { getModuleGraphByStats } from '../src/transform/module-graph/transform';
-import { chunkTransform } from '../src/transform/chunks/chunkTransform';
+import { Module, ModuleGraph, PackageGraph } from '../../src/graph';
+import { getModuleGraphByStats } from '../../src/graph/transform/module-graph/transform';
+import { chunkTransform } from '../../src/graph/transform/chunks/chunkTransform';
 // TODO: simplify the module-graph-basic.json data size.
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, 'fixture', ...paths);

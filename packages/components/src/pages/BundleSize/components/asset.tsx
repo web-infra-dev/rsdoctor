@@ -48,7 +48,7 @@ import {
 import { ModuleAnalyzeComponent } from '../../ModuleAnalyze';
 import { ModuleGraphListContext } from '../config';
 import styles from './asset.module.scss';
-import { ModuleData } from '@rsdoctor/graph';
+import { ModuleData } from '@rsdoctor/core/graph';
 import { ErrorBoundary } from 'react-error-boundary';
 
 const { DirectoryTree } = Tree;

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { ModuleGraph } from '@rsdoctor/graph';
+import { ModuleGraph } from '@rsdoctor/core/graph';
 import { Manifest, SDK } from '@rsdoctor/types';
 import { ConfigContext } from '../config';
 import { Theme, ViewMode } from '../constants';
@@ -43,7 +43,8 @@ export function useViewMode() {
 }
 
 export function useManifest(url: string) {
-  const [manifest, setManifest] = useState<Manifest.RsdoctorManifestWithShardingFiles>();
+  const [manifest, setManifest] =
+    useState<Manifest.RsdoctorManifestWithShardingFiles>();
 
   useEffect(() => {
     fetchManifest(url).then((res) => {
@@ -54,6 +55,8 @@ export function useManifest(url: string) {
   return manifest;
 }
 
-export function useModuleGraphInstanceByModuleGraph(moduleGraph: SDK.ModuleGraphData) {
+export function useModuleGraphInstanceByModuleGraph(
+  moduleGraph: SDK.ModuleGraphData,
+) {
   return useMemo(() => ModuleGraph.fromData(moduleGraph), [moduleGraph]);
 }

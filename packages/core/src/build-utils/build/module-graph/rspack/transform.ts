@@ -3,7 +3,7 @@ import {
   extractCodeFromSourceLines,
   Module,
   parseLocation,
-} from '@rsdoctor/graph';
+} from '@rsdoctor/core/graph';
 import { Plugin, SDK } from '@rsdoctor/types';
 
 /**

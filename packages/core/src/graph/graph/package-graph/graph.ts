@@ -1,10 +1,12 @@
 import { unionBy } from 'es-toolkit/compat';
-import { resolve } from 'path';
+import path from 'path-browserify';
 import { SDK } from '@rsdoctor/types';
 import { Package } from './package';
 import { PackageDependency } from './dependency';
 import { readPackageJson } from './utils';
 export { readPackageJson } from './utils';
+
+const { resolve } = path;
 
 export class PackageGraph implements SDK.PackageGraphInstance {
   static fromModuleGraph(

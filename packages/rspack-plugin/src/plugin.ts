@@ -33,7 +33,7 @@ import {
   processCompilerConfig,
 } from '@rsdoctor/core/plugins';
 
-import { ModuleGraph } from '@rsdoctor/graph';
+import { ModuleGraph } from '@rsdoctor/core/graph';
 import { Loader } from '@rsdoctor/core/common';
 import { logger, time, timeEnd } from '@rsdoctor/core/logger';
 

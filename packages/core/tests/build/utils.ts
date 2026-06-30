@@ -1,5 +1,5 @@
 import type { Compiler, Module as RspackModule, Stats } from '@rspack/core';
-import { ModuleGraph } from '@rsdoctor/graph';
+import { ModuleGraph } from '@rsdoctor/core/graph';
 import { removeAbsModulePath } from '../common/utils';
 import {
   Chunks,

@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@rsdoctor/core": "workspace:*",
-    "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*"
   },
