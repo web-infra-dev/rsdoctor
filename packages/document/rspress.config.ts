@@ -14,9 +14,7 @@ const siteUrl = 'https://rsdoctor.rs';
 export default defineConfig({
   plugins: [
     pluginClientRedirects({
-      redirects: [
-        { from: '/guide/start/mcp', to: '/guide/usage/mcp' },
-      ],
+      redirects: [{ from: '/guide/start/mcp', to: '/guide/usage/mcp' }],
     }),
     pluginAlgolia(),
     pluginSitemap({
@@ -92,7 +90,11 @@ export default defineConfig({
       return `<meta property="og:image" content="https://assets.rspack.rs/rsdoctor/${getOgImage()}">`;
     },
   ],
-  markdown: {},
+  markdown: {
+    link: {
+      checkAnchors: true,
+    },
+  },
   ssg: true,
   llms: true,
   route: {
