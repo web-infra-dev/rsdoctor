@@ -233,4 +233,22 @@ describe('readPackageJson util', () => {
       },
     ).toMatchSnapshot();
   });
+
+  it('walks up windows paths with backslashes', () => {
+    const pkgPath = 'C:\\repo\\pkg\\package.json';
+    const result = readPackageJson('C:\\repo\\pkg\\src\\file.js', (file) => {
+      if (file === pkgPath) {
+        return {
+          name: 'pkg',
+          version: '1.0.0',
+        };
+      }
+    });
+
+    expect(result).toEqual({
+      name: 'pkg',
+      version: '1.0.0',
+      root: 'C:\\repo\\pkg',
+    });
+  });
 });
