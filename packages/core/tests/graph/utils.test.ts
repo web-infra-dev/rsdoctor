@@ -3,8 +3,8 @@ import {
   getModuleName,
   parseLocation,
   extractCodeFromSourceLines,
-} from '../src/graph/module-graph/utils';
-import { readPackageJson } from '../src/graph/package-graph/utils';
+} from '../../src/graph/graph/module-graph/utils';
+import { readPackageJson } from '../../src/graph/graph/package-graph/utils';
 import { join } from 'path';
 import { readFileSync } from 'node:fs';
 /**
@@ -232,5 +232,23 @@ describe('readPackageJson util', () => {
         root: result.root.replace(join(__dirname, '../../..'), '<ROOT>'),
       },
     ).toMatchSnapshot();
+  });
+
+  it('walks up windows paths with backslashes', () => {
+    const pkgPath = 'C:\\repo\\pkg\\package.json';
+    const result = readPackageJson('C:\\repo\\pkg\\src\\file.js', (file) => {
+      if (file === pkgPath) {
+        return {
+          name: 'pkg',
+          version: '1.0.0',
+        };
+      }
+    });
+
+    expect(result).toEqual({
+      name: 'pkg',
+      version: '1.0.0',
+      root: 'C:\\repo\\pkg',
+    });
   });
 });

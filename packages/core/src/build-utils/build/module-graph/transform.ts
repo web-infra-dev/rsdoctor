@@ -1,5 +1,5 @@
 import { Plugin } from '@rsdoctor/types';
-import { ModuleGraphTrans } from '@rsdoctor/graph';
+import { ModuleGraphTrans } from '@rsdoctor/core/graph';
 import { SDK } from '@rsdoctor/types';
 
 export function getModuleGraphByStats(

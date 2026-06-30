@@ -1,6 +1,8 @@
 import type { SDK } from '@rsdoctor/types';
-import { relative } from 'path';
+import path from 'path-browserify';
 import { isPackagePath } from './utils';
+
+const { relative } = path;
 
 let id = 1;
 

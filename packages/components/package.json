@@ -79,7 +79,6 @@
     "react-markdown": "catalog:",
     "url-parse": "1.5.10",
     "@rsdoctor/core": "workspace:*",
-    "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/types": "workspace:*"
   },
   "peerDependencies": {

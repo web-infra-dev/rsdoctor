@@ -4,7 +4,7 @@ exports[`readPackageJson util > readPackageJson util 1`] = `
 {
   "name": "@lodash/es",
   "private": true,
-  "root": "<ROOT>/packages/graph/tests/fixture",
+  "root": "<ROOT>/core/tests/graph/fixture",
   "type": "module",
   "version": "0.1.0",
 }

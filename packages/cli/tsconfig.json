@@ -18,9 +18,6 @@
       "path": "../core/tsconfig.json"
     },
     {
-      "path": "../graph/tsconfig.json"
-    },
-    {
       "path": "../sdk/tsconfig.json"
     },
     {

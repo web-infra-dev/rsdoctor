@@ -5,7 +5,7 @@ import { createRequire } from 'module';
 import { DevToolError } from '@rsdoctor/core/error';
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
-import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/graph';
+import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/core/graph';
 import { logger } from '@rsdoctor/core/logger';
 import { RsdoctorServer } from '../server';
 import { RsdoctorFakeServer } from '../server/fakeServer';

@@ -2,7 +2,7 @@ import { describe, expect, it } from '@rstest/core';
 import path from 'path';
 
 import { Chunks } from '@/build-utils/build';
-import { ModuleGraphTrans } from '@rsdoctor/graph';
+import { ModuleGraphTrans } from '@rsdoctor/core/graph';
 import { SDK, type Plugin } from '@rsdoctor/types';
 import { compileByRspack } from '@scripts/test-helper';
 import { removeAbsModulePath } from '../utils';
