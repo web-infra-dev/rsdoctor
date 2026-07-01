@@ -4,7 +4,6 @@ import {
   getDependenciesByModule,
   getDependencyByPackageData,
 } from './dependency';
-import { logger } from 'src/logger';
 
 export function getModulesByAsset(
   asset: SDK.AssetData,
@@ -77,8 +76,8 @@ export function getModulesByChunks(
         }
       });
     });
-  } catch (error) {
-    logger.debug(error);
+  } catch {
+    // Keep the previous fault-tolerant behavior without depending on core logger.
   }
 
   return res;

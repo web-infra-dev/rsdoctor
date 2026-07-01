@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { Typography } from 'antd';
-import { upperFirst as upf } from '@rsdoctor/core/collection';
+import { upperFirst as upf } from '@rsdoctor/shared/collection';
 
 interface TitleProps {
   /**

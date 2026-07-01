@@ -12,7 +12,7 @@ import {
 
 import { Checkbox } from 'antd';
 import styles from './index.module.scss';
-import { Lodash } from '@rsdoctor/core/common-browser';
+import { Lodash } from '@rsdoctor/shared/common-browser';
 import { useTheme } from 'src/utils';
 
 export function CodeViewer({

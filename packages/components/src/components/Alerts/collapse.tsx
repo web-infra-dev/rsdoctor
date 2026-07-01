@@ -1,6 +1,6 @@
 import { Collapse, Typography, Divider, Space, Tabs, Tag, Tooltip } from 'antd';
 import Icon from '@ant-design/icons';
-import { sumBy } from '@rsdoctor/core/collection';
+import { sumBy } from '@rsdoctor/shared/collection';
 
 import Overview from '../Overall/overview';
 import { TextDrawer } from '../TextDrawer';

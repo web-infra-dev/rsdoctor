@@ -1,1 +1,1 @@
-export * from './common/collection';
+export * from '@rsdoctor/shared/collection';

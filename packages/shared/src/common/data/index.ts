@@ -9,6 +9,13 @@ import * as Alerts from '../alerts';
 import { checkSourceMapSupport } from '../rspack';
 
 const { relative } = path;
+type RsdoctorWindow = Window &
+  Record<
+    string,
+    {
+      enableRoutes?: string[];
+    }
+  >;
 
 /**
  * this class will run at both browser and node environment.
@@ -63,17 +70,21 @@ export class APIDataLoader {
               name: configs?.[0]?.config?.name,
             }) as R,
         );
-      case SDK.ServerAPI.API.GetClientRoutes:
-        if (
-          typeof window !== 'undefined' &&
-          window?.[Constants.WINDOW_RSDOCTOR_TAG]
-        ) {
-          return window[Constants.WINDOW_RSDOCTOR_TAG].enableRoutes;
+      case SDK.ServerAPI.API.GetClientRoutes: {
+        const rsdoctorWindow =
+          typeof window === 'undefined'
+            ? undefined
+            : (window as unknown as RsdoctorWindow);
+        if (rsdoctorWindow?.[Constants.WINDOW_RSDOCTOR_TAG]?.enableRoutes) {
+          return Promise.resolve(
+            rsdoctorWindow[Constants.WINDOW_RSDOCTOR_TAG].enableRoutes as R,
+          );
         }
         return this.loader.loadManifest().then((res) => {
           const { enableRoutes = [] } = res.client || {};
           return enableRoutes as R;
         });
+      }
 
       /** Loader API */
       case SDK.ServerAPI.API.GetLoaderNames:

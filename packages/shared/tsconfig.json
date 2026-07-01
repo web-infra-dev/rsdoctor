@@ -1,0 +1,14 @@
+{
+  "extends": "@rsdoctor/tsconfig/base",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["**/node_modules"],
+  "references": [
+    {
+      "path": "../types/tsconfig.json"
+    }
+  ]
+}

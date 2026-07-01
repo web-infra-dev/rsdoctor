@@ -200,6 +200,7 @@
   "dependencies": {
     "@babel/code-frame": "7.26.2",
     "@rsbuild/plugin-check-syntax": "catalog:",
+    "@rsdoctor/shared": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rspack/resolver": "catalog:",
     "@types/estree": "catalog:",

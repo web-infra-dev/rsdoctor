@@ -1,20 +1,22 @@
-export * as Summary from './summary';
-export * as Crypto from './crypto';
-export * as Manifest from './manifest';
-export * as Loader from './loader';
-export * as Time from './time';
-export * as Algorithm from './algorithm';
-export * as Resolver from './resolver';
-export * as Graph from './graph';
-export * as Bundle from './bundle';
-export * as Url from './url';
-export * as Plugin from './plugin';
-export * as Data from './data';
-export * as Alerts from './alerts';
-export * as Fetch from './fetch';
-export * as Rspack from './rspack';
-export * as Package from './package';
-export * as Lodash from './lodash';
+export {
+  Alerts,
+  Algorithm,
+  Bundle,
+  Crypto,
+  Data,
+  Fetch,
+  Graph,
+  Loader,
+  Lodash,
+  Manifest,
+  Package,
+  Plugin,
+  Resolver,
+  Rspack,
+  Summary,
+  Time,
+  Url,
+} from '@rsdoctor/shared/common-browser';
 export * as GlobalConfig from './global-config';
 export * as File from './file';
-export * from './decycle';
+export * from '@rsdoctor/shared/common-browser';

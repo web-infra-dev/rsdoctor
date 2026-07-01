@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { Lodash } from '@rsdoctor/core/common-browser';
+import { Lodash } from '@rsdoctor/shared/common-browser';
 
 export const getImporteds = (
   curModule: SDK.ModuleData,

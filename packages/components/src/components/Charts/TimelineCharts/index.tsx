@@ -11,7 +11,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 import dayjs from 'dayjs';
 import { ChartProps, DurationMetric, ITraceEventData } from '../types';
-import { groupBy } from '@rsdoctor/core/collection';
+import { groupBy } from '@rsdoctor/shared/collection';
 import { ChartTypes, PALETTE_COLORS } from '../constants';
 import { useThemeToken } from 'src/utils';
 

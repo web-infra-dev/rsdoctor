@@ -1,7 +1,7 @@
 import { Common, Manifest, Plugin, SDK } from '@rsdoctor/types';
-import { PackageGraph } from '@rsdoctor/core/graph';
-import { Chunks, ModuleGraphTrans } from '@rsdoctor/core/graph';
-import { isArray } from '@rsdoctor/core/collection';
+import { PackageGraph } from '@rsdoctor/shared/graph';
+import { Chunks, ModuleGraphTrans } from '@rsdoctor/shared/graph';
+import { isArray } from '@rsdoctor/shared/collection';
 
 export function isRspackStats(
   json: Common.PlainObject,

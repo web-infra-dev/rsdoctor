@@ -1,4 +1,4 @@
-import { Time } from '@rsdoctor/core/common-browser';
+import { Time } from '@rsdoctor/shared/common-browser';
 
 const { toFixedDigits, getUnit, formatCosts } = Time;
 

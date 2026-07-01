@@ -1,7 +1,7 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Alert, Button, Divider, Space, Typography } from 'antd';
 import React from 'react';
-import { Lodash } from '@rsdoctor/core/common-browser';
+import { Lodash } from '@rsdoctor/shared/common-browser';
 import { useRuleIndexNavigate } from '../../utils';
 import { CodeViewer } from '../base';
 import { CodeOpener } from '../Opener';

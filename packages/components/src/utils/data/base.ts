@@ -1,5 +1,5 @@
 import { Common, Manifest, SDK } from '@rsdoctor/types';
-import { Data } from '@rsdoctor/core/common-browser';
+import { Data } from '@rsdoctor/shared/common-browser';
 
 export abstract class BaseDataLoader implements Manifest.ManifestDataLoader {
   protected pool = new Map<string, Promise<unknown>>();

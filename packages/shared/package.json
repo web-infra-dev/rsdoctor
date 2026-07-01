@@ -1,0 +1,96 @@
+{
+  "name": "@rsdoctor/shared",
+  "version": "1.5.11",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/web-infra-dev/rsdoctor",
+    "directory": "packages/shared"
+  },
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./collection": {
+      "import": {
+        "types": "./dist/collection.d.ts",
+        "default": "./dist/collection.js"
+      },
+      "require": {
+        "types": "./dist/collection.d.cts",
+        "default": "./dist/collection.cjs"
+      }
+    },
+    "./common-browser": {
+      "import": {
+        "types": "./dist/common-browser.d.ts",
+        "default": "./dist/common-browser.js"
+      },
+      "require": {
+        "types": "./dist/common-browser.d.cts",
+        "default": "./dist/common-browser.cjs"
+      }
+    },
+    "./graph": {
+      "import": {
+        "types": "./dist/graph.d.ts",
+        "default": "./dist/graph.js"
+      },
+      "require": {
+        "types": "./dist/graph.d.cts",
+        "default": "./dist/graph.cjs"
+      }
+    }
+  },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "collection": [
+        "./dist/collection.d.ts"
+      ],
+      "common-browser": [
+        "./dist/common-browser.d.ts"
+      ],
+      "graph": [
+        "./dist/graph.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "rslib build",
+    "start": "rslib build -w"
+  },
+  "dependencies": {
+    "@rsdoctor/types": "workspace:*",
+    "buffer": "5.7.1",
+    "es-toolkit": "catalog:",
+    "path-browserify": "catalog:",
+    "source-map": "catalog:"
+  },
+  "devDependencies": {
+    "@types/estree": "catalog:",
+    "@types/node": "catalog:",
+    "@types/path-browserify": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

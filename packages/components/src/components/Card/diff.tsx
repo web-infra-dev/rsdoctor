@@ -1,6 +1,6 @@
 import { Client } from '@rsdoctor/types';
 import { Segmented, Space, Tooltip, Typography } from 'antd';
-import { Graph } from '@rsdoctor/core/common-browser';
+import { Graph } from '@rsdoctor/shared/common-browser';
 import React, { useState } from 'react';
 import { formatSize } from '../../utils';
 import { Color } from '../../constants';

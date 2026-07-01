@@ -20,7 +20,7 @@ import {
   Typography,
 } from 'antd';
 import { DataNode as AntdDataNode } from 'antd/es/tree';
-import { debounce, omitBy, sumBy } from '@rsdoctor/core/collection';
+import { debounce, omitBy, sumBy } from '@rsdoctor/shared/collection';
 import { dirname, relative } from 'path';
 import React, {
   useEffect,
@@ -48,7 +48,7 @@ import {
 import { ModuleAnalyzeComponent } from '../../ModuleAnalyze';
 import { ModuleGraphListContext } from '../config';
 import styles from './asset.module.scss';
-import { ModuleData } from '@rsdoctor/core/graph';
+import { ModuleData } from '@rsdoctor/shared/graph';
 import { ErrorBoundary } from 'react-error-boundary';
 
 const { DirectoryTree } = Tree;
