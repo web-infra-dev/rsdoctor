@@ -1,9 +1,6 @@
 import { describe, it, expect } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
-import {
-  getLoaderFileDetails,
-  getLoaderFileInputAndOutput,
-} from '../../../src/common/loader';
+import { Loader } from '../../../src/common';
 
 describe('test src/common/loader.ts', () => {
   const mockLoaderData: SDK.LoaderData = [
@@ -50,7 +47,7 @@ describe('test src/common/loader.ts', () => {
   ];
 
   it('getLoaderFileDetails should strip input and result fields', () => {
-    const result = getLoaderFileDetails('/test/file.js', mockLoaderData);
+    const result = Loader.getLoaderFileDetails('/test/file.js', mockLoaderData);
 
     expect(result).toBeDefined();
     expect(result.resource.path).toBe('/test/file.js');
@@ -68,7 +65,7 @@ describe('test src/common/loader.ts', () => {
   });
 
   it('getLoaderFileInputAndOutput should return input and output for first loader', () => {
-    const result = getLoaderFileInputAndOutput(
+    const result = Loader.getLoaderFileInputAndOutput(
       '/test/file.js',
       'babel-loader',
       0,
@@ -81,7 +78,7 @@ describe('test src/common/loader.ts', () => {
   });
 
   it('getLoaderFileInputAndOutput should return input and output for second loader (loaderIndex: 1)', () => {
-    const result = getLoaderFileInputAndOutput(
+    const result = Loader.getLoaderFileInputAndOutput(
       '/test/file.js',
       'ts-loader',
       1,
@@ -94,7 +91,7 @@ describe('test src/common/loader.ts', () => {
   });
 
   it('getLoaderFileInputAndOutput should return empty strings for non-existent loader', () => {
-    const result = getLoaderFileInputAndOutput(
+    const result = Loader.getLoaderFileInputAndOutput(
       '/test/file.js',
       'non-existent-loader',
       0,
@@ -106,7 +103,7 @@ describe('test src/common/loader.ts', () => {
   });
 
   it('getLoaderFileInputAndOutput should return empty strings for non-existent file', () => {
-    const result = getLoaderFileInputAndOutput(
+    const result = Loader.getLoaderFileInputAndOutput(
       '/non-existent/file.js',
       'babel-loader',
       0,
@@ -119,7 +116,7 @@ describe('test src/common/loader.ts', () => {
 
   it('getLoaderFileDetails should throw error for non-existent file', () => {
     expect(() => {
-      getLoaderFileDetails('/non-existent/file.js', mockLoaderData);
+      Loader.getLoaderFileDetails('/non-existent/file.js', mockLoaderData);
     }).toThrow('"/non-existent/file.js" not match any loader data');
   });
 });
