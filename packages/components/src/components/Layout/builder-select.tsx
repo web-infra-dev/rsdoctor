@@ -1,6 +1,6 @@
 import { Select, Divider, Typography, Space } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { Manifest } from '@rsdoctor/types';
+import { Manifest } from '@rsdoctor/shared/types';
 import TotalSizeSvg from '../../common/svg/total-size.svg';
 import { fetchManifest, changeOrigin } from '../../utils';
 import Icon from '@ant-design/icons';

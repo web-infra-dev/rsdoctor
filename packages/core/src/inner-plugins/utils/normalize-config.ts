@@ -1,4 +1,4 @@
-import { Common, Config, Plugin, SDK } from '@rsdoctor/types';
+import { Common, Config, Plugin, SDK } from '@rsdoctor/shared/types';
 import type {
   RuleSetCondition as RspackRuleSetCondition,
   RuleSetRule as RspackRuleSetRule,

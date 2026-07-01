@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Progress as P, Row, Typography } from 'antd';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Size } from 'src/constants';
 import { withServerAPI } from '../Manifest';
 

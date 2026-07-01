@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import fs from 'node:fs';
 import { createRequire } from 'module';
 import { BaseAPI } from './base';

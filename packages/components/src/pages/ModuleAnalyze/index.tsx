@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Badge, Card, Drawer, Popover, Space, Tabs, Typography } from 'antd';
 import React, { useState } from 'react';
 import { ServerAPIProvider } from 'src/components/Manifest';

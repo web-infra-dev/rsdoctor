@@ -5,7 +5,7 @@ import {
   patchNativeModuleGraph,
   patchNativeModuleSources,
 } from '@/build-utils/build/module-graph/rspack/transform';
-import type { Plugin } from '@rsdoctor/types';
+import type { Plugin } from '@rsdoctor/shared/types';
 
 function createNativeModule(
   data: Partial<Plugin.RspackNativeModule> &

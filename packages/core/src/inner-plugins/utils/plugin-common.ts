@@ -1,6 +1,6 @@
 import type { Configuration, RuleSetRule } from '@rspack/core';
 import { makeRulesSerializable } from '@rsdoctor/core/plugins';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { chalk } from '@rsdoctor/core/logger';
 import path from 'path';
 import { openBrowser } from './openBrowser';

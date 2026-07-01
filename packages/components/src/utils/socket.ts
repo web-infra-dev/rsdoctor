@@ -1,5 +1,5 @@
 /* rslint-disable no-restricted-globals */
-import type { Common, SDK } from '@rsdoctor/types';
+import type { Common, SDK } from '@rsdoctor/shared/types';
 
 type SocketAPI = SDK.ServerAPI.API | SDK.ServerAPI.APIExtends;
 

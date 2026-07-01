@@ -14,7 +14,7 @@ import {
   Manifest as ManifestType,
   SDK,
   Constants,
-} from '@rsdoctor/types';
+} from '@rsdoctor/shared/types';
 import { Manifest, Algorithm, Graph } from '@rsdoctor/core/common';
 import { RsdoctorSDK } from '@rsdoctor/core/sdk';
 import { createRequire } from 'node:module';

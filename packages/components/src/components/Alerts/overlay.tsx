@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import {
   Alert,
   Button,

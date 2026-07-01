@@ -1,5 +1,5 @@
 import { Module } from '@rsdoctor/shared/graph';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Space, Tag } from 'antd';
 import { escape, get } from '@rsdoctor/shared/collection';
 import type { editor, Range as RangeClass } from 'monaco-editor';

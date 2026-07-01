@@ -1,6 +1,6 @@
 import { Col, Row, Space, Typography } from 'antd';
 import React from 'react';
-import { Client } from '@rsdoctor/types';
+import { Client } from '@rsdoctor/shared/types';
 import { Size } from '../../../../constants';
 import { DiffCard, Percent } from '../../../../components/Card/diff';
 import {

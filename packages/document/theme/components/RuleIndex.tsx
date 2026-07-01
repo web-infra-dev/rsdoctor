@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Rule } from '@rsdoctor/types';
+import { Rule } from '@rsdoctor/shared/types';
 import styles from './RuleIndex.module.scss';
 import { getCustomMDXComponent } from '@rspress/core/theme-original';
 

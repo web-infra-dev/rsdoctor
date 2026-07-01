@@ -1,11 +1,11 @@
-import { Manifest, Plugin } from '@rsdoctor/types';
+import { Manifest, Plugin } from '@rsdoctor/shared/types';
 import type { HookInterceptor } from 'tapable';
 import { Loader } from '@rsdoctor/core/common';
 import { isEqual, omit } from '@rsdoctor/core/collection';
 import type { LoaderContext, NormalModule } from '@rspack/core';
 import { interceptLoader, type CompatibleResolve } from '../utils';
 import { InternalBasePlugin } from './base';
-import { ProxyLoaderOptions } from '@rsdoctor/core/types';
+import type { ProxyLoaderOptions } from '../../types';
 import { time, timeEnd } from '@rsdoctor/core/logger';
 import path from 'path';
 import { fileURLToPath } from 'url';

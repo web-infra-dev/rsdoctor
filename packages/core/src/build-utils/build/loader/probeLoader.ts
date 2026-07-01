@@ -1,6 +1,6 @@
 import { parseQuery } from '@/build-utils/build/utils';
 import { getSDK } from '@/inner-plugins/utils/sdk';
-import type { Plugin, SDK } from '@rsdoctor/types';
+import type { Plugin, SDK } from '@rsdoctor/shared/types';
 import type { LoaderDefinitionFunction } from '@rspack/core';
 import { omit } from '@rsdoctor/core/collection';
 import path from 'path';

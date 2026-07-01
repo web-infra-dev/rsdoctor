@@ -1,4 +1,4 @@
-import { Client } from '@rsdoctor/types';
+import { Client } from '@rsdoctor/shared/types';
 
 export const name = 'Upload and Analysis';
 

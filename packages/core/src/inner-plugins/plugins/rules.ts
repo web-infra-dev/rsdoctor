@@ -2,7 +2,7 @@ import { InternalBasePlugin } from './base';
 import { Linter } from '../../rules';
 import { DevToolError } from '@rsdoctor/core/error';
 import { pull } from '@rsdoctor/core/collection';
-import { Plugin } from '@rsdoctor/types';
+import { Plugin } from '@rsdoctor/shared/types';
 import type { RspackError } from '@rspack/core';
 import { time, timeEnd } from '@rsdoctor/core/logger';
 

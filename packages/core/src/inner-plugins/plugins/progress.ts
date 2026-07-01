@@ -1,5 +1,5 @@
-import { SDK } from '@rsdoctor/types';
-import type { Plugin } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
+import type { Plugin } from '@rsdoctor/shared/types';
 import { InternalBasePlugin } from './base';
 import { logger } from '@rsdoctor/core/logger';
 

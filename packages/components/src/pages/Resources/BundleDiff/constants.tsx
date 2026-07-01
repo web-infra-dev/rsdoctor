@@ -1,5 +1,5 @@
 import React from 'react';
-import { Client, Manifest } from '@rsdoctor/types';
+import { Client, Manifest } from '@rsdoctor/shared/types';
 
 export const name = 'Bundle Diff';
 

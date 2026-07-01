@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { useMemo } from 'react';
 import { formatSize, getShortPath } from 'src/utils';
 import { getImporteds } from '.';

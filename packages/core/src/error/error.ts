@@ -1,6 +1,6 @@
 import { codeFrameColumns } from '@babel/code-frame';
 import { Lodash } from '@rsdoctor/core/common';
-import { Err, Rule } from '@rsdoctor/types';
+import { Err, Rule } from '@rsdoctor/shared/types';
 import { createColors } from 'picocolors';
 import deepEql from 'deep-eql';
 import stripAnsi from 'strip-ansi';

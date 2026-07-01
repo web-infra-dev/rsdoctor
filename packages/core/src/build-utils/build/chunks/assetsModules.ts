@@ -1,6 +1,6 @@
 import { Chunks } from '@rsdoctor/core/graph';
 import { parseBundle } from '../utils';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 
 /**
  * Collects module size data from bundle assets, using source maps when available

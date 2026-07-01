@@ -11,7 +11,7 @@
       "path": "../core/tsconfig.json"
     },
     {
-      "path": "../types/tsconfig.json"
+      "path": "../shared/tsconfig.json"
     }
   ]
 }

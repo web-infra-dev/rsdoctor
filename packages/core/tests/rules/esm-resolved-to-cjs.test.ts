@@ -2,7 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { describe, expect, it } from '@rstest/core';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { rule } from '../../src/rules/rules/esm-resolved-to-cjs';
 
 interface RunRuleOptions {

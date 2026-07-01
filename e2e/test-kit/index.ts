@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { execute } from '@rsdoctor/cli';
 import { resolve } from 'path';
 import { launchPlaywright } from './launch';

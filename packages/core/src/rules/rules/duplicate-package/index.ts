@@ -1,4 +1,4 @@
-import { Linter, Rule } from '@rsdoctor/types';
+import { Linter, Rule } from '@rsdoctor/shared/types';
 import { gt, diff } from 'semver';
 import * as duplicatePackageTypes from './types';
 import type { Config } from './types';

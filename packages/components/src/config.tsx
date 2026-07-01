@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { Manifest } from '@rsdoctor/types';
+import { Manifest } from '@rsdoctor/shared/types';
 import {
   getLocaleFromStorage,
   getThemeFromStorage,

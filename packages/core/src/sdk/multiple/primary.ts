@@ -1,5 +1,5 @@
 import path from 'path';
-import { Manifest, SDK } from '@rsdoctor/types';
+import { Manifest, SDK } from '@rsdoctor/shared/types';
 import { RsdoctorSDK } from '../sdk';
 import { RsdoctorSlaveServer } from './server';
 import type { RsdoctorSDKController } from './controller';

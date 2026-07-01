@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Divider, Row, Select, Space, Typography } from 'antd';
 import { RightOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';

@@ -1,4 +1,4 @@
-import { Manifest, SDK } from '@rsdoctor/types';
+import { Manifest, SDK } from '@rsdoctor/shared/types';
 import {
   Fetch,
   Manifest as ManifestMethod,

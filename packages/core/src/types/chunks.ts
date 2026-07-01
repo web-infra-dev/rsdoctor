@@ -1,4 +1,4 @@
-import { Plugin } from '@rsdoctor/types';
+import { Plugin } from '@rsdoctor/shared/types';
 
 export type AssetsModules = {
   label?: string;

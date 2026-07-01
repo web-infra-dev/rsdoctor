@@ -3,7 +3,7 @@ import http from 'http';
 import os from 'os';
 import gp from 'get-port';
 import { execFileSync } from 'child_process';
-import { Thirdparty } from '@rsdoctor/types';
+import { Thirdparty } from '@rsdoctor/shared/types';
 import { Algorithm } from '@rsdoctor/core/common';
 
 // see https://neo4j.com/developer/kb/list-of-restricted-ports-in-browsers

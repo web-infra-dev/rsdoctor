@@ -1,5 +1,5 @@
 import { Monaco } from '@monaco-editor/react';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import type { Range as RangeClass } from 'monaco-editor';
 import { editor } from 'monaco-editor';
 import { extname } from 'path';

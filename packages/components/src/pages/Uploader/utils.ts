@@ -1,4 +1,4 @@
-import { Client, Common, Constants, Manifest } from '@rsdoctor/types';
+import { Client, Common, Constants, Manifest } from '@rsdoctor/shared/types';
 import { message } from 'antd';
 import { loadRspackStats } from '../../utils/stats';
 

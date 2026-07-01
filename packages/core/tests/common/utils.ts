@@ -1,5 +1,5 @@
 import { relative } from 'path';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 export function removeAbsModulePath(
   graph: SDK.ModuleGraphInstance,
   root: string,

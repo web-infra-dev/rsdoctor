@@ -1,4 +1,4 @@
-import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
+import { Common, Constants, Manifest, SDK } from '@rsdoctor/shared/types';
 import { File, Json, EnvInfo } from '@rsdoctor/core/build-utils';
 import fs from 'node:fs';
 import path from 'node:path';

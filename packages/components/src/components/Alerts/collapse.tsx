@@ -12,7 +12,7 @@ import SourceSizeSvg from '../../common/svg/source-size.svg';
 import TotalSizeSvg from '../../common/svg/total-size.svg';
 import VersionSvg from '../../common/svg/version.svg';
 
-import type { Rule } from '@rsdoctor/types';
+import type { Rule } from '@rsdoctor/shared/types';
 
 import type { AlertProps } from '../Alert/types';
 

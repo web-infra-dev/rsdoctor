@@ -1,4 +1,4 @@
-import type { SDK } from '@rsdoctor/types';
+import type { SDK } from '@rsdoctor/shared/types';
 import { DevToolError } from '@rsdoctor/core/error';
 import { IHook } from '@/build-utils/build/utils';
 

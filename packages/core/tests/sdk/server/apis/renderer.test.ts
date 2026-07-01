@@ -1,6 +1,6 @@
 import { File } from '@rsdoctor/core/build-utils';
 import { describe, it, expect } from '@rstest/core';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { setupSDK } from '../../utils';
 
 describe('test server/apis/data.ts', () => {

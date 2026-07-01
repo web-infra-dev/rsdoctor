@@ -2,13 +2,12 @@
   "extends": "@rsdoctor/tsconfig/base",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "paths": {
+      "@rsdoctor/shared/types": ["./src/types/index.ts"]
+    },
+    "types": ["node"]
   },
   "include": ["src"],
-  "exclude": ["**/node_modules"],
-  "references": [
-    {
-      "path": "../types/tsconfig.json"
-    }
-  ]
+  "exclude": ["**/node_modules"]
 }

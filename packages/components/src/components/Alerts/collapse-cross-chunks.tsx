@@ -7,7 +7,7 @@ import utilStyles from './index.module.scss';
 import TotalSizeSvg from '../../common/svg/total-size.svg';
 import { LabelComponent } from './collapse-shared';
 
-import type { Rule } from '@rsdoctor/types';
+import type { Rule } from '@rsdoctor/shared/types';
 import type { AlertProps } from '../Alert/types';
 
 const { Text } = Typography;

@@ -1,4 +1,4 @@
-import { Manifest } from '@rsdoctor/types';
+import { Manifest } from '@rsdoctor/shared/types';
 
 export function hasCompile(routes: Manifest.RsdoctorManifestClientRoutes[]) {
   const hasCompile =

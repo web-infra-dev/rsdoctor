@@ -1,5 +1,5 @@
 import test, { expect } from '@playwright/test';
-import { Client } from '@rsdoctor/types';
+import { Client } from '@rsdoctor/shared/types';
 import {
   getRsdoctorManifestPath,
   openBrowserByDiffCLI,

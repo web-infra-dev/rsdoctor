@@ -1,5 +1,5 @@
 import { ApiOutlined, PartitionOutlined } from '@ant-design/icons';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Button, Card, Input, Select, Space, Typography } from 'antd';
 import React, { useState } from 'react';
 import { WebpackConfigurationViewer } from '../../components/Configuration';

@@ -1,5 +1,5 @@
 import { JsonStreamStringify } from 'json-stream-stringify';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { dirname, join } from 'path';
 import { Package } from 'src/common';
 import { Transform } from 'stream';

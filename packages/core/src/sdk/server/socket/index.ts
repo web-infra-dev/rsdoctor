@@ -1,4 +1,4 @@
-import { Common, SDK } from '@rsdoctor/types';
+import { Common, SDK } from '@rsdoctor/shared/types';
 import type { Server } from 'http';
 import WebSocket, { WebSocketServer } from 'ws';
 import type { VerifyClientCallbackSync } from 'ws';

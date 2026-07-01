@@ -1,4 +1,4 @@
-import { Client, Manifest, SDK } from '@rsdoctor/types';
+import { Client, Manifest, SDK } from '@rsdoctor/shared/types';
 import { UpdateType } from './constants';
 
 import { InferServerAPIBody } from '../../../../components/Manifest/api';

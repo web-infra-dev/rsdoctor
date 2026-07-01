@@ -1,4 +1,4 @@
-import type { SDK } from '@rsdoctor/types';
+import type { SDK } from '@rsdoctor/shared/types';
 
 export interface Config {
   /**

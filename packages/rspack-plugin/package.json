@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@rsdoctor/core": "workspace:*",
-    "@rsdoctor/types": "workspace:*"
+    "@rsdoctor/shared": "workspace:*"
   },
   "devDependencies": {
     "@rspack/core": "catalog:",

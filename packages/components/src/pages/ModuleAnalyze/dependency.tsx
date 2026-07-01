@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Col, Empty, Row } from 'antd';
 import React, { memo, useMemo } from 'react';
 import { getShortPath } from '../../utils';

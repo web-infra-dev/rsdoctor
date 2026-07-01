@@ -19,7 +19,7 @@ import {
 } from '@ant-design/icons';
 import type { ComposeOption, EChartsType } from 'echarts/core';
 import { formatSize, useThemeToken } from 'src/utils';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
 import { ModuleAnalyzeComponent } from '../../pages/ModuleAnalyze';
 import Styles from './treemap.module.scss';

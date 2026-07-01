@@ -1,7 +1,7 @@
 /* rslint-disable react/jsx-key */
 import React, { useState, useMemo } from 'react';
 import { Divider, Segmented, Avatar, Tree } from 'antd';
-import { Client, SDK } from '@rsdoctor/types';
+import { Client, SDK } from '@rsdoctor/shared/types';
 import { RightOutlined, FileFilled, GoldenFilled } from '@ant-design/icons';
 
 import {

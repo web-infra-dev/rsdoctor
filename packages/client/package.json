@@ -38,7 +38,7 @@
     "sirv": "catalog:",
     "source-map-loader": "^5.0.0",
     "typescript": "catalog:",
-    "@rsdoctor/types": "workspace:*"
+    "@rsdoctor/shared": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

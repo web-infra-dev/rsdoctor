@@ -1,4 +1,4 @@
-import { Manifest, Plugin } from '@rsdoctor/types';
+import { Manifest, Plugin } from '@rsdoctor/shared/types';
 import { Utils as BuildUtils } from '@/build-utils/build';
 import { interceptPluginHook } from '../utils';
 import { InternalBasePlugin } from './base';

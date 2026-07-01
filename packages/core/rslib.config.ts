@@ -4,7 +4,7 @@ import { dualPackageBundleless } from '../../scripts/rslib.base.config';
 const externals = [
   '@rsdoctor/client',
   '@rsdoctor/shared',
-  '@rsdoctor/types',
+  '@rsdoctor/shared/types',
   '@rspack/core',
   'lodash',
   'semver',

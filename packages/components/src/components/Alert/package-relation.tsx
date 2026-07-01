@@ -27,7 +27,7 @@ import { Size, Color } from '../../constants';
 import { Badge as Bdg } from '../Badge';
 import { withServerAPI } from '../Manifest';
 
-import { Rule, SDK } from '@rsdoctor/types';
+import { Rule, SDK } from '@rsdoctor/shared/types';
 
 import { PackageRelationAlertProps } from './types';
 

@@ -1,4 +1,4 @@
-import { Client } from '@rsdoctor/types';
+import { Client } from '@rsdoctor/shared/types';
 import { Segmented, Space, Tooltip, Typography } from 'antd';
 import { Graph } from '@rsdoctor/shared/common-browser';
 import React, { useState } from 'react';

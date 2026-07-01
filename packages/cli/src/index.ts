@@ -1,6 +1,6 @@
 import { cac } from 'cac';
 import { red } from 'picocolors';
-import { Common } from '@rsdoctor/types';
+import { Common } from '@rsdoctor/shared/types';
 import { analyze, bundleDiff } from './commands';
 import { Command, CommandContext, GetCommandArgumentsType } from './types';
 import { Commands, pkg, bin } from './constants';

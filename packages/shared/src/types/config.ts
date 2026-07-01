@@ -66,16 +66,20 @@ interface OutputBaseConfig {
 }
 
 // Brief Mode Type
-export interface BriefModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+export interface BriefModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'brief';
   reportCodeType?: ReportCodeTypeByMode<'brief'>;
   options?: BriefModeOptions;
 }
 
 // Normal Mode Type
-interface NormalModeConfig
-  extends Omit<OutputBaseConfig, 'reportCodeType' | 'mode'> {
+interface NormalModeConfig extends Omit<
+  OutputBaseConfig,
+  'reportCodeType' | 'mode'
+> {
   mode?: 'normal';
   reportCodeType?: ReportCodeTypeByMode<'normal'>;
   options?: NormalModeOptions;

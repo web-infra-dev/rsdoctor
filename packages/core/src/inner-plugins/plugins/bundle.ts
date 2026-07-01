@@ -1,4 +1,4 @@
-import { Manifest, Plugin } from '@rsdoctor/types';
+import { Manifest, Plugin } from '@rsdoctor/shared/types';
 import type { Assets } from '@rspack/core';
 import { InternalBasePlugin } from './base';
 import { Chunks } from '@rsdoctor/core/graph';

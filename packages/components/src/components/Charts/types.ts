@@ -1,4 +1,4 @@
-import { SDK } from "@rsdoctor/types";
+import { SDK } from '@rsdoctor/shared/types';
 
 export interface ChartProps {
   loaders: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData>;
@@ -36,11 +36,11 @@ export enum ETraceEventPhase {
 type MicroSeconds = number;
 type ProcessID = number | string;
 type ArgsType = {
-  p: string,
-  n: string,
-  s: number,
-  e: number,
-}
+  p: string;
+  n: string;
+  s: number;
+  e: number;
+};
 
 export interface ITraceEventData {
   /**

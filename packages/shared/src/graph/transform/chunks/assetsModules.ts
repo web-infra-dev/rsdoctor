@@ -1,5 +1,5 @@
 import path from 'path-browserify';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { isEmpty, pick } from 'es-toolkit/compat';
 import { gzipSync } from 'node:zlib';
 import { ParseBundle } from '../../types/transform';

@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 
 export class ChunkGraph implements SDK.ChunkGraphInstance {
   private _assetMap: Map<number, SDK.AssetInstance> = new Map();

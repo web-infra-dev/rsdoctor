@@ -1,5 +1,5 @@
-import { RsdoctorPluginInstance } from '@rsdoctor/core/types';
-import { Linter, Plugin, SDK } from '@rsdoctor/types';
+import type { RsdoctorPluginInstance } from '../../types';
+import { Linter, Plugin, SDK } from '@rsdoctor/shared/types';
 import { Process } from '@rsdoctor/core/build-utils';
 import { chalk, logger } from '@rsdoctor/core/logger';
 import {

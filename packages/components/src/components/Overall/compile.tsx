@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Summary } from '@rsdoctor/shared/common-browser';
 import { Divider, Progress, Space, Typography } from 'antd';
 import React from 'react';

@@ -21,7 +21,7 @@ import {
   FileSearchOutlined,
   AppstoreAddOutlined,
 } from '@ant-design/icons';
-import { Constants, SDK, Client } from '@rsdoctor/types';
+import { Constants, SDK, Client } from '@rsdoctor/shared/types';
 import { BundleDiffTableAssetsData } from './types';
 import { formatPercent, formatSize } from '../../../../utils';
 import { Color, Size } from '../../../../constants';

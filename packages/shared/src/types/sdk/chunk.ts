@@ -94,24 +94,24 @@ export interface ChunkGraphInstance {
   setEntrypoints(entrypoints: EntryPointInstance[]): void;
 }
 
-export interface AssetData
-  extends Omit<NonFunctionProperties<AssetInstance>, 'chunks'> {
+export interface AssetData extends Omit<
+  NonFunctionProperties<AssetInstance>,
+  'chunks'
+> {
   /** Chunk Identifier to which the file belongs */
   chunks: string[];
 }
 
-export interface ChunkGraphData
-  extends NonFunctionProperties<ChunkGraphInstance> {
+export interface ChunkGraphData extends NonFunctionProperties<ChunkGraphInstance> {
   assets: AssetData[];
   chunks: ChunkData[];
   entrypoints: EntryPointData[];
 }
 
-export interface ChunkData
-  extends Omit<
-    NonFunctionProperties<ChunkInstance>,
-    'assets' | 'modules' | 'dependencies' | 'imported'
-  > {
+export interface ChunkData extends Omit<
+  NonFunctionProperties<ChunkInstance>,
+  'assets' | 'modules' | 'dependencies' | 'imported'
+> {
   /** Is it the entrance Chunk */
   entry: boolean;
   /** Contains product path */
@@ -143,8 +143,7 @@ export interface EntryPointInstance {
   setAssets(assets: AssetInstance[]): void;
 }
 
-export interface EntryPointData
-  extends NonFunctionProperties<EntryPointInstance> {
+export interface EntryPointData extends NonFunctionProperties<EntryPointInstance> {
   /**
    * id list for chunks which contained in this entry point.
    */

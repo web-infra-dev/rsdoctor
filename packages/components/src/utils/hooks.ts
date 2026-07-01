@@ -1,5 +1,5 @@
 import { Algorithm } from '@rsdoctor/shared/common-browser';
-import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
+import { Client, Manifest, Rule, SDK } from '@rsdoctor/shared/types';
 import { uniqBy, defaults, throttle } from '@rsdoctor/shared/collection';
 import {
   useEffect,

@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { compact, isEmpty, last } from 'es-toolkit/compat';
 import path from 'path-browserify';
 

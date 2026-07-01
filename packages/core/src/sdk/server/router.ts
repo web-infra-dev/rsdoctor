@@ -1,5 +1,5 @@
 import type { ServerResponse } from 'http';
-import { Common, SDK, Thirdparty } from '@rsdoctor/types';
+import { Common, SDK, Thirdparty } from '@rsdoctor/shared/types';
 import { BaseAPI } from './apis/base';
 
 interface RouterOptions {

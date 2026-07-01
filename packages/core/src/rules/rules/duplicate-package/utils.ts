@@ -1,6 +1,6 @@
 import path from 'path';
 import { filesize } from 'filesize';
-import type { SDK, Rule } from '@rsdoctor/types';
+import type { SDK, Rule } from '@rsdoctor/shared/types';
 
 export function getErrorMsg(
   packages: SDK.PackageInstance[],

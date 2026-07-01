@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Rule, SDK } from '@rsdoctor/types';
+import { Rule, SDK } from '@rsdoctor/shared/types';
 import {
   hasViewModeFromStorage,
   useCompileAlertsByErrors,

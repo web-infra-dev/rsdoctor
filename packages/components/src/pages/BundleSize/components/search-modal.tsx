@@ -11,7 +11,7 @@ import {
 } from 'antd';
 import { SearchProps } from 'antd/es/input';
 import { ServerAPIProvider } from 'src/components';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import styles from './search-modal.module.scss';
 import { SearchOutlined } from '@ant-design/icons';
 

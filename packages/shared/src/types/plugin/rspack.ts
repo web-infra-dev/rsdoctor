@@ -33,7 +33,7 @@ export type RspackNativeModuleOriginalSource =
 export type RspackNativeModuleSourcePatch =
   RsdoctorPluginData.RsdoctorModuleSourcesPatch;
 
-import rspack from '@rspack/core';
+import type rspack from '@rspack/core';
 
 export type RspackExportsExperiments = typeof rspack.experiments;
 

@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import { sumBy, uniq } from '@rsdoctor/shared/collection';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { BundleDiffTablePackagesData } from './types';
 import { formatSize } from '../../../../utils';
 import { Size } from '../../../../constants';

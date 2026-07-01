@@ -1,4 +1,4 @@
-import { Rule, SDK } from '@rsdoctor/types';
+import { Rule, SDK } from '@rsdoctor/shared/types';
 import { getChunksByChunkIds, getChunkIdsByAsset } from './chunk';
 import {
   getDependenciesByModule,

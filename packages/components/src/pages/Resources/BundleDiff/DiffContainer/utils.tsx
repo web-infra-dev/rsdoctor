@@ -1,4 +1,4 @@
-import { Client } from '@rsdoctor/types';
+import { Client } from '@rsdoctor/shared/types';
 import { Typography } from 'antd';
 import { Color } from 'src/constants';
 import { formatSize } from 'src/utils';

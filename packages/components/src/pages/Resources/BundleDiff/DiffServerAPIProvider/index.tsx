@@ -1,4 +1,4 @@
-import { Client, SDK, Constants } from '@rsdoctor/types';
+import { Client, SDK, Constants } from '@rsdoctor/shared/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
 import { fetchManifest, useUrlQuery } from 'src/utils';
 import { Algorithm } from '@rsdoctor/shared/common-browser';

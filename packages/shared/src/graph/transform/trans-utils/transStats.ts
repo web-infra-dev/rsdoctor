@@ -1,4 +1,4 @@
-import { Plugin, SDK } from '@rsdoctor/types';
+import { Plugin, SDK } from '@rsdoctor/shared/types';
 import { Chunks, ModuleGraphTrans } from '..';
 
 /**

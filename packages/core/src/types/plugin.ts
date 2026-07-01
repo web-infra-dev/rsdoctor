@@ -3,7 +3,7 @@ import type {
   Linter as LinterType,
   Plugin,
   SDK,
-} from '@rsdoctor/types';
+} from '@rsdoctor/shared/types';
 export interface RsdoctorMultiplePluginOptions<
   Rules extends LinterType.ExtendRuleData[] = LinterType.ExtendRuleData[],
 >

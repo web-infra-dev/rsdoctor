@@ -1,5 +1,5 @@
 import { Loader } from '@rsdoctor/shared/common-browser';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import dayjs from 'dayjs';
 import { maxBy, minBy } from '@rsdoctor/shared/collection';
 import { formatCosts } from 'src/utils';

@@ -5,7 +5,7 @@ import { filesize } from 'filesize';
 import { parser } from '@rsdoctor/core/rule-utils';
 import { extname } from 'path';
 
-import { Constants, SDK } from '@rsdoctor/types';
+import { Constants, SDK } from '@rsdoctor/shared/types';
 import { logger } from '@rsdoctor/core/logger';
 import type { ParseBundle } from '@rsdoctor/core/graph';
 

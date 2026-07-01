@@ -1,6 +1,6 @@
 import { Col, Row, Space, Tooltip, Typography } from 'antd';
 import React from 'react';
-import { Rule, SDK } from '@rsdoctor/types';
+import { Rule, SDK } from '@rsdoctor/shared/types';
 import { ExceptionOutlined } from '@ant-design/icons';
 import { Alerts } from '@rsdoctor/shared/common-browser';
 import { Size } from '../../constants';

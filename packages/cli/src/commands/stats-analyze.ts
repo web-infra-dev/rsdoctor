@@ -1,11 +1,15 @@
 import { RsdoctorSDK } from '@rsdoctor/core/sdk';
-import { Constants, Manifest as ManifestType, SDK } from '@rsdoctor/types';
+import {
+  Constants,
+  Manifest as ManifestType,
+  SDK,
+} from '@rsdoctor/shared/types';
 import { cyan } from 'picocolors';
 import ora from 'ora';
 import { Commands } from '../constants';
 import { Command } from '../types';
 import { enhanceCommand, readFile } from '../utils';
-import type { Plugin } from '@rsdoctor/types';
+import type { Plugin } from '@rsdoctor/shared/types';
 import { TransUtils } from '@rsdoctor/core/graph';
 
 interface Options {

@@ -1,5 +1,5 @@
-import { RsdoctorPluginInstance } from '@rsdoctor/core/types';
-import { Linter, Plugin } from '@rsdoctor/types';
+import type { RsdoctorPluginInstance } from '../../types';
+import { Linter, Plugin } from '@rsdoctor/shared/types';
 import { Graph } from '@rsdoctor/core/common';
 import { logger, time, timeEnd } from '@rsdoctor/core/logger';
 import { Asset } from '@rspack/core';

@@ -1,4 +1,4 @@
-import type { SDK } from '@rsdoctor/types';
+import type { SDK } from '@rsdoctor/shared/types';
 
 export type ExportData = SDK.ExportData;
 export type ModuleGraphModuleData = SDK.ModuleGraphModuleData;

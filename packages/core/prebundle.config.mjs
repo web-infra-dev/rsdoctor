@@ -3,7 +3,7 @@ export default {
   dependencies: [],
   exclude: [
     '@rsdoctor/client',
-    '@rsdoctor/types',
+    '@rsdoctor/shared/types',
     '@rspack/core',
     'safer-buffer',
   ],

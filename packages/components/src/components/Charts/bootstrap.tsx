@@ -1,6 +1,6 @@
 import React from 'react';
 import { Space } from 'antd';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { TextDrawer } from '../TextDrawer';
 
 import './loader.scss';

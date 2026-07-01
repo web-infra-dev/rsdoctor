@@ -1,4 +1,4 @@
-import { Err, Logger } from '@rsdoctor/types';
+import { Err, Logger } from '@rsdoctor/shared/types';
 
 export function toLevel(level: keyof typeof Err.ErrorLevel) {
   return Err.ErrorLevel[level];

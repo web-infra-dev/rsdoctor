@@ -1,4 +1,4 @@
-import { Linter, Rule } from '@rsdoctor/types';
+import { Linter, Rule } from '@rsdoctor/shared/types';
 import { defineRule } from '../../rule';
 import type { Config } from './types';
 

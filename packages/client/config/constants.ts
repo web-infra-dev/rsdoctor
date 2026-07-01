@@ -1,4 +1,4 @@
-import { Constants } from '@rsdoctor/types';
+import { Constants } from '@rsdoctor/shared/types';
 
 import path from 'path';
 

@@ -1,4 +1,4 @@
-import { SDK, Plugin } from '@rsdoctor/types';
+import { SDK, Plugin } from '@rsdoctor/shared/types';
 
 const COMPRESSIBLE_REGEX =
   /\.(?:js|css|html|json|svg|txt|xml|xhtml|wasm|manifest)$/i;

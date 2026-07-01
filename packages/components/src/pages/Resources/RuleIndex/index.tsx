@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Rule } from '@rsdoctor/types';
+import { Rule } from '@rsdoctor/shared/types';
 import { Badge, Card, Space, Typography, Col, Row, Tag } from 'antd';
 import ReactMarkdown from 'react-markdown';
 import { Title } from '../../../components/Title';

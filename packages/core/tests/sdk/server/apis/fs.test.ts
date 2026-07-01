@@ -1,5 +1,5 @@
 import { describe, it, rs, expect } from '@rstest/core';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { setupSDK } from '../../utils';
 
 describe('test server/apis/fs.ts', () => {

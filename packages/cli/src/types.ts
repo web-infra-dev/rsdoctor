@@ -1,4 +1,4 @@
-import { Common } from '@rsdoctor/types';
+import { Common } from '@rsdoctor/shared/types';
 import type { Command as CACCommand } from 'cac';
 
 export interface Command<CMD, Options = Common.PlainObject, Result = unknown> {

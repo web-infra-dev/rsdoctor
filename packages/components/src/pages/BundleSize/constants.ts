@@ -1,4 +1,4 @@
-import { Client } from '@rsdoctor/types';
+import { Client } from '@rsdoctor/shared/types';
 
 export const maxModuleSize = 5000;
 
