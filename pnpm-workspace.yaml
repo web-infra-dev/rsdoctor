@@ -68,6 +68,8 @@ minimumReleaseAgeExclude:
   - '@rslint/*'
   # Renovate security update: ws@8.21.0
   - ws@8.21.0
+  # Renovate security update: echarts@6.1.0
+  - echarts@6.1.0
 
 overrides:
   '@remix-run/router': 1.23.3

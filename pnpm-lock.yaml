@@ -620,11 +620,11 @@ importers:
         specifier: 'catalog:'
         version: 1.11.21
       echarts:
-        specifier: ^5.6.0
-        version: 5.6.0
+        specifier: ^6.0.0
+        version: 6.1.0
       echarts-for-react:
         specifier: ^3.0.6
-        version: 3.0.6(echarts@5.6.0)(react@19.2.7)
+        version: 3.0.6(echarts@6.1.0)(react@19.2.7)
       i18next:
         specifier: 22.0.4
         version: 22.0.4
@@ -4540,8 +4540,8 @@ packages:
       echarts: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
       react: ^15.0.0 || >=16.0.0
 
-  echarts@5.6.0:
-    resolution: {integrity: sha512-oTbVTsXfKuEhxftHqL5xprgLoc0k7uScAwtryCgWF6hPYFLRwOUHiFmHGCBKP5NPFNkDVopOieyUqYGH8Fa3kA==}
+  echarts@6.1.0:
+    resolution: {integrity: sha512-q0yaFPggC9FUdsWH4blavRWFmxdrIodbkoKNAjJudAI6CA9gNPxHtV2RcZNEepZVlk4yvBYkOkbk6HIVpIyHZA==}
 
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
@@ -7796,8 +7796,8 @@ packages:
   zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
 
-  zrender@5.6.1:
-    resolution: {integrity: sha512-OFXkDJKcrlx5su2XbzJvj/34Q3m6PvyCZkVPHGYpcCJ52ek4U/ymZyfuV1nKE23AyBJ51E/6Yr0mhZ7xGTO4ag==}
+  zrender@6.1.0:
+    resolution: {integrity: sha512-oEGMDB6pOP2S6OwRR4PdVv610zrjnA3Bh+JnSG12fYJlBKjtNAoEb5fSUoCOOINlH96I2fU38/A2UpRKs67xYQ==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -11774,17 +11774,17 @@ snapshots:
       es-errors: 1.3.0
       gopd: 1.2.0
 
-  echarts-for-react@3.0.6(echarts@5.6.0)(react@19.2.7):
+  echarts-for-react@3.0.6(echarts@6.1.0)(react@19.2.7):
     dependencies:
-      echarts: 5.6.0
+      echarts: 6.1.0
       fast-deep-equal: 3.1.3
       react: 19.2.7
       size-sensor: 1.0.2
 
-  echarts@5.6.0:
+  echarts@6.1.0:
     dependencies:
       tslib: 2.8.1
-      zrender: 5.6.1
+      zrender: 6.1.0
 
   ee-first@1.1.1: {}
 
@@ -15682,7 +15682,7 @@ snapshots:
 
   zod@4.4.3: {}
 
-  zrender@5.6.1:
+  zrender@6.1.0:
     dependencies:
       tslib: 2.8.1
 
