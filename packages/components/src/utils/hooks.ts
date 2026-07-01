@@ -1,6 +1,6 @@
-import { Algorithm } from '@rsdoctor/core/common-browser';
+import { Algorithm } from '@rsdoctor/shared/common-browser';
 import { Client, Manifest, Rule, SDK } from '@rsdoctor/types';
-import { uniqBy, defaults, throttle } from '@rsdoctor/core/collection';
+import { uniqBy, defaults, throttle } from '@rsdoctor/shared/collection';
 import {
   useEffect,
   useLayoutEffect,

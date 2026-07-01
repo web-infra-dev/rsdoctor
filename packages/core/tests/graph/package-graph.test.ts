@@ -2,10 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import fse from 'fs-extra';
 import { expect, describe, it, beforeEach } from '@rstest/core';
-import { PackageGraph } from '../../src/graph/graph/package-graph/graph';
-import { Module } from '../../src/graph/graph/module-graph/module';
-import { Chunk } from '../../src/graph/graph/chunk-graph/chunk';
-import { Asset } from '../../src/graph/graph/chunk-graph/asset';
+import { Asset, Chunk, Module, PackageGraph } from '@rsdoctor/shared/graph';
 
 describe('PackageGraph.getPackageByModule', () => {
   let pkgGraph: PackageGraph;

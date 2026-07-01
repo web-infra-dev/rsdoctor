@@ -1,6 +1,6 @@
+import { Lodash } from '@rsdoctor/core/common';
 import { LinesAndColumns } from 'lines-and-columns';
 import { Range, OffsetRange, Position, DocumentEditData } from './types';
-import { isNumber, isUndefined } from 'src/common/lodash';
 
 /** Document Catalogue */
 export class Document {
@@ -65,11 +65,11 @@ export class Document {
     const end =
       typeof range.end === 'number' ? range.end : this.offsetAt(range.end);
 
-    if (isUndefined(start)) {
+    if (Lodash.isUndefined(start)) {
       throw new Error(`Location ${JSON.stringify(start)} is illegal`);
     }
 
-    if (isUndefined(end)) {
+    if (Lodash.isUndefined(end)) {
       throw new Error(`Location ${JSON.stringify(end)} is illegal`);
     }
 
@@ -79,12 +79,14 @@ export class Document {
   /** Edit document data */
   edit(data: DocumentEditData) {
     let { _text: content } = this;
-    const startOffset = isNumber(data.start)
+    const startOffset = Lodash.isNumber(data.start)
       ? data.start
       : this.offsetAt(data.start);
-    const endOffset = isNumber(data.end) ? data.end : this.offsetAt(data.end);
+    const endOffset = Lodash.isNumber(data.end)
+      ? data.end
+      : this.offsetAt(data.end);
 
-    if (isUndefined(startOffset) || isUndefined(endOffset)) {
+    if (Lodash.isUndefined(startOffset) || Lodash.isUndefined(endOffset)) {
       return;
     }
 

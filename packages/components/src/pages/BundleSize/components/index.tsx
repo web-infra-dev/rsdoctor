@@ -32,7 +32,7 @@ import {
   AssetTreemapWithFilter,
   TreeNode,
 } from 'src/components/Charts/TreeMap';
-import { Rspack } from '@rsdoctor/core/common-browser';
+import { Rspack } from '@rsdoctor/shared/common-browser';
 import { TreeGraph } from './tree-graph';
 
 interface WebpackModulesOverallProps {

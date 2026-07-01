@@ -4,7 +4,7 @@ import React, { memo, useMemo } from 'react';
 import { getShortPath } from '../../utils';
 import { FileTree } from './components/fileTreeCom';
 import './index.sass';
-import { Lodash } from '@rsdoctor/core/common-browser';
+import { Lodash } from '@rsdoctor/shared/common-browser';
 
 const DependencyTree: React.FC<{
   module: SDK.ModuleData;

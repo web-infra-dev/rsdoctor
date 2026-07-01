@@ -1,8 +1,8 @@
-import { isObject } from 'src/common/lodash';
+import { Lodash } from '@rsdoctor/core/common';
 import { Node } from './types';
 
 function isSyntaxNode(node: unknown): node is Node.SyntaxNode {
-  return isObject(node) && 'type' in node;
+  return Lodash.isObject(node) && 'type' in node;
 }
 
 function assertCreator<T>(type: string) {

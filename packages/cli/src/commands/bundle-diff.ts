@@ -16,7 +16,7 @@ import {
   Constants,
 } from '@rsdoctor/types';
 import { Manifest, Algorithm, Graph } from '@rsdoctor/core/common';
-import { RsdoctorSDK } from '@rsdoctor/sdk';
+import { RsdoctorSDK } from '@rsdoctor/core/sdk';
 import { createRequire } from 'node:module';
 
 interface Options {

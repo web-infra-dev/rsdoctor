@@ -16,7 +16,7 @@ import type {
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
 } from '@rsdoctor/core/types';
-import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/sdk';
+import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/core/sdk';
 import {
   Constants,
   Linter,

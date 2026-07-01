@@ -21,7 +21,7 @@ import { Assets } from './assets';
 import { Modules } from './modules';
 import { Packages } from './packages';
 import { DiffServerAPIProvider } from '../DiffServerAPIProvider';
-import { Graph } from '@rsdoctor/core/common-browser';
+import { Graph } from '@rsdoctor/shared/common-browser';
 
 export const DiffContainer: React.FC<BundleDiffContainerProps> = ({
   manifests,

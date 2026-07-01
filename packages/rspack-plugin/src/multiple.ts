@@ -1,5 +1,5 @@
 import type { RsdoctorMultiplePluginOptions } from '@rsdoctor/core/types';
-import { RsdoctorPrimarySDK, RsdoctorSDKController } from '@rsdoctor/sdk';
+import { RsdoctorPrimarySDK, RsdoctorSDKController } from '@rsdoctor/core/sdk';
 import { SDK, type Linter } from '@rsdoctor/types';
 
 import { normalizeUserConfig } from '@rsdoctor/core/plugins';

@@ -1,9 +1,9 @@
 /* rslint-disable react/no-unescaped-entities */
 import { CloseCircleOutlined, FileSearchOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/types';
-import { Resolver } from '@rsdoctor/core/common-browser';
+import { Resolver } from '@rsdoctor/shared/common-browser';
 import { Card, Col, Row, Space, Table, Tabs, Typography } from 'antd';
-import { get } from '@rsdoctor/core/collection';
+import { get } from '@rsdoctor/shared/collection';
 import React, { useMemo, useState } from 'react';
 import { Size } from '../../constants';
 import { createFileStructures, formatCosts, mapFileKey } from '../../utils';

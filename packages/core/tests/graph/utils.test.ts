@@ -3,8 +3,8 @@ import {
   getModuleName,
   parseLocation,
   extractCodeFromSourceLines,
-} from '../../src/graph/graph/module-graph/utils';
-import { readPackageJson } from '../../src/graph/graph/package-graph/utils';
+} from '@rsdoctor/shared/graph';
+import { readPackageJson } from '../../../shared/src/graph/graph/package-graph/utils';
 import { join } from 'path';
 import { readFileSync } from 'node:fs';
 /**

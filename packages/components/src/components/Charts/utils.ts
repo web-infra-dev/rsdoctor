@@ -1,7 +1,7 @@
-import { Loader } from '@rsdoctor/core/common-browser';
+import { Loader } from '@rsdoctor/shared/common-browser';
 import { SDK } from '@rsdoctor/types';
 import dayjs from 'dayjs';
-import { maxBy, minBy } from '@rsdoctor/core/collection';
+import { maxBy, minBy } from '@rsdoctor/shared/collection';
 import { formatCosts } from 'src/utils';
 
 import './tooltips.scss';

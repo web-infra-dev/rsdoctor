@@ -1,11 +1,11 @@
 import { codeFrameColumns } from '@babel/code-frame';
+import { Lodash } from '@rsdoctor/core/common';
 import { Err, Rule } from '@rsdoctor/types';
 import { createColors } from 'picocolors';
 import deepEql from 'deep-eql';
 import stripAnsi from 'strip-ansi';
 import { transform } from './transform';
 import { insertSpace, toLevel } from './utils';
-import { isNil } from 'src/common/lodash';
 
 let id = 1;
 
@@ -132,7 +132,7 @@ export class DevToolError extends Error implements Err.DevToolErrorInstance {
             end: {
               line: 1,
               column:
-                isNil(start.column) || isNil(length)
+                Lodash.isNil(start.column) || Lodash.isNil(length)
                   ? undefined
                   : start.column + length,
             },

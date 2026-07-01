@@ -1,7 +1,7 @@
-import { Module } from '@rsdoctor/core/graph';
+import { Module } from '@rsdoctor/shared/graph';
 import { SDK } from '@rsdoctor/types';
 import { Space, Tag } from 'antd';
-import { escape, get } from '@rsdoctor/core/collection';
+import { escape, get } from '@rsdoctor/shared/collection';
 import type { editor, Range as RangeClass } from 'monaco-editor';
 import path from 'path-browserify';
 import { useMemo } from 'react';

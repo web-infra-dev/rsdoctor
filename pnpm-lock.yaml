@@ -507,9 +507,6 @@ importers:
       '@rsdoctor/core':
         specifier: workspace:*
         version: link:../core
-      '@rsdoctor/sdk':
-        specifier: workspace:*
-        version: link:../sdk
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -550,9 +547,6 @@ importers:
       '@rsdoctor/components':
         specifier: workspace:*
         version: link:../components
-      '@rsdoctor/core':
-        specifier: workspace:*
-        version: link:../core
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -601,9 +595,9 @@ importers:
       '@monaco-editor/react':
         specifier: 4.7.0
         version: 4.7.0(monaco-editor@0.49.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@rsdoctor/core':
+      '@rsdoctor/shared':
         specifier: workspace:*
-        version: link:../core
+        version: link:../shared
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -710,6 +704,12 @@ importers:
       '@rsbuild/plugin-check-syntax':
         specifier: 'catalog:'
         version: 1.6.1(@rsbuild/core@2.0.15(core-js@3.49.0))
+      '@rsdoctor/client':
+        specifier: workspace:*
+        version: link:../client
+      '@rsdoctor/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -728,12 +728,21 @@ importers:
       acorn-walk:
         specifier: 8.3.5
         version: 8.3.5
+      body-parser:
+        specifier: 2.3.0
+        version: 2.3.0
       browserslist-load-config:
         specifier: ^1.0.3
         version: 1.0.3
       connect:
         specifier: 3.7.0
         version: 3.7.0
+      cors:
+        specifier: 2.8.6
+        version: 2.8.6
+      dayjs:
+        specifier: 'catalog:'
+        version: 1.11.21
       deep-eql:
         specifier: 4.1.4
         version: 4.1.4
@@ -755,6 +764,9 @@ importers:
       json-stream-stringify:
         specifier: 3.0.1
         version: 3.0.1
+      launch-editor:
+        specifier: ^2.14.1
+        version: 2.14.1
       lines-and-columns:
         specifier: 2.0.4
         version: 2.0.4
@@ -770,15 +782,27 @@ importers:
       rslog:
         specifier: ^2.1.2
         version: 2.1.3
+      safer-buffer:
+        specifier: 2.1.2
+        version: 2.1.2
       semver:
         specifier: ^7.7.4
         version: 7.7.4
+      sirv:
+        specifier: 3.0.2
+        version: 3.0.2
       source-map:
         specifier: 'catalog:'
         version: 0.7.6
       strip-ansi:
         specifier: ^6.0.1
         version: 6.0.1
+      tapable:
+        specifier: 2.3.3
+        version: 2.3.3
+      ws:
+        specifier: 8.21.0
+        version: 8.21.0
     devDependencies:
       '@rspack/core':
         specifier: 'catalog:'
@@ -789,9 +813,15 @@ importers:
       '@types/babel__code-frame':
         specifier: 7.27.0
         version: 7.27.0
+      '@types/body-parser':
+        specifier: 'catalog:'
+        version: 1.19.6
       '@types/connect':
         specifier: 'catalog:'
         version: 3.4.38
+      '@types/cors':
+        specifier: 2.8.19
+        version: 2.8.19
       '@types/deep-eql':
         specifier: 4.0.2
         version: 4.0.2
@@ -816,6 +846,9 @@ importers:
       '@types/tapable':
         specifier: 'catalog:'
         version: 2.3.0
+      '@types/ws':
+        specifier: ^8.18.1
+        version: 8.18.1
       babel-loader:
         specifier: 10.1.1
         version: 10.1.1(@babel/core@7.29.0)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
@@ -914,9 +947,6 @@ importers:
       '@rsdoctor/core':
         specifier: workspace:*
         version: link:../core
-      '@rsdoctor/sdk':
-        specifier: workspace:*
-        version: link:../sdk
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
@@ -937,72 +967,33 @@ importers:
         specifier: 'catalog:'
         version: 6.0.3
 
-  packages/sdk:
+  packages/shared:
     dependencies:
-      '@rsdoctor/client':
-        specifier: workspace:*
-        version: link:../client
-      '@rsdoctor/core':
-        specifier: workspace:*
-        version: link:../core
       '@rsdoctor/types':
         specifier: workspace:*
         version: link:../types
-      launch-editor:
-        specifier: ^2.14.1
-        version: 2.14.1
-      safer-buffer:
-        specifier: 2.1.2
-        version: 2.1.2
-      tapable:
-        specifier: 2.3.3
-        version: 2.3.3
-      ws:
-        specifier: 8.21.0
-        version: 8.21.0
-    devDependencies:
-      '@types/body-parser':
+      buffer:
+        specifier: 5.7.1
+        version: 5.7.1
+      es-toolkit:
         specifier: 'catalog:'
-        version: 1.19.6
-      '@types/connect':
+        version: 1.47.1
+      path-browserify:
         specifier: 'catalog:'
-        version: 3.4.38
-      '@types/cors':
-        specifier: 2.8.19
-        version: 2.8.19
-      '@types/fs-extra':
-        specifier: 'catalog:'
-        version: 11.0.4
-      '@types/node':
-        specifier: 'catalog:'
-        version: 24.12.3
-      '@types/ws':
-        specifier: ^8.18.1
-        version: 8.18.1
-      body-parser:
-        specifier: 2.3.0
-        version: 2.3.0
-      cors:
-        specifier: 2.8.6
-        version: 2.8.6
-      dayjs:
-        specifier: 'catalog:'
-        version: 1.11.21
-      fs-extra:
-        specifier: 'catalog:'
-        version: 11.3.0
-      open:
-        specifier: ^10.2.0
-        version: 10.2.0
-      prebundle:
-        specifier: 'catalog:'
-        version: 1.6.5(typescript@6.0.3)
-      sirv:
-        specifier: 3.0.2
-        version: 3.0.2
+        version: 1.0.1
       source-map:
         specifier: 'catalog:'
         version: 0.7.6
+    devDependencies:
+      '@types/estree':
+        specifier: 'catalog:'
+        version: 1.0.5
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.12.3
+      '@types/path-browserify':
+        specifier: 'catalog:'
+        version: 1.0.3
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -10757,7 +10748,7 @@ snapshots:
 
   '@types/tapable@2.3.0':
     dependencies:
-      tapable: 2.3.2
+      tapable: 2.3.3
 
   '@types/unist@2.0.11': {}
 

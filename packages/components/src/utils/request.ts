@@ -3,7 +3,7 @@ import {
   Fetch,
   Manifest as ManifestMethod,
   Url,
-} from '@rsdoctor/core/common-browser';
+} from '@rsdoctor/shared/common-browser';
 import { APILoaderMode4Dev } from '../constants';
 import { getManifestUrlFromUrlQuery } from './url';
 import { getAPILoaderModeFromStorage } from './storage';

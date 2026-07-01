@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { groupBy } from '@rsdoctor/core/collection';
+import { groupBy } from '@rsdoctor/shared/collection';
 import { Empty } from 'antd';
 import './loader.scss';
 import { useTheme } from 'src/utils/manifest';

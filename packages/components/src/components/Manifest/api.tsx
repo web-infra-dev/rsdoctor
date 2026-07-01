@@ -1,12 +1,12 @@
 import { Constants, Manifest, SDK } from '@rsdoctor/types';
 import { Skeleton, Spin } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { isEqual } from '@rsdoctor/core/collection';
+import { isEqual } from '@rsdoctor/shared/collection';
 import { fetchManifest, useDataLoader } from '../../utils';
 import { ComponentState } from '../../constants';
 import { FailedStatus } from '../Status';
 import { BaseDataLoader } from '../../utils/data/base';
-import { Lodash } from '@rsdoctor/core/common-browser';
+import { Lodash } from '@rsdoctor/shared/common-browser';
 import { Client } from '@rsdoctor/types';
 
 /**

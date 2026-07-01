@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { sumBy } from '@rsdoctor/core/collection';
+import { sumBy } from '@rsdoctor/shared/collection';
 import {
   CheckSquareOutlined,
   InfoCircleOutlined,
@@ -31,7 +31,7 @@ import { ModuleRowForAsset } from './row';
 import { ViewChanges } from './changes';
 import { UpdateType, SortType } from './constants';
 import { formatDiffSize } from './utils';
-import { Graph } from '@rsdoctor/core/common-browser';
+import { Graph } from '@rsdoctor/shared/common-browser';
 
 const fileTypes = {
   JS: Constants.JSExtensions,

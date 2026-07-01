@@ -1,7 +1,7 @@
 import { describe, it, expect, rs } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 
-import { APIDataLoader } from '../../../src/common/data';
+import { Data } from '../../../src/common';
 
 describe('test src/common/data/index.ts', () => {
   const excludeAPIs = [
@@ -21,7 +21,7 @@ describe('test src/common/data/index.ts', () => {
   it('ensure implement api with server and client', () => {
     const fn = rs.fn().mockImplementation(() => new Promise(() => {}));
 
-    const loader = new APIDataLoader({
+    const loader = new Data.APIDataLoader({
       loadData: fn,
       loadManifest: rs.fn().mockImplementation(() => new Promise(() => {})),
     });
@@ -39,7 +39,7 @@ describe('test src/common/data/index.ts', () => {
   it('ensure api not implement with server and client', () => {
     const fn = rs.fn();
 
-    const loader = new APIDataLoader({
+    const loader = new Data.APIDataLoader({
       loadData: fn,
       loadManifest: rs.fn().mockImplementation(() => new Promise(() => {})),
     });
