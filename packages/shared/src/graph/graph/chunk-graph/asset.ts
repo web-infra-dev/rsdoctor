@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/shared/types';
+import { SDK } from '../../../types';
 import { gzipSync } from 'node:zlib';
 let id = 1;
 
