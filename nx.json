@@ -18,5 +18,6 @@
       "inputs": ["build", "^build"]
     }
   },
-  "defaultBase": "main"
+  "defaultBase": "main",
+  "analytics": true
 }
