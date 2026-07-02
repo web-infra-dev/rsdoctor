@@ -1,4 +1,5 @@
 import { Tabs, Empty, Tag } from 'antd';
+import { useState } from 'react';
 
 import { Card } from '../Card';
 import { ECMAVersionCheck } from '../Alert/ecma-version-check';
@@ -10,10 +11,10 @@ import { ViewMode } from '../../constants';
 import { AlertProps } from '../Alert/types';
 
 import type { Rule } from '@rsdoctor/shared/types';
+import type { CSSProperties } from 'react';
 
 import styles from './bundle-alert.module.scss';
 import utilStyles from './index.module.scss';
-import { CSSProperties, useState } from 'react';
 import { CrossChunksAlertCollapse } from './collapse-cross-chunks';
 import { ModuleMixedChunksAlertCollapse } from './collapse-module-mixed-chunks';
 import { SideEffectsOnlyImportsAlertCollapse } from './collapse-side-effects-only-imports';
@@ -30,84 +31,82 @@ interface BundleAlertProps {
   extraCom?: React.JSX.Element | undefined;
 }
 
+const BUILTIN_RULE_TABS = [
+  {
+    key: 'E1001',
+    label: 'Duplicate Packages',
+  },
+  {
+    key: 'E1002',
+    label: 'Cross Chunks Package',
+  },
+  {
+    key: 'E1003',
+    label: 'Loader Performance Optimization',
+  },
+  {
+    key: 'E1004',
+    label: 'ECMA Version Check',
+  },
+  {
+    key: 'E1005',
+    label: 'Default Import Check',
+  },
+  {
+    key: 'E1006',
+    label: 'Module Mixed Chunks',
+  },
+  {
+    key: 'E1007',
+    label: 'Tree Shaking Side Effects Only',
+  },
+  {
+    key: 'E1008',
+    label: 'CJS Require Cannot Tree-Shake',
+  },
+  {
+    key: 'E1009',
+    label: 'ESM Import Resolved to CJS',
+  },
+];
+
 export const BundleAlert: React.FC<BundleAlertProps> = ({
   title,
   dataSource,
   extraData,
 }) => {
-  const firstKeyWithData =
-    [
-      'E1001',
-      'E1002',
-      'E1003',
-      'E1004',
-      'E1005',
-      'E1006',
-      'E1007',
-      'E1008',
-      'E1009',
-    ].find((code) => dataSource.some((d) => d.code === code)) ?? 'E1001';
-  const [activeKey, setActiveKey] = useState(firstKeyWithData);
   const tabData: Array<{
     key: string;
     label: string;
     data: Array<Rule.RuleStoreDataItem>;
-  }> = [
-    {
-      key: 'E1001',
-      label: 'Duplicate Packages',
-      data: [],
-    },
-    {
-      key: 'E1002',
-      label: 'Cross Chunks Package',
-      data: [],
-    },
-    {
-      key: 'E1003',
-      label: 'Loader Performance Optimization',
-      data: [],
-    },
-    {
-      key: 'E1004',
-      label: 'ECMA Version Check',
-      data: [],
-    },
-    {
-      key: 'E1005',
-      label: 'Default Import Check',
-      data: [],
-    },
-    {
-      key: 'E1006',
-      label: 'Module Mixed Chunks',
-      data: [],
-    },
-    {
-      key: 'E1007',
-      label: 'Tree Shaking Side Effects Only',
-      data: [],
-    },
-    {
-      key: 'E1008',
-      label: 'CJS Require Cannot Tree-Shake',
-      data: [],
-    },
-    {
-      key: 'E1009',
-      label: 'ESM Import Resolved to CJS',
-      data: [],
-    },
-  ];
+    tag: string;
+  }> = BUILTIN_RULE_TABS.map((tab) => ({ ...tab, data: [], tag: tab.key }));
+  const customRulesData: Array<Rule.RuleStoreDataItem> = [];
 
   dataSource.forEach((data) => {
-    const target = tabData.find((td) => td.key === data.code)?.data;
-    target?.push(data);
+    const target = tabData.find((td) => td.key === data.code);
+    if (target) {
+      target.data.push(data);
+    } else {
+      customRulesData.push(data);
+    }
   });
+
+  if (customRulesData.length) {
+    tabData.push({
+      key: 'CUSTOM_RULES',
+      label: 'Custom Rules',
+      data: customRulesData,
+      tag: 'Custom',
+    });
+  }
 
   tabData.sort(
     (a, b) => (b.data.length > 0 ? 1 : 0) - (a.data.length > 0 ? 1 : 0),
   );
+
+  const defaultActiveKey = tabData[0]?.key ?? 'E1001';
+  const [activeKey, setActiveKey] = useState(defaultActiveKey);
 
   const tabItems = tabData.map((td) => {
     const tagStyle =
@@ -140,7 +139,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
             <Tag
               style={{ fontFamily: 'Menlo', borderRadius: '2px', ...tagStyle }}
             >
-              <span style={{ ...tagTextStyle }}>{td.key}</span>
+              <span style={{ ...tagTextStyle }}>{td.tag}</span>
             </Tag>
           </div>
         }
@@ -198,6 +197,9 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
           <EsmResolvedToCjsAlertCollapse data={td.data} extraData={extraData} />
         );
         break;
+      case 'CUSTOM_RULES':
+        children = <CommonList data={td.data} />;
+        break;
       default:
         children = null;
         break;
@@ -226,7 +228,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
                   fontSize: '13px',
                 }}
               >
-                {td.key}
+                {td.tag}
               </Tag>
               <span>{td.label}</span>
             </>
@@ -261,7 +263,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
             onChange={setActiveKey}
             tabBarGutter={10}
             type="card"
-            defaultActiveKey={tabData[0]?.key ?? 'E1001'}
+            defaultActiveKey={defaultActiveKey}
             items={tabItems}
           />
         )}
