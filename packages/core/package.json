@@ -269,6 +269,14 @@
     "@types/cors": "2.8.19",
     "@types/ws": "^8.18.1"
   },
+  "peerDependencies": {
+    "@rspack/core": "*"
+  },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
