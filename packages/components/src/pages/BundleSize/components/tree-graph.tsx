@@ -28,6 +28,8 @@ import './index.sass';
 import { SearchModal } from './search-modal';
 const { Option } = Select;
 
+const normalizeAssetPath = (assetPath: string) => assetPath.replace(/\\/g, '/');
+
 export const TreeGraph = memo(
   ({
     cwd,
@@ -133,11 +135,22 @@ export const TreeGraph = memo(
       });
     }, [summary.all.total.files]);
 
+    const assetsMap = useMemo(() => {
+      return new Map(
+        filteredAssets.map((asset) => [normalizeAssetPath(asset.path), asset]),
+      );
+    }, [filteredAssets]);
+
     const assetsStructures = useMemo(() => {
       const res = createFileStructures({
         files: filteredAssets.map((e) => e.path).filter(Boolean),
         fileTitle(file, basename) {
-          const target = filteredAssets.find((e) => e.path === file)!;
+          const target = assetsMap.get(normalizeAssetPath(file));
+
+          if (!target) {
+            return basename;
+          }
+
           const { size, initial, path, content } = target;
 
           return (
@@ -173,7 +186,7 @@ export const TreeGraph = memo(
         },
       });
       return res;
-    }, [filteredAssets]);
+    }, [assetsMap, filteredAssets, showCode]);
 
     const onSearch = (value: string) => {
       setAssetName(value);
