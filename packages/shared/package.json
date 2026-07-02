@@ -90,6 +90,7 @@
   },
   "dependencies": {
     "@types/connect": "catalog:",
+    "@types/estree": "catalog:",
     "@types/tapable": "catalog:",
     "buffer": "5.7.1",
     "es-toolkit": "catalog:",
@@ -97,7 +98,6 @@
     "source-map": "catalog:"
   },
   "devDependencies": {
-    "@types/estree": "catalog:",
     "@types/node": "catalog:",
     "@types/path-browserify": "catalog:",
     "@types/react": "catalog:",
