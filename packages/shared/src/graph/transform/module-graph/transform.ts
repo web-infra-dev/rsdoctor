@@ -1,4 +1,4 @@
-import { SDK, Plugin } from '@rsdoctor/shared/types';
+import { SDK, Plugin } from '../../../types';
 import path from 'path-browserify';
 import { Statement, ModuleGraph, Module } from '../../graph';
 import { isImportDependency, getImportKind } from './utils';

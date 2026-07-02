@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/shared/types';
+import { SDK } from '../types';
 
 export function getPluginHooks(plugin: SDK.PluginData) {
   return Object.keys(plugin);

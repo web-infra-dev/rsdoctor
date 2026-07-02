@@ -1,6 +1,5 @@
-import { SDK } from '@rsdoctor/shared/types';
+import { Plugin, SDK } from '../types';
 import { mergeIntervals } from './algorithm';
-import { Plugin } from '@rsdoctor/shared/types';
 
 export function findLoaderTotalTiming(
   loaders: Pick<SDK.LoaderTransformData, 'startAt' | 'endAt'>[],
