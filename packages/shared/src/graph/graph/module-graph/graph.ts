@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/shared/types';
+import { SDK } from '../../../types';
 import { Dependency } from './dependency';
 import { Module } from './module';
 import { Statement } from './statement';

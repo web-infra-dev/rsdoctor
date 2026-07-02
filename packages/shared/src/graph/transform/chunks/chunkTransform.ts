@@ -1,5 +1,5 @@
 import { Asset, Chunk, ChunkGraph, EntryPoint } from '../../graph';
-import { Plugin } from '@rsdoctor/shared/types';
+import { Plugin } from '../../../types';
 
 const FILTER_ASSETS_TYPE = 'assets by status';
 

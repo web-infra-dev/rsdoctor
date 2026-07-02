@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/shared/types';
+import { SDK } from '../../types';
 
 export function getChunkIdsByAsset(asset: SDK.AssetData): string[] {
   if (asset.chunks) {

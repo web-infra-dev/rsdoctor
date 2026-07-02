@@ -1,4 +1,4 @@
-import { Rule, SDK } from '@rsdoctor/shared/types';
+import { Rule, SDK } from '../../types';
 
 export function getDependencyByPackageData(
   dep: Rule.DependencyWithPackageData,
