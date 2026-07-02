@@ -1,9 +1,8 @@
-import type { RsdoctorMultiplePluginOptions } from '@rsdoctor/core';
-import { RsdoctorPrimarySDK, RsdoctorSDKController } from '@rsdoctor/core/sdk';
-import { SDK, type Linter } from '@rsdoctor/shared/types';
+import type { RsdoctorMultiplePluginOptions } from '../types';
+import { RsdoctorPrimarySDK, RsdoctorSDKController } from '../sdk';
+import { SDK, type Linter, type Plugin } from '@rsdoctor/shared/types';
 
-import { normalizeUserConfig } from '@rsdoctor/core/plugins';
-import type { Compiler } from '@rspack/core';
+import { normalizeUserConfig } from '../inner-plugins';
 import { RsdoctorRspackPlugin } from './plugin';
 
 let globalController: RsdoctorSDKController | undefined;
@@ -51,7 +50,7 @@ export class RsdoctorRspackMultiplePlugin<
     this.controller = controller;
   }
 
-  apply(compiler: Compiler) {
+  apply(compiler: Plugin.BaseCompilerType<'rspack'>) {
     if ('dependencies' in compiler.options) {
       (this.sdk as RsdoctorPrimarySDK).dependencies =
         compiler.options.dependencies;

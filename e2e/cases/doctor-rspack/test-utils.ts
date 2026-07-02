@@ -1,5 +1,5 @@
 import type { RsdoctorRspackPluginOptions } from '@rsdoctor/core';
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
 import { Linter } from '@rsdoctor/shared/types';
 import { File } from '@rsdoctor/core/build-utils';
 import { tmpdir } from 'os';

@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@rstest/core';
-import { RsdoctorRspackPlugin } from '../src/plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
 
 describe('RsdoctorRspackPlugin', () => {
   it('keeps the report server when the client server is disabled in CI', () => {
