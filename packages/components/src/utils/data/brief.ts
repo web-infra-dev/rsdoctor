@@ -1,7 +1,7 @@
-import { Manifest, SDK } from '@rsdoctor/types';
+import { Manifest, SDK } from '@rsdoctor/shared/types';
 import { Algorithm } from '@rsdoctor/shared/common-browser';
 import { BaseDataLoader } from './base';
-import { Constants } from '@rsdoctor/types';
+import { Constants } from '@rsdoctor/shared/types';
 
 export class BriefDataLoader extends BaseDataLoader {
   public isLocal() {

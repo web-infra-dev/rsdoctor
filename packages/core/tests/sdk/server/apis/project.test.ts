@@ -1,5 +1,5 @@
 import { describe, it, expect, rs } from '@rstest/core';
-import { Manifest, SDK } from '@rsdoctor/types';
+import { Manifest, SDK } from '@rsdoctor/shared/types';
 import { Manifest as ManifestShared } from '@rsdoctor/core/common';
 import { request } from 'http';
 import { cwd, setupSDK, type MockSDKResponse } from '../../utils';

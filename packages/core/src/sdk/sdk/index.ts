@@ -3,7 +3,7 @@ import fse from 'fs-extra';
 import path from 'path';
 import { createRequire } from 'module';
 import { DevToolError } from '@rsdoctor/core/error';
-import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
+import { Common, Constants, Manifest, SDK } from '@rsdoctor/shared/types';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/core/graph';
 import { logger } from '@rsdoctor/core/logger';

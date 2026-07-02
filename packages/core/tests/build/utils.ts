@@ -5,7 +5,7 @@ import {
   Chunks,
   ModuleGraph as ModuleGraphBuildUtils,
 } from '@/build-utils/build';
-import { SDK, Plugin } from '@rsdoctor/types';
+import { SDK, Plugin } from '@rsdoctor/shared/types';
 
 export class ModuleGraphTestPlugin {
   public readonly name = 'ModuleGraphTestPlugin';

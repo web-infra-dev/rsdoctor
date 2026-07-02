@@ -7,7 +7,7 @@ import { beautifyPath } from '../../utils/file';
 import { truncateMiddle } from '../../utils/string';
 import { LabelComponent } from './collapse-shared';
 
-import type { Rule } from '@rsdoctor/types';
+import type { Rule } from '@rsdoctor/shared/types';
 import type { AlertProps } from '../Alert/types';
 
 const { Text } = Typography;

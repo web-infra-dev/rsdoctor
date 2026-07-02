@@ -23,11 +23,10 @@ export interface VariableInstance {
   toData(): VariableData;
 }
 
-export interface VariableData
-  extends Omit<
-    NonFunctionProperties<VariableInstance>,
-    'identifier' | 'module'
-  > {
+export interface VariableData extends Omit<
+  NonFunctionProperties<VariableInstance>,
+  'identifier' | 'module'
+> {
   identifier: StatementData;
   module: number;
   exported?: number;
@@ -73,11 +72,10 @@ export interface ExportInstance {
 }
 
 /** Export variable data */
-export interface ExportData
-  extends Omit<
-    NonFunctionProperties<ExportInstance>,
-    'identifier' | 'variable'
-  > {
+export interface ExportData extends Omit<
+  NonFunctionProperties<ExportInstance>,
+  'identifier' | 'variable'
+> {
   from?: number;
   root?: number;
   used: number[];
@@ -125,16 +123,15 @@ export interface SideEffectInstance {
   toData(): SideEffectData;
 }
 
-export interface SideEffectData
-  extends Omit<
-    NonFunctionProperties<SideEffectInstance>,
-    | 'module'
-    | 'exports'
-    | 'identifier'
-    | 'variable'
-    | 'isNameSpace'
-    | 'fromDependency'
-  > {
+export interface SideEffectData extends Omit<
+  NonFunctionProperties<SideEffectInstance>,
+  | 'module'
+  | 'exports'
+  | 'identifier'
+  | 'variable'
+  | 'isNameSpace'
+  | 'fromDependency'
+> {
   module: number;
   identifier: StatementData;
   fromDependency?: number;
@@ -174,8 +171,10 @@ export interface ModuleGraphModuleInstance {
   toData(): ModuleGraphModuleData;
 }
 
-export interface ModuleGraphModuleData
-  extends Omit<NonFunctionProperties<ModuleGraphModuleInstance>, 'module'> {
+export interface ModuleGraphModuleData extends Omit<
+  NonFunctionProperties<ModuleGraphModuleInstance>,
+  'module'
+> {
   /** Module number */
   module: number;
 

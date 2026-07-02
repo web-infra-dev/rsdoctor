@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Lodash } from '@rsdoctor/shared/common-browser';
 
 export const getImporteds = (

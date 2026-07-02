@@ -78,8 +78,7 @@
     "react-json-view": "1.21.3",
     "react-markdown": "catalog:",
     "url-parse": "1.5.10",
-    "@rsdoctor/shared": "workspace:*",
-    "@rsdoctor/types": "workspace:*"
+    "@rsdoctor/shared": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=19",

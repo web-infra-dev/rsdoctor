@@ -1,6 +1,6 @@
 import c from 'picocolors';
 import { createLogger, logger } from 'rslog';
-import { Constants } from '@rsdoctor/types';
+import { Constants } from '@rsdoctor/shared/types';
 
 /**
  * log debug message

@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import type { RawSourceMap } from 'source-map';
 import { BaseAPI } from './base';
 import { Router } from '../router';

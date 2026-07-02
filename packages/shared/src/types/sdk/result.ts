@@ -43,5 +43,6 @@ export interface EMOStoreData extends StoreCommonData {
  * @deprecated
  */
 export interface StoreData
-  extends Partial<Omit<EMOStoreData, keyof StoreCommonData>>,
+  extends
+    Partial<Omit<EMOStoreData, keyof StoreCommonData>>,
     BuilderStoreData {}

@@ -1,4 +1,4 @@
-import { Common } from '@rsdoctor/types';
+import { Common } from '@rsdoctor/shared/types';
 import fs from 'node:fs';
 
 const cache = new Map<string, string>();

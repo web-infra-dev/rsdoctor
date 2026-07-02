@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { getServerUrl, sendRequest } from './request.js';
 import { toolDescriptions } from '@/prompt/bundle.js';
 

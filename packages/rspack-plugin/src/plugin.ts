@@ -15,7 +15,7 @@ import type {
   RsdoctorRspackPluginInstance,
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
-} from '@rsdoctor/core/types';
+} from '@rsdoctor/core';
 import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/core/sdk';
 import {
   Constants,
@@ -24,7 +24,7 @@ import {
   Manifest as ManifestType,
   Plugin,
   SDK,
-} from '@rsdoctor/types';
+} from '@rsdoctor/shared/types';
 import path from 'path';
 import { pluginTapName, pluginTapPostOptions, pkg } from './constants';
 

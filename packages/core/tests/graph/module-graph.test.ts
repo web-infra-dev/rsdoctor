@@ -1,6 +1,6 @@
 import path from 'path';
 import { expect, describe, it } from '@rstest/core';
-import { SDK, Plugin } from '@rsdoctor/types';
+import { SDK, Plugin } from '@rsdoctor/shared/types';
 import {
   Chunks,
   Module,

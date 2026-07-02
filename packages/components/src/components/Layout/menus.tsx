@@ -5,7 +5,7 @@ import {
   ApiFilled,
   NodeIndexOutlined,
 } from '@ant-design/icons';
-import { Manifest, SDK } from '@rsdoctor/types';
+import { Manifest, SDK } from '@rsdoctor/shared/types';
 import { Menu, MenuProps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';

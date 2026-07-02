@@ -1,4 +1,4 @@
-import { Manifest } from '@rsdoctor/types';
+import { Manifest } from '@rsdoctor/shared/types';
 import { Skeleton } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDataLoader } from '../../utils';
@@ -6,7 +6,9 @@ import { PageState } from '../../constants';
 import { FailedStatus } from '../Status';
 import { BaseDataLoader } from '../../utils/data/base';
 
-type ExtractAlias<T> = T extends [property: string, alias: infer P][] ? `${P extends string ? P : never}` : never;
+type ExtractAlias<T> = T extends [property: string, alias: infer P][]
+  ? `${P extends string ? P : never}`
+  : never;
 
 /**
  * @deprecated
@@ -14,7 +16,10 @@ type ExtractAlias<T> = T extends [property: string, alias: infer P][] ? `${P ext
 export function ConnectManifestData<
   Props extends object,
   Keys extends
-    | [property: `${Manifest.RsdoctorManifestMappingKeys}`, alias: keyof Props][]
+    | [
+        property: `${Manifest.RsdoctorManifestMappingKeys}`,
+        alias: keyof Props,
+      ][]
     | [property: string, alias: keyof Props][],
 >(
   manifestLoader: () => Promise<Manifest.RsdoctorManifestWithShardingFiles>,
@@ -24,7 +29,8 @@ export function ConnectManifestData<
   const promise = manifestLoader();
 
   return function _() {
-    const [manifest, setManifest] = useState<Manifest.RsdoctorManifestWithShardingFiles>();
+    const [manifest, setManifest] =
+      useState<Manifest.RsdoctorManifestWithShardingFiles>();
     const [state, setState] = useState(PageState.Pending);
     const [props, setProps] = useState<Props>({} as Props);
 
@@ -36,7 +42,9 @@ export function ConnectManifestData<
       });
     }, [loader]);
 
-    function ensureManifest(pro: Promise<Manifest.RsdoctorManifestWithShardingFiles>) {
+    function ensureManifest(
+      pro: Promise<Manifest.RsdoctorManifestWithShardingFiles>,
+    ) {
       return pro
         .then((manifest) => {
           setManifest(manifest);

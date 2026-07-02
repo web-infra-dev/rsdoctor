@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Alert, Typography } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from '../../utils';

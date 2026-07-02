@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 
 let id = 1;
 export class EntryPoint implements SDK.EntryPointInstance {

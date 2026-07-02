@@ -1,4 +1,4 @@
-import { Rule } from '@rsdoctor/types';
+import { Rule } from '@rsdoctor/shared/types';
 import React from 'react';
 
 import type { CheckSyntax } from '@rsbuild/plugin-check-syntax';

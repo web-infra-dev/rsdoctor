@@ -1,4 +1,4 @@
-import { Client, SDK } from '@rsdoctor/types';
+import { Client, SDK } from '@rsdoctor/shared/types';
 import { getAssetsDiffResult, diffSize } from './assets';
 
 /**

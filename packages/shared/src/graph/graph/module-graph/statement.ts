@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { isSameRange } from './utils';
 
 export class Statement implements SDK.StatementInstance {

@@ -1,5 +1,5 @@
 import parse from 'url-parse';
-import { Constants, Client } from '@rsdoctor/types';
+import { Constants, Client } from '@rsdoctor/shared/types';
 
 function setDefaultUrl(url: parse<Record<string, string | undefined>>) {
   if (process.env.NODE_ENV !== 'development') {

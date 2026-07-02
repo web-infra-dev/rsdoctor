@@ -8,7 +8,7 @@ import { TextDrawer } from '../TextDrawer';
 import { getFiles } from '../Overall';
 import { ServerAPIProvider } from '../Manifest';
 
-import { SDK, Client } from '@rsdoctor/types';
+import { SDK, Client } from '@rsdoctor/shared/types';
 
 import styles from './size.module.scss';
 

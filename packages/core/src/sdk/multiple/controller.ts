@@ -1,4 +1,4 @@
-import { Manifest } from '@rsdoctor/types';
+import { Manifest } from '@rsdoctor/shared/types';
 import { RsdoctorPrimarySDK } from './primary';
 
 export class RsdoctorSDKController {

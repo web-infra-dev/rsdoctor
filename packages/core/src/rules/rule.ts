@@ -1,4 +1,4 @@
-import { Linter, SDK, Rule as RuleTypes } from '@rsdoctor/types';
+import { Linter, SDK, Rule as RuleTypes } from '@rsdoctor/shared/types';
 import { Lodash } from '@rsdoctor/core/common';
 import { LinterType } from './linter';
 import { noop, toSeverity } from './utils';

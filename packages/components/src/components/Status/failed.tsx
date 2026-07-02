@@ -1,4 +1,4 @@
-import { Common } from '@rsdoctor/types';
+import { Common } from '@rsdoctor/shared/types';
 import { Button, Empty, Space, Typography } from 'antd';
 import React from 'react';
 

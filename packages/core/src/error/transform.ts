@@ -1,6 +1,6 @@
 import stripAnsi from 'strip-ansi';
 // import { parse as stackParse } from '@web-doctor/stack-trace'; // TODO: add doctor stack-trace
-import { Esbuild, Babel, Err, Linter } from '@rsdoctor/types';
+import { Esbuild, Babel, Err, Linter } from '@rsdoctor/shared/types';
 import { DevToolError } from './error';
 
 const MAX_ERROR_MESSAGE_LENGTH = 1000;

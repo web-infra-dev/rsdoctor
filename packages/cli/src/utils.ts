@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'node:fs';
 import { Ora } from 'ora';
 import { Command } from './types';
-import { Common } from '@rsdoctor/types';
+import { Common } from '@rsdoctor/shared/types';
 import { Url } from '@rsdoctor/core/common';
 import { fetchWithTimeout } from './fetch-http';
 

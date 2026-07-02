@@ -1,5 +1,5 @@
 import { Data } from '@rsdoctor/core/common';
-import { Manifest, SDK } from '@rsdoctor/types';
+import { Manifest, SDK } from '@rsdoctor/shared/types';
 
 interface SocketAPILoaderOptions {
   sdk: SDK.RsdoctorBuilderSDKInstance;

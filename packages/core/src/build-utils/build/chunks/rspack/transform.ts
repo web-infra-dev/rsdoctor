@@ -1,5 +1,5 @@
 import { Asset, Chunk, EntryPoint } from '@rsdoctor/core/graph';
-import { Plugin, SDK } from '@rsdoctor/types';
+import { Plugin, SDK } from '@rsdoctor/shared/types';
 
 /**
  * Patch native chunk graph data from Rspack into ChunkGraph instance

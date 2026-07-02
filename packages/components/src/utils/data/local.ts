@@ -1,5 +1,5 @@
 import { Manifest as ManifestShared } from '@rsdoctor/shared/common-browser';
-import { Common, Manifest, SDK } from '@rsdoctor/types';
+import { Common, Manifest, SDK } from '@rsdoctor/shared/types';
 import { get } from '@rsdoctor/shared/collection';
 import { BaseDataLoader } from './base';
 import { postServerAPI } from '../request';

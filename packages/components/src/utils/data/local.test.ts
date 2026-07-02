@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { LocalServerDataLoader } from './local';
 
 class MockWebSocket {

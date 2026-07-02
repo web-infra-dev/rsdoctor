@@ -1,6 +1,6 @@
 import React from 'react';
 import { Space, Table, Tag, Typography } from 'antd';
-import { Client } from '@rsdoctor/types';
+import { Client } from '@rsdoctor/shared/types';
 
 import { BundleDiffTableOverviewData } from './types';
 import { formatSize } from '../../../../utils';

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Linter, Rule, SDK } from '@rsdoctor/types';
+import { Linter, Rule, SDK } from '@rsdoctor/shared/types';
 import { defineRule } from '../../rule';
 import type { Config } from './types';
 

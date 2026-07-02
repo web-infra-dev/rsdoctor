@@ -5,8 +5,8 @@ import {
 import type {
   RsdoctorMultiplePluginOptions,
   RsdoctorRspackPluginOptions,
-} from '@rsdoctor/core/types';
-import { Linter } from '@rsdoctor/types';
+} from '@rsdoctor/core';
+import { Linter } from '@rsdoctor/shared/types';
 import { File } from '@rsdoctor/core/build-utils';
 import { tmpdir } from 'os';
 import path from 'path';

@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import fse from 'fs-extra';
 import { omit } from '@rsdoctor/core/collection';
 import { Loader } from '@rsdoctor/core/common';
-import type { Common, Plugin } from '@rsdoctor/types';
+import type { Common, Plugin } from '@rsdoctor/shared/types';
 import type { Rule } from '../../../types/rules';
 import { readPackageJson } from '../json';
 import type { RuleSetUseItem } from '@rspack/core';

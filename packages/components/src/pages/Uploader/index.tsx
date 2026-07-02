@@ -1,5 +1,5 @@
 import { InboxOutlined } from '@ant-design/icons';
-import { Common } from '@rsdoctor/types';
+import { Common } from '@rsdoctor/shared/types';
 import { message, Spin, Upload, UploadFile } from 'antd';
 import React, { useState } from 'react';
 import { readJSONByFileReader } from '../../utils';

@@ -5,7 +5,7 @@ import { loadConfig } from 'browserslist-load-config';
 import { defineRule } from '../../rule';
 import { Config } from './types';
 
-import { Linter } from '@rsdoctor/types';
+import { Linter } from '@rsdoctor/shared/types';
 export type { Config } from './types';
 
 const title = 'ecma-version-check';

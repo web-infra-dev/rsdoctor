@@ -10,7 +10,7 @@ import {
   setThemeToStorage,
   setViewModeToStorage,
 } from '@rsdoctor/components/utils';
-import type { Manifest } from '@rsdoctor/types';
+import type { Manifest } from '@rsdoctor/shared/types';
 import {
   Button,
   ConfigProvider,

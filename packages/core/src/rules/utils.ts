@@ -1,4 +1,4 @@
-import { Linter } from '@rsdoctor/types';
+import { Linter } from '@rsdoctor/shared/types';
 
 export function toSeverity(
   input: Linter.SeverityInput,

@@ -1,5 +1,5 @@
 import { get } from '@rsdoctor/shared/collection';
-import { Common, SDK } from '@rsdoctor/types';
+import { Common, SDK } from '@rsdoctor/shared/types';
 import { message, Space, TreeNodeProps, UploadFile } from 'antd';
 import { FieldDataNode } from 'rc-tree';
 import {

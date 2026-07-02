@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Empty, Table, Tag } from 'antd';
 import { orderBy } from '@rsdoctor/shared/collection';
 import React, { useMemo } from 'react';

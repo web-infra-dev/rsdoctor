@@ -17,9 +17,6 @@
   "exclude": ["**/node_modules", "**/*/.DS_Store"],
   "references": [
     {
-      "path": "../types/tsconfig.json"
-    },
-    {
       "path": "../shared/tsconfig.json"
     }
   ]

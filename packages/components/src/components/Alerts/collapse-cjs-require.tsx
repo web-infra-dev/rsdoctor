@@ -6,7 +6,7 @@ import utilStyles from './index.module.scss';
 import { beautifyPath } from '../../utils/file';
 import { LabelComponent, IdeIcons } from './collapse-shared';
 
-import type { Rule } from '@rsdoctor/types';
+import type { Rule } from '@rsdoctor/shared/types';
 import type { AlertProps } from '../Alert/types';
 
 const { innerWidth } = window;

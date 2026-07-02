@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { ExportInfo } from './export';
 import { SideEffect } from './sideEffect';
 import { Variable } from './variable';

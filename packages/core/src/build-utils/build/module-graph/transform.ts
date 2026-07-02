@@ -1,6 +1,6 @@
-import { Plugin } from '@rsdoctor/types';
+import { Plugin } from '@rsdoctor/shared/types';
 import { ModuleGraphTrans } from '@rsdoctor/core/graph';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 
 export function getModuleGraphByStats(
   _compilation: Plugin.BaseCompilation,

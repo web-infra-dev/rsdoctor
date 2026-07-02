@@ -3,7 +3,7 @@ import {
   ColumnHeightOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import {
   Button,
   Card,

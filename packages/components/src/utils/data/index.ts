@@ -1,4 +1,4 @@
-import { Constants, Manifest } from '@rsdoctor/types';
+import { Constants, Manifest } from '@rsdoctor/shared/types';
 import { useEffect, useState } from 'react';
 import { LocalServerDataLoader } from './local';
 import { RemoteDataLoader } from './remote';

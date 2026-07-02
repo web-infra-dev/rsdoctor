@@ -12,7 +12,7 @@ import {
 import React, { useEffect } from 'react';
 
 import { InfoCircleOutlined, LogoutOutlined } from '@ant-design/icons';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { BundleDiffContainerProps } from './types';
 import { Size } from '../../../../constants';
 import { DiffCards } from './cards';

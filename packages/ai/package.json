@@ -32,7 +32,7 @@
     "typescript": "catalog:",
     "zod": "^4.4.3",
     "@rsdoctor/core": "workspace:*",
-    "@rsdoctor/types": "workspace:*"
+    "@rsdoctor/shared": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

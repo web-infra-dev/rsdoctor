@@ -1,5 +1,5 @@
 import { CodeOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { type Client, SDK } from '@rsdoctor/types';
+import { type Client, SDK } from '@rsdoctor/shared/types';
 import {
   Card,
   Col,

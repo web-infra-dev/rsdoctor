@@ -4,7 +4,7 @@ import { FileSearchOutlined, SelectOutlined } from '@ant-design/icons';
 import { KeywordInput } from '../Form/keyword';
 import { Size } from 'src/constants';
 import { ServerAPIProvider } from '../Manifest';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import './index.scss';
 
 interface LoaderNamesSelectProps {

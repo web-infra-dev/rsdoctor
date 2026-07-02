@@ -6,7 +6,7 @@ import { useI18n, useTheme } from '../../utils';
 import { OverlayAlertsWithButton } from '../Alerts';
 import { BuilderSelect } from './builder-select';
 import { Menus } from './menus';
-import { Client } from '@rsdoctor/types';
+import { Client } from '@rsdoctor/shared/types';
 import { useNavigate } from 'react-router-dom';
 import styles from './header.module.scss';
 import logoDark from './rsdoctor-title-logo-dark.png';

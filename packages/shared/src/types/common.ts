@@ -25,8 +25,8 @@ export type Constructor<T> = T extends abstract new (
 ) => infer R1
   ? new (...args: P1) => R1
   : T extends new (...args: infer P2) => infer R2
-  ? new (...args: P2) => R2
-  : never;
+    ? new (...args: P2) => R2
+    : never;
 
 export type Function<P extends any[] = any[], R = any> = (...args: P) => R;
 
@@ -48,11 +48,10 @@ export type UnionToIntersection<U> = (
   ? I
   : never;
 
-export type LastOf<T> = UnionToIntersection<
-  T extends any ? () => T : never
-> extends () => infer R
-  ? R
-  : never;
+export type LastOf<T> =
+  UnionToIntersection<T extends any ? () => T : never> extends () => infer R
+    ? R
+    : never;
 
 export type Push<T extends any[], V> = [...T, V];
 

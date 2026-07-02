@@ -1,4 +1,4 @@
-import { Linter as LinterType, SDK } from '@rsdoctor/types';
+import { Linter as LinterType, SDK } from '@rsdoctor/shared/types';
 import { Rule } from './rule';
 import { rules as allRules } from './rules';
 import { toSeverity } from './utils';

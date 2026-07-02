@@ -1,4 +1,4 @@
-import { Plugin } from '@rsdoctor/types';
+import { Plugin } from '@rsdoctor/shared/types';
 import { Chunks } from '@rsdoctor/core/graph';
 
 export function chunkTransform(

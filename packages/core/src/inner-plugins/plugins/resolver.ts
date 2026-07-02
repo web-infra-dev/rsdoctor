@@ -1,4 +1,4 @@
-import { Manifest, Plugin, SDK } from '@rsdoctor/types';
+import { Manifest, Plugin, SDK } from '@rsdoctor/shared/types';
 import { Time } from '@rsdoctor/core/common';
 import { InternalBasePlugin } from './base';
 

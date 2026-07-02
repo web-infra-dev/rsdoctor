@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { mergeIntervals } from './algorithm';
 
 export function isResolveSuccessData(

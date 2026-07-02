@@ -9,7 +9,7 @@ import { ViewMode } from '../../constants';
 
 import { AlertProps } from '../Alert/types';
 
-import type { Rule } from '@rsdoctor/types';
+import type { Rule } from '@rsdoctor/shared/types';
 
 import styles from './bundle-alert.module.scss';
 import utilStyles from './index.module.scss';

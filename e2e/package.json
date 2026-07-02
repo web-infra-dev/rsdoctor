@@ -16,7 +16,7 @@
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/rspack-plugin": "workspace:*",
-    "@rsdoctor/types": "workspace:*",
+    "@rsdoctor/shared": "workspace:*",
     "@rspack/core": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

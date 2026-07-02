@@ -4,14 +4,11 @@ import path from 'path';
 import { logger } from '@rsdoctor/core/logger';
 import { Loader } from '@rsdoctor/core/common';
 import { Time } from '@rsdoctor/core/common';
-import { SDK, Plugin } from '@rsdoctor/types';
+import { SDK, Plugin } from '@rsdoctor/shared/types';
 import { DevToolError } from '@rsdoctor/core/error';
 import { getSDK } from './sdk';
 import { checkCirclePath } from './circleDetect';
-import {
-  ProxyLoaderInternalOptions,
-  ProxyLoaderOptions,
-} from '@rsdoctor/core/types';
+import { ProxyLoaderInternalOptions, ProxyLoaderOptions } from '../../types';
 import { Utils as BuildUtils } from '@/build-utils/build';
 import { isESMLoader, parseQuery } from '@/build-utils/build/utils';
 import { Fetch, Lodash } from '@rsdoctor/core/common';

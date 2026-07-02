@@ -51,8 +51,7 @@ export type ReportDetailData<T extends BaseRuleStoreData> = Omit<
 };
 
 export interface Diagnostic
-  extends Omit<ReportData, 'severity'>,
-    Pick<RuleMessage, 'category' | 'code'> {
+  extends Omit<ReportData, 'severity'>, Pick<RuleMessage, 'category' | 'code'> {
   severity: Severity;
   title: string;
   detail?: RuleStoreDataItem;

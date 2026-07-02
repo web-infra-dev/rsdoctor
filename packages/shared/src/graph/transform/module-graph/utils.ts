@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 
 function isStyleExt(path: string) {
   return /\.(c|le|sa|sc)ss(\?.*)?$/.test(path);

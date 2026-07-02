@@ -1,4 +1,4 @@
-import { Rule, Err, Plugin } from '@rsdoctor/types';
+import { Rule, Err, Plugin } from '@rsdoctor/shared/types';
 import { InternalBasePlugin } from './base';
 import { DevToolError } from '@rsdoctor/core/error';
 import { time, timeEnd } from '@rsdoctor/core/logger';

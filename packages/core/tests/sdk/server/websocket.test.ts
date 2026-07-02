@@ -1,5 +1,5 @@
 import { describe, expect, it, rs } from '@rstest/core';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Socket } from '../../../src/sdk/server/socket';
 
 function createMockClient() {

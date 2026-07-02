@@ -21,7 +21,7 @@ import {
 } from '../../utils';
 import { Progress } from './progress';
 import { ConfigContext } from '../../config';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { ServerAPIProvider } from '../Manifest';
 import { ProjectInfoContext } from './project-info-context';
 import styles from './index.module.scss';

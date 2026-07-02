@@ -1,4 +1,4 @@
-import { Manifest } from '@rsdoctor/types';
+import { Manifest } from '@rsdoctor/shared/types';
 import { decompressText } from './algorithm';
 import { isRemoteUrl } from './url';
 

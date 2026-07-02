@@ -1,4 +1,4 @@
-import { Common, SDK, Thirdparty, Client } from '@rsdoctor/types';
+import { Common, SDK, Thirdparty, Client } from '@rsdoctor/shared/types';
 import { Server } from '@rsdoctor/core/build-utils';
 import serve from 'sirv';
 import { Bundle, GlobalConfig } from '@rsdoctor/core/common';

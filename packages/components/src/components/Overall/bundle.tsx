@@ -19,7 +19,7 @@ import listStyles from './list.module.scss';
 import cardStyles from './card.module.scss';
 import { DataSummary } from './DataSummary';
 
-import { Client, SDK } from '@rsdoctor/types';
+import { Client, SDK } from '@rsdoctor/shared/types';
 import type { TreeDataNode } from 'antd';
 
 import styles from './bundle.module.scss';

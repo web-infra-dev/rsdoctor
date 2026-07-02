@@ -4,7 +4,7 @@ import {
   Module,
   parseLocation,
 } from '@rsdoctor/core/graph';
-import { Plugin, SDK } from '@rsdoctor/types';
+import { Plugin, SDK } from '@rsdoctor/shared/types';
 
 /**
  * Create dependency kind from dependency type string

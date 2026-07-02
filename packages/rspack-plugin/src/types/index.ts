@@ -1,4 +1,4 @@
-import type { Plugin } from '@rsdoctor/types';
+import type { Plugin } from '@rsdoctor/shared/types';
 import type { RspackPluginInstance } from '@rspack/core';
 
 export interface RsdoctorRspackPluginOptions {

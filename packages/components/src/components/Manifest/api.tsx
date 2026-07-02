@@ -1,4 +1,4 @@
-import { Constants, Manifest, SDK } from '@rsdoctor/types';
+import { Constants, Manifest, SDK } from '@rsdoctor/shared/types';
 import { Skeleton, Spin } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { isEqual } from '@rsdoctor/shared/collection';
@@ -7,7 +7,7 @@ import { ComponentState } from '../../constants';
 import { FailedStatus } from '../Status';
 import { BaseDataLoader } from '../../utils/data/base';
 import { Lodash } from '@rsdoctor/shared/common-browser';
-import { Client } from '@rsdoctor/types';
+import { Client } from '@rsdoctor/shared/types';
 
 /**
  * Checks if the current route is uploader route

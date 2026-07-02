@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 
 export interface ProjectInfoContextValue {
   project: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetProjectInfo> | null;

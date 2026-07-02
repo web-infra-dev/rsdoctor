@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@rstest/core';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Router } from '../../../../src/sdk/server/router';
 
 // make sure the decorators work.

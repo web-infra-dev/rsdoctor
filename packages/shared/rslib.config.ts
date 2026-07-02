@@ -1,13 +1,7 @@
 import { defineConfig } from '@rslib/core';
 import { dualPackageBundleless } from '../../scripts/rslib.base.config';
 
-const externals = [
-  '@rsdoctor/types',
-  'buffer',
-  'es-toolkit',
-  'path-browserify',
-  'source-map',
-];
+const externals = ['buffer', 'es-toolkit', 'path-browserify', 'source-map'];
 
 export default defineConfig({
   ...dualPackageBundleless,

@@ -3,9 +3,9 @@ import type {
   Compilation as RspackCompilation,
   RsdoctorPluginHooks,
 } from '@rspack/core';
-import { Linter, Plugin } from '@rsdoctor/types';
+import { Linter, Plugin } from '@rsdoctor/shared/types';
 import type { experiments } from '@rspack/core';
-import { RsdoctorPluginInstance } from '@rsdoctor/core/types';
+import type { RsdoctorPluginInstance } from '../../types';
 import {
   Chunks as ChunksBuildUtils,
   ModuleGraph as ModuleGraphBuildUtils,

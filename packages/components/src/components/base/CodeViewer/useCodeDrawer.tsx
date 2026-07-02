@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Drawer, Empty } from 'antd';
 import { useState } from 'react';
 import { CodeViewer } from '.';

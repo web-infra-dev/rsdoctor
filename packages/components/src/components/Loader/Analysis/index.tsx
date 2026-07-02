@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { ConfigProvider } from 'antd';
 import React, { useState } from 'react';
 import { ConfigContext } from 'src/config';

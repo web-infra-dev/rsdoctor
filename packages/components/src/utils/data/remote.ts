@@ -1,4 +1,4 @@
-import { Manifest, SDK } from '@rsdoctor/types';
+import { Manifest, SDK } from '@rsdoctor/shared/types';
 import { Manifest as ManifestShared } from '@rsdoctor/shared/common-browser';
 import { get } from '@rsdoctor/shared/collection';
 import { BaseDataLoader } from './base';

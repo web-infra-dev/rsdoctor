@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Divider, Space } from 'antd';
 import React from 'react';
 import { TextDrawer } from '../TextDrawer';

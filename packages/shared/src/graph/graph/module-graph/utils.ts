@@ -1,4 +1,4 @@
-import type { SDK } from '@rsdoctor/types';
+import type { SDK } from '@rsdoctor/shared/types';
 import { isNil, isUndefined, last } from 'es-toolkit/compat';
 
 export function isSamePosition(

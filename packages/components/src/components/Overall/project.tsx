@@ -17,7 +17,7 @@ import listStyles from './list.module.scss';
 import cardStyles from './card.module.scss';
 import projectStyles from './project.module.scss';
 
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 
 export const ProjectOverall: React.FC<{
   configs: SDK.ConfigData;

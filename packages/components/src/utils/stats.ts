@@ -1,4 +1,4 @@
-import { Common, Manifest, Plugin, SDK } from '@rsdoctor/types';
+import { Common, Manifest, Plugin, SDK } from '@rsdoctor/shared/types';
 import { PackageGraph } from '@rsdoctor/shared/graph';
 import { Chunks, ModuleGraphTrans } from '@rsdoctor/shared/graph';
 import { isArray } from '@rsdoctor/shared/collection';

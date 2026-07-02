@@ -1,6 +1,6 @@
 import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import Editor, { OnMount } from '@monaco-editor/react';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Card, Space, Tooltip, Typography } from 'antd';
 import type { editor, Range as RangeClass } from 'monaco-editor';
 import path from 'path-browserify';

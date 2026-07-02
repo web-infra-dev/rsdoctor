@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '@rsdoctor/shared/types';
 import { Server } from '@rsdoctor/core/build-utils';
 import { RsdoctorServer } from '.';
 

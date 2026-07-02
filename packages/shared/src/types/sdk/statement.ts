@@ -183,8 +183,10 @@ export interface StatementInstance {
 }
 
 /** statement data */
-export interface StatementData
-  extends Omit<NonFunctionProperties<StatementInstance>, 'module'> {
+export interface StatementData extends Omit<
+  NonFunctionProperties<StatementInstance>,
+  'module'
+> {
   /** Module number where the statement is located */
   module: number;
 }

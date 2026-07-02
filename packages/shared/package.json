@@ -53,6 +53,16 @@
         "types": "./dist/graph.d.cts",
         "default": "./dist/graph.cjs"
       }
+    },
+    "./types": {
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/types/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.cts",
+        "default": "./dist/types/index.cjs"
+      }
     }
   },
   "typesVersions": {
@@ -68,6 +78,9 @@
       ],
       "graph": [
         "./dist/graph.d.ts"
+      ],
+      "types": [
+        "./dist/types/index.d.ts"
       ]
     }
   },
@@ -76,18 +89,29 @@
     "start": "rslib build -w"
   },
   "dependencies": {
-    "@rsdoctor/types": "workspace:*",
+    "@types/connect": "catalog:",
+    "@types/estree": "catalog:",
+    "@types/tapable": "catalog:",
     "buffer": "5.7.1",
     "es-toolkit": "catalog:",
     "path-browserify": "catalog:",
     "source-map": "catalog:"
   },
   "devDependencies": {
-    "@types/estree": "catalog:",
     "@types/node": "catalog:",
     "@types/path-browserify": "catalog:",
+    "@types/react": "catalog:",
+    "@rspack/core": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "@rspack/core": "*"
+  },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",
