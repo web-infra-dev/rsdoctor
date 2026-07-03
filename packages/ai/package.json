@@ -27,7 +27,7 @@
     "@modelcontextprotocol/sdk": "1.29.0",
     "@rstest/core": "catalog:",
     "@types/node": "catalog:",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.6.1",
     "prebundle": "catalog:",
     "typescript": "catalog:",
     "zod": "^4.4.3",
