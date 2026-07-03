@@ -107,10 +107,13 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
 
   const defaultActiveKey = tabData[0]?.key ?? 'E1001';
   const [activeKey, setActiveKey] = useState(defaultActiveKey);
+  const resolvedActiveKey = tabData.some((tab) => tab.key === activeKey)
+    ? activeKey
+    : defaultActiveKey;
 
   const tabItems = tabData.map((td) => {
     const tagStyle =
-      activeKey === td.key
+      resolvedActiveKey === td.key
         ? ({
             border: '1px solid #91D5FF',
             backgroundColor: '#E6F7FF',
@@ -118,7 +121,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
         : {};
 
     const tagTextStyle =
-      activeKey === td.key
+      resolvedActiveKey === td.key
         ? {
             color: '#1890FF',
           }
@@ -198,7 +201,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
         );
         break;
       case 'CUSTOM_RULES':
-        children = <CommonList data={td.data} />;
+        children = <CommonList data={td.data} showCode />;
         break;
       default:
         children = null;
@@ -263,7 +266,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
             onChange={setActiveKey}
             tabBarGutter={10}
             type="card"
-            defaultActiveKey={defaultActiveKey}
+            activeKey={resolvedActiveKey}
             items={tabItems}
           />
         )}
