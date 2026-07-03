@@ -663,9 +663,22 @@ const AssetTreemapWithFilterInner: React.FC<{
     return assetNames.filter(isJavaScriptAsset);
   }, [assetNames, showOnlyJavaScriptAssets]);
 
+  const visibleAssetNamesKey = useMemo(
+    () => visibleAssetNames.join('\0'),
+    [visibleAssetNames],
+  );
+  const previousVisibleAssetNamesKeyRef = React.useRef<string | undefined>(
+    undefined,
+  );
+
   useEffect(() => {
+    if (previousVisibleAssetNamesKeyRef.current === visibleAssetNamesKey) {
+      return;
+    }
+
+    previousVisibleAssetNamesKeyRef.current = visibleAssetNamesKey;
     setCheckedAssets(visibleAssetNames);
-  }, [visibleAssetNames]);
+  }, [visibleAssetNames, visibleAssetNamesKey]);
 
   const handleChartClick = useCallback(
     (params: ECElementEvent) => {
