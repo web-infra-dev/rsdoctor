@@ -195,8 +195,8 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
       '@lynx-js/react':
-        specifier: ^0.121.2
-        version: 0.121.2(@types/react@19.2.17)
+        specifier: ^0.122.0
+        version: 0.122.0(@types/react@19.2.17)
       '@lynx-js/rspeedy':
         specifier: ^0.15.0
         version: 0.15.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(core-js@3.49.0)(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
@@ -2288,8 +2288,8 @@ packages:
   '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c':
     resolution: {integrity: sha512-h2pRrt5oLK9LT1NkjyprtzJij/AdZGvv3CN6B5edL4chixqvITbxoCSdYy667Hl6+uKOBuxmCNZoDddgRfcLnw==}
 
-  '@lynx-js/react@0.121.2':
-    resolution: {integrity: sha512-Ruf5d2P0v1mXiZXbtxTOoR06Frfrs031Rp4bebnf1ZNW12PuXvnGa6n8gFi+ioJ4c1v9SUSpU40Fl/97TMgSRA==}
+  '@lynx-js/react@0.122.0':
+    resolution: {integrity: sha512-es4YNzhdBAa0ja8rpe9bC3MtA8WAvQ+vx4YL09dyRxL9A9fZ2I3RO2eN7GqholNSKZJ3ptsw6ZZ/RD3A7mGvsw==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18
@@ -9217,7 +9217,7 @@ snapshots:
 
   '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c': {}
 
-  '@lynx-js/react@0.121.2(@types/react@19.2.17)':
+  '@lynx-js/react@0.122.0(@types/react@19.2.17)':
     dependencies:
       '@types/react': 19.2.17
       preact: '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c'
