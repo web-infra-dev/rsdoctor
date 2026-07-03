@@ -47,7 +47,7 @@
     "heading-case": "^1.1.2",
     "husky": "^9.1.7",
     "nano-staged": "^1.0.2",
-    "nx": "^22.7.5",
+    "nx": "^23.0.1",
     "prettier": "^3.9.4",
     "rsbuild-plugin-publint": "^0.3.4"
   },
