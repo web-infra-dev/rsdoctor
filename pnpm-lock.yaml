@@ -199,7 +199,7 @@ importers:
         version: 0.122.0(@types/react@19.2.17)
       '@lynx-js/rspeedy':
         specifier: ^0.15.1
-        version: 0.15.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(core-js@3.49.0)(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
+        version: 0.15.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(core-js@3.49.0)(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@playwright/test':
         specifier: 1.55.1
         version: 1.55.1
@@ -523,9 +523,18 @@ importers:
 
   packages/client:
     devDependencies:
+      '@ant-design/icons':
+        specifier: 6.3.2
+        version: 6.3.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@monaco-editor/react':
+        specifier: 4.7.0
+        version: 4.7.0(monaco-editor@0.49.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@rsbuild/core':
         specifier: 'catalog:'
         version: 2.1.4(core-js@3.49.0)
+      '@rsbuild/plugin-check-syntax':
+        specifier: 'catalog:'
+        version: 1.6.1(@rsbuild/core@2.1.4(core-js@3.49.0))
       '@rsbuild/plugin-node-polyfill':
         specifier: 'catalog:'
         version: 1.4.6(@rsbuild/core@2.1.4(core-js@3.49.0))
@@ -535,63 +544,33 @@ importers:
       '@rsbuild/plugin-sass':
         specifier: 'catalog:'
         version: 1.5.3(@rsbuild/core@2.1.4(core-js@3.49.0))
+      '@rsbuild/plugin-svgr':
+        specifier: 'catalog:'
+        version: 2.0.5(@rsbuild/core@2.1.4(core-js@3.49.0))(@rspack/core@2.1.2(@swc/helpers@0.5.23))(typescript@6.0.3)
       '@rsbuild/plugin-type-check':
         specifier: 'catalog:'
         version: 1.5.0(@rsbuild/core@2.1.4(core-js@3.49.0))(@rspack/core@2.1.2(@swc/helpers@0.5.23))(tslib@2.8.1)(typescript@6.0.3)
-      '@rsdoctor/components':
-        specifier: workspace:*
-        version: link:../components
       '@rsdoctor/shared':
         specifier: workspace:*
         version: link:../shared
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.3
+      '@types/path-browserify':
+        specifier: 'catalog:'
+        version: 1.0.3
       '@types/react':
         specifier: 'catalog:'
         version: 19.2.17
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.17)
-      antd:
-        specifier: 'catalog:'
-        version: 5.19.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      normalize.css:
-        specifier: 8.0.1
-        version: 8.0.1
-      react:
-        specifier: 'catalog:'
-        version: 19.2.7
-      react-dom:
-        specifier: 'catalog:'
-        version: 19.2.7(react@19.2.7)
-      react-error-boundary:
-        specifier: 'catalog:'
-        version: 4.1.2(react@19.2.7)
-      react-router-dom:
-        specifier: 'catalog:'
-        version: 6.30.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      sirv:
-        specifier: 3.0.2
-        version: 3.0.2
-      source-map-loader:
-        specifier: ^5.0.0
-        version: 5.0.0(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
-      typescript:
-        specifier: 'catalog:'
-        version: 6.0.3
-
-  packages/components:
-    dependencies:
-      '@ant-design/icons':
-        specifier: 6.3.2
-        version: 6.3.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@monaco-editor/react':
-        specifier: 4.7.0
-        version: 4.7.0(monaco-editor@0.49.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@rsdoctor/shared':
-        specifier: workspace:*
-        version: link:../shared
+      '@types/react-highlight-words':
+        specifier: ^0.20.1
+        version: 0.20.1
+      '@types/url-parse':
+        specifier: 1.4.11
+        version: 1.4.11
       ansi-to-react:
         specifier: 6.2.6
         version: 6.2.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -605,7 +584,7 @@ importers:
         specifier: 'catalog:'
         version: 1.11.21
       echarts:
-        specifier: ^6.1.0
+        specifier: ^6.0.0
         version: 6.1.0
       echarts-for-react:
         specifier: ^3.0.6
@@ -616,6 +595,9 @@ importers:
       monaco-editor:
         specifier: 0.49.0
         version: 0.49.0
+      normalize.css:
+        specifier: 8.0.1
+        version: 8.0.1
       path-browserify:
         specifier: 'catalog:'
         version: 1.0.1
@@ -625,6 +607,12 @@ importers:
       rc-tree:
         specifier: 5.7.2
         version: 5.7.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      react:
+        specifier: 'catalog:'
+        version: 19.2.7
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.2.7(react@19.2.7)
       react-error-boundary:
         specifier: 'catalog:'
         version: 4.1.2(react@19.2.7)
@@ -643,49 +631,21 @@ importers:
       react-markdown:
         specifier: 'catalog:'
         version: 10.1.0(@types/react@19.2.17)(react@19.2.7)
-      url-parse:
-        specifier: 1.5.10
-        version: 1.5.10
-    devDependencies:
-      '@rsbuild/plugin-check-syntax':
-        specifier: 'catalog:'
-        version: 1.6.1(@rsbuild/core@2.1.4(core-js@3.49.0))
-      '@rsbuild/plugin-react':
-        specifier: 'catalog:'
-        version: 2.1.0(@rsbuild/core@2.1.4(core-js@3.49.0))(@rspack/core@2.1.2(@swc/helpers@0.5.23))
-      '@rsbuild/plugin-sass':
-        specifier: 'catalog:'
-        version: 1.5.3(@rsbuild/core@2.1.4(core-js@3.49.0))
-      '@rsbuild/plugin-svgr':
-        specifier: 'catalog:'
-        version: 2.0.5(@rsbuild/core@2.1.4(core-js@3.49.0))(@rspack/core@2.1.2(@swc/helpers@0.5.23))(typescript@6.0.3)
-      '@types/node':
-        specifier: 'catalog:'
-        version: 24.12.3
-      '@types/path-browserify':
-        specifier: 'catalog:'
-        version: 1.0.3
-      '@types/react':
-        specifier: 'catalog:'
-        version: 19.2.17
-      '@types/react-highlight-words':
-        specifier: ^0.20.1
-        version: 0.20.1
-      '@types/url-parse':
-        specifier: 1.4.11
-        version: 1.4.11
-      react:
-        specifier: 'catalog:'
-        version: 19.2.7
-      react-dom:
-        specifier: 'catalog:'
-        version: 19.2.7(react@19.2.7)
       react-router-dom:
         specifier: 'catalog:'
         version: 6.30.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      sirv:
+        specifier: 3.0.2
+        version: 3.0.2
+      source-map-loader:
+        specifier: ^5.0.0
+        version: 5.0.0(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
+      url-parse:
+        specifier: 1.5.10
+        version: 1.5.10
 
   packages/core:
     dependencies:
@@ -1109,9 +1069,6 @@ packages:
   '@ant-design/fast-color@3.0.1':
     resolution: {integrity: sha512-esKJegpW4nckh0o6kV3Tkb7NPIZYbPnnFxmQDUmL08ukXZAvV85TZBr70eGuke/CIArLaP6aw8lt9KILjnWuOw==}
     engines: {node: '>=8.x'}
-
-  '@ant-design/icons-svg@4.4.2':
-    resolution: {integrity: sha512-vHbT+zJEVzllwP+CM+ul7reTEfBR0vgxFe7+lREAsAA7YGsYpboiq2sQNeQeRvh09GfQgs/GyFEvZpJ9cLXpXA==}
 
   '@ant-design/icons-svg@4.5.0':
     resolution: {integrity: sha512-1BTUFyKPTBZ53MuTP8s0k5SFEXL7o3VHEOwLgzaoWKwnBeqIcqUtVshc4SKzhI6uACfqhJqBwBUE9FsWR3uULA==}
@@ -4371,9 +4328,6 @@ packages:
 
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
-
-  dayjs@1.11.20:
-    resolution: {integrity: sha512-YbwwqR/uYpeoP4pu043q+LTDLFBLApUP6VxRihdfNTqu4ubqMlGDLd6ErXhEgsyvY0K6nCs7nggYumAN+9uEuQ==}
 
   dayjs@1.11.21:
     resolution: {integrity: sha512-98IT+HOahAisibz/yjKbzuOBwYcjJ7BCLPzARyHiyEBmRz4fatF+KPJszEHXsGYjUG234aH/cOjW1wwTbKUZlA==}
@@ -8023,14 +7977,12 @@ snapshots:
 
   '@ant-design/fast-color@3.0.1': {}
 
-  '@ant-design/icons-svg@4.4.2': {}
-
   '@ant-design/icons-svg@4.5.0': {}
 
   '@ant-design/icons@5.6.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@ant-design/colors': 7.2.0
-      '@ant-design/icons-svg': 4.4.2
+      '@ant-design/icons-svg': 4.5.0
       '@babel/runtime': 7.28.4
       classnames: 2.5.1
       rc-util: 5.44.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -9440,7 +9392,7 @@ snapshots:
       '@types/react': 19.2.17
       preact: '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c'
 
-  '@lynx-js/rspeedy@0.15.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(core-js@3.49.0)(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
+  '@lynx-js/rspeedy@0.15.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(core-js@3.49.0)(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
     dependencies:
       '@lynx-js/cache-events-webpack-plugin': 0.1.0
       '@lynx-js/chunk-loading-webpack-plugin': 0.4.0
@@ -9450,7 +9402,7 @@ snapshots:
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 2.0.11(core-js@3.49.0)
       '@rsbuild/plugin-css-minimizer': 2.0.0(@rsbuild/core@2.0.11(core-js@3.49.0))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
-      '@rsdoctor/rspack-plugin': 1.5.9(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
+      '@rsdoctor/rspack-plugin': 1.5.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
     optionalDependencies:
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -10064,14 +10016,14 @@ snapshots:
 
   '@rsdoctor/client@1.5.9': {}
 
-  '@rsdoctor/core@1.5.9(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
+  '@rsdoctor/core@1.5.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.6.1(@rsbuild/core@2.0.11(core-js@3.49.0))
       '@rsdoctor/graph': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/sdk': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/types': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/utils': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
-      '@rspack/resolver': 0.2.8(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
+      '@rspack/resolver': 0.2.8(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
       browserslist-load-config: 1.0.3
       es-toolkit: 1.49.0
       filesize: 10.1.6
@@ -10099,9 +10051,9 @@ snapshots:
       - '@rspack/core'
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.5.9(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
+  '@rsdoctor/rspack-plugin@1.5.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
     dependencies:
-      '@rsdoctor/core': 1.5.9(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
+      '@rsdoctor/core': 1.5.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/graph': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/sdk': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/types': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
@@ -10377,14 +10329,6 @@ snapshots:
   '@rspack/resolver-binding-linux-x64-musl@0.2.8':
     optional: true
 
-  '@rspack/resolver-binding-wasm32-wasi@0.2.8(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
-    dependencies:
-      '@napi-rs/wasm-runtime': 1.1.4(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
-    optional: true
-
   '@rspack/resolver-binding-wasm32-wasi@0.2.8(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     dependencies:
       '@napi-rs/wasm-runtime': 1.1.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
@@ -10401,22 +10345,6 @@ snapshots:
 
   '@rspack/resolver-binding-win32-x64-msvc@0.2.8':
     optional: true
-
-  '@rspack/resolver@0.2.8(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
-    optionalDependencies:
-      '@rspack/resolver-binding-darwin-arm64': 0.2.8
-      '@rspack/resolver-binding-darwin-x64': 0.2.8
-      '@rspack/resolver-binding-linux-arm64-gnu': 0.2.8
-      '@rspack/resolver-binding-linux-arm64-musl': 0.2.8
-      '@rspack/resolver-binding-linux-x64-gnu': 0.2.8
-      '@rspack/resolver-binding-linux-x64-musl': 0.2.8
-      '@rspack/resolver-binding-wasm32-wasi': 0.2.8(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
-      '@rspack/resolver-binding-win32-arm64-msvc': 0.2.8
-      '@rspack/resolver-binding-win32-ia32-msvc': 0.2.8
-      '@rspack/resolver-binding-win32-x64-msvc': 0.2.8
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
 
   '@rspack/resolver@0.2.8(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     optionalDependencies:
@@ -11202,7 +11130,7 @@ snapshots:
       '@rc-component/trigger': 2.2.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       classnames: 2.5.1
       copy-to-clipboard: 3.3.3
-      dayjs: 1.11.20
+      dayjs: 1.11.21
       rc-cascader: 3.27.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       rc-checkbox: 3.3.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       rc-collapse: 3.7.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -11218,7 +11146,7 @@ snapshots:
       rc-motion: 2.9.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       rc-notification: 5.6.2(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       rc-pagination: 4.2.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      rc-picker: 4.6.15(dayjs@1.11.20)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      rc-picker: 4.6.15(dayjs@1.11.21)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       rc-progress: 4.0.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       rc-rate: 2.13.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       rc-resize-observer: 1.4.3(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -11856,8 +11784,6 @@ snapshots:
   csstype@3.2.3: {}
 
   dayjs@1.11.13: {}
-
-  dayjs@1.11.20: {}
 
   dayjs@1.11.21: {}
 
@@ -14415,7 +14341,7 @@ snapshots:
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
 
-  rc-picker@4.6.15(dayjs@1.11.20)(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+  rc-picker@4.6.15(dayjs@1.11.21)(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       '@babel/runtime': 7.28.4
       '@rc-component/trigger': 2.2.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -14426,7 +14352,7 @@ snapshots:
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
     optionalDependencies:
-      dayjs: 1.11.20
+      dayjs: 1.11.21
 
   rc-progress@4.0.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:

@@ -11,7 +11,7 @@ import {
   TreeShaking,
   BundleDiff,
   Uploader,
-} from '@rsdoctor/components/pages';
+} from './pages';
 
 export default function Router(): React.ReactElement {
   const routes = [

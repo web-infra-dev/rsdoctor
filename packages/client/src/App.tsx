@@ -1,8 +1,8 @@
 import { Alert } from 'antd';
 import React from 'react';
-import { getDemoUrl, useDetectIfCloudIdeEnv } from '@rsdoctor/components/utils';
 import Router from './router';
 import BaseApp from './components/BaseApp';
+import { getDemoUrl, useDetectIfCloudIdeEnv } from './utils';
 import { Typography } from 'antd';
 
 const App: React.FC = (): React.ReactElement => {

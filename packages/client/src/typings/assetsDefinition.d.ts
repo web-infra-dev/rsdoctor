@@ -8,9 +8,9 @@ declare module '*.ttf';
 declare module '*.woff';
 declare module '*.woff2';
 declare module '*.scss';
+declare module '*.sass';
 declare module '*.less';
 declare module '*.css';
 declare module '*?__inline';
 declare module '*?__inline=true';
 declare module '*?__inline=false';
-

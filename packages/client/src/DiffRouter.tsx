@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { BundleDiff } from '@rsdoctor/components/pages';
+import { BundleDiff } from './pages';
 
 export function DiffRouter(): React.ReactElement {
   return (

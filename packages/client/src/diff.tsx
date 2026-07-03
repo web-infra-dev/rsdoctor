@@ -1,4 +1,4 @@
-import '@rsdoctor/components/i18n';
+import './utils/i18n';
 import ReactDOM from 'react-dom/client';
 import DiffApp from './DiffApp';
 import './common/styles/base.scss';

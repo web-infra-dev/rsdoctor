@@ -3,6 +3,7 @@ import { defineConfig } from '@rsbuild/core';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import fs from 'fs';
 import path from 'path';
@@ -32,6 +33,11 @@ export default defineConfig(({ env }) => {
       pluginReact(),
       pluginNodePolyfill(),
       pluginSass(),
+      pluginSvgr({
+        svgrOptions: {
+          exportType: 'default',
+        },
+      }),
       pluginTypeCheck({
         enable: IS_PRODUCTION,
         tsCheckerOptions: {
@@ -46,6 +52,9 @@ export default defineConfig(({ env }) => {
       entry: {
         index: ClientEntry,
         diff: './src/diff.tsx',
+      },
+      alias: {
+        src: path.resolve(__dirname, 'src'),
       },
       define: {
         'process.env.NODE_DEBUG': JSON.stringify(false),
@@ -62,6 +71,7 @@ export default defineConfig(({ env }) => {
         '@rsbuild/core',
         '@rsbuild/plugin-node-polyfill',
         '@rsbuild/plugin-react',
+        '@rsbuild/plugin-svgr',
       ],
       distPath: {
         root: path.basename(DistPath),

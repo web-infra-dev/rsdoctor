@@ -29,7 +29,7 @@ npx nx build @rsdoctor/core # build a single package (respects dependsOn)
 # ── focused dev ──────────────────────────────────────────────
 pnpm --filter @rsdoctor/core run build     # build one package
 pnpm --filter @rsdoctor/core run test      # test one package
-pnpm -C packages/components test           # alternative: use directory path
+pnpm -C packages/client build              # alternative: use directory path
 
 # ── changeset / release ──────────────────────────────────────
 pnpm changeset              # create a changeset for your changes
@@ -49,8 +49,7 @@ packages/
   webpack-plugin/     # Webpack 5 plugin (peerDep: webpack 5.x)
   cli/                # `rsdoctor` CLI binary
   ai/                 # `@rsdoctor/mcp-server` — MCP server + AI analysis (published as @rsdoctor/mcp-server)
-  client/             # web client (Rsbuild SPA, serves analysis report)
-  components/         # shared React UI components (antd + echarts)
+  client/             # web client (Rsbuild SPA, serves analysis report and report UI)
   document/           # documentation site (Rspress)
   proto/              # protocol buffer / schema definitions
   test-helper/        # test utilities shared across packages
@@ -67,7 +66,7 @@ examples/               # runnable example projects (rspack / rsbuild / webpack 
 
 ```text
 types → utils → graph → sdk → core → rspack-plugin / webpack-plugin → cli
-                                  ↘ client ← components
+                                  ↘ client
                                   ↘ ai (mcp-server)
 ```
 

@@ -1,15 +1,3 @@
-import { Constants } from '@rsdoctor/components';
-import {
-  Config,
-  ConfigContext,
-  defaultConfig,
-} from '@rsdoctor/components/config';
-import { Layout } from '@rsdoctor/components/elements';
-import {
-  getLocale,
-  setThemeToStorage,
-  setViewModeToStorage,
-} from '@rsdoctor/components/utils';
 import type { Manifest } from '@rsdoctor/shared/types';
 import {
   Button,
@@ -23,6 +11,10 @@ import {
 import React, { useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HashRouter as BrowserRouter } from 'react-router-dom';
+import * as Constants from '../constants';
+import { Config, ConfigContext, defaultConfig } from '../config';
+import { Layout } from './Layout';
+import { getLocale, setThemeToStorage, setViewModeToStorage } from '../utils';
 
 const { PageState, Theme } = Constants;
 

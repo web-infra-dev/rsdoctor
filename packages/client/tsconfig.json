@@ -7,16 +7,17 @@
     "declarationMap": false,
     "composite": true,
     "outDir": "dist",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "src": ["./src"],
+      "src/*": ["./src/*"]
+    }
   },
   "include": ["src", "config"],
   "exclude": ["**/node_modules"],
   "references": [
     {
       "path": "../shared/tsconfig.json"
-    },
-    {
-      "path": "../components/tsconfig.json"
     }
   ]
 }
