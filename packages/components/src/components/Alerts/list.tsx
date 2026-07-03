@@ -7,8 +7,11 @@ import type { Rule } from '@rsdoctor/types';
 
 import styles from './list.module.scss';
 
-export const CommonList = (props: { data: Array<Rule.RuleStoreDataItem> }) => {
-  const { data } = props;
+export const CommonList = (props: {
+  data: Array<Rule.RuleStoreDataItem>;
+  showCode?: boolean;
+}) => {
+  const { data, showCode } = props;
   return data.map((d) => {
     const { code, link, description } = d;
     const navigate = useRuleIndexNavigate(code, link);
@@ -19,10 +22,13 @@ export const CommonList = (props: { data: Array<Rule.RuleStoreDataItem> }) => {
           background: '#fff',
         }}
         description={
-          <div className={styles.description}>{description || ''}</div>
+          <div className={styles.description}>
+            {showCode ? <div className={styles.code}>{code}</div> : null}
+            <div>{description || ''}</div>
+          </div>
         }
         icon={
-          <Button onClick={() => navigate} type="link">
+          <Button onClick={navigate} type="link">
             more
           </Button>
         }
