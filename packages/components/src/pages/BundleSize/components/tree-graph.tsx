@@ -23,6 +23,7 @@ import { ServerAPIProvider } from '../../../components/Manifest';
 import { Size } from '../../../constants';
 import { createFileStructures, formatSize, useI18n } from '../../../utils';
 import { AssetDetail } from './asset';
+import { createAssetPathMap, resolveAssetFileTitleTarget } from './asset-path';
 import styles from './index.module.scss';
 import './index.sass';
 import { SearchModal } from './search-modal';
@@ -133,11 +134,20 @@ export const TreeGraph = memo(
       });
     }, [summary.all.total.files]);
 
+    const assetsMap = useMemo(() => {
+      return createAssetPathMap(filteredAssets);
+    }, [filteredAssets]);
+
     const assetsStructures = useMemo(() => {
       const res = createFileStructures({
         files: filteredAssets.map((e) => e.path).filter(Boolean),
         fileTitle(file, basename) {
-          const target = filteredAssets.find((e) => e.path === file)!;
+          const target = resolveAssetFileTitleTarget(assetsMap, file, basename);
+
+          if (typeof target === 'string') {
+            return target;
+          }
+
           const { size, initial, path, content } = target;
 
           return (
@@ -173,7 +183,7 @@ export const TreeGraph = memo(
         },
       });
       return res;
-    }, [filteredAssets]);
+    }, [assetsMap, filteredAssets, showCode]);
 
     const onSearch = (value: string) => {
       setAssetName(value);
