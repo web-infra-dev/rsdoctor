@@ -23,12 +23,11 @@ import { ServerAPIProvider } from '../../../components/Manifest';
 import { Size } from '../../../constants';
 import { createFileStructures, formatSize, useI18n } from '../../../utils';
 import { AssetDetail } from './asset';
+import { createAssetPathMap, resolveAssetFileTitleTarget } from './asset-path';
 import styles from './index.module.scss';
 import './index.sass';
 import { SearchModal } from './search-modal';
 const { Option } = Select;
-
-const normalizeAssetPath = (assetPath: string) => assetPath.replace(/\\/g, '/');
 
 export const TreeGraph = memo(
   ({
@@ -136,19 +135,17 @@ export const TreeGraph = memo(
     }, [summary.all.total.files]);
 
     const assetsMap = useMemo(() => {
-      return new Map(
-        filteredAssets.map((asset) => [normalizeAssetPath(asset.path), asset]),
-      );
+      return createAssetPathMap(filteredAssets);
     }, [filteredAssets]);
 
     const assetsStructures = useMemo(() => {
       const res = createFileStructures({
         files: filteredAssets.map((e) => e.path).filter(Boolean),
         fileTitle(file, basename) {
-          const target = assetsMap.get(normalizeAssetPath(file));
+          const target = resolveAssetFileTitleTarget(assetsMap, file, basename);
 
-          if (!target) {
-            return basename;
+          if (typeof target === 'string') {
+            return target;
           }
 
           const { size, initial, path, content } = target;
