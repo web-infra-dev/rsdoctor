@@ -38,7 +38,7 @@
   "dependencies": {
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
-    "ora": "^5.4.1"
+    "ora": "^9.4.1"
   },
   "devDependencies": {
     "@rsdoctor/client": "workspace:*",
