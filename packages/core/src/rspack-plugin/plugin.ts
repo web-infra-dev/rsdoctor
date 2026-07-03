@@ -1,4 +1,4 @@
-import { Loader as BuildUtilLoader } from '@rsdoctor/core/build-utils';
+import { Loader as BuildUtilLoader } from '../build-utils';
 import {
   ensureModulesChunksGraphFn,
   InternalBundlePlugin,
@@ -10,13 +10,15 @@ import {
   InternalSummaryPlugin,
   normalizeRspackUserOptions,
   setSDK,
-} from '@rsdoctor/core/plugins';
+  handleBriefModeReport,
+  processCompilerConfig,
+} from '../inner-plugins';
 import type {
   RsdoctorRspackPluginInstance,
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
-} from '@rsdoctor/core';
-import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '@rsdoctor/core/sdk';
+} from '../types';
+import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '../sdk';
 import {
   Constants,
   Linter,
@@ -27,15 +29,9 @@ import {
 } from '@rsdoctor/shared/types';
 import path from 'path';
 import { pluginTapName, pluginTapPostOptions, pkg } from './constants';
-
-import {
-  handleBriefModeReport,
-  processCompilerConfig,
-} from '@rsdoctor/core/plugins';
-
-import { ModuleGraph } from '@rsdoctor/core/graph';
-import { Loader } from '@rsdoctor/core/common';
-import { logger, time, timeEnd } from '@rsdoctor/core/logger';
+import { ModuleGraph } from '../graph';
+import { Loader } from '../common';
+import { logger, time, timeEnd } from '../logger';
 
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;

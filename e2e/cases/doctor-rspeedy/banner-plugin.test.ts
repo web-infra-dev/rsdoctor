@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { getSDK } from '@rsdoctor/core/plugins';
 import path from 'path';
 import { createStubRspeedy } from './rspeedy';
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
 
 test.afterEach(async ({ page }) => {
   await page.close();
