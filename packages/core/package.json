@@ -235,7 +235,7 @@
     "rslog": "^2.1.2",
     "semver": "^7.8.5",
     "source-map": "catalog:",
-    "strip-ansi": "^6.0.1",
+    "strip-ansi": "^7.2.0",
     "@rsdoctor/client": "workspace:*",
     "body-parser": "2.3.0",
     "cors": "2.8.6",
