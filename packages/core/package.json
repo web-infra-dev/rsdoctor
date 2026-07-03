@@ -262,7 +262,7 @@
     "babel-loader": "10.1.1",
     "prebundle": "catalog:",
     "string-loader": "0.0.1",
-    "ts-loader": "^9.5.7",
+    "ts-loader": "^9.6.2",
     "tslib": "catalog:",
     "typescript": "catalog:",
     "@types/body-parser": "catalog:",
