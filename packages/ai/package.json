@@ -29,7 +29,7 @@
     "@rsdoctor/utils": "workspace:*",
     "@rstest/core": "catalog:",
     "@types/node": "catalog:",
-    "dotenv": "^16.6.1",
+    "dotenv": "^17.4.2",
     "prebundle": "catalog:",
     "socket.io-client": "catalog:",
     "typescript": "catalog:",
