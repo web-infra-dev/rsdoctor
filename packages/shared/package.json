@@ -92,7 +92,7 @@
     "@types/connect": "catalog:",
     "@types/estree": "catalog:",
     "@types/tapable": "catalog:",
-    "buffer": "5.7.1",
+    "buffer": "6.0.3",
     "es-toolkit": "catalog:",
     "path-browserify": "catalog:",
     "source-map": "catalog:"
