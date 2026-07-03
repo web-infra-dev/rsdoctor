@@ -233,7 +233,7 @@
     "path-browserify": "catalog:",
     "picocolors": "catalog:",
     "rslog": "^2.1.2",
-    "semver": "^7.7.4",
+    "semver": "^7.8.5",
     "source-map": "catalog:",
     "strip-ansi": "^6.0.1",
     "@rsdoctor/client": "workspace:*",
