@@ -24,6 +24,7 @@ import { ServerAPIProvider } from 'src/components/Manifest';
 import { ModuleAnalyzeComponent } from '../../pages/ModuleAnalyze';
 import Styles from './treemap.module.scss';
 import { TREE_COLORS } from './constants';
+import { isJavaScriptAsset } from '../../utils/assets';
 import type {
   CallbackDataParams,
   ECElementEvent,
@@ -647,8 +648,35 @@ const AssetTreemapWithFilterInner: React.FC<{
   const [moduleId, setModuleId] = useState<string | number>('');
   const [showAnalyze, setShowAnalyze] = useState(false);
   const [chunkSearchQuery, setChunkSearchQuery] = useState('');
+  const [showOnlyJavaScriptAssets, setShowOnlyJavaScriptAssets] =
+    useState(false);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
+
+  const visibleAssetNames = useMemo(() => {
+    if (!showOnlyJavaScriptAssets) {
+      return assetNames;
+    }
+
+    return assetNames.filter(isJavaScriptAsset);
+  }, [assetNames, showOnlyJavaScriptAssets]);
+
+  const visibleAssetNamesKey = useMemo(
+    () => visibleAssetNames.join('\0'),
+    [visibleAssetNames],
+  );
+  const previousVisibleAssetNamesKeyRef = React.useRef<string | undefined>(
+    undefined,
+  );
+
+  useEffect(() => {
+    if (previousVisibleAssetNamesKeyRef.current === visibleAssetNamesKey) {
+      return;
+    }
+
+    previousVisibleAssetNamesKeyRef.current = visibleAssetNamesKey;
+    setCheckedAssets(visibleAssetNames);
+  }, [visibleAssetNames, visibleAssetNamesKey]);
 
   const handleChartClick = useCallback(
     (params: ECElementEvent) => {
@@ -729,7 +757,11 @@ const AssetTreemapWithFilterInner: React.FC<{
   }, []);
 
   const filteredTreeData = useMemo(() => {
-    let filtered = treeData.filter((item) => checkedAssets.includes(item.name));
+    let filtered = treeData.filter(
+      (item) =>
+        visibleAssetNames.includes(item.name) &&
+        checkedAssets.includes(item.name),
+    );
 
     if (chunkSearchQuery.trim()) {
       const searchLower = chunkSearchQuery.toLowerCase();
@@ -739,7 +771,7 @@ const AssetTreemapWithFilterInner: React.FC<{
     }
 
     return filtered;
-  }, [treeData, checkedAssets, chunkSearchQuery]);
+  }, [treeData, checkedAssets, chunkSearchQuery, visibleAssetNames]);
 
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return [];
@@ -876,21 +908,33 @@ const AssetTreemapWithFilterInner: React.FC<{
             <Checkbox
               indeterminate={
                 checkedAssets.length > 0 &&
-                checkedAssets.length < assetNames.length
+                checkedAssets.length < visibleAssetNames.length
               }
-              checked={checkedAssets.length === assetNames.length}
+              checked={
+                visibleAssetNames.length > 0 &&
+                checkedAssets.length === visibleAssetNames.length
+              }
               onChange={(e) =>
-                setCheckedAssets(e.target.checked ? assetNames : [])
+                setCheckedAssets(e.target.checked ? visibleAssetNames : [])
               }
               className={Styles['all-none-checkbox']}
             >
               All
             </Checkbox>
+            <Checkbox
+              checked={showOnlyJavaScriptAssets}
+              onChange={(e) => {
+                setShowOnlyJavaScriptAssets(e.target.checked);
+              }}
+              className={Styles['all-none-checkbox']}
+            >
+              JS only
+            </Checkbox>
             <div
               className={Styles['chunk-list']}
               style={{ maxHeight: 180, overflowY: 'auto' }}
             >
-              {assetNames
+              {visibleAssetNames
                 .filter((name) =>
                   name.toLowerCase().includes(chunkSearchQuery.toLowerCase()),
                 )
