@@ -1,7 +1,7 @@
 import {
   RsdoctorRspackMultiplePlugin,
   RsdoctorRspackPlugin,
-} from '@rsdoctor/rspack-plugin';
+} from '@rsdoctor/core/rspack-plugin';
 import type {
   RsdoctorMultiplePluginOptions,
   RsdoctorRspackPluginOptions,

@@ -1,6 +1,6 @@
 const rspack = require('@rspack/core');
 const { ReactRefreshRspackPlugin } = require('@rspack/plugin-react-refresh');
-const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+const { RsdoctorRspackPlugin } = require('@rsdoctor/core/rspack-plugin');
 
 const banner = `var a = 111111111111111; console.log(a)`;
 

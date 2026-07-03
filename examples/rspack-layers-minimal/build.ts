@@ -2,7 +2,9 @@ import rspack from '@rspack/core';
 import { resolve } from 'path';
 const config = require('./rspack.config.js');
 const { ReactRefreshRspackPlugin } = require('@rspack/plugin-react-refresh');
-const { RsdoctorRspackMultiplePlugin } = require('@rsdoctor/rspack-plugin');
+const {
+  RsdoctorRspackMultiplePlugin,
+} = require('@rsdoctor/core/rspack-plugin');
 
 // console.log(config)
 
