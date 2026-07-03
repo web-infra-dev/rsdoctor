@@ -20,7 +20,7 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@rsdoctor/rspack-plugin": "workspace:*",
+    "@rsdoctor/core": "workspace:*",
     "@rspack/cli": "catalog:",
     "@rspack/core": "catalog:",
     "@rspack/plugin-react-refresh": "catalog:",

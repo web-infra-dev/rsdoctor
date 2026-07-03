@@ -116,6 +116,16 @@
         "default": "./dist/inner-plugins/index.cjs"
       }
     },
+    "./rspack-plugin": {
+      "import": {
+        "types": "./dist/rspack-plugin/index.d.ts",
+        "default": "./dist/rspack-plugin/index.js"
+      },
+      "require": {
+        "types": "./dist/rspack-plugin/index.d.cts",
+        "default": "./dist/rspack-plugin/index.cjs"
+      }
+    },
     "./rules": {
       "import": {
         "types": "./dist/rules/index.d.ts",
@@ -178,6 +188,9 @@
       ],
       "plugins": [
         "./dist/inner-plugins/index.d.ts"
+      ],
+      "rspack-plugin": [
+        "./dist/rspack-plugin/index.d.ts"
       ],
       "rules": [
         "./dist/rules/index.d.ts"
@@ -255,6 +268,14 @@
     "@types/body-parser": "catalog:",
     "@types/cors": "2.8.19",
     "@types/ws": "^8.18.1"
+  },
+  "peerDependencies": {
+    "@rspack/core": "*"
+  },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",

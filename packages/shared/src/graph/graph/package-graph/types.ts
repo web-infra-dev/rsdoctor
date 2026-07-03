@@ -1,4 +1,4 @@
-import type { SDK } from '@rsdoctor/shared/types';
+import type { SDK } from '../../../types';
 
 export type PackageData = SDK.PackageData;
 export type PackageJSONData = SDK.PackageJSONData;

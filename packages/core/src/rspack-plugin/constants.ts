@@ -1,5 +1,8 @@
+import { createRequire } from 'node:module';
 import type { Tap } from 'tapable';
-import packageJson from '../package.json';
+
+const require = createRequire(import.meta.url);
+const packageJson = require('../../package.json') as { version: string };
 
 export const pluginTapName = 'RsdoctorRspackPlugin';
 

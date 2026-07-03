@@ -1,4 +1,4 @@
-import { Plugin, SDK } from '@rsdoctor/shared/types';
+import { Plugin, SDK } from '../../../types';
 
 /**
  * Reverse decode the location (loc) information.

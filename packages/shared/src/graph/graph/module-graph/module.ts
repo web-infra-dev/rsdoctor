@@ -1,4 +1,4 @@
-import { SDK, Plugin } from '@rsdoctor/shared/types';
+import { SDK, Plugin } from '../../../types';
 import path from 'path-browserify';
 import { isNumber } from 'es-toolkit/compat';
 import type { SourceMapConsumer } from 'source-map';

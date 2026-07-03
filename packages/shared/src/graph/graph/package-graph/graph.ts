@@ -1,6 +1,6 @@
 import { unionBy } from 'es-toolkit/compat';
 import path from 'path-browserify';
-import { SDK } from '@rsdoctor/shared/types';
+import { SDK } from '../../../types';
 import { Package } from './package';
 import { PackageDependency } from './dependency';
 import { readPackageJson } from './utils';

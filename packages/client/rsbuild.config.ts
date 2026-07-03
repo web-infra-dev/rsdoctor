@@ -141,7 +141,7 @@ export default defineConfig(({ env }) => {
         if (ENABLE_DEVTOOLS_PLUGIN) {
           chainConfig.optimization.set('concatenateModules', false);
           const { RsdoctorRspackPlugin } =
-            require('../rspack-plugin/dist') as typeof import('../rspack-plugin/dist');
+            require('../core/dist/rspack-plugin') as typeof import('../core/dist/rspack-plugin');
 
           class StatsWriter {
             apply(compiler: Rspack.Compiler) {

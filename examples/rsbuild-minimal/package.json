@@ -26,7 +26,6 @@
     "@rsbuild/core": "catalog:",
     "@rsbuild/plugin-react": "catalog:",
     "@rsdoctor/core": "workspace:*",
-    "@rsdoctor/rspack-plugin": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/semver6": "npm:@types/semver@7.5.6",

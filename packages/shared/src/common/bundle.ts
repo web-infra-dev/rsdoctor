@@ -1,4 +1,4 @@
-import { Client } from '@rsdoctor/shared/types';
+import { Client } from '../types';
 
 const sep = ',';
 

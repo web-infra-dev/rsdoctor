@@ -1,4 +1,4 @@
-import type { SDK } from '@rsdoctor/shared/types';
+import type { SDK } from '../../../types';
 import path from 'path-browserify';
 import { isPackagePath } from './utils';
 

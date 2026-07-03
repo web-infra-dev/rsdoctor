@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/shared/types';
+import { SDK } from '../types';
 
 export const RspackLoaderInternalPropertyName = '__l__';
 

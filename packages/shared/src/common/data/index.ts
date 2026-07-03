@@ -1,4 +1,4 @@
-import { Rule, SDK, Manifest, Constants } from '@rsdoctor/shared/types';
+import { Rule, SDK, Manifest, Constants } from '../../types';
 import path from 'path-browserify';
 
 import * as Loader from '../loader';

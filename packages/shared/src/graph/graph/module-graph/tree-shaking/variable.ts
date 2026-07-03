@@ -1,4 +1,4 @@
-import { SDK } from '@rsdoctor/shared/types';
+import { SDK } from '../../../../types';
 import { ExportInfo } from './export';
 
 let id = 1;

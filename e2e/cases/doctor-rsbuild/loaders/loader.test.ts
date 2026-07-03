@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { getSDK } from '@rsdoctor/core/plugins';
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
 import { createStubRsbuild } from '@scripts/test-helper';
 import path from 'path';
 

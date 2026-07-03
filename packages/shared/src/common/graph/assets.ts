@@ -1,4 +1,4 @@
-import { Client, Constants, SDK } from '@rsdoctor/shared/types';
+import { Client, Constants, SDK } from '../../types';
 import { getChunksByAsset } from './chunk';
 import { getModulesByAsset } from './modules';
 
