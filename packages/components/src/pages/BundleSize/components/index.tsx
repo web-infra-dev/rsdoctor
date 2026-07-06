@@ -30,6 +30,7 @@ import {
 } from 'src/components/Charts/TreeMap';
 import { Rspack } from '@rsdoctor/utils/common';
 import { TreeGraph } from './tree-graph';
+import { isJavaScriptAsset } from '../../../utils/assets';
 
 interface WebpackModulesOverallProps {
   cwd: string;
@@ -219,23 +220,20 @@ export const WebpackModulesOverallBase: React.FC<
                       >
                         {(data) => {
                           // Filter assets to only show JS (js, cjs, mjs), .bundle, CSS, and HTML files
-                          const isTargetFileType = (
-                            filePath: string,
-                          ): boolean => {
+                          const isVisibleTreemapAsset = (filePath: string) => {
                             const ext =
                               filePath.toLowerCase().split('.').pop() || '';
                             return (
-                              ext === 'js' ||
-                              ext === 'cjs' ||
-                              ext === 'mjs' ||
-                              ext === 'bundle' ||
+                              isJavaScriptAsset(filePath) ||
                               ext === 'css' ||
                               ext === 'html'
                             );
                           };
 
                           const computedTreeData: TreeNode[] = data
-                            .filter((item) => isTargetFileType(item.asset.path))
+                            .filter((item) =>
+                              isVisibleTreemapAsset(item.asset.path),
+                            )
                             .map((item) => {
                               const moduleTree = flattenTreemapData(
                                 item.modules,

@@ -54,7 +54,7 @@
     "cors": "2.8.6",
     "dayjs": "catalog:",
     "fs-extra": "catalog:",
-    "open": "^10.2.0",
+    "open": "^11.0.0",
     "sirv": "catalog:",
     "source-map": "catalog:",
     "prebundle": "catalog:",
