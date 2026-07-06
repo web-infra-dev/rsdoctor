@@ -32,7 +32,7 @@
     "es-toolkit": "catalog:",
     "memfs": "4.57.3",
     "typescript": "catalog:",
-    "upath": "2.0.1",
+    "upath": "3.0.7",
     "webpack": "^5.105.4"
   },
   "publishConfig": {
