@@ -25,8 +25,8 @@
   },
   "devDependencies": {
     "@rsdoctor/types": "workspace:*",
-    "@rspress/plugin-algolia": "2.0.13",
-    "@rspress/plugin-client-redirects": "2.0.13",
+    "@rspress/plugin-algolia": "2.0.16",
+    "@rspress/plugin-client-redirects": "2.0.16",
     "@rspress/plugin-rss": "2.0.5",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
@@ -46,6 +46,6 @@
     "@rstack-dev/doc-ui": "1.14.3",
     "clsx": "catalog:",
     "react-markdown": "catalog:",
-    "@rspress/core": "2.0.13"
+    "@rspress/core": "2.0.16"
   }
 }
