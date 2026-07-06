@@ -232,7 +232,7 @@
     "open": "^11.0.0",
     "path-browserify": "catalog:",
     "picocolors": "catalog:",
-    "rslog": "^2.1.2",
+    "rslog": "^2.1.3",
     "semver": "^7.8.5",
     "source-map": "catalog:",
     "strip-ansi": "^7.2.0",
