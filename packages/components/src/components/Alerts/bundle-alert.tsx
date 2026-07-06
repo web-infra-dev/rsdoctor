@@ -1,5 +1,5 @@
 import { Tabs, Empty, Tag } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Card } from '../Card';
 import { ECMAVersionCheck } from '../Alert/ecma-version-check';
@@ -105,9 +105,15 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
 
   const defaultActiveKey = tabData[0]?.key ?? 'E1001';
   const [activeKey, setActiveKey] = useState(defaultActiveKey);
-  const resolvedActiveKey = tabData.some((tab) => tab.key === activeKey)
-    ? activeKey
-    : defaultActiveKey;
+  const activeTab = tabData.find((tab) => tab.key === activeKey);
+  const resolvedActiveKey =
+    activeTab && (activeTab.data.length > 0 || dataSource.length === 0)
+      ? activeKey
+      : defaultActiveKey;
+
+  useEffect(() => {
+    setActiveKey(defaultActiveKey);
+  }, [defaultActiveKey]);
 
   const tabItems = tabData.map((td) => {
     const tagStyle =
