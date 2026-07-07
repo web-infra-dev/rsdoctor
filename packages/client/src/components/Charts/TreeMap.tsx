@@ -24,6 +24,7 @@ import { ServerAPIProvider } from 'src/components/Manifest';
 import { ModuleAnalyzeComponent } from '../../pages/ModuleAnalyze';
 import Styles from './treemap.module.scss';
 import { TREE_COLORS } from './constants';
+import { syncCheckedAssets } from './treemap-assets';
 import type {
   CallbackDataParams,
   ECElementEvent,
@@ -638,6 +639,7 @@ const AssetTreemapWithFilterInner: React.FC<{
   );
 
   const [checkedAssets, setCheckedAssets] = useState<string[]>(assetNames);
+  const previousAssetNamesRef = React.useRef<string[]>(assetNames);
   const [collapsed, setCollapsed] = useState(false);
   const [sizeType, setSizeType] = useState<SizeType>(
     bundledSize ? 'parsed' : 'stat',
@@ -651,6 +653,19 @@ const AssetTreemapWithFilterInner: React.FC<{
   const [chunkSearchQuery, setChunkSearchQuery] = useState('');
 
   const containerRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const previousAssetNames = previousAssetNamesRef.current;
+
+    setCheckedAssets((currentCheckedAssets) =>
+      syncCheckedAssets({
+        assetNames,
+        previousAssetNames,
+        checkedAssets: currentCheckedAssets,
+      }),
+    );
+    previousAssetNamesRef.current = assetNames;
+  }, [assetNames]);
 
   const handleChartClick = useCallback(
     (params: ECElementEvent) => {
