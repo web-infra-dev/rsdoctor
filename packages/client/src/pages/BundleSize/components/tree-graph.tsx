@@ -2,6 +2,7 @@ import { CodeOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { type Client, SDK } from '@rsdoctor/shared/types';
 import {
   Card,
+  Checkbox,
   Col,
   Divider,
   Empty,
@@ -22,6 +23,7 @@ import { Keyword } from '../../../components/Keyword';
 import { ServerAPIProvider } from '../../../components/Manifest';
 import { Size } from '../../../constants';
 import { createFileStructures, formatSize, useI18n } from '../../../utils';
+import { isJavaScriptAsset } from '../../../utils/assets';
 import { AssetDetail } from './asset';
 import { createAssetPathMap, resolveAssetFileTitleTarget } from './asset-path';
 import styles from './index.module.scss';
@@ -48,6 +50,8 @@ export const TreeGraph = memo(
     const [defaultExpandAll, setDefaultExpandAll] = useState(false);
     const [inputModuleUnit, setModuleUnit] = useState('');
     const [inputChunkUnit, setChunkUnit] = useState('');
+    const [showOnlyJavaScriptAssets, setShowOnlyJavaScriptAssets] =
+      useState(false);
     const [assetPath, setAssetPath] = useState<string | null>(null);
     const { showCode, codeDrawerComponent } = useCodeDrawer(
       'Do not have the codes of assets. If you use the lite or brief mode, there will have codes.',
@@ -99,6 +103,10 @@ export const TreeGraph = memo(
         res = res.filter((e) => e.path.indexOf(inputAssetName) > -1);
       }
 
+      if (showOnlyJavaScriptAssets) {
+        res = res.filter((e) => isJavaScriptAsset(e.path));
+      }
+
       if (inputAssetSize > 0) {
         res = res.filter((e) => e.size >= inputAssetSize);
       }
@@ -118,21 +126,25 @@ export const TreeGraph = memo(
         // return _a - _b;
         return _b - _a;
       });
-    }, [assets, selectedEntryPoints, inputAssetName, inputAssetSize]);
+    }, [
+      assets,
+      selectedEntryPoints,
+      inputAssetName,
+      inputAssetSize,
+      showOnlyJavaScriptAssets,
+    ]);
 
     useEffect(() => {
-      function getFileExtension(filePath: string) {
-        const parts = filePath.split('.');
-        return parts.length > 1 ? parts.pop() : '';
+      if (assetPath && filteredAssets.some((f) => f.path === assetPath)) {
+        return;
       }
 
-      summary.all.total.files.forEach((f) => {
-        const ext = getFileExtension(f.path);
-        if (ext === 'js') {
-          setAssetPath(f.path);
-        }
-      });
-    }, [summary.all.total.files]);
+      const nextAsset =
+        filteredAssets.find((f) => isJavaScriptAsset(f.path)) ??
+        filteredAssets[0];
+
+      setAssetPath(nextAsset?.path ?? null);
+    }, [assetPath, filteredAssets]);
 
     const assetsMap = useMemo(() => {
       return createAssetPathMap(filteredAssets);
@@ -237,6 +249,17 @@ export const TreeGraph = memo(
                 placeholder="search asset by keyword"
                 onChange={onSearch}
               />
+            </Col>
+            <Col>
+              <Checkbox
+                checked={showOnlyJavaScriptAssets}
+                onChange={(e) => {
+                  setShowOnlyJavaScriptAssets(e.target.checked);
+                  setDefaultExpandAll(false);
+                }}
+              >
+                JS only
+              </Checkbox>
             </Col>
             <Col span={6}>
               <InputNumber
