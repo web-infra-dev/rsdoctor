@@ -232,7 +232,7 @@ export const WebpackModulesOverallBase: React.FC<
                         api={SDK.ServerAPI.API.GetSummaryBundles}
                       >
                         {(data) => {
-                          // Filter assets to only show JS (js, cjs, mjs), .bundle, CSS, and HTML files
+                          // Filter assets to only show JS (js, jsx, cjs, mjs), .bundle, CSS, and HTML files
                           const isTargetFileType = (
                             filePath: string,
                           ): boolean => {
@@ -240,6 +240,7 @@ export const WebpackModulesOverallBase: React.FC<
                               filePath.toLowerCase().split('.').pop() || '';
                             return (
                               ext === 'js' ||
+                              ext === 'jsx' ||
                               ext === 'cjs' ||
                               ext === 'mjs' ||
                               ext === 'bundle' ||
