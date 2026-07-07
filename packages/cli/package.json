@@ -41,13 +41,9 @@
     "ora": "^9.4.1"
   },
   "devDependencies": {
-    "@rsdoctor/client": "workspace:*",
     "cac": "^7.0.0",
     "typescript": "catalog:",
     "picocolors": "catalog:"
-  },
-  "peerDependencies": {
-    "@rsdoctor/client": "workspace:*"
   },
   "publishConfig": {
     "access": "public",

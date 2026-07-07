@@ -508,9 +508,6 @@ importers:
         specifier: ^9.4.1
         version: 9.4.1
     devDependencies:
-      '@rsdoctor/client':
-        specifier: workspace:*
-        version: link:../client
       cac:
         specifier: ^7.0.0
         version: 7.0.0

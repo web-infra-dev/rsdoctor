@@ -1,10 +1,8 @@
 import { SDK } from '@rsdoctor/shared/types';
 import fs from 'node:fs';
-import { createRequire } from 'module';
 import { BaseAPI } from './base';
 import { Router } from '../router';
-
-const require = createRequire(import.meta.url);
+import { resolveClientHtmlPath } from '../client';
 
 export class RendererAPI extends BaseAPI {
   /** sdk manifest api */
@@ -16,9 +14,7 @@ export class RendererAPI extends BaseAPI {
 
     // dynamic serve client:
     // require.resolve will failed due to the dist will remove when execute "npm run build" of client.
-    const clientHtmlPath = server.innerClientPath
-      ? server.innerClientPath
-      : require.resolve('@rsdoctor/client');
+    const clientHtmlPath = resolveClientHtmlPath(server.innerClientPath);
 
     const clientHtml = fs.readFileSync(clientHtmlPath, 'utf-8');
 

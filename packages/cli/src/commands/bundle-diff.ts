@@ -16,8 +16,7 @@ import {
   Constants,
 } from '@rsdoctor/shared/types';
 import { Manifest, Algorithm, Graph } from '@rsdoctor/core/common';
-import { RsdoctorSDK } from '@rsdoctor/core/sdk';
-import { createRequire } from 'node:module';
+import { resolveClientDiffHtmlPath, RsdoctorSDK } from '@rsdoctor/core/sdk';
 
 interface Options {
   current: string;
@@ -228,8 +227,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
     if (html) {
       spinner.text = 'Generating standalone HTML file...';
 
-      const require = createRequire(import.meta.url);
-      const clientHtmlPath = require.resolve('@rsdoctor/client/dist/diff.html');
+      const clientHtmlPath = resolveClientDiffHtmlPath();
       let htmlContent = fs.readFileSync(clientHtmlPath, 'utf-8');
       const basePath = path.dirname(clientHtmlPath);
 
