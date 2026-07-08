@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import fse from 'fs-extra';
 import path from 'path';
+import { createRequire } from 'module';
 import { DevToolError } from '@rsdoctor/core/error';
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/shared/types';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
@@ -14,15 +15,12 @@ import { Algorithm } from '@rsdoctor/core/common';
 import { Lodash } from '@rsdoctor/core/common';
 import { findRoot } from '../utils';
 import { decycle } from '@rsdoctor/core/common';
-import { resolveClientHtmlPath } from '../server/client';
 
 export * from '../utils/openBrowser';
 export * from '../utils/base';
-export {
-  resolveClientDiffHtmlPath,
-  resolveClientDistPath,
-  resolveClientHtmlPath,
-} from '../server/client';
+export { resolveClientDiffHtmlPath } from '../server/client';
+
+const require = createRequire(import.meta.url);
 export class RsdoctorSDK<
   T extends RsdoctorRspackSDKOptions = RsdoctorRspackSDKOptions,
 >
@@ -392,9 +390,9 @@ export class RsdoctorSDK<
     logger.debug(`sdk.writeStore has run.`, '[SDK.writeStore][end]');
     let htmlPath = '';
     if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
-      const clientHtmlPath = resolveClientHtmlPath(
-        this.extraConfig.innerClientPath,
-      );
+      const clientHtmlPath = this.extraConfig.innerClientPath
+        ? this.extraConfig.innerClientPath
+        : require.resolve('@rsdoctor/client');
 
       if (this.extraConfig?.brief?.type?.includes('json')) {
         const data = this.getStoreData();

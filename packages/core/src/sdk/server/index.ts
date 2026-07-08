@@ -11,6 +11,8 @@ import { Router } from './router';
 import * as APIs from './apis';
 import { chalk, logger } from '@rsdoctor/core/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
+import path from 'path';
+import { createRequire } from 'module';
 import { ServerResponse } from 'http';
 import { randomBytes } from 'crypto';
 import {
@@ -18,10 +20,9 @@ import {
   isAllowedCorsRequest,
   isAllowedRequestHost,
 } from './security';
-import { resolveClientDistPath } from './client';
 
+const require = createRequire(import.meta.url);
 export * from './utils';
-export * from './client';
 
 /** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
@@ -198,7 +199,10 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     this.app.use(bodyParser.json({ limit: '500mb' }));
     await this._router.setup();
 
-    const clientDistPath = resolveClientDistPath(this._innerClientPath);
+    const clientHtmlPath = this._innerClientPath
+      ? this._innerClientPath
+      : require.resolve('@rsdoctor/client');
+    const clientDistPath = path.resolve(clientHtmlPath, '..');
     this.app.use(
       serve(clientDistPath, {
         dev: true,
