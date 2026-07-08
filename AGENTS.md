@@ -48,12 +48,11 @@ packages/
   rspack-plugin/      # Rspack plugin (peerDep: @rspack/core)
   webpack-plugin/     # Webpack 5 plugin (peerDep: webpack 5.x)
   cli/                # `rsdoctor` CLI binary
-  ai/                 # `@rsdoctor/mcp-server` — MCP server + AI analysis (published as @rsdoctor/mcp-server)
+  agent-cli/          # `@rsdoctor/agent-cli` — agent CLI tooling
   client/             # web client (Rsbuild SPA, serves analysis report and report UI)
   document/           # documentation site (Rspress)
   proto/              # protocol buffer / schema definitions
   test-helper/        # test utilities shared across packages
-  agent-cli/          # agent CLI tooling (docs only)
 scripts/
   rslib.base.config.ts  # shared Rslib build config (CJS + ESM dual-package)
   rstest.setup.ts       # rstest global setup (snapshot serializer)
@@ -67,7 +66,7 @@ examples/               # runnable example projects (rspack / rsbuild / webpack 
 ```text
 types → utils → graph → sdk → core → rspack-plugin / webpack-plugin → cli
                                   ↘ client
-                                  ↘ ai (mcp-server)
+                                  ↘ agent-cli
 ```
 
 ## Build system
@@ -87,7 +86,6 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 - Unit tests live in `<package>/tests/` (file pattern: `*.test.ts`).
 - Rstest config: `rstest.config.ts` at repo root. Tests run with `maxWorkers: 1` (build-heavy tests are flaky in parallel).
 - Snapshot serializer normalizes workspace paths (see `scripts/rstest.setup.ts`).
-- `packages/ai/` tests are excluded from the root test run and should be run separately.
 - E2E tests use Playwright; cases are organized per bundler under `e2e/cases/`.
 
 ## CI
@@ -96,7 +94,7 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 - **Test (Windows)**: same matrix on windows.
 - **Lint**: separate workflow runs `rslint lint`.
 - PRs targeting `main`, `release_*`, `release-*` trigger CI.
-- Paths `document/**` and `*.md` are excluded from test CI triggers.
+- Paths `packages/document/**` and `*.md` are excluded from test CI triggers.
 
 ## Pull request conventions
 

@@ -18,6 +18,6 @@ export default defineConfig({
     tsconfigPath: './tsconfig.test.json',
   },
   include: ['packages/**/*.test.ts'],
-  exclude: ['**/node_modules/**', 'packages/ai/**/*.test.ts'],
+  exclude: ['**/node_modules/**'],
   setupFiles: ['./scripts/rstest.setup.ts'],
 });
