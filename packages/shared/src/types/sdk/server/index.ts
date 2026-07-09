@@ -5,6 +5,10 @@ import { API, APIExtends } from './apis';
 
 export * as ServerAPI from './apis';
 
+export const OPEN_IN_EDITOR_EDITORS = ['code', 'cursor', 'trae'] as const;
+
+export type OpenInEditorKind = (typeof OPEN_IN_EDITOR_EDITORS)[number];
+
 interface ClientUrlFunctionWithRouteDefined<T> {
   (
     route: RsdoctorClientRoutes.BundleDiff,

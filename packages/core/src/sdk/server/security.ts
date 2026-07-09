@@ -1,4 +1,5 @@
 import { isIP } from 'node:net';
+import { timingSafeEqual } from 'node:crypto';
 
 export const DEFAULT_ALLOWED_CORS_ORIGINS =
   /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/;
@@ -71,4 +72,19 @@ export function isAllowedCorsRequest(
   }
 
   return true;
+}
+
+export function isAllowedOpenInEditorToken(
+  token: string | null,
+  expectedToken: string,
+) {
+  if (typeof token !== 'string' || !expectedToken) {
+    return false;
+  }
+  const tokenBuffer = Buffer.from(token);
+  const expectedTokenBuffer = Buffer.from(expectedToken);
+  return (
+    tokenBuffer.length === expectedTokenBuffer.length &&
+    timingSafeEqual(tokenBuffer, expectedTokenBuffer)
+  );
 }

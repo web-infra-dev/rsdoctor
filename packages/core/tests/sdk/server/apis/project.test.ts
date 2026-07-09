@@ -153,6 +153,40 @@ describe('test server/apis/project.ts', () => {
     });
   });
 
+  it('requires socket token for open-in-editor requests', async () => {
+    const host = `127.0.0.1:${target.server.port}`;
+
+    await expect(
+      requestWithHost('/__open-in-editor?file=/tmp/example.js', host),
+    ).resolves.toStrictEqual({
+      statusCode: 403,
+    });
+    await expect(
+      requestWithHost(
+        '/__open-in-editor?file=/tmp/example.js&token=invalid',
+        host,
+      ),
+    ).resolves.toStrictEqual({
+      statusCode: 403,
+    });
+    await expect(
+      requestWithHost(
+        `/__open-in-editor?token=${target.server.socketUrl.token}`,
+        host,
+      ),
+    ).resolves.toStrictEqual({
+      statusCode: 400,
+    });
+    await expect(
+      requestWithHost(
+        `/__open-in-editor?file=/tmp/example.js&editor=sh%20-c&token=${target.server.socketUrl.token}`,
+        host,
+      ),
+    ).resolves.toStrictEqual({
+      statusCode: 400,
+    });
+  });
+
   it('supports custom server.cors options', async () => {
     await expect(
       optionsWithOrigin(customCorsTarget, 'https://example.com'),
