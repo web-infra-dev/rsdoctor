@@ -15,6 +15,12 @@ const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
 
 let openInEditorTokenTask: Promise<string | undefined> | undefined;
 
+function clearOpenInEditorTokenTask(task = openInEditorTokenTask) {
+  if (openInEditorTokenTask === task) {
+    openInEditorTokenTask = undefined;
+  }
+}
+
 function getOpenInEditorTokenFromSocketUrl(socketUrl?: string) {
   if (!socketUrl) return undefined;
   try {
@@ -30,12 +36,22 @@ function getOpenInEditorTokenFromSocketUrl(socketUrl?: string) {
 async function getOpenInEditorToken(base: string) {
   if (!base) return undefined;
   if (!openInEditorTokenTask) {
-    openInEditorTokenTask = fetch(`${base}${SDK.ServerAPI.API.Manifest}`)
+    const task = fetch(`${base}${SDK.ServerAPI.API.Manifest}`)
       .then((res) => (res.ok ? res.json() : undefined))
-      .then((manifest) =>
-        getOpenInEditorTokenFromSocketUrl(manifest?.__SOCKET__URL__),
-      )
-      .catch(() => undefined);
+      .then((manifest) => {
+        const token = getOpenInEditorTokenFromSocketUrl(
+          manifest?.__SOCKET__URL__,
+        );
+        if (!token) {
+          clearOpenInEditorTokenTask(task);
+        }
+        return token;
+      })
+      .catch(() => {
+        clearOpenInEditorTokenTask(task);
+        return undefined;
+      });
+    openInEditorTokenTask = task;
   }
 
   return openInEditorTokenTask;
@@ -67,6 +83,9 @@ async function openInEditor(
     const res = await fetch(`${base}${OPEN_IN_EDITOR_PATH}?${params}`, {
       method: 'GET',
     });
+    if (res.status === 403) {
+      clearOpenInEditorTokenTask();
+    }
     if (!res.ok) {
       urlSchemeFallback();
     }
