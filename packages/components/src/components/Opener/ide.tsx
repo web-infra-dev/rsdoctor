@@ -1,4 +1,5 @@
 import { Lodash } from '@rsdoctor/utils/common';
+import { SDK } from '@rsdoctor/types';
 import React from 'react';
 import VSCodeIcon from '../../common/svg/vscode.svg';
 
@@ -12,13 +13,39 @@ interface VSCodeProps {
 
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
 
-type EditorKind = 'code' | 'cursor' | 'trae';
+let openInEditorTokenTask: Promise<string | undefined> | undefined;
+
+function getOpenInEditorTokenFromSocketUrl(socketUrl?: string) {
+  if (!socketUrl) return undefined;
+  try {
+    return (
+      new URL(socketUrl, window.location.origin).searchParams.get('token') ||
+      undefined
+    );
+  } catch {
+    return undefined;
+  }
+}
+
+async function getOpenInEditorToken(base: string) {
+  if (!base) return undefined;
+  if (!openInEditorTokenTask) {
+    openInEditorTokenTask = fetch(`${base}${SDK.ServerAPI.API.Manifest}`)
+      .then((res) => (res.ok ? res.json() : undefined))
+      .then((manifest) =>
+        getOpenInEditorTokenFromSocketUrl(manifest?.__SOCKET__URL__),
+      )
+      .catch(() => undefined);
+  }
+
+  return openInEditorTokenTask;
+}
 
 async function openInEditor(
   file: string,
   line: number | string,
   column: number | string,
-  editor: EditorKind,
+  editor: SDK.OpenInEditorKind,
   urlSchemeFallback: () => void,
 ) {
   const fileSpec = `${file}:${line}:${column}`;
@@ -27,8 +54,19 @@ async function openInEditor(
       typeof window !== 'undefined' && window.location?.origin
         ? window.location.origin
         : '';
-    const url = `${base}${OPEN_IN_EDITOR_PATH}?file=${encodeURIComponent(fileSpec)}&editor=${editor}`;
-    const res = await fetch(url, { method: 'GET' });
+    const token = await getOpenInEditorToken(base);
+    if (!token) {
+      urlSchemeFallback();
+      return;
+    }
+    const params = new URLSearchParams({
+      file: fileSpec,
+      editor,
+      token,
+    });
+    const res = await fetch(`${base}${OPEN_IN_EDITOR_PATH}?${params}`, {
+      method: 'GET',
+    });
     if (!res.ok) {
       urlSchemeFallback();
     }

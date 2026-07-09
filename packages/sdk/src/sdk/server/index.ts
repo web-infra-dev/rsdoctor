@@ -19,6 +19,7 @@ import { randomBytes } from 'crypto';
 import {
   DEFAULT_ALLOWED_CORS_ORIGINS,
   isAllowedCorsRequest,
+  isAllowedOpenInEditorToken,
   isAllowedRequestHost,
 } from './security';
 
@@ -28,6 +29,7 @@ export * from './utils';
 /** Path for launch-editor: open file in editor from the UI (see https://github.com/yyx990803/launch-editor) */
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
 const LISTEN_RETRY_LIMIT = 10;
+const OPEN_IN_EDITOR_EDITORS = new Set<string>(SDK.OPEN_IN_EDITOR_EDITORS);
 
 export type ISocketType = { port: number; socketUrl: string; token: string };
 
@@ -39,6 +41,12 @@ export type RsdoctorServerOptions = {
 
 function isAddressInUseError(error: unknown) {
   return (error as { code?: string }).code === 'EADDRINUSE';
+}
+
+function isAllowedOpenInEditorEditor(
+  editor: string | null,
+): editor is SDK.OpenInEditorKind {
+  return typeof editor === 'string' && OPEN_IN_EDITOR_EDITORS.has(editor);
 }
 
 export class RsdoctorServer implements SDK.RsdoctorServerInstance {
@@ -231,10 +239,21 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
         }
         const url = new URL(req.url || '', `http://localhost`);
         const file = url.searchParams.get('file');
-        const editor = url.searchParams.get('editor') || undefined;
+        const editor = url.searchParams.get('editor');
+        const token = url.searchParams.get('token');
+        if (!isAllowedOpenInEditorToken(token, this._socketToken)) {
+          res.statusCode = 403;
+          res.end();
+          return;
+        }
         if (!file) {
           res.statusCode = 400;
           res.end('Missing file parameter');
+          return;
+        }
+        if (!isAllowedOpenInEditorEditor(editor)) {
+          res.statusCode = 400;
+          res.end('Unsupported editor parameter');
           return;
         }
         try {

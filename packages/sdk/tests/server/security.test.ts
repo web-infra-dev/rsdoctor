@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@rstest/core';
 import {
   isAllowedCorsRequest,
+  isAllowedOpenInEditorToken,
   isAllowedRequestHost,
   isAllowedRequestOrigin,
 } from '../../src/sdk/server/security';
@@ -51,5 +52,12 @@ describe('test server/security.ts', () => {
     expect(
       isAllowedCorsRequest('http://foo.localhost:3001', '127.0.0.1:3000'),
     ).toBe(false);
+  });
+
+  it('requires the exact token for open-in-editor requests', () => {
+    expect(isAllowedOpenInEditorToken(null, 'secret')).toBe(false);
+    expect(isAllowedOpenInEditorToken('wrong', 'secret')).toBe(false);
+    expect(isAllowedOpenInEditorToken('secret-extra', 'secret')).toBe(false);
+    expect(isAllowedOpenInEditorToken('secret', 'secret')).toBe(true);
   });
 });
