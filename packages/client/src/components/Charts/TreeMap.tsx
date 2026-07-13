@@ -422,7 +422,7 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
                 textStyle: {
                   fontFamily: 'sans-serif',
                   fontSize: 12,
-                  color: '#666',
+                  color: 'white',
                 },
               },
               emphasis: {
