@@ -137,7 +137,6 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
     highlightNodeId,
     centerNodeId,
     rootPath,
-    style = { width: '100%', height: '100%' },
   }) => {
     const [option, setOption] = useState<TreeMapOption | null>(null);
     const chartRef = React.useRef<EChartsReactCore | null>(null);
