@@ -133,11 +133,11 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
   ({
     treeData,
     sizeType,
-    style,
     onChartClick,
     highlightNodeId,
     centerNodeId,
     rootPath,
+    style = { width: '100%', height: '100%' },
   }) => {
     const [option, setOption] = useState<TreeMapOption | null>(null);
     const chartRef = React.useRef<EChartsReactCore | null>(null);
@@ -1015,7 +1015,6 @@ const AssetTreemapWithFilterInner: React.FC<{
           highlightNodeId={highlightNodeId}
           centerNodeId={centerNodeId}
           rootPath={rootPath}
-          style={{ width: '100%', height: '100%' }}
         />
         {moduleId ? (
           <ServerAPIProvider
