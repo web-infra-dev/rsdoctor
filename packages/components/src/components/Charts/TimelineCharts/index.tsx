@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, useMemo, memo } from 'react';
 import ReactEChartsCore from 'echarts-for-react/esm/core';
 import * as echarts from 'echarts/core';
 import { CustomChart } from 'echarts/charts';
@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import { ChartProps, DurationMetric, ITraceEventData } from '../types';
 import { groupBy } from 'es-toolkit/compat';
 import { ChartTypes, PALETTE_COLORS } from '../constants';
-import { useThemeToken } from 'src/utils';
+import { useTheme, useThemeToken } from 'src/utils';
 
 interface CoordSysType {
   x: number;
@@ -29,6 +29,97 @@ type LoaderType = {
 };
 
 const LINE_HEIGHT = 60;
+const DARK_MODE_LOADER_BAR_OPACITY = 0.6;
+
+function buildTimelineData(
+  loaderData?: DurationMetric[],
+  pluginsData?: ITraceEventData[],
+) {
+  const data: LoaderType[] = [];
+  const categories: string[] = [];
+
+  if (loaderData) {
+    const loaderCategories: string[] = [];
+    loaderData.forEach((_l) => {
+      loaderCategories.unshift(_l.n + ' total');
+      loaderCategories.unshift(_l.n);
+    });
+
+    loaderData.forEach((_loaderData) => {
+      data.push({
+        name: _loaderData.n + ' total',
+        value: [
+          loaderCategories.indexOf(_loaderData.n + ' total'),
+          _loaderData.s,
+          _loaderData.e,
+          _loaderData.e - _loaderData.s,
+        ],
+        itemStyle: {
+          normal: {
+            color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
+            opacity: 0.25,
+          },
+        },
+      });
+
+      if (!_loaderData?.c) return;
+      for (let l = 0; l < _loaderData.c.length; l++) {
+        data.push({
+          name: _loaderData.n,
+          value: [
+            loaderCategories.indexOf(_loaderData.n),
+            _loaderData.c[l].s,
+            _loaderData.c[l].e,
+            _loaderData.c[l].e - _loaderData.c[l].s,
+          ],
+          itemStyle: {
+            normal: {
+              color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
+              opacity: 0.25,
+            },
+          },
+          ext: _loaderData.c[l].ext as ChartProps['loaders'][0],
+        });
+      }
+    });
+
+    categories.push(
+      ...loaderCategories.map((val, i) =>
+        i % 2 !== 0 ? val.replace(' total', '') : '',
+      ),
+    );
+  }
+
+  if (pluginsData) {
+    const plugins = groupBy(pluginsData, (e: ITraceEventData) => e.pid);
+
+    Object.keys(plugins)
+      .reverse()
+      .forEach((key, i) => {
+        plugins[key].forEach((_plugin) => {
+          data.push({
+            name: String(_plugin.pid),
+            value: [
+              i,
+              _plugin.args.s,
+              _plugin.args.e,
+              _plugin.args.e - _plugin.args.s,
+            ],
+            itemStyle: {
+              normal: {
+                color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
+                opacity: 0.25,
+              },
+            },
+            ext: _plugin,
+          });
+        });
+        categories.push(String(key.charAt(0).toUpperCase() + key.slice(1)));
+      });
+  }
+
+  return { data, categories };
+}
 
 export const TimelineCom: React.FC<{
   loaderData?: DurationMetric[];
@@ -44,10 +135,28 @@ export const TimelineCom: React.FC<{
     chartType = ChartTypes.Normal,
     exts = null,
   }) => {
-    const data: LoaderType[] = [];
-    let categories: string[] = [];
     const [optionsData, setOptionsData] = useState({});
+    const { isDark } = useTheme();
     const themeToken = useThemeToken();
+    const { data, categories } = useMemo(
+      () => buildTimelineData(loaderData, pluginsData),
+      [loaderData, pluginsData],
+    );
+    const themedData = useMemo(() => {
+      if (!isDark || chartType !== ChartTypes.Loader) {
+        return data;
+      }
+
+      return data.map((item) => ({
+        ...item,
+        itemStyle: {
+          normal: {
+            ...item.itemStyle.normal,
+            opacity: DARK_MODE_LOADER_BAR_OPACITY,
+          },
+        },
+      }));
+    }, [chartType, data, isDark]);
 
     // Register the required components
     echarts.use([
@@ -57,92 +166,6 @@ export const TimelineCom: React.FC<{
       DataZoomComponent,
       CanvasRenderer,
     ]);
-
-    useEffect(() => {
-      if (!loaderData) return;
-      const _categories: string[] = [];
-      loaderData.forEach((_l) => {
-        _categories.unshift(_l.n + ' total');
-        _categories.unshift(_l.n);
-      });
-
-      // Generate mock data
-      loaderData.forEach(function (_loaderData, _i) {
-        data.push({
-          name: _loaderData.n + ' total',
-          value: [
-            _categories.indexOf(_loaderData.n + ' total'),
-            _loaderData.s,
-            _loaderData.e,
-            _loaderData.e - _loaderData.s,
-          ],
-          itemStyle: {
-            normal: {
-              color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
-              opacity: 0.25,
-            },
-          },
-        });
-
-        if (!_loaderData?.c) return;
-        for (let l = 0; l < _loaderData?.c?.length; l++) {
-          data.push({
-            name: _loaderData.n,
-            value: [
-              _categories.indexOf(_loaderData.n),
-              _loaderData.c[l].s,
-              _loaderData.c[l].e,
-              _loaderData.c[l].e - _loaderData.c[l].s,
-            ],
-            itemStyle: {
-              normal: {
-                color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
-                opacity: 0.25,
-              },
-            },
-            ext: _loaderData.c[l].ext as ChartProps['loaders'][0],
-          });
-        }
-      });
-
-      categories = _categories.map((val, i) => {
-        if (i % 2 !== 0) {
-          return val.replace(' total', '');
-        } else {
-          return '';
-        }
-      });
-    }, [loaderData]);
-
-    useEffect(() => {
-      if (!pluginsData) return;
-
-      const _pluginsData = groupBy(pluginsData, (e: ITraceEventData) => e.pid);
-
-      Object.keys(_pluginsData)
-        .reverse()
-        .forEach(function (key, i) {
-          _pluginsData[key].forEach((_plugin, _i) => {
-            data.push({
-              name: String(_plugin.pid),
-              value: [
-                i,
-                _plugin.args.s,
-                _plugin.args.e,
-                _plugin.args.e - _plugin.args.s,
-              ],
-              itemStyle: {
-                normal: {
-                  color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
-                  opacity: 0.25,
-                },
-              },
-              ext: _plugin,
-            });
-          });
-          categories.push(String(key.charAt(0).toUpperCase() + key.slice(1)));
-        });
-    }, [pluginsData]);
 
     useEffect(() => {
       function renderItem(
@@ -270,12 +293,12 @@ export const TimelineCom: React.FC<{
               x: [1, 2],
               y: 0,
             },
-            data,
+            data: themedData,
           },
         ],
       };
       setOptionsData(option);
-    }, [loaderData, pluginsData, exts, themeToken]);
+    }, [chartType, exts, formatterFn, themeToken, categories, themedData]);
 
     return (
       <ReactEChartsCore

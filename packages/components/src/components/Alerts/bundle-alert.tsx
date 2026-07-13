@@ -7,6 +7,7 @@ import { Overview } from '../Overall/overview';
 import { AlertCollapse } from './collapse';
 import { CommonList } from './list';
 import { ViewMode } from '../../constants';
+import { useThemeToken } from '../../utils';
 
 import type { AlertProps } from '../Alert/types';
 import type { CSSProperties } from 'react';
@@ -74,6 +75,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   dataSource,
   extraData,
 }) => {
+  const themeToken = useThemeToken();
   const tabData: Array<{
     key: string;
     label: string;
@@ -120,15 +122,15 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
     const tagStyle =
       resolvedActiveKey === td.key
         ? ({
-            border: '1px solid #91D5FF',
-            backgroundColor: '#E6F7FF',
+            border: `1px solid ${themeToken.colorPrimaryBorder}`,
+            backgroundColor: themeToken.colorPrimaryBg,
           } as CSSProperties)
         : {};
 
     const tagTextStyle =
       resolvedActiveKey === td.key
         ? {
-            color: '#1890FF',
+            color: themeToken.colorPrimary,
           }
         : {};
 

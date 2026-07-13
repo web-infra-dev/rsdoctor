@@ -18,9 +18,6 @@ export const CommonList = (props: {
 
     return (
       <Overview
-        style={{
-          background: '#fff',
-        }}
         description={
           <div className={styles.description}>
             {showCode ? <div className={styles.code}>{code}</div> : null}
