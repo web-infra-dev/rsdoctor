@@ -4,8 +4,7 @@
   height: calc(100vh - 100px);
   position: relative;
   overflow: hidden;
-  border: 2px solid #e8e8e8;
-  background-color: #ffffff;
+  border: 2px solid var(--color-border-secondary);
 
   :global {
     .ant-checkbox-wrapper {
@@ -28,8 +27,8 @@
 .sidebar {
   width: 300px;
   min-width: 300px;
-  background-color: #f6f6f6;
-  border-right: 1px solid #e8e8e8;
+  background-color: var(--color-bg-box-elevated);
+  border-right: 1px solid var(--color-border-secondary);
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease;
@@ -57,7 +56,6 @@
     margin: 0 0 10px 0;
     font-size: 14px;
     font-weight: bold;
-    color: #333;
   }
 }
 
@@ -67,6 +65,7 @@
   right: 10px;
   z-index: 20;
   background: white;
+  color: black;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 5px;

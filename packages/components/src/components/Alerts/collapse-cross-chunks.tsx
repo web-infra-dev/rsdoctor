@@ -3,6 +3,7 @@ import { Collapse, Space, Tag, Typography } from 'antd';
 
 import Overview from '../Overall/overview';
 import styles from './collapse.module.scss';
+import utilStyles from './index.module.scss';
 import TotalSizeSvg from '../../common/svg/total-size.svg';
 import { LabelComponent } from './collapse-shared';
 
@@ -27,16 +28,15 @@ export const CrossChunksAlertCollapse = (props: {
         return (
           <div className={styles.collapseContainer}>
             <Overview
-              style={{ backgroundColor: '#fff' }}
               title={
                 <Space>
                   <Icon style={{ fontSize: '18px' }} component={TotalSizeSvg} />
                   <Text style={{ width: innerWidth > 1500 ? 900 : 700 }}>
                     Module:{' '}
                     <Text
+                      type="secondary"
                       style={{
                         fontSize: 12,
-                        color: 'rgba(28, 31, 35, 0.6)',
                         fontWeight: 300,
                       }}
                     >
@@ -68,7 +68,7 @@ export const CrossChunksAlertCollapse = (props: {
       label: (
         <LabelComponent
           title={
-            <Tag style={{ backgroundColor: '#EAEDF1', borderRadius: '2px' }}>
+            <Tag className={utilStyles.tag}>
               <span
                 className={styles.pkgName}
               >{`${dupPackage.name}@${dupPackage.version}`}</span>

@@ -18,7 +18,7 @@ import {
   FullscreenExitOutlined,
 } from '@ant-design/icons';
 import type { ComposeOption, EChartsType } from 'echarts/core';
-import { formatSize } from 'src/utils';
+import { formatSize, useThemeToken } from 'src/utils';
 import { SDK } from '@rsdoctor/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
 import { ModuleAnalyzeComponent } from '../../pages/ModuleAnalyze';
@@ -143,6 +143,7 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
     const chartRef = React.useRef<EChartsReactCore | null>(null);
     const chartDataRef = React.useRef<TreemapDataNode[]>([]);
     const clickTimeoutRef = React.useRef<number | null>(null);
+    const themeToken = useThemeToken();
 
     useEffect(() => {
       if (!treeData) return;
@@ -290,15 +291,16 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
 
       chartDataRef.current = data;
 
+      const textColor = themeToken.colorText;
       setOption({
         color: TREE_COLORS,
         tooltip: {
           padding: 10,
-          backgroundColor: '#fff',
-          borderColor: '#eee',
+          backgroundColor: themeToken.colorBgElevated,
+          borderColor: themeToken.colorBorder,
           borderWidth: 1,
           textStyle: {
-            color: 'rgba(0, 0, 0, 0.8)',
+            color: textColor,
           },
           confine: true,
           extraCssText: 'max-width: 450px; word-wrap: break-word;',
@@ -379,7 +381,7 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
 
             return `
                 <div style="font-family: sans-serif; font-size: 12px; line-height: 1.5;">
-                  <div style="margin-bottom: 6px; max-width: 400px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; white-space: normal; color: rgba(0, 0, 0, 0.8);">${echarts.format.encodeHTML(path)}</div>
+                  <div style="margin-bottom: 6px; max-width: 400px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; white-space: normal; color: ${textColor};">${echarts.format.encodeHTML(path)}</div>
                   ${rows.join('')}
                 </div>
               `;
@@ -449,7 +451,7 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
           } as TreemapSeriesOption,
         ],
       });
-    }, [treeData, sizeType, highlightNodeId, rootPath]);
+    }, [treeData, sizeType, highlightNodeId, rootPath, themeToken]);
 
     useEffect(() => {
       if (centerNodeId && chartRef.current && option) {

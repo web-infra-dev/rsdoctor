@@ -46,9 +46,13 @@
   flex: 1;
   min-height: var(--tree-min-height);
   padding: var(--y-pad) var(--x-pad-minus-scrollbar) var(--y-pad) var(--x-pad);
-  border: 1px solid rgba(235, 237, 241);
-  border-radius: 8px;
-  resize: vertical;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+
+  :global(.ant-tree-list-scrollbar-thumb) {
+    /* override antd's inline style */
+    background: var(--color-scrollbar) !important;
+  }
 
   /* on smaller devices stop trying to keep the whole tree in viewport: let's expand it a little bit */
   @media (max-height: 900px) {
@@ -97,7 +101,6 @@
   text-wrap: nowrap;
   font-size: 14px;
   font-weight: 400;
-  color: rgba(0, 0, 0, 0.85);
 }
 
 .bundleTreeEntryTitleWrap {
@@ -114,5 +117,5 @@
   min-width: 10px;
   flex-grow: 1;
   margin: 0 10px;
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+  border-bottom: 1px dashed var(--color-divider);
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { WebpackConfigurationViewer } from '../../../components/Configuration';
 import { Card } from '../../../components/Card';
 import { LoaderChart } from 'src/components/Charts';
-import { Popover, Space, Tag, Typography } from 'antd/lib';
+import { Popover, Space, Tag, Typography } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 

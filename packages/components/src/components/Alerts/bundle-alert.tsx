@@ -13,6 +13,7 @@ import type { CSSProperties } from 'react';
 import type { Rule } from '@rsdoctor/types';
 
 import styles from './bundle-alert.module.scss';
+import utilStyles from './index.module.scss';
 import { CrossChunksAlertCollapse } from './collapse-cross-chunks';
 import { ModuleMixedChunksAlertCollapse } from './collapse-module-mixed-chunks';
 import { SideEffectsOnlyImportsAlertCollapse } from './collapse-side-effects-only-imports';
@@ -228,12 +229,11 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
           title={
             <>
               <Tag
+                className={utilStyles.tag}
                 style={{
                   fontFamily: 'Menlo',
                   fontWeight: '700',
                   fontSize: '13px',
-                  backgroundColor: '#EAEDF1',
-                  borderRadius: '2px',
                 }}
               >
                 {td.tag}

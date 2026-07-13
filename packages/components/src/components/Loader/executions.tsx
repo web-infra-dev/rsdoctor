@@ -26,6 +26,7 @@ import { CodeOpener } from '../Opener';
 import { Title } from '../Title';
 import { ServerAPIProvider } from '../Manifest';
 import styles from './Analysis/style.module.scss';
+import clsx from 'clsx';
 
 interface LoaderExecutionsProps {
   cwd: string;
@@ -233,8 +234,7 @@ export const LoaderExecutions = ({
 }: PropsWithChildren<LoaderExecutionsProps>): React.JSX.Element => {
   const { loaders, resource } = data;
   const [currentIndex, setCurrentIndex] = useState(index || 0);
-  const { theme } = useTheme();
-  const isLight = theme === 'light';
+  const { isLight } = useTheme();
   const loader = loaders[currentIndex];
   const leftSpan = 5;
   const [activeKey, setActiveKey] = useState('loaderDetails');
@@ -247,7 +247,7 @@ export const LoaderExecutions = ({
       <Col
         span={leftSpan}
         style={{
-          borderRight: isLight ? `1px solid #f0f0f0` : undefined,
+          borderRight: `1px solid var(--color-border-secondary)`,
           padding: Size.BasePadding,
         }}
       >
@@ -275,27 +275,25 @@ export const LoaderExecutions = ({
                     <Col span={24} className={styles.timeline}>
                       <Tooltip title={loader} trigger="hover">
                         <div
-                          className={`${styles.box} ${currentIndex === i ? styles.selected : ''}`}
+                          className={clsx(
+                            styles.box,
+                            currentIndex === i && styles.selected,
+                          )}
                           onClick={() => {
                             setCurrentIndex(i);
                           }}
                           style={{ textAlign: 'left' }}
                         >
                           <div>
-                            <Typography.Text style={{ color: '#000' }}>
+                            <Typography.Text>
                               {costs.match(/[0-9]*\.?[0-9]+/g)?.[0]}
                             </Typography.Text>
                             {` `}
-                            <Typography.Text
-                              style={{ color: 'rgba(0,0,0,0.45)' }}
-                            >
+                            <Typography.Text type="secondary">
                               {costs.match(/[a-zA-Z]+/g)}
                             </Typography.Text>
                           </div>
-                          <Typography.Text
-                            style={{ color: 'rgba(0,0,0,0.65)' }}
-                            className={styles.loader}
-                          >
+                          <Typography.Text className={styles.loader}>
                             {loader}
                           </Typography.Text>
                         </div>

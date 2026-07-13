@@ -3,6 +3,7 @@ import { Collapse, Space, Tag, Typography } from 'antd';
 
 import Overview from '../Overall/overview';
 import styles from './collapse.module.scss';
+import utilStyles from './index.module.scss';
 import TotalSizeSvg from '../../common/svg/total-size.svg';
 import { beautifyPath } from '../../utils/file';
 import { LabelComponent, IdeIcons } from './collapse-shared';
@@ -30,16 +31,15 @@ export const SideEffectsOnlyImportsAlertCollapse = (props: {
       return (
         <div className={styles.collapseContainer}>
           <Overview
-            style={{ backgroundColor: '#fff' }}
             title={
               <Space align="center">
                 <Icon style={{ fontSize: '18px' }} component={TotalSizeSvg} />
                 <Text style={{ width: innerWidth > 1500 ? 900 : 700 }}>
                   Module:{' '}
                   <Text
+                    type="secondary"
                     style={{
                       fontSize: 12,
-                      color: 'rgba(28, 31, 35, 0.6)',
                       fontWeight: 300,
                     }}
                   >
@@ -55,7 +55,6 @@ export const SideEffectsOnlyImportsAlertCollapse = (props: {
                   style={{
                     marginBottom: 8,
                     fontWeight: 500,
-                    color: 'rgba(28, 31, 35, 0.85)',
                   }}
                 >
                   Side-Effects-Only Importers:
@@ -66,10 +65,9 @@ export const SideEffectsOnlyImportsAlertCollapse = (props: {
                     <div className={styles.iconContainer}>
                       <span className={styles.data}>{conn.userRequest}</span>
                       <Tag
+                        className={utilStyles.tag}
                         style={{
                           marginLeft: 8,
-                          backgroundColor: '#EAEDF1',
-                          borderRadius: '2px',
                           fontSize: 11,
                         }}
                       >
@@ -91,7 +89,7 @@ export const SideEffectsOnlyImportsAlertCollapse = (props: {
         <LabelComponent
           title={
             <Space size={4} align="center">
-              <Tag style={{ backgroundColor: '#EAEDF1', borderRadius: '2px' }}>
+              <Tag className={utilStyles.tag}>
                 <span className={styles.pkgName}>{modulePath}</span>
               </Tag>
             </Space>

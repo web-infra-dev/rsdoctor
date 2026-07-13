@@ -1,4 +1,10 @@
-import { PropsWithChildren, useContext, useEffect, useState } from 'react';
+import {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import { FloatButton, Layout as L } from 'antd';
 import { Language, MAIN_BG, Size } from '../../constants';
 import { Header } from './header';
@@ -10,6 +16,8 @@ import {
   getLanguage,
   useUrlQuery,
   getEnableRoutesFromUrlQuery,
+  useThemeToken,
+  useTheme,
 } from '../../utils';
 import { Progress } from './progress';
 import { ConfigContext } from '../../config';
@@ -39,6 +47,8 @@ const TitleUpdater: React.FC<{
 export const Layout = (
   props: PropsWithChildren<LayoutProps>,
 ): React.JSX.Element => {
+  const { isLight } = useTheme();
+  const themeToken = useThemeToken();
   const locale = useLocale();
   const { i18n } = useI18n();
   const { children } = props;
@@ -75,11 +85,29 @@ export const Layout = (
   const ctx = useContext(ConfigContext);
   const showHeader = !ctx.embedded;
 
-  const globalCssVars = {
-    '--spacing-base': Size.BasePadding + 'px',
-    '--layout-nav-height': showHeader ? Size.NavBarHeight + 'px' : '0px',
-    '--color-bg-main': MAIN_BG,
-  } as React.CSSProperties;
+  useLayoutEffect(() => {
+    const $root = document.documentElement;
+    const globalCssVars = {
+      '--spacing-base': Size.BasePadding + 'px',
+      '--layout-nav-height': showHeader ? Size.NavBarHeight + 'px' : '0px',
+      '--color-bg-main': MAIN_BG,
+      '--color-bg-box': themeToken.colorBgContainer,
+      '--color-bg-box-elevated': themeToken.colorBgLayout,
+      '--color-border': themeToken.colorBorder,
+      '--color-border-secondary': themeToken.colorBorderSecondary,
+      '--color-divider': themeToken.colorBorder,
+      '--color-scrollbar': isLight
+        ? 'rgba(0, 0, 0, 0.5)'
+        : 'rgba(255,255,255, 0.5)',
+      '--text-color': themeToken.colorText,
+      '--text-color-secondary': themeToken.colorTextSecondary,
+      '--border-radius': themeToken.borderRadius + 'px',
+      '--border-radius-lg': themeToken.borderRadiusLG + 'px',
+    };
+    for (const [name, value] of Object.entries(globalCssVars)) {
+      $root.style.setProperty(name, value);
+    }
+  }, [showHeader, themeToken, isLight]);
 
   return (
     <ServerAPIProvider
@@ -88,7 +116,7 @@ export const Layout = (
     >
       {(project) => (
         <ProjectInfoContext.Provider value={{ project }}>
-          <L style={globalCssVars}>
+          <L>
             <TitleUpdater name={project?.name} />
             {showHeader && <Header enableRoutes={enableRoutes} />}
             <Progress />

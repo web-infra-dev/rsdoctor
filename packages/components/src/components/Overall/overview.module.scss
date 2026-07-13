@@ -1,7 +1,7 @@
 .container {
   width: 100%;
   display: flex;
-  background: #f6f8fa;
+  background: var(--color-bg-box-elevated);
   align-items: center;
   justify-content: space-between;
   border-radius: 8px;
@@ -16,7 +16,6 @@
       font-size: 12px;
       font-weight: 400;
       line-height: 20px;
-      color: #000000a6;
     }
 
     .description {

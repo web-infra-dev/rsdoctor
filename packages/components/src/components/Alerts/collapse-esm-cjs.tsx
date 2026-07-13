@@ -2,6 +2,7 @@ import { Collapse, Space, Tag, Tooltip, Typography } from 'antd';
 
 import Overview from '../Overall/overview';
 import styles from './collapse.module.scss';
+import utilStyles from './index.module.scss';
 import { beautifyPath } from '../../utils/file';
 import { truncateMiddle } from '../../utils/string';
 import { LabelComponent } from './collapse-shared';
@@ -29,17 +30,15 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
     const ChildComponent = () => (
       <div className={styles.collapseContainer}>
         <Overview
-          style={{ backgroundColor: '#fff' }}
           title={
             <Space align="center" wrap>
               <Text strong style={{ fontSize: 13 }}>
                 Package:
               </Text>
               <Tag
+                className={utilStyles.tag}
                 style={{
                   fontFamily: 'Menlo',
-                  backgroundColor: '#EAEDF1',
-                  borderRadius: '2px',
                 }}
               >
                 {`${packageName}@${packageVersion}`}
@@ -147,12 +146,7 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
                   {
                     key: 'issuers',
                     label: (
-                      <span
-                        style={{
-                          fontWeight: 500,
-                          color: 'rgba(28, 31, 35, 0.85)',
-                        }}
-                      >
+                      <span style={{ fontWeight: 500 }}>
                         {`ESM Importers (${issuers.length})`}
                       </span>
                     ),
@@ -171,10 +165,9 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
                             {beautifyPath(issuer.path, cwd)}
                           </span>
                           <Tag
+                            className={utilStyles.tag}
                             style={{
                               marginLeft: 8,
-                              backgroundColor: '#EAEDF1',
-                              borderRadius: '2px',
                               fontSize: 11,
                               fontFamily: 'Menlo',
                             }}
@@ -199,7 +192,10 @@ export const EsmResolvedToCjsAlertCollapse = (props: {
         <LabelComponent
           title={
             <Space size={4} align="center">
-              <Tag style={{ backgroundColor: '#EAEDF1', borderRadius: '2px' }}>
+              <Tag
+                className={utilStyles.tag}
+                style={{ backgroundColor: '#EAEDF1', borderRadius: '2px' }}
+              >
                 <span
                   className={styles.pkgName}
                 >{`${packageName}@${packageVersion}`}</span>

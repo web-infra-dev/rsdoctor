@@ -1,5 +1,4 @@
 .root {
-  --bg-color: white;
   --height: var(--layout-nav-height, 54px);
 
   width: 100%;
@@ -8,7 +7,6 @@
   padding: 0;
   padding-inline: var(--spacing-base);
   z-index: 999;
-  background-color: var(--bg-color);
   transition: none;
 
   :global {
@@ -16,10 +14,6 @@
       top: 1px !important;
     }
   }
-}
-
-.rootDark {
-  --bg-color: #141414;
 }
 
 .innerRoot {

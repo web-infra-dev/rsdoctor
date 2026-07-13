@@ -110,6 +110,13 @@ const BaseApp: React.FC<BaseAppProps> = ({
               <ConfigProvider
                 locale={getLocale(v.locale)}
                 theme={{
+                  components: {
+                    Layout: {
+                      ...(Theme.Light === theme && {
+                        headerBg: '#fff',
+                      }),
+                    },
+                  },
                   algorithm:
                     theme === Theme.Dark
                       ? te.darkAlgorithm
@@ -117,7 +124,6 @@ const BaseApp: React.FC<BaseAppProps> = ({
 
                   token: {
                     padding: 16,
-                    colorText: 'rgba(0, 0, 0, 0.85)',
                     fontFamily: 'var(--font-family-code)',
                   },
                 }}

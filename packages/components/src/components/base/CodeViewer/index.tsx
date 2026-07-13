@@ -13,6 +13,7 @@ import {
 import { Checkbox } from 'antd';
 import styles from './index.module.scss';
 import { Lodash } from '@rsdoctor/utils/common';
+import { useTheme } from 'src/utils';
 
 export function CodeViewer({
   className,
@@ -24,9 +25,11 @@ export function CodeViewer({
   ranges,
   isEmbed = false,
   headerVisible = true,
-  isLightTheme = true,
+  isLightTheme: isLightThemeProp,
   formatOnMount = false,
 }: CodeViewerProps) {
+  const { isLight: isLightMode } = useTheme();
+  const isLightTheme: boolean = isLightThemeProp ?? isLightMode;
   const editor = useRef<editor.IStandaloneCodeEditor>(undefined);
   const monaco = useRef<Monaco>(undefined);
   const language = useMemo(
@@ -59,8 +62,6 @@ export function CodeViewer({
     },
     [ranges, defaultLine, formatOnMount],
   );
-
-  const theme = isLightTheme ? 'vs-light' : 'vs-dark';
 
   useEffect(
     () => () => {
@@ -100,7 +101,7 @@ export function CodeViewer({
       )}
       <div className={clsx(styles['content'], 'editor-wrap')}>
         <Editor
-          theme={theme}
+          theme={isLightTheme ? 'vs-light' : 'vs-dark'}
           language={language}
           value={code}
           options={options}

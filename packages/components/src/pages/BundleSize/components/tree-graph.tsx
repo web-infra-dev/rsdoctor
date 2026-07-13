@@ -278,7 +278,7 @@ export const TreeGraph = memo(
                       style={{ marginLeft: 3 }}
                     >
                       <InfoCircleOutlined
-                        style={{ color: 'rgba(0,0,0,.45)' }}
+                        style={{ color: 'var(--text-color-secondary)' }}
                       />
                     </Tooltip>
                   </Space>
@@ -303,7 +303,7 @@ export const TreeGraph = memo(
                       style={{ marginLeft: 3 }}
                     >
                       <InfoCircleOutlined
-                        style={{ color: 'rgba(0,0,0,.45)' }}
+                        style={{ color: 'var(--text-color-secondary)' }}
                       />
                     </Tooltip>
                   </Space>

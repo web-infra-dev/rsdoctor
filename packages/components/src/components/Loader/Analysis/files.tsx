@@ -116,15 +116,15 @@ export const LoaderFiles: React.FC<{
                 if (i <= ADDITION_LOADER_NUMBER) {
                   return (
                     <Tooltip title={e.path} key={key}>
-                      <Typography.Text
-                        className={styles.textBox}
-                        style={{ color: isError ? '#f50' : 'inherit' }}
+                      <Tag
                         onClick={(ev) => {
                           ev.stopPropagation();
                           setResourcePath(file);
                           setLoaderIndex(i);
                           setDrawerVisible(true);
                         }}
+                        className={styles.textBox}
+                        style={{ color: isError ? '#f50' : 'inherit' }}
                       >
                         <Typography.Text className={styles.text} ellipsis>
                           {e.loader.match(/([^/]+-loader)/g)?.[0] || e.loader}
@@ -137,12 +137,12 @@ export const LoaderFiles: React.FC<{
                             {formatCosts(e.costs)}
                           </Typography.Text>
                         )}
-                      </Typography.Text>
+                      </Tag>
                     </Tooltip>
                   );
                 }
               })}
-              {additionalLoaders?.length ? (
+              {additionalLoaders?.length > 0 && (
                 <Popover
                   content={
                     <List
@@ -155,16 +155,16 @@ export const LoaderFiles: React.FC<{
                           <List.Item>
                             <Tooltip title={e.path} key={key}>
                               <div style={{ paddingBottom: 5 }}>
-                                <Typography.Text
-                                  className={styles.textBox}
-                                  style={{
-                                    color: isError ? '#f50' : 'inherit',
-                                  }}
+                                <Tag
                                   onClick={(ev) => {
                                     ev.stopPropagation();
                                     setResourcePath(file);
                                     setLoaderIndex(i);
                                     setDrawerVisible(true);
+                                  }}
+                                  className={styles.textBox}
+                                  style={{
+                                    color: isError ? '#f50' : 'inherit',
                                   }}
                                 >
                                   <Typography.Text
@@ -178,7 +178,7 @@ export const LoaderFiles: React.FC<{
                                   <Typography.Text className={styles.text}>
                                     {formatCosts(e.costs)}
                                   </Typography.Text>
-                                </Typography.Text>
+                                </Tag>
                               </div>
                             </Tooltip>
                           </List.Item>
@@ -187,12 +187,10 @@ export const LoaderFiles: React.FC<{
                     />
                   }
                 >
-                  <div className={styles.textBox}>
+                  <Tag className={styles.textBox}>
                     <Typography.Text>···</Typography.Text>
-                  </div>
+                  </Tag>
                 </Popover>
-              ) : (
-                <></>
               )}
             </Space>
           </div>
@@ -216,11 +214,10 @@ export const LoaderFiles: React.FC<{
             <Space>
               <Typography.Text strong>Files</Typography.Text>
               <Typography.Text
+                type="secondary"
                 style={{
                   fontSize: 12,
                   fontWeight: 400,
-                  color: '#1C1F2399',
-                  opacity: 0.6,
                 }}
               >
                 Total Files: {filteredFiles.length}

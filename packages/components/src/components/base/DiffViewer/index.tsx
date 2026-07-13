@@ -6,6 +6,7 @@ import { getFileName, getFilePathFormat } from '../CodeViewer/utils';
 import styles from './index.module.scss';
 import { DiffViewerProps } from './interface';
 import { defineMonacoDiffOptions } from './utils';
+import { useTheme } from '../../../utils';
 
 export function DiffViewer({
   className,
@@ -17,9 +18,11 @@ export function DiffViewer({
   originalLang,
   modifiedLang,
   isEmbed = false,
-  isLightTheme = true,
+  isLightTheme: isLightThemeProp,
   headerVisible = true,
 }: DiffViewerProps) {
+  const { isLight: isLightMode } = useTheme();
+  const isLightTheme: boolean = isLightThemeProp ?? isLightMode;
   const [isSideBySide, setIsSideBySide] = useState(true);
   const editor = useRef<MonacoDiffEditor>(undefined);
   const originalLanguage = useMemo(

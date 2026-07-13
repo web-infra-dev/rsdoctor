@@ -1,5 +1,5 @@
 import React from 'react';
-import { Space, theme } from 'antd';
+import { Space } from 'antd';
 import {
   FileOutlined,
   FolderOpenTwoTone,
@@ -14,10 +14,8 @@ import JSIcon from 'src/common/svg/files/js.svg';
 import FileIcon from 'src/common/svg/files/unkown-file.svg';
 
 import './index.sass';
-import { useTheme } from '../../utils';
+import { useTheme, useThemeToken } from '../../utils';
 import path from 'path';
-
-const { useToken } = theme;
 
 function getFileType(filename: string) {
   const extension = path.extname(filename).slice(1).toLowerCase();
@@ -71,7 +69,7 @@ export function getFileCom(filename: string) {
 export const FileTree: React.FC<Partial<TreeProps>> = (props) => {
   const { isDark } = useTheme();
 
-  const { token } = useToken();
+  const token = useThemeToken();
   const color = isDark ? token.colorWhite : token.colorText;
   const style = { fontSize: token.fontSize };
 
