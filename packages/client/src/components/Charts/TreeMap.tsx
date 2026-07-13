@@ -314,11 +314,11 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
               obj.right = size.viewSize[0] - pos[0] + 10;
             }
             return obj;
-          } as TooltipComponentOption['position'],
-          formatter: function (
-            info: CallbackDataParams & { data?: TreemapDataNode },
-          ) {
-            const node = info.data || {};
+          },
+          formatter: function (info) {
+            const node =
+              (info as CallbackDataParams & { data?: TreemapDataNode }).data ||
+              {};
             let path =
               typeof node.path === 'string'
                 ? node.path
@@ -386,13 +386,10 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
                 </div>
               `;
           },
-        } as TooltipComponentOption,
+        },
         series: [
           {
             type: 'treemap',
-            itemStyle: {
-              gapColor: '#ffffff',
-            },
             label: {
               show: true,
               formatter: '{b}',
@@ -422,16 +419,16 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
                 borderColor: 'transparent',
                 borderWidth: 0,
                 borderRadius: 0,
+                textStyle: {
+                  fontFamily: 'sans-serif',
+                  fontSize: 12,
+                  color: '#666',
+                },
               },
               emphasis: {
                 itemStyle: {
                   color: '#333',
                 },
-              },
-              textStyle: {
-                fontFamily: 'sans-serif',
-                fontSize: 12,
-                color: '#666',
               },
             },
             roam: true,
@@ -444,11 +441,11 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
             bottom: 30,
             left: 0,
             right: 0,
-            zoomLimit: {
+            scaleLimit: {
               min: 0.5,
               max: 5,
             },
-          } as TreemapSeriesOption,
+          },
         ],
       });
     }, [treeData, sizeType, highlightNodeId, rootPath, themeToken]);
