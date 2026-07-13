@@ -696,60 +696,59 @@ const AssetTreemapWithFilterInner: React.FC<{
     [onChartClick],
   );
 
-  const enterFullscreen = useCallback(() => {
-    if (containerRef.current) {
-      const el = containerRef.current as HTMLElement & {
-        webkitRequestFullscreen?: () => void;
-        mozRequestFullScreen?: () => void;
-        msRequestFullscreen?: () => void;
-      };
-      if (el.requestFullscreen) {
-        el.requestFullscreen()
-          .then(() => setIsFullscreen(true))
-          .catch((err: unknown) =>
-            console.error('Failed to enter fullscreen:', err),
-          );
-      } else if (el.webkitRequestFullscreen) {
-        try {
-          el.webkitRequestFullscreen();
-          setIsFullscreen(true);
-        } catch (err) {
-          console.error('Failed to enter fullscreen (webkit):', err);
-        }
-      } else if (el.mozRequestFullScreen) {
-        try {
-          el.mozRequestFullScreen();
-          setIsFullscreen(true);
-        } catch (err) {
-          console.error('Failed to enter fullscreen (moz):', err);
-        }
-      } else if (el.msRequestFullscreen) {
-        try {
-          el.msRequestFullscreen();
-          setIsFullscreen(true);
-        } catch (err) {
-          console.error('Failed to enter fullscreen (ms):', err);
-        }
-      } else {
-        console.error('Fullscreen API is not supported in this browser.');
+  const enterFullscreen = () => {
+    if (!containerRef.current) return;
+    const el = containerRef.current as HTMLElement & {
+      webkitRequestFullscreen?: () => void;
+      mozRequestFullScreen?: () => void;
+      msRequestFullscreen?: () => void;
+    };
+    if (el.requestFullscreen) {
+      el.requestFullscreen()
+        .then(() => setIsFullscreen(true))
+        .catch((err: unknown) =>
+          console.error('Failed to enter fullscreen:', err),
+        );
+    } else if (el.webkitRequestFullscreen) {
+      try {
+        el.webkitRequestFullscreen();
+        setIsFullscreen(true);
+      } catch (err) {
+        console.error('Failed to enter fullscreen (webkit):', err);
       }
+    } else if (el.mozRequestFullScreen) {
+      try {
+        el.mozRequestFullScreen();
+        setIsFullscreen(true);
+      } catch (err) {
+        console.error('Failed to enter fullscreen (moz):', err);
+      }
+    } else if (el.msRequestFullscreen) {
+      try {
+        el.msRequestFullscreen();
+        setIsFullscreen(true);
+      } catch (err) {
+        console.error('Failed to enter fullscreen (ms):', err);
+      }
+    } else {
+      console.error('Fullscreen API is not supported in this browser.');
     }
-  }, []);
+  };
 
-  const exitFullscreen = useCallback(() => {
+  const exitFullscreen = () => {
     document
       .exitFullscreen()
       .then(() => setIsFullscreen(false))
       .catch((err) => console.error('Failed to exit fullscreen:', err));
-  }, []);
+  };
 
-  const toggleFullscreen = useCallback(() => {
+  const toggleFullscreen = () => {
     if (isFullscreen) {
       exitFullscreen();
     } else {
       enterFullscreen();
     }
-  }, [isFullscreen, enterFullscreen, exitFullscreen]);
+  };
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -807,64 +806,55 @@ const AssetTreemapWithFilterInner: React.FC<{
     return results;
   }, [filteredTreeData, searchQuery]);
 
-  const handleSearchResultClick = useCallback((nodeId: number) => {
+  const handleSearchResultClick = (nodeId: number) => {
     setHighlightNodeId(nodeId);
     setCenterNodeId(nodeId);
-  }, []);
+  };
 
-  const removeRootPath = useCallback(
-    (filepath: string): string => {
-      if (!rootPath || !filepath) return filepath;
-      const normalizedRoot = rootPath.replace(/\\/g, '/').replace(/\/$/, '');
-      const normalizedPath = filepath.replace(/\\/g, '/');
+  const removeRootPath = (filepath: string): string => {
+    if (!rootPath || !filepath) return filepath;
+    const normalizedRoot = rootPath.replace(/\\/g, '/').replace(/\/$/, '');
+    const normalizedPath = filepath.replace(/\\/g, '/');
 
-      if (normalizedPath.startsWith(normalizedRoot + '/')) {
-        return normalizedPath.slice(normalizedRoot.length + 1);
-      } else if (normalizedPath === normalizedRoot) {
-        return '';
-      }
-      return filepath;
-    },
-    [rootPath],
-  );
+    if (normalizedPath.startsWith(normalizedRoot + '/')) {
+      return normalizedPath.slice(normalizedRoot.length + 1);
+    } else if (normalizedPath === normalizedRoot) {
+      return '';
+    }
+    return filepath;
+  };
 
-  const getSize = useCallback((node: TreeNode, type?: SizeType) => {
+  const getSize = (node: TreeNode, type?: SizeType) => {
     if (type === 'stat') return node.sourceSize || 0;
     if (type === 'parsed') return node.bundledSize || 0;
     if (type === 'gzip') return node.gzipSize || 0;
     if (type === 'value') return node.value || 0;
     if (node.value) return node.value;
     return 0;
-  }, []);
+  };
 
-  const calculateNodeTotalSize = useCallback(
-    (node: TreeNode, type: SizeType): number => {
-      let size = getSize(node, type);
+  const calculateNodeTotalSize = (node: TreeNode, type: SizeType): number => {
+    let size = getSize(node, type);
 
-      if (node.children && node.children.length > 0) {
-        const childrenSize = node.children.reduce(
-          (sum, child) => sum + calculateNodeTotalSize(child, type),
-          0,
-        );
-        if (size === 0 || (!node.path && childrenSize > 0)) {
-          size = childrenSize;
-        }
+    if (node.children && node.children.length > 0) {
+      const childrenSize = node.children.reduce(
+        (sum, child) => sum + calculateNodeTotalSize(child, type),
+        0,
+      );
+      if (size === 0 || (!node.path && childrenSize > 0)) {
+        size = childrenSize;
       }
+    }
 
-      return size;
-    },
-    [getSize],
-  );
+    return size;
+  };
 
-  const getChunkSize = useCallback(
-    (name: string, type?: SizeType) => {
-      const node = treeData.find((n) => n.name === name);
-      if (!node) return 0;
-      const sizeTypeToUse = type || sizeType;
-      return calculateNodeTotalSize(node, sizeTypeToUse);
-    },
-    [treeData, sizeType, calculateNodeTotalSize],
-  );
+  const getChunkSize = (name: string, type?: SizeType) => {
+    const node = treeData.find((n) => n.name === name);
+    if (!node) return 0;
+    const sizeTypeToUse = type || sizeType;
+    return calculateNodeTotalSize(node, sizeTypeToUse);
+  };
 
   return (
     <div className={Styles.treemap} ref={containerRef}>
