@@ -552,52 +552,58 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
     }, []);
 
     return option ? (
-      <div className={Styles['chart-container']} style={style}>
+      <div className={Styles['chart-container']}>
         <Alert
           message="If parsed size lacks detailed module information, you can enable sourceMap when RSDOCTOR = true. This is because Rsdoctor relies on SourceMap to obtain Parsed Size. Rspack provides SourceMap information to Rsdoctor by default without affecting the build output."
           type="info"
           showIcon
           style={{ marginBottom: 0 }}
         />
-        <EChartsReactCore
-          ref={chartRef}
-          option={option}
-          echarts={echarts}
-          onEvents={{
-            click: (params: ECElementEvent) => {
-              // Delay to differentiate from double-click; only zoom on single click
-              if (clickTimeoutRef.current) {
-                window.clearTimeout(clickTimeoutRef.current);
-              }
-              clickTimeoutRef.current = window.setTimeout(() => {
-                if (chartRef.current) {
-                  const instance =
-                    chartRef.current.getEchartsInstance() as unknown as EChartsType;
-                  const data = params?.data as TreemapDataNode | undefined;
-                  if (instance && data?.id !== undefined) {
-                    instance.dispatchAction({
-                      type: 'treemapZoomToNode',
-                      seriesIndex: 0,
-                      targetNodeId: String(data.id),
-                    });
-                  }
-                }
-              }, 180);
-            },
-            dblclick: (params: ECElementEvent) => {
-              // Double click: cancel pending single-click action and trigger analyze
-              if (clickTimeoutRef.current) {
-                window.clearTimeout(clickTimeoutRef.current);
-                clickTimeoutRef.current = null;
-              }
-              onChartClick?.(params);
-            },
-          }}
+        <div
           style={{
-            width: '100%',
-            height: '100%',
+            flex: 1,
           }}
-        />
+        >
+          <EChartsReactCore
+            ref={chartRef}
+            option={option}
+            echarts={echarts}
+            onEvents={{
+              click: (params: ECElementEvent) => {
+                // Delay to differentiate from double-click; only zoom on single click
+                if (clickTimeoutRef.current) {
+                  window.clearTimeout(clickTimeoutRef.current);
+                }
+                clickTimeoutRef.current = window.setTimeout(() => {
+                  if (chartRef.current) {
+                    const instance =
+                      chartRef.current.getEchartsInstance() as unknown as EChartsType;
+                    const data = params?.data as TreemapDataNode | undefined;
+                    if (instance && data?.id !== undefined) {
+                      instance.dispatchAction({
+                        type: 'treemapZoomToNode',
+                        seriesIndex: 0,
+                        targetNodeId: String(data.id),
+                      });
+                    }
+                  }
+                }, 180);
+              },
+              dblclick: (params: ECElementEvent) => {
+                // Double click: cancel pending single-click action and trigger analyze
+                if (clickTimeoutRef.current) {
+                  window.clearTimeout(clickTimeoutRef.current);
+                  clickTimeoutRef.current = null;
+                }
+                onChartClick?.(params);
+              },
+            }}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          />
+        </div>
       </div>
     ) : null;
   },
