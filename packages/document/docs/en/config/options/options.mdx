@@ -4,18 +4,16 @@ import { Badge, Tab, Tabs } from '@theme';
 
 ## RsdoctorRspackPlugin
 
-The **RsdoctorRspackPlugin** class is exported by `@rsdoctor/rspack-plugin`, and the configuration options are [RsdoctorRspackPluginOptions](#rsdoctorrspackpluginoptions).
+The `RsdoctorRspackPlugin` class is exported from `@rsdoctor/core`. Its configuration type is [RsdoctorRspackPluginOptions](#rsdoctorrspackpluginoptions).
 
 <Tabs>
 
 <Tab label="esm">
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
-new RsdoctorRspackPlugin({
-  /** RsdoctorRspackPluginOptions */
-});
+new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
 ```
 
 </Tab>
@@ -23,11 +21,9 @@ new RsdoctorRspackPlugin({
 <Tab label="cjs">
 
 ```js
-const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
 
-new RsdoctorRspackPlugin({
-  /** RsdoctorRspackPluginOptions */
-});
+new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
 ```
 
 </Tab>
@@ -61,8 +57,7 @@ interface RsdoctorRspackPluginOptions<
 
   /** Rsdoctor feature toggles */
   features?:
-    | RsdoctorRspackPluginFeatures
-    | Array<keyof RsdoctorRspackPluginFeatures>;
+    RsdoctorRspackPluginFeatures | Array<keyof RsdoctorRspackPluginFeatures>;
 
   /**
    * @deprecated Use `output.mode` instead. If using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead

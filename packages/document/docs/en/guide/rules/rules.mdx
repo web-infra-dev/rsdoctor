@@ -44,7 +44,7 @@ Please refer to the [Linter Type](#linter-type) in this document for the type de
 - Configuration Example:
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugin: [
@@ -149,7 +149,7 @@ interface Config {
 This rule is used to detect incompatible advanced syntax. When scanning the rule, the configuration of `browserslist` is prioritized; if `browserslist` is not configured, manual detection is required, as shown below:
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugin: [
@@ -269,7 +269,7 @@ interface Config {
 Configuration example:
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugin: [
@@ -322,7 +322,7 @@ interface Config {
 Configuration example:
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugins: [
@@ -375,7 +375,7 @@ interface Config {
 Configuration example:
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugins: [
@@ -431,7 +431,7 @@ interface Config {
 Configuration example:
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugins: [
@@ -485,7 +485,7 @@ type RuleConfigItem =
 If you want to **disable a rule**, you can set `SeverityInput` to `off`, as shown in the following example:
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugin: [

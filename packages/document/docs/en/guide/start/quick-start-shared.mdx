@@ -7,7 +7,7 @@ After the dependency installation, you need to integrate the Rsdoctor plugin int
 Initialize the RsdoctorRspackPlugin in the [plugins](https://www.rspack.rs/config/plugins.html#plugins) of `rspack.config.js`:
 
 ```js title="rspack.config.js"
-const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
 
 module.exports = {
   // ...
@@ -32,7 +32,7 @@ Rsbuild has built-in support for Rsdoctor, so you don't need to manually registe
 Initialize the plugin in the [tools.rspack](https://modernjs.dev/configure/app/tools/rspack) of `modern.config.ts`:
 
 ```ts title="modern.config.ts"
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   // ...
@@ -61,7 +61,7 @@ Initialize the [RsdoctorRspackPlugin](#rspack) plugin in the [Rspack Config](htt
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -125,12 +125,12 @@ rsdoctor analyze --profile .next/server/chunks/.rsdoctor/manifest.json
 
 ### Vue project
 
-Initialize the `@rsdoctor/rspack-plugin` plugin in the configuration file. Here is an example using `rsbuild`:
+Import `RsdoctorRspackPlugin` from `@rsdoctor/core` and initialize it in the configuration file. Here is an example using Rsbuild:
 
 ```ts title="rsbuild.config.ts"
 import { defineConfig } from '@rsbuild/core';
 import { pluginVue } from '@rsbuild/plugin-vue';
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default defineConfig({
   plugins: [pluginVue()],
