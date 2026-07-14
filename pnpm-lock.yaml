@@ -46,8 +46,8 @@ catalogs:
       specifier: ^0.2.8
       version: 0.2.8
     '@rstest/core':
-      specifier: 0.10.6
-      version: 0.10.6
+      specifier: 0.11.1
+      version: 0.11.1
     '@types/body-parser':
       specifier: 1.19.6
       version: 1.19.6
@@ -160,7 +160,7 @@ importers:
         version: 0.6.4(jiti@2.6.1)
       '@rstest/core':
         specifier: 'catalog:'
-        version: 0.10.6(core-js@3.49.0)
+        version: 0.11.1(core-js@3.49.0)
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:scripts/test-helper
@@ -199,7 +199,7 @@ importers:
         version: 0.122.0(@types/react@19.2.17)
       '@lynx-js/rspeedy':
         specifier: ^0.15.1
-        version: 0.15.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(core-js@3.49.0)(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
+        version: 0.15.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(core-js@3.49.0)(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@playwright/test':
         specifier: 1.55.1
         version: 1.55.1
@@ -455,7 +455,7 @@ importers:
         version: 0.21.5(@microsoft/api-extractor@7.58.9(@types/node@24.12.3))(core-js@3.49.0)(typescript@6.0.3)
       '@rstest/core':
         specifier: 'catalog:'
-        version: 0.10.6(core-js@3.49.0)
+        version: 0.11.1(core-js@3.49.0)
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.3
@@ -3156,8 +3156,8 @@ packages:
       '@rspress/core':
         optional: true
 
-  '@rstest/core@0.10.6':
-    resolution: {integrity: sha512-nX61dw2Tnxfwy/jGZEuNbh2tzapgaH6Iwj4Aw5d2wxUwxptUL3ddUxFF5M1ZSWoLEVG30VaPg3ITzrSo5sdbTg==}
+  '@rstest/core@0.11.1':
+    resolution: {integrity: sha512-9iJnDrM/zYuHyk1//CMr/Jer2XughgN3fYagGb1YWpMLUke+E+WXlUPgACwf7OkmIB47/TttbLFK+4zwGDNOFg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -9209,7 +9209,7 @@ snapshots:
       '@types/react': 19.2.17
       preact: '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c'
 
-  '@lynx-js/rspeedy@0.15.1(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(core-js@3.49.0)(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
+  '@lynx-js/rspeedy@0.15.1(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rspack/core@2.0.8(@swc/helpers@0.5.23))(core-js@3.49.0)(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
     dependencies:
       '@lynx-js/cache-events-webpack-plugin': 0.1.0
       '@lynx-js/chunk-loading-webpack-plugin': 0.4.0
@@ -9219,7 +9219,7 @@ snapshots:
       '@lynx-js/websocket': 0.0.4
       '@rsbuild/core': 2.0.11(core-js@3.49.0)
       '@rsbuild/plugin-css-minimizer': 2.0.0(@rsbuild/core@2.0.11(core-js@3.49.0))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
-      '@rsdoctor/rspack-plugin': 1.5.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
+      '@rsdoctor/rspack-plugin': 1.5.9(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
     optionalDependencies:
       typescript: 6.0.3
     transitivePeerDependencies:
@@ -9811,14 +9811,14 @@ snapshots:
 
   '@rsdoctor/client@1.5.9': {}
 
-  '@rsdoctor/core@1.5.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
+  '@rsdoctor/core@1.5.9(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
     dependencies:
       '@rsbuild/plugin-check-syntax': 1.6.1(@rsbuild/core@2.0.11(core-js@3.49.0))
       '@rsdoctor/graph': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/sdk': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/types': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/utils': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
-      '@rspack/resolver': 0.2.8(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@rspack/resolver': 0.2.8(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
       browserslist-load-config: 1.0.3
       es-toolkit: 1.49.0
       filesize: 10.1.6
@@ -9846,9 +9846,9 @@ snapshots:
       - '@rspack/core'
       - webpack
 
-  '@rsdoctor/rspack-plugin@1.5.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
+  '@rsdoctor/rspack-plugin@1.5.9(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))':
     dependencies:
-      '@rsdoctor/core': 1.5.9(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
+      '@rsdoctor/core': 1.5.9(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@rsbuild/core@2.0.11(core-js@3.49.0))(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/graph': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/sdk': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
       '@rsdoctor/types': 1.5.9(@rspack/core@2.0.8(@swc/helpers@0.5.23))(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23)))
@@ -10124,6 +10124,14 @@ snapshots:
   '@rspack/resolver-binding-linux-x64-musl@0.2.8':
     optional: true
 
+  '@rspack/resolver-binding-wasm32-wasi@0.2.8(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
+    dependencies:
+      '@napi-rs/wasm-runtime': 1.1.4(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+    optional: true
+
   '@rspack/resolver-binding-wasm32-wasi@0.2.8(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     dependencies:
       '@napi-rs/wasm-runtime': 1.1.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
@@ -10140,6 +10148,22 @@ snapshots:
 
   '@rspack/resolver-binding-win32-x64-msvc@0.2.8':
     optional: true
+
+  '@rspack/resolver@0.2.8(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
+    optionalDependencies:
+      '@rspack/resolver-binding-darwin-arm64': 0.2.8
+      '@rspack/resolver-binding-darwin-x64': 0.2.8
+      '@rspack/resolver-binding-linux-arm64-gnu': 0.2.8
+      '@rspack/resolver-binding-linux-arm64-musl': 0.2.8
+      '@rspack/resolver-binding-linux-x64-gnu': 0.2.8
+      '@rspack/resolver-binding-linux-x64-musl': 0.2.8
+      '@rspack/resolver-binding-wasm32-wasi': 0.2.8(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
+      '@rspack/resolver-binding-win32-arm64-msvc': 0.2.8
+      '@rspack/resolver-binding-win32-ia32-msvc': 0.2.8
+      '@rspack/resolver-binding-win32-x64-msvc': 0.2.8
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
 
   '@rspack/resolver@0.2.8(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
     optionalDependencies:
@@ -10301,9 +10325,9 @@ snapshots:
     optionalDependencies:
       '@rspress/core': 2.0.16(@rspack/core@2.1.2(@swc/helpers@0.5.23))(@types/mdast@4.0.4)(@types/react@19.2.17)(core-js@3.49.0)(micromark-util-types@2.0.1)(micromark@4.0.1)
 
-  '@rstest/core@0.10.6(core-js@3.49.0)':
+  '@rstest/core@0.11.1(core-js@3.49.0)':
     dependencies:
-      '@rsbuild/core': 2.0.15(core-js@3.49.0)
+      '@rsbuild/core': 2.1.4(core-js@3.49.0)
       '@types/chai': 5.2.3
     transitivePeerDependencies:
       - '@module-federation/runtime-tools'
