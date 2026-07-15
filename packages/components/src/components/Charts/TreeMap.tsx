@@ -133,7 +133,6 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
   ({
     treeData,
     sizeType,
-    style,
     onChartClick,
     highlightNodeId,
     centerNodeId,
@@ -314,11 +313,11 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
               obj.right = size.viewSize[0] - pos[0] + 10;
             }
             return obj;
-          } as TooltipComponentOption['position'],
-          formatter: function (
-            info: CallbackDataParams & { data?: TreemapDataNode },
-          ) {
-            const node = info.data || {};
+          },
+          formatter: function (info) {
+            const node =
+              (info as CallbackDataParams & { data?: TreemapDataNode }).data ||
+              {};
             let path =
               typeof node.path === 'string'
                 ? node.path
@@ -386,13 +385,10 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
                 </div>
               `;
           },
-        } as TooltipComponentOption,
+        },
         series: [
           {
             type: 'treemap',
-            itemStyle: {
-              gapColor: '#ffffff',
-            },
             label: {
               show: true,
               formatter: '{b}',
@@ -422,16 +418,16 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
                 borderColor: 'transparent',
                 borderWidth: 0,
                 borderRadius: 0,
+                textStyle: {
+                  fontFamily: 'sans-serif',
+                  fontSize: 12,
+                  color: 'white',
+                },
               },
               emphasis: {
                 itemStyle: {
                   color: '#333',
                 },
-              },
-              textStyle: {
-                fontFamily: 'sans-serif',
-                fontSize: 12,
-                color: '#666',
               },
             },
             roam: true,
@@ -444,11 +440,11 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
             bottom: 30,
             left: 0,
             right: 0,
-            zoomLimit: {
+            scaleLimit: {
               min: 0.5,
               max: 5,
             },
-          } as TreemapSeriesOption,
+          },
         ],
       });
     }, [treeData, sizeType, highlightNodeId, rootPath, themeToken]);
@@ -555,52 +551,58 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
     }, []);
 
     return option ? (
-      <div className={Styles['chart-container']} style={style}>
+      <div className={Styles['chart-container']}>
         <Alert
           message="If parsed size lacks detailed module information, you can enable sourceMap when RSDOCTOR = true. This is because Rsdoctor relies on SourceMap to obtain Parsed Size. Rspack provides SourceMap information to Rsdoctor by default without affecting the build output."
           type="info"
           showIcon
           style={{ marginBottom: 0 }}
         />
-        <EChartsReactCore
-          ref={chartRef}
-          option={option}
-          echarts={echarts}
-          onEvents={{
-            click: (params: ECElementEvent) => {
-              // Delay to differentiate from double-click; only zoom on single click
-              if (clickTimeoutRef.current) {
-                window.clearTimeout(clickTimeoutRef.current);
-              }
-              clickTimeoutRef.current = window.setTimeout(() => {
-                if (chartRef.current) {
-                  const instance =
-                    chartRef.current.getEchartsInstance() as unknown as EChartsType;
-                  const data = params?.data as TreemapDataNode | undefined;
-                  if (instance && data?.id !== undefined) {
-                    instance.dispatchAction({
-                      type: 'treemapZoomToNode',
-                      seriesIndex: 0,
-                      targetNodeId: String(data.id),
-                    });
-                  }
-                }
-              }, 180);
-            },
-            dblclick: (params: ECElementEvent) => {
-              // Double click: cancel pending single-click action and trigger analyze
-              if (clickTimeoutRef.current) {
-                window.clearTimeout(clickTimeoutRef.current);
-                clickTimeoutRef.current = null;
-              }
-              onChartClick?.(params);
-            },
-          }}
+        <div
           style={{
-            width: '100%',
-            height: '100%',
+            flex: 1,
           }}
-        />
+        >
+          <EChartsReactCore
+            ref={chartRef}
+            option={option}
+            echarts={echarts}
+            onEvents={{
+              click: (params: ECElementEvent) => {
+                // Delay to differentiate from double-click; only zoom on single click
+                if (clickTimeoutRef.current) {
+                  window.clearTimeout(clickTimeoutRef.current);
+                }
+                clickTimeoutRef.current = window.setTimeout(() => {
+                  if (chartRef.current) {
+                    const instance =
+                      chartRef.current.getEchartsInstance() as unknown as EChartsType;
+                    const data = params?.data as TreemapDataNode | undefined;
+                    if (instance && data?.id !== undefined) {
+                      instance.dispatchAction({
+                        type: 'treemapZoomToNode',
+                        seriesIndex: 0,
+                        targetNodeId: String(data.id),
+                      });
+                    }
+                  }
+                }, 180);
+              },
+              dblclick: (params: ECElementEvent) => {
+                // Double click: cancel pending single-click action and trigger analyze
+                if (clickTimeoutRef.current) {
+                  window.clearTimeout(clickTimeoutRef.current);
+                  clickTimeoutRef.current = null;
+                }
+                onChartClick?.(params);
+              },
+            }}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          />
+        </div>
       </div>
     ) : null;
   },
@@ -693,60 +695,59 @@ const AssetTreemapWithFilterInner: React.FC<{
     [onChartClick],
   );
 
-  const enterFullscreen = useCallback(() => {
-    if (containerRef.current) {
-      const el = containerRef.current as HTMLElement & {
-        webkitRequestFullscreen?: () => void;
-        mozRequestFullScreen?: () => void;
-        msRequestFullscreen?: () => void;
-      };
-      if (el.requestFullscreen) {
-        el.requestFullscreen()
-          .then(() => setIsFullscreen(true))
-          .catch((err: unknown) =>
-            console.error('Failed to enter fullscreen:', err),
-          );
-      } else if (el.webkitRequestFullscreen) {
-        try {
-          el.webkitRequestFullscreen();
-          setIsFullscreen(true);
-        } catch (err) {
-          console.error('Failed to enter fullscreen (webkit):', err);
-        }
-      } else if (el.mozRequestFullScreen) {
-        try {
-          el.mozRequestFullScreen();
-          setIsFullscreen(true);
-        } catch (err) {
-          console.error('Failed to enter fullscreen (moz):', err);
-        }
-      } else if (el.msRequestFullscreen) {
-        try {
-          el.msRequestFullscreen();
-          setIsFullscreen(true);
-        } catch (err) {
-          console.error('Failed to enter fullscreen (ms):', err);
-        }
-      } else {
-        console.error('Fullscreen API is not supported in this browser.');
+  const enterFullscreen = () => {
+    if (!containerRef.current) return;
+    const el = containerRef.current as HTMLElement & {
+      webkitRequestFullscreen?: () => void;
+      mozRequestFullScreen?: () => void;
+      msRequestFullscreen?: () => void;
+    };
+    if (el.requestFullscreen) {
+      el.requestFullscreen()
+        .then(() => setIsFullscreen(true))
+        .catch((err: unknown) =>
+          console.error('Failed to enter fullscreen:', err),
+        );
+    } else if (el.webkitRequestFullscreen) {
+      try {
+        el.webkitRequestFullscreen();
+        setIsFullscreen(true);
+      } catch (err) {
+        console.error('Failed to enter fullscreen (webkit):', err);
       }
+    } else if (el.mozRequestFullScreen) {
+      try {
+        el.mozRequestFullScreen();
+        setIsFullscreen(true);
+      } catch (err) {
+        console.error('Failed to enter fullscreen (moz):', err);
+      }
+    } else if (el.msRequestFullscreen) {
+      try {
+        el.msRequestFullscreen();
+        setIsFullscreen(true);
+      } catch (err) {
+        console.error('Failed to enter fullscreen (ms):', err);
+      }
+    } else {
+      console.error('Fullscreen API is not supported in this browser.');
     }
-  }, []);
+  };
 
-  const exitFullscreen = useCallback(() => {
+  const exitFullscreen = () => {
     document
       .exitFullscreen()
       .then(() => setIsFullscreen(false))
       .catch((err) => console.error('Failed to exit fullscreen:', err));
-  }, []);
+  };
 
-  const toggleFullscreen = useCallback(() => {
+  const toggleFullscreen = () => {
     if (isFullscreen) {
       exitFullscreen();
     } else {
       enterFullscreen();
     }
-  }, [isFullscreen, enterFullscreen, exitFullscreen]);
+  };
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -804,64 +805,55 @@ const AssetTreemapWithFilterInner: React.FC<{
     return results;
   }, [filteredTreeData, searchQuery]);
 
-  const handleSearchResultClick = useCallback((nodeId: number) => {
+  const handleSearchResultClick = (nodeId: number) => {
     setHighlightNodeId(nodeId);
     setCenterNodeId(nodeId);
-  }, []);
+  };
 
-  const removeRootPath = useCallback(
-    (filepath: string): string => {
-      if (!rootPath || !filepath) return filepath;
-      const normalizedRoot = rootPath.replace(/\\/g, '/').replace(/\/$/, '');
-      const normalizedPath = filepath.replace(/\\/g, '/');
+  const removeRootPath = (filepath: string): string => {
+    if (!rootPath || !filepath) return filepath;
+    const normalizedRoot = rootPath.replace(/\\/g, '/').replace(/\/$/, '');
+    const normalizedPath = filepath.replace(/\\/g, '/');
 
-      if (normalizedPath.startsWith(normalizedRoot + '/')) {
-        return normalizedPath.slice(normalizedRoot.length + 1);
-      } else if (normalizedPath === normalizedRoot) {
-        return '';
-      }
-      return filepath;
-    },
-    [rootPath],
-  );
+    if (normalizedPath.startsWith(normalizedRoot + '/')) {
+      return normalizedPath.slice(normalizedRoot.length + 1);
+    } else if (normalizedPath === normalizedRoot) {
+      return '';
+    }
+    return filepath;
+  };
 
-  const getSize = useCallback((node: TreeNode, type?: SizeType) => {
+  const getSize = (node: TreeNode, type?: SizeType) => {
     if (type === 'stat') return node.sourceSize || 0;
     if (type === 'parsed') return node.bundledSize || 0;
     if (type === 'gzip') return node.gzipSize || 0;
     if (type === 'value') return node.value || 0;
     if (node.value) return node.value;
     return 0;
-  }, []);
+  };
 
-  const calculateNodeTotalSize = useCallback(
-    (node: TreeNode, type: SizeType): number => {
-      let size = getSize(node, type);
+  const calculateNodeTotalSize = (node: TreeNode, type: SizeType): number => {
+    let size = getSize(node, type);
 
-      if (node.children && node.children.length > 0) {
-        const childrenSize = node.children.reduce(
-          (sum, child) => sum + calculateNodeTotalSize(child, type),
-          0,
-        );
-        if (size === 0 || (!node.path && childrenSize > 0)) {
-          size = childrenSize;
-        }
+    if (node.children && node.children.length > 0) {
+      const childrenSize = node.children.reduce(
+        (sum, child) => sum + calculateNodeTotalSize(child, type),
+        0,
+      );
+      if (size === 0 || (!node.path && childrenSize > 0)) {
+        size = childrenSize;
       }
+    }
 
-      return size;
-    },
-    [getSize],
-  );
+    return size;
+  };
 
-  const getChunkSize = useCallback(
-    (name: string, type?: SizeType) => {
-      const node = treeData.find((n) => n.name === name);
-      if (!node) return 0;
-      const sizeTypeToUse = type || sizeType;
-      return calculateNodeTotalSize(node, sizeTypeToUse);
-    },
-    [treeData, sizeType, calculateNodeTotalSize],
-  );
+  const getChunkSize = (name: string, type?: SizeType) => {
+    const node = treeData.find((n) => n.name === name);
+    if (!node) return 0;
+    const sizeTypeToUse = type || sizeType;
+    return calculateNodeTotalSize(node, sizeTypeToUse);
+  };
 
   return (
     <div className={Styles.treemap} ref={containerRef}>
@@ -1022,7 +1014,6 @@ const AssetTreemapWithFilterInner: React.FC<{
           highlightNodeId={highlightNodeId}
           centerNodeId={centerNodeId}
           rootPath={rootPath}
-          style={{ width: '100%', height: '100%' }}
         />
         {moduleId ? (
           <ServerAPIProvider
