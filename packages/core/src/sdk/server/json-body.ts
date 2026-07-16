@@ -231,13 +231,21 @@ export function jsonBodyParser(
       next(normalizeReadError(error, charset));
     };
 
+    let limit: number | string | undefined;
+    try {
+      limit =
+        typeof options.limit === 'function'
+          ? options.limit(req)
+          : options.limit;
+    } catch (error) {
+      handleError(error);
+      return;
+    }
+
     getRawBody(content.stream, {
       encoding: charset,
       length: content.length,
-      limit:
-        typeof options.limit === 'function'
-          ? options.limit(req)
-          : options.limit,
+      limit,
     }).then((body) => {
       try {
         request.body = parseJson(body);

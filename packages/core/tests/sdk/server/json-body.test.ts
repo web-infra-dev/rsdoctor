@@ -91,6 +91,21 @@ describe('jsonBodyParser', () => {
     expect(largeRequest.body).toEqual({ value: 'large' });
   });
 
+  it('handles errors thrown by the body limit resolver', async () => {
+    const req = createRequest(gzipSync('{}'), {
+      'content-encoding': 'gzip',
+    });
+    const error = await parse(req, () => {
+      throw new Error('failed to resolve body limit');
+    });
+
+    expect(error).toMatchObject({
+      message: 'failed to resolve body limit',
+      status: 400,
+      type: 'request.invalid',
+    });
+  });
+
   it('rejects unsupported charsets and content encodings', async () => {
     const charsetError = await parse(
       createRequest('{}', {
