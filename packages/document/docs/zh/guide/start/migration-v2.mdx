@@ -1,0 +1,88 @@
+# 迁移到 Rsdoctor 2.0
+
+Rsdoctor 2.0 围绕 Rspack 收敛了包结构。大多数项目只需要安装 `@rsdoctor/core`。此版本移除了多个独立包。请同时更新依赖和导入路径，避免在 2.0 代码中解析到 1.x 包。
+
+## 检查构建工具
+
+Rsdoctor 2.0 支持基于 Rspack 的工具，不再支持 webpack，并移除了 `@rsdoctor/webpack-plugin`。
+
+- Rspack 项目可以继续按照本文档迁移。
+- webpack 项目应继续使用 Rsdoctor 1.x，或先迁移到 Rspack，再升级 Rsdoctor。
+
+## 更新 Rspack 插件
+
+使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`：
+
+```bash
+pnpm remove @rsdoctor/rspack-plugin
+pnpm add -D @rsdoctor/core
+```
+
+同步更新 ESM 和 CommonJS 导入：
+
+```ts title="迁移前"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+```
+
+```ts title="迁移后"
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+```
+
+```js title="CommonJS"
+const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
+```
+
+`@rspack/core` 仍是 `@rsdoctor/core` 的可选 peer dependency。基于 Rspack 的构建工具通常已经提供该依赖；直接使用 Rspack 的项目需要安装 `@rspack/core`。
+
+## CLI 迁移
+
+`@rsdoctor/cli` 仍是 `rsdoctor` 命令对应的包。请为 `@rsdoctor/cli` 和 `@rsdoctor/core` 使用相同版本：
+
+```bash
+pnpm add -D @rsdoctor/core @rsdoctor/cli
+```
+
+原有命令和 Node.js API 继续保留，当前用法请参考 [CLI 使用教程](/guide/start/cli)。
+
+## AI 工作流迁移
+
+Rsdoctor 2.0 已移除 `@rsdoctor/mcp-server`，不再提供 MCP Server。所有基于 Rsdoctor 的 AI 辅助分析工作流都需要迁移到 `@rsdoctor/agent-cli`：
+
+```bash
+pnpm remove @rsdoctor/mcp-server
+pnpm add -D @rsdoctor/agent-cli
+```
+
+Agent CLI 是新的替代工作流，但不兼容 MCP 协议，也不是旧 API 的直接替代品。不能只替换包名，还需要完成以下调整：
+
+1. 从 `.cursor/mcp.json`、`.vscode/mcp.json` 等配置中删除 Rsdoctor MCP 项。
+2. 删除启动 `npx @rsdoctor/mcp-server` 的脚本或自动化配置。
+3. 生成 `rsdoctor-data.json`，然后使用 Agent CLI 直接读取该文件：
+
+   ```bash
+   rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json
+   rsdoctor-agent query packages_duplicates --data-file ./dist/rsdoctor-data.json
+   ```
+
+4. 调整 AI Agent 和自动化流程，通过 `rsdoctor-agent` 执行分析并消费其结构化 JSON 输出。支持 Skill 的 Coding Agent 可以使用 Rsdoctor analysis skill 管理此流程。
+
+Agent CLI 直接读取数据文件，因此不再需要 MCP Server 端口、compiler 等 MCP 专用配置。安装、数据生成和更多命令示例请参考 [AI](/guide/start/ai)。
+
+## 配置迁移
+
+包迁移不会自动更新已废弃的配置项。`mode`、`brief`、`output.compressData` 以及相关输出选项的迁移方法，请参考[配置迁移说明](/config/options/options-v2)。
+
+## 验证升级结果
+
+更新依赖和导入路径后：
+
+1. 搜索项目中是否仍存在已移除的包名：
+
+   ```bash
+   rg '@rsdoctor/(rspack-plugin|webpack-plugin|sdk|graph|types|utils|components|mcp-server)'
+   ```
+
+2. 使用项目的包管理器重新安装依赖。
+3. 执行生产环境构建，确认 Rsdoctor 能够生成报告。
+4. 打开报告，检查项目使用的概览、编译分析和产物分析页面。
+5. 如果项目使用 `@rsdoctor/cli` 或 `@rsdoctor/agent-cli`，请使用新生成的 Rsdoctor 数据执行对应命令。

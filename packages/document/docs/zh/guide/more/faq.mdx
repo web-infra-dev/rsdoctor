@@ -5,7 +5,7 @@
 当**只需要** Rsdoctor 内的 [Bundle Size](../usage/bundle-size) 分析产物大小功能时，可以在 Rsdoctor 插件配置时添加对应的 [features](/config/options/features) 配置项，参考下方代码：
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 new RsdoctorRspackPlugin({
   features: ['bundle'], // 代表只开启 bundle size 的功能分析

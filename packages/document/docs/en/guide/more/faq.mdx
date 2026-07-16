@@ -5,7 +5,7 @@
 When we **only need** the [Bundle Size](../usage/bundle-size) bundle size analysis feature **within** Rsdoctor, we can add the corresponding [features](/config/options/features) option when configuring the Rsdoctor plugin. Refer to the code snippet below:
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 new RsdoctorRspackPlugin({
   features: ['bundle'], // Represents enabling only the bundle size analysis feature

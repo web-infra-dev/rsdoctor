@@ -7,7 +7,7 @@
 在 `rspack.config.js` 的 [plugins](https://www.rspack.rs/config/plugins.html#plugins) 中初始化 RsdoctorRspackPlugin 插件，参考：
 
 ```js title="rspack.config.js"
-const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
 
 module.exports = {
   // ...
@@ -32,7 +32,7 @@ Rsbuild 内置了对 Rsdoctor 的支持，不需要手动注册插件。详见 [
 在 `modern.config.ts` 的 [tools.bundlerChain](https://modernjs.dev/configure/app/tools/rspack) 中初始化插件，参考：
 
 ```ts title="modern.config.ts"
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   // ...
@@ -61,7 +61,7 @@ export default {
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -125,12 +125,12 @@ rsdoctor analyze --profile .next/server/chunks/.rsdoctor/manifest.json
 
 ### Vue 项目
 
-在配置文件中初始化 `@rsdoctor/rspack-plugin` 插件，以下是使用 rsbuild 项目作为示例：
+从 `@rsdoctor/core` 导入 `RsdoctorRspackPlugin` 并在配置文件中初始化。以下是 Rsbuild 项目的示例：
 
 ```ts title="rsbuild.config.ts"
 import { defineConfig } from '@rsbuild/core';
 import { pluginVue } from '@rsbuild/plugin-vue';
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default defineConfig({
   plugins: [pluginVue()],

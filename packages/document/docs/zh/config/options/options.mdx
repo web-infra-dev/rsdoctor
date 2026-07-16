@@ -4,18 +4,16 @@ import { Badge, Tab, Tabs } from '@theme';
 
 ## RsdoctorRspackPlugin 插件
 
-**RsdoctorRspackPlugin** 类由 `@rsdoctor/rspack-plugin` 导出，配置项是 [RsdoctorRspackPluginOptions](#rsdoctorrspackpluginoptions)。
+`RsdoctorRspackPlugin` 类由 `@rsdoctor/core` 导出，其配置类型为 [RsdoctorRspackPluginOptions](#rsdoctorrspackpluginoptions)。
 
 <Tabs>
 
 <Tab label="esm">
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
-new RsdoctorRspackPlugin({
-  /** RsdoctorRspackPluginOptions */
-});
+new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
 ```
 
 </Tab>
@@ -23,11 +21,9 @@ new RsdoctorRspackPlugin({
 <Tab label="cjs">
 
 ```js
-const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
+const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
 
-new RsdoctorRspackPlugin({
-  /** RsdoctorRspackPluginOptions */
-});
+new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
 ```
 
 </Tab>
@@ -60,8 +56,7 @@ interface RsdoctorRspackPluginOptions<
 
   /** Rsdoctor 功能开关 */
   features?:
-    | RsdoctorRspackPluginFeatures
-    | Array<keyof RsdoctorRspackPluginFeatures>;
+    RsdoctorRspackPluginFeatures | Array<keyof RsdoctorRspackPluginFeatures>;
 
   /**
    * @deprecated 使用 `output.mode` 代替，如果使用 `lite` 模式，请使用 `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` 代替

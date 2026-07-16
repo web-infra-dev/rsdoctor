@@ -1,0 +1,88 @@
+# Migrate to Rsdoctor 2.0
+
+Rsdoctor 2.0 consolidates the package structure around Rspack. This release removes several standalone packages. Update dependencies and imports together to avoid resolving a 1.x package with 2.0 code.
+
+## Check your bundler
+
+Rsdoctor 2.0 supports Rspack-based tools. webpack support and `@rsdoctor/webpack-plugin` have been removed.
+
+- For an Rspack-based project, continue with this guide.
+- For a webpack project, stay on Rsdoctor 1.x or migrate the project to Rspack before upgrading Rsdoctor.
+
+## Update the Rspack plugin
+
+Replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`:
+
+```bash
+pnpm remove @rsdoctor/rspack-plugin
+pnpm add -D @rsdoctor/core
+```
+
+Update both ESM and CommonJS imports:
+
+```ts title="Before"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+```
+
+```ts title="After"
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+```
+
+```js title="CommonJS"
+const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
+```
+
+`@rspack/core` remains an optional peer dependency of `@rsdoctor/core`. Your Rspack-based build tool normally provides it. Install `@rspack/core` in projects that use Rspack directly.
+
+## CLI migration
+
+`@rsdoctor/cli` remains the `rsdoctor` command package. Use the same version of `@rsdoctor/cli` and `@rsdoctor/core`:
+
+```bash
+pnpm add -D @rsdoctor/core @rsdoctor/cli
+```
+
+The command names and Node.js API remain available. See the [CLI tutorial](/guide/start/cli) for current usage.
+
+## AI workflow migration
+
+Rsdoctor 2.0 removes `@rsdoctor/mcp-server` and no longer provides an MCP server. Migrate all Rsdoctor AI-assisted analysis workflows to `@rsdoctor/agent-cli`:
+
+```bash
+pnpm remove @rsdoctor/mcp-server
+pnpm add -D @rsdoctor/agent-cli
+```
+
+Agent CLI is the replacement workflow, but it is not an MCP-compatible or drop-in API replacement. Complete the following changes instead of only replacing the package name:
+
+1. Remove Rsdoctor MCP entries from configurations such as `.cursor/mcp.json` and `.vscode/mcp.json`.
+2. Remove scripts or automation that start `npx @rsdoctor/mcp-server`.
+3. Generate `rsdoctor-data.json`, then run Agent CLI directly against that file:
+
+   ```bash
+   rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json
+   rsdoctor-agent query packages_duplicates --data-file ./dist/rsdoctor-data.json
+   ```
+
+4. Update AI agents and automation to invoke `rsdoctor-agent` and consume its structured JSON output. The Rsdoctor analysis skill can manage this workflow for supported coding agents.
+
+Agent CLI reads the data file directly, so MCP-specific options such as server ports and compiler selection no longer apply. See [AI](/guide/start/ai) for installation, data generation, and more command examples.
+
+## Configuration migration
+
+Package migration does not automatically update deprecated configuration fields. Follow the [configuration migration guide](/config/options/options-v2) for `mode`, `brief`, `output.compressData`, and related output options.
+
+## Verify the upgrade
+
+After updating dependencies and imports:
+
+1. Search the application for removed package names:
+
+   ```bash
+   rg '@rsdoctor/(rspack-plugin|webpack-plugin|sdk|graph|types|utils|components|mcp-server)'
+   ```
+
+2. Reinstall dependencies with the project's package manager.
+3. Run the project's production build and confirm that Rsdoctor generates a report.
+4. Open the report and verify the overview, compilation, and bundle analysis pages used by the project.
+5. If the project uses `@rsdoctor/cli` or `@rsdoctor/agent-cli`, run the relevant command against newly generated Rsdoctor data.

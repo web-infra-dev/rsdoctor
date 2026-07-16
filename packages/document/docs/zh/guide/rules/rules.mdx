@@ -40,7 +40,7 @@
 - 配置示例：
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugin: [
@@ -145,7 +145,7 @@ interface Config {
 该规则用于检测不兼容的高级语法。在规则扫描时，优先使用 `browserslist` 的配置；如果未配置 `browserslist`，则需要手动进行检测，示例如下：
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugin: [
@@ -265,7 +265,7 @@ interface Config {
 配置示例：
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugin: [
@@ -318,7 +318,7 @@ interface Config {
 配置示例：
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugins: [
@@ -371,7 +371,7 @@ interface Config {
 配置示例：
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugins: [
@@ -427,7 +427,7 @@ interface Config {
 配置示例：
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugins: [
@@ -481,7 +481,7 @@ type RuleConfigItem =
 如果要**关闭某个规则**，则可以 `SeverityInput` 设为 `off`，如下示例：
 
 ```ts
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default {
   plugin: [
