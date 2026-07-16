@@ -1,0 +1,171 @@
+---
+published_at: 2026-07
+---
+
+_July 2026_
+
+# Rsdoctor 2.0 发布公告
+
+我们很高兴地宣布 **Rsdoctor 2.0** 正式发布！🎉
+
+Rsdoctor 2.0 不只是一次版本升级，也是一次产品定位与技术架构的重新收敛。除了继续提供可视化的构建分析报告，Rsdoctor 现在也能将结构化分析数据交给 Agent 和 CI，让构建问题可以被自动检索、解释和持续跟踪。
+
+本次更新的主要亮点包括：
+
+- **面向 Agent 的构建分析**：Agent CLI 可以直接读取 Rsdoctor 数据，并通过结构化 JSON 提供产物、依赖、Tree Shaking 和构建性能分析。
+- **Rsdoctor Action 与 AI 分析**：在 Pull Request 中自动进行 Bundle Diff，并借助 AI 总结产物劣化原因和优化方向。
+- **更简单的包结构**：核心能力统一收敛到 `@rsdoctor/core`，仓库 package 从 13 个减少到 6 个，内部运行时依赖关系从 28 条减少到 4 条。
+- **更专注的 Rspack 支持**：2.0 聚焦 Rspack，进一步提升原生分析、页面性能和大型项目体验。
+
+Agent CLI、Rsdoctor Action 和部分分析能力最初在 1.x 期间发布。在 2.0 中，它们共同组成了一套更完整的、面向 Rspack 和 AI Agent 的构建分析工作流。
+
+> Rsdoctor 2.0 不再支持 webpack。webpack 项目请继续使用 Rsdoctor 1.x，或先迁移到 Rspack 再升级 Rsdoctor。
+
+## 面向 Agent 的构建分析
+
+Rsdoctor 能够采集丰富的构建数据，但在复杂项目中，开发者仍然需要在多个页面之间查找信息，再把不同维度的数据组合起来判断问题。
+
+在 1.x 的后续版本中，我们开始探索 Agent CLI。在 2.0 中，[`@rsdoctor/agent-cli`](/guide/start/ai#agent-cli) 正式成为推荐的 AI 辅助分析入口。它直接读取 `rsdoctor-data.json`，并以结构化 JSON 输出分析结果，方便 Coding Agent 按需检索、过滤和继续推理。
+
+```bash
+# 安装 Agent CLI
+pnpm add -D @rsdoctor/agent-cli
+
+# 安装 Rsdoctor analysis skill（可选）
+npx skills add rstackjs/agent-skills --skill rsdoctor-analysis
+
+# 构建并生成 JSON 数据
+RSDOCTOR_OUTPUT=json pnpm run build
+
+# 直接查询构建数据
+pnpm exec rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json
+pnpm exec rsdoctor-agent tree-shaking summary --data-file ./dist/rsdoctor-data.json
+pnpm exec rsdoctor-agent query packages_duplicates --data-file ./dist/rsdoctor-data.json
+```
+
+Agent CLI 提供两类使用方式：
+
+- `list` 和 `query` 提供稳定、机器可读的工具目录与查询接口。
+- `chunks`、`modules`、`packages`、`loaders`、`tree-shaking` 等分组命令适合交互式排查。
+
+与 1.x 的 MCP Server 相比，Agent CLI 不需要启动常驻服务，也不需要维护端口或 MCP Client 配置。Agent 可以围绕同一个数据文件逐步分析大 Chunk、重复依赖、模块引用链、Loader 热点和 Tree Shaking 失败原因。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-2.gif"
+  style={{ margin: 'auto' }}
+/>
+
+> [查看 Agent CLI 使用详情](/guide/start/ai#agent-cli)
+
+Rsdoctor 2.0 已移除 `@rsdoctor/mcp-server`。Agent CLI 是新的推荐工作流，但它不是 MCP 协议或旧 API 的直接替代品。完整迁移方式请参考[迁移到 Rsdoctor 2.0](/guide/start/migration-v2#ai-工作流迁移)。
+
+## Rsdoctor action 与 AI 分析
+
+在 Rsdoctor 0.4 的发布公告中，我们曾计划将 Bundle Diff 扩展到 GitHub CI。现在，[Rsdoctor Action](https://github.com/web-infra-dev/rsdoctor-action) 已经将这套流程完整串联起来：
+
+1. 主分支构建完成后上传基线数据。
+2. Pull Request 构建当前版本，并与目标分支基线进行 Bundle Diff。
+3. 在 PR 评论和 GitHub Actions 中展示总体积、Gzip 体积及资源变化。
+4. 生成可下载的交互式 Bundle Diff 报告，用于进一步查看 Asset、Module 和 Package 变化。
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/github-actions-opt.png"
+  style={{ width: '80%', margin: 'auto' }}
+/>
+
+Rsdoctor Action 还支持可选的 AI 辅助分析。当存在基线、产物体积发生变化并配置 `AI_TOKEN` 时，Action 会将 Bundle Diff 的结构化数据交给模型，自动总结主要劣化项、可能原因和优化方向，并将结果展示在 Pull Request 评论中。
+
+Action 可以根据模型名称自动选择 Anthropic、Google、DeepSeek、Qwen 或 OpenAI Provider。AI 分析失败时也不会影响常规 Bundle Diff 流程。
+
+```yaml
+- name: Bundle Analysis
+  uses: web-infra-dev/rsdoctor-action@v1.1.2
+  env:
+    AI_TOKEN: ${{ secrets.AI_TOKEN }}
+  with:
+    file_path: 'dist/.rsdoctor/rsdoctor-data.json'
+    target_branch: 'main'
+```
+
+<div style={{ flex: '0 1 320px', maxWidth: 560, margin: 'auto' }}>
+  <img
+    src="/actions-ai-detail.png"
+    alt="Rsdoctor Action AI 辅助分析"
+    style={{ display: 'block', width: '100%' }}
+  />
+</div>
+
+如果没有配置 AI Token，Action 仍会正常执行常规 Bundle Diff。这样既可以把体积变化变成持续运行的工程检查，也可以按需增加 AI 的解释能力。
+
+> [查看 Rsdoctor Action 使用详情](/guide/start/action)
+
+## 更简单的仓库与依赖关系
+
+随着能力不断增加，Rsdoctor 1.x 的核心逻辑逐渐分散在 `core`、`graph`、`sdk`、`utils`、`types` 和不同插件包中。多个 package 边界增加了构建、发布和版本同步成本，也让内部依赖关系变得复杂。
+
+Rsdoctor 2.0 重新梳理了这些边界：
+
+- `utils`、`graph`、`sdk` 和 Rspack 插件的核心能力统一并入 `@rsdoctor/core`。
+- 跨端共享的类型与图结构沉淀到新的 `@rsdoctor/shared`。
+- `@rsdoctor/components` 并入 `@rsdoctor/client`。
+- `@rsdoctor/cli` 和 `@rsdoctor/agent-cli` 保持独立入口，并减少与 Client 和 Rspack 的直接耦合。
+- 报告服务从 Socket.IO 迁移到服务端 `ws` 与浏览器原生 WebSocket。
+
+这次重构带来了可量化的简化：
+
+| 指标                  | Rsdoctor 1.x | Rsdoctor 2.0 |
+| --------------------- | -----------: | -----------: |
+| 仓库顶层 package      |           13 |            6 |
+| Runtime 依赖声明      |           88 |           48 |
+| 内部 Runtime 依赖关系 |           28 |            4 |
+| 唯一外部 Runtime 依赖 |           51 |           40 |
+
+以上数据基于两个分支的 `packages/*/package.json` 统计，用于反映仓库内部结构的变化，不等同于单个项目安装后的传递依赖数量。
+
+对于大多数 Rspack 项目，安装入口也从 `@rsdoctor/rspack-plugin` 统一为 `@rsdoctor/core`：
+
+```ts title="Rsdoctor 1.x"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+```
+
+```ts title="Rsdoctor 2.0"
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+```
+
+更少的包边界意味着更直接的开发与发布流程，也可以避免多个 `@rsdoctor/*` 包版本不一致带来的问题。
+
+## 其他能力
+
+从 1.2 到 2.0 的迭代中，Rsdoctor 还持续完善了分析深度与使用体验：
+
+- **更深入的 Rspack 分析**：默认启用 Rspack Native Plugin，新增 [Rspack Resolver 分析](/guide/usage/resolver)，并按需采集 Tree Shaking 的副作用代码，减少默认分析开销。
+- **更完整的 Tree Shaking 诊断**：新增 Module Mixed Chunks、Side Effects Only、CJS Require 和 ESM Import Resolved to CJS 等[检查规则](/guide/rules/rules)，帮助定位模块无法被移除的具体原因。
+- **大型报告性能优化**：Loader 输入与输出改为按需加载，在相关场景中减少 90% 以上的数据量；同时优化 Module Tree 和依赖关系图在大型项目中的渲染性能。
+- **界面体验升级**：新增暗色主题，并持续优化 Treemap、导航和分析详情页面。
+- **更灵活的数据输出**：Brief 模式可以生成 JSON 数据，Bundle Diff CLI 支持 JSON 输出，便于接入 Agent、Action 和其他自动化流程。
+
+## 如何升级到 2.0
+
+Rsdoctor 2.0 包含以下不兼容更新：
+
+- 仅支持 Rspack，不再支持 webpack。webpack 项目请继续使用 Rsdoctor 1.x，或先迁移到 Rspack。
+- 使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`。
+- `@rsdoctor/mcp-server` 已移除，AI 工作流请迁移到 `@rsdoctor/agent-cli`，并使用 2.0 重新生成分析数据。
+- `mode`、`brief`、`lite`、`output.compressData` 等配置项需要按照 2.0 配置结构进行调整。
+
+```bash
+pnpm remove @rsdoctor/rspack-plugin
+pnpm add -D @rsdoctor/core
+```
+
+`@rsdoctor/cli` 仍然提供 `rsdoctor` 命令。使用 CLI 时，请确保 `@rsdoctor/cli` 与 `@rsdoctor/core` 的版本一致。
+
+> [查看完整的 Rsdoctor 2.0 迁移指南](/guide/start/migration-v2)
+
+---
+
+Rsdoctor 2.0 希望让构建报告不再只是分析的终点，而是能够继续流向开发者、Agent 和 CI 的结构化工程数据。我们会继续完善自动化分析、性能劣化检测和 Rspack 原生能力，让构建问题更容易被发现、理解和解决。
+
+完整更新内容请参考 [Release 页面](https://github.com/web-infra-dev/rsdoctor/releases)。
+
+感谢所有为 Rsdoctor 贡献过的开发者 ❤️
