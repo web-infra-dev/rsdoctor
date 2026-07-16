@@ -1,0 +1,171 @@
+---
+published_at: 2026-07
+---
+
+_July 2026_
+
+# Announcing Rsdoctor 2.0
+
+We are excited to announce the release of **Rsdoctor 2.0**! 🎉
+
+Rsdoctor 2.0 is more than a version update. It refines both the product direction and the technical architecture. Rsdoctor still provides visual build reports, but its structured analysis data can now flow into agents and CI, where build issues can be searched, explained, and tracked automatically.
+
+Highlights in this release include:
+
+- **Build analysis for agents**: Agent CLI reads Rsdoctor data directly and provides structured JSON for bundle, dependency, tree shaking, and build performance analysis.
+- **Rsdoctor Action with AI analysis**: Run Bundle Diff automatically in pull requests, then use AI to summarize bundle regressions and possible optimizations.
+- **A simpler package structure**: Core capabilities now live in `@rsdoctor/core`. The repository has been reduced from 13 packages to 6, and internal runtime dependency edges have been reduced from 28 to 4.
+- **A stronger focus on Rspack**: Rsdoctor 2.0 focuses on Rspack, with further improvements to native analysis, report performance, and the experience on large projects.
+
+Agent CLI, Rsdoctor Action, and some of the analysis capabilities below were first delivered during the 1.x cycle. In 2.0, they form a more coherent workflow centered on Rspack and AI agents.
+
+> Rsdoctor 2.0 no longer supports webpack. webpack projects should remain on Rsdoctor 1.x or migrate to Rspack before upgrading.
+
+## Build analysis for agents
+
+Rsdoctor collects extensive build data. In a complex project, however, developers may still need to move between several pages and combine multiple dimensions of data before they can identify the cause of a problem.
+
+We started exploring Agent CLI in later Rsdoctor 1.x releases. In 2.0, [`@rsdoctor/agent-cli`](/guide/start/ai#agent-cli) becomes the recommended entry point for AI-assisted analysis. It reads `rsdoctor-data.json` directly and returns structured JSON, allowing coding agents to search, filter, and reason over the results.
+
+```bash
+# Install Agent CLI
+pnpm add -D @rsdoctor/agent-cli
+
+# Install the Rsdoctor analysis skill (optional)
+npx skills add rstackjs/agent-skills --skill rsdoctor-analysis
+
+# Build and generate JSON data
+RSDOCTOR_OUTPUT=json pnpm run build
+
+# Query build data directly
+pnpm exec rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json
+pnpm exec rsdoctor-agent tree-shaking summary --data-file ./dist/rsdoctor-data.json
+pnpm exec rsdoctor-agent query packages_duplicates --data-file ./dist/rsdoctor-data.json
+```
+
+Agent CLI supports two styles of interaction:
+
+- `list` and `query` provide a stable, machine-readable tool catalog and query interface.
+- Grouped commands such as `chunks`, `modules`, `packages`, `loaders`, and `tree-shaking` are convenient for interactive investigation.
+
+Unlike the MCP Server workflow in 1.x, Agent CLI does not require a long-running service, port management, or MCP client configuration. An agent can work through the same data file to investigate large chunks, duplicate dependencies, module issuer chains, loader hotspots, and tree-shaking bailouts.
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-2.gif"
+  style={{ margin: 'auto' }}
+/>
+
+> [Learn more about Agent CLI](/guide/start/ai#agent-cli)
+
+Rsdoctor 2.0 removes `@rsdoctor/mcp-server`. Agent CLI is the new recommended workflow, but it is not an MCP-compatible or drop-in API replacement. See [Migrating to Rsdoctor 2.0](/guide/start/migration-v2#ai-workflow-migration) for the complete migration steps.
+
+## Rsdoctor action with AI analysis
+
+In the Rsdoctor 0.4 announcement, we shared a plan to bring Bundle Diff into GitHub CI. [Rsdoctor Action](https://github.com/web-infra-dev/rsdoctor-action) now connects the complete workflow:
+
+1. A build on the main branch uploads the baseline data.
+2. A pull request builds the current version and compares it with the target branch baseline.
+3. PR comments and GitHub Actions show total size, gzip size, and asset changes.
+4. A downloadable, interactive Bundle Diff report provides deeper Asset, Module, and Package comparisons.
+
+<img
+  src="https://assets.rspack.rs/others/assets/rsdoctor/github-actions-opt.png"
+  style={{ width: '80%', margin: 'auto' }}
+/>
+
+Rsdoctor Action also supports optional AI-assisted analysis. When a baseline exists, the bundle size changes, and `AI_TOKEN` is configured, the Action sends the structured Bundle Diff data to the selected model. It then summarizes the main regressions, likely causes, and possible optimizations in the pull request comment.
+
+The Action selects Anthropic, Google, DeepSeek, Qwen, or OpenAI from the model name. An AI analysis failure does not interrupt the regular Bundle Diff workflow.
+
+```yaml
+- name: Bundle Analysis
+  uses: web-infra-dev/rsdoctor-action@v1.1.2
+  env:
+    AI_TOKEN: ${{ secrets.AI_TOKEN }}
+  with:
+    file_path: 'dist/.rsdoctor/rsdoctor-data.json'
+    target_branch: 'main'
+```
+
+<div style={{ flex: '0 1 320px', maxWidth: 560, margin: 'auto' }}>
+  <img
+    src="/actions-ai-detail.png"
+    alt="Rsdoctor Action AI-assisted analysis"
+    style={{ display: 'block', width: '100%' }}
+  />
+</div>
+
+Without an AI token, the Action still performs the regular Bundle Diff workflow. Teams can therefore make bundle changes a continuous engineering check and add AI explanations only when needed.
+
+> [Learn more about Rsdoctor Action](/guide/start/action)
+
+## A simpler repository and dependency graph
+
+As Rsdoctor grew, its core logic became distributed across `core`, `graph`, `sdk`, `utils`, `types`, and separate plugin packages. These package boundaries increased build, release, and version synchronization costs, while making the internal dependency graph harder to maintain.
+
+Rsdoctor 2.0 reorganizes these responsibilities:
+
+- Core capabilities from `utils`, `graph`, `sdk`, and the Rspack plugin now live in `@rsdoctor/core`.
+- Shared types and graph structures are provided by the new `@rsdoctor/shared` package.
+- `@rsdoctor/components` has been merged into `@rsdoctor/client`.
+- `@rsdoctor/cli` and `@rsdoctor/agent-cli` remain independent entry points, with less direct coupling to the Client and Rspack.
+- Report transport has moved from Socket.IO to server-side `ws` and the browser's native WebSocket API.
+
+The simplification is measurable:
+
+| Metric                               | Rsdoctor 1.x | Rsdoctor 2.0 |
+| ------------------------------------ | -----------: | -----------: |
+| Top-level repository packages        |           13 |            6 |
+| Runtime dependency declarations      |           88 |           48 |
+| Internal runtime dependency edges    |           28 |            4 |
+| Unique external runtime dependencies |           51 |           40 |
+
+These figures are calculated from `packages/*/package.json` on the two branches. They describe the repository structure, not the full transitive dependency count installed in an individual project.
+
+For most Rspack projects, the installation entry point also moves from `@rsdoctor/rspack-plugin` to `@rsdoctor/core`:
+
+```ts title="Rsdoctor 1.x"
+import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+```
+
+```ts title="Rsdoctor 2.0"
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+```
+
+Fewer package boundaries make development and releases more direct, while reducing the risk of mismatched versions across several `@rsdoctor/*` packages.
+
+## Other improvements
+
+From 1.2 through 2.0, Rsdoctor also continued to improve analysis depth and usability:
+
+- **Deeper Rspack analysis**: The Rspack Native Plugin is enabled by default, Rsdoctor now includes [Rspack resolver analysis](/guide/usage/resolver), and side-effect source code is collected only when tree-shaking analysis needs it.
+- **More complete tree-shaking diagnostics**: New [checks](/guide/rules/rules) cover mixed initial and async chunks, side-effect-only imports, CommonJS `require()` calls, and ESM imports that resolve to CommonJS.
+- **Better performance for large reports**: Loader input and output are loaded on demand, reducing data volume by more than 90% in the affected scenarios. Module trees and dependency graphs also render more efficiently in large projects.
+- **Improved interface**: Rsdoctor now includes a dark theme, together with continued improvements to the Treemap, navigation, and analysis detail pages.
+- **More flexible data output**: Brief mode can generate JSON data, and the Bundle Diff CLI can output JSON for agents, Actions, and other automation.
+
+## Upgrade to 2.0
+
+Rsdoctor 2.0 includes the following breaking changes:
+
+- Rsdoctor now supports Rspack only. webpack projects should remain on Rsdoctor 1.x or migrate to Rspack before upgrading.
+- Replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`.
+- `@rsdoctor/mcp-server` has been removed. Migrate AI workflows to `@rsdoctor/agent-cli` and regenerate the analysis data with 2.0.
+- Options such as `mode`, `brief`, `lite`, and `output.compressData` must be updated to the 2.0 configuration structure.
+
+```bash
+pnpm remove @rsdoctor/rspack-plugin
+pnpm add -D @rsdoctor/core
+```
+
+`@rsdoctor/cli` continues to provide the `rsdoctor` command. When using the CLI, keep `@rsdoctor/cli` and `@rsdoctor/core` on the same version.
+
+> [Read the complete Rsdoctor 2.0 migration guide](/guide/start/migration-v2)
+
+---
+
+With Rsdoctor 2.0, a build report is no longer only the end of an investigation. It can become structured engineering data that continues into developer workflows, agents, and CI. We will keep improving automated analysis, regression detection, and Rspack-native capabilities so that build problems are easier to find, understand, and fix.
+
+See the [Release page](https://github.com/web-infra-dev/rsdoctor/releases) for the complete list of changes.
+
+Thank you to everyone who has contributed to Rsdoctor ❤️
