@@ -10,8 +10,10 @@ interface Props {
 export const ResponsiveLayout = ({ children }: Props) => {
   return (
     <Flex vertical className={style.layout}>
-      {children.map((e) => (
-        <div className={style.row}>{e}</div>
+      {children.map((element, index) => (
+        <div className={style.row} key={index}>
+          {element}
+        </div>
       ))}
     </Flex>
   );

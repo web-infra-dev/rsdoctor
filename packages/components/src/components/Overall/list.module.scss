@@ -4,6 +4,15 @@
     font-size: 13px;
   }
 
+  :global(.ant-descriptions-item-label) {
+    color: var(--text-color-secondary);
+  }
+
+  :global(.ant-descriptions-item-content) {
+    color: var(--text-color);
+    font-variant-numeric: tabular-nums;
+  }
+
   :global(.ant-descriptions-item) {
     padding-bottom: 10px !important;
   }
@@ -13,6 +22,15 @@
   :global(.ant-descriptions-item-label),
   :global(.ant-descriptions-item-content) {
     font-size: 13px;
+  }
+
+  :global(.ant-descriptions-item-label) {
+    color: var(--text-color-secondary);
+  }
+
+  :global(.ant-descriptions-item-content) {
+    color: var(--text-color);
+    font-variant-numeric: tabular-nums;
   }
 
   :global(.ant-descriptions-item) {

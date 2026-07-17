@@ -90,9 +90,14 @@ export const Layout = (
     const globalCssVars = {
       '--spacing-base': Size.BasePadding + 'px',
       '--layout-nav-height': showHeader ? Size.NavBarHeight + 'px' : '0px',
-      '--color-bg-main': MAIN_BG,
+      '--color-bg-main': isLight ? MAIN_BG : themeToken.colorBgLayout,
       '--color-bg-box': themeToken.colorBgContainer,
-      '--color-bg-box-elevated': themeToken.colorBgLayout,
+      '--color-bg-box-elevated': isLight
+        ? themeToken.colorBgLayout
+        : themeToken.colorBgElevated,
+      '--color-bg-box-subtle': isLight
+        ? themeToken.colorBgContainer
+        : '#0d1218',
       '--color-border': themeToken.colorBorder,
       '--color-border-secondary': themeToken.colorBorderSecondary,
       '--color-divider': themeToken.colorBorder,
@@ -101,6 +106,12 @@ export const Layout = (
         : 'rgba(255,255,255, 0.5)',
       '--text-color': themeToken.colorText,
       '--text-color-secondary': themeToken.colorTextSecondary,
+      '--text-color-muted': themeToken.colorTextTertiary,
+      '--color-accent-subtle': isLight ? '#e6f4ff' : 'rgba(47, 129, 247, 0.12)',
+      '--color-data-bundled': '#5b8ff9',
+      '--color-data-source': '#43c6d9',
+      '--color-data-gzip': '#f2b84b',
+      '--color-data-initial': '#43c6d9',
       '--border-radius': themeToken.borderRadius + 'px',
       '--border-radius-lg': themeToken.borderRadiusLG + 'px',
     };

@@ -4,6 +4,8 @@
   background-color: var(--color-bg-box);
   padding: 20px 0;
   margin-bottom: 20px;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
 
   .chartsContainer {
     width: 100%;
@@ -26,15 +28,17 @@
 
     .description {
       font-size: 20px;
-      font-weight: 500;
+      font-weight: 600;
       line-height: 32px;
       margin-right: 5px;
+      font-variant-numeric: tabular-nums;
     }
 
     .unit {
       font-size: 12px;
       font-weight: 400;
       line-height: 32px;
+      color: var(--text-color-secondary);
     }
 
     .totalNumber {
@@ -42,6 +46,8 @@
       font-weight: 400;
       line-height: 20px;
       margin: 4px 0;
+      color: var(--text-color-secondary);
+      font-variant-numeric: tabular-nums;
     }
   }
 }

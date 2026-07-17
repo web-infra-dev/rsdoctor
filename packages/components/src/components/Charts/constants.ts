@@ -28,6 +28,17 @@ export const PALETTE_COLORS = [
   '#528BFF',
 ];
 
+export const TIMELINE_PALETTE_COLORS = [
+  '#5B8FF9',
+  '#43C6D9',
+  '#A78BFA',
+  '#F2B84B',
+  '#F27D62',
+  '#5CCB8A',
+  '#7C9CF5',
+  '#D879B9',
+];
+
 export enum ChartTypes {
   Bootstrap,
   Compile,
