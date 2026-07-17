@@ -33,6 +33,7 @@ import {
   LoaderTimeline,
 } from 'src/pages';
 import { CompileName } from './constants';
+import styles from './header.module.scss';
 
 const BuilderSwitchName = 'builder-switcher';
 
@@ -162,18 +163,23 @@ const MenusBase: React.FC<{
       }}
       disabledOverflow
       overflowedIndicator={<MenuOutlined />}
+      className={styles.primaryMenu}
       style={{
         height: Size.NavBarHeight,
         lineHeight: `${Size.NavBarHeight}px`,
         minWidth: 0,
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         ...props.style,
       }}
       selectedKeys={[pathname === '/' ? OverallConstants.route : pathname]}
     />
   );
 
-  return <div style={{ marginLeft: '30px' }}>{MenuComponent}</div>;
+  return (
+    <nav className={styles.menuContainer} aria-label="Primary navigation">
+      {MenuComponent}
+    </nav>
+  );
 };
 
 export const Menus = withServerAPI({

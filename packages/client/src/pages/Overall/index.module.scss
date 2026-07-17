@@ -20,12 +20,47 @@
 }
 
 .overall {
-  display: flex;
-  justify-content: space-between;
+  width: 100%;
+}
+
+.columns {
+  width: 100%;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.mainColumn,
+.sideColumn {
+  min-width: 0;
+}
+
+.mainColumn {
+  flex: 3 1 0;
+}
+
+.sideColumn {
+  flex: 1 1 320px;
+  min-width: 300px;
+
+  :global(.ant-card) {
+    background: var(--color-bg-box-subtle);
+  }
 }
 
 .layout {
   .row {
     margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .columns {
+    flex-wrap: wrap;
+  }
+
+  .mainColumn,
+  .sideColumn {
+    flex-basis: 100%;
+    width: 100%;
   }
 }

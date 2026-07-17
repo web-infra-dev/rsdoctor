@@ -55,5 +55,5 @@
     .civ
       // 每一栏的 label 文案
       .label-text {
-  fill: #fff !important;
+  fill: var(--text-color) !important;
 }

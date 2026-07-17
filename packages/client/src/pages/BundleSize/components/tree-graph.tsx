@@ -176,12 +176,14 @@ export const TreeGraph = memo(
               />
               <Space size="small" className={styles.assetsTag}>
                 <Divider type="vertical" />
-                <Typography.Text style={{ color: '#4FD233' }}>
+                <Typography.Text style={{ color: 'var(--color-data-bundled)' }}>
                   {formatSize(size)}
                 </Typography.Text>
                 <Divider type="vertical" />
                 {initial ? (
-                  <Typography.Text style={{ color: '#009A9E' }}>
+                  <Typography.Text
+                    style={{ color: 'var(--color-data-initial)' }}
+                  >
                     initial
                   </Typography.Text>
                 ) : null}

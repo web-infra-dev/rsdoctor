@@ -24,8 +24,8 @@ const Component: React.FC = () => {
 
   return (
     <div className={style.overall}>
-      <Flex style={{ width: '100%' }}>
-        <div style={{ flex: 3, marginRight: '16px', maxWidth: '75%' }}>
+      <Flex className={style.columns}>
+        <main className={style.mainColumn}>
           <ResponsiveLayout>
             <ProjectOverall
               configs={configs}
@@ -36,15 +36,15 @@ const Component: React.FC = () => {
             />
             <BundleAlerts />
           </ResponsiveLayout>
-        </div>
+        </main>
 
-        <div style={{ flex: 1 }}>
+        <aside className={style.sideColumn}>
           <ResponsiveLayout>
             <BundleOverall errors={errors} cwd={cwd} />
             <CompileOverall summary={summary} />
             <HelpCenter />
           </ResponsiveLayout>
-        </div>
+        </aside>
       </Flex>
     </div>
   );

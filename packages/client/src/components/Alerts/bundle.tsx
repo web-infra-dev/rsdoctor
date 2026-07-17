@@ -40,8 +40,8 @@ export const BundleAlertsBase: React.FC<BundleAlertsProps> = ({
       theme={{
         components: {
           Alert: {
-            colorInfoBg: '#e6f4ff57',
-            colorInfoBorder: 'none',
+            colorInfoBg: 'var(--color-accent-subtle)',
+            colorInfoBorder: 'transparent',
           },
         },
         token: {

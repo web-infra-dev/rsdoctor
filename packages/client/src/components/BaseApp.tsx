@@ -8,6 +8,7 @@ import {
   Typography,
   theme as te,
 } from 'antd';
+import type { ThemeConfig } from 'antd';
 import React, { useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HashRouter as BrowserRouter } from 'react-router-dom';
@@ -17,6 +18,71 @@ import { Layout } from './Layout';
 import { getLocale, setThemeToStorage, setViewModeToStorage } from '../utils';
 
 const { PageState, Theme } = Constants;
+
+const darkTheme: ThemeConfig = {
+  token: {
+    colorPrimary: '#2f81f7',
+    colorInfo: '#5b8ff9',
+    colorSuccess: '#5ccb8a',
+    colorWarning: '#f2b84b',
+    colorError: '#ff6b6b',
+    colorBgBase: '#090b10',
+    colorBgLayout: '#090b10',
+    colorBgContainer: '#11151b',
+    colorBgElevated: '#171c24',
+    colorBorder: 'rgba(255, 255, 255, 0.16)',
+    colorBorderSecondary: 'rgba(255, 255, 255, 0.1)',
+    colorText: '#f3f5f7',
+    colorTextSecondary: '#aab2bf',
+    colorTextTertiary: '#7d8796',
+    colorFill: 'rgba(255, 255, 255, 0.16)',
+    colorFillSecondary: 'rgba(255, 255, 255, 0.1)',
+    colorFillTertiary: 'rgba(255, 255, 255, 0.06)',
+    colorFillQuaternary: 'rgba(255, 255, 255, 0.04)',
+    borderRadius: 8,
+    borderRadiusLG: 12,
+    boxShadowSecondary: '0 12px 32px rgba(0, 0, 0, 0.24)',
+  },
+  components: {
+    Layout: {
+      bodyBg: '#090b10',
+      headerBg: '#071827',
+      headerColor: '#f3f5f7',
+    },
+    Menu: {
+      activeBarHeight: 2,
+      darkItemBg: 'transparent',
+      darkSubMenuItemBg: '#11151b',
+      darkItemColor: '#aab2bf',
+      darkItemHoverColor: '#f3f5f7',
+      darkItemHoverBg: 'rgba(47, 129, 247, 0.08)',
+      darkItemSelectedColor: '#f3f5f7',
+      darkItemSelectedBg: 'rgba(47, 129, 247, 0.14)',
+      itemBorderRadius: 8,
+      horizontalItemBorderRadius: 8,
+    },
+    Card: {
+      headerBg: 'transparent',
+      extraColor: '#aab2bf',
+    },
+    Segmented: {
+      trackBg: 'rgba(255, 255, 255, 0.06)',
+      itemHoverBg: 'rgba(255, 255, 255, 0.08)',
+      itemActiveBg: 'rgba(47, 129, 247, 0.12)',
+      itemSelectedBg: '#202733',
+      itemSelectedColor: '#f3f5f7',
+    },
+    Progress: {
+      defaultColor: '#2f81f7',
+      remainingColor: 'rgba(255, 255, 255, 0.1)',
+    },
+    Tree: {
+      nodeHoverBg: 'rgba(47, 129, 247, 0.08)',
+      nodeSelectedBg: 'rgba(47, 129, 247, 0.14)',
+      directoryNodeSelectedBg: 'rgba(47, 129, 247, 0.18)',
+    },
+  },
+};
 
 interface BaseAppProps {
   router: React.ReactNode;
@@ -103,7 +169,11 @@ const BaseApp: React.FC<BaseAppProps> = ({
                 locale={getLocale(v.locale)}
                 theme={{
                   components: {
+                    ...(theme === Theme.Dark ? darkTheme.components : {}),
                     Layout: {
+                      ...(theme === Theme.Dark
+                        ? darkTheme.components?.Layout
+                        : {}),
                       ...(Theme.Light === theme && {
                         headerBg: '#fff',
                       }),
@@ -117,6 +187,7 @@ const BaseApp: React.FC<BaseAppProps> = ({
                   token: {
                     padding: 16,
                     fontFamily: 'var(--font-family-code)',
+                    ...(theme === Theme.Dark ? darkTheme.token : {}),
                   },
                 }}
               >
