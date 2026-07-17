@@ -1,5 +1,5 @@
 import { TranslationOutlined } from '@ant-design/icons';
-import { Client } from '@rsdoctor/shared/types';
+import { Client } from '@rsdoctor/types';
 import { Button, Col, Dropdown, Layout, Row, Switch } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
