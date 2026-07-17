@@ -7,7 +7,7 @@ import FileSvg from '../../common/svg/file.svg';
 import styles from './DataSummary.module.scss';
 
 export interface DataSummaryProps {
-  theme: 'common' | 'warning';
+  theme: 'common' | 'size' | 'warning';
   number: string | number;
   onClick?: () => void;
   description: string;
@@ -32,7 +32,7 @@ export const DataSummary = ({
         </>
       }
       className={styles.container}
-      type={theme === 'common' ? 'info' : theme}
+      type={theme === 'warning' ? 'warning' : 'info'}
     ></Alert>
   );
 };

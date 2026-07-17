@@ -19,6 +19,7 @@ export interface SizeCardProps {
   files: {
     path: string;
     size: number;
+    gzipSize?: number;
   }[];
   /**
    * total size for origin files
@@ -47,6 +48,10 @@ export const SizeCard: React.FC<SizeCardProps> = ({
   const sum = useMemo(() => {
     return sumBy(files, (e) => e.size);
   }, [files]);
+  const gzipSum = useMemo(() => {
+    return sumBy(files, (e) => e.gzipSize ?? 0);
+  }, [files]);
+  const hasGzipSize = files.some((file) => file.gzipSize !== undefined);
 
   return (
     <ServerAPIProvider
@@ -73,9 +78,17 @@ export const SizeCard: React.FC<SizeCardProps> = ({
               )}
             />
             <div style={{ marginLeft: '10px' }}>
-              <div className={styles.dataContainer}>
-                <div className={styles.title}>Size</div>
-                <div className={styles.description}>{formatSize(sum)}</div>
+              <div className={styles.sizeMetrics}>
+                <div className={styles.dataContainer}>
+                  <div className={styles.title}>Size</div>
+                  <div className={styles.description}>{formatSize(sum)}</div>
+                </div>
+                <div className={styles.dataContainer}>
+                  <div className={styles.title}>Gzipped</div>
+                  <div className={styles.description}>
+                    {hasGzipSize ? formatSize(gzipSum) : 'N/A'}
+                  </div>
+                </div>
               </div>
               <TextDrawer
                 buttonProps={{

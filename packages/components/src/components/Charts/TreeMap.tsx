@@ -29,6 +29,11 @@ import type {
   CallbackDataParams,
   ECElementEvent,
 } from 'echarts/types/dist/shared';
+import {
+  calculateTreeNodeTotalSize,
+  calculateTreeNodesTotalSize,
+  type TreeMapSizeType,
+} from './treeMapSize';
 
 type TreeMapOption = ComposeOption<
   TreemapSeriesOption | TooltipComponentOption | TitleComponentOption
@@ -55,7 +60,7 @@ export type TreeNode = {
   id?: string | number;
 };
 
-export type SizeType = 'stat' | 'parsed' | 'gzip' | 'value';
+export type SizeType = TreeMapSizeType;
 
 interface TreeMapProps {
   treeData: TreeNode[];
@@ -103,13 +108,13 @@ function isDarkColor(hex: string): boolean {
   return getLuminance(hex) < 0.4;
 }
 
-function getLevelOption() {
+function getLevelOption(gapColor: string) {
   return [
     {
       itemStyle: {
         borderWidth: 0,
         gapWidth: 4,
-        gapColor: '#ffffff',
+        gapColor,
       },
     },
     {
@@ -117,7 +122,7 @@ function getLevelOption() {
         borderColorAlpha: [1, 0.3],
         borderWidth: 5,
         gapWidth: 4,
-        gapColor: '#ffffff',
+        gapColor,
       },
       upperLabel: {
         show: true,
@@ -364,17 +369,17 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
             const rows = [];
             if (sourceSize !== undefined && sourceSize > 0) {
               rows.push(
-                makeRow('Stat size', formatSize(sourceSize), '#52c41a'),
+                makeRow('Stat size', formatSize(sourceSize), '#43c6d9'),
               );
             }
             if (bundledSize !== undefined && bundledSize > 0) {
               rows.push(
-                makeRow('Parsed size', formatSize(bundledSize), '#d96420'),
+                makeRow('Parsed size', formatSize(bundledSize), '#5b8ff9'),
               );
             }
             if (gzipSize !== undefined && gzipSize > 0) {
               rows.push(
-                makeRow('Gzipped size', formatSize(gzipSize), '#1677ff'),
+                makeRow('Gzipped size', formatSize(gzipSize), '#f2b84b'),
               );
             }
 
@@ -405,7 +410,7 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
               fontWeight: 'normal',
               padding: [0, 0, 0, 4],
             },
-            levels: getLevelOption(),
+            levels: getLevelOption(themeToken.colorBgContainer),
             data: data,
             breadcrumb: {
               show: true,
@@ -823,37 +828,17 @@ const AssetTreemapWithFilterInner: React.FC<{
     return filepath;
   };
 
-  const getSize = (node: TreeNode, type?: SizeType) => {
-    if (type === 'stat') return node.sourceSize || 0;
-    if (type === 'parsed') return node.bundledSize || 0;
-    if (type === 'gzip') return node.gzipSize || 0;
-    if (type === 'value') return node.value || 0;
-    if (node.value) return node.value;
-    return 0;
-  };
-
-  const calculateNodeTotalSize = (node: TreeNode, type: SizeType): number => {
-    let size = getSize(node, type);
-
-    if (node.children && node.children.length > 0) {
-      const childrenSize = node.children.reduce(
-        (sum, child) => sum + calculateNodeTotalSize(child, type),
-        0,
-      );
-      if (size === 0 || (!node.path && childrenSize > 0)) {
-        size = childrenSize;
-      }
-    }
-
-    return size;
-  };
-
   const getChunkSize = (name: string, type?: SizeType) => {
     const node = treeData.find((n) => n.name === name);
     if (!node) return 0;
     const sizeTypeToUse = type || sizeType;
-    return calculateNodeTotalSize(node, sizeTypeToUse);
+    return calculateTreeNodeTotalSize(node, sizeTypeToUse);
   };
+
+  const allAssetsSize = useMemo(
+    () => calculateTreeNodesTotalSize(filteredTreeData, sizeType),
+    [filteredTreeData, sizeType],
+  );
 
   return (
     <div className={Styles.treemap} ref={containerRef}>
@@ -899,22 +884,27 @@ const AssetTreemapWithFilterInner: React.FC<{
               size="small"
               style={{ marginBottom: 8 }}
             />
-            <Checkbox
-              indeterminate={
-                checkedAssets.length > 0 &&
-                checkedAssets.length < visibleAssetNames.length
-              }
-              checked={
-                visibleAssetNames.length > 0 &&
-                checkedAssets.length === visibleAssetNames.length
-              }
-              onChange={(e) =>
-                setCheckedAssets(e.target.checked ? visibleAssetNames : [])
-              }
-              className={Styles['all-none-checkbox']}
-            >
-              All
-            </Checkbox>
+            <div className={Styles['chunk-item']}>
+              <Checkbox
+                indeterminate={
+                  checkedAssets.length > 0 &&
+                  checkedAssets.length < visibleAssetNames.length
+                }
+                checked={
+                  visibleAssetNames.length > 0 &&
+                  checkedAssets.length === visibleAssetNames.length
+                }
+                onChange={(e) =>
+                  setCheckedAssets(e.target.checked ? visibleAssetNames : [])
+                }
+                className={Styles['all-none-checkbox']}
+              >
+                All
+              </Checkbox>
+              <span className={Styles['size-tag']}>
+                {formatSize(allAssetsSize)}
+              </span>
+            </div>
             <Checkbox
               checked={showOnlyJavaScriptAssets}
               onChange={(e) => {

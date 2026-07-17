@@ -8,6 +8,8 @@
   padding-inline: var(--spacing-base);
   z-index: 999;
   transition: none;
+  border-bottom: 1px solid var(--color-border-secondary);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 8%);
 
   :global {
     .ant-switch-handle {
@@ -36,6 +38,21 @@
   height: 100%;
 }
 
+.logoButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid #2f81f7;
+    outline-offset: 4px;
+  }
+}
+
 .rightCol {
   flex: 1;
 }
@@ -51,32 +68,70 @@
 
 .rsdoctorLogo {
   width: auto;
-  height: 30px;
-  cursor: pointer;
+  height: 28px;
+  object-fit: contain;
+  user-select: none;
 
   &:active {
     opacity: 0.8;
   }
 }
 
-.translationsIcon {
-  --color-active: #40a9ff;
-  --color-hover: #1668dc;
+.menuContainer {
+  align-self: stretch;
+  margin-left: 24px;
+}
 
-  display: inline-block;
+.primaryMenu {
+  background: transparent;
+  border-bottom: 0;
+
+  :global(.ant-menu-item),
+  :global(.ant-menu-submenu) {
+    margin-block: 5px;
+  }
+
+  :global(.ant-menu-title-content) {
+    font-weight: 500;
+  }
+}
+
+.themeSwitch {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-box-elevated);
+
+  &:focus-visible {
+    outline: 2px solid #2f81f7;
+    outline-offset: 2px;
+  }
+}
+
+.utilityButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 20px;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  width: 30px;
-  transition: all 0.3s ease;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--text-color-secondary);
+  border-radius: var(--border-radius);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
   user-select: none;
 
   &:hover {
-    color: var(--color-hover);
+    color: var(--text-color);
+    background: var(--color-accent-subtle);
   }
 
   &:active {
-    color: var(--color-active);
+    color: #5b8ff9;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #2f81f7;
+    outline-offset: 2px;
   }
 }

@@ -1,35 +1,25 @@
-
-
 .loader-chart-container {
-
   // loader 图表 x 轴文案的样式覆盖
-  .x-axis
-    .tick
-      text {
-        transform: translate(28px, 10px) rotate(0) !important;
-        font-size: 12px;
-        font-weight: 500;
-      
-      }
-      // x 轴第一个坐标文案
-      &:nth-child(2) 
-        text {
-          transform: translate(52px, 10px) rotate(0) !important;
-        }
+  .x-axis .tick text {
+    transform: translate(28px, 10px) rotate(0) !important;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  // x 轴第一个坐标文案
+  &:nth-child(2) text {
+    transform: translate(52px, 10px) rotate(0) !important;
+  }
 
-      // x 轴最后一个坐标文案
-      &:last-child
-        text {
-          transform: translate(5px, 10px) rotate(0) !important;
-        }
+  // x 轴最后一个坐标文案
+  &:last-child text {
+    transform: translate(5px, 10px) rotate(0) !important;
+  }
 
   // loader 图表内容中的样式覆盖
   .area {
     // 图表内容中的轨道
     .civ {
       transform: translateY(5px);
-    
-
 
       // 每一栏的 label 文案
       .label-text {
@@ -43,7 +33,7 @@
       //   display: none !important
 
       // 轨道中，无数据的箭头样式覆盖
-      path[fill="#000000"] {
+      path[fill='#000000'] {
         display: none;
       }
     }
@@ -65,5 +55,5 @@
     .civ
       // 每一栏的 label 文案
       .label-text {
-        fill: #fff !important;
-      }
+  fill: var(--text-color) !important;
+}
