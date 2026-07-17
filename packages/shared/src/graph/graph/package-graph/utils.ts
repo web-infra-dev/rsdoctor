@@ -1,5 +1,5 @@
 import { SDK } from '../../../types';
-import { compact, isEmpty, last } from 'es-toolkit/compat';
+import { compact, isEmpty, last } from '../../../common/lodash';
 import path from 'path-browserify';
 
 const { dirname, join } = path;

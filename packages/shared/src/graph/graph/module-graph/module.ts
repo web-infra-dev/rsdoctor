@@ -1,6 +1,6 @@
 import { SDK, Plugin } from '../../../types';
+import { isNumber } from '../../../common/lodash';
 import path from 'path-browserify';
-import { isNumber } from 'es-toolkit/compat';
 import type { SourceMapConsumer } from 'source-map';
 import type { Program } from 'estree';
 import { Dependency } from './dependency';

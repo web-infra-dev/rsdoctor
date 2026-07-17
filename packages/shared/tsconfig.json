@@ -4,6 +4,7 @@
     "outDir": "dist",
     "rootDir": "src",
     "paths": {
+      "@rsdoctor/shared/collection": ["./src/common/collection.ts"],
       "@rsdoctor/shared/types": ["./src/types/index.ts"]
     },
     "types": ["node"]

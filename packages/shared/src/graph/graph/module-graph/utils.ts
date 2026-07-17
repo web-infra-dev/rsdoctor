@@ -1,5 +1,5 @@
 import type { SDK } from '../../../types';
-import { isNil, isUndefined, last } from 'es-toolkit/compat';
+import { isNil, isUndefined, last } from '../../../common/lodash';
 
 export function isSamePosition(
   po1: SDK.SourcePosition,

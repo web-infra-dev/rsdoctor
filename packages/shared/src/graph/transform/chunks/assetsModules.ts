@@ -1,6 +1,6 @@
 import path from 'path-browserify';
 import { SDK } from '../../../types';
-import { isEmpty, pick } from 'es-toolkit/compat';
+import { isEmpty, pick } from '../../../common/lodash';
 import { gzipSync } from 'node:zlib';
 import { ParseBundle } from '../../types/transform';
 

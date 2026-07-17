@@ -658,9 +658,6 @@ importers:
       envinfo:
         specifier: 7.21.0
         version: 7.21.0
-      es-toolkit:
-        specifier: 'catalog:'
-        version: 1.49.0
       filesize:
         specifier: 'catalog:'
         version: 11.0.22
@@ -865,9 +862,6 @@ importers:
       buffer:
         specifier: 6.0.3
         version: 6.0.3
-      es-toolkit:
-        specifier: 'catalog:'
-        version: 1.49.0
       path-browserify:
         specifier: 'catalog:'
         version: 1.0.1
@@ -887,6 +881,9 @@ importers:
       '@types/react':
         specifier: 'catalog:'
         version: 19.2.17
+      es-toolkit:
+        specifier: 'catalog:'
+        version: 1.49.0
       tslib:
         specifier: 2.8.1
         version: 2.8.1

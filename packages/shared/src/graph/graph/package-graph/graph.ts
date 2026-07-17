@@ -1,4 +1,4 @@
-import { unionBy } from 'es-toolkit/compat';
+import { unionBy } from '@rsdoctor/shared/collection';
 import path from 'path-browserify';
 import { SDK } from '../../../types';
 import { Package } from './package';

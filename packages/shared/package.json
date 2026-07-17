@@ -93,7 +93,6 @@
     "@types/estree": "catalog:",
     "@types/tapable": "catalog:",
     "buffer": "6.0.3",
-    "es-toolkit": "catalog:",
     "path-browserify": "catalog:",
     "source-map": "catalog:"
   },
@@ -102,6 +101,7 @@
     "@types/path-browserify": "catalog:",
     "@types/react": "catalog:",
     "@rspack/core": "catalog:",
+    "es-toolkit": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:"
   },

@@ -223,7 +223,6 @@
     "connect": "3.7.0",
     "deep-eql": "4.1.4",
     "envinfo": "7.21.0",
-    "es-toolkit": "catalog:",
     "filesize": "catalog:",
     "fs-extra": "catalog:",
     "get-port": "5.1.1",
