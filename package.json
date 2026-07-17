@@ -7,7 +7,7 @@
     ]
   },
   "scripts": {
-    "build": "cross-env NX_DAEMON=false nx run-many -t build --projects=@rsdoctor/*,@examples/rsdoctor-rspack-banner --parallel=10",
+    "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"./scripts/*\" run build",
     "change": "changeset",
     "changeset": "changeset",
     "bump": "changeset version",

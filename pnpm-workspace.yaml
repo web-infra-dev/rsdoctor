@@ -53,7 +53,7 @@ catalog:
   sirv: 3.0.2
   source-map: ^0.7.6
   tslib: 2.8.1
-  typescript: ^6.0.3
+  typescript: ^7.0.2
 
 minimumReleaseAge: 1440
 
@@ -70,6 +70,11 @@ minimumReleaseAgeExclude:
   - ws@8.21.0
   # Renovate security update: echarts@6.1.0
   - echarts@6.1.0
+
+packageExtensions:
+  prebundle@1.6.5:
+    dependencies:
+      typescript: 6.0.3
 
 overrides:
   '@remix-run/router': 1.23.3

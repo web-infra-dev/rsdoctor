@@ -23,10 +23,12 @@ export function getInternalLoaderOptions(
 
 export function getLoaderOptionsWithoutInternalKeys(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,
-): Omit<ProxyLoaderOptions, typeof Loader.LoaderInternalPropertyName> {
+): Record<string, any> {
   const options = loaderContext.getOptions();
   const circlePaths: string[][] = [];
-  const loaderOptions = omit(options, [Loader.LoaderInternalPropertyName]);
+  const loaderOptions = omit(options, [
+    Loader.LoaderInternalPropertyName,
+  ]) as Record<string, any>;
 
   checkCirclePath(loaderOptions, [], circlePaths, 0);
 
@@ -123,8 +125,7 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
     // In the childCompiler of mini-css-extract-plugin, the options[Loader.LoaderInternalPropertyName] of proxy-loader is set to proxy-loader, ultimately causing errors in the compilation of less files.
     opts[Loader.LoaderInternalPropertyName] =
       rule.loader &&
-      // compatible with proxy.cjs and proxy.js
-      /proxy\.(js|cjs)/.test(rule.loader) &&
+      rule.loader.endsWith('proxy.js') &&
       'options' in rule &&
       typeof rule.options === 'object'
         ? rule.options[Loader.LoaderInternalPropertyName]

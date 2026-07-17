@@ -7,7 +7,7 @@
     "directory": "packages/core"
   },
   "license": "MIT",
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
@@ -17,144 +17,60 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./build-utils": {
-      "import": {
-        "types": "./dist/build-utils/index.d.ts",
-        "default": "./dist/build-utils/index.js"
-      },
-      "require": {
-        "types": "./dist/build-utils/index.d.cts",
-        "default": "./dist/build-utils/index.cjs"
-      }
+      "types": "./dist/build-utils/index.d.ts",
+      "default": "./dist/build-utils/index.js"
     },
     "./collection": {
-      "import": {
-        "types": "./dist/collection.d.ts",
-        "default": "./dist/collection.js"
-      },
-      "require": {
-        "types": "./dist/collection.d.cts",
-        "default": "./dist/collection.cjs"
-      }
+      "types": "./dist/collection.d.ts",
+      "default": "./dist/collection.js"
     },
     "./common": {
-      "import": {
-        "types": "./dist/common/index.d.ts",
-        "default": "./dist/common/index.js"
-      },
-      "require": {
-        "types": "./dist/common/index.d.cts",
-        "default": "./dist/common/index.cjs"
-      }
+      "types": "./dist/common/index.d.ts",
+      "default": "./dist/common/index.js"
     },
     "./common-browser": {
-      "import": {
-        "types": "./dist/common-browser.d.ts",
-        "default": "./dist/common-browser.js"
-      },
-      "require": {
-        "types": "./dist/common-browser.d.cts",
-        "default": "./dist/common-browser.cjs"
-      }
+      "types": "./dist/common-browser.d.ts",
+      "default": "./dist/common-browser.js"
     },
     "./graph": {
-      "import": {
-        "types": "./dist/graph/index.d.ts",
-        "default": "./dist/graph/index.js"
-      },
-      "require": {
-        "types": "./dist/graph/index.d.cts",
-        "default": "./dist/graph/index.cjs"
-      }
+      "types": "./dist/graph/index.d.ts",
+      "default": "./dist/graph/index.js"
     },
     "./error": {
-      "import": {
-        "types": "./dist/error/index.d.ts",
-        "default": "./dist/error/index.js"
-      },
-      "require": {
-        "types": "./dist/error/index.d.cts",
-        "default": "./dist/error/index.cjs"
-      }
+      "types": "./dist/error/index.d.ts",
+      "default": "./dist/error/index.js"
     },
     "./logger": {
-      "import": {
-        "types": "./dist/logger.d.ts",
-        "default": "./dist/logger.js"
-      },
-      "require": {
-        "types": "./dist/logger.d.cts",
-        "default": "./dist/logger.cjs"
-      }
+      "types": "./dist/logger.d.ts",
+      "default": "./dist/logger.js"
     },
     "./sdk": {
-      "import": {
-        "types": "./dist/sdk.d.ts",
-        "default": "./dist/sdk.js"
-      },
-      "require": {
-        "types": "./dist/sdk.d.cts",
-        "default": "./dist/sdk.cjs"
-      }
+      "types": "./dist/sdk.d.ts",
+      "default": "./dist/sdk.js"
     },
     "./plugins": {
-      "import": {
-        "types": "./dist/inner-plugins/index.d.ts",
-        "default": "./dist/inner-plugins/index.js"
-      },
-      "require": {
-        "types": "./dist/inner-plugins/index.d.cts",
-        "default": "./dist/inner-plugins/index.cjs"
-      }
+      "types": "./dist/inner-plugins/index.d.ts",
+      "default": "./dist/inner-plugins/index.js"
     },
     "./rspack-plugin": {
-      "import": {
-        "types": "./dist/rspack-plugin/index.d.ts",
-        "default": "./dist/rspack-plugin/index.js"
-      },
-      "require": {
-        "types": "./dist/rspack-plugin/index.d.cts",
-        "default": "./dist/rspack-plugin/index.cjs"
-      }
+      "types": "./dist/rspack-plugin/index.d.ts",
+      "default": "./dist/rspack-plugin/index.js"
     },
     "./rules": {
-      "import": {
-        "types": "./dist/rules/index.d.ts",
-        "default": "./dist/rules/index.js"
-      },
-      "require": {
-        "types": "./dist/rules/index.d.cts",
-        "default": "./dist/rules/index.cjs"
-      }
+      "types": "./dist/rules/index.d.ts",
+      "default": "./dist/rules/index.js"
     },
     "./rule-utils": {
-      "import": {
-        "types": "./dist/rule-utils/index.d.ts",
-        "default": "./dist/rule-utils/index.js"
-      },
-      "require": {
-        "types": "./dist/rule-utils/index.d.cts",
-        "default": "./dist/rule-utils/index.cjs"
-      }
+      "types": "./dist/rule-utils/index.d.ts",
+      "default": "./dist/rule-utils/index.js"
     },
     "./types": {
-      "import": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/types/index.js"
-      },
-      "require": {
-        "types": "./dist/types/index.d.cts",
-        "default": "./dist/types/index.cjs"
-      }
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/types/index.js"
     }
   },
   "typesVersions": {

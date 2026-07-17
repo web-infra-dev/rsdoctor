@@ -7,13 +7,8 @@ import { interceptLoader, type CompatibleResolve } from '../utils';
 import { InternalBasePlugin } from './base';
 import type { ProxyLoaderOptions } from '../../types';
 import { time, timeEnd } from '@rsdoctor/core/logger';
-import path from 'path';
 import { fileURLToPath } from 'url';
 import { safeCloneDeep } from '../utils/plugin-common';
-
-// ESM equivalent of __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 type MutableNormalModule = Omit<NormalModule, 'loaders'> & {
   loaders: Array<{ loader: string; options?: unknown }>;
@@ -29,20 +24,9 @@ export class InternalLoaderPlugin<
 > extends InternalBasePlugin<T> {
   public readonly name = 'loader';
 
-  // TODO: find the reason why using loader/proxy.js causes this problem https://github.com/web-infra-dev/rsdoctor/pull/1271.
-  public readonly internalLoaderPath: string = (() => {
-    const isCJS = __filename.endsWith('.cjs');
-    if (isCJS) {
-      // CJS environment: only use proxy.cjs
-      return require.resolve(path.join(__dirname, `../loaders/proxy.cjs`));
-    } else {
-      try {
-        return require.resolve(path.join(__dirname, `../loaders/proxy.js`));
-      } catch {
-        return require.resolve(path.join(__dirname, `../loaders/proxy.cjs`));
-      }
-    }
-  })();
+  public readonly internalLoaderPath = fileURLToPath(
+    new URL('../loaders/proxy.js', import.meta.url),
+  );
 
   public apply(compiler: T) {
     time('InternalLoaderPlugin.apply');

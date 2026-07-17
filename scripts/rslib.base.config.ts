@@ -9,43 +9,19 @@ export const baseBuildConfig = defineConfig({
   lib: [
     {
       bundle: false,
-      format: 'cjs' as const,
+      format: 'esm' as const,
       syntax: [BUILD_TARGET],
       dts: true,
+      redirect: {
+        dts: {
+          extension: true,
+        },
+      },
     },
   ],
 });
 
 export default baseBuildConfig;
-
-export const configWithEsm = defineConfig({
-  lib: [
-    {
-      bundle: false,
-      format: 'cjs',
-      syntax: [BUILD_TARGET],
-      output: {
-        distPath: {
-          root: './dist/cjs',
-        },
-      },
-      dts: {
-        distPath: './dist/type',
-      },
-    },
-    {
-      bundle: false,
-      format: 'esm',
-      syntax: [BUILD_TARGET],
-      output: {
-        distPath: {
-          root: './dist/esm',
-        },
-      },
-      dts: false,
-    },
-  ],
-});
 
 export const nodeMinifyConfig = {
   js: true,
@@ -74,36 +50,17 @@ export const esmConfig: LibConfig = {
   },
 };
 
-export const cjsConfig: LibConfig = {
-  format: 'cjs',
-  syntax: [BUILD_TARGET],
-  dts: {
-    build: true,
-    autoExtension: true,
-  },
-  output: {
-    minify: nodeMinifyConfig,
-    filename: {
-      js: '[name].cjs',
-    },
-  },
-};
-
-export const dualPackageBundleless = defineConfig({
+export const esmPackageBundleless = defineConfig({
   lib: [
     {
       ...esmConfig,
-      bundle: false,
-    },
-    {
-      ...cjsConfig,
       bundle: false,
     },
   ],
   plugins: pluginsConfig,
 });
 
-export const dualPackage = defineConfig({
-  lib: [esmConfig, cjsConfig],
+export const esmPackage = defineConfig({
+  lib: [esmConfig],
   plugins: pluginsConfig,
 });

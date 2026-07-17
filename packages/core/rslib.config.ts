@@ -1,5 +1,5 @@
-import { defineConfig, rspack } from '@rslib/core';
-import { dualPackageBundleless } from '../../scripts/rslib.base.config';
+import { defineConfig } from '@rslib/core';
+import { esmPackageBundleless } from '../../scripts/rslib.base.config';
 
 const externals = [
   '@rsdoctor/client',
@@ -12,14 +12,15 @@ const externals = [
 ];
 
 export default defineConfig({
-  ...dualPackageBundleless,
+  ...esmPackageBundleless,
   lib: [
     {
       bundle: false,
       format: 'esm',
       syntax: 'es2021',
       dts: {
-        build: true,
+        build: false,
+        tsgo: true,
       },
       output: {
         filename: {
@@ -33,42 +34,5 @@ export default defineConfig({
         },
       },
     },
-    {
-      bundle: false,
-      format: 'cjs',
-      syntax: 'es2021',
-      dts: {
-        build: true,
-        autoExtension: true,
-      },
-      output: {
-        filename: {
-          js: '[name].cjs',
-        },
-        externals,
-      },
-      shims: {
-        cjs: {
-          'import.meta.url': true,
-        },
-      },
-    },
   ],
-  tools: {
-    rspack: {
-      plugins: [
-        new rspack.BannerPlugin({
-          banner: (args) => {
-            if (args.filename === 'inner-plugins/loaders/proxy.cjs') {
-              return 'module.exports = loaderModule; // This is a proxy loader, do not remove this line';
-            }
-            // For ESM files, we don't need to add export since it's already exported
-            return '';
-          },
-          footer: true,
-          raw: true,
-        }),
-      ],
-    },
-  },
 });

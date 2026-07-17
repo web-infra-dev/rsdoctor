@@ -121,7 +121,7 @@ export interface RspackPitchLoaderDefinitionFunction<
 }
 
 export type LoaderDefinition<T, R> = LoaderDefinitionFunction<T, R> & {
-  raw?: false;
+  raw?: boolean;
   pitch?:
     | PitchLoaderDefinitionFunction<T>
     | RspackPitchLoaderDefinitionFunction<T>;
