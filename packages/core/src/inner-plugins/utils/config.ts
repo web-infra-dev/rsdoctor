@@ -1,7 +1,3 @@
-import {
-  RsdoctorRspackPluginOptions,
-  RsdoctorRspackPluginOptionsNormalized,
-} from '../../types';
 import { Config, Linter, Plugin, SDK } from '@rsdoctor/shared/types';
 import { chalk, logger } from '@rsdoctor/core/logger';
 import assert from 'assert';
@@ -227,28 +223,4 @@ export const normalizeReportType = (
   return SDK.ToDataType.Normal;
 };
 
-export function normalizeRspackUserOptions<
-  Rules extends Linter.ExtendRuleData[],
->(
-  options: RsdoctorRspackPluginOptions<Rules>,
-): RsdoctorRspackPluginOptionsNormalized<Rules> {
-  const config: RsdoctorRspackPluginOptionsNormalized<Rules> =
-    normalizeUserConfig(options);
-  config.experiments ??= {
-    enableNativePlugin: {
-      moduleGraph: true,
-      chunkGraph: true,
-    },
-  };
-  // Default to true, only set to false when explicitly set to false
-  if (
-    typeof options.experiments?.enableNativePlugin === 'boolean' &&
-    options.experiments?.enableNativePlugin === false
-  ) {
-    config.experiments.enableNativePlugin = {
-      moduleGraph: false,
-      chunkGraph: false,
-    };
-  }
-  return config;
-}
+export const normalizeRspackUserOptions = normalizeUserConfig;

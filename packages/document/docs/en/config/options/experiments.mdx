@@ -2,20 +2,10 @@ import { Badge } from '@theme';
 
 # experiments
 
-<Badge text="Version: 1.0.0" type="warning" />
+<Badge text="Removed in 2.0.0" type="warning" />
 
 ## enableNativePlugin
 
-- **Type:** `boolean`
-- **Optional:** `true`
-- **Default:** `true`
+Rsdoctor 2.0 always uses the Rsdoctor native plugin built into Rspack to collect module and chunk graph data. The `experiments.enableNativePlugin` option has been removed and the stats-based build fallback is no longer available.
 
-By enabling the enableNativePlugin option, the Rspack native plugin moves the time-consuming data processing logic from Rsdoctor to the Rspack build stage, significantly improving build analysis efficiency and greatly reducing Rsdoctor's own analysis time.
-
-- **Example:**
-
-```js
-new RsdoctorRspackPlugin({
-  experiments: { enableNativePlugin: true }
-}),
-```
+Remove this option from your configuration and upgrade Rspack if `experiments.RsdoctorPlugin` is unavailable.

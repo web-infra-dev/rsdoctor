@@ -47,34 +47,10 @@ export type RsdoctorRspackPluginInstance<
   Rules extends LinterType.ExtendRuleData[] = [],
 > = RsdoctorPluginInstance<Plugin.BaseCompilerType<'rspack'>, Rules>;
 
-export interface NativePluginConfig {
-  moduleGraph?: boolean;
-  chunkGraph?: boolean;
-}
-
-export interface RsdoctorRspackPluginExperiments {
-  /**
-   * Whether to enable the native plugin to improve the performance.
-   * @default true
-   */
-  enableNativePlugin?: boolean;
-}
-
-export interface RsdoctorRspackPluginExperimentsNormalized {
-  enableNativePlugin?: NativePluginConfig;
-}
-
-export interface RsdoctorRspackPluginOptions<
+export type RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
-> extends Plugin.RsdoctorRspackPluginOptions<Rules> {
-  /**
-   * The experiments of the Rsdoctor Rspack plugin.
-   */
-  experiments?: RsdoctorRspackPluginExperiments;
-}
+> = Plugin.RsdoctorRspackPluginOptions<Rules>;
 
 export type RsdoctorRspackPluginOptionsNormalized<
   Rules extends Linter.ExtendRuleData[],
-> = Plugin.RsdoctorPluginOptionsNormalized<Rules> & {
-  experiments?: RsdoctorRspackPluginExperimentsNormalized;
-};
+> = Plugin.RsdoctorPluginOptionsNormalized<Rules>;

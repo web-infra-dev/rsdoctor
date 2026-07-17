@@ -37,7 +37,6 @@ new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
 这个 `Options` 是 [RsdoctorRspackPlugin](#rsdoctorrspackplugin-%E6%8F%92%E4%BB%B6) 的配置项。它包含以下属性值：
 
 - [disableClientServer](./disableClientServer.mdx) - **客户端服务控制**：是否在分析完成后不自动打开 Rsdoctor 报告服务。
-- [experiments](./experiments.mdx) - **实验性功能配置**：启用 Rspack 插件的实验性功能，如原生插件性能优化。
 - [features](./features.mdx) - **特性开关配置**：控制 Rsdoctor 的各项分析功能，如 loader 分析、bundle 分析、规则检查等
 - [output](./output.mdx) - **输出相关配置**：控制报告的输出格式、目录等选项，包括 mode、options、reportCodeType 等
 - [port](./port.mdx) - **服务端口配置**：设置 Rsdoctor 开发服务器的端口号，用于本地开发时的报告预览
@@ -80,15 +79,5 @@ interface RsdoctorRspackPluginOptions<
   brief?: Config.BriefConfig;
 
   output?: Config.IOutput<'brief' | 'normal'>;
-
-  experiments?: RsdoctorRspackPluginExperiments;
-}
-
-interface RsdoctorRspackPluginExperiments {
-  /**
-   * 是否启用原生插件以提高性能
-   * @default true
-   */
-  enableNativePlugin?: boolean;
 }
 ```

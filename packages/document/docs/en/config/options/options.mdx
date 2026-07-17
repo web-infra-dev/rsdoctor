@@ -37,7 +37,6 @@ new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
 This `Options` object is the configuration for [RsdoctorRspackPlugin](#rsdoctorrspackplugin). It contains the following properties:
 
 - [disableClientServer](./disableClientServer.mdx) - **Client Service Control**: Whether to not automatically open the Rsdoctor report service after analysis is complete.
-- [experiments](./experiments.mdx) - **Experimental Features Configuration**: Enable experimental features for Rspack plugins, such as native plugin performance optimization.
 - [features](./features.mdx) - **Feature Toggle Configuration**: Control various analysis features of Rsdoctor, such as loader analysis, bundle analysis, rule checking, etc.
 - [output](./output.mdx) - **Output Related Configuration**: Control report output format, directory and other options, including mode, options, reportCodeType, etc.
 - [port](./port.mdx) - **Service Port Configuration**: Set the port number for the Rsdoctor development server, used for report preview during local development.
@@ -81,15 +80,5 @@ interface RsdoctorRspackPluginOptions<
   brief?: Config.BriefConfig;
 
   output?: Config.IOutput<'brief' | 'normal'>;
-
-  experiments?: RsdoctorRspackPluginExperiments;
-}
-
-interface RsdoctorRspackPluginExperiments {
-  /**
-   * Whether to enable native plugin to improve performance
-   * @default true
-   */
-  enableNativePlugin?: boolean;
 }
 ```

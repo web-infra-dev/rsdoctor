@@ -34,6 +34,8 @@ const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
 
 `@rspack/core` remains an optional peer dependency of `@rsdoctor/core`. Your Rspack-based build tool normally provides it. Install `@rspack/core` in projects that use Rspack directly.
 
+Rsdoctor 2.0 requires the Rsdoctor native plugin built into Rspack for module and chunk graph collection. Remove the former `experiments.enableNativePlugin` option because the native path is now always enabled. If the build reports that `experiments.RsdoctorPlugin` is unavailable, upgrade the Rspack dependency supplied by your project or framework.
+
 ## CLI migration
 
 `@rsdoctor/cli` remains the `rsdoctor` command package. Use the same version of `@rsdoctor/cli` and `@rsdoctor/core`:

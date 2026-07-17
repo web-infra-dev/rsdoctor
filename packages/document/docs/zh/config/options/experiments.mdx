@@ -2,20 +2,10 @@ import { Badge } from '@theme';
 
 # experiments
 
-<Badge text="Version: 1.0.0" type="warning" />
+<Badge text="2.0.0 已移除" type="warning" />
 
 ## enableNativePlugin
 
-- **类型：** `boolean`
-- **可选：** `true`
-- **默认值：** `true`
+Rsdoctor 2.0 始终使用 Rspack 内置的 Rsdoctor native plugin 收集 module graph 和 chunk graph 数据。`experiments.enableNativePlugin` 配置项已移除，构建期间不再回退到 stats 转换逻辑。
 
-通过 enableNativePlugin 选项开启 Rspack 原生插件，将 Rsdoctor 中耗时较大的数据处理逻辑前置到 Rspack 构建阶段，从而显著提升构建分析效率并大幅降低 Rsdoctor 自身的分析耗时。
-
-- **示例：**
-
-```js
-new RsdoctorRspackPlugin({
-  experiments: { enableNativePlugin: true }
-}),
-```
+请从配置中删除该选项；如果当前 Rspack 不提供 `experiments.RsdoctorPlugin`，请升级 Rspack。

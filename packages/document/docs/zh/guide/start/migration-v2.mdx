@@ -34,6 +34,8 @@ const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
 
 `@rspack/core` 仍是 `@rsdoctor/core` 的可选 peer dependency。基于 Rspack 的构建工具通常已经提供该依赖；直接使用 Rspack 的项目需要安装 `@rspack/core`。
 
+Rsdoctor 2.0 要求使用 Rspack 内置的 Rsdoctor 原生插件来收集模块图和 chunk 图。请移除原有的 `experiments.enableNativePlugin` 配置，因为原生链路现在始终启用。如果构建提示 `experiments.RsdoctorPlugin` 不可用，请升级项目或框架提供的 Rspack 依赖。
+
 ## CLI 迁移
 
 `@rsdoctor/cli` 仍是 `rsdoctor` 命令对应的包。请为 `@rsdoctor/cli` 和 `@rsdoctor/core` 使用相同版本：
