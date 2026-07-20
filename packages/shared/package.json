@@ -7,7 +7,7 @@
     "directory": "packages/shared"
   },
   "license": "MIT",
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
@@ -15,54 +15,29 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./collection": {
-      "import": {
-        "types": "./dist/collection.d.ts",
-        "default": "./dist/collection.js"
-      },
-      "require": {
-        "types": "./dist/collection.d.cts",
-        "default": "./dist/collection.cjs"
-      }
+      "types": "./dist/collection.d.ts",
+      "import": "./dist/collection.js",
+      "default": "./dist/collection.js"
     },
     "./common-browser": {
-      "import": {
-        "types": "./dist/common-browser.d.ts",
-        "default": "./dist/common-browser.js"
-      },
-      "require": {
-        "types": "./dist/common-browser.d.cts",
-        "default": "./dist/common-browser.cjs"
-      }
+      "types": "./dist/common-browser.d.ts",
+      "import": "./dist/common-browser.js",
+      "default": "./dist/common-browser.js"
     },
     "./graph": {
-      "import": {
-        "types": "./dist/graph.d.ts",
-        "default": "./dist/graph.js"
-      },
-      "require": {
-        "types": "./dist/graph.d.cts",
-        "default": "./dist/graph.cjs"
-      }
+      "types": "./dist/graph.d.ts",
+      "import": "./dist/graph.js",
+      "default": "./dist/graph.js"
     },
     "./types": {
-      "import": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/types/index.js"
-      },
-      "require": {
-        "types": "./dist/types/index.d.cts",
-        "default": "./dist/types/index.cjs"
-      }
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js",
+      "default": "./dist/types/index.js"
     }
   },
   "typesVersions": {

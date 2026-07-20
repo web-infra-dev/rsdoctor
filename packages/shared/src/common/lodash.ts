@@ -5,7 +5,12 @@ export function isUndefined(value: unknown): value is undefined {
 
 // Replace lodash's isNumber function
 export function isNumber(value: unknown): value is number {
-  return typeof value === 'number' && !Number.isNaN(value);
+  return (
+    typeof value === 'number' ||
+    (typeof value === 'object' &&
+      value !== null &&
+      Object.prototype.toString.call(value) === '[object Number]')
+  );
 }
 
 export function isObject(value: unknown): value is Record<string, unknown> {

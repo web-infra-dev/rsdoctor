@@ -1,3 +1,5 @@
+export { isNumber } from './lodash';
+
 export {
   debounce,
   defaults,
@@ -8,7 +10,6 @@ export {
   groupBy,
   isArray,
   isEqual,
-  isNumber,
   lowerCase,
   mapValues,
   maxBy,

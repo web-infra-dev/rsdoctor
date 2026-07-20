@@ -1,8 +1,5 @@
 import { defineConfig } from '@rslib/core';
-import {
-  dualPackage,
-  dualPackageBundleless,
-} from '../../scripts/rslib.base.config';
+import { esmConfig, pluginsConfig } from '../../scripts/rslib.base.config';
 
 const externals = [
   '@rsdoctor/shared/collection',
@@ -15,44 +12,44 @@ const bundlelessEntries = {
   index: ['src/**', '!src/common/collection.ts'],
 };
 
-const bundlelessLib = dualPackageBundleless.lib.map((libConfig) => ({
-  ...libConfig,
+const bundlelessLib = {
+  ...esmConfig,
+  bundle: false,
   source: {
     entry: bundlelessEntries,
   },
   output: {
-    ...libConfig.output,
+    ...esmConfig.output,
     externals,
   },
   redirect: {
-    ...libConfig.redirect,
+    ...esmConfig.redirect,
     dts: {
-      ...libConfig.redirect?.dts,
+      extension: true,
       path: false,
     },
   },
-}));
+};
 
-const collectionLib = dualPackage.lib.map((libConfig) => ({
-  ...libConfig,
+const collectionLib = {
+  ...esmConfig,
   source: {
     entry: {
       collection: './src/common/collection.ts',
     },
   },
   output: {
-    ...libConfig.output,
+    ...esmConfig.output,
     externals,
   },
   dts: {
     bundle: {
       bundledPackages: ['es-toolkit'],
     },
-    autoExtension: libConfig.format === 'cjs',
   },
-}));
+};
 
 export default defineConfig({
-  ...dualPackageBundleless,
-  lib: [...bundlelessLib, ...collectionLib],
+  lib: [bundlelessLib, collectionLib],
+  plugins: pluginsConfig,
 });
