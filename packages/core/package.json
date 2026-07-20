@@ -244,7 +244,7 @@
     "safer-buffer": "2.1.2",
     "sirv": "catalog:",
     "tapable": "2.3.3",
-    "ws": "8.21.0"
+    "ws": "8.21.1"
   },
   "devDependencies": {
     "@rspack/core": "catalog:",
