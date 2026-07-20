@@ -135,3 +135,4 @@ describe('Rspack native graph collection', () => {
       'did not provide module graph data',
     );
   });
+});
