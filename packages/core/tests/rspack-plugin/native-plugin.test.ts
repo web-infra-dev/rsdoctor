@@ -122,4 +122,16 @@ describe('Rspack native graph collection', () => {
       'did not provide chunk graph data',
     );
   });
-});
+
+  it('fails when module graph hook does not provide data', async () => {
+    const { doneHook, nativeHooks } = createHarness();
+
+    nativeHooks.chunkGraph.call({
+      chunks: [],
+      entrypoints: [],
+    });
+
+    await expect(doneHook.promise({})).rejects.toThrow(
+      'did not provide module graph data',
+    );
+  });
