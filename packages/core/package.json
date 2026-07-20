@@ -269,7 +269,7 @@
     "@types/ws": "^8.18.1"
   },
   "peerDependencies": {
-    "@rspack/core": "*"
+    "@rspack/core": ">=1.2.3"
   },
   "peerDependenciesMeta": {
     "@rspack/core": {
