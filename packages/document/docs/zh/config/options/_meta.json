@@ -2,6 +2,7 @@
   "options",
   "term",
   "disableClientServer",
+  "experiments",
   "features",
   "output",
   "port",
