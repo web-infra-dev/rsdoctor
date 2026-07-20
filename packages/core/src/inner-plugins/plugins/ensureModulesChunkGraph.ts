@@ -1,16 +1,16 @@
 import type { RsdoctorPluginInstance } from '../../types';
 import { Linter, Plugin, SDK } from '@rsdoctor/shared/types';
-import { Process } from '@rsdoctor/core/build-utils';
 import { chalk, logger } from '@rsdoctor/core/logger';
-import {
-  Chunks as ChunksBuildUtils,
-  ModuleGraph as ModuleGraphBuildUtils,
-} from '@/build-utils/build';
+import { Chunks as ChunksBuildUtils } from '@/build-utils/build';
 import {
   internalPluginTapPreOptions,
   pluginTapPostOptions,
 } from '../constants';
-import { applyRspackNativePlugin } from './rspack';
+import {
+  applyRspackNativePlugin,
+  getRspackNativePlugin,
+  type RspackNativeGraphState,
+} from './rspack';
 import { handleAfterEmitAssets } from './sourcemapTool';
 
 /**
@@ -29,7 +29,7 @@ let hasConsole = false;
 
 /**
  * Main function to generate ModuleGraph and ChunkGraph from Rspack native data
- * or stats fallback, and collect source maps.
+ * and collect source maps.
  */
 export const ensureModulesChunksGraphFn = (
   compiler: Plugin.BaseCompiler,
@@ -37,27 +37,25 @@ export const ensureModulesChunksGraphFn = (
 ) => {
   // Prevent duplicate application
   if (_this._modulesGraphApplied) return;
+
+  const RsdoctorRspackPlugin = getRspackNativePlugin(compiler);
   _this._modulesGraphApplied = true;
-
-  // Check for Rspack native plugin support
-  const RsdoctorRspackPlugin = (
-    compiler.webpack.experiments as Plugin.RspackExportsExperiments
-  )?.RsdoctorPlugin;
-
-  if (RsdoctorRspackPlugin) {
-    applyRspackNativePlugin(compiler, _this, RsdoctorRspackPlugin);
-  }
+  const nativeGraphState = applyRspackNativePlugin(
+    compiler,
+    _this,
+    RsdoctorRspackPlugin,
+  );
 
   // Initialize real source path cache if not present
   if (!_this._realSourcePathCache) {
     _this._realSourcePathCache = new Map();
   }
 
-  // Hook: After compilation is done, generate graphs and process stats
+  // Hook: After compilation is done, process and report native graphs
   compiler.hooks.done.tapPromise(
     internalPluginTapPreOptions('moduleGraph'),
-    async (_stats: any) => {
-      await doneHandler(_stats, _this, compiler);
+    async () => {
+      await doneHandler(_this, compiler, nativeGraphState);
     },
   );
 
@@ -94,65 +92,24 @@ export const ensureModulesChunksGraphFn = (
 };
 
 /**
- * Handler function for the done hook. Generates graphs, processes stats, and reports results.
+ * Handler function for the done hook. Processes native graphs and reports results.
  */
 async function doneHandler(
-  _stats: any,
   _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
   compiler: Plugin.BaseCompiler,
+  nativeGraphState: RspackNativeGraphState,
 ) {
-  const stats = _stats as Plugin.Stats;
-  // Lazy getter for stats JSON, with caching
-  const getStatsJson = (() => {
-    let cached: Plugin.StatsCompilation | null = null;
-    return () => {
-      if (cached) return cached as Plugin.StatsCompilation;
-      cached = stats.toJson({
-        all: false,
-        chunks: true,
-        modules: true,
-        chunkModules: true,
-        assets: true,
-        ids: true,
-        hash: true,
-        errors: true,
-        warnings: true,
-        nestedModules: true,
-        cachedModules: true,
-        orphanModules: true,
-        runtimeModules: true,
-        optimizationBailout: true,
-      });
-      return cached;
-    };
-  })();
-  logger.debug(
-    `${(Process.getMemoryUsageMessage(), '[Before Generate ModuleGraph]')}`,
-  );
-
-  // Generate chunk graph if not already present
-  if (!_this.chunkGraph?.getChunks().length) {
-    _this.chunkGraph = ChunksBuildUtils.chunkTransform(
-      new Map(),
-      getStatsJson(),
+  if (!nativeGraphState.chunkGraph || !_this.chunkGraph) {
+    throw new Error(
+      '[RsdoctorRspackPlugin] The Rspack native plugin did not provide chunk graph data.',
     );
   }
 
-  // Generate module graph if not already present
-  if (!_this.modulesGraph.getModules().length) {
-    /** generate module graph */
-    _this.modulesGraph = await ModuleGraphBuildUtils.getModuleGraphByStats(
-      stats.compilation,
-      getStatsJson(),
-      process.cwd(),
-      _this.chunkGraph!,
-      _this.options.features,
+  if (!nativeGraphState.moduleGraph) {
+    throw new Error(
+      '[RsdoctorRspackPlugin] The Rspack native plugin did not provide module graph data.',
     );
   }
-
-  logger.debug(
-    `${(Process.getMemoryUsageMessage(), '[After Generate ModuleGraph]')}`,
-  );
 
   /**
    * Transform modules graph: collect additional module info, such as parsed code and size.
@@ -162,24 +119,18 @@ async function doneHandler(
   await getModulesInfos(
     compiler,
     _this.modulesGraph,
-    _this.chunkGraph!,
+    _this.chunkGraph,
     shouldParseBundle,
     _this.sourceMapSets,
     _this.assetsWithoutSourceMap,
   );
 
-  logger.debug(
-    `${Process.getMemoryUsageMessage()}, '[After Transform ModuleGraph]'`,
-  );
-
   // Report graphs to SDK for further processing or client display
   logger.debug('reportModuleGraph start');
-  if (_this.modulesGraph) {
-    await _this.sdk.reportModuleGraph(_this.modulesGraph);
-  }
+  await _this.sdk.reportModuleGraph(_this.modulesGraph);
   logger.debug('reportModuleGraph done');
   logger.debug('reportChunkGraph start');
-  await _this.sdk.reportChunkGraph(_this.chunkGraph!);
+  await _this.sdk.reportChunkGraph(_this.chunkGraph);
   logger.debug('reportChunkGraph done');
   // Warn if deprecated treemap option is enabled
   if (_this.options.supports.generateTileGraph) {

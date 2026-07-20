@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "scripts": {
     "test": "playwright test",
-    "test:native": "RSPACK_NATIVE_PLUGIN=true playwright test",
     "test:local": "npx playwright install chromium && playwright test"
   },
   "devDependencies": {

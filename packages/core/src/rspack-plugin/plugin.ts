@@ -32,6 +32,7 @@ import { pluginTapName, pluginTapPostOptions, pkg } from './constants';
 import { ModuleGraph } from '../graph';
 import { Loader } from '../common';
 import { logger, time, timeEnd } from '../logger';
+import { getRspackNativePlugin } from '../inner-plugins/plugins/rspack';
 
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
@@ -169,28 +170,23 @@ export class RsdoctorRspackPlugin<
       // Keep bundler diagnostics reporting separate from Rsdoctor lint messages.
       new InternalErrorReporterPlugin(this).apply(compiler);
 
-      // apply Rspack native plugin to improve the performance
-      const RsdoctorRspackNativePlugin =
-        compiler.webpack.experiments?.RsdoctorPlugin;
-      if (RsdoctorRspackNativePlugin) {
-        logger.debug('[RspackNativePlugin] Enabled');
-        const enableNativePlugin = this.options.experiments?.enableNativePlugin;
-        new RsdoctorRspackNativePlugin({
-          moduleGraphFeatures: enableNativePlugin?.moduleGraph ?? true,
-          chunkGraphFeatures: enableNativePlugin?.chunkGraph ?? true,
-          sourceMapFeatures: {
-            cheap: false,
-            module: false,
-          },
-        }).apply(compiler);
-      }
+      const RsdoctorRspackNativePlugin = getRspackNativePlugin(compiler);
+      logger.debug('[RspackNativePlugin] Enabled');
+      new RsdoctorRspackNativePlugin({
+        moduleGraphFeatures: true,
+        chunkGraphFeatures: true,
+        sourceMapFeatures: {
+          cheap: false,
+          module: false,
+        },
+      }).apply(compiler);
     } finally {
       timeEnd('RsdoctorRspackPlugin.apply');
     }
   }
 
   /**
-   * @description Generate ModuleGraph and ChunkGraph from stats and Rspack module APIs.
+   * @description Generate ModuleGraph and ChunkGraph from the Rspack native plugin.
    * @param {Compiler} compiler
    * @return {*}
    * @memberof RsdoctorRspackPlugin

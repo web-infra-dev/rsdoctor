@@ -13,13 +13,36 @@ import {
 import { internalPluginTapPreOptions } from '../constants';
 import { logger } from '@rsdoctor/core/logger';
 
+export interface RspackNativeGraphState {
+  chunkGraph: boolean;
+  moduleGraph: boolean;
+}
+
+export function getRspackNativePlugin(
+  compiler: Plugin.BaseCompiler,
+): typeof experiments.RsdoctorPlugin {
+  const RsdoctorRspackPlugin = compiler.webpack.experiments?.RsdoctorPlugin;
+  if (!RsdoctorRspackPlugin) {
+    throw new Error(
+      '[RsdoctorRspackPlugin] The current Rspack version does not provide experiments.RsdoctorPlugin. Please upgrade Rspack.',
+    );
+  }
+  return RsdoctorRspackPlugin;
+}
+
 export function applyRspackNativePlugin(
   compiler: Plugin.BaseCompiler,
   plugin: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
   RsdoctorRspackPlugin: typeof experiments.RsdoctorPlugin,
 ) {
+  const state: RspackNativeGraphState = {
+    chunkGraph: false,
+    moduleGraph: false,
+  };
   logger.debug('[RspackNativePlugin] Apply hooks');
   compiler.hooks.compilation.tap('RsdoctorRspackPlugin', (compilation) => {
+    state.chunkGraph = false;
+    state.moduleGraph = false;
     const hooks = RsdoctorRspackPlugin.getCompilationHooks(
       compilation as RspackCompilation,
     ) as RsdoctorPluginHooks;
@@ -58,6 +81,7 @@ export function applyRspackNativePlugin(
       chunkGraphData: (data: Plugin.RspackNativeChunkGraph) => {
         plugin.chunkGraph = new ChunkGraph();
         ChunksBuildUtils.patchNativeChunkGraph(plugin.chunkGraph, data);
+        state.chunkGraph = true;
       },
       moduleGraphData: (data: Plugin.RspackNativeModuleGraph) => {
         ModuleGraphBuildUtils.patchNativeModuleGraph(
@@ -65,6 +89,7 @@ export function applyRspackNativePlugin(
           plugin.chunkGraph!,
           data,
         );
+        state.moduleGraph = true;
       },
       moduleIdsPatchData: (data: Plugin.RspackNativeModuleIdsPatch) => {
         ModuleGraphBuildUtils.patchNativeModuleIds(plugin.modulesGraph, data);
@@ -149,4 +174,5 @@ export function applyRspackNativePlugin(
       },
     );
   });
+  return state;
 }
