@@ -1,16 +1,17 @@
 import { TranslationOutlined } from '@ant-design/icons';
-import { Col, Dropdown, Layout, Row, Switch } from 'antd';
+import { Client } from '@rsdoctor/shared/types';
+import { Button, Col, Dropdown, Layout, Row, Switch } from 'antd';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Language, Theme } from '../../constants';
 import { useI18n, useTheme } from '../../utils';
 import { OverlayAlertsWithButton } from '../Alerts';
 import { BuilderSelect } from './builder-select';
 import { Menus } from './menus';
-import { Client } from '@rsdoctor/shared/types';
-import { useNavigate } from 'react-router-dom';
 import styles from './header.module.scss';
-import logoDark from './rsdoctor-title-logo-dark.png';
+
 const logoLight = 'https://assets.rspack.rs/rsdoctor/rsdoctor-title-logo.png';
+const logoDark = 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-dark.png';
 
 export interface HeaderProps {
   enableRoutes?: string[];
@@ -31,12 +32,10 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
       <Row className={styles.innerRoot}>
         <Col className={styles.leftCol}>
           <div className={styles.leftColInner}>
-            <img
-              width="1604"
-              height="380"
-              src={isLight ? logoLight : logoDark}
-              className={styles.rsdoctorLogo}
-              alt="logo"
+            <button
+              type="button"
+              className={styles.logoButton}
+              aria-label="Go to Rsdoctor home"
               onClick={() => {
                 if (
                   location.hash.includes(
@@ -49,7 +48,16 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
                   navigate(Client.RsdoctorClientRoutes.Home);
                 }
               }}
-            />
+            >
+              <img
+                width="1604"
+                height="380"
+                src={isLight ? logoLight : logoDark}
+                className={styles.rsdoctorLogo}
+                alt="Rsdoctor"
+                draggable={false}
+              />
+            </button>
             <BuilderSelect />
           </div>
         </Col>
@@ -66,16 +74,13 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
 
             <Col>
               <Switch
-                className="header-switch"
+                className={styles.themeSwitch}
+                aria-label={isDark ? 'Use light theme' : 'Use dark theme'}
                 checkedChildren="🌛"
                 unCheckedChildren="🌞"
                 checked={isDark}
                 onChange={(checked) => {
                   setTheme(checked ? Theme.Dark : Theme.Light);
-                }}
-                style={{
-                  border: `1px solid ${isLight ? '#ddd' : '#fff'}`,
-                  background: isLight ? '#eee' : '#141414',
                 }}
               />
             </Col>
@@ -93,7 +98,12 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
                   selectedKeys: [i18n.language],
                 }}
               >
-                <TranslationOutlined className={styles.translationsIcon} />
+                <Button
+                  type="text"
+                  className={styles.utilityButton}
+                  aria-label="Change language"
+                  icon={<TranslationOutlined />}
+                />
               </Dropdown>
             </Col>
           </Row>

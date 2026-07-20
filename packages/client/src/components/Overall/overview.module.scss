@@ -4,9 +4,10 @@
   background: var(--color-bg-box-elevated);
   align-items: center;
   justify-content: space-between;
-  border-radius: 8px;
-  padding: 8px 20px 8px 20px;
-  margin-right: 10px;
+  min-height: 88px;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 10px;
+  padding: 14px 18px;
   white-space: nowrap;
 
   .content {
@@ -16,12 +17,19 @@
       font-size: 12px;
       font-weight: 400;
       line-height: 20px;
+      color: var(--text-color-secondary);
     }
 
     .description {
       font-size: 24px;
-      font-weight: 500;
+      font-weight: 600;
       line-height: 32px;
+      color: var(--text-color);
+      font-variant-numeric: tabular-nums;
     }
+  }
+
+  :global(.ant-avatar) {
+    box-shadow: 0 0 0 4px rgb(255 255 255 / 4%);
   }
 }

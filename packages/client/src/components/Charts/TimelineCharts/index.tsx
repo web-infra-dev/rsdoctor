@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useMemo } from 'react';
 import ReactEChartsCore from 'echarts-for-react/esm/core';
 import * as echarts from 'echarts/core';
 import { CustomChart } from 'echarts/charts';
@@ -12,7 +12,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 import dayjs from 'dayjs';
 import { ChartProps, DurationMetric, ITraceEventData } from '../types';
 import { groupBy } from '@rsdoctor/shared/collection';
-import { ChartTypes, PALETTE_COLORS } from '../constants';
+import { ChartTypes, TIMELINE_PALETTE_COLORS } from '../constants';
 import { useThemeToken } from 'src/utils';
 
 interface CoordSysType {
@@ -28,7 +28,15 @@ type LoaderType = {
   ext?: Record<string, any>;
 };
 
-const LINE_HEIGHT = 60;
+const LINE_HEIGHT = 46;
+
+echarts.use([
+  CustomChart,
+  TooltipComponent,
+  GridComponent,
+  DataZoomComponent,
+  CanvasRenderer,
+]);
 
 export const TimelineCom: React.FC<{
   loaderData?: DurationMetric[];
@@ -45,105 +53,112 @@ export const TimelineCom: React.FC<{
     chartType = ChartTypes.Normal,
     exts = null,
   }) => {
-    const data: LoaderType[] = [];
-    let categories: string[] = [];
     const [optionsData, setOptionsData] = useState({});
     const themeToken = useThemeToken();
 
-    // Register the required components
-    echarts.use([
-      CustomChart,
-      TooltipComponent,
-      GridComponent,
-      DataZoomComponent,
-      CanvasRenderer,
-    ]);
+    const { data, categories } = useMemo(() => {
+      const chartData: LoaderType[] = [];
+      const categoryLabels: string[] = [];
 
-    useEffect(() => {
-      if (!loaderData) return;
-      const _categories: string[] = [];
-      loaderData.forEach((_l) => {
-        _categories.unshift(_l.n + ' total');
-        _categories.unshift(_l.n);
-      });
-
-      // Generate mock data
-      loaderData.forEach(function (_loaderData, _i) {
-        data.push({
-          name: _loaderData.n + ' total',
-          value: [
-            _categories.indexOf(_loaderData.n + ' total'),
-            _loaderData.s,
-            _loaderData.e,
-            _loaderData.e - _loaderData.s,
-          ],
-          itemStyle: {
-            normal: {
-              color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
-              opacity: 0.25,
-            },
-          },
+      if (loaderData) {
+        loaderData.forEach((loader) => {
+          categoryLabels.unshift(loader.n + ' total');
+          categoryLabels.unshift(loader.n);
         });
 
-        if (!_loaderData?.c) return;
-        for (let l = 0; l < _loaderData?.c?.length; l++) {
-          data.push({
-            name: _loaderData.n,
+        loaderData.forEach((loader, loaderIndex) => {
+          const totalColor =
+            TIMELINE_PALETTE_COLORS[
+              loaderIndex % TIMELINE_PALETTE_COLORS.length
+            ];
+          chartData.push({
+            name: loader.n + ' total',
             value: [
-              _categories.indexOf(_loaderData.n),
-              _loaderData.c[l].s,
-              _loaderData.c[l].e,
-              _loaderData.c[l].e - _loaderData.c[l].s,
+              categoryLabels.indexOf(loader.n + ' total'),
+              loader.s,
+              loader.e,
+              loader.e - loader.s,
             ],
             itemStyle: {
               normal: {
-                color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
-                opacity: 0.25,
+                color: totalColor,
+                opacity: 0.34,
               },
             },
-            ext: _loaderData.c[l].ext as ChartProps['loaders'][0],
           });
-        }
-      });
 
-      categories = _categories.map((val, i) => {
-        if (i % 2 !== 0) {
-          return val.replace(' total', '');
-        } else {
-          return '';
-        }
-      });
-    }, [loaderData]);
-
-    useEffect(() => {
-      if (!pluginsData) return;
-
-      const _pluginsData = groupBy(pluginsData, (e: ITraceEventData) => e.pid);
-
-      Object.keys(_pluginsData)
-        .reverse()
-        .forEach(function (key, i) {
-          _pluginsData[key].forEach((_plugin, _i) => {
-            data.push({
-              name: String(_plugin.pid),
+          loader.c?.forEach((child, childIndex) => {
+            chartData.push({
+              name: loader.n,
               value: [
-                i,
-                _plugin.args.s,
-                _plugin.args.e,
-                _plugin.args.e - _plugin.args.s,
+                categoryLabels.indexOf(loader.n),
+                child.s,
+                child.e,
+                child.e - child.s,
               ],
               itemStyle: {
                 normal: {
-                  color: PALETTE_COLORS[Math.floor(Math.random() * 27)],
-                  opacity: 0.25,
+                  color:
+                    TIMELINE_PALETTE_COLORS[
+                      (loaderIndex + childIndex) %
+                        TIMELINE_PALETTE_COLORS.length
+                    ],
+                  opacity: 0.78,
                 },
               },
-              ext: _plugin,
+              ext: child.ext as ChartProps['loaders'][0],
             });
           });
-          categories.push(String(key.charAt(0).toUpperCase() + key.slice(1)));
         });
-    }, [pluginsData]);
+
+        for (let index = 0; index < categoryLabels.length; index++) {
+          categoryLabels[index] =
+            index % 2 !== 0 ? categoryLabels[index].replace(' total', '') : '';
+        }
+      }
+
+      if (pluginsData) {
+        const groupedPlugins = groupBy(
+          pluginsData,
+          (event: ITraceEventData) => event.pid,
+        );
+
+        Object.keys(groupedPlugins)
+          .reverse()
+          .forEach((key, groupIndex) => {
+            groupedPlugins[key].forEach((plugin, pluginIndex) => {
+              chartData.push({
+                name: String(plugin.pid),
+                value: [
+                  groupIndex,
+                  plugin.args.s,
+                  plugin.args.e,
+                  plugin.args.e - plugin.args.s,
+                ],
+                itemStyle: {
+                  normal: {
+                    color:
+                      TIMELINE_PALETTE_COLORS[
+                        (groupIndex + pluginIndex) %
+                          TIMELINE_PALETTE_COLORS.length
+                      ],
+                    opacity: 0.78,
+                  },
+                },
+                ext: plugin,
+              });
+            });
+            categoryLabels.push(
+              String(key.charAt(0).toUpperCase() + key.slice(1)),
+            );
+          });
+      }
+
+      return {
+        data: chartData,
+        categories: categoryLabels,
+      };
+    }, [loaderData, pluginsData]);
 
     useEffect(() => {
       function renderItem(
@@ -158,7 +173,7 @@ export const TimelineCom: React.FC<{
         const categoryIndex = api.value(0);
         const start = api.coord([api.value(1), categoryIndex]);
         const end = api.coord([api.value(2), categoryIndex]);
-        const height = api.size([0, 1])[1] * 0.3;
+        const height = api.size([0, 1])[1] * 0.36;
 
         const rectShape = echarts.graphic.clipRectByRect(
           {
@@ -202,7 +217,15 @@ export const TimelineCom: React.FC<{
             type: 'slider',
             filterMode: 'weakFilter',
             showDataShadow: false,
-            top: -10,
+            top: -8,
+            height: 14,
+            borderColor: themeToken.colorBorderSecondary,
+            backgroundColor: themeToken.colorFillQuaternary,
+            fillerColor: themeToken.colorPrimaryBg,
+            handleStyle: {
+              color: themeToken.colorTextSecondary,
+              borderColor: themeToken.colorBorder,
+            },
           },
           {
             type: 'inside',
@@ -210,10 +233,10 @@ export const TimelineCom: React.FC<{
           },
         ],
         grid: {
-          top: 10,
-          left: 0,
-          bottom: 10,
-          right: 0,
+          top: 18,
+          left: 12,
+          bottom: 12,
+          right: 16,
           height:
             categories.length > (chartType === ChartTypes.Loader ? 6 : 3)
               ? 'auto'
@@ -228,12 +251,19 @@ export const TimelineCom: React.FC<{
           position: 'top',
           splitLine: {
             show: true,
+            lineStyle: {
+              color: themeToken.colorBorderSecondary,
+              width: 1,
+            },
           },
           scale: true,
           axisLine: {
             show: false,
           },
           axisLabel: {
+            color: themeToken.colorTextSecondary,
+            fontSize: 11,
+            margin: 10,
             formatter(val: number) {
               return dayjs(val as number).format('HH:mm:ss:SSS');
             },
@@ -245,12 +275,14 @@ export const TimelineCom: React.FC<{
             show: false,
           },
           axisLabel: {
-            inside: true,
+            inside: false,
             lineHeight: 20,
-            width: 100,
+            width: chartType === ChartTypes.Loader ? 220 : 140,
+            overflow: 'truncate',
+            margin: 16,
             fontSize: 12,
-            color: themeToken.colorText,
-            verticalAlign: 'bottom',
+            color: themeToken.colorTextSecondary,
+            verticalAlign: 'middle',
           },
           axisLine: {
             show: false,
@@ -265,7 +297,7 @@ export const TimelineCom: React.FC<{
             type: 'custom',
             renderItem,
             itemStyle: {
-              opacity: 0.8,
+              opacity: 1,
             },
             encode: {
               x: [1, 2],
@@ -276,7 +308,17 @@ export const TimelineCom: React.FC<{
         ],
       };
       setOptionsData(option);
-    }, [loaderData, pluginsData, exts, themeToken]);
+    }, [categories, chartType, data, exts, formatterFn, themeToken]);
+
+    const categoryCount = loaderData
+      ? loaderData.length * 2
+      : new Set(pluginsData?.map((item) => item.pid)).size;
+    const chartHeight =
+      chartType === ChartTypes.Minify
+        ? 100
+        : chartType === ChartTypes.Loader
+          ? Math.min(Math.max(categoryCount * LINE_HEIGHT + 80, 300), 1000)
+          : Math.min(Math.max(categoryCount * LINE_HEIGHT + 70, 200), 1000);
 
     return (
       <ReactEChartsCore
@@ -284,13 +326,7 @@ export const TimelineCom: React.FC<{
         echarts={echarts}
         style={{
           width: '100%',
-          minHeight:
-            chartType === ChartTypes.Loader
-              ? '500px'
-              : chartType === ChartTypes.Minify
-                ? '100px'
-                : '200px',
-          maxHeight: chartType === ChartTypes.Minify ? '100px' : '1000px',
+          height: `${chartHeight}px`,
           border: '1px solid var(--color-border)',
           borderRadius: '10px',
         }}

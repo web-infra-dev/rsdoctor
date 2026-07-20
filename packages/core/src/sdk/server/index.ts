@@ -3,7 +3,6 @@ import { Server } from '@rsdoctor/core/build-utils';
 import serve from 'sirv';
 import { Bundle, GlobalConfig } from '@rsdoctor/core/common';
 import assert from 'assert';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import { PassThrough } from 'stream';
 import { Socket } from './socket';
@@ -15,6 +14,7 @@ import path from 'path';
 import { createRequire } from 'module';
 import { ServerResponse } from 'http';
 import { randomBytes } from 'crypto';
+import { jsonBodyParser } from './json-body';
 import {
   DEFAULT_ALLOWED_CORS_ORIGINS,
   isAllowedCorsRequest,
@@ -29,6 +29,12 @@ export * from './utils';
 const OPEN_IN_EDITOR_PATH = '/__open-in-editor';
 const LISTEN_RETRY_LIMIT = 10;
 const OPEN_IN_EDITOR_EDITORS = new Set<string>(SDK.OPEN_IN_EDITOR_EDITORS);
+const DEFAULT_JSON_BODY_LIMIT = '10mb';
+const LARGE_JSON_BODY_LIMIT = '500mb';
+const LARGE_JSON_BODY_ROUTES = new Set<string>([
+  SDK.ServerAPI.API.ReportLoader,
+  SDK.ServerAPI.API.ReportSourceMap,
+]);
 
 export type ISocketType = { port: number; socketUrl: string; token: string };
 
@@ -204,7 +210,16 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     if (corsOptions !== false) {
       this.app.use(cors(corsOptions));
     }
-    this.app.use(bodyParser.json({ limit: '500mb' }));
+    this.app.use(
+      jsonBodyParser({
+        limit: (req) => {
+          const pathname = new URL(req.url || '/', 'http://localhost').pathname;
+          return LARGE_JSON_BODY_ROUTES.has(pathname)
+            ? LARGE_JSON_BODY_LIMIT
+            : DEFAULT_JSON_BODY_LIMIT;
+        },
+      }),
+    );
     await this._router.setup();
 
     const clientHtmlPath = this._innerClientPath

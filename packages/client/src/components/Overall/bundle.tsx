@@ -71,7 +71,7 @@ export const getFiles = (
         <div className={styles.treeContainer}>
           <div className={styles.treeTitle}>{file.fileName}</div>
           <div className={styles.line} />
-          <Tag className={styles.tag} color="green">
+          <Tag className={`${styles.tag} ${styles.sizeTag}`}>
             {formatSize(file.size)}
           </Tag>
           {file.initial ? (
@@ -325,7 +325,7 @@ export const BundleOverall: React.FC<{
                 style={{ marginBottom: 8, fontSize: '14px' }}
               />
               <DataSummary
-                theme={view === 'files' ? 'common' : 'warning'}
+                theme={view === 'files' ? 'common' : 'size'}
                 number={view === 'files' ? res.all.total.count : totalSizeStr}
                 description={`Total ${view}`}
               />

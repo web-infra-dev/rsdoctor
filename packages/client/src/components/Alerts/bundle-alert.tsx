@@ -131,8 +131,10 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
       <Overview
         style={{
           backgroundColor: 'transparent',
-          paddingLeft: 0,
-          paddingRight: 0,
+          border: 'none',
+          borderRadius: 0,
+          minHeight: 'auto',
+          padding: '8px 0',
           width: '100%',
         }}
         title={<span className={styles.labelTitle}>{td.label}</span>}

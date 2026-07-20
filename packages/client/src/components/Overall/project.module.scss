@@ -1,5 +1,6 @@
 .overview {
   display: flex;
+  gap: 12px;
   margin-bottom: 19px;
 }
 
@@ -16,5 +17,12 @@
     text-align: left;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .overview {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
