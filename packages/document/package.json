@@ -24,8 +24,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@rspress/plugin-algolia": "2.0.17",
-    "@rspress/plugin-client-redirects": "2.0.17",
+    "@rspress/plugin-algolia": "2.0.18",
+    "@rspress/plugin-client-redirects": "2.0.18",
     "@rspress/plugin-rss": "2.0.5",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
@@ -47,6 +47,6 @@
     "@rstack-dev/doc-ui": "1.14.5",
     "clsx": "catalog:",
     "react-markdown": "catalog:",
-    "@rspress/core": "2.0.17"
+    "@rspress/core": "2.0.18"
   }
 }
