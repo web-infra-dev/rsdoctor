@@ -28,7 +28,7 @@ export function last<T>(array: T[]): T | undefined {
 
 // Replace lodash's compact function
 export function compact<T>(array: (T | null | undefined)[]): T[] {
-  return array.filter((item): item is T => item != null || !item); // Filter out null and undefined
+  return array.filter((item): item is T => Boolean(item));
 }
 
 // Replace lodash's isNil function
