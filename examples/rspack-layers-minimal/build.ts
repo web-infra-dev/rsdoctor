@@ -1,10 +1,11 @@
+import { RsdoctorRspackMultiplePlugin } from '@rsdoctor/core/rspack-plugin';
 import rspack from '@rspack/core';
-import { resolve } from 'path';
-const config = require('./rspack.config.js');
-const { ReactRefreshRspackPlugin } = require('@rspack/plugin-react-refresh');
-const {
-  RsdoctorRspackMultiplePlugin,
-} = require('@rsdoctor/core/rspack-plugin');
+import { ReactRefreshRspackPlugin } from '@rspack/plugin-react-refresh';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+import config from './rspack.config.mjs';
+
+const currentDir = dirname(fileURLToPath(import.meta.url));
 
 // console.log(config)
 
@@ -66,7 +67,7 @@ async function build() {
       name: 'Builder 2',
       target: 'node',
       output: {
-        path: resolve(__dirname, 'dist/node'),
+        path: resolve(currentDir, 'dist/node'),
         filename: 'index.js',
       },
       plugins: [

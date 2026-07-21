@@ -7,6 +7,9 @@ import {
 } from '@rspack/core';
 import { createFsFromVolume, Volume } from 'memfs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function promisifyCompilerRun<
   T extends Compiler,
@@ -71,7 +74,7 @@ export function compileByRspackLayers(
     entry,
     mode: 'none',
     output: {
-      path: path.resolve(__dirname),
+      path: dirname,
       // filename: 'bundle.js',
     },
     stats: 'normal',

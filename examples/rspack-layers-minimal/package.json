@@ -3,8 +3,8 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "dev": "ENABLE_CLIENT_SERVER=true NODE_ENV=development rspack serve",
-    "build": "ENABLE_CLIENT_SERVER=false NODE_ENV=production rspack build -c ./rspack.config.js"
+    "dev": "ENABLE_CLIENT_SERVER=true NODE_ENV=development rspack serve -c ./rspack.config.mjs",
+    "build": "ENABLE_CLIENT_SERVER=false NODE_ENV=production rspack build -c ./rspack.config.mjs"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.58.3",

@@ -1,9 +1,9 @@
-const rspack = require('@rspack/core');
-const { ReactRefreshRspackPlugin } = require('@rspack/plugin-react-refresh');
-const { RsdoctorRspackPlugin } = require('@rsdoctor/core/rspack-plugin');
+import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
+import rspack from '@rspack/core';
+import { ReactRefreshRspackPlugin } from '@rspack/plugin-react-refresh';
 
 /** @type {import('@rspack/cli').Configuration} */
-const config = {
+const rspackConfig = {
   entry: {
     main: {
       import: './src/index.tsx',
@@ -125,4 +125,4 @@ const config = {
     }),
   ],
 };
-module.exports = config;
+export default rspackConfig;

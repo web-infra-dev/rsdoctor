@@ -1,12 +1,15 @@
-const rspack = require('@rspack/core');
-const { ReactRefreshRspackPlugin } = require('@rspack/plugin-react-refresh');
-const { RsdoctorRspackPlugin } = require('@rsdoctor/core/rspack-plugin');
+import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
+import rspack from '@rspack/core';
+import { ReactRefreshRspackPlugin } from '@rspack/plugin-react-refresh';
+
+const banner = `var a = 111111111111111; console.log(a)`;
 
 /** @type {import('@rspack/cli').Configuration} */
-const config = {
+const rspackConfig = {
   entry: {
     main: './src/index.tsx',
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -68,17 +71,6 @@ const config = {
         type: 'javascript/auto',
       },
       {
-        test: /\.css$/,
-        use: [
-          {
-            loader: 'builtin:lightningcss-loader',
-            options: {
-              targets: 'ie 10',
-            },
-          },
-        ],
-      },
-      {
         test: /\.svg$/,
         type: 'asset/resource',
       },
@@ -87,33 +79,27 @@ const config = {
   resolve: {
     extensions: ['...', '.tsx', '.ts', '.jsx'], // "..." means to extend from the default extensions
   },
+  optimization: {
+    minimize: true,
+  },
+  // stats: 'verbose',
   plugins: [
     new ReactRefreshRspackPlugin(),
     new RsdoctorRspackPlugin({
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
-      features: ['bundle', 'plugins', 'loader'],
-      mode: 'brief',
-      linter: {
-        rules: {
-          'ecma-version-check': [
-            'Warn',
-            {
-              ecmaVersion: 3,
-            },
-          ],
-        },
+      features: ['bundle', 'plugins', 'resolver', 'loader'],
+      supports: {
+        banner: false,
       },
+    }),
+    new rspack.BannerPlugin({
+      test: /\.js/,
+      banner,
+      raw: true,
     }),
     new rspack.HtmlRspackPlugin({
       template: './index.html',
     }),
-    new rspack.CopyRspackPlugin({
-      patterns: [
-        {
-          from: 'public',
-        },
-      ],
-    }),
   ],
 };
-module.exports = config;
+export default rspackConfig;
