@@ -50,11 +50,12 @@ describe('atomic write manifest', () => {
       const readAttempts = 100;
 
       const workerScript = `
-        const { parentPort, workerData } = require('node:worker_threads');
-        const { File, Server } = require('@rsdoctor/core/build-utils');
-        const { RsdoctorSDK } = require('@rsdoctor/core/sdk');
-
         (async () => {
+          const { parentPort, workerData } = await import('node:worker_threads');
+          const [{ File, Server }, { RsdoctorSDK }] = await Promise.all([
+            import('@rsdoctor/core/build-utils'),
+            import('@rsdoctor/core/sdk'),
+          ]);
           const { outputDir, readAttempts } = workerData;
           const port = await Server.getPort(
             10000 + Math.floor(Math.random() * 20000),
@@ -99,6 +100,7 @@ describe('atomic write manifest', () => {
         new Promise<void>((resolve, reject) => {
           const worker = new Worker(workerScript, {
             eval: true,
+            execArgv: [],
             workerData: { outputDir, readAttempts },
           });
           workers.push(worker);

@@ -60,6 +60,52 @@ describe('test src/utils/loader.ts', () => {
       ]);
     });
 
+    it('only reuses metadata from the internal proxy loader', () => {
+      const existingInternalOptions = {
+        ...internalOptions,
+        hasOptions: true,
+        loader: resolvedBabelLoader,
+      };
+      const unrelatedProxyLoader = path.resolve(__dirname, 'fixtures/proxy.js');
+
+      expect(
+        interceptLoader(
+          [
+            {
+              loader: proxyLoaderPath,
+              options: {
+                [Loader.LoaderInternalPropertyName]: existingInternalOptions,
+              },
+            },
+            {
+              loader: unrelatedProxyLoader,
+              options: { custom: true },
+            },
+          ],
+          proxyLoaderPath,
+          internalOptions,
+        ),
+      ).toStrictEqual([
+        {
+          loader: proxyLoaderPath,
+          options: {
+            [Loader.LoaderInternalPropertyName]: existingInternalOptions,
+          },
+        },
+        {
+          loader: proxyLoaderPath,
+          options: {
+            custom: true,
+            [Loader.LoaderInternalPropertyName]: {
+              ...internalOptions,
+              hasOptions: true,
+              loader: unrelatedProxyLoader,
+            },
+          },
+        },
+      ]);
+    });
+
     it('[Array] rule.loaders', () => {
       expect(
         interceptLoader(
