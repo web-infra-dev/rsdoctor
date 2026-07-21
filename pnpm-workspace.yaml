@@ -35,6 +35,7 @@ catalog:
   '@types/react': ^19.2.17
   '@types/react-dom': ^19.2.3
   '@types/tapable': 2.3.0
+  '@typescript/native-preview': 7.0.0-dev.20260707.2
   antd: 5.19.1
   clsx: ^2.1.1
   cross-env: ^10.1.0
