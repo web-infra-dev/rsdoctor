@@ -61,6 +61,7 @@ export const nodeMinifyConfig = {
 };
 
 export const esmConfig: LibConfig = {
+  format: 'esm',
   syntax: [BUILD_TARGET],
   dts: {
     build: true,
