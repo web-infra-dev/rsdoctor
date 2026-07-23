@@ -65,6 +65,7 @@ minimumReleaseAgeExclude:
   - '@rstest/*'
   - '@rsdoctor/*'
   - '@rslint/*'
+  - 'rsbuild-plugin-dts'
   # Renovate security update: ws@8.21.0
   - ws@8.21.0
   # Renovate security update: echarts@6.1.0
