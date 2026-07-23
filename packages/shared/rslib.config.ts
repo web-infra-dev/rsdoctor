@@ -23,9 +23,7 @@ const bundlelessLib = {
     externals,
   },
   redirect: {
-    ...esmConfig.redirect,
     dts: {
-      extension: true,
       path: false,
     },
   },

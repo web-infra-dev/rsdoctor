@@ -16,15 +16,9 @@ export default defineConfig({
   lib: [
     {
       bundle: false,
-      format: 'esm',
       syntax: 'es2021',
       dts: {
         build: true,
-      },
-      redirect: {
-        dts: {
-          extension: true,
-        },
       },
       output: {
         filename: {
