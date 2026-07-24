@@ -16,7 +16,11 @@ const loaderModule: Plugin.LoaderDefinition<ProbeLoaderOptions, object> =
     const time = Date.now();
     const code = args[0];
     const _options = this.getOptions();
-    const sdk = getSDK(_options.builderName);
+    const compilation = this._compilation as
+    { compiler?: { compilerPath?: string } } | undefined;
+    const sdk = getSDK(
+      compilation?.compiler?.compilerPath || _options.builderName,
+    );
 
     const loaderData: SDK.ResourceLoaderData = {
       resource: {

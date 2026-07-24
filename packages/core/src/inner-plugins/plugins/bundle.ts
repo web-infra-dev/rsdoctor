@@ -18,8 +18,22 @@ export class InternalBundlePlugin<
       this.scheduler.ensureModulesChunksGraphApplied(compiler);
       this.changeDevtoolModuleFilename(compiler);
 
-      compiler.hooks.compilation.tap(this.tapPostOptions, this.thisCompilation);
-      compiler.hooks.done.tapPromise(this.tapPreOptions, this.done.bind(this));
+      compiler.hooks.compilation.tap(this.tapPostOptions, (compilation) => {
+        if (!compilation.compiler || compilation.compiler === compiler) {
+          this.thisCompilation(compilation);
+        }
+      });
+      if (compiler.isChild()) {
+        compiler.hooks.afterCompile.tapPromise(
+          this.tapPreOptions,
+          this.done.bind(this),
+        );
+      } else {
+        compiler.hooks.done.tapPromise(
+          this.tapPreOptions,
+          this.done.bind(this),
+        );
+      }
     } finally {
       timeEnd('InternalBundlePlugin.apply');
     }
