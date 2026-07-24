@@ -130,7 +130,6 @@
     "@babel/code-frame": "7.26.2",
     "@rsbuild/plugin-check-syntax": "catalog:",
     "@rsdoctor/shared": "workspace:*",
-    "@rspack/resolver": "catalog:",
     "@types/estree": "catalog:",
     "acorn": "^8.10.0",
     "acorn-import-attributes": "^1.9.5",

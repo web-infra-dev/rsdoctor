@@ -3,7 +3,7 @@ import type { HookInterceptor } from 'tapable';
 import { Loader } from '@rsdoctor/core/common';
 import { isEqual, omit } from '@rsdoctor/core/collection';
 import type { LoaderContext, NormalModule } from '@rspack/core';
-import { interceptLoader, type CompatibleResolve } from '../utils';
+import { interceptLoader } from '../utils';
 import { InternalBasePlugin } from './base';
 import type { ProxyLoaderOptions } from '../../types';
 import { time, timeEnd } from '@rsdoctor/core/logger';
@@ -188,10 +188,8 @@ export class InternalLoaderPlugin<
         host: this.sdk.server.origin,
         skipLoaders: this.options.loaderInterceptorOptions.skipLoaders, // not implement
       },
+      compiler.resolverFactory.get('loader', compiler.options.resolveLoader),
       this.sdk.root,
-      'resolveLoader' in compiler.options
-        ? (compiler.options.resolveLoader as CompatibleResolve)
-        : {},
     );
   }
 }
