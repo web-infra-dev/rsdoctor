@@ -52,7 +52,6 @@ function createHarness() {
         treeShaking: false,
       },
       supports: {
-        parseBundle: false,
         generateTileGraph: false,
       },
     },

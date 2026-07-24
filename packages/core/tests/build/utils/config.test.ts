@@ -108,13 +108,11 @@ describe('normalizeUserConfig', () => {
   it('should use default supports when not provided', () => {
     const result = normalizeUserConfig();
     expect(result.supports.gzip).toEqual(true);
-    expect(result.supports.parseBundle).toEqual(true);
   });
 
   it('should respect custom supports', () => {
     const customSupports = {
-      parseBundle: false,
-      gzip: true,
+      gzip: false,
     };
     const result = normalizeUserConfig({ supports: customSupports });
     expect(result.supports).toEqual(customSupports);

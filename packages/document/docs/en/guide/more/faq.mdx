@@ -154,7 +154,7 @@ By default, Rsdoctor recognizes the following JavaScript bundle extensions:
 
 If your project generates bundle files with a `.bundle` extension (e.g., `main.bundle`, `vendor.bundle`), Rsdoctor will automatically:
 
-- Parse and analyze `.bundle` files alongside `.js` files
+- Analyze source maps for `.bundle` files alongside `.js` files
 - Display `.bundle` files in the Bundle Analyzer Graph
 - Include `.bundle` assets in JavaScript asset statistics
 - Support source map analysis for `.bundle` files
@@ -163,7 +163,7 @@ If your project generates bundle files with a `.bundle` extension (e.g., `main.b
 
 The detection logic has been updated in the following areas:
 
-1. **Bundle Parsing**: The `parseBundle` function now accepts both `.js` and `.bundle` extensions when analyzing bundle contents.
+1. **Source Map Analysis**: Source map processing recognizes both `.js` and `.bundle` assets.
 2. **Asset Filtering**: Asset summary and filtering functions treat `.bundle` files as JavaScript assets.
 3. **File Type Detection**: All file extension matching utilities include `.bundle` as a recognized JavaScript extension.
 

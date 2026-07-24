@@ -111,16 +111,11 @@ async function doneHandler(
     );
   }
 
-  /**
-   * Transform modules graph: collect additional module info, such as parsed code and size.
-   * Optionally parses bundle if enabled in options.
-   */
-  const shouldParseBundle = _this.options.supports.parseBundle !== false;
+  // Transform modules graph: collect additional module info from source maps.
   await getModulesInfos(
     compiler,
     _this.modulesGraph,
     _this.chunkGraph,
-    shouldParseBundle,
     _this.sourceMapSets,
     _this.assetsWithoutSourceMap,
   );
@@ -171,14 +166,12 @@ export const ensureDevtools = (compiler: Plugin.BaseCompiler) => {
  * @param compiler - The Rspack compiler instance.
  * @param moduleGraph - The module graph instance.
  * @param chunkGraph - The chunk graph instance.
- * @param parseBundle - Whether to parse the bundle for additional info.
  * @param sourceMapSets - Map of source file to code segments from source maps.
  */
 async function getModulesInfos(
   compiler: Plugin.BaseCompiler,
   moduleGraph: SDK.ModuleGraphInstance,
   chunkGraph: SDK.ChunkGraphInstance,
-  parseBundle: boolean,
   sourceMapSets: Map<string, string>,
   assetsWithoutSourceMap?: Set<string>,
 ) {
@@ -191,7 +184,7 @@ async function getModulesInfos(
       chunkGraph,
       compiler.outputPath,
       sourceMapSets,
-      parseBundle,
+      undefined,
       assetsWithoutSourceMap,
     );
   } catch {

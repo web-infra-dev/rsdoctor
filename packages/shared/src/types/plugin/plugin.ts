@@ -64,7 +64,6 @@ export interface RsdoctorPluginOptionsNormalized<
 }
 
 interface ISupport {
-  parseBundle?: boolean;
   generateTileGraph?: boolean;
   gzip?: boolean;
 }
@@ -96,9 +95,7 @@ export type IReportCodeType = {
 };
 
 export type NewReportCodeType =
-  | 'noModuleSource'
-  | 'noAssetsAndModuleSource'
-  | 'noCode';
+  'noModuleSource' | 'noAssetsAndModuleSource' | 'noCode';
 
 export interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
@@ -109,8 +106,7 @@ export interface RsdoctorRspackPluginOptions<
    * the switch for the Rsdoctor features.
    */
   features?:
-    | RsdoctorRspackPluginFeatures
-    | Array<keyof RsdoctorRspackPluginFeatures>;
+    RsdoctorRspackPluginFeatures | Array<keyof RsdoctorRspackPluginFeatures>;
 
   /**
    * @deprecated  Use `output.mode` instead, if you're using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead.

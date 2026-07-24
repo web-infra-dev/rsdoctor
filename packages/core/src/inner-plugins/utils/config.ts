@@ -24,7 +24,6 @@ function getDefaultOutput() {
 }
 function getDefaultSupports() {
   return {
-    parseBundle: true,
     gzip: true, // change the gzip to true by default.
   };
 }

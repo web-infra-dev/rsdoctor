@@ -38,6 +38,6 @@ describe('test src/utils/config.ts', () => {
     const result = normalizeRspackUserOptions({});
 
     expect(result.features.bundle).toBe(true);
-    expect(result.supports.parseBundle).toBe(true);
+    expect(result.supports.gzip).toBe(true);
   });
 });
