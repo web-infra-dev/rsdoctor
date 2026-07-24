@@ -8,14 +8,28 @@ import { Badge } from '@theme';
 
 目前我们提供了以下几种使用方式：
 
-- [CLI 本地打开](/guide/start/cli)
+- [通过 CLI 在本地打开报告](/guide/start/cli)
+- [通过 CLI 生成 JSON 报告](#通过-cli-生成-json-报告)
 - 在线上传分析（计划支持）
 
 ## 使用方式
 
-### CLI 本地打开
+### 通过 CLI 在本地打开报告
 
 首先你需要准备 **2 份** Rsdoctor 产出的[manifest.json](/config/options/term#manifestjson)，然后通过安装[@rsdoctor/cli](/guide/start/cli#%E5%AE%89%E8%A3%85-rsdoctorcli) 并使用 CLI 提供的 `bundle-diff` 命令，详见[命令使用教程](/guide/start/cli#bundle-diff-%E5%91%BD%E4%BB%A4)。
+
+### 通过 CLI 生成 JSON 报告
+
+使用 `--json [path]` 可以直接生成结构化差异报告，而不会启动报告服务器或打开浏览器：
+
+```bash
+rsdoctor bundle-diff \
+  --baseline="baseline/.rsdoctor/manifest.json" \
+  --current="current/.rsdoctor/manifest.json" \
+  --json="result.json"
+```
+
+如果省略 `--json` 后的路径，报告将保存为 `rsdoctor-diff.json`。报告包含 `assets`、`modules` 和 `packages` 的差异数据，可用于 CI 流程或生成 Pull Request 评论。
 
 ### 在线上传分析（计划支持）
 
