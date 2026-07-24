@@ -48,7 +48,7 @@ Come and chat with us on [Discord](https://discord.gg/wrBPBT6rkM)! The Rstack te
 
 ## 🦀 Rstack
 
-Rstack is a unified JavaScript toolchain centered on Rspack, with high performance and consistent architecture.
+Rsdoctor is part of Rstack, the fast, unified JavaScript toolchain for developers and agents.
 
 | Name                                                  | Description              | Version                                                                                                                                                                          |
 | ----------------------------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
