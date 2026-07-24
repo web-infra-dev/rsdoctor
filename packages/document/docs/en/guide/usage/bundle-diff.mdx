@@ -8,14 +8,28 @@ We provide the Bundle Diff feature, which allows you to compare and analyze the 
 
 Currently, we offer the following usage methods:
 
-- [Open locally with CLI](/guide/start/cli)
+- [Open the report locally with CLI](/guide/start/cli)
+- [Generate a JSON report with CLI](#generate-a-json-report-with-cli)
 - Online upload analysis (planned support)
 
 ## Usage
 
-### Open locally with CLI
+### Open the report locally with CLI
 
 First, you need to prepare **2 copies** of the [manifest.json](/config/options/term#manifestjson) produced by Rsdoctor. Then, install [@rsdoctor/cli](/guide/start/cli#cli-tutorial) and use the CLI command `bundle-diff`. For detailed command usage, see [command usage tutorial](/guide/start/cli#bundle-diff-command).
+
+### Generate a JSON report with CLI
+
+Use the `--json [path]` option to generate a structured diff report without starting the report server or opening the browser:
+
+```bash
+rsdoctor bundle-diff \
+  --baseline="baseline/.rsdoctor/manifest.json" \
+  --current="current/.rsdoctor/manifest.json" \
+  --json="result.json"
+```
+
+If you omit the path after `--json`, the report is saved as `rsdoctor-diff.json`. The report contains `assets`, `modules`, and `packages` diff data, which can be consumed in CI workflows or used to generate pull request comments.
 
 ### Online upload analysis (planned support)
 
