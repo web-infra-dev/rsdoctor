@@ -10,9 +10,6 @@ let globalController: RsdoctorSDKController | undefined;
 export class RsdoctorRspackMultiplePlugin<
   Rules extends Linter.ExtendRuleData[],
 > extends RsdoctorRspackPlugin<Rules> {
-  // @ts-expect-error
-  private controller: RsdoctorSDKController;
-
   constructor(options: RsdoctorMultiplePluginOptions<Rules> = {}) {
     const controller = (() => {
       if (globalController) {
@@ -39,6 +36,9 @@ export class RsdoctorRspackMultiplePlugin<
           normallizedOptions.output.mode === SDK.IMode[SDK.IMode.brief]
             ? normallizedOptions.output.options || undefined
             : undefined,
+        features: {
+          treeShaking: normallizedOptions.features.treeShaking,
+        },
       },
       type: normallizedOptions.output.reportCodeType,
     });
@@ -47,7 +47,6 @@ export class RsdoctorRspackMultiplePlugin<
       ...options,
       sdkInstance: instance,
     });
-    this.controller = controller;
   }
 
   apply(compiler: Plugin.BaseCompilerType<'rspack'>) {

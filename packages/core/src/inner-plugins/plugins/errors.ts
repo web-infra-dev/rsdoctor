@@ -11,7 +11,14 @@ export class InternalErrorReporterPlugin<
   public apply(compiler: T) {
     time('InternalErrorReporterPlugin.apply');
     try {
-      compiler.hooks.done.tapPromise(this.tapPreOptions, this.done);
+      if (compiler.isChild()) {
+        compiler.hooks.afterCompile.tapPromise(
+          this.tapPreOptions,
+          this.afterCompile,
+        );
+      } else {
+        compiler.hooks.done.tapPromise(this.tapPreOptions, this.done);
+      }
     } finally {
       timeEnd('InternalErrorReporterPlugin.apply');
     }
@@ -39,6 +46,19 @@ export class InternalErrorReporterPlugin<
     } finally {
       timeEnd('InternalErrorReporterPlugin.done');
     }
+  };
+
+  public afterCompile = async (
+    compilation: Plugin.BaseCompilation,
+  ): Promise<void> => {
+    await Promise.all([
+      this.reportErrors(
+        (compilation.errors || []) as unknown as Plugin.BuildError[],
+      ),
+      this.reportWarnings(
+        (compilation.warnings || []) as unknown as Plugin.BuildWarning[],
+      ),
+    ]);
   };
 
   public handleBundlerError(

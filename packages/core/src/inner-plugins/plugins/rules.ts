@@ -12,7 +12,14 @@ export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler>
   public apply(compiler: Plugin.BaseCompiler) {
     time('InternalRulesPlugin.apply');
     try {
-      compiler.hooks.done.tapPromise(this.tapPreOptions, this.done);
+      if (compiler.isChild()) {
+        compiler.hooks.afterCompile.tapPromise(
+          this.tapPreOptions,
+          this.lint.bind(this),
+        );
+      } else {
+        compiler.hooks.done.tapPromise(this.tapPreOptions, this.done);
+      }
     } finally {
       timeEnd('InternalRulesPlugin.apply');
     }

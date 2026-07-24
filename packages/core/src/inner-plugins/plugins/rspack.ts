@@ -41,6 +41,10 @@ export function applyRspackNativePlugin(
   };
   logger.debug('[RspackNativePlugin] Apply hooks');
   compiler.hooks.compilation.tap('RsdoctorRspackPlugin', (compilation) => {
+    if (compilation.compiler && compilation.compiler !== compiler) {
+      return;
+    }
+
     state.chunkGraph = false;
     state.moduleGraph = false;
     const hooks = RsdoctorRspackPlugin.getCompilationHooks(

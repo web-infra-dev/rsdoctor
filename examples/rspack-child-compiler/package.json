@@ -1,0 +1,14 @@
+{
+  "name": "@examples/rsdoctor-rspack-child-compiler",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "ENABLE_CLIENT_SERVER=false rspack build",
+    "build:analysis": "ENABLE_CLIENT_SERVER=true rspack build"
+  },
+  "devDependencies": {
+    "@rsdoctor/core": "workspace:*",
+    "@rspack/cli": "catalog:",
+    "@rspack/core": "catalog:"
+  }
+}

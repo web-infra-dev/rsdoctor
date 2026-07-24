@@ -52,12 +52,13 @@ export const ensureModulesChunksGraphFn = (
   }
 
   // Hook: After compilation is done, process and report native graphs
-  compiler.hooks.done.tapPromise(
-    internalPluginTapPreOptions('moduleGraph'),
-    async () => {
-      await doneHandler(_this, compiler, nativeGraphState);
-    },
-  );
+  const finalHook =
+    typeof compiler.isChild === 'function' && compiler.isChild()
+      ? compiler.hooks.afterCompile
+      : compiler.hooks.done;
+  finalHook.tapPromise(internalPluginTapPreOptions('moduleGraph'), async () => {
+    await doneHandler(_this, compiler, nativeGraphState);
+  });
 
   // Hook: Process assets to collect source maps (Rspack only)
   compiler.hooks.compilation.tap(
@@ -66,6 +67,10 @@ export const ensureModulesChunksGraphFn = (
       name: 'RsdoctorSourceMapCollector',
     },
     (compilation: Plugin.BaseCompilation) => {
+      if (compilation.compiler && compilation.compiler !== compiler) {
+        return;
+      }
+
       if (compilation.hooks.processAssets) {
         compilation.hooks.processAssets.tapPromise(
           {
