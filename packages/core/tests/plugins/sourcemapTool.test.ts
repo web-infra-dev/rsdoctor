@@ -1,26 +1,11 @@
 import { describe, it, expect } from '@rstest/core';
 import path from 'path';
-import fs from 'fs';
 import os from 'os';
 import {
   bindContextCache,
   collectSourceMaps,
   handleAfterEmitAssets,
 } from '../../src/inner-plugins/plugins/sourcemapTool';
-
-// Read the real source map and bundle as test fixtures
-const jsMapPath = path.resolve(
-  __dirname,
-  '../../../../examples/rspack-banner-minimal/dist/main.js.map',
-);
-const jsPath = path.resolve(
-  __dirname,
-  '../../../../examples/rspack-banner-minimal/dist/main.js',
-);
-
-const jsMap = JSON.parse(fs.readFileSync(jsMapPath, 'utf-8'));
-const jsContent = fs.readFileSync(jsPath, 'utf-8');
-const jsLines = jsContent.split(/\r?\n/);
 
 // Add mock source map before createMockPluginInstance
 const mockJsMap = {
@@ -190,12 +175,30 @@ describe('sourcemapTool', () => {
   });
 
   describe('collectSourceMaps', () => {
-    it('should collect code segments for real sources', async () => {
+    it('should collect code segments for webpack sources', async () => {
       const plugin = createMockPluginInstance();
       const compilation = createMockCompilation();
       const regex =
         /webpack:\/\/(?:@examples\/rsdoctor-rspack-banner\/)?([^?]*)/;
-      await collectSourceMaps(jsMap, jsLines, compilation, plugin, regex);
+      const sourceMap = {
+        version: 3,
+        sources: [
+          'webpack://@examples/rsdoctor-rspack-banner/./node_modules/dayjs/dayjs.min.js',
+        ],
+        names: [],
+        mappings: 'AAAA',
+        file: 'main.js',
+        sourcesContent: ['console.log("dayjs");'],
+      };
+
+      await collectSourceMaps(
+        sourceMap,
+        ['console.log("dayjs");'],
+        compilation,
+        plugin,
+        regex,
+      );
+
       // Assert that sourceMapSets is filled
       expect(plugin.sourceMapSets.size).toBeGreaterThan(0);
       // Assert that there is a key related to dayjs.min.js
