@@ -48,24 +48,36 @@ rsdoctor analyze --profile <manifestFile>
 rsdoctor analyze --profile "./dist/.rsdoctor/manifest.json"
 ```
 
-### `bundle-diff` Command
+### `bundle-diff` command
 
-The `bundle-diff` command is used to load **two** [manifest.json](/config/options/term#manifestjson) files **locally** and open the Rsdoctor [Bundle Diff](../usage/bundle-diff) page for **comparison and analysis of build bundles**.
+The `bundle-diff` command loads **two** [manifest.json](/config/options/term#manifestjson) files **locally** and compares their build bundles. By default, it opens the Rsdoctor [Bundle Diff](../usage/bundle-diff) page in the browser. Use `--json [path]` to generate a JSON report without starting the report server or opening the browser.
 
 ```bash
 rsdoctor bundle-diff --baseline <baselineManifestJsonPath> --current <currentManifestJsonPath>
 ```
 
-**Parameter Definitions**
+**Parameter definitions**
 
-- `baselineManifestJsonPath` Path to the [manifest.json](/config/options/term#manifestjson) used as the **baseline** (supports local paths as well as online URLs).
-- `currentManifestJsonPath` Path to the [manifest.json](/config/options/term#manifestjson) used as the **current** (supports local paths as well as online URLs) for comparison with the **baseline**.
+- `--baseline <path>`: Path or online URL of the [manifest.json](/config/options/term#manifestjson) used as the **baseline**.
+- `--current <path>`: Path or online URL of the [manifest.json](/config/options/term#manifestjson) used as the **current** build.
+- `--json [path]`: Generate a JSON diff report. The default output path is `rsdoctor-diff.json`.
 
-**Usage Example**
+**Open the report in the browser**
 
 ```bash
 rsdoctor bundle-diff --baseline="baseline/.rsdoctor/manifest.json" --current="current/.rsdoctor/manifest.json"
 ```
+
+**Generate a JSON report**
+
+```bash
+rsdoctor bundle-diff \
+  --baseline="baseline/.rsdoctor/manifest.json" \
+  --current="current/.rsdoctor/manifest.json" \
+  --json="result.json"
+```
+
+The JSON report contains diff data for assets, modules, and packages. You can consume it in CI workflows or use it to generate pull request comments.
 
 ## Node API
 
