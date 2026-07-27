@@ -1,5 +1,6 @@
-import { isDeepStrictEqual, stripVTControlCharacters } from 'node:util';
+import { stripVTControlCharacters } from 'node:util';
 import { codeFrameColumns } from '@babel/code-frame';
+import { isEqual } from '@rsdoctor/core/collection';
 import { Lodash } from '@rsdoctor/core/common';
 import { Err, Rule } from '@rsdoctor/shared/types';
 import { createColors } from 'picocolors';
@@ -267,8 +268,7 @@ export class DevToolError extends Error implements Err.DevToolErrorInstance {
       this.level === error.level &&
       this.title === error.title &&
       this.referenceUrl === error.referenceUrl &&
-      this.code === error.code &&
-      isDeepStrictEqual(this.codeFrame, error.codeFrame)
+      isEqual(this.codeFrame, error.codeFrame)
     );
   }
 }
