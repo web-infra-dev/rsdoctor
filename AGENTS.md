@@ -2,8 +2,8 @@
 
 ## Stack
 
-- Node.js `22+`, package manager **pnpm `10.17+`** (enable via `corepack enable`)
-- `pnpm` workspace + `Nx` monorepo (build caching + topological ordering)
+- Node.js `24.15+`, package manager **pnpm `10.33+`** (enable via `corepack enable`)
+- `pnpm` workspace monorepo (topological build ordering)
 - TypeScript strict mode; target `node 16` for library output
 - Build toolchain: **Rslib** (based on Rsbuild/Rspack)
 - Lint: **Rslint** (`pnpm lint`), format: **Prettier** (`pnpm format`)
@@ -23,8 +23,8 @@ pnpm test                   # unit tests via rstest (single worker, NODE_OPTIONS
 pnpm e2e                    # playwright e2e (requires chromium: cd e2e && npx playwright install chromium)
 
 # ── build ────────────────────────────────────────────────────
-pnpm run build              # nx run-many: build all @rsdoctor/* packages in parallel
-npx nx build @rsdoctor/core # build a single package (respects dependsOn)
+pnpm run build                                # build all package targets in topological order
+pnpm --filter '@rsdoctor/core...' run build   # build one package and its workspace dependencies
 
 # ── focused dev ──────────────────────────────────────────────
 pnpm --filter @rsdoctor/core run build     # build one package

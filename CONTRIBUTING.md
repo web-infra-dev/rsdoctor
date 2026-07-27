@@ -52,7 +52,7 @@ What this will do:
 
 - Install all dependencies.
 - Create symlinks between packages in the monorepo.
-- Run the `prepare` script to build all packages, powered by [nx](https://nx.dev/).
+- Run the `prepare` script to build all packages in dependency order with pnpm.
 
 ### Set git email
 
@@ -101,10 +101,10 @@ Starting from Rsdoctor 2.0 development, the `main` branch is used for v2 develop
 
 ### Build the package
 
-Use [nx build](https://nx.dev/nx-api/nx/documents/run) to build the package you want to change:
+Use a pnpm workspace filter to build the package you want to change and its dependencies:
 
 ```sh
-npx nx build @rsdoctor/core
+pnpm --filter '@rsdoctor/core...' run build
 ```
 
 Build all packages:
