@@ -42,9 +42,6 @@ catalogs:
     '@rspack/plugin-react-refresh':
       specifier: ^2.0.2
       version: 2.0.2
-    '@rspack/resolver':
-      specifier: ^0.2.8
-      version: 0.2.8
     '@rstest/core':
       specifier: 0.11.4
       version: 0.11.4
@@ -627,9 +624,6 @@ importers:
       '@rsdoctor/shared':
         specifier: workspace:*
         version: link:../shared
-      '@rspack/resolver':
-        specifier: 'catalog:'
-        version: 0.2.8(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
       '@types/estree':
         specifier: 'catalog:'
         version: 1.0.5
