@@ -42,7 +42,9 @@ export default defineConfig(({ env }) => {
         enable: IS_PRODUCTION,
         tsCheckerOptions: {
           typescript: {
+            build: false,
             mode: 'readonly',
+            tsgo: true,
           },
         },
       }),

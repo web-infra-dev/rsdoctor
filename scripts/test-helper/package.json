@@ -9,9 +9,10 @@
     "directory": "packages/test-helper"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.js",
+      "types": "./dist/src/index.d.ts",
       "default": "./dist/index.js"
     }
   },

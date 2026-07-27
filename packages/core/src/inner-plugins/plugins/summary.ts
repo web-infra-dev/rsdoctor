@@ -1,6 +1,6 @@
 import { Summary } from '@rsdoctor/core/common';
 import { minBy, sumBy } from '@rsdoctor/core/collection';
-import type { Plugin } from '@rsdoctor/shared/types';
+import type { Plugin, SDK } from '@rsdoctor/shared/types';
 import { InternalBasePlugin } from './base';
 import { time, timeEnd } from '@rsdoctor/core/logger';
 
@@ -99,7 +99,9 @@ export class InternalSummaryPlugin<
       // report minify costs
       if (compiler.options.optimization.minimize !== false) {
         const pluginData = this.sdk.getStoreData().plugin;
-        const minifyHookData = [...(pluginData.processAssets || [])];
+        const minifyHookData: SDK.PluginHookData[] = [
+          ...(pluginData.processAssets || []),
+        ];
         if (minifyHookData.length) {
           this.sdk.reportSummaryData({
             costs: [

@@ -16,27 +16,22 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./collection": {
       "types": "./dist/collection.d.ts",
-      "import": "./dist/collection.js",
       "default": "./dist/collection.js"
     },
     "./common-browser": {
       "types": "./dist/common-browser.d.ts",
-      "import": "./dist/common-browser.js",
       "default": "./dist/common-browser.js"
     },
     "./graph": {
       "types": "./dist/graph.d.ts",
-      "import": "./dist/graph.js",
       "default": "./dist/graph.js"
     },
     "./types": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js",
       "default": "./dist/types/index.js"
     }
   },

@@ -1,4 +1,3 @@
-import { isNumber } from '@rsdoctor/core/collection';
 import { parser, Node } from '@rsdoctor/core/rule-utils';
 import { SDK } from '@rsdoctor/shared/types';
 function getDefaultExportIdentifier(
@@ -36,12 +35,18 @@ function getDefaultExportIdentifier(
   // Take the first line by default.
   const startLine = node.declaration.loc?.start.line;
 
-  if (!isNumber(startLine)) {
+  if (typeof startLine !== 'number') {
     return;
   }
 
   const { transformed } = module.getSource();
-  const endColumn = transformed.split('\n')[startLine - 1].length - 1;
+  const line = transformed.split('\n')[startLine - 1];
+
+  if (line === undefined) {
+    return;
+  }
+
+  const endColumn = line.length - 1;
 
   return module.getStatement({
     start: {

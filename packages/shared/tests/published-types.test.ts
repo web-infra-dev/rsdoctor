@@ -11,7 +11,14 @@ const testDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(testDir, '../../..');
 const sharedRoot = path.resolve(repoRoot, 'packages/shared');
 const sharedPackageJsonPath = path.resolve(sharedRoot, 'package.json');
-const tscPath = require.resolve('typescript/lib/tsc');
+const typescriptPackageJsonPath = require.resolve('typescript/package.json');
+const typescriptPackageJson = require(typescriptPackageJsonPath) as {
+  bin: { tsc: string };
+};
+const tscPath = path.resolve(
+  path.dirname(typescriptPackageJsonPath),
+  typescriptPackageJson.bin.tsc,
+);
 
 function runTsc(args: string[], options: ExecFileSyncOptions) {
   try {

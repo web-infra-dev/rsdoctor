@@ -1,9 +1,20 @@
 import path from 'path';
 import { tmpdir } from 'os';
-import { describe, it, expect, afterEach, beforeAll } from '@rstest/core';
+import { describe, it, expect, afterEach, beforeAll, rs } from '@rstest/core';
 import { Worker } from 'node:worker_threads';
 import { File } from '@rsdoctor/core/build-utils';
 import { execSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
+
+const corePackageDir = path.resolve(__dirname, '../../../..');
+const workerModuleUrls = {
+  buildUtils: pathToFileURL(
+    path.resolve(corePackageDir, 'dist/build-utils/index.js'),
+  ).href,
+  sdk: pathToFileURL(path.resolve(corePackageDir, 'dist/sdk.js')).href,
+};
+
+rs.setConfig({ testTimeout: 30000 });
 
 // Skip on Windows because rename may throw EPERM/EBUSY under concurrent access
 const describeIfNotWin =
@@ -31,7 +42,7 @@ describe('atomic write manifest', () => {
       try {
         execSync('pnpm --filter @rsdoctor/core run build', {
           stdio: 'ignore',
-          cwd: path.resolve(__dirname, '../../../../..'),
+          cwd: corePackageDir,
         });
       } catch {
         // Ignore build errors, dist may already exist
@@ -50,11 +61,12 @@ describe('atomic write manifest', () => {
       const readAttempts = 100;
 
       const workerScript = `
-        const { parentPort, workerData } = require('node:worker_threads');
-        const { File, Server } = require('@rsdoctor/core/build-utils');
-        const { RsdoctorSDK } = require('@rsdoctor/core/sdk');
-
         (async () => {
+          const { parentPort, workerData } = await import('node:worker_threads');
+          const [{ File, Server }, { RsdoctorSDK }] = await Promise.all([
+            import(workerData.moduleUrls.buildUtils),
+            import(workerData.moduleUrls.sdk),
+          ]);
           const { outputDir, readAttempts } = workerData;
           const port = await Server.getPort(
             10000 + Math.floor(Math.random() * 20000),
@@ -99,7 +111,12 @@ describe('atomic write manifest', () => {
         new Promise<void>((resolve, reject) => {
           const worker = new Worker(workerScript, {
             eval: true,
-            workerData: { outputDir, readAttempts },
+            execArgv: [],
+            workerData: {
+              outputDir,
+              readAttempts,
+              moduleUrls: workerModuleUrls,
+            },
           });
           workers.push(worker);
 

@@ -2,7 +2,7 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   build: {
-    external: ['**/packages/shared/dist/**'],
+    external: ['**/packages/*/dist/**', '**/scripts/test-helper/dist/**'],
   },
   testMatch: ['/cases/**/**.test.ts'],
   timeout: 60000,

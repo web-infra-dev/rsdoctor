@@ -64,7 +64,10 @@ export const parseBundle: ParseBundle = (
     ecmaVersion: 'latest',
   });
 
-  const walkState = {
+  const walkState: {
+    locations: Record<string, { start: number; end: number }> | null;
+    expressionStatementDepth: number;
+  } = {
     locations: null,
     expressionStatementDepth: 0,
   };
@@ -239,7 +242,7 @@ export const parseBundle: ParseBundle = (
     },
   });
 
-  let modules;
+  let modules: Record<string, string>;
 
   if (walkState.locations) {
     modules = mapValues(
@@ -260,7 +263,7 @@ export const parseBundle: ParseBundle = (
     const moduleContent = modules[module];
     const size = moduleContent && Buffer.byteLength(moduleContent);
     const identifier =
-      find(modulesData, { renderId: module })?.identifier || '';
+      find(modulesData, (item) => item.renderId === module)?.identifier || '';
     modulesObj[identifier] = {
       size,
       sizeConvert: filesize(size || 0),
@@ -462,7 +465,7 @@ function getModulesLocations(node: {
   callee: { object: { arguments: { value: any }[] } };
   arguments: { elements: any }[];
   elements: any;
-}) {
+}): Record<string, { start: number; end: number }> {
   if (node.type === 'ObjectExpression') {
     // Modules hash
     const modulesNodes = node.properties;

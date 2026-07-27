@@ -23,10 +23,12 @@ export function getInternalLoaderOptions(
 
 export function getLoaderOptionsWithoutInternalKeys(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,
-): Omit<ProxyLoaderOptions, typeof Loader.LoaderInternalPropertyName> {
+): Record<string, any> {
   const options = loaderContext.getOptions();
   const circlePaths: string[][] = [];
-  const loaderOptions = omit(options, [Loader.LoaderInternalPropertyName]);
+  const loaderOptions = omit(options, [
+    Loader.LoaderInternalPropertyName,
+  ]) as Record<string, any>;
 
   checkCirclePath(loaderOptions, [], circlePaths, 0);
 

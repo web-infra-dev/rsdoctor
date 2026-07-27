@@ -1,3 +1,3 @@
-import { dualPackage } from '../../scripts/rslib.base.config';
+import { esmPackage } from '../../scripts/rslib.base.config';
 
-export default dualPackage;
+export default esmPackage;
