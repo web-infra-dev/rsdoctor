@@ -11,7 +11,6 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "compiled",
     "static"
   ],
   "type": "module",
@@ -121,10 +120,9 @@
   },
   "scripts": {
     "dev": "npm run start",
-    "build": "npm run prebundle && rslib build",
+    "build": "rslib build",
     "start": "rslib build -w",
-    "test": "rstest run",
-    "prebundle": "prebundle"
+    "test": "rstest run"
   },
   "dependencies": {
     "@babel/code-frame": "7.26.2",
@@ -170,7 +168,6 @@
     "@types/semver": "^7.7.1",
     "@types/tapable": "catalog:",
     "babel-loader": "10.1.1",
-    "prebundle": "catalog:",
     "string-loader": "0.0.1",
     "ts-loader": "^9.6.2",
     "tslib": "catalog:",
