@@ -15,4 +15,18 @@ describe('DevToolError', () => {
     expect(transformedError.message).toBe('message');
     expect(detailedError.toData().description).toBe('description');
   });
+
+  it('compares code frames deeply', () => {
+    const createError = (column: number) =>
+      new DevToolError('title', 'message', {
+        codeFrame: {
+          filePath: 'index.ts',
+          fileContent: 'const answer = 42;',
+          start: { line: 1, column },
+        },
+      });
+
+    expect(createError(7).isSame(createError(7))).toBe(true);
+    expect(createError(7).isSame(createError(8))).toBe(false);
+  });
 });

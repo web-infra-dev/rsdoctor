@@ -1,9 +1,8 @@
-import { stripVTControlCharacters } from 'node:util';
+import { isDeepStrictEqual, stripVTControlCharacters } from 'node:util';
 import { codeFrameColumns } from '@babel/code-frame';
 import { Lodash } from '@rsdoctor/core/common';
 import { Err, Rule } from '@rsdoctor/shared/types';
 import { createColors } from 'picocolors';
-import deepEql from 'deep-eql';
 import { transform } from './transform';
 import { insertSpace, toLevel } from './utils';
 
@@ -269,7 +268,7 @@ export class DevToolError extends Error implements Err.DevToolErrorInstance {
       this.title === error.title &&
       this.referenceUrl === error.referenceUrl &&
       this.code === error.code &&
-      deepEql(this.codeFrame, error.codeFrame)
+      isDeepStrictEqual(this.codeFrame, error.codeFrame)
     );
   }
 }

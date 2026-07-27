@@ -643,9 +643,6 @@ importers:
       dayjs:
         specifier: 'catalog:'
         version: 1.11.21
-      deep-eql:
-        specifier: 4.1.4
-        version: 4.1.4
       envinfo:
         specifier: 7.21.0
         version: 7.21.0
@@ -710,9 +707,6 @@ importers:
       '@types/cors':
         specifier: 2.8.19
         version: 2.8.19
-      '@types/deep-eql':
-        specifier: 4.0.2
-        version: 4.0.2
       '@types/envinfo':
         specifier: 7.8.4
         version: 7.8.4
