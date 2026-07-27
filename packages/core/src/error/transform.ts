@@ -1,4 +1,4 @@
-import stripAnsi from 'strip-ansi';
+import { stripVTControlCharacters } from 'node:util';
 // import { parse as stackParse } from '@web-doctor/stack-trace'; // TODO: add doctor stack-trace
 import { Esbuild, Babel, Err, Linter } from '@rsdoctor/shared/types';
 import { DevToolError } from './error';
@@ -26,7 +26,7 @@ function isDiagnosticError(err: any): err is Linter.Diagnostic {
 }
 
 function parseBabelErrorMessage(input: string) {
-  const lines = stripAnsi(truncateMessage(input)).split('\n');
+  const lines = stripVTControlCharacters(truncateMessage(input)).split('\n');
   const filePath = lines[0].replace(/^([^:]+):.*/, '$1');
   const message = lines[0].replace(/.*: (.*) \(\d+:\d+\)*/, '$1');
   const lineText =
@@ -40,7 +40,10 @@ function parseBabelErrorMessage(input: string) {
 }
 
 function clearMessage(str: string) {
-  return stripAnsi(truncateMessage(str)).replace(/.*: (.*)\n\n[\s\S]*/g, '$1');
+  return stripVTControlCharacters(truncateMessage(str)).replace(
+    /.*: (.*)\n\n[\s\S]*/g,
+    '$1',
+  );
 }
 
 function clearStack(str: string) {

@@ -1,9 +1,9 @@
+import { stripVTControlCharacters } from 'node:util';
 import { codeFrameColumns } from '@babel/code-frame';
 import { Lodash } from '@rsdoctor/core/common';
 import { Err, Rule } from '@rsdoctor/shared/types';
 import { createColors } from 'picocolors';
 import deepEql from 'deep-eql';
-import stripAnsi from 'strip-ansi';
 import { transform } from './transform';
 import { insertSpace, toLevel } from './utils';
 
@@ -219,7 +219,9 @@ export class DevToolError extends Error implements Err.DevToolErrorInstance {
       ...this.detail,
       id: this.id,
       category: this.category,
-      description: stripAnsi(this.detail?.description ?? this.message),
+      description: stripVTControlCharacters(
+        this.detail?.description ?? this.message,
+      ),
       title: this.title.toUpperCase(),
       code: this.code,
       level: this.level.toLowerCase(),
