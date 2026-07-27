@@ -45,7 +45,6 @@ catalog:
   fs-extra: ^11.1.1
   path-browserify: 1.0.1
   picocolors: ^1.1.1
-  prebundle: 1.6.5
   react: 19.2.8
   react-dom: 19.2.8
   react-error-boundary: ^4.1.2
@@ -71,11 +70,6 @@ minimumReleaseAgeExclude:
   - ws@8.21.0
   # Renovate security update: echarts@6.1.0
   - echarts@6.1.0
-
-packageExtensions:
-  prebundle@1.6.5:
-    dependencies:
-      typescript: 6.0.3
 
 overrides:
   '@remix-run/router': 1.23.3
