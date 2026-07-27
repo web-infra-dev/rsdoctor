@@ -47,7 +47,7 @@
     "husky": "^9.1.7",
     "nano-staged": "^1.0.2",
     "nx": "^23.0.2",
-    "prettier": "^3.9.5",
+    "prettier": "^3.9.6",
     "rsbuild-plugin-publint": "^0.3.4"
   },
   "packageManager": "pnpm@10.33.4",
