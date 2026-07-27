@@ -52,7 +52,6 @@
     // align Node.js version minimum requirements
     '@types/node',
     'acorn',
-    '@rspack/resolver',
     'json-stream-stringify',
     'fs-extra',
     'socket.io',

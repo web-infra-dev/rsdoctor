@@ -1,4 +1,3 @@
-import { ResolverFactory } from '@rspack/resolver';
 import { omit } from '@rsdoctor/core/collection';
 import path from 'path';
 import { logger } from '@rsdoctor/core/logger';
@@ -69,36 +68,23 @@ export function shouldSkipLoader(
   return false;
 }
 
-export type CompatibleResolve = Omit<
-  Plugin.Configuration['resolve'],
-  'mainFields'
-> & {
-  mainFields?: string[];
-};
+export type LoaderResolver = ReturnType<
+  Plugin.BaseCompiler['resolverFactory']['get']
+>;
 
 export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
   loaderPath: string,
   options: Omit<ProxyLoaderInternalOptions, 'loader' | 'hasOptions'>,
+  loaderResolver: LoaderResolver,
   cwd = process.cwd(),
-  resolveLoader?: CompatibleResolve,
 ): T[] {
-  const loaderResolver = new ResolverFactory({
-    conditionNames: ['loader', 'require', 'node'],
-    exportsFields: ['exports'],
-    mainFiles: ['index'],
-    mainFields: ['loader', 'main'],
-    extensions: ['js', '.json'],
-    modules: ['node_modules'],
-    ...resolveLoader,
-  });
-
   const resolve = (target: string) => {
     try {
-      const result = loaderResolver.sync(cwd, target);
+      const result = loaderResolver.resolveSync({}, cwd, target);
 
-      if (result.path) {
-        return result.path;
+      if (result) {
+        return result;
       }
     } catch {
       // ..

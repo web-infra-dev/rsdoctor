@@ -1,4 +1,5 @@
 import { Loader } from '@rsdoctor/core/common';
+import { rspack } from '@rspack/core';
 import { describe, it, expect } from '@rstest/core';
 import path from 'path';
 import { ProxyLoaderInternalOptions } from '@/types';
@@ -18,6 +19,23 @@ describe('test src/utils/loader.ts', () => {
     const proxyLoaderPath = path.resolve(
       __dirname,
       '../../src/loaders/proxy.ts',
+    );
+    const compiler = rspack({
+      context: exampleWebpackPath,
+    });
+    const loaderResolver = compiler.resolverFactory.get(
+      'loader',
+      compiler.options.resolveLoader,
+    );
+    const customCompiler = rspack({
+      context: exampleWebpackPath,
+      resolveLoader: {
+        modules: [path.join(exampleWebpackPath, 'node_modules')],
+      },
+    });
+    const customLoaderResolver = customCompiler.resolverFactory.get(
+      'loader',
+      customCompiler.options.resolveLoader,
     );
     const internalOptions: Omit<
       ProxyLoaderInternalOptions,
@@ -42,6 +60,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
+          loaderResolver,
           path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
@@ -78,6 +97,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
+          loaderResolver,
           path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
@@ -111,6 +131,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
+          loaderResolver,
           path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
@@ -151,6 +172,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
+          loaderResolver,
           path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
@@ -199,6 +221,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
+          loaderResolver,
           path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
@@ -245,6 +268,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
+          loaderResolver,
           path.join(__dirname, '../../'),
         ),
       ).toStrictEqual([
@@ -286,7 +310,7 @@ describe('test src/utils/loader.ts', () => {
       ]);
     });
 
-    it('[string] rule.loader with resolveOptions', () => {
+    it('[string] rule.loader with resolveLoader', () => {
       expect(
         interceptLoader(
           [
@@ -300,10 +324,8 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
-          undefined,
-          {
-            modules: [path.join(exampleWebpackPath, 'node_modules')],
-          },
+          customLoaderResolver,
+          exampleWebpackPath,
         ),
       ).toStrictEqual([
         {
@@ -351,6 +373,7 @@ describe('test src/utils/loader.ts', () => {
           ],
           proxyLoaderPath,
           internalOptions,
+          loaderResolver,
         ),
       ).toStrictEqual([
         {
