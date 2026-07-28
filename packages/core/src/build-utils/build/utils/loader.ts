@@ -213,7 +213,7 @@ function appendProbeLoaders(
       : {};
   const loaderPath = process.env.DOCTOR_TEST
     ? path.resolve(__dirname, '../loader/probeLoader.ts')
-    : require.resolve(path.join(__dirname, '../loader/probeLoader'));
+    : require.resolve(path.join(__dirname, 'probe-loader'));
 
   const loader =
     typeof loaderConfig === 'string'

@@ -22,6 +22,7 @@ export default defineConfig({
       source: {
         entry: {
           index: './src/index.ts',
+          'probe-loader': './src/build-utils/build/loader/probeLoader.ts',
           'proxy-loader': './src/proxy-loader.ts',
         },
       },

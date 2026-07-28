@@ -3,6 +3,7 @@ import { tmpdir } from 'os';
 import { describe, it, expect, afterEach, beforeAll, rs } from '@rstest/core';
 import { Worker } from 'node:worker_threads';
 import { File } from '@rsdoctor/core';
+import type { Plugin } from '@rsdoctor/shared/types';
 import { execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -14,6 +15,9 @@ const coreModuleUrl = pathToFileURL(
 ).href;
 const proxyLoaderModuleUrl = pathToFileURL(
   path.resolve(corePackageDir, 'dist/proxy-loader.js'),
+).href;
+const probeLoaderModuleUrl = pathToFileURL(
+  path.resolve(corePackageDir, 'dist/probe-loader.js'),
 ).href;
 const sharedGraphModuleUrl = pathToFileURL(
   require.resolve('@rsdoctor/shared/graph'),
@@ -43,6 +47,35 @@ describe('core package exports', () => {
     expect(plugin.internalLoaderPath).toBe(fileURLToPath(proxyLoaderModuleUrl));
     expect(proxyLoader.raw).toBe(true);
     expect(proxyLoader.default).toBeTypeOf('function');
+  });
+
+  it('should keep the private probe loader loadable from the bundled build', async () => {
+    const doctorTest = process.env.DOCTOR_TEST;
+    delete process.env.DOCTOR_TEST;
+
+    try {
+      const [{ Utils }, probeLoader] = await Promise.all([
+        import(coreModuleUrl),
+        import(probeLoaderModuleUrl),
+      ]);
+      const [rule] = Utils.addProbeLoader2Rules(
+        [{ loader: 'mock-loader' }],
+        { options: { name: 'test-compiler' } } as Plugin.BaseCompiler,
+        () => true,
+      );
+      const loaders = rule.use as Array<{ loader: string }>;
+      const probeLoaderPath = fileURLToPath(probeLoaderModuleUrl);
+
+      expect(loaders[0].loader).toBe(probeLoaderPath);
+      expect(loaders[2].loader).toBe(probeLoaderPath);
+      expect(probeLoader.default).toBeTypeOf('function');
+    } finally {
+      if (doctorTest === undefined) {
+        delete process.env.DOCTOR_TEST;
+      } else {
+        process.env.DOCTOR_TEST = doctorTest;
+      }
+    }
   });
 
   it('should keep openBrowser static assets reachable from output chunks', async () => {
