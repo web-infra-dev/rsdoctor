@@ -1,5 +1,5 @@
 import { Manifest, Plugin } from '@rsdoctor/shared/types';
-import type { HookInterceptor } from 'tapable';
+import type { HookInterceptor } from '@rspack/lite-tapable';
 import { Loader } from '@rsdoctor/core/common';
 import { isEqual, omit } from '@rsdoctor/core/collection';
 import type { LoaderContext, NormalModule } from '@rspack/core';

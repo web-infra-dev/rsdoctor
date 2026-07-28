@@ -1,4 +1,4 @@
-import type { AsyncSeriesHook } from 'tapable';
+import type { AsyncSeriesHook } from '@rspack/lite-tapable';
 import { RsdoctorManifestWithShardingFiles } from '../manifest';
 
 /**

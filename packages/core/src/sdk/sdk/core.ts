@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import process from 'node:process';
-import { AsyncSeriesHook } from 'tapable';
+import { AsyncSeriesHook } from '@rspack/lite-tapable';
 import { decycle } from '@rsdoctor/core/common';
 import { logger } from '@rsdoctor/core/logger';
 import { transformDataUrls } from '../utils';
