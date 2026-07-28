@@ -1,4 +1,4 @@
-import { AsyncSeriesHook, SyncHook } from 'tapable';
+import { AsyncSeriesHook, SyncHook } from '@rspack/lite-tapable';
 import { describe, expect, it, rs } from '@rstest/core';
 import { ModuleGraph } from '@rsdoctor/shared/graph';
 import type { Plugin } from '@rsdoctor/shared/types';
@@ -29,7 +29,7 @@ function createHarness() {
     getCompilationHooks: () => nativeHooks,
   };
   const compiler = {
-    webpack: {
+    rspack: {
       experiments: {
         RsdoctorPlugin,
       },
@@ -83,7 +83,7 @@ describe('Rspack native graph collection', () => {
   it('requires the Rspack Rsdoctor native plugin', () => {
     expect(() =>
       getRspackNativePlugin({
-        webpack: {
+        rspack: {
           experiments: {},
         },
       } as unknown as Plugin.BaseCompiler),

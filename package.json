@@ -8,11 +8,7 @@
   },
   "scripts": {
     "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"!./packages/agent-cli\" --filter \"./scripts/*\" run build",
-    "change": "changeset",
-    "changeset": "changeset",
-    "bump": "changeset version",
     "check-spell": "pnpx cspell && heading-case",
-    "check-changeset": "pnpx disallow-major-changeset",
     "check-dependency-version": "pnpx check-dependency-version-consistency . && echo",
     "dev:doc": "cd packages/document && pnpm run dev",
     "e2e": "pnpm run e2e:base",
@@ -36,7 +32,6 @@
   },
   "devDependencies": {
     "@rslint/core": "catalog:",
-    "@changesets/cli": "^2.31.1",
     "@rsdoctor/tsconfig": "workspace:*",
     "@rslib/core": "1.0.0-beta.1",
     "@rstest/core": "catalog:",

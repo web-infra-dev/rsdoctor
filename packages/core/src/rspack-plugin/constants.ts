@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import type { Tap } from 'tapable';
+import type { Tap } from '@rspack/lite-tapable';
 
 const require = createRequire(import.meta.url);
 const packageJsonPath = existsSync(new URL('../package.json', import.meta.url))

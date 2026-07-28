@@ -275,8 +275,7 @@ export class RsdoctorRspackPlugin<
       // Use extracted common function to process configuration
       const configuration = processCompilerConfig(compiler.options);
 
-      const rspackVersion =
-        compiler.webpack?.rspackVersion || compiler.webpack?.version;
+      const { rspackVersion } = compiler.rspack;
 
       // Save Rspack configuration to sdk.
       this.sdk.reportConfiguration({

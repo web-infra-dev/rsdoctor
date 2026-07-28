@@ -61,7 +61,7 @@
   "dependencies": {
     "@types/connect": "catalog:",
     "@types/estree": "catalog:",
-    "@types/tapable": "catalog:",
+    "@rspack/lite-tapable": "catalog:",
     "buffer": "6.0.3",
     "path-browserify": "catalog:",
     "source-map": "catalog:"
@@ -76,7 +76,7 @@
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@rspack/core": "*"
+    "@rspack/core": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "@rspack/core": {
