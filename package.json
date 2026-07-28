@@ -7,7 +7,7 @@
     ]
   },
   "scripts": {
-    "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"!./packages/agent-cli\" --filter \"./scripts/*\" run build",
+    "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"./scripts/*\" run build",
     "check-spell": "pnpx cspell && heading-case",
     "check-dependency-version": "pnpx check-dependency-version-consistency . && echo",
     "dev:doc": "cd packages/document && pnpm run dev",
