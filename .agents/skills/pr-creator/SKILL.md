@@ -1,6 +1,8 @@
 ---
 name: pr-creator
-description: Use when asked to create a pull request for the Rsdoctor repository. Ensures the PR follows branch safety rules, Conventional Commits title convention, the project's PR template, and concise English writing style.
+description: Use when asked to create a pull request for this repository. It helps the PR follow the repository's branch safety rules, title convention, pull request template, and concise English writing style.
+metadata:
+  internal: true
 ---
 
 # Pull Request Creator
@@ -8,33 +10,31 @@ description: Use when asked to create a pull request for the Rsdoctor repository
 ## Steps
 
 1. Confirm the current branch with `git branch --show-current`.
-   If it is `main`, create and switch to a new branch before doing anything else.
-   Use a descriptive branch name, for example `feat/add-xxx` or `fix/resolve-xxx`.
+   If it is the default branch, create and switch to a new branch before doing anything else.
+   Use a descriptive branch name, preferably `feat-<topic>` or `fix-<topic>`.
 
 2. Review local changes with `git status --short`.
    Do not revert unrelated user changes.
-   Before creating the PR, ensure the intended changes are committed and never commit directly on `main`.
+   Before creating the PR, ensure the intended changes are committed and never commit directly on the default branch.
 
-3. Read `.github/PULL_REQUEST_TEMPLATE.md` and keep its structure exactly. The template has two sections:
-   - `## Summary`
-   - `## Related Links`
+3. If `.github/PULL_REQUEST_TEMPLATE.md` exists, read it and follow its structure.
 
-4. Draft the PR title in **Conventional Commits** format. Common scopes for Rsdoctor:
+4. Draft the PR title in the repository's standard format. If the repository uses Conventional Commits, common patterns include:
    - `feat(core): add ...`
-   - `fix(rspack-plugin): ...`
-   - `fix(webpack-plugin): ...`
-   - `feat(sdk): ...`
-   - `feat(cli): ...`
-   - `feat(ai): ...`
+   - `fix(types): ...`
    - `docs: ...`
-   - `refactor(graph): ...`
+   - `refactor(types): ...`
+   - `chore(ci): ...` for CI workflow, check, or release automation changes
    - `chore(deps): ...`
-   - `release: v1.5.8`
+   - `release: v1.2.0`
 
 5. Write the PR body in concise, clear English.
-   - In `Summary`, explain the user-facing problem or maintenance goal first, then the main change.
-   - Keep it short: one compact paragraph or 2-4 bullets is usually enough.
-   - Focus on what changed and why it matters; avoid low-signal implementation detail.
+   - In `Summary`, explain the change context first: the user-facing problem, maintenance goal, or compatibility constraint that makes the change necessary.
+   - Prioritize high-signal information: public API changes, behavior changes, breaking changes, migration notes, and important compatibility implications.
+   - Then describe the main implementation change only as much as needed to understand the review.
+   - Keep the PR body concise and review-oriented: use 1-4 short standalone sentences for typical changes, covering why it matters, what changed, and any reviewer-important impact.
+   - Omit incidental updates to tests, documentation, and supporting artifacts from the PR description; mention them only when they are the PR's primary purpose or carry reviewer-relevant risk.
+   - Avoid low-signal sections such as `Test plan` or `Validation`, routine verification commands, generated file lists, or obvious implementation details unless the repository template explicitly requires them or the change has unusual validation risk.
    - Good background examples:
      - `This PR adds support for custom logger injection so CLI output can be isolated per instance.`
      - `This PR fixes incorrect padding in URL labels to keep terminal output aligned across different label lengths.`
@@ -42,8 +42,15 @@ description: Use when asked to create a pull request for the Rsdoctor repository
 
 6. Fill `Related Links` with issue links, design docs, related PRs, or discussion pages.
    If the PR upgrades an npm dependency, add a link to the upgraded version's release notes or tag page when available.
-   If there is no relevant link, leave a short note such as `None`.
+   Example: `https://github.com/web-infra-dev/rspack/releases/tag/v1.0.0`
+   If there is no relevant link, omit the entire `Related Links` section from the PR body.
 
-7. Push the branch only after re-checking the branch name. Never push `main` directly.
+7. Push the branch only after re-checking the branch name. Never push the default branch directly.
 
-8. Create the PR with `gh pr create`.
+8. Create the PR.
+   When running in Codex, use the Codex GitHub connector/plugin for GitHub operations.
+   Use `gh pr create` only as a fallback when the connector is unavailable.
+
+## Constraints
+
+- Do not modify code while following this skill.
