@@ -76,7 +76,7 @@
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@rspack/core": "*"
+    "@rspack/core": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "@rspack/core": {
