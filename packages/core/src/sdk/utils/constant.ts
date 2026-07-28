@@ -1,3 +1,3 @@
-import dayjs from 'dayjs';
+import { formatLocalDate } from './date';
 
-export const CLOUD_DIR = `rsdoctor/manifests/${dayjs().format('YYYYMMDD')}`;
+export const CLOUD_DIR = `rsdoctor/manifests/${formatLocalDate(new Date())}`;

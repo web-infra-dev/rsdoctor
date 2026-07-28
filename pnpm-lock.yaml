@@ -626,9 +626,6 @@ importers:
       cors:
         specifier: 2.8.6
         version: 2.8.6
-      dayjs:
-        specifier: 'catalog:'
-        version: 1.11.21
       envinfo:
         specifier: 7.21.0
         version: 7.21.0
