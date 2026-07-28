@@ -1,5 +1,4 @@
 import { Manifest, Plugin } from '@rsdoctor/shared/types';
-import type { HookInterceptor } from '@rspack/lite-tapable';
 import { Loader } from '@rsdoctor/core/common';
 import { isEqual, omit } from '@rsdoctor/core/collection';
 import type { LoaderContext, NormalModule } from '@rspack/core';
@@ -157,20 +156,20 @@ export class InternalLoaderPlugin<
           }
         };
 
-      const interceptor: HookInterceptor<[object, MutableNormalModule], void> =
-        {
-          register(tap) {
-            const originFn = tap.fn;
-            if (typeof originFn === 'function') {
-              tap.fn = wrapper(originFn as LoaderHookCallback);
-            }
-            return tap;
-          },
-        };
-
-      compiler.webpack.NormalModule.getCompilationHooks(
+      const loaderHook = compiler.webpack.NormalModule.getCompilationHooks(
         compilation as Plugin.BaseCompilationType<'rspack'>,
-      ).loader.intercept(interceptor);
+      ).loader;
+      const interceptor: Parameters<typeof loaderHook.intercept>[0] = {
+        register(tap) {
+          const originFn = tap.fn;
+          if (typeof originFn === 'function') {
+            tap.fn = wrapper(originFn as LoaderHookCallback);
+          }
+          return tap;
+        },
+      };
+
+      loaderHook.intercept(interceptor);
     } finally {
       timeEnd('InternalLoaderPlugin.compilation');
     }
