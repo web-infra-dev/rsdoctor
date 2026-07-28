@@ -61,7 +61,7 @@
   "dependencies": {
     "@types/connect": "catalog:",
     "@types/estree": "catalog:",
-    "@types/tapable": "catalog:",
+    "@rspack/lite-tapable": "catalog:",
     "buffer": "6.0.3",
     "path-browserify": "catalog:",
     "source-map": "catalog:"

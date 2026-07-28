@@ -1,4 +1,4 @@
-import type { Tap } from 'tapable';
+import type { Tap } from '@rspack/lite-tapable';
 
 export const pluginTapName = 'RsdoctorRspackPlugin';
 

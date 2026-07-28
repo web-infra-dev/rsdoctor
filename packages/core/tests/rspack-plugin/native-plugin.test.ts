@@ -1,4 +1,4 @@
-import { AsyncSeriesHook, SyncHook } from 'tapable';
+import { AsyncSeriesHook, SyncHook } from '@rspack/lite-tapable';
 import { describe, expect, it, rs } from '@rstest/core';
 import { ModuleGraph } from '@rsdoctor/core/graph';
 import type { Plugin } from '@rsdoctor/shared/types';

@@ -127,6 +127,7 @@
   "dependencies": {
     "@babel/code-frame": "7.26.2",
     "@rsbuild/plugin-check-syntax": "catalog:",
+    "@rspack/lite-tapable": "catalog:",
     "@rsdoctor/shared": "workspace:*",
     "@types/estree": "catalog:",
     "acorn": "^8.10.0",
@@ -151,7 +152,6 @@
     "dayjs": "catalog:",
     "launch-editor": "^2.14.1",
     "sirv": "catalog:",
-    "tapable": "2.3.3",
     "ws": "8.21.1"
   },
   "devDependencies": {
@@ -162,9 +162,7 @@
     "@types/envinfo": "7.8.4",
     "@types/fs-extra": "catalog:",
     "@types/node": "catalog:",
-    "@types/node-fetch": "^2.6.13",
     "@types/semver": "^7.7.1",
-    "@types/tapable": "catalog:",
     "babel-loader": "10.1.1",
     "string-loader": "0.0.1",
     "ts-loader": "^9.6.2",
