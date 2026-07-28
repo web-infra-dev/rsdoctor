@@ -12,7 +12,6 @@ module.exports = {
   ignorePaths: [
     'dist',
     'dist-*',
-    'compiled',
     'coverage',
     'doc_build',
     'node_modules',
