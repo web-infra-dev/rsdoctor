@@ -1,6 +1,6 @@
 ---
 name: release-rsdoctor
-description: Use when asked to release Rsdoctor packages for a specific version. All publishable `@rsdoctor/*` packages under `packages/` (except `@rsdoctor/mcp-server`) are versioned together as a fixed group.
+description: Use when asked to release Rsdoctor packages for a specific version. All publishable `@rsdoctor/*` packages under `packages/` (except `@rsdoctor/agent-cli`) are versioned together as a fixed group.
 ---
 
 # Release Rsdoctor
@@ -17,11 +17,11 @@ If the version is missing, ask for it before making changes.
 
 2. Create and switch to branch `release_v<version>` (underscore, not slash). If the branch already exists, stop and ask the user how to proceed.
 
-3. Set every publishable package under `packages/` to the target version, except `@rsdoctor/mcp-server`:
+3. Set every publishable package under `packages/` to the target version, except `@rsdoctor/agent-cli`:
 
    ```sh
    pnpm --filter './packages/*' \
-     --filter '!@rsdoctor/mcp-server' \
+     --filter '!@rsdoctor/agent-cli' \
      exec npm pkg set 'version=<version>'
    ```
 
@@ -33,7 +33,7 @@ If the version is missing, ask for it before making changes.
    pnpm install --lockfile-only
    ```
 
-5. Review the diff. Confirm every package in the fixed group has exactly the target version, `@rsdoctor/mcp-server` is unchanged, and `pnpm-lock.yaml` is updated.
+5. Review the diff. Confirm every package in the fixed group has exactly the target version, `@rsdoctor/agent-cli` is unchanged, and `pnpm-lock.yaml` is updated.
 
 6. Commit with this exact message: `release: v<version>`
 
@@ -41,7 +41,5 @@ If the version is missing, ask for it before making changes.
 
 8. If `.github/PULL_REQUEST_TEMPLATE.md` exists, keep its structure.
    Fill it with:
-   - `Summary`: `Release @rsdoctor/* packages v<version>.`
+   - `Summary`: `Release v<version>.`
    - `Related Links`: `https://github.com/web-infra-dev/rsdoctor/releases/tag/v<version>`
-
-9. After the PR is created, a maintainer will run the [release GitHub Action](https://github.com/web-infra-dev/rsdoctor/actions/workflows/release.yml) to publish to npm, then merge the PR to `main`.
