@@ -14,7 +14,6 @@
     "@svgr/webpack": "^8.1.0",
     "@swc/helpers": "^0.5.3",
     "classnames": "^2.5.1",
-    "css-loader": "^6.9.0",
     "less-loader": "^11.1.4",
     "react": "catalog:",
     "react-dom": "catalog:"
