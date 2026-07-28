@@ -1,7 +1,7 @@
 import path from 'path-browserify';
 import { SDK } from '../../../types';
 import { isEmpty, pick } from '../../../common/lodash';
-import { gzipSync } from 'node:zlib';
+import { DEFAULT_GZIP_LEVEL, getGzipSize } from '../../../common/gzip';
 import { ParseBundle } from '../../types/transform';
 
 const timers = new Map<string, number>();
@@ -31,6 +31,25 @@ const logger = {
   },
 };
 
+interface GzipOptions {
+  gzip?: boolean;
+  gzipLevel?: number;
+}
+
+function tryGetGzipSize(
+  content: string | undefined,
+  { gzip = true, gzipLevel = DEFAULT_GZIP_LEVEL }: GzipOptions,
+) {
+  if (!gzip || !content) {
+    return undefined;
+  }
+  try {
+    return getGzipSize(content, gzipLevel);
+  } catch {
+    return undefined;
+  }
+}
+
 export type ParsedModuleSizeData = {
   [x: string]: { size: number; sizeConvert: string; content: string };
 };
@@ -49,23 +68,21 @@ export async function getAssetsModulesData(
   bundleDir: string,
   opts: {
     parseBundle?: ParseBundle;
-  },
+  } & GzipOptions,
   sourceMapSets: Map<string, string> = new Map(),
   assetsWithoutSourceMap?: Set<string>,
 ) {
+  const gzipOptions: GzipOptions = {
+    gzip: opts.gzip,
+    gzipLevel: opts.gzipLevel,
+  };
+
   // Parse assets with sourcemap using sourcemap data
   if (sourceMapSets.size > 0) {
     time(`Start Parse bundle by sourcemap.`);
     for (const [modulePath, codes] of sourceMapSets.entries()) {
       const modules = moduleGraph.getModuleByFile(modulePath);
-      let gzipSize = undefined;
-      try {
-        if (codes && typeof codes === 'string' && codes.length > 0) {
-          gzipSize = gzipSync(codes, { level: 9 }).length;
-        }
-      } catch {
-        // Ignore errors
-      }
+      const gzipSize = tryGetGzipSize(codes, gzipOptions);
       for (const module of modules) {
         module?.setSize({
           parsedSize: codes.length,
@@ -140,33 +157,38 @@ export async function getAssetsModulesData(
       }
 
       if (parsedModules) {
-        transformAssetsModulesData(parsedModules, moduleGraph);
+        transformAssetsModulesData(parsedModules, moduleGraph, gzipOptions);
       }
     }
     timeEnd(`Start Parse bundle by AST.`);
+  }
+
+  if (gzipOptions.gzip !== false) {
+    for (const module of moduleGraph.getModules()) {
+      if (module.getSize().gzipSize > 0) {
+        continue;
+      }
+      const source = module.getSource();
+      const gzipSize = tryGetGzipSize(
+        source.parsedSource || source.source,
+        gzipOptions,
+      );
+      if (gzipSize !== undefined) {
+        module.setSize({ gzipSize });
+      }
+    }
   }
 }
 
 export function transformAssetsModulesData(
   parsedModulesData: ParsedModuleSizeData,
   moduleGraph: SDK.ModuleGraphInstance,
+  gzipOptions: GzipOptions = {},
 ) {
   if (!moduleGraph) return;
   Object.entries(parsedModulesData).forEach(([moduleId, parsedData]) => {
     const module = moduleGraph.getModuleByIdentifier(moduleId ?? '');
-    // 计算 gzip size
-    let gzipSize = undefined;
-    try {
-      if (
-        parsedData?.content &&
-        typeof parsedData.content === 'string' &&
-        parsedData.content.length > 0
-      ) {
-        gzipSize = gzipSync(parsedData.content, { level: 9 }).length;
-      }
-    } catch {
-      // Ignore errors
-    }
+    const gzipSize = tryGetGzipSize(parsedData?.content, gzipOptions);
     module?.setSize({
       parsedSize: parsedData?.size,
       gzipSize,

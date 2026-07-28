@@ -14,7 +14,7 @@ export interface AssetInstance {
   toData(type: ToDataType): AssetData;
   setId(id: number): void;
   setChunks(chunks: ChunkInstance[]): void;
-  setGzipSize(content: string): void;
+  setGzipSize(content: string, level?: number): void;
 }
 
 export interface ChunkInstance {

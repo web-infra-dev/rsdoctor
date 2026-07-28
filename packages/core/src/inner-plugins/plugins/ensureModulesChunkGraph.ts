@@ -123,6 +123,10 @@ async function doneHandler(
     shouldParseBundle,
     _this.sourceMapSets,
     _this.assetsWithoutSourceMap,
+    {
+      enabled: _this.options.supports.gzip !== false,
+      level: _this.options.gzipLevel,
+    },
   );
 
   // Report graphs to SDK for further processing or client display
@@ -181,6 +185,7 @@ async function getModulesInfos(
   parseBundle: boolean,
   sourceMapSets: Map<string, string>,
   assetsWithoutSourceMap?: Set<string>,
+  gzipOptions?: ChunksBuildUtils.GzipOptions,
 ) {
   if (!moduleGraph) {
     return;
@@ -193,6 +198,7 @@ async function getModulesInfos(
       sourceMapSets,
       parseBundle,
       assetsWithoutSourceMap,
+      gzipOptions,
     );
   } catch {
     // Ignore errors

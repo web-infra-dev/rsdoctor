@@ -79,6 +79,7 @@ interface AssetInfo {
   files: {
     path: string;
     size: number;
+    gzipSize?: number;
     initial: boolean;
     content: string | void;
   }[];
