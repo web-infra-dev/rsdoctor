@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import process from 'node:process';
 import { AsyncSeriesHook } from '@rspack/lite-tapable';
-import { decycle } from '@rsdoctor/shared/common';
+import { decycle } from '@rsdoctor/shared/common-browser';
 import { logger } from '@/logger';
 import { transformDataUrls } from '../utils';
 import { RsdoctorSDKOptions, DataWithUrl } from './types';

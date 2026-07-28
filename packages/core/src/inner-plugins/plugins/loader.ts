@@ -1,13 +1,13 @@
 import { Manifest, Plugin } from '@rsdoctor/shared/types';
-import { Loader } from '@rsdoctor/core/common';
 import { createRequire } from 'node:module';
-import { isEqual, omit } from '@rsdoctor/core/collection';
+import { isEqual, omit } from '@rsdoctor/shared/collection';
 import type { LoaderContext, NormalModule } from '@rspack/core';
 import { interceptLoader } from '../utils';
 import { InternalBasePlugin } from './base';
 import type { ProxyLoaderOptions } from '../../types';
 import { time, timeEnd } from '@/logger';
 import { safeCloneDeep } from '../utils/plugin-common';
+import { Loader } from '@rsdoctor/shared/common-browser';
 
 const require = createRequire(import.meta.url);
 
