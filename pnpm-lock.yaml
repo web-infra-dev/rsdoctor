@@ -207,9 +207,6 @@ importers:
       '@types/react':
         specifier: 'catalog:'
         version: 19.2.17
-      es-toolkit:
-        specifier: 'catalog:'
-        version: 1.49.0
       loader-utils:
         specifier: ^2.0.4
         version: 2.0.4

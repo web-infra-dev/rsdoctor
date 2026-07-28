@@ -75,7 +75,6 @@ pluggable
 pmmmwh
 postcssrc
 preact
-prebundle
 preflights
 prefresh
 preprocessors
