@@ -225,7 +225,7 @@ Dependencies installation-related metrics base on publishing process, so the dat
 Repository maintainers can publish a new version of changed packages to npm.
 
 1. Checkout a new release branch from the target release line, for example `release_v1.2.0` from `v1.x` for v1 releases, or from `main` for v2 releases.
-2. Run [changesets](https://github.com/changesets/changesets) to bump changed packages and commit the changes.
+2. Update the versions of changed packages and commit the changes.
 3. Create a pull request, the title should be `release: v1.2.0`.
 4. Run the [release action](https://github.com/web-infra-dev/rsdoctor/actions/workflows/release.yml) to publish packages to npm.
 5. Merge the release pull request back to its target branch.

@@ -8,7 +8,6 @@
 - Build toolchain: **Rslib** (based on Rsbuild/Rspack)
 - Lint: **Rslint** (`pnpm lint`), format: **Prettier** (`pnpm format`)
 - Test runner: **Rstest** (`pnpm test`), E2E: **Playwright** (`pnpm e2e`)
-- Versioning: **Changesets** (`pnpm changeset`)
 
 ## Commands
 
@@ -30,10 +29,6 @@ pnpm --filter '@rsdoctor/core...' run build   # build one package and its worksp
 pnpm --filter @rsdoctor/core run build     # build one package
 pnpm --filter @rsdoctor/core run test      # test one package
 pnpm -C packages/client build              # alternative: use directory path
-
-# ── changeset / release ──────────────────────────────────────
-pnpm changeset              # create a changeset for your changes
-pnpm bump                   # apply changesets to bump versions
 ```
 
 ## Project structure
@@ -104,7 +99,6 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 - PR body must follow `.github/PULL_REQUEST_TEMPLATE.md` with two sections:
   - `## Summary` — what changed and why.
   - `## Related Links` — issue links, docs, related PRs, or `None`.
-- Add a **changeset** (`pnpm changeset`) for user-facing changes before opening the PR.
 
 ## Conventions for AI agents
 

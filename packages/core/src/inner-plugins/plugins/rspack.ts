@@ -21,7 +21,7 @@ export interface RspackNativeGraphState {
 export function getRspackNativePlugin(
   compiler: Plugin.BaseCompiler,
 ): typeof experiments.RsdoctorPlugin {
-  const RsdoctorRspackPlugin = compiler.webpack.experiments?.RsdoctorPlugin;
+  const RsdoctorRspackPlugin = compiler.rspack.experiments?.RsdoctorPlugin;
   if (!RsdoctorRspackPlugin) {
     throw new Error(
       '[RsdoctorRspackPlugin] The current Rspack version does not provide experiments.RsdoctorPlugin. Please upgrade Rspack.',
