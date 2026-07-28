@@ -1,6 +1,6 @@
 ---
 name: release-rsdoctor
-description: Use when asked to release Rsdoctor packages for a specific version. All `@rsdoctor/*` packages (except `@rsdoctor/mcp-server`) are versioned together via changesets.
+description: Use when asked to release Rsdoctor packages for a specific version. All publishable `@rsdoctor/*` packages under `packages/` (except `@rsdoctor/mcp-server`) are versioned together as a fixed group.
 ---
 
 # Release Rsdoctor
@@ -17,23 +17,31 @@ If the version is missing, ask for it before making changes.
 
 2. Create and switch to branch `release_v<version>` (underscore, not slash). If the branch already exists, stop and ask the user how to proceed.
 
-3. Run [changesets](https://github.com/changesets/changesets) to bump changed packages:
+3. Set every publishable package under `packages/` to the target version, except `@rsdoctor/mcp-server`:
 
    ```sh
-   pnpm changeset version
+   pnpm --filter './packages/*' \
+     --filter '!@rsdoctor/mcp-server' \
+     exec npm pkg set 'version=<version>'
    ```
 
-   All `@rsdoctor/*` packages (except `@rsdoctor/mcp-server`) move together as a fixed group — see `.changeset/config.json`.
+   These packages always move together as a fixed group, even if only one package changed. Do not update private tooling workspaces outside `packages/`.
 
-4. Review the diff. Confirm version bumps are correct across packages and `pnpm-lock.yaml` is updated.
+4. Regenerate the lockfile from the updated package manifests:
 
-5. Commit with this exact message: `release: v<version>`
+   ```sh
+   pnpm install --lockfile-only
+   ```
 
-6. Push the branch, then create a GitHub PR with `gh pr create`. Use the same text for the PR title: `release: v<version>`
+5. Review the diff. Confirm every package in the fixed group has exactly the target version, `@rsdoctor/mcp-server` is unchanged, and `pnpm-lock.yaml` is updated.
 
-7. If `.github/PULL_REQUEST_TEMPLATE.md` exists, keep its structure.
+6. Commit with this exact message: `release: v<version>`
+
+7. Push the branch, then create a GitHub PR with `gh pr create`. Use the same text for the PR title: `release: v<version>`
+
+8. If `.github/PULL_REQUEST_TEMPLATE.md` exists, keep its structure.
    Fill it with:
    - `Summary`: `Release @rsdoctor/* packages v<version>.`
    - `Related Links`: `https://github.com/web-infra-dev/rsdoctor/releases/tag/v<version>`
 
-8. After the PR is created, a maintainer will run the [release GitHub Action](https://github.com/web-infra-dev/rsdoctor/actions/workflows/release.yml) to publish to npm, then merge the PR to `main`.
+9. After the PR is created, a maintainer will run the [release GitHub Action](https://github.com/web-infra-dev/rsdoctor/actions/workflows/release.yml) to publish to npm, then merge the PR to `main`.
