@@ -156,7 +156,7 @@ export class InternalLoaderPlugin<
           }
         };
 
-      const loaderHook = compiler.webpack.NormalModule.getCompilationHooks(
+      const loaderHook = compiler.rspack.NormalModule.getCompilationHooks(
         compilation as Plugin.BaseCompilationType<'rspack'>,
       ).loader;
       const interceptor: Parameters<typeof loaderHook.intercept>[0] = {

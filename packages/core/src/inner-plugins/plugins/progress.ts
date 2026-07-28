@@ -16,28 +16,26 @@ export class InternalProgressPlugin<
 
   public apply(compiler: T): void {
     const { sdk, currentProgress } = this;
-    if (compiler.webpack && compiler.webpack.ProgressPlugin) {
-      const progress = new compiler.webpack.ProgressPlugin(
-        (percentage: number, msg: string) => {
-          currentProgress.percentage = percentage;
-          currentProgress.message = msg || '';
+    const progress = new compiler.rspack.ProgressPlugin(
+      (percentage: number, msg: string) => {
+        currentProgress.percentage = percentage;
+        currentProgress.message = msg || '';
 
-          const api = SDK.ServerAPI.APIExtends
-            .GetCompileProgress as unknown as SDK.ServerAPI.API;
-          try {
-            sdk.server.sendAPIDataToClient(api, {
-              req: {
-                api,
-                body: undefined,
-              },
-              res: currentProgress,
-            });
-          } catch (e: any) {
-            logger.debug(e);
-          }
-        },
-      );
-      progress.apply(compiler);
-    }
+        const api = SDK.ServerAPI.APIExtends
+          .GetCompileProgress as unknown as SDK.ServerAPI.API;
+        try {
+          sdk.server.sendAPIDataToClient(api, {
+            req: {
+              api,
+              body: undefined,
+            },
+            res: currentProgress,
+          });
+        } catch (e: any) {
+          logger.debug(e);
+        }
+      },
+    );
+    progress.apply(compiler);
   }
 }

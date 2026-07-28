@@ -29,7 +29,7 @@ function createHarness() {
     getCompilationHooks: () => nativeHooks,
   };
   const compiler = {
-    webpack: {
+    rspack: {
       experiments: {
         RsdoctorPlugin,
       },
@@ -83,7 +83,7 @@ describe('Rspack native graph collection', () => {
   it('requires the Rspack Rsdoctor native plugin', () => {
     expect(() =>
       getRspackNativePlugin({
-        webpack: {
+        rspack: {
           experiments: {},
         },
       } as unknown as Plugin.BaseCompiler),
