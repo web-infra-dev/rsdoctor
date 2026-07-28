@@ -149,11 +149,11 @@ export default defineConfig(({ env }) => {
     },
 
     tools: {
-      bundlerChain: (chainConfig) => {
+      bundlerChain: async (chainConfig) => {
         if (ENABLE_DEVTOOLS_PLUGIN) {
           chainConfig.optimization.set('concatenateModules', false);
           const { RsdoctorRspackPlugin } =
-            require('../core/dist/index.js') as typeof import('@rsdoctor/core');
+            (await import('../core/dist/index.js')) as typeof import('@rsdoctor/core');
 
           class StatsWriter {
             apply(compiler: Rspack.Compiler) {

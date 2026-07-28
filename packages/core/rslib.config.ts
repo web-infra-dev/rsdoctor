@@ -4,6 +4,9 @@ import { esmConfig, pluginsConfig } from '../../scripts/rslib.base.config';
 const externals = [
   '@rsdoctor/client',
   '@rsdoctor/shared',
+  '@rsdoctor/shared/collection',
+  '@rsdoctor/shared/common-browser',
+  '@rsdoctor/shared/graph',
   '@rsdoctor/shared/types',
   '@rspack/core',
   'lodash',

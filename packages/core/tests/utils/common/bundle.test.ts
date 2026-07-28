@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Bundle } from '../../../src/common';
+import { Bundle } from '@rsdoctor/shared/common-browser';
 
 describe('test src/common/bundle.ts', () => {
   it('getBundleDiffPageQueryString', () => {

@@ -4,14 +4,19 @@ import { describe, it, expect, afterEach, beforeAll, rs } from '@rstest/core';
 import { Worker } from 'node:worker_threads';
 import { File } from '@rsdoctor/core';
 import { execSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const corePackageDir = path.resolve(__dirname, '../../../..');
+const require = createRequire(import.meta.url);
 const coreModuleUrl = pathToFileURL(
   path.resolve(corePackageDir, 'dist/index.js'),
 ).href;
 const proxyLoaderModuleUrl = pathToFileURL(
   path.resolve(corePackageDir, 'dist/proxy-loader.js'),
+).href;
+const sharedGraphModuleUrl = pathToFileURL(
+  require.resolve('@rsdoctor/shared/graph'),
 ).href;
 
 rs.setConfig({ testTimeout: 30000 });
@@ -65,6 +70,24 @@ describe('core package exports', () => {
         ),
       ).toBe(true);
     }
+  });
+
+  it('should reuse public shared graph constructors', async () => {
+    const [{ RsdoctorSDK }, { ModuleGraph }] = await Promise.all([
+      import(coreModuleUrl),
+      import(sharedGraphModuleUrl),
+    ]);
+    const moduleGraph = new ModuleGraph();
+    const sdk = new RsdoctorSDK({
+      name: 'test',
+      root: process.cwd(),
+      config: { noServer: true },
+    });
+
+    moduleGraph.addLayer('browser');
+    sdk.reportModuleGraph(moduleGraph);
+
+    expect(sdk.getStoreData().moduleGraph.layers).toEqual(['browser']);
   });
 });
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Plugin } from '../../../src/common';
+import { Plugin } from '@rsdoctor/shared/common-browser';
 
 describe('test src/common/plugin.ts', () => {
   it('getPluginHooks', () => {
