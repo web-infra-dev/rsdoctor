@@ -102,7 +102,9 @@ function organize(markdown) {
   const prefix = markdown.slice(0, bodyStart).trimEnd();
   const suffix = markdown.slice(bodyEnd).replace(/^\n+/, '');
 
-  return suffix ? `${prefix}\n${lines.join('\n')}\n\n${suffix}` : `${prefix}\n${lines.join('\n')}\n`;
+  return suffix
+    ? `${prefix}\n${lines.join('\n')}\n\n${suffix}`
+    : `${prefix}\n${lines.join('\n')}\n`;
 }
 
 try {
