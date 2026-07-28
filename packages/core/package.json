@@ -149,7 +149,6 @@
     "source-map": "catalog:",
     "@rsdoctor/client": "workspace:*",
     "cors": "2.8.6",
-    "dayjs": "catalog:",
     "launch-editor": "^2.14.1",
     "sirv": "catalog:",
     "ws": "8.21.1"
