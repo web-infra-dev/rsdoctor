@@ -23,7 +23,7 @@ catalog:
   '@rslint/core': ^0.6.5
   '@rspack/cli': ^2.0.8
   '@rspack/core': ^2.1.5
-  '@rspack/lite-tapable': ^1.1.3
+  '@rspack/lite-tapable': ^1.1.4
   '@rspack/plugin-react-refresh': ^2.0.2
   '@rspack/resolver': ^0.2.8
   '@rstest/core': 0.11.4
@@ -72,7 +72,7 @@ minimumReleaseAgeExclude:
 
 overrides:
   '@remix-run/router': 1.23.3
-  '@rspack/lite-tapable': 1.1.3
+  '@rspack/lite-tapable': 1.1.4
   call-bind-apply-helpers: 1.0.2
   es-object-atoms: 1.1.2
   get-intrinsic: 1.3.0

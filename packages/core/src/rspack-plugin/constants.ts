@@ -1,7 +1,5 @@
 import { createRequire } from 'node:module';
-import type { Options } from '@rspack/lite-tapable';
-
-type Tap = Exclude<Options, string>;
+import type { Tap } from '@rspack/lite-tapable';
 
 const require = createRequire(import.meta.url);
 const packageJson = require('../../package.json') as { version: string };

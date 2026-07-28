@@ -1,6 +1,4 @@
-import type { Options } from '@rspack/lite-tapable';
-
-type Tap = Exclude<Options, string>;
+import type { Tap } from '@rspack/lite-tapable';
 
 export const pluginTapName = 'RsdoctorRspackPlugin';
 
