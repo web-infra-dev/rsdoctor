@@ -16,8 +16,8 @@ export class InternalProgressPlugin<
 
   public apply(compiler: T): void {
     const { sdk, currentProgress } = this;
-    if (compiler.webpack && compiler.webpack.ProgressPlugin) {
-      const progress = new compiler.webpack.ProgressPlugin(
+    if (compiler.rspack && compiler.rspack.ProgressPlugin) {
+      const progress = new compiler.rspack.ProgressPlugin(
         (percentage: number, msg: string) => {
           currentProgress.percentage = percentage;
           currentProgress.message = msg || '';

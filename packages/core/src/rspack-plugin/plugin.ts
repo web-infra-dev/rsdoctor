@@ -276,7 +276,7 @@ export class RsdoctorRspackPlugin<
       const configuration = processCompilerConfig(compiler.options);
 
       const rspackVersion =
-        compiler.webpack?.rspackVersion || compiler.webpack?.version;
+        compiler.rspack.rspackVersion || compiler.rspack.version;
 
       // Save Rspack configuration to sdk.
       this.sdk.reportConfiguration({
