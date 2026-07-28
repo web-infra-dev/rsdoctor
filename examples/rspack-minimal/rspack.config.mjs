@@ -1,4 +1,4 @@
-import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import rspack from '@rspack/core';
 import { ReactRefreshRspackPlugin } from '@rspack/plugin-react-refresh';
 

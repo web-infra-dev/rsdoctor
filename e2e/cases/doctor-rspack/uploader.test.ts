@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import path from 'path';
 import fs from 'fs/promises';
-import { getSDK, setSDK } from '@rsdoctor/core/plugins';
+import { getSDK, setSDK } from '@rsdoctor/core';
 import { createRsdoctorPlugin } from './test-utils';
 
 // Dynamic imports to avoid rspack binding issues

@@ -1,10 +1,10 @@
 import { InternalBasePlugin } from './base';
 import { Linter } from '../../rules';
-import { DevToolError } from '@rsdoctor/core/error';
-import { pull } from '@rsdoctor/core/collection';
+import { DevToolError } from '@/error';
+import { pull } from '@rsdoctor/shared/collection';
 import { Plugin } from '@rsdoctor/shared/types';
 import type { RspackError } from '@rspack/core';
-import { time, timeEnd } from '@rsdoctor/core/logger';
+import { time, timeEnd } from '@/logger';
 
 export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler> {
   public readonly name = 'rules';

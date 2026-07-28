@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { getSDK, setSDK } from '@rsdoctor/core/plugins';
+import { getSDK, setSDK } from '@rsdoctor/core';
 import { compileByRspackLayers } from '@scripts/test-helper';
 import { Compiler } from '@rspack/core';
 import path from 'path';

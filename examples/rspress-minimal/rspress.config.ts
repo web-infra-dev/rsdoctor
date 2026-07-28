@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 import { defineConfig } from 'rspress/config';
-import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),

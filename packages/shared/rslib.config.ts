@@ -15,6 +15,9 @@ const bundlelessEntries = {
 const bundlelessLib = {
   ...esmConfig,
   bundle: false,
+  dts: {
+    build: false,
+  },
   source: {
     entry: bundlelessEntries,
   },
@@ -41,6 +44,7 @@ const collectionLib = {
     externals,
   },
   dts: {
+    isolated: true,
     bundle: {
       bundledPackages: ['es-toolkit'],
     },

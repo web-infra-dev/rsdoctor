@@ -1,4 +1,4 @@
-import { Lodash } from '@rsdoctor/core/common';
+import { Lodash } from '@rsdoctor/shared/common-browser';
 import { LinesAndColumns } from 'lines-and-columns';
 import { Range, OffsetRange, Position, DocumentEditData } from './types';
 

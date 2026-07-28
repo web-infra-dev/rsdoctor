@@ -1,4 +1,5 @@
-import { RsdoctorSDK } from '@rsdoctor/core/sdk';
+import { RsdoctorSDK } from '@rsdoctor/core';
+import { TransUtils } from '@rsdoctor/shared/graph';
 import {
   Constants,
   Manifest as ManifestType,
@@ -10,7 +11,6 @@ import { Commands } from '../constants';
 import { Command } from '../types';
 import { enhanceCommand, readFile } from '../utils';
 import type { Plugin } from '@rsdoctor/shared/types';
-import { TransUtils } from '@rsdoctor/core/graph';
 
 interface Options {
   profile: string;

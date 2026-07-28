@@ -8,9 +8,9 @@
  *
  */
 import { exec } from 'node:child_process';
-import { promisify } from 'node:util';
-import { logger } from '@rsdoctor/core/logger';
 import { join } from 'node:path';
+import { promisify } from 'node:util';
+import { logger } from '@/logger';
 
 const execAsync = promisify(exec);
 

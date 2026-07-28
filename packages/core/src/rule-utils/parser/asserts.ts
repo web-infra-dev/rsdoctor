@@ -1,4 +1,4 @@
-import { Lodash } from '@rsdoctor/core/common';
+import { Lodash } from '@rsdoctor/shared/common-browser';
 import { Node } from './types';
 
 function isSyntaxNode(node: unknown): node is Node.SyntaxNode {

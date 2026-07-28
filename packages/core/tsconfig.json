@@ -6,8 +6,6 @@
     "outDir": "dist",
     "paths": {
       "@rsdoctor/core": ["./src/index.ts"],
-      "@rsdoctor/core/*": ["./src/*"],
-      "@rsdoctor/core/plugins": ["./src/inner-plugins/index.ts"],
       "@/*": ["./src/*"],
       "src": ["./src"],
       "src/*": ["./src/*"]

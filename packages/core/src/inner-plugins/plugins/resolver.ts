@@ -1,5 +1,5 @@
 import { Manifest, Plugin, SDK } from '@rsdoctor/shared/types';
-import { Time } from '@rsdoctor/core/common';
+import { Time } from '@rsdoctor/shared/common-browser';
 import { InternalBasePlugin } from './base';
 
 export class InternalResolverPlugin<

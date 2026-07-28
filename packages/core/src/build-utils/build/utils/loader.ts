@@ -2,13 +2,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import fse from 'fs-extra';
-import { omit } from '@rsdoctor/core/collection';
-import { Loader } from '@rsdoctor/core/common';
+import { omit } from '@rsdoctor/shared/collection';
+import { Loader } from '@rsdoctor/shared/common-browser';
 import type { Common, Plugin } from '@rsdoctor/shared/types';
 import type { Rule } from '../../../types/rules';
 import { readPackageJson } from '../json';
 import type { RuleSetUseItem } from '@rspack/core';
-import { logger } from '@rsdoctor/core/logger';
+import { logger } from '@/logger';
 
 // ESM equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);

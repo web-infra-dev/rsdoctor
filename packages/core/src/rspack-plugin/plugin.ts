@@ -28,9 +28,9 @@ import {
   SDK,
 } from '@rsdoctor/shared/types';
 import path from 'path';
+import { Loader } from '@rsdoctor/shared/common-browser';
+import { ModuleGraph } from '@rsdoctor/shared/graph';
 import { pluginTapName, pluginTapPostOptions, pkg } from './constants';
-import { ModuleGraph } from '../graph';
-import { Loader } from '../common';
 import { logger, time, timeEnd } from '../logger';
 import { getRspackNativePlugin } from '../inner-plugins/plugins/rspack';
 

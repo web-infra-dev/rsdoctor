@@ -1,5 +1,5 @@
 import { test, chromium } from '@playwright/test';
-import { getSDK, setSDK } from '@rsdoctor/core/plugins';
+import { getSDK, setSDK } from '@rsdoctor/core';
 import { compileByRspack } from '@scripts/test-helper';
 import * as core from '@actions/core';
 import { Compiler } from '@rspack/core';

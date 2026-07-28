@@ -1,5 +1,5 @@
 import { defineConfig } from '@rslib/core';
-import { esmPackageBundleless } from '../../scripts/rslib.base.config';
+import { esmConfig, pluginsConfig } from '../../scripts/rslib.base.config';
 
 const externals = [
   '@rsdoctor/client',
@@ -12,17 +12,22 @@ const externals = [
 ];
 
 export default defineConfig({
-  ...esmPackageBundleless,
   lib: [
     {
-      bundle: false,
-      format: 'esm',
-      syntax: 'es2021',
+      ...esmConfig,
+      bundle: true,
+      source: {
+        entry: {
+          index: './src/index.ts',
+          'proxy-loader': './src/proxy-loader.ts',
+        },
+      },
       dts: {
         build: false,
         tsgo: true,
       },
       output: {
+        ...esmConfig.output,
         filename: {
           js: '[name].js',
         },
@@ -30,9 +35,11 @@ export default defineConfig({
       },
       shims: {
         esm: {
+          __dirname: true,
           require: true,
         },
       },
     },
   ],
+  plugins: pluginsConfig,
 });

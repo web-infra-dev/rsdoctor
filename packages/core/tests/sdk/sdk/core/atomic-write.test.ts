@@ -2,23 +2,71 @@ import path from 'path';
 import { tmpdir } from 'os';
 import { describe, it, expect, afterEach, beforeAll, rs } from '@rstest/core';
 import { Worker } from 'node:worker_threads';
-import { File } from '@rsdoctor/core/build-utils';
+import { File } from '@rsdoctor/core';
 import { execSync } from 'node:child_process';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const corePackageDir = path.resolve(__dirname, '../../../..');
-const workerModuleUrls = {
-  buildUtils: pathToFileURL(
-    path.resolve(corePackageDir, 'dist/build-utils/index.js'),
-  ).href,
-  sdk: pathToFileURL(path.resolve(corePackageDir, 'dist/sdk.js')).href,
-};
+const coreModuleUrl = pathToFileURL(
+  path.resolve(corePackageDir, 'dist/index.js'),
+).href;
+const proxyLoaderModuleUrl = pathToFileURL(
+  path.resolve(corePackageDir, 'dist/proxy-loader.js'),
+).href;
 
 rs.setConfig({ testTimeout: 30000 });
+
+beforeAll(() => {
+  execSync('pnpm --filter @rsdoctor/core run build', {
+    stdio: 'ignore',
+    cwd: corePackageDir,
+  });
+});
 
 // Skip on Windows because rename may throw EPERM/EBUSY under concurrent access
 const describeIfNotWin =
   process.platform === 'win32' ? describe.skip : describe;
+
+describe('core package exports', () => {
+  it('should expose the proxy loader as a loadable file', async () => {
+    const [{ InternalLoaderPlugin }, proxyLoader] = await Promise.all([
+      import(coreModuleUrl),
+      import(proxyLoaderModuleUrl),
+    ]);
+    const plugin = new InternalLoaderPlugin({});
+
+    expect(plugin.internalLoaderPath).toBe(fileURLToPath(proxyLoaderModuleUrl));
+    expect(proxyLoader.raw).toBe(true);
+    expect(proxyLoader.default).toBeTypeOf('function');
+  });
+
+  it('should keep openBrowser static assets reachable from output chunks', async () => {
+    const distDir = path.resolve(corePackageDir, 'dist');
+    const outputFiles = (await File.fse.readdir(distDir))
+      .filter((file) => file.endsWith('.js'))
+      .map((file) => path.join(distDir, file));
+    const openBrowserChunks: string[] = [];
+
+    for (const outputFile of outputFiles) {
+      const source = await File.fse.readFile(outputFile, 'utf8');
+      if (source.includes('openChrome.applescript')) {
+        openBrowserChunks.push(outputFile);
+      }
+    }
+
+    expect(openBrowserChunks.length).toBeGreaterThan(0);
+    for (const outputFile of openBrowserChunks) {
+      expect(
+        await File.fse.pathExists(
+          path.resolve(
+            path.dirname(outputFile),
+            '../static/openChrome.applescript',
+          ),
+        ),
+      ).toBe(true);
+    }
+  });
+});
 
 /**
  * Verify manifest writing uses an atomic pattern (temp file + rename).
@@ -37,18 +85,6 @@ describe('atomic write manifest', () => {
   describeIfNotWin('concurrent write test', () => {
     let outputDir: string;
 
-    // Build SDK package before running tests to ensure dist exists
-    beforeAll(() => {
-      try {
-        execSync('pnpm --filter @rsdoctor/core run build', {
-          stdio: 'ignore',
-          cwd: corePackageDir,
-        });
-      } catch {
-        // Ignore build errors, dist may already exist
-      }
-    });
-
     afterEach(async () => {
       if (outputDir) {
         await File.fse.remove(outputDir);
@@ -63,10 +99,7 @@ describe('atomic write manifest', () => {
       const workerScript = `
         (async () => {
           const { parentPort, workerData } = await import('node:worker_threads');
-          const [{ File, Server }, { RsdoctorSDK }] = await Promise.all([
-            import(workerData.moduleUrls.buildUtils),
-            import(workerData.moduleUrls.sdk),
-          ]);
+          const { File, Server, RsdoctorSDK } = await import(workerData.moduleUrl);
           const { outputDir, readAttempts } = workerData;
           const port = await Server.getPort(
             10000 + Math.floor(Math.random() * 20000),
@@ -115,7 +148,7 @@ describe('atomic write manifest', () => {
             workerData: {
               outputDir,
               readAttempts,
-              moduleUrls: workerModuleUrls,
+              moduleUrl: coreModuleUrl,
             },
           });
           workers.push(worker);

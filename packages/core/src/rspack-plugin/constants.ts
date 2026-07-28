@@ -1,8 +1,12 @@
+import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import type { Tap } from 'tapable';
 
 const require = createRequire(import.meta.url);
-const packageJson = require('../../package.json') as { version: string };
+const packageJsonPath = existsSync(new URL('../package.json', import.meta.url))
+  ? '../package.json'
+  : '../../package.json';
+const packageJson = require(packageJsonPath) as { version: string };
 
 export const pluginTapName = 'RsdoctorRspackPlugin';
 

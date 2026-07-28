@@ -2,7 +2,7 @@ import { parseQuery } from '@/build-utils/build/utils';
 import { getSDK } from '@/inner-plugins/utils/sdk';
 import type { Plugin, SDK } from '@rsdoctor/shared/types';
 import type { LoaderDefinitionFunction } from '@rspack/core';
-import { omit } from '@rsdoctor/core/collection';
+import { omit } from '@rsdoctor/shared/collection';
 import path from 'path';
 
 export const loaderModule: Plugin.LoaderDefinition<

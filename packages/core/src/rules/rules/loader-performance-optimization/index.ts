@@ -1,5 +1,5 @@
 import { Linter, SDK } from '@rsdoctor/shared/types';
-import { Loader, Time } from '@rsdoctor/core/common';
+import { Loader, Time } from '@rsdoctor/shared/common-browser';
 import { defineRule } from '../../rule';
 import { Config, LoaderMapValue } from './types';
 import { match } from './utils';

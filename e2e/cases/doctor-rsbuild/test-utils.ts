@@ -1,13 +1,13 @@
 import {
+  File,
   RsdoctorRspackMultiplePlugin,
   RsdoctorRspackPlugin,
-} from '@rsdoctor/core/rspack-plugin';
+} from '@rsdoctor/core';
 import type {
   RsdoctorMultiplePluginOptions,
   RsdoctorRspackPluginOptions,
 } from '@rsdoctor/core';
 import { Linter } from '@rsdoctor/shared/types';
-import { File } from '@rsdoctor/core/build-utils';
 import { tmpdir } from 'os';
 import path from 'path';
 

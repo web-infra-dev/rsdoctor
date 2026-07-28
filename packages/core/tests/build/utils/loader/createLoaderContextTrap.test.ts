@@ -1,5 +1,5 @@
 import { describe, it, expect, rs } from '@rstest/core';
-import { Loader } from '@rsdoctor/core/common';
+import { Loader } from '@rsdoctor/shared/common-browser';
 import { createLoaderContextTrap } from '@/build-utils/build/utils';
 
 describe('test utils/loader.ts createLoaderContextTrap()', () => {

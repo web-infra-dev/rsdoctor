@@ -1,4 +1,4 @@
-import { Chunks } from '@rsdoctor/core/graph';
+import { Chunks } from '@rsdoctor/shared/graph';
 import { parseBundle } from '../utils';
 import { SDK } from '@rsdoctor/shared/types';
 

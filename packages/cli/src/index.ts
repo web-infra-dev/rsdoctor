@@ -4,7 +4,7 @@ import { Common } from '@rsdoctor/shared/types';
 import { analyze, bundleDiff } from './commands';
 import { Command, CommandContext, GetCommandArgumentsType } from './types';
 import { Commands, pkg, bin } from './constants';
-import { logger } from '@rsdoctor/core/logger';
+import { logger } from '@rsdoctor/core';
 import { statsAnalyze } from './commands/stats-analyze';
 
 interface AnalyzeArgs {

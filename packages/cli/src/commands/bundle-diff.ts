@@ -15,8 +15,8 @@ import {
   SDK,
   Constants,
 } from '@rsdoctor/shared/types';
-import { Manifest, Algorithm, Graph } from '@rsdoctor/core/common';
-import { resolveClientDiffHtmlPath, RsdoctorSDK } from '@rsdoctor/core/sdk';
+import { Algorithm, Graph, Manifest } from '@rsdoctor/shared/common-browser';
+import { resolveClientDiffHtmlPath, RsdoctorSDK } from '@rsdoctor/core';
 
 interface Options {
   current: string;

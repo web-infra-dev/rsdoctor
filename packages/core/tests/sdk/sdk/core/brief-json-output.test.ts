@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { afterEach, describe, expect, it } from '@rstest/core';
-import { File } from '@rsdoctor/core/build-utils';
+import { File } from '@rsdoctor/core';
 import { createSDK, type MockSDKResponse } from '../../utils';
 
 describe('brief json output', () => {

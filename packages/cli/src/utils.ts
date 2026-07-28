@@ -2,8 +2,8 @@ import path from 'path';
 import fs from 'node:fs';
 import { Ora } from 'ora';
 import { Command } from './types';
+import { Url } from '@rsdoctor/shared/common-browser';
 import { Common } from '@rsdoctor/shared/types';
-import { Url } from '@rsdoctor/core/common';
 import { fetchWithTimeout } from './fetch-http';
 
 export function enhanceCommand<CMD extends string, Options, Result>(

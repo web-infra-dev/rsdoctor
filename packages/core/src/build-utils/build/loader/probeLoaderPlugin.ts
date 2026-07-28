@@ -1,6 +1,6 @@
 import type { Plugin } from '@rsdoctor/shared/types';
 import type { RuleSetRules } from '@rspack/core';
-import { Loader } from '@rsdoctor/core/common';
+import { Loader } from '@rsdoctor/shared/common-browser';
 import { Build } from '@/build-utils';
 import { Utils } from '..';
 

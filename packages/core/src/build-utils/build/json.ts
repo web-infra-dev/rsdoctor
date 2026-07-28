@@ -1,7 +1,7 @@
 import { JsonStreamStringify } from 'json-stream-stringify';
 import { SDK } from '@rsdoctor/shared/types';
 import { dirname, join } from 'path';
-import { Package } from 'src/common';
+import { Package } from '@rsdoctor/shared/common-browser';
 import { Transform } from 'stream';
 
 const maxFileSize = 1024 * 1024 * 400; // Maximum length of each file is 400MB, measured in bytes.

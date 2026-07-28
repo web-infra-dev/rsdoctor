@@ -1,6 +1,6 @@
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
-import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import { AssetsCountLimit } from './rules/assets-count-limit';
 
 export default defineConfig({

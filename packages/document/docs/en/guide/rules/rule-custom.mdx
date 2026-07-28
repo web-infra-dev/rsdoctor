@@ -7,7 +7,7 @@ The external extension interface needs to be configured on the Rsdoctor plugin t
 
 ```ts
 // src/rules/assets-count-limit.ts
-import { defineRule } from '@rsdoctor/core/rules';
+import { defineRule } from '@rsdoctor/core';
 
 export const AssetsCountLimit = defineRule(() => ({
   meta: {
@@ -68,7 +68,7 @@ You can follow the detailed steps below to define and write custom rules.
 
 ### 1. Installation
 
-When writing custom rules, install `@rsdoctor/core` and use the defineRule function from `@rsdoctor/core/rules` to define unified Rsdoctor rules.
+When writing custom rules, install `@rsdoctor/core` and use the defineRule function from `@rsdoctor/core` to define unified Rsdoctor rules.
 
 import { PackageManagerTabs } from '@theme';
 
@@ -82,7 +82,7 @@ To write rules, you need to use the `defineRule` function, which takes a functio
 
 ```ts
 // src/rules/some-rule.ts
-import { defineRule } from '@rsdoctor/core/rules';
+import { defineRule } from '@rsdoctor/core';
 
 const ruleTitle = 'check-rule';
 const ruleConfig = {
@@ -473,7 +473,7 @@ interface SourceRange {
 
 ### AST processing
 
-When performing rule detection and analysis, it is common to perform AST analysis on modules and other operations. To provide more auxiliary functions, we also provide `@rsdoctor/core/rule-utils`, which contains many useful utility functions and methods.
+When performing rule detection and analysis, it is common to perform AST analysis on modules and other operations. To provide more auxiliary functions, we also provide `@rsdoctor/core`, which contains many useful utility functions and methods.
 
 ```ts
 /** This includes the type definitions for all AST nodes */

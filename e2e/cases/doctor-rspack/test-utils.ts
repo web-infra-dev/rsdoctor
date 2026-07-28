@@ -1,7 +1,6 @@
 import type { RsdoctorRspackPluginOptions } from '@rsdoctor/core';
-import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
+import { File, RsdoctorRspackPlugin } from '@rsdoctor/core';
 import { Linter } from '@rsdoctor/shared/types';
-import { File } from '@rsdoctor/core/build-utils';
 import { tmpdir } from 'os';
 import path from 'path';
 import events from 'node:events';

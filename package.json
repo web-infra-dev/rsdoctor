@@ -7,7 +7,7 @@
     ]
   },
   "scripts": {
-    "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"./scripts/*\" run build",
+    "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"!./packages/agent-cli\" --filter \"./scripts/*\" run build",
     "change": "changeset",
     "changeset": "changeset",
     "bump": "changeset version",
