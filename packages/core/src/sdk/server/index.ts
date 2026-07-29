@@ -1,14 +1,15 @@
 import { Common, SDK, Thirdparty, Client } from '@rsdoctor/shared/types';
-import { Server } from '@rsdoctor/core/build-utils';
+import { Server } from '@/build-utils';
 import serve from 'sirv';
-import { Bundle, GlobalConfig } from '@rsdoctor/core/common';
+import { Bundle } from '@rsdoctor/shared/common-browser';
+import * as GlobalConfig from '@/common/global-config';
 import assert from 'assert';
 import cors from 'cors';
 import { PassThrough } from 'stream';
 import { Socket } from './socket';
 import { Router } from './router';
 import * as APIs from './apis';
-import { chalk, logger } from '@rsdoctor/core/logger';
+import { chalk, logger } from '@/logger';
 import { openBrowser } from '@/sdk/utils/openBrowser';
 import path from 'path';
 import { createRequire } from 'module';

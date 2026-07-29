@@ -1,7 +1,7 @@
 import { Rule, Err, Plugin } from '@rsdoctor/shared/types';
 import { InternalBasePlugin } from './base';
-import { DevToolError } from '@rsdoctor/core/error';
-import { time, timeEnd } from '@rsdoctor/core/logger';
+import { DevToolError } from '@/error';
+import { time, timeEnd } from '@/logger';
 
 export class InternalErrorReporterPlugin<
   T extends Plugin.BaseCompiler,

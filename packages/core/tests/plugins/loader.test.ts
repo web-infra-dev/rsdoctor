@@ -1,4 +1,4 @@
-import { Loader } from '@rsdoctor/core/common';
+import { Loader } from '@rsdoctor/shared/common-browser';
 import { rspack } from '@rspack/core';
 import { describe, it, expect } from '@rstest/core';
 import path from 'path';

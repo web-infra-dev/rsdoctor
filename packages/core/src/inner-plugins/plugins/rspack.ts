@@ -1,4 +1,4 @@
-import { ChunkGraph } from '@rsdoctor/core/graph';
+import { ChunkGraph } from '@rsdoctor/shared/graph';
 import type {
   Compilation as RspackCompilation,
   RsdoctorPluginHooks,
@@ -11,7 +11,7 @@ import {
   ModuleGraph as ModuleGraphBuildUtils,
 } from '@/build-utils/build';
 import { internalPluginTapPreOptions } from '../constants';
-import { logger } from '@rsdoctor/core/logger';
+import { logger } from '@/logger';
 
 export interface RspackNativeGraphState {
   chunkGraph: boolean;

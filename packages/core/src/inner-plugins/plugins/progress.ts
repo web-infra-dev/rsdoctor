@@ -1,7 +1,7 @@
 import { SDK } from '@rsdoctor/shared/types';
 import type { Plugin } from '@rsdoctor/shared/types';
 import { InternalBasePlugin } from './base';
-import { logger } from '@rsdoctor/core/logger';
+import { logger } from '@/logger';
 
 export class InternalProgressPlugin<
   T extends Plugin.BaseCompilerType<'rspack'>,

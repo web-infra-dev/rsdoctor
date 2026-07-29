@@ -1,6 +1,6 @@
 import type { RsdoctorPluginInstance } from '../../types';
 import { Linter, Plugin, SDK } from '@rsdoctor/shared/types';
-import { chalk, logger } from '@rsdoctor/core/logger';
+import { chalk, logger } from '@/logger';
 import { Chunks as ChunksBuildUtils } from '@/build-utils/build';
 import {
   internalPluginTapPreOptions,

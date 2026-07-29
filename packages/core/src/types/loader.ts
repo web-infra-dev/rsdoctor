@@ -1,4 +1,4 @@
-import { Loader } from '@rsdoctor/core/common';
+import { Loader } from '@rsdoctor/shared/common-browser';
 
 export interface ProxyLoaderInternalOptions {
   cwd: string;

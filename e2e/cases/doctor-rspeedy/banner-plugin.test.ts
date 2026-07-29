@@ -1,14 +1,16 @@
 import { expect, test } from '@playwright/test';
-import { getSDK } from '@rsdoctor/core/plugins';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import path from 'path';
 import { createStubRspeedy } from './rspeedy';
-import { RsdoctorRspackPlugin } from '@rsdoctor/core/rspack-plugin';
 
 test.afterEach(async ({ page }) => {
   await page.close();
 });
 
 test('rspack plugin intercept', async () => {
+  const plugin = new RsdoctorRspackPlugin({
+    disableClientServer: true,
+  });
   const rspeedy = await createStubRspeedy({
     source: {
       entry: { main: path.join(__dirname, './fixtures/index.tsx') },
@@ -19,14 +21,7 @@ test('rspack plugin intercept', async () => {
           ...config.optimization,
           concatenateModules: false,
         };
-        appendPlugins(
-          new RsdoctorRspackPlugin({
-            disableClientServer: true,
-            supports: {
-              banner: true,
-            },
-          }),
-        );
+        appendPlugins(plugin);
         return config;
       },
     },
@@ -34,7 +29,6 @@ test('rspack plugin intercept', async () => {
   process.env.RSDOCTOR = 'true';
   await rspeedy.build();
 
-  const sdk = getSDK();
-  const datas = sdk.getStoreData();
+  const datas = plugin.sdk.getStoreData();
   expect(datas.moduleGraph.modules.length).toBeGreaterThan(70);
 });

@@ -4,7 +4,7 @@ import os from 'os';
 import gp from 'get-port';
 import { execFileSync } from 'child_process';
 import { Thirdparty } from '@rsdoctor/shared/types';
-import { Algorithm } from '@rsdoctor/core/common';
+import { Algorithm } from '@rsdoctor/shared/common-browser';
 
 // see https://neo4j.com/developer/kb/list-of-restricted-ports-in-browsers
 const RESTRICTED_PORTS = [3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669];

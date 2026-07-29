@@ -1,4 +1,4 @@
-import type { ECMAVersion } from '@rsdoctor/core/rule-utils';
+import type { ECMAVersion } from '@/rule-utils';
 
 export function getVersionNumber(ECMAString: ECMAVersion) {
   const version = ECMAString.match(/\d/);

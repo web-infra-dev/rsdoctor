@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Time } from '../../../src/common';
+import { Time } from '@rsdoctor/shared/common-browser';
 
 describe('test src/common/time.ts', () => {
   it('toFixedDigits', () => {

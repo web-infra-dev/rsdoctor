@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import zlib from 'node:zlib';
 import { tmpdir } from 'os';
 import { describe, it, expect, afterEach } from '@rstest/core';
-import { File } from '@rsdoctor/core/build-utils';
+import { File } from '@/build-utils';
 import { createSDK, type MockSDKResponse } from '../../utils';
 
 /**
@@ -43,7 +43,7 @@ describe('writePieces shard file integrity', () => {
       ],
     }));
 
-    await target.sdk.saveManifest({ loader: loaderData } as any, {});
+    await target.sdk.saveManifest({ loader: loaderData }, {});
 
     const loaderDir = path.join(outputDir, 'loader');
     expect(fs.existsSync(loaderDir)).toBe(true);
@@ -93,7 +93,7 @@ describe('writePieces shard file integrity', () => {
       },
     ];
 
-    await target.sdk.saveManifest({ loader: loaderData } as any, {});
+    await target.sdk.saveManifest({ loader: loaderData }, {});
 
     const loaderDir = path.join(outputDir, 'loader');
     expect(fs.existsSync(loaderDir)).toBe(true);

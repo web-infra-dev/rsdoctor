@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, afterEach, beforeEach } from '@rstest/core';
-import { File, Server } from '@rsdoctor/core/build-utils';
+import { File, Server } from '@/build-utils';
 import { Common, SDK } from '@rsdoctor/shared/types';
 import { request } from 'http';
 import { tmpdir } from 'os';
@@ -7,7 +7,7 @@ import path from 'node:path';
 import { RsdoctorSDK } from '../../src/sdk';
 
 export interface MockSDKResponse {
-  sdk: SDK.RsdoctorSDKInstance;
+  sdk: RsdoctorSDK;
   server: SDK.RsdoctorServerInstance;
   // get<T extends boolean = false>(pathname: string, toJson?: T): Promise<T extends true ? object : string>;
   get<T extends SDK.ServerAPI.API>(
@@ -159,13 +159,13 @@ export function setupSDK(config?: SDK.SDKOptionsType) {
   return new Proxy(
     {},
     {
-      get(trap, p, receiver) {
+      get(_target, p, receiver) {
         return Reflect.get(target, p, receiver);
       },
-      set(trap, key, value, receiver) {
+      set(_target, key, value, receiver) {
         return Reflect.set(target, key, value, receiver);
       },
-      defineProperty(trap, p, attrs) {
+      defineProperty(_target, p, attrs) {
         return Reflect.defineProperty(target, p, attrs);
       },
     },

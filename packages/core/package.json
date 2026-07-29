@@ -19,57 +19,9 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./build-utils": {
-      "types": "./dist/build-utils/index.d.ts",
-      "default": "./dist/build-utils/index.js"
-    },
-    "./collection": {
-      "types": "./dist/collection.d.ts",
-      "default": "./dist/collection.js"
-    },
-    "./common": {
-      "types": "./dist/common/index.d.ts",
-      "default": "./dist/common/index.js"
-    },
-    "./common-browser": {
-      "types": "./dist/common-browser.d.ts",
-      "default": "./dist/common-browser.js"
-    },
-    "./graph": {
-      "types": "./dist/graph/index.d.ts",
-      "default": "./dist/graph/index.js"
-    },
-    "./error": {
-      "types": "./dist/error/index.d.ts",
-      "default": "./dist/error/index.js"
-    },
-    "./logger": {
-      "types": "./dist/logger.d.ts",
-      "default": "./dist/logger.js"
-    },
-    "./sdk": {
-      "types": "./dist/sdk.d.ts",
-      "default": "./dist/sdk.js"
-    },
-    "./plugins": {
-      "types": "./dist/inner-plugins/index.d.ts",
-      "default": "./dist/inner-plugins/index.js"
-    },
-    "./rspack-plugin": {
-      "types": "./dist/rspack-plugin/index.d.ts",
-      "default": "./dist/rspack-plugin/index.js"
-    },
-    "./rules": {
-      "types": "./dist/rules/index.d.ts",
-      "default": "./dist/rules/index.js"
-    },
-    "./rule-utils": {
-      "types": "./dist/rule-utils/index.d.ts",
-      "default": "./dist/rule-utils/index.js"
-    },
-    "./types": {
-      "types": "./dist/types/index.d.ts",
-      "default": "./dist/types/index.js"
+    "./proxy-loader": {
+      "types": "./dist/proxy-loader.d.ts",
+      "default": "./dist/proxy-loader.js"
     }
   },
   "typesVersions": {
@@ -77,44 +29,8 @@
       ".": [
         "./dist/index.d.ts"
       ],
-      "build-utils": [
-        "./dist/build-utils/index.d.ts"
-      ],
-      "collection": [
-        "./dist/collection.d.ts"
-      ],
-      "common": [
-        "./dist/common/index.d.ts"
-      ],
-      "common-browser": [
-        "./dist/common-browser.d.ts"
-      ],
-      "graph": [
-        "./dist/graph/index.d.ts"
-      ],
-      "error": [
-        "./dist/error/index.d.ts"
-      ],
-      "logger": [
-        "./dist/logger.d.ts"
-      ],
-      "sdk": [
-        "./dist/sdk.d.ts"
-      ],
-      "plugins": [
-        "./dist/inner-plugins/index.d.ts"
-      ],
-      "rspack-plugin": [
-        "./dist/rspack-plugin/index.d.ts"
-      ],
-      "rules": [
-        "./dist/rules/index.d.ts"
-      ],
-      "rule-utils": [
-        "./dist/rule-utils/index.d.ts"
-      ],
-      "types": [
-        "./dist/types/index.d.ts"
+      "proxy-loader": [
+        "./dist/proxy-loader.d.ts"
       ]
     }
   },

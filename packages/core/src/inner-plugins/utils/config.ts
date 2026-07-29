@@ -1,5 +1,5 @@
 import { Config, Linter, Plugin, SDK } from '@rsdoctor/shared/types';
-import { chalk, logger } from '@rsdoctor/core/logger';
+import { chalk, logger } from '@/logger';
 import assert from 'assert';
 import {
   convertReportCodeTypeObject,

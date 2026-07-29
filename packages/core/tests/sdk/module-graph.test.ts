@@ -1,7 +1,7 @@
 import path from 'path';
 import { expect, describe, it } from '@rstest/core';
 import type { SDK } from '@rsdoctor/shared/types';
-import { Module, ModuleGraph, PackageGraph } from '@rsdoctor/core/graph';
+import { Module, ModuleGraph, PackageGraph } from '@rsdoctor/shared/graph';
 
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, 'fixture', ...paths);

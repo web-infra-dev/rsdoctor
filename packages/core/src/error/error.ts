@@ -1,7 +1,7 @@
 import { stripVTControlCharacters } from 'node:util';
 import { codeFrameColumns } from '@babel/code-frame';
-import { isEqual } from '@rsdoctor/core/collection';
-import { Lodash } from '@rsdoctor/core/common';
+import { isEqual } from '@rsdoctor/shared/collection';
+import { Lodash } from '@rsdoctor/shared/common-browser';
 import { Err, Rule } from '@rsdoctor/shared/types';
 import { createColors } from 'picocolors';
 import { transform } from './transform';

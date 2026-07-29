@@ -1,6 +1,6 @@
 import { AsyncSeriesHook, SyncHook } from '@rspack/lite-tapable';
 import { describe, expect, it, rs } from '@rstest/core';
-import { ModuleGraph } from '@rsdoctor/core/graph';
+import { ModuleGraph } from '@rsdoctor/shared/graph';
 import type { Plugin } from '@rsdoctor/shared/types';
 import { ensureModulesChunksGraphFn } from '@/inner-plugins/plugins/ensureModulesChunkGraph';
 import { getRspackNativePlugin } from '@/inner-plugins/plugins/rspack';

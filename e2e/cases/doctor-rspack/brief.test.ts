@@ -1,17 +1,10 @@
 import { expect, test, chromium } from '@playwright/test';
-import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
-import { Compiler } from '@rspack/core';
 import path from 'path';
 import fs from 'fs';
 import { createRsdoctorPlugin } from './test-utils';
 
-let reportLoaderStartOrEndTimes = 0;
-
-async function rspackCompile(
-  _tapName: string,
-  compile: typeof compileByRspack,
-) {
+async function rspackCompile(compile: typeof compileByRspack) {
   const file = path.resolve(__dirname, './fixtures/a.js');
   const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
 
@@ -60,44 +53,6 @@ async function rspackCompile(
       createRsdoctorPlugin({
         mode: 'brief',
       }),
-      {
-        name: 'Foo',
-        apply(compiler: Compiler) {
-          compiler.hooks.beforeRun.tapPromise(
-            { name: 'Foo', stage: 99999 },
-            async () => {
-              const sdk = getSDK();
-              if (!sdk) {
-                throw new Error('SDK is undefined');
-              }
-              setSDK(
-                // @ts-ignore
-                new Proxy(sdk, {
-                  get(target, key, receiver) {
-                    switch (key) {
-                      case 'reportLoader':
-                        return null;
-                      case 'reportLoaderStartOrEnd':
-                        return (_data: any) => {
-                          // rslint-disable-next-line @typescript-eslint/no-unused-vars
-                          reportLoaderStartOrEndTimes += 1;
-                        };
-                      default:
-                        return Reflect.get(target, key, receiver);
-                    }
-                  },
-                  set(target, key, value, receiver) {
-                    return Reflect.set(target, key, value, receiver);
-                  },
-                  defineProperty(target, p, attrs) {
-                    return Reflect.defineProperty(target, p, attrs);
-                  },
-                }),
-              );
-            },
-          );
-        },
-      },
     ],
   });
 
@@ -109,8 +64,7 @@ test.afterEach(async ({ page }) => {
 });
 
 test('rspack brief mode', async () => {
-  const tapName = 'Foo';
-  await rspackCompile(tapName, compileByRspack);
+  await rspackCompile(compileByRspack);
 
   const reportPath = path.join(__dirname, './dist/brief/rsdoctor-report.html');
 

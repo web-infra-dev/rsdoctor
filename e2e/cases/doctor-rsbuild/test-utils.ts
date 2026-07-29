@@ -1,13 +1,13 @@
 import {
   RsdoctorRspackMultiplePlugin,
   RsdoctorRspackPlugin,
-} from '@rsdoctor/core/rspack-plugin';
+} from '@rsdoctor/core';
 import type {
   RsdoctorMultiplePluginOptions,
   RsdoctorRspackPluginOptions,
 } from '@rsdoctor/core';
 import { Linter } from '@rsdoctor/shared/types';
-import { File } from '@rsdoctor/core/build-utils';
+import { rm } from 'node:fs/promises';
 import { tmpdir } from 'os';
 import path from 'path';
 
@@ -32,7 +32,7 @@ export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
     async () => {
       plugin.sdk.setOutputDir(outdir);
       try {
-        await File.fse.remove(plugin.sdk.outputDir);
+        await rm(plugin.sdk.outputDir, { recursive: true, force: true });
       } catch (e) {
         console.error(e);
       }
@@ -63,7 +63,7 @@ export function createRsdoctorMultiPlugin<T extends Linter.ExtendRuleData[]>(
     async () => {
       plugin.sdk.setOutputDir(outdir);
       try {
-        await File.fse.remove(plugin.sdk.outputDir);
+        await rm(plugin.sdk.outputDir, { recursive: true, force: true });
       } catch (e) {
         console.error(e);
       }

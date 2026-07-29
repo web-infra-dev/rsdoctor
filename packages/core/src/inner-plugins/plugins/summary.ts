@@ -1,8 +1,8 @@
-import { Summary } from '@rsdoctor/core/common';
-import { minBy, sumBy } from '@rsdoctor/core/collection';
+import { Summary } from '@rsdoctor/shared/common-browser';
+import { minBy, sumBy } from '@rsdoctor/shared/collection';
 import type { Plugin, SDK } from '@rsdoctor/shared/types';
 import { InternalBasePlugin } from './base';
-import { time, timeEnd } from '@rsdoctor/core/logger';
+import { time, timeEnd } from '@/logger';
 
 export class InternalSummaryPlugin<
   T extends Plugin.BaseCompiler,

@@ -1,4 +1,4 @@
-import { parser, Node } from '@rsdoctor/core/rule-utils';
+import { parser, Node } from '@/rule-utils';
 import { SDK } from '@rsdoctor/shared/types';
 function getDefaultExportIdentifier(
   node: Node.ExportDefaultDeclaration,

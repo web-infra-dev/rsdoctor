@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Graph } from '../../../src/common';
+import * as Graph from '../src/common/graph';
 
 describe('test src/common/graph.ts', () => {
   it('formatAssetName', () => {

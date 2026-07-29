@@ -1,6 +1,6 @@
 import { describe, it, expect, rs } from '@rstest/core';
+import { Manifest as ManifestShared } from '@rsdoctor/shared/common-browser';
 import { Manifest, SDK } from '@rsdoctor/shared/types';
-import { Manifest as ManifestShared } from '@rsdoctor/core/common';
 import { request } from 'http';
 import { cwd, setupSDK, type MockSDKResponse } from '../../utils';
 import { getLocalIpAddress } from '../../../../src/sdk/server/utils';

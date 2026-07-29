@@ -1,16 +1,16 @@
-import { omit } from '@rsdoctor/core/collection';
+import { omit } from '@rsdoctor/shared/collection';
 import path from 'path';
-import { logger } from '@rsdoctor/core/logger';
-import { Loader } from '@rsdoctor/core/common';
-import { Time } from '@rsdoctor/core/common';
+import { logger } from '@/logger';
+import { Loader } from '@rsdoctor/shared/common-browser';
+import { Time } from '@rsdoctor/shared/common-browser';
 import { SDK, Plugin } from '@rsdoctor/shared/types';
-import { DevToolError } from '@rsdoctor/core/error';
+import { DevToolError } from '@/error';
 import { getSDK } from './sdk';
 import { checkCirclePath } from './circleDetect';
 import { ProxyLoaderInternalOptions, ProxyLoaderOptions } from '../../types';
 import { Utils as BuildUtils } from '@/build-utils/build';
 import { isESMLoader, parseQuery } from '@/build-utils/build/utils';
-import { Fetch, Lodash } from '@rsdoctor/core/common';
+import { Fetch, Lodash } from '@rsdoctor/shared/common-browser';
 
 export function getInternalLoaderOptions(
   loaderContext: Plugin.LoaderContext<ProxyLoaderOptions>,

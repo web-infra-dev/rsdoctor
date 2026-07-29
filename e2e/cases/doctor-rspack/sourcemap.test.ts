@@ -1,27 +1,26 @@
 import { expect, test } from '@playwright/test';
-import { getSDK } from '@rsdoctor/core/plugins';
 import path from 'path';
 import { compileByRspack } from '@scripts/test-helper';
 import { createRsdoctorPlugin } from './test-utils';
 
-async function rspackCompile(_tapName: string) {
+async function rspackCompile() {
   const file = path.resolve(__dirname, './fixtures/a.js');
+  const plugin = createRsdoctorPlugin({});
 
   await compileByRspack(file, {
     output: {
       path: path.join(__dirname, 'dist'),
     },
-    plugins: [createRsdoctorPlugin({})],
+    plugins: [plugin],
   });
+
+  return plugin.sdk;
 }
 
 test('rspack sourcemap tool', async () => {
-  const tapName = 'SourcemapTest';
-  await rspackCompile(tapName);
-  const sdk = getSDK();
-  expect(sdk).toBeDefined();
+  const sdk = await rspackCompile();
 
-  const res = sdk!.getStoreData();
+  const res = sdk.getStoreData();
   const modules = res.moduleGraph.modules;
   // Verify sourcemap data exists
   expect(modules).toBeDefined();
@@ -33,8 +32,9 @@ test('rspack sourcemap tool', async () => {
   expect(modules[1].size.parsedSize).toBeGreaterThan(0);
 });
 
-async function rspackCompile2(_tapName: string) {
+async function rspackCompile2() {
   const file = path.resolve(__dirname, './fixtures/a.js');
+  const plugin = createRsdoctorPlugin({});
 
   await compileByRspack(file, {
     output: {
@@ -42,17 +42,16 @@ async function rspackCompile2(_tapName: string) {
       devtoolModuleFilenameTemplate:
         'webpack://[namespace]/[resource-path]?[loaders]',
     },
-    plugins: [createRsdoctorPlugin({})],
+    plugins: [plugin],
   });
+
+  return plugin.sdk;
 }
 
 test('rspack sourcemap tool at special devtoolModuleFilenameTemplate', async () => {
-  const tapName = 'SourcemapTest';
-  await rspackCompile2(tapName);
-  const sdk = getSDK();
-  expect(sdk).toBeDefined();
+  const sdk = await rspackCompile2();
 
-  const res = sdk!.getStoreData();
+  const res = sdk.getStoreData();
   const modules = res.moduleGraph.modules;
   // Verify sourcemap data exists
   expect(modules).toBeDefined();
@@ -65,25 +64,25 @@ test('rspack sourcemap tool at special devtoolModuleFilenameTemplate', async () 
 });
 
 // Test for assetsWithoutSourceMap functionality
-async function rspackCompileWithoutSourceMap(_tapName: string) {
+async function rspackCompileWithoutSourceMap() {
   const file = path.resolve(__dirname, './fixtures/a.js');
+  const plugin = createRsdoctorPlugin({});
 
   await compileByRspack(file, {
     output: {
       path: path.join(__dirname, 'dist'),
     },
     // No devtool, so no sourcemaps will be generated
-    plugins: [createRsdoctorPlugin({})],
+    plugins: [plugin],
   });
+
+  return plugin.sdk;
 }
 
 test('rspack handles assets without sourcemap correctly', async () => {
-  const tapName = 'AssetsWithoutSourceMapTest';
-  await rspackCompileWithoutSourceMap(tapName);
-  const sdk = getSDK();
-  expect(sdk).toBeDefined();
+  const sdk = await rspackCompileWithoutSourceMap();
 
-  const res = sdk!.getStoreData();
+  const res = sdk.getStoreData();
   const modules = res.moduleGraph.modules;
   // Verify modules are still processed even without sourcemaps
   expect(modules).toBeDefined();

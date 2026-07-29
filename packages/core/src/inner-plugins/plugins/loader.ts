@@ -1,13 +1,15 @@
 import { Manifest, Plugin } from '@rsdoctor/shared/types';
-import { Loader } from '@rsdoctor/core/common';
-import { isEqual, omit } from '@rsdoctor/core/collection';
+import { createRequire } from 'node:module';
+import { isEqual, omit } from '@rsdoctor/shared/collection';
 import type { LoaderContext, NormalModule } from '@rspack/core';
 import { interceptLoader } from '../utils';
 import { InternalBasePlugin } from './base';
 import type { ProxyLoaderOptions } from '../../types';
-import { time, timeEnd } from '@rsdoctor/core/logger';
-import { fileURLToPath } from 'url';
+import { time, timeEnd } from '@/logger';
 import { safeCloneDeep } from '../utils/plugin-common';
+import { Loader } from '@rsdoctor/shared/common-browser';
+
+const require = createRequire(import.meta.url);
 
 type MutableNormalModule = Omit<NormalModule, 'loaders'> & {
   loaders: Array<{ loader: string; options?: unknown }>;
@@ -23,9 +25,8 @@ export class InternalLoaderPlugin<
 > extends InternalBasePlugin<T> {
   public readonly name = 'loader';
 
-  public readonly internalLoaderPath = fileURLToPath(
-    new URL('../loaders/proxy.js', import.meta.url),
-  );
+  public readonly internalLoaderPath =
+    require.resolve('@rsdoctor/core/proxy-loader');
 
   public apply(compiler: T) {
     time('InternalLoaderPlugin.apply');

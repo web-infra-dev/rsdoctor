@@ -1,12 +1,10 @@
 import { expect, test } from '@playwright/test';
 import path from 'path';
 import fs from 'fs/promises';
-import { getSDK, setSDK } from '@rsdoctor/core/plugins';
 import { createRsdoctorPlugin } from './test-utils';
 
 // Dynamic imports to avoid rspack binding issues
 let compileByRspack: any;
-let Compiler: any;
 const originalEnvRSTEST = process.env.RSTEST;
 const rspackOutputDir = path.join(__dirname, './dist');
 const manifestFileName = 'rsdoctor-data.json';
@@ -14,13 +12,12 @@ const manifestFileName = 'rsdoctor-data.json';
 try {
   const testHelper = require('@scripts/test-helper');
   compileByRspack = testHelper.compileByRspack;
-  Compiler = require('@rspack/core').Compiler;
 } catch {
   // Skip tests if rspack is not available
   test.skip(true, 'Rspack binding not available, skipping all tests');
 }
 
-async function rspackCompile(_tapName: string, compile: any) {
+async function rspackCompile(compile: any) {
   const file = path.resolve(__dirname, './fixtures/c.js');
 
   const res = await compile(file, {
@@ -62,40 +59,6 @@ async function rspackCompile(_tapName: string, compile: any) {
         },
         port: 8681,
       }),
-      {
-        name: 'Foo',
-        apply(compiler: any) {
-          compiler.hooks.beforeRun.tapPromise(
-            { name: 'Foo', stage: 99999 },
-            async () => {
-              const sdk = getSDK();
-              if (!sdk) {
-                throw new Error('SDK is undefined');
-              }
-              setSDK(
-                new Proxy(sdk as object, {
-                  get(target, key, receiver) {
-                    switch (key) {
-                      case 'reportLoader':
-                        return null;
-                      case 'reportLoaderStartOrEnd':
-                        return (_data: any) => {};
-                      default:
-                        return Reflect.get(target, key, receiver);
-                    }
-                  },
-                  set(target, key, value, receiver) {
-                    return Reflect.set(target, key, value, receiver);
-                  },
-                  defineProperty(target, p, attrs) {
-                    return Reflect.defineProperty(target, p, attrs);
-                  },
-                }) as any,
-              );
-            },
-          );
-        },
-      },
     ],
   });
 
@@ -112,12 +75,11 @@ test.describe('Uploader Integration Tests', () => {
     process.env.RSTEST = 'true';
 
     // Skip test if rspack binding is not available
-    if (!compileByRspack || !Compiler) {
+    if (!compileByRspack) {
       test.skip(true, 'Rspack binding not available, skipping test');
       return;
     }
-    const tapName = 'Foo';
-    await rspackCompile(tapName, compileByRspack);
+    await rspackCompile(compileByRspack);
 
     manifestPath = path.resolve(rspackOutputDir, manifestFileName);
 
@@ -137,7 +99,7 @@ test.describe('Uploader Integration Tests', () => {
 
   test('should upload and analyze real build manifest', async ({ page }) => {
     // Skip test if rspack binding is not available
-    if (!compileByRspack || !Compiler) {
+    if (!compileByRspack) {
       test.skip(true, 'Rspack binding not available, skipping test');
       return;
     }

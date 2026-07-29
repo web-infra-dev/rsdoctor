@@ -1,5 +1,5 @@
 import { Linter, SDK, Rule as RuleTypes } from '@rsdoctor/shared/types';
-import { Lodash } from '@rsdoctor/core/common';
+import { Lodash } from '@rsdoctor/shared/common-browser';
 import { LinterType } from './linter';
 import { noop, toSeverity } from './utils';
 
@@ -173,8 +173,7 @@ export function defineRule<
   T = Linter.DefaultRuleConfig,
 >(
   ruleCreator:
-    | Linter.RuleConstructor<Title, T>
-    | Linter.ExtendRuleConstructor<Title, T>,
+    Linter.RuleConstructor<Title, T> | Linter.ExtendRuleConstructor<Title, T>,
 ) {
   return ruleCreator();
 }

@@ -1,11 +1,9 @@
 import { exec } from 'node:child_process';
-import { dirname, join } from 'node:path';
+import { join } from 'node:path';
 import { promisify } from 'node:util';
-import { fileURLToPath } from 'node:url';
-import { logger } from '@rsdoctor/core/logger';
+import { logger } from '@/logger';
 
 const execAsync = promisify(exec);
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const supportedChromiumBrowsers = [
   'Google Chrome Canary',
@@ -53,7 +51,7 @@ export async function openBrowser(
             needEncodeURI ? encodeURI(url) : url
           }" "${targetBrowser}"`,
           {
-            cwd: join(__dirname, '../../../static'),
+            cwd: join(__dirname, '../static'),
           },
         );
         return true;

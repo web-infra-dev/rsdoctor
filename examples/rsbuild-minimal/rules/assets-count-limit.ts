@@ -1,4 +1,4 @@
-import { defineRule } from '@rsdoctor/core/rules';
+import { defineRule } from '@rsdoctor/core';
 
 export const AssetsCountLimit = defineRule(() => ({
   meta: {

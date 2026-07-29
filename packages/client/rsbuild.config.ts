@@ -98,7 +98,7 @@ export default defineConfig(({ env }) => {
     },
 
     performance: {
-      buildCache: false,
+      buildCache: true,
       chunkSplit: {
         strategy: 'custom',
         splitChunks: {
@@ -149,11 +149,11 @@ export default defineConfig(({ env }) => {
     },
 
     tools: {
-      bundlerChain: (chainConfig) => {
+      bundlerChain: async (chainConfig) => {
         if (ENABLE_DEVTOOLS_PLUGIN) {
           chainConfig.optimization.set('concatenateModules', false);
           const { RsdoctorRspackPlugin } =
-            require('../core/dist/rspack-plugin') as typeof import('../core/dist/rspack-plugin');
+            (await import('../core/dist/index.js')) as typeof import('@rsdoctor/core');
 
           class StatsWriter {
             apply(compiler: Rspack.Compiler) {

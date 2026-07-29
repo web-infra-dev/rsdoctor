@@ -4,7 +4,7 @@ import {
   parseLocation,
   extractCodeFromSourceLines,
 } from '@rsdoctor/shared/graph';
-import { readPackageJson } from '../../../shared/src/graph/graph/package-graph/utils';
+import { readPackageJson } from '@rsdoctor/shared/graph';
 import { join } from 'path';
 import { readFileSync } from 'node:fs';
 /**
