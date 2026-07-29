@@ -6,7 +6,6 @@ import type { Program } from 'estree';
 import { Dependency } from './dependency';
 import { Statement } from './statement';
 import { getModuleName } from './utils';
-import { gzipSync } from 'node:zlib';
 
 let id = 1;
 
@@ -271,19 +270,8 @@ export class Module implements SDK.ModuleInstance {
     size.sourceSize = input.sourceSize ?? size.sourceSize;
     size.transformedSize = input.transformedSize ?? size.transformedSize;
     size.parsedSize = input.parsedSize ?? size.parsedSize;
-    // gzipSize: if provided, use it; else, try to compute from parsedSource/source
     if (typeof input.gzipSize === 'number') {
       size.gzipSize = input.gzipSize;
-    } else {
-      // Try to compute gzip size from parsedSource or source
-      const code = this.source.parsedSource || this.source.source;
-      if (code && typeof code === 'string' && code.length > 0) {
-        try {
-          size.gzipSize = gzipSync(code, { level: 9 }).length;
-        } catch {
-          size.gzipSize = 0;
-        }
-      }
     }
   }
 

@@ -2,12 +2,33 @@ import path from 'path';
 import { logger, time, timeEnd } from '@rsdoctor/utils/logger';
 import { SDK } from '@rsdoctor/types';
 import { Lodash } from '@rsdoctor/utils/common';
-import { gzipSync } from 'node:zlib';
 import { ParseBundle } from '@/types/transform';
+import { DEFAULT_GZIP_LEVEL, getGzipSize } from '../../gzip';
 
 export type ParsedModuleSizeData = {
   [x: string]: { size: number; sizeConvert: string; content: string };
 };
+
+interface GzipOptions {
+  gzip?: boolean;
+  gzipLevel?: number;
+}
+
+function tryGetGzipSize(
+  content: string | undefined,
+  { gzip = true, gzipLevel = DEFAULT_GZIP_LEVEL }: GzipOptions,
+) {
+  if (!gzip || !content) {
+    return undefined;
+  }
+
+  try {
+    return getGzipSize(content, gzipLevel);
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * The following code is modified based on
  * https://github.com/webpack-contrib/webpack-bundle-analyzer/blob/8a3d3f0f40010f2b41ccd28519eda5a44e13da3e/src/analyzer.js#L20
@@ -23,23 +44,21 @@ export async function getAssetsModulesData(
   bundleDir: string,
   opts: {
     parseBundle?: ParseBundle;
-  },
+  } & GzipOptions,
   sourceMapSets: Map<string, string> = new Map(),
   assetsWithoutSourceMap?: Set<string>,
 ) {
+  const gzipOptions = {
+    gzip: opts.gzip,
+    gzipLevel: opts.gzipLevel,
+  };
+
   // Parse assets with sourcemap using sourcemap data
   if (sourceMapSets.size > 0) {
     time(`Start Parse bundle by sourcemap.`);
     for (const [modulePath, codes] of sourceMapSets.entries()) {
       const modules = moduleGraph.getModuleByFile(modulePath);
-      let gzipSize = undefined;
-      try {
-        if (codes && typeof codes === 'string' && codes.length > 0) {
-          gzipSize = gzipSync(codes, { level: 9 }).length;
-        }
-      } catch {
-        // Ignore errors
-      }
+      const gzipSize = tryGetGzipSize(codes, gzipOptions);
       for (const module of modules) {
         module?.setSize({
           parsedSize: codes.length,
@@ -117,33 +136,39 @@ export async function getAssetsModulesData(
       }
 
       if (parsedModules) {
-        transformAssetsModulesData(parsedModules, moduleGraph);
+        transformAssetsModulesData(parsedModules, moduleGraph, gzipOptions);
       }
     }
     timeEnd(`Start Parse bundle by AST.`);
+  }
+
+  if (gzipOptions.gzip !== false) {
+    for (const module of moduleGraph.getModules()) {
+      if (module.getSize().gzipSize > 0) {
+        continue;
+      }
+
+      const source = module.getSource();
+      const gzipSize = tryGetGzipSize(
+        source.parsedSource || source.source,
+        gzipOptions,
+      );
+      if (gzipSize !== undefined) {
+        module.setSize({ gzipSize });
+      }
+    }
   }
 }
 
 export function transformAssetsModulesData(
   parsedModulesData: ParsedModuleSizeData,
   moduleGraph: SDK.ModuleGraphInstance,
+  gzipOptions: GzipOptions = {},
 ) {
   if (!moduleGraph) return;
   Object.entries(parsedModulesData).forEach(([moduleId, parsedData]) => {
     const module = moduleGraph.getModuleByWebpackId(moduleId ?? '');
-    // 计算 gzip size
-    let gzipSize = undefined;
-    try {
-      if (
-        parsedData?.content &&
-        typeof parsedData.content === 'string' &&
-        parsedData.content.length > 0
-      ) {
-        gzipSize = gzipSync(parsedData.content, { level: 9 }).length;
-      }
-    } catch {
-      // Ignore errors
-    }
+    const gzipSize = tryGetGzipSize(parsedData?.content, gzipOptions);
     module?.setSize({
       parsedSize: parsedData?.size,
       gzipSize,

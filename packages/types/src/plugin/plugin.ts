@@ -60,15 +60,42 @@ export interface RsdoctorPluginOptionsNormalized<
   };
   port?: number;
   server: SDK.RsdoctorServerConfig;
-  supports: ISupport;
+  supports: NormalizedSupports;
 }
+
+export type GzipConfig =
+  | boolean
+  | {
+      /**
+       * Gzip compression level used to calculate asset and module gzip sizes.
+       * Must be an integer between 0 and 9.
+       * @default 9
+       */
+      gzipLevel?: number;
+    };
+
+export type NormalizedGzipConfig =
+  | false
+  | {
+      gzipLevel: number;
+    };
 
 interface ISupport {
   banner?: boolean;
   parseBundle?: boolean;
   generateTileGraph?: boolean;
-  gzip?: boolean;
+  /**
+   * Whether and how to calculate gzip sizes for assets and modules.
+   * Set to `false` to disable gzip calculation, `true` to use the default
+   * compression level, or an object to configure `gzipLevel`.
+   * @default true
+   */
+  gzip?: GzipConfig;
 }
+
+type NormalizedSupports = Omit<ISupport, 'gzip'> & {
+  gzip: NormalizedGzipConfig;
+};
 
 interface OutputBaseConfig {
   /**
@@ -97,9 +124,7 @@ export type IReportCodeType = {
 };
 
 export type NewReportCodeType =
-  | 'noModuleSource'
-  | 'noAssetsAndModuleSource'
-  | 'noCode';
+  'noModuleSource' | 'noAssetsAndModuleSource' | 'noCode';
 
 export interface RsdoctorWebpackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
@@ -110,8 +135,7 @@ export interface RsdoctorWebpackPluginOptions<
    * the switch for the Rsdoctor features.
    */
   features?:
-    | RsdoctorWebpackPluginFeatures
-    | Array<keyof RsdoctorWebpackPluginFeatures>;
+    RsdoctorWebpackPluginFeatures | Array<keyof RsdoctorWebpackPluginFeatures>;
 
   /**
    * @deprecated  Use `output.mode` instead, if you're using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead.

@@ -1,5 +1,5 @@
 import { SDK } from '@rsdoctor/types';
-import { gzipSync } from 'node:zlib';
+import { getGzipSize } from '../../gzip';
 let id = 1;
 
 export class Asset implements SDK.AssetInstance {
@@ -51,7 +51,7 @@ export class Asset implements SDK.AssetInstance {
     this.id = id;
   }
 
-  setGzipSize(content: string) {
-    this.gzipSize = gzipSync(content, { level: 9 }).length;
+  setGzipSize(content: string, level?: number) {
+    this.gzipSize = getGzipSize(content, level);
   }
 }

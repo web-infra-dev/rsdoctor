@@ -6,7 +6,7 @@ const COMPRESSIBLE_REGEX =
 export function assetsContents(
   assetMap: Map<string, { content: string }>,
   chunkGraph: SDK.ChunkGraphInstance,
-  supports: Plugin.RsdoctorPluginOptionsNormalized['supports'],
+  gzip: Plugin.NormalizedGzipConfig,
 ) {
   const assets = chunkGraph.getAssets();
   assets.forEach((asset) => {
@@ -15,8 +15,8 @@ export function assetsContents(
     if (content.length > 0 && asset.size === 0) {
       asset.size = Buffer.byteLength(content, 'utf8');
     }
-    if (COMPRESSIBLE_REGEX.test(asset.path) && supports?.gzip) {
-      asset.setGzipSize(content);
+    if (COMPRESSIBLE_REGEX.test(asset.path) && gzip !== false) {
+      asset.setGzipSize(content, gzip.gzipLevel);
     }
   });
 }

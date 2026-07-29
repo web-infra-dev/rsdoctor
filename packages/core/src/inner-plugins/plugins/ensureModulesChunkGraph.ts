@@ -216,6 +216,7 @@ async function doneHandler(
    * Optionally parses bundle if enabled in options.
    */
   const shouldParseBundle = _this.options.supports.parseBundle !== false;
+  const gzip = _this.options.supports.gzip;
   await getModulesInfos(
     compiler,
     _this.modulesGraph,
@@ -223,6 +224,9 @@ async function doneHandler(
     shouldParseBundle,
     _this.sourceMapSets,
     _this.assetsWithoutSourceMap,
+    gzip === false
+      ? { enabled: false }
+      : { enabled: true, level: gzip.gzipLevel },
   );
 
   logger.debug(
@@ -300,6 +304,7 @@ async function getModulesInfos(
   parseBundle: boolean,
   sourceMapSets: Map<string, string>,
   assetsWithoutSourceMap?: Set<string>,
+  gzipOptions?: ChunksBuildUtils.GzipOptions,
 ) {
   if (!moduleGraph) {
     return;
@@ -312,6 +317,7 @@ async function getModulesInfos(
       sourceMapSets,
       parseBundle,
       assetsWithoutSourceMap,
+      gzipOptions,
     );
   } catch {
     // Ignore errors

@@ -6,7 +6,7 @@ import { Badge } from '@theme';
 - **Optional:** `true`
 - **Default:** `undefined`
 
-This option is used to configure whether Rsdoctor enables support for certain detailed feature analysis capabilities, such as whether to enable compatibility with BannerPlugin.
+This option controls detailed analysis behavior, such as BannerPlugin compatibility, bundle parsing, and gzip size calculation.
 
 ## supportsTypes
 
@@ -15,6 +15,11 @@ type ISupport = {
   banner?: boolean;
   parseBundle?: boolean;
   generateTileGraph?: boolean;
+  gzip?:
+    | boolean
+    | {
+        gzipLevel?: number;
+      };
 };
 ```
 
@@ -70,3 +75,32 @@ Disabling the Parse Bundle capability will only affect the visibility of the Bun
     style={{ margin: 'auto' }}
   />
 </div>
+
+## gzip
+
+- **Type:** `boolean | { gzipLevel?: number }`
+- **Default:** `true`
+
+Controls whether Rsdoctor calculates gzip sizes for assets and modules. This calculation only affects the size data in the Rsdoctor report; it does not modify or compress the build output.
+
+Gzip size calculation is enabled by default with a compression level of `9`. Set `gzip` to an object to customize `gzipLevel`, which must be an integer between `0` and `9`:
+
+```ts
+new RsdoctorRspackPlugin({
+  supports: {
+    gzip: {
+      gzipLevel: 6,
+    },
+  },
+});
+```
+
+Set `gzip` to `false` to disable gzip size calculation:
+
+```ts
+new RsdoctorRspackPlugin({
+  supports: {
+    gzip: false,
+  },
+});
+```
