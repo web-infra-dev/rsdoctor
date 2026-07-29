@@ -116,6 +116,7 @@ async function doneHandler(
    * Optionally parses bundle if enabled in options.
    */
   const shouldParseBundle = _this.options.supports.parseBundle !== false;
+  const gzip = _this.options.supports.gzip;
   await getModulesInfos(
     compiler,
     _this.modulesGraph,
@@ -123,10 +124,9 @@ async function doneHandler(
     shouldParseBundle,
     _this.sourceMapSets,
     _this.assetsWithoutSourceMap,
-    {
-      enabled: _this.options.supports.gzip !== false,
-      level: _this.options.gzipLevel,
-    },
+    gzip === false
+      ? { enabled: false }
+      : { enabled: true, level: gzip.gzipLevel },
   );
 
   // Report graphs to SDK for further processing or client display

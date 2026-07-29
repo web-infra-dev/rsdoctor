@@ -60,18 +60,41 @@ export interface RsdoctorPluginOptionsNormalized<
   };
   port?: number;
   server: SDK.RsdoctorServerConfig;
-  supports: ISupport;
+  supports: NormalizedSupports;
 }
+
+export type GzipConfig =
+  | boolean
+  | {
+      /**
+       * Gzip compression level used to calculate asset and module gzip sizes.
+       * Must be an integer between 0 and 9.
+       * @default 9
+       */
+      gzipLevel?: number;
+    };
+
+export type NormalizedGzipConfig =
+  | false
+  | {
+      gzipLevel: number;
+    };
 
 interface ISupport {
   parseBundle?: boolean;
   generateTileGraph?: boolean;
   /**
-   * Whether to calculate gzip sizes for assets and modules.
+   * Whether and how to calculate gzip sizes for assets and modules.
+   * Set to `false` to disable gzip calculation, `true` to use the default
+   * compression level, or an object to configure `gzipLevel`.
    * @default true
    */
-  gzip?: boolean;
+  gzip?: GzipConfig;
 }
+
+type NormalizedSupports = Omit<ISupport, 'gzip'> & {
+  gzip: NormalizedGzipConfig;
+};
 
 interface OutputBaseConfig {
   /**
@@ -145,13 +168,6 @@ export interface RsdoctorRspackPluginOptions<
 
   /** Whether to turn on specific analysis capabilities. */
   supports?: ISupport;
-
-  /**
-   * Gzip compression level used to calculate asset and module gzip sizes.
-   * Must be an integer between 0 and 9.
-   * @default 9
-   */
-  gzipLevel?: number;
 
   /**
    * The port of the Rsdoctor server.

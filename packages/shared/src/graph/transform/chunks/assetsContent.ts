@@ -1,5 +1,4 @@
 import { SDK, Plugin } from '../../../types';
-import { DEFAULT_GZIP_LEVEL } from '../../../common/gzip';
 
 const COMPRESSIBLE_REGEX =
   /\.(?:js|css|html|json|svg|txt|xml|xhtml|wasm|manifest)$/i;
@@ -7,8 +6,7 @@ const COMPRESSIBLE_REGEX =
 export function assetsContents(
   assetMap: Map<string, { content: string }>,
   chunkGraph: SDK.ChunkGraphInstance,
-  supports: Plugin.RsdoctorPluginOptionsNormalized['supports'],
-  gzipLevel = DEFAULT_GZIP_LEVEL,
+  gzip: Plugin.NormalizedGzipConfig,
 ) {
   const assets = chunkGraph.getAssets();
   assets.forEach((asset) => {
@@ -17,8 +15,8 @@ export function assetsContents(
     if (content.length > 0 && asset.size === 0) {
       asset.size = Buffer.byteLength(content, 'utf8');
     }
-    if (COMPRESSIBLE_REGEX.test(asset.path) && supports?.gzip) {
-      asset.setGzipSize(content, gzipLevel);
+    if (COMPRESSIBLE_REGEX.test(asset.path) && gzip !== false) {
+      asset.setGzipSize(content, gzip.gzipLevel);
     }
   });
 }
