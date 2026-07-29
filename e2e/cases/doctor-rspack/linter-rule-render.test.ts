@@ -1,19 +1,13 @@
 import { test, chromium } from '@playwright/test';
-import { getSDK, setSDK } from '@rsdoctor/core';
 import { compileByRspack } from '@scripts/test-helper';
 import * as core from '@actions/core';
-import { Compiler } from '@rspack/core';
 import path from 'path';
 import fs from 'fs';
 import { createRsdoctorPlugin } from './test-utils';
 
-let reportLoaderStartOrEndTimes = 0;
 const ecmaVersion = 3;
 
-async function rspackCompile(
-  _tapName: string,
-  compile: typeof compileByRspack,
-) {
+async function rspackCompile(compile: typeof compileByRspack) {
   const file = path.resolve(__dirname, './fixtures/c.js');
 
   const res = await compile(file, {
@@ -58,43 +52,6 @@ async function rspackCompile(
           },
         },
       }),
-      {
-        name: 'Foo',
-        apply(compiler: Compiler) {
-          compiler.hooks.beforeRun.tapPromise(
-            { name: 'Foo', stage: 99999 },
-            async () => {
-              const sdk = getSDK();
-              if (!sdk) {
-                throw new Error('SDK is undefined');
-              }
-              setSDK(
-                new Proxy(sdk as object, {
-                  get(target, key, receiver) {
-                    switch (key) {
-                      case 'reportLoader':
-                        return null;
-                      case 'reportLoaderStartOrEnd':
-                        return (_data: any) => {
-                          // rslint-disable-next-line @typescript-eslint/no-unused-vars
-                          reportLoaderStartOrEndTimes += 1;
-                        };
-                      default:
-                        return Reflect.get(target, key, receiver);
-                    }
-                  },
-                  set(target, key, value, receiver) {
-                    return Reflect.set(target, key, value, receiver);
-                  },
-                  defineProperty(target, p, attrs) {
-                    return Reflect.defineProperty(target, p, attrs);
-                  },
-                }) as any,
-              );
-            },
-          );
-        },
-      },
     ],
   });
 
@@ -106,8 +63,7 @@ test.afterEach(async ({ page }) => {
 });
 
 test('linter rule render check', async () => {
-  const tapName = 'Foo';
-  await rspackCompile(tapName, compileByRspack);
+  await rspackCompile(compileByRspack);
 
   const reportPath = path.join(
     __dirname,

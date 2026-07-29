@@ -1,20 +1,14 @@
 import { expect, test } from '@playwright/test';
-import { getSDK, setSDK } from '@rsdoctor/core';
 import { compileByRspackLayers } from '@scripts/test-helper';
-import { Compiler } from '@rspack/core';
 import path from 'path';
 import { createRsdoctorPlugin } from './test-utils';
 
-let reportLoaderStartOrEndTimes = 0;
-
-async function rspackCompile(
-  tapName: string,
-  compile: typeof compileByRspackLayers,
-) {
+async function rspackCompile(compile: typeof compileByRspackLayers) {
   const file = path.resolve(__dirname, './fixtures/a.js');
   const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
+  const plugin = createRsdoctorPlugin({});
 
-  const res = await compile(file, {
+  await compile(file, {
     entry: {
       main: {
         import: file,
@@ -103,57 +97,11 @@ async function rspackCompile(
     },
     plugins: [
       // @ts-ignore
-      createRsdoctorPlugin({}),
-      {
-        name: 'Foo',
-        apply(compiler: Compiler) {
-          compiler.hooks.done.tapPromise(tapName, async () => {
-            // nothing
-          });
-          compiler.hooks.thisCompilation.tap(tapName, (compilation) => {
-            compilation.hooks.processAssets.tap(tapName, () => {
-              return 'processAssets end';
-            });
-          });
-          compiler.hooks.beforeRun.tapPromise(
-            { name: 'Foo', stage: 99999 },
-            async () => {
-              const sdk = getSDK();
-              if (!sdk) {
-                throw new Error('SDK is undefined');
-              }
-              setSDK(
-                // @ts-ignore
-                new Proxy(sdk, {
-                  get(target, key, receiver) {
-                    switch (key) {
-                      case 'reportLoader':
-                        return null;
-                      case 'reportLoaderStartOrEnd':
-                        return (_data: any) => {
-                          // rslint-disable-next-line @typescript-eslint/no-unused-vars
-                          reportLoaderStartOrEndTimes += 1;
-                        };
-                      default:
-                        return Reflect.get(target, key, receiver);
-                    }
-                  },
-                  set(target, key, value, receiver) {
-                    return Reflect.set(target, key, value, receiver);
-                  },
-                  defineProperty(target, p, attrs) {
-                    return Reflect.defineProperty(target, p, attrs);
-                  },
-                }),
-              );
-            },
-          );
-        },
-      },
+      plugin,
     ],
   });
 
-  return res;
+  return plugin.sdk;
 }
 
 test.afterEach(async ({ page }) => {
@@ -161,9 +109,7 @@ test.afterEach(async ({ page }) => {
 });
 
 test('rspack data store', async () => {
-  const tapName = 'Foo';
-  await rspackCompile(tapName, compileByRspackLayers);
-  const sdk = getSDK()!;
+  const sdk = await rspackCompile(compileByRspackLayers);
   const datas = sdk.getStoreData();
   const graphData = datas.moduleGraph;
   const layerList = graphData.modules.map((m) => m.layer);

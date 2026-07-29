@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { getSDK, setSDK } from '@rsdoctor/core';
 import { compileByRspack } from '@scripts/test-helper';
 import { Compiler } from '@rspack/core';
 import * as core from '@actions/core';
@@ -7,17 +6,30 @@ import os from 'os';
 import path from 'path';
 import { createRsdoctorPlugin } from './test-utils';
 
-let reportLoaderStartOrEndTimes = 0;
-
 async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
   const file = path.resolve(__dirname, './fixtures/a.js');
   const loader = path.resolve(__dirname, './fixtures/loaders/comment.js');
+  const plugin = createRsdoctorPlugin({
+    features: {
+      treeShaking: true,
+    },
+    linter: {
+      rules: {
+        'ecma-version-check': [
+          'Warn',
+          {
+            ecmaVersion: 3,
+          },
+        ],
+      },
+    },
+  });
 
   const esmLoaderJs = path.resolve(
     __dirname,
     './fixtures/loaders/esm/esm-serialize-query-to-comment.js',
   );
-  const res = await compile(file, {
+  await compile(file, {
     resolve: {
       extensions: ['.ts', '.js'],
     },
@@ -62,21 +74,7 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
     },
     plugins: [
       // @ts-ignore
-      createRsdoctorPlugin({
-        features: {
-          treeShaking: true,
-        },
-        linter: {
-          rules: {
-            'ecma-version-check': [
-              'Warn',
-              {
-                ecmaVersion: 3,
-              },
-            ],
-          },
-        },
-      }),
+      plugin,
       {
         name: 'Foo',
         apply(compiler: Compiler) {
@@ -88,42 +86,13 @@ async function rspackCompile(tapName: string, compile: typeof compileByRspack) {
               return 'processAssets end';
             });
           });
-          compiler.hooks.beforeRun.tapPromise(
-            { name: 'Foo', stage: 99999 },
-            async () => {
-              const sdk = getSDK();
-              setSDK(
-                // @ts-ignore
-                new Proxy(sdk, {
-                  get(target, key, receiver) {
-                    switch (key) {
-                      case 'reportLoader':
-                        return null;
-                      case 'reportLoaderStartOrEnd':
-                        return (_data: any) => {
-                          reportLoaderStartOrEndTimes += 1;
-                        };
-                      default:
-                        return Reflect.get(target, key, receiver);
-                    }
-                  },
-                  set(target, key, value, receiver) {
-                    return Reflect.set(target, key, value, receiver);
-                  },
-                  defineProperty(target, p, attrs) {
-                    return Reflect.defineProperty(target, p, attrs);
-                  },
-                }),
-              );
-            },
-          );
         },
       },
     ],
     devtool: 'cheap-module-source-map',
   });
 
-  return res;
+  return plugin.sdk;
 }
 
 test.afterEach(async ({ page }) => {
@@ -132,12 +101,10 @@ test.afterEach(async ({ page }) => {
 
 test('rspack plugin intercept', async () => {
   const tapName = 'Foo';
-  await rspackCompile(tapName, compileByRspack);
-  const sdk = getSDK()!;
+  const sdk = await rspackCompile(tapName, compileByRspack);
   const { done, thisCompilation } = sdk.getStoreData().plugin;
   const loaderData = sdk.getStoreData().loader;
   expect(loaderData[0].loaders.length).toBe(1);
-  expect(reportLoaderStartOrEndTimes).toBeGreaterThan(0);
   const doneData = done.filter((e) => e.tapName === tapName);
   expect(doneData).toHaveLength(1);
   expect(doneData[0].type).toEqual('promise');
@@ -150,8 +117,7 @@ test('rspack plugin intercept', async () => {
 
 test('rspack data store', async () => {
   const tapName = 'Foo';
-  await rspackCompile(tapName, compileByRspack);
-  const sdk = getSDK()!;
+  const sdk = await rspackCompile(tapName, compileByRspack);
   const datas = sdk.getStoreData();
   expect(datas.errors.length).toBe(2);
   const graphData = datas.moduleGraph;

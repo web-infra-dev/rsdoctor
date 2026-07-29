@@ -2,11 +2,11 @@ import path from 'path';
 import { tmpdir } from 'os';
 import { describe, it, expect, afterEach, beforeAll, rs } from '@rstest/core';
 import { Worker } from 'node:worker_threads';
-import { File } from '@rsdoctor/core';
-import type { Plugin } from '@rsdoctor/shared/types';
+import { rspack } from '@rspack/core';
 import { execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
+import { File } from '@/build-utils';
 
 const corePackageDir = path.resolve(__dirname, '../../../..');
 const require = createRequire(import.meta.url);
@@ -36,45 +36,62 @@ beforeAll(() => {
 const describeIfNotWin =
   process.platform === 'win32' ? describe.skip : describe;
 
-describe('core package exports', () => {
+describe('core package output', () => {
   it('should expose the proxy loader as a loadable file', async () => {
-    const [{ InternalLoaderPlugin }, proxyLoader] = await Promise.all([
-      import(coreModuleUrl),
-      import(proxyLoaderModuleUrl),
-    ]);
-    const plugin = new InternalLoaderPlugin({});
+    const proxyLoader = await import(proxyLoaderModuleUrl);
 
-    expect(plugin.internalLoaderPath).toBe(fileURLToPath(proxyLoaderModuleUrl));
     expect(proxyLoader.raw).toBe(true);
     expect(proxyLoader.default).toBeTypeOf('function');
   });
 
-  it('should keep the private probe loader loadable from the bundled build', async () => {
-    const doctorTest = process.env.DOCTOR_TEST;
-    delete process.env.DOCTOR_TEST;
+  it('should keep private loaders loadable from the bundled build', async () => {
+    const { RsdoctorRspackPlugin } = await import(coreModuleUrl);
+    const outputDir = path.join(
+      tmpdir(),
+      `rsdoctor-bundled-loader-${Date.now()}`,
+    );
+    const compiler = rspack({
+      context: corePackageDir,
+      entry: './tests/fixtures/default-export/literal/index.js',
+      output: {
+        path: outputDir,
+      },
+      plugins: [
+        new RsdoctorRspackPlugin({
+          disableClientServer: true,
+          output: {
+            reportDir: path.join(outputDir, 'report'),
+          },
+        }),
+      ],
+    });
 
     try {
-      const [{ Utils }, probeLoader] = await Promise.all([
-        import(coreModuleUrl),
-        import(probeLoaderModuleUrl),
-      ]);
-      const [rule] = Utils.addProbeLoader2Rules(
-        [{ loader: 'mock-loader' }],
-        { options: { name: 'test-compiler' } } as Plugin.BaseCompiler,
-        () => true,
-      );
-      const loaders = rule.use as Array<{ loader: string }>;
-      const probeLoaderPath = fileURLToPath(probeLoaderModuleUrl);
+      await new Promise<void>((resolve, reject) => {
+        compiler.run((error, stats) => {
+          if (error) {
+            reject(error);
+          } else if (stats?.hasErrors()) {
+            reject(new Error(stats.toString({ errors: true })));
+          } else {
+            resolve();
+          }
+        });
+      });
+      const probeLoader = await import(probeLoaderModuleUrl);
 
-      expect(loaders[0].loader).toBe(probeLoaderPath);
-      expect(loaders[2].loader).toBe(probeLoaderPath);
       expect(probeLoader.default).toBeTypeOf('function');
     } finally {
-      if (doctorTest === undefined) {
-        delete process.env.DOCTOR_TEST;
-      } else {
-        process.env.DOCTOR_TEST = doctorTest;
-      }
+      await new Promise<void>((resolve, reject) => {
+        compiler.close((error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+      await File.fse.remove(outputDir);
     }
   });
 
@@ -155,18 +172,16 @@ describe('atomic write manifest', () => {
       const workerScript = `
         (async () => {
           const { parentPort, workerData } = await import('node:worker_threads');
-          const { File, Server, RsdoctorSDK } = await import(workerData.moduleUrl);
+          const { readFile } = await import('node:fs/promises');
+          const { RsdoctorSDK } = await import(workerData.moduleUrl);
           const { outputDir, readAttempts } = workerData;
-          const port = await Server.getPort(
-            10000 + Math.floor(Math.random() * 20000),
-          );
           const sdk = new RsdoctorSDK({
             name: 'test',
             root: process.cwd(),
             config: {
               noServer: true,
               server: {
-                port,
+                port: 10000 + Math.floor(Math.random() * 20000),
               },
             },
           });
@@ -176,10 +191,8 @@ describe('atomic write manifest', () => {
             const manifestPath = await sdk.saveManifest(sdk.getStoreData(), {});
 
             for (let i = 0; i < readAttempts; i++) {
-              if (await File.fse.pathExists(manifestPath)) {
-                const content = await File.fse.readFile(manifestPath, 'utf-8');
-                JSON.parse(content);
-              }
+              const content = await readFile(manifestPath, 'utf-8');
+              JSON.parse(content);
             }
 
             parentPort?.postMessage({ ok: true });

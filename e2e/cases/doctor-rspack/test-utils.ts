@@ -1,6 +1,7 @@
 import type { RsdoctorRspackPluginOptions } from '@rsdoctor/core';
-import { File, RsdoctorRspackPlugin } from '@rsdoctor/core';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import { Linter } from '@rsdoctor/shared/types';
+import { rm } from 'node:fs/promises';
 import { tmpdir } from 'os';
 import path from 'path';
 import events from 'node:events';
@@ -28,7 +29,7 @@ export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
   plugin.sdk.hooks.afterSaveManifest.tapPromise('REMOVE_TMP_DIR', async () => {
     plugin.sdk.setOutputDir(outdir);
     try {
-      await File.fse.remove(plugin.sdk.outputDir);
+      await rm(plugin.sdk.outputDir, { recursive: true, force: true });
     } catch (e) {
       console.error(e);
     }
