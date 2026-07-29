@@ -104,7 +104,7 @@ test('rspack plugin intercept', async () => {
   const sdk = await rspackCompile(tapName, compileByRspack);
   const { done, thisCompilation } = sdk.getStoreData().plugin;
   const loaderData = sdk.getStoreData().loader;
-  expect(loaderData[0].loaders.length).toBe(1);
+  expect(loaderData[0].loaders.length).toBe(3);
   const doneData = done.filter((e) => e.tapName === tapName);
   expect(doneData).toHaveLength(1);
   expect(doneData[0].type).toEqual('promise');
