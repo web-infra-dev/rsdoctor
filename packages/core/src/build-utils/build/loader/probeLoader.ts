@@ -11,7 +11,7 @@ export interface ProbeLoaderOptions {
   builderName: string;
 }
 
-export const loaderModule: Plugin.LoaderDefinition<ProbeLoaderOptions, object> =
+const loaderModule: Plugin.LoaderDefinition<ProbeLoaderOptions, object> =
   function (...args) {
     const time = Date.now();
     const code = args[0];
