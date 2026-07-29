@@ -2,6 +2,11 @@ import { Chunks } from '@rsdoctor/core/graph';
 import { parseBundle } from '../utils';
 import { SDK } from '@rsdoctor/shared/types';
 
+export interface GzipOptions {
+  enabled: boolean;
+  level: number;
+}
+
 /**
  * Collects module size data from bundle assets, using source maps when available
  * and falling back to AST parsing for assets without source maps.
@@ -24,12 +29,17 @@ export async function getAssetsModulesData(
   sourceMapSets: Map<string, string>,
   hasParseBundle = true,
   assetsWithoutSourceMap?: Set<string>,
+  gzipOptions?: GzipOptions,
 ) {
   return Chunks.getAssetsModulesData(
     moduleGraph,
     chunkGraph,
     bundleDir,
-    hasParseBundle ? { parseBundle } : {},
+    {
+      ...(hasParseBundle ? { parseBundle } : {}),
+      gzip: gzipOptions?.enabled,
+      gzipLevel: gzipOptions?.level,
+    },
     sourceMapSets,
     assetsWithoutSourceMap,
   );

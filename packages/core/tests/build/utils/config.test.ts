@@ -109,6 +109,7 @@ describe('normalizeUserConfig', () => {
     const result = normalizeUserConfig();
     expect(result.supports.gzip).toEqual(true);
     expect(result.supports.parseBundle).toEqual(true);
+    expect(result.gzipLevel).toBe(9);
   });
 
   it('should respect custom supports', () => {
@@ -119,6 +120,19 @@ describe('normalizeUserConfig', () => {
     const result = normalizeUserConfig({ supports: customSupports });
     expect(result.supports).toEqual(customSupports);
   });
+
+  it.each([0, 6, 9])('should respect gzip level %s', (gzipLevel) => {
+    expect(normalizeUserConfig({ gzipLevel }).gzipLevel).toBe(gzipLevel);
+  });
+
+  it.each([-1, 1.5, 10, Number.NaN])(
+    'should reject invalid gzip level %s',
+    (gzipLevel) => {
+      expect(() => normalizeUserConfig({ gzipLevel })).toThrow(
+        '`gzipLevel` must be an integer between 0 and 9.',
+      );
+    },
+  );
 
   describe('mode configuration warnings', () => {
     it('should show warning when using deprecated mode configuration', () => {

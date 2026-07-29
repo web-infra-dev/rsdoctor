@@ -81,6 +81,7 @@ export class InternalBundlePlugin<
           this.map,
           this.scheduler.chunkGraph,
           this.scheduler.options?.supports,
+          this.scheduler.options?.gzipLevel,
         );
       }
 
