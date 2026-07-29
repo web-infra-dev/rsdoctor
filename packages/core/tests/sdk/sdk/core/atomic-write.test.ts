@@ -25,13 +25,6 @@ const sharedGraphModuleUrl = pathToFileURL(
 
 rs.setConfig({ testTimeout: 30000 });
 
-beforeAll(() => {
-  execSync('pnpm --filter @rsdoctor/core run build', {
-    stdio: 'ignore',
-    cwd: corePackageDir,
-  });
-});
-
 // Skip on Windows because rename may throw EPERM/EBUSY under concurrent access
 const describeIfNotWin =
   process.platform === 'win32' ? describe.skip : describe;
