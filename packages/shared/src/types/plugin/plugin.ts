@@ -63,14 +63,22 @@ export interface RsdoctorPluginOptionsNormalized<
   supports: NormalizedSupports;
 }
 
-interface GzipConfig {
-  /**
-   * Gzip compression level used to calculate asset and module gzip sizes.
-   * Must be an integer between 0 and 9.
-   * @default 9
-   */
-  gzipLevel?: number;
-}
+export type GzipConfig =
+  | boolean
+  | {
+      /**
+       * Gzip compression level used to calculate asset and module gzip sizes.
+       * Must be an integer between 0 and 9.
+       * @default 9
+       */
+      gzipLevel?: number;
+    };
+
+export type NormalizedGzipConfig =
+  | false
+  | {
+      gzipLevel: number;
+    };
 
 interface ISupport {
   parseBundle?: boolean;
@@ -81,11 +89,11 @@ interface ISupport {
    * compression level, or an object to configure `gzipLevel`.
    * @default true
    */
-  gzip?: boolean | GzipConfig;
+  gzip?: GzipConfig;
 }
 
 type NormalizedSupports = Omit<ISupport, 'gzip'> & {
-  gzip: false | Required<GzipConfig>;
+  gzip: NormalizedGzipConfig;
 };
 
 interface OutputBaseConfig {

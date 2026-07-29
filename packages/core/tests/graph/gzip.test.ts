@@ -7,6 +7,7 @@ import {
   Module,
   ModuleGraph,
 } from '@rsdoctor/shared/graph';
+import { normalizeUserConfig } from '../../src/inner-plugins/utils/config';
 
 const source = `
   export const values = [${Array.from({ length: 1_000 }, (_, index) => index % 17).join(',')}];
@@ -23,15 +24,37 @@ function createModuleGraph() {
 }
 
 describe('gzip size collection', () => {
+  it('uses the normalized default gzip level for assets', () => {
+    const chunkGraph = new ChunkGraph();
+    const asset = new Asset('index.js', source.length, [], '');
+    chunkGraph.addAsset(asset);
+
+    const gzip = normalizeUserConfig({
+      supports: { gzip: true },
+    }).supports.gzip;
+
+    Chunks.assetsContents(
+      new Map([['index.js', { content: source }]]),
+      chunkGraph,
+      gzip,
+    );
+
+    expect(asset.gzipSize).toBe(gzipSync(source, { level: 9 }).length);
+  });
+
   it('uses the configured gzip level for assets', () => {
     const chunkGraph = new ChunkGraph();
     const asset = new Asset('index.js', source.length, [], '');
     chunkGraph.addAsset(asset);
 
+    const gzip = normalizeUserConfig({
+      supports: { gzip: { gzipLevel: 1 } },
+    }).supports.gzip;
+
     Chunks.assetsContents(
       new Map([['index.js', { content: source }]]),
       chunkGraph,
-      { gzip: { gzipLevel: 1 } },
+      gzip,
     );
 
     expect(asset.gzipSize).toBe(gzipSync(source, { level: 1 }).length);
@@ -42,10 +65,14 @@ describe('gzip size collection', () => {
     const asset = new Asset('index.js', source.length, [], '');
     chunkGraph.addAsset(asset);
 
+    const gzip = normalizeUserConfig({
+      supports: { gzip: false },
+    }).supports.gzip;
+
     Chunks.assetsContents(
       new Map([['index.js', { content: source }]]),
       chunkGraph,
-      { gzip: false },
+      gzip,
     );
 
     expect(asset.gzipSize).toBeUndefined();

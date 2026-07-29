@@ -41,7 +41,7 @@ function normalizeGzipLevel(value: unknown): number {
   );
   return gzipLevel;
 }
-function normalizeGzip(value: unknown): false | { gzipLevel: number } {
+function normalizeGzip(value: unknown): Plugin.NormalizedGzipConfig {
   assert(
     value === undefined ||
       typeof value === 'boolean' ||
