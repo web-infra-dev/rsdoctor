@@ -37,6 +37,25 @@ const describeIfNotWin =
   process.platform === 'win32' ? describe.skip : describe;
 
 describe('core package output', () => {
+  it('should expose only the public runtime API', async () => {
+    const core = await import(coreModuleUrl);
+
+    expect(Object.keys(core).sort()).toEqual(
+      [
+        'Linter',
+        'LinterRule',
+        'LinterType',
+        'RsdoctorRspackMultiplePlugin',
+        'RsdoctorRspackPlugin',
+        'RsdoctorSDK',
+        'defineRule',
+        'logger',
+        'resolveClientDiffHtmlPath',
+        'rules',
+      ].sort(),
+    );
+  });
+
   it('should expose the proxy loader as a loadable file', async () => {
     const proxyLoader = await import(proxyLoaderModuleUrl);
 
