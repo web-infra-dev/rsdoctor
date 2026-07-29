@@ -54,6 +54,9 @@ function createHarness() {
       supports: {
         parseBundle: false,
         generateTileGraph: false,
+        gzip: {
+          gzipLevel: 9,
+        },
       },
     },
     sdk: {

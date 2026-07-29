@@ -25,22 +25,39 @@ function getDefaultOutput() {
 function getDefaultSupports() {
   return {
     parseBundle: true,
-    gzip: true, // change the gzip to true by default.
   };
 }
 function isJsonOutputEnv(value: unknown): boolean {
   return value === 'json';
 }
 function normalizeGzipLevel(value: unknown): number {
-  const gzipLevel = value ?? 9;
+  const gzipLevel = value === undefined ? 9 : value;
   assert(
     typeof gzipLevel === 'number' &&
       Number.isInteger(gzipLevel) &&
       gzipLevel >= 0 &&
       gzipLevel <= 9,
-    '`gzipLevel` must be an integer between 0 and 9.',
+    '`supports.gzip.gzipLevel` must be an integer between 0 and 9.',
   );
   return gzipLevel;
+}
+function normalizeGzip(value: unknown): false | { gzipLevel: number } {
+  assert(
+    value === undefined ||
+      typeof value === 'boolean' ||
+      (typeof value === 'object' && value !== null && !Array.isArray(value)),
+    '`supports.gzip` must be a boolean or an object.',
+  );
+  if (value === false) {
+    return false;
+  }
+  const gzipLevel =
+    typeof value === 'object' && value !== null
+      ? (value as { gzipLevel?: unknown }).gzipLevel
+      : undefined;
+  return {
+    gzipLevel: normalizeGzipLevel(gzipLevel),
+  };
 }
 function normalizeFeatures(features: any, mode: keyof typeof SDK.IMode) {
   if (Array.isArray(features)) {
@@ -107,15 +124,17 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     innerClientPath = '',
     output = outputConfig,
     supports: userSupports = {},
-    gzipLevel: userGzipLevel,
     port,
     server: userServer = {},
     printLog = { serverUrls: true },
     mode = undefined,
     brief = undefined,
   } = normalizedConfig;
-  const supports = { ...getDefaultSupports(), ...userSupports };
-  const gzipLevel = normalizeGzipLevel(userGzipLevel);
+  const supports = {
+    ...getDefaultSupports(),
+    ...userSupports,
+    gzip: normalizeGzip(userSupports.gzip),
+  };
   // If process.env.RSTEST is set to true, disableClientServer should be false
   // Otherwise, if process.env.CI is set, disableClientServer should be true
   const disableClientServer =
@@ -193,7 +212,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     },
     innerClientPath,
     supports,
-    gzipLevel,
     port,
     server,
     printLog,

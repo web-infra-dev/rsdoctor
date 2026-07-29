@@ -2,10 +2,14 @@ import { Chunks } from '@rsdoctor/core/graph';
 import { parseBundle } from '../utils';
 import { SDK } from '@rsdoctor/shared/types';
 
-export interface GzipOptions {
-  enabled: boolean;
-  level: number;
-}
+export type GzipOptions =
+  | {
+      enabled: false;
+    }
+  | {
+      enabled: true;
+      level: number;
+    };
 
 /**
  * Collects module size data from bundle assets, using source maps when available
@@ -38,7 +42,7 @@ export async function getAssetsModulesData(
     {
       ...(hasParseBundle ? { parseBundle } : {}),
       gzip: gzipOptions?.enabled,
-      gzipLevel: gzipOptions?.level,
+      gzipLevel: gzipOptions?.enabled ? gzipOptions.level : undefined,
     },
     sourceMapSets,
     assetsWithoutSourceMap,

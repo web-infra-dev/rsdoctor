@@ -107,30 +107,87 @@ describe('normalizeUserConfig', () => {
 
   it('should use default supports when not provided', () => {
     const result = normalizeUserConfig();
-    expect(result.supports.gzip).toEqual(true);
+    expect(result.supports.gzip).toEqual({ gzipLevel: 9 });
     expect(result.supports.parseBundle).toEqual(true);
-    expect(result.gzipLevel).toBe(9);
   });
 
-  it('should respect custom supports', () => {
-    const customSupports = {
+  it('should normalize enabled gzip support with the default level', () => {
+    const result = normalizeUserConfig({
+      supports: {
+        gzip: true,
+      },
+    });
+    expect(result.supports.gzip).toEqual({ gzipLevel: 9 });
+  });
+
+  it('should normalize an empty gzip config with the default level', () => {
+    const result = normalizeUserConfig({
+      supports: {
+        gzip: {},
+      },
+    });
+    expect(result.supports.gzip).toEqual({ gzipLevel: 9 });
+  });
+
+  it('should respect disabled gzip support', () => {
+    const result = normalizeUserConfig({
+      supports: {
+        gzip: false,
+      },
+    });
+    expect(result.supports.gzip).toBe(false);
+  });
+
+  it('should respect other custom supports', () => {
+    const result = normalizeUserConfig({
+      supports: {
+        gzip: {
+          gzipLevel: 6,
+        },
+        parseBundle: false,
+      },
+    });
+    expect(result.supports).toEqual({
       parseBundle: false,
-      gzip: true,
-    };
-    const result = normalizeUserConfig({ supports: customSupports });
-    expect(result.supports).toEqual(customSupports);
+      gzip: { gzipLevel: 6 },
+    });
   });
 
   it.each([0, 6, 9])('should respect gzip level %s', (gzipLevel) => {
-    expect(normalizeUserConfig({ gzipLevel }).gzipLevel).toBe(gzipLevel);
+    expect(
+      normalizeUserConfig({
+        supports: {
+          gzip: { gzipLevel },
+        },
+      }).supports.gzip,
+    ).toEqual({ gzipLevel });
   });
 
-  it.each([-1, 1.5, 10, Number.NaN])(
+  it.each([-1, 1.5, 10, Number.NaN, null])(
     'should reject invalid gzip level %s',
     (gzipLevel) => {
-      expect(() => normalizeUserConfig({ gzipLevel })).toThrow(
-        '`gzipLevel` must be an integer between 0 and 9.',
+      expect(() =>
+        normalizeUserConfig({
+          supports: {
+            gzip: { gzipLevel } as never,
+          },
+        }),
+      ).toThrow(
+        '`supports.gzip.gzipLevel` must be an integer between 0 and 9.',
       );
+    },
+  );
+
+  it.each([[null], [1], ['true'], [[]]])(
+    'should reject invalid gzip support %s',
+    (gzip) => {
+      expect(() =>
+        normalizeUserConfig({
+          supports: {
+            gzip: gzip as never,
+          },
+        }),
+      ).toThrow('`supports.gzip` must be a boolean or an object.');
     },
   );
 

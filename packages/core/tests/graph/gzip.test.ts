@@ -31,8 +31,7 @@ describe('gzip size collection', () => {
     Chunks.assetsContents(
       new Map([['index.js', { content: source }]]),
       chunkGraph,
-      { gzip: true },
-      1,
+      { gzip: { gzipLevel: 1 } },
     );
 
     expect(asset.gzipSize).toBe(gzipSync(source, { level: 1 }).length);
@@ -47,7 +46,6 @@ describe('gzip size collection', () => {
       new Map([['index.js', { content: source }]]),
       chunkGraph,
       { gzip: false },
-      1,
     );
 
     expect(asset.gzipSize).toBeUndefined();
