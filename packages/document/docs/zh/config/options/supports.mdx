@@ -6,7 +6,7 @@ import { Badge } from '@theme';
 - **可选：** `true`
 - **默认值：** `undefined`
 
-该选项是配置 Rsdoctor 是否开启某些细节特性分析能力支持的，例如：是否开启对 BannerPlugin 的兼容能力。
+该选项用于控制详细的分析行为，例如 BannerPlugin 兼容、Bundle 解析和 gzip 大小计算。
 
 ## supportsTypes
 
@@ -15,6 +15,11 @@ type ISupport = {
   banner?: boolean;
   parseBundle?: boolean;
   generateTileGraph?: boolean;
+  gzip?:
+    | boolean
+    | {
+        gzipLevel?: number;
+      };
 };
 ```
 
@@ -69,3 +74,32 @@ chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
     style={{ margin: 'auto' }}
   />
 </div>
+
+## gzip
+
+- **类型：** `boolean | { gzipLevel?: number }`
+- **默认值：** `true`
+
+控制 Rsdoctor 是否计算 Asset 和 Module 的 gzip 大小。该计算只影响 Rsdoctor 报告中的大小数据，不会修改或压缩构建产物。
+
+gzip 大小计算默认开启，默认压缩级别为 `9`。将 `gzip` 配置为对象可以自定义 `gzipLevel`，其值必须是 `0` 到 `9` 之间的整数：
+
+```ts
+new RsdoctorRspackPlugin({
+  supports: {
+    gzip: {
+      gzipLevel: 6,
+    },
+  },
+});
+```
+
+将 `gzip` 设置为 `false` 可以关闭 gzip 大小计算：
+
+```ts
+new RsdoctorRspackPlugin({
+  supports: {
+    gzip: false,
+  },
+});
+```
