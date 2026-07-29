@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
-import { fetchJSONByUrl, postServerAPI } from './request';
+import { fetchJSONByUrl, postServerAPI } from 'src/utils/request';
 
 describe('request utils', () => {
   const originalFetch = globalThis.fetch;

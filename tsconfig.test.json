@@ -1,7 +1,12 @@
 {
   "extends": "@rsdoctor/tsconfig/base",
   "compilerOptions": {
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "paths": {
+      "@rsdoctor/cli/*": ["./packages/cli/src/*"],
+      "src": ["./packages/client/src"],
+      "src/*": ["./packages/client/src/*"]
+    }
   },
   "references": [
     {

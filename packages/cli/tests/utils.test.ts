@@ -1,4 +1,10 @@
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
+import {
+  fetchText,
+  loadJSON,
+  loadShardingFile,
+  loadShardingFileWithSpinner,
+} from '@rsdoctor/cli/utils';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -7,12 +13,9 @@ const { fetchWithTimeoutMock } = rs.hoisted(() => ({
   fetchWithTimeoutMock: rs.fn(),
 }));
 
-rs.mock('./fetch-http', () => ({
+rs.mock('@rsdoctor/cli/fetch-http', () => ({
   fetchWithTimeout: fetchWithTimeoutMock,
 }));
-
-import { fetchText, loadJSON } from './utils';
-import { loadShardingFile, loadShardingFileWithSpinner } from './utils';
 
 describe('cli utils', () => {
   afterEach(() => {

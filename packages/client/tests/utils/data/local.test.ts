@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
 import { SDK } from '@rsdoctor/shared/types';
-import { LocalServerDataLoader } from './local';
+import { LocalServerDataLoader } from 'src/utils/data/local';
 
 class MockWebSocket {
   static instances: MockWebSocket[] = [];

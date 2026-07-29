@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@rstest/core';
-import { coercePort } from './stats-analyze';
+import { coercePort } from '@rsdoctor/cli/commands/stats-analyze';
 
 describe('stats-analyze command', () => {
   it('coercePort() preserves undefined', () => {

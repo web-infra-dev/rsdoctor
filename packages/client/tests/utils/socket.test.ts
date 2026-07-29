@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
-import { SDK } from '@rsdoctor/shared/types';
 import {
   formatURL,
   publishServerSocketMessage,
   requestServerAPI,
   subscribeServerAPI,
-} from './socket';
+} from 'src/utils/socket';
+import { SDK } from '@rsdoctor/shared/types';
 
 class MockWebSocket {
   static instances: MockWebSocket[] = [];

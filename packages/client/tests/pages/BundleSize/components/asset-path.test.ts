@@ -3,7 +3,7 @@ import {
   createAssetPathMap,
   normalizeAssetPath,
   resolveAssetFileTitleTarget,
-} from './asset-path';
+} from 'src/pages/BundleSize/components/asset-path';
 
 describe('BundleSize asset path helpers', () => {
   it('normalizes Windows path separators', () => {

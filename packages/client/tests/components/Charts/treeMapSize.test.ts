@@ -2,7 +2,7 @@ import { describe, expect, it } from '@rstest/core';
 import {
   calculateTreeNodeTotalSize,
   calculateTreeNodesTotalSize,
-} from './treeMapSize';
+} from 'src/components/Charts/treeMapSize';
 
 describe('treeMapSize', () => {
   it('uses the asset size instead of summing module sizes', () => {
