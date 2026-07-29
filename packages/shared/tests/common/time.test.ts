@@ -1,7 +1,24 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect, rs } from '@rstest/core';
 import { Time } from '@rsdoctor/shared/common-browser';
+import { hrtime } from 'process';
+
+rs.setConfig({ testTimeout: 100000 });
 
 describe('test src/common/time.ts', () => {
+  it('getCurrentTimestamp', async () => {
+    const start = Date.now();
+    const startH = hrtime();
+    const delay = 500;
+
+    const value = await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(Time.getCurrentTimestamp(start, startH));
+      }, delay);
+    });
+
+    expect(value).toBeGreaterThanOrEqual(start + delay);
+  });
+
   it('toFixedDigits', () => {
     expect(Time.toFixedDigits(100, 0)).toEqual(100);
     expect(Time.toFixedDigits(100.1, 0)).toEqual(100);

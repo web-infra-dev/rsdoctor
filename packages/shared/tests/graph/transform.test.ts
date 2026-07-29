@@ -7,7 +7,7 @@ import { compileByRspack } from '@scripts/test-helper';
 import { removeAbsModulePath } from '../utils';
 
 const resolveFixture = (...paths: string[]) => {
-  return path.resolve(__dirname, '../../fixtures', ...paths);
+  return path.resolve(__dirname, '../fixtures', ...paths);
 };
 
 const statsOptions = {

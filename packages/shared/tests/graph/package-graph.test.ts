@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import fse from 'fs-extra';
 import { expect, describe, it, beforeEach } from '@rstest/core';
 import { Asset, Chunk, Module, PackageGraph } from '@rsdoctor/shared/graph';
 
@@ -12,15 +11,14 @@ describe('PackageGraph.getPackageByModule', () => {
     pkgGraph = new PackageGraph(root);
   });
 
-  const getPackageFile = (path: string) => {
+  const getPackageFile = (filePath: string) => {
     try {
-      const exists = fs.existsSync(path);
+      const exists = fs.existsSync(filePath);
       if (exists) {
-        const res = fse.readJsonSync(path);
-        return res;
+        return JSON.parse(fs.readFileSync(filePath, 'utf8'));
       }
-    } catch (error) {
-      const { message, stack } = error as Error;
+    } catch {
+      return undefined;
     }
   };
 
@@ -102,7 +100,7 @@ describe('PackageGraph.getPackageByModule', () => {
     expect(pkg).toBeDefined();
     const packageJsonPath = path.join(root, 'package.json');
     if (fs.existsSync(packageJsonPath)) {
-      const packageData = fse.readJsonSync(packageJsonPath);
+      const packageData = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
       expect(pkg?.name).toBe(packageData.name);
       expect(pkg?.version).toBe(packageData.version);
     }
@@ -139,7 +137,7 @@ describe('PackageGraph.getPackageByModule', () => {
         return undefined;
       }
       if (pkgPath === path.join(root, 'package.json')) {
-        return fse.readJsonSync(pkgPath);
+        return JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
       }
       return undefined;
     };
