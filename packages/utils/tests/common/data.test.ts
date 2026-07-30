@@ -1,5 +1,5 @@
 import { describe, it, expect, rs } from '@rstest/core';
-import { SDK } from '@rsdoctor/types';
+import { SDK } from '../../../types/src';
 
 import { APIDataLoader } from '../../src/common/data';
 

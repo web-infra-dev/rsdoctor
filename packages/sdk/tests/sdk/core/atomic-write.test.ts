@@ -2,7 +2,7 @@ import path from 'path';
 import { tmpdir } from 'os';
 import { describe, it, expect, afterEach, beforeAll } from '@rstest/core';
 import { Worker } from 'node:worker_threads';
-import { File } from '@rsdoctor/utils/build';
+import { File } from '../../../../utils/src/build';
 import { execSync } from 'node:child_process';
 
 // Skip on Windows because rename may throw EPERM/EBUSY under concurrent access

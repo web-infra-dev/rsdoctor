@@ -2,7 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { afterEach, beforeEach, describe, expect, it, rs } from '@rstest/core';
-import { GlobalConfig } from '@rsdoctor/utils/common';
+import * as GlobalConfig from '../../utils/src/common/global-config';
 import { getWsUrl } from '../src/server/socket';
 
 describe('server/socket', () => {
