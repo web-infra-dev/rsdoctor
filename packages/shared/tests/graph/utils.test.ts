@@ -4,7 +4,7 @@ import {
   getModuleName,
   parseLocation,
   extractCodeFromSourceLines,
-} from '@rsdoctor/shared/graph';
+} from '../../src/graph';
 import { join } from 'path';
 import { readFileSync } from 'node:fs';
 /**

@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@rstest/core';
-import { Lodash } from '@rsdoctor/shared/common-browser';
+import { Lodash } from '../src/common-browser';
 
 describe('compact', () => {
   it('removes falsy values', () => {

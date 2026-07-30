@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Algorithm, Manifest } from '@rsdoctor/shared/common-browser';
+import { Algorithm, Manifest } from '../../src/common-browser';
 
 describe('test src/common/manifest.ts', () => {
   it('isShardingData', () => {

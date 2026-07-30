@@ -1,13 +1,13 @@
 import path from 'path';
 import { expect, describe, it } from '@rstest/core';
-import { SDK, Plugin } from '@rsdoctor/shared/types';
+import { SDK, Plugin } from '../../src/types';
 import {
   Chunks,
   Module,
   ModuleGraph,
   ModuleGraphTrans,
   PackageGraph,
-} from '@rsdoctor/shared/graph';
+} from '../../src/graph';
 
 const { chunkTransform } = Chunks;
 const { getModuleGraphByStats } = ModuleGraphTrans;

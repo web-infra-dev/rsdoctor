@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@rstest/core';
-import { Loader } from '@rsdoctor/shared/common-browser';
-import { SDK } from '@rsdoctor/shared/types';
+import { Loader } from '../../src/common-browser';
+import { SDK } from '../../src/types';
 
 describe('test src/common/loader.ts', () => {
   const mockLoaderData: SDK.LoaderData = [

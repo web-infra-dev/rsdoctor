@@ -1,5 +1,5 @@
 import { describe, it, expect, rs } from '@rstest/core';
-import { Time } from '@rsdoctor/shared/common-browser';
+import { Time } from '../../src/common-browser';
 import { hrtime } from 'process';
 
 rs.setConfig({ testTimeout: 100000 });

@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@rstest/core';
 import path from 'path';
 
-import { Chunks, ModuleGraphTrans } from '@rsdoctor/shared/graph';
-import { SDK, type Plugin } from '@rsdoctor/shared/types';
+import { Chunks, ModuleGraphTrans } from '../../src/graph';
+import { SDK, type Plugin } from '../../src/types';
 import { compileByRspack } from '@scripts/test-helper';
 import { removeAbsModulePath } from '../utils';
 

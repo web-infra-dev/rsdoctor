@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { expect, describe, it, beforeEach } from '@rstest/core';
-import { Asset, Chunk, Module, PackageGraph } from '@rsdoctor/shared/graph';
+import { Asset, Chunk, Module, PackageGraph } from '../../src/graph';
 
 describe('PackageGraph.getPackageByModule', () => {
   let pkgGraph: PackageGraph;

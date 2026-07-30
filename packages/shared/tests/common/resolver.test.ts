@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@rstest/core';
-import { Resolver } from '@rsdoctor/shared/common-browser';
-import { SDK } from '@rsdoctor/shared/types';
+import { Resolver } from '../../src/common-browser';
+import { SDK } from '../../src/types';
 
 describe('test src/common/resolver.ts', () => {
   it('isResolveSuccessData', () => {

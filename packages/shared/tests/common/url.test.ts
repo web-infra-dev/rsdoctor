@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Url } from '@rsdoctor/shared/common-browser';
+import { Url } from '../../src/common-browser';
 
 describe('test src/common/url.ts', () => {
   it('isUrl', () => {

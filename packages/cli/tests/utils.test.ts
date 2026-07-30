@@ -4,7 +4,7 @@ import {
   loadJSON,
   loadShardingFile,
   loadShardingFileWithSpinner,
-} from '@rsdoctor/cli/utils';
+} from '../src/utils';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -13,7 +13,7 @@ const { fetchWithTimeoutMock } = rs.hoisted(() => ({
   fetchWithTimeoutMock: rs.fn(),
 }));
 
-rs.mock('@rsdoctor/cli/fetch-http', () => ({
+rs.mock('../src/fetch-http', () => ({
   fetchWithTimeout: fetchWithTimeoutMock,
 }));
 

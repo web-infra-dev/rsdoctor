@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Crypto } from '@rsdoctor/shared/common-browser';
+import { Crypto } from '../../src/common-browser';
 
 describe('test src/crypto.ts', () => {
   describe('encode & decode', () => {

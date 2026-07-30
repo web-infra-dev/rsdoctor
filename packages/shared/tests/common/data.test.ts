@@ -1,6 +1,6 @@
 import { describe, it, expect, rs } from '@rstest/core';
-import { Data } from '@rsdoctor/shared/common-browser';
-import { SDK } from '@rsdoctor/shared/types';
+import { Data } from '../../src/common-browser';
+import { SDK } from '../../src/types';
 
 describe('test src/common/data/index.ts', () => {
   const excludeAPIs = [

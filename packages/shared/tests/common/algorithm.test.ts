@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@rstest/core';
-import { Algorithm } from '@rsdoctor/shared/common-browser';
+import { Algorithm } from '../../src/common-browser';
 
 describe('test src/common/algorithm.ts', () => {
   it('mergeIntervals', () => {
