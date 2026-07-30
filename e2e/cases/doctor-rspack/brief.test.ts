@@ -1,4 +1,4 @@
-import { expect, test, chromium } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { compileByRspack } from '@scripts/test-helper';
 import path from 'path';
 import fs from 'fs';
@@ -59,24 +59,12 @@ async function rspackCompile(compile: typeof compileByRspack) {
   return res;
 }
 
-test.afterEach(async ({ page }) => {
-  await page.close();
-});
-
-test('rspack brief mode', async () => {
+test('rspack brief mode', async ({ page }) => {
   await rspackCompile(compileByRspack);
 
   const reportPath = path.join(__dirname, './dist/brief/rsdoctor-report.html');
 
   fileExists(reportPath);
-
-  const browser = await chromium.launch();
-
-  // Create a new browser context
-  const context = await browser.newContext();
-
-  // Open a new page
-  const page = await context.newPage();
 
   // Navigate to a URL
   await page.goto(`file:///${reportPath}`);
@@ -105,15 +93,6 @@ test('rspack brief mode', async () => {
   expect(bundleTitleExists).toBe(true);
   expect(compileTabExists).toBe(true);
   expect(bundleTabExists).toBe(true);
-
-  // Close the page
-  await page.close();
-
-  // Close the browser context
-  await context.close();
-
-  // Close the browser
-  await browser.close();
 });
 
 async function fileExists(filePath: string) {
