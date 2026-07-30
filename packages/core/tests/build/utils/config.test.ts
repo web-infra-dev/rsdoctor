@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach, afterEach } from '@rstest/core';
 import { normalizeUserConfig } from '../../../src/inner-plugins/utils/config';
-import { SDK } from '../../../../types/src';
+import { SDK } from '@rsdoctor/types';
 
 // Mock console.log to capture warning messages
 const originalConsoleLog = console.log;

@@ -1,6 +1,6 @@
 import path from 'path';
 import { expect, describe, it } from '@rstest/core';
-import { SDK, Plugin } from '../../types/src';
+import { SDK, Plugin } from '@rsdoctor/types';
 import { Module, ModuleGraph, PackageGraph } from '../src/graph';
 import { getModuleGraphByStats } from '../src/transform/module-graph/transform';
 import { chunkTransform } from '../src/transform/chunks/chunkTransform';

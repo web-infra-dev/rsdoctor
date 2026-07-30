@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@rstest/core';
 import os from 'os';
-import { Plugin } from '../../../../../types/src';
+import { Plugin } from '@rsdoctor/types';
 import { addProbeLoader2Rules } from '@/build-utils/build/utils';
 
 process.env.DOCTOR_TEST = 'true';

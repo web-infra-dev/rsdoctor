@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@rstest/core';
-import { File } from '../../utils/src/build';
+import { File } from '@rsdoctor/utils/build';
 import { tmpdir } from 'os';
 import path from 'path';
 import { RsdoctorWebpackPlugin } from '../src';

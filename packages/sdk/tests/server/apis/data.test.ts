@@ -1,5 +1,5 @@
 import { describe, it, expect, rs } from '@rstest/core';
-import { SDK } from '../../../../types/src';
+import { SDK } from '@rsdoctor/types';
 import { setupSDK } from '../../utils';
 
 rs.setConfig({ testTimeout: 50000 });

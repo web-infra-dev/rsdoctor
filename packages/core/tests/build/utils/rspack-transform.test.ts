@@ -1,7 +1,7 @@
 import { describe, it, expect } from '@rstest/core';
-import { ModuleGraph, ChunkGraph, Chunk } from '../../../../graph/src';
+import { ModuleGraph, ChunkGraph, Chunk } from '@rsdoctor/graph';
 import { patchNativeModuleGraph } from '@/build-utils/build/module-graph/rspack/transform';
-import type { Plugin } from '../../../../types/src';
+import type { Plugin } from '@rsdoctor/types';
 
 describe('Rspack native module graph transform', () => {
   it('should process bailoutReason from Rspack native plugin', () => {

@@ -3,7 +3,7 @@ import {
   processModeConfigurations,
   processBriefHtmlModeConfig,
 } from '@/inner-plugins/utils/normalize-config';
-import { Config } from '../../../types/src';
+import { Config } from '@rsdoctor/types';
 
 describe('test src/inner-plugins/utils/normalize-config.ts', () => {
   describe('processModeConfigurations', () => {

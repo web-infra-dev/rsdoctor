@@ -4,9 +4,9 @@ import fs from 'fs';
 
 import { Chunks } from '@/build-utils/build';
 import { removeAbsModulePath } from '../utils';
-import { compileByWebpack5 } from '../../../../../scripts/test-helper/src';
-import type { Plugin } from '../../../../types/src';
-import { ModuleGraphTrans } from '../../../../graph/src';
+import { compileByWebpack5 } from '@scripts/test-helper';
+import type { Plugin } from '@rsdoctor/types';
+import { ModuleGraphTrans } from '@rsdoctor/graph';
 
 const resolveFixture = (...paths: string[]) => {
   return path.resolve(__dirname, '../../fixtures', ...paths);

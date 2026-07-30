@@ -6,7 +6,7 @@ import {
   Chunks,
   Module,
   ModuleGraph,
-} from '../../../graph/src';
+} from '@rsdoctor/graph';
 import { normalizeUserConfig } from '../../src/inner-plugins/utils/config';
 
 const source = `

@@ -1,6 +1,6 @@
 import path from 'path';
 import { isESMLoader } from '../../src/build-utils/build/utils/loader';
-import type { Plugin } from '../../../types/src';
+import type { Plugin } from '@rsdoctor/types';
 import { describe, expect, test } from '@rstest/core';
 
 describe('loader path detection', () => {
