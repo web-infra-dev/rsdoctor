@@ -14,6 +14,39 @@ process.stderr.cursorTo = () => {};
 // @ts-ignore
 process.stderr.moveCursor = () => {};
 
+function serializeManifestWithReplacedPaths(
+  manifest: string,
+  oldPath: string,
+  newPath: string,
+) {
+  return JSON.stringify(
+    JSON.parse(manifest),
+    (_key, value) =>
+      typeof value === 'string' ? value.replaceAll(oldPath, newPath) : value,
+    2,
+  );
+}
+
+test('escapes Windows paths in manifest JSON', () => {
+  const oldPath = '<root>/rsdoctor';
+  const newPath = String.raw`C:\workspace\rsdoctor`;
+  const manifest = JSON.stringify({
+    root: oldPath,
+    files: [`${oldPath}/index.js`],
+  });
+
+  const updatedManifest = serializeManifestWithReplacedPaths(
+    manifest,
+    oldPath,
+    newPath,
+  );
+
+  expect(JSON.parse(updatedManifest)).toEqual({
+    root: newPath,
+    files: [`${newPath}/index.js`],
+  });
+});
+
 test('use Rsdoctor manifest data', async ({ page }) => {
   // Usage
   const manifestPath = path.resolve(
@@ -26,7 +59,7 @@ test('use Rsdoctor manifest data', async ({ page }) => {
 
   fs.writeFileSync(
     manifestPath,
-    originalManifest.replaceAll(oldPath, newPath),
+    serializeManifestWithReplacedPaths(originalManifest, oldPath, newPath),
     'utf-8',
   );
 
