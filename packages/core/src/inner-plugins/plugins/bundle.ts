@@ -105,7 +105,7 @@ export class InternalBundlePlugin<
         Chunks.assetsContents(
           this.map,
           this.scheduler.chunkGraph,
-          this.scheduler.options?.supports,
+          this.scheduler.options.supports.gzip,
         );
       }
 
