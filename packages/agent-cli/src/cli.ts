@@ -187,7 +187,7 @@ async function runRegisteredCommands(
 }
 
 export async function runCli(
-  argv = process.argv.slice(2),
+  argv: string[] = process.argv.slice(2),
   options?: {
     executeTool?: (request: {
       toolName: string;
@@ -197,7 +197,7 @@ export async function runCli(
     write?: (text: string) => void;
     writeError?: (text: string) => void;
   },
-) {
+): Promise<number> {
   const write =
     options?.write ?? ((text: string) => process.stdout.write(text));
   const writeError =
@@ -226,7 +226,9 @@ export async function runCli(
   });
 }
 
-export async function main(argv = process.argv.slice(2)) {
+export async function main(
+  argv: string[] = process.argv.slice(2),
+): Promise<void> {
   const exitCode = await runCli(argv);
   process.exitCode = exitCode;
 }

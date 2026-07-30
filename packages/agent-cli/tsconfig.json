@@ -1,7 +1,9 @@
 {
   "extends": "@rsdoctor/tsconfig/base",
   "compilerOptions": {
+    "allowJs": false,
     "experimentalDecorators": true,
+    "isolatedDeclarations": true,
     "outDir": "./dist",
     "types": ["node"],
     "paths": {
