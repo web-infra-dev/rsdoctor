@@ -3,10 +3,6 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import path from 'path';
 import { createStubRspeedy } from './rspeedy';
 
-test.afterEach(async ({ page }) => {
-  await page.close();
-});
-
 test('rspack plugin intercept', async () => {
   const plugin = new RsdoctorRspackPlugin({
     disableClientServer: true,

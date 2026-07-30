@@ -1,4 +1,4 @@
-import { test, chromium } from '@playwright/test';
+import { test } from '@playwright/test';
 import { compileByRspack } from '@scripts/test-helper';
 import * as core from '@actions/core';
 import path from 'path';
@@ -58,11 +58,7 @@ async function rspackCompile(compile: typeof compileByRspack) {
   return res;
 }
 
-test.afterEach(async ({ page }) => {
-  await page.close();
-});
-
-test('linter rule render check', async () => {
+test('linter rule render check', async ({ page }) => {
   await rspackCompile(compileByRspack);
 
   const reportPath = path.join(
@@ -71,14 +67,6 @@ test('linter rule render check', async () => {
   );
 
   fileExists(reportPath);
-
-  const browser = await chromium.launch();
-
-  // Create a new browser context
-  const context = await browser.newContext();
-
-  // Open a new page
-  const page = await context.newPage();
 
   // Navigate to a URL
   await page.goto(`file:///${reportPath}`);
@@ -108,15 +96,6 @@ test('linter rule render check', async () => {
   // expect(errorText).toBe(
   //   `Find some syntax that does not match "ecmaVersion <= ${ecmaVersion}"`,
   // );
-
-  // Close the page
-  await page.close();
-
-  // Close the browser context
-  await context.close();
-
-  // Close the browser
-  await browser.close();
 });
 
 async function fileExists(filePath: string) {

@@ -1,8 +1,7 @@
-import { SDK } from '@rsdoctor/shared/types';
+import type { Page } from '@playwright/test';
 import { execute } from '@rsdoctor/cli';
+import type { SDK } from '@rsdoctor/shared/types';
 import { resolve } from 'path';
-import { launchPlaywright } from './launch';
-import { Page } from '@playwright/test';
 
 export * from './path';
 
@@ -14,6 +13,7 @@ export async function waitReload(page: Page) {
 }
 
 export async function openBrowserByCLI(
+  page: Page,
   manifestFile: string,
   ...args: Parameters<SDK.RsdoctorServerInstance['getClientUrl']>
 ) {
@@ -21,10 +21,6 @@ export async function openBrowserByCLI(
     profile: resolve(process.cwd(), manifestFile),
     open: false,
   });
-
-  console.log('launch puppeteer');
-
-  const { browser, page } = await launchPlaywright();
 
   await page.goto(sdk.server.getClientUrl(...args));
 
@@ -38,20 +34,21 @@ export async function openBrowserByCLI(
     if (i > -1) {
       callbacks.splice(i, 1);
     }
-    await Promise.all([sdk?.dispose(), browser?.close()]);
+    await page.close();
+    await sdk?.dispose();
   }
 
   callbacks.push(dispose);
 
   return {
     sdk,
-    browser,
     page,
     dispose,
   };
 }
 
 export async function openBrowserByDiffCLI(
+  page: Page,
   manifestFile: string,
   ..._args: Parameters<SDK.RsdoctorServerInstance['getClientUrl']>
 ) {
@@ -62,9 +59,6 @@ export async function openBrowserByDiffCLI(
     open: false,
   });
 
-  console.log('launch puppeteer');
-
-  const { browser, page } = await launchPlaywright();
   const { origin } = sdk.server;
 
   await page.goto(
@@ -85,14 +79,14 @@ export async function openBrowserByDiffCLI(
     if (i > -1) {
       callbacks.splice(i, 1);
     }
-    await Promise.all([sdk?.dispose(), browser?.close()]);
+    await page.close();
+    await sdk?.dispose();
   }
 
   callbacks.push(dispose);
 
   return {
     sdk,
-    browser,
     page,
     dispose,
   };
