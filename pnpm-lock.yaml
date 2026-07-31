@@ -626,9 +626,6 @@ importers:
       envinfo:
         specifier: 7.21.0
         version: 7.21.0
-      filesize:
-        specifier: 'catalog:'
-        version: 11.0.22
       fs-extra:
         specifier: 'catalog:'
         version: 11.3.0
@@ -702,6 +699,9 @@ importers:
       babel-loader:
         specifier: 10.1.1
         version: 10.1.1(@babel/core@7.29.0)(@rspack/core@2.1.5(@swc/helpers@0.5.23))(webpack@5.105.4)
+      filesize:
+        specifier: 'catalog:'
+        version: 11.0.22
       string-loader:
         specifier: 0.0.1
         version: 0.0.1
