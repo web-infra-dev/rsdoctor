@@ -1,5 +1,5 @@
 import { cac } from 'cac';
-import { red } from 'picocolors';
+import { color } from 'rslog';
 import { Common } from '@rsdoctor/shared/types';
 import { analyze, bundleDiff } from './commands';
 import { Command, CommandContext, GetCommandArgumentsType } from './types';
@@ -48,7 +48,7 @@ function validateRequiredArgs(command: string, args: CommandArgs): void {
   if (isAnalyzeCommand(command)) {
     const analyzeArgs = args as AnalyzeArgs;
     if (!analyzeArgs.profile) {
-      logger.error(red(`❌ Missing required argument: --profile`));
+      logger.error(color.red(`❌ Missing required argument: --profile`));
       logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
       logger.info(`💡 Use --help to see all available options`);
       process.exit(1);
@@ -59,7 +59,7 @@ function validateRequiredArgs(command: string, args: CommandArgs): void {
     const bundleDiffArgs = args as BundleDiffArgs;
     if (!bundleDiffArgs.current || !bundleDiffArgs.baseline) {
       logger.error(
-        red(`❌ Missing required arguments: --current and --baseline`),
+        color.red(`❌ Missing required arguments: --current and --baseline`),
       );
       logger.info(
         `💡 Usage: ${bin} ${command} --current <path> --baseline <path>`,
@@ -72,7 +72,7 @@ function validateRequiredArgs(command: string, args: CommandArgs): void {
   if (isStatsAnalyzeCommand(command)) {
     const statsAnalyzeArgs = args as StatsAnalyzeArgs;
     if (!statsAnalyzeArgs.profile) {
-      logger.error(red(`❌ Missing required argument: --profile`));
+      logger.error(color.red(`❌ Missing required argument: --profile`));
       logger.info(`💡 Usage: ${bin} ${command} --profile <path>`);
       logger.info(`💡 Use --help to see all available options`);
       process.exit(1);
@@ -86,16 +86,16 @@ function handleCacError(error: Error): void {
 
   if (message.includes('value is missing')) {
     logger.error(
-      red(
+      color.red(
         `❌ Missing required argument. Please provide a value for the option.`,
       ),
     );
     logger.info(`💡 Use --help to see available options`);
   } else if (message.includes('Unknown option')) {
-    logger.error(red(`❌ Unknown option. Please check your command.`));
+    logger.error(color.red(`❌ Unknown option. Please check your command.`));
     logger.info(`💡 Use --help to see available options`);
   } else {
-    logger.error(red(`❌ ${message}`));
+    logger.error(color.red(`❌ ${message}`));
   }
 
   process.exit(1);
@@ -171,7 +171,7 @@ export async function execute(
         await action(args);
       } catch (error) {
         const { message, stack } = error as Error;
-        logger.error(red(stack || message));
+        logger.error(color.red(stack || message));
         process.exit(1);
       }
     });

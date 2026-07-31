@@ -6,7 +6,7 @@ import {
   SDK,
 } from '@rsdoctor/shared/types';
 import ora from 'ora';
-import { cyan, red } from 'picocolors';
+import { color } from 'rslog';
 import { Command } from '../types';
 import {
   enhanceCommand,
@@ -41,7 +41,7 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
         .option('--port <number>', 'port for Rsdoctor Server');
     },
     async action({ profile, open = true, port, type = SDK.ToDataType.Normal }) {
-      const spinner = ora({ prefixText: cyan(`[${name}]`) }).start(
+      const spinner = ora({ prefixText: color.cyan(`[${name}]`) }).start(
         `start to loading "${profile}"`,
       );
 
@@ -67,7 +67,7 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
             (url: string) => loadShardingFileWithSpinner(url, cwd, spinner),
           );
         } catch {
-          spinner.fail(red((error as Error).message));
+          spinner.fail(color.red((error as Error).message));
           throw error;
         }
       }
@@ -108,7 +108,7 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
       }
 
       spinner.succeed(
-        `the local url: ${cyan(sdk.server.getClientUrl('homepage'))}`,
+        `the local url: ${color.cyan(sdk.server.getClientUrl('homepage'))}`,
       );
 
       return sdk;
