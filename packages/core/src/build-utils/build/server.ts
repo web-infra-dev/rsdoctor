@@ -1,4 +1,4 @@
-import connect from 'connect';
+import { connect } from 'connect-next';
 import http from 'http';
 import os from 'os';
 import gp from 'get-port';

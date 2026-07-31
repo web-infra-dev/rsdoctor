@@ -38,6 +38,22 @@ describe('test src/server.ts', () => {
     }
   });
 
+  it('runs mounted middleware', async () => {
+    const { app, server, close } = await Server.createServer(0);
+    const { port } = server.address() as AddressInfo;
+
+    app.use('/health', (_req, res) => {
+      res.end('ok');
+    });
+
+    try {
+      const response = await fetch(`http://${defaultHost}:${port}/health`);
+      expect(await response.text()).toEqual('ok');
+    } finally {
+      await close();
+    }
+  });
+
   it('rejects when the requested port is already in use', async () => {
     const { server, close } = await Server.createServer(0);
     const { port } = server.address() as AddressInfo;
