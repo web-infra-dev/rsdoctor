@@ -14,38 +14,40 @@ process.stderr.cursorTo = () => {};
 // @ts-ignore
 process.stderr.moveCursor = () => {};
 
-// Function to replace paths in manifest.json
-function replacePaths(
-  manifestPath: fs.PathOrFileDescriptor,
+function serializeManifestWithReplacedPaths(
+  manifest: string,
   oldPath: string,
   newPath: string,
 ) {
-  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
-
-  const replaceInObject = (obj: { [x: string]: any }) => {
-    for (const key in obj) {
-      if (typeof obj[key] === 'string') {
-        obj[key] = obj[key].replace(oldPath, newPath);
-      } else if (Array.isArray(obj[key])) {
-        obj[key] = obj[key].map((item) =>
-          typeof item === 'string' ? item.replace(oldPath, newPath) : item,
-        );
-      } else if (typeof obj[key] === 'object') {
-        replaceInObject(obj[key]);
-      }
-    }
-  };
-
-  replaceInObject(manifest);
-
-  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8');
+  return JSON.stringify(
+    JSON.parse(manifest),
+    (_key, value) =>
+      typeof value === 'string' ? value.replaceAll(oldPath, newPath) : value,
+    2,
+  );
 }
 
-test.afterEach(async ({ page }) => {
-  await page.close();
+test('escapes Windows paths in manifest JSON', () => {
+  const oldPath = '<root>/rsdoctor';
+  const newPath = String.raw`C:\workspace\rsdoctor`;
+  const manifest = JSON.stringify({
+    root: oldPath,
+    files: [`${oldPath}/index.js`],
+  });
+
+  const updatedManifest = serializeManifestWithReplacedPaths(
+    manifest,
+    oldPath,
+    newPath,
+  );
+
+  expect(JSON.parse(updatedManifest)).toEqual({
+    root: newPath,
+    files: [`${newPath}/index.js`],
+  });
 });
 
-test('use Rsdoctor manifest data', async () => {
+test('use Rsdoctor manifest data', async ({ page }) => {
   // Usage
   const manifestPath = path.resolve(
     __dirname,
@@ -53,33 +55,39 @@ test('use Rsdoctor manifest data', async () => {
   );
   const oldPath = '<root>/rsdoctor';
   const newPath = path.resolve(__dirname, '../../../');
+  const originalManifest = fs.readFileSync(manifestPath, 'utf-8');
 
-  replacePaths(manifestPath, oldPath, newPath);
-
-  const { dispose, page } = await openBrowserByDiffCLI(
-    getRsdoctorManifestPath(),
+  fs.writeFileSync(
+    manifestPath,
+    serializeManifestWithReplacedPaths(originalManifest, oldPath, newPath),
+    'utf-8',
   );
 
-  await page.evaluate(
-    `window.location.hash = ${JSON.stringify(Client.RsdoctorClientRoutes.BundleDiff)}`,
-  );
+  let dispose: (() => Promise<void>) | undefined;
 
-  replacePaths(manifestPath, newPath, oldPath);
+  try {
+    ({ dispose } = await openBrowserByDiffCLI(page, getRsdoctorManifestPath()));
 
-  // card for bundle diff.
-  await page.waitForSelector('.statistic-card', { timeout: 20000 });
-  const tabs = await page.$$(`#root .ant-tabs-tab`);
+    await page.evaluate(
+      `window.location.hash = ${JSON.stringify(Client.RsdoctorClientRoutes.BundleDiff)}`,
+    );
 
-  expect(tabs.length).toBeGreaterThan(0);
+    // card for bundle diff.
+    await page.waitForSelector('.statistic-card', { timeout: 20000 });
+    const tabs = await page.$$(`#root .ant-tabs-tab`);
 
-  const tabTexts = await Promise.all(
-    tabs.map((tab) => page.evaluate((node) => node.textContent, tab)),
-  );
+    expect(tabs.length).toBeGreaterThan(0);
 
-  expect(tabTexts).toContain('Overview');
-  expect(tabTexts).toContain('Assets');
-  expect(tabTexts).toContain('Modules');
-  expect(tabTexts).toContain('Packages');
+    const tabTexts = await Promise.all(
+      tabs.map((tab) => page.evaluate((node) => node.textContent, tab)),
+    );
 
-  await dispose();
+    expect(tabTexts).toContain('Overview');
+    expect(tabTexts).toContain('Assets');
+    expect(tabTexts).toContain('Modules');
+    expect(tabTexts).toContain('Packages');
+  } finally {
+    fs.writeFileSync(manifestPath, originalManifest, 'utf-8');
+    await dispose?.();
+  }
 });

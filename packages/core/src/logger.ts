@@ -1,5 +1,4 @@
-import c from 'picocolors';
-import { createLogger, logger } from 'rslog';
+import { color, createLogger, logger } from 'rslog';
 import { Constants } from '@rsdoctor/shared/types';
 
 /**
@@ -18,29 +17,29 @@ const rsdoctorLogger = createLogger();
 
 rsdoctorLogger.override({
   log: (message) => {
-    console.log(`${c.green('[RSDOCTOR LOG]')} ${message}`);
+    console.log(`${color.green('[RSDOCTOR LOG]')} ${message}`);
   },
   info: (message) => {
-    console.log(`${c.yellow('[RSDOCTOR INFO]')} ${message}`);
+    console.log(`${color.yellow('[RSDOCTOR INFO]')} ${message}`);
   },
   warn: (message) => {
-    console.warn(`${c.yellow('[RSDOCTOR WARN]')} ${message}`);
+    console.warn(`${color.yellow('[RSDOCTOR WARN]')} ${message}`);
   },
   start: (message) => {
-    console.log(`${c.green('[RSDOCTOR START]')} ${message}`);
+    console.log(`${color.green('[RSDOCTOR START]')} ${message}`);
   },
   ready: (message) => {
-    console.log(`${c.green('[RSDOCTOR READY]')} ${message}`);
+    console.log(`${color.green('[RSDOCTOR READY]')} ${message}`);
   },
   error: (message) => {
-    console.error(`${c.red('[RSDOCTOR ERROR]')} ${message}`);
+    console.error(`${color.red('[RSDOCTOR ERROR]')} ${message}`);
   },
   success: (message) => {
-    console.error(`${c.green('[RSDOCTOR SUCCESS]')} ${message}`);
+    console.error(`${color.green('[RSDOCTOR SUCCESS]')} ${message}`);
   },
   debug: (message) => {
     if (process.env.DEBUG) {
-      console.log(`${c.blue('[RSDOCTOR DEBUG]')} ${message}`);
+      console.log(`${color.blue('[RSDOCTOR DEBUG]')} ${message}`);
     }
   },
 });
@@ -78,4 +77,4 @@ function timeEnd(label: string) {
   _timers.delete(label);
 }
 
-export { time, timeEnd, c as chalk, rsdoctorLogger as logger };
+export { time, timeEnd, color as chalk, rsdoctorLogger as logger };

@@ -104,10 +104,6 @@ async function rspackCompile(compile: typeof compileByRspackLayers) {
   return plugin.sdk;
 }
 
-test.afterEach(async ({ page }) => {
-  await page.close();
-});
-
 test('rspack data store', async () => {
   const sdk = await rspackCompile(compileByRspackLayers);
   const datas = sdk.getStoreData();
