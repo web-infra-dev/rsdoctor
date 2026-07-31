@@ -31,7 +31,7 @@ function isJsonOutputEnv(value: unknown): boolean {
   return value === 'json';
 }
 function normalizeGzipLevel(value: unknown): number {
-  const gzipLevel = value === undefined ? 9 : value;
+  const gzipLevel = value === undefined ? 6 : value;
   assert(
     typeof gzipLevel === 'number' &&
       Number.isInteger(gzipLevel) &&
