@@ -590,9 +590,6 @@ importers:
       '@babel/code-frame':
         specifier: 7.26.2
         version: 7.26.2
-      '@rsbuild/plugin-check-syntax':
-        specifier: 'catalog:'
-        version: 1.6.1(@rsbuild/core@2.1.9)
       '@rsdoctor/client':
         specifier: workspace:*
         version: link:../client
@@ -617,6 +614,9 @@ importers:
       browserslist-load-config:
         specifier: ^1.0.3
         version: 1.0.3
+      caniuse-lite:
+        specifier: ^1.0.30001792
+        version: 1.0.30001792
       connect:
         specifier: 3.7.0
         version: 3.7.0
@@ -632,9 +632,6 @@ importers:
       get-port:
         specifier: 5.1.1
         version: 5.1.1
-      json-stream-stringify:
-        specifier: 3.0.1
-        version: 3.0.1
       launch-editor:
         specifier: ^2.14.1
         version: 2.14.1
@@ -663,6 +660,9 @@ importers:
         specifier: 8.21.1
         version: 8.21.1
     devDependencies:
+      '@rsbuild/plugin-check-syntax':
+        specifier: 'catalog:'
+        version: 1.6.1(@rsbuild/core@2.1.9)
       '@rspack/core':
         specifier: 'catalog:'
         version: 2.1.7(@swc/helpers@0.5.23)
@@ -699,6 +699,9 @@ importers:
       filesize:
         specifier: 'catalog:'
         version: 11.0.22
+      json-stream-stringify:
+        specifier: 3.0.1
+        version: 3.0.1
       string-loader:
         specifier: 0.0.1
         version: 0.0.1
@@ -3583,9 +3586,6 @@ packages:
 
   caniuse-api@3.0.0:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
-
-  caniuse-lite@1.0.30001762:
-    resolution: {integrity: sha512-PxZwGNvH7Ak8WX5iXzoK1KPZttBXNPuaOvI2ZYU7NrlM+d9Ov+TUvlLOBNGzVXAntMSMMlJPd+jY6ovrVjSmUw==}
 
   caniuse-lite@1.0.30001792:
     resolution: {integrity: sha512-hVLMUZFgR4JJ6ACt1uEESvQN1/dBVqPAKY0hgrV70eN3391K6juAfTjKZLKvOMsx8PxA7gsY1/tLMMTcfFLLpw==}
@@ -9907,7 +9907,7 @@ snapshots:
   browserslist@4.28.1:
     dependencies:
       baseline-browser-mapping: 2.9.11
-      caniuse-lite: 1.0.30001762
+      caniuse-lite: 1.0.30001792
       electron-to-chromium: 1.5.267
       node-releases: 2.0.27
       update-browserslist-db: 1.2.3(browserslist@4.28.1)
@@ -9971,8 +9971,6 @@ snapshots:
       caniuse-lite: 1.0.30001792
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
-
-  caniuse-lite@1.0.30001762: {}
 
   caniuse-lite@1.0.30001792: {}
 
