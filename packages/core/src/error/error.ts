@@ -3,11 +3,16 @@ import { codeFrameColumns } from '@babel/code-frame';
 import { isEqual } from '@rsdoctor/shared/collection';
 import { Lodash } from '@rsdoctor/shared/common-browser';
 import { Err, Rule } from '@rsdoctor/shared/types';
-import { createColors } from 'picocolors';
+import { color } from 'rslog';
 import { transform } from './transform';
 import { insertSpace, toLevel } from './utils';
 
 let id = 1;
+
+const stringify = (text: string | number) => String(text);
+const plainColor = Object.fromEntries(
+  Object.keys(color).map((key) => [key, stringify]),
+) as typeof color;
 
 export class DevToolError extends Error implements Err.DevToolErrorInstance {
   static from(err: unknown, opt?: Err.DevToolErrorParams): DevToolError {
@@ -87,7 +92,7 @@ export class DevToolError extends Error implements Err.DevToolErrorInstance {
     return this._codeFrame;
   }
 
-  private printCodeFrame(print: ReturnType<typeof createColors>) {
+  private printCodeFrame(print: typeof color) {
     const msgs: string[] = [];
     const { _codeFrame: codeFrameOpt, _controller: controller } = this;
 
@@ -180,7 +185,7 @@ export class DevToolError extends Error implements Err.DevToolErrorInstance {
       _controller: controller,
     } = this;
 
-    const print = createColors(!controller.noColor);
+    const print = controller.noColor ? plainColor : color;
 
     const mainColorPrint =
       this._level === Err.ErrorLevel.Error ? print.red : print.yellow;
