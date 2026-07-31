@@ -39,7 +39,7 @@ describe('gzip size collection', () => {
       gzip,
     );
 
-    expect(asset.gzipSize).toBe(gzipSync(source, { level: 9 }).length);
+    expect(asset.gzipSize).toBe(gzipSync(source, { level: 6 }).length);
   });
 
   it('uses the configured gzip level for assets', () => {

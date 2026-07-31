@@ -106,7 +106,7 @@ describe('normalizeUserConfig', () => {
   it('should use default supports when not provided', () => {
     const result = normalizeUserConfig();
     expect(result.supports.banner).toEqual(undefined);
-    expect(result.supports.gzip).toEqual({ gzipLevel: 9 });
+    expect(result.supports.gzip).toEqual({ gzipLevel: 6 });
     expect(result.supports.parseBundle).toEqual(true);
   });
 
@@ -116,7 +116,7 @@ describe('normalizeUserConfig', () => {
         gzip: true,
       },
     });
-    expect(result.supports.gzip).toEqual({ gzipLevel: 9 });
+    expect(result.supports.gzip).toEqual({ gzipLevel: 6 });
   });
 
   it('should normalize an empty gzip config with the default level', () => {
@@ -125,7 +125,7 @@ describe('normalizeUserConfig', () => {
         gzip: {},
       },
     });
-    expect(result.supports.gzip).toEqual({ gzipLevel: 9 });
+    expect(result.supports.gzip).toEqual({ gzipLevel: 6 });
   });
 
   it('should respect disabled gzip support', () => {

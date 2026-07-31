@@ -69,7 +69,7 @@ export type GzipConfig =
       /**
        * Gzip compression level used to calculate asset and module gzip sizes.
        * Must be an integer between 0 and 9.
-       * @default 9
+       * @default 6
        */
       gzipLevel?: number;
     };
