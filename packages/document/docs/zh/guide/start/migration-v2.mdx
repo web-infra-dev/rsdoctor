@@ -4,7 +4,7 @@ Rsdoctor 2.0 围绕 Rspack 收敛了包结构。大多数项目只需要安装 `
 
 ## 检查构建工具
 
-Rsdoctor 2.0 支持基于 Rspack 的工具，不再支持 webpack，并移除了 `@rsdoctor/webpack-plugin`。
+Rsdoctor 2.0 要求使用 Node.js 20.19 及以上版本和 Rspack 2.0 及以上版本，不再支持 Rspack 1.x。此外，Rsdoctor 2.0 不再支持 webpack，并移除了 `@rsdoctor/webpack-plugin`。
 
 - Rspack 项目可以继续按照本文档迁移。
 - webpack 项目应继续使用 Rsdoctor 1.x，或先迁移到 Rspack，再升级 Rsdoctor。
@@ -28,7 +28,7 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 ```
 
-`@rspack/core` 仍是 `@rsdoctor/core` 的可选 peer dependency。基于 Rspack 的构建工具通常已经提供该依赖；直接使用 Rspack 的项目需要安装 `@rspack/core`。
+`@rspack/core` 仍是 `@rsdoctor/core` 的可选 peer dependency，最低支持版本为 2.0。基于 Rspack 的构建工具通常已经提供该依赖；直接使用 Rspack 的项目需要安装 `@rspack/core`。
 
 Rsdoctor 2.0 要求使用 Rspack 内置的 Rsdoctor 原生插件来收集模块图和 chunk 图。请移除原有的 `experiments.enableNativePlugin` 配置，因为原生链路现在始终启用。如果构建提示 `experiments.RsdoctorPlugin` 不可用，请升级项目或框架提供的 Rspack 依赖。
 

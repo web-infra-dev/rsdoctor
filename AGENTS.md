@@ -2,7 +2,7 @@
 
 ## Stack
 
-- Node.js `24.15+`, package manager **pnpm `10.33+`** (enable via `corepack enable`)
+- Node.js `20.19+`, package manager **pnpm `10.33+`** (enable via `corepack enable`)
 - `pnpm` workspace monorepo (topological build ordering)
 - TypeScript strict mode; target `node 16` for library output
 - Build toolchain: **Rslib** (based on Rsbuild/Rspack)

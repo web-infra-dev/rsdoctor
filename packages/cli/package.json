@@ -20,6 +20,9 @@
     }
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
