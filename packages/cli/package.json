@@ -20,6 +20,9 @@
     }
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=22.18.0"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -32,12 +35,12 @@
   "dependencies": {
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
-    "ora": "^9.4.1"
+    "ora": "^9.4.1",
+    "rslog": "^2.1.3"
   },
   "devDependencies": {
     "cac": "^7.0.0",
-    "typescript": "catalog:",
-    "picocolors": "catalog:"
+    "typescript": "catalog:"
   },
   "publishConfig": {
     "access": "public",

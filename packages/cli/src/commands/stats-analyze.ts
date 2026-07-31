@@ -5,8 +5,8 @@ import {
   Manifest as ManifestType,
   SDK,
 } from '@rsdoctor/shared/types';
-import { cyan } from 'picocolors';
 import ora from 'ora';
+import { color } from 'rslog';
 import { Commands } from '../constants';
 import { Command } from '../types';
 import { enhanceCommand, readFile } from '../utils';
@@ -51,7 +51,7 @@ export const statsAnalyze: Command<
   },
   async action({ profile, open = true, port, type = SDK.ToDataType.Normal }) {
     const serverPort = coercePort(port);
-    const spinner = ora({ prefixText: cyan(`[${name}]`) }).start(
+    const spinner = ora({ prefixText: color.cyan(`[${name}]`) }).start(
       `start to loading "${profile}"`,
     );
     const statsStrings = await readFile(profile, cwd);
@@ -87,7 +87,7 @@ export const statsAnalyze: Command<
     }
 
     spinner.succeed(
-      `the local url: ${cyan(sdk.server.getClientUrl('homepage'))}`,
+      `the local url: ${color.cyan(sdk.server.getClientUrl('homepage'))}`,
     );
 
     return sdk;

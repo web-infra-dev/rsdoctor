@@ -90,9 +90,6 @@ catalogs:
     path-browserify:
       specifier: 1.0.1
       version: 1.0.1
-    picocolors:
-      specifier: ^1.1.1
-      version: 1.1.1
     react:
       specifier: 19.2.8
       version: 19.2.8
@@ -170,7 +167,7 @@ importers:
         version: 3.9.6
       rsbuild-plugin-publint:
         specifier: ^0.3.4
-        version: 0.3.4(@rsbuild/core@2.1.8(core-js@3.49.0))
+        version: 0.3.4(@rsbuild/core@2.1.7(core-js@3.49.0))
 
   e2e:
     devDependencies:
@@ -448,13 +445,13 @@ importers:
       ora:
         specifier: ^9.4.1
         version: 9.4.1
+      rslog:
+        specifier: ^2.1.3
+        version: 2.1.3
     devDependencies:
       cac:
         specifier: ^7.0.0
         version: 7.0.0
-      picocolors:
-        specifier: 'catalog:'
-        version: 1.1.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -626,9 +623,6 @@ importers:
       envinfo:
         specifier: 7.21.0
         version: 7.21.0
-      filesize:
-        specifier: 'catalog:'
-        version: 11.0.22
       fs-extra:
         specifier: 'catalog:'
         version: 11.3.0
@@ -647,9 +641,6 @@ importers:
       open:
         specifier: ^11.0.0
         version: 11.0.0
-      picocolors:
-        specifier: 'catalog:'
-        version: 1.1.1
       raw-body:
         specifier: 3.0.2
         version: 3.0.2
@@ -702,6 +693,9 @@ importers:
       babel-loader:
         specifier: 10.1.1
         version: 10.1.1(@babel/core@7.29.0)(@rspack/core@2.1.5(@swc/helpers@0.5.23))(webpack@5.105.4)
+      filesize:
+        specifier: 'catalog:'
+        version: 11.0.22
       string-loader:
         specifier: 0.0.1
         version: 0.0.1
@@ -831,6 +825,10 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
+
+  packages/shared/tests/graph/fixture: {}
+
+  packages/shared/tests/graph/fixture/index: {}
 
   scripts/test-helper:
     dependencies:
@@ -12771,12 +12769,12 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.1.7(core-js@3.49.0)
 
-  rsbuild-plugin-publint@0.3.4(@rsbuild/core@2.1.8(core-js@3.49.0)):
+  rsbuild-plugin-publint@0.3.4(@rsbuild/core@2.1.7(core-js@3.49.0)):
     dependencies:
       picocolors: 1.1.1
       publint: 0.3.17
     optionalDependencies:
-      '@rsbuild/core': 2.1.8(core-js@3.49.0)
+      '@rsbuild/core': 2.1.7(core-js@3.49.0)
 
   rslog@1.3.2: {}
 

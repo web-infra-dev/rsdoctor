@@ -29,4 +29,24 @@ describe('DevToolError', () => {
     expect(createError(7).isSame(createError(7))).toBe(true);
     expect(createError(7).isSame(createError(8))).toBe(false);
   });
+
+  it('disables all styling when noColor is enabled', () => {
+    const error = new DevToolError('title', 'message', {
+      code: 'E001',
+      hint: 'check the config',
+      referenceUrl: 'https://example.com',
+      controller: {
+        noColor: true,
+      },
+    });
+
+    expect(error.toString()).toBe(
+      [
+        '[E001:Error:TITLE] message',
+        '',
+        ' HINT: check the config',
+        ' See: https://example.com',
+      ].join('\n'),
+    );
+  });
 });

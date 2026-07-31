@@ -1,5 +1,5 @@
 import ora from 'ora';
-import { cyan, red } from 'picocolors';
+import { color } from 'rslog';
 import { Command } from '../types';
 import path from 'path';
 import fs from 'fs';
@@ -66,7 +66,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
     json = false,
     output, // ????
   }) {
-    const spinner = ora({ prefixText: cyan(`[${name}]`) }).start();
+    const spinner = ora({ prefixText: color.cyan(`[${name}]`) }).start();
 
     spinner.text = `loading "${baseline}"`;
     const baselineData = {
@@ -95,7 +95,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
           (url) => loadShardingFileWithSpinner(url, cwd, spinner),
         );
       } else {
-        spinner.fail(red((error as Error).message));
+        spinner.fail(color.red((error as Error).message));
         throw error;
       }
     }
@@ -127,14 +127,14 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
           (url) => loadShardingFileWithSpinner(url, cwd, spinner),
         );
       } else {
-        spinner.fail(red((error as Error).message));
+        spinner.fail(color.red((error as Error).message));
         throw error;
       }
     }
 
     if (json && html) {
       spinner.fail(
-        red(
+        color.red(
           'Options "--json" and "--html" cannot be used together. Please choose one.',
         ),
       );
