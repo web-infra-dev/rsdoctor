@@ -4,7 +4,7 @@ Rsdoctor 2.0 consolidates the package structure around Rspack. This release remo
 
 ## Check your bundler
 
-Rsdoctor 2.0 supports Rspack-based tools. webpack support and `@rsdoctor/webpack-plugin` have been removed.
+Rsdoctor 2.0 requires Node.js 22.18 or later and Rspack 2.0 or later. Rspack 1.x is no longer supported. webpack support and `@rsdoctor/webpack-plugin` have also been removed.
 
 - For an Rspack-based project, continue with this guide.
 - For a webpack project, stay on Rsdoctor 1.x or migrate the project to Rspack before upgrading Rsdoctor.
@@ -28,7 +28,7 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 ```
 
-`@rspack/core` remains an optional peer dependency of `@rsdoctor/core`. Your Rspack-based build tool normally provides it. Install `@rspack/core` in projects that use Rspack directly.
+`@rspack/core` remains an optional peer dependency of `@rsdoctor/core`, with a minimum supported version of 2.0. Your Rspack-based build tool normally provides it. Install `@rspack/core` in projects that use Rspack directly.
 
 Rsdoctor 2.0 requires the Rsdoctor native plugin built into Rspack for module and chunk graph collection. Remove the former `experiments.enableNativePlugin` option because the native path is now always enabled. If the build reports that `experiments.RsdoctorPlugin` is unavailable, upgrade the Rspack dependency supplied by your project or framework.
 

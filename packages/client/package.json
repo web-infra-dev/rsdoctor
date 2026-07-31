@@ -11,6 +11,9 @@
     "dist"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.18.0"
+  },
   "scripts": {
     "dev": "rsbuild dev",
     "start": "NODE_ENV=development rsbuild build -w",
