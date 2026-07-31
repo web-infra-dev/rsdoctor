@@ -9,6 +9,8 @@ describe('test src/common/time.ts', () => {
     const start = Date.now();
     const startH = hrtime();
     const delay = 500;
+    // Timer scheduling and timestamp rounding may differ by a few milliseconds.
+    const timerTolerance = 5;
 
     const value = await new Promise((resolve) => {
       setTimeout(() => {
@@ -16,7 +18,7 @@ describe('test src/common/time.ts', () => {
       }, delay);
     });
 
-    expect(value).toBeGreaterThanOrEqual(start + delay);
+    expect(value).toBeGreaterThanOrEqual(start + delay - timerTolerance);
   });
 
   it('toFixedDigits', () => {
