@@ -832,6 +832,10 @@ importers:
         specifier: 'catalog:'
         version: 7.0.2
 
+  packages/shared/tests/graph/fixture: {}
+
+  packages/shared/tests/graph/fixture/index: {}
+
   scripts/test-helper:
     dependencies:
       '@rsbuild/core':
