@@ -15,7 +15,9 @@ export default defineConfig({
         },
       },
       bundle: true,
-      dts: true,
+      dts: {
+        isolated: true,
+      },
       syntax: 'es2021',
     },
   ],
