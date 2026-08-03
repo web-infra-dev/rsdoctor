@@ -45,7 +45,6 @@
   },
   "dependencies": {
     "@babel/code-frame": "7.26.2",
-    "@rsbuild/plugin-check-syntax": "catalog:",
     "@rspack/lite-tapable": "catalog:",
     "@rsdoctor/shared": "workspace:*",
     "@types/estree": "catalog:",
@@ -53,11 +52,11 @@
     "acorn-import-attributes": "^1.9.5",
     "acorn-walk": "8.3.5",
     "browserslist-load-config": "^1.0.3",
+    "caniuse-lite": "^1.0.30001792",
     "connect": "3.7.0",
     "envinfo": "7.21.0",
     "fs-extra": "catalog:",
     "get-port": "5.1.1",
-    "json-stream-stringify": "3.0.1",
     "lines-and-columns": "2.0.4",
     "open": "^11.0.0",
     "raw-body": "3.0.2",
@@ -71,6 +70,7 @@
     "ws": "8.21.1"
   },
   "devDependencies": {
+    "@rsbuild/plugin-check-syntax": "catalog:",
     "@rspack/core": "catalog:",
     "@scripts/test-helper": "workspace:*",
     "@types/babel__code-frame": "7.27.0",
@@ -81,6 +81,7 @@
     "@types/semver": "^7.7.1",
     "babel-loader": "10.1.1",
     "filesize": "catalog:",
+    "json-stream-stringify": "3.0.1",
     "string-loader": "0.0.1",
     "ts-loader": "^9.6.2",
     "tslib": "catalog:",
