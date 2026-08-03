@@ -28,7 +28,7 @@
   "dependencies": {
     "@rsbuild/core": "catalog:",
     "@rspack/core": "catalog:",
-    "@types/lodash": "^4.17.24",
+    "@types/lodash": "^4.17.25",
     "@types/node": "catalog:",
     "es-toolkit": "catalog:",
     "memfs": "4.57.8",
