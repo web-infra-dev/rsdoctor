@@ -12,7 +12,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=24.18.1"
   },
   "scripts": {
     "dev": "rsbuild dev",
