@@ -49,6 +49,28 @@ function linkDependency(
   fs.symlinkSync(packageRoot, target, 'junction');
 }
 
+function resolvePackageRoot(packageName: string) {
+  const segments = packageName.split('/');
+  const nodeModulesPaths =
+    require.resolve.paths('__rsdoctor_dependency__') ?? [];
+
+  for (const nodeModulesPath of nodeModulesPaths) {
+    const packageRoot = path.join(nodeModulesPath, ...segments);
+    const packageJsonPath = path.join(packageRoot, 'package.json');
+    if (fs.existsSync(packageJsonPath)) {
+      const packageJson = JSON.parse(
+        fs.readFileSync(packageJsonPath, 'utf-8'),
+      ) as { name?: string };
+
+      if (packageJson.name === packageName) {
+        return fs.realpathSync(packageRoot);
+      }
+    }
+  }
+
+  throw new Error(`Unable to resolve package root for ${packageName}`);
+}
+
 function installSharedDependencies(consumerNodeModules: string) {
   const sharedPackageJson = JSON.parse(
     fs.readFileSync(sharedPackageJsonPath, 'utf-8'),
@@ -62,17 +84,10 @@ function installSharedDependencies(consumerNodeModules: string) {
   ];
 
   for (const packageName of packages) {
-    const dependencyPackageJsonPath = require.resolve(
-      `${packageName}/package.json`,
-      {
-        paths: [sharedRoot],
-      },
-    );
-
     linkDependency(
       consumerNodeModules,
       packageName,
-      path.dirname(dependencyPackageJsonPath),
+      resolvePackageRoot(packageName),
     );
   }
 }
@@ -120,6 +135,7 @@ describe('@rsdoctor/shared published declarations', () => {
               noEmit: true,
               strict: true,
               target: 'ES2022',
+              types: ['node'],
             },
             include: ['index.ts'],
           },
