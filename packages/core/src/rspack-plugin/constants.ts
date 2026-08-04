@@ -23,4 +23,4 @@ export const internalPluginTapPostOptions = (namespace: string): Tap => ({
   stage: 1000,
 });
 
-export const pkg = packageJson;
+export const pkg: { version: string } = packageJson;
