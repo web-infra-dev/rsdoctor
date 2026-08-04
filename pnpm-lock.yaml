@@ -793,6 +793,9 @@ importers:
       '@types/estree':
         specifier: 'catalog:'
         version: 1.0.5
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.12.3
       buffer:
         specifier: 6.0.3
         version: 6.0.3
@@ -809,9 +812,6 @@ importers:
       '@rspack/core':
         specifier: 'catalog:'
         version: 2.1.7(@swc/helpers@0.5.23)
-      '@types/node':
-        specifier: 'catalog:'
-        version: 24.12.3
       '@types/path-browserify':
         specifier: 'catalog:'
         version: 1.0.3
