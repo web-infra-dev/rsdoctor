@@ -12,7 +12,14 @@ export function setSDK(t: SDK.RsdoctorBuilderSDKInstance) {
   if (!globalThis.__rsdoctor_sdks__) {
     globalThis.__rsdoctor_sdks__ = [];
   }
-  globalThis.__rsdoctor_sdks__!.push(t);
+  const sameNameIndex = globalThis.__rsdoctor_sdks__.findIndex(
+    (sdk) => sdk.name === t.name,
+  );
+  if (sameNameIndex >= 0) {
+    globalThis.__rsdoctor_sdks__[sameNameIndex] = t;
+  } else if (!globalThis.__rsdoctor_sdks__.includes(t)) {
+    globalThis.__rsdoctor_sdks__.push(t);
+  }
   globalThis.__rsdoctor_sdk__ = t;
 }
 

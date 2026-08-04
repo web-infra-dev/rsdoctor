@@ -44,6 +44,7 @@ This `Options` object is the configuration for [RsdoctorRspackPlugin](#rsdoctorr
 - [supports](./supports.mdx) - **Feature Support Configuration**: Enable compatibility support for specific build tools, such as BannerPlugin, etc.
 - [brief](./brief.mdx) - **Brief Mode Configuration**: Control the generation of brief mode reports, including HTML filename and whether to generate JSON data files.
 - [mode](./mode.mdx) - **Build Report Data Output Mode**: Select the output mode for reports, supporting normal (normal mode) and brief (brief mode).
+- [multiCompiler](./multiCompiler.mdx) - **Multi-compiler Configuration**: Automatically detect and isolate reports for Rspack MultiCompiler and Rsbuild environments.
 
 ### RsdoctorRspackPluginOptions
 
@@ -51,6 +52,8 @@ This `Options` object is the configuration for [RsdoctorRspackPlugin](#rsdoctorr
 interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
+  multiCompiler?: boolean | { group?: string };
+
   /** Linter configuration */
   linter?: LinterType.Options<Rules, InternalRules>;
 
