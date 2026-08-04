@@ -1,0 +1,16 @@
+# multiCompiler
+
+- **类型：** `boolean | { group?: string }`
+- **默认值：** `true`
+
+`RsdoctorRspackPlugin` 默认会自动识别同一次启动中的多个 compiler，为每个 compiler 创建独立的分析数据，并在报告中提供 compiler 切换入口。Rsbuild 的 `environments` 会直接使用 environment 名称，例如 `web`、`node`。
+
+默认 compiler 仍输出到原有的 `.rsdoctor` 目录，其他 compiler 输出到 `.rsdoctor/compilers/<compilerName>`。
+
+如果同一进程会同时创建多个互不相关的 compiler，可以设置为 `false` 来关闭跨插件实例的自动聚合。也可以提供 `group`，显式指定需要聚合的插件实例：
+
+```ts
+new RsdoctorRspackPlugin({
+  multiCompiler: { group: 'ssr' },
+});
+```

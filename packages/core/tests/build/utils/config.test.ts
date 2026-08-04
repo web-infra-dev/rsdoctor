@@ -54,6 +54,22 @@ describe('normalizeUserConfig', () => {
     // @ts-ignore
     expect(result.output.compressData).toBe(undefined);
     expect(result.output.mode).toBe('normal');
+    expect(result.multiCompiler).toEqual({
+      enabled: true,
+      group: undefined,
+    });
+  });
+
+  it('should normalize multi-compiler configuration', () => {
+    expect(normalizeUserConfig({ multiCompiler: false }).multiCompiler).toEqual(
+      {
+        enabled: false,
+        group: undefined,
+      },
+    );
+    expect(
+      normalizeUserConfig({ multiCompiler: { group: 'ssr' } }).multiCompiler,
+    ).toEqual({ enabled: true, group: 'ssr' });
   });
 
   it('should handle compressData configuration correctly', () => {

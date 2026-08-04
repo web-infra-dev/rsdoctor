@@ -129,6 +129,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     printLog = { serverUrls: true },
     mode = undefined,
     brief = undefined,
+    multiCompiler = true,
   } = normalizedConfig;
   const supports = {
     ...getDefaultSupports(),
@@ -153,6 +154,10 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     ...userServer,
   };
   assert(typeof server.port === 'undefined' || typeof server.port === 'number');
+  assert(
+    typeof multiCompiler === 'boolean' ||
+      (typeof multiCompiler === 'object' && multiCompiler !== null),
+  );
   if (typeof server.port === 'undefined' && typeof port !== 'undefined') {
     server.port = port;
   }
@@ -215,6 +220,11 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     port,
     server,
     printLog,
+    multiCompiler: {
+      enabled: multiCompiler !== false,
+      group:
+        typeof multiCompiler === 'object' ? multiCompiler.group : undefined,
+    },
   };
 
   // Add deprecation warning for compressData

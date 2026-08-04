@@ -1,0 +1,16 @@
+# multiCompiler
+
+- **Type:** `boolean | { group?: string }`
+- **Default:** `true`
+
+`RsdoctorRspackPlugin` automatically detects compilers created during the same startup, creates isolated analysis data for each compiler, and adds a compiler selector to the report. Rsbuild `environments` use their environment names, such as `web` and `node`.
+
+The default compiler keeps the existing `.rsdoctor` output path. Additional compilers are written to `.rsdoctor/compilers/<compilerName>`.
+
+Set this option to `false` when the same process creates unrelated compilers together. You can also explicitly group plugin instances:
+
+```ts
+new RsdoctorRspackPlugin({
+  multiCompiler: { group: 'ssr' },
+});
+```

@@ -36,4 +36,24 @@ describe('SDK registry', () => {
 
     expect(getSDK('web')).toBe(slaveSDK);
   });
+
+  it('does not register the same SDK more than once', () => {
+    const sdk = createSDK('web');
+
+    setSDK(sdk);
+    setSDK(sdk);
+
+    expect(globalThis.__rsdoctor_sdks__).toEqual([sdk]);
+  });
+
+  it('replaces a recreated SDK with the same compiler name', () => {
+    const previous = createSDK('web');
+    const current = createSDK('web');
+
+    setSDK(previous);
+    setSDK(current);
+
+    expect(globalThis.__rsdoctor_sdks__).toEqual([current]);
+    expect(getSDK('web')).toBe(current);
+  });
 });
