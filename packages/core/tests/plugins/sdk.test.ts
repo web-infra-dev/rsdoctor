@@ -1,59 +1,52 @@
-import { afterEach, describe, expect, it } from '@rstest/core';
-import type { SDK } from '@rsdoctor/shared/types';
 import { getSDK, setSDK } from '@/inner-plugins/utils/sdk';
+import type { SDK } from '@rsdoctor/shared/types';
+import { afterEach, describe, expect, it } from '@rstest/core';
 
-const createSDK = (name: string) =>
-  ({ name }) as SDK.RsdoctorBuilderSDKInstance;
-
-const createMultipleSDKs = () => {
-  const controller = {
-    slaves: [] as Array<
-      SDK.RsdoctorBuilderSDKInstance & { compilerPath: string }
-    >,
-  };
+function createMultipleSDKs() {
   const createSlave = (name: string, compilerPath = '') =>
     ({
       name,
       compilerPath,
-      parent: controller,
-    }) as unknown as SDK.RsdoctorBuilderSDKInstance & {
-      compilerPath: string;
-    };
+    }) as SDK.RsdoctorBuilderSDKInstance & { compilerPath: string };
   const webSDK = createSlave('web');
   const nodeSDK = createSlave('node');
-  controller.slaves.push(webSDK, nodeSDK);
-
+  const controller = {
+    slaves: [webSDK, nodeSDK],
+  };
+  Object.assign(webSDK, { parent: controller });
+  Object.assign(nodeSDK, { parent: controller });
   return { controller, createSlave, webSDK, nodeSDK };
-};
+}
 
-afterEach(() => {
-  delete globalThis.__rsdoctor_sdk__;
-  delete globalThis.__rsdoctor_sdks__;
-});
+function createSDK(name: string) {
+  return { name } as SDK.RsdoctorBuilderSDKInstance;
+}
 
 describe('SDK registry', () => {
-  it('returns the latest SDK by default and finds named SDKs', () => {
-    const webSDK = createSDK('web');
-    const web1SDK = createSDK('web1');
-
-    setSDK(webSDK);
-    setSDK(web1SDK);
-
-    expect(getSDK()).toBe(web1SDK);
-    expect(getSDK('web')).toBe(webSDK);
-    expect(getSDK('web1')).toBe(web1SDK);
+  afterEach(() => {
+    globalThis.__rsdoctor_sdk__ = undefined;
+    globalThis.__rsdoctor_sdks__ = undefined;
   });
 
-  it('finds named SDKs from a parent SDK', () => {
-    const slaveSDK = createSDK('web');
-    const parentSDK = {
-      name: 'parent',
-      parent: {
-        slaves: [slaveSDK],
-      },
-    } as unknown as SDK.RsdoctorBuilderSDKInstance;
+  it('returns the named SDK instead of the last registered SDK', () => {
+    const webSDK = createSDK('web');
+    const nodeSDK = createSDK('node');
 
-    setSDK(parentSDK);
+    setSDK(webSDK);
+    setSDK(nodeSDK);
+
+    expect(getSDK('web')).toBe(webSDK);
+    expect(getSDK('node')).toBe(nodeSDK);
+  });
+
+  it('finds sibling SDKs from the controller', () => {
+    const rootSDK = createSDK('root');
+    const slaveSDK = createSDK('web');
+    Object.assign(rootSDK, {
+      parent: { slaves: [rootSDK, slaveSDK] },
+    });
+
+    setSDK(rootSDK);
 
     expect(getSDK('web')).toBe(slaveSDK);
   });
@@ -77,5 +70,25 @@ describe('SDK registry', () => {
     setSDK(nodeSDK);
 
     expect(getSDK('web|child|0|')).toBe(childSDK);
+  });
+
+  it('does not register the same SDK more than once', () => {
+    const sdk = createSDK('web');
+
+    setSDK(sdk);
+    setSDK(sdk);
+
+    expect(globalThis.__rsdoctor_sdks__).toEqual([sdk]);
+  });
+
+  it('replaces a recreated SDK with the same compiler name', () => {
+    const previous = createSDK('web');
+    const current = createSDK('web');
+
+    setSDK(previous);
+    setSDK(current);
+
+    expect(globalThis.__rsdoctor_sdks__).toEqual([current]);
+    expect(getSDK('web')).toBe(current);
   });
 });

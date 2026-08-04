@@ -1,0 +1,14 @@
+{
+  "name": "@examples/doctor-rsbuild-environments",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "rsbuild build",
+    "build:analysis": "ENABLE_CLIENT_SERVER=true rsbuild build"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "catalog:",
+    "@rsdoctor/core": "workspace:*"
+  }
+}
