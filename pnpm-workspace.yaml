@@ -38,6 +38,7 @@ catalog:
   antd: 5.19.1
   clsx: ^2.1.1
   cross-env: ^10.1.0
+  connect-next: 4.0.2
   dayjs: 1.11.21
   es-toolkit: ^1.49.0
   filesize: ^11.0.22

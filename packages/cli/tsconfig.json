@@ -3,6 +3,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "outDir": "./dist",
+    "types": ["node"],
     "paths": {
       "@rsdoctor/core": ["../core/src/index.ts"],
       "@/*": ["./src/*"]

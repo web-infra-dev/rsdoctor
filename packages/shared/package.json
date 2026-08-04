@@ -62,15 +62,15 @@
     "start": "rslib build -w"
   },
   "dependencies": {
-    "@types/connect": "catalog:",
     "@types/estree": "catalog:",
+    "@types/node": "catalog:",
     "@rspack/lite-tapable": "catalog:",
     "buffer": "6.0.3",
+    "connect-next": "catalog:",
     "path-browserify": "catalog:",
     "source-map": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
     "@types/path-browserify": "catalog:",
     "@types/react": "catalog:",
     "@rspack/core": "catalog:",

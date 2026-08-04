@@ -39,6 +39,7 @@
     "rslog": "^2.1.3"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "cac": "^7.0.0",
     "typescript": "catalog:"
   },
