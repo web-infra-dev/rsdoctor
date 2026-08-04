@@ -417,7 +417,9 @@ export class RsdoctorRspackPlugin<
 
   private getOutputDir(compiler: Plugin.BaseCompilerType<'rspack'>) {
     return path.resolve(
-      this.options.output.reportDir || compiler.outputPath,
+      this.options.output.reportDir ||
+        compiler.options.output?.path ||
+        compiler.outputPath,
       this.options.output.mode === SDK.IMode[SDK.IMode.brief]
         ? ''
         : `./${Constants.RsdoctorOutputFolder}`,

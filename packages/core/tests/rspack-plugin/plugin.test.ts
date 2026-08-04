@@ -3,6 +3,7 @@ import { RsdoctorRspackPlugin } from '@/rspack-plugin';
 import { RsdoctorPrimarySDK, RsdoctorSDK } from '@/sdk';
 import { rspack } from '@rspack/core';
 import { afterEach, describe, expect, it } from '@rstest/core';
+import path from 'node:path';
 
 afterEach(async () => {
   delete globalThis.__rsdoctor_sdk__;
@@ -56,6 +57,24 @@ describe('RsdoctorRspackPlugin', () => {
     expect(getSDK('node')).toBe(nodeSDK);
 
     await Promise.all([webSDK.dispose(), nodeSDK.dispose()]);
+  });
+
+  it('uses the configured output path before the compiler starts', async () => {
+    const reportDir = path.join(process.cwd(), 'dist', 'brief-report');
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      output: { mode: 'brief' },
+    });
+
+    rspack({
+      output: { path: reportDir },
+      plugins: [plugin],
+    });
+    await plugin._bootstrapTask;
+
+    expect(plugin.sdk.outputDir).toBe(reportDir);
+
+    await plugin.sdk.dispose();
   });
 
   it('creates isolated compiler contexts when one plugin instance is reused', async () => {
