@@ -9,6 +9,7 @@ import {
   InternalRulesPlugin,
   InternalSummaryPlugin,
   normalizeRspackUserOptions,
+  registerSDK,
   setSDK,
   handleBriefModeReport,
   processCompilerConfig,
@@ -18,7 +19,7 @@ import type {
   RsdoctorRspackPluginOptions,
   RsdoctorRspackPluginOptionsNormalized,
 } from '../types';
-import { findRoot, RsdoctorPrimarySDK, RsdoctorSDK } from '../sdk';
+import { findRoot, RsdoctorPrimarySDK, RsdoctorSDKController } from '../sdk';
 import {
   Constants,
   Linter,
@@ -42,7 +43,7 @@ export class RsdoctorRspackPlugin<
 > implements RsdoctorRspackPluginInstance<Rules> {
   public readonly name = pluginTapName;
 
-  public readonly sdk: SDK.RsdoctorBuilderSDKInstance | RsdoctorPrimarySDK;
+  public readonly sdk: SDK.RsdoctorBuilderSDKInstance;
 
   public readonly isRsdoctorPlugin: boolean;
 
@@ -56,25 +57,45 @@ export class RsdoctorRspackPlugin<
 
   public outsideInstance: boolean;
 
+  protected readonly controller?: RsdoctorSDKController;
+
+  private readonly childOptions: RsdoctorRspackPluginOptions<Rules>;
+
+  private readonly childPlugins = new Map<
+    string,
+    {
+      compiler: Plugin.BaseCompilerType<'rspack'>;
+      sdk: RsdoctorPrimarySDK;
+    }
+  >();
+
   constructor(options?: RsdoctorRspackPluginOptions<Rules>) {
-    this.options = normalizeRspackUserOptions<Rules>(
-      Object.assign(options || {}, {
-        supports: {
-          ...options?.supports,
-        },
-      }),
-    );
-    const { port, server, output, innerClientPath, printLog, sdkInstance } =
+    this.childOptions = {
+      ...options,
+      supports: {
+        ...options?.supports,
+      },
+    };
+    this.options = normalizeRspackUserOptions<Rules>(this.childOptions);
+    const { server, output, innerClientPath, printLog, sdkInstance } =
       this.options;
 
-    this.sdk =
-      this.options.sdkInstance ??
-      new RsdoctorSDK({
-        port,
+    if (sdkInstance) {
+      this.sdk = sdkInstance;
+      if (sdkInstance instanceof RsdoctorPrimarySDK) {
+        this.controller = sdkInstance.parent;
+      }
+    } else {
+      const controller = new RsdoctorSDKController();
+      this.controller = controller;
+      this.sdk = controller.createSlave({
         name: pluginTapName,
-        root: process.cwd(),
+        displayName: 'Main compiler',
+        compilerPath: '',
+        isChild: false,
+        stage: 0,
         type: output.reportCodeType,
-        config: {
+        extraConfig: {
           innerClientPath,
           printLog,
           server,
@@ -86,6 +107,7 @@ export class RsdoctorRspackPlugin<
           features: { treeShaking: this.options.features.treeShaking },
         },
       });
+    }
     this.outsideInstance = Boolean(sdkInstance);
     this.modulesGraph = new ModuleGraph() as SDK.ModuleGraphInstance;
     this.isRsdoctorPlugin = true;
@@ -109,23 +131,40 @@ export class RsdoctorRspackPlugin<
         this._bootstrapTask = this.sdk.bootstrap();
       }
 
-      if (compiler.options.name) {
+      if (compiler.options.name && !compiler.isChild()) {
         this.sdk.setName(compiler.options.name);
       }
 
-      setSDK(this.sdk);
+      if (compiler.isChild()) {
+        registerSDK(this.sdk);
+      } else {
+        setSDK(this.sdk);
+      }
 
-      compiler.hooks.afterPlugins.tap(
-        pluginTapPostOptions,
-        this.afterPlugins.bind(this, compiler),
-      );
-      compiler.hooks.done.tapPromise(
-        {
-          ...pluginTapPostOptions,
-          stage: pluginTapPostOptions.stage! + 100,
-        },
-        this.done.bind(this, compiler),
-      );
+      this.applyChildCompilerSupport(compiler);
+
+      if (compiler.isChild()) {
+        this.getRspackConfig(compiler);
+        compiler.hooks.afterCompile.tapPromise(
+          {
+            ...pluginTapPostOptions,
+            stage: pluginTapPostOptions.stage! + 100,
+          },
+          this.childDone.bind(this, compiler),
+        );
+      } else {
+        compiler.hooks.afterPlugins.tap(
+          pluginTapPostOptions,
+          this.afterPlugins.bind(this, compiler),
+        );
+        compiler.hooks.done.tapPromise(
+          {
+            ...pluginTapPostOptions,
+            stage: pluginTapPostOptions.stage! + 100,
+          },
+          this.done.bind(this, compiler),
+        );
+      }
 
       // TODO: to fix the TypeError: Type instantiation is excessively deep and possibly infinite.
       // @ts-ignore
@@ -134,7 +173,9 @@ export class RsdoctorRspackPlugin<
       );
 
       if (this.options.features.loader) {
-        new BuildUtilLoader.ProbeLoaderPlugin().apply(compiler);
+        if (!compiler.isChild()) {
+          new BuildUtilLoader.ProbeLoaderPlugin().apply(compiler);
+        }
         // add loader page to client
         this.sdk.addClientRoutes([
           Manifest.RsdoctorManifestClientRoutes.Loaders,
@@ -206,6 +247,131 @@ export class RsdoctorRspackPlugin<
     }
   };
 
+  private getOutputDir(compiler: Plugin.BaseCompilerType<'rspack'>) {
+    return path.resolve(
+      this.options.output.reportDir || compiler.outputPath,
+      this.options.output.mode === SDK.IMode[SDK.IMode.brief]
+        ? ''
+        : `./${Constants.RsdoctorOutputFolder}`,
+    );
+  }
+
+  private applyChildCompilerSupport(
+    compiler: Plugin.BaseCompilerType<'rspack'>,
+  ) {
+    compiler.hooks.thisCompilation.tap(
+      {
+        name: `${pluginTapName}:childCompiler`,
+        stage: -999,
+      },
+      (compilation) => {
+        compilation.hooks.childCompiler.tap(
+          `${pluginTapName}:childCompiler`,
+          (childCompiler, compilerName, compilerIndex) => {
+            this.registerChildCompiler(
+              compiler,
+              childCompiler as Plugin.BaseCompilerType<'rspack'>,
+              compilerName,
+              compilerIndex,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  private registerChildCompiler(
+    parentCompiler: Plugin.BaseCompilerType<'rspack'>,
+    childCompiler: Plugin.BaseCompilerType<'rspack'>,
+    compilerName: string,
+    compilerIndex: number,
+  ) {
+    if (!this.controller || !(this.sdk instanceof RsdoctorPrimarySDK)) {
+      return;
+    }
+
+    const compilerPath =
+      childCompiler.compilerPath ||
+      `${parentCompiler.compilerPath}${compilerName}|${compilerIndex}|`;
+    const registeredChild = this.childPlugins.get(compilerPath);
+    if (registeredChild?.compiler === childCompiler) {
+      return;
+    }
+
+    this.controller.master.setOutputDir(this.getOutputDir(parentCompiler));
+
+    const childSDK = (() => {
+      if (registeredChild) {
+        return registeredChild.sdk;
+      }
+
+      const safeCompilerPath =
+        compilerPath.replace(/[^a-zA-Z0-9._-]+/g, '-') ||
+        `${compilerName}-${compilerIndex}`;
+      const displayName =
+        childCompiler.name || compilerName || `Child compiler ${compilerIndex}`;
+      const sdk = this.controller!.createSlave({
+        name: `child-${safeCompilerPath}`,
+        displayName,
+        compilerPath,
+        parentCompilerPath: parentCompiler.compilerPath || '',
+        isChild: true,
+        stage: this.sdk.stage + (this.controller!.slaves.length + 1) / 1000,
+        extraConfig: this.sdk.extraConfig,
+        type: this.sdk.type,
+      });
+      // Child compilers finish before the main compiler writes its pieces.
+      // Avoid waiting for the main manifest from the child lifecycle.
+      sdk.dependencies = [this.sdk.name];
+      return sdk;
+    })();
+
+    this.removeInheritedRsdoctorTaps(childCompiler);
+
+    const childPlugin = new RsdoctorRspackPlugin({
+      ...this.childOptions,
+      sdkInstance: childSDK,
+    });
+    this.childPlugins.set(compilerPath, {
+      compiler: childCompiler,
+      sdk: childSDK,
+    });
+    childPlugin.apply(childCompiler);
+  }
+
+  private removeInheritedRsdoctorTaps(
+    compiler: Plugin.BaseCompilerType<'rspack'>,
+  ) {
+    for (const hook of Object.values(compiler.hooks)) {
+      const mutableHook = hook as unknown as {
+        taps?: Array<{ name: string }>;
+      };
+      if (!Array.isArray(mutableHook.taps)) {
+        continue;
+      }
+      mutableHook.taps = mutableHook.taps.filter(
+        (tap) =>
+          tap.name !== pluginTapName &&
+          !tap.name.startsWith(`${pluginTapName}:`),
+      );
+    }
+  }
+
+  private childDone = async (
+    compiler: Plugin.BaseCompilerType<'rspack'>,
+  ): Promise<void> => {
+    await this.sdk.bootstrap();
+    this.sdk.addClientRoutes([
+      ManifestType.RsdoctorManifestClientRoutes.Overall,
+    ]);
+    this.sdk.setOutputDir(this.getOutputDir(compiler));
+    await this.sdk.writeStore();
+
+    if (this.options.disableClientServer) {
+      await this.sdk.dispose();
+    }
+  };
+
   public done = async (
     compiler: Plugin.BaseCompilerType<'rspack'>,
   ): Promise<void> => {
@@ -219,25 +385,11 @@ export class RsdoctorRspackPlugin<
         ManifestType.RsdoctorManifestClientRoutes.Overall,
       ]);
 
-      if (this.outsideInstance && 'parent' in this.sdk) {
-        this.sdk.parent.master.setOutputDir(
-          path.resolve(
-            this.options.output.reportDir || compiler.outputPath,
-            this.options.output.mode === SDK.IMode[SDK.IMode.brief]
-              ? ''
-              : `./${Constants.RsdoctorOutputFolder}`,
-          ),
-        );
+      if (this.outsideInstance && this.sdk instanceof RsdoctorPrimarySDK) {
+        this.sdk.parent.master.setOutputDir(this.getOutputDir(compiler));
       }
 
-      this.sdk.setOutputDir(
-        path.resolve(
-          this.options.output.reportDir || compiler.outputPath,
-          this.options.output.mode === SDK.IMode[SDK.IMode.brief]
-            ? ''
-            : `./${Constants.RsdoctorOutputFolder}`,
-        ),
-      );
+      this.sdk.setOutputDir(this.getOutputDir(compiler));
       await this.sdk.writeStore();
       if (!this.options.disableClientServer) {
         // If it's brief mode, open the static report page instead of the local server page.
@@ -270,10 +422,11 @@ export class RsdoctorRspackPlugin<
   public getRspackConfig(compiler: Plugin.BaseCompilerType<'rspack'>) {
     time('RsdoctorRspackPlugin.getRspackConfig');
     try {
-      if (compiler.isChild()) return;
-
       // Use extracted common function to process configuration
       const configuration = processCompilerConfig(compiler.options);
+      if (compiler.isChild() && compiler.name) {
+        configuration.name = compiler.name;
+      }
 
       const { rspackVersion } = compiler.rspack;
 

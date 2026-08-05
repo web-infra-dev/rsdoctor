@@ -3,6 +3,7 @@ import { RsdoctorRspackPlugin } from '@/rspack-plugin';
 import { RsdoctorSDK } from '@/sdk';
 import { rspack } from '@rspack/core';
 import { afterEach, describe, expect, it } from '@rstest/core';
+import { RsdoctorServer } from '@/sdk/server';
 
 afterEach(() => {
   delete globalThis.__rsdoctor_sdk__;
@@ -43,7 +44,7 @@ describe('RsdoctorRspackPlugin', () => {
       const plugin = new RsdoctorRspackPlugin();
 
       expect(plugin.options.disableClientServer).toBe(true);
-      expect(plugin.sdk.server.constructor.name).toBe('RsdoctorServer');
+      expect(plugin.sdk.server).toBeInstanceOf(RsdoctorServer);
     } finally {
       if (typeof originalCI === 'undefined') {
         delete process.env.CI;

@@ -31,11 +31,17 @@ export class InternalLoaderPlugin<
   public apply(compiler: T) {
     time('InternalLoaderPlugin.apply');
     try {
-      // make sure that loaders were intercepted.
-      compiler.hooks.afterPlugins.tap(
-        this.tapPostOptions,
-        this.afterPlugins.bind(this, compiler),
-      );
+      if (compiler.isChild()) {
+        this.sdk.addClientRoutes([
+          Manifest.RsdoctorManifestClientRoutes.Loaders,
+        ]);
+      } else {
+        // make sure that loaders were intercepted.
+        compiler.hooks.afterPlugins.tap(
+          this.tapPostOptions,
+          this.afterPlugins.bind(this, compiler),
+        );
+      }
 
       compiler.hooks.compilation.tap(
         this.tapPreOptions,
@@ -50,7 +56,6 @@ export class InternalLoaderPlugin<
   public afterPlugins = (compiler: T) => {
     time('InternalLoaderPlugin.afterPlugins');
     try {
-      if (compiler.isChild()) return;
       // intercept loader to collect the costs of loaders
       compiler.options.module.rules = this.getInterceptRules(
         compiler,
@@ -67,7 +72,7 @@ export class InternalLoaderPlugin<
   public compilation(compiler: T, compilation: Plugin.BaseCompilation) {
     time('InternalLoaderPlugin.compilation');
     try {
-      if (compiler.isChild()) return;
+      if (compilation.compiler && compilation.compiler !== compiler) return;
 
       /**
        * Some plugins overwrite and validate loader or loader options in the normalModuleLoader hook.
