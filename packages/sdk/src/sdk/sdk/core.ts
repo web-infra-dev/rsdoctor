@@ -1,17 +1,14 @@
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
-import { File, Json, EnvInfo } from '@rsdoctor/utils/build';
+import { EnvInfo, File, Json } from '@rsdoctor/utils/build';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import process from 'node:process';
-import { Readable } from 'node:stream';
-import { createDeflate } from 'node:zlib';
 import { AsyncSeriesHook } from 'tapable';
 import { decycle } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
-import { transformDataUrls } from '../utils';
+import { transformDataUrls, writeManifestShards } from '../utils';
 import { RsdoctorSDKOptions, DataWithUrl } from './types';
-import { Algorithm } from '@rsdoctor/utils/common';
 
 export abstract class SDKCore<T extends RsdoctorSDKOptions>
   implements SDK.RsdoctorSDKInstance
@@ -221,12 +218,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     key: string,
     index?: number,
   ): Promise<DataWithUrl> {
-    const compressedText = Algorithm.compressText(jsonStr);
-    if (!compressedText) {
-      throw new Error(`Failed to compress manifest data for "${key}".`);
-    }
-
-    return this.writeEncodedTextToFolder(compressedText, dir, key, index);
+    return this.writeJsonFragmentsToFolder([jsonStr], dir, key, index);
   }
 
   protected async writeJsonFragmentsToFolder(
@@ -239,39 +231,9 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
       throw new Error(`Cannot write empty JSON fragments for "${key}".`);
     }
 
-    const compressedChunks: Buffer[] = [];
-    const compressor = Readable.from(jsonFragments, {
-      objectMode: false,
-    }).pipe(createDeflate());
-
-    for await (const chunk of compressor) {
-      compressedChunks.push(Buffer.from(chunk));
-    }
-
-    const compressedText = Buffer.concat(compressedChunks).toString('base64');
-    return this.writeEncodedTextToFolder(compressedText, dir, key, index);
-  }
-
-  private writeEncodedTextToFolder(
-    encodedText: string,
-    dir: string,
-    key: string,
-    index?: number,
-  ): Promise<DataWithUrl> {
-    const sharding = new File.FileSharding(encodedText);
     const folder = path.resolve(dir, key);
-    const writer = sharding.writeStringToFolder(folder, '', index);
-    return writer.then((item) => {
-      const res: DataWithUrl = {
-        name: key,
-        files: item.map((el) => ({
-          path: path.resolve(folder, el.filename),
-          basename: el.filename,
-          content: el.content,
-        })),
-      };
-      return res;
-    });
+    const files = await writeManifestShards(jsonFragments, folder, { index });
+    return { name: key, files };
   }
 
   public abstract onDataReport(): void | Promise<void>;
