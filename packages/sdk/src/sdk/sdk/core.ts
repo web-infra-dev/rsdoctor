@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import process from 'node:process';
+import { Readable } from 'node:stream';
+import { createDeflate } from 'node:zlib';
 import { AsyncSeriesHook } from 'tapable';
 import { decycle } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
@@ -155,19 +157,9 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
       })();
 
       if (Array.isArray(jsonStr)) {
-        // Write chunks sequentially with cumulative file offset so each
-        // chunk's shard files get unique IDs within the shared folder.
-        let fileOffset = 0;
-        for (const str of jsonStr) {
-          const result = await this.writeToFolder(
-            str,
-            outputDir,
-            key,
-            fileOffset,
-          );
-          fileOffset += result.files.length;
-          urlsPromiseList.push(result);
-        }
+        urlsPromiseList.push(
+          this.writeJsonFragmentsToFolder(jsonStr, outputDir, key),
+        );
       } else {
         urlsPromiseList.push(this.writeToFolder(jsonStr, outputDir, key));
       }
@@ -229,7 +221,44 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     key: string,
     index?: number,
   ): Promise<DataWithUrl> {
-    const sharding = new File.FileSharding(Algorithm.compressText(jsonStr));
+    const compressedText = Algorithm.compressText(jsonStr);
+    if (!compressedText) {
+      throw new Error(`Failed to compress manifest data for "${key}".`);
+    }
+
+    return this.writeEncodedTextToFolder(compressedText, dir, key, index);
+  }
+
+  protected async writeJsonFragmentsToFolder(
+    jsonFragments: string[],
+    dir: string,
+    key: string,
+    index?: number,
+  ): Promise<DataWithUrl> {
+    if (jsonFragments.length === 0) {
+      throw new Error(`Cannot write empty JSON fragments for "${key}".`);
+    }
+
+    const compressedChunks: Buffer[] = [];
+    const compressor = Readable.from(jsonFragments, {
+      objectMode: false,
+    }).pipe(createDeflate());
+
+    for await (const chunk of compressor) {
+      compressedChunks.push(Buffer.from(chunk));
+    }
+
+    const compressedText = Buffer.concat(compressedChunks).toString('base64');
+    return this.writeEncodedTextToFolder(compressedText, dir, key, index);
+  }
+
+  private writeEncodedTextToFolder(
+    encodedText: string,
+    dir: string,
+    key: string,
+    index?: number,
+  ): Promise<DataWithUrl> {
+    const sharding = new File.FileSharding(encodedText);
     const folder = path.resolve(dir, key);
     const writer = sharding.writeStringToFolder(folder, '', index);
     return writer.then((item) => {
