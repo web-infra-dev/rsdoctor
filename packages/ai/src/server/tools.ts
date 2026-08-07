@@ -38,7 +38,7 @@ export const getAllChunks = async (): Promise<
   )) as SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetChunkGraphAI>;
 };
 
-export const getChunkById = async (chunkId: number) => {
+export const getChunkById = async (chunkId: string) => {
   const chunk = await sendRequest(SDK.ServerAPI.API.GetChunkByIdAI, {
     chunkId,
   });
