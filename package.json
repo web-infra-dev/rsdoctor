@@ -8,8 +8,6 @@
   },
   "scripts": {
     "build": "cross-env NX_DAEMON=false nx run-many -t build --projects=@rsdoctor/*,@examples/rsdoctor-rspack-banner --parallel=10",
-    "change": "changeset",
-    "changeset": "changeset",
     "bump": "changeset version",
     "check-spell": "pnpx cspell && heading-case",
     "check-changeset": "pnpx disallow-major-changeset",
@@ -37,7 +35,6 @@
   },
   "devDependencies": {
     "@rslint/core": "catalog:",
-    "@changesets/cli": "^2.31.0",
     "@rsdoctor/tsconfig": "workspace:*",
     "@rslib/core": "0.21.5",
     "@rstest/core": "catalog:",
