@@ -1,5 +1,5 @@
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/types';
-import { File, Json, EnvInfo } from '@rsdoctor/utils/build';
+import { EnvInfo, File, Json } from '@rsdoctor/utils/build';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
@@ -7,9 +7,8 @@ import process from 'node:process';
 import { AsyncSeriesHook } from 'tapable';
 import { decycle } from '@rsdoctor/utils/common';
 import { logger } from '@rsdoctor/utils/logger';
-import { transformDataUrls } from '../utils';
+import { transformDataUrls, writeManifestShards } from '../utils';
 import { RsdoctorSDKOptions, DataWithUrl } from './types';
-import { Algorithm } from '@rsdoctor/utils/common';
 
 export abstract class SDKCore<T extends RsdoctorSDKOptions>
   implements SDK.RsdoctorSDKInstance
@@ -155,19 +154,9 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
       })();
 
       if (Array.isArray(jsonStr)) {
-        // Write chunks sequentially with cumulative file offset so each
-        // chunk's shard files get unique IDs within the shared folder.
-        let fileOffset = 0;
-        for (const str of jsonStr) {
-          const result = await this.writeToFolder(
-            str,
-            outputDir,
-            key,
-            fileOffset,
-          );
-          fileOffset += result.files.length;
-          urlsPromiseList.push(result);
-        }
+        urlsPromiseList.push(
+          this.writeJsonFragmentsToFolder(jsonStr, outputDir, key),
+        );
       } else {
         urlsPromiseList.push(this.writeToFolder(jsonStr, outputDir, key));
       }
@@ -229,20 +218,22 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     key: string,
     index?: number,
   ): Promise<DataWithUrl> {
-    const sharding = new File.FileSharding(Algorithm.compressText(jsonStr));
+    return this.writeJsonFragmentsToFolder([jsonStr], dir, key, index);
+  }
+
+  protected async writeJsonFragmentsToFolder(
+    jsonFragments: string[],
+    dir: string,
+    key: string,
+    index?: number,
+  ): Promise<DataWithUrl> {
+    if (jsonFragments.length === 0) {
+      throw new Error(`Cannot write empty JSON fragments for "${key}".`);
+    }
+
     const folder = path.resolve(dir, key);
-    const writer = sharding.writeStringToFolder(folder, '', index);
-    return writer.then((item) => {
-      const res: DataWithUrl = {
-        name: key,
-        files: item.map((el) => ({
-          path: path.resolve(folder, el.filename),
-          basename: el.filename,
-          content: el.content,
-        })),
-      };
-      return res;
-    });
+    const files = await writeManifestShards(jsonFragments, folder, { index });
+    return { name: key, files };
   }
 
   public abstract onDataReport(): void | Promise<void>;

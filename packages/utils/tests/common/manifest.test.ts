@@ -44,4 +44,31 @@ describe('test src/common/manifest.ts', () => {
       ),
     ).toStrictEqual({ a: 1, b: '2', c: [3, 4], d: true });
   });
+
+  it('decodes arbitrary Base64 and UTF-8 shard boundaries', async () => {
+    const data = {
+      modules: [
+        {
+          id: 1,
+          source: '🙂'.repeat(10000),
+        },
+      ],
+    };
+    const encodedText = Algorithm.compressText(JSON.stringify(data));
+    const shardSizes = [1, 2, 5, 7, 11, 13];
+    const shards: string[] = [];
+    let offset = 0;
+    let shardIndex = 0;
+
+    while (offset < encodedText.length) {
+      const shardSize = shardSizes[shardIndex % shardSizes.length];
+      shards.push(encodedText.slice(offset, offset + shardSize));
+      offset += shardSize;
+      shardIndex += 1;
+    }
+
+    await expect(
+      Manifest.fetchShardingData(shards, async (value) => value),
+    ).resolves.toStrictEqual(data);
+  });
 });
