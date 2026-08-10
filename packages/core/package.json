@@ -52,7 +52,7 @@
     "acorn-import-attributes": "^1.9.5",
     "acorn-walk": "8.3.5",
     "browserslist-load-config": "^1.0.3",
-    "caniuse-lite": "^1.0.30001792",
+    "caniuse-lite": "^1.0.30001809",
     "connect-next": "catalog:",
     "envinfo": "7.21.0",
     "fs-extra": "catalog:",
@@ -67,7 +67,7 @@
     "cors": "2.8.6",
     "launch-editor": "^2.14.1",
     "sirv": "catalog:",
-    "ws": "8.21.1"
+    "ws": "8.21.3"
   },
   "devDependencies": {
     "@rsbuild/plugin-check-syntax": "catalog:",
