@@ -1,32 +1,30 @@
 ---
-published_at: 2026-07
+published_at: 2026-08
 ---
 
-_July 2026_
+_2026 年 8 月_
 
 # Rsdoctor 2.0 发布公告
 
-我们很高兴地宣布 **Rsdoctor 2.0** 正式发布！🎉
+我们很高兴地宣布 **Rsdoctor 2.0**！🎉
 
-Rsdoctor 2.0 不只是一次版本升级，也是一次产品定位与技术架构的重新收敛。除了继续提供可视化的构建分析报告，Rsdoctor 现在也能将结构化分析数据交给 Agent 和 CI，让构建问题可以被自动检索、解释和持续跟踪。
+Rsdoctor 2.0 进一步聚焦 Rspack，并让构建报告成为可以被开发者、Agent 和自动化流程共同使用的数据。与当前 `v1.x` 分支相比，2.0 统一使用 Rspack 原生分析链路，覆盖更多 Compiler 场景，并通过更精简的包结构和依赖关系提供核心能力。
 
 本次更新的主要亮点包括：
 
-- **面向 Agent 的构建分析**：Agent CLI 可以直接读取 Rsdoctor 数据，并通过结构化 JSON 提供产物、依赖、Tree Shaking 和构建性能分析。
-- **Rsdoctor Action 与 AI 分析**：在 Pull Request 中自动进行 Bundle Diff，并借助 AI 总结产物劣化原因和优化方向。
-- **一个报告覆盖所有 Compiler**：自动聚合 Rspack MultiCompiler、Rsbuild environments 和 Child Compiler，同时保持每个 Compiler 的分析数据相互隔离。
-- **更简单的包结构**：核心能力统一收敛到 `@rsdoctor/core`，仓库 package 从 13 个减少到 6 个，内部运行时依赖关系从 28 条减少到 4 条。
-- **更专注的 Rspack 支持**：2.0 聚焦 Rspack，进一步提升原生分析、页面性能和大型项目体验。
+- **面向 Agent 的构建分析**：Agent CLI 与 Rsdoctor analysis skill 可以帮助 Coding Agent 查询构建数据，并给出可执行的优化建议。
+- **一个报告覆盖所有 Compiler**：常规 Rspack 插件可以自动处理 MultiCompiler、Rsbuild environments 和 Child Compiler，同时保持每个 Compiler 的数据相互隔离。
+- **默认使用 Rspack 原生链路**：Rsdoctor 2.0 要求使用 Rspack 2，并通过 Rspack 内置的 Rsdoctor Native Plugin 采集 Module Graph 和 Chunk Graph。
+- **更精简的包结构**：Core、Graph、SDK、Utils 和 Rspack Plugin 统一收敛到 `@rsdoctor/core`，仓库 package 从 13 个减少到 6 个。
+- **更轻量的安装与运行时**：直接 Runtime 依赖声明从 88 项减少到 39 项，同时继续通过预打包和依赖清理降低安装开销。
 
-Agent CLI、Rsdoctor Action 和部分分析能力最初在 1.x 期间发布。在 2.0 中，它们共同组成了一套更完整的、面向 Rspack 和 AI Agent 的构建分析工作流。
+> Rsdoctor 2.0 要求使用 Node.js 22.18 及以上版本和 Rspack 2.0 及以上版本。webpack 项目请继续使用 Rsdoctor 1.x，或先迁移到 Rspack 再升级。
 
-> Rsdoctor 2.0 不再支持 webpack。webpack 项目请继续使用 Rsdoctor 1.x，或先迁移到 Rspack 再升级 Rsdoctor。
+## 面向 Agent 的构建分析 {#build-analysis-for-agents}
 
-## 面向 Agent 的构建分析
+Rsdoctor 报告包含 Asset、Module、Package、Loader 和 Tree Shaking 等多个维度的详细信息。在大型项目中，找到一个问题的答案仍可能需要在多个页面之间切换，再手动组合不同维度的数据。
 
-Rsdoctor 能够采集丰富的构建数据，但在复杂项目中，开发者仍然需要在多个页面之间查找信息，再把不同维度的数据组合起来判断问题。
-
-在 1.x 的后续版本中，我们开始探索 Agent CLI。在 2.0 中，[`@rsdoctor/agent-cli`](/guide/start/ai#agent-cli) 正式成为推荐的 AI 辅助分析入口。它直接读取 `rsdoctor-data.json`，并以结构化 JSON 输出分析结果，方便 Coding Agent 按需检索、过滤和继续推理。
+Agent CLI 与 Rsdoctor analysis skill 最早在 1.x 期间推出，并在 2.0 中成为推荐的 AI 辅助分析工作流。[`@rsdoctor/agent-cli`](/guide/start/ai#agent-cli) 可以直接读取 `rsdoctor-data.json` 并返回结构化 JSON，让 Coding Agent 无需启动常驻服务即可检索和过滤报告数据。
 
 ```bash
 # 安装 Agent CLI
@@ -38,80 +36,39 @@ npx skills add rstackjs/agent-skills --skill rsdoctor-analysis
 # 构建并生成 JSON 数据
 RSDOCTOR_OUTPUT=json pnpm run build
 
-# 直接查询构建数据
+# 获取整体优化建议
 pnpm exec rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json
-pnpm exec rsdoctor-agent tree-shaking summary --data-file ./dist/rsdoctor-data.json
+
+# 查询指定数据工具
 pnpm exec rsdoctor-agent query packages_duplicates --data-file ./dist/rsdoctor-data.json
 ```
 
-Agent CLI 提供两类使用方式：
+Agent CLI 提供两类互补的使用方式：
 
-- `list` 和 `query` 提供稳定、机器可读的工具目录与查询接口。
+- `list` 和 `query` 为 Agent 与自动化流程提供稳定、机器可读的工具目录与查询接口。
 - `chunks`、`modules`、`packages`、`loaders`、`tree-shaking` 等分组命令适合交互式排查。
 
-与 1.x 的 MCP Server 相比，Agent CLI 不需要启动常驻服务，也不需要维护端口或 MCP Client 配置。Agent 可以围绕同一个数据文件逐步分析大 Chunk、重复依赖、模块引用链、Loader 热点和 Tree Shaking 失败原因。
+结合 analysis skill，Agent 可以逐步分析大 Chunk、重复依赖、Module 引用链、Loader 热点和 Tree Shaking 失败原因，并根据结果继续发起更聚焦的查询。
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-2.gif"
   style={{ margin: 'auto' }}
 />
 
-> [查看 Agent CLI 使用详情](/guide/start/ai#agent-cli)
+Rsdoctor 2.0 已移除 `@rsdoctor/mcp-server`。Agent CLI 是新的替代工作流，但它不兼容 MCP 协议，也不是旧 API 的直接替代品。安装和迁移方式请参考 [AI](/guide/start/ai) 与 [2.0 迁移指南](/guide/start/migration-v2#ai-工作流迁移)。
 
-Rsdoctor 2.0 已移除 `@rsdoctor/mcp-server`。Agent CLI 是新的推荐工作流，但它不是 MCP 协议或旧 API 的直接替代品。完整迁移方式请参考[迁移到 Rsdoctor 2.0](/guide/start/migration-v2#ai-工作流迁移)。
+## 一个报告覆盖所有 Compiler {#one-report-for-every-compiler}
 
-## Rsdoctor action 与 AI 分析
-
-在 Rsdoctor 0.4 的发布公告中，我们曾计划将 Bundle Diff 扩展到 GitHub CI。现在，[Rsdoctor Action](https://github.com/web-infra-dev/rsdoctor-action) 已经将这套流程完整串联起来：
-
-1. 主分支构建完成后上传基线数据。
-2. Pull Request 构建当前版本，并与目标分支基线进行 Bundle Diff。
-3. 在 PR 评论和 GitHub Actions 中展示总体积、Gzip 体积及资源变化。
-4. 生成可下载的交互式 Bundle Diff 报告，用于进一步查看 Asset、Module 和 Package 变化。
-
-<img
-  src="https://assets.rspack.rs/others/assets/rsdoctor/github-actions-opt.png"
-  style={{ width: '80%', margin: 'auto' }}
-/>
-
-Rsdoctor Action 还支持可选的 AI 辅助分析。当存在基线、产物体积发生变化并配置 `AI_TOKEN` 时，Action 会将 Bundle Diff 的结构化数据交给模型，自动总结主要劣化项、可能原因和优化方向，并将结果展示在 Pull Request 评论中。
-
-Action 可以根据模型名称自动选择 Anthropic、Google、DeepSeek、Qwen 或 OpenAI Provider。AI 分析失败时也不会影响常规 Bundle Diff 流程。
-
-```yaml
-- name: Bundle Analysis
-  uses: web-infra-dev/rsdoctor-action@v1.1.2
-  env:
-    AI_TOKEN: ${{ secrets.AI_TOKEN }}
-  with:
-    file_path: 'dist/.rsdoctor/rsdoctor-data.json'
-    target_branch: 'main'
-```
-
-<div style={{ flex: '0 1 320px', maxWidth: 560, margin: 'auto' }}>
-  <img
-    src="/actions-ai-detail.png"
-    alt="Rsdoctor Action AI 辅助分析"
-    style={{ display: 'block', width: '100%' }}
-  />
-</div>
-
-如果没有配置 AI Token，Action 仍会正常执行常规 Bundle Diff。这样既可以把体积变化变成持续运行的工程检查，也可以按需增加 AI 的解释能力。
-
-> [查看 Rsdoctor Action 使用详情](/guide/start/action)
-
-## 在一个报告中分析所有 Compiler {#analyze-every-compiler-in-one-report}
-
-现代 Rspack 应用经常在同一进程中完成多次构建。MultiCompiler 配置可能同时构建浏览器端和 Node.js 产物，Rsbuild environments 会分别创建 Web 和 Server 构建，插件也可能通过 Child Compiler 生成自己的资源。此前，这些场景需要额外配置 Rsdoctor，或者只能在报告中看到部分构建结果。
+现代 Rspack 应用经常在同一进程中创建多个 Compiler。MultiCompiler 配置可能同时构建浏览器端和 Node.js 产物，Rsbuild environments 可能分别创建 Web 和 Server 构建，插件也可能通过 Child Compiler 生成自己的资源。
 
 Rsdoctor 2.0 将常规的 `RsdoctorRspackPlugin` 统一为这些场景的入口：
 
-- [MultiCompiler 与 Rsbuild environments 支持](https://github.com/web-infra-dev/rsdoctor/pull/1888)会自动聚合同一次启动中创建的 Compiler。每个 Compiler 都拥有独立的分析数据，报告中则提供切换入口，方便在不同结果之间浏览。Rsbuild environments 会直接使用 `web`、`node` 等 environment 名称。
+- [MultiCompiler 与 Rsbuild environments 自动支持](https://github.com/web-infra-dev/rsdoctor/pull/1888)会聚合同一次启动中创建的 Compiler。每个 Compiler 都拥有独立的分析数据，报告中则提供切换入口，方便在不同结果之间浏览。Rsbuild environments 会直接使用 `web`、`node` 等 environment 名称。
 - [Child Compiler 支持](https://github.com/web-infra-dev/rsdoctor/pull/1842)会在 Child Compiler 创建时自动发现它，并分别记录 Module Graph、Chunk、Asset、Loader、Plugin、诊断、规则和摘要数据。报告可以在 Main Compiler 与 Child Compiler 的结果之间切换。
 
-主 Compiler 继续使用原有的 `.rsdoctor` 输出路径，其他 Compiler 的数据写入 `.rsdoctor/compilers/<compilerName>`。这样，自动化工具也能分别读取每个构建结果，避免混合不同目标的数据。
+主 Compiler 继续使用原有的 `.rsdoctor` 输出路径，其他 Compiler 的数据写入 `.rsdoctor/compilers/<compilerName>`，避免混合不同构建目标的数据。
 
-自动聚合默认开启。如果同一进程启动的是多个互不相关的 Compiler，可以使用 `multiCompiler: false` 关闭；也可以通过命名分组，明确指定需要聚合的插件实例：
+自动聚合默认开启，无需引入新的插件。如果同一进程启动的是多个互不相关的 Compiler，可以设置 `multiCompiler: false`；也可以通过命名分组明确关联多个插件实例：
 
 ```ts
 new RsdoctorRspackPlugin({
@@ -119,32 +76,42 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-应用无需改变现有的 Rsdoctor 插件接入方式，就能分别查看浏览器端、服务端、Worker 和插件生成构建的独立报告，并在它们之间快速切换。
+浏览器端、服务端、Worker 和插件生成的构建可以分别拥有独立结果，用户不再需要切换到专用的 MultiCompiler Plugin。
 
-## 更简单的仓库与依赖关系
+## 默认使用 Rspack 原生链路 {#rspack-native-by-default}
 
-随着能力不断增加，Rsdoctor 1.x 的核心逻辑逐渐分散在 `core`、`graph`、`sdk`、`utils`、`types` 和不同插件包中。多个 package 边界增加了构建、发布和版本同步成本，也让内部依赖关系变得复杂。
+Rsdoctor 1.x 同时支持 Rspack 和 webpack，Rspack Native Plugin 最初也是一条可选的性能优化链路。同时维护 Native、Stats、Rspack 和 webpack 多套实现，使分析流程难以持续保持一致。
 
-Rsdoctor 2.0 重新梳理了这些边界：
+Rsdoctor 2.0 仅支持 Rspack 2。Module Graph 与 Chunk Graph 始终通过 Rspack 内置的 Rsdoctor Native Plugin 采集，Resolver 分析直接使用 Rspack 内部的解析数据，Tree Shaking 所需的副作用源码也只会在相关分析开启时采集。
 
-- `utils`、`graph`、`sdk` 和 Rspack 插件的核心能力统一并入 `@rsdoctor/core`。
-- 跨端共享的类型与图结构沉淀到新的 `@rsdoctor/shared`。
-- `@rsdoctor/components` 并入 `@rsdoctor/client`。
-- `@rsdoctor/cli` 和 `@rsdoctor/agent-cli` 保持独立入口，并减少与 Client 和 Rspack 的直接耦合。
-- 报告服务从 Socket.IO 迁移到服务端 `ws` 与浏览器原生 WebSocket。
+项目不再需要配置 `experiments.enableNativePlugin`，基于 Stats 的回退链路也已移除。统一的 Rspack 原生链路减少了重复处理，并让新的分析能力建立在一致的数据模型上。
 
-这次重构带来了可量化的简化：
+webpack 支持与 `@rsdoctor/webpack-plugin` 已移除，webpack 项目可以继续使用长期维护的 `v1.x` 版本。
+
+## 更小的包与依赖关系 {#a-smaller-package-and-dependency-graph}
+
+Rsdoctor 1.x 将运行时能力拆分在 `utils`、`graph`、`sdk`、`types`、`components` 和不同 Bundler Plugin 等多个包中。这些边界增加了安装、构建、发布和版本同步成本。
+
+Rsdoctor 2.0 围绕三类职责重新整理包结构：
+
+- `@rsdoctor/core` 包含分析引擎、Graph 与 SDK 实现、通用工具和 Rspack Plugin。
+- `@rsdoctor/shared` 提供 Node.js 与浏览器共享的类型、通用工具和图结构。
+- `@rsdoctor/client`、`@rsdoctor/cli` 与 `@rsdoctor/agent-cli` 分别作为报告 UI、通用 CLI 和 Agent 工作流的独立入口。
+
+当前 `v1.x` 与 `main` 分支之间的差异可以直接量化：
 
 | 指标                  | Rsdoctor 1.x | Rsdoctor 2.0 |
 | --------------------- | -----------: | -----------: |
 | 仓库顶层 package      |           13 |            6 |
-| Runtime 依赖声明      |           88 |           48 |
+| Runtime 依赖声明      |           88 |           39 |
 | 内部 Runtime 依赖关系 |           28 |            4 |
-| 唯一外部 Runtime 依赖 |           51 |           40 |
+| 唯一外部 Runtime 依赖 |           51 |           30 |
 
-以上数据基于两个分支的 `packages/*/package.json` 统计，用于反映仓库内部结构的变化，不等同于单个项目安装后的传递依赖数量。
+依赖数量统计包含 `packages/*/package.json` 中直接声明的 `dependencies` 与 `optionalDependencies`，用于描述仓库的 package 关系，而不是单个应用安装后的完整传递依赖数量。
 
-对于大多数 Rspack 项目，安装入口也从 `@rsdoctor/rspack-plugin` 统一为 `@rsdoctor/core`：
+报告传输也从 Socket.IO 迁移到服务端 `ws` 与浏览器原生 WebSocket。常用依赖会在有助于降低安装开销时进行预打包，不再使用的 Runtime 依赖则已移除。
+
+对于大多数 Rspack 项目，安装和导入路径需要从 `@rsdoctor/rspack-plugin` 更新为 `@rsdoctor/core`：
 
 ```ts title="Rsdoctor 1.x"
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
@@ -154,39 +121,38 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 ```
 
-更少的包边界意味着更直接的开发与发布流程，也可以避免多个 `@rsdoctor/*` 包版本不一致带来的问题。
+Rsdoctor 2.0 的 package 仅提供 ESM 产物。`@rsdoctor/cli` 继续提供 `rsdoctor` 命令，并保持独立安装。
 
-## 其他能力
+## 更清晰的产物分析体验 {#refined-bundle-analysis}
 
-从 1.2 到 2.0 的迭代中，Rsdoctor 还持续完善了分析深度与使用体验：
+在 1.x 分析模型的基础上，Rsdoctor 2.0 继续优化 Bundle Size 页面。Treemap 的布局、导航、响应式行为和体积展示得到调整，让大型 Asset 更容易查看；Bundle 分析也会在以 Module 为主的视图中过滤无关的资源类型，帮助用户更快定位 JavaScript 相关结果。
 
-- **更深入的 Rspack 分析**：默认启用 Rspack Native Plugin，新增 [Rspack Resolver 分析](/guide/usage/resolver)，并按需采集 Tree Shaking 的副作用代码，减少默认分析开销。
-- **更完整的 Tree Shaking 诊断**：新增 Module Mixed Chunks、Side Effects Only、CJS Require 和 ESM Import Resolved to CJS 等[检查规则](/guide/rules/rules)，帮助定位模块无法被移除的具体原因。
-- **大型报告性能优化**：Loader 输入与输出改为按需加载，在相关场景中减少 90% 以上的数据量；同时优化 Module Tree 和依赖关系图在大型项目中的渲染性能。
-- **界面体验升级**：新增暗色主题，并持续优化 Treemap、导航和分析详情页面。
-- **更灵活的数据输出**：Brief 模式可以生成 JSON 数据，Bundle Diff CLI 支持 JSON 输出，便于接入 Agent、Action 和其他自动化流程。
+这些界面优化与 Rspack 原生 Module Graph、统一后的 Client Package 使用同一套数据模型，为 Overview、Tree Graph、Treemap 和 Module 详情页提供一致的数据基础。
 
-## 如何升级到 2.0
+## 升级到 2.0 {#upgrade-to-20}
 
 Rsdoctor 2.0 包含以下不兼容更新：
 
-- 仅支持 Rspack，不再支持 webpack。webpack 项目请继续使用 Rsdoctor 1.x，或先迁移到 Rspack。
+- 要求使用 Node.js 22.18 及以上版本和 Rspack 2.0 及以上版本。
+- 不再支持 webpack，并移除了 `@rsdoctor/webpack-plugin`。
 - 使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`。
-- `@rsdoctor/mcp-server` 已移除，AI 工作流请迁移到 `@rsdoctor/agent-cli`，并使用 2.0 重新生成分析数据。
-- `mode`、`brief`、`lite`、`output.compressData` 等配置项需要按照 2.0 配置结构进行调整。
+- Package 仅提供 ESM 产物，需要将 CommonJS `require()` 调用改为 ESM Import。
+- 删除 `experiments.enableNativePlugin`，原生分析链路现在始终启用。
+- 使用 `@rsdoctor/agent-cli` 替换基于 `@rsdoctor/mcp-server` 的工作流。
+- 将已废弃的 `mode`、`brief`、`lite` 和 `output.compressData` 配置迁移到 2.0 的 Output 结构。
 
 ```bash
 pnpm remove @rsdoctor/rspack-plugin
 pnpm add -D @rsdoctor/core
 ```
 
-`@rsdoctor/cli` 仍然提供 `rsdoctor` 命令。使用 CLI 时，请确保 `@rsdoctor/cli` 与 `@rsdoctor/core` 的版本一致。
+使用 CLI 时，请确保 `@rsdoctor/cli` 与 `@rsdoctor/core` 的版本一致。
 
 > [查看完整的 Rsdoctor 2.0 迁移指南](/guide/start/migration-v2)
 
 ---
 
-Rsdoctor 2.0 希望让构建报告不再只是分析的终点，而是能够继续流向开发者、Agent 和 CI 的结构化工程数据。我们会继续完善自动化分析、性能劣化检测和 Rspack 原生能力，让构建问题更容易被发现、理解和解决。
+Rsdoctor 2.0 为可视化与自动化构建分析建立了更精简的 Rspack 原生基础。我们会继续完善提供给开发者和 Agent 的分析数据，让构建问题更容易被发现、理解和解决。
 
 完整更新内容请参考 [Release 页面](https://github.com/web-infra-dev/rsdoctor/releases)。
 
