@@ -14,6 +14,7 @@ Highlights in this release include:
 
 - **Build analysis for agents**: Agent CLI reads Rsdoctor data directly and provides structured JSON for bundle, dependency, tree shaking, and build performance analysis.
 - **Rsdoctor Action with AI analysis**: Run Bundle Diff automatically in pull requests, then use AI to summarize bundle regressions and possible optimizations.
+- **One report for every compiler**: Rsdoctor automatically groups Rspack multi-compiler builds, Rsbuild environments, and child compilers while keeping each compiler's data isolated.
 - **A simpler package structure**: Core capabilities now live in `@rsdoctor/core`. The repository has been reduced from 13 packages to 6, and internal runtime dependency edges have been reduced from 28 to 4.
 - **A stronger focus on Rspack**: Rsdoctor 2.0 focuses on Rspack, with further improvements to native analysis, report performance, and the experience on large projects.
 
@@ -98,6 +99,27 @@ The Action selects Anthropic, Google, DeepSeek, Qwen, or OpenAI from the model n
 Without an AI token, the Action still performs the regular Bundle Diff workflow. Teams can therefore make bundle changes a continuous engineering check and add AI explanations only when needed.
 
 > [Learn more about Rsdoctor Action](/guide/start/action)
+
+## Analyze every compiler in one report
+
+Modern Rspack applications often produce several builds in one process. Multi-compiler configurations can target the browser and Node.js together, Rsbuild environments can create separate web and server builds, and plugins can start child compilers for their own assets. Previously, these cases required extra Rsdoctor configuration or left part of the build outside the report.
+
+Rsdoctor 2.0 makes the regular `RsdoctorRspackPlugin` the single entry point for these builds:
+
+- [Multi-compiler and Rsbuild environment support](https://github.com/web-infra-dev/rsdoctor/pull/1888) automatically groups compilers created during the same startup. Each compiler gets isolated analysis data, while the report provides a compiler selector for moving between results. Rsbuild environments use their environment names, such as `web` and `node`.
+- [Child compiler support](https://github.com/web-infra-dev/rsdoctor/pull/1842) discovers child compilers as they are created and records their module graph, chunks, assets, loaders, plugins, diagnostics, rules, and summary data separately. The report lets you switch between the main compiler and its child compiler results.
+
+The primary compiler keeps the existing `.rsdoctor` output path. Additional compiler data is stored under `.rsdoctor/compilers/<compilerName>`, so automated consumers can inspect each result without mixing data from different targets.
+
+Automatic grouping is enabled by default. If one process starts unrelated compilers, disable it with `multiCompiler: false`, or use a named group to declare which plugin instances belong together:
+
+```ts
+new RsdoctorRspackPlugin({
+  multiCompiler: { group: 'ssr' },
+});
+```
+
+This means an application can keep its existing Rsdoctor plugin setup while gaining separate, navigable reports for browser, server, worker, and plugin-generated builds.
 
 ## A simpler repository and dependency graph
 

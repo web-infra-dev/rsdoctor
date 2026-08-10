@@ -14,6 +14,7 @@ Rsdoctor 2.0 不只是一次版本升级，也是一次产品定位与技术架�
 
 - **面向 Agent 的构建分析**：Agent CLI 可以直接读取 Rsdoctor 数据，并通过结构化 JSON 提供产物、依赖、Tree Shaking 和构建性能分析。
 - **Rsdoctor Action 与 AI 分析**：在 Pull Request 中自动进行 Bundle Diff，并借助 AI 总结产物劣化原因和优化方向。
+- **一个报告覆盖所有 Compiler**：自动聚合 Rspack MultiCompiler、Rsbuild environments 和 Child Compiler，同时保持每个 Compiler 的分析数据相互隔离。
 - **更简单的包结构**：核心能力统一收敛到 `@rsdoctor/core`，仓库 package 从 13 个减少到 6 个，内部运行时依赖关系从 28 条减少到 4 条。
 - **更专注的 Rspack 支持**：2.0 聚焦 Rspack，进一步提升原生分析、页面性能和大型项目体验。
 
@@ -98,6 +99,27 @@ Action 可以根据模型名称自动选择 Anthropic、Google、DeepSeek、Qwen
 如果没有配置 AI Token，Action 仍会正常执行常规 Bundle Diff。这样既可以把体积变化变成持续运行的工程检查，也可以按需增加 AI 的解释能力。
 
 > [查看 Rsdoctor Action 使用详情](/guide/start/action)
+
+## 在一个报告中分析所有 Compiler {#analyze-every-compiler-in-one-report}
+
+现代 Rspack 应用经常在同一进程中完成多次构建。MultiCompiler 配置可能同时构建浏览器端和 Node.js 产物，Rsbuild environments 会分别创建 Web 和 Server 构建，插件也可能通过 Child Compiler 生成自己的资源。此前，这些场景需要额外配置 Rsdoctor，或者只能在报告中看到部分构建结果。
+
+Rsdoctor 2.0 将常规的 `RsdoctorRspackPlugin` 统一为这些场景的入口：
+
+- [MultiCompiler 与 Rsbuild environments 支持](https://github.com/web-infra-dev/rsdoctor/pull/1888)会自动聚合同一次启动中创建的 Compiler。每个 Compiler 都拥有独立的分析数据，报告中则提供切换入口，方便在不同结果之间浏览。Rsbuild environments 会直接使用 `web`、`node` 等 environment 名称。
+- [Child Compiler 支持](https://github.com/web-infra-dev/rsdoctor/pull/1842)会在 Child Compiler 创建时自动发现它，并分别记录 Module Graph、Chunk、Asset、Loader、Plugin、诊断、规则和摘要数据。报告可以在 Main Compiler 与 Child Compiler 的结果之间切换。
+
+主 Compiler 继续使用原有的 `.rsdoctor` 输出路径，其他 Compiler 的数据写入 `.rsdoctor/compilers/<compilerName>`。这样，自动化工具也能分别读取每个构建结果，避免混合不同目标的数据。
+
+自动聚合默认开启。如果同一进程启动的是多个互不相关的 Compiler，可以使用 `multiCompiler: false` 关闭；也可以通过命名分组，明确指定需要聚合的插件实例：
+
+```ts
+new RsdoctorRspackPlugin({
+  multiCompiler: { group: 'ssr' },
+});
+```
+
+应用无需改变现有的 Rsdoctor 插件接入方式，就能分别查看浏览器端、服务端、Worker 和插件生成构建的独立报告，并在它们之间快速切换。
 
 ## 更简单的仓库与依赖关系
 
