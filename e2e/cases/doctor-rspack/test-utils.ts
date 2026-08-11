@@ -1,6 +1,6 @@
 import type { RsdoctorRspackPluginOptions } from '@rsdoctor/core';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
-import { Linter } from '@rsdoctor/shared/types';
+import type { Linter, SDK } from '@rsdoctor/shared/types';
 import { rm } from 'node:fs/promises';
 import { tmpdir } from 'os';
 import path from 'path';
@@ -9,6 +9,29 @@ import events from 'node:events';
 const emitter = new events.EventEmitter();
 emitter.setMaxListeners(50);
 events.EventEmitter.defaultMaxListeners = 50;
+
+type SDKWithChildren = SDK.RsdoctorBuilderSDKInstance & {
+  parent: {
+    slaves: Array<
+      SDK.RsdoctorBuilderSDKInstance & {
+        compilerPath: string;
+      }
+    >;
+  };
+};
+
+export function getChildSDK(
+  sdk: SDK.RsdoctorBuilderSDKInstance,
+  compilerPath?: string,
+) {
+  if (!compilerPath || !('parent' in sdk)) {
+    return undefined;
+  }
+
+  return (sdk as SDKWithChildren).parent.slaves.find(
+    (item) => item.compilerPath === compilerPath,
+  );
+}
 
 export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
   options: RsdoctorRspackPluginOptions<T>,

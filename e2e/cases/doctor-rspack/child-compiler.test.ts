@@ -1,9 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { getSDK } from '@rsdoctor/core/plugins';
 import { compileByRspack } from '@scripts/test-helper';
 import { Compiler, EntryPlugin } from '@rspack/core';
 import path from 'path';
-import { createRsdoctorPlugin } from './test-utils';
+import { createRsdoctorPlugin, getChildSDK } from './test-utils';
 
 class ChildCompilerPlugin {
   constructor(private readonly entry: string) {}
@@ -54,7 +53,7 @@ test('collects child compiler data in an isolated report', async () => {
   const rootData = doctor.sdk.getStoreData();
   const series = doctor.sdk.getManifestData().series || [];
   const child = series.find((item) => item.isChild);
-  const childSDK = getSDK(child?.compilerPath);
+  const childSDK = getChildSDK(doctor.sdk, child?.compilerPath);
   const childData = childSDK?.getStoreData();
 
   expect(series).toHaveLength(2);
