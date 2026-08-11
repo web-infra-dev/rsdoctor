@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { compileByRspack } from '@scripts/test-helper';
 import { Compiler, EntryPlugin } from '@rspack/core';
+import { access, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import path from 'path';
 import { createRsdoctorPlugin, getChildSDK } from './test-utils';
 
@@ -86,4 +88,69 @@ test('collects child compiler data in an isolated report', async () => {
   expect(
     childData?.loader.some((item) => item.resource.path === childEntry),
   ).toBe(true);
+});
+
+test('writes child compiler data to an isolated brief report', async () => {
+  const mainEntry = path.resolve(__dirname, './fixtures/a.js');
+  const childEntry = path.resolve(__dirname, './fixtures/b.js');
+  const reportDir = path.join(tmpdir(), `rsdoctor-child-brief-${Date.now()}`);
+  const doctor = createRsdoctorPlugin({
+    output: {
+      mode: 'brief',
+      reportDir,
+      options: {
+        type: ['html', 'json'],
+      },
+    },
+  });
+
+  try {
+    await compileByRspack(mainEntry, {
+      plugins: [doctor, new ChildCompilerPlugin(childEntry)],
+    });
+
+    const child = doctor.sdk
+      .getManifestData()
+      .series?.find((item) => item.isChild);
+    const childSDK = getChildSDK(doctor.sdk, child?.compilerPath);
+
+    if (!childSDK) {
+      throw new Error('Expected child compiler SDK to be registered');
+    }
+
+    const childReportDir = path.join(
+      reportDir,
+      '.slaves',
+      childSDK.name.replace(/\s+/g, '-'),
+    );
+    await Promise.all([
+      access(path.join(reportDir, 'rsdoctor-report.html')),
+      access(path.join(childReportDir, 'rsdoctor-report.html')),
+    ]);
+
+    const mainReport = JSON.parse(
+      await readFile(path.join(reportDir, 'rsdoctor-data.json'), 'utf-8'),
+    );
+    const childReport = JSON.parse(
+      await readFile(path.join(childReportDir, 'rsdoctor-data.json'), 'utf-8'),
+    );
+
+    expect(
+      mainReport.data.moduleGraph.modules.some(
+        (item: { path: string }) => item.path === mainEntry,
+      ),
+    ).toBe(true);
+    expect(
+      mainReport.data.moduleGraph.modules.some(
+        (item: { path: string }) => item.path === childEntry,
+      ),
+    ).toBe(false);
+    expect(
+      childReport.data.moduleGraph.modules.some(
+        (item: { path: string }) => item.path === childEntry,
+      ),
+    ).toBe(true);
+  } finally {
+    await rm(reportDir, { recursive: true, force: true });
+  }
 });

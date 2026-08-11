@@ -95,17 +95,28 @@ export class RsdoctorPrimarySDK
     return this.parent.master === this;
   }
 
-  protected async writePieces(): Promise<void> {
-    const { name, parent, isMaster, outputDir, finishUploadPieceSwitch } = this;
+  private ensureSlaveOutputDir() {
+    if (this.isMaster) {
+      return;
+    }
+
     this.setOutputDir(
-      isMaster
-        ? outputDir
-        : path.join(
-            parent.master.outputDir,
-            '.slaves',
-            name.replace(/\s+/g, '-'),
-          ),
+      path.join(
+        this.parent.master.outputDir,
+        '.slaves',
+        this.name.replace(/\s+/g, '-'),
+      ),
     );
+  }
+
+  public async writeStore(options?: SDK.WriteStoreOptionsType) {
+    this.ensureSlaveOutputDir();
+    return super.writeStore(options);
+  }
+
+  protected async writePieces(): Promise<void> {
+    const { finishUploadPieceSwitch } = this;
+    this.ensureSlaveOutputDir();
     await super.writePieces(this.getStoreData());
     finishUploadPieceSwitch?.();
   }
