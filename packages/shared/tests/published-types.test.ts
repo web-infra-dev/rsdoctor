@@ -33,6 +33,7 @@ function runTsc(args: string[], options: ExecFileSyncOptions) {
       ['tsc failed.', result.stdout?.toString(), result.stderr?.toString()]
         .filter(Boolean)
         .join('\n'),
+      { cause: error },
     );
   }
 }

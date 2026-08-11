@@ -24,7 +24,7 @@ interface CodeOpenerProps {
 
 function parseUrl(url: string) {
   const strs = url.split(' ');
-  let res = '';
+  let res: string | undefined;
   if (strs.length === 1) {
     [res] = strs;
   } else {
