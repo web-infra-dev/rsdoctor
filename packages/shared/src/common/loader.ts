@@ -63,10 +63,10 @@ export function getLoadersCosts(
     );
 
     const matchSum = _match.length
-      ? _match.reduce((t, c) => (t += c[1] - c[0]), 0)
+      ? _match.reduce((t, c) => t + c[1] - c[0], 0)
       : 0;
     const othersSum = _others.length
-      ? _others.reduce((t, c) => (t += c[1] - c[0]), 0)
+      ? _others.reduce((t, c) => t + c[1] - c[0], 0)
       : 0;
 
     costs += matchSum - othersSum;

@@ -93,6 +93,7 @@ test.describe('Uploader Integration Tests', () => {
         `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
           error instanceof Error ? error.message : String(error)
         }`,
+        { cause: error },
       );
     }
   });

@@ -131,7 +131,7 @@ export function loadJsonData(filePath: string): RsdoctorData {
     return data;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`Failed to load data file: ${message}`);
+    throw new Error(`Failed to load data file: ${message}`, { cause: error });
   }
 }
 

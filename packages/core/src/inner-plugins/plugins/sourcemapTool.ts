@@ -47,7 +47,7 @@ export function bindContextCache(
     if (cache.has(source)) {
       return cache.get(source)!;
     }
-    let resolved = UNASSIGNED;
+    let resolved: string;
 
     if (source.startsWith('file://')) {
       resolved = resolve(context, source.replace(/^file:\/\//, ''));
