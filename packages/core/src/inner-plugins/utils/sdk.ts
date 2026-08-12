@@ -27,17 +27,31 @@ export function registerSDK(
   }
 }
 
+function findMatchingSDK(
+  sdks: SDK.RsdoctorBuilderSDKInstance[],
+  compilerId: string,
+) {
+  const exactMatch = sdks.find(
+    (item) =>
+      item.name === compilerId ||
+      ('compilerPath' in item && item.compilerPath === compilerId),
+  );
+  if (exactMatch) {
+    return exactMatch;
+  }
+
+  const compilerName = compilerId.split('|', 1)[0];
+  if (compilerName && compilerName !== compilerId) {
+    return sdks.find((item) => item.name === compilerName);
+  }
+}
+
 export function getSDK(compilerId?: string) {
   const sdks = globalThis[globalKey] || [];
   let sdk = globalThis['__rsdoctor_sdk__'];
 
   if (compilerId) {
-    sdk =
-      sdks.find(
-        (item) =>
-          item.name === compilerId ||
-          ('compilerPath' in item && item.compilerPath === compilerId),
-      ) || sdk;
+    sdk = findMatchingSDK(sdks, compilerId) || sdk;
   }
   if (sdk && compilerId && 'parent' in sdk) {
     const parent = (
@@ -49,9 +63,7 @@ export function getSDK(compilerId?: string) {
         };
       }
     ).parent;
-    const slaveSDK = parent?.slaves.find(
-      (item) => item.name === compilerId || item.compilerPath === compilerId,
-    );
+    const slaveSDK = parent && findMatchingSDK(parent.slaves, compilerId);
     return slaveSDK || sdk;
   }
   return sdk;
