@@ -42,6 +42,7 @@
     "heading-case": "^1.1.4",
     "husky": "^9.1.7",
     "nano-staged": "^1.0.2",
+    "pkg-pr-new": "0.0.87",
     "prettier": "^3.9.6",
     "rsbuild-plugin-publint": "^0.3.4"
   },
