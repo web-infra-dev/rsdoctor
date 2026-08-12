@@ -1,10 +1,24 @@
 import { expect, test } from '@playwright/test';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
-import type { Linter } from '@rsdoctor/shared/types';
+import { Constants, type Linter } from '@rsdoctor/shared/types';
 import { createStubRsbuild } from '@scripts/test-helper';
 import { readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+
+function getBriefSeries(html: string) {
+  const marker = `window.${Constants.WINDOW_RSDOCTOR_TAG}.series=`;
+  const start = html.indexOf(marker);
+  const end = html.indexOf('</script>', start);
+
+  expect(start).toBeGreaterThanOrEqual(0);
+  expect(end).toBeGreaterThan(start);
+
+  return JSON.parse(html.slice(start + marker.length, end)) as Array<{
+    name: string;
+    path: string;
+  }>;
+}
 
 test('automatically exports isolated reports for Rsbuild environments', async () => {
   const testRoot = path.join(
@@ -126,8 +140,19 @@ test('embeds compiler navigation in brief reports', async () => {
     );
 
     expect(webReport).toContain('.name="web"');
-    expect(webReport).toContain('compilers/node/rsdoctor-report.html');
     expect(nodeReport).toContain('.name="node"');
+    expect(
+      getBriefSeries(webReport).map(({ name, path }) => ({ name, path })),
+    ).toEqual([
+      { name: 'web', path: 'rsdoctor-report.html' },
+      { name: 'node', path: 'compilers/node/rsdoctor-report.html' },
+    ]);
+    expect(
+      getBriefSeries(nodeReport).map(({ name, path }) => ({ name, path })),
+    ).toEqual([
+      { name: 'web', path: '../../rsdoctor-report.html' },
+      { name: 'node', path: 'rsdoctor-report.html' },
+    ]);
   } finally {
     await rm(testRoot, { recursive: true, force: true });
   }

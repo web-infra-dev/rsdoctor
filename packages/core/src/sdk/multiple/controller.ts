@@ -2,6 +2,13 @@ import { Constants, Manifest } from '@rsdoctor/shared/types';
 import path from 'node:path';
 import { RsdoctorPrimarySDK } from './primary';
 
+function toUrlPath(filePath: string) {
+  return filePath
+    .split(path.sep)
+    .map((segment) => encodeURIComponent(segment))
+    .join('/');
+}
+
 export class RsdoctorSDKController {
   readonly slaves: RsdoctorPrimarySDK[] = [];
 
@@ -94,6 +101,26 @@ export class RsdoctorSDKController {
 
       return data;
     });
+  }
+
+  getBriefSeriesData(
+    current: RsdoctorPrimarySDK,
+  ): Manifest.RsdoctorManifestSeriesData[] {
+    const currentOutputDir = this.getCompilerOutputDir(current);
+
+    return this.getActiveSlaves().map((item) => ({
+      name: item.name,
+      path: toUrlPath(
+        path.relative(
+          currentOutputDir,
+          path.join(
+            this.getCompilerOutputDir(item),
+            item.reportFileName || 'rsdoctor-report.html',
+          ),
+        ),
+      ),
+      stage: item.stage,
+    }));
   }
 
   createSlave({

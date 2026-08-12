@@ -151,7 +151,7 @@ export class RsdoctorPrimarySDK
       return result;
     }
 
-    const metadata = `<script>window.${Constants.WINDOW_RSDOCTOR_TAG}.name=${JSON.stringify(this.name)};window.${Constants.WINDOW_RSDOCTOR_TAG}.series=${JSON.stringify(this.parent.getSeriesData())}</script>`;
+    const metadata = `<script>window.${Constants.WINDOW_RSDOCTOR_TAG}.name=${JSON.stringify(this.name)};window.${Constants.WINDOW_RSDOCTOR_TAG}.series=${JSON.stringify(this.parent.getBriefSeriesData(this))}</script>`;
     return result.replace('</body>', `${metadata}</body>`);
   }
 }

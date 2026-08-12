@@ -58,7 +58,7 @@ export const BuilderSelect: React.FC = () => {
                 location.href = changeOrigin(item.origin);
               } else if (item.path) {
                 location.href = item.path.endsWith('.html')
-                  ? item.path
+                  ? new URL(item.path, location.href).href
                   : getSharingUrl(item.path);
               } else {
                 console.error('No Rsdoctor compiler report location');
