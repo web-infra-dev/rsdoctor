@@ -47,6 +47,7 @@ export interface RsdoctorPluginOptionsNormalized<
     | 'brief'
     | 'mode'
     | 'server'
+    | 'multiCompiler'
   >
 > {
   features: Common.DeepRequired<RsdoctorRspackPluginFeatures>;
@@ -61,6 +62,10 @@ export interface RsdoctorPluginOptionsNormalized<
   port?: number;
   server: SDK.RsdoctorServerConfig;
   supports: NormalizedSupports;
+  multiCompiler: {
+    enabled: boolean;
+    group?: string;
+  };
 }
 
 export type GzipConfig =
@@ -128,6 +133,18 @@ export type NewReportCodeType =
 export interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
+  /**
+   * Configure automatic multi-compiler aggregation.
+   *
+   * Rsdoctor groups plugin instances created for the same compiler startup by
+   * default. Set this to `false` when multiple unrelated compilers are created
+   * together in the same process, or provide a group name to explicitly group
+   * compiler reports.
+   *
+   * @default true
+   */
+  multiCompiler?: boolean | { group?: string };
+
   /** Checker configuration */
   linter?: LinterType.Options<Rules, InternalRules>;
   /**

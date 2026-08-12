@@ -19,7 +19,12 @@ export function registerSDK(
   if (!globalThis.__rsdoctor_sdks__) {
     globalThis.__rsdoctor_sdks__ = [];
   }
-  if (!globalThis.__rsdoctor_sdks__.includes(t)) {
+  const sameNameIndex = globalThis.__rsdoctor_sdks__.findIndex(
+    (sdk) => sdk.name === t.name,
+  );
+  if (sameNameIndex >= 0) {
+    globalThis.__rsdoctor_sdks__[sameNameIndex] = t;
+  } else if (!globalThis.__rsdoctor_sdks__.includes(t)) {
     globalThis.__rsdoctor_sdks__.push(t);
   }
   if (asDefault) {

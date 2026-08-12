@@ -1,5 +1,4 @@
-import path from 'path';
-import { Manifest, SDK } from '@rsdoctor/shared/types';
+import { Constants, Manifest, SDK } from '@rsdoctor/shared/types';
 import { RsdoctorSDK } from '../sdk';
 import { RsdoctorSlaveServer } from './server';
 import type { RsdoctorSDKController } from './controller';
@@ -33,7 +32,7 @@ export class RsdoctorPrimarySDK
 
   public readonly stage: number;
 
-  public readonly displayName: string;
+  public displayName: string;
 
   public readonly compilerPath: string;
 
@@ -43,9 +42,7 @@ export class RsdoctorPrimarySDK
 
   public dependencies: Array<string> | undefined;
 
-  private uploadPieces!: Promise<void>;
-
-  private finishUploadPieceSwitch!: () => void;
+  public reportFileName = '';
 
   constructor({
     name,
@@ -77,69 +74,45 @@ export class RsdoctorPrimarySDK
     this.isChild = Boolean(isChild);
     this.extraConfig = extraConfig;
     this.parent = controller;
-    this.server = new RsdoctorSlaveServer(this, port, {
-      cors: extraConfig?.server?.cors,
-    });
+    if (lastSdk) {
+      this.server = new RsdoctorSlaveServer(this, port, {
+        cors: extraConfig?.server?.cors,
+      });
+    }
     this.type = type;
     this.setName(name);
-    this.clearSwitch();
-  }
-
-  private clearSwitch() {
-    this.uploadPieces = new Promise<void>((resolve) => {
-      this.finishUploadPieceSwitch = resolve;
-    });
   }
 
   get isMaster() {
     return this.parent.master === this;
   }
 
-  private ensureSlaveOutputDir() {
-    if (this.isMaster) {
-      return;
-    }
-
-    this.setOutputDir(
-      path.join(
-        this.parent.master.outputDir,
-        '.slaves',
-        this.name.replace(/\s+/g, '-'),
-      ),
-    );
-  }
-
-  public async writeStore(options?: SDK.WriteStoreOptionsType) {
-    this.ensureSlaveOutputDir();
-    return super.writeStore(options);
-  }
-
   protected async writePieces(): Promise<void> {
-    const { finishUploadPieceSwitch } = this;
-    this.ensureSlaveOutputDir();
+    this.setOutputDir(this.parent.getCompilerOutputDir(this));
     await super.writePieces(this.getStoreData());
-    finishUploadPieceSwitch?.();
   }
 
   protected async writeManifest() {
-    const { parent, cloudData, dependencies } = this;
+    const { parent, cloudData } = this;
 
-    if (!dependencies?.length) {
-      await Promise.all(
-        this.parent.slaves
-          .filter((item) => !item.dependencies?.length)
-          .map((item) => item.uploadPieces),
-      );
-    }
-
-    if (cloudData) {
+    if (cloudData && parent.isMultiple) {
       cloudData.name = this.name;
       cloudData.series = parent.getSeriesData();
     }
 
     const result = await super.writeManifest();
-    this.clearSwitch();
+    await parent.refreshManifestSeries();
     return result;
+  }
+
+  async refreshManifestSeries() {
+    if (!this.parent.isMultiple || !this.cloudData || !this.diskManifestPath) {
+      return;
+    }
+
+    this.cloudData.name = this.name;
+    this.cloudData.series = this.parent.getSeriesData();
+    await super.writeManifest();
   }
 
   getSeriesData(serverUrl = false): Manifest.RsdoctorManifestSeriesData[] {
@@ -147,13 +120,38 @@ export class RsdoctorPrimarySDK
   }
 
   setName(name: string) {
-    this._name = this.parent.hasName(name, this) ? `${name}-${id}` : name;
+    const baseName = name || `compiler-${this.id}`;
+    if (!this.parent.hasName(baseName, this)) {
+      this._name = baseName;
+      return;
+    }
+
+    let suffix = 2;
+    while (this.parent.hasName(`${baseName}-${suffix}`, this)) {
+      suffix += 1;
+    }
+    this._name = `${baseName}-${suffix}`;
   }
 
   getManifestData(): Manifest.RsdoctorManifestWithShardingFiles {
     const data = super.getManifestData();
-    data.name = this.name;
-    data.series = this.getSeriesData(true);
+    if (this.parent.isMultiple) {
+      data.name = this.name;
+      data.series = this.getSeriesData(true);
+    }
     return data;
+  }
+
+  public addRsdoctorDataToHTML(
+    storeData: SDK.BuilderStoreData,
+    htmlContent: string,
+  ) {
+    const result = super.addRsdoctorDataToHTML(storeData, htmlContent);
+    if (!this.parent.isMultiple) {
+      return result;
+    }
+
+    const metadata = `<script>window.${Constants.WINDOW_RSDOCTOR_TAG}.name=${JSON.stringify(this.name)};window.${Constants.WINDOW_RSDOCTOR_TAG}.series=${JSON.stringify(this.parent.getBriefSeriesData(this))}</script>`;
+    return result.replace('</body>', `${metadata}</body>`);
   }
 }

@@ -20,6 +20,7 @@ npm run test:cjs     # Test CJS functionality
 - `rspack-banner-minimal/` - Rspack with banner plugin
 - `rspack-layers-minimal/` - Rspack with layer support
 - `rsbuild-minimal/` - Rsbuild with Rsdoctor
+- `rsbuild-environments/` - Rsbuild multi-environment build with Rsdoctor
 
 ## Module System Comparison
 
