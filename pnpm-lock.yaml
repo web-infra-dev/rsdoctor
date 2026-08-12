@@ -165,6 +165,9 @@ importers:
       nano-staged:
         specifier: ^1.0.2
         version: 1.0.2
+      pkg-pr-new:
+        specifier: 0.0.87
+        version: 0.0.87
       prettier:
         specifier: ^3.9.6
         version: 3.9.6
@@ -5092,6 +5095,10 @@ packages:
   pify@4.0.1:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
+
+  pkg-pr-new@0.0.87:
+    resolution: {integrity: sha512-nm+30Py1csXWfyMH1ueQyTR11IZGHS5oW8Qok/MxMwjPx9g1jX3wMRrJf8TgEvNo0a0M4i14T0zQsEPWdZfAhg==}
+    hasBin: true
 
   playwright-core@1.55.1:
     resolution: {integrity: sha512-Z6Mh9mkwX+zxSlHqdr5AOcJnfp+xUWLCt9uKV18fhzA8eyxUd8NUWzAjxUh55RZKSYwDGX0cfaySdhZJGMoJ+w==}
@@ -11850,6 +11857,8 @@ snapshots:
 
   pify@4.0.1:
     optional: true
+
+  pkg-pr-new@0.0.87: {}
 
   playwright-core@1.55.1: {}
 
