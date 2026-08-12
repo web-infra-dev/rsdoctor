@@ -8,6 +8,7 @@ permissions: {}
 
 jobs:
   publish:
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,9 +25,6 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm run build
 
       - name: Publish Package Previews
         run: pnpm exec pkg-pr-new publish --pnpm --previewVersion --no-template './packages/shared' './packages/client' './packages/core' './packages/cli' './packages/agent-cli'
