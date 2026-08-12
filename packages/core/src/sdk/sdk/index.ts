@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import fse from 'fs-extra';
 import path from 'path';
 import { createRequire } from 'module';
+import packageJson from '../../../package.json';
 import { DevToolError } from '@/error';
 import { Common, Constants, Manifest, SDK } from '@rsdoctor/shared/types';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
@@ -386,6 +387,92 @@ export class RsdoctorSDK<
     }
   }
 
+  protected async writePieces(
+    storeData: Common.PlainObject,
+    options?: SDK.WriteStoreOptionsType,
+  ) {
+    await super.writePieces(storeData, options);
+    if (this.cloudData) {
+      this.cloudData.metadata = this.getArtifactMetadata(
+        'normal',
+        storeData as Partial<SDK.BuilderStoreData>,
+      );
+    }
+  }
+
+  public getArtifactMetadata(
+    mode: Manifest.RsdoctorArtifactOutputMode,
+    storeData: Partial<SDK.BuilderStoreData> = this.getStoreData(),
+  ): Manifest.RsdoctorArtifactMetadata {
+    const briefSections = this.extraConfig?.brief?.jsonOptions?.sections;
+    const isBriefJson =
+      mode === 'brief' && this.extraConfig?.brief?.type?.includes('json');
+    const compilerConfig = storeData.configs?.[0];
+    const buildIdentity = this.getArtifactBuildIdentity();
+    const sectionState = (
+      section: Manifest.RsdoctorArtifactSectionName,
+    ): Manifest.RsdoctorArtifactSectionState =>
+      storeData[section] === undefined
+        ? { status: 'omitted', reason: 'not-collected' }
+        : { status: 'collected' };
+
+    return {
+      schemaVersion: 1,
+      producer: {
+        name: '@rsdoctor/core',
+        version: packageJson.version,
+      },
+      output: { mode },
+      build: {
+        id: storeData.hash ?? this.getHash(),
+        root: storeData.root ?? this.root,
+        ...buildIdentity,
+        compiler: {
+          name: this.name,
+          ...(compilerConfig
+            ? {
+                type: compilerConfig.name,
+                version: String(compilerConfig.version),
+              }
+            : {}),
+        },
+      },
+      sections: {
+        errors:
+          isBriefJson && briefSections && !briefSections.rules
+            ? { status: 'omitted', reason: 'not-selected' }
+            : sectionState('errors'),
+        configs: sectionState('configs'),
+        summary: sectionState('summary'),
+        resolver: sectionState('resolver'),
+        loader: sectionState('loader'),
+        moduleGraph:
+          isBriefJson && briefSections && !briefSections.moduleGraph
+            ? { status: 'omitted', reason: 'not-selected' }
+            : sectionState('moduleGraph'),
+        chunkGraph:
+          isBriefJson && briefSections && !briefSections.chunkGraph
+            ? { status: 'omitted', reason: 'not-selected' }
+            : sectionState('chunkGraph'),
+        moduleCodeMap:
+          mode === 'brief'
+            ? { status: 'omitted', reason: 'output-mode' }
+            : sectionState('moduleCodeMap'),
+        plugin: sectionState('plugin'),
+        packageGraph: this._packageGraph
+          ? { status: 'collected' }
+          : { status: 'omitted', reason: 'not-collected' },
+        treeShaking:
+          mode === 'brief'
+            ? { status: 'omitted', reason: 'output-mode' }
+            : this.extraConfig?.features?.treeShaking
+              ? sectionState('treeShaking')
+              : { status: 'omitted', reason: 'feature-disabled' },
+        otherReports: sectionState('otherReports'),
+      },
+    };
+  }
+
   public async writeStore(options?: SDK.WriteStoreOptionsType) {
     logger.debug(`sdk.writeStore has run.`, '[SDK.writeStore][end]');
     let htmlPath = '';
@@ -400,6 +487,7 @@ export class RsdoctorSDK<
         const jsonData = {
           data,
           clientRoutes,
+          metadata: this.getArtifactMetadata('brief', data),
         };
 
         fs.mkdirSync(this.outputDir, { recursive: true });
@@ -538,6 +626,7 @@ export class RsdoctorSDK<
 
         return t;
       }, {} as Common.PlainObject) as unknown as Manifest.RsdoctorManifestWithShardingFiles['data'],
+      metadata: this.getArtifactMetadata('normal', dataValue),
       __LOCAL__SERVER__: true,
       __SOCKET__PORT__: this.server.socketUrl.port.toString(),
       __SOCKET__URL__: this.server.socketUrl.socketUrl,

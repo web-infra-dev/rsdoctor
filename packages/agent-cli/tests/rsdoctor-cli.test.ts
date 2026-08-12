@@ -13,6 +13,44 @@ import {
 import { runCli } from '../src/cli';
 
 describe('rsdoctor cli tool executor', () => {
+  it('parses legacy and v1 artifacts without changing report data', () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-data-'));
+    const legacyFile = path.join(tempDir, 'legacy.json');
+    const v1File = path.join(tempDir, 'v1.json');
+    const reportData = {
+      summary: { costs: [] },
+      moduleGraph: { modules: [], dependencies: [], exports: [] },
+    };
+    fs.writeFileSync(legacyFile, JSON.stringify({ data: reportData }));
+    fs.writeFileSync(
+      v1File,
+      JSON.stringify({
+        data: reportData,
+        metadata: {
+          schemaVersion: 1,
+          producer: { name: '@rsdoctor/core', version: '2.0.0-beta.0' },
+          futureField: { preserved: true },
+        },
+      }),
+    );
+
+    try {
+      const legacy = datasource.loadJsonData(legacyFile);
+      const v1 = datasource.loadJsonData(v1File);
+
+      expect(legacy.data).toEqual(reportData);
+      expect(legacy.metadata).toBeUndefined();
+      expect(v1.data).toEqual(reportData);
+      expect(v1.metadata).toEqual({
+        schemaVersion: 1,
+        producer: { name: '@rsdoctor/core', version: '2.0.0-beta.0' },
+        futureField: { preserved: true },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it('runs the mapped command and returns parsed json', async () => {
     const commands: string[][] = [];
     const catalog = getToolCatalog();

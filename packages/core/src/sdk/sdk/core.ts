@@ -30,6 +30,9 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
 
   protected _envinfo: SDK.EnvInfo = {} as SDK.EnvInfo;
 
+  protected _artifactBuildIdentity: Manifest.RsdoctorArtifactCompilationIdentity =
+    {};
+
   private _clientRoutes: Set<Manifest.RsdoctorManifestClientRoutes> = new Set([
     Manifest.RsdoctorManifestClientRoutes.Overall,
   ]);
@@ -106,6 +109,16 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
 
   public getHash() {
     return this.hash;
+  }
+
+  public setArtifactBuildIdentity(
+    identity: Manifest.RsdoctorArtifactCompilationIdentity,
+  ) {
+    this._artifactBuildIdentity = { ...identity };
+  }
+
+  public getArtifactBuildIdentity() {
+    return { ...this._artifactBuildIdentity };
   }
 
   public getClientRoutes() {

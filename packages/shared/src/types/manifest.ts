@@ -3,6 +3,8 @@ import { StoreData } from './sdk';
 
 export interface RsdoctorManifest {
   client: RsdoctorManifestClient;
+  /** Optional for compatibility with artifacts produced before schema v1. */
+  metadata?: RsdoctorArtifactMetadata;
   /**
    * manifest url in tos, used by inner-rsdoctor.
    */
@@ -18,6 +20,76 @@ export interface RsdoctorManifest {
    * multiple build info
    */
   series?: RsdoctorManifestSeriesData[];
+}
+
+export type RsdoctorArtifactOutputMode = 'brief' | 'normal';
+
+export type RsdoctorArtifactSectionName =
+  | 'errors'
+  | 'configs'
+  | 'summary'
+  | 'resolver'
+  | 'loader'
+  | 'moduleGraph'
+  | 'chunkGraph'
+  | 'moduleCodeMap'
+  | 'plugin'
+  | 'packageGraph'
+  | 'treeShaking'
+  | 'otherReports';
+
+export type RsdoctorArtifactOmissionReason =
+  'not-selected' | 'output-mode' | 'feature-disabled' | 'not-collected';
+
+export type RsdoctorArtifactSectionState =
+  | { status: 'collected' }
+  | { status: 'omitted'; reason: RsdoctorArtifactOmissionReason };
+
+export type RsdoctorArtifactSections = Record<
+  RsdoctorArtifactSectionName,
+  RsdoctorArtifactSectionState
+> &
+  Record<string, RsdoctorArtifactSectionState>;
+
+export interface RsdoctorArtifactCompilationIdentity {
+  compilationHash?: string;
+  target?: string | string[];
+  environment?: string;
+}
+
+export interface RsdoctorArtifactCompilerIdentity extends RsdoctorArtifactCompilationIdentity {
+  name: string;
+  stage?: number;
+}
+
+export interface RsdoctorArtifactMetadata {
+  schemaVersion: 1;
+  producer: {
+    name: '@rsdoctor/core';
+    version: string;
+  };
+  output: {
+    mode: RsdoctorArtifactOutputMode;
+  };
+  build: RsdoctorArtifactCompilationIdentity & {
+    /** Existing Rsdoctor SDK/build identifier; not a compilation hash. */
+    id: string;
+    root: string;
+    compiler: {
+      name: string;
+      type?: string;
+      version?: string;
+    };
+    compilers?: RsdoctorArtifactCompilerIdentity[];
+  };
+  sections: RsdoctorArtifactSections;
+}
+
+export interface RsdoctorBriefArtifact {
+  data: RsdoctorManifestData;
+  clientRoutes: RsdoctorManifestClientRoutes[];
+  /** Optional for compatibility with artifacts produced before schema v1. */
+  metadata?: RsdoctorArtifactMetadata;
 }
 
 export interface RsdoctorManifestSeriesData {

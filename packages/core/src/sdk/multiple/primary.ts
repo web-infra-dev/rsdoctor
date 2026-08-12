@@ -98,6 +98,7 @@ export class RsdoctorPrimarySDK
     if (cloudData && parent.isMultiple) {
       cloudData.name = this.name;
       cloudData.series = parent.getSeriesData();
+      cloudData.metadata = this.getArtifactMetadata('normal');
     }
 
     const result = await super.writeManifest();
@@ -112,7 +113,31 @@ export class RsdoctorPrimarySDK
 
     this.cloudData.name = this.name;
     this.cloudData.series = this.parent.getSeriesData();
+    this.cloudData.metadata = this.getArtifactMetadata('normal');
     await super.writeManifest();
+  }
+
+  public getArtifactMetadata(
+    mode: Manifest.RsdoctorArtifactOutputMode,
+    storeData: Partial<SDK.BuilderStoreData> = this.getStoreData(),
+  ): Manifest.RsdoctorArtifactMetadata {
+    const metadata = super.getArtifactMetadata(mode, storeData);
+    if (!this.parent.isMultiple) {
+      return metadata;
+    }
+
+    delete metadata.build.compilationHash;
+    delete metadata.build.target;
+    delete metadata.build.environment;
+    metadata.build.compilers = this.parent.getSeriesData().map((series) => {
+      const sdk = this.parent.slaves.find((item) => item.name === series.name)!;
+      return {
+        name: series.name,
+        stage: series.stage,
+        ...sdk.getArtifactBuildIdentity(),
+      };
+    });
+    return metadata;
   }
 
   getSeriesData(serverUrl = false): Manifest.RsdoctorManifestSeriesData[] {

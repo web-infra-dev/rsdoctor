@@ -2,9 +2,13 @@ import { getSDK } from '@/inner-plugins/utils/sdk';
 import { RsdoctorRspackPlugin } from '@/rspack-plugin';
 import { RsdoctorPrimarySDK, RsdoctorSDK } from '@/sdk';
 import { rspack } from '@rspack/core';
-import { afterEach, describe, expect, it } from '@rstest/core';
+import { afterEach, describe, expect, it, rs } from '@rstest/core';
 import { RsdoctorServer } from '@/sdk/server';
+import { File } from '@/build-utils';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
+
+rs.setConfig({ testTimeout: 30000 });
 
 afterEach(async () => {
   delete globalThis.__rsdoctor_sdk__;
@@ -58,6 +62,105 @@ describe('RsdoctorRspackPlugin', () => {
     expect(getSDK('node')).toBe(nodeSDK);
 
     await Promise.all([webSDK.dispose(), nodeSDK.dispose()]);
+  });
+
+  it('emits independently matchable identities for multiple compilers', async () => {
+    const testRoot = path.join(
+      tmpdir(),
+      `rsdoctor-multi-compiler-metadata-${Date.now()}`,
+    );
+    const reportDir = path.join(testRoot, 'report');
+    const entry = path.resolve(
+      __dirname,
+      '../fixtures/default-export/literal/index.js',
+    );
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      output: { reportDir },
+    });
+    const compiler = rspack([
+      {
+        context: path.resolve(__dirname, '../..'),
+        entry,
+        mode: 'development',
+        name: 'web',
+        output: { path: path.join(testRoot, 'web') },
+        plugins: [plugin],
+        target: 'web',
+      },
+      {
+        context: path.resolve(__dirname, '../..'),
+        entry,
+        mode: 'development',
+        name: 'node',
+        output: { path: path.join(testRoot, 'node') },
+        plugins: [plugin],
+        target: 'node',
+      },
+    ]);
+
+    try {
+      const stats = await new Promise<
+        NonNullable<Parameters<Parameters<typeof compiler.run>[0]>[1]>
+      >((resolve, reject) => {
+        compiler.run((error, result) => {
+          if (error) {
+            reject(error);
+          } else if (!result) {
+            reject(new Error('Rspack did not return compilation stats.'));
+          } else if (result.hasErrors()) {
+            reject(new Error(result.toString({ errors: true })));
+          } else {
+            resolve(result);
+          }
+        });
+      });
+      const observedHashes = Object.fromEntries(
+        stats.stats.map((item) => [item.compilation.name, item.hash]),
+      );
+      const manifest = JSON.parse(
+        await File.fse.readFile(
+          path.join(reportDir, '.rsdoctor', 'manifest.json'),
+          'utf-8',
+        ),
+      );
+      const nodeManifestPath = manifest.series.find(
+        (item: { name: string }) => item.name === 'node',
+      ).path;
+      const nodeManifest = JSON.parse(
+        await File.fse.readFile(nodeManifestPath, 'utf-8'),
+      );
+
+      expect(manifest.metadata.build.compilationHash).toBeUndefined();
+      expect(manifest.metadata.build.compilers).toEqual([
+        expect.objectContaining({
+          name: 'web',
+          compilationHash: observedHashes.web,
+          environment: 'web',
+          target: 'web',
+        }),
+        expect.objectContaining({
+          name: 'node',
+          compilationHash: observedHashes.node,
+          environment: 'node',
+          target: 'node',
+        }),
+      ]);
+      expect(nodeManifest.metadata.build.compilers).toEqual(
+        manifest.metadata.build.compilers,
+      );
+    } finally {
+      await new Promise<void>((resolve, reject) => {
+        compiler.close((error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+      await File.fse.remove(testRoot);
+    }
   });
 
   it('uses the configured output path before the compiler starts', async () => {
