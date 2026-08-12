@@ -15,23 +15,27 @@ export class InternalSummaryPlugin<
 
   private postTimes: Map<Summary.SummaryCostsDataName, number> = new Map();
 
+  private readonly createdAt = Date.now();
+
   public apply(compiler: T) {
     time('InternalSummaryPlugin.apply');
     try {
       compiler.hooks.beforeCompile.tapPromise(
         this.tapPostOptions,
-        this.beforeCompile,
+        this.beforeCompile.bind(this, compiler),
       );
 
       compiler.hooks.afterCompile.tapPromise(
         this.tapPreOptions,
-        this.afterCompile,
+        this.afterCompile.bind(this, compiler),
       );
 
-      compiler.hooks.done.tapPromise(
-        this.tapPostOptions,
-        this.done.bind(this, compiler),
-      );
+      if (!compiler.isChild()) {
+        compiler.hooks.done.tapPromise(
+          this.tapPostOptions,
+          this.done.bind(this, compiler),
+        );
+      }
     } finally {
       timeEnd('InternalSummaryPlugin.apply');
     }
@@ -52,13 +56,14 @@ export class InternalSummaryPlugin<
     }
   }
 
-  public beforeCompile = async (): Promise<void> => {
+  public beforeCompile = async (compiler: T): Promise<void> => {
     time('InternalSummaryPlugin.beforeCompile');
     try {
       // report bootstrap -> compile
       if (!this.times.has(Summary.SummaryCostsDataName.Bootstrap)) {
-        const costs = Math.floor(process.uptime() * 1000);
-        const startAt = Date.now() - costs;
+        const startAt = compiler.isChild()
+          ? this.createdAt
+          : Date.now() - Math.floor(process.uptime() * 1000);
         this.report(Summary.SummaryCostsDataName.Bootstrap, startAt);
         this.mark(Summary.SummaryCostsDataName.Bootstrap, 'post');
       }
@@ -68,14 +73,14 @@ export class InternalSummaryPlugin<
   };
 
   public afterCompile = async (
+    compiler: T,
     compilation: Plugin.BaseCompilation,
   ): Promise<void> => {
     time('InternalSummaryPlugin.afterCompile');
     try {
-      // child Compiler hook time cannot use as main compile's.
       if (
         !this.times.has(Summary.SummaryCostsDataName.Compile) &&
-        !compilation.compiler.isChild()
+        (!compilation.compiler || compilation.compiler === compiler)
       ) {
         // report compile -> after compile
         const start = this.postTimes.get(

@@ -199,9 +199,15 @@ export async function reportLoader(
   };
 
   // sdk exists means in the same process
-  const sdk = getSDK(ctx._compilation?.name);
+  const compilation = ctx._compilation as
+    | {
+        name?: string;
+        compiler?: { compilerPath?: string };
+      }
+    | undefined;
+  const sdk = getSDK(compilation?.compiler?.compilerPath || compilation?.name);
 
-  if (sdk?.reportLoader && !('parent' in sdk && sdk.parent)) {
+  if (sdk?.reportLoader) {
     sdk.reportLoader(loaderData);
     sdk.reportSourceMap(sourceMapData);
     return loaderData;

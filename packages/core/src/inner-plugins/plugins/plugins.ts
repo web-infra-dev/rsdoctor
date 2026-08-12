@@ -12,11 +12,17 @@ export class InternalPluginsPlugin<
   public apply(compiler: Plugin.BaseCompiler) {
     time('InternalPluginsPlugin.apply');
     try {
-      compiler.hooks.afterPlugins.tap(
-        this.tapPostOptions,
-        this.afterPlugins.bind(this, compiler),
+      if (compiler.isChild()) {
+        this.afterPlugins(compiler);
+      } else {
+        compiler.hooks.afterPlugins.tap(
+          this.tapPostOptions,
+          this.afterPlugins.bind(this, compiler),
+        );
+      }
+      compiler.hooks.compilation.tap(this.tapPostOptions, (compilation) =>
+        this.compilation(compiler, compilation),
       );
-      compiler.hooks.compilation.tap(this.tapPostOptions, this.compilation);
     } finally {
       timeEnd('InternalPluginsPlugin.apply');
     }
@@ -25,8 +31,6 @@ export class InternalPluginsPlugin<
   public afterPlugins = (compiler: Plugin.BaseCompiler) => {
     time('InternalPluginsPlugin.afterPlugins');
     try {
-      if (compiler.isChild()) return;
-
       // intercept compiler hooks
       BuildUtils.interceptCompilerHooks(compiler, (name, hook) =>
         interceptPluginHook(this.sdk, name, hook),
@@ -39,10 +43,13 @@ export class InternalPluginsPlugin<
     }
   };
 
-  public compilation = (compilation: Plugin.BaseCompilation): void => {
+  public compilation = (
+    compiler: Plugin.BaseCompiler,
+    compilation: Plugin.BaseCompilation,
+  ): void => {
     time('InternalPluginsPlugin.compilation');
     try {
-      if (compilation.compiler.isChild()) return;
+      if (compilation.compiler && compilation.compiler !== compiler) return;
 
       // intercept compilation hooks
       BuildUtils.interceptCompilationHooks(compilation, (name, hook) =>

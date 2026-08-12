@@ -22,9 +22,13 @@ export interface RsdoctorManifest {
 
 export interface RsdoctorManifestSeriesData {
   name: string;
+  displayName?: string;
   path: string;
   stage: number;
   origin?: string;
+  compilerPath?: string;
+  parentCompilerPath?: string;
+  isChild?: boolean;
 }
 
 export interface RsdoctorManifestWithShardingFiles extends Omit<
@@ -73,7 +77,9 @@ export type RsdoctorManifestRootKeys = keyof RsdoctorManifestData;
 
 export type RsdoctorManifestMappingKeys =
   | {
-      [K in RsdoctorManifestObjectKeys]: RsdoctorManifestData[K] extends PlainObject
+      [
+        K in RsdoctorManifestObjectKeys
+      ]: RsdoctorManifestData[K] extends PlainObject
         ? RsdoctorManifestData[K] extends Array<unknown>
           ? never
           : string extends keyof RsdoctorManifestData[K]

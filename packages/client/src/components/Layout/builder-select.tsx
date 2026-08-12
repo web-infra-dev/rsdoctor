@@ -1,4 +1,4 @@
-import { Select, Divider, Typography, Space } from 'antd';
+import { Select, Divider, Typography, Space, Tag } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { Manifest } from '@rsdoctor/shared/types';
 import TotalSizeSvg from '../../common/svg/total-size.svg';
@@ -23,7 +23,7 @@ export const BuilderSelect: React.FC = () => {
     });
   }, []);
 
-  if (buildName.length <= 0 || series.length <= 0) {
+  if (buildName.length <= 0 || series.length <= 1) {
     return <></>;
   }
 
@@ -50,13 +50,20 @@ export const BuilderSelect: React.FC = () => {
             }
           }}
         >
-          {series.map((item, i) => (
+          {series.map((item) => (
             <Select.Option
-              key={i}
+              key={item.name}
               value={item.name}
               className="builder-selector-option-item"
             >
-              {item.name}
+              <Space size={6}>
+                <span>{item.displayName || item.name}</span>
+                {item.isChild ? (
+                  <Tag color="blue" bordered={false}>
+                    Child
+                  </Tag>
+                ) : null}
+              </Space>
             </Select.Option>
           ))}
         </Select>

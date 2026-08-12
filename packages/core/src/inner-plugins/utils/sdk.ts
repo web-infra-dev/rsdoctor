@@ -9,29 +9,61 @@ declare global {
 }
 
 export function setSDK(t: SDK.RsdoctorBuilderSDKInstance) {
+  registerSDK(t, true);
+}
+
+export function registerSDK(
+  t: SDK.RsdoctorBuilderSDKInstance,
+  asDefault = false,
+) {
   if (!globalThis.__rsdoctor_sdks__) {
     globalThis.__rsdoctor_sdks__ = [];
   }
-  globalThis.__rsdoctor_sdks__!.push(t);
-  globalThis.__rsdoctor_sdk__ = t;
+  if (!globalThis.__rsdoctor_sdks__.includes(t)) {
+    globalThis.__rsdoctor_sdks__.push(t);
+  }
+  if (asDefault) {
+    globalThis.__rsdoctor_sdk__ = t;
+  }
 }
 
-export function getSDK(builderName?: string) {
+function findMatchingSDK(
+  sdks: SDK.RsdoctorBuilderSDKInstance[],
+  compilerId: string,
+) {
+  const exactMatch = sdks.find(
+    (item) =>
+      item.name === compilerId ||
+      ('compilerPath' in item && item.compilerPath === compilerId),
+  );
+  if (exactMatch) {
+    return exactMatch;
+  }
+
+  const compilerName = compilerId.split('|', 1)[0];
+  if (compilerName && compilerName !== compilerId) {
+    return sdks.find((item) => item.name === compilerName);
+  }
+}
+
+export function getSDK(compilerId?: string) {
   const sdks = globalThis[globalKey] || [];
   let sdk = globalThis['__rsdoctor_sdk__'];
 
-  if (sdk && sdk.name !== builderName) {
-    sdk = builderName ? sdks.find((s) => s.name === builderName) || sdk : sdk;
+  if (compilerId) {
+    sdk = findMatchingSDK(sdks, compilerId) || sdk;
   }
-  if (sdk && builderName && 'parent' in sdk) {
+  if (sdk && compilerId && 'parent' in sdk) {
     const parent = (
       sdk as SDK.RsdoctorBuilderSDKInstance & {
-        parent?: { slaves: SDK.RsdoctorBuilderSDKInstance[] };
+        parent?: {
+          slaves: Array<
+            SDK.RsdoctorBuilderSDKInstance & { compilerPath?: string }
+          >;
+        };
       }
     ).parent;
-    const slaveSDK = parent?.slaves.find(
-      (_sdk: { name: string }) => _sdk.name === builderName,
-    );
+    const slaveSDK = parent && findMatchingSDK(parent.slaves, compilerId);
     return slaveSDK || sdk;
   }
   return sdk;

@@ -8,6 +8,10 @@ let id = 1;
 
 interface RsdoctorSlaveSDKOptions {
   name: string;
+  displayName?: string;
+  compilerPath?: string;
+  parentCompilerPath?: string;
+  isChild?: boolean;
   /**
    * use to sort for display in the client page.
    * the smaller the front.
@@ -29,6 +33,14 @@ export class RsdoctorPrimarySDK
 
   public readonly stage: number;
 
+  public readonly displayName: string;
+
+  public readonly compilerPath: string;
+
+  public readonly parentCompilerPath?: string;
+
+  public readonly isChild: boolean;
+
   public dependencies: Array<string> | undefined;
 
   private uploadPieces!: Promise<void>;
@@ -37,6 +49,10 @@ export class RsdoctorPrimarySDK
 
   constructor({
     name,
+    displayName,
+    compilerPath,
+    parentCompilerPath,
+    isChild,
     stage,
     controller,
     extraConfig,
@@ -55,6 +71,10 @@ export class RsdoctorPrimarySDK
 
     this.id = id++;
     this.stage = typeof stage === 'number' ? stage : 1;
+    this.displayName = displayName || name;
+    this.compilerPath = compilerPath || '';
+    this.parentCompilerPath = parentCompilerPath;
+    this.isChild = Boolean(isChild);
     this.extraConfig = extraConfig;
     this.parent = controller;
     this.server = new RsdoctorSlaveServer(this, port, {
@@ -75,17 +95,28 @@ export class RsdoctorPrimarySDK
     return this.parent.master === this;
   }
 
-  protected async writePieces(): Promise<void> {
-    const { name, parent, isMaster, outputDir, finishUploadPieceSwitch } = this;
+  private ensureSlaveOutputDir() {
+    if (this.isMaster) {
+      return;
+    }
+
     this.setOutputDir(
-      isMaster
-        ? outputDir
-        : path.join(
-            parent.master.outputDir,
-            '.slaves',
-            name.replace(/\s+/g, '-'),
-          ),
+      path.join(
+        this.parent.master.outputDir,
+        '.slaves',
+        this.name.replace(/\s+/g, '-'),
+      ),
     );
+  }
+
+  public async writeStore(options?: SDK.WriteStoreOptionsType) {
+    this.ensureSlaveOutputDir();
+    return super.writeStore(options);
+  }
+
+  protected async writePieces(): Promise<void> {
+    const { finishUploadPieceSwitch } = this;
+    this.ensureSlaveOutputDir();
     await super.writePieces(this.getStoreData());
     finishUploadPieceSwitch?.();
   }
@@ -116,7 +147,7 @@ export class RsdoctorPrimarySDK
   }
 
   setName(name: string) {
-    this._name = this.parent.hasName(name) ? `${name}-${id}` : name;
+    this._name = this.parent.hasName(name, this) ? `${name}-${id}` : name;
   }
 
   getManifestData(): Manifest.RsdoctorManifestWithShardingFiles {

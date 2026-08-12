@@ -16,6 +16,7 @@ npm run test:cjs     # Test CJS functionality
 ## Other Examples
 
 - `rspack-minimal/` - Basic Rspack setup with Rsdoctor
+- `rspack-child-compiler/` - Rspack child compiler with isolated Rsdoctor reports
 - `rspack-banner-minimal/` - Rspack with banner plugin
 - `rspack-layers-minimal/` - Rspack with layer support
 - `rsbuild-minimal/` - Rsbuild with Rsdoctor
