@@ -109,13 +109,10 @@ export async function getAssetsModulesData(
     const assets = chunkGraph.getAssets();
     const modules = moduleGraph.getModules();
 
-    // Trying to parse bundle assets and get real module sizes if `bundleDir` is provided
-    let bundlesSources: Record<string, unknown> | null = null;
-    let parsedModules: ParsedModuleSizeData | null = null;
-
     if (bundleDir && assets.length) {
-      bundlesSources = {};
-      parsedModules = {};
+      // Trying to parse bundle assets and get real module sizes if `bundleDir` is provided
+      const bundlesSources: Record<string, unknown> = {};
+      const parsedModules: ParsedModuleSizeData = {};
 
       for (const asset of assets) {
         // If assetsWithoutSourceMap is provided, only parse assets without sourcemap
@@ -147,16 +144,12 @@ export async function getAssetsModulesData(
       }
 
       if (isEmpty(bundlesSources)) {
-        bundlesSources = null;
-        parsedModules = null;
         if (process.env.DEVTOOLS_DEV) {
           logger.warn(
             '\nNo bundles were parsed. Analyzer will show only original module sizes from stats file.\n',
           );
         }
-      }
-
-      if (parsedModules) {
+      } else {
         transformAssetsModulesData(parsedModules, moduleGraph, gzipOptions);
       }
     }

@@ -30,20 +30,18 @@ export function formatAssetName(assetName: string, fileConfig?: string) {
   // - [dir][name].[hash].[ext] -> [dir][name].[ext]
   // - [dir][name]-[hash].[ext] -> [dir][name].[ext]
   const splitFilesList = fileConfig?.split('.');
-  let outputFileTailName = '';
-  let unHashedFileName = assetName;
   if (
     splitFilesList?.length &&
     splitFilesList.length >= 3 &&
     splitFilesList[splitFilesList.length - 2]?.indexOf('[') < 0 &&
     EXT.indexOf(splitFilesList[splitFilesList.length - 1]) > -1
   ) {
-    outputFileTailName = splitFilesList[splitFilesList.length - 2];
+    const outputFileTailName = splitFilesList[splitFilesList.length - 2];
     const _regPattern =
       /(.*)(\.([a-f0-9]{4,32}|[a-zA-Z]*[0-9][a-zA-Z0-9]*))(\.[^.]+){2,}$/;
     const match = assetName.match(_regPattern);
     if (match && match[3].length >= 4 && match[3].length <= 32) {
-      unHashedFileName = match[1];
+      const unHashedFileName = match[1];
       return `${unHashedFileName}.${outputFileTailName}.${assetName.substring(
         assetName.lastIndexOf('.') + 1,
       )}`;
@@ -85,9 +83,7 @@ export function filterAssetsByExtensions(
 }
 
 type FilterFunctionOrExtensions =
-  | string
-  | string[]
-  | ((asset: SDK.AssetData) => boolean);
+  string | string[] | ((asset: SDK.AssetData) => boolean);
 
 function isAssetMatchFilter(
   asset: SDK.AssetData,
