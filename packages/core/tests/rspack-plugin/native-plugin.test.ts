@@ -77,6 +77,7 @@ function createHarness(watchMode = false) {
   } as unknown as Plugin.BaseCompilation);
 
   return {
+    compiler,
     doneHook,
     modulesGraph: plugin.modulesGraph,
     nativeHooks,
@@ -186,6 +187,38 @@ describe('Rspack native graph collection', () => {
       );
     },
   );
+
+  it('clears module gzip sizes when a compiler switches to watch mode', async () => {
+    const { compiler, doneHook, modulesGraph, nativeHooks } = createHarness();
+    const source = 'export const value = 1;';
+
+    nativeHooks.chunkGraph.call({ chunks: [], entrypoints: [] });
+    nativeHooks.moduleGraph.call({
+      modules: [
+        createNativeModule({
+          ukey: 1,
+          identifier: '/src/index.js',
+          path: '/src/index.js',
+        }),
+      ],
+      dependencies: [],
+      chunkModules: [],
+      connectionsOnlyImports: [],
+    });
+    nativeHooks.moduleSources.call({
+      moduleOriginalSources: [{ module: 1, source, size: source.length }],
+      jsonModuleSizes: [],
+    });
+
+    await doneHook.promise({});
+    expect(modulesGraph.getModuleById(1)?.getSize().gzipSize).toBeGreaterThan(
+      0,
+    );
+
+    compiler.watchMode = true;
+    await doneHook.promise({});
+    expect(modulesGraph.getModuleById(1)?.getSize().gzipSize).toBe(0);
+  });
 
   it('fails when native graph hooks do not provide data', async () => {
     const { doneHook } = createHarness();

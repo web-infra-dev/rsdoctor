@@ -44,4 +44,16 @@ describe('InternalBundlePlugin', () => {
       expect(asset.gzipSize).toBe(expectedGzipSize);
     },
   );
+
+  it('clears asset gzip sizes when a compiler switches to watch mode', async () => {
+    const { asset, plugin } = createHarness();
+    const compiler = { watchMode: false } as Plugin.BaseCompiler;
+
+    await plugin.done(compiler);
+    expect(asset.gzipSize).toBeGreaterThan(0);
+
+    compiler.watchMode = true;
+    await plugin.done(compiler);
+    expect(asset.gzipSize).toBeUndefined();
+  });
 });
