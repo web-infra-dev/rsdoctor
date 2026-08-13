@@ -332,7 +332,6 @@ describe('normalizeUserConfig', () => {
         type: ['json'],
         htmlOptions: {
           reportHtmlName: undefined,
-          writeDataJson: false,
         },
         jsonOptions: {
           fileName: 'rsdoctor-data.json',
