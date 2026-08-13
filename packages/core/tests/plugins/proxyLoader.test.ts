@@ -53,6 +53,6 @@ describe('proxy loader cacheability', () => {
 
     expect(normalResult).toBe('source');
     expect(pitchResult).toBe('pitch');
-    expect(cacheable).not.toHaveBeenCalledWith(false);
+    expect(cacheable).not.toHaveBeenCalled();
   });
 });
