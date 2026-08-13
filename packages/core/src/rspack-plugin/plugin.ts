@@ -53,6 +53,8 @@ class RsdoctorCompilerContext implements RsdoctorRspackPluginInstance<
 
   public applied = false;
 
+  public hasOpenedClientAutomatically = false;
+
   constructor(
     public readonly sdk: SDK.RsdoctorBuilderSDKInstance,
     public readonly options: RsdoctorRspackPluginOptionsNormalized<
@@ -352,7 +354,12 @@ export class RsdoctorRspackPlugin<
 
       const isPrimaryCompiler =
         !(context.sdk instanceof RsdoctorPrimarySDK) || context.sdk.isMaster;
-      if (!this.options.disableClientServer && isPrimaryCompiler) {
+      if (
+        !this.options.disableClientServer &&
+        isPrimaryCompiler &&
+        !context.hasOpenedClientAutomatically
+      ) {
+        context.hasOpenedClientAutomatically = true;
         if (this.options.output.mode === SDK.IMode[SDK.IMode.brief]) {
           await handleBriefModeReport(
             context.sdk,
