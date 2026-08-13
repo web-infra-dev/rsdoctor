@@ -3,12 +3,28 @@ import { CheckSyntax } from '@rsbuild/plugin-check-syntax';
 import { loadConfig } from 'browserslist-load-config';
 
 import { defineRule } from '../../rule';
-import { Config } from './types';
+import type { Config } from './types';
 
 import { Linter } from '@rsdoctor/shared/types';
 export type { Config } from './types';
 
 const title = 'ecma-version-check';
+
+function isExcludedOutput(
+  filepath: string,
+  exclude: Config['excludeOutput'],
+): boolean {
+  if (!exclude) return false;
+
+  const conditions = Array.isArray(exclude) ? exclude : [exclude];
+  const normalizedPath = filepath.replace(/\\/g, '/');
+
+  return conditions.some((condition) => {
+    if (typeof condition === 'function') return condition(filepath);
+    if (typeof condition === 'string') return filepath.startsWith(condition);
+    return condition.test(normalizedPath);
+  });
+}
 
 export const rule: Linter.RuleData<Config, typeof title> = defineRule<
   typeof title,
@@ -22,53 +38,64 @@ export const rule: Linter.RuleData<Config, typeof title> = defineRule<
       severity: Linter.Severity.Warn,
       defaultConfig: {
         ecmaVersion: undefined,
-        targets: [],
       },
     },
     async check({ chunkGraph, report, ruleConfig, root, configs }) {
-      for (const asset of chunkGraph.getAssets()) {
-        if (
-          path.extname(asset.path) !== '.js' &&
-          path.extname(asset.path) !== '.bundle'
-        ) {
-          continue;
-        }
+      const assets = chunkGraph.getAssets().filter((asset) => {
+        const extension = path.extname(asset.path);
+        return extension === '.js' || extension === '.bundle';
+      });
+      if (!assets.length) return;
 
-        const browserslistConfig = loadConfig({
-          path: root,
-          env: 'production',
-        });
-        const { exclude, excludeOutput, targets, ecmaVersion } = ruleConfig;
-        const finalTargets = targets || browserslistConfig || [];
-        // disable check syntax
-        if (!finalTargets.length && !ecmaVersion) {
-          return;
-        }
+      const {
+        exclude,
+        excludeErrorMessage,
+        excludeOutput,
+        targets,
+        ecmaVersion,
+      } = ruleConfig;
+      const hasEcmaVersion = typeof ecmaVersion !== 'undefined';
+      const finalTargets =
+        targets ??
+        (hasEcmaVersion
+          ? []
+          : loadConfig({
+              path: root,
+              env: 'production',
+            })) ??
+        [];
 
-        const buildConfig = configs[0]?.config;
-        const context = buildConfig?.context || root;
-        const checkSyntax = new CheckSyntax({
-          exclude,
-          excludeOutput,
-          ecmaVersion,
-          rootPath: context,
-          targets: finalTargets,
-        });
+      // Explicitly passing an empty targets array keeps the rule disabled.
+      if (!finalTargets.length && !hasEcmaVersion) return;
 
-        const outputDir =
-          buildConfig?.output?.path || path.resolve(root, 'dist');
+      const buildConfig = configs[0]?.config;
+      const context = buildConfig?.context || root;
+      const outputDir = buildConfig?.output?.path || path.resolve(root, 'dist');
+      const checkSyntax = new CheckSyntax({
+        exclude,
+        excludeErrorMessage,
+        excludeOutput,
+        ecmaVersion,
+        rootPath: context,
+        targets: finalTargets,
+      });
+
+      for (const asset of assets) {
         const assetPath = path.resolve(outputDir, asset.path);
+        if (isExcludedOutput(assetPath, excludeOutput)) continue;
+
         await checkSyntax.check(assetPath, asset.content);
-        checkSyntax.errors.forEach((err) => {
-          report({
-            message: `Found syntax that does not match "ecmaVersion <= ${checkSyntax.ecmaVersion}"`,
-            detail: {
-              error: err,
-              type: 'link',
-            },
-          });
-        });
       }
+
+      checkSyntax.errors.forEach((err) => {
+        report({
+          message: `Found syntax that does not match "ecmaVersion <= ${checkSyntax.ecmaVersion}"`,
+          detail: {
+            error: err,
+            type: 'link',
+          },
+        });
+      });
     },
   };
 });
