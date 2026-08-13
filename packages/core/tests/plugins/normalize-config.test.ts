@@ -16,7 +16,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
       };
       const brief: Config.BriefConfig = {
         reportHtmlName: 'test.html',
-        writeDataJson: false,
       };
 
       const result = processModeConfigurations('brief', output, brief);
@@ -25,7 +24,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         type: ['html'],
         htmlOptions: {
           reportHtmlName: 'test.html',
-          writeDataJson: false,
         },
         jsonOptions: {},
       });
@@ -53,7 +51,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         type: ['json'],
         htmlOptions: {
           reportHtmlName: undefined,
-          writeDataJson: false,
         },
         jsonOptions: {
           sections: {
@@ -72,7 +69,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
           type: ['html', 'json'],
           htmlOptions: {
             reportHtmlName: 'custom.html',
-            writeDataJson: true,
           },
           jsonOptions: {
             sections: {
@@ -90,7 +86,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         type: ['html', 'json'],
         htmlOptions: {
           reportHtmlName: 'custom.html',
-          writeDataJson: true,
         },
         jsonOptions: {
           sections: {
@@ -126,7 +121,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         type: ['html'],
         htmlOptions: {
           reportHtmlName: undefined,
-          writeDataJson: false,
         },
         jsonOptions: {},
       });
@@ -145,7 +139,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         type: ['json'],
         htmlOptions: {
           reportHtmlName: undefined,
-          writeDataJson: false,
         },
         jsonOptions: {
           fileName: 'rsdoctor-data.json',
@@ -178,7 +171,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         type: ['json'],
         htmlOptions: {
           reportHtmlName: undefined,
-          writeDataJson: false,
         },
         jsonOptions: {
           sections: {
@@ -196,7 +188,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
           type: ['html', 'json'],
           htmlOptions: {
             reportHtmlName: 'report.html',
-            writeDataJson: true,
           },
           jsonOptions: {
             sections: {
@@ -209,7 +200,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
       };
       const brief: Config.BriefConfig = {
         reportHtmlName: 'fallback.html',
-        writeDataJson: false,
       };
 
       const result = processBriefHtmlModeConfig(output, brief);
@@ -218,7 +208,6 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         type: ['html', 'json'],
         htmlOptions: {
           reportHtmlName: 'report.html', // Should use output.options.htmlOptions first
-          writeDataJson: true,
         },
         jsonOptions: {
           sections: {
@@ -236,19 +225,16 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
           type: ['html'],
           htmlOptions: {
             reportHtmlName: 'priority.html',
-            writeDataJson: true,
           },
         },
       };
       const brief: Config.BriefConfig = {
         reportHtmlName: 'fallback.html',
-        writeDataJson: false,
       };
 
       const result = processBriefHtmlModeConfig(output, brief);
 
       expect(result.htmlOptions?.reportHtmlName).toBe('priority.html');
-      expect(result.htmlOptions?.writeDataJson).toBe(true);
     });
 
     it('should fallback to brief parameter when output.options is not provided', () => {
@@ -259,13 +245,11 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
       };
       const brief: Config.BriefConfig = {
         reportHtmlName: 'fallback.html',
-        writeDataJson: true,
       };
 
       const result = processBriefHtmlModeConfig(output, brief);
 
       expect(result.htmlOptions?.reportHtmlName).toBe('fallback.html');
-      expect(result.htmlOptions?.writeDataJson).toBe(true);
     });
   });
 });

@@ -49,9 +49,11 @@ class RsdoctorCompilerContext implements RsdoctorRspackPluginInstance<
 
   public readonly modulesGraph = new ModuleGraph() as SDK.ModuleGraphInstance;
 
-  public bootstrapTask?: Promise<unknown>;
+  public bootstrapTask?: Promise<void>;
 
   public applied = false;
+
+  public hasOpenedClientAutomatically = false;
 
   constructor(
     public readonly sdk: SDK.RsdoctorBuilderSDKInstance,
@@ -187,9 +189,9 @@ export class RsdoctorRspackPlugin<
 
       this.releasePendingSessionOnRun(compiler);
 
-      if (!context.bootstrapTask) {
-        context.bootstrapTask = context.sdk.bootstrap();
-      }
+      // Bootstrap early so it can run in parallel with compiler setup. The
+      // completion hook awaits the same task instead of starting it again.
+      void this.ensureBootstrap(context);
 
       const compilerName =
         compiler.name ||
@@ -334,7 +336,8 @@ export class RsdoctorRspackPlugin<
     time('RsdoctorRspackPlugin.done');
     try {
       logger.debug('[RsdoctorRspackPlugin] bootstrap(start) in done()');
-      await context.bootstrapTask;
+      const bootstrapTask = this.ensureBootstrap(context);
+      await this.awaitBootstrap(context, bootstrapTask);
       logger.debug('[RsdoctorRspackPlugin] bootstrap(end) in done()');
 
       context.sdk.addClientRoutes([
@@ -354,7 +357,12 @@ export class RsdoctorRspackPlugin<
 
       const isPrimaryCompiler =
         !(context.sdk instanceof RsdoctorPrimarySDK) || context.sdk.isMaster;
-      if (!this.options.disableClientServer && isPrimaryCompiler) {
+      if (
+        !this.options.disableClientServer &&
+        isPrimaryCompiler &&
+        !context.hasOpenedClientAutomatically
+      ) {
+        context.hasOpenedClientAutomatically = true;
         if (this.options.output.mode === SDK.IMode[SDK.IMode.brief]) {
           await handleBriefModeReport(
             context.sdk,
@@ -367,7 +375,7 @@ export class RsdoctorRspackPlugin<
       }
 
       if (this.shouldDisposeSDK()) {
-        await context.sdk.dispose();
+        await this.disposeSDK(context, bootstrapTask);
       }
     } finally {
       timeEnd('RsdoctorRspackPlugin.done');
@@ -452,6 +460,48 @@ export class RsdoctorRspackPlugin<
     this.appliedCompilerCount += 1;
     this.compilerContexts.set(compiler, context);
     return context;
+  }
+
+  private ensureBootstrap(context: RsdoctorCompilerContext): Promise<void> {
+    if (!context.bootstrapTask) {
+      const task = context.sdk.bootstrap();
+      context.bootstrapTask = task;
+
+      // apply() cannot await this task. Mark a possible rejection as handled
+      // until a compiler completion hook propagates the original error.
+      void task.catch(() => {});
+    }
+
+    return context.bootstrapTask;
+  }
+
+  private async awaitBootstrap(
+    context: RsdoctorCompilerContext,
+    bootstrapTask: Promise<void>,
+  ) {
+    try {
+      await bootstrapTask;
+    } catch (error) {
+      this.clearBootstrapTask(context, bootstrapTask);
+      throw error;
+    }
+  }
+
+  private clearBootstrapTask(
+    context: RsdoctorCompilerContext,
+    bootstrapTask: Promise<void>,
+  ) {
+    if (context.bootstrapTask === bootstrapTask) {
+      context.bootstrapTask = undefined;
+    }
+  }
+
+  private async disposeSDK(
+    context: RsdoctorCompilerContext,
+    bootstrapTask: Promise<void>,
+  ) {
+    await context.sdk.dispose();
+    this.clearBootstrapTask(context, bootstrapTask);
   }
 
   private getOutputDir(compiler: Plugin.BaseCompilerType<'rspack'>) {
@@ -584,7 +634,8 @@ export class RsdoctorRspackPlugin<
     context: RsdoctorCompilerContext,
     compilationHash?: string | null,
   ): Promise<void> => {
-    await context.bootstrapTask;
+    const bootstrapTask = this.ensureBootstrap(context);
+    await this.awaitBootstrap(context, bootstrapTask);
     context.sdk.addClientRoutes([
       ManifestType.RsdoctorManifestClientRoutes.Overall,
     ]);
@@ -599,7 +650,7 @@ export class RsdoctorRspackPlugin<
     await context.sdk.writeStore();
 
     if (this.shouldDisposeSDK()) {
-      await context.sdk.dispose();
+      await this.disposeSDK(context, bootstrapTask);
     }
   };
 
