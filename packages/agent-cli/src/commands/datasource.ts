@@ -57,6 +57,10 @@ interface RsdoctorError {
 
 export interface RsdoctorArtifactMetadata {
   schemaVersion: number;
+  sections?: Record<
+    string,
+    { status: 'collected' } | { status: 'omitted'; reason: string }
+  >;
   [key: string]: unknown;
 }
 

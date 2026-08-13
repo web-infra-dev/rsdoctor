@@ -25,7 +25,7 @@ The package exposes a binary named `rsdoctor-agent`.
 
 ## Artifact compatibility
 
-The datasource accepts both legacy `{ data, clientRoutes }` artifacts and artifacts with the optional versioned top-level `metadata` field. For metadata-aware consumers, a section marked `collected` was collected even when its payload is empty; a section marked `omitted` retains the legacy placeholder or `undefined` payload and includes the reason it was not collected.
+The datasource accepts both legacy `{ data, clientRoutes }` artifacts and artifacts with the optional versioned top-level `metadata` field. For metadata-aware consumers, a section marked `collected` was collected even when its payload is empty; a section marked `omitted` retains the legacy placeholder or `undefined` payload and includes the reason it was not collected. In-process tools that require an omitted section return `ok: false` with a structured `RSDOCTOR_SECTION_UNAVAILABLE` error instead of reporting an empty success. Legacy artifacts without section metadata keep their existing behavior.
 
 ## Usage
 

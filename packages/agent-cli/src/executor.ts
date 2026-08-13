@@ -11,8 +11,40 @@ import {
   splitToolInputControls,
 } from './core/result-controls';
 import { getInProcessToolExecutors } from './commands';
+import { loadJsonData } from './commands/datasource';
 
 const execFileAsync = promisify(execFile);
+
+const TOOL_REQUIRED_SECTIONS: Record<string, string[]> = {
+  packages_direct_dependencies: ['packageGraph'],
+  packages_duplicates: ['errors'],
+  packages_similar: ['packageGraph'],
+  tree_shaking_retained_modules: ['moduleGraph'],
+  tree_shaking_side_effects: ['moduleGraph'],
+  tree_shaking_summary: ['errors'],
+};
+
+function getUnavailableSectionResult(
+  toolName: string,
+  dataFile: string,
+): unknown {
+  const sections = loadJsonData(dataFile).metadata?.sections;
+  for (const section of TOOL_REQUIRED_SECTIONS[toolName] ?? []) {
+    const state = sections?.[section];
+    if (state?.status === 'omitted') {
+      return {
+        ok: false,
+        error: {
+          code: 'RSDOCTOR_SECTION_UNAVAILABLE',
+          message: `Rsdoctor artifact section "${section}" is unavailable (${state.reason}).`,
+          section,
+          status: state.status,
+          reason: state.reason,
+        },
+      };
+    }
+  }
+}
 
 async function defaultRunCommand(command: string[]): Promise<string> {
   const [file, ...args] = command;
@@ -83,6 +115,13 @@ export function createInProcessRsdoctorCliToolExecutor(): ToolExecutor {
         splitToolInputControls(request.input, {
           sourcePagination: tool.sourcePagination,
         });
+      const unavailableSectionResult = getUnavailableSectionResult(
+        request.toolName,
+        request.dataFile,
+      );
+      if (unavailableSectionResult) {
+        return unavailableSectionResult;
+      }
       const result = await tool.execute({
         dataFile: request.dataFile,
         input: passthroughInput,

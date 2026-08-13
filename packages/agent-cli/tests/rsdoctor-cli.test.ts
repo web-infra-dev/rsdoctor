@@ -51,6 +51,128 @@ describe('rsdoctor cli tool executor', () => {
     }
   });
 
+  it('keeps collected-but-empty package graph results successful', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: {
+          schemaVersion: 1,
+          sections: {
+            packageGraph: { status: 'collected' },
+          },
+        },
+        data: {
+          packageGraph: { packages: [], dependencies: [] },
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      await expect(
+        executor.execute({
+          toolName: 'packages_direct_dependencies',
+          input: {},
+          dataFile,
+        }),
+      ).resolves.toMatchObject({
+        ok: true,
+        data: { total: 0, items: [] },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('reports omitted module graph data as unavailable to tree-shaking tools', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: {
+          schemaVersion: 1,
+          sections: {
+            moduleGraph: { status: 'omitted', reason: 'not-selected' },
+          },
+        },
+        data: {
+          moduleGraph: { modules: [], dependencies: [], exports: [] },
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      await expect(
+        executor.execute({
+          toolName: 'tree_shaking_retained_modules',
+          input: {},
+          dataFile,
+        }),
+      ).resolves.toEqual({
+        ok: false,
+        error: {
+          code: 'RSDOCTOR_SECTION_UNAVAILABLE',
+          message:
+            'Rsdoctor artifact section "moduleGraph" is unavailable (not-selected).',
+          section: 'moduleGraph',
+          status: 'omitted',
+          reason: 'not-selected',
+        },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('reports an uncollected package graph instead of zero packages', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: {
+          schemaVersion: 1,
+          sections: {
+            packageGraph: { status: 'omitted', reason: 'not-collected' },
+          },
+        },
+        data: {
+          packageGraph: { packages: [], dependencies: [] },
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      await expect(
+        executor.execute({
+          toolName: 'packages_direct_dependencies',
+          input: {},
+          dataFile,
+        }),
+      ).resolves.toEqual({
+        ok: false,
+        error: {
+          code: 'RSDOCTOR_SECTION_UNAVAILABLE',
+          message:
+            'Rsdoctor artifact section "packageGraph" is unavailable (not-collected).',
+          section: 'packageGraph',
+          status: 'omitted',
+          reason: 'not-collected',
+        },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it('runs the mapped command and returns parsed json', async () => {
     const commands: string[][] = [];
     const catalog = getToolCatalog();
