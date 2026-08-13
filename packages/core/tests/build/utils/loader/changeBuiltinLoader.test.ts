@@ -1,10 +1,11 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, expect, it, rs } from '@rstest/core';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Plugin } from '@rsdoctor/shared/types';
 import { Utils } from '@/build-utils/build';
 import { addProbeLoader2Rules } from '@/build-utils/build/utils';
+import { ProbeLoaderPlugin } from '@/build-utils/build/loader/probeLoaderPlugin';
 
 process.env.DOCTOR_TEST = 'true';
 
@@ -176,5 +177,36 @@ describe('addProbeLoader2Rules', () => {
     expect(result[0].rules[0]).toHaveProperty('use');
     // @ts-ignore
     expect(result[0].rules[0].use).toHaveLength(3);
+  });
+});
+
+describe('ProbeLoaderPlugin', () => {
+  it('instruments a compiler only once across watch rebuilds', () => {
+    const watchRunCallbacks: Array<() => void> = [];
+    const compiler = {
+      options: {
+        name: 'test-compiler',
+        module: {
+          rules: [{ loader: 'builtin:swc-loader' }],
+        },
+      },
+      hooks: {
+        beforeRun: { tap: rs.fn() },
+        watchRun: {
+          tap: (_options: unknown, callback: () => void) => {
+            watchRunCallbacks.push(callback);
+          },
+        },
+      },
+    } as unknown as Plugin.BaseCompiler;
+
+    new ProbeLoaderPlugin().apply(compiler);
+    watchRunCallbacks[0]();
+    watchRunCallbacks[0]();
+
+    const [rule] = compiler.options.module.rules as Array<{
+      use: Array<{ loader: string }>;
+    }>;
+    expect(rule.use).toHaveLength(3);
   });
 });
