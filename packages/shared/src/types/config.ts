@@ -1,6 +1,5 @@
 export interface BriefConfig {
   reportHtmlName?: string;
-  writeDataJson: boolean;
 }
 
 /**
@@ -100,6 +99,4 @@ export type IOutput<T extends 'brief' | 'normal'> = T extends 'brief'
     : BriefModeConfig | NormalModeConfig | OutputBaseConfig;
 
 export type NewReportCodeType =
-  | 'noModuleSource'
-  | 'noAssetsAndModuleSource'
-  | 'noCode';
+  'noModuleSource' | 'noAssetsAndModuleSource' | 'noCode';
