@@ -15,8 +15,6 @@ const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, object> =
       return;
     }
 
-    this.cacheable(false);
-
     const mod = getOriginLoaderModule(this);
 
     if (mod.default) {
@@ -90,8 +88,6 @@ export const pitch = function (
   if (shouldSkipLoader(this)) {
     return;
   }
-
-  this.cacheable(false);
 
   const mod = getOriginLoaderModule(this);
 
