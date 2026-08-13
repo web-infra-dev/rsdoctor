@@ -1,7 +1,7 @@
 import { getSDK } from '@/inner-plugins/utils/sdk';
 import { RsdoctorRspackPlugin } from '@/rspack-plugin';
 import { RsdoctorPrimarySDK, RsdoctorSDK } from '@/sdk';
-import { rspack } from '@rspack/core';
+import { rspack, type MultiCompiler, type MultiStats } from '@rspack/core';
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
 import { RsdoctorServer } from '@/sdk/server';
 import { File } from '@/build-utils';
@@ -9,6 +9,68 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 rs.setConfig({ testTimeout: 30000 });
+
+const createMultiCompiler = (
+  testRoot: string,
+  plugin: RsdoctorRspackPlugin,
+) => {
+  const context = path.resolve(__dirname, '../..');
+  const entry = path.resolve(
+    __dirname,
+    '../fixtures/default-export/literal/index.js',
+  );
+
+  return rspack([
+    {
+      context,
+      entry,
+      mode: 'development',
+      name: 'web',
+      output: { path: path.join(testRoot, 'web') },
+      plugins: [plugin],
+      target: 'web',
+    },
+    {
+      context,
+      entry,
+      mode: 'development',
+      name: 'node',
+      output: { path: path.join(testRoot, 'node') },
+      plugins: [plugin],
+      target: 'node',
+    },
+  ]);
+};
+
+const runCompiler = (compiler: MultiCompiler) =>
+  new Promise<MultiStats>((resolve, reject) => {
+    compiler.run((error, stats) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      if (!stats) {
+        reject(new Error('Rspack did not return compilation stats.'));
+        return;
+      }
+      if (stats.hasErrors()) {
+        reject(new Error(stats.toString({ errors: true })));
+        return;
+      }
+      resolve(stats);
+    });
+  });
+
+const closeCompiler = (compiler: MultiCompiler) =>
+  new Promise<void>((resolve, reject) => {
+    compiler.close((error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
+  });
 
 afterEach(async () => {
   delete globalThis.__rsdoctor_sdk__;
@@ -70,51 +132,14 @@ describe('RsdoctorRspackPlugin', () => {
       `rsdoctor-multi-compiler-metadata-${Date.now()}`,
     );
     const reportDir = path.join(testRoot, 'report');
-    const entry = path.resolve(
-      __dirname,
-      '../fixtures/default-export/literal/index.js',
-    );
     const plugin = new RsdoctorRspackPlugin({
       disableClientServer: true,
       output: { reportDir },
     });
-    const compiler = rspack([
-      {
-        context: path.resolve(__dirname, '../..'),
-        entry,
-        mode: 'development',
-        name: 'web',
-        output: { path: path.join(testRoot, 'web') },
-        plugins: [plugin],
-        target: 'web',
-      },
-      {
-        context: path.resolve(__dirname, '../..'),
-        entry,
-        mode: 'development',
-        name: 'node',
-        output: { path: path.join(testRoot, 'node') },
-        plugins: [plugin],
-        target: 'node',
-      },
-    ]);
+    const compiler = createMultiCompiler(testRoot, plugin);
 
     try {
-      const stats = await new Promise<
-        NonNullable<Parameters<Parameters<typeof compiler.run>[0]>[1]>
-      >((resolve, reject) => {
-        compiler.run((error, result) => {
-          if (error) {
-            reject(error);
-          } else if (!result) {
-            reject(new Error('Rspack did not return compilation stats.'));
-          } else if (result.hasErrors()) {
-            reject(new Error(result.toString({ errors: true })));
-          } else {
-            resolve(result);
-          }
-        });
-      });
+      const stats = await runCompiler(compiler);
       const observedHashes = Object.fromEntries(
         stats.stats.map((item) => [item.compilation.name, item.hash]),
       );
@@ -150,15 +175,7 @@ describe('RsdoctorRspackPlugin', () => {
         manifest.metadata.build.compilers,
       );
     } finally {
-      await new Promise<void>((resolve, reject) => {
-        compiler.close((error) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
-      });
+      await closeCompiler(compiler);
       await File.fse.remove(testRoot);
     }
   });
@@ -169,10 +186,6 @@ describe('RsdoctorRspackPlugin', () => {
       `rsdoctor-multi-compiler-brief-metadata-${Date.now()}`,
     );
     const reportDir = path.join(testRoot, 'report');
-    const entry = path.resolve(
-      __dirname,
-      '../fixtures/default-export/literal/index.js',
-    );
     const plugin = new RsdoctorRspackPlugin({
       disableClientServer: true,
       features: { resolver: true },
@@ -182,43 +195,10 @@ describe('RsdoctorRspackPlugin', () => {
         options: { type: ['json'] },
       },
     });
-    const compiler = rspack([
-      {
-        context: path.resolve(__dirname, '../..'),
-        entry,
-        mode: 'development',
-        name: 'web',
-        output: { path: path.join(testRoot, 'web') },
-        plugins: [plugin],
-        target: 'web',
-      },
-      {
-        context: path.resolve(__dirname, '../..'),
-        entry,
-        mode: 'development',
-        name: 'node',
-        output: { path: path.join(testRoot, 'node') },
-        plugins: [plugin],
-        target: 'node',
-      },
-    ]);
+    const compiler = createMultiCompiler(testRoot, plugin);
 
     try {
-      const stats = await new Promise<
-        NonNullable<Parameters<Parameters<typeof compiler.run>[0]>[1]>
-      >((resolve, reject) => {
-        compiler.run((error, result) => {
-          if (error) {
-            reject(error);
-          } else if (!result) {
-            reject(new Error('Rspack did not return compilation stats.'));
-          } else if (result.hasErrors()) {
-            reject(new Error(result.toString({ errors: true })));
-          } else {
-            resolve(result);
-          }
-        });
-      });
+      const stats = await runCompiler(compiler);
       const observedHashes = Object.fromEntries(
         stats.stats.map((item) => [item.compilation.name, item.hash]),
       );
@@ -268,15 +248,7 @@ describe('RsdoctorRspackPlugin', () => {
         }),
       );
     } finally {
-      await new Promise<void>((resolve, reject) => {
-        compiler.close((error) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve();
-          }
-        });
-      });
+      await closeCompiler(compiler);
       await File.fse.remove(testRoot);
     }
   });
