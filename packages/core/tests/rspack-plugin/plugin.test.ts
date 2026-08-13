@@ -182,7 +182,7 @@ describe('RsdoctorRspackPlugin', () => {
     await plugin.done(compiler);
     await plugin.done(compiler);
 
-    expect(bootstrap).toHaveBeenCalledTimes(2);
+    expect(bootstrap).toHaveBeenCalledTimes(1);
     expect(dispose).toHaveBeenCalledTimes(2);
   });
 
