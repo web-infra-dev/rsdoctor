@@ -255,13 +255,21 @@ export class RsdoctorSDK<
     if (_builtinLoader.startAt) {
       this._loaderStart.push(data);
     } else if (_builtinLoader.endAt) {
-      const matchLoaderStart = this._loaderStart.find(
+      const matchLoaderStartIndex = this._loaderStart.findIndex(
         (e) =>
           e.resource.path === data.resource.path &&
-          e.loaders[0].loader === _builtinLoader.loader,
+          e.resource.queryRaw === data.resource.queryRaw &&
+          e.loaders[0].loader === _builtinLoader.loader &&
+          e.loaders[0].loaderIndex === _builtinLoader.loaderIndex &&
+          e.loaders[0].isPitch === _builtinLoader.isPitch &&
+          e.loaders[0].pid === _builtinLoader.pid,
       );
 
-      if (matchLoaderStart) {
+      if (matchLoaderStartIndex !== -1) {
+        const [matchLoaderStart] = this._loaderStart.splice(
+          matchLoaderStartIndex,
+          1,
+        );
         matchLoaderStart.loaders[0].result = _builtinLoader.result;
         matchLoaderStart.loaders[0].endAt = _builtinLoader.endAt;
         this.reportLoader([matchLoaderStart]);
