@@ -334,7 +334,7 @@ export class RsdoctorRspackPlugin<
     try {
       logger.debug('[RsdoctorRspackPlugin] bootstrap(start) in done()');
       const bootstrapTask = this.ensureBootstrap(context);
-      await bootstrapTask;
+      await this.awaitBootstrap(context, bootstrapTask);
       logger.debug('[RsdoctorRspackPlugin] bootstrap(end) in done()');
 
       context.sdk.addClientRoutes([
@@ -466,14 +466,33 @@ export class RsdoctorRspackPlugin<
     return context.bootstrapTask;
   }
 
+  private async awaitBootstrap(
+    context: RsdoctorCompilerContext,
+    bootstrapTask: Promise<void>,
+  ) {
+    try {
+      await bootstrapTask;
+    } catch (error) {
+      this.clearBootstrapTask(context, bootstrapTask);
+      throw error;
+    }
+  }
+
+  private clearBootstrapTask(
+    context: RsdoctorCompilerContext,
+    bootstrapTask: Promise<void>,
+  ) {
+    if (context.bootstrapTask === bootstrapTask) {
+      context.bootstrapTask = undefined;
+    }
+  }
+
   private async disposeSDK(
     context: RsdoctorCompilerContext,
     bootstrapTask: Promise<void>,
   ) {
     await context.sdk.dispose();
-    if (context.bootstrapTask === bootstrapTask) {
-      context.bootstrapTask = undefined;
-    }
+    this.clearBootstrapTask(context, bootstrapTask);
   }
 
   private getOutputDir(compiler: Plugin.BaseCompilerType<'rspack'>) {
@@ -606,7 +625,7 @@ export class RsdoctorRspackPlugin<
     context: RsdoctorCompilerContext,
   ): Promise<void> => {
     const bootstrapTask = this.ensureBootstrap(context);
-    await bootstrapTask;
+    await this.awaitBootstrap(context, bootstrapTask);
     context.sdk.addClientRoutes([
       ManifestType.RsdoctorManifestClientRoutes.Overall,
     ]);

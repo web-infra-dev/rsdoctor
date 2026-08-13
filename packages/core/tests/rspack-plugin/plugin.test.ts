@@ -186,14 +186,17 @@ describe('RsdoctorRspackPlugin', () => {
     expect(dispose).toHaveBeenCalledTimes(2);
   });
 
-  it('propagates the apply bootstrap error without retrying', async () => {
+  it('retries bootstrap on the next build after a failure', async () => {
     const sdk = new RsdoctorSDK({
       name: 'bootstrap-error',
       root: process.cwd(),
       config: { noServer: true },
     });
     const error = new Error('bootstrap failed');
-    const bootstrap = rs.spyOn(sdk, 'bootstrap').mockRejectedValue(error);
+    const bootstrap = rs
+      .spyOn(sdk, 'bootstrap')
+      .mockRejectedValueOnce(error)
+      .mockResolvedValue();
     const writeStore = rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
 
     const plugin = new RsdoctorRspackPlugin({
@@ -203,9 +206,10 @@ describe('RsdoctorRspackPlugin', () => {
     const compiler = rspack({ plugins: [plugin] });
 
     await expect(plugin.done(compiler)).rejects.toBe(error);
+    await plugin.done(compiler);
 
-    expect(bootstrap).toHaveBeenCalledTimes(1);
-    expect(writeStore).not.toHaveBeenCalled();
+    expect(bootstrap).toHaveBeenCalledTimes(2);
+    expect(writeStore).toHaveBeenCalledTimes(1);
   });
 
   it('keeps the report server when the client server is disabled in CI', () => {
