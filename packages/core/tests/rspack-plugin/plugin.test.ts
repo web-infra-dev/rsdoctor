@@ -79,6 +79,32 @@ describe('RsdoctorRspackPlugin', () => {
     await plugin.sdk.dispose();
   });
 
+  it('opens the dashboard automatically only once across rebuilds', async () => {
+    const sdk = new RsdoctorSDK({
+      name: 'watch',
+      root: process.cwd(),
+      config: { noServer: true },
+    });
+    const plugin = new RsdoctorRspackPlugin({ sdkInstance: sdk });
+    const compiler = rspack({ name: 'watch', plugins: [plugin] });
+    const openClientPage = rs
+      .spyOn(sdk.server, 'openClientPage')
+      .mockResolvedValue();
+    const writeStore = rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
+
+    await plugin.done(compiler);
+    await plugin.done(compiler);
+
+    expect(writeStore).toHaveBeenCalledTimes(2);
+    expect(openClientPage).toHaveBeenCalledTimes(1);
+
+    await sdk.server.openClientPage('homepage');
+
+    expect(openClientPage).toHaveBeenCalledTimes(2);
+
+    await sdk.dispose();
+  });
+
   it('creates isolated compiler contexts when one plugin instance is reused', async () => {
     const plugin = new RsdoctorRspackPlugin({
       disableClientServer: true,
