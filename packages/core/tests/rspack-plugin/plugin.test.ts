@@ -173,11 +173,11 @@ describe('RsdoctorRspackPlugin', () => {
     rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
 
     const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
       features: [],
       sdkInstance: sdk,
     });
     const compiler = rspack({ plugins: [plugin] });
-    plugin.options.disableClientServer = true;
 
     await plugin.done(compiler);
     await plugin.done(compiler);
