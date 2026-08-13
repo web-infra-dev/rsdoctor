@@ -1,12 +1,13 @@
 import { getSDK } from '@/inner-plugins/utils/sdk';
 import { RsdoctorRspackPlugin } from '@/rspack-plugin';
 import { RsdoctorPrimarySDK, RsdoctorSDK } from '@/sdk';
-import { rspack } from '@rspack/core';
-import { afterEach, describe, expect, it } from '@rstest/core';
 import { RsdoctorServer } from '@/sdk/server';
+import { rspack } from '@rspack/core';
+import { afterEach, describe, expect, it, rs } from '@rstest/core';
 import path from 'node:path';
 
 afterEach(async () => {
+  rs.restoreAllMocks();
   delete globalThis.__rsdoctor_sdk__;
   delete globalThis.__rsdoctor_sdks__;
   await new Promise((resolve) => setTimeout(resolve, 0));
@@ -127,6 +128,99 @@ describe('RsdoctorRspackPlugin', () => {
     expect(secondSDK.getManifestData().series).toBeUndefined();
 
     await Promise.all([firstSDK.dispose(), secondSDK.dispose()]);
+  });
+
+  it('bootstraps the SDK only once across apply and done', async () => {
+    const sdk = new RsdoctorSDK({
+      name: 'bootstrap-once',
+      root: process.cwd(),
+      config: { noServer: true },
+    });
+    let resolveBootstrap!: () => void;
+    const bootstrapTask = new Promise<void>((resolve) => {
+      resolveBootstrap = resolve;
+    });
+    const bootstrap = rs.spyOn(sdk, 'bootstrap').mockReturnValue(bootstrapTask);
+    const writeStore = rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
+
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      features: [],
+      sdkInstance: sdk,
+    });
+    const compiler = rspack({ plugins: [plugin] });
+
+    const doneTask = plugin.done(compiler);
+    await Promise.resolve();
+
+    expect(bootstrap).toHaveBeenCalledTimes(1);
+    expect(writeStore).not.toHaveBeenCalled();
+
+    resolveBootstrap();
+    await doneTask;
+
+    expect(writeStore).toHaveBeenCalledTimes(1);
+  });
+
+  it('restarts the SDK once after done disposes it', async () => {
+    const originalRSTEST = process.env.RSTEST;
+    delete process.env.RSTEST;
+
+    try {
+      const sdk = new RsdoctorSDK({
+        name: 'bootstrap-after-dispose',
+        root: process.cwd(),
+        config: { noServer: true },
+      });
+      const bootstrap = rs.spyOn(sdk, 'bootstrap').mockResolvedValue();
+      const dispose = rs.spyOn(sdk, 'dispose').mockResolvedValue();
+      rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
+
+      const plugin = new RsdoctorRspackPlugin({
+        disableClientServer: true,
+        features: [],
+        sdkInstance: sdk,
+      });
+      const compiler = rspack({ plugins: [plugin] });
+
+      await plugin.done(compiler);
+      await plugin.done(compiler);
+
+      expect(bootstrap).toHaveBeenCalledTimes(2);
+      expect(dispose).toHaveBeenCalledTimes(2);
+    } finally {
+      if (typeof originalRSTEST === 'undefined') {
+        delete process.env.RSTEST;
+      } else {
+        process.env.RSTEST = originalRSTEST;
+      }
+    }
+  });
+
+  it('retries bootstrap on the next build after a failure', async () => {
+    const sdk = new RsdoctorSDK({
+      name: 'bootstrap-error',
+      root: process.cwd(),
+      config: { noServer: true },
+    });
+    const error = new Error('bootstrap failed');
+    const bootstrap = rs
+      .spyOn(sdk, 'bootstrap')
+      .mockRejectedValueOnce(error)
+      .mockResolvedValue();
+    const writeStore = rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
+
+    const plugin = new RsdoctorRspackPlugin({
+      features: [],
+      sdkInstance: sdk,
+    });
+    const compiler = rspack({ plugins: [plugin] });
+
+    await expect(plugin.done(compiler)).rejects.toBe(error);
+    await plugin.done(compiler);
+
+    expect(bootstrap).toHaveBeenCalledTimes(2);
+    expect(writeStore).toHaveBeenCalledTimes(1);
   });
 
   it('keeps the report server when the client server is disabled in CI', () => {
