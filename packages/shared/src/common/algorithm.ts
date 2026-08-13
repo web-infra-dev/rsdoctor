@@ -25,6 +25,17 @@ export function mergeIntervals(intervals: [number, number][]) {
 }
 
 export function compressText(input: string, compressionLevel?: number): string {
+  if (
+    compressionLevel !== undefined &&
+    (!Number.isInteger(compressionLevel) ||
+      compressionLevel < 0 ||
+      compressionLevel > 9)
+  ) {
+    throw new RangeError(
+      '`compressionLevel` must be an integer between 0 and 9.',
+    );
+  }
+
   try {
     return deflateSync(
       input,
