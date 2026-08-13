@@ -610,13 +610,19 @@ export class RsdoctorRspackPlugin<
   ) {
     const target = compiler.options.target;
     const environment = compiler.name || compiler.options.name;
-    context.sdk.setArtifactBuildIdentity?.({
-      ...(compilationHash ? { compilationHash } : {}),
-      ...(typeof target === 'string' || Array.isArray(target)
-        ? { target }
-        : {}),
-      ...(environment ? { environment } : {}),
-    });
+    const identity: Manifest.RsdoctorArtifactCompilationIdentity = {};
+
+    if (compilationHash) {
+      identity.compilationHash = compilationHash;
+    }
+    if (typeof target === 'string' || Array.isArray(target)) {
+      identity.target = target;
+    }
+    if (environment) {
+      identity.environment = environment;
+    }
+
+    context.sdk.setArtifactBuildIdentity?.(identity);
   }
 
   private shouldDisposeSDK() {

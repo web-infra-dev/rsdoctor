@@ -409,12 +409,36 @@ export class RsdoctorSDK<
       mode === 'brief' && this.extraConfig?.brief?.type?.includes('json');
     const compilerConfig = storeData.configs?.[0];
     const buildIdentity = this.getArtifactBuildIdentity();
+    const omittedSectionState = (
+      reason: Manifest.RsdoctorArtifactOmissionReason,
+    ): Manifest.RsdoctorArtifactSectionState => ({
+      status: 'omitted',
+      reason,
+    });
     const sectionState = (
       section: Manifest.RsdoctorArtifactSectionName,
     ): Manifest.RsdoctorArtifactSectionState =>
       storeData[section] === undefined
-        ? { status: 'omitted', reason: 'not-collected' }
+        ? omittedSectionState('not-collected')
         : { status: 'collected' };
+    const briefSectionState = (
+      section: Manifest.RsdoctorArtifactSectionName,
+      selected: boolean | undefined,
+    ): Manifest.RsdoctorArtifactSectionState => {
+      if (isBriefJson && briefSections && !selected) {
+        return omittedSectionState('not-selected');
+      }
+      return sectionState(section);
+    };
+
+    let treeShakingState: Manifest.RsdoctorArtifactSectionState;
+    if (mode === 'brief') {
+      treeShakingState = omittedSectionState('output-mode');
+    } else if (this.extraConfig?.features?.treeShaking) {
+      treeShakingState = sectionState('treeShaking');
+    } else {
+      treeShakingState = omittedSectionState('feature-disabled');
+    }
 
     return {
       schemaVersion: 1,
@@ -438,38 +462,27 @@ export class RsdoctorSDK<
         },
       },
       sections: {
-        errors:
-          isBriefJson && briefSections && !briefSections.rules
-            ? { status: 'omitted', reason: 'not-selected' }
-            : sectionState('errors'),
+        errors: briefSectionState('errors', briefSections?.rules),
         configs: sectionState('configs'),
         summary: sectionState('summary'),
         resolver: this.isArtifactSectionCollected('resolver')
           ? sectionState('resolver')
-          : { status: 'omitted', reason: 'feature-disabled' },
+          : omittedSectionState('feature-disabled'),
         loader: sectionState('loader'),
-        moduleGraph:
-          isBriefJson && briefSections && !briefSections.moduleGraph
-            ? { status: 'omitted', reason: 'not-selected' }
-            : sectionState('moduleGraph'),
-        chunkGraph:
-          isBriefJson && briefSections && !briefSections.chunkGraph
-            ? { status: 'omitted', reason: 'not-selected' }
-            : sectionState('chunkGraph'),
+        moduleGraph: briefSectionState(
+          'moduleGraph',
+          briefSections?.moduleGraph,
+        ),
+        chunkGraph: briefSectionState('chunkGraph', briefSections?.chunkGraph),
         moduleCodeMap:
           mode === 'brief'
-            ? { status: 'omitted', reason: 'output-mode' }
+            ? omittedSectionState('output-mode')
             : sectionState('moduleCodeMap'),
         plugin: sectionState('plugin'),
         packageGraph: this._packageGraph
           ? { status: 'collected' }
-          : { status: 'omitted', reason: 'not-collected' },
-        treeShaking:
-          mode === 'brief'
-            ? { status: 'omitted', reason: 'output-mode' }
-            : this.extraConfig?.features?.treeShaking
-              ? sectionState('treeShaking')
-              : { status: 'omitted', reason: 'feature-disabled' },
+          : omittedSectionState('not-collected'),
+        treeShaking: treeShakingState,
         otherReports: sectionState('otherReports'),
       },
     };
