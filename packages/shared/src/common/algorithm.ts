@@ -39,9 +39,7 @@ export function compressText(input: string, compressionLevel?: number): string {
   try {
     return deflateSync(
       input,
-      typeof compressionLevel === 'number'
-        ? { level: compressionLevel }
-        : undefined,
+      compressionLevel === undefined ? undefined : { level: compressionLevel },
     ).toString('base64');
   } catch {
     return '';

@@ -131,6 +131,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     await File.fse.ensureDir(outputDir);
 
     const urlsPromiseList: (Promise<DataWithUrl> | DataWithUrl)[] = [];
+    const compressionLevel = options?.compressionLevel;
 
     for (const key of Object.keys(storeData)) {
       const data = storeData[key];
@@ -164,7 +165,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
             outputDir,
             key,
             fileOffset,
-            options?.compressionLevel,
+            compressionLevel,
           );
           fileOffset += result.files.length;
           urlsPromiseList.push(result);
@@ -176,7 +177,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
             outputDir,
             key,
             undefined,
-            options?.compressionLevel,
+            compressionLevel,
           ),
         );
       }
