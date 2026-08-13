@@ -36,7 +36,6 @@ export function processBriefHtmlModeConfig(
 ): Config.BriefModeOptions {
   let htmlOptions: Config.BriefConfig = {
     reportHtmlName: undefined,
-    writeDataJson: false,
   };
   let jsonOptions: Config.JsonOptions = {};
   const briefOptions = output?.options || {};
@@ -63,10 +62,6 @@ export function processBriefHtmlModeConfig(
         outputBriefOptions?.reportHtmlName ||
         outputBrief?.reportHtmlName ||
         undefined,
-      writeDataJson:
-        outputBriefOptions?.writeDataJson ||
-        outputBrief?.writeDataJson ||
-        false,
     };
   }
 
