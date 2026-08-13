@@ -217,17 +217,11 @@ export class InternalLoaderPlugin<
     const markerPath = path.join(this.sdk.outputDir, '.loader-cache');
     fs.mkdirSync(path.dirname(markerPath), { recursive: true });
 
-    let previous = '';
-    try {
-      previous = fs.readFileSync(markerPath, 'utf8');
-    } catch {
-      // The first session has no marker to preserve.
-    }
-    const marker =
-      previous.length < 4096
-        ? `${previous}${randomUUID()}\n`
-        : `${randomUUID()}\n`;
-    fs.writeFileSync(markerPath, marker);
+    const previous = fs.existsSync(markerPath)
+      ? fs.readFileSync(markerPath, 'utf8')
+      : '';
+    const prefix = previous.length < 4096 ? previous : '';
+    fs.writeFileSync(markerPath, `${prefix}${randomUUID()}\n`);
     this.cacheMarkerPath = markerPath;
     return markerPath;
   }
