@@ -1,4 +1,6 @@
 import { Constants, Manifest, SDK } from '@rsdoctor/shared/types';
+import fs from 'node:fs';
+import path from 'node:path';
 import { RsdoctorSDK } from '../sdk';
 import { RsdoctorSlaveServer } from './server';
 import type { RsdoctorSDKController } from './controller';
@@ -87,6 +89,14 @@ export class RsdoctorPrimarySDK
     return this.parent.master === this;
   }
 
+  public async writeStore(options?: SDK.WriteStoreOptionsType) {
+    const result = await super.writeStore(options);
+    if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
+      await this.parent.refreshManifestSeries();
+    }
+    return result;
+  }
+
   protected async writePieces(): Promise<void> {
     this.setOutputDir(this.parent.getCompilerOutputDir(this));
     await super.writePieces(this.getStoreData());
@@ -107,14 +117,37 @@ export class RsdoctorPrimarySDK
   }
 
   async refreshManifestSeries() {
-    if (!this.parent.isMultiple || !this.cloudData || !this.diskManifestPath) {
+    if (!this.parent.isMultiple) {
       return;
     }
+
+    if (this.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
+      this.refreshBriefArtifactMetadata();
+      return;
+    }
+
+    if (!this.cloudData || !this.diskManifestPath) return;
 
     this.cloudData.name = this.name;
     this.cloudData.series = this.parent.getSeriesData();
     this.cloudData.metadata = this.getArtifactMetadata('normal');
     await super.writeManifest();
+  }
+
+  private refreshBriefArtifactMetadata() {
+    if (!this.extraConfig?.brief?.type?.includes('json')) return;
+
+    const artifactPath = path.resolve(
+      this.outputDir,
+      this.extraConfig.brief.jsonOptions?.fileName ?? 'rsdoctor-data.json',
+    );
+    if (!fs.existsSync(artifactPath)) return;
+
+    const artifact = JSON.parse(
+      fs.readFileSync(artifactPath, 'utf-8'),
+    ) as Manifest.RsdoctorBriefArtifact;
+    artifact.metadata = this.getArtifactMetadata('brief', artifact.data);
+    fs.writeFileSync(artifactPath, JSON.stringify(artifact));
   }
 
   public getArtifactMetadata(

@@ -76,6 +76,7 @@ describe('brief json output', () => {
         errors: { status: 'omitted', reason: 'not-selected' },
         moduleGraph: { status: 'omitted', reason: 'not-selected' },
         moduleCodeMap: { status: 'omitted', reason: 'output-mode' },
+        resolver: { status: 'omitted', reason: 'feature-disabled' },
         treeShaking: { status: 'omitted', reason: 'output-mode' },
       },
     });
@@ -94,6 +95,28 @@ describe('brief json output', () => {
       layers: [],
     });
     expect(artifact.data.errors).toEqual([]);
+  });
+
+  it('marks an enabled resolver collector as collected when its payload is empty', async () => {
+    target = await createSDK({
+      noServer: true,
+      mode: 'brief',
+      brief: { type: ['json'] },
+    });
+    outputDir = path.resolve(tmpdir(), `rsdoctor_brief_json_${Date.now()}`);
+    target.sdk.setOutputDir(outputDir);
+    target.sdk.markArtifactSectionCollected('resolver');
+
+    await target.sdk.writeStore();
+
+    const artifact = JSON.parse(
+      fs.readFileSync(path.join(outputDir, 'rsdoctor-data.json'), 'utf-8'),
+    );
+
+    expect(artifact.data.resolver).toEqual([]);
+    expect(artifact.metadata.sections.resolver).toEqual({
+      status: 'collected',
+    });
   });
 
   it('emits v1 metadata on normal manifests without changing sharded data', async () => {
@@ -122,6 +145,7 @@ describe('brief json output', () => {
         chunkGraph: { status: 'collected' },
         moduleGraph: { status: 'collected' },
         packageGraph: { status: 'omitted', reason: 'not-collected' },
+        resolver: { status: 'omitted', reason: 'feature-disabled' },
         treeShaking: { status: 'omitted', reason: 'feature-disabled' },
       },
     });

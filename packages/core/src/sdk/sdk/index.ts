@@ -444,7 +444,9 @@ export class RsdoctorSDK<
             : sectionState('errors'),
         configs: sectionState('configs'),
         summary: sectionState('summary'),
-        resolver: sectionState('resolver'),
+        resolver: this.isArtifactSectionCollected('resolver')
+          ? sectionState('resolver')
+          : { status: 'omitted', reason: 'feature-disabled' },
         loader: sectionState('loader'),
         moduleGraph:
           isBriefJson && briefSections && !briefSections.moduleGraph

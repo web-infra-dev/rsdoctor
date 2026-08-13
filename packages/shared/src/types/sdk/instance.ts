@@ -7,6 +7,7 @@ import { BuilderStoreData, EMOStoreData } from './result';
 import { ModuleGraphInstance, ToDataType } from './module';
 import {
   RsdoctorArtifactCompilationIdentity,
+  RsdoctorArtifactSectionName,
   RsdoctorManifestClientRoutes,
   RsdoctorManifestWithShardingFiles,
 } from '../manifest';
@@ -112,6 +113,9 @@ export interface RsdoctorSDKInstance {
   setArtifactBuildIdentity?(
     identity: RsdoctorArtifactCompilationIdentity,
   ): void;
+
+  /** Mark a section whose collector was installed for this artifact. */
+  markArtifactSectionCollected?(section: RsdoctorArtifactSectionName): void;
 
   /**
    * write the manifest to a folder

@@ -163,6 +163,124 @@ describe('RsdoctorRspackPlugin', () => {
     }
   });
 
+  it('refreshes brief JSON identities after sibling and watch completions', async () => {
+    const testRoot = path.join(
+      tmpdir(),
+      `rsdoctor-multi-compiler-brief-metadata-${Date.now()}`,
+    );
+    const reportDir = path.join(testRoot, 'report');
+    const entry = path.resolve(
+      __dirname,
+      '../fixtures/default-export/literal/index.js',
+    );
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      features: { resolver: true },
+      output: {
+        reportDir,
+        mode: 'brief',
+        options: { type: ['json'] },
+      },
+    });
+    const compiler = rspack([
+      {
+        context: path.resolve(__dirname, '../..'),
+        entry,
+        mode: 'development',
+        name: 'web',
+        output: { path: path.join(testRoot, 'web') },
+        plugins: [plugin],
+        target: 'web',
+      },
+      {
+        context: path.resolve(__dirname, '../..'),
+        entry,
+        mode: 'development',
+        name: 'node',
+        output: { path: path.join(testRoot, 'node') },
+        plugins: [plugin],
+        target: 'node',
+      },
+    ]);
+
+    try {
+      const stats = await new Promise<
+        NonNullable<Parameters<Parameters<typeof compiler.run>[0]>[1]>
+      >((resolve, reject) => {
+        compiler.run((error, result) => {
+          if (error) {
+            reject(error);
+          } else if (!result) {
+            reject(new Error('Rspack did not return compilation stats.'));
+          } else if (result.hasErrors()) {
+            reject(new Error(result.toString({ errors: true })));
+          } else {
+            resolve(result);
+          }
+        });
+      });
+      const observedHashes = Object.fromEntries(
+        stats.stats.map((item) => [item.compilation.name, item.hash]),
+      );
+      const webSDK = plugin.getCompilerSDK('web') as RsdoctorPrimarySDK;
+      const nodeSDK = plugin.getCompilerSDK('node') as RsdoctorPrimarySDK;
+      const readArtifact = async (sdk: RsdoctorPrimarySDK) =>
+        JSON.parse(
+          await File.fse.readFile(
+            path.join(sdk.outputDir, 'rsdoctor-data.json'),
+            'utf-8',
+          ),
+        );
+      const expectedCompilers = [
+        expect.objectContaining({
+          name: 'web',
+          compilationHash: observedHashes.web,
+        }),
+        expect.objectContaining({
+          name: 'node',
+          compilationHash: observedHashes.node,
+        }),
+      ];
+
+      expect((await readArtifact(webSDK)).metadata.build.compilers).toEqual(
+        expectedCompilers,
+      );
+      expect((await readArtifact(nodeSDK)).metadata.build.compilers).toEqual(
+        expectedCompilers,
+      );
+      expect((await readArtifact(webSDK)).metadata.sections.resolver).toEqual({
+        status: 'collected',
+      });
+
+      webSDK.setArtifactBuildIdentity({
+        compilationHash: 'web-watch-hash',
+        environment: 'web',
+        target: 'web',
+      });
+      await webSDK.writeStore();
+
+      expect(
+        (await readArtifact(nodeSDK)).metadata.build.compilers,
+      ).toContainEqual(
+        expect.objectContaining({
+          name: 'web',
+          compilationHash: 'web-watch-hash',
+        }),
+      );
+    } finally {
+      await new Promise<void>((resolve, reject) => {
+        compiler.close((error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+      await File.fse.remove(testRoot);
+    }
+  });
+
   it('uses the configured output path before the compiler starts', async () => {
     const reportDir = path.join(process.cwd(), 'dist', 'brief-report');
     const plugin = new RsdoctorRspackPlugin({

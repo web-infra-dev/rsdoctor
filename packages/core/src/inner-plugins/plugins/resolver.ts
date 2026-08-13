@@ -13,6 +13,8 @@ export class InternalResolverPlugin<
   >();
 
   public apply(compiler: T) {
+    this.sdk.markArtifactSectionCollected?.('resolver');
+
     // resolver depends on module graph
     this.scheduler.ensureModulesChunksGraphApplied(compiler);
     compiler.hooks.normalModuleFactory.tap(
