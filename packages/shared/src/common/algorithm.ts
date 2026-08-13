@@ -24,9 +24,14 @@ export function mergeIntervals(intervals: [number, number][]) {
   return result;
 }
 
-export function compressText(input: string): string {
+export function compressText(input: string, compressionLevel?: number): string {
   try {
-    return deflateSync(input).toString('base64');
+    return deflateSync(
+      input,
+      typeof compressionLevel === 'number'
+        ? { level: compressionLevel }
+        : undefined,
+    ).toString('base64');
   } catch {
     return '';
   }

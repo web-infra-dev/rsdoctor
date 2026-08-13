@@ -122,4 +122,38 @@ describe('writePieces shard file integrity', () => {
     expect(parsed.length).toBe(1);
     expect(parsed[0].resource.path).toBe('/test/a.ts');
   });
+
+  it('honors the requested shard compression level', async () => {
+    target = await createSDK({ noServer: true });
+    const uncompressedDir = path.resolve(
+      tmpdir(),
+      `sharding_level_0_${Date.now()}`,
+    );
+    const compressedDir = path.resolve(
+      tmpdir(),
+      `sharding_level_9_${Date.now()}`,
+    );
+    const data = { moduleCodeMap: { source: 'a'.repeat(100_000) } };
+    const shardSize = (dir: string) =>
+      fs
+        .readdirSync(path.join(dir, 'moduleCodeMap'))
+        .reduce(
+          (total, file) =>
+            total + fs.statSync(path.join(dir, 'moduleCodeMap', file)).size,
+          0,
+        );
+
+    try {
+      target.sdk.setOutputDir(uncompressedDir);
+      await target.sdk.saveManifest(data, { compressionLevel: 0 });
+
+      target.sdk.setOutputDir(compressedDir);
+      await target.sdk.saveManifest(data, { compressionLevel: 9 });
+
+      expect(shardSize(compressedDir)).toBeLessThan(shardSize(uncompressedDir));
+    } finally {
+      await File.fse.remove(uncompressedDir);
+      await File.fse.remove(compressedDir);
+    }
+  });
 });

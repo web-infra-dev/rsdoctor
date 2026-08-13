@@ -1,4 +1,4 @@
-import { Constants, Manifest, SDK } from '@rsdoctor/shared/types';
+import { Common, Constants, Manifest, SDK } from '@rsdoctor/shared/types';
 import { RsdoctorSDK } from '../sdk';
 import { RsdoctorSlaveServer } from './server';
 import type { RsdoctorSDKController } from './controller';
@@ -87,9 +87,12 @@ export class RsdoctorPrimarySDK
     return this.parent.master === this;
   }
 
-  protected async writePieces(): Promise<void> {
+  protected async writePieces(
+    _storeData: Common.PlainObject,
+    options?: SDK.WriteStoreOptionsType,
+  ): Promise<void> {
     this.setOutputDir(this.parent.getCompilerOutputDir(this));
-    await super.writePieces(this.getStoreData());
+    await super.writePieces(this.getStoreData(), options);
   }
 
   protected async writeManifest() {
