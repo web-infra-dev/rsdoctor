@@ -216,7 +216,7 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.",
+            "The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.",
           ),
         ),
       ).toBe(true);
@@ -232,7 +232,7 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "The 'compressData' configuration will be deprecated in a future version.",
+            "The 'compressData' configuration is deprecated in Rsdoctor 2.x.",
           ),
         ),
       ).toBe(true);
@@ -248,7 +248,7 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "The 'compressData' configuration will be deprecated in a future version.",
+            "The 'compressData' configuration is deprecated in Rsdoctor 2.x.",
           ),
         ),
       ).toBe(false);
@@ -264,7 +264,7 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.",
+            "The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.",
           ),
         ),
       ).toBe(false);
@@ -291,7 +291,7 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "Lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
+            "Lite features are deprecated in Rsdoctor 2.x. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
           ),
         ),
       ).toBe(true);
@@ -307,12 +307,12 @@ describe('normalizeUserConfig', () => {
 
       const modeWarning = consoleOutput.some((output) =>
         output.includes(
-          "The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.",
+          "The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.",
         ),
       );
       const liteWarning = consoleOutput.some((output) =>
         output.includes(
-          "Lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
+          "Lite features are deprecated in Rsdoctor 2.x. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
         ),
       );
 

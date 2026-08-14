@@ -173,7 +173,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   if (mode) {
     logger.info(
       chalk.yellow(
-        `The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.`,
+        `The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.`,
       ),
     );
   }
@@ -182,7 +182,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   if (_features.lite || finalMode === SDK.IMode[SDK.IMode.lite]) {
     logger.info(
       chalk.yellow(
-        `Lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.`,
+        `Lite features are deprecated in Rsdoctor 2.x. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.`,
       ),
     );
   }
@@ -231,7 +231,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   if (output.compressData !== undefined) {
     logger.info(
       chalk.yellow(
-        `The 'compressData' configuration will be deprecated in a future version.`,
+        `The 'compressData' configuration is deprecated in Rsdoctor 2.x.`,
       ),
     );
   }
