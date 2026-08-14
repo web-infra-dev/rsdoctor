@@ -29,17 +29,30 @@ function createHarness() {
 
 describe('InternalBundlePlugin', () => {
   it.each([
-    { watchMode: true, expectedGzipSize: undefined },
     {
-      watchMode: false,
+      compiler: { watchMode: true },
+      expectedGzipSize: undefined,
+      mode: 'watch compiler',
+    },
+    {
+      compiler: { watchMode: false },
       expectedGzipSize: gzipSync(source, { level: 9 }).length,
+      mode: 'one-time compiler',
+    },
+    {
+      compiler: {
+        watchMode: false,
+        parentCompilation: { compiler: { watchMode: true } },
+      },
+      expectedGzipSize: undefined,
+      mode: 'child of a watch compiler',
     },
   ])(
-    'uses watchMode=$watchMode when calculating asset gzip sizes',
-    async ({ watchMode, expectedGzipSize }) => {
+    'calculates asset gzip sizes for a $mode',
+    async ({ compiler, expectedGzipSize }) => {
       const { asset, plugin } = createHarness();
 
-      await plugin.done({ watchMode } as Plugin.BaseCompiler);
+      await plugin.done(compiler as unknown as Plugin.BaseCompiler);
 
       expect(asset.gzipSize).toBe(expectedGzipSize);
     },
