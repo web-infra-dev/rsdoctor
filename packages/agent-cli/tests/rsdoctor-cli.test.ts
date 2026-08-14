@@ -173,6 +173,112 @@ describe('rsdoctor cli tool executor', () => {
     }
   });
 
+  it('guards every catalog tool when its required artifact section is omitted', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    const requiredSectionByTool = {
+      build_summary: 'summary',
+      bundle_optimize: 'errors',
+      chunks_list: 'chunkGraph',
+      errors_list: 'errors',
+      packages_direct_dependencies: 'packageGraph',
+      packages_duplicates: 'errors',
+      packages_similar: 'packageGraph',
+      tree_shaking_retained_modules: 'moduleGraph',
+      tree_shaking_side_effects: 'moduleGraph',
+      tree_shaking_summary: 'errors',
+    } as const;
+    const sections = Object.fromEntries(
+      [...new Set(Object.values(requiredSectionByTool))].map((section) => [
+        section,
+        { status: 'omitted', reason: 'not-selected' },
+      ]),
+    );
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: { schemaVersion: 1, sections },
+        data: {
+          chunkGraph: { assets: [], chunks: [], entrypoints: [] },
+          errors: [],
+          moduleGraph: { modules: [], dependencies: [], exports: [] },
+          packageGraph: { packages: [], dependencies: [] },
+          summary: {},
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      expect(Object.keys(requiredSectionByTool).sort()).toEqual(
+        getToolCatalog()
+          .map((tool) => tool.name)
+          .sort(),
+      );
+      for (const [toolName, section] of Object.entries(requiredSectionByTool)) {
+        await expect(
+          executor.execute({ toolName, input: {}, dataFile }),
+        ).resolves.toMatchObject({
+          ok: false,
+          error: { code: 'RSDOCTOR_SECTION_UNAVAILABLE', section },
+        });
+      }
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('guards only the sections used by the selected bundle optimization step', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: {
+          schemaVersion: 1,
+          sections: {
+            chunkGraph: { status: 'omitted', reason: 'not-selected' },
+            errors: { status: 'collected' },
+            packageGraph: { status: 'omitted', reason: 'not-collected' },
+          },
+        },
+        data: {
+          chunkGraph: { assets: [], chunks: [], entrypoints: [] },
+          errors: [],
+          packageGraph: { packages: [], dependencies: [] },
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      await expect(
+        executor.execute({
+          toolName: 'bundle_optimize',
+          input: { step: 1 },
+          dataFile,
+        }),
+      ).resolves.toMatchObject({
+        ok: false,
+        error: {
+          code: 'RSDOCTOR_SECTION_UNAVAILABLE',
+          section: 'packageGraph',
+        },
+      });
+      await expect(
+        executor.execute({
+          toolName: 'bundle_optimize',
+          input: { step: 2 },
+          dataFile,
+        }),
+      ).resolves.toMatchObject({ ok: true });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it('runs the mapped command and returns parsed json', async () => {
     const commands: string[][] = [];
     const catalog = getToolCatalog();

@@ -16,6 +16,9 @@ import { loadJsonData } from './commands/datasource';
 const execFileAsync = promisify(execFile);
 
 const TOOL_REQUIRED_SECTIONS: Record<string, string[]> = {
+  build_summary: ['summary'],
+  chunks_list: ['chunkGraph'],
+  errors_list: ['errors'],
   packages_direct_dependencies: ['packageGraph'],
   packages_duplicates: ['errors'],
   packages_similar: ['packageGraph'],
@@ -24,12 +27,25 @@ const TOOL_REQUIRED_SECTIONS: Record<string, string[]> = {
   tree_shaking_summary: ['errors'],
 };
 
+function getToolRequiredSections(
+  toolName: string,
+  input: Record<string, unknown>,
+): string[] {
+  if (toolName === 'bundle_optimize') {
+    return input.step === 2 || input.step === '2'
+      ? ['errors']
+      : ['errors', 'packageGraph', 'chunkGraph'];
+  }
+  return TOOL_REQUIRED_SECTIONS[toolName] ?? [];
+}
+
 function getUnavailableSectionResult(
   toolName: string,
+  input: Record<string, unknown>,
   dataFile: string,
 ): unknown {
   const sections = loadJsonData(dataFile).metadata?.sections;
-  for (const section of TOOL_REQUIRED_SECTIONS[toolName] ?? []) {
+  for (const section of getToolRequiredSections(toolName, input)) {
     const state = sections?.[section];
     if (state?.status === 'omitted') {
       return {
@@ -117,6 +133,7 @@ export function createInProcessRsdoctorCliToolExecutor(): ToolExecutor {
         });
       const unavailableSectionResult = getUnavailableSectionResult(
         request.toolName,
+        request.input,
         request.dataFile,
       );
       if (unavailableSectionResult) {
