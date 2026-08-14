@@ -232,6 +232,9 @@ describe('RsdoctorRspackPlugin', () => {
       expect((await readArtifact(webSDK)).metadata.sections.resolver).toEqual({
         status: 'collected',
       });
+      expect((await readArtifact(webSDK)).metadata.sections.loader).toEqual({
+        status: 'collected',
+      });
 
       webSDK.setArtifactBuildIdentity({
         compilationHash: 'web-watch-hash',

@@ -468,7 +468,9 @@ export class RsdoctorSDK<
         resolver: this.isArtifactSectionCollected('resolver')
           ? sectionState('resolver')
           : omittedSectionState('feature-disabled'),
-        loader: sectionState('loader'),
+        loader: this.isArtifactSectionCollected('loader')
+          ? sectionState('loader')
+          : omittedSectionState('feature-disabled'),
         moduleGraph: briefSectionState(
           'moduleGraph',
           briefSections?.moduleGraph,

@@ -119,6 +119,52 @@ describe('brief json output', () => {
     });
   });
 
+  it('marks a disabled loader collector as omitted', async () => {
+    target = await createSDK({
+      noServer: true,
+      mode: 'brief',
+      features: { loader: false },
+      brief: { type: ['json'] },
+    });
+    outputDir = path.resolve(tmpdir(), `rsdoctor_brief_json_${Date.now()}`);
+    target.sdk.setOutputDir(outputDir);
+
+    await target.sdk.writeStore();
+
+    const artifact = JSON.parse(
+      fs.readFileSync(path.join(outputDir, 'rsdoctor-data.json'), 'utf-8'),
+    );
+
+    expect(artifact.data.loader).toEqual([]);
+    expect(artifact.metadata.sections.loader).toEqual({
+      status: 'omitted',
+      reason: 'feature-disabled',
+    });
+  });
+
+  it('marks an enabled loader collector as collected when its payload is empty', async () => {
+    target = await createSDK({
+      noServer: true,
+      mode: 'brief',
+      features: { loader: true },
+      brief: { type: ['json'] },
+    });
+    outputDir = path.resolve(tmpdir(), `rsdoctor_brief_json_${Date.now()}`);
+    target.sdk.setOutputDir(outputDir);
+    target.sdk.markArtifactSectionCollected('loader');
+
+    await target.sdk.writeStore();
+
+    const artifact = JSON.parse(
+      fs.readFileSync(path.join(outputDir, 'rsdoctor-data.json'), 'utf-8'),
+    );
+
+    expect(artifact.data.loader).toEqual([]);
+    expect(artifact.metadata.sections.loader).toEqual({
+      status: 'collected',
+    });
+  });
+
   it('emits v1 metadata on normal manifests without changing sharded data', async () => {
     target = await createSDK({ noServer: true });
     outputDir = path.resolve(tmpdir(), `rsdoctor_normal_json_${Date.now()}`);
