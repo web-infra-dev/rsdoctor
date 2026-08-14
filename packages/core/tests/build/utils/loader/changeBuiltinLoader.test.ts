@@ -181,8 +181,8 @@ describe('addProbeLoader2Rules', () => {
 });
 
 describe('ProbeLoaderPlugin', () => {
-  it('instruments a compiler only once across watch rebuilds', () => {
-    const watchRunCallbacks: Array<() => void> = [];
+  it('instruments a compiler only once across run and watch rebuilds', () => {
+    const runCallbacks: Array<() => void> = [];
     const compiler = {
       options: {
         name: 'test-compiler',
@@ -191,18 +191,23 @@ describe('ProbeLoaderPlugin', () => {
         },
       },
       hooks: {
-        beforeRun: { tap: rs.fn() },
+        beforeRun: {
+          tap: (_options: unknown, callback: () => void) => {
+            runCallbacks.push(callback);
+          },
+        },
         watchRun: {
           tap: (_options: unknown, callback: () => void) => {
-            watchRunCallbacks.push(callback);
+            runCallbacks.push(callback);
           },
         },
       },
     } as unknown as Plugin.BaseCompiler;
 
     new ProbeLoaderPlugin().apply(compiler);
-    watchRunCallbacks[0]();
-    watchRunCallbacks[0]();
+    runCallbacks[0]();
+    runCallbacks[1]();
+    runCallbacks[1]();
 
     const [rule] = compiler.options.module.rules as Array<{
       use: Array<{ loader: string }>;
