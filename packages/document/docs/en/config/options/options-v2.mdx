@@ -1,18 +1,18 @@
-# Configuration migration guide
+# Legacy configuration migration
 
-**Rsdoctor introduced replacement configuration options in version 1.2.4.** These options are easier to configure, more extensible, and compatible with Rsdoctor 2.x.
+**Rsdoctor 1.2.4 introduced the output configuration used by Rsdoctor 2.x.** It is easier to configure and extend than the legacy options.
 
-The top-level `mode` option was removed in Rsdoctor 2.x. Other replaced options, including `brief`, `features.lite`, and `output.compressData`, remain available for backward compatibility but are deprecated. Migrate these configurations to the replacements introduced in version 1.2.4.
+Configuration options from version 1.2.3 and earlier are deprecated in Rsdoctor 2.x and retained for backward compatibility. Migrate them to the replacements below.
 
-| Original configuration            | Replacement configuration                                                                             |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| mode                              | Configure `output.mode`.                                                                              |
-| brief                             | Set `output.mode` to `'brief'` and `output.options.type` to `['html']`.                               |
-| output.compressData               | Set `output.mode` to `'brief'` and `output.options.type` to `['json']`.                               |
-| `mode: 'lite'` or `features.lite` | Set `output.mode` to `'normal'` and `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`. |
-| None                              | Configure the new `output.options.jsonOptions.section` option.                                        |
+| Original Configuration                 | New Configuration                                                                                           |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| mode                                   | Configure `output.mode` instead.                                                                            |
+| brief                                  | Configure `output.mode: 'brief'` and set `output.options.type` to `['html']`.                               |
+| output.compressData                    | Configure `output.mode: 'brief'` and set `output.options.type` to `['json']`.                               |
+| `mode: 'lite'` or `features: ['lite']` | Configure `output.mode: 'normal'` and set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`. |
+| None                                   | New `output.options.jsonOptions.sections` configuration                                                     |
 
-## Configuration changes
+## Configuration changes details
 
 ### mode
 
@@ -20,20 +20,21 @@ The top-level `mode` option was removed in Rsdoctor 2.x. Use `output.mode` to ke
 
 ### brief
 
-The `brief` option remains available for backward compatibility but is deprecated. Set `output.mode` to `'brief'` and `output.options.type` to `['html']` to generate an HTML report.
+The current brief report mode outputs an HTML file as the report page. The new brief mode still supports JSON format, and for unified management of the same configuration, the brief configuration is moved to output.options.
+Replace the original `brief` configuration with `output.mode: 'brief'` and set `output.options.type` to `['html']`.
 
 ### output.compressData
 
-The `output.compressData` option remains available for backward compatibility but is deprecated. Replace it with `output.mode: 'brief'` and `output.options.type: ['json']`.
+Replace the original `output.compressData` configuration with `output.mode: 'brief'` and set `output.options.type` to `['json']`.
 
 ### lite
 
-Lite mode is equivalent to setting `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`. It reduces the data retained during builds and can help large projects avoid slow report loading or out-of-memory errors.
+The internal logic of lite mode is equivalent to `output.reportCodeType` being `noCode` or `noAssetsAndModuleSource`, mainly to solve the problem of large projects being too slow when opening reports or OOM during build.
 
-The top-level `mode: 'lite'` option was removed in Rsdoctor 2.x, and `features.lite` is deprecated. Use `output.reportCodeType` to state which code data the report should retain.
+`mode: 'lite'` is deprecated in Rsdoctor 2.x and retained for backward compatibility. The `output.reportCodeType` configuration expresses the intended report content more clearly.
 
-Replace the original `mode: 'lite'` or `features.lite` configuration with `output.mode: 'normal'` and set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`.
+Replace `mode: 'lite'` or `features: ['lite']` with `output.mode: 'normal'`, and set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`.
 
-### output.options.jsonOptions.section
+### output.options.jsonOptions.sections
 
-Support for the new `output.options.jsonOptions.section` configuration for more granular JSON output option customization. For specific sections configuration items, refer to [output.options.jsonOptions.section](/config/options/output#options).
+Use `output.options.jsonOptions.sections` to control which sections are included in JSON output. See [output.options.jsonOptions.sections](/config/options/output#options) for the available fields.
