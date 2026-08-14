@@ -39,6 +39,26 @@ describe('RsdoctorRspackPlugin', () => {
     ).toEqual({ compressionLevel: 1 });
   });
 
+  it('uses faster report compression when writing watch reports', async () => {
+    const sdk = new RsdoctorSDK({
+      name: 'watch-write',
+      root: process.cwd(),
+      config: { noServer: true },
+    });
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      features: [],
+      sdkInstance: sdk,
+    });
+    const compiler = rspack({ plugins: [plugin] });
+    compiler.watchMode = true;
+    const writeStore = rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
+
+    await plugin.done(compiler);
+
+    expect(writeStore).toHaveBeenCalledWith({ compressionLevel: 1 });
+  });
+
   it('registers SDKs by compiler name', async () => {
     const createPlugin = () =>
       new RsdoctorRspackPlugin({
