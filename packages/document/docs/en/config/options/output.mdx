@@ -11,10 +11,10 @@ import { Badge } from '@theme';
 Rsdoctor report mode, default is `normal`.
 
 - **normal:** Generates a `.rsdoctor` folder in the build output directory, containing various data files and displaying code in the report page. The output directory can be configured via [reportDir](#reportdir).
-- **brief:** Generates an HTML report file in the `.rsdoctor` folder of the build output directory. All build analysis data is integrated and injected into this HTML file, which can be opened in a browser to view the report. Brief mode has more configuration options, see [mode: 'brief'](#mode-brief) for details.
+- **brief:** Generates `rsdoctor-report.html` in the build output directory. All build analysis data is embedded in this standalone file, which can be opened directly in a browser. See [mode: 'brief'](#mode-brief) for additional options.
 
 :::tip
-Mode does not have a lite configuration option. The lite mode will be deprecated. Refer to [lite mode deprecation notice](./options-v2.mdx#lite).
+`output.mode` does not accept `lite`. The legacy `mode: 'lite'` option is deprecated in Rsdoctor 2.x and retained for backward compatibility. Use [`output.reportCodeType`](#reportcodetype) instead.
 :::
 
 ## options
@@ -36,7 +36,7 @@ Brief mode is used to generate lightweight analysis reports, supporting both HTM
   - If configured with `['json']`, it will generate a JSON file named `rsdoctor-data.json`.
   - If configured with `['html']`, it will generate an HTML file. The filename can be configured via `htmlOptions.reportHtmlName`.
 - **`htmlOptions`**: HTML output related configuration
-  - **`reportHtmlName`**: HTML report filename, defaults to `report-rsdoctor.html`
+  - **`reportHtmlName`**: HTML report filename, defaults to `rsdoctor-report.html`
 - **`jsonOptions`**: JSON output related configuration
   - **`fileName`**: JSON stats filename, defaults to `rsdoctor-data.json`
   - **`sections`**: Module configuration for JSON output
@@ -65,7 +65,7 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-#### HTML vs JSON Output Format Differences
+#### HTML vs JSON output format differences
 
 | Feature               | HTML Format                                                                                    | JSON Format                                                                              |
 | --------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -122,7 +122,7 @@ new RsdoctorRspackPlugin({
 
 In Normal mode, `options` is an empty object with no additional configuration items.
 
-### Type Definitions
+### Type definitions
 
 #### BriefModeOptions
 
@@ -137,7 +137,7 @@ interface BriefModeOptions {
 }
 
 interface BriefConfig {
-  /** HTML report filename, defaults to report-rsdoctor.html */
+  /** HTML report filename, defaults to rsdoctor-report.html */
   reportHtmlName?: string;
 }
 
@@ -165,7 +165,6 @@ NormalModeOptions currently has an empty Object type.
 ## reportCodeType
 
 - **Type:** `"noModuleSource" | "noAssetsAndModuleSource" | "noCode" | { noModuleSource?: boolean; noAssetsAndModuleSource?: boolean; noCode?: boolean }`
-  - **In V2, only String type will be supported.**
 - **Optional:** `true`
 - **Default:** `undefined`, when undefined, outputs all complete data.
 - **Description:**
@@ -175,7 +174,7 @@ NormalModeOptions currently has an empty Object type.
   - **`noAssetsAndModuleSource`**: Output data excluding module ([Module](https://rspack.rs/config/module#module)) code and Assets product code
   - **`noCode`**: Output data excluding code, i.e., no code is output
 
-### Output Data Comparison Table
+### Output data comparison table
 
 | Configuration               | Included Data                                                                                                            | Excluded Data                                                     | Use Cases                                                                                   | File Size |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | --------- |
@@ -209,7 +208,7 @@ The output directory for Rsdoctor reports. By default, it is the build output di
 ## compressData
 
 :::warning
-Deprecated in V2, please use `output.mode: 'brief'` and `output.options.type: 'json'` instead. Refer to [compressData configuration migration](/config/options/options-v2#outputcompressdata).
+The legacy `output.compressData` option is deprecated in Rsdoctor 2.x and retained for backward compatibility. Use `output.mode: 'brief'` and `output.options.type: ['json']` instead. See [compressData configuration migration](/config/options/options-v2#outputcompressdata).
 :::
 
 - **Type:** `boolean`

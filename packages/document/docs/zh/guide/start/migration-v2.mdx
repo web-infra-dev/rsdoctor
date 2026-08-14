@@ -21,7 +21,7 @@ pnpm add -D @rsdoctor/core
 Rsdoctor 2.0 的包仅提供 ESM 产物。更新包路径时，请同时将 CommonJS `require()` 调用改为 ESM 导入：
 
 ```ts title="迁移前"
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
+const { RsdoctorRspackPlugin } = require('@rsdoctor/rspack-plugin');
 ```
 
 ```ts title="迁移后"
