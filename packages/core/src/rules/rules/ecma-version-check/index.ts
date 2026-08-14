@@ -21,8 +21,15 @@ function isExcludedOutput(
 
   return conditions.some((condition) => {
     if (typeof condition === 'function') return condition(filepath);
-    if (typeof condition === 'string') return filepath.startsWith(condition);
-    return condition.test(normalizedPath);
+    if (typeof condition === 'string') {
+      return normalizedPath.startsWith(condition.replace(/\\/g, '/'));
+    }
+
+    const lastIndex = condition.lastIndex;
+    condition.lastIndex = 0;
+    const isExcluded = condition.test(normalizedPath);
+    condition.lastIndex = lastIndex;
+    return isExcluded;
   });
 }
 
@@ -55,12 +62,14 @@ export const rule: Linter.RuleData<Config, typeof title> = defineRule<
         ecmaVersion,
       } = ruleConfig;
       const hasEcmaVersion = typeof ecmaVersion !== 'undefined';
+      const buildConfig = configs[0]?.config;
+      const context = buildConfig?.context || root;
       const finalTargets =
         targets ??
         (hasEcmaVersion
           ? []
           : loadConfig({
-              path: root,
+              path: context,
               env: 'production',
             })) ??
         [];
@@ -68,8 +77,6 @@ export const rule: Linter.RuleData<Config, typeof title> = defineRule<
       // Explicitly passing an empty targets array keeps the rule disabled.
       if (!finalTargets.length && !hasEcmaVersion) return;
 
-      const buildConfig = configs[0]?.config;
-      const context = buildConfig?.context || root;
       const outputDir = buildConfig?.output?.path || path.resolve(root, 'dist');
       const checkSyntax = new CheckSyntax({
         exclude,

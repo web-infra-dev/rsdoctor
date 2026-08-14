@@ -37,6 +37,7 @@ async function runRule(
     { path: 'main.js', content: 'const main = 1;' },
     { path: 'async.bundle', content: 'const asyncChunk = 1;' },
   ],
+  context = root,
 ) {
   const reports: unknown[] = [];
 
@@ -47,7 +48,7 @@ async function runRule(
     configs: [
       {
         config: {
-          context: root,
+          context,
           output: { path: outputPath },
         },
       },
@@ -82,6 +83,19 @@ describe('ecma-version-check rule', () => {
     expect(mocks.options).toHaveLength(1);
     expect(mocks.options[0].targets).toEqual(['ie 11']);
     expect(mocks.check).toHaveBeenCalledTimes(2);
+  });
+
+  it('resolves project Browserslist from the build context', async () => {
+    const context = path.join(root, 'packages/app');
+    mocks.loadConfig.mockReturnValue(['ie 11']);
+
+    await runRule({}, undefined, context);
+
+    expect(mocks.loadConfig).toHaveBeenCalledWith({
+      path: context,
+      env: 'production',
+    });
+    expect(mocks.options[0].rootPath).toBe(context);
   });
 
   it('uses explicit targets without loading project Browserslist', async () => {
@@ -139,5 +153,26 @@ describe('ecma-version-check rule', () => {
       path.join(outputPath, 'async.bundle'),
       'const asyncChunk = 1;',
     );
+  });
+
+  it('normalizes string output exclusions', async () => {
+    await runRule(
+      {
+        ecmaVersion: 5,
+        excludeOutput: `${outputPath}/nested/`,
+      },
+      [{ path: 'nested\\main.js', content: 'const main = 1;' }],
+    );
+
+    expect(mocks.check).not.toHaveBeenCalled();
+  });
+
+  it('resets stateful output exclusion regular expressions', async () => {
+    const excludeOutput = /dist\/.*\.(?:js|bundle)$/g;
+
+    await runRule({ ecmaVersion: 5, excludeOutput });
+
+    expect(mocks.check).not.toHaveBeenCalled();
+    expect(excludeOutput.lastIndex).toBe(0);
   });
 });
