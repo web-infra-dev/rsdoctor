@@ -11,6 +11,7 @@ export {
   rules,
 } from './rules';
 export { RsdoctorSDK, resolveClientDiffHtmlPath } from './sdk';
+export { inlineClientAssets } from './sdk/utils';
 export type {
   RsdoctorMultiplePluginOptions,
   RsdoctorRspackPluginOptions,

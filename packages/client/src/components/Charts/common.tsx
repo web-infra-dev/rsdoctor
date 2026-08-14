@@ -1,14 +1,19 @@
 import { SDK } from '@rsdoctor/shared/types';
-import { Alert, Typography } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Skeleton, Typography } from 'antd';
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useTheme } from '../../utils';
-import { TimelineCom } from './TimelineCharts';
 
 import './loader.scss';
 import './tooltips.scss';
 import { DurationMetric, ITraceEventData, Metric } from './types';
 import { formatterForPlugins, processTrans } from './utils';
 import { ChartTypes } from './constants';
+
+const TimelineCom = lazy(() =>
+  import('./TimelineCharts').then(({ TimelineCom }) => ({
+    default: TimelineCom,
+  })),
+);
 
 export interface CommonChartProps {
   summary: SDK.SummaryData;
@@ -54,11 +59,13 @@ export const CommonExecutionsChart: React.FC<{
       ref={ref}
       style={{ width: '100%' }}
     >
-      <TimelineCom
-        pluginsData={data}
-        formatterFn={formatterForPlugins}
-        chartType={type}
-      />
+      <Suspense fallback={<Skeleton active />}>
+        <TimelineCom
+          pluginsData={data}
+          formatterFn={formatterForPlugins}
+          chartType={type}
+        />
+      </Suspense>
     </div>
   );
 };

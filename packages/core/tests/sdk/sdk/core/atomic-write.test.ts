@@ -42,6 +42,7 @@ describe('core package output', () => {
         'RsdoctorRspackPlugin',
         'RsdoctorSDK',
         'defineRule',
+        'inlineClientAssets',
         'logger',
         'resolveClientDiffHtmlPath',
         'rules',

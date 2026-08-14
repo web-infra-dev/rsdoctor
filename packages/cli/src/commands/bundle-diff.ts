@@ -16,7 +16,11 @@ import {
   Constants,
 } from '@rsdoctor/shared/types';
 import { Algorithm, Graph, Manifest } from '@rsdoctor/shared/common-browser';
-import { resolveClientDiffHtmlPath, RsdoctorSDK } from '@rsdoctor/core';
+import {
+  inlineClientAssets,
+  resolveClientDiffHtmlPath,
+  RsdoctorSDK,
+} from '@rsdoctor/core';
 
 interface Options {
   current: string;
@@ -228,65 +232,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
       spinner.text = 'Generating standalone HTML file...';
 
       const clientHtmlPath = resolveClientDiffHtmlPath();
-      let htmlContent = fs.readFileSync(clientHtmlPath, 'utf-8');
-      const basePath = path.dirname(clientHtmlPath);
-
-      // Extract and inline scripts and styles
-      const scriptSrcs = Array.from(
-        htmlContent.matchAll(
-          /<script[^>]+src=["']([^"']+)["'][^>]*><\/script>/g,
-        ),
-        (m) => m[1],
-      );
-      const cssHrefs = Array.from(
-        htmlContent.matchAll(/<link\s+href=["'](.+?)["']\s+rel="stylesheet">/g),
-        (m) => m[1],
-      );
-
-      htmlContent = htmlContent.replace(
-        /<script\s+.*?src=["'].*?["']><\/script>/g,
-        '',
-      );
-      htmlContent = htmlContent.replace(
-        /<link\s+.*?rel=["']stylesheet["'].*?>/g,
-        '',
-      );
-
-      // Inline scripts
-      const inlinedScripts = scriptSrcs
-        .map((src) => {
-          const scriptPath = path.resolve(basePath, src);
-          try {
-            const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
-            return `<script>${scriptContent}</script>`;
-          } catch (error) {
-            console.error(`Could not read script at ${scriptPath}:`, error);
-            return '';
-          }
-        })
-        .join('');
-
-      // Inline styles
-      const inlinedStyles = cssHrefs
-        .map((href) => {
-          const cssPath = path.resolve(basePath, href);
-          try {
-            const cssContent = fs.readFileSync(cssPath, 'utf-8');
-            return `<style>${cssContent}</style>`;
-          } catch (error) {
-            console.error(`Could not read CSS at ${cssPath}:`, error);
-            return '';
-          }
-        })
-        .join('');
-
-      // Add inlined resources
-      const index = htmlContent.indexOf('</body>');
-      htmlContent =
-        htmlContent.slice(0, index) +
-        inlinedStyles +
-        inlinedScripts +
-        htmlContent.slice(index);
+      let htmlContent = inlineClientAssets(clientHtmlPath, 'diff');
 
       // Add compressed data
       const baselineCompressText = Algorithm.compressText(

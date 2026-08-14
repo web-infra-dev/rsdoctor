@@ -88,6 +88,10 @@ export default defineConfig(({ env }) => {
         ? OFFICIAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || './'
         : './',
       cleanDistPath: IS_PRODUCTION,
+      manifest: {
+        filename: 'rsdoctor-client-manifest.json',
+        prefix: false,
+      },
       sourceMap: IS_PRODUCTION
         ? false
         : {
@@ -104,9 +108,9 @@ export default defineConfig(({ env }) => {
         splitChunks: {
           cacheGroups: {
             monaco: {
-              test: /node_modules\/monaco-editor\/*/,
+              test: /[\\/]node_modules[\\/](?:monaco-editor|@monaco-editor[\\/]react)[\\/]/,
               name: 'monaco',
-              chunks: (chunk) => chunk.name === 'index',
+              chunks: 'all',
               maxSize: 1000000,
               minSize: 500000,
             },

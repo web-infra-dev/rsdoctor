@@ -1,4 +1,6 @@
 import React, {
+  lazy,
+  Suspense,
   useCallback,
   useMemo,
   useRef,
@@ -6,12 +8,11 @@ import React, {
   useState,
 } from 'react';
 import { groupBy } from '@rsdoctor/shared/collection';
-import { Empty } from 'antd';
+import { Empty, Skeleton } from 'antd';
 import './loader.scss';
 import { useTheme } from 'src/utils/manifest';
 import { findLoaderTotalTiming } from 'src/utils/loader';
 import { beautifyPath } from 'src/utils/file';
-import { TimelineCom } from './TimelineCharts';
 import { ChartProps, DurationMetric } from './types';
 import {
   renderTotalLoadersTooltip,
@@ -19,6 +20,13 @@ import {
   useDebounceHook,
 } from './utils';
 import { ChartTypes } from './constants';
+
+const TimelineCom = lazy(() =>
+  import('./TimelineCharts').then(({ TimelineCom }) => ({
+    default: TimelineCom,
+  })),
+);
+
 let startTimestamp = 0;
 let endTimestamp = 0;
 
@@ -95,12 +103,14 @@ export const LoaderExecutionsChart: React.FC<ChartProps> = ({
           ref={ref}
           style={{ width: '100%' }}
         >
-          <TimelineCom
-            loaderData={durationMetricData}
-            formatterFn={formatterForLoader}
-            chartType={ChartTypes.Loader}
-            exts={{ startTimestamp, endTimestamp }}
-          />
+          <Suspense fallback={<Skeleton active />}>
+            <TimelineCom
+              loaderData={durationMetricData}
+              formatterFn={formatterForLoader}
+              chartType={ChartTypes.Loader}
+              exts={{ startTimestamp, endTimestamp }}
+            />
+          </Suspense>
         </div>
       ) : (
         <Empty />

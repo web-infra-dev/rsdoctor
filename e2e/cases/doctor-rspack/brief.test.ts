@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { compileByRspack } from '@scripts/test-helper';
 import path from 'path';
 import fs from 'fs';
+import { pathToFileURL } from 'node:url';
 import { createRsdoctorPlugin } from './test-utils';
 
 async function rspackCompile(compile: typeof compileByRspack) {
@@ -63,36 +64,48 @@ test('rspack brief mode', async ({ page }) => {
   await rspackCompile(compileByRspack);
 
   const reportPath = path.join(__dirname, './dist/brief/rsdoctor-report.html');
+  const chunkFailures: string[] = [];
+
+  page.on('pageerror', (error) => {
+    if (
+      /ChunkLoadError|Loading (?:CSS )?chunk|CSS_CHUNK_LOAD_FAILED/i.test(
+        error.message,
+      )
+    ) {
+      chunkFailures.push(error.message);
+    }
+  });
+  page.on('requestfailed', (request) => {
+    if (/\/resource\/(?:js|css)\/async\//.test(request.url())) {
+      chunkFailures.push(request.url());
+    }
+  });
 
   fileExists(reportPath);
 
   // Navigate to a URL
-  await page.goto(`file:///${reportPath}`);
+  await page.goto(pathToFileURL(reportPath).href);
 
   // Perform actions on the page
   const title = await page.title();
   expect(title).toBe('Rsdoctor');
 
-  const titleContent = 'Bundle Overall';
+  await expect(page.getByText('Bundle Overall').first()).toBeVisible();
+  await expect(page.getByText('Compile Analysis').first()).toBeVisible();
+  await expect(page.getByText('Bundle Size').first()).toBeVisible();
 
-  const bundleTitleExists = await page
-    .locator(`text=${titleContent}`)
-    .first()
-    .isVisible();
+  for (const [route, text] of [
+    ['/bundle/size', 'Tree Graph'],
+    ['/loaders/overall', 'Loader Timeline'],
+    ['/plugins', 'Plugins Overall'],
+  ]) {
+    await page.evaluate((nextRoute) => {
+      window.location.hash = nextRoute;
+    }, route);
+    await expect(page.getByText(text).first()).toBeVisible();
+  }
 
-  const compileTabExists = await page
-    .locator(`text='Compile Analysis'`)
-    .first()
-    .isVisible();
-
-  const bundleTabExists = await page
-    .locator(`text='Bundle Size'`)
-    .first()
-    .isVisible();
-
-  expect(bundleTitleExists).toBe(true);
-  expect(compileTabExists).toBe(true);
-  expect(bundleTabExists).toBe(true);
+  expect(chunkFailures).toEqual([]);
 });
 
 async function fileExists(filePath: string) {

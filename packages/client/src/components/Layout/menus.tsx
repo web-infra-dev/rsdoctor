@@ -10,7 +10,12 @@ import { Menu, MenuProps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Size } from '../../constants';
+import * as BundleSize from '../../pages/BundleSize/constants';
+import * as LoaderFiles from '../../pages/Loaders/Analysis/constants';
+import * as LoaderTimeline from '../../pages/Loaders/Overall/constants';
+import * as ModuleResolve from '../../pages/ModuleResolve/constants';
 import * as OverallConstants from '../../pages/Overall/constants';
+import * as PluginsAnalyze from '../../pages/Plugins/constants';
 import {
   useI18n,
   hasBundle,
@@ -25,13 +30,6 @@ import CompileAnalysisActive from 'src/common/svg/navbar/compile-analysis-active
 import CompileAnalysisInActive from 'src/common/svg/navbar/compile-analysis-inactive.svg';
 import BundleSizeActive from 'src/common/svg/navbar/bundle-size-active.svg';
 import BundleSizeInActive from 'src/common/svg/navbar/bundle-size-inactive.svg';
-import {
-  BundleSize,
-  LoaderFiles,
-  PluginsAnalyze,
-  ModuleResolve,
-  LoaderTimeline,
-} from 'src/pages';
 import { CompileName } from './constants';
 import styles from './header.module.scss';
 

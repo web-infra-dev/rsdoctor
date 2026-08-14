@@ -15,6 +15,7 @@ import { Algorithm } from '@rsdoctor/shared/common-browser';
 import { Lodash } from '@rsdoctor/shared/common-browser';
 import { findRoot } from '../utils';
 import { decycle } from '@rsdoctor/shared/common-browser';
+import { inlineClientAssets } from '../utils/inlineClientAssets';
 
 export * from '../utils/openBrowser';
 export * from '../utils/base';
@@ -598,86 +599,7 @@ export class RsdoctorSDK<
   }
 
   public inlineScriptsAndStyles(htmlFilePath: string) {
-    // Helper function to inline JavaScript files
-    function inlineScripts(basePath: string, scripts: string[]): string {
-      return scripts
-        .map((src) => {
-          const scriptPath = resolveFilePath(basePath, src);
-          try {
-            const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
-            return `<script>${scriptContent}</script>`;
-          } catch (error) {
-            console.error(`Could not read script at ${scriptPath}:`, error);
-            return '';
-          }
-        })
-        .join('');
-    }
-
-    function resolveFilePath(basePath: string, filePath: string): string {
-      if (filePath.startsWith('/')) {
-        return path.resolve(basePath, filePath.slice(1));
-      }
-
-      return path.resolve(basePath, filePath);
-    }
-
-    // Helper function to inline CSS files
-    function inlineCss(basePath: string, cssFiles: string[]): string {
-      return cssFiles
-        .map((href) => {
-          const cssPath = resolveFilePath(basePath, href);
-          try {
-            const cssContent = fs.readFileSync(cssPath, 'utf-8');
-            return `<style>${cssContent}</style>`;
-          } catch (error) {
-            console.error(`Could not read CSS at ${cssPath}:`, error);
-            return '';
-          }
-        })
-        .join('');
-    }
-
-    // Path to your HTML file
-    let htmlContent = fs.readFileSync(htmlFilePath, 'utf-8');
-
-    // Base path to the resources
-    const basePath = path.dirname(htmlFilePath);
-
-    // Extract scripts and links from the HTML
-    const scriptSrcs = Array.from(
-      htmlContent.matchAll(
-        /<script\s+(?:defer="defer"|defer)\s+src=["'](.+?)["']><\/script>/g,
-      ),
-      (m) => m[1],
-    );
-    const cssHrefs = Array.from(
-      htmlContent.matchAll(/<link\s+href=["'](.+?)["']\s+rel="stylesheet">/g),
-      (m) => m[1],
-    );
-
-    // Remove all <script> tags
-    htmlContent = htmlContent.replace(
-      /<script\s+.*?src=["'].*?["']><\/script>/g,
-      '',
-    );
-
-    // Remove all <link rel="stylesheet"> tags
-    htmlContent = htmlContent.replace(
-      /<link\s+.*?rel=["']stylesheet["'].*?>/g,
-      '',
-    );
-
-    // Inline scripts and CSS
-    const inlinedScripts = inlineScripts(basePath, scriptSrcs);
-    const inlinedCss = inlineCss(basePath, cssHrefs);
-
-    const index = htmlContent.indexOf('</body>');
-    htmlContent =
-      htmlContent.slice(0, index) +
-      inlinedCss +
-      inlinedScripts +
-      htmlContent.slice(index);
+    let htmlContent = inlineClientAssets(htmlFilePath, 'index');
     htmlContent = this.addRsdoctorDataToHTML(this.getStoreData(), htmlContent);
 
     // Output the processed HTML content
