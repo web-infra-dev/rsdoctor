@@ -37,7 +37,7 @@ jobs:
               - "!**/*.mdx"
               - "!**/_meta.json"
               - "!**/dictionary.txt"
-              - "!document/**"
+              - "!packages/document/**"
 
   ecosystem_ci_dispatch:
     name: Dispatch ecosystem CI
