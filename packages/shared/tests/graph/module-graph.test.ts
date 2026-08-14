@@ -5,6 +5,7 @@ import {
   Chunks,
   Module,
   ModuleGraph,
+  ModuleGraphModule,
   ModuleGraphTrans,
   PackageGraph,
 } from '../../src/graph';
@@ -173,6 +174,10 @@ describe('module graph', () => {
       const moduleB = new Module('b', '/b.js');
       const moduleC = new Module('c', '/c.js');
       const moduleD = new Module('d', '/d.js');
+      const moduleGraphModuleA = new ModuleGraphModule(moduleA, graph);
+      const moduleGraphModuleB = new ModuleGraphModule(moduleB, graph);
+      graph.addModuleGraphModule(moduleGraphModuleA);
+      graph.addModuleGraphModule(moduleGraphModuleB);
       addDependency(graph, moduleA, moduleB, './b');
       const dependencyAC = addDependency(graph, moduleA, moduleC, './c');
       addDependency(graph, moduleB, moduleC, './c');
@@ -185,6 +190,7 @@ describe('module graph', () => {
       expect(moduleA.getDependencies()).toEqual([dependencyAC]);
       expect(moduleC.getImported()).toEqual([moduleA]);
       expect(moduleD.getDependencies()).toEqual([]);
+      expect(graph.getModuleGraphModules()).toEqual([moduleGraphModuleA]);
       expect(graph.getModuleById(moduleB.id)).toBeUndefined();
       expect(graph.getModuleByIdentifier(moduleB.identifier)).toBeUndefined();
 
@@ -202,6 +208,9 @@ describe('module graph', () => {
         expect(moduleIds.has(dependency.module)).toBe(true);
         expect(moduleIds.has(dependency.dependency)).toBe(true);
         expect(moduleIds.has(dependency.originDependency)).toBe(true);
+      }
+      for (const moduleGraphModule of data.moduleGraphModules) {
+        expect(moduleIds.has(moduleGraphModule.module)).toBe(true);
       }
     });
 

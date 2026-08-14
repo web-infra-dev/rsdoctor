@@ -377,6 +377,7 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
       this.removeDependency(dep);
     }
 
+    this._moduleGraphModules.delete(module);
     this._moduleIdMap.delete(module.id);
     this._moduleIdentifierMap.delete(module.identifier);
   }
