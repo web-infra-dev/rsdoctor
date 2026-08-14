@@ -12,7 +12,7 @@ afterEach(() => {
 });
 
 describe('proxy loader cacheability', () => {
-  it('preserves caching for normal and pitching loaders', () => {
+  it('preserves caching and registers the session marker', () => {
     setSDK({
       name: 'web',
       reportLoader: rs.fn(),
@@ -20,6 +20,8 @@ describe('proxy loader cacheability', () => {
     } as unknown as SDK.RsdoctorBuilderSDKInstance);
 
     const loaderDirectory = path.resolve(__dirname, '../fixtures/loaders');
+    const cacheMarkerPath = path.join(loaderDirectory, '.loader-cache');
+    const addBuildDependency = rs.fn();
     const cacheable = rs.fn();
     const createContext = (
       loader: string,
@@ -27,10 +29,12 @@ describe('proxy loader cacheability', () => {
       ({
         _compilation: { name: 'web' },
         _module: {},
+        addBuildDependency,
         cacheable,
         callback: rs.fn(),
         getOptions: () => ({
           [Loader.LoaderInternalPropertyName]: {
+            cacheMarkerPath,
             cwd: loaderDirectory,
             hasOptions: false,
             host: 'http://localhost:3000',
@@ -53,6 +57,8 @@ describe('proxy loader cacheability', () => {
 
     expect(normalResult).toBe('source');
     expect(pitchResult).toBe('pitch');
+    expect(addBuildDependency).toHaveBeenCalledTimes(2);
+    expect(addBuildDependency).toHaveBeenCalledWith(cacheMarkerPath);
     expect(cacheable).not.toHaveBeenCalled();
   });
 });
