@@ -321,6 +321,43 @@ describe('sourcemapTool', () => {
       expect(sourceMap).toBe('console.log("test");');
     });
 
+    it('should skip source map assets without a source', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            filename: '[name].[contenthash].js',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'worker.abc123.js',
+            source: {
+              source: () => 'console.log("worker");\n',
+              name: 'worker.abc123.js',
+              sourceAndMap: () => ({
+                source: 'console.log("worker");\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {
+                sourceMap: 'worker.abc123.js.map',
+              },
+            },
+          },
+          {
+            name: 'worker.abc123.js.map',
+            info: {},
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+      expect(plugin.sourceMapSets.size).toBe(0);
+    });
+
     it('should find source map by base name without hash when exact match fails', async () => {
       const plugin = createMockPluginInstance();
       const compilation = {
