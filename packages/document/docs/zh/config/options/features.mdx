@@ -12,7 +12,7 @@ features 属性是用于分析功能开关的，具体的功能项如下：
 - **plugins**：Plugins 调用以及耗时分析，默认开启。
 - **bundle**：构建产物分析，默认开启。
 - **resolver**：Resolver 分析，默认关闭。
-- **lite**: **(lite 模式即将在 V2 废弃，参考[lite 模式废弃说明](/config/options/options-v2#lite))** lite 模式。lite 模式和普通模式的区别就是不再展示源码信息，只展示打包后的代码信息，这样分析页面上的代码也将是打包后的。默认普通模式。
+- **lite**：**已在 Rsdoctor 2.x 中废弃，仅为向后兼容而保留。请改用 [output.reportCodeType](/config/options/output#reportcodetype)。** Lite 模式不展示源码，仅展示打包后的代码。默认仍为普通模式。
 
 所以，**默认配置是开启了 Bundle 分析能力、 Loader 和 Plugin 构建时分析**，没有开启 Resolver 分析能力。如需启用 Resolver 分析，可以在 `features` 中显式配置 `resolver`。
 
@@ -45,11 +45,11 @@ new RsdoctorRspackPlugin({
 
 **如果出现了 out of memory 的报错，可以尝试：**
 
-1. 打开 **lite** 模式。
+1. 将 [`output.reportCodeType`](/config/options/output#reportcodetype) 设置为 `noCode` 或 `noAssetsAndModuleSource`。
 2. 增大 node 内存上限，例如：NODE_OPTIONS=--max-old-space-size=8096。
 
-- 原因：因为构建过程中，缓存了源码信息，超过了内存，所以开启 `lite` 模式可以缓解。
-- 区别：`lite` 模式和普通模式的区别就是不再缓存源码信息，只缓存打包后的代码信息，这样分析页面上的代码也将是打包后的。
+- 原因：构建过程存储源码时可能超过内存限制，减少报告包含的代码数据可以降低内存占用。
+- 区别：`noCode` 不包含任何代码，`noAssetsAndModuleSource` 不包含资源代码和模块源码。
 
 :::
 

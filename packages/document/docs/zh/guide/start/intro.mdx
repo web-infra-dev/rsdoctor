@@ -1,10 +1,10 @@
 # 介绍
 
-Rsdoctor 是一款为 [Rspack](https://rspack.rs/) 生态量身打造的构建分析工具，同时也完全兼容 [webpack](https://webpack.js.org/) 生态。
+Rsdoctor 2.x 是一款面向 [Rspack 2.x](https://rspack.rs/) 项目的构建分析工具。
 
 Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可视化与智能分析，使整个构建流程变得透明、可预测和可优化，从而帮助开发团队精准定位瓶颈、优化性能并提升工程质量。
 
-Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Docusaurus](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-rsdoctor)、[Rspeedy (Lynx)](https://lynxjs.org/rspeedy/)、[Storybook](https://github.com/rstackjs/storybook-rsbuild)、[Next.js](https://nextjs.org/)、[Nuxt](https://nuxt.com/)、[Re.Pack](https://re-pack.dev/)、[Modern.js](https://modernjs.dev/)、[Rsbuild](https://rsbuild.rs/)、[Rspress](https://rspress.rs/) 和 [Rslib](https://rslib.rs/) 等。
+Rsdoctor 2.x 用于分析基于 Rspack 2.x 构建的项目。webpack 项目应继续使用 Rsdoctor 1.x，或先迁移到 Rspack，再升级到 Rsdoctor 2.x。详情请参阅 [Rsdoctor 2.0 迁移指南](/guide/start/migration-v2)。
 
 <video
   src="https://assets.rspack.rs/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
@@ -49,7 +49,7 @@ Rsdoctor 支持所有基于 Rspack 或 webpack 的工具和框架，例如：[Do
 
 #### Loader 分析
 
-- 该模块主要提供了 **Rspack 或 webpack 的 Loaders** 内的输入输出、预估耗时、参数等数据分析的功能。
+- 该模块用于分析 Rspack Loaders 的输入输出、预估耗时和参数等数据。
 
   <img
     src="https://assets.rspack.rs/others/assets/rsdoctor/loader-timeline-overall.png"

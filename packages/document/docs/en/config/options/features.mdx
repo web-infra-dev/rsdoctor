@@ -4,7 +4,7 @@
 - **Optional:** `true`
 - **Default:** `['loader', 'plugins', 'bundle']`
 
-## Configuration Description
+## Configuration description
 
 The `features` attribute is used for analysis feature toggles, and the specific functional items are as follows:
 
@@ -12,7 +12,7 @@ The `features` attribute is used for analysis feature toggles, and the specific 
 - **plugins**: Plugin calls and time consumption analysis, enabled by default.
 - **bundle**: Build artifact analysis, enabled by default.
 - **resolver**: Resolver analysis, disabled by default.
-- **lite**: **(lite mode will be deprecated in V2, refer to [lite mode deprecation notice](/config/options/options-v2#lite))** lite mode. The difference between lite mode and normal mode is that source code information is no longer displayed, only packaged code information is displayed, so the code analyzed on the page will also be packaged. Default is normal mode.
+- **lite**: **Deprecated in Rsdoctor 2.x and retained for backward compatibility. Use [output.reportCodeType](/config/options/output#reportcodetype) instead.** Lite mode omits source code and shows only bundled code. Normal mode remains the default.
 
 Therefore, **the default configuration enables Bundle analysis capabilities, Loader and Plugin build-time analysis**. Resolver analysis is not enabled by default. To enable it, explicitly configure `resolver` in `features`.
 
@@ -45,11 +45,11 @@ new RsdoctorRspackPlugin({
 
 **If an "out of memory" error occurs, you can try the following:**
 
-1. Enable **lite** mode.
+1. Set [`output.reportCodeType`](/config/options/output#reportcodetype) to `noCode` or `noAssetsAndModuleSource`.
 2. Increase the node memory limit, for example: NODE_OPTIONS=--max-old-space-size=8096.
 
-- Reason: Because during the build process, source code information is cached, which exceeds memory, so enabling `lite` mode can help alleviate this.
-- Difference: The difference between `lite` mode and normal mode is that source code information is no longer cached, only packaged code information is cached, so the code analyzed on the page will also be packaged.
+- Reason: The build may exceed the memory limit when it stores source code. Reducing the code data included in the report can lower memory usage.
+- Difference: `noCode` omits all code, while `noAssetsAndModuleSource` omits asset code and module source code.
 
 :::
 

@@ -223,7 +223,7 @@ interface Config {
 }
 ```
 
-### [E1006] Module Mixed Chunks
+### [E1006] Module mixed chunks
 
 When a module is included in both **initial chunks** and **async chunks**, the same module code is bundled into multiple chunks, increasing output size and potentially affecting first-screen load and cache efficiency.
 
@@ -250,7 +250,7 @@ When a module is included in both **initial chunks** and **async chunks**, the s
    If a file is both an entry and part of an async chunk, either remove one of those usages or treat the file as a shared dependency and extract it into a single shared chunk via build config, so both initial and async chunks reference it instead of duplicating it.
 
 3. **Adjust splitChunks / chunkSplit**  
-   Check rules for that module path in `optimization.splitChunks` (Rspack/Webpack) or `performance.chunkSplit` (Rsbuild), and avoid the same module being split into both initial and async chunks. Use `chunks: 'async'` or `chunks: 'initial'` where appropriate, or control which chunk type it goes into via `cacheGroups` and `test` / `chunks`.
+   Check rules for that module path in `optimization.splitChunks` (Rspack) or `performance.chunkSplit` (Rsbuild), and avoid the same module being split into both initial and async chunks. Use `chunks: 'async'` or `chunks: 'initial'` where appropriate, or control which chunk type it goes into via `cacheGroups` and `test` / `chunks`.
 
 4. **Trace dependencies**  
    From the reported module path and chunk list, search the codebase for references to that module, distinguish sync vs dynamic imports, then converge to a single chunk type or extract a common chunk as above.
@@ -284,7 +284,7 @@ export default {
 };
 ```
 
-### [E1007] Tree Shaking Side Effects Only
+### [E1007] Tree shaking side effects only
 
 Rule key: `tree-shaking-side-effects-only`
 
@@ -343,7 +343,7 @@ export default {
 };
 ```
 
-### [E1008] CJS Require Cannot Tree-Shake
+### [E1008] CJS require cannot Tree-Shake
 
 Rule key: `cjs-require`
 
@@ -393,7 +393,7 @@ export default {
 };
 ```
 
-### [E1009] ESM Import Resolved to CJS
+### [E1009] ESM import resolved to CJS
 
 Rule key: `esm-resolved-to-cjs`
 
@@ -409,7 +409,7 @@ This rule warns when a package provides both ESM and CJS formats (via the `modul
 #### Solutions
 
 1. **Check the package's `exports` config**: Ensure the target package's `exports` field correctly defines the `"import"` condition pointing to a valid ESM entry file.
-2. **Upgrade the bundler or plugins**: Make sure you are using a bundler version that supports `exports` conditional exports (e.g. Rspack, Webpack 5+).
+2. **Upgrade Rspack or related plugins**: Make sure your toolchain supports `exports` conditional exports.
 3. **Report to the package author**: If the problem is a misconfigured `package.json` in a third-party package, file an issue with the package author.
 4. **Temporarily ignore**: If the package cannot be fixed for now, use the `ignore` option to skip the check for that package.
 
