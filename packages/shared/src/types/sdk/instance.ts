@@ -6,6 +6,8 @@ import { PluginData } from './plugin';
 import { BuilderStoreData, EMOStoreData } from './result';
 import { ModuleGraphInstance, ToDataType } from './module';
 import {
+  RsdoctorArtifactCompilationIdentity,
+  RsdoctorArtifactSectionName,
   RsdoctorManifestClientRoutes,
   RsdoctorManifestWithShardingFiles,
 } from '../manifest';
@@ -107,6 +109,14 @@ export interface RsdoctorSDKInstance {
   setHash(hash: string): void;
   getHash(): string;
 
+  /** Attach build identity already exposed by the producing compiler. */
+  setArtifactBuildIdentity?(
+    identity: RsdoctorArtifactCompilationIdentity,
+  ): void;
+
+  /** Mark a section whose collector was installed for this artifact. */
+  markArtifactSectionCollected?(section: RsdoctorArtifactSectionName): void;
+
   /**
    * write the manifest to a folder
    *   - use this.outputDir
@@ -123,10 +133,7 @@ export interface IPrintLog {
 }
 
 export type RsdoctorServerCorsStaticOrigin =
-  | boolean
-  | string
-  | RegExp
-  | Array<boolean | string | RegExp>;
+  boolean | string | RegExp | Array<boolean | string | RegExp>;
 
 export type RsdoctorServerCorsOrigin =
   | RsdoctorServerCorsStaticOrigin

@@ -13,6 +13,13 @@ import { getTreeShakingSummary } from './tree-shaking';
 
 interface Chunk {
   size: number;
+  assets?: unknown[];
+}
+
+function limitChunkAssets(chunk: Chunk, limit: number): Chunk {
+  return chunk.assets
+    ? { ...chunk, assets: chunk.assets.slice(0, limit) }
+    : chunk;
 }
 
 function withoutDescription<T>(result: { ok: boolean; data: T }): {
@@ -64,7 +71,7 @@ export async function getConfig(): Promise<{
   };
 }
 
-async function executeStep1(): Promise<{
+async function executeStep1(limit: number): Promise<{
   duplicatePackages: { ok: boolean; data: unknown };
   similarPackages: { ok: boolean; data: unknown };
   mediaAssets: { ok: boolean; data: unknown };
@@ -73,12 +80,13 @@ async function executeStep1(): Promise<{
   const [duplicatePackages, similarPackages, mediaAssets] = await Promise.all([
     detectDuplicatePackages(),
     detectSimilarPackages(),
-    getMediaAssets(),
+    getMediaAssets(limit),
   ]);
 
   const chunksResult = getChunks(1, Number.MAX_SAFE_INTEGER);
   const chunks = chunksResult.items || [];
   const chunksArray = chunks as Chunk[];
+  const largeChunks = getLargeChunksData(chunksArray);
 
   return {
     duplicatePackages: omitModulesFields(withoutDescription(duplicatePackages)),
@@ -86,20 +94,28 @@ async function executeStep1(): Promise<{
     mediaAssets: omitModulesFields(withoutDescription(mediaAssets)),
     largeChunks: omitModulesFields({
       ok: true,
-      data: getLargeChunksData(chunksArray),
+      data: {
+        ...largeChunks,
+        oversized: largeChunks.oversized
+          .slice(0, limit)
+          .map((chunk) => limitChunkAssets(chunk, limit)),
+      },
     }),
   };
 }
 
 export async function optimizeBundle(
   stepInput?: string,
+  limitInput?: string,
 ): Promise<{ ok: boolean; data: unknown; description: string }> {
   const step = stepInput
     ? parsePositiveInt(stepInput, 'step', { min: 1, max: 2 })
     : undefined;
+  const limit =
+    parsePositiveInt(limitInput, 'limit', { min: 1, max: 1000 }) ?? 100;
 
   if (step === 1) {
-    const step1Data = await executeStep1();
+    const step1Data = await executeStep1(limit);
     return {
       ok: true,
       data: {
@@ -128,7 +144,7 @@ export async function optimizeBundle(
   }
 
   const [step1Data, treeShakingSummary] = await Promise.all([
-    executeStep1(),
+    executeStep1(limit),
     getTreeShakingSummary(),
   ]);
 

@@ -383,15 +383,15 @@ describe('tool input validation', () => {
     const error = await expectValidationError(() =>
       executor.execute({
         toolName: 'chunks_list',
-        input: { pageNumber: 2 },
+        input: { page_number: 2 },
         dataFile: '/tmp/demo.json',
       }),
     );
 
     expect(error.issues).toEqual([
       {
-        path: 'pageNumber',
-        message: '"pageNumber" is not an allowed property',
+        path: 'page_number',
+        message: '"page_number" is not an allowed property',
       },
     ]);
     expect(commands).toEqual([]);
@@ -450,15 +450,15 @@ describe('tool input validation', () => {
     const error = await expectValidationError(() =>
       executor.execute({
         toolName: 'build_summary',
-        input: { pageNumber: 2 },
+        input: { page_number: 2 },
         dataFile: '/nonexistent/rsdoctor-data.json',
       }),
     );
 
     expect(error.issues).toEqual([
       {
-        path: 'pageNumber',
-        message: '"pageNumber" is not an allowed property',
+        path: 'page_number',
+        message: '"page_number" is not an allowed property',
       },
     ]);
   });

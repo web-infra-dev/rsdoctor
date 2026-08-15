@@ -12,7 +12,16 @@ interface ParsedControls {
 
 export const TOOL_INPUT_CONTROL_KEYS: ReadonlySet<string> = new Set([
   'filter',
+  'limit',
   'page',
+  'pageNumber',
+  'pageSize',
+]);
+
+const STRIPPED_TOOL_INPUT_CONTROL_KEYS = new Set([
+  'filter',
+  'page',
+  'pageNumber',
   'pageSize',
 ]);
 
@@ -227,15 +236,20 @@ export function splitToolInputControls(
     };
   },
 ): ParsedControls {
+  const pageInput = input.page ?? input.pageNumber;
+  const pageSizeInput = input.pageSize ?? input.limit;
+  const pageSize = parsePositiveInteger(pageSizeInput, 'pageSize');
   const controls: ToolResultControls = {
     filterPaths: parseFilterPaths(input.filter),
-    page: parsePositiveInteger(input.page, 'page'),
-    pageSize: parsePositiveInteger(input.pageSize, 'pageSize'),
+    page:
+      parsePositiveInteger(pageInput, 'page') ??
+      (pageSize !== undefined ? 1 : undefined),
+    pageSize,
   };
 
   const passthroughInput: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(input)) {
-    if (TOOL_INPUT_CONTROL_KEYS.has(key)) {
+    if (STRIPPED_TOOL_INPUT_CONTROL_KEYS.has(key)) {
       continue;
     }
     if (
