@@ -557,6 +557,11 @@ interface ToolCatalogEntry {
 }
 
 interface InProcessToolEntry {
+  /**
+   * Same declaration the catalog exposes, so the in-process executor validates
+   * tool input exactly like the spawned-CLI executor does.
+   */
+  inputSchema: ToolCatalogEntry['inputSchema'];
   execute: (context: {
     dataFile: string;
     input: Record<string, unknown>;
@@ -691,6 +696,7 @@ export function getInProcessToolExecutors(): Record<
     for (const def of Object.values(subcommands)) {
       if (!def.toolName) continue;
       tools[def.toolName] = {
+        inputSchema: toolInputSchema,
         sourcePagination: getSourcePaginationConfig(def.options),
         execute: async ({ dataFile, input }) => {
           setDataFilePath(dataFile);

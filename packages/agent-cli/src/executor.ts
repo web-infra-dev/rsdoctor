@@ -10,6 +10,7 @@ import {
   applyToolResultControls,
   splitToolInputControls,
 } from './core/result-controls';
+import { validateToolInput } from './core/validate-input';
 import { getInProcessToolExecutors } from './commands';
 
 const execFileAsync = promisify(execFile);
@@ -44,6 +45,7 @@ export function createRsdoctorCliToolExecutor({
   return {
     async execute(request: ToolExecutionRequest): Promise<unknown> {
       const tool = getToolByName(tools, request.toolName);
+      validateToolInput(request.toolName, request.input, tool.inputSchema);
       const { controls, passthroughInput, paginateResult } =
         splitToolInputControls(request.input, {
           sourcePagination: tool.sourcePagination,
@@ -79,6 +81,7 @@ export function createInProcessRsdoctorCliToolExecutor(): ToolExecutor {
       if (!tool) {
         throw new Error(`Unknown rsdoctor tool: ${request.toolName}`);
       }
+      validateToolInput(request.toolName, request.input, tool.inputSchema);
       const { controls, passthroughInput, paginateResult } =
         splitToolInputControls(request.input, {
           sourcePagination: tool.sourcePagination,
