@@ -12,6 +12,19 @@ import {
 } from '../src/executor';
 import { runCli } from '../src/cli';
 
+function writeModuleGraphArtifact(modules: Array<Record<string, unknown>>): {
+  dataFile: string;
+  tempDir: string;
+} {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+  const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+  fs.writeFileSync(
+    dataFile,
+    JSON.stringify({ data: { moduleGraph: { modules } } }),
+  );
+  return { dataFile, tempDir };
+}
+
 describe('rsdoctor cli tool executor', () => {
   it('parses legacy and v1 artifacts without changing report data', () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-data-'));
@@ -417,6 +430,172 @@ describe('rsdoctor cli tool executor', () => {
         items: [{ id: 2, name: 'async' }],
       },
     });
+  });
+
+  it('excludes modules whose bailout reason has no content', async () => {
+    const { dataFile, tempDir } = writeModuleGraphArtifact([
+      { id: 1, path: '/repo/src/a.ts', bailoutReason: [] },
+      { id: 2, path: '/repo/src/b.ts', bailoutReason: {} },
+      {
+        id: 3,
+        path: '/repo/src/c.ts',
+        bailoutReason: ['Statement with side_effects in source code'],
+      },
+    ]);
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      const result = (await executor.execute({
+        toolName: 'tree_shaking_side_effects',
+        input: {},
+        dataFile,
+      })) as { data: { all: Array<{ id: number }>; total: number } };
+
+      expect(result.data.total).toBe(1);
+      expect(result.data.all.map((module) => module.id)).toEqual([3]);
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('uses limit to bound every side-effects module collection', async () => {
+    const { dataFile, tempDir } = writeModuleGraphArtifact([
+      {
+        id: 1,
+        path: '/repo/node_modules/pkg/a.js',
+        bailoutReason: ['side effects'],
+      },
+      {
+        id: 2,
+        path: '/repo/node_modules/pkg/b.js',
+        bailoutReason: ['side effects'],
+      },
+      {
+        id: 3,
+        path: '/repo/node_modules/pkg/c.js',
+        bailoutReason: ['side effects'],
+      },
+    ]);
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      const result = (await executor.execute({
+        toolName: 'tree_shaking_side_effects',
+        input: { limit: 1 },
+        dataFile,
+      })) as {
+        data: {
+          all: Array<{ id: number }>;
+          nodeModules: {
+            topPackages: Array<{ modules: Array<{ id: number }> }>;
+          };
+          pageNumber: number;
+          pageSize: number;
+          total: number;
+        };
+      };
+
+      expect(result.data).toMatchObject({
+        total: 3,
+        pageNumber: 1,
+        pageSize: 1,
+      });
+      expect(result.data.all.map((module) => module.id)).toEqual([1]);
+      expect(
+        result.data.nodeModules.topPackages.flatMap((pkg) => pkg.modules),
+      ).toEqual([expect.objectContaining({ id: 1 })]);
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('accepts pageNumber when selecting a later source page', async () => {
+    const { dataFile, tempDir } = writeModuleGraphArtifact([
+      { id: 1, path: '/repo/src/a.ts', bailoutReason: ['side effects'] },
+      { id: 2, path: '/repo/src/b.ts', bailoutReason: ['side effects'] },
+    ]);
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      const result = (await executor.execute({
+        toolName: 'tree_shaking_side_effects',
+        input: { limit: 1, pageNumber: 2 },
+        dataFile,
+      })) as {
+        data: {
+          all: Array<{ id: number }>;
+          pageNumber: number;
+          pageSize: number;
+        };
+      };
+
+      expect(result.data.pageNumber).toBe(2);
+      expect(result.data.pageSize).toBe(1);
+      expect(result.data.all.map((module) => module.id)).toEqual([2]);
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('bounds bundle optimization chunk details with limit', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        data: {
+          chunkGraph: {
+            chunks: [
+              { id: 1, name: 'one', modules: [] },
+              { id: 2, name: 'two', modules: [] },
+              { id: 3, name: 'three', modules: [] },
+            ],
+            assets: [
+              { path: 'one.js', size: 500_000, chunks: [1] },
+              { path: 'one.css', size: 500_000, chunks: [1] },
+              { path: 'two.js', size: 1_000_000, chunks: [2] },
+              { path: 'three.js', size: 3_000_000, chunks: [3] },
+              { path: 'three.css', size: 1_000_000, chunks: [3] },
+            ],
+          },
+          errors: [],
+          packageGraph: { packages: [], dependencies: [] },
+        },
+      }),
+    );
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      const result = (await executor.execute({
+        toolName: 'bundle_optimize',
+        input: { limit: 1, step: 1 },
+        dataFile,
+      })) as {
+        data: {
+          largeChunks: {
+            data: {
+              oversized: Array<{ assets: unknown[]; id: number }>;
+            };
+          };
+          mediaAssets: {
+            data: {
+              chunks: Array<{ assets: unknown[]; id: number }>;
+            };
+          };
+        };
+      };
+
+      expect(
+        result.data.mediaAssets.data.chunks.map((chunk) => chunk.id),
+      ).toEqual([1]);
+      expect(result.data.mediaAssets.data.chunks[0].assets).toHaveLength(1);
+      expect(result.data.largeChunks.data.oversized).toEqual([
+        expect.objectContaining({ id: 3 }),
+      ]);
+      expect(result.data.largeChunks.data.oversized[0].assets).toHaveLength(1);
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
   });
 
   it('detects duplicate package rules by code instead of description text', async () => {

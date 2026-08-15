@@ -277,13 +277,18 @@ export async function diffAssets(
   };
 }
 
-export async function getMediaAssets(): Promise<{
+export async function getMediaAssets(
+  limit: number = Number.MAX_SAFE_INTEGER,
+): Promise<{
   ok: boolean;
   data: { guidance: string; chunks: unknown };
   description: string;
 }> {
-  const chunksResult = getChunks(1, Number.MAX_SAFE_INTEGER);
-  const chunks = chunksResult.items || [];
+  const chunksResult = getChunks(1, limit);
+  const chunks = (chunksResult.items || []).map((chunk) => ({
+    ...chunk,
+    assets: chunk.assets.slice(0, limit),
+  }));
   return {
     ok: true,
     data: {
