@@ -9,6 +9,7 @@ import type {
 import {
   applyToolResultControls,
   splitToolInputControls,
+  TOOL_INPUT_CONTROL_KEYS,
 } from './core/result-controls';
 import { validateToolInput } from './core/validate-input';
 import { getInProcessToolExecutors } from './commands';
@@ -45,7 +46,9 @@ export function createRsdoctorCliToolExecutor({
   return {
     async execute(request: ToolExecutionRequest): Promise<unknown> {
       const tool = getToolByName(tools, request.toolName);
-      validateToolInput(request.toolName, request.input, tool.inputSchema);
+      validateToolInput(request.toolName, request.input, tool.inputSchema, {
+        allowedAdditionalProperties: TOOL_INPUT_CONTROL_KEYS,
+      });
       const { controls, passthroughInput, paginateResult } =
         splitToolInputControls(request.input, {
           sourcePagination: tool.sourcePagination,
@@ -81,7 +84,9 @@ export function createInProcessRsdoctorCliToolExecutor(): ToolExecutor {
       if (!tool) {
         throw new Error(`Unknown rsdoctor tool: ${request.toolName}`);
       }
-      validateToolInput(request.toolName, request.input, tool.inputSchema);
+      validateToolInput(request.toolName, request.input, tool.inputSchema, {
+        allowedAdditionalProperties: TOOL_INPUT_CONTROL_KEYS,
+      });
       const { controls, passthroughInput, paginateResult } =
         splitToolInputControls(request.input, {
           sourcePagination: tool.sourcePagination,

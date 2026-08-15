@@ -547,6 +547,7 @@ interface ToolCatalogEntry {
   inputSchema: {
     type: 'object';
     properties: Record<string, unknown>;
+    required?: string[];
     additionalProperties: boolean;
   };
   buildCommand: (context: {
@@ -605,29 +606,6 @@ function appendToolSpecificOptions(
   return nextCommand;
 }
 
-const toolInputSchema = {
-  type: 'object' as const,
-  properties: {
-    filter: {
-      type: ['string', 'array'],
-      description:
-        'Optional field filter. Supports comma-separated paths like "items.id,items.name".',
-    },
-    page: {
-      type: 'integer',
-      minimum: 1,
-      description: 'Optional page number for response pagination.',
-    },
-    pageSize: {
-      type: 'integer',
-      minimum: 1,
-      maximum: 1000,
-      description: 'Optional page size for response pagination.',
-    },
-  } as Record<string, unknown>,
-  additionalProperties: true,
-};
-
 export function getToolCatalog(): ToolCatalogEntry[] {
   const tools: ToolCatalogEntry[] = [];
   for (const [group, subcommands] of Object.entries(SUBCOMMANDS)) {
@@ -636,7 +614,7 @@ export function getToolCatalog(): ToolCatalogEntry[] {
       tools.push({
         name: def.toolName,
         description: def.toolDescription ?? def.description,
-        inputSchema: toolInputSchema,
+        inputSchema: buildToolInputSchema(def.options),
         sourcePagination: getSourcePaginationConfig(def.options),
         buildCommand: ({ dataFile, input }) =>
           appendToolSpecificOptions(
@@ -679,7 +657,7 @@ export function describeRunSubcommands(): Array<{
         toolName: def.toolName,
         path: `${group}.${subcommand}`,
         description: def.toolDescription ?? def.description,
-        args: toolInputSchema as Record<string, unknown>,
+        args: buildToolInputSchema(def.options) as Record<string, unknown>,
       });
     }
   }
@@ -696,7 +674,7 @@ export function getInProcessToolExecutors(): Record<
     for (const def of Object.values(subcommands)) {
       if (!def.toolName) continue;
       tools[def.toolName] = {
-        inputSchema: toolInputSchema,
+        inputSchema: buildToolInputSchema(def.options),
         sourcePagination: getSourcePaginationConfig(def.options),
         execute: async ({ dataFile, input }) => {
           setDataFilePath(dataFile);
@@ -739,6 +717,50 @@ function buildInputSchema(options: OptionDef[]): Record<string, unknown> {
   };
   if (required.length > 0) schema.required = required;
   return schema;
+}
+
+function buildToolInputSchema(
+  options: OptionDef[],
+): ToolCatalogEntry['inputSchema'] {
+  const properties: Record<string, unknown> = {
+    filter: {
+      type: ['string', 'array'],
+      description:
+        'Optional field filter. Supports comma-separated paths like "items.id,items.name".',
+    },
+    page: {
+      type: 'integer',
+      minimum: 1,
+      description: 'Optional page number for response pagination.',
+    },
+    pageSize: {
+      type: 'integer',
+      minimum: 1,
+      maximum: 1000,
+      description: 'Optional page size for response pagination.',
+    },
+  };
+  const required: string[] = [];
+
+  for (const option of options) {
+    const name = option.name.replace(/^--/, '');
+    if (name === 'page-number' || name === 'page-size') {
+      continue;
+    }
+    if (properties[name] === undefined) {
+      properties[name] = optionToJsonSchema(option);
+    }
+    if (option.required) {
+      required.push(name);
+    }
+  }
+
+  return {
+    type: 'object',
+    properties,
+    ...(required.length > 0 ? { required } : {}),
+    additionalProperties: false,
+  };
 }
 
 export function describeCommandSchema(commandPath: string): unknown {

@@ -106,7 +106,7 @@ describe('tool input validation', () => {
     expect(harness.commands).toEqual([]);
   });
 
-  it('rejects wrong primitive types', async () => {
+  it('rejects non-numeric strings for numeric types', async () => {
     const harness = createHarness({
       type: 'object',
       properties: { limit: { type: 'integer' } },
@@ -114,7 +114,7 @@ describe('tool input validation', () => {
     });
 
     const error = await expectValidationError(() =>
-      harness.execute({ limit: '10' }),
+      harness.execute({ limit: 'ten' }),
     );
 
     expect(error.issues).toEqual([
@@ -124,6 +124,30 @@ describe('tool input validation', () => {
       },
     ]);
     expect(harness.commands).toEqual([]);
+  });
+
+  it('accepts numeric strings and applies numeric bounds to them', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        count: { type: 'integer', minimum: 1, maximum: 10 },
+        ratio: { type: 'number', minimum: 0, maximum: 1 },
+        choice: { type: 'integer', enum: [1, 2] },
+      },
+      additionalProperties: false,
+    });
+
+    await expect(
+      harness.execute({ count: '2', ratio: '0.5', choice: '2' }),
+    ).resolves.toEqual({ ok: true, data: { called: true } });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ count: '11', ratio: '-0.1' }),
+    );
+    expect(error.issues).toEqual([
+      { path: 'count', message: '"count" must be <= 10, received "11"' },
+      { path: 'ratio', message: '"ratio" must be >= 0, received "-0.1"' },
+    ]);
   });
 
   it('rejects values outside declared numeric bounds', async () => {
@@ -161,6 +185,35 @@ describe('tool input validation', () => {
         message: '"category" must be one of "cjs", "barrel", received "esm"',
       },
     ]);
+  });
+
+  it('compares structured enum values by JSON value', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        config: { type: 'object', enum: [{ mode: 'fast' }] },
+      },
+      additionalProperties: false,
+    });
+
+    await expect(
+      harness.execute({ config: { mode: 'fast' } }),
+    ).resolves.toEqual({ ok: true, data: { called: true } });
+  });
+
+  it('preserves string enum values in numeric union types', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        choice: { type: ['string', 'integer'], enum: ['2', 3] },
+      },
+      additionalProperties: false,
+    });
+
+    await expect(harness.execute({ choice: '2' })).resolves.toEqual({
+      ok: true,
+      data: { called: true },
+    });
   });
 
   it('rejects wrong array item types', async () => {
@@ -231,6 +284,38 @@ describe('tool input validation', () => {
     });
   });
 
+  it('treats undefined required properties as missing', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: { id: { type: 'string' } },
+      required: ['id'],
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ id: undefined }),
+    );
+
+    expect(error.issues).toEqual([
+      { path: 'id', message: 'input is missing required property "id"' },
+    ]);
+    expect(harness.commands).toEqual([]);
+  });
+
+  it('allows executor controls alongside a strict custom tool schema', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: { id: { type: 'string' } },
+      required: ['id'],
+      additionalProperties: false,
+    });
+
+    await expect(
+      harness.execute({ id: 'main', filter: '', page: '1', pageSize: '2' }),
+    ).resolves.toEqual({ ok: true, data: { called: true } });
+    expect(harness.commands).toEqual([['schema-tool']]);
+  });
+
   it('reports every mismatch in a single error', async () => {
     const harness = createHarness({
       type: 'object',
@@ -285,6 +370,60 @@ describe('tool input validation', () => {
     expect(commands).toEqual([]);
   });
 
+  it('rejects unknown catalog properties instead of silently ignoring them', async () => {
+    const commands: string[][] = [];
+    const executor = createRsdoctorCliToolExecutor({
+      tools: getToolCatalog(),
+      runCommand: async (command) => {
+        commands.push(command);
+        return JSON.stringify({ ok: true, data: {} });
+      },
+    });
+
+    const error = await expectValidationError(() =>
+      executor.execute({
+        toolName: 'chunks_list',
+        input: { pageNumber: 2 },
+        dataFile: '/tmp/demo.json',
+      }),
+    );
+
+    expect(error.issues).toEqual([
+      {
+        path: 'pageNumber',
+        message: '"pageNumber" is not an allowed property',
+      },
+    ]);
+    expect(commands).toEqual([]);
+  });
+
+  it('catalog schemas retain declared tool options while rejecting extras', () => {
+    const catalog = getToolCatalog();
+    const optimize = catalog.find((tool) => tool.name === 'bundle_optimize');
+    const sideEffects = catalog.find(
+      (tool) => tool.name === 'tree_shaking_side_effects',
+    );
+
+    expect(optimize?.inputSchema).toMatchObject({
+      properties: {
+        filter: expect.any(Object),
+        page: expect.any(Object),
+        pageSize: expect.any(Object),
+        step: { type: 'integer', enum: [1, 2] },
+      },
+      additionalProperties: false,
+    });
+    expect(sideEffects?.inputSchema).toMatchObject({
+      properties: {
+        category: {
+          type: 'string',
+          enum: ['cjs', 'barrel', 'side-effects', 'dynamic-import'],
+        },
+      },
+      additionalProperties: false,
+    });
+  });
+
   it('validates catalog controls for the in-process executor', async () => {
     const executor = createInProcessRsdoctorCliToolExecutor();
 
@@ -301,6 +440,25 @@ describe('tool input validation', () => {
       {
         path: 'page',
         message: '"page" must be of type integer, received string',
+      },
+    ]);
+  });
+
+  it('rejects unknown catalog properties in the in-process executor', async () => {
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    const error = await expectValidationError(() =>
+      executor.execute({
+        toolName: 'build_summary',
+        input: { pageNumber: 2 },
+        dataFile: '/nonexistent/rsdoctor-data.json',
+      }),
+    );
+
+    expect(error.issues).toEqual([
+      {
+        path: 'pageNumber',
+        message: '"pageNumber" is not an allowed property',
       },
     ]);
   });

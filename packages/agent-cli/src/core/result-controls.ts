@@ -10,7 +10,11 @@ interface ParsedControls {
   paginateResult: boolean;
 }
 
-const CONTROL_KEYS = new Set(['filter', 'page', 'pageSize']);
+export const TOOL_INPUT_CONTROL_KEYS: ReadonlySet<string> = new Set([
+  'filter',
+  'page',
+  'pageSize',
+]);
 
 function parsePositiveInteger(
   value: unknown,
@@ -231,7 +235,7 @@ export function splitToolInputControls(
 
   const passthroughInput: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(input)) {
-    if (CONTROL_KEYS.has(key)) {
+    if (TOOL_INPUT_CONTROL_KEYS.has(key)) {
       continue;
     }
     if (

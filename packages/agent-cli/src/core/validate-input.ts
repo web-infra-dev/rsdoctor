@@ -3,13 +3,12 @@ import type { JsonSchema } from './types';
 /**
  * Tool input validation.
  *
- * The supported schema dialect is exactly what the tool catalog emits from
- * `OptionDef` (see `optionToJsonSchema` / `buildInputSchema` in
- * `commands/router.ts`): an object schema carrying `properties`, an optional
- * `required` list, `additionalProperties`, and per-property `type` (a single
- * name or a list of names), `enum`, `minimum`, and `maximum`. `items` is
- * handled as well so array properties declared by hand-written
- * `ToolDefinition`s are checked too.
+ * The supported schema dialect covers the shared controls and `OptionDef`
+ * properties emitted by the tool catalog: an object schema carrying
+ * `properties`, an optional `required` list, `additionalProperties`, and
+ * per-property `type` (a single name or a list of names), `enum`, `minimum`,
+ * and `maximum`. `items` is handled as well so array properties declared by
+ * hand-written `ToolDefinition`s are checked too.
  *
  * Two deliberate choices keep the executor from being stricter than the CLI it
  * mirrors:
@@ -17,11 +16,8 @@ import type { JsonSchema } from './types';
  * - Unknown keywords are ignored instead of rejected, so a richer schema never
  *   fails closed.
  * - Extra properties are accepted unless a schema explicitly declares
- *   `additionalProperties: false`. The catalog declares
- *   `additionalProperties: true` because `parseSubcommandOptions` and
- *   `appendToolSpecificOptions` silently drop options a subcommand does not
- *   declare, so rejecting unknown keys here would refuse input the CLI itself
- *   accepts.
+ *   `additionalProperties: false`. Catalog schemas are strict so misspelled
+ *   programmatic inputs are rejected before dispatch.
  */
 export interface ToolInputValidationIssue {
   /** Dotted path to the offending value, empty for the input object itself. */
@@ -56,6 +52,17 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+function parseFiniteNumber(value: unknown): number | undefined {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : undefined;
+  }
+  if (typeof value !== 'string' || value.trim() === '') {
+    return undefined;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
 function matchesSchemaType(value: unknown, type: unknown): boolean {
   if (Array.isArray(type)) {
     return type.some((entry) => matchesSchemaType(value, entry));
@@ -66,12 +73,14 @@ function matchesSchemaType(value: unknown, type: unknown): boolean {
       return Array.isArray(value);
     case 'boolean':
       return typeof value === 'boolean';
-    case 'integer':
-      return typeof value === 'number' && Number.isInteger(value);
+    case 'integer': {
+      const parsed = parseFiniteNumber(value);
+      return parsed !== undefined && Number.isInteger(parsed);
+    }
     case 'null':
       return value === null;
     case 'number':
-      return typeof value === 'number' && Number.isFinite(value);
+      return parseFiniteNumber(value) !== undefined;
     case 'object':
       return isRecord(value);
     case 'string':
@@ -96,7 +105,67 @@ function describeValueType(value: unknown): string {
 }
 
 function formatValue(value: unknown): string {
-  return typeof value === 'string' ? JSON.stringify(value) : String(value);
+  if (typeof value === 'string') {
+    return JSON.stringify(value);
+  }
+  if (value !== null && typeof value === 'object') {
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return String(value);
+    }
+  }
+  return String(value);
+}
+
+function jsonValuesEqual(
+  left: unknown,
+  right: unknown,
+  seen = new WeakMap<object, object>(),
+): boolean {
+  if (left === right) {
+    return true;
+  }
+
+  if (Array.isArray(left) || Array.isArray(right)) {
+    if (!Array.isArray(left) || !Array.isArray(right)) {
+      return false;
+    }
+    const previous = seen.get(left);
+    if (previous !== undefined) {
+      return previous === right;
+    }
+    seen.set(left, right);
+    return (
+      left.length === right.length &&
+      left.every((entry, index) => jsonValuesEqual(entry, right[index], seen))
+    );
+  }
+
+  if (!isRecord(left) || !isRecord(right)) {
+    return false;
+  }
+  const previous = seen.get(left);
+  if (previous !== undefined) {
+    return previous === right;
+  }
+  seen.set(left, right);
+  const leftKeys = Object.keys(left);
+  const rightKeys = Object.keys(right);
+  return (
+    leftKeys.length === rightKeys.length &&
+    leftKeys.every(
+      (key) =>
+        Object.prototype.hasOwnProperty.call(right, key) &&
+        jsonValuesEqual(left[key], right[key], seen),
+    )
+  );
+}
+
+function schemaHasNumericType(type: unknown): boolean {
+  return Array.isArray(type)
+    ? type.includes('integer') || type.includes('number')
+    : type === 'integer' || type === 'number';
 }
 
 function describeLabel(path: string): string {
@@ -112,6 +181,7 @@ function collectIssues(
   schema: unknown,
   path: string,
   issues: ToolInputValidationIssue[],
+  options: ToolInputValidationOptions,
 ): void {
   if (!isRecord(schema)) {
     return;
@@ -129,7 +199,18 @@ function collectIssues(
     return;
   }
 
-  if (Array.isArray(schema.enum) && !schema.enum.includes(value)) {
+  const numericValue =
+    typeof value === 'number' || schemaHasNumericType(schema.type)
+      ? parseFiniteNumber(value)
+      : undefined;
+  if (
+    Array.isArray(schema.enum) &&
+    !schema.enum.some(
+      (entry) =>
+        jsonValuesEqual(entry, value) ||
+        (numericValue !== undefined && jsonValuesEqual(entry, numericValue)),
+    )
+  ) {
     issues.push({
       path,
       message: `${label} must be one of ${schema.enum
@@ -138,17 +219,17 @@ function collectIssues(
     });
   }
 
-  if (typeof value === 'number') {
-    if (typeof schema.minimum === 'number' && value < schema.minimum) {
+  if (numericValue !== undefined) {
+    if (typeof schema.minimum === 'number' && numericValue < schema.minimum) {
       issues.push({
         path,
-        message: `${label} must be >= ${schema.minimum}, received ${value}`,
+        message: `${label} must be >= ${schema.minimum}, received ${formatValue(value)}`,
       });
     }
-    if (typeof schema.maximum === 'number' && value > schema.maximum) {
+    if (typeof schema.maximum === 'number' && numericValue > schema.maximum) {
       issues.push({
         path,
-        message: `${label} must be <= ${schema.maximum}, received ${value}`,
+        message: `${label} must be <= ${schema.maximum}, received ${formatValue(value)}`,
       });
     }
   }
@@ -156,7 +237,13 @@ function collectIssues(
   if (Array.isArray(value)) {
     if (isRecord(schema.items)) {
       value.forEach((entry, index) => {
-        collectIssues(entry, schema.items, `${path}[${index}]`, issues);
+        collectIssues(
+          entry,
+          schema.items,
+          `${path}[${index}]`,
+          issues,
+          options,
+        );
       });
     }
     return;
@@ -170,7 +257,10 @@ function collectIssues(
 
   if (Array.isArray(schema.required)) {
     for (const key of schema.required) {
-      if (typeof key === 'string' && !(key in value)) {
+      if (
+        typeof key === 'string' &&
+        (!(key in value) || value[key] === undefined)
+      ) {
         issues.push({
           path: joinPath(path, key),
           message: `${label} is missing required property "${key}"`,
@@ -180,15 +270,20 @@ function collectIssues(
   }
 
   for (const [key, entry] of Object.entries(value)) {
+    if (entry === undefined) {
+      continue;
+    }
     const propertyPath = joinPath(path, key);
     const propertySchema = properties[key];
 
     if (propertySchema !== undefined) {
-      collectIssues(entry, propertySchema, propertyPath, issues);
+      collectIssues(entry, propertySchema, propertyPath, issues, options);
       continue;
     }
 
-    if (schema.additionalProperties === false) {
+    const isAllowedExecutorProperty =
+      path === '' && options.allowedAdditionalProperties?.has(key) === true;
+    if (schema.additionalProperties === false && !isAllowedExecutorProperty) {
       issues.push({
         path: propertyPath,
         message: `${describeLabel(propertyPath)} is not an allowed property`,
@@ -197,9 +292,20 @@ function collectIssues(
     }
 
     if (isRecord(schema.additionalProperties)) {
-      collectIssues(entry, schema.additionalProperties, propertyPath, issues);
+      collectIssues(
+        entry,
+        schema.additionalProperties,
+        propertyPath,
+        issues,
+        options,
+      );
     }
   }
+}
+
+export interface ToolInputValidationOptions {
+  /** Executor-level properties accepted in addition to a strict tool schema. */
+  allowedAdditionalProperties?: ReadonlySet<string>;
 }
 
 /**
@@ -215,13 +321,14 @@ export function validateToolInput(
   toolName: string,
   input: unknown,
   schema: JsonSchema | undefined,
+  options: ToolInputValidationOptions = {},
 ): void {
   if (schema === undefined) {
     return;
   }
 
   const issues: ToolInputValidationIssue[] = [];
-  collectIssues(input, schema, '', issues);
+  collectIssues(input, schema, '', issues, options);
 
   if (issues.length > 0) {
     throw new ToolInputValidationError(toolName, issues);
