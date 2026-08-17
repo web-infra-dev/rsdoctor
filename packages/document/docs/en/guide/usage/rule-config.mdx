@@ -1,6 +1,6 @@
 # Compilation diagnostic rules
 
-Building diagnostic rules is similar to `ESLint` like lint tools, but different from it in that `ESLint` performs code scanning and is unrelated to the build process. In contrast, the code diagnostics here are closely related to the build process of `Rspack or Webpack`, incorporating many internal parameters generated during the build process to aid judgment, such as ModuleGraph, Webpack's internal markings for each module, and runtime added after code transformation, among others.
+Build diagnostics complement static lint tools such as ESLint. They run against Rspack's build data and can use information such as the ModuleGraph, per-module metadata, and generated runtime code.
 
 During the build process, if issues are discovered, they will be visible in the CLI and the final diagnostic summary webpage, as shown below:
 
