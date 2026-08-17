@@ -2,7 +2,7 @@
 
 **Rsdoctor introduced replacement configuration options in version 1.2.4.** These options are easier to configure, more extensible, and compatible with Rsdoctor 2.x.
 
-The replaced options from version 1.2.3 and earlier were removed in Rsdoctor 2.x. Migrate to the replacement options introduced in version 1.2.4.
+The top-level `mode` option was removed in Rsdoctor 2.x. Other replaced options, including `brief`, `features.lite`, and `output.compressData`, remain available for backward compatibility but are deprecated. Migrate these configurations to the replacements introduced in version 1.2.4.
 
 | Original configuration            | Replacement configuration                                                                             |
 | --------------------------------- | ----------------------------------------------------------------------------------------------------- |
@@ -16,15 +16,15 @@ The replaced options from version 1.2.3 and earlier were removed in Rsdoctor 2.x
 
 ### mode
 
-The original top-level `mode` option moved to `output.mode` to keep output-related settings together.
+The top-level `mode` option was removed in Rsdoctor 2.x. Use `output.mode` to keep output-related settings together.
 
 ### brief
 
-The original `brief` option moved to `output.options.htmlOptions`. Set `output.mode` to `'brief'` and `output.options.type` to `['html']` to generate an HTML report.
+The `brief` option remains available for backward compatibility but is deprecated. Set `output.mode` to `'brief'` and `output.options.type` to `['html']` to generate an HTML report.
 
 ### output.compressData
 
-Replace `output.compressData` with `output.mode: 'brief'` and `output.options.type: ['json']`.
+The `output.compressData` option remains available for backward compatibility but is deprecated. Replace it with `output.mode: 'brief'` and `output.options.type: ['json']`.
 
 ### lite
 

@@ -2,7 +2,7 @@
 
 **Rsdoctor 在 1.2.4 版本中引入了替代配置项。** 新配置更易于使用和扩展，并与 Rsdoctor 2.x 兼容。
 
-1.2.3 及之前版本中被替代的配置项已在 Rsdoctor 2.x 中移除，请迁移到 1.2.4 引入的替代配置。
+顶层 `mode` 配置已在 Rsdoctor 2.x 中移除。其他被替代的配置（包括 `brief`、`features.lite` 和 `output.compressData`）仍为向后兼容而保留，但已废弃。请迁移到 1.2.4 引入的替代配置。
 
 | 原配置                            | 替代配置                                                                                                    |
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -16,15 +16,15 @@
 
 ### mode
 
-原有的顶层 `mode` 配置已迁移为 `output.mode`，便于统一管理输出相关配置。
+顶层 `mode` 配置已在 Rsdoctor 2.x 中移除。请使用 `output.mode` 统一管理输出相关配置。
 
 ### brief
 
-原有的 `brief` 配置已迁移到 `output.options.htmlOptions`。将 `output.mode` 设为 `'brief'`，并将 `output.options.type` 设为 `['html']`，即可生成 HTML 报告。
+`brief` 配置仍为向后兼容而保留，但已废弃。将 `output.mode` 设为 `'brief'`，并将 `output.options.type` 设为 `['html']`，即可生成 HTML 报告。
 
 ### output.compressData
 
-使用 `output.mode: 'brief'` 和 `output.options.type: ['json']` 代替 `output.compressData`。
+`output.compressData` 配置仍为向后兼容而保留，但已废弃。请使用 `output.mode: 'brief'` 和 `output.options.type: ['json']` 代替它。
 
 ### lite
 

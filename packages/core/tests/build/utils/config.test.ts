@@ -213,7 +213,7 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.",
+            "The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use 'output.mode' instead.",
           ),
         ),
       ).toBe(true);
@@ -225,7 +225,7 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(
-            "The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.",
+            "The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use 'output.mode' instead.",
           ),
         ),
       ).toBe(false);
