@@ -28,7 +28,7 @@
     "type-check": "rslint --type-check-only --config rslint.type-check.config.mts"
   },
   "devDependencies": {
-    "@rslib/core": "1.0.0-beta.2",
+    "@rslib/core": "1.0.0-beta.3",
     "@rstest/core": "catalog:",
     "@types/node": "catalog:",
     "cac": "^7.0.0",
