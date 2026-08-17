@@ -339,6 +339,7 @@ export const LoaderExecutions = ({
                       file: resource.path,
                       loader: loader.loader,
                       loaderIndex: loader.loaderIndex,
+                      isPitch: loader.isPitch,
                     }}
                     showSkeleton={false}
                   >

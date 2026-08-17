@@ -60,5 +60,6 @@ export interface LoaderAPIRequestBody {
     file: string;
     loader: string;
     loaderIndex: number;
+    isPitch: boolean;
   };
 }

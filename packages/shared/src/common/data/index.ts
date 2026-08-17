@@ -146,6 +146,7 @@ export class APIDataLoader {
             params.file,
             params.loader,
             params.loaderIndex,
+            params.isPitch,
             res || [],
           ) as R;
         });

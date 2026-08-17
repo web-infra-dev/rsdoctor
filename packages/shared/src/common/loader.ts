@@ -337,6 +337,7 @@ export function getLoaderFileInputAndOutput(
   file: string,
   loader: string,
   loaderIndex: number,
+  isPitch: boolean,
   loaders: SDK.LoaderData,
 ): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileInputAndOutput> {
   for (let i = 0; i < loaders.length; i++) {
@@ -347,7 +348,8 @@ export function getLoaderFileInputAndOutput(
         const l = item.loaders[j];
         if (
           getLoadrName(l.loader) === loader &&
-          l.loaderIndex === loaderIndex
+          l.loaderIndex === loaderIndex &&
+          l.isPitch === isPitch
         ) {
           return {
             input: l.input || '',
