@@ -84,8 +84,8 @@ describe('test src/common/loader.ts', () => {
       '/test/file.js',
       'babel-loader',
       0,
-      false,
       mockLoaderData,
+      false,
     );
 
     expect(result).toBeDefined();
@@ -98,8 +98,8 @@ describe('test src/common/loader.ts', () => {
       '/test/file.js',
       'ts-loader',
       1,
-      false,
       mockLoaderData,
+      false,
     );
 
     expect(result).toBeDefined();
@@ -112,8 +112,8 @@ describe('test src/common/loader.ts', () => {
       '/test/file.js',
       'non-existent-loader',
       0,
-      false,
       mockLoaderData,
+      false,
     );
 
     expect(result.input).toBe('');
@@ -125,8 +125,8 @@ describe('test src/common/loader.ts', () => {
       '/non-existent/file.js',
       'babel-loader',
       0,
-      false,
       mockLoaderData,
+      false,
     );
 
     expect(result.input).toBe('');
@@ -138,21 +138,33 @@ describe('test src/common/loader.ts', () => {
       '/test/file.js',
       'babel-loader',
       0,
-      true,
       mockLoaderData,
+      true,
     );
     const normalResult = Loader.getLoaderFileInputAndOutput(
       '/test/file.js',
       'babel-loader',
       0,
-      false,
       mockLoaderData,
+      false,
     );
 
     expect(pitchResult.input).toBe('');
     expect(pitchResult.output).toBe('pitch result');
     expect(normalResult.input).toBe('const foo = 1;');
     expect(normalResult.output).toBe('var foo = 1;');
+  });
+
+  it('getLoaderFileInputAndOutput should preserve legacy lookup behavior when isPitch is omitted', () => {
+    const result = Loader.getLoaderFileInputAndOutput(
+      '/test/file.js',
+      'babel-loader',
+      0,
+      mockLoaderData,
+    );
+
+    expect(result.input).toBe('');
+    expect(result.output).toBe('pitch result');
   });
 
   it('getLoaderFileDetails should throw error for non-existent file', () => {
