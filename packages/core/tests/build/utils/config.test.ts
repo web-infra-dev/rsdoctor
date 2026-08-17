@@ -207,16 +207,50 @@ describe('normalizeUserConfig', () => {
   );
 
   describe('deprecated configuration warnings', () => {
+    const removedModeWarning = (replacement: string) =>
+      `The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`;
+
     it('should show a warning for the removed top-level mode', () => {
       normalizeUserConfig({ mode: 'brief' } as never);
 
       expect(
         consoleOutput.some((output) =>
-          output.includes(
-            "The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use 'output.mode' instead.",
-          ),
+          output.includes(removedModeWarning('output.mode')),
         ),
       ).toBe(true);
+    });
+
+    it("should recommend output.reportCodeType for mode: 'lite'", () => {
+      normalizeUserConfig({ mode: 'lite' } as never);
+
+      expect(
+        consoleOutput.some((output) =>
+          output.includes(removedModeWarning('output.reportCodeType')),
+        ),
+      ).toBe(true);
+    });
+
+    it.each(['', null, false, 0])(
+      'should show the top-level mode warning for %p',
+      (mode) => {
+        normalizeUserConfig({ mode } as never);
+
+        expect(
+          consoleOutput.some((output) =>
+            output.includes(removedModeWarning('output.mode')),
+          ),
+        ).toBe(true);
+      },
+    );
+
+    it('should not show the top-level mode warning for undefined', () => {
+      normalizeUserConfig({ mode: undefined } as never);
+
+      expect(
+        consoleOutput.some((output) =>
+          output.includes("The top-level 'mode' configuration was removed"),
+        ),
+      ).toBe(false);
     });
 
     it('should not show the top-level mode warning for output.mode', () => {
@@ -224,9 +258,7 @@ describe('normalizeUserConfig', () => {
 
       expect(
         consoleOutput.some((output) =>
-          output.includes(
-            "The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use 'output.mode' instead.",
-          ),
+          output.includes(removedModeWarning('output.mode')),
         ),
       ).toBe(false);
     });

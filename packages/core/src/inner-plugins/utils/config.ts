@@ -167,10 +167,12 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         ? SDK.IMode[SDK.IMode.normal]
         : output.mode
       : undefined) || SDK.IMode[SDK.IMode.normal];
-  if (deprecatedMode) {
+  if (deprecatedMode !== undefined) {
+    const replacement =
+      deprecatedMode === 'lite' ? 'output.reportCodeType' : 'output.mode';
     logger.info(
       chalk.yellow(
-        `The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use 'output.mode' instead.`,
+        `The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`,
       ),
     );
   }
