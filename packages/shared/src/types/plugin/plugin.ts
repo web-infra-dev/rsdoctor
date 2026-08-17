@@ -45,7 +45,6 @@ export interface RsdoctorPluginOptionsNormalized<
     | 'supports'
     | 'port'
     | 'brief'
-    | 'mode'
     | 'server'
     | 'multiCompiler'
   >
@@ -152,15 +151,6 @@ export interface RsdoctorRspackPluginOptions<
    */
   features?:
     RsdoctorRspackPluginFeatures | Array<keyof RsdoctorRspackPluginFeatures>;
-
-  /**
-   * @deprecated  Use `output.mode` instead, if you're using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead.
-   * Rsdoctor mode option:
-   * - normal: Refers to the normal mode.
-   * - brief: Refers to the brief mode, which only displays the results of the duration analysis and build artifact analysis
-   *    and does not display any part of the code.
-   */
-  mode?: 'brief' | 'normal' | 'lite';
 
   /**
    * Configuration for the bundler loader interceptor. TODO: delete this option.

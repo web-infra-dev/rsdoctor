@@ -97,6 +97,7 @@ function isValidMode(mode: any): mode is keyof typeof SDK.IMode {
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   config: Plugin.RsdoctorRspackPluginOptions<Rules> = {},
 ): Plugin.RsdoctorPluginOptionsNormalized<Rules> {
+  const deprecatedMode = (config as { mode?: unknown }).mode;
   const userOutput = config.output;
   const defaultOutput = getDefaultOutput();
   const outputConfig: Config.IOutput<'brief' | 'normal'> = isJsonOutputEnv(
@@ -127,7 +128,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     port,
     server: userServer = {},
     printLog = { serverUrls: true },
-    mode = undefined,
     brief = undefined,
     multiCompiler = true,
   } = normalizedConfig;
@@ -166,11 +166,8 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       ? output.mode === ('lite' as SDK.IMode.normal)
         ? SDK.IMode[SDK.IMode.normal]
         : output.mode
-      : undefined) ||
-    mode ||
-    SDK.IMode[SDK.IMode.normal];
-
-  if (mode) {
+      : undefined) || SDK.IMode[SDK.IMode.normal];
+  if (deprecatedMode) {
     logger.info(
       chalk.yellow(
         `The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.`,
@@ -179,7 +176,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   }
   const _features = normalizeFeatures(features, finalMode);
   const _linter = normalizeLinter(linter);
-  if (_features.lite || finalMode === SDK.IMode[SDK.IMode.lite]) {
+  if (_features.lite) {
     logger.info(
       chalk.yellow(
         `Lite features are deprecated in Rsdoctor 2.x. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.`,

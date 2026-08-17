@@ -107,16 +107,15 @@ describe('normalizeUserConfig', () => {
 
   it('should normalize output.reportCodeType according to mode', () => {
     const result = normalizeUserConfig({
-      output: { reportCodeType: { noCode: true } },
-      mode: 'brief',
+      output: { mode: 'brief', reportCodeType: { noCode: true } },
     });
     expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
   });
 
-  it('should normalize output.reportCodeType and mode:lite', () => {
+  it('should normalize output.reportCodeType with lite features', () => {
     const result = normalizeUserConfig({
+      features: { lite: true },
       output: { reportCodeType: { noCode: true } },
-      mode: 'lite',
     });
     expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
   });
@@ -207,11 +206,9 @@ describe('normalizeUserConfig', () => {
     },
   );
 
-  describe('mode configuration warnings', () => {
-    it('should show warning when using deprecated mode configuration', () => {
-      normalizeUserConfig({
-        mode: 'lite',
-      });
+  describe('deprecated configuration warnings', () => {
+    it('should show a warning for the removed top-level mode', () => {
+      normalizeUserConfig({ mode: 'brief' } as never);
 
       expect(
         consoleOutput.some((output) =>
@@ -220,6 +217,18 @@ describe('normalizeUserConfig', () => {
           ),
         ),
       ).toBe(true);
+    });
+
+    it('should not show the top-level mode warning for output.mode', () => {
+      normalizeUserConfig({ output: { mode: 'brief' } });
+
+      expect(
+        consoleOutput.some((output) =>
+          output.includes(
+            "The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.",
+          ),
+        ),
+      ).toBe(false);
     });
 
     it('should show warning when using deprecated compressData configuration', () => {
@@ -254,22 +263,6 @@ describe('normalizeUserConfig', () => {
       ).toBe(false);
     });
 
-    it('should not show warning when using output.mode instead of mode', () => {
-      normalizeUserConfig({
-        output: {
-          mode: 'brief',
-        },
-      });
-
-      expect(
-        consoleOutput.some((output) =>
-          output.includes(
-            "The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.",
-          ),
-        ),
-      ).toBe(false);
-    });
-
     it('should handle invalid mode values gracefully', () => {
       const result = normalizeUserConfig({
         output: {
@@ -296,32 +289,9 @@ describe('normalizeUserConfig', () => {
         ),
       ).toBe(true);
     });
-
-    it('should show both warnings when both mode and lite features are used', () => {
-      normalizeUserConfig({
-        mode: 'lite',
-        features: {
-          lite: true,
-        },
-      });
-
-      const modeWarning = consoleOutput.some((output) =>
-        output.includes(
-          "The 'mode' configuration is deprecated in Rsdoctor 2.x. Please use 'output.mode' instead.",
-        ),
-      );
-      const liteWarning = consoleOutput.some((output) =>
-        output.includes(
-          "Lite features are deprecated in Rsdoctor 2.x. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
-        ),
-      );
-
-      expect(modeWarning).toBe(true);
-      expect(liteWarning).toBe(true);
-    });
   });
 
-  describe('mode priority', () => {
+  describe('output mode', () => {
     it('should use brief json output when RSDOCTOR_OUTPUT is json', () => {
       process.env.RSDOCTOR_OUTPUT = 'json';
 
@@ -344,37 +314,13 @@ describe('normalizeUserConfig', () => {
       });
     });
 
-    it('should prioritize output.mode over mode', () => {
-      const result = normalizeUserConfig({
-        mode: 'normal',
-        output: {
-          mode: 'brief',
-        },
-      });
+    it('should ignore the removed top-level mode', () => {
+      const result = normalizeUserConfig({ mode: 'brief' } as never);
 
-      expect(result.output.mode).toBe('brief');
+      expect(result.output.mode).toBe('normal');
     });
 
-    it('should use mode when output.mode is not provided', () => {
-      const result = normalizeUserConfig({
-        mode: 'brief',
-      });
-
-      expect(result.output.mode).toBe('brief');
-    });
-
-    it('should handle output.mode with invalid value and fall back to mode', () => {
-      const result = normalizeUserConfig({
-        mode: 'brief',
-        output: {
-          mode: 'invalid' as any,
-        },
-      });
-
-      expect(result.output.mode).toBe('brief');
-    });
-
-    it('should use normal as default when neither mode nor output.mode is provided', () => {
+    it('should use normal as default when output.mode is not provided', () => {
       const result = normalizeUserConfig({});
 
       expect(result.output.mode).toBe('normal');
@@ -474,8 +420,8 @@ describe('normalizeUserConfig', () => {
   describe('output.reportCodeType', () => {
     it('should return NoCode when mode is brief regardless of reportCodeType', () => {
       const result = normalizeUserConfig({
-        mode: 'brief',
         output: {
+          mode: 'brief',
           reportCodeType: {
             noModuleSource: true,
             noAssetsAndModuleSource: false,
@@ -488,23 +434,7 @@ describe('normalizeUserConfig', () => {
 
     it('should return NoSourceAndAssets when mode is lite and no special flags', () => {
       const result = normalizeUserConfig({
-        mode: 'lite',
-        output: {
-          reportCodeType: {
-            noModuleSource: false,
-            noAssetsAndModuleSource: false,
-            noCode: false,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(
-        SDK.ToDataType.NoSourceAndAssets,
-      );
-    });
-
-    it('should return NoSource when mode is lite and no special flags', () => {
-      const result = normalizeUserConfig({
-        mode: 'lite',
+        features: { lite: true },
         output: {
           reportCodeType: {
             noModuleSource: false,
@@ -520,7 +450,7 @@ describe('normalizeUserConfig', () => {
 
     it('should return NoSourceAndAssets when mode is lite and noAssetsAndModuleSource is true', () => {
       const result = normalizeUserConfig({
-        mode: 'lite',
+        features: { lite: true },
         output: {
           reportCodeType: {
             noModuleSource: false,
@@ -536,8 +466,8 @@ describe('normalizeUserConfig', () => {
 
     it('should respect noCode flag in normal mode', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: {
             noModuleSource: false,
             noAssetsAndModuleSource: false,
@@ -550,8 +480,8 @@ describe('normalizeUserConfig', () => {
 
     it('should respect noAssetsAndModuleSource flag in normal mode', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: {
             noModuleSource: false,
             noAssetsAndModuleSource: true,
@@ -566,8 +496,8 @@ describe('normalizeUserConfig', () => {
 
     it('should respect noModuleSource flag in normal mode', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: {
             noModuleSource: true,
             noAssetsAndModuleSource: false,
@@ -580,8 +510,8 @@ describe('normalizeUserConfig', () => {
 
     it('should return Normal when no flags are set in normal mode', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: {
             noModuleSource: false,
             noAssetsAndModuleSource: false,
@@ -594,8 +524,8 @@ describe('normalizeUserConfig', () => {
 
     it('should handle NewReportCodeType string values - noCode', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: 'noCode',
         },
       });
@@ -604,8 +534,8 @@ describe('normalizeUserConfig', () => {
 
     it('should handle NewReportCodeType string values - noAssetsAndModuleSource', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: 'noAssetsAndModuleSource',
         },
       });
@@ -616,8 +546,8 @@ describe('normalizeUserConfig', () => {
 
     it('should handle NewReportCodeType string values - noModuleSource', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: 'noModuleSource',
         },
       });
@@ -626,8 +556,8 @@ describe('normalizeUserConfig', () => {
 
     it('should handle undefined reportCodeType and use default', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: undefined,
         },
       });
@@ -636,8 +566,8 @@ describe('normalizeUserConfig', () => {
 
     it('should handle empty object reportCodeType and use default', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: {},
         },
       });
@@ -646,8 +576,8 @@ describe('normalizeUserConfig', () => {
 
     it('should prioritize noCode over other flags in normal mode', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: {
             noCode: true,
             noModuleSource: true,
@@ -660,8 +590,8 @@ describe('normalizeUserConfig', () => {
 
     it('should prioritize noAssetsAndModuleSource over noModuleSource in normal mode', () => {
       const result = normalizeUserConfig({
-        mode: 'normal',
         output: {
+          mode: 'normal',
           reportCodeType: {
             noCode: false,
             noModuleSource: true,

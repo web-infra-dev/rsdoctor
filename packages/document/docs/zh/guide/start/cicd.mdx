@@ -12,7 +12,7 @@ Brief 模式中，会将数据报告整合到一个 HTML 页面中，方便用�
 
 <Badge text="Version: 0.4.0" type="warning" />
 
-通过配置 Rsdoctor 插件的 [mode.brief](/config/options/mode) 选项，即可开启 Brief 模式。Brief 模式会在构建后生成一份报告到构建产物目录中： `[outputDir]/.rsdoctor/report-rsdoctor.html`，通过浏览器打开 HTML 文件，
+将 Rsdoctor 插件的 [output.mode](/config/options/output#mode) 设置为 `'brief'`，即可开启 Brief 模式。Brief 模式会在构建后生成一份报告到构建产物目录中：`[outputDir]/.rsdoctor/report-rsdoctor.html`。通过浏览器打开 HTML 文件，
 即可看到构建分析简报。
 
 - Brief 模式下是不展示任何的代码数据的，为了防止数据过大导致页面崩溃。
@@ -29,7 +29,9 @@ module.exports = {
     process.env.RSDOCTOR &&
       new RsdoctorRspackPlugin({
         // 其他插件选项
-        mode: 'brief',
+        output: {
+          mode: 'brief',
+        },
       }),
   ].filter(Boolean),
 };
