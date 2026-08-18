@@ -2,14 +2,14 @@
 
 :::warning
 
-顶层 `mode` 配置已在 Rsdoctor 2.x 中移除，请使用 [output.mode](/config/options/output#mode) 代替。参考 [mode 配置迁移说明](/config/options/options-v2#mode)。
+旧版顶层 `mode` 配置已在 Rsdoctor 2.x 中移除且会被忽略，请改用 [output.mode](/config/options/output#mode)。参阅 [mode 配置迁移](/config/options/options-v2#mode)。
 
 :::
 
 已移除的配置曾支持以下值：
 
 - **类型：** `"normal" | "brief" | "lite"`
-  - lite 模式的迁移方式请参考 [lite 模式迁移说明](/config/options/options-v2#lite)。
+  - `lite` 已在 Rsdoctor 2.x 中移除且会被忽略，请改用 [output.reportCodeType](/config/options/output#reportcodetype)。
 - **可选：** `true`
 - **默认值：** `normal`
 

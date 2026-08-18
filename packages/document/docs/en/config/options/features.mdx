@@ -12,7 +12,7 @@ The `features` attribute is used for analysis feature toggles, and the specific 
 - **plugins**: Plugin calls and time consumption analysis, enabled by default.
 - **bundle**: Build artifact analysis, enabled by default.
 - **resolver**: Resolver analysis, disabled by default.
-- **lite**: **(lite mode will be deprecated in V2, refer to [lite mode deprecation notice](/config/options/options-v2#lite))** lite mode. The difference between lite mode and normal mode is that source code information is no longer displayed, only packaged code information is displayed, so the code analyzed on the page will also be packaged. Default is normal mode.
+- **lite**: Enables lite mode. Both `features: { lite: true }` and `features: ['lite']` are supported. Unlike normal mode, lite mode omits source code information and only displays bundled code. Lite mode is disabled by default.
 
 Therefore, **the default configuration enables Bundle analysis capabilities, Loader and Plugin build-time analysis**. Resolver analysis is not enabled by default. To enable it, explicitly configure `resolver` in `features`.
 

@@ -194,13 +194,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   }
   const _features = normalizeFeatures(features, finalMode);
   const _linter = normalizeLinter(linter);
-  if (_features.lite) {
-    logger.info(
-      chalk.yellow(
-        `Lite features are deprecated in Rsdoctor 2.x. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.`,
-      ),
-    );
-  }
   // Process mode-specific configurations
   const { finalBrief, finalNormalOptions } = processModeConfigurations(
     finalMode,
