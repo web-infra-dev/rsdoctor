@@ -9,6 +9,8 @@ const BuiltinLightingCssName = 'builtin:lightningcss-loader';
 const ESMLoaderFile = '.mjs';
 
 export class ProbeLoaderPlugin {
+  private readonly instrumentedCompilers = new WeakSet<Plugin.BaseCompiler>();
+
   apply(compiler: Plugin.BaseCompiler) {
     compiler.hooks.beforeRun.tap(
       {
@@ -30,6 +32,8 @@ export class ProbeLoaderPlugin {
   }
 
   private addProbeLoader(compiler: Plugin.BaseCompiler) {
+    if (this.instrumentedCompilers.has(compiler)) return;
+
     let rules = compiler.options.module.rules as Plugin.RuleSetRule[];
 
     if (Loader.isVue(compiler)) {
@@ -38,6 +42,7 @@ export class ProbeLoaderPlugin {
         compiler,
         (r: Plugin.BuildRuleSetRule) => !!r.loader || typeof r === 'string',
       ) as RuleSetRules;
+      this.instrumentedCompilers.add(compiler);
       return;
     }
 
@@ -65,5 +70,6 @@ export class ProbeLoaderPlugin {
         );
       },
     ) as RuleSetRules;
+    this.instrumentedCompilers.add(compiler);
   }
 }
