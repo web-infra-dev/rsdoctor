@@ -14,7 +14,7 @@ Rsdoctor 报告模式，默认是 `normal`。
 - **brief:** 在构建产物目录的 `.rsdoctor` 文件夹中生成一个 HTML 报告文件，所有构建分析数据会整合注入到这个 HTML 文件中，可以通过浏览器打开该 HTML 文件查看报告。brief 模式还有更多配置项，详细信息请参阅：[mode: 'brief'](#mode-brief)。
 
 :::tip
-mode 是没有 lite 配置项的，lite 模式即将废弃，参考 [lite 模式废弃说明](./options-v2.mdx#lite)。
+`output.mode` 不支持 `lite`。请使用 [output.reportCodeType](#reportcodetype) 控制是否包含源码和产物代码。`features` lite 配置仍受支持。
 :::
 
 ## options

@@ -306,20 +306,17 @@ describe('normalizeUserConfig', () => {
       expect(result.output.mode).toBe('normal');
     });
 
-    it('should show warning when lite features are enabled', () => {
+    it('should not show a deprecation warning when lite features are enabled', () => {
       normalizeUserConfig({
         features: {
           lite: true,
         },
       });
+      normalizeUserConfig({
+        features: ['lite'],
+      });
 
-      expect(
-        consoleOutput.some((output) =>
-          output.includes(
-            "Lite features are deprecated in Rsdoctor 2.x. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.",
-          ),
-        ),
-      ).toBe(true);
+      expect(consoleOutput).toEqual([]);
     });
   });
 

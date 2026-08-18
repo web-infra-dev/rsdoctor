@@ -2,15 +2,16 @@
 
 **Rsdoctor 1.2.4 引入了 Rsdoctor 2.x 使用的 output 配置。** 与旧版配置相比，新配置更易于使用和扩展。
 
-1.2.3 及之前版本的配置项已在 Rsdoctor 2.x 中废弃，仅为向后兼容而保留。请迁移到下表中的替代配置。
+顶层 `mode` 配置已在 Rsdoctor 2.x 中移除且会被忽略。旧版 `brief` 和 `output.compressData` 配置已废弃，仅为向后兼容而保留。请根据下表迁移这些配置。两种 `features` lite 配置仍受支持，下表仅列出其等价的 `output` 配置。
 
-| 原配置                                 | 新配置                                                                                                        |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| mode                                   | 改为配置 `output.mode`。                                                                                      |
-| brief                                  | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。                               |
-| output.compressData                    | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['json']`。                               |
-| `mode: 'lite'` 或 `features: ['lite']` | 改为配置 `output.mode: 'normal'`，并将 `output.reportCodeType` 设置为 `noCode` 或 `noAssetsAndModuleSource`。 |
-| 无                                     | 新增 `output.options.jsonOptions.sections` 配置                                                               |
+| 原配置                                             | 新配置                                                                                                        |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| mode                                               | 改为配置 `output.mode`。                                                                                      |
+| brief                                              | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。                               |
+| output.compressData                                | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['json']`。                               |
+| `mode: 'lite'`                                     | 改为配置 `output.mode: 'normal'`，并将 `output.reportCodeType` 设置为 `noCode` 或 `noAssetsAndModuleSource`。 |
+| `features: { lite: true }` 或 `features: ['lite']` | 仍受支持。等价的 `output` 配置为 `output.mode: 'normal'`，并按上一行设置 `output.reportCodeType`。            |
+| 无                                                 | 新增 `output.options.jsonOptions.sections` 配置                                                               |
 
 ## 配置改动详情
 
@@ -31,9 +32,9 @@
 
 lite 模式的内部逻辑等同于 `output.reportCodeType` 为 `noCode` 或 `noAssetsAndModuleSource`，主要是为了解决大项目在打开报告时过慢或者构建时 OOM 的问题。
 
-`mode: 'lite'` 已在 Rsdoctor 2.x 中废弃，仅为向后兼容而保留。`output.reportCodeType` 能更清晰地表达需要包含的报告内容。
+`mode: 'lite'` 已在 Rsdoctor 2.x 中移除且会被忽略。请将其替换为 `output.mode: 'normal'`，并将 `output.reportCodeType` 设置为 `noCode` 或 `noAssetsAndModuleSource`。
 
-将 `mode: 'lite'` 或 `features: ['lite']` 替换为 `output.mode: 'normal'`，并将 `output.reportCodeType` 设置为 `noCode` 或 `noAssetsAndModuleSource`。
+`features: { lite: true }` 和 `features: ['lite']` 均仍受支持，无需迁移。等价的 `output.reportCodeType` 配置能更清晰地表达需要包含的报告内容。
 
 ### 新增 output.options.jsonOptions.sections
 
