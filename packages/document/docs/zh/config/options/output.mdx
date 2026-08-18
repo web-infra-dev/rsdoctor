@@ -141,6 +141,8 @@ interface BriefConfig {
 }
 
 interface JsonOptions {
+  /** JSON stats 文件名，默认为 rsdoctor-data.json */
+  fileName?: string;
   /** JSON 输出包含的模块配置 */
   sections?: JsonSectionOptions;
 }
@@ -206,11 +208,5 @@ Rsdoctor 报告输出目录，默认是构建产物输出目录。
 ## compressData
 
 :::warning
-V2 中即将废弃，请使用 `output.mode: 'brief'` 和 `output.options.type: 'json'` 代替。参考 [compressData 配置迁移](/config/options/options-v2#outputcompressdata)。
+已在 Rsdoctor 2.x 中移除且会被忽略。请使用 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['json']`。参考 [compressData 配置迁移](/config/options/options-v2#outputcompressdata)。
 :::
-
-- **类型：** `boolean`
-- **可选：** `true`
-- **默认值：** `true`
-
-compressData 用于配置是否将 `[outputDir]/.rsdoctor` 下的分析数据进行压缩处理。

@@ -19,7 +19,6 @@ function getDefaultOutput() {
     },
     options: undefined,
     reportDir: '',
-    compressData: undefined,
   };
 }
 function getDefaultSupports() {
@@ -121,7 +120,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   )
     ? {
         reportDir: userOutput?.reportDir,
-        compressData: userOutput?.compressData,
         mode: 'brief' as const,
         options: {
           type: ['json'] as Array<'json'>,
@@ -234,15 +232,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         typeof multiCompiler === 'object' ? multiCompiler.group : undefined,
     },
   };
-
-  // Add deprecation warning for compressData
-  if (output.compressData !== undefined) {
-    logger.info(
-      chalk.yellow(
-        `The 'compressData' configuration is deprecated in Rsdoctor 2.x.`,
-      ),
-    );
-  }
 
   return res;
 }

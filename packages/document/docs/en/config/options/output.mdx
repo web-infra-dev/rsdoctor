@@ -209,11 +209,5 @@ The output directory for Rsdoctor reports. By default, it is the build output di
 ## compressData
 
 :::warning
-Deprecated in V2, please use `output.mode: 'brief'` and `output.options.type: 'json'` instead. Refer to [compressData configuration migration](/config/options/options-v2#outputcompressdata).
+Removed in Rsdoctor 2.x and ignored. Use `output.mode: 'brief'` and set `output.options.type` to `['json']` instead. Refer to [compressData configuration migration](/config/options/options-v2#outputcompressdata).
 :::
-
-- **Type:** `boolean`
-- **Optional:** `true`
-- **Default:** `true`
-
-compressData is used to configure whether to compress the analysis data under `[outputDir]/.rsdoctor`.

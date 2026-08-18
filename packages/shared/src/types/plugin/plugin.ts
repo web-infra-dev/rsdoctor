@@ -110,14 +110,6 @@ interface OutputBaseConfig {
    * Control the Rsdoctor reporter codes records.
    */
   reportCodeType?: IReportCodeType | undefined | NewReportCodeType;
-
-  /**
-   * @deprecated
-   * Configure whether to compress data.
-   * @default false
-   *
-   */
-  compressData?: boolean;
 }
 
 export type IReportCodeType = {
