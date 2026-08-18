@@ -11,7 +11,7 @@ import { Badge } from '@theme';
 Rsdoctor report mode, default is `normal`.
 
 - **normal:** Generates a `.rsdoctor` folder in the build output directory, containing various data files and displaying code in the report page. The output directory can be configured via [reportDir](#reportdir).
-- **brief:** Generates an HTML report file in the `.rsdoctor` folder of the build output directory. All build analysis data is integrated and injected into this HTML file, which can be opened in a browser to view the report. Brief mode has more configuration options, see [mode: 'brief'](#mode-brief) for details.
+- **brief:** Generates `rsdoctor-report.html` in the report output directory. This directory defaults to the build output directory and can be configured via [reportDir](#reportdir). All build analysis data is injected into this standalone HTML file, which can be opened directly in a browser. See [mode: 'brief'](#mode-brief) for more options.
 
 :::tip
 `output.mode` does not support `lite`. Use [output.reportCodeType](#reportcodetype) to control whether source and asset code is included. The `features` lite configurations remain supported.
@@ -36,7 +36,7 @@ Brief mode is used to generate lightweight analysis reports, supporting both HTM
   - If configured with `['json']`, it will generate a JSON file named `rsdoctor-data.json`.
   - If configured with `['html']`, it will generate an HTML file. The filename can be configured via `htmlOptions.reportHtmlName`.
 - **`htmlOptions`**: HTML output related configuration
-  - **`reportHtmlName`**: HTML report filename, defaults to `report-rsdoctor.html`
+  - **`reportHtmlName`**: HTML report filename, defaults to `rsdoctor-report.html`
 - **`jsonOptions`**: JSON output related configuration
   - **`fileName`**: JSON stats filename, defaults to `rsdoctor-data.json`
   - **`sections`**: Module configuration for JSON output
@@ -137,7 +137,7 @@ interface BriefModeOptions {
 }
 
 interface BriefConfig {
-  /** HTML report filename, defaults to report-rsdoctor.html */
+  /** HTML report filename, defaults to rsdoctor-report.html */
   reportHtmlName?: string;
 }
 
