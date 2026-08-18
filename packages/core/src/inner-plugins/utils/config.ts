@@ -59,6 +59,22 @@ function normalizeGzip(value: unknown): Plugin.NormalizedGzipConfig {
     gzipLevel: normalizeGzipLevel(gzipLevel),
   };
 }
+
+export function isCompilerWatching(
+  compiler: Pick<Plugin.BaseCompiler, 'watchMode' | 'parentCompilation'>,
+): boolean {
+  return Boolean(
+    compiler.watchMode || compiler.parentCompilation?.compiler.watchMode,
+  );
+}
+
+export function getEffectiveGzipConfig(
+  compiler: Pick<Plugin.BaseCompiler, 'watchMode' | 'parentCompilation'>,
+  gzip: Plugin.NormalizedGzipConfig,
+): Plugin.NormalizedGzipConfig {
+  return isCompilerWatching(compiler) ? false : gzip;
+}
+
 function normalizeFeatures(features: any, mode: keyof typeof SDK.IMode) {
   if (Array.isArray(features)) {
     return {

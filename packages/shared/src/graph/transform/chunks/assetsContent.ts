@@ -15,7 +15,9 @@ export function assetsContents(
     if (content.length > 0 && asset.size === 0) {
       asset.size = Buffer.byteLength(content, 'utf8');
     }
-    if (COMPRESSIBLE_REGEX.test(asset.path) && gzip !== false) {
+    if (gzip === false) {
+      asset.gzipSize = undefined;
+    } else if (COMPRESSIBLE_REGEX.test(asset.path)) {
       asset.setGzipSize(content, gzip.gzipLevel);
     }
   });
