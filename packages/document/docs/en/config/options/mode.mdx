@@ -1,19 +1,19 @@
-import { Badge } from '@theme';
-
 # mode
 
 :::warning
 
-- Deprecated in V2, please use [output.mode](/config/options/output#mode) instead. Refer to [mode configuration migration](/config/options/options-v2#mode).
+The top-level `mode` option was removed in Rsdoctor 2.x. Use [output.mode](/config/options/output#mode) instead. See the [mode configuration migration guide](/config/options/options-v2#mode).
 
 :::
 
+The removed option accepted the following values:
+
 - **Type:** `"normal" | "brief" | "lite"`
-  - lite mode will be deprecated in V2, refer to [lite mode deprecation notice](/config/options/options-v2#lite)
+  - `lite` was removed and is ignored in Rsdoctor 2.x. Use [output.reportCodeType](/config/options/output#reportcodetype) instead.
 - **Optional:** `true`
 - **Default:** `normal`
 
-Select the Rsdoctor build report mode to use, which includes the following options:
+These values selected the following report behaviors:
 
 import ModeIntro from '@en/shared/mode-intro.md';
 

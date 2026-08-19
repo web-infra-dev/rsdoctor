@@ -17,10 +17,12 @@ const loaderModule: Plugin.LoaderDefinition<ProbeLoaderOptions, object> =
     const code = args[0];
     const _options = this.getOptions();
     const compilation = this._compilation as
-    { compiler?: { compilerPath?: string } } | undefined;
+      { compiler?: { compilerPath?: string } } | undefined;
     const sdk = getSDK(
       compilation?.compiler?.compilerPath || _options.builderName,
     );
+    const targetLoaderIndex =
+      _options.type === 'start' ? this.loaderIndex - 1 : this.loaderIndex + 1;
 
     const loaderData: SDK.ResourceLoaderData = {
       resource: {
@@ -35,7 +37,7 @@ const loaderModule: Plugin.LoaderDefinition<ProbeLoaderOptions, object> =
       loaders: [
         {
           loader: _options.loader,
-          loaderIndex: this.loaderIndex,
+          loaderIndex: targetLoaderIndex,
           path: _options.loader,
           input: _options.type === 'start' ? code : null,
           result: _options.type === 'end' ? code : null,

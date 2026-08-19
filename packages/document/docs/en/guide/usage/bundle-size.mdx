@@ -6,7 +6,7 @@ If you want to analyze the reference chain of a specific Module, you can check �
 
 ## ⭐️ Overview
 
-**Rsdoctor** provides the `Bundle Size` module, which is mainly used to analyze the information of the build artifacts of **Webpack** or **Rspack**, including the **size of resources**, **duplicate packages**, and **module reference relationships**:
+**Rsdoctor** provides the `Bundle Size` module for analyzing build artifacts, including **resource sizes**, **duplicate packages**, and **module relationships**:
 
 - **Bundle Overview**: Displays the total number of artifacts, the number and size of each file type, as well as duplicate packages and their reference chains, 👉🏻 [**Bundle Overview**](#-bundle-overview).
 - **Bundle Analysis (`Bundle Analysis`) Module**: Analyzes the size and code information of the build artifacts (**Assets**) and the included **Modules**. In this module, you can view the **actual code size of modules after packaging** in the Assets, the original code of modules, **packaged code segments**, and **module reference relationships**.
@@ -208,15 +208,6 @@ Rsdoctor supports the analyze of **[Concatenated Module](https://rspack.rs/misc/
   style={{ margin: 'auto' }}
 />
 
-- **For webpack projects**: Source maps must be enabled to accurately decompose and analyze concatenated modules, as shown in the following configuration.
-
-```js
-export default {
-  // ...
-  devtool: 'cheap-source-map', // or other devtool configuration
-};
-```
-
 - Rsdoctor supports the following SourceMap configurations for Concatenated Module analysis:
   - source-map
   - hidden-source-map
@@ -243,13 +234,13 @@ Click the module tag to view module details, as shown below:
 `supports.banner` option is only used for debugging, do not use it in production.
 :::
 
-Both Rspack and webpack support the [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin), which is a built-in plugin that allows you to add specific content at the top or bottom of the generated chunks.
+Rspack provides [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin), a built-in plugin for adding content to the beginning or end of generated chunks.
 
 The added code segment will affect the analysis capability of the bundle.
 
 Rsdoctor is compatible with the logic of adding code using the BannerPlugin, but it is not enabled by default because Rsdoctor needs to add tag code. The Rsdoctor BannerPlugin capability is enabled in the following two cases:
 
-1. The project uses the BannerPlugin in `rspack.config.(js|ts)` or `webpack.config.(js|ts)`.
+1. The project uses BannerPlugin in `rspack.config.(js|ts)`.
 
 2. Enable Rsdoctor BannerPlugin capability through Rsdoctor options by setting `supports.banner`:
 

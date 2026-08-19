@@ -12,7 +12,7 @@ allowBuilds:
   esbuild: true
 
 catalog:
-  '@rsbuild/core': ^2.1.10
+  '@rsbuild/core': ^2.1.13
   '@rsbuild/plugin-check-syntax': ^1.6.1
   '@rsbuild/plugin-less': ^1.6.4
   '@rsbuild/plugin-node-polyfill': ^1.4.6
@@ -22,11 +22,11 @@ catalog:
   '@rsbuild/plugin-type-check': ^1.6.0
   '@rslint/core': ^0.7.3
   '@rspack/cli': ^2.0.8
-  '@rspack/core': ^2.1.8
+  '@rspack/core': ^2.1.10
   '@rspack/lite-tapable': ^1.1.5
   '@rspack/plugin-react-refresh': ^2.0.2
   '@rspack/resolver': ^0.2.8
-  '@rstest/core': 0.11.6
+  '@rstest/core': 0.11.8
   '@types/connect': 3.4.38
   '@types/estree': 1.0.5
   '@types/fs-extra': ^11.0.4
@@ -77,6 +77,7 @@ overrides:
   es-object-atoms: 1.1.2
   get-intrinsic: 1.3.0
   minimatch: ^10.2.6
+  nanoid: 3.3.18
   node-forge: 1.4.0
   qs: 6.15.3
   rc-dialog: 9.1.0

@@ -82,6 +82,8 @@ chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
 
 控制 Rsdoctor 是否计算 Asset 和 Module 的 gzip 大小。该计算只影响 Rsdoctor 报告中的大小数据，不会修改或压缩构建产物。
 
+当编译器以 watch 模式运行时，Rsdoctor 会跳过 gzip 大小计算。如需分析生产 Bundle 的 gzip 大小，请运行一次性构建。
+
 gzip 大小计算默认开启，默认压缩级别为 `6`。将 `gzip` 配置为对象可以自定义 `gzipLevel`，其值必须是 `0` 到 `9` 之间的整数：
 
 ```ts

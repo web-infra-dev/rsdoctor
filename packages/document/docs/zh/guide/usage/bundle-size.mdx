@@ -6,7 +6,7 @@
 
 ## ⭐️ 功能概览
 
-**Rsdoctor** 提供了 `Bundle Size` 模块，该模块主要用于分析 **Webpack** 或 **Rspack** 构建产物的信息，包括当前编译产物的**资源大小**、**重复包**、**模块引用关系**等：
+**Rsdoctor** 提供 `Bundle Size` 模块，用于分析构建产物的**资源大小**、**重复包**和**模块引用关系**：
 
 - **产物概览**：展示产物总数、各类型文件数目、大小以及占比，以及重复包和重复包的引用链，👉🏻 [**产物概览**](#-%E4%BA%A7%E7%89%A9%E6%A6%82%E8%A7%88)
 - **产物分析（`Bundle Analysis`）模块**：分析构建产物资源（**Assets**）以及所包含的 **Modules** 的大小和代码信息。在该模块中，可以查看 Assets 中 **Module 打包后的实际代码大小**、模块的原始代码、**打包后的代码段**以及**模块引用关系**。
@@ -208,15 +208,6 @@ Rsdoctor 支持了对 **[Concatenated Module](https://rspack.rs/zh/misc/glossary
   style={{ margin: 'auto' }}
 />
 
-- **webpack 项目**：需要开启 sourcemap，才可以准确拆解并分析 concatenated module，配置如下。
-
-```js
-export default {
-  // ...
-  devtool: 'cheap-source-map', // 或其他 devtool 配置
-};
-```
-
 - Rsdoctor 对 Concatenated Module 分析支持如下 Sourcemap 配置：
   - source-map
   - hidden-source-map
@@ -243,13 +234,13 @@ export default {
 `supports.banner` 选项仅用于调试，请勿将其用于生产。
 :::
 
-由于 Rspack 和 webpack 都支持 [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin)，BannerPlugin 是一个可在生成的 chunk 顶部或尾部添加指定内容的内置插件。
+Rspack 提供内置的 [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin)，可在生成的 chunk 顶部或尾部添加指定内容。
 
 添加的代码段将会影响到对 Bundle 的解析能力。
 
 Rsdoctor 兼容了 BannerPlugin 这种添加代码的逻辑，但因为 Rsdoctor 需要添加标记代码，所以没有默认开启。以下两种情况会开启 Rsdoctor BannerPlugin 能力：
 
-1. 项目在 `rspack.config.(js|ts)` 或 `webpack.config.(js|ts)` 中使用了 BannerPlugin；
+1. 项目在 `rspack.config.(js|ts)` 中使用了 BannerPlugin；
 
 2. 通过 Rsdoctor options 配置 `supports.banner` 来开启：
 

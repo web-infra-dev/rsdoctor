@@ -366,23 +366,41 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
   }
 
   removeModule(module: SDK.ModuleInstance) {
+    const dependencies = this.getDependencies().filter(
+      (dep) =>
+        dep.module === module ||
+        dep.originDependency === module ||
+        dep.dependency === module,
+    );
+
+    for (const dep of dependencies) {
+      this.removeDependency(dep);
+    }
+
+    this._moduleGraphModules.delete(module);
     this._moduleIdMap.delete(module.id);
     this._moduleIdentifierMap.delete(module.identifier);
-
-    for (const dep of module.getDependencies()) {
-      this.removeDependency(dep);
-      this._dependenciesIdMap.delete(dep.id);
-    }
-
-    for (const imported of module.getImported()) {
-      imported.removeDependencyByModule(imported);
-    }
   }
 
   removeDependency(dep: SDK.DependencyInstance) {
-    dep.module.removeDependency(dep);
-    dep.dependency.removeImported(dep.module);
     this._dependenciesIdMap.delete(dep.id);
+    dep.module.removeDependency(dep);
+
+    const dependencyModules = new Set([dep.originDependency, dep.dependency]);
+
+    for (const dependencyModule of dependencyModules) {
+      const stillImported = dep.module
+        .getDependencies()
+        .some(
+          (item) =>
+            item.originDependency === dependencyModule ||
+            item.dependency === dependencyModule,
+        );
+
+      if (!stillImported) {
+        dependencyModule.removeImported(dep.module);
+      }
+    }
   }
 
   addModuleGraphModule(mgm: SDK.ModuleGraphModuleInstance) {

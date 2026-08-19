@@ -184,7 +184,7 @@ export class Module implements SDK.ModuleInstance {
   }
 
   removeDependency(dep: SDK.DependencyInstance): void {
-    this.dependencies = this.dependencies.filter((item) => item === dep);
+    this.dependencies = this.dependencies.filter((item) => item !== dep);
   }
 
   removeDependencyByModule(module: SDK.ModuleInstance): void {
@@ -205,7 +205,7 @@ export class Module implements SDK.ModuleInstance {
   }
 
   removeImported(module: SDK.ModuleInstance): void {
-    this.imported = this.imported.filter((item) => item === module);
+    this.imported = this.imported.filter((item) => item !== module);
   }
 
   setProgram(program: Program) {
