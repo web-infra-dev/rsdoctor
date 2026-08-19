@@ -73,6 +73,16 @@ const optimizeStepOptions: OptionDef[] = [
     type: 'integer',
     enum: [1, 2],
   },
+  {
+    name: '--limit',
+    description:
+      'Maximum detailed rows per bundle analysis section (default: 100, max: 1000).',
+    required: false,
+    type: 'integer',
+    default: 100,
+    minimum: 1,
+    maximum: 1000,
+  },
 ];
 
 const pageNumberOption: OptionDef = {
@@ -122,7 +132,8 @@ function createOptimizeCommand(
   return {
     ...command,
     options: optimizeStepOptions,
-    handler: (opts) => optimizeBundle(opts['step'] as string),
+    handler: (opts) =>
+      optimizeBundle(opts['step'] as string, opts.limit as string),
   };
 }
 
@@ -613,11 +624,22 @@ const toolInputSchema = {
       minimum: 1,
       description: 'Optional page number for response pagination.',
     },
+    pageNumber: {
+      type: 'integer',
+      minimum: 1,
+      description: 'Alias for page.',
+    },
     pageSize: {
       type: 'integer',
       minimum: 1,
       maximum: 1000,
       description: 'Optional page size for response pagination.',
+    },
+    limit: {
+      type: 'integer',
+      minimum: 1,
+      maximum: 1000,
+      description: 'Alias for pageSize and a bound for aggregate tool details.',
     },
   } as Record<string, unknown>,
   additionalProperties: true,

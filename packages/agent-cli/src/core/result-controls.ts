@@ -10,7 +10,7 @@ interface ParsedControls {
   paginateResult: boolean;
 }
 
-const CONTROL_KEYS = new Set(['filter', 'page', 'pageSize']);
+const CONTROL_KEYS = new Set(['filter', 'page', 'pageNumber', 'pageSize']);
 
 function parsePositiveInteger(
   value: unknown,
@@ -223,10 +223,15 @@ export function splitToolInputControls(
     };
   },
 ): ParsedControls {
+  const pageInput = input.page ?? input.pageNumber;
+  const pageSizeInput = input.pageSize ?? input.limit;
+  const pageSize = parsePositiveInteger(pageSizeInput, 'pageSize');
   const controls: ToolResultControls = {
     filterPaths: parseFilterPaths(input.filter),
-    page: parsePositiveInteger(input.page, 'page'),
-    pageSize: parsePositiveInteger(input.pageSize, 'pageSize'),
+    page:
+      parsePositiveInteger(pageInput, 'page') ??
+      (pageSize !== undefined ? 1 : undefined),
+    pageSize,
   };
 
   const passthroughInput: Record<string, unknown> = {};

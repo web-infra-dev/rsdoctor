@@ -34,6 +34,8 @@ export class InternalLoaderPlugin<
     require.resolve('@rsdoctor/core/proxy-loader');
 
   public apply(compiler: T) {
+    this.sdk.markArtifactSectionCollected?.('loader');
+
     time('InternalLoaderPlugin.apply');
     try {
       if (compiler.isChild()) {

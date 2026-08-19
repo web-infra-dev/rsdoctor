@@ -42,6 +42,28 @@ describe('tool catalog', () => {
     ]);
   });
 
+  it('passes bundle output limits into built commands', () => {
+    const bundleOptimize = getToolCatalog().find(
+      (tool) => tool.name === 'bundle_optimize',
+    );
+
+    expect(
+      bundleOptimize?.buildCommand({
+        dataFile: '/tmp/rsdoctor-data.json',
+        input: { limit: 2 },
+      }),
+    ).toEqual([
+      'rsdoctor-agent',
+      'bundle',
+      'optimize',
+      '--data-file',
+      '/tmp/rsdoctor-data.json',
+      '--compact',
+      '--limit',
+      '2',
+    ]);
+  });
+
   it('passes tool-specific input into built commands', () => {
     const catalog = getToolCatalog();
     const sideEffects = catalog.find(
@@ -63,5 +85,21 @@ describe('tool catalog', () => {
       '--category',
       'cjs',
     ]);
+  });
+
+  it('declares the pagination aliases accepted by catalog tools', () => {
+    const [tool] = getToolCatalog();
+
+    expect(tool.inputSchema.properties).toMatchObject({
+      limit: {
+        type: 'integer',
+        minimum: 1,
+        maximum: 1000,
+      },
+      pageNumber: {
+        type: 'integer',
+        minimum: 1,
+      },
+    });
   });
 });
