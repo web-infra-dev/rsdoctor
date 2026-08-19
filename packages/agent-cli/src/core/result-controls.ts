@@ -10,7 +10,20 @@ interface ParsedControls {
   paginateResult: boolean;
 }
 
-const CONTROL_KEYS = new Set(['filter', 'page', 'pageNumber', 'pageSize']);
+export const TOOL_INPUT_CONTROL_KEYS: ReadonlySet<string> = new Set([
+  'filter',
+  'limit',
+  'page',
+  'pageNumber',
+  'pageSize',
+]);
+
+const STRIPPED_TOOL_INPUT_CONTROL_KEYS = new Set([
+  'filter',
+  'page',
+  'pageNumber',
+  'pageSize',
+]);
 
 function parsePositiveInteger(
   value: unknown,
@@ -236,7 +249,7 @@ export function splitToolInputControls(
 
   const passthroughInput: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(input)) {
-    if (CONTROL_KEYS.has(key)) {
+    if (STRIPPED_TOOL_INPUT_CONTROL_KEYS.has(key)) {
       continue;
     }
     if (
