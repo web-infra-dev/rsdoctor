@@ -19,22 +19,25 @@ describe('probe loader', () => {
       reportLoaderStartOrEnd,
     } as unknown as SDK.RsdoctorBuilderSDKInstance);
 
-    probeLoader.call(
-      {
+    const createContext = (
+      type: ProbeLoaderOptions['type'],
+      loaderIndex: number,
+    ) =>
+      ({
         _module: { layer: 'modern' },
         callback,
         getOptions: () => ({
           builderName: 'web',
           loader: 'builtin:swc-loader',
           options: { jsc: true },
-          type: 'start',
+          type,
         }),
-        loaderIndex: 1,
+        loaderIndex,
         resourcePath: '/project/src/index.ts',
         resourceQuery: '?raw',
-      } as unknown as Plugin.LoaderContext<ProbeLoaderOptions>,
-      'source',
-    );
+      }) as unknown as Plugin.LoaderContext<ProbeLoaderOptions>;
+
+    probeLoader.call(createContext('start', 2), 'source');
 
     expect(reportLoaderStartOrEnd).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -57,5 +60,22 @@ describe('probe loader', () => {
       }),
     );
     expect(callback).toHaveBeenCalledWith(null, 'source');
+
+    reportLoaderStartOrEnd.mockClear();
+    callback.mockClear();
+    probeLoader.call(createContext('end', 0), 'result');
+
+    expect(reportLoaderStartOrEnd).toHaveBeenCalledWith(
+      expect.objectContaining({
+        loaders: [
+          expect.objectContaining({
+            input: null,
+            loaderIndex: 1,
+            result: 'result',
+          }),
+        ],
+      }),
+    );
+    expect(callback).toHaveBeenCalledWith(null, 'result');
   });
 });

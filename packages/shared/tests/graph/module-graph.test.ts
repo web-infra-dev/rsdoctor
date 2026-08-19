@@ -5,6 +5,7 @@ import {
   Chunks,
   Module,
   ModuleGraph,
+  ModuleGraphModule,
   ModuleGraphTrans,
   PackageGraph,
 } from '../../src/graph';
@@ -22,6 +23,21 @@ function arrayEq<T>(actual: T[], expected: T[]) {
 }
 
 describe('module graph', () => {
+  const addDependency = (
+    graph: ModuleGraph,
+    module: Module,
+    dependency: Module,
+    request: string,
+  ) => {
+    const dep = module.addDependency(
+      request,
+      dependency,
+      SDK.DependencyKind.ImportStatement,
+    )!;
+    graph.addDependency(dep);
+    return dep;
+  };
+
   it('from space data', async () => {
     expect(ModuleGraph.fromData({}).toData()).toStrictEqual({
       modules: [],
@@ -105,6 +121,141 @@ describe('module graph', () => {
     }
 
     expect(_moduleGraph.toCodeData()).toMatchSnapshot();
+  });
+
+  describe('remove module relationships', () => {
+    it('removes only the requested local relationship', () => {
+      const moduleA = new Module('a', '/a.js');
+      const moduleB = new Module('b', '/b.js');
+      const moduleC = new Module('c', '/c.js');
+      const moduleD = new Module('d', '/d.js');
+      const dependencyAB = moduleA.addDependency(
+        './b',
+        moduleB,
+        SDK.DependencyKind.ImportStatement,
+      )!;
+      const dependencyAC = moduleA.addDependency(
+        './c',
+        moduleC,
+        SDK.DependencyKind.ImportStatement,
+      )!;
+      moduleD.addDependency('./b', moduleB, SDK.DependencyKind.ImportStatement);
+
+      moduleA.removeDependency(dependencyAB);
+      moduleB.removeImported(moduleA);
+
+      expect(moduleA.getDependencies()).toEqual([dependencyAC]);
+      expect(moduleB.getImported()).toEqual([moduleD]);
+    });
+
+    it('keeps reverse imports until the last parallel dependency is removed', () => {
+      const graph = new ModuleGraph();
+      const moduleA = new Module('a', '/a.js');
+      const moduleB = new Module('b', '/b.js');
+      const dependencyAB1 = addDependency(graph, moduleA, moduleB, './b?one');
+      const dependencyAB2 = addDependency(graph, moduleA, moduleB, './b?two');
+
+      graph.removeDependency(dependencyAB1);
+
+      expect(graph.getDependencies()).toEqual([dependencyAB2]);
+      expect(moduleA.getDependencies()).toEqual([dependencyAB2]);
+      expect(moduleB.getImported()).toEqual([moduleA]);
+
+      graph.removeDependency(dependencyAB2);
+
+      expect(graph.getDependencies()).toEqual([]);
+      expect(moduleA.getDependencies()).toEqual([]);
+      expect(moduleB.getImported()).toEqual([]);
+    });
+
+    it('removes every incoming and outgoing relationship with a module', () => {
+      const graph = new ModuleGraph();
+      const moduleA = new Module('a', '/a.js');
+      const moduleB = new Module('b', '/b.js');
+      const moduleC = new Module('c', '/c.js');
+      const moduleD = new Module('d', '/d.js');
+      const moduleGraphModuleA = new ModuleGraphModule(moduleA, graph);
+      const moduleGraphModuleB = new ModuleGraphModule(moduleB, graph);
+      graph.addModuleGraphModule(moduleGraphModuleA);
+      graph.addModuleGraphModule(moduleGraphModuleB);
+      addDependency(graph, moduleA, moduleB, './b');
+      const dependencyAC = addDependency(graph, moduleA, moduleC, './c');
+      addDependency(graph, moduleB, moduleC, './c');
+      addDependency(graph, moduleD, moduleB, './b');
+
+      graph.removeModule(moduleB);
+
+      expect(graph.getModules()).toEqual([moduleA, moduleC, moduleD]);
+      expect(graph.getDependencies()).toEqual([dependencyAC]);
+      expect(moduleA.getDependencies()).toEqual([dependencyAC]);
+      expect(moduleC.getImported()).toEqual([moduleA]);
+      expect(moduleD.getDependencies()).toEqual([]);
+      expect(graph.getModuleGraphModules()).toEqual([moduleGraphModuleA]);
+      expect(graph.getModuleById(moduleB.id)).toBeUndefined();
+      expect(graph.getModuleByIdentifier(moduleB.identifier)).toBeUndefined();
+
+      const data = graph.toData();
+      const moduleIds = new Set(data.modules.map((module) => module.id));
+      const dependencyIds = new Set(data.dependencies.map((dep) => dep.id));
+
+      for (const module of data.modules) {
+        expect(module.dependencies.every((id) => dependencyIds.has(id))).toBe(
+          true,
+        );
+        expect(module.imported.every((id) => moduleIds.has(id))).toBe(true);
+      }
+      for (const dependency of data.dependencies) {
+        expect(moduleIds.has(dependency.module)).toBe(true);
+        expect(moduleIds.has(dependency.dependency)).toBe(true);
+        expect(moduleIds.has(dependency.originDependency)).toBe(true);
+      }
+      for (const moduleGraphModule of data.moduleGraphModules) {
+        expect(moduleIds.has(moduleGraphModule.module)).toBe(true);
+      }
+    });
+
+    it('cleans self references when removing a module', () => {
+      const graph = new ModuleGraph();
+      const moduleA = new Module('a', '/a.js');
+      const moduleB = new Module('b', '/b.js');
+      addDependency(graph, moduleA, moduleB, './b');
+      addDependency(graph, moduleB, moduleB, './b');
+
+      graph.removeModule(moduleB);
+
+      expect(graph.getDependencies()).toEqual([]);
+      expect(moduleA.getDependencies()).toEqual([]);
+      expect(moduleB.getDependencies()).toEqual([]);
+      expect(moduleB.getImported()).toEqual([]);
+    });
+
+    it('cleans imports from concatenation modules and their root modules', () => {
+      const graph = new ModuleGraph();
+      const moduleA = new Module('a', '/a.js');
+      const concatenationModule = new Module(
+        'concatenation',
+        '/root.js',
+        false,
+        SDK.ModuleKind.Concatenation,
+      );
+      const rootModule = new Module('root', '/root.js');
+      concatenationModule.addNormalModule(rootModule);
+      const dependency = addDependency(
+        graph,
+        moduleA,
+        concatenationModule,
+        './root',
+      );
+
+      expect(dependency.dependency).toBe(rootModule);
+      expect(concatenationModule.getImported()).toEqual([moduleA]);
+      expect(rootModule.getImported()).toEqual([moduleA]);
+
+      graph.removeDependency(dependency);
+
+      expect(concatenationModule.getImported()).toEqual([]);
+      expect(rootModule.getImported()).toEqual([]);
+    });
   });
 
   it('serializes modules with bundler identifiers', async () => {

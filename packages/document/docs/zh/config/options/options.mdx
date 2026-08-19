@@ -1,34 +1,14 @@
-import { Badge, Tab, Tabs } from '@theme';
-
 # 总览
 
 ## RsdoctorRspackPlugin 插件
 
 `RsdoctorRspackPlugin` 类由 `@rsdoctor/core` 导出，其配置类型为 [RsdoctorRspackPluginOptions](#rsdoctorrspackpluginoptions)。
 
-<Tabs>
-
-<Tab label="esm">
-
 ```ts
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
 ```
-
-</Tab>
-
-<Tab label="cjs">
-
-```js
-const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
-
-new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
-```
-
-</Tab>
-
-</Tabs>
 
 ## 配置项
 
@@ -43,7 +23,6 @@ new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
 - [server](./server.mdx) - **报告服务配置**：配置 Rsdoctor 报告服务，包括 `server.port` 和 `server.cors`
 - [supports](./supports.mdx) - **特性支持配置**：启用特定构建工具的兼容性支持，如 BannerPlugin 等
 - [brief](./brief.mdx) - **Brief 模式的配置**：控制简要模式报告的生成，包括 HTML 文件名和是否生成 JSON 数据文件
-- [mode](./mode.mdx) - **构建报告数据输出模式**：选择报告的输出模式，支持 normal（普通模式）和 brief（简要模式）
 - [multiCompiler](./multiCompiler.mdx) - **多编译器配置**：自动识别并隔离 Rspack MultiCompiler 和 Rsbuild environments 的分析报告
 
 ### RsdoctorRspackPluginOptions
@@ -59,14 +38,6 @@ interface RsdoctorRspackPluginOptions<
   /** Rsdoctor 功能开关 */
   features?:
     RsdoctorRspackPluginFeatures | Array<keyof RsdoctorRspackPluginFeatures>;
-
-  /**
-   * @deprecated 使用 `output.mode` 代替，如果使用 `lite` 模式，请使用 `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` 代替
-   * Rsdoctor 模式选项：
-   * - normal: 普通模式
-   * - brief: 简要模式，仅显示持续时间分析和构建产物分析结果，不显示任何代码部分
-   */
-  mode?: 'brief' | 'normal' | 'lite';
 
   disableClientServer?: boolean;
 

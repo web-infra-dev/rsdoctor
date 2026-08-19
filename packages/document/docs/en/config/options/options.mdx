@@ -1,34 +1,14 @@
-import { Badge, Tab, Tabs } from '@theme';
-
 # Overview
 
 ## RsdoctorRspackPlugin
 
 The `RsdoctorRspackPlugin` class is exported from `@rsdoctor/core`. Its configuration type is [RsdoctorRspackPluginOptions](#rsdoctorrspackpluginoptions).
 
-<Tabs>
-
-<Tab label="esm">
-
 ```ts
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
 ```
-
-</Tab>
-
-<Tab label="cjs">
-
-```js
-const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
-
-new RsdoctorRspackPlugin({/** RsdoctorRspackPluginOptions */});
-```
-
-</Tab>
-
-</Tabs>
 
 ## Options
 
@@ -43,7 +23,6 @@ This `Options` object is the configuration for [RsdoctorRspackPlugin](#rsdoctorr
 - [server](./server.mdx) - **Report Server Configuration**: Configure the Rsdoctor report server, including `server.port` and `server.cors`.
 - [supports](./supports.mdx) - **Feature Support Configuration**: Enable compatibility support for specific build tools, such as BannerPlugin, etc.
 - [brief](./brief.mdx) - **Brief Mode Configuration**: Control the generation of brief mode reports, including HTML filename and whether to generate JSON data files.
-- [mode](./mode.mdx) - **Build Report Data Output Mode**: Select the output mode for reports, supporting normal (normal mode) and brief (brief mode).
 - [multiCompiler](./multiCompiler.mdx) - **Multi-compiler Configuration**: Automatically detect and isolate reports for Rspack MultiCompiler and Rsbuild environments.
 
 ### RsdoctorRspackPluginOptions
@@ -60,14 +39,6 @@ interface RsdoctorRspackPluginOptions<
   /** Rsdoctor feature toggles */
   features?:
     RsdoctorRspackPluginFeatures | Array<keyof RsdoctorRspackPluginFeatures>;
-
-  /**
-   * @deprecated Use `output.mode` instead. If using `lite` mode, please use `output.reportCodeType: 'noCode' or 'noAssetsAndModuleSource'` instead
-   * Rsdoctor mode options:
-   * - normal: Normal mode
-   * - brief: Brief mode, only displays duration analysis and build artifact analysis results, does not display any code parts
-   */
-  mode?: 'brief' | 'normal' | 'lite';
 
   disableClientServer?: boolean;
 

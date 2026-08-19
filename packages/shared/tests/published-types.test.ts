@@ -120,7 +120,20 @@ describe('@rsdoctor/shared published declarations', () => {
       installSharedDependencies(consumerNodeModules);
       fs.writeFileSync(
         path.join(consumerRoot, 'index.ts'),
-        "import type { SDK } from '@rsdoctor/shared/types';\n\nconst moduleData = {} as SDK.ModuleData;\nvoid moduleData;\n",
+        [
+          "import type { Plugin, SDK } from '@rsdoctor/shared/types';",
+          '',
+          'const moduleData = {} as SDK.ModuleData;',
+          "const options: Plugin.RsdoctorRspackPluginOptions<[]> = { output: { mode: 'brief' } };",
+          'const removedMode: Plugin.RsdoctorRspackPluginOptions<[]> = {',
+          '  // @ts-expect-error The top-level mode option was removed in Rsdoctor 2.x.',
+          "  mode: 'brief',",
+          '};',
+          'void moduleData;',
+          'void options;',
+          'void removedMode;',
+          '',
+        ].join('\n'),
       );
       fs.writeFileSync(
         path.join(consumerRoot, 'package.json'),
