@@ -51,8 +51,6 @@ describe('normalizeUserConfig', () => {
       treeShaking: false,
     });
     expect(result.output.reportCodeType).toBeDefined();
-    // @ts-ignore
-    expect(result.output.compressData).toBe(undefined);
     expect(result.output.mode).toBe('normal');
     expect(result.multiCompiler).toEqual({
       enabled: true,
@@ -70,17 +68,6 @@ describe('normalizeUserConfig', () => {
     expect(
       normalizeUserConfig({ multiCompiler: { group: 'ssr' } }).multiCompiler,
     ).toEqual({ enabled: true, group: 'ssr' });
-  });
-
-  it('should handle compressData configuration correctly', () => {
-    const result = normalizeUserConfig({
-      output: {
-        compressData: true,
-      },
-    });
-
-    // compressData is deprecated and not included in final output
-    expect(result.output).not.toHaveProperty('compressData');
   });
 
   it('should respect custom features array', () => {
@@ -259,38 +246,6 @@ describe('normalizeUserConfig', () => {
       expect(
         consoleOutput.some((output) =>
           output.includes(removedModeWarning('output.mode')),
-        ),
-      ).toBe(false);
-    });
-
-    it('should show warning when using deprecated compressData configuration', () => {
-      normalizeUserConfig({
-        output: {
-          compressData: false,
-        },
-      });
-
-      expect(
-        consoleOutput.some((output) =>
-          output.includes(
-            "The 'compressData' configuration is deprecated in Rsdoctor 2.x.",
-          ),
-        ),
-      ).toBe(true);
-    });
-
-    it('should not show compressData warning when compressData is undefined', () => {
-      normalizeUserConfig({
-        output: {
-          compressData: undefined,
-        },
-      });
-
-      expect(
-        consoleOutput.some((output) =>
-          output.includes(
-            "The 'compressData' configuration is deprecated in Rsdoctor 2.x.",
-          ),
         ),
       ).toBe(false);
     });
