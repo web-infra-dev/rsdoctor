@@ -12,7 +12,7 @@ The `features` attribute is used for analysis feature toggles, and the specific 
 - **plugins**: Plugin calls and time consumption analysis, enabled by default.
 - **bundle**: Build artifact analysis, enabled by default.
 - **resolver**: Resolver analysis, disabled by default.
-- **lite**: Enables lite mode. Both `features: { lite: true }` and `features: ['lite']` are supported. When [`output.reportCodeType`](/config/options/output#reportcodetype) is not explicitly set, lite mode is equivalent to `noAssetsAndModuleSource`: it omits module source and asset code while retaining bundled module code. Lite mode is disabled by default.
+- **lite**: Enables lite mode. Both `features: { lite: true }` and `features: ['lite']` are supported. When enabled, lite mode forces the report code type to `noAssetsAndModuleSource`, overriding other [`output.reportCodeType`](/config/options/output#reportcodetype) values. The only exception is an explicitly configured `noCode` value, which takes precedence. `noAssetsAndModuleSource` omits module source and asset code while retaining bundled module code. Lite mode is disabled by default.
 
 Therefore, **the default configuration enables Bundle analysis capabilities, Loader and Plugin build-time analysis**. Resolver analysis is not enabled by default. To enable it, explicitly configure `resolver` in `features`.
 
