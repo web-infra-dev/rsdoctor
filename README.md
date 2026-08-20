@@ -13,11 +13,11 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-Rsdoctor 2.x is a build analyzer tailored for projects built with [Rspack 2.x](https://rspack.rs/).
+Rsdoctor is a build analyzer tailored for projects built with [Rspack](https://rspack.rs/).
 
 Rsdoctor is committed to being a one-stop, intelligent build analyzer that makes the build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
 
-webpack projects should continue using Rsdoctor 1.x or migrate to Rspack before upgrading to Rsdoctor 2.x. See the [Rsdoctor 2.0 migration guide](https://rsdoctor.rs/guide/start/migration-v2) for details.
+For webpack projects, continue using Rsdoctor 1.x or migrate to Rspack. See the [migration guide](https://rsdoctor.rs/guide/start/migration-v2) for details.
 
 https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
