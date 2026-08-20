@@ -149,7 +149,11 @@ export default defineConfig({
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
-    exclude: ['**/zh/shared/**', '**/en/shared/**'],
+    exclude: [
+      '**/zh/shared/**',
+      '**/en/shared/**',
+      '**/quick-start-shared.mdx',
+    ],
   },
   globalStyles: path.join(__dirname, 'theme', 'index.css'),
   themeConfig: {

@@ -18,7 +18,7 @@ pnpm remove @rsdoctor/rspack-plugin
 pnpm add -D @rsdoctor/core
 ```
 
-Rsdoctor 2.0 的包仅提供 ESM 产物。更新包路径时，请同时将 CommonJS `require()` 调用改为 ESM 导入：
+Rsdoctor 2.0 的包仅提供 ESM 产物。请在现有 ESM 导入中更新包路径：
 
 ```ts title="迁移前"
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
@@ -27,6 +27,8 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 ```ts title="迁移后"
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 ```
+
+如果 1.x 配置使用 CommonJS `require()`，请改为上面的 ESM 导入方式。
 
 `@rspack/core` 仍是 `@rsdoctor/core` 的可选 peer dependency，最低支持版本为 2.0。基于 Rspack 的构建工具通常已经提供该依赖；直接使用 Rspack 的项目需要安装 `@rspack/core`。
 

@@ -18,7 +18,7 @@ pnpm remove @rsdoctor/rspack-plugin
 pnpm add -D @rsdoctor/core
 ```
 
-Rsdoctor 2.0 packages are ESM-only. Replace CommonJS `require()` calls with ESM imports while updating the package path:
+Rsdoctor 2.0 packages are ESM-only. Update the package path in the existing ESM import:
 
 ```ts title="Before"
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
@@ -27,6 +27,8 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
 ```ts title="After"
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 ```
+
+If a 1.x configuration uses CommonJS `require()`, replace it with the ESM import shown above.
 
 `@rspack/core` remains an optional peer dependency of `@rsdoctor/core`, with a minimum supported version of 2.0. Your Rspack-based build tool normally provides it. Install `@rspack/core` in projects that use Rspack directly.
 
