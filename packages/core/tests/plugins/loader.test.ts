@@ -2,8 +2,11 @@ import { Loader } from '@rsdoctor/shared/common-browser';
 import { rspack } from '@rspack/core';
 import { describe, it, expect } from '@rstest/core';
 import path from 'path';
-import { ProxyLoaderInternalOptions } from '@/types';
+import fs from 'node:fs';
+import os from 'node:os';
+import type { ProxyLoaderInternalOptions, ProxyLoaderOptions } from '@/types';
 import { interceptLoader } from '@/inner-plugins/utils';
+import { InternalLoaderPlugin } from '@/inner-plugins/plugins/loader';
 
 describe('test src/utils/loader.ts', () => {
   describe('interceptLoader()', () => {
@@ -341,6 +344,55 @@ describe('test src/utils/loader.ts', () => {
           },
         },
       ]);
+    });
+
+    it('rotates the persistent-cache marker between Rsdoctor sessions', () => {
+      const outputDir = fs.mkdtempSync(
+        path.join(os.tmpdir(), 'rsdoctor-loader-cache-'),
+      );
+      try {
+        const persistentCompiler = rspack({
+          context: exampleWebpackPath,
+          cache: {
+            type: 'persistent',
+            storage: {
+              type: 'filesystem',
+              directory: path.join(outputDir, 'rspack-cache'),
+            },
+          },
+        });
+        const createPlugin = () =>
+          new InternalLoaderPlugin({
+            options: {
+              loaderInterceptorOptions: { skipLoaders: [] },
+            },
+            sdk: {
+              outputDir,
+              root: exampleWebpackPath,
+              server: { origin: 'http://localhost:5100' },
+            },
+          } as any);
+        const rule = [{ test: /\.js$/, loader: babelLoader }];
+        const getCacheMarkerPath = (plugin: InternalLoaderPlugin<any>) => {
+          const [result] = plugin.getInterceptRules(
+            persistentCompiler,
+            rule,
+          ) as Array<{ options: ProxyLoaderOptions }>;
+          return result.options[Loader.LoaderInternalPropertyName]
+            .cacheMarkerPath!;
+        };
+
+        const firstPlugin = createPlugin();
+        const markerPath = getCacheMarkerPath(firstPlugin);
+        const firstMarker = fs.readFileSync(markerPath, 'utf8');
+        expect(getCacheMarkerPath(firstPlugin)).toBe(markerPath);
+        expect(fs.readFileSync(markerPath, 'utf8')).toBe(firstMarker);
+
+        expect(getCacheMarkerPath(createPlugin())).toBe(markerPath);
+        expect(fs.readFileSync(markerPath, 'utf8')).not.toBe(firstMarker);
+      } finally {
+        fs.rmSync(outputDir, { recursive: true, force: true });
+      }
     });
 
     it('builtin:swc-loader test', () => {

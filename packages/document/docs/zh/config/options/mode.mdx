@@ -1,19 +1,19 @@
-import { Badge } from '@theme';
-
 # mode
 
 :::warning
 
-- V2 中即将废弃，请使用 [output.mode](/config/options/output#mode) 代替。参考 [mode 配置迁移](/config/options/options-v2#mode)。
+旧版顶层 `mode` 配置已在 Rsdoctor 2.x 中移除且会被忽略，请改用 [output.mode](/config/options/output#mode)。参阅 [mode 配置迁移](/config/options/options-v2#mode)。
 
 :::
 
+已移除的配置曾支持以下值：
+
 - **类型：** `"normal" | "brief" | "lite"`
-  - lite 模式即将在 V2 废弃，参考[lite 模式废弃说明](/config/options/options-v2#lite)
+  - `lite` 已在 Rsdoctor 2.x 中移除且会被忽略，请改用 [output.reportCodeType](/config/options/output#reportcodetype)。
 - **可选：** `true`
 - **默认值：** `normal`
 
-选择使用的 Rsdoctor 构建报告模式，有以下几种：
+这些值对应以下报告行为：
 
 import ModeIntro from '@zh/shared/mode-intro.md';
 

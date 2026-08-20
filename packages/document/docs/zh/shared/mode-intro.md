@@ -1,6 +1,6 @@
 - **normal 模式：** 在构建产物目录中生成一个 `.rsdoctor` 文件夹，其中包含各种数据文件，并在报告页面中展示代码。输出目录可以通过 [reportDir](/config/options/output#reportdir) 进行配置。
 
-- **brief 模式：** 在构建产物目录的 `.rsdoctor` 文件夹中生成一个 HTML 报告文件，所有构建分析数据会整合注入到这个 HTML 文件中，可以通过浏览器打开该 HTML 文件查看报告。brief 模式还有更多配置项，详细信息请参阅：[brief](/config/options/brief).
+- **brief 模式：** 在报告输出目录中生成 `rsdoctor-report.html`。该目录默认为构建产物目录，也可通过 [reportDir](/config/options/output#reportdir) 配置。所有构建分析数据都会注入这个独立 HTML 文件，可以直接在浏览器中打开。可用配置项请参阅 [mode: 'brief'](/config/options/output#mode-brief)。
 
 - **lite 模式：** 基于普通模式，不展示源码和产物代码，仅显示打包后的代码信息。
-  - lite 模式即将在 V2 废弃，参考 [lite 模式废弃说明](/config/options/options-v2#lite)。
+  - 顶层 `mode: 'lite'` 配置已在 Rsdoctor 2.x 中移除且会被忽略。`features` lite 配置仍受支持。新配置请使用 [output.reportCodeType](/config/options/output#reportcodetype)。

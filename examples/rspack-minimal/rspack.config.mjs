@@ -92,7 +92,9 @@ const rspackConfig = {
     new RsdoctorRspackPlugin({
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
       features: ['bundle', 'plugins', 'loader'],
-      mode: 'brief',
+      output: {
+        mode: 'brief',
+      },
       linter: {
         rules: {
           'ecma-version-check': [

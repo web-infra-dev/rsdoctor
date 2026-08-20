@@ -12,6 +12,7 @@ import {
   type RspackNativeGraphState,
 } from './rspack';
 import { handleAfterEmitAssets } from './sourcemapTool';
+import { getEffectiveGzipConfig } from '../utils/config';
 
 /**
  * Represents a mapping item from a source map.
@@ -121,7 +122,7 @@ async function doneHandler(
    * Optionally parses bundle if enabled in options.
    */
   const shouldParseBundle = _this.options.supports.parseBundle !== false;
-  const gzip = _this.options.supports.gzip;
+  const gzip = getEffectiveGzipConfig(compiler, _this.options.supports.gzip);
   await getModulesInfos(
     compiler,
     _this.modulesGraph,

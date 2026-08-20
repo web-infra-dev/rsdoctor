@@ -4,11 +4,11 @@ Brief mode generates a self-contained report that can be stored as a CI artifact
 
 ## Enable brief mode
 
-Configure [`output.mode: 'brief'`](/config/options/output#mode) and include HTML in [`output.options.type`](/config/options/output#options). After the build, Rsdoctor writes `[outputDir]/rsdoctor-report.html`, which can be opened directly in a browser.
+Configure [`output.mode: 'brief'`](/config/options/output#mode) and include HTML in [`output.options.type`](/config/options/output#options). After the build, Rsdoctor writes `rsdoctor-report.html` to the report output directory, which defaults to `[outputDir]` and can be changed with [`output.reportDir`](/config/options/output#reportdir). Open the file directly in a browser to view the report.
 
 - Brief reports omit code data to keep the standalone file manageable.
-- Use `output.reportDir` to change the output directory.
-- Use `output.options.htmlOptions.reportHtmlName` to change the filename.
+- Use [`output.options.htmlOptions.reportHtmlName`](/config/options/output#mode-brief) to change the filename.
+- For more options, see [mode: 'brief'](/config/options/output#mode-brief).
 
 ```js title="rspack.config.mjs"
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';

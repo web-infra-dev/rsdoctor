@@ -8,6 +8,9 @@ import type { ProxyLoaderOptions } from '../../types';
 import { time, timeEnd } from '@/logger';
 import { safeCloneDeep } from '../utils/plugin-common';
 import { Loader } from '@rsdoctor/shared/common-browser';
+import { randomUUID } from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const require = createRequire(import.meta.url);
 
@@ -24,6 +27,8 @@ export class InternalLoaderPlugin<
   T extends Plugin.BaseCompiler,
 > extends InternalBasePlugin<T> {
   public readonly name = 'loader';
+
+  private cacheMarkerPath?: string;
 
   public readonly internalLoaderPath =
     require.resolve('@rsdoctor/core/proxy-loader');
@@ -185,10 +190,12 @@ export class InternalLoaderPlugin<
     compiler: T,
     rules: Plugin.BuildRuleSetRules,
   ): Plugin.BuildRuleSetRule[] {
+    const cacheMarkerPath = this.getCacheMarkerPath(compiler);
     return interceptLoader(
       rules as Plugin.BuildRuleSetRule[],
       this.internalLoaderPath,
       {
+        cacheMarkerPath,
         cwd: compiler.context || process.cwd(),
         host: this.sdk.server.origin,
         skipLoaders: this.options.loaderInterceptorOptions.skipLoaders, // not implement
@@ -196,5 +203,26 @@ export class InternalLoaderPlugin<
       compiler.resolverFactory.get('loader', compiler.options.resolveLoader),
       this.sdk.root,
     );
+  }
+
+  private getCacheMarkerPath(compiler: T) {
+    if (
+      typeof compiler.options.cache !== 'object' ||
+      compiler.options.cache.type !== 'persistent'
+    ) {
+      return undefined;
+    }
+    if (this.cacheMarkerPath) return this.cacheMarkerPath;
+
+    const markerPath = path.join(this.sdk.outputDir, '.loader-cache');
+    fs.mkdirSync(path.dirname(markerPath), { recursive: true });
+
+    const previous = fs.existsSync(markerPath)
+      ? fs.readFileSync(markerPath, 'utf8')
+      : '';
+    const prefix = previous.length < 4096 ? previous : '';
+    fs.writeFileSync(markerPath, `${prefix}${randomUUID()}\n`);
+    this.cacheMarkerPath = markerPath;
+    return markerPath;
   }
 }

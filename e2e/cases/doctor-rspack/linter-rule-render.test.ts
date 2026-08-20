@@ -40,7 +40,9 @@ async function rspackCompile(compile: typeof compileByRspack) {
     plugins: [
       // @ts-ignore
       createRsdoctorPlugin({
-        mode: 'brief',
+        output: {
+          mode: 'brief',
+        },
         linter: {
           rules: {
             'ecma-version-check': [

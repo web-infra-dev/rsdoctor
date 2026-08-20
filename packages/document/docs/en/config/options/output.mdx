@@ -11,10 +11,10 @@ import { Badge } from '@theme';
 Rsdoctor report mode, default is `normal`.
 
 - **normal:** Generates a `.rsdoctor` folder in the build output directory, containing various data files and displaying code in the report page. The output directory can be configured via [reportDir](#reportdir).
-- **brief:** Generates `rsdoctor-report.html` in the build output directory. All build analysis data is embedded in this standalone file, which can be opened directly in a browser. See [mode: 'brief'](#mode-brief) for additional options.
+- **brief:** Generates `rsdoctor-report.html` in the report output directory. This directory defaults to the build output directory and can be configured via [reportDir](#reportdir). All build analysis data is embedded in this standalone HTML file, which can be opened directly in a browser. See [mode: 'brief'](#mode-brief) for more options.
 
 :::tip
-`output.mode` does not accept `lite`. The legacy `mode: 'lite'` option is deprecated in Rsdoctor 2.x and retained for backward compatibility. Use [`output.reportCodeType`](#reportcodetype) instead.
+`output.mode` does not support `lite`. Use [output.reportCodeType](#reportcodetype) to control whether source and asset code is included. The `features` lite configurations remain supported.
 :::
 
 ## options
@@ -208,11 +208,5 @@ The output directory for Rsdoctor reports. By default, it is the build output di
 ## compressData
 
 :::warning
-The legacy `output.compressData` option is deprecated in Rsdoctor 2.x and retained for backward compatibility. Use `output.mode: 'brief'` and `output.options.type: ['json']` instead. See [compressData configuration migration](/config/options/options-v2#outputcompressdata).
+Removed in Rsdoctor 2.x and ignored. Use `output.mode: 'brief'` and set `output.options.type` to `['json']` instead. Refer to [compressData configuration migration](/config/options/options-v2#outputcompressdata).
 :::
-
-- **Type:** `boolean`
-- **Optional:** `true`
-- **Default:** `true`
-
-compressData is used to configure whether to compress the analysis data under `[outputDir]/.rsdoctor`.

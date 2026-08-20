@@ -96,12 +96,12 @@ export class LoaderAPI extends BaseAPI {
     SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileInputAndOutput>
   > {
     const { req } = this.ctx;
-    const { file, loader, loaderIndex } =
+    const { file, loader, loaderIndex, isPitch } =
       req.body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetLoaderFileInputAndOutput>;
 
     return this.dataLoader.loadAPI(
       SDK.ServerAPI.API.GetLoaderFileInputAndOutput,
-      { file, loader, loaderIndex },
+      { file, loader, loaderIndex, isPitch },
     );
   }
 }

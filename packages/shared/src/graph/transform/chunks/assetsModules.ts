@@ -77,6 +77,12 @@ export async function getAssetsModulesData(
     gzipLevel: opts.gzipLevel,
   };
 
+  if (gzipOptions.gzip === false) {
+    for (const module of moduleGraph.getModules()) {
+      module.setSize({ gzipSize: 0 });
+    }
+  }
+
   // Parse assets with sourcemap using sourcemap data
   if (sourceMapSets.size > 0) {
     time(`Start Parse bundle by sourcemap.`);

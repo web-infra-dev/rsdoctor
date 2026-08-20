@@ -4,11 +4,11 @@ Brief 模式会生成一份自包含报告，适合作为 CI 产物保存或上�
 
 ## 开启 Brief 模式
 
-配置 [`output.mode: 'brief'`](/config/options/output#mode)，并在 [`output.options.type`](/config/options/output#options) 中包含 HTML。构建完成后，Rsdoctor 会生成 `[outputDir]/rsdoctor-report.html`，可以直接在浏览器中打开。
+配置 [`output.mode: 'brief'`](/config/options/output#mode)，并在 [`output.options.type`](/config/options/output#options) 中包含 HTML。构建完成后，Rsdoctor 会在报告输出目录中生成 `rsdoctor-report.html`；该目录默认为 `[outputDir]`，也可通过 [`output.reportDir`](/config/options/output#reportdir) 修改。直接在浏览器中打开该文件即可查看报告。
 
 - Brief 报告不包含代码数据，以控制独立 HTML 的体积。
-- 使用 `output.reportDir` 修改输出目录。
-- 使用 `output.options.htmlOptions.reportHtmlName` 修改文件名。
+- 使用 [`output.options.htmlOptions.reportHtmlName`](/config/options/output#mode-brief) 修改文件名。
+- 更多配置请参阅 [mode: 'brief'](/config/options/output#mode-brief)。
 
 ```js title="rspack.config.mjs"
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';

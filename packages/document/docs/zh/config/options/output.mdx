@@ -11,10 +11,10 @@ import { Badge } from '@theme';
 Rsdoctor 报告模式，默认是 `normal`。
 
 - **normal:** 在构建产物目录中生成一个 `.rsdoctor` 文件夹，其中包含各种数据文件，并在报告页面中展示代码。输出目录可以通过 [reportDir](#reportdir) 进行配置。
-- **brief:** 在构建输出目录中生成 `rsdoctor-report.html`。所有构建分析数据都会嵌入这份独立文件，可以直接在浏览器中打开。更多配置请参阅 [mode: 'brief'](#mode-brief)。
+- **brief:** 在报告输出目录中生成 `rsdoctor-report.html`。该目录默认为构建产物目录，也可通过 [reportDir](#reportdir) 配置。所有构建分析数据都会注入这个独立 HTML 文件，可以直接在浏览器中打开。更多配置请参阅 [mode: 'brief'](#mode-brief)。
 
 :::tip
-`output.mode` 不支持 `lite`。旧版 `mode: 'lite'` 配置已在 Rsdoctor 2.x 中废弃，仅为向后兼容而保留。请改用 [`output.reportCodeType`](#reportcodetype)。
+`output.mode` 不支持 `lite`。请使用 [output.reportCodeType](#reportcodetype) 控制是否包含源码和产物代码。`features` lite 配置仍受支持。
 :::
 
 ## options
@@ -141,6 +141,8 @@ interface BriefConfig {
 }
 
 interface JsonOptions {
+  /** JSON stats 文件名，默认为 rsdoctor-data.json */
+  fileName?: string;
   /** JSON 输出包含的模块配置 */
   sections?: JsonSectionOptions;
 }
@@ -205,11 +207,5 @@ Rsdoctor 报告输出目录，默认是构建产物输出目录。
 ## compressData
 
 :::warning
-旧版 `output.compressData` 配置已在 Rsdoctor 2.x 中废弃，仅为向后兼容而保留。请改用 `output.mode: 'brief'` 和 `output.options.type: ['json']`。参阅 [compressData 配置迁移](/config/options/options-v2#outputcompressdata)。
+已在 Rsdoctor 2.x 中移除且会被忽略。请使用 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['json']`。参考 [compressData 配置迁移](/config/options/options-v2#outputcompressdata)。
 :::
-
-- **类型：** `boolean`
-- **可选：** `true`
-- **默认值：** `true`
-
-compressData 用于配置是否将 `[outputDir]/.rsdoctor` 下的分析数据进行压缩处理。
