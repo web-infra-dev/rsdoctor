@@ -16,7 +16,7 @@ Playground 是 Rsdoctor 提供的在线分析工具，支持上传构建分析�
 
 > 具体配置可查看 [output 配置](/config/options/output)。
 
-```js title="rspack.config.mjs 或 webpack.config.mjs"
+```js title="rspack.config.mjs"
 export default {
   plugins: [
     new RsdoctorRspackPlugin({
@@ -47,9 +47,13 @@ Brief 模式与 Normal 模式的区别：
 
 :::
 
-### 2. Rspack Stats 数据
+### 2. Rspack stats 数据
 
 支持上传 Rspack 或 webpack 的 `stats.json` 文件，自动生成分析报告。
+
+:::tip
+本节的 webpack 支持仅指将已有 stats 文件导入 Playground。Rsdoctor 2.x 不再提供 webpack 构建插件。
+:::
 
 #### 配置要求
 
