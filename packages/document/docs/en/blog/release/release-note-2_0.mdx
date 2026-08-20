@@ -16,7 +16,7 @@ Highlights in this release include:
 - **One report for every compiler**: The regular Rspack plugin automatically handles multi-compiler builds, Rsbuild environments, and child compilers while keeping their data isolated.
 - **Rspack-native by default**: Rsdoctor 2.0 requires Rspack 2 and uses the Rsdoctor native plugin built into Rspack for module and chunk graph collection.
 - **A smaller package surface**: Core, graph, SDK, utilities, and the Rspack plugin are consolidated into `@rsdoctor/core`, reducing the repository from 13 packages to 6.
-- **Lighter installation and runtime**: Direct runtime dependency declarations are reduced from 88 to 39, alongside further prebundling and dependency cleanup.
+- **Lighter installation and runtime**: Direct runtime dependency declarations are reduced from 88 to 39. In our clean production-install benchmark, the third-party closure contains 76% fewer package instances and uses 77% less pnpm virtual-store space.
 - **Faster rebuild analysis**: Watch mode preserves loader caching, skips gzip-size calculations, and writes report data with faster compression.
 
 > Rsdoctor 2.0 requires Node.js 22.18 or later and Rspack 2.0 or later. webpack projects should remain on Rsdoctor 1.x or migrate to Rspack before upgrading.
@@ -139,7 +139,18 @@ The difference between the current `v1.x` and `main` branches is measurable:
 
 The dependency counts include direct `dependencies` and `optionalDependencies` declared by `packages/*/package.json`. They describe the repository package graph rather than the complete transitive installation of an individual application.
 
-The report transport has also moved from Socket.IO to server-side `ws` and the browser's native WebSocket API. Common dependencies are prebundled where that reduces installation overhead, and unused runtime dependencies have been removed.
+### Third-party production install footprint
+
+The smaller graph also reduces the third-party packages installed with Rsdoctor:
+
+| Metric                              | Rsdoctor 1.x | Rsdoctor 2.0 | Reduction |
+| ----------------------------------- | -----------: | -----------: | --------: |
+| Third-party package instances       |          402 |           98 |     75.6% |
+| pnpm virtual-store disk usage (MiB) |        564.8 |        130.3 |     76.9% |
+
+Rsdoctor 2.0 no longer installs the standalone `@rsdoctor/components` runtime tree. Large UI dependencies such as Ant Design, ECharts, and Monaco Editor are used to build the client, while the published `@rsdoctor/client` package ships the compiled static assets. `@rsdoctor/core` also prebundles `@rsbuild/plugin-check-syntax`, `filesize`, and `json-stream-stringify`; that change alone reduced the package's third-party production footprint from 10.61 MB to 7.78 MB, or 26.6%. The report transport has also moved from Socket.IO to server-side `ws` and the browser's native WebSocket API, and unused runtime dependencies have been removed.
+
+> The install comparison was measured on macOS x64 on August 20, 2026, using `v1.x` at `a3ac3fe2` and `main` at `b35ea8cb`. Each branch used its declared pnpm version, a clean filtered production install, disabled lifecycle scripts, and disabled peer auto-install. The 1.x target was `@rsdoctor/rspack-plugin...`; the 2.0 target was `@rsdoctor/core...`. Disk usage covers `node_modules/.pnpm` only, excluding Rsdoctor's own package files. Results can vary by operating system, package manager, and filesystem.
 
 For most Rspack projects, the installation and import path now change from `@rsdoctor/rspack-plugin` to `@rsdoctor/core`:
 
@@ -155,9 +166,13 @@ Rsdoctor 2.0 packages are ESM-only. `@rsdoctor/cli` continues to provide the `rs
 
 ## Faster rebuilds in watch mode
 
-Rsdoctor is often enabled throughout local development, so rebuild analysis should avoid repeating startup work. In 2.0, the plugin [reuses its SDK session](https://github.com/web-infra-dev/rsdoctor/pull/1901), opens the report only once, [preserves loader caching](https://github.com/web-infra-dev/rsdoctor/pull/1906) while instrumentation is active, and prevents loader events from accumulating across rebuilds.
+Rsdoctor is often enabled throughout local development, so the 2.0 rebuild path focuses on removing repeated work from its critical path. The plugin reuses the same SDK session instead of bootstrapping the analysis service for every compilation, and it starts the report server and opens the report page only once. Loader instrumentation now preserves the bundler's cache, allowing unchanged modules to reuse previous loader results, while loader events are reset between compilations instead of accumulating and being serialized again on every update.
 
-Watch-mode compilers also [skip gzip-size calculations](https://github.com/web-infra-dev/rsdoctor/pull/1908) and use [faster compression for report data](https://github.com/web-infra-dev/rsdoctor/pull/1913). Non-watch builds retain the full gzip analysis path. Together, these changes reduce repeated work during watch and HMR without requiring additional configuration.
+Report generation is the other major optimization path. Watch-mode compilers skip module and asset gzip-size calculations that would otherwise run after every update, and large report shards use a faster compression level to reduce synchronous write time. These optimizations apply automatically to watch and HMR builds. One-shot and production builds retain the complete gzip analysis path and the default compression level, preserving the accuracy and compact report output expected from final build artifacts.
+
+Overall, these changes reduced median HMR time in the Kiali benchmark from 6.81 s to 3.64 s, an improvement of about 47%. Report write time decreased from 3.57–3.58 s to 2.03–2.06 s, saving about 1.54 s per update, while loader events and the loader report shard were reduced by about 72% and 73%, respectively. In a separate repeated-build benchmark, analysis time decreased from 250.9 ms to 14.2 ms, an improvement of 94.3%.
+
+> Data source: repeated HMR runs in the Kiali frontend fixture with the Rsdoctor client server disabled, plus a repeated-build benchmark using 100 generated modules, one warm-up, and the median of five measured runs. The figures compare the corresponding 2.0 optimization baselines rather than a single end-to-end 1.x-to-2.0 benchmark and should not be added together. Faster watch-mode compression makes the dominant compressed shards about 26% larger; non-watch builds retain gzip-size analysis and the default compression level.
 
 ## Refined bundle analysis
 

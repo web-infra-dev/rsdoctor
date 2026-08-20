@@ -16,7 +16,7 @@ Rsdoctor 2.0 进一步聚焦 Rspack，并让构建报告成为可以被开发者
 - **一个报告覆盖所有 Compiler**：常规 Rspack 插件可以自动处理 MultiCompiler、Rsbuild environments 和 Child Compiler，同时保持每个 Compiler 的数据相互隔离。
 - **默认使用 Rspack 原生链路**：Rsdoctor 2.0 要求使用 Rspack 2，并通过 Rspack 内置的 Rsdoctor Native Plugin 采集 Module Graph 和 Chunk Graph。
 - **更精简的包结构**：Core、Graph、SDK、Utils 和 Rspack Plugin 统一收敛到 `@rsdoctor/core`，仓库 package 从 13 个减少到 6 个。
-- **更轻量的安装与运行时**：直接 Runtime 依赖声明从 88 项减少到 39 项，同时继续通过预打包和依赖清理降低安装开销。
+- **更轻量的安装与运行时**：直接 Runtime 依赖声明从 88 项减少到 39 项。在全新生产依赖安装基准中，第三方包实例减少 76%，pnpm 虚拟存储占用降低 77%。
 - **更快的增量构建分析**：Watch 模式会保留 Loader 缓存、跳过 gzip 体积计算，并以更快的压缩级别写入报告数据。
 
 > Rsdoctor 2.0 要求使用 Node.js 22.18 及以上版本和 Rspack 2.0 及以上版本。webpack 项目请继续使用 Rsdoctor 1.x，或先迁移到 Rspack 再升级。
@@ -139,7 +139,18 @@ Rsdoctor 2.0 围绕三类职责重新整理包结构：
 
 依赖数量统计包含 `packages/*/package.json` 中直接声明的 `dependencies` 与 `optionalDependencies`，用于描述仓库的 package 关系，而不是单个应用安装后的完整传递依赖数量。
 
-报告传输也从 Socket.IO 迁移到服务端 `ws` 与浏览器原生 WebSocket。常用依赖会在有助于降低安装开销时进行预打包，不再使用的 Runtime 依赖则已移除。
+### 第三方生产依赖安装体积 {#third-party-production-install-footprint}
+
+更精简的依赖关系也直接减少了随 Rsdoctor 安装的第三方包：
+
+| 指标                     | Rsdoctor 1.x | Rsdoctor 2.0 |  降幅 |
+| ------------------------ | -----------: | -----------: | ----: |
+| 第三方包实例             |          402 |           98 | 75.6% |
+| pnpm 虚拟存储占用（MiB） |        564.8 |        130.3 | 76.9% |
+
+Rsdoctor 2.0 不再安装独立的 `@rsdoctor/components` Runtime 依赖树。Ant Design、ECharts、Monaco Editor 等大型 UI 依赖仅用于构建 Client，发布的 `@rsdoctor/client` 直接提供编译后的静态资源。`@rsdoctor/core` 还会预打包 `@rsbuild/plugin-check-syntax`、`filesize` 和 `json-stream-stringify`；仅这一项优化就将该包的第三方生产依赖体积从 10.61 MB 降至 7.78 MB，减少 26.6%。此外，报告传输从 Socket.IO 迁移到服务端 `ws` 与浏览器原生 WebSocket，不再使用的 Runtime 依赖也已移除。
+
+> 安装数据于 2026 年 8 月 20 日在 macOS x64 上测得，分别使用 `v1.x` 的 `a3ac3fe2` 与 `main` 的 `b35ea8cb`，并使用各分支声明的 pnpm 版本。两组测试均执行全新的筛选式生产依赖安装，关闭生命周期脚本和 peer 自动安装；1.x 的目标为 `@rsdoctor/rspack-plugin...`，2.0 的目标为 `@rsdoctor/core...`。磁盘占用仅统计 `node_modules/.pnpm`，不包含 Rsdoctor 自身的 package 文件。结果可能因操作系统、包管理器和文件系统而异。
 
 对于大多数 Rspack 项目，安装和导入路径需要从 `@rsdoctor/rspack-plugin` 更新为 `@rsdoctor/core`：
 
@@ -155,9 +166,13 @@ Rsdoctor 2.0 的 package 仅提供 ESM 产物。`@rsdoctor/cli` 继续提供 `rs
 
 ## Watch 模式下更快的增量构建 {#faster-rebuilds-in-watch-mode}
 
-Rsdoctor 通常会在本地开发期间持续启用，因此增量分析应尽量避免重复启动开销。在 2.0 中，插件会[复用 SDK 会话](https://github.com/web-infra-dev/rsdoctor/pull/1901)、只打开一次报告页面，在插桩期间[保留 Loader 缓存](https://github.com/web-infra-dev/rsdoctor/pull/1906)，并避免 Loader 事件在多次构建后重复累积。
+Rsdoctor 通常会在本地开发期间持续启用，因此 2.0 的增量分析重点是移除关键路径上的重复工作。插件会复用同一个 SDK 会话，不再为每次编译重复启动分析服务；报告服务与报告页面也只会启动和打开一次。Loader 插桩现在会保留 Bundler 缓存，让未变化的 Module 复用之前的 Loader 结果；Loader 事件则会在每次编译之间重置，避免持续累积并在每次更新时被重复序列化。
 
-Watch 模式下的 Compiler 还会[跳过 gzip 体积计算](https://github.com/web-infra-dev/rsdoctor/pull/1908)，并[使用更快的压缩级别写入报告数据](https://github.com/web-infra-dev/rsdoctor/pull/1913)；非 Watch 构建仍保留完整的 gzip 分析链路。这些优化无需额外配置，即可减少 Watch 与 HMR 期间的重复工作。
+报告生成是另一条主要优化路径。Watch 模式下的 Compiler 会跳过每次更新后原本需要执行的 Module 与 Asset gzip 体积计算，并使用更快的压缩级别写入大型报告分片，从而减少同步写入耗时。这些优化会自动应用于 Watch 与 HMR 构建；一次性构建和生产构建仍保留完整的 gzip 分析链路与默认压缩级别，确保最终构建报告的分析精度和压缩体积不受影响。
+
+总体来看，这些优化将 Kiali 基准中的 HMR 中位数从 6.81 s 降至 3.64 s，提升约 47%；报告写入耗时从 3.57–3.58 s 降至 2.03–2.06 s，每次更新节省约 1.54 s；Loader 事件和 Loader 报告分片则分别减少约 72% 和 73%。在另一组重复构建基准中，分析耗时从 250.9 ms 降至 14.2 ms，提升 94.3%。
+
+> 数据来源：关闭 Rsdoctor Client Server 后，在 Kiali 前端项目中连续执行 HMR；重复构建基准使用 100 个生成的 Module，预热 1 次后取 5 次测试的中位数。这些数据比较的是 2.0 各项优化对应的基线，而不是一次完整的 1.x 与 2.0 端到端对比，因此不能直接相加。更快的 Watch 压缩会使主要压缩分片增大约 26%；非 Watch 构建仍保留 gzip 体积分析和默认压缩级别。
 
 ## 更清晰的产物分析体验 {#refined-bundle-analysis}
 
