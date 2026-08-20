@@ -17,8 +17,38 @@ Rsdoctor 2.0 进一步聚焦 Rspack，并让构建报告成为可以被开发者
 - **默认使用 Rspack 原生链路**：Rsdoctor 2.0 要求使用 Rspack 2，并通过 Rspack 内置的 Rsdoctor Native Plugin 采集 Module Graph 和 Chunk Graph。
 - **更精简的包结构**：Core、Graph、SDK、Utils 和 Rspack Plugin 统一收敛到 `@rsdoctor/core`，仓库 package 从 13 个减少到 6 个。
 - **更轻量的安装与运行时**：直接 Runtime 依赖声明从 88 项减少到 39 项，同时继续通过预打包和依赖清理降低安装开销。
+- **更快的增量构建分析**：Watch 模式会保留 Loader 缓存、跳过 gzip 体积计算，并以更快的压缩级别写入报告数据。
 
 > Rsdoctor 2.0 要求使用 Node.js 22.18 及以上版本和 Rspack 2.0 及以上版本。webpack 项目请继续使用 Rsdoctor 1.x，或先迁移到 Rspack 再升级。
+
+## 不兼容更新 {#breaking-changes}
+
+Rsdoctor 2.0 主动收敛了兼容范围和包结构。升级前需要处理以下变更：
+
+- **运行环境与构建工具**：要求使用 Node.js 22.18 及以上版本和 Rspack 2.0 及以上版本，不再支持 Rspack 1.x 和 webpack。webpack 项目应继续使用长期维护的 Rsdoctor 1.x，或先迁移到 Rspack。
+- **包结构**：使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`。独立的 `@rsdoctor/webpack-plugin`、`@rsdoctor/sdk`、`@rsdoctor/graph`、`@rsdoctor/types`、`@rsdoctor/utils` 和 `@rsdoctor/components` 包已移除，`@rsdoctor/cli` 则继续保持独立安装。
+- **模块格式**：Rsdoctor package 仅提供 ESM 产物，需要将 CommonJS `require()` 调用改为 ESM Import。
+- **分析链路**：Rspack Native Plugin 现在始终启用，并移除了基于 Stats 的回退链路。
+- **AI 工作流**：`@rsdoctor/mcp-server` 已移除。请迁移到直接读取报告数据的 `@rsdoctor/agent-cli`；Agent CLI 不兼容 MCP 协议，也不是旧 API 的直接替代品。
+
+### 配置项 {#configuration-options}
+
+下表区分了已经移除、仍处于废弃状态以及继续受支持的配置项：
+
+| Rsdoctor 1.x 配置项                                                 | 2.0 状态               | 替代方式                                                                                                                         |
+| ------------------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `experiments.enableNativePlugin`                                    | 已移除                 | 删除该配置；Rspack Native Plugin 现在始终启用。                                                                                  |
+| `mode: 'normal'`                                                    | 已移除且会被忽略       | 使用 `output.mode: 'normal'`。                                                                                                   |
+| `mode: 'brief'`                                                     | 已移除且会被忽略       | 使用 `output.mode: 'brief'`。                                                                                                    |
+| `mode: 'lite'`                                                      | 已移除且会被忽略       | 使用 `output.mode: 'normal'`，并将 `output.reportCodeType` 设置为 `'noCode'` 或 `'noAssetsAndModuleSource'`。                    |
+| `brief`                                                             | 已废弃，仅为兼容而保留 | 使用 `output.mode: 'brief'`、`output.options.type: ['html']`，并通过 `output.options.htmlOptions` 配置 `reportHtmlName` 等选项。 |
+| `brief.writeDataJson` 或 `output.options.htmlOptions.writeDataJson` | 已移除                 | 使用 `output.options.type: ['html', 'json']` 同时输出两种格式。                                                                  |
+| `output.compressData`                                               | 已移除且会被忽略       | 使用 `output.mode: 'brief'` 和 `output.options.type: ['json']`。                                                                 |
+| `features: { lite: true }` 或 `features: ['lite']`                  | 仍受支持，未废弃       | 无需迁移；也可以使用 `output.reportCodeType` 直接表达等价的输出行为。                                                            |
+| `port`                                                              | 已废弃，仅为兼容而保留 | 使用 `server.port`。                                                                                                             |
+| `supports.generateTileGraph`                                        | 已废弃，不再需要配置   | 删除该配置；Treemap 数据默认生成。                                                                                               |
+
+完整示例请参考[配置迁移说明](/config/options/options-v2)。
 
 ## 面向 Agent 的构建分析 {#build-analysis-for-agents}
 
@@ -123,6 +153,12 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 Rsdoctor 2.0 的 package 仅提供 ESM 产物。`@rsdoctor/cli` 继续提供 `rsdoctor` 命令，并保持独立安装。
 
+## Watch 模式下更快的增量构建 {#faster-rebuilds-in-watch-mode}
+
+Rsdoctor 通常会在本地开发期间持续启用，因此增量分析应尽量避免重复启动开销。在 2.0 中，插件会[复用 SDK 会话](https://github.com/web-infra-dev/rsdoctor/pull/1901)、只打开一次报告页面，在插桩期间[保留 Loader 缓存](https://github.com/web-infra-dev/rsdoctor/pull/1906)，并避免 Loader 事件在多次构建后重复累积。
+
+Watch 模式下的 Compiler 还会[跳过 gzip 体积计算](https://github.com/web-infra-dev/rsdoctor/pull/1908)，并[使用更快的压缩级别写入报告数据](https://github.com/web-infra-dev/rsdoctor/pull/1913)；非 Watch 构建仍保留完整的 gzip 分析链路。这些优化无需额外配置，即可减少 Watch 与 HMR 期间的重复工作。
+
 ## 更清晰的产物分析体验 {#refined-bundle-analysis}
 
 在 1.x 分析模型的基础上，Rsdoctor 2.0 继续优化 Bundle Size 页面。Treemap 的布局、导航、响应式行为和体积展示得到调整，让大型 Asset 更容易查看；Bundle 分析也会在以 Module 为主的视图中过滤无关的资源类型，帮助用户更快定位 JavaScript 相关结果。
@@ -131,15 +167,7 @@ Rsdoctor 2.0 的 package 仅提供 ESM 产物。`@rsdoctor/cli` 继续提供 `rs
 
 ## 升级到 2.0 {#upgrade-to-20}
 
-Rsdoctor 2.0 包含以下不兼容更新：
-
-- 要求使用 Node.js 22.18 及以上版本和 Rspack 2.0 及以上版本。
-- 不再支持 webpack，并移除了 `@rsdoctor/webpack-plugin`。
-- 使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`。
-- Package 仅提供 ESM 产物，需要将 CommonJS `require()` 调用改为 ESM Import。
-- 删除 `experiments.enableNativePlugin`，原生分析链路现在始终启用。
-- 使用 `@rsdoctor/agent-cli` 替换基于 `@rsdoctor/mcp-server` 的工作流。
-- 将已废弃的 `mode`、`brief`、`lite` 和 `output.compressData` 配置迁移到 2.0 的 Output 结构。
+Rspack 项目可以先替换 1.x 的插件包：
 
 ```bash
 pnpm remove @rsdoctor/rspack-plugin
@@ -148,7 +176,7 @@ pnpm add -D @rsdoctor/core
 
 使用 CLI 时，请确保 `@rsdoctor/cli` 与 `@rsdoctor/core` 的版本一致。
 
-> [查看完整的 Rsdoctor 2.0 迁移指南](/guide/start/migration-v2)
+> [查看完整的 Rsdoctor 2.0 迁移指南](/guide/start/migration-v2)，了解包结构、ESM、AI 工作流和配置项的迁移步骤。
 
 ---
 
