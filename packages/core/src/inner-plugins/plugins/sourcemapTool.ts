@@ -280,7 +280,7 @@ export async function handleAfterEmitAssets(
             });
           }
 
-          if (sourceMapAsset) {
+          if (sourceMapAsset?.source) {
             map = JSON.parse(sourceMapAsset.source.source().toString());
             const outputPath = compilation.options.output?.path;
             if (outputPath && typeof outputPath === 'string') {
