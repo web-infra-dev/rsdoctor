@@ -237,6 +237,15 @@ export const normalizeReportType = (
       ),
     '`output.reportCodeType` must be "noModuleSource", "noAssetsAndModuleSource", or "noCode".',
   );
+  if (
+    mode === SDK.IMode[SDK.IMode.brief] &&
+    reportCodeType !== undefined &&
+    reportCodeType !== 'noCode'
+  ) {
+    logger.warn(
+      '`output.reportCodeType` is ignored when `output.mode` is "brief"; brief mode always uses "noCode".',
+    );
+  }
   if (reportCodeType === 'noCode') {
     return SDK.ToDataType.NoCode;
   }

@@ -2,17 +2,23 @@ import { describe, expect, it, beforeEach, afterEach } from '@rstest/core';
 import { normalizeUserConfig } from '../../../src/inner-plugins/utils/config';
 import { SDK } from '@rsdoctor/shared/types';
 
-// Mock console.log to capture warning messages
+// Mock console output to capture log messages
 const originalConsoleLog = console.log;
+const originalConsoleWarn = console.warn;
 let consoleOutput: string[] = [];
+let consoleWarningOutput: string[] = [];
 const originalEnvCI = process.env.CI;
 const originalEnvRSTEST = process.env.RSTEST;
 const originalEnvRSDOCTOROUTPUT = process.env.RSDOCTOR_OUTPUT;
 
 beforeEach(() => {
   consoleOutput = [];
+  consoleWarningOutput = [];
   console.log = (...args: any[]) => {
     consoleOutput.push(args.join(' '));
+  };
+  console.warn = (...args: any[]) => {
+    consoleWarningOutput.push(args.join(' '));
   };
   delete process.env.CI;
   delete process.env.RSTEST;
@@ -21,6 +27,7 @@ beforeEach(() => {
 
 afterEach(() => {
   console.log = originalConsoleLog;
+  console.warn = originalConsoleWarn;
   if (originalEnvCI !== undefined) {
     process.env.CI = originalEnvCI;
   } else {
@@ -438,6 +445,27 @@ describe('normalizeUserConfig', () => {
       });
       expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
     });
+
+    it.each(['noModuleSource', 'noAssetsAndModuleSource'] as const)(
+      'should warn and use NoCode for %s in brief mode',
+      (reportCodeType) => {
+        const result = normalizeUserConfig({
+          output: {
+            mode: 'brief',
+            reportCodeType,
+          },
+        } as never);
+
+        expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
+        expect(
+          consoleWarningOutput.some((output) =>
+            output.includes(
+              '`output.reportCodeType` is ignored when `output.mode` is "brief"',
+            ),
+          ),
+        ).toBe(true);
+      },
+    );
 
     it('should handle lite mode via features', () => {
       const result = normalizeUserConfig({
