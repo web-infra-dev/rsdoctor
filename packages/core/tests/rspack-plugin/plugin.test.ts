@@ -2,9 +2,11 @@ import { getSDK } from '@/inner-plugins/utils/sdk';
 import { RsdoctorRspackPlugin } from '@/rspack-plugin';
 import { RsdoctorPrimarySDK, RsdoctorSDK } from '@/sdk';
 import { RsdoctorServer } from '@/sdk/server';
+import type { Plugin } from '@rsdoctor/shared/types';
 import { rspack } from '@rspack/core';
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
 import path from 'node:path';
+import { getWriteStoreOptions } from '@/rspack-plugin/writeStore';
 
 afterEach(async () => {
   rs.restoreAllMocks();
@@ -14,6 +16,49 @@ afterEach(async () => {
 });
 
 describe('RsdoctorRspackPlugin', () => {
+  it('uses faster report compression only in watch mode', () => {
+    expect(
+      getWriteStoreOptions({
+        watchMode: true,
+        parentCompilation: undefined,
+      }),
+    ).toEqual({ compressionLevel: 1 });
+    expect(
+      getWriteStoreOptions({
+        watchMode: false,
+        parentCompilation: undefined,
+      }),
+    ).toBeUndefined();
+    expect(
+      getWriteStoreOptions({
+        watchMode: false,
+        parentCompilation: {
+          compiler: { watchMode: true },
+        } as Plugin.BaseCompilation,
+      }),
+    ).toEqual({ compressionLevel: 1 });
+  });
+
+  it('uses faster report compression when writing watch reports', async () => {
+    const sdk = new RsdoctorSDK({
+      name: 'watch-write',
+      root: process.cwd(),
+      config: { noServer: true },
+    });
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      features: [],
+      sdkInstance: sdk,
+    });
+    const compiler = rspack({ plugins: [plugin] });
+    compiler.watchMode = true;
+    const writeStore = rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
+
+    await plugin.done(compiler);
+
+    expect(writeStore).toHaveBeenCalledWith({ compressionLevel: 1 });
+  });
+
   it('registers SDKs by compiler name', async () => {
     const createPlugin = () =>
       new RsdoctorRspackPlugin({

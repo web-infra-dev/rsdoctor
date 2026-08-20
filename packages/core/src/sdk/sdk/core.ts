@@ -122,7 +122,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
   /** Upload analysis data pieces */
   protected async writePieces(
     storeData: Common.PlainObject,
-    _options?: SDK.WriteStoreOptionsType,
+    options?: SDK.WriteStoreOptionsType,
   ) {
     const { outputDir } = this;
     const manifest = path.resolve(outputDir, Constants.RsdoctorOutputManifest);
@@ -131,6 +131,7 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     await File.fse.ensureDir(outputDir);
 
     const urlsPromiseList: (Promise<DataWithUrl> | DataWithUrl)[] = [];
+    const compressionLevel = options?.compressionLevel;
 
     for (const key of Object.keys(storeData)) {
       const data = storeData[key];
@@ -164,12 +165,21 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
             outputDir,
             key,
             fileOffset,
+            compressionLevel,
           );
           fileOffset += result.files.length;
           urlsPromiseList.push(result);
         }
       } else {
-        urlsPromiseList.push(this.writeToFolder(jsonStr, outputDir, key));
+        urlsPromiseList.push(
+          this.writeToFolder(
+            jsonStr,
+            outputDir,
+            key,
+            undefined,
+            compressionLevel,
+          ),
+        );
       }
     }
 
@@ -228,8 +238,11 @@ export abstract class SDKCore<T extends RsdoctorSDKOptions>
     dir: string,
     key: string,
     index?: number,
+    compressionLevel?: number,
   ): Promise<DataWithUrl> {
-    const sharding = new File.FileSharding(Algorithm.compressText(jsonStr));
+    const sharding = new File.FileSharding(
+      Algorithm.compressText(jsonStr, compressionLevel),
+    );
     const folder = path.resolve(dir, key);
     const writer = sharding.writeStringToFolder(folder, '', index);
     return writer.then((item) => {
