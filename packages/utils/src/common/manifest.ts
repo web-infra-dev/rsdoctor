@@ -1,7 +1,6 @@
 import { Manifest } from '@rsdoctor/types';
 import { Buffer } from 'buffer';
-import { Readable } from 'stream';
-import { pipeline } from 'stream/promises';
+import { pipeline, Readable, Writable } from 'stream';
 import { StringDecoder } from 'string_decoder';
 import { createInflate } from 'zlib';
 import { isRemoteUrl } from './url';
@@ -46,15 +45,22 @@ export async function fetchShardingData(
   const decoder = new StringDecoder('utf8');
   const jsonParts: string[] = [];
 
-  await pipeline(
-    Readable.from(decodeBase64Shards(shardingFiles, fetchImplement)),
-    createInflate(),
-    async (source) => {
-      for await (const chunk of source) {
-        jsonParts.push(decoder.write(Buffer.from(chunk)));
-      }
-    },
-  );
+  await new Promise<void>((resolve, reject) => {
+    pipeline(
+      Readable.from(decodeBase64Shards(shardingFiles, fetchImplement)),
+      createInflate(),
+      new Writable({
+        write(chunk, _encoding, callback) {
+          jsonParts.push(decoder.write(Buffer.from(chunk)));
+          callback();
+        },
+      }),
+      (error) => {
+        if (error) reject(error);
+        else resolve();
+      },
+    );
+  });
 
   const finalPart = decoder.end();
   if (finalPart) jsonParts.push(finalPart);
