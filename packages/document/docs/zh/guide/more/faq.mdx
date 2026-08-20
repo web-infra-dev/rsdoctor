@@ -33,7 +33,7 @@ Rsdoctor 提供的 Loader 耗时是**预估耗时**。无法统计到准确耗�
 
 ### 方法二
 
-这个问题多是因为构建过程中存储了源码信息，超过了内存限制，可以在 `output.reportCodeType` 中配置 `noCode` 或 `noAssetsAndModuleSource` 字段来缓解此问题。[output.reportCodeType](/config/options/output#reportcodetype)
+这个问题通常是因为构建过程中存储源码信息，导致内存超限。请将 `output.reportCodeType` 设置为 `noCode` 或 `noAssetsAndModuleSource`，以降低内存占用。详情请参阅 [output.reportCodeType](/config/options/output#reportcodetype)。
 
 ## 产物分析中，Module 都没有 Bundled/Parsed Size 怎么办？
 

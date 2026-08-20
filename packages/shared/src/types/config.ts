@@ -2,16 +2,6 @@ export interface BriefConfig {
   reportHtmlName?: string;
 }
 
-/**
- * @deprecated This type is deprecated and will be removed in a future version.
- * Use {@link NewReportCodeType} instead for better type safety and consistency.
- */
-export type IReportCodeType = {
-  noModuleSource?: boolean;
-  noAssetsAndModuleSource?: boolean;
-  noCode?: boolean;
-};
-
 export interface NormalModeOptions {
   // Normal mode doesn't have type field, it's only available in brief mode
   type?: never;
@@ -54,7 +44,7 @@ interface OutputBaseConfig {
   /**
    * Control the Rsdoctor reporter codes records.
    */
-  reportCodeType?: IReportCodeType | undefined | NewReportCodeType;
+  reportCodeType?: NewReportCodeType;
 }
 
 // Brief Mode Type
@@ -79,10 +69,8 @@ interface NormalModeConfig extends Omit<
 
 // Conditional type for reportCodeType based on mode
 type ReportCodeTypeByMode<T extends 'brief' | 'normal'> = T extends 'brief'
-  ? undefined | 'noCode' | { noCode?: boolean }
-  : T extends 'normal'
-    ? IReportCodeType | undefined | NewReportCodeType
-    : IReportCodeType | undefined | NewReportCodeType;
+  ? 'noCode' | undefined
+  : NewReportCodeType | undefined;
 
 // Conditional output type based on mode
 export type IOutput<T extends 'brief' | 'normal'> = T extends 'brief'

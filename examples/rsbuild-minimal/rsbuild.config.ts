@@ -23,9 +23,7 @@ export default defineConfig({
           //   options: {
           //     type: ['json', 'html'],
           //   },
-          //   reportCodeType: {
-          //     noCode: true,
-          //   },
+          //   reportCodeType: 'noCode',
           // },
           linter: {
             level: 'Error',
