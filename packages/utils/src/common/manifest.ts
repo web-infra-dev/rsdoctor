@@ -1,6 +1,7 @@
 import { Manifest } from '@rsdoctor/types';
 import { Buffer } from 'buffer';
 import { Readable } from 'stream';
+import { pipeline } from 'stream/promises';
 import { StringDecoder } from 'string_decoder';
 import { createInflate } from 'zlib';
 import { isRemoteUrl } from './url';
@@ -42,15 +43,19 @@ export async function fetchShardingData(
 ) {
   if (shardingFiles.length === 0) return [];
 
-  const inflater = Readable.from(
-    decodeBase64Shards(shardingFiles, fetchImplement),
-  ).pipe(createInflate());
   const decoder = new StringDecoder('utf8');
   const jsonParts: string[] = [];
 
-  for await (const chunk of inflater) {
-    jsonParts.push(decoder.write(Buffer.from(chunk)));
-  }
+  await pipeline(
+    Readable.from(decodeBase64Shards(shardingFiles, fetchImplement)),
+    createInflate(),
+    async (source) => {
+      for await (const chunk of source) {
+        jsonParts.push(decoder.write(Buffer.from(chunk)));
+      }
+    },
+  );
+
   const finalPart = decoder.end();
   if (finalPart) jsonParts.push(finalPart);
 

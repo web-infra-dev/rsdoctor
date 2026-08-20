@@ -71,4 +71,14 @@ describe('test src/common/manifest.ts', () => {
       Manifest.fetchShardingData(shards, async (value) => value),
     ).resolves.toStrictEqual(data);
   });
+
+  it('propagates shard loading errors', async () => {
+    const error = new Error('Failed to load shard');
+
+    await expect(
+      Manifest.fetchShardingData(['/missing-shard'], async () => {
+        throw error;
+      }),
+    ).rejects.toBe(error);
+  });
 });
