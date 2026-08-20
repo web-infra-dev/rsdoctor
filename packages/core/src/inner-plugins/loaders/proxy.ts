@@ -3,10 +3,24 @@ import { Plugin } from '@rsdoctor/shared/types';
 import { Utils as BuildUtils } from '@/build-utils/build';
 import type { ProxyLoaderOptions } from '../../types';
 import {
+  getInternalLoaderOptions,
   getOriginLoaderModule,
   reportLoader,
   shouldSkipLoader,
 } from '../utils';
+
+type CacheAwareLoaderContext = PluginType.LoaderContext<ProxyLoaderOptions> & {
+  addBuildDependency(file: string): void;
+};
+
+function addCacheMarkerDependency(
+  context: PluginType.LoaderContext<ProxyLoaderOptions>,
+) {
+  const { cacheMarkerPath } = getInternalLoaderOptions(context);
+  if (cacheMarkerPath) {
+    (context as CacheAwareLoaderContext).addBuildDependency(cacheMarkerPath);
+  }
+}
 
 const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, object> =
   function (...args) {
@@ -15,7 +29,7 @@ const loaderModule: Plugin.LoaderDefinition<ProxyLoaderOptions, object> =
       return;
     }
 
-    this.cacheable(false);
+    addCacheMarkerDependency(this);
 
     const mod = getOriginLoaderModule(this);
 
@@ -91,7 +105,7 @@ export const pitch = function (
     return;
   }
 
-  this.cacheable(false);
+  addCacheMarkerDependency(this);
 
   const mod = getOriginLoaderModule(this);
 

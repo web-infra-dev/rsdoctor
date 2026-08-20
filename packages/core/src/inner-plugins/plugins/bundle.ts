@@ -3,6 +3,7 @@ import type { Assets } from '@rspack/core';
 import { InternalBasePlugin } from './base';
 import { Chunks } from '@rsdoctor/shared/graph';
 import { logger, time, timeEnd } from '@/logger';
+import { getEffectiveGzipConfig } from '../utils/config';
 
 export class InternalBundlePlugin<
   T extends Plugin.BaseCompiler,
@@ -26,12 +27,12 @@ export class InternalBundlePlugin<
       if (compiler.isChild()) {
         compiler.hooks.afterCompile.tapPromise(
           this.tapPreOptions,
-          this.done.bind(this),
+          this.done.bind(this, compiler),
         );
       } else {
         compiler.hooks.done.tapPromise(
           this.tapPreOptions,
-          this.done.bind(this),
+          this.done.bind(this, compiler),
         );
       }
     } finally {
@@ -87,14 +88,17 @@ export class InternalBundlePlugin<
     }
   };
 
-  public done = async (): Promise<void> => {
+  public done = async (compiler: T): Promise<void> => {
     time('InternalBundlePlugin.done');
     try {
       if (this.scheduler.chunkGraph) {
         Chunks.assetsContents(
           this.map,
           this.scheduler.chunkGraph,
-          this.scheduler.options.supports.gzip,
+          getEffectiveGzipConfig(
+            compiler,
+            this.scheduler.options.supports.gzip,
+          ),
         );
       }
 

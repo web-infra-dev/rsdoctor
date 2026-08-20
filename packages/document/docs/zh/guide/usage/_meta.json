@@ -11,6 +11,5 @@
   "module-analysis",
   "resolver",
   "rule-config",
-  "bundle-diff",
-  "mcp"
+  "bundle-diff"
 ]

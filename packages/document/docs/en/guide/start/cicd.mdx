@@ -1,41 +1,36 @@
-import { Badge } from '@theme';
-
 # CI/CD tutorial
 
-In CI/CD, there is often a desire to upload historical reports to the CDN as historical records. Because it's not convenient to achieve instant use in the standard mode, the **Brief** mode is supported.
+Brief mode generates a self-contained report that can be stored as a CI artifact or uploaded to a CDN.
 
-## Brief mode
+## Enable brief mode
 
-In Brief mode, data reports are integrated into a single HTML page, making it easy for users to view historical build data in a summary form within CI/CD and other scenarios.
+Configure [`output.mode: 'brief'`](/config/options/output#mode) and include HTML in [`output.options.type`](/config/options/output#options). After the build, Rsdoctor writes `rsdoctor-report.html` to the report output directory, which defaults to `[outputDir]` and can be changed with [`output.reportDir`](/config/options/output#reportdir). Open the file directly in a browser to view the report.
 
-### Enabling brief mode
+- Brief reports omit code data to keep the standalone file manageable.
+- Use [`output.options.htmlOptions.reportHtmlName`](/config/options/output#mode-brief) to change the filename.
+- For more options, see [mode: 'brief'](/config/options/output#mode-brief).
 
-<Badge text="Version: 0.4.0" type="warning" />
+```js title="rspack.config.mjs"
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
-You can enable Brief mode by configuring the [mode.brief](/config/options/mode) option in the Rsdoctor plugin. After the build, Brief mode will generate a report in the build output directory: `[outputDir]/.rsdoctor/report-rsdoctor.html`. You can view the build analysis summary by opening the HTML file in a browser.
-
-- In Brief mode, no code data is displayed to prevent the page from crashing due to large data sizes.
-- The report output directory and file name can be configured. Refer to: [Options](/config/options/brief).
-- For more configurations, refer to: [Options](/config/options/brief).
-
-```ts title="rspack.config.js"
-const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
-
-module.exports = {
-  // ...
+export default {
   plugins: [
     process.env.RSDOCTOR &&
       new RsdoctorRspackPlugin({
-        // other options
-        mode: 'brief',
+        output: {
+          mode: 'brief',
+          options: {
+            type: ['html'],
+          },
+        },
       }),
   ].filter(Boolean),
 };
 ```
 
-### Differences between brief mode and lite mode
+## Report modes
 
-Currently, Rsdoctor has several report modes: `Normal, Brief, and Lite`.
+Rsdoctor 2.x supports normal and brief output modes. The legacy lite mode is retained only for backward compatibility.
 
 import ModeIntro from '@en/shared/mode-intro.md';
 

@@ -16,6 +16,21 @@ describe('test src/common/loader.ts', () => {
           loader: 'babel-loader',
           loaderIndex: 0,
           path: '/node_modules/babel-loader/lib/index.js',
+          input: null,
+          result: 'pitch result',
+          startAt: 900,
+          endAt: 950,
+          options: {},
+          isPitch: true,
+          sync: false,
+          errors: [],
+          pid: 1,
+          ppid: 0,
+        },
+        {
+          loader: 'babel-loader',
+          loaderIndex: 0,
+          path: '/node_modules/babel-loader/lib/index.js',
           input: 'const foo = 1;',
           result: 'var foo = 1;',
           startAt: 1000,
@@ -51,7 +66,7 @@ describe('test src/common/loader.ts', () => {
 
     expect(result).toBeDefined();
     expect(result.resource.path).toBe('/test/file.js');
-    expect(result.loaders).toHaveLength(2);
+    expect(result.loaders).toHaveLength(3);
 
     // Verify that input and result are NOT included
     result.loaders.forEach((loader) => {
@@ -70,6 +85,7 @@ describe('test src/common/loader.ts', () => {
       'babel-loader',
       0,
       mockLoaderData,
+      false,
     );
 
     expect(result).toBeDefined();
@@ -83,6 +99,7 @@ describe('test src/common/loader.ts', () => {
       'ts-loader',
       1,
       mockLoaderData,
+      false,
     );
 
     expect(result).toBeDefined();
@@ -96,6 +113,7 @@ describe('test src/common/loader.ts', () => {
       'non-existent-loader',
       0,
       mockLoaderData,
+      false,
     );
 
     expect(result.input).toBe('');
@@ -108,10 +126,45 @@ describe('test src/common/loader.ts', () => {
       'babel-loader',
       0,
       mockLoaderData,
+      false,
     );
 
     expect(result.input).toBe('');
     expect(result.output).toBe('');
+  });
+
+  it('getLoaderFileInputAndOutput should distinguish pitch and normal loader executions', () => {
+    const pitchResult = Loader.getLoaderFileInputAndOutput(
+      '/test/file.js',
+      'babel-loader',
+      0,
+      mockLoaderData,
+      true,
+    );
+    const normalResult = Loader.getLoaderFileInputAndOutput(
+      '/test/file.js',
+      'babel-loader',
+      0,
+      mockLoaderData,
+      false,
+    );
+
+    expect(pitchResult.input).toBe('');
+    expect(pitchResult.output).toBe('pitch result');
+    expect(normalResult.input).toBe('const foo = 1;');
+    expect(normalResult.output).toBe('var foo = 1;');
+  });
+
+  it('getLoaderFileInputAndOutput should preserve legacy lookup behavior when isPitch is omitted', () => {
+    const result = Loader.getLoaderFileInputAndOutput(
+      '/test/file.js',
+      'babel-loader',
+      0,
+      mockLoaderData,
+    );
+
+    expect(result.input).toBe('');
+    expect(result.output).toBe('pitch result');
   });
 
   it('getLoaderFileDetails should throw error for non-existent file', () => {

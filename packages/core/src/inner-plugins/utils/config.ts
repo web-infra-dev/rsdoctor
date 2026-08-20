@@ -19,7 +19,6 @@ function getDefaultOutput() {
     },
     options: undefined,
     reportDir: '',
-    compressData: undefined,
   };
 }
 function getDefaultSupports() {
@@ -59,6 +58,22 @@ function normalizeGzip(value: unknown): Plugin.NormalizedGzipConfig {
     gzipLevel: normalizeGzipLevel(gzipLevel),
   };
 }
+
+export function isCompilerWatching(
+  compiler: Pick<Plugin.BaseCompiler, 'watchMode' | 'parentCompilation'>,
+): boolean {
+  return Boolean(
+    compiler.watchMode || compiler.parentCompilation?.compiler.watchMode,
+  );
+}
+
+export function getEffectiveGzipConfig(
+  compiler: Pick<Plugin.BaseCompiler, 'watchMode' | 'parentCompilation'>,
+  gzip: Plugin.NormalizedGzipConfig,
+): Plugin.NormalizedGzipConfig {
+  return isCompilerWatching(compiler) ? false : gzip;
+}
+
 function normalizeFeatures(features: any, mode: keyof typeof SDK.IMode) {
   if (Array.isArray(features)) {
     return {
@@ -97,6 +112,7 @@ function isValidMode(mode: any): mode is keyof typeof SDK.IMode {
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   config: Plugin.RsdoctorRspackPluginOptions<Rules> = {},
 ): Plugin.RsdoctorPluginOptionsNormalized<Rules> {
+  const deprecatedMode = (config as { mode?: unknown }).mode;
   const userOutput = config.output;
   const defaultOutput = getDefaultOutput();
   const outputConfig: Config.IOutput<'brief' | 'normal'> = isJsonOutputEnv(
@@ -104,7 +120,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   )
     ? {
         reportDir: userOutput?.reportDir,
-        compressData: userOutput?.compressData,
         mode: 'brief' as const,
         options: {
           type: ['json'] as Array<'json'>,
@@ -127,7 +142,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     port,
     server: userServer = {},
     printLog = { serverUrls: true },
-    mode = undefined,
     brief = undefined,
     multiCompiler = true,
   } = normalizedConfig;
@@ -166,26 +180,18 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       ? output.mode === ('lite' as SDK.IMode.normal)
         ? SDK.IMode[SDK.IMode.normal]
         : output.mode
-      : undefined) ||
-    mode ||
-    SDK.IMode[SDK.IMode.normal];
-
-  if (mode) {
+      : undefined) || SDK.IMode[SDK.IMode.normal];
+  if (deprecatedMode !== undefined) {
+    const replacement =
+      deprecatedMode === 'lite' ? 'output.reportCodeType' : 'output.mode';
     logger.info(
       chalk.yellow(
-        `The 'mode' configuration will be deprecated in a future version. Please use 'output.mode' instead.`,
+        `The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`,
       ),
     );
   }
   const _features = normalizeFeatures(features, finalMode);
   const _linter = normalizeLinter(linter);
-  if (_features.lite || finalMode === SDK.IMode[SDK.IMode.lite]) {
-    logger.info(
-      chalk.yellow(
-        `Lite features will be deprecated in a future version. Please use 'output: { reportCodeType: { noAssetsAndModuleSource: true }}' instead.`,
-      ),
-    );
-  }
   // Process mode-specific configurations
   const { finalBrief, finalNormalOptions } = processModeConfigurations(
     finalMode,
@@ -226,15 +232,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         typeof multiCompiler === 'object' ? multiCompiler.group : undefined,
     },
   };
-
-  // Add deprecation warning for compressData
-  if (output.compressData !== undefined) {
-    logger.info(
-      chalk.yellow(
-        `The 'compressData' configuration will be deprecated in a future version.`,
-      ),
-    );
-  }
 
   return res;
 }

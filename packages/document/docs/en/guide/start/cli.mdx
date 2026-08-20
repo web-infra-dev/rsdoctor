@@ -16,8 +16,6 @@ Use the same version of `@rsdoctor/cli` and `@rsdoctor/core`.
 
 import { PackageManagerTabs } from '@theme';
 
-import { Tab, Tabs } from '@rspress/core/theme';
-
 <PackageManagerTabs command="add @rsdoctor/cli -D" />
 
 ## Command usage
@@ -83,27 +81,11 @@ The JSON report contains diff data for assets, modules, and packages. You can co
 
 We provide a Node.js API in `@rsdoctor/cli` that allows you to make calls during runtime in Node.js.
 
-**Importing the Module**
-
-<Tabs>
-
-<Tab label="esm">
+**Importing the module**
 
 ```js
 import { execute } from '@rsdoctor/cli';
 ```
-
-</Tab>
-
-<Tab label="cjs">
-
-```js
-const { execute } = require('@rsdoctor/cli');
-```
-
-</Tab>
-
-</Tabs>
 
 **execute()**
 
