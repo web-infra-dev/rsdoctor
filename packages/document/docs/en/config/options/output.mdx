@@ -164,7 +164,8 @@ NormalModeOptions currently has an empty Object type.
 
 ## reportCodeType
 
-- **Type:** `"noModuleSource" | "noAssetsAndModuleSource" | "noCode" | { noModuleSource?: boolean; noAssetsAndModuleSource?: boolean; noCode?: boolean }`
+- **Type:** `"noModuleSource" | "noAssetsAndModuleSource" | "noCode"`
+- Rsdoctor 2.x accepts only the string values listed above.
 - **Optional:** `true`
 - **Default:** `undefined`, when undefined, outputs all complete data.
 - **Description:**
@@ -192,7 +193,7 @@ NormalModeOptions currently has an empty Object type.
 ```js
 new RsdoctorRspackPlugin({
   output: {
-    reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
+    reportCodeType: 'noModuleSource', // or 'noAssetsAndModuleSource'
   }
 }),
 ```

@@ -109,14 +109,8 @@ interface OutputBaseConfig {
   /**
    * Control the Rsdoctor reporter codes records.
    */
-  reportCodeType?: IReportCodeType | undefined | NewReportCodeType;
+  reportCodeType?: NewReportCodeType;
 }
-
-export type IReportCodeType = {
-  noModuleSource?: boolean;
-  noAssetsAndModuleSource?: boolean;
-  noCode?: boolean;
-};
 
 export type NewReportCodeType =
   'noModuleSource' | 'noAssetsAndModuleSource' | 'noCode';
@@ -203,10 +197,8 @@ export interface RsdoctorRspackPluginOptions<
 
 // Conditional type for reportCodeType based on mode
 type ReportCodeTypeByMode<T extends 'brief' | 'normal'> = T extends 'brief'
-  ? undefined | 'noCode' | { noCode?: boolean }
-  : T extends 'normal'
-    ? IReportCodeType | undefined | NewReportCodeType
-    : IReportCodeType | undefined | NewReportCodeType;
+  ? 'noCode' | undefined
+  : NewReportCodeType | undefined;
 
 export interface NormalModeOptions {
   // Normal mode doesn't have type field, it's only available in brief mode

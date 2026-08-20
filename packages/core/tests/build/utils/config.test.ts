@@ -2,17 +2,23 @@ import { describe, expect, it, beforeEach, afterEach } from '@rstest/core';
 import { normalizeUserConfig } from '../../../src/inner-plugins/utils/config';
 import { SDK } from '@rsdoctor/shared/types';
 
-// Mock console.log to capture warning messages
+// Mock console output to capture log messages
 const originalConsoleLog = console.log;
+const originalConsoleWarn = console.warn;
 let consoleOutput: string[] = [];
+let consoleWarningOutput: string[] = [];
 const originalEnvCI = process.env.CI;
 const originalEnvRSTEST = process.env.RSTEST;
 const originalEnvRSDOCTOROUTPUT = process.env.RSDOCTOR_OUTPUT;
 
 beforeEach(() => {
   consoleOutput = [];
+  consoleWarningOutput = [];
   console.log = (...args: any[]) => {
     consoleOutput.push(args.join(' '));
+  };
+  console.warn = (...args: any[]) => {
+    consoleWarningOutput.push(args.join(' '));
   };
   delete process.env.CI;
   delete process.env.RSTEST;
@@ -21,6 +27,7 @@ beforeEach(() => {
 
 afterEach(() => {
   console.log = originalConsoleLog;
+  console.warn = originalConsoleWarn;
   if (originalEnvCI !== undefined) {
     process.env.CI = originalEnvCI;
   } else {
@@ -90,21 +97,6 @@ describe('normalizeUserConfig', () => {
     expect(result.features.plugins).toBe(true);
     expect(result.features.treeShaking).toBe(false);
     expect(result.features.lite).toBe(true);
-  });
-
-  it('should normalize output.reportCodeType according to mode', () => {
-    const result = normalizeUserConfig({
-      output: { mode: 'brief', reportCodeType: { noCode: true } },
-    });
-    expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
-  });
-
-  it('should normalize output.reportCodeType with lite features', () => {
-    const result = normalizeUserConfig({
-      features: { lite: true },
-      output: { reportCodeType: { noCode: true } },
-    });
-    expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
   });
 
   it('should use default supports when not provided', () => {
@@ -402,111 +394,7 @@ describe('normalizeUserConfig', () => {
   });
 
   describe('output.reportCodeType', () => {
-    it('should return NoCode when mode is brief regardless of reportCodeType', () => {
-      const result = normalizeUserConfig({
-        output: {
-          mode: 'brief',
-          reportCodeType: {
-            noModuleSource: true,
-            noAssetsAndModuleSource: false,
-            noCode: false,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
-    });
-
-    it('should return NoSourceAndAssets when mode is lite and no special flags', () => {
-      const result = normalizeUserConfig({
-        features: { lite: true },
-        output: {
-          reportCodeType: {
-            noModuleSource: false,
-            noAssetsAndModuleSource: false,
-            noCode: false,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(
-        SDK.ToDataType.NoSourceAndAssets,
-      );
-    });
-
-    it('should return NoSourceAndAssets when mode is lite and noAssetsAndModuleSource is true', () => {
-      const result = normalizeUserConfig({
-        features: { lite: true },
-        output: {
-          reportCodeType: {
-            noModuleSource: false,
-            noAssetsAndModuleSource: true,
-            noCode: false,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(
-        SDK.ToDataType.NoSourceAndAssets,
-      );
-    });
-
-    it('should respect noCode flag in normal mode', () => {
-      const result = normalizeUserConfig({
-        output: {
-          mode: 'normal',
-          reportCodeType: {
-            noModuleSource: false,
-            noAssetsAndModuleSource: false,
-            noCode: true,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
-    });
-
-    it('should respect noAssetsAndModuleSource flag in normal mode', () => {
-      const result = normalizeUserConfig({
-        output: {
-          mode: 'normal',
-          reportCodeType: {
-            noModuleSource: false,
-            noAssetsAndModuleSource: true,
-            noCode: false,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(
-        SDK.ToDataType.NoSourceAndAssets,
-      );
-    });
-
-    it('should respect noModuleSource flag in normal mode', () => {
-      const result = normalizeUserConfig({
-        output: {
-          mode: 'normal',
-          reportCodeType: {
-            noModuleSource: true,
-            noAssetsAndModuleSource: false,
-            noCode: false,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoSource);
-    });
-
-    it('should return Normal when no flags are set in normal mode', () => {
-      const result = normalizeUserConfig({
-        output: {
-          mode: 'normal',
-          reportCodeType: {
-            noModuleSource: false,
-            noAssetsAndModuleSource: false,
-            noCode: false,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(SDK.ToDataType.Normal);
-    });
-
-    it('should handle NewReportCodeType string values - noCode', () => {
+    it('should handle noCode', () => {
       const result = normalizeUserConfig({
         output: {
           mode: 'normal',
@@ -516,7 +404,7 @@ describe('normalizeUserConfig', () => {
       expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
     });
 
-    it('should handle NewReportCodeType string values - noAssetsAndModuleSource', () => {
+    it('should handle noAssetsAndModuleSource', () => {
       const result = normalizeUserConfig({
         output: {
           mode: 'normal',
@@ -528,7 +416,7 @@ describe('normalizeUserConfig', () => {
       );
     });
 
-    it('should handle NewReportCodeType string values - noModuleSource', () => {
+    it('should handle noModuleSource', () => {
       const result = normalizeUserConfig({
         output: {
           mode: 'normal',
@@ -548,47 +436,7 @@ describe('normalizeUserConfig', () => {
       expect(result.output.reportCodeType).toBe(SDK.ToDataType.Normal);
     });
 
-    it('should handle empty object reportCodeType and use default', () => {
-      const result = normalizeUserConfig({
-        output: {
-          mode: 'normal',
-          reportCodeType: {},
-        },
-      });
-      expect(result.output.reportCodeType).toBe(SDK.ToDataType.Normal);
-    });
-
-    it('should prioritize noCode over other flags in normal mode', () => {
-      const result = normalizeUserConfig({
-        output: {
-          mode: 'normal',
-          reportCodeType: {
-            noCode: true,
-            noModuleSource: true,
-            noAssetsAndModuleSource: true,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
-    });
-
-    it('should prioritize noAssetsAndModuleSource over noModuleSource in normal mode', () => {
-      const result = normalizeUserConfig({
-        output: {
-          mode: 'normal',
-          reportCodeType: {
-            noCode: false,
-            noModuleSource: true,
-            noAssetsAndModuleSource: true,
-          },
-        },
-      });
-      expect(result.output.reportCodeType).toBe(
-        SDK.ToDataType.NoSourceAndAssets,
-      );
-    });
-
-    it('should handle brief mode with valid NewReportCodeType string', () => {
+    it('should handle brief mode with noCode', () => {
       const result = normalizeUserConfig({
         output: {
           mode: 'brief',
@@ -598,7 +446,28 @@ describe('normalizeUserConfig', () => {
       expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
     });
 
-    it('should handle lite mode via features with NewReportCodeType string', () => {
+    it.each(['noModuleSource', 'noAssetsAndModuleSource'] as const)(
+      'should warn and use NoCode for %s in brief mode',
+      (reportCodeType) => {
+        const result = normalizeUserConfig({
+          output: {
+            mode: 'brief',
+            reportCodeType,
+          },
+        } as never);
+
+        expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
+        expect(
+          consoleWarningOutput.some((output) =>
+            output.includes(
+              '`output.reportCodeType` is ignored when `output.mode` is "brief"',
+            ),
+          ),
+        ).toBe(true);
+      },
+    );
+
+    it('should handle lite mode via features', () => {
       const result = normalizeUserConfig({
         features: {
           lite: true,
@@ -608,6 +477,28 @@ describe('normalizeUserConfig', () => {
         },
       });
       expect(result.output.reportCodeType).toBe(SDK.ToDataType.NoCode);
+    });
+
+    it('should reject the legacy object value', () => {
+      expect(() =>
+        normalizeUserConfig({
+          output: {
+            mode: 'normal',
+            reportCodeType: { noCode: true },
+          },
+        } as never),
+      ).toThrow('`output.reportCodeType` must be');
+    });
+
+    it('should reject an unknown string value', () => {
+      expect(() =>
+        normalizeUserConfig({
+          output: {
+            mode: 'normal',
+            reportCodeType: 'unknown',
+          },
+        } as never),
+      ).toThrow('`output.reportCodeType` must be');
     });
   });
 
