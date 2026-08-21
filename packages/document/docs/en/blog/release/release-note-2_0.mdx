@@ -176,9 +176,13 @@ Overall, these changes reduced median HMR time in the Kiali benchmark from 6.81 
 
 ## Refined bundle analysis
 
-Rsdoctor 2.0 also improves the Bundle Size experience on top of the 1.x analysis model. The Treemap layout, navigation, responsive behavior, and size presentation have been refined to make large assets easier to inspect. Bundle analysis also keeps irrelevant asset types out of module-focused views, making it faster to reach JavaScript-related results.
+Rsdoctor 2.0 makes the Bundle Size page smoother for large projects and helps you locate important modules more quickly through faster rendering and clearer navigation, filtering, and size presentation.
 
-These interface changes are paired with the Rspack-native module graph and the consolidated client package, so the same data model powers the overview, tree graph, Treemap, and module detail views.
+- Tree Graph uses virtual scrolling and render caching to reduce the rendering cost of large assets with many modules.
+- Treemap adds full-screen mode, a collapsible sidebar, breadcrumb navigation, and click-to-zoom for easier exploration of deeply nested modules.
+- Asset and chunk filters, regular-expression module search, result highlighting, and direct access to module details make specific modules easier to find.
+- Stat, Parsed, and Gzip size modes now stay consistent across the Treemap, sidebar, and tooltips.
+- JavaScript-only filtering removes unrelated assets from module-focused views, while responsive layouts and expandable cards make better use of the available screen space.
 
 ## Upgrade to 2.0
 

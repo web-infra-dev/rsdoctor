@@ -176,9 +176,13 @@ Rsdoctor 通常会在本地开发期间持续启用，因此 2.0 的增量分析
 
 ## 更清晰的产物分析体验 {#refined-bundle-analysis}
 
-在 1.x 分析模型的基础上，Rsdoctor 2.0 继续优化 Bundle Size 页面。Treemap 的布局、导航、响应式行为和体积展示得到调整，让大型 Asset 更容易查看；Bundle 分析也会在以 Module 为主的视图中过滤无关的资源类型，帮助用户更快定位 JavaScript 相关结果。
+Rsdoctor 2.0 通过提升渲染性能并优化导航、筛选和体积展示，让大型项目中的 Bundle Size 分析更流畅，也更容易定位关键 Module。
 
-这些界面优化与 Rspack 原生 Module Graph、统一后的 Client Package 使用同一套数据模型，为 Overview、Tree Graph、Treemap 和 Module 详情页提供一致的数据基础。
+- Tree Graph 使用虚拟滚动和渲染缓存，降低包含大量 Module 的大型 Asset 的渲染开销。
+- Treemap 新增全屏模式、可收起侧边栏、面包屑导航和点击缩放，方便逐层查看深层 Module。
+- Asset 与 Chunk 筛选、Module 正则搜索、结果高亮定位，以及直接打开 Module 详情，让查找具体 Module 更高效。
+- Stat、Parsed 和 Gzip 三种体积口径在 Treemap、侧边栏和 Tooltip 中保持一致。
+- JavaScript Asset 筛选会在以 Module 为主的视图中过滤无关资源；响应式布局和可展开卡片则能更充分地利用屏幕空间。
 
 ## 升级到 2.0 {#upgrade-to-20}
 
