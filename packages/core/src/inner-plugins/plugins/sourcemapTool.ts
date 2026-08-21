@@ -213,6 +213,15 @@ export async function collectSourceMaps(
   }
 }
 
+function markAssetWithoutSourceMap(
+  assetsWithoutSourceMap: Set<string>,
+  assetName: unknown,
+) {
+  if (typeof assetName === 'string' && /\.(?:js|bundle|css)$/.test(assetName)) {
+    assetsWithoutSourceMap.add(assetName);
+  }
+}
+
 /**
  * Handles the afterEmit event for assets to collect source map information.
  * @param compilation - The current compilation object.
@@ -280,25 +289,29 @@ export async function handleAfterEmitAssets(
             });
           }
 
-          if (sourceMapAsset?.source) {
-            map = JSON.parse(sourceMapAsset.source.source().toString());
-            const outputPath = compilation.options.output?.path;
-            if (outputPath && typeof outputPath === 'string') {
-              sourceMapPath = resolve(outputPath, sourceMapAsset.name);
+          try {
+            const sourceMapContent = sourceMapAsset?.source?.source();
+            if (sourceMapContent) {
+              map = JSON.parse(sourceMapContent.toString());
             }
+          } catch (error) {
+            logger.debug(
+              `Error parsing source map asset ${sourceMapFile}:`,
+              error,
+            );
+          }
+
+          if (!map) {
+            markAssetWithoutSourceMap(_this.assetsWithoutSourceMap, assetName);
+            continue;
+          }
+
+          const outputPath = compilation.options.output?.path;
+          if (outputPath && typeof outputPath === 'string' && sourceMapAsset) {
+            sourceMapPath = resolve(outputPath, sourceMapAsset.name);
           }
         } else {
-          // Mark asset as having no sourcemap for AST parsing fallback
-          // Only mark js/css files that don't have sourcemap
-          if (
-            assetName &&
-            typeof assetName === 'string' &&
-            (assetName.endsWith('.js') ||
-              assetName.endsWith('.bundle') ||
-              assetName.endsWith('.css'))
-          ) {
-            _this.assetsWithoutSourceMap.add(assetName);
-          }
+          markAssetWithoutSourceMap(_this.assetsWithoutSourceMap, assetName);
           continue;
         }
       } else {
