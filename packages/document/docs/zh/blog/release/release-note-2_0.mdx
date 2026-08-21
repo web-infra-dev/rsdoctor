@@ -79,7 +79,7 @@ Rsdoctor 2.0 将常规的 `RsdoctorRspackPlugin` 统一为这些场景的入口�
 - [MultiCompiler 与 Rsbuild environments 自动支持](https://github.com/web-infra-dev/rsdoctor/pull/1888)会聚合同一次启动中创建的 Compiler。每个 Compiler 都拥有独立的分析数据，报告中则提供切换入口，方便在不同结果之间浏览。Rsbuild environments 会直接使用 `web`、`node` 等 environment 名称。
 - [Child Compiler 支持](https://github.com/web-infra-dev/rsdoctor/pull/1842)会在 Child Compiler 创建时自动发现它，并分别记录 Module Graph、Chunk、Asset、Loader、Plugin、诊断、规则和摘要数据。报告可以在 Main Compiler 与 Child Compiler 的结果之间切换。
 
-主 Compiler 继续使用原有的 `.rsdoctor` 输出路径，其他 Compiler 的数据写入 `.rsdoctor/compilers/<compilerName>`，避免混合不同构建目标的数据。
+主 Compiler 继续使用原有的 `.rsdoctor` 输出路径；其他顶层 Compiler 的数据写入 `.rsdoctor/compilers/<compilerName>`，Child Compiler 的数据则写入 `.rsdoctor/.slaves/<name>`，从而保持不同类型 Compiler 的数据相互隔离。
 
 自动聚合默认开启，无需引入新的插件。如果同一进程启动的是多个互不相关的 Compiler，可以设置 `multiCompiler: false`；也可以通过命名分组明确关联多个插件实例：
 
