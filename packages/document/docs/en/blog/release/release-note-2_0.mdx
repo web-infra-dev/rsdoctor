@@ -8,7 +8,7 @@ _August 2026_
 
 We are excited to announce **Rsdoctor 2.0**! 🎉
 
-Rsdoctor 2.0 focuses the project on Rspack and turns build reports into data that can be used by developers, agents, and automation. Compared with the current `v1.x` branch, 2.0 uses a Rspack-native analysis path, covers more compiler topologies, and provides the same core capabilities through a much smaller package and dependency graph.
+Rsdoctor 2.0 deepens its integration with Rspack and makes the same build analysis data available to developers, agents, and automation. Compared with the current `v1.x` branch, 2.0 uses a Rspack-native analysis path, covers more compiler topologies, and provides the same core capabilities through a much smaller package and dependency graph.
 
 Highlights in this release include:
 
@@ -45,13 +45,15 @@ npx skills add rstackjs/agent-skills --skill rsdoctor-analysis
 
 # Build and generate JSON data
 RSDOCTOR_OUTPUT=json pnpm run build
-
-# Ask Agent CLI for an optimization overview
-pnpm exec rsdoctor-agent bundle optimize --data-file ./dist/rsdoctor-data.json
-
-# Query a specific data tool
-pnpm exec rsdoctor-agent query packages_duplicates --data-file ./dist/rsdoctor-data.json
 ```
+
+After setup, users do not need to remember or run Agent CLI commands themselves. They can ask their coding agent directly, for example:
+
+```text
+Use Rsdoctor to analyze this project and identify opportunities to reduce bundle size.
+```
+
+The coding agent selects and runs the relevant `rsdoctor-agent` commands, analyzes the results in the context of the project, and continues with more focused queries when needed.
 
 Agent CLI provides two complementary interfaces:
 
@@ -65,7 +67,7 @@ Together with the analysis skill, an agent can investigate large chunks, duplica
   style={{ margin: 'auto' }}
 />
 
-Rsdoctor 2.0 removes `@rsdoctor/mcp-server`. Agent CLI is the replacement workflow, but it is not an MCP-compatible or drop-in API replacement. See [AI](/guide/start/ai) and the [2.0 migration guide](/guide/start/migration-v2#ai-workflow-migration) for installation and migration details.
+Rsdoctor 2.0 removes `@rsdoctor/mcp-server`. MCP Server requires client-specific configuration and a service connection, while Agent CLI reads `rsdoctor-data.json` directly, runs on demand, and returns structured JSON, making it easier to integrate with coding agents and automation. Rsdoctor 2.0 therefore standardizes on Agent CLI for AI-assisted analysis. It is not MCP-compatible or a drop-in API replacement. See [AI](/guide/start/ai) and the [2.0 migration guide](/guide/start/migration-v2#ai-workflow-migration) for installation and migration details.
 
 ## One report for every compiler
 
@@ -94,18 +96,16 @@ This gives browser, server, worker, and plugin-generated builds separate results
 
 Rsdoctor 2.0 consolidates core, graph, SDK, utilities, and the Rspack plugin into `@rsdoctor/core`, moves shared capabilities into `@rsdoctor/shared`, and keeps the client and CLIs as separate entry points. The resulting dependency graph is smaller:
 
-| Metric                               | Rsdoctor 1.x | Rsdoctor 2.0 |
-| ------------------------------------ | -----------: | -----------: |
-| Top-level repository packages        |           13 |            6 |
-| Runtime dependency declarations      |           88 |           39 |
-| Internal runtime dependency edges    |           28 |            4 |
-| Unique external runtime dependencies |           51 |           30 |
+| Metric                          | Rsdoctor 1.x | Rsdoctor 2.0 |
+| ------------------------------- | -----------: | -----------: |
+| Top-level repository packages   |           13 |            6 |
+| Runtime dependency declarations |           88 |           39 |
 
 > The counts cover `dependencies` and `optionalDependencies` in `packages/*/package.json`. They describe the repository package graph rather than an application's complete installation dependency tree.
 
 ### Smaller install footprint {#smaller-production-install-footprint}
 
-Rsdoctor 2.0 reduces the complete installation footprint of `@rsdoctor/core` by consolidating internal packages, removing runtime dependencies, and prebundling packages such as `es-toolkit`, `@rsbuild/plugin-check-syntax`, `filesize`, and `json-stream-stringify` into the published output. Report transport has also moved from Socket.IO to server-side `ws` and the browser's native WebSocket API, removing more runtime dependencies that are no longer needed.
+Rsdoctor 2.0 streamlines the package structure and runtime dependencies, further reducing the complete installation footprint of `@rsdoctor/core`.
 
 The following table compares the logical size of `@rsdoctor/core` and its complete transitive dependency tree in a clean npm production install:
 
@@ -131,23 +131,24 @@ Rsdoctor 2.0 packages are ESM-only. `@rsdoctor/cli` continues to provide the `rs
 
 Rsdoctor 2.0 removes repeated work from the watch and HMR critical path in three ways:
 
-- Reuse the SDK session, report server, and report page.
-- Preserve the bundler's loader cache and reset loader events after each compilation.
-- Skip module and asset gzip-size calculations and use faster report compression. Non-watch builds retain the complete analysis path.
+- Reuse the SDK session and report server, and open the report page only for the first build.
+- Preserve the bundler's loader cache and prevent loader events from accumulating across rebuilds.
+- Skip module and asset gzip-size calculations. Non-watch builds retain the complete analysis path.
+
+Watch mode writes report data with a faster compression level to reduce synchronous work on every update. As a trade-off, the compressed size of the main report shards increases by about 26%. This affects Rsdoctor report data only, not application bundle output. Non-watch builds continue to use the default compression level.
 
 In the Kiali benchmark, median HMR time dropped from 6.81 s to 3.64 s, an improvement of about 47%. Report writes saved about 1.54 s per update, while loader events and the loader report shard were reduced by about 72% and 73%. In a separate repeated-build benchmark, analysis time dropped from 250.9 ms to 14.2 ms, an improvement of 94.3%.
 
-> The Kiali benchmark disabled the Rsdoctor client server. The repeated-build benchmark used 100 modules, one warm-up, and the median of five runs. These figures use separate 2.0 optimization baselines rather than a complete 1.x-to-2.0 comparison. Faster watch compression increases the main report shards by about 26%.
+> The Kiali benchmark disabled the Rsdoctor client server. The repeated-build benchmark used 100 modules, one warm-up, and the median of five runs.
+>
+> Related PRs: [#1901](https://github.com/web-infra-dev/rsdoctor/pull/1901), [#1904](https://github.com/web-infra-dev/rsdoctor/pull/1904), [#1905](https://github.com/web-infra-dev/rsdoctor/pull/1905), [#1906](https://github.com/web-infra-dev/rsdoctor/pull/1906), [#1908](https://github.com/web-infra-dev/rsdoctor/pull/1908), and [#1913](https://github.com/web-infra-dev/rsdoctor/pull/1913).
 
 ## Refined bundle analysis
 
 Rsdoctor 2.0 makes the Bundle Size page smoother for large projects and helps you locate important modules more quickly through faster rendering and clearer navigation, filtering, and size presentation.
 
 - Tree Graph uses virtual scrolling and render caching to reduce the rendering cost of large assets with many modules.
-- Treemap adds full-screen mode, a collapsible sidebar, breadcrumb navigation, and click-to-zoom for easier exploration of deeply nested modules.
-- Asset and chunk filters, regular-expression module search, result highlighting, and direct access to module details make specific modules easier to find.
-- Stat, Parsed, and Gzip size modes now stay consistent across the Treemap, sidebar, and tooltips.
-- JavaScript-only filtering removes unrelated assets from module-focused views, while responsive layouts and expandable cards make better use of the available screen space.
+- Treemap improves navigation, filtering, search, size presentation, and responsive layouts, making important modules easier to find and inspect.
 
 ## Upgrade to 2.0
 
