@@ -1,4 +1,5 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, expect, it, rs } from '@rstest/core';
+import { Readable } from 'stream';
 import { Algorithm, Manifest } from '../../src/common';
 
 describe('test src/common/manifest.ts', () => {
@@ -70,5 +71,33 @@ describe('test src/common/manifest.ts', () => {
     await expect(
       Manifest.fetchShardingData(shards, async (value) => value),
     ).resolves.toStrictEqual(data);
+  });
+
+  it('propagates shard loading errors', async () => {
+    const error = new Error('Failed to load shard');
+
+    await expect(
+      Manifest.fetchShardingData(['/missing-shard'], async () => {
+        throw error;
+      }),
+    ).rejects.toBe(error);
+  });
+
+  it('does not depend on Readable.from in browser environments', async () => {
+    const fromSpy = rs.spyOn(Readable, 'from').mockImplementation(() => {
+      throw new Error('Readable.from is not available in the browser');
+    });
+    const data = { modules: [{ id: 1 }] };
+
+    try {
+      await expect(
+        Manifest.fetchShardingData(
+          [Algorithm.compressText(JSON.stringify(data))],
+          async (value) => value,
+        ),
+      ).resolves.toStrictEqual(data);
+    } finally {
+      fromSpy.mockRestore();
+    }
   });
 });

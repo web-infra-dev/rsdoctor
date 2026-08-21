@@ -1,6 +1,6 @@
 import { Manifest } from '@rsdoctor/types';
 import { Buffer } from 'buffer';
-import { Readable } from 'stream';
+import { pipeline, Readable, Writable } from 'stream';
 import { StringDecoder } from 'string_decoder';
 import { createInflate } from 'zlib';
 import { isRemoteUrl } from './url';
@@ -26,6 +26,34 @@ async function* decodeBase64Shards(
   }
 }
 
+function createDecodedShardStream(
+  shardingFiles: string[],
+  fetchImplement: (url: string) => Promise<string>,
+) {
+  const iterator = decodeBase64Shards(shardingFiles, fetchImplement)[
+    Symbol.asyncIterator
+  ]();
+  let reading = false;
+
+  return new Readable({
+    read() {
+      if (reading) return;
+      reading = true;
+
+      void iterator.next().then(
+        ({ value, done }) => {
+          reading = false;
+          this.push(done ? null : value);
+        },
+        (error) => {
+          reading = false;
+          this.destroy(error);
+        },
+      );
+    },
+  });
+}
+
 export function isShardingData(data: unknown): data is string[] {
   if (Array.isArray(data) && data.length > 0) {
     if (data.every((e) => isRemoteUrl(e))) {
@@ -42,15 +70,26 @@ export async function fetchShardingData(
 ) {
   if (shardingFiles.length === 0) return [];
 
-  const inflater = Readable.from(
-    decodeBase64Shards(shardingFiles, fetchImplement),
-  ).pipe(createInflate());
   const decoder = new StringDecoder('utf8');
   const jsonParts: string[] = [];
 
-  for await (const chunk of inflater) {
-    jsonParts.push(decoder.write(Buffer.from(chunk)));
-  }
+  await new Promise<void>((resolve, reject) => {
+    pipeline(
+      createDecodedShardStream(shardingFiles, fetchImplement),
+      createInflate(),
+      new Writable({
+        write(chunk, _encoding, callback) {
+          jsonParts.push(decoder.write(Buffer.from(chunk)));
+          callback();
+        },
+      }),
+      (error) => {
+        if (error) reject(error);
+        else resolve();
+      },
+    );
+  });
+
   const finalPart = decoder.end();
   if (finalPart) jsonParts.push(finalPart);
 
