@@ -26,6 +26,34 @@ async function* decodeBase64Shards(
   }
 }
 
+function createDecodedShardStream(
+  shardingFiles: string[],
+  fetchImplement: (url: string) => Promise<string>,
+) {
+  const iterator = decodeBase64Shards(shardingFiles, fetchImplement)[
+    Symbol.asyncIterator
+  ]();
+  let reading = false;
+
+  return new Readable({
+    read() {
+      if (reading) return;
+      reading = true;
+
+      void iterator.next().then(
+        ({ value, done }) => {
+          reading = false;
+          this.push(done ? null : value);
+        },
+        (error) => {
+          reading = false;
+          this.destroy(error);
+        },
+      );
+    },
+  });
+}
+
 export function isShardingData(data: unknown): data is string[] {
   if (Array.isArray(data) && data.length > 0) {
     if (data.every((e) => isRemoteUrl(e))) {
@@ -47,7 +75,7 @@ export async function fetchShardingData(
 
   await new Promise<void>((resolve, reject) => {
     pipeline(
-      Readable.from(decodeBase64Shards(shardingFiles, fetchImplement)),
+      createDecodedShardStream(shardingFiles, fetchImplement),
       createInflate(),
       new Writable({
         write(chunk, _encoding, callback) {
