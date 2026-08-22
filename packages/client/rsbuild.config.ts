@@ -99,51 +99,50 @@ export default defineConfig(({ env }) => {
 
     performance: {
       buildCache: true,
-      chunkSplit: {
-        strategy: 'custom',
-        splitChunks: {
-          cacheGroups: {
-            monaco: {
-              test: /node_modules\/monaco-editor\/*/,
-              name: 'monaco',
-              chunks: (chunk) => chunk.name === 'index',
-              maxSize: 1000000,
-              minSize: 500000,
-            },
-            react: {
-              test: /node_modules\/react-*/,
-              name: 'react',
-              chunks: 'all',
-            },
-            rc: {
-              test: /node_modules\/rc-*/,
-              name: 'rc',
-              chunks: (chunk) => chunk.name === 'index',
-              maxSize: 1000000,
-              minSize: 500000,
-            },
-            antDesign: {
-              chunks: (chunk) => chunk.name === 'index',
-              name: 'ant-design',
-              test: /node_modules\/antd\//,
-              maxSize: 1000000,
-              minSize: 500000,
-            },
-            antDesignIcons: {
-              name: 'ant-design-icons',
-              test: /node_modules\/@ant-design\/icons/,
-              chunks: (chunk) => chunk.name === 'index',
-              maxSize: 1000000,
-              minSize: 200000,
-            },
-            vender: {
-              chunks: 'all',
-              name: 'vender',
-              test: /node_modules\/(acorn|lodash|i18next|remark-*)/,
-              maxSize: 1000000,
-              minSize: 200000,
-            },
-          },
+    },
+
+    splitChunks: {
+      preset: 'none',
+      cacheGroups: {
+        monaco: {
+          test: /node_modules\/monaco-editor\/*/,
+          name: 'monaco',
+          chunks: (chunk) => chunk.name === 'index',
+          maxSize: 1000000,
+          minSize: 500000,
+        },
+        react: {
+          test: /node_modules\/react-*/,
+          name: 'react',
+          chunks: 'all',
+        },
+        rc: {
+          test: /node_modules\/rc-*/,
+          name: 'rc',
+          chunks: (chunk) => chunk.name === 'index',
+          maxSize: 1000000,
+          minSize: 500000,
+        },
+        antDesign: {
+          chunks: (chunk) => chunk.name === 'index',
+          name: 'ant-design',
+          test: /node_modules\/antd\//,
+          maxSize: 1000000,
+          minSize: 500000,
+        },
+        antDesignIcons: {
+          name: 'ant-design-icons',
+          test: /node_modules\/@ant-design\/icons/,
+          chunks: (chunk) => chunk.name === 'index',
+          maxSize: 1000000,
+          minSize: 200000,
+        },
+        vender: {
+          chunks: 'all',
+          name: 'vender',
+          test: /node_modules\/(acorn|lodash|i18next|remark-*)/,
+          maxSize: 1000000,
+          minSize: 200000,
         },
       },
     },
