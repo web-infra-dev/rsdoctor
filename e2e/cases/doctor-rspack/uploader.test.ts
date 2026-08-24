@@ -12,8 +12,11 @@ const manifestFileName = 'rsdoctor-data.json';
 try {
   const testHelper = require('@scripts/test-helper');
   compileByRspack = testHelper.compileByRspack;
-} catch {
-  // Skip tests if rspack is not available
+} catch (error) {
+  console.warn(
+    'Skipping uploader integration tests: Rspack binding is not available.',
+    error,
+  );
 }
 
 async function rspackCompile(compile: any) {
