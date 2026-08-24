@@ -1,6 +1,58 @@
 import { Manifest } from '../types';
-import { decompressText } from './algorithm';
+import { Buffer } from 'buffer';
+import { pipeline, Readable, Writable } from 'stream';
+import { StringDecoder } from 'string_decoder';
+import { createInflate } from 'zlib';
 import { isRemoteUrl } from './url';
+
+async function* decodeBase64Shards(
+  shardingFiles: string[],
+  fetchImplement: (url: string) => Promise<string>,
+) {
+  let remainder = '';
+
+  for (const url of shardingFiles) {
+    const encodedText = remainder + (await fetchImplement(url));
+    const decodableLength = encodedText.length - (encodedText.length % 4);
+
+    if (decodableLength > 0) {
+      yield Buffer.from(encodedText.slice(0, decodableLength), 'base64');
+    }
+    remainder = encodedText.slice(decodableLength);
+  }
+
+  if (remainder.length > 0) {
+    yield Buffer.from(remainder, 'base64');
+  }
+}
+
+function createDecodedShardStream(
+  shardingFiles: string[],
+  fetchImplement: (url: string) => Promise<string>,
+) {
+  const iterator = decodeBase64Shards(shardingFiles, fetchImplement)[
+    Symbol.asyncIterator
+  ]();
+  let reading = false;
+
+  return new Readable({
+    read() {
+      if (reading) return;
+      reading = true;
+
+      void iterator.next().then(
+        ({ value, done }) => {
+          reading = false;
+          this.push(done ? null : value);
+        },
+        (error) => {
+          reading = false;
+          this.destroy(error);
+        },
+      );
+    },
+  });
+}
 
 export function isShardingData(data: unknown): data is string[] {
   if (Array.isArray(data) && data.length > 0) {
@@ -16,15 +68,32 @@ export async function fetchShardingData(
   shardingFiles: string[],
   fetchImplement: (url: string) => Promise<string>,
 ) {
-  const res = await Promise.all(
-    shardingFiles.map((url: string) => fetchImplement(url)),
-  );
+  if (shardingFiles.length === 0) return [];
 
-  const strings = res.length === 0 ? [] : res.reduce((t, e) => t + e);
+  const decoder = new StringDecoder('utf8');
+  const jsonParts: string[] = [];
 
-  return typeof strings === 'object'
-    ? strings
-    : JSON.parse(decompressText(strings));
+  await new Promise<void>((resolve, reject) => {
+    pipeline(
+      createDecodedShardStream(shardingFiles, fetchImplement),
+      createInflate(),
+      new Writable({
+        write(chunk, _encoding, callback) {
+          jsonParts.push(decoder.write(Buffer.from(chunk)));
+          callback();
+        },
+      }),
+      (error) => {
+        if (error) reject(error);
+        else resolve();
+      },
+    );
+  });
+
+  const finalPart = decoder.end();
+  if (finalPart) jsonParts.push(finalPart);
+
+  return JSON.parse(jsonParts.join(''));
 }
 
 export async function fetchShardingFiles(
