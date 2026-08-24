@@ -1,7 +1,6 @@
 import { expect, test } from '@test-kit/rstest';
 import path from 'path';
 import fs from 'fs/promises';
-import { tmpdir } from 'node:os';
 import { createRsdoctorPlugin } from './test-utils';
 
 // Dynamic imports to avoid rspack binding issues
@@ -28,7 +27,6 @@ async function rspackCompile(compile: any) {
         type: ['json', 'html'],
       },
     },
-    server: { port: 0 },
   });
 
   await compile(file, {
@@ -66,24 +64,6 @@ async function rspackCompile(compile: any) {
   return doctor.sdk;
 }
 
-async function readManifest(filePath: string) {
-  const deadline = Date.now() + 10_000;
-  let lastError: unknown;
-
-  while (Date.now() < deadline) {
-    try {
-      return JSON.parse(await fs.readFile(filePath, 'utf-8'));
-    } catch (error) {
-      lastError = error;
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
-  }
-
-  throw new Error(`Failed to read generated Rsdoctor manifest at ${filePath}`, {
-    cause: lastError,
-  });
-}
-
 // Integration test that uses real build artifacts
 test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
   let manifestPath: string;
@@ -96,7 +76,20 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
     serverOrigin = sdk.server.origin;
 
     manifestPath = path.resolve(rspackOutputDir, manifestFileName);
-    manifestData = await readManifest(manifestPath);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    try {
+      const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+      manifestData = JSON.parse(manifestContent);
+    } catch (error) {
+      throw new Error(
+        `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+        { cause: error },
+      );
+    }
   });
 
   test('should upload and analyze real build manifest', async ({ page }) => {
@@ -114,13 +107,12 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
     const fileContent = JSON.stringify(manifestContent);
 
     // Create a temporary file for upload
-    const tempDir = await fs.mkdtemp(path.join(tmpdir(), 'rsdoctor-uploader-'));
-    const tempFilePath = path.join(tempDir, 'manifest.json');
+    const tempFilePath = path.join(__dirname, 'temp-manifest.json');
     await fs.writeFile(tempFilePath, fileContent);
 
     try {
       const navigationPromise = page.waitForURL(/.*#\/overall.*/, {
-        timeout: 10_000,
+        timeout: 2000,
       });
 
       // Use Playwright's file upload method
@@ -132,6 +124,9 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
       expect(page.url()).toContain('#/overall');
 
       // Wait for the page to be fully loaded and data to be mounted
+      await page.waitForLoadState('networkidle');
+      await page.waitForTimeout(2000);
+
       // Wait for data to be mounted and verify it's properly loaded
       await page.waitForFunction(
         (tag) => {
@@ -163,9 +158,9 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
         expect(windowData.enableRoutes.length).toBeTruthy();
       }
     } finally {
-      // Clean up temporary upload data
+      // Clean up temporary file
       try {
-        await fs.rm(tempDir, { recursive: true, force: true });
+        await fs.unlink(tempFilePath);
       } catch (error) {
         console.warn('Failed to clean up temp file:', error);
       }
@@ -176,6 +171,9 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
       manifestData.clientRoutes &&
       manifestData.clientRoutes.includes('Overall')
     ) {
+      // Wait for the page to fully load and render
+      await page.waitForTimeout(2000);
+
       // Try multiple possible selectors for the Bundle Overall menu
       const possibleSelectors = [
         "text='Bundle Overall'",
