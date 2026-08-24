@@ -5,6 +5,7 @@ import { createRsdoctorPlugin } from './test-utils';
 
 // Dynamic imports to avoid rspack binding issues
 let compileByRspack: any;
+const originalEnvRSTEST = process.env.RSTEST;
 const rspackOutputDir = path.join(__dirname, './dist');
 const manifestFileName = 'rsdoctor-data.json';
 
@@ -12,24 +13,13 @@ try {
   const testHelper = require('@scripts/test-helper');
   compileByRspack = testHelper.compileByRspack;
 } catch {
-  // The suite is skipped below when the native Rspack binding is unavailable.
+  // Skip tests if rspack is not available
 }
 
 async function rspackCompile(compile: any) {
   const file = path.resolve(__dirname, './fixtures/c.js');
 
-  const doctor = createRsdoctorPlugin({
-    disableClientServer: true,
-    output: {
-      reportDir: rspackOutputDir,
-      mode: 'brief',
-      options: {
-        type: ['json', 'html'],
-      },
-    },
-  });
-
-  await compile(file, {
+  const res = await compile(file, {
     resolve: {
       extensions: ['.ts', '.js'],
     },
@@ -56,44 +46,58 @@ async function rspackCompile(compile: any) {
         },
       ],
     },
-    plugins: [doctor],
+    plugins: [
+      createRsdoctorPlugin({
+        disableClientServer: false,
+        output: {
+          reportDir: rspackOutputDir,
+          mode: 'brief',
+          options: {
+            type: ['json', 'html'],
+          },
+        },
+        port: 8681,
+      }),
+    ],
   });
 
-  await doctor.sdk.bootstrap();
-
-  return doctor.sdk;
+  return res;
 }
 
 // Integration test that uses real build artifacts
 test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
   let manifestPath: string;
   let manifestData: any;
-  let sdk: any;
-  let serverOrigin: string;
 
   test.beforeAll(async () => {
-    sdk = await rspackCompile(compileByRspack);
-    serverOrigin = sdk.server.origin;
-
-    manifestPath = path.resolve(rspackOutputDir, manifestFileName);
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // RSTEST keeps the client server enabled in integration tests.
+    process.env.RSTEST = 'true';
 
     try {
-      const manifestContent = await fs.readFile(manifestPath, 'utf-8');
-      manifestData = JSON.parse(manifestContent);
-    } catch (error) {
-      throw new Error(
-        `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-        { cause: error },
-      );
+      await rspackCompile(compileByRspack);
+
+      manifestPath = path.resolve(rspackOutputDir, manifestFileName);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      try {
+        const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+        manifestData = JSON.parse(manifestContent);
+      } catch (error) {
+        throw new Error(
+          `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+          { cause: error },
+        );
+      }
+    } finally {
+      process.env.RSTEST = originalEnvRSTEST;
     }
   });
 
   test('should upload and analyze real build manifest', async ({ page }) => {
-    await page.goto(`${serverOrigin}/#/resources/uploader`);
+    await page.goto('http://localhost:8681/#/resources/uploader');
 
     await expect(page.locator('.ant-upload-btn')).toBeVisible();
 
@@ -208,8 +212,9 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
   });
 
   test.afterAll(async () => {
+    process.env.RSTEST = originalEnvRSTEST;
+
     try {
-      await sdk?.dispose();
       await fs.rm(rspackOutputDir, {
         recursive: true,
         force: true,
