@@ -1,11 +1,11 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import path from 'path';
 import fs from 'fs/promises';
+import { tmpdir } from 'node:os';
 import { createRsdoctorPlugin } from './test-utils';
 
 // Dynamic imports to avoid rspack binding issues
 let compileByRspack: any;
-const originalEnvRSTEST = process.env.RSTEST;
 const rspackOutputDir = path.join(__dirname, './dist');
 const manifestFileName = 'rsdoctor-data.json';
 
@@ -13,14 +13,25 @@ try {
   const testHelper = require('@scripts/test-helper');
   compileByRspack = testHelper.compileByRspack;
 } catch {
-  // Skip tests if rspack is not available
-  test.skip(true, 'Rspack binding not available, skipping all tests');
+  // The suite is skipped below when the native Rspack binding is unavailable.
 }
 
 async function rspackCompile(compile: any) {
   const file = path.resolve(__dirname, './fixtures/c.js');
 
-  const res = await compile(file, {
+  const doctor = createRsdoctorPlugin({
+    disableClientServer: true,
+    output: {
+      reportDir: rspackOutputDir,
+      mode: 'brief',
+      options: {
+        type: ['json', 'html'],
+      },
+    },
+    server: { port: 0 },
+  });
+
+  await compile(file, {
     resolve: {
       extensions: ['.ts', '.js'],
     },
@@ -47,64 +58,49 @@ async function rspackCompile(compile: any) {
         },
       ],
     },
-    plugins: [
-      createRsdoctorPlugin({
-        disableClientServer: false,
-        output: {
-          reportDir: rspackOutputDir,
-          mode: 'brief',
-          options: {
-            type: ['json', 'html'],
-          },
-        },
-        port: 8681,
-      }),
-    ],
+    plugins: [doctor],
   });
 
-  return res;
+  await doctor.sdk.bootstrap();
+
+  return doctor.sdk;
+}
+
+async function readManifest(filePath: string) {
+  const deadline = Date.now() + 10_000;
+  let lastError: unknown;
+
+  while (Date.now() < deadline) {
+    try {
+      return JSON.parse(await fs.readFile(filePath, 'utf-8'));
+    } catch (error) {
+      lastError = error;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+
+  throw new Error(`Failed to read generated Rsdoctor manifest at ${filePath}`, {
+    cause: lastError,
+  });
 }
 
 // Integration test that uses real build artifacts
-test.describe('Uploader Integration Tests', () => {
+test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
   let manifestPath: string;
   let manifestData: any;
+  let sdk: any;
+  let serverOrigin: string;
 
   test.beforeAll(async () => {
-    // RSTEST keeps the client server enabled in integration tests.
-    process.env.RSTEST = 'true';
-
-    // Skip test if rspack binding is not available
-    if (!compileByRspack) {
-      test.skip(true, 'Rspack binding not available, skipping test');
-      return;
-    }
-    await rspackCompile(compileByRspack);
+    sdk = await rspackCompile(compileByRspack);
+    serverOrigin = sdk.server.origin;
 
     manifestPath = path.resolve(rspackOutputDir, manifestFileName);
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    try {
-      const manifestContent = await fs.readFile(manifestPath, 'utf-8');
-      manifestData = JSON.parse(manifestContent);
-    } catch (error) {
-      throw new Error(
-        `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-        { cause: error },
-      );
-    }
+    manifestData = await readManifest(manifestPath);
   });
 
   test('should upload and analyze real build manifest', async ({ page }) => {
-    // Skip test if rspack binding is not available
-    if (!compileByRspack) {
-      test.skip(true, 'Rspack binding not available, skipping test');
-      return;
-    }
-    await page.goto('http://localhost:8681/#/resources/uploader');
+    await page.goto(`${serverOrigin}/#/resources/uploader`);
 
     await expect(page.locator('.ant-upload-btn')).toBeVisible();
 
@@ -118,12 +114,13 @@ test.describe('Uploader Integration Tests', () => {
     const fileContent = JSON.stringify(manifestContent);
 
     // Create a temporary file for upload
-    const tempFilePath = path.join(__dirname, 'temp-manifest.json');
+    const tempDir = await fs.mkdtemp(path.join(tmpdir(), 'rsdoctor-uploader-'));
+    const tempFilePath = path.join(tempDir, 'manifest.json');
     await fs.writeFile(tempFilePath, fileContent);
 
     try {
       const navigationPromise = page.waitForURL(/.*#\/overall.*/, {
-        timeout: 2000,
+        timeout: 10_000,
       });
 
       // Use Playwright's file upload method
@@ -135,9 +132,6 @@ test.describe('Uploader Integration Tests', () => {
       expect(page.url()).toContain('#/overall');
 
       // Wait for the page to be fully loaded and data to be mounted
-      await page.waitForLoadState('networkidle');
-      await page.waitForTimeout(2000);
-
       // Wait for data to be mounted and verify it's properly loaded
       await page.waitForFunction(
         (tag) => {
@@ -169,9 +163,9 @@ test.describe('Uploader Integration Tests', () => {
         expect(windowData.enableRoutes.length).toBeTruthy();
       }
     } finally {
-      // Clean up temporary file
+      // Clean up temporary upload data
       try {
-        await fs.unlink(tempFilePath);
+        await fs.rm(tempDir, { recursive: true, force: true });
       } catch (error) {
         console.warn('Failed to clean up temp file:', error);
       }
@@ -182,9 +176,6 @@ test.describe('Uploader Integration Tests', () => {
       manifestData.clientRoutes &&
       manifestData.clientRoutes.includes('Overall')
     ) {
-      // Wait for the page to fully load and render
-      await page.waitForTimeout(2000);
-
       // Try multiple possible selectors for the Bundle Overall menu
       const possibleSelectors = [
         "text='Bundle Overall'",
@@ -219,9 +210,8 @@ test.describe('Uploader Integration Tests', () => {
   });
 
   test.afterAll(async () => {
-    process.env.RSTEST = originalEnvRSTEST;
-
     try {
+      await sdk?.dispose();
       await fs.rm(rspackOutputDir, {
         recursive: true,
         force: true,

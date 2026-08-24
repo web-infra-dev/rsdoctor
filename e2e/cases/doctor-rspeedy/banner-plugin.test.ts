@@ -1,9 +1,10 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import path from 'path';
 import { createStubRspeedy } from './rspeedy';
 
 test('rspack plugin intercept', async () => {
+  const originalEnvRSDOCTOR = process.env.RSDOCTOR;
   const plugin = new RsdoctorRspackPlugin({
     disableClientServer: true,
   });
@@ -22,9 +23,13 @@ test('rspack plugin intercept', async () => {
       },
     },
   });
-  process.env.RSDOCTOR = 'true';
-  await rspeedy.build();
+  try {
+    process.env.RSDOCTOR = 'true';
+    await rspeedy.build();
 
-  const datas = plugin.sdk.getStoreData();
-  expect(datas.moduleGraph.modules.length).toBeGreaterThan(70);
+    const datas = plugin.sdk.getStoreData();
+    expect(datas.moduleGraph.modules.length).toBeGreaterThan(70);
+  } finally {
+    process.env.RSDOCTOR = originalEnvRSDOCTOR;
+  }
 });

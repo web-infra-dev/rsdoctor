@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import { compileByRspack } from '@scripts/test-helper';
 import { Compiler } from '@rspack/core';
 import * as core from '@actions/core';

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import { compileByRspackLayers } from '@scripts/test-helper';
 import path from 'path';
 import { createRsdoctorPlugin } from './test-utils';

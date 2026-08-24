@@ -3,14 +3,15 @@
   "name": "@rsdoctor/e2e",
   "version": "0.0.1",
   "scripts": {
-    "test": "playwright test",
-    "test:local": "npx playwright install chromium && playwright test"
+    "test": "rstest run",
+    "test:local": "npx playwright install chromium && rstest run"
   },
   "devDependencies": {
     "@actions/core": "^1.11.1",
     "@lynx-js/react": "^0.124.0",
     "@lynx-js/rspeedy": "^0.16.4",
-    "@playwright/test": "1.55.1",
+    "@rstest/core": "catalog:",
+    "@rstest/playwright": "catalog:",
     "@rsbuild/plugin-less": "catalog:",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
