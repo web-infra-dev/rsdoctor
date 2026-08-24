@@ -1,11 +1,9 @@
-import type { Page } from '@playwright/test';
+import type { Page } from 'playwright';
 import { execute } from '@rsdoctor/cli';
 import type { SDK } from '@rsdoctor/shared/types';
 import { resolve } from 'path';
 
 export * from './path';
-
-const callbacks: Array<() => unknown> = [];
 
 export async function waitReload(page: Page) {
   // await page.waitForNetworkIdle();
@@ -30,15 +28,9 @@ export async function openBrowserByCLI(
   console.log('page loaded');
 
   async function dispose() {
-    const i = callbacks.findIndex((e) => e === dispose);
-    if (i > -1) {
-      callbacks.splice(i, 1);
-    }
     await page.close();
     await sdk?.dispose();
   }
-
-  callbacks.push(dispose);
 
   return {
     sdk,
@@ -75,15 +67,9 @@ export async function openBrowserByDiffCLI(
   console.log('page loaded');
 
   async function dispose() {
-    const i = callbacks.findIndex((e) => e === dispose);
-    if (i > -1) {
-      callbacks.splice(i, 1);
-    }
     await page.close();
     await sdk?.dispose();
   }
-
-  callbacks.push(dispose);
 
   return {
     sdk,

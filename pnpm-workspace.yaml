@@ -27,6 +27,7 @@ catalog:
   '@rspack/plugin-react-refresh': ^2.0.2
   '@rspack/resolver': ^0.2.8
   '@rstest/core': 0.11.9
+  '@rstest/playwright': 0.11.9
   '@types/connect': 3.4.38
   '@types/estree': 1.0.5
   '@types/fs-extra': ^11.0.4

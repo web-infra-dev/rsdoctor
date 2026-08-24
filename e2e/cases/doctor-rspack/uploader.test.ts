@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import path from 'path';
 import fs from 'fs/promises';
 import { createRsdoctorPlugin } from './test-utils';
@@ -6,15 +6,17 @@ import { createRsdoctorPlugin } from './test-utils';
 // Dynamic imports to avoid rspack binding issues
 let compileByRspack: any;
 const originalEnvRSTEST = process.env.RSTEST;
-const rspackOutputDir = path.join(__dirname, './dist');
+const rspackOutputDir = path.join(__dirname, './dist/uploader');
 const manifestFileName = 'rsdoctor-data.json';
 
 try {
   const testHelper = require('@scripts/test-helper');
   compileByRspack = testHelper.compileByRspack;
-} catch {
-  // Skip tests if rspack is not available
-  test.skip(true, 'Rspack binding not available, skipping all tests');
+} catch (error) {
+  console.warn(
+    'Skipping uploader integration tests: Rspack binding is not available.',
+    error,
+  );
 }
 
 async function rspackCompile(compile: any) {
@@ -66,7 +68,7 @@ async function rspackCompile(compile: any) {
 }
 
 // Integration test that uses real build artifacts
-test.describe('Uploader Integration Tests', () => {
+test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
   let manifestPath: string;
   let manifestData: any;
 
@@ -74,36 +76,30 @@ test.describe('Uploader Integration Tests', () => {
     // RSTEST keeps the client server enabled in integration tests.
     process.env.RSTEST = 'true';
 
-    // Skip test if rspack binding is not available
-    if (!compileByRspack) {
-      test.skip(true, 'Rspack binding not available, skipping test');
-      return;
-    }
-    await rspackCompile(compileByRspack);
-
-    manifestPath = path.resolve(rspackOutputDir, manifestFileName);
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     try {
-      const manifestContent = await fs.readFile(manifestPath, 'utf-8');
-      manifestData = JSON.parse(manifestContent);
-    } catch (error) {
-      throw new Error(
-        `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-        { cause: error },
-      );
+      await rspackCompile(compileByRspack);
+
+      manifestPath = path.resolve(rspackOutputDir, manifestFileName);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      try {
+        const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+        manifestData = JSON.parse(manifestContent);
+      } catch (error) {
+        throw new Error(
+          `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+          { cause: error },
+        );
+      }
+    } finally {
+      process.env.RSTEST = originalEnvRSTEST;
     }
   });
 
   test('should upload and analyze real build manifest', async ({ page }) => {
-    // Skip test if rspack binding is not available
-    if (!compileByRspack) {
-      test.skip(true, 'Rspack binding not available, skipping test');
-      return;
-    }
     await page.goto('http://localhost:8681/#/resources/uploader');
 
     await expect(page.locator('.ant-upload-btn')).toBeVisible();
