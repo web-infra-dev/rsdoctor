@@ -11,6 +11,6 @@ export default defineConfig({
   testTimeout: 60_000,
   hookTimeout: 60_000,
   pool: {
-    maxWorkers: 1,
+    maxWorkers: '50%',
   },
 });

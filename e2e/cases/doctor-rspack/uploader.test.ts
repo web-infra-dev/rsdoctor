@@ -6,7 +6,7 @@ import { createRsdoctorPlugin } from './test-utils';
 // Dynamic imports to avoid rspack binding issues
 let compileByRspack: any;
 const originalEnvRSTEST = process.env.RSTEST;
-const rspackOutputDir = path.join(__dirname, './dist');
+const rspackOutputDir = path.join(__dirname, './dist/uploader');
 const manifestFileName = 'rsdoctor-data.json';
 
 try {
