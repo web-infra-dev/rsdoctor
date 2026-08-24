@@ -8,8 +8,8 @@
   },
   "devDependencies": {
     "@actions/core": "^1.11.1",
-    "@lynx-js/react": "^0.124.0",
-    "@lynx-js/rspeedy": "^0.16.4",
+    "@lynx-js/react": "^0.125.0",
+    "@lynx-js/rspeedy": "^0.16.5",
     "@rstest/core": "catalog:",
     "@rstest/playwright": "catalog:",
     "@rsbuild/plugin-less": "catalog:",
