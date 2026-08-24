@@ -19,8 +19,6 @@ Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可�
 
 webpack 项目应继续使用 Rsdoctor 1.x，或先迁移到 Rspack。详情请参阅 [迁移指南](https://rsdoctor.rs/zh/guide/start/migration-v2)。
 
-https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
-
 ## 🔥 特性
 
 - **编译可视化**：Rsdoctor 将编译行为及耗时进行可视化展示，方便开发者查看构建问题。
