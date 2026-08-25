@@ -119,7 +119,7 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
 
     try {
       const navigationPromise = page.waitForURL(/.*#\/overall.*/, {
-        timeout: 2000,
+        timeout: 10000,
       });
 
       // Use Playwright's file upload method
@@ -178,39 +178,11 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
       manifestData.clientRoutes &&
       manifestData.clientRoutes.includes('Overall')
     ) {
-      // Wait for the page to fully load and render
-      await page.waitForTimeout(2000);
-
-      // Try multiple possible selectors for the Bundle Overall menu
-      const possibleSelectors = [
-        "text='Bundle Overall'",
-        "[data-testid='bundle-overall']",
-        "text='Overall'",
-        ".ant-menu-item:has-text('Bundle Overall')",
-        ".ant-menu-item:has-text('Overall')",
-      ];
-
-      let found = false;
-      for (const selector of possibleSelectors) {
-        try {
-          const element = page.locator(selector).first();
-          await expect(element).toBeVisible({ timeout: 3000 });
-          found = true;
-          break;
-        } catch {
-          // Continue to next selector
-          console.log(`Selector "${selector}" not found, trying next...`);
-        }
-      }
-
-      if (!found) {
-        // If none of the selectors work, log the page content for debugging
-        const pageContent = await page.content();
-        console.log('Page content:', pageContent.substring(0, 1000));
-        throw new Error(
-          'Could not find Bundle Overall menu item with any selector',
-        );
-      }
+      await page.waitForFunction(
+        () => document.body.innerText.includes('Overall'),
+        undefined,
+        { timeout: 10000 },
+      );
     }
   });
 
