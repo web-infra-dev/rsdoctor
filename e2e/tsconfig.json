@@ -5,8 +5,9 @@
     "outDir": "./dist",
     "paths": {
       "@/*": ["./src/*"],
-      "@scripts/*": ["./scripts/*"]
+      "@scripts/*": ["./scripts/*"],
+      "@test-kit/*": ["./test-kit/*"]
     }
   },
-  "include": ["src", "scripts", "cases", "playwright.config.ts", "test-kit"]
+  "include": ["src", "scripts", "cases", "rstest.config.mts", "test-kit"]
 }

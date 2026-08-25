@@ -19,8 +19,6 @@ Rsdoctor is committed to being a one-stop, intelligent build analyzer that makes
 
 For webpack projects, continue using Rsdoctor 1.x or migrate to Rspack. See the [migration guide](https://rsdoctor.rs/guide/start/migration-v2) for details.
 
-https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
-
 ## 🔥 Features
 
 - **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.

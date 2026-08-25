@@ -52,23 +52,16 @@ export default defineConfig({
     minify: false,
     filenameHash: false,
   },
-  performance: {
-    chunkSplit: {
-      strategy: 'split-by-experience',
-      override: {
-        cacheGroups: {
-          shared: {
-            test: /[\\/]src[\\/]utils[\\/]shared\.ts$/,
-            name: 'shared',
-            chunks: 'async',
-            priority: 20,
-            reuseExistingChunk: true,
-          },
-        },
+  splitChunks: {
+    preset: 'default',
+    cacheGroups: {
+      shared: {
+        test: /[\\/]src[\\/]utils[\\/]shared\.ts$/,
+        name: 'shared',
+        chunks: 'async',
+        priority: 20,
+        reuseExistingChunk: true,
       },
-    },
-    bundleAnalyze: {
-      generateStatsFile: true,
     },
   },
 });

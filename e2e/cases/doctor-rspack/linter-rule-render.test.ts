@@ -1,8 +1,9 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import { compileByRspack } from '@scripts/test-helper';
 import * as core from '@actions/core';
 import path from 'path';
 import fs from 'fs';
+import { pathToFileURL } from 'node:url';
 import { createRsdoctorPlugin } from './test-utils';
 
 const ecmaVersion = 3;
@@ -68,10 +69,10 @@ test('linter rule render check', async ({ page }) => {
     `./dist/linter-rule-render/rsdoctor-report.html`,
   );
 
-  fileExists(reportPath);
+  expect(fileExists(reportPath)).toBe(true);
 
   // Navigate to a URL
-  await page.goto(`file:///${reportPath}`);
+  await page.goto(pathToFileURL(reportPath).href);
   core.debug(`reportPath:: ${reportPath}`);
 
   const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
@@ -100,10 +101,9 @@ test('linter rule render check', async ({ page }) => {
   // );
 });
 
-async function fileExists(filePath: string) {
+function fileExists(filePath: string) {
   try {
-    await fs.existsSync(filePath);
-    return true;
+    return fs.existsSync(filePath);
   } catch {
     return false;
   }
