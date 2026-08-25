@@ -337,6 +337,7 @@ export async function handleAfterEmitAssets(
         );
       } catch (e) {
         logger.debug(e);
+        markAssetWithoutSourceMap(_this.assetsWithoutSourceMap, assetName);
       }
       _this.sourceMapSets.forEach((_value: string, key: string) => {
         if (!skipSources.has(key)) {

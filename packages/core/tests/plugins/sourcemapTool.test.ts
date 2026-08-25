@@ -384,6 +384,18 @@ describe('sourcemapTool', () => {
         },
         getAssets: () => [
           {
+            name: 'main.js',
+            source: {
+              source: () => 'console.log("test");\n',
+              name: 'main.js',
+              sourceAndMap: () => ({
+                source: 'console.log("test");\n',
+                map: mockJsMap,
+              }),
+            },
+            info: {},
+          },
+          {
             name: 'worker.abc123.js',
             source: {
               source: () => 'console.log("worker");\n',
@@ -402,7 +414,7 @@ describe('sourcemapTool', () => {
           {
             name: 'worker.abc123.js.map',
             source: {
-              source: () => 'invalid source map',
+              source: () => '{}',
               name: 'worker.abc123.js.map',
             },
             info: {},
@@ -411,7 +423,7 @@ describe('sourcemapTool', () => {
       } as any;
 
       await handleAfterEmitAssets(compilation, plugin);
-      expect(plugin.sourceMapSets.size).toBe(0);
+      expect(plugin.sourceMapSets.size).toBe(1);
       expect(plugin.assetsWithoutSourceMap).toEqual(
         new Set(['worker.abc123.js']),
       );
