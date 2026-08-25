@@ -2,7 +2,13 @@
 published_at: 2026-08
 ---
 
-_2026 年 8 月_
+<img
+  src="/rsdoctor-2_0-release-banner.png"
+  alt="Rsdoctor 2.0 发布横幅"
+  style={{ margin: 'auto' }}
+/>
+
+_July 2026_
 
 # Rsdoctor 2.0 发布公告
 
@@ -71,6 +77,18 @@ Rsdoctor 2.0 将常规的 `RsdoctorRspackPlugin` 统一为这些场景的入口�
 
 - [MultiCompiler 与 Rsbuild environments](https://github.com/web-infra-dev/rsdoctor/pull/1888)：自动聚合同一次启动中创建的 Compiler，并使用 `web`、`node` 等 environment 名称区分结果。
 - [Child Compiler](https://github.com/web-infra-dev/rsdoctor/pull/1842)：自动发现 Child Compiler，并将其分析数据与 Main Compiler 隔离展示。
+
+<img
+  src="/rsdoctor-2_0-multicompiler.jpg"
+  alt="MultiCompiler 构建中包含 web 和 node 的 Compiler 选择器"
+  style={{ margin: 'auto' }}
+/>
+
+<img
+  src="/rsdoctor-2_0-child-compiler.jpg"
+  alt="包含 Main compiler 和带 Child 标签的 child-assets 的 Compiler 选择器"
+  style={{ margin: 'auto' }}
+/>
 
 自动聚合默认开启，无需引入新的插件。如果同一进程启动的是多个互不相关的 Compiler，可以设置 `multiCompiler: false`；也可以通过命名分组明确关联多个插件实例：
 

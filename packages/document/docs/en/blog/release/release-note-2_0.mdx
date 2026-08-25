@@ -2,7 +2,13 @@
 published_at: 2026-08
 ---
 
-_August 2026_
+<img
+  src="/rsdoctor-2_0-release-banner.png"
+  alt="Rsdoctor 2.0 release banner"
+  style={{ margin: 'auto' }}
+/>
+
+_July 2026_
 
 # Announcing Rsdoctor 2.0
 
@@ -71,6 +77,18 @@ Rsdoctor 2.0 makes the regular `RsdoctorRspackPlugin` the single entry point for
 
 - [Multi-compiler and Rsbuild environments](https://github.com/web-infra-dev/rsdoctor/pull/1888): Group compilers created during the same startup and use environment names such as `web` and `node` to distinguish their results.
 - [Child compilers](https://github.com/web-infra-dev/rsdoctor/pull/1842): Discover child compilers automatically and display their analysis data separately from the main compiler.
+
+<img
+  src="/rsdoctor-2_0-multicompiler.jpg"
+  alt="Compiler selector with web and node entries from a multi-compiler build"
+  style={{ margin: 'auto' }}
+/>
+
+<img
+  src="/rsdoctor-2_0-child-compiler.jpg"
+  alt="Compiler selector with Main compiler and child-assets marked Child"
+  style={{ margin: 'auto' }}
+/>
 
 Automatic grouping is enabled by default and requires no new plugin. If one process starts unrelated compilers, set `multiCompiler: false`. A named group can also explicitly associate plugin instances:
 
