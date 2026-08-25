@@ -8,27 +8,27 @@ _August 2026_
 
 We are excited to announce **Rsdoctor 2.0**! 🎉
 
-Rsdoctor 2.0 deepens its integration with Rspack and makes the same build analysis data available to developers, agents, and automation. Compared with the current `v1.x` branch, 2.0 uses a Rspack-native analysis path, covers more compiler topologies, and provides the same core capabilities through a much smaller package and dependency graph.
+Starting with 2.0, Rsdoctor is fully focused on Rspack. webpack projects can continue using Rsdoctor 1.x. This focus allows Rsdoctor to integrate more deeply with Rspack's built-in capabilities and continue tailoring analysis to its build model and ecosystem.
+
+Build analysis data also moves beyond the report UI: developers can investigate issues visually, while coding agents and automation can query the same data directly. Rsdoctor 2.0 also brings faster analysis, broader compiler support, and a smaller installation footprint.
 
 Highlights in this release include:
 
-- **Rspack-native by default**: Rsdoctor 2.0 requires Rspack 2 and uses the Rsdoctor native plugin built into Rspack for module and chunk graph collection.
+- **Faster analysis with Rspack**: Rsdoctor 2.0 is fully focused on Rspack, and expensive data processing runs inside Rspack. When introduced as an option in 1.0, this reduced overall analysis time by **more than 20%**. In 2.0, it is always enabled and avoids repeated work such as stats conversion.
 - **Build analysis for agents**: Agent CLI and the Rsdoctor analysis skill let coding agents query build data and return actionable optimization suggestions.
 - **One report for every compiler**: The regular Rspack plugin automatically handles multi-compiler builds, Rsbuild environments, and child compilers while keeping their data isolated.
-- **A smaller package and dependency graph**: Core, graph, SDK, utilities, and the Rspack plugin are consolidated into `@rsdoctor/core`, reducing the repository from 13 packages to 6 and direct runtime dependency declarations from 88 to 39. The complete production install size of `@rsdoctor/core` and its transitive dependencies drops from 25.5 MB to 13.1 MB, a reduction of about 48%.
-- **Faster rebuild analysis**: Watch mode preserves loader caching, skips gzip-size calculations, and writes report data with faster compression.
+- **A smaller installation footprint**: Core capabilities are consolidated into `@rsdoctor/core`, reducing the repository from 13 packages to 6 and the complete production installation footprint by **48.5%**.
+- **Faster rebuild analysis**: Loader caching, fewer unnecessary calculations, and faster report writes reduce median HMR time by about **47%** in the Kiali benchmark.
 
-> Rsdoctor 2.0 requires Node.js 22.18 or later and Rspack 2.0 or later. webpack projects should remain on Rsdoctor 1.x or migrate to Rspack before upgrading.
+## Deeper and faster Rspack analysis {#rspack-native-by-default}
 
-## Rspack-native by default
+Rsdoctor 1.x supported both Rspack and webpack, so some analysis capabilities had to rely on data that both bundlers could provide. By focusing on Rspack in 2.0, Rsdoctor can reuse more of Rspack's internal data and evolve alongside its build model and capabilities.
 
-Rsdoctor 1.x supported both Rspack and webpack, and its Rspack native plugin started as an optional performance path. Maintaining native, stats-based, Rspack, and webpack implementations in parallel made the analysis pipeline harder to evolve consistently.
+The Rspack native plugin started as an optional performance optimization in Rsdoctor 1.x. It moved expensive data processing into Rust inside Rspack, reducing overall analysis time by **more than 20%** in large-project testing for Rsdoctor 1.0. Rsdoctor 2.0 enables this capability by default.
 
-Rsdoctor 2.0 supports Rspack 2 only. Module and chunk graph collection now always uses the Rsdoctor native plugin built into Rspack, the resolver analysis uses Rspack's internal resolver data, and side-effect source code is collected only when tree-shaking analysis needs it.
+Rspack now provides module and chunk graphs directly instead of sending them through stats conversion. Resolver analysis reuses Rspack's internal resolver data, while side-effect source code is collected only when tree-shaking analysis needs it. These changes reduce data conversion and repeated processing in JavaScript.
 
-Projects no longer need [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin), and the stats-based fallback has been removed. A single Rspack-native path reduces duplicate processing and gives new analysis features one consistent data model.
-
-webpack support and `@rsdoctor/webpack-plugin` have been removed. webpack projects can continue using the maintained `v1.x` release line.
+Projects no longer need [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin). Remove the option when upgrading to 2.0.
 
 ## Build analysis for agents
 
@@ -53,14 +53,7 @@ After setup, users do not need to remember or run Agent CLI commands themselves.
 Use Rsdoctor to analyze this project and identify opportunities to reduce bundle size.
 ```
 
-The coding agent selects and runs the relevant `rsdoctor-agent` commands, analyzes the results in the context of the project, and continues with more focused queries when needed.
-
-Agent CLI provides two complementary interfaces:
-
-- `list` and `query` expose a stable, machine-readable catalog for agents and automation.
-- Grouped commands such as `chunks`, `modules`, `packages`, `loaders`, and `tree-shaking` support interactive investigation.
-
-Together with the analysis skill, an agent can investigate large chunks, duplicate dependencies, module issuer chains, loader hotspots, and tree-shaking bailouts, then continue with focused follow-up queries.
+The coding agent selects and runs the relevant `rsdoctor-agent` commands, then uses the project context to investigate large chunks, duplicate dependencies, module issuer chains, loader hotspots, and tree-shaking bailouts. It can continue with more focused queries when needed.
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-2.gif"
@@ -68,7 +61,7 @@ Together with the analysis skill, an agent can investigate large chunks, duplica
   style={{ margin: 'auto' }}
 />
 
-Rsdoctor 2.0 removes `@rsdoctor/mcp-server`. MCP Server requires client-specific configuration and a service connection, while Agent CLI reads `rsdoctor-data.json` directly, runs on demand, and returns structured JSON, making it easier to integrate with coding agents and automation. Rsdoctor 2.0 therefore standardizes on Agent CLI for AI-assisted analysis. It is not MCP-compatible or a drop-in API replacement. See [AI](/guide/start/ai) and the [2.0 migration guide](/guide/start/migration-v2#ai-workflow-migration) for installation and migration details.
+Rsdoctor 2.0 removes `@rsdoctor/mcp-server` and standardizes on Agent CLI, which runs on demand without maintaining a service connection. It is not MCP-compatible or a drop-in API replacement. See [AI](/guide/start/ai) and the [2.0 migration guide](/guide/start/migration-v2#ai-workflow-migration) for installation and migration details.
 
 ## One report for every compiler
 
@@ -76,10 +69,8 @@ Modern Rspack applications often create several compilers in one process. A mult
 
 Rsdoctor 2.0 makes the regular `RsdoctorRspackPlugin` the single entry point for these cases:
 
-- [Automatic multi-compiler and Rsbuild environment support](https://github.com/web-infra-dev/rsdoctor/pull/1888) groups compilers created during the same startup. Each compiler gets isolated analysis data, while the report provides a compiler selector for moving between results. Rsbuild environments use their environment names, such as `web` and `node`.
-- [Child compiler support](https://github.com/web-infra-dev/rsdoctor/pull/1842) discovers child compilers as they are created and records their module graph, chunks, assets, loaders, plugins, diagnostics, rules, and summary data separately. The report can switch between the main compiler and its child compiler results.
-
-The primary compiler keeps the existing `.rsdoctor` output path. Additional top-level compilers write to `.rsdoctor/compilers/<compilerName>`, while child compilers write to `.rsdoctor/.slaves/<name>`. This keeps data from different compiler types isolated.
+- [Multi-compiler and Rsbuild environments](https://github.com/web-infra-dev/rsdoctor/pull/1888): Group compilers created during the same startup and use environment names such as `web` and `node` to distinguish their results.
+- [Child compilers](https://github.com/web-infra-dev/rsdoctor/pull/1842): Discover child compilers automatically and display their analysis data separately from the main compiler.
 
 Automatic grouping is enabled by default and requires no new plugin. If one process starts unrelated compilers, set `multiCompiler: false`. A named group can also explicitly associate plugin instances:
 
@@ -89,44 +80,28 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-This gives browser, server, worker, and plugin-generated builds separate results without requiring users to switch to a dedicated multi-compiler plugin.
+Browser, server, worker, and plugin-generated builds can now be viewed from one report without switching to a dedicated multi-compiler plugin.
 
-## A smaller package graph and install footprint {#a-smaller-package-and-dependency-graph}
+## A smaller install footprint {#a-smaller-package-and-dependency-graph}
 
-### Smaller dependency graph {#smaller-dependency-graph}
+### A simpler package graph {#smaller-dependency-graph}
 
-Rsdoctor 2.0 consolidates core, graph, SDK, utilities, and the Rspack plugin into `@rsdoctor/core`, moves shared capabilities into `@rsdoctor/shared`, and keeps the client and CLIs as separate entry points. The resulting dependency graph is smaller:
+Rsdoctor 2.0 consolidates core, graph, SDK, utilities, and the Rspack plugin into `@rsdoctor/core`, moves shared capabilities into `@rsdoctor/shared`, and keeps the client and CLIs as separate entry points:
 
 | Metric                          | Rsdoctor 1.x | Rsdoctor 2.0 |
 | ------------------------------- | -----------: | -----------: |
 | Top-level repository packages   |           13 |            6 |
 | Runtime dependency declarations |           88 |           39 |
 
-> The counts cover `dependencies` and `optionalDependencies` in `packages/*/package.json`. They describe the repository package graph rather than an application's complete installation dependency tree.
-
 ### Smaller install footprint {#smaller-production-install-footprint}
 
-Rsdoctor 2.0 streamlines the package structure and runtime dependencies, further reducing the complete installation footprint of `@rsdoctor/core`.
-
-The following table compares the logical size of `@rsdoctor/core` and its complete transitive dependency tree in a clean npm production install:
+The streamlined package structure and runtime dependencies also cut the production installation footprint of `@rsdoctor/core` and its complete transitive dependency tree by nearly half:
 
 | Metric                                       | Rsdoctor 1.6.2 | Rsdoctor 2.0 | Reduction | Reduction rate |
 | -------------------------------------------- | -------------: | -----------: | --------: | -------------: |
-| Complete `@rsdoctor/core` production install |        25.5 MB |      13.1 MB |   12.3 MB |          48.5% |
+| Complete `@rsdoctor/core` production install |        25.5 MB |      13.1 MB |   12.3 MB |      **48.5%** |
 
-> The install comparison was measured with npm on August 21, 2026, with lifecycle scripts disabled. Install size is the logical file size of Rsdoctor and all its transitive dependencies in `node_modules`, rather than the disk space allocated by the filesystem. Transitive dependency updates may affect the result, so we will measure again with the final 2.0 package after it is published.
-
-For most Rspack projects, the installation and import path now change from `@rsdoctor/rspack-plugin` to `@rsdoctor/core`:
-
-```ts title="Rsdoctor 1.x"
-import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
-```
-
-```ts title="Rsdoctor 2.0"
-import { RsdoctorRspackPlugin } from '@rsdoctor/core';
-```
-
-Rsdoctor 2.0 packages are ESM-only. `@rsdoctor/cli` continues to provide the `rsdoctor` command and remains independently installable.
+When upgrading an Rspack project, replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`. See the [2.0 migration guide](/guide/start/migration-v2#update-the-rspack-plugin) for the steps.
 
 ## Faster rebuilds in watch mode
 
@@ -138,7 +113,7 @@ Rsdoctor 2.0 removes repeated work from the watch and HMR critical path in three
 
 Watch mode writes report data with a faster compression level to reduce synchronous work on every update. As a trade-off, the compressed size of the main report shards increases by about 26%. This affects Rsdoctor report data only, not application bundle output. Non-watch builds continue to use the default compression level.
 
-In the Kiali benchmark, median HMR time dropped from 6.81 s to 3.64 s, an improvement of about 47%. Report writes saved about 1.54 s per update, while loader events and the loader report shard were reduced by about 72% and 73%. In a separate repeated-build benchmark, analysis time dropped from 250.9 ms to 14.2 ms, an improvement of 94.3%.
+In the Kiali benchmark, median HMR time dropped from 6.81 s to 3.64 s, an improvement of about **47%**. In a separate repeated-build benchmark, analysis time dropped from 250.9 ms to 14.2 ms, an improvement of **94.3%**.
 
 > The Kiali benchmark disabled the Rsdoctor client server. The repeated-build benchmark used 100 modules, one warm-up, and the median of five runs.
 >
@@ -151,27 +126,12 @@ Rsdoctor 2.0 makes the Bundle Size page smoother for large projects and helps yo
 - Tree Graph uses virtual scrolling and render caching to reduce the rendering cost of large assets with many modules.
 - Treemap improves navigation, filtering, search, size presentation, and responsive layouts, making important modules easier to find and inspect.
 
-## Upgrade to 2.0
-
-For Rspack projects, start by replacing the 1.x plugin package:
-
-```bash
-pnpm remove @rsdoctor/rspack-plugin
-pnpm add -D @rsdoctor/core
-```
-
-When using the CLI, keep `@rsdoctor/cli` and `@rsdoctor/core` on the same version.
-
-> [Read the complete Rsdoctor 2.0 migration guide](/guide/start/migration-v2) for package, ESM, AI workflow, and configuration migration steps.
-
 ## Breaking changes
 
 Rsdoctor 2.0 deliberately narrows its compatibility and package surface. Account for the following changes before upgrading:
 
-- **Runtime and bundler**: Node.js 22.18 or later and Rspack 2.0 or later are required. Rspack 1.x and webpack are no longer supported; webpack projects should stay on the maintained Rsdoctor 1.x release line or migrate to Rspack first.
-- **Packages**: Replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`. The standalone `@rsdoctor/webpack-plugin`, `@rsdoctor/sdk`, `@rsdoctor/graph`, `@rsdoctor/types`, `@rsdoctor/utils`, and `@rsdoctor/components` packages have been removed, while `@rsdoctor/cli` remains independently installable.
-- **Module format**: Rsdoctor packages are ESM-only. Replace CommonJS `require()` calls with ESM imports.
-- **Analysis path**: The Rspack native plugin is always enabled and the stats-based fallback has been removed.
+- **Runtime and bundler**: Node.js 22.18 or later and Rspack 2.0 or later are required. Projects on Rspack 1.x must upgrade Rspack first. webpack projects should stay on the maintained Rsdoctor 1.x release line or migrate to Rspack.
+- **Packages and module format**: Replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`. Rsdoctor packages are ESM-only, so CommonJS `require()` calls must become ESM imports.
 - **AI workflow**: `@rsdoctor/mcp-server` has been removed. Migrate to `@rsdoctor/agent-cli`, which reads report data directly but is not an MCP-compatible or drop-in API replacement.
 
 ### Configuration options
@@ -192,9 +152,20 @@ The following table distinguishes options that are removed from options that rem
 
 See the [configuration migration guide](/config/options/options-v2) for complete examples.
 
+## Upgrade to 2.0
+
+Rspack projects that meet the requirements above can start by replacing the 1.x plugin package:
+
+```bash
+pnpm remove @rsdoctor/rspack-plugin
+pnpm add -D @rsdoctor/core
+```
+
+When using the CLI, keep `@rsdoctor/cli` and `@rsdoctor/core` on the same version. See the [Rsdoctor 2.0 migration guide](/guide/start/migration-v2) for the complete steps.
+
 ---
 
-Rsdoctor 2.0 establishes a smaller, Rspack-native foundation for both visual and automated build analysis. We will continue improving the data exposed to developers and agents so that build problems are easier to find, understand, and fix.
+By focusing on Rspack, Rsdoctor 2.0 establishes a smaller foundation for visual and automated build analysis. We will continue expanding analysis across Rspack build scenarios and improving the data exposed to developers and agents so that build problems are easier to find, understand, and fix.
 
 See the [Release page](https://github.com/web-infra-dev/rsdoctor/releases) for the complete list of changes.
 
