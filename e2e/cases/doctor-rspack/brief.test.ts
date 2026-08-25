@@ -78,24 +78,15 @@ test('rspack brief mode', async ({ page }) => {
 
   const titleContent = 'Bundle Overall';
 
-  const bundleTitleExists = await page
-    .locator(`text=${titleContent}`)
-    .first()
-    .isVisible();
-
-  const compileTabExists = await page
-    .locator(`text='Compile Analysis'`)
-    .first()
-    .isVisible();
-
-  const bundleTabExists = await page
-    .locator(`text='Bundle Size'`)
-    .first()
-    .isVisible();
-
-  expect(bundleTitleExists).toBe(true);
-  expect(compileTabExists).toBe(true);
-  expect(bundleTabExists).toBe(true);
+  await expect(page.locator(`text=${titleContent}`).first()).toBeVisible({
+    timeout: 10000,
+  });
+  await expect(page.locator(`text='Compile Analysis'`).first()).toBeVisible({
+    timeout: 10000,
+  });
+  await expect(page.locator(`text='Bundle Size'`).first()).toBeVisible({
+    timeout: 10000,
+  });
 });
 
 function fileExists(filePath: string) {

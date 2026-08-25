@@ -2,7 +2,6 @@ import { expect, test } from '@test-kit/rstest';
 import { compileByRspack } from '@scripts/test-helper';
 import { Compiler } from '@rspack/core';
 import * as core from '@actions/core';
-import os from 'os';
 import path from 'path';
 import { createRsdoctorPlugin } from './test-utils';
 
@@ -126,19 +125,11 @@ test('rspack data store', async () => {
     `graphData.modules[0].identifier: ${graphData.modules[0].identifier}`,
   );
 
-  if (os.EOL === '\n') {
-    expect(
-      graphData.modules[0].identifier.indexOf('/fixtures/'),
-    ).toBeGreaterThan(0);
-  } else {
-    expect(
-      graphData.modules[0].identifier.indexOf('\\fixtures\\'),
-    ).toBeGreaterThan(0);
-  }
+  expect(graphData.modules[0].identifier).toMatch(/[\\/]fixtures[\\/]/);
 
   graphData.modules.forEach((mod) => (mod.identifier = ''));
   expect(graphData.modules[0].size.sourceSize).toBeGreaterThan(0);
-  expect(graphData.modules[0].path).toMatch('/fixtures/');
+  expect(graphData.modules[0].path).toMatch(/[\\/]fixtures[\\/]/);
 
   // TODO: Change report Rspack config to afterPlugin hook, this should be reWrite
   // @ts-ignore
