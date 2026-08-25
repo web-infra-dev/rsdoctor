@@ -39,8 +39,7 @@
 }
 
 .sideColumn {
-  flex: 1 1 320px;
-  min-width: 300px;
+  flex: 1 1 0;
 
   :global(.ant-card) {
     background: var(--color-bg-box-subtle);
@@ -54,13 +53,11 @@
 }
 
 @media (max-width: 1200px) {
-  .columns {
-    flex-wrap: wrap;
+  .mainColumn {
+    flex: 3 1 0;
   }
 
-  .mainColumn,
   .sideColumn {
-    flex-basis: 100%;
-    width: 100%;
+    flex: 1 1 0;
   }
 }
