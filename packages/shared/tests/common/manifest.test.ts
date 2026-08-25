@@ -83,6 +83,55 @@ describe('test src/common/manifest.ts', () => {
     ).rejects.toBe(error);
   });
 
+  it('prefetches shards with bounded concurrency and preserves order', async () => {
+    const data = {
+      modules: Array.from({ length: 20 }, (_, id) => ({
+        id,
+        source: `m${id}`,
+      })),
+    };
+    const encodedText = Algorithm.compressText(JSON.stringify(data));
+    const shardSize = Math.ceil(encodedText.length / 6);
+    const shards = Array.from({ length: 6 }, (_, index) =>
+      encodedText.slice(index * shardSize, (index + 1) * shardSize),
+    );
+    const urls = shards.map((_, index) => `shard-${index}`);
+    const gates = shards.map(() => {
+      let resolve!: () => void;
+      const promise = new Promise<void>((resolvePromise) => {
+        resolve = resolvePromise;
+      });
+      return { promise, resolve };
+    });
+    const started: number[] = [];
+    const completed: number[] = [];
+    let active = 0;
+    let maxActive = 0;
+
+    const resultPromise = Manifest.fetchShardingData(urls, async (url) => {
+      const index = Number(url.slice('shard-'.length));
+      started.push(index);
+      active += 1;
+      maxActive = Math.max(maxActive, active);
+      await gates[index].promise;
+      completed.push(index);
+      active -= 1;
+      return shards[index];
+    });
+
+    await new Promise<void>((resolve) => setImmediate(resolve));
+    expect(started).toStrictEqual([0, 1, 2]);
+
+    gates.slice(3).forEach(({ resolve }) => resolve());
+    gates[2].resolve();
+    gates[1].resolve();
+    gates[0].resolve();
+
+    await expect(resultPromise).resolves.toStrictEqual(data);
+    expect(completed.slice(0, 3)).toStrictEqual([2, 1, 0]);
+    expect(maxActive).toBe(3);
+  });
+
   it('does not depend on Readable.from in browser environments', async () => {
     const fromSpy = rs.spyOn(Readable, 'from').mockImplementation(() => {
       throw new Error('Readable.from is not available in the browser');

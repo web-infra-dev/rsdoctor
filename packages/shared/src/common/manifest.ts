@@ -5,14 +5,51 @@ import { StringDecoder } from 'string_decoder';
 import { createInflate } from 'zlib';
 import { isRemoteUrl } from './url';
 
+const SHARD_FETCH_CONCURRENCY = 3;
+
+type ShardFetchResult =
+  | { status: 'fulfilled'; value: string }
+  | { status: 'rejected'; reason: unknown };
+
 async function* decodeBase64Shards(
   shardingFiles: string[],
   fetchImplement: (url: string) => Promise<string>,
 ) {
   let remainder = '';
+  let nextIndex = 0;
+  const pending = new Map<number, Promise<ShardFetchResult>>();
 
-  for (const url of shardingFiles) {
-    const encodedText = remainder + (await fetchImplement(url));
+  const fillQueue = () => {
+    while (
+      nextIndex < shardingFiles.length &&
+      pending.size < SHARD_FETCH_CONCURRENCY
+    ) {
+      const index = nextIndex++;
+      pending.set(
+        index,
+        Promise.resolve()
+          .then(() => fetchImplement(shardingFiles[index]))
+          .then(
+            (value) => ({ status: 'fulfilled' as const, value }),
+            (reason) => ({ status: 'rejected' as const, reason }),
+          ),
+      );
+    }
+  };
+
+  fillQueue();
+
+  for (let index = 0; index < shardingFiles.length; index++) {
+    const result = await pending.get(index)!;
+    pending.delete(index);
+
+    if (result.status === 'rejected') {
+      throw result.reason;
+    }
+
+    fillQueue();
+
+    const encodedText = remainder + result.value;
     const decodableLength = encodedText.length - (encodedText.length % 4);
 
     if (decodableLength > 0) {
