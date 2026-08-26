@@ -3,7 +3,7 @@ published_at: 2026-08
 ---
 
 <img
-  src="/rsdoctor-2_0-release-banner.png"
+  src="https://assets.rspack.rs/rsdoctor/rsdoctor_2.png"
   alt="Rsdoctor 2.0 release banner"
   style={{ margin: 'auto' }}
 />
@@ -79,13 +79,7 @@ Rsdoctor 2.0 makes the regular `RsdoctorRspackPlugin` the single entry point for
 - [Child compilers](https://github.com/web-infra-dev/rsdoctor/pull/1842): Discover child compilers automatically and display their analysis data separately from the main compiler.
 
 <img
-  src="/rsdoctor-2_0-multicompiler.jpg"
-  alt="Compiler selector with web and node entries from a multi-compiler build"
-  style={{ margin: 'auto' }}
-/>
-
-<img
-  src="/rsdoctor-2_0-child-compiler.jpg"
+  src="https://assets.rspack.rs/rsdoctor/child_compiler.png"
   alt="Compiler selector with Main compiler and child-assets marked Child"
   style={{ margin: 'auto' }}
 />
@@ -139,10 +133,23 @@ In the Kiali benchmark, median HMR time dropped from 6.81 s to 3.64 s, an improv
 
 ## Refined bundle analysis
 
-Rsdoctor 2.0 makes the Bundle Size page smoother for large projects and helps you locate important modules more quickly through faster rendering and clearer navigation, filtering, and size presentation.
+Large projects often produce assets with many deeply nested modules. Rsdoctor 2.0 improves both the rendering performance of the Bundle Size page and the analysis path from selecting assets and filtering chunks to locating modules and opening their details, making complex output easier to explore and understand.
 
-- Tree Graph uses virtual scrolling and render caching to reduce the rendering cost of large assets with many modules.
-- Treemap improves navigation, filtering, search, size presentation, and responsive layouts, making important modules easier to find and inspect.
+- Tree Graph uses virtual scrolling and render caching to render only nodes near the viewport and reduce the overhead of interactive components such as tooltips and popovers while scrolling. Expanding folders and navigating large assets now remain responsive even when they contain many modules.
+
+**Before**
+
+![Tree Graph before](https://assets.rspack.rs/rsdoctor/tree-graph-before.gif)
+
+**After**
+
+![Tree Graph after](https://assets.rspack.rs/rsdoctor/tree-graph-after.gif)
+
+- Treemap adds full-screen mode, a collapsible sidebar, breadcrumb navigation, and click-to-zoom. You can drill into deeply nested modules while keeping the current hierarchy visible.
+- Asset and chunk filters, regular-expression module search, result highlighting, and direct access to module details shorten the path from spotting an unexpected size to identifying the responsible code.
+- Stat, Parsed, and Gzipped size modes now stay consistent across the Treemap, sidebar, and tooltips. JavaScript asset filtering removes unrelated resources from module-focused views, while responsive layouts and expandable cards make better use of the available space.
+
+> Related PRs: [#1705](https://github.com/web-infra-dev/rsdoctor/pull/1705), [#1782](https://github.com/web-infra-dev/rsdoctor/pull/1782), [#1830](https://github.com/web-infra-dev/rsdoctor/pull/1830), and [#1839](https://github.com/web-infra-dev/rsdoctor/pull/1839).
 
 ## Breaking changes
 
@@ -187,4 +194,8 @@ By focusing on Rspack, Rsdoctor 2.0 establishes a smaller foundation for visual 
 
 See the [Release page](https://github.com/web-infra-dev/rsdoctor/releases) for the complete list of changes.
 
-Thank you to everyone who has contributed to Rsdoctor ❤️
+## Acknowledgements
+
+Rsdoctor 2.0 was made possible by the wider community. Thank you to everyone who contributed code, tests, documentation, design, and reviews, as well as users who opened issues, shared reproducible projects, and tested prerelease versions. Your feedback and collaboration made Rsdoctor 2.0 more reliable and help us keep improving the build analysis experience ❤️
+
+[![Contributors](https://contrib.rocks/image?repo=web-infra-dev/rsdoctor)](https://github.com/web-infra-dev/rsdoctor/graphs/contributors)

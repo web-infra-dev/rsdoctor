@@ -3,7 +3,7 @@ published_at: 2026-08
 ---
 
 <img
-  src="/rsdoctor-2_0-release-banner.png"
+  src="https://assets.rspack.rs/rsdoctor/rsdoctor_2.png"
   alt="Rsdoctor 2.0 发布横幅"
   style={{ margin: 'auto' }}
 />
@@ -79,13 +79,7 @@ Rsdoctor 2.0 将常规的 `RsdoctorRspackPlugin` 统一为这些场景的入口�
 - [Child Compiler](https://github.com/web-infra-dev/rsdoctor/pull/1842)：自动发现 Child Compiler，并将其分析数据与 Main Compiler 隔离展示。
 
 <img
-  src="/rsdoctor-2_0-multicompiler.jpg"
-  alt="MultiCompiler 构建中包含 web 和 node 的 Compiler 选择器"
-  style={{ margin: 'auto' }}
-/>
-
-<img
-  src="/rsdoctor-2_0-child-compiler.jpg"
+  src="https://assets.rspack.rs/rsdoctor/child_compiler.png"
   alt="包含 Main compiler 和带 Child 标签的 child-assets 的 Compiler 选择器"
   style={{ margin: 'auto' }}
 />
@@ -139,10 +133,23 @@ Watch 模式会使用更快的压缩级别写入报告数据，以减少每次�
 
 ## 更清晰的产物分析体验 {#refined-bundle-analysis}
 
-Rsdoctor 2.0 通过提升渲染性能并优化导航、筛选和体积展示，让大型项目中的 Bundle Size 分析更流畅，也更容易定位关键 Module。
+大型项目的产物往往包含数量众多、层级很深的 Module。Rsdoctor 2.0 不仅优化了 Bundle Size 页面的渲染性能，也重新梳理了从选择 Asset、筛选 Chunk，到定位 Module 和查看详情的分析路径，让复杂产物更容易浏览和理解。
 
-- Tree Graph 使用虚拟滚动和渲染缓存，降低包含大量 Module 的大型 Asset 的渲染开销。
-- Treemap 优化了导航、筛选、搜索、体积展示和响应式布局，方便快速定位和查看关键 Module。
+- Tree Graph 使用虚拟滚动和渲染缓存，仅渲染当前视窗附近的节点，并降低滚动期间 Tooltip、Popover 等交互组件的额外开销。即使 Asset 包含大量 Module，展开目录和连续滚动也能保持流畅。
+
+**优化前**
+
+![Tree Graph 优化前](https://assets.rspack.rs/rsdoctor/tree-graph-before.gif)
+
+**优化后**
+
+![Tree Graph 优化后](https://assets.rspack.rs/rsdoctor/tree-graph-after.gif)
+
+- Treemap 新增全屏模式、可收起侧边栏、面包屑导航和点击缩放。查看深层 Module 时，可以逐级下钻，同时保留当前所在层级的上下文。
+- Asset 与 Chunk 筛选、Module 正则搜索、结果高亮定位，以及直接打开 Module 详情，缩短了从发现异常体积到确认具体代码的操作路径。
+- Stat、Parsed 和 Gzipped 三种体积口径在 Treemap、侧边栏和 Tooltip 中保持一致；JavaScript Asset 筛选会隐藏与 Module 分析无关的资源，响应式布局和可展开卡片也能更充分地利用屏幕空间。
+
+> 相关 PR：[#1705](https://github.com/web-infra-dev/rsdoctor/pull/1705)、[#1782](https://github.com/web-infra-dev/rsdoctor/pull/1782)、[#1830](https://github.com/web-infra-dev/rsdoctor/pull/1830)、[#1839](https://github.com/web-infra-dev/rsdoctor/pull/1839)。
 
 ## 不兼容更新 {#breaking-changes}
 
@@ -187,4 +194,8 @@ pnpm add -D @rsdoctor/core
 
 完整更新内容请参考 [Release 页面](https://github.com/web-infra-dev/rsdoctor/releases)。
 
-感谢所有为 Rsdoctor 贡献过的开发者 ❤️
+## 致谢 {#acknowledgements}
+
+Rsdoctor 2.0 离不开社区的共同参与。感谢所有贡献代码、测试、文档、设计与评审的开发者，也感谢提交 Issue、提供可复现项目和验证预发布版本的用户。你们的反馈与协作让 Rsdoctor 2.0 更可靠，也帮助我们持续改进构建分析体验 ❤️
+
+[![Contributors](https://contrib.rocks/image?repo=web-infra-dev/rsdoctor)](https://github.com/web-infra-dev/rsdoctor/graphs/contributors)
