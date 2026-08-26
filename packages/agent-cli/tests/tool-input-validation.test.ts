@@ -98,10 +98,10 @@ describe('tool input validation', () => {
 
     expect(error.toolName).toBe('schema_tool');
     expect(error.issues).toEqual([
-      { path: 'id', message: 'input is missing required property "id"' },
+      { path: 'id', message: "input must have required property 'id'" },
     ]);
     expect(error.message).toBe(
-      'Invalid input for rsdoctor tool schema_tool: input is missing required property "id"',
+      "Invalid input for rsdoctor tool schema_tool: input must have required property 'id'",
     );
     expect(harness.commands).toEqual([]);
   });
@@ -120,7 +120,7 @@ describe('tool input validation', () => {
     expect(error.issues).toEqual([
       {
         path: 'limit',
-        message: '"limit" must be of type integer, received string',
+        message: '"limit" must be integer',
       },
     ]);
     expect(harness.commands).toEqual([]);
@@ -145,8 +145,8 @@ describe('tool input validation', () => {
       harness.execute({ count: '11', ratio: '-0.1' }),
     );
     expect(error.issues).toEqual([
-      { path: 'count', message: '"count" must be <= 10, received "11"' },
-      { path: 'ratio', message: '"ratio" must be >= 0, received "-0.1"' },
+      { path: 'count', message: '"count" must be <= 10' },
+      { path: 'ratio', message: '"ratio" must be >= 0' },
     ]);
   });
 
@@ -162,7 +162,7 @@ describe('tool input validation', () => {
     );
 
     expect(error.issues).toEqual([
-      { path: 'limit', message: '"limit" must be <= 10, received 99' },
+      { path: 'limit', message: '"limit" must be <= 10' },
     ]);
   });
 
@@ -182,9 +182,36 @@ describe('tool input validation', () => {
     expect(error.issues).toEqual([
       {
         path: 'category',
-        message: '"category" must be one of "cjs", "barrel", received "esm"',
+        message: '"category" must be equal to one of the allowed values',
       },
     ]);
+  });
+
+  it('enforces standard JSON Schema string constraints', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        id: { type: 'string', minLength: 3, pattern: '^[a-z]+$' },
+      },
+      required: ['id'],
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ id: 'A' }),
+    );
+
+    expect(error.issues).toEqual([
+      {
+        path: 'id',
+        message: '"id" must NOT have fewer than 3 characters',
+      },
+      {
+        path: 'id',
+        message: '"id" must match pattern "^[a-z]+$"',
+      },
+    ]);
+    expect(harness.commands).toEqual([]);
   });
 
   it('compares structured enum values by JSON value', async () => {
@@ -232,7 +259,7 @@ describe('tool input validation', () => {
     expect(error.issues).toEqual([
       {
         path: 'fields[1]',
-        message: '"fields[1]" must be of type string, received number',
+        message: '"fields[1]" must be string',
       },
     ]);
   });
@@ -248,12 +275,12 @@ describe('tool input validation', () => {
       harness.execute(undefined),
     );
     expect(undefinedInput.issues).toEqual([
-      { path: '', message: 'input must be of type object, received undefined' },
+      { path: '', message: 'input must be object' },
     ]);
 
     const arrayInput = await expectValidationError(() => harness.execute([]));
     expect(arrayInput.issues).toEqual([
-      { path: '', message: 'input must be of type object, received array' },
+      { path: '', message: 'input must be object' },
     ]);
 
     expect(harness.commands).toEqual([]);
@@ -297,7 +324,7 @@ describe('tool input validation', () => {
     );
 
     expect(error.issues).toEqual([
-      { path: 'id', message: 'input is missing required property "id"' },
+      { path: 'id', message: "input must have required property 'id'" },
     ]);
     expect(harness.commands).toEqual([]);
   });
@@ -360,11 +387,11 @@ describe('tool input validation', () => {
     expect(error.issues).toEqual([
       {
         path: 'page',
-        message: '"page" must be of type integer, received string',
+        message: '"page" must be integer',
       },
       {
         path: 'pageSize',
-        message: '"pageSize" must be <= 1000, received 5000',
+        message: '"pageSize" must be <= 1000',
       },
     ]);
     expect(commands).toEqual([]);
@@ -439,7 +466,7 @@ describe('tool input validation', () => {
     expect(error.issues).toEqual([
       {
         path: 'page',
-        message: '"page" must be of type integer, received string',
+        message: '"page" must be integer',
       },
     ]);
   });
