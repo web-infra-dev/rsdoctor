@@ -157,6 +157,9 @@ export default defineConfig({
   },
   globalStyles: path.join(__dirname, 'theme', 'index.css'),
   themeConfig: {
+    llmsUI: {
+      placement: 'outline',
+    },
     footer: {
       message: 'Copyright © ByteDance',
     },
