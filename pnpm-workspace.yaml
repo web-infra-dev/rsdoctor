@@ -65,6 +65,7 @@ minimumReleaseAgeExclude:
   - '@rstest/*'
   - '@rsdoctor/*'
   - '@rslint/*'
+  - '@rstackjs/*'
   - 'rsbuild-plugin-dts'
   # Renovate security update: ws@8.21.0
   - ws@8.21.0
