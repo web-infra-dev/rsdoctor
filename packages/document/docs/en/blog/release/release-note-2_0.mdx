@@ -186,6 +186,12 @@ pnpm remove @rsdoctor/rspack-plugin
 pnpm add -D @rsdoctor/core
 ```
 
+To let a coding agent apply the migration, use the [`rsdoctor-migrate-v2` skill](https://github.com/rstackjs/agent-skills/pull/115):
+
+```bash
+npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
+```
+
 When using the CLI, keep `@rsdoctor/cli` and `@rsdoctor/core` on the same version. See the [Rsdoctor 2.0 migration guide](/guide/start/migration-v2) for the complete steps.
 
 ---

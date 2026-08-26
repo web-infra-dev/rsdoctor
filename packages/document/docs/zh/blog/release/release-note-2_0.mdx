@@ -186,6 +186,12 @@ pnpm remove @rsdoctor/rspack-plugin
 pnpm add -D @rsdoctor/core
 ```
 
+推荐使用 [`rsdoctor-migrate-v2` Skill](https://github.com/rstackjs/agent-skills/pull/115)，让编码 Agent 协助完成迁移：
+
+```bash
+npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
+```
+
 使用 CLI 时，请确保 `@rsdoctor/cli` 与 `@rsdoctor/core` 的版本一致。完整步骤请参考 [Rsdoctor 2.0 迁移指南](/guide/start/migration-v2)。
 
 ---
