@@ -1,5 +1,5 @@
 ---
-published_at: 2026-08
+published_at: 2026-09
 ---
 
 <img
@@ -8,7 +8,7 @@ published_at: 2026-08
   style={{ margin: 'auto' }}
 />
 
-_July 2026_
+_September 2026_
 
 # Announcing Rsdoctor 2.0
 
@@ -24,7 +24,7 @@ Highlights in this release include:
 - **Build analysis for agents**: Agent CLI and the Rsdoctor analysis skill let coding agents query build data and return actionable optimization suggestions.
 - **One report for every compiler**: The regular Rspack plugin automatically handles multi-compiler builds, Rsbuild environments, and child compilers while keeping their data isolated.
 - **A smaller installation footprint**: Core capabilities are consolidated into `@rsdoctor/core`, reducing the repository from 13 packages to 6 and the complete production installation footprint by **48.5%**.
-- **Faster rebuild analysis**: Loader caching, fewer unnecessary calculations, and faster report writes reduce median HMR time by about **47%** in the Kiali benchmark.
+- **Faster rebuild analysis**: Loader caching, fewer unnecessary calculations, and faster report writes reduce median HMR time by about **47%** in the benchmark.
 
 ## Deeper and faster Rspack analysis {#rspack-native-by-default}
 
@@ -100,10 +100,12 @@ Browser, server, worker, and plugin-generated builds can now be viewed from one 
 
 Rsdoctor 2.0 consolidates core, graph, SDK, utilities, and the Rspack plugin into `@rsdoctor/core`, moves shared capabilities into `@rsdoctor/shared`, and keeps the client and CLIs as separate entry points:
 
-| Metric                          | Rsdoctor 1.x | Rsdoctor 2.0 |
-| ------------------------------- | -----------: | -----------: |
-| Top-level repository packages   |           13 |            6 |
-| Runtime dependency declarations |           88 |           39 |
+| Metric                                                                | Rsdoctor 1.x | Rsdoctor 2.0 |
+| --------------------------------------------------------------------- | -----------: | -----------: |
+| Top-level repository packages                                         |           13 |            6 |
+| Direct `dependencies` declarations across top-level package manifests |           88 |           39 |
+
+This metric counts direct dependency declarations in the source, not installed packages. The dependency graph also includes the root package, transitive dependencies, and peer dependencies, so it contains more nodes.
 
 ### Smaller install footprint {#smaller-production-install-footprint}
 
@@ -125,9 +127,9 @@ Rsdoctor 2.0 removes repeated work from the watch and HMR critical path in three
 
 Watch mode writes report data with a faster compression level to reduce synchronous work on every update. As a trade-off, the compressed size of the main report shards increases by about 26%. This affects Rsdoctor report data only, not application bundle output. Non-watch builds continue to use the default compression level.
 
-In the Kiali benchmark, median HMR time dropped from 6.81 s to 3.64 s, an improvement of about **47%**. In a separate repeated-build benchmark, analysis time dropped from 250.9 ms to 14.2 ms, an improvement of **94.3%**.
+In the benchmark, median HMR time dropped from 6.81 s to 3.64 s, an improvement of about **47%**. In a separate repeated-build benchmark, analysis time dropped from 250.9 ms to 14.2 ms, an improvement of **94.3%**.
 
-> The Kiali benchmark disabled the Rsdoctor client server. The repeated-build benchmark used 100 modules, one warm-up, and the median of five runs.
+> The benchmark disabled the Rsdoctor client server. The repeated-build benchmark used 100 modules, one warm-up, and the median of five runs.
 >
 > Related PRs: [#1901](https://github.com/web-infra-dev/rsdoctor/pull/1901), [#1904](https://github.com/web-infra-dev/rsdoctor/pull/1904), [#1905](https://github.com/web-infra-dev/rsdoctor/pull/1905), [#1906](https://github.com/web-infra-dev/rsdoctor/pull/1906), [#1908](https://github.com/web-infra-dev/rsdoctor/pull/1908), and [#1913](https://github.com/web-infra-dev/rsdoctor/pull/1913).
 
