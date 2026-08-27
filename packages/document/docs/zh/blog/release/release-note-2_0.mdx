@@ -145,9 +145,7 @@ Watch 模式会使用更快的压缩级别写入报告数据，以减少每次�
 
 ![Tree Graph 优化后](https://assets.rspack.rs/rsdoctor/tree-graph-after.gif)
 
-- Treemap 新增全屏模式、可收起侧边栏、面包屑导航和点击缩放。查看深层 Module 时，可以逐级下钻，同时保留当前所在层级的上下文。
-- Asset 与 Chunk 筛选、Module 正则搜索、结果高亮定位，以及直接打开 Module 详情，缩短了从发现异常体积到确认具体代码的操作路径。
-- Stat、Parsed 和 Gzipped 三种体积口径在 Treemap、侧边栏和 Tooltip 中保持一致；JavaScript Asset 筛选会隐藏与 Module 分析无关的资源，响应式布局和可展开卡片也能更充分地利用屏幕空间。
+Treemap 新增全屏模式、可收起侧边栏、面包屑导航和点击缩放，并统一 Stat、Parsed 和 Gzipped 体积口径，配合 JavaScript Asset 筛选与响应式布局，让大型产物的层级浏览更清晰高效。
 
 > 相关 PR：[#1705](https://github.com/web-infra-dev/rsdoctor/pull/1705)、[#1782](https://github.com/web-infra-dev/rsdoctor/pull/1782)、[#1830](https://github.com/web-infra-dev/rsdoctor/pull/1830)、[#1839](https://github.com/web-infra-dev/rsdoctor/pull/1839)。
 
