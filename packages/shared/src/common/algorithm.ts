@@ -24,9 +24,23 @@ export function mergeIntervals(intervals: [number, number][]) {
   return result;
 }
 
-export function compressText(input: string): string {
+export function compressText(input: string, compressionLevel?: number): string {
+  if (
+    compressionLevel !== undefined &&
+    (!Number.isInteger(compressionLevel) ||
+      compressionLevel < 0 ||
+      compressionLevel > 9)
+  ) {
+    throw new RangeError(
+      '`compressionLevel` must be an integer between 0 and 9.',
+    );
+  }
+
   try {
-    return deflateSync(input).toString('base64');
+    return deflateSync(
+      input,
+      compressionLevel === undefined ? undefined : { level: compressionLevel },
+    ).toString('base64');
   } catch {
     return '';
   }

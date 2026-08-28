@@ -1,5 +1,5 @@
-import { containerStyle } from '@rstack-dev/doc-ui/section-style';
-import { ToolStack as BaseToolStack } from '@rstack-dev/doc-ui/tool-stack';
+import { containerStyle } from '@rstackjs/doc-ui/section-style';
+import { ToolStack as BaseToolStack } from '@rstackjs/doc-ui/tool-stack';
 import { useLang } from '@rspress/core/runtime';
 
 export function ToolStack() {

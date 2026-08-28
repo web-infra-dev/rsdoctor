@@ -219,7 +219,7 @@ interface Config {
 }
 ```
 
-### [E1006] Module Mixed Chunks
+### [E1006] Module mixed chunks
 
 当某个模块同时被包含在 **initial chunks**（初始 chunk）和 **async chunks**（异步 chunk）中时，会导致同一份模块代码被重复打进多个 chunk，增加产物体积，并可能影响首屏加载与缓存效率。
 
@@ -235,21 +235,17 @@ interface Config {
 
 - **同一模块被两种方式引用**：既在主包或 entry 里被同步 `import`，又在某处被动态 `import()` 引用，构建工具会分别打进 initial 与 async chunk。
 - **某文件既作 entry 又作异步 chunk**：例如某工具模块既在配置里被设为 entry，又在业务代码里被 `import()`，会导致该模块同时出现在 entry 产物的 initial chunk 和动态加载的 async chunk 中。
-- **splitChunks 与 entry 重叠**：通过 `splitChunks` / `chunkSplit` 把某路径单独拆成 async chunk，但该路径同时又是 entry 或主包依赖，也会出现混合。
+- **splitChunks 与 entry 重叠**：通过 `splitChunks` 把某路径单独拆成 async chunk，但该路径同时又是 entry 或主包依赖，也会出现混合。
 
 #### 解决方案与建议
 
-1. **统一引用方式**  
-   尽量对同一模块只使用一种引用方式：要么全部同步 import（放进 initial），要么全部动态 `import()`（放进 async）。避免「主包同步引用 + 某处动态引用」同一文件。
+1. **统一引用方式**：尽量对同一模块只使用一种引用方式：要么全部同步 import（放进 initial），要么全部动态 `import()`（放进 async）。避免「主包同步引用 + 某处动态引用」同一文件。
 
-2. **审视 entry 与动态加载**  
-   若某文件既作为 entry 又被打进异步 **chunk**，考虑：去掉其中一种用法；或将该文件只作为公共依赖，通过构建配置抽成单一 shared chunk，由 initial 与 async 共同引用，而不是重复打包。
+2. **审视 entry 与动态加载**：若某文件既作为 entry 又被打进异步 **chunk**，考虑：去掉其中一种用法；或将该文件只作为公共依赖，通过构建配置抽成单一 shared chunk，由 initial 与 async 共同引用，而不是重复打包。
 
-3. **调整 splitChunks / chunkSplit**  
-   检查 `optimization.splitChunks`（Rspack/Webpack）或 `performance.chunkSplit`（Rsbuild）中对该模块路径的规则，避免同一模块被同时拆到 initial 与 async 两类 chunk。可适当使用 `chunks: 'async'` 或 `chunks: 'initial'` 做区分，或通过 `cacheGroups` 的 `test` 与 `chunks` 控制其只进入一类 chunk。
+3. **调整 splitChunks**：检查 `optimization.splitChunks`（Rspack）或 `splitChunks`（Rsbuild）中对该模块路径的规则，避免同一模块被同时拆到 initial 与 async 两类 chunk。可适当使用 `chunks: 'async'` 或 `chunks: 'initial'` 做区分，或通过 `cacheGroups` 的 `test` 与 `chunks` 控制其只进入一类 chunk。
 
-4. **梳理依赖关系**  
-   根据报告中的模块路径与 chunk 列表，在源码中搜索该模块的引用位置，区分同步与动态引用，再按上述方式收敛为单一 chunk 类型或抽成公共 chunk。
+4. **梳理依赖关系**：根据报告中的模块路径与 chunk 列表，在源码中搜索该模块的引用位置，区分同步与动态引用，再按上述方式收敛为单一 chunk 类型或抽成公共 chunk。
 
 #### 配置
 
@@ -280,7 +276,7 @@ export default {
 };
 ```
 
-### [E1007] Tree Shaking Side Effects Only
+### [E1007] Tree shaking side effects only
 
 规则 key: `tree-shaking-side-effects-only`
 
@@ -339,7 +335,7 @@ export default {
 };
 ```
 
-### [E1008] CJS Require Cannot Tree-Shake
+### [E1008] CJS require cannot Tree-Shake
 
 规则 key: `cjs-require`
 
@@ -389,7 +385,7 @@ export default {
 };
 ```
 
-### [E1009] ESM Import Resolved to CJS
+### [E1009] ESM import resolved to CJS
 
 规则 key: `esm-resolved-to-cjs`
 
@@ -405,7 +401,7 @@ export default {
 #### 解决方案
 
 1. **检查 `package.json` 的 `exports` 配置**：确保目标包的 `exports` 字段正确配置了 `"import"` 条件，并指向合法的 ESM 入口文件。
-2. **升级打包器或相关插件**：确保使用支持 `exports` 条件导出的打包器版本（如 Rspack、Webpack 5+）。
+2. **升级 Rspack 或相关插件**：确保工具链支持 `exports` 条件导出。
 3. **联系包作者**：若问题出在第三方包的 `package.json` 配置错误，可向包作者反馈或提 issue。
 4. **临时忽略**：若该包暂无法修复，可通过 `ignore` 配置项跳过对该包的检查。
 

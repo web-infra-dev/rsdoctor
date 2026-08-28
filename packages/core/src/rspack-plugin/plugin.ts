@@ -36,6 +36,7 @@ import {
 import path from 'node:path';
 import { pluginTapName, pluginTapPostOptions, pkg } from './constants';
 import { acquireBuildSession, type RsdoctorBuildSessionLease } from './session';
+import { getWriteStoreOptions } from './writeStore';
 
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
@@ -353,7 +354,7 @@ export class RsdoctorRspackPlugin<
         context.sdk.setOutputDir(this.getOutputDir(compiler));
       }
 
-      await context.sdk.writeStore();
+      await context.sdk.writeStore(getWriteStoreOptions(compiler));
 
       const isPrimaryCompiler =
         !(context.sdk instanceof RsdoctorPrimarySDK) || context.sdk.isMaster;
@@ -647,7 +648,7 @@ export class RsdoctorRspackPlugin<
     } else {
       context.sdk.setOutputDir(this.getOutputDir(compiler));
     }
-    await context.sdk.writeStore();
+    await context.sdk.writeStore(getWriteStoreOptions(compiler));
 
     if (this.shouldDisposeSDK()) {
       await this.disposeSDK(context, bootstrapTask);

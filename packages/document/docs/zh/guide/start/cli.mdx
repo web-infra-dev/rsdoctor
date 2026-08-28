@@ -16,8 +16,6 @@
 
 import { PackageManagerTabs } from '@theme';
 
-import { Tab, Tabs } from '@rspress/core/theme';
-
 <PackageManagerTabs command="add @rsdoctor/cli -D" />
 
 ## 命令使用
@@ -85,25 +83,9 @@ JSON 报告包含 assets、modules 和 packages 的差异数据，可用于 CI �
 
 **引入模块**
 
-<Tabs>
-
-<Tab label="esm">
-
 ```js
 import { execute } from '@rsdoctor/cli';
 ```
-
-</Tab>
-
-<Tab label="cjs">
-
-```js
-const { execute } = require('@rsdoctor/cli');
-```
-
-</Tab>
-
-</Tabs>
 
 **execute()**
 

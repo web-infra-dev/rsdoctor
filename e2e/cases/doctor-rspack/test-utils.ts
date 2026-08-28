@@ -1,14 +1,10 @@
 import type { RsdoctorRspackPluginOptions } from '@rsdoctor/core';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import type { Linter, SDK } from '@rsdoctor/shared/types';
+import { randomUUID } from 'node:crypto';
 import { rm } from 'node:fs/promises';
 import { tmpdir } from 'os';
 import path from 'path';
-import events from 'node:events';
-
-const emitter = new events.EventEmitter();
-emitter.setMaxListeners(50);
-events.EventEmitter.defaultMaxListeners = 50;
 
 type SDKWithChildren = SDK.RsdoctorBuilderSDKInstance & {
   parent: {
@@ -46,7 +42,7 @@ export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
 
   const outdir = path.resolve(
     tmpdir(),
-    `./${Date.now()}/rsbuild_doctor_rspack_plugin_test`,
+    `./${randomUUID()}/rsbuild_doctor_rspack_plugin_test`,
   );
 
   plugin.sdk.hooks.afterSaveManifest.tapPromise('REMOVE_TMP_DIR', async () => {

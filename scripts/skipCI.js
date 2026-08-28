@@ -1,12 +1,28 @@
 const { execSync } = require('child_process');
 
-const SKIP_FOLDERS = [
+const SKIP_PATHS = [
   'cspell.json',
   '.github',
   '.vscode',
-  'document',
+  'packages/document',
   'scripts/skipCI.js',
 ];
+const SKIP_EXTENSIONS = ['.md', '.mdx'];
+
+function shouldSkipFile(file) {
+  return (
+    SKIP_PATHS.some(
+      (skipPath) => file.startsWith(`${skipPath}/`) || file === skipPath,
+    ) || SKIP_EXTENSIONS.some((extension) => file.endsWith(extension))
+  );
+}
+
+function shouldSkipCI(changedFiles) {
+  return (
+    changedFiles.length > 0 &&
+    changedFiles.every((file) => shouldSkipFile(file))
+  );
+}
 
 async function main() {
   execSync('git fetch origin main');
@@ -19,22 +35,14 @@ async function main() {
     .map((file) => file?.trim())
     .filter(Boolean);
 
-  const shouldNotSkipCI =
-    !changedFiles.length ||
-    changedFiles.some(
-      (file) =>
-        !SKIP_FOLDERS.some(
-          (folder) =>
-            file.startsWith(`${folder}/`) ||
-            file === folder ||
-            file.endsWith('.md'),
-        ),
-    );
-
-  console.log(shouldNotSkipCI ? 'false' : 'true');
+  console.log(shouldSkipCI(changedFiles) ? 'true' : 'false');
 }
 
-main().catch((err) => {
-  console.error('Failed to detect CI skip', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error('Failed to detect CI skip', err);
+    process.exit(1);
+  });
+}
+
+module.exports = { shouldSkipCI, shouldSkipFile };

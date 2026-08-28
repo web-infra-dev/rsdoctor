@@ -1,10 +1,7 @@
 import { Config, Linter, Plugin, SDK } from '@rsdoctor/shared/types';
 import { chalk, logger } from '@/logger';
 import assert from 'assert';
-import {
-  convertReportCodeTypeObject,
-  processModeConfigurations,
-} from './normalize-config';
+import { processModeConfigurations } from './normalize-config';
 
 function defaultBoolean(v: unknown, dft: boolean): boolean {
   return typeof v === 'boolean' ? v : dft;
@@ -12,14 +9,8 @@ function defaultBoolean(v: unknown, dft: boolean): boolean {
 function getDefaultOutput() {
   return {
     mode: undefined,
-    reportCodeType: {
-      noModuleSource: false,
-      noAssetsAndModuleSource: false,
-      noCode: false,
-    },
     options: undefined,
     reportDir: '',
-    compressData: undefined,
   };
 }
 function getDefaultSupports() {
@@ -121,7 +112,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   )
     ? {
         reportDir: userOutput?.reportDir,
-        compressData: userOutput?.compressData,
         mode: 'brief' as const,
         options: {
           type: ['json'] as Array<'json'>,
@@ -204,9 +194,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   if (_features.lite && finalMode !== SDK.IMode[SDK.IMode.brief]) {
     finalMode = SDK.IMode[SDK.IMode.lite] as keyof typeof SDK.IMode;
   }
-  const reportCodeType = output.reportCodeType
-    ? normalizeReportType(output.reportCodeType, finalMode)
-    : normalizeReportType(getDefaultOutput().reportCodeType, finalMode);
+  const reportCodeType = normalizeReportType(output.reportCodeType, finalMode);
   const res: Plugin.RsdoctorPluginOptionsNormalized<Rules> = {
     linter: _linter,
     features: _features,
@@ -235,27 +223,30 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     },
   };
 
-  // Add deprecation warning for compressData
-  if (output.compressData !== undefined) {
-    logger.info(
-      chalk.yellow(
-        `The 'compressData' configuration is deprecated in Rsdoctor 2.x.`,
-      ),
-    );
-  }
-
   return res;
 }
 
 export const normalizeReportType = (
-  reportCodeType: Plugin.IReportCodeType | Plugin.NewReportCodeType,
+  reportCodeType: Plugin.NewReportCodeType | undefined,
   mode: keyof typeof SDK.IMode,
 ): SDK.ToDataType => {
-  const convertedReportCodeType =
-    typeof reportCodeType === 'object'
-      ? convertReportCodeTypeObject(reportCodeType)
-      : reportCodeType;
-  if (convertedReportCodeType === 'noCode') {
+  assert(
+    reportCodeType === undefined ||
+      ['noModuleSource', 'noAssetsAndModuleSource', 'noCode'].includes(
+        reportCodeType,
+      ),
+    '`output.reportCodeType` must be "noModuleSource", "noAssetsAndModuleSource", or "noCode".',
+  );
+  if (
+    mode === SDK.IMode[SDK.IMode.brief] &&
+    reportCodeType !== undefined &&
+    reportCodeType !== 'noCode'
+  ) {
+    logger.warn(
+      '`output.reportCodeType` is ignored when `output.mode` is "brief"; brief mode always uses "noCode".',
+    );
+  }
+  if (reportCodeType === 'noCode') {
     return SDK.ToDataType.NoCode;
   }
   if (mode === SDK.IMode[SDK.IMode.brief]) {
@@ -264,10 +255,10 @@ export const normalizeReportType = (
   if (mode === SDK.IMode[SDK.IMode.lite]) {
     return SDK.ToDataType.NoSourceAndAssets;
   }
-  if (convertedReportCodeType === 'noAssetsAndModuleSource') {
+  if (reportCodeType === 'noAssetsAndModuleSource') {
     return SDK.ToDataType.NoSourceAndAssets;
   }
-  if (convertedReportCodeType === 'noModuleSource') {
+  if (reportCodeType === 'noModuleSource') {
     return SDK.ToDataType.NoSource;
   }
   return SDK.ToDataType.Normal;

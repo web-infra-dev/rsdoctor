@@ -4,12 +4,12 @@ After the dependency installation, you need to integrate the Rsdoctor plugin int
 
 ### Rspack
 
-Initialize the RsdoctorRspackPlugin in the [plugins](https://www.rspack.rs/config/plugins.html#plugins) of `rspack.config.js`:
+Initialize `RsdoctorRspackPlugin` in the [plugins](https://www.rspack.rs/config/plugins.html#plugins) of `rspack.config.mjs`:
 
-```js title="rspack.config.js"
-const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
+```js title="rspack.config.mjs"
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
-module.exports = {
+export default {
   // ...
   plugins: [
     // Only register the plugin when RSDOCTOR is true, as the plugin will increase the build time.
@@ -55,7 +55,7 @@ export default {
 
 ### Next.js
 
-#### Step 1: Register the Rsdoctor plugin
+#### Step 1: register the Rsdoctor plugin
 
 Initialize the [RsdoctorRspackPlugin](#rspack) plugin in the [Rspack Config](https://rspack.rs/guide/tech/next) of `next.config.ts`.
 
@@ -91,7 +91,7 @@ export default nextConfig;
 
 - **Options:** The plugin provides some configuration options, please refer to [Options](../../config/options/options).
 
-#### Step 2: Execute build
+#### Step 2: execute build
 
 Execute the **build** command, Rsdoctor will generate the corresponding report data in the local repository artifacts.
 
@@ -99,7 +99,7 @@ import { PackageManagerTabs } from '@theme';
 
 <PackageManagerTabs command="run build" />
 
-#### Step 3: Open the report
+#### Step 3: open the report
 
 After installing [@rsdoctor/cli](/guide/start/cli), add the following scripts commands to **package.json**, executing **client:rsd** or **server:rsd** can open the report of the corresponding builder:
 
@@ -153,7 +153,7 @@ export default defineConfig({
 
 ---
 
-## Step 3: Execute build
+## Step 3: execute build
 
 Now, you can run the **build** command in the project. After the build is complete, Rsdoctor will automatically open the analysis page of this build.
 

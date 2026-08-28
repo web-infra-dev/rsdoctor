@@ -4,7 +4,8 @@ This folder contains the e2e test cases of Rsdoctor.
 
 ## Tech stack
 
-- [playwright](https://github.com/microsoft/playwright): The e2e test framework.
+- [Rstest](https://rstest.rs/): The test runner.
+- [playwright](https://github.com/microsoft/playwright): The browser automation runtime.
 
 ## Commands
 
@@ -12,7 +13,7 @@ This folder contains the e2e test cases of Rsdoctor.
 # Install playwright browser
 npx playwright install chromium
 
-# Run all test cases
+# Run all test cases with Rstest
 pnpm run test
 ```
 
@@ -21,7 +22,7 @@ pnpm run test
 ### Add test cases for common capabilities
 
 ```ts
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 
 test('test 1 + 1', () => {
   expect(1 + 1).toBe(2);

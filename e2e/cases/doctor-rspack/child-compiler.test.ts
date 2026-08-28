@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import { compileByRspack } from '@scripts/test-helper';
 import { Compiler, EntryPlugin } from '@rspack/core';
 import { access, readFile, rm } from 'node:fs/promises';
@@ -30,10 +30,6 @@ class ChildCompilerPlugin {
     );
   }
 }
-
-test.afterEach(async ({ page }) => {
-  await page.close();
-});
 
 test('collects child compiler data in an isolated report', async () => {
   const mainEntry = path.resolve(__dirname, './fixtures/a.js');

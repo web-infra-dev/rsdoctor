@@ -1,4 +1,4 @@
-import { Constants, Manifest, SDK } from '@rsdoctor/shared/types';
+import { Common, Constants, Manifest, SDK } from '@rsdoctor/shared/types';
 import fs from 'node:fs';
 import path from 'node:path';
 import { RsdoctorSDK } from '../sdk';
@@ -97,9 +97,12 @@ export class RsdoctorPrimarySDK
     return result;
   }
 
-  protected async writePieces(): Promise<void> {
+  protected async writePieces(
+    _storeData: Common.PlainObject,
+    options?: SDK.WriteStoreOptionsType,
+  ): Promise<void> {
     this.setOutputDir(this.parent.getCompilerOutputDir(this));
-    await super.writePieces(this.getStoreData());
+    await super.writePieces(this.getStoreData(), options);
   }
 
   protected async writeManifest() {

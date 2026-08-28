@@ -72,25 +72,6 @@ export function processBriefHtmlModeConfig(
   };
 }
 
-/**
- * Convert reportCodeType object to NewReportCodeType enum value
- */
-export function convertReportCodeTypeObject(
-  reportCodeType: any,
-): Config.NewReportCodeType | undefined {
-  if (!reportCodeType) return undefined;
-
-  if (reportCodeType.noCode) {
-    return 'noCode';
-  } else if (reportCodeType.noAssetsAndModuleSource) {
-    return 'noAssetsAndModuleSource';
-  } else if (reportCodeType.noModuleSource) {
-    return 'noModuleSource';
-  }
-
-  return undefined;
-}
-
 // --For loader configs--
 /**
  * This function recursively processes rule set conditions to ensure they can be

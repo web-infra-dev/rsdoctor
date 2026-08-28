@@ -141,6 +141,8 @@ interface BriefConfig {
 }
 
 interface JsonOptions {
+  /** JSON stats 文件名，默认为 rsdoctor-data.json */
+  fileName?: string;
   /** JSON 输出包含的模块配置 */
   sections?: JsonSectionOptions;
 }
@@ -161,8 +163,8 @@ NormalModeOptions 目前类型为空 Object。
 
 ## reportCodeType
 
-- **类型：** `"noModuleSource" | "noAssetsAndModuleSource" | "noCode" | { noModuleSource?: boolean; noAssetsAndModuleSource?: boolean; noCode?: boolean }`
-  - **V2 时，类型将只支持 String 类型。**
+- **类型：** `"noModuleSource" | "noAssetsAndModuleSource" | "noCode"`
+- Rsdoctor 2.x 仅接受上面列出的字符串值。
 - **可选：** `true`
 - **默认值：** `undefined`，undefined 时输出所有完整数据。
 - **描述：**
@@ -190,7 +192,7 @@ NormalModeOptions 目前类型为空 Object。
 ```js
 new RsdoctorRspackPlugin({
   output: {
-     reportCodeType: { noModuleSource: true } // { noAssetsAndModuleSource: true }
+    reportCodeType: 'noModuleSource', // 或 'noAssetsAndModuleSource'
   }
 }),
 ```
@@ -206,11 +208,5 @@ Rsdoctor 报告输出目录，默认是构建产物输出目录。
 ## compressData
 
 :::warning
-V2 中即将废弃，请使用 `output.mode: 'brief'` 和 `output.options.type: 'json'` 代替。参考 [compressData 配置迁移](/config/options/options-v2#outputcompressdata)。
+已在 Rsdoctor 2.x 中移除且会被忽略。请使用 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['json']`。参考 [compressData 配置迁移](/config/options/options-v2#outputcompressdata)。
 :::
-
-- **类型：** `boolean`
-- **可选：** `true`
-- **默认值：** `true`
-
-compressData 用于配置是否将 `[outputDir]/.rsdoctor` 下的分析数据进行压缩处理。

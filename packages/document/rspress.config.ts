@@ -118,7 +118,7 @@ export default defineConfig({
   ],
   root: path.join(__dirname, 'docs'),
   title: 'Rsdoctor',
-  description: 'A one-stop build analyzer for Rspack and webpack.',
+  description: 'A one-stop build analyzer for Rspack projects.',
   icon: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-960x960.png',
   lang: 'en',
   base: '/',
@@ -149,12 +149,19 @@ export default defineConfig({
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
-    exclude: ['**/zh/shared/**', '**/en/shared/**'],
+    exclude: [
+      '**/zh/shared/**',
+      '**/en/shared/**',
+      '**/quick-start-shared.mdx',
+    ],
   },
   globalStyles: path.join(__dirname, 'theme', 'index.css'),
   themeConfig: {
+    llmsUI: {
+      placement: 'outline',
+    },
     footer: {
-      message: 'Copyright © 2024 ByteDance',
+      message: 'Copyright © ByteDance',
     },
     socialLinks: [
       {
@@ -182,13 +189,13 @@ export default defineConfig({
         lang: 'en',
         label: 'English',
         title: 'Rsdoctor',
-        description: 'Build analyzer for Rspack and webpack',
+        description: 'Build analyzer for Rspack projects',
       },
       {
         lang: 'zh',
         label: '简体中文',
         title: 'Rsdoctor',
-        description: 'Rspack 和 webpack 项目的构建分析工具',
+        description: 'Rspack 项目的构建分析工具',
       },
     ],
   },
@@ -200,7 +207,7 @@ export default defineConfig({
         title: 'Rsdoctor',
         type: 'website',
         url: 'https://rsdoctor.rs/',
-        description: 'Build analyzer for Rspack and webpack',
+        description: 'Build analyzer for Rspack projects',
         twitter: {
           site: '@rspack_dev',
           card: 'summary_large_image',

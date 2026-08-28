@@ -21,8 +21,15 @@ import { EmoCheckData } from '../emo';
 import { SummaryData } from './summary';
 import { ConfigData } from './config';
 
-// rslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type WriteStoreOptionsType = {};
+export type WriteStoreOptionsType = {
+  /**
+   * The zlib compression level used for report shards.
+   * Accepts values from 0 to 9.
+   *
+   * @default 6
+   */
+  compressionLevel?: number;
+};
 
 export enum IMode {
   brief = 'brief',
