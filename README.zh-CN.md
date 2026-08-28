@@ -1,5 +1,5 @@
 <picture>
-  <img alt="Rsdoctor Banner" width="100%" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" />
+  <img alt="Rsdoctor Banner" width="100%" src="https://assets.rspack.rs/rsdoctor/rsdoctor-banner.png" />
 </picture>
 
 # Rsdoctor

@@ -47,7 +47,7 @@
     "@rsdoctor/shared": "workspace:*"
   },
   "dependencies": {
-    "@rstackjs/doc-ui": "1.14.9",
+    "@rstackjs/doc-ui": "1.14.11",
     "clsx": "catalog:",
     "react-markdown": "catalog:",
     "@rspress/core": "2.0.19"
