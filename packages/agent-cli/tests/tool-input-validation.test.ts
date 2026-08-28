@@ -1,0 +1,504 @@
+import { describe, expect, it } from '@rstest/core';
+
+import { getToolCatalog } from '../src/commands';
+import type { ToolDefinition } from '../src/core/types';
+import { ToolInputValidationError } from '../src/core/validate-input';
+import {
+  createInProcessRsdoctorCliToolExecutor,
+  createRsdoctorCliToolExecutor,
+} from '../src/executor';
+
+interface Harness {
+  execute: (input: unknown) => Promise<unknown>;
+  commands: string[][];
+}
+
+function createHarness(inputSchema: ToolDefinition['inputSchema']): Harness {
+  const commands: string[][] = [];
+  const executor = createRsdoctorCliToolExecutor({
+    tools: [
+      {
+        name: 'schema_tool',
+        description: 'test tool',
+        inputSchema,
+        buildCommand: () => ['schema-tool'],
+      },
+    ],
+    runCommand: async (command) => {
+      commands.push(command);
+      return JSON.stringify({ ok: true, data: { called: true } });
+    },
+  });
+
+  return {
+    commands,
+    execute: (input: unknown) =>
+      executor.execute({
+        toolName: 'schema_tool',
+        input: input as Record<string, unknown>,
+        dataFile: '/tmp/demo.json',
+      }),
+  };
+}
+
+async function expectValidationError(
+  run: () => Promise<unknown>,
+): Promise<ToolInputValidationError> {
+  let caught: unknown;
+  try {
+    await run();
+  } catch (error) {
+    caught = error;
+  }
+
+  expect(caught).toBeInstanceOf(ToolInputValidationError);
+  return caught as ToolInputValidationError;
+}
+
+describe('tool input validation', () => {
+  it('passes valid input through unchanged', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+        limit: { type: 'integer', minimum: 1, maximum: 10 },
+      },
+      required: ['id'],
+      additionalProperties: false,
+    });
+
+    const result = await harness.execute({ id: 'main', limit: 5 });
+
+    expect(result).toEqual({ ok: true, data: { called: true } });
+    expect(harness.commands).toEqual([['schema-tool']]);
+  });
+
+  it('accepts an empty object for a tool without required fields', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: { id: { type: 'string' } },
+      additionalProperties: false,
+    });
+
+    await expect(harness.execute({})).resolves.toEqual({
+      ok: true,
+      data: { called: true },
+    });
+  });
+
+  it('rejects missing required properties before dispatch', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: { id: { type: 'string' } },
+      required: ['id'],
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() => harness.execute({}));
+
+    expect(error.toolName).toBe('schema_tool');
+    expect(error.issues).toEqual([
+      { path: 'id', message: "input must have required property 'id'" },
+    ]);
+    expect(error.message).toBe(
+      "Invalid input for rsdoctor tool schema_tool: input must have required property 'id'",
+    );
+    expect(harness.commands).toEqual([]);
+  });
+
+  it('rejects non-numeric strings for numeric types', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: { limit: { type: 'integer' } },
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ limit: 'ten' }),
+    );
+
+    expect(error.issues).toEqual([
+      {
+        path: 'limit',
+        message: '"limit" must be integer',
+      },
+    ]);
+    expect(harness.commands).toEqual([]);
+  });
+
+  it('accepts numeric strings and applies numeric bounds to them', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        count: { type: 'integer', minimum: 1, maximum: 10 },
+        ratio: { type: 'number', minimum: 0, maximum: 1 },
+        choice: { type: 'integer', enum: [1, 2] },
+      },
+      additionalProperties: false,
+    });
+
+    await expect(
+      harness.execute({ count: '2', ratio: '0.5', choice: '2' }),
+    ).resolves.toEqual({ ok: true, data: { called: true } });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ count: '11', ratio: '-0.1' }),
+    );
+    expect(error.issues).toEqual([
+      { path: 'count', message: '"count" must be <= 10' },
+      { path: 'ratio', message: '"ratio" must be >= 0' },
+    ]);
+  });
+
+  it('rejects values outside declared numeric bounds', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: { limit: { type: 'integer', minimum: 1, maximum: 10 } },
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ limit: 99 }),
+    );
+
+    expect(error.issues).toEqual([
+      { path: 'limit', message: '"limit" must be <= 10' },
+    ]);
+  });
+
+  it('rejects unknown enum values', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        category: { type: 'string', enum: ['cjs', 'barrel'] },
+      },
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ category: 'esm' }),
+    );
+
+    expect(error.issues).toEqual([
+      {
+        path: 'category',
+        message: '"category" must be equal to one of the allowed values',
+      },
+    ]);
+  });
+
+  it('enforces standard JSON Schema string constraints', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        id: { type: 'string', minLength: 3, pattern: '^[a-z]+$' },
+      },
+      required: ['id'],
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ id: 'A' }),
+    );
+
+    expect(error.issues).toEqual([
+      {
+        path: 'id',
+        message: '"id" must NOT have fewer than 3 characters',
+      },
+      {
+        path: 'id',
+        message: '"id" must match pattern "^[a-z]+$"',
+      },
+    ]);
+    expect(harness.commands).toEqual([]);
+  });
+
+  it('compares structured enum values by JSON value', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        config: { type: 'object', enum: [{ mode: 'fast' }] },
+      },
+      additionalProperties: false,
+    });
+
+    await expect(
+      harness.execute({ config: { mode: 'fast' } }),
+    ).resolves.toEqual({ ok: true, data: { called: true } });
+  });
+
+  it('preserves string enum values in numeric union types', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        choice: { type: ['string', 'integer'], enum: ['2', 3] },
+      },
+      additionalProperties: false,
+    });
+
+    await expect(harness.execute({ choice: '2' })).resolves.toEqual({
+      ok: true,
+      data: { called: true },
+    });
+  });
+
+  it('rejects wrong array item types', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        fields: { type: 'array', items: { type: 'string' } },
+      },
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ fields: ['id', 2] }),
+    );
+
+    expect(error.issues).toEqual([
+      {
+        path: 'fields[1]',
+        message: '"fields[1]" must be string',
+      },
+    ]);
+  });
+
+  it('rejects non-object input where an object is required', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {},
+      additionalProperties: true,
+    });
+
+    const undefinedInput = await expectValidationError(() =>
+      harness.execute(undefined),
+    );
+    expect(undefinedInput.issues).toEqual([
+      { path: '', message: 'input must be object' },
+    ]);
+
+    const arrayInput = await expectValidationError(() => harness.execute([]));
+    expect(arrayInput.issues).toEqual([
+      { path: '', message: 'input must be object' },
+    ]);
+
+    expect(harness.commands).toEqual([]);
+  });
+
+  it('rejects unknown properties only when the schema forbids them', async () => {
+    const strict = createHarness({
+      type: 'object',
+      properties: {},
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      strict.execute({ nope: 1 }),
+    );
+    expect(error.issues).toEqual([
+      { path: 'nope', message: '"nope" is not an allowed property' },
+    ]);
+
+    const open = createHarness({
+      type: 'object',
+      properties: {},
+      additionalProperties: true,
+    });
+    await expect(open.execute({ nope: 1 })).resolves.toEqual({
+      ok: true,
+      data: { called: true },
+    });
+  });
+
+  it('treats undefined required properties as missing', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: { id: { type: 'string' } },
+      required: ['id'],
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ id: undefined }),
+    );
+
+    expect(error.issues).toEqual([
+      { path: 'id', message: "input must have required property 'id'" },
+    ]);
+    expect(harness.commands).toEqual([]);
+  });
+
+  it('allows executor controls alongside a strict custom tool schema', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: { id: { type: 'string' } },
+      required: ['id'],
+      additionalProperties: false,
+    });
+
+    await expect(
+      harness.execute({ id: 'main', filter: '', page: '1', pageSize: '2' }),
+    ).resolves.toEqual({ ok: true, data: { called: true } });
+    expect(harness.commands).toEqual([['schema-tool']]);
+  });
+
+  it('reports every mismatch in a single error', async () => {
+    const harness = createHarness({
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+        limit: { type: 'integer', minimum: 1 },
+      },
+      required: ['id'],
+      additionalProperties: false,
+    });
+
+    const error = await expectValidationError(() =>
+      harness.execute({ limit: 0, extra: true }),
+    );
+
+    expect(error.issues.map((issue) => issue.path)).toEqual([
+      'id',
+      'limit',
+      'extra',
+    ]);
+  });
+
+  it('validates catalog controls for the spawned cli executor', async () => {
+    const commands: string[][] = [];
+    const executor = createRsdoctorCliToolExecutor({
+      tools: getToolCatalog(),
+      runCommand: async (command) => {
+        commands.push(command);
+        return JSON.stringify({ ok: true, data: {} });
+      },
+    });
+
+    const error = await expectValidationError(() =>
+      executor.execute({
+        toolName: 'chunks_list',
+        input: { page: 'two', pageSize: 5000 },
+        dataFile: '/tmp/demo.json',
+      }),
+    );
+
+    expect(error.toolName).toBe('chunks_list');
+    expect(error.issues).toEqual([
+      {
+        path: 'page',
+        message: '"page" must be integer',
+      },
+      {
+        path: 'pageSize',
+        message: '"pageSize" must be <= 1000',
+      },
+    ]);
+    expect(commands).toEqual([]);
+  });
+
+  it('rejects unknown catalog properties instead of silently ignoring them', async () => {
+    const commands: string[][] = [];
+    const executor = createRsdoctorCliToolExecutor({
+      tools: getToolCatalog(),
+      runCommand: async (command) => {
+        commands.push(command);
+        return JSON.stringify({ ok: true, data: {} });
+      },
+    });
+
+    const error = await expectValidationError(() =>
+      executor.execute({
+        toolName: 'chunks_list',
+        input: { page_number: 2 },
+        dataFile: '/tmp/demo.json',
+      }),
+    );
+
+    expect(error.issues).toEqual([
+      {
+        path: 'page_number',
+        message: '"page_number" is not an allowed property',
+      },
+    ]);
+    expect(commands).toEqual([]);
+  });
+
+  it('catalog schemas retain declared tool options while rejecting extras', () => {
+    const catalog = getToolCatalog();
+    const optimize = catalog.find((tool) => tool.name === 'bundle_optimize');
+    const sideEffects = catalog.find(
+      (tool) => tool.name === 'tree_shaking_side_effects',
+    );
+
+    expect(optimize?.inputSchema).toMatchObject({
+      properties: {
+        filter: expect.any(Object),
+        page: expect.any(Object),
+        pageSize: expect.any(Object),
+        step: { type: 'integer', enum: [1, 2] },
+      },
+      additionalProperties: false,
+    });
+    expect(sideEffects?.inputSchema).toMatchObject({
+      properties: {
+        category: {
+          type: 'string',
+          enum: ['cjs', 'barrel', 'side-effects', 'dynamic-import'],
+        },
+      },
+      additionalProperties: false,
+    });
+  });
+
+  it('validates catalog controls for the in-process executor', async () => {
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    const error = await expectValidationError(() =>
+      executor.execute({
+        toolName: 'build_summary',
+        input: { page: 'two' },
+        dataFile: '/nonexistent/rsdoctor-data.json',
+      }),
+    );
+
+    expect(error.toolName).toBe('build_summary');
+    expect(error.issues).toEqual([
+      {
+        path: 'page',
+        message: '"page" must be integer',
+      },
+    ]);
+  });
+
+  it('rejects unknown catalog properties in the in-process executor', async () => {
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    const error = await expectValidationError(() =>
+      executor.execute({
+        toolName: 'build_summary',
+        input: { page_number: 2 },
+        dataFile: '/nonexistent/rsdoctor-data.json',
+      }),
+    );
+
+    expect(error.issues).toEqual([
+      {
+        path: 'page_number',
+        message: '"page_number" is not an allowed property',
+      },
+    ]);
+  });
+
+  it('keeps rejecting unknown tools before validating input', async () => {
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    await expect(
+      executor.execute({
+        toolName: 'not_a_tool',
+        input: undefined as unknown as Record<string, unknown>,
+        dataFile: '/tmp/demo.json',
+      }),
+    ).rejects.toThrow('Unknown rsdoctor tool: not_a_tool');
+  });
+});

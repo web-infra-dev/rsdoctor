@@ -451,6 +451,10 @@ importers:
         version: 24.12.3
 
   packages/agent-cli:
+    dependencies:
+      ajv:
+        specifier: ^8.20.0
+        version: 8.20.0
     devDependencies:
       '@rslib/core':
         specifier: 1.0.0-rc.0

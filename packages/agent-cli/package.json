@@ -37,5 +37,8 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0"
   }
 }
