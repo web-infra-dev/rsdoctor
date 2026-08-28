@@ -321,6 +321,114 @@ describe('sourcemapTool', () => {
       expect(sourceMap).toBe('console.log("test");');
     });
 
+    it('should fall back to AST parsing when a related source map has no source', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            filename: '[name].[contenthash].js',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'main.js',
+            source: {
+              source: () => 'console.log("test");\n',
+              name: 'main.js',
+              sourceAndMap: () => ({
+                source: 'console.log("test");\n',
+                map: mockJsMap,
+              }),
+            },
+            info: {},
+          },
+          {
+            name: 'worker.abc123.js',
+            source: {
+              source: () => 'console.log("worker");\n',
+              name: 'worker.abc123.js',
+              sourceAndMap: () => ({
+                source: 'console.log("worker");\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {
+                sourceMap: 'worker.abc123.js.map',
+              },
+            },
+          },
+          {
+            name: 'worker.abc123.js.map',
+            info: {},
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+      expect(plugin.sourceMapSets.size).toBe(1);
+      expect(plugin.assetsWithoutSourceMap).toEqual(
+        new Set(['worker.abc123.js']),
+      );
+    });
+
+    it('should fall back to AST parsing when a related source map is invalid', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = {
+        compiler: { rspack: {} },
+        options: {
+          output: {
+            filename: '[name].[contenthash].js',
+          },
+        },
+        getAssets: () => [
+          {
+            name: 'main.js',
+            source: {
+              source: () => 'console.log("test");\n',
+              name: 'main.js',
+              sourceAndMap: () => ({
+                source: 'console.log("test");\n',
+                map: mockJsMap,
+              }),
+            },
+            info: {},
+          },
+          {
+            name: 'worker.abc123.js',
+            source: {
+              source: () => 'console.log("worker");\n',
+              name: 'worker.abc123.js',
+              sourceAndMap: () => ({
+                source: 'console.log("worker");\n',
+                map: null,
+              }),
+            },
+            info: {
+              related: {
+                sourceMap: 'worker.abc123.js.map',
+              },
+            },
+          },
+          {
+            name: 'worker.abc123.js.map',
+            source: {
+              source: () => '{}',
+              name: 'worker.abc123.js.map',
+            },
+            info: {},
+          },
+        ],
+      } as any;
+
+      await handleAfterEmitAssets(compilation, plugin);
+      expect(plugin.sourceMapSets.size).toBe(1);
+      expect(plugin.assetsWithoutSourceMap).toEqual(
+        new Set(['worker.abc123.js']),
+      );
+    });
+
     it('should find source map by base name without hash when exact match fails', async () => {
       const plugin = createMockPluginInstance();
       const compilation = {

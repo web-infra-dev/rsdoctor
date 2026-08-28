@@ -39,8 +39,7 @@
 }
 
 .sideColumn {
-  flex: 1 1 320px;
-  min-width: 300px;
+  flex: 1 1 0;
 
   :global(.ant-card) {
     background: var(--color-bg-box-subtle);

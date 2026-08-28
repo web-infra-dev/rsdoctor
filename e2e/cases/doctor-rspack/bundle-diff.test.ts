@@ -1,4 +1,4 @@
-import test, { expect } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import { Client } from '@rsdoctor/shared/types';
 import {
   getRsdoctorManifestPath,

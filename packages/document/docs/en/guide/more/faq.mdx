@@ -33,7 +33,7 @@ Increase the Node.js memory limit, for example: `NODE_OPTIONS=--max-old-space-si
 
 ### Method 2
 
-This issue is often caused by storing source code information during the build process, which exceeds the memory limit. You can configure the `noCode` or `noAssetsAndModuleSource` field in `output.reportCodeType` to alleviate this issue. [output.reportCodeType](/config/options/output#reportcodetype)
+This issue is often caused by storing source code information during the build process, which exceeds the memory limit. Set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource` to reduce memory usage. See [output.reportCodeType](/config/options/output#reportcodetype).
 
 ## No Bundled/Parsed Size for Modules in bundle analysis?
 

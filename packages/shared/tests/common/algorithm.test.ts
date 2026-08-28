@@ -38,6 +38,13 @@ describe('test src/common/algorithm.ts', () => {
     );
   });
 
+  it.each([-1, 10, 1.5, Number.NaN, Number.POSITIVE_INFINITY])(
+    'rejects invalid compression level %s',
+    (level) => {
+      expect(() => Algorithm.compressText('hello', level)).toThrow(RangeError);
+    },
+  );
+
   it('random', () => {
     [
       [0, 10],

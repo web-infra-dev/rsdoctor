@@ -1,7 +1,8 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import { compileByRspack } from '@scripts/test-helper';
 import path from 'path';
 import fs from 'fs';
+import { pathToFileURL } from 'node:url';
 import { createRsdoctorPlugin } from './test-utils';
 
 async function rspackCompile(compile: typeof compileByRspack) {
@@ -66,10 +67,10 @@ test('rspack brief mode', async ({ page }) => {
 
   const reportPath = path.join(__dirname, './dist/brief/rsdoctor-report.html');
 
-  fileExists(reportPath);
+  expect(fileExists(reportPath)).toBe(true);
 
   // Navigate to a URL
-  await page.goto(`file:///${reportPath}`);
+  await page.goto(pathToFileURL(reportPath).href);
 
   // Perform actions on the page
   const title = await page.title();
@@ -77,30 +78,20 @@ test('rspack brief mode', async ({ page }) => {
 
   const titleContent = 'Bundle Overall';
 
-  const bundleTitleExists = await page
-    .locator(`text=${titleContent}`)
-    .first()
-    .isVisible();
-
-  const compileTabExists = await page
-    .locator(`text='Compile Analysis'`)
-    .first()
-    .isVisible();
-
-  const bundleTabExists = await page
-    .locator(`text='Bundle Size'`)
-    .first()
-    .isVisible();
-
-  expect(bundleTitleExists).toBe(true);
-  expect(compileTabExists).toBe(true);
-  expect(bundleTabExists).toBe(true);
+  await expect(page.locator(`text=${titleContent}`).first()).toBeVisible({
+    timeout: 10000,
+  });
+  await expect(page.locator(`text='Compile Analysis'`).first()).toBeVisible({
+    timeout: 10000,
+  });
+  await expect(page.locator(`text='Bundle Size'`).first()).toBeVisible({
+    timeout: 10000,
+  });
 });
 
-async function fileExists(filePath: string) {
+function fileExists(filePath: string) {
   try {
-    await fs.existsSync(filePath);
-    return true;
+    return fs.existsSync(filePath);
   } catch {
     return false;
   }

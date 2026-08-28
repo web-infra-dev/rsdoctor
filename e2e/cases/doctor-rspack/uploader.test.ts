@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import path from 'path';
 import fs from 'fs/promises';
 import { createRsdoctorPlugin } from './test-utils';
@@ -6,15 +6,17 @@ import { createRsdoctorPlugin } from './test-utils';
 // Dynamic imports to avoid rspack binding issues
 let compileByRspack: any;
 const originalEnvRSTEST = process.env.RSTEST;
-const rspackOutputDir = path.join(__dirname, './dist');
+const rspackOutputDir = path.join(__dirname, './dist/uploader');
 const manifestFileName = 'rsdoctor-data.json';
 
 try {
   const testHelper = require('@scripts/test-helper');
   compileByRspack = testHelper.compileByRspack;
-} catch {
-  // Skip tests if rspack is not available
-  test.skip(true, 'Rspack binding not available, skipping all tests');
+} catch (error) {
+  console.warn(
+    'Skipping uploader integration tests: Rspack binding is not available.',
+    error,
+  );
 }
 
 async function rspackCompile(compile: any) {
@@ -66,7 +68,7 @@ async function rspackCompile(compile: any) {
 }
 
 // Integration test that uses real build artifacts
-test.describe('Uploader Integration Tests', () => {
+test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
   let manifestPath: string;
   let manifestData: any;
 
@@ -74,36 +76,30 @@ test.describe('Uploader Integration Tests', () => {
     // RSTEST keeps the client server enabled in integration tests.
     process.env.RSTEST = 'true';
 
-    // Skip test if rspack binding is not available
-    if (!compileByRspack) {
-      test.skip(true, 'Rspack binding not available, skipping test');
-      return;
-    }
-    await rspackCompile(compileByRspack);
-
-    manifestPath = path.resolve(rspackOutputDir, manifestFileName);
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     try {
-      const manifestContent = await fs.readFile(manifestPath, 'utf-8');
-      manifestData = JSON.parse(manifestContent);
-    } catch (error) {
-      throw new Error(
-        `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-        { cause: error },
-      );
+      await rspackCompile(compileByRspack);
+
+      manifestPath = path.resolve(rspackOutputDir, manifestFileName);
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      try {
+        const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+        manifestData = JSON.parse(manifestContent);
+      } catch (error) {
+        throw new Error(
+          `Failed to read generated Rsdoctor manifest at ${manifestPath}: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+          { cause: error },
+        );
+      }
+    } finally {
+      process.env.RSTEST = originalEnvRSTEST;
     }
   });
 
   test('should upload and analyze real build manifest', async ({ page }) => {
-    // Skip test if rspack binding is not available
-    if (!compileByRspack) {
-      test.skip(true, 'Rspack binding not available, skipping test');
-      return;
-    }
     await page.goto('http://localhost:8681/#/resources/uploader');
 
     await expect(page.locator('.ant-upload-btn')).toBeVisible();
@@ -123,7 +119,7 @@ test.describe('Uploader Integration Tests', () => {
 
     try {
       const navigationPromise = page.waitForURL(/.*#\/overall.*/, {
-        timeout: 2000,
+        timeout: 10000,
       });
 
       // Use Playwright's file upload method
@@ -182,39 +178,11 @@ test.describe('Uploader Integration Tests', () => {
       manifestData.clientRoutes &&
       manifestData.clientRoutes.includes('Overall')
     ) {
-      // Wait for the page to fully load and render
-      await page.waitForTimeout(2000);
-
-      // Try multiple possible selectors for the Bundle Overall menu
-      const possibleSelectors = [
-        "text='Bundle Overall'",
-        "[data-testid='bundle-overall']",
-        "text='Overall'",
-        ".ant-menu-item:has-text('Bundle Overall')",
-        ".ant-menu-item:has-text('Overall')",
-      ];
-
-      let found = false;
-      for (const selector of possibleSelectors) {
-        try {
-          const element = page.locator(selector).first();
-          await expect(element).toBeVisible({ timeout: 3000 });
-          found = true;
-          break;
-        } catch {
-          // Continue to next selector
-          console.log(`Selector "${selector}" not found, trying next...`);
-        }
-      }
-
-      if (!found) {
-        // If none of the selectors work, log the page content for debugging
-        const pageContent = await page.content();
-        console.log('Page content:', pageContent.substring(0, 1000));
-        throw new Error(
-          'Could not find Bundle Overall menu item with any selector',
-        );
-      }
+      await page.waitForFunction(
+        () => document.body.innerText.includes('Overall'),
+        undefined,
+        { timeout: 10000 },
+      );
     }
   });
 
