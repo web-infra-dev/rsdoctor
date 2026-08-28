@@ -5,7 +5,6 @@ import { AssetsCountLimit } from './rules/assets-count-limit';
 
 export default defineConfig({
   source: {
-    include: ['src/**/*.ts', 'src/**/*.tsx'],
     entry: {
       index: './src/index.tsx',
       shared: './src/utils/shared.ts',
@@ -13,9 +12,9 @@ export default defineConfig({
   },
   plugins: [pluginReact()],
   tools: {
-    bundlerChain: (chain) => {
-      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
-        {
+    rspack: {
+      plugins: [
+        new RsdoctorRspackPlugin({
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
           features: ['resolver', 'bundle', 'plugins', 'loader'],
           // output: {
@@ -44,8 +43,8 @@ export default defineConfig({
             },
           },
           port: 9988,
-        },
-      ]);
+        }),
+      ],
     },
   },
   output: {
