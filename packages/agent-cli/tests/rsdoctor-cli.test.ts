@@ -12,7 +12,286 @@ import {
 } from '../src/executor';
 import { runCli } from '../src/cli';
 
+function writeModuleGraphArtifact(modules: Array<Record<string, unknown>>): {
+  dataFile: string;
+  tempDir: string;
+} {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+  const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+  fs.writeFileSync(
+    dataFile,
+    JSON.stringify({ data: { moduleGraph: { modules } } }),
+  );
+  return { dataFile, tempDir };
+}
+
 describe('rsdoctor cli tool executor', () => {
+  it('parses legacy and v1 artifacts without changing report data', () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-data-'));
+    const legacyFile = path.join(tempDir, 'legacy.json');
+    const v1File = path.join(tempDir, 'v1.json');
+    const reportData = {
+      summary: { costs: [] },
+      moduleGraph: { modules: [], dependencies: [], exports: [] },
+    };
+    fs.writeFileSync(legacyFile, JSON.stringify({ data: reportData }));
+    fs.writeFileSync(
+      v1File,
+      JSON.stringify({
+        data: reportData,
+        metadata: {
+          schemaVersion: 1,
+          producer: { name: '@rsdoctor/core', version: '2.0.0-beta.0' },
+          futureField: { preserved: true },
+        },
+      }),
+    );
+
+    try {
+      const legacy = datasource.loadJsonData(legacyFile);
+      const v1 = datasource.loadJsonData(v1File);
+
+      expect(legacy.data).toEqual(reportData);
+      expect(legacy.metadata).toBeUndefined();
+      expect(v1.data).toEqual(reportData);
+      expect(v1.metadata).toEqual({
+        schemaVersion: 1,
+        producer: { name: '@rsdoctor/core', version: '2.0.0-beta.0' },
+        futureField: { preserved: true },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('keeps collected-but-empty package graph results successful', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: {
+          schemaVersion: 1,
+          sections: {
+            packageGraph: { status: 'collected' },
+          },
+        },
+        data: {
+          packageGraph: { packages: [], dependencies: [] },
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      await expect(
+        executor.execute({
+          toolName: 'packages_direct_dependencies',
+          input: {},
+          dataFile,
+        }),
+      ).resolves.toMatchObject({
+        ok: true,
+        data: { total: 0, items: [] },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('reports omitted module graph data as unavailable to tree-shaking tools', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: {
+          schemaVersion: 1,
+          sections: {
+            moduleGraph: { status: 'omitted', reason: 'not-selected' },
+          },
+        },
+        data: {
+          moduleGraph: { modules: [], dependencies: [], exports: [] },
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      await expect(
+        executor.execute({
+          toolName: 'tree_shaking_retained_modules',
+          input: {},
+          dataFile,
+        }),
+      ).resolves.toEqual({
+        ok: false,
+        error: {
+          code: 'RSDOCTOR_SECTION_UNAVAILABLE',
+          message:
+            'Rsdoctor artifact section "moduleGraph" is unavailable (not-selected).',
+          section: 'moduleGraph',
+          status: 'omitted',
+          reason: 'not-selected',
+        },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('reports an uncollected package graph instead of zero packages', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: {
+          schemaVersion: 1,
+          sections: {
+            packageGraph: { status: 'omitted', reason: 'not-collected' },
+          },
+        },
+        data: {
+          packageGraph: { packages: [], dependencies: [] },
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      await expect(
+        executor.execute({
+          toolName: 'packages_direct_dependencies',
+          input: {},
+          dataFile,
+        }),
+      ).resolves.toEqual({
+        ok: false,
+        error: {
+          code: 'RSDOCTOR_SECTION_UNAVAILABLE',
+          message:
+            'Rsdoctor artifact section "packageGraph" is unavailable (not-collected).',
+          section: 'packageGraph',
+          status: 'omitted',
+          reason: 'not-collected',
+        },
+      });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('guards every catalog tool when its required artifact section is omitted', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    const requiredSectionByTool = {
+      build_summary: 'summary',
+      bundle_optimize: 'errors',
+      chunks_list: 'chunkGraph',
+      errors_list: 'errors',
+      packages_direct_dependencies: 'packageGraph',
+      packages_duplicates: 'errors',
+      packages_similar: 'packageGraph',
+      tree_shaking_retained_modules: 'moduleGraph',
+      tree_shaking_side_effects: 'moduleGraph',
+      tree_shaking_summary: 'errors',
+    } as const;
+    const sections = Object.fromEntries(
+      [...new Set(Object.values(requiredSectionByTool))].map((section) => [
+        section,
+        { status: 'omitted', reason: 'not-selected' },
+      ]),
+    );
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: { schemaVersion: 1, sections },
+        data: {
+          chunkGraph: { assets: [], chunks: [], entrypoints: [] },
+          errors: [],
+          moduleGraph: { modules: [], dependencies: [], exports: [] },
+          packageGraph: { packages: [], dependencies: [] },
+          summary: {},
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      expect(Object.keys(requiredSectionByTool).sort()).toEqual(
+        getToolCatalog()
+          .map((tool) => tool.name)
+          .sort(),
+      );
+      for (const [toolName, section] of Object.entries(requiredSectionByTool)) {
+        await expect(
+          executor.execute({ toolName, input: {}, dataFile }),
+        ).resolves.toMatchObject({
+          ok: false,
+          error: { code: 'RSDOCTOR_SECTION_UNAVAILABLE', section },
+        });
+      }
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('guards only the sections used by the selected bundle optimization step', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        metadata: {
+          schemaVersion: 1,
+          sections: {
+            chunkGraph: { status: 'omitted', reason: 'not-selected' },
+            errors: { status: 'collected' },
+            packageGraph: { status: 'omitted', reason: 'not-collected' },
+          },
+        },
+        data: {
+          chunkGraph: { assets: [], chunks: [], entrypoints: [] },
+          errors: [],
+          packageGraph: { packages: [], dependencies: [] },
+        },
+      }),
+    );
+
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      await expect(
+        executor.execute({
+          toolName: 'bundle_optimize',
+          input: { step: 1 },
+          dataFile,
+        }),
+      ).resolves.toMatchObject({
+        ok: false,
+        error: {
+          code: 'RSDOCTOR_SECTION_UNAVAILABLE',
+          section: 'packageGraph',
+        },
+      });
+      await expect(
+        executor.execute({
+          toolName: 'bundle_optimize',
+          input: { step: 2 },
+          dataFile,
+        }),
+      ).resolves.toMatchObject({ ok: true });
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it('runs the mapped command and returns parsed json', async () => {
     const commands: string[][] = [];
     const catalog = getToolCatalog();
@@ -151,6 +430,172 @@ describe('rsdoctor cli tool executor', () => {
         items: [{ id: 2, name: 'async' }],
       },
     });
+  });
+
+  it('excludes modules whose bailout reason has no content', async () => {
+    const { dataFile, tempDir } = writeModuleGraphArtifact([
+      { id: 1, path: '/repo/src/a.ts', bailoutReason: [] },
+      { id: 2, path: '/repo/src/b.ts', bailoutReason: {} },
+      {
+        id: 3,
+        path: '/repo/src/c.ts',
+        bailoutReason: ['Statement with side_effects in source code'],
+      },
+    ]);
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      const result = (await executor.execute({
+        toolName: 'tree_shaking_side_effects',
+        input: {},
+        dataFile,
+      })) as { data: { all: Array<{ id: number }>; total: number } };
+
+      expect(result.data.total).toBe(1);
+      expect(result.data.all.map((module) => module.id)).toEqual([3]);
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('uses limit to bound every side-effects module collection', async () => {
+    const { dataFile, tempDir } = writeModuleGraphArtifact([
+      {
+        id: 1,
+        path: '/repo/node_modules/pkg/a.js',
+        bailoutReason: ['side effects'],
+      },
+      {
+        id: 2,
+        path: '/repo/node_modules/pkg/b.js',
+        bailoutReason: ['side effects'],
+      },
+      {
+        id: 3,
+        path: '/repo/node_modules/pkg/c.js',
+        bailoutReason: ['side effects'],
+      },
+    ]);
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      const result = (await executor.execute({
+        toolName: 'tree_shaking_side_effects',
+        input: { limit: 1 },
+        dataFile,
+      })) as {
+        data: {
+          all: Array<{ id: number }>;
+          nodeModules: {
+            topPackages: Array<{ modules: Array<{ id: number }> }>;
+          };
+          pageNumber: number;
+          pageSize: number;
+          total: number;
+        };
+      };
+
+      expect(result.data).toMatchObject({
+        total: 3,
+        pageNumber: 1,
+        pageSize: 1,
+      });
+      expect(result.data.all.map((module) => module.id)).toEqual([1]);
+      expect(
+        result.data.nodeModules.topPackages.flatMap((pkg) => pkg.modules),
+      ).toEqual([expect.objectContaining({ id: 1 })]);
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('accepts pageNumber when selecting a later source page', async () => {
+    const { dataFile, tempDir } = writeModuleGraphArtifact([
+      { id: 1, path: '/repo/src/a.ts', bailoutReason: ['side effects'] },
+      { id: 2, path: '/repo/src/b.ts', bailoutReason: ['side effects'] },
+    ]);
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      const result = (await executor.execute({
+        toolName: 'tree_shaking_side_effects',
+        input: { limit: 1, pageNumber: 2 },
+        dataFile,
+      })) as {
+        data: {
+          all: Array<{ id: number }>;
+          pageNumber: number;
+          pageSize: number;
+        };
+      };
+
+      expect(result.data.pageNumber).toBe(2);
+      expect(result.data.pageSize).toBe(1);
+      expect(result.data.all.map((module) => module.id)).toEqual([2]);
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it('bounds bundle optimization chunk details with limit', async () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-cli-'));
+    const dataFile = path.join(tempDir, 'rsdoctor-data.json');
+    fs.writeFileSync(
+      dataFile,
+      JSON.stringify({
+        data: {
+          chunkGraph: {
+            chunks: [
+              { id: 1, name: 'one', modules: [] },
+              { id: 2, name: 'two', modules: [] },
+              { id: 3, name: 'three', modules: [] },
+            ],
+            assets: [
+              { path: 'one.js', size: 500_000, chunks: [1] },
+              { path: 'one.css', size: 500_000, chunks: [1] },
+              { path: 'two.js', size: 1_000_000, chunks: [2] },
+              { path: 'three.js', size: 3_000_000, chunks: [3] },
+              { path: 'three.css', size: 1_000_000, chunks: [3] },
+            ],
+          },
+          errors: [],
+          packageGraph: { packages: [], dependencies: [] },
+        },
+      }),
+    );
+    const executor = createInProcessRsdoctorCliToolExecutor();
+
+    try {
+      const result = (await executor.execute({
+        toolName: 'bundle_optimize',
+        input: { limit: 1, step: 1 },
+        dataFile,
+      })) as {
+        data: {
+          largeChunks: {
+            data: {
+              oversized: Array<{ assets: unknown[]; id: number }>;
+            };
+          };
+          mediaAssets: {
+            data: {
+              chunks: Array<{ assets: unknown[]; id: number }>;
+            };
+          };
+        };
+      };
+
+      expect(
+        result.data.mediaAssets.data.chunks.map((chunk) => chunk.id),
+      ).toEqual([1]);
+      expect(result.data.mediaAssets.data.chunks[0].assets).toHaveLength(1);
+      expect(result.data.largeChunks.data.oversized).toEqual([
+        expect.objectContaining({ id: 3 }),
+      ]);
+      expect(result.data.largeChunks.data.oversized[0].assets).toHaveLength(1);
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
   });
 
   it('detects duplicate package rules by code instead of description text', async () => {

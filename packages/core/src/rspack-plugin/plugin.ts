@@ -239,7 +239,7 @@ export class RsdoctorRspackPlugin<
             ...pluginTapPostOptions,
             stage: pluginTapPostOptions.stage! + 100,
           },
-          () => this.childDone(compiler, context),
+          (compilation) => this.childDone(compiler, context, compilation.hash),
         );
       } else {
         compiler.hooks.afterPlugins.tap(pluginTapPostOptions, () =>
@@ -250,7 +250,7 @@ export class RsdoctorRspackPlugin<
             ...pluginTapPostOptions,
             stage: pluginTapPostOptions.stage! + 100,
           },
-          () => this.done(compiler, context),
+          (stats) => this.done(compiler, context, stats),
         );
       }
 
@@ -332,6 +332,7 @@ export class RsdoctorRspackPlugin<
   public done = async (
     compiler: Plugin.BaseCompilerType<'rspack'>,
     context = this.getCompilerContext(compiler),
+    stats?: Plugin.BaseStats,
   ): Promise<void> => {
     time('RsdoctorRspackPlugin.done');
     try {
@@ -343,6 +344,7 @@ export class RsdoctorRspackPlugin<
       context.sdk.addClientRoutes([
         ManifestType.RsdoctorManifestClientRoutes.Overall,
       ]);
+      this.setArtifactBuildIdentity(compiler, context, stats?.hash);
 
       if (context.sdk instanceof RsdoctorPrimarySDK) {
         context.sdk.setOutputDir(
@@ -631,12 +633,14 @@ export class RsdoctorRspackPlugin<
   private childDone = async (
     compiler: Plugin.BaseCompilerType<'rspack'>,
     context: RsdoctorCompilerContext,
+    compilationHash?: string | null,
   ): Promise<void> => {
     const bootstrapTask = this.ensureBootstrap(context);
     await this.awaitBootstrap(context, bootstrapTask);
     context.sdk.addClientRoutes([
       ManifestType.RsdoctorManifestClientRoutes.Overall,
     ]);
+    this.setArtifactBuildIdentity(compiler, context, compilationHash);
     if (context.sdk instanceof RsdoctorPrimarySDK) {
       context.sdk.setOutputDir(
         context.sdk.parent.getCompilerOutputDir(context.sdk),
@@ -650,6 +654,28 @@ export class RsdoctorRspackPlugin<
       await this.disposeSDK(context, bootstrapTask);
     }
   };
+
+  private setArtifactBuildIdentity(
+    compiler: Plugin.BaseCompilerType<'rspack'>,
+    context: RsdoctorCompilerContext,
+    compilationHash?: string | null,
+  ) {
+    const target = compiler.options.target;
+    const environment = compiler.name || compiler.options.name;
+    const identity: Manifest.RsdoctorArtifactCompilationIdentity = {};
+
+    if (compilationHash) {
+      identity.compilationHash = compilationHash;
+    }
+    if (typeof target === 'string' || Array.isArray(target)) {
+      identity.target = target;
+    }
+    if (environment) {
+      identity.environment = environment;
+    }
+
+    context.sdk.setArtifactBuildIdentity?.(identity);
+  }
 
   private shouldDisposeSDK() {
     return (

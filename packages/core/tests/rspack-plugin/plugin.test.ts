@@ -1,12 +1,78 @@
 import { getSDK } from '@/inner-plugins/utils/sdk';
 import { RsdoctorRspackPlugin } from '@/rspack-plugin';
+import { getWriteStoreOptions } from '@/rspack-plugin/writeStore';
 import { RsdoctorPrimarySDK, RsdoctorSDK } from '@/sdk';
+import { File } from '@/build-utils';
 import { RsdoctorServer } from '@/sdk/server';
 import type { Plugin } from '@rsdoctor/shared/types';
-import { rspack } from '@rspack/core';
+import { rspack, type MultiCompiler, type MultiStats } from '@rspack/core';
 import { afterEach, describe, expect, it, rs } from '@rstest/core';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { getWriteStoreOptions } from '@/rspack-plugin/writeStore';
+
+rs.setConfig({ testTimeout: 30000 });
+
+const createMultiCompiler = (
+  testRoot: string,
+  plugin: RsdoctorRspackPlugin,
+) => {
+  const context = path.resolve(__dirname, '../..');
+  const entry = path.resolve(
+    __dirname,
+    '../fixtures/default-export/literal/index.js',
+  );
+
+  return rspack([
+    {
+      context,
+      entry,
+      mode: 'development',
+      name: 'web',
+      output: { path: path.join(testRoot, 'web') },
+      plugins: [plugin],
+      target: 'web',
+    },
+    {
+      context,
+      entry,
+      mode: 'development',
+      name: 'node',
+      output: { path: path.join(testRoot, 'node') },
+      plugins: [plugin],
+      target: 'node',
+    },
+  ]);
+};
+
+const runCompiler = (compiler: MultiCompiler) =>
+  new Promise<MultiStats>((resolve, reject) => {
+    compiler.run((error, stats) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      if (!stats) {
+        reject(new Error('Rspack did not return compilation stats.'));
+        return;
+      }
+      if (stats.hasErrors()) {
+        reject(new Error(stats.toString({ errors: true })));
+        return;
+      }
+      resolve(stats);
+    });
+  });
+
+const closeCompiler = (compiler: MultiCompiler) =>
+  new Promise<void>((resolve, reject) => {
+    compiler.close((error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
+  });
 
 afterEach(async () => {
   rs.restoreAllMocks();
@@ -104,6 +170,136 @@ describe('RsdoctorRspackPlugin', () => {
     expect(getSDK('node')).toBe(nodeSDK);
 
     await Promise.all([webSDK.dispose(), nodeSDK.dispose()]);
+  });
+
+  it('emits independently matchable identities for multiple compilers', async () => {
+    const testRoot = path.join(
+      tmpdir(),
+      `rsdoctor-multi-compiler-metadata-${Date.now()}`,
+    );
+    const reportDir = path.join(testRoot, 'report');
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      output: { reportDir },
+    });
+    const compiler = createMultiCompiler(testRoot, plugin);
+
+    try {
+      const stats = await runCompiler(compiler);
+      const observedHashes = Object.fromEntries(
+        stats.stats.map((item) => [item.compilation.name, item.hash]),
+      );
+      const manifest = JSON.parse(
+        await File.fse.readFile(
+          path.join(reportDir, '.rsdoctor', 'manifest.json'),
+          'utf-8',
+        ),
+      );
+      const nodeManifestPath = manifest.series.find(
+        (item: { name: string }) => item.name === 'node',
+      ).path;
+      const nodeManifest = JSON.parse(
+        await File.fse.readFile(nodeManifestPath, 'utf-8'),
+      );
+
+      expect(manifest.metadata.build.compilationHash).toBeUndefined();
+      expect(manifest.metadata.build.compilers).toEqual([
+        expect.objectContaining({
+          name: 'web',
+          compilationHash: observedHashes.web,
+          environment: 'web',
+          target: 'web',
+        }),
+        expect.objectContaining({
+          name: 'node',
+          compilationHash: observedHashes.node,
+          environment: 'node',
+          target: 'node',
+        }),
+      ]);
+      expect(nodeManifest.metadata.build.compilers).toEqual(
+        manifest.metadata.build.compilers,
+      );
+    } finally {
+      await closeCompiler(compiler);
+      await File.fse.remove(testRoot);
+    }
+  });
+
+  it('refreshes brief JSON identities after sibling and watch completions', async () => {
+    const testRoot = path.join(
+      tmpdir(),
+      `rsdoctor-multi-compiler-brief-metadata-${Date.now()}`,
+    );
+    const reportDir = path.join(testRoot, 'report');
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      features: { resolver: true },
+      output: {
+        reportDir,
+        mode: 'brief',
+        options: { type: ['json'] },
+      },
+    });
+    const compiler = createMultiCompiler(testRoot, plugin);
+
+    try {
+      const stats = await runCompiler(compiler);
+      const observedHashes = Object.fromEntries(
+        stats.stats.map((item) => [item.compilation.name, item.hash]),
+      );
+      const webSDK = plugin.getCompilerSDK('web') as RsdoctorPrimarySDK;
+      const nodeSDK = plugin.getCompilerSDK('node') as RsdoctorPrimarySDK;
+      const readArtifact = async (sdk: RsdoctorPrimarySDK) =>
+        JSON.parse(
+          await File.fse.readFile(
+            path.join(sdk.outputDir, 'rsdoctor-data.json'),
+            'utf-8',
+          ),
+        );
+      const expectedCompilers = [
+        expect.objectContaining({
+          name: 'web',
+          compilationHash: observedHashes.web,
+        }),
+        expect.objectContaining({
+          name: 'node',
+          compilationHash: observedHashes.node,
+        }),
+      ];
+
+      expect((await readArtifact(webSDK)).metadata.build.compilers).toEqual(
+        expectedCompilers,
+      );
+      expect((await readArtifact(nodeSDK)).metadata.build.compilers).toEqual(
+        expectedCompilers,
+      );
+      expect((await readArtifact(webSDK)).metadata.sections.resolver).toEqual({
+        status: 'collected',
+      });
+      expect((await readArtifact(webSDK)).metadata.sections.loader).toEqual({
+        status: 'collected',
+      });
+
+      webSDK.setArtifactBuildIdentity({
+        compilationHash: 'web-watch-hash',
+        environment: 'web',
+        target: 'web',
+      });
+      await webSDK.writeStore();
+
+      expect(
+        (await readArtifact(nodeSDK)).metadata.build.compilers,
+      ).toContainEqual(
+        expect.objectContaining({
+          name: 'web',
+          compilationHash: 'web-watch-hash',
+        }),
+      );
+    } finally {
+      await closeCompiler(compiler);
+      await File.fse.remove(testRoot);
+    }
   });
 
   it('uses the configured output path before the compiler starts', async () => {

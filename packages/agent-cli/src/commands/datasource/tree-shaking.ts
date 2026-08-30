@@ -81,9 +81,25 @@ function getBailoutModules(
     .filter(Boolean);
 
   return modules
-    .filter((module) => module.bailoutReason)
+    .filter((module) => hasBailoutReasonContent(module.bailoutReason))
     .filter((module) => matchesModuleFilters(module, normalizedFilters))
     .map((module) => toBailoutModule(module));
+}
+
+function hasBailoutReasonContent(value: unknown): boolean {
+  if (typeof value === 'string') {
+    return value.trim().length > 0;
+  }
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return true;
+  }
+  if (Array.isArray(value)) {
+    return value.some((item) => hasBailoutReasonContent(item));
+  }
+  if (value && typeof value === 'object') {
+    return Object.values(value).some((item) => hasBailoutReasonContent(item));
+  }
+  return false;
 }
 
 function getRetainedModuleCategory(
@@ -312,7 +328,7 @@ export function getSideEffects(
       name,
       count: stats.count,
       totalSize: stats.totalSize,
-      modules: stats.modules,
+      modules: paginateItems(stats.modules, pageNumber, pageSize).items,
     }))
     .sort((a, b) => b.totalSize - a.totalSize);
 

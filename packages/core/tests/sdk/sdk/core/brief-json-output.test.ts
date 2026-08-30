@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { afterEach, describe, expect, it } from '@rstest/core';
 import { File } from '@/build-utils';
 import { createSDK, type MockSDKResponse } from '../../utils';
+import packageJson from '../../../../package.json';
 
 describe('brief json output', () => {
   let target: MockSDKResponse;
@@ -31,5 +32,168 @@ describe('brief json output', () => {
     const content = fs.readFileSync(jsonDataPath, 'utf-8');
 
     expect(content).toBe(JSON.stringify(JSON.parse(content)));
+  });
+
+  it('emits v1 metadata without changing the brief artifact envelope', async () => {
+    target = await createSDK({
+      noServer: true,
+      mode: 'brief',
+      brief: {
+        type: ['json'],
+        jsonOptions: {
+          sections: {
+            chunkGraph: true,
+            moduleGraph: false,
+            rules: false,
+          },
+        },
+      },
+    });
+    outputDir = path.resolve(tmpdir(), `rsdoctor_brief_json_${Date.now()}`);
+    target.sdk.setOutputDir(outputDir);
+
+    await target.sdk.writeStore();
+
+    const artifact = JSON.parse(
+      fs.readFileSync(path.join(outputDir, 'rsdoctor-data.json'), 'utf-8'),
+    );
+
+    expect(Object.keys(artifact)).toEqual(['data', 'clientRoutes', 'metadata']);
+    expect(artifact.metadata).toMatchObject({
+      schemaVersion: 1,
+      producer: {
+        name: '@rsdoctor/core',
+        version: packageJson.version,
+      },
+      output: { mode: 'brief' },
+      build: {
+        id: artifact.data.hash,
+        root: artifact.data.root,
+        compiler: { name: 'test' },
+      },
+      sections: {
+        chunkGraph: { status: 'collected' },
+        errors: { status: 'omitted', reason: 'not-selected' },
+        moduleGraph: { status: 'omitted', reason: 'not-selected' },
+        moduleCodeMap: { status: 'omitted', reason: 'output-mode' },
+        resolver: { status: 'omitted', reason: 'feature-disabled' },
+        treeShaking: { status: 'omitted', reason: 'output-mode' },
+      },
+    });
+    expect(artifact.data.chunkGraph).toEqual({
+      assets: [],
+      chunks: [],
+      entrypoints: [],
+    });
+    expect(artifact.data.moduleGraph).toEqual({
+      dependencies: [],
+      modules: [],
+      moduleGraphModules: [],
+      exports: [],
+      sideEffects: [],
+      variables: [],
+      layers: [],
+    });
+    expect(artifact.data.errors).toEqual([]);
+  });
+
+  it('marks an enabled resolver collector as collected when its payload is empty', async () => {
+    target = await createSDK({
+      noServer: true,
+      mode: 'brief',
+      brief: { type: ['json'] },
+    });
+    outputDir = path.resolve(tmpdir(), `rsdoctor_brief_json_${Date.now()}`);
+    target.sdk.setOutputDir(outputDir);
+    target.sdk.markArtifactSectionCollected('resolver');
+
+    await target.sdk.writeStore();
+
+    const artifact = JSON.parse(
+      fs.readFileSync(path.join(outputDir, 'rsdoctor-data.json'), 'utf-8'),
+    );
+
+    expect(artifact.data.resolver).toEqual([]);
+    expect(artifact.metadata.sections.resolver).toEqual({
+      status: 'collected',
+    });
+  });
+
+  it('marks a disabled loader collector as omitted', async () => {
+    target = await createSDK({
+      noServer: true,
+      mode: 'brief',
+      features: { loader: false },
+      brief: { type: ['json'] },
+    });
+    outputDir = path.resolve(tmpdir(), `rsdoctor_brief_json_${Date.now()}`);
+    target.sdk.setOutputDir(outputDir);
+
+    await target.sdk.writeStore();
+
+    const artifact = JSON.parse(
+      fs.readFileSync(path.join(outputDir, 'rsdoctor-data.json'), 'utf-8'),
+    );
+
+    expect(artifact.data.loader).toEqual([]);
+    expect(artifact.metadata.sections.loader).toEqual({
+      status: 'omitted',
+      reason: 'feature-disabled',
+    });
+  });
+
+  it('marks an enabled loader collector as collected when its payload is empty', async () => {
+    target = await createSDK({
+      noServer: true,
+      mode: 'brief',
+      features: { loader: true },
+      brief: { type: ['json'] },
+    });
+    outputDir = path.resolve(tmpdir(), `rsdoctor_brief_json_${Date.now()}`);
+    target.sdk.setOutputDir(outputDir);
+    target.sdk.markArtifactSectionCollected('loader');
+
+    await target.sdk.writeStore();
+
+    const artifact = JSON.parse(
+      fs.readFileSync(path.join(outputDir, 'rsdoctor-data.json'), 'utf-8'),
+    );
+
+    expect(artifact.data.loader).toEqual([]);
+    expect(artifact.metadata.sections.loader).toEqual({
+      status: 'collected',
+    });
+  });
+
+  it('emits v1 metadata on normal manifests without changing sharded data', async () => {
+    target = await createSDK({ noServer: true });
+    outputDir = path.resolve(tmpdir(), `rsdoctor_normal_json_${Date.now()}`);
+    target.sdk.setOutputDir(outputDir);
+
+    const manifestPath = await target.sdk.writeStore();
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+
+    expect(manifest.client.enableRoutes).toEqual(['Overall']);
+    expect(manifest.data.summary).toBeInstanceOf(Array);
+    expect(manifest.metadata).toMatchObject({
+      schemaVersion: 1,
+      producer: {
+        name: '@rsdoctor/core',
+        version: packageJson.version,
+      },
+      output: { mode: 'normal' },
+      build: {
+        id: target.sdk.getHash(),
+        root: target.sdk.root,
+        compiler: { name: 'test' },
+      },
+      sections: {
+        chunkGraph: { status: 'collected' },
+        moduleGraph: { status: 'collected' },
+        packageGraph: { status: 'omitted', reason: 'not-collected' },
+        resolver: { status: 'omitted', reason: 'feature-disabled' },
+        treeShaking: { status: 'omitted', reason: 'feature-disabled' },
+      },
+    });
   });
 });

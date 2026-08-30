@@ -55,7 +55,19 @@ interface RsdoctorError {
   packages?: unknown[];
 }
 
+export interface RsdoctorArtifactMetadata {
+  schemaVersion: number;
+  sections?: Record<
+    string,
+    { status: 'collected' } | { status: 'omitted'; reason: string }
+  >;
+  [key: string]: unknown;
+}
+
 export interface RsdoctorData {
+  /** Absent on legacy artifacts; unknown fields are preserved for newer schemas. */
+  metadata?: RsdoctorArtifactMetadata;
+  clientRoutes?: string[];
   data?: {
     chunkGraph?: {
       chunks?: Array<{

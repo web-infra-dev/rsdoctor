@@ -6,6 +6,8 @@ import { PluginData } from './plugin';
 import { BuilderStoreData, EMOStoreData } from './result';
 import { ModuleGraphInstance, ToDataType } from './module';
 import {
+  RsdoctorArtifactCompilationIdentity,
+  RsdoctorArtifactSectionName,
   RsdoctorManifestClientRoutes,
   RsdoctorManifestWithShardingFiles,
 } from '../manifest';
@@ -113,6 +115,14 @@ export interface RsdoctorSDKInstance {
   setName(name: string): void;
   setHash(hash: string): void;
   getHash(): string;
+
+  /** Attach build identity already exposed by the producing compiler. */
+  setArtifactBuildIdentity?(
+    identity: RsdoctorArtifactCompilationIdentity,
+  ): void;
+
+  /** Mark a section whose collector was installed for this artifact. */
+  markArtifactSectionCollected?(section: RsdoctorArtifactSectionName): void;
 
   /**
    * write the manifest to a folder
