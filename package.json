@@ -15,20 +15,12 @@
     "e2e:base": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
     "format": "rs fmt && heading-case --write",
     "lint": "rs lint",
-    "prepare": "pnpm run build && husky",
+    "prepare": "pnpm run build && rs hooks",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm run ut",
     "test:all": "pnpm run test && pnpm run e2e",
     "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
     "ut": "rstest run",
     "ut:watch": "rstest"
-  },
-  "nano-staged": {
-    "*.{md,mdx,json,css,less,scss}": "rs fmt --no-error-on-unmatched-pattern",
-    "*.{js,jsx,ts,tsx,mjs,cjs}": [
-      "rs lint",
-      "rs fmt --no-error-on-unmatched-pattern"
-    ],
-    "package.json": "pnpm run check-dependency-version"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.58.12",
@@ -39,8 +31,6 @@
     "cross-env": "catalog:",
     "cspell-ban-words": "^0.0.4",
     "heading-case": "^1.1.5",
-    "husky": "^9.1.7",
-    "nano-staged": "^1.0.2",
     "pkg-pr-new": "0.0.88",
     "rsbuild-plugin-publint": "^0.3.4",
     "rstack": "^0.6.5"
