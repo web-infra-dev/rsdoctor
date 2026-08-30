@@ -1,9 +1,12 @@
 import { describe, it, expect } from '@rstest/core';
-import { checkCirclePath } from '@/inner-plugins/utils'
+import { checkCirclePath } from '@/inner-plugins/utils';
 
 describe('test checkCirclePath function', () => {
   it('makeRulesSerializable()', async () => {
-    const obj: Record<string, any> = { foo: { bar: [{ x: 'y' }, { y: 'x' }], xx: { yy: 'zz' } }, a: { b: 'b' } };
+    const obj: Record<string, any> = {
+      foo: { bar: [{ x: 'y' }, { y: 'x' }], xx: { yy: 'zz' } },
+      a: { b: 'b' },
+    };
     obj.foo.a = obj.foo;
     obj.foo.x = obj;
     const circlePaths: string[][] = [];

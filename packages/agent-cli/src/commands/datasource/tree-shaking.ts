@@ -16,10 +16,7 @@ interface BailoutModule {
 }
 
 export type SideEffectsCategory =
-  | 'cjs'
-  | 'barrel'
-  | 'side-effects'
-  | 'dynamic-import';
+  'cjs' | 'barrel' | 'side-effects' | 'dynamic-import';
 
 export type RetainedModuleCategory = SideEffectsCategory | 'unknown';
 

@@ -6,7 +6,7 @@
 - `pnpm` workspace monorepo (topological build ordering)
 - TypeScript strict mode; target `node 16` for library output
 - Build toolchain: **Rslib** (based on Rsbuild/Rspack)
-- Lint: **Rslint** (`pnpm lint`), format: **Prettier** (`pnpm format`)
+- Lint/format: **Rstack CLI** (`rs lint` backed by Rslint, `rs fmt` based on Prettier)
 - Test runner: **Rstest** (`pnpm test`), E2E: **Playwright** (`pnpm e2e`)
 
 ## Commands
@@ -16,8 +16,8 @@
 pnpm install                # install all deps + build all packages (prepare hook)
 
 # ── quality checks ───────────────────────────────────────────
-pnpm lint                   # rslint lint (error-level only)
-pnpm format                 # prettier + heading-case
+pnpm lint                   # rs lint (error-level only)
+pnpm format                 # rs fmt + heading-case
 pnpm test                   # unit tests via rstest (single worker, NODE_OPTIONS=--max-old-space-size=8192)
 pnpm e2e                    # playwright e2e (requires chromium: cd e2e && npx playwright install chromium)
 
@@ -87,7 +87,7 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 
 - **Test (Ubuntu)**: Node 22.x on ubuntu-22.04, runs `pnpm run test:all` (unit + e2e).
 - **Test (Windows)**: same matrix on windows.
-- **Lint**: separate workflow runs `rslint lint`.
+- **Lint**: separate workflow runs `rs lint`.
 - PRs targeting `main`, `release_*`, `release-*` trigger CI.
 - Paths `packages/document/**` and `*.md` are excluded from test CI triggers.
 

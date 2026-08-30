@@ -1,7 +1,16 @@
-import { defineConfig, ts } from '@rslint/core';
+import { define } from 'rstack';
 
-export default defineConfig([
-  ts.configs.recommended,
+const tsFiles = ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'];
+
+define.lint(({ js, ts }) => [
+  {
+    ...js.configs.recommended,
+    files: tsFiles,
+  },
+  ...ts.configs.recommended.map((config) => ({
+    ...config,
+    files: tsFiles,
+  })),
   {
     languageOptions: {
       parserOptions: {
@@ -21,3 +30,8 @@ export default defineConfig([
     },
   },
 ]);
+
+define.fmt({
+  singleQuote: true,
+  ignorePatterns: ['examples/*/index.html'],
+});

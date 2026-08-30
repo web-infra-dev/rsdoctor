@@ -3,13 +3,7 @@ import { Linter } from '../index';
 export type InternalRules = Linter.RuleData[];
 
 export type InternalRuleId =
-  | 'E1001'
-  | 'E1002'
-  | 'E1003'
-  | 'E1004'
-  | 'E1005'
-  | 'E1006'
-  | 'E1007';
+  'E1001' | 'E1002' | 'E1003' | 'E1004' | 'E1005' | 'E1006' | 'E1007';
 
 export type InternalRuleName =
   | 'duplicate-package'

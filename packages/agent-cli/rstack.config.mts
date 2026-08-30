@@ -1,6 +1,6 @@
-import { defineConfig } from '@rslint/core';
+import { define } from 'rstack';
 
-export default defineConfig([
+define.lint(() => [
   {
     languageOptions: {
       parserOptions: {
