@@ -13,4 +13,3 @@ declare module '*.css';
 declare module '*?__inline';
 declare module '*?__inline=true';
 declare module '*?__inline=false';
-

@@ -1,6 +1,8 @@
-import { defineConfig, ts } from '@rslint/core';
+import { define } from 'rstack';
 
-export default defineConfig([
+define.lint(({ js, ts, globalIgnores }) => [
+  globalIgnores(['packages/core/tests/build/utils/bundles/**']),
+  js.configs.recommended,
   ts.configs.recommended,
   {
     languageOptions: {
@@ -18,6 +20,17 @@ export default defineConfig([
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+      'no-undef': 'off',
     },
   },
 ]);
+
+define.fmt({
+  singleQuote: true,
+  ignorePatterns: [
+    'examples/*/index.html',
+    'packages/core/tests/build/utils/bundles/**',
+  ],
+});

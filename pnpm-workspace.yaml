@@ -20,7 +20,6 @@ catalog:
   '@rsbuild/plugin-sass': ^1.5.3
   '@rsbuild/plugin-svgr': ^2.0.5
   '@rsbuild/plugin-type-check': ^1.6.0
-  '@rslint/core': ^0.7.3
   '@rspack/cli': ^2.0.8
   '@rspack/core': ^2.1.10
   '@rspack/lite-tapable': ^1.1.5

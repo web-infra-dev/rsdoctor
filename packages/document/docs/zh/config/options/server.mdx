@@ -96,10 +96,7 @@ interface RsdoctorServerConfig {
 }
 
 type RsdoctorServerCorsStaticOrigin =
-  | boolean
-  | string
-  | RegExp
-  | Array<boolean | string | RegExp>;
+  boolean | string | RegExp | Array<boolean | string | RegExp>;
 
 type RsdoctorServerCorsOrigin =
   | RsdoctorServerCorsStaticOrigin

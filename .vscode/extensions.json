@@ -1,7 +1,3 @@
 {
-  "recommendations": [
-    "rstack.rslint",
-    "esbenp.prettier-vscode",
-    "streetsidesoftware.code-spell-checker"
-  ]
+  "recommendations": ["rstack.rstack", "streetsidesoftware.code-spell-checker"]
 }

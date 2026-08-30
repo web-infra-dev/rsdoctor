@@ -130,10 +130,7 @@ export interface IPrintLog {
 }
 
 export type RsdoctorServerCorsStaticOrigin =
-  | boolean
-  | string
-  | RegExp
-  | Array<boolean | string | RegExp>;
+  boolean | string | RegExp | Array<boolean | string | RegExp>;
 
 export type RsdoctorServerCorsOrigin =
   | RsdoctorServerCorsStaticOrigin
