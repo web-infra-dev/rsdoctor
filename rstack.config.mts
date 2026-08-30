@@ -1,16 +1,9 @@
 import { define } from 'rstack';
 
-const tsFiles = ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'];
-
-define.lint(({ js, ts }) => [
-  {
-    ...js.configs.recommended,
-    files: tsFiles,
-  },
-  ...ts.configs.recommended.map((config) => ({
-    ...config,
-    files: tsFiles,
-  })),
+define.lint(({ js, ts, globalIgnores }) => [
+  globalIgnores(['packages/core/tests/build/utils/bundles/**']),
+  js.configs.recommended,
+  ts.configs.recommended,
   {
     languageOptions: {
       parserOptions: {
@@ -27,6 +20,9 @@ define.lint(({ js, ts }) => [
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+      'no-undef': 'off',
     },
   },
 ]);
