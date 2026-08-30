@@ -1,32 +1,34 @@
 {
   "name": "@rsdoctor/docs",
   "version": "2.0.0-beta.0",
-  "scripts": {
-    "dev": "cross-env RSPRESS_PERSISTENT_CACHE=false rspress dev",
-    "build": "cross-env RSPRESS_PERSISTENT_CACHE=false rspress build && sh build.sh",
-    "preview": "rspress preview"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
     "directory": "packages/document"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">=22.18.0"
-  },
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "docs",
     "src"
   ],
-  "type": "module",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
+  "scripts": {
+    "build": "cross-env RSPRESS_PERSISTENT_CACHE=false rspress build && sh build.sh",
+    "dev": "cross-env RSPRESS_PERSISTENT_CACHE=false rspress dev",
+    "preview": "rspress preview"
+  },
+  "dependencies": {
+    "@rspress/core": "2.0.19",
+    "@rstackjs/doc-ui": "1.14.11",
+    "clsx": "catalog:",
+    "react-markdown": "catalog:"
   },
   "devDependencies": {
+    "@rsbuild/plugin-sass": "catalog:",
+    "@rsdoctor/core": "workspace:*",
+    "@rsdoctor/shared": "workspace:*",
     "@rspress/plugin-algolia": "2.0.19",
     "@rspress/plugin-client-redirects": "2.0.19",
     "@rspress/plugin-rss": "2.0.5",
@@ -41,15 +43,13 @@
     "rsbuild-plugin-open-graph": "^1.1.3",
     "rspress-plugin-font-open-sans": "^1.0.4",
     "rspress-plugin-sitemap": "^1.2.1",
-    "typescript": "catalog:",
-    "@rsbuild/plugin-sass": "catalog:",
-    "@rsdoctor/core": "workspace:*",
-    "@rsdoctor/shared": "workspace:*"
+    "typescript": "catalog:"
   },
-  "dependencies": {
-    "@rstackjs/doc-ui": "1.14.11",
-    "clsx": "catalog:",
-    "react-markdown": "catalog:",
-    "@rspress/core": "2.0.19"
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

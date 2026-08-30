@@ -8,8 +8,9 @@
   },
   "scripts": {
     "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"./scripts/*\" run build",
-    "check-spell": "pnpx cspell && heading-case",
+    "check": "rs check",
     "check-dependency-version": "pnpx check-dependency-version-consistency . && echo",
+    "check-spell": "pnpx cspell && heading-case",
     "dev:doc": "cd packages/document && pnpm run dev",
     "e2e": "pnpm run e2e:base",
     "e2e:base": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
@@ -18,7 +19,6 @@
     "prepare": "pnpm run build && rs hooks",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm run ut",
     "test:all": "pnpm run test && pnpm run e2e",
-    "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
     "ut": "rstest run",
     "ut:watch": "rstest"
   },

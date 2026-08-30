@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start:analysis": "ENABLE_CLIENT_SERVER=true rsbuild",
-    "build:analysis": "ENABLE_CLIENT_SERVER=true rsbuild build",
     "build": "rsbuild build",
-    "start": "rsbuild"
+    "build:analysis": "ENABLE_CLIENT_SERVER=true rsbuild build",
+    "start": "rsbuild",
+    "start:analysis": "ENABLE_CLIENT_SERVER=true rsbuild"
   },
   "dependencies": {
     "react": "catalog:",

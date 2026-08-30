@@ -7,19 +7,16 @@
     "directory": "packages/agent-cli"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">=22.18.0"
-  },
+  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "rsdoctor-agent": "./bin/rsdoctor-agent.js"
+  },
   "files": [
     "dist",
     "bin"
   ],
-  "bin": {
-    "rsdoctor-agent": "./bin/rsdoctor-agent.js"
-  },
-  "type": "module",
   "scripts": {
     "build": "rslib build",
     "dev": "rslib build --watch",
@@ -33,6 +30,9 @@
     "@types/node": "catalog:",
     "cac": "^7.0.0",
     "typescript": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   },
   "publishConfig": {
     "access": "public",
