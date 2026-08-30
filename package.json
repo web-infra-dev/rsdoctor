@@ -23,10 +23,10 @@
     "ut:watch": "rstest"
   },
   "nano-staged": {
-    "*.{md,mdx,json,css,less,scss}": "rs fmt",
+    "*.{md,mdx,json,css,less,scss}": "rs fmt --no-error-on-unmatched-pattern",
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
       "rs lint",
-      "rs fmt"
+      "rs fmt --no-error-on-unmatched-pattern"
     ],
     "package.json": "pnpm run check-dependency-version"
   },

@@ -33,5 +33,8 @@ define.lint(({ js, ts }) => [
 
 define.fmt({
   singleQuote: true,
-  ignorePatterns: ['examples/*/index.html'],
+  ignorePatterns: [
+    'examples/*/index.html',
+    'packages/core/tests/build/utils/bundles/**',
+  ],
 });
