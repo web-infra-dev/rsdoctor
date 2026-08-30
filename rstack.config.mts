@@ -34,3 +34,9 @@ define.fmt({
     'packages/core/tests/build/utils/bundles/**',
   ],
 });
+
+define.staged({
+  '*.{md,mdx,json,css,less,scss}': 'rs fmt',
+  '*.{js,jsx,ts,tsx,mjs,cjs}': ['rs lint', 'rs fmt'],
+  'package.json': 'pnpm run check-dependency-version',
+});
