@@ -29,6 +29,7 @@ define.lint(({ js, ts, globalIgnores }) => [
 
 define.fmt({
   singleQuote: true,
+  sortPackageJson: true,
   ignorePatterns: [
     'examples/*/index.html',
     'packages/core/tests/build/utils/bundles/**',

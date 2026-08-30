@@ -1,7 +1,7 @@
 {
-  "private": true,
   "name": "@rsdoctor/e2e",
   "version": "0.0.1",
+  "private": true,
   "scripts": {
     "test": "rstest run",
     "test:local": "npx playwright install chromium && rstest run"
@@ -10,13 +10,13 @@
     "@actions/core": "^1.11.1",
     "@lynx-js/react": "^0.125.0",
     "@lynx-js/rspeedy": "^0.16.5",
-    "@rstest/core": "catalog:",
-    "@rstest/playwright": "catalog:",
     "@rsbuild/plugin-less": "catalog:",
     "@rsdoctor/cli": "workspace:*",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
     "@rspack/core": "catalog:",
+    "@rstest/core": "catalog:",
+    "@rstest/playwright": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "loader-utils": "^2.0.4",
