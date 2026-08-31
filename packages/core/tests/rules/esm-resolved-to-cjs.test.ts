@@ -1,7 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { SDK } from '@rsdoctor/shared/types';
 import { rule } from '../../src/rules/rules/esm-resolved-to-cjs';
 

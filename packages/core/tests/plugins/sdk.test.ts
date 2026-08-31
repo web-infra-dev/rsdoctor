@@ -1,6 +1,6 @@
 import { getSDK, setSDK } from '@/inner-plugins/utils/sdk';
 import type { SDK } from '@rsdoctor/shared/types';
-import { afterEach, describe, expect, it } from '@rstest/core';
+import { afterEach, describe, expect, it } from 'rstack/test';
 
 function createMultipleSDKs() {
   const createSlave = (name: string, compilerPath = '') =>

@@ -1,4 +1,4 @@
-import { describe, it, expect, rs } from '@rstest/core';
+import { describe, it, expect, rs } from 'rstack/test';
 import { Time } from '../../src/common-browser';
 import { hrtime } from 'process';
 

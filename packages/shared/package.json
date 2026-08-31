@@ -56,7 +56,8 @@
   ],
   "scripts": {
     "build": "rs lib",
-    "start": "rs lib -w"
+    "start": "rs lib -w",
+    "test": "rs test"
   },
   "dependencies": {
     "@rspack/lite-tapable": "catalog:",

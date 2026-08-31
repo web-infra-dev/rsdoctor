@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, rs } from '@rstest/core';
+import { afterEach, describe, expect, it, rs } from 'rstack/test';
 import { SDK } from '@rsdoctor/shared/types';
 import { LocalServerDataLoader } from 'src/utils/data/local';
 

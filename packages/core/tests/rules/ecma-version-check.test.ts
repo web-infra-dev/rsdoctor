@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { beforeEach, describe, expect, it, rs } from '@rstest/core';
+import { beforeEach, describe, expect, it, rs } from 'rstack/test';
 
 const mocks = rs.hoisted(() => ({
   check: rs.fn(async () => {}),

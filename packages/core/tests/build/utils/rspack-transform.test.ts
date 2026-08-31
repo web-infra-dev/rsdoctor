@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import { ModuleGraph, ChunkGraph, Chunk } from '@rsdoctor/shared/graph';
 import {
   extractSideEffectCodes,

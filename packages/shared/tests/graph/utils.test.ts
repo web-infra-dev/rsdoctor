@@ -1,4 +1,4 @@
-import { expect, describe, it } from '@rstest/core';
+import { expect, describe, it } from 'rstack/test';
 import {
   readPackageJson,
   getModuleName,

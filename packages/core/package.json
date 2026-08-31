@@ -38,7 +38,7 @@
     "build": "rs lib",
     "dev": "npm run start",
     "start": "rs lib -w",
-    "test": "rstest run"
+    "test": "rs test"
   },
   "dependencies": {
     "@babel/code-frame": "7.26.2",

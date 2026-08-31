@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'node:fs';
 import zlib from 'node:zlib';
 import { tmpdir } from 'os';
-import { describe, it, expect, afterEach } from '@rstest/core';
+import { describe, it, expect, afterEach } from 'rstack/test';
 import { File } from '@/build-utils';
 import { createSDK, type MockSDKResponse } from '../../utils';
 

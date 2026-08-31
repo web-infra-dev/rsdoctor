@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import path from 'path';
 
 import { Chunks, ModuleGraphTrans } from '../../src/graph';

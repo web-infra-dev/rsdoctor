@@ -1,9 +1,10 @@
-import { defineConfig } from '@rstest/core';
+import path from 'node:path';
+import type { RstestConfig } from 'rstack/test';
 
-// Disable color in test
+// Disable color in tests.
 process.env.NO_COLOR = '1';
 
-export default defineConfig({
+export const baseConfig: RstestConfig = {
   name: 'node',
   globals: true,
   restoreMocks: true,
@@ -15,9 +16,8 @@ export default defineConfig({
     decorators: {
       version: 'legacy',
     },
-    tsconfigPath: './tsconfig.test.json',
+    tsconfigPath: path.join(import.meta.dirname, '../tsconfig.test.json'),
   },
-  include: ['packages/**/*.test.ts'],
   exclude: ['**/node_modules/**'],
-  setupFiles: ['./scripts/rstest.setup.ts'],
-});
+  setupFiles: [path.join(import.meta.dirname, 'rstest.setup.ts')],
+};

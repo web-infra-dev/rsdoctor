@@ -2,7 +2,7 @@ import { lowerCase } from '@rsdoctor/shared/collection';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import { parseBundle } from '@/build-utils/build/utils/parseBundle';
 
 const BUNDLES_DIR = `${__dirname}/bundles`;

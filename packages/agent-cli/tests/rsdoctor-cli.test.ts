@@ -1,4 +1,4 @@
-import { describe, expect, it, rs } from '@rstest/core';
+import { describe, expect, it, rs } from 'rstack/test';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';

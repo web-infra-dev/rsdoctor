@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from '@rstest/core';
+import { afterEach, describe, expect, it } from 'rstack/test';
 import { formatLocalDate } from '../../../src/sdk/utils/date';
 
 const originalTimezone = process.env.TZ;

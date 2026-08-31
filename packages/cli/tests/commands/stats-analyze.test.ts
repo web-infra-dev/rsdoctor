@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { coercePort } from '../../src/commands/stats-analyze';
 
 describe('stats-analyze command', () => {

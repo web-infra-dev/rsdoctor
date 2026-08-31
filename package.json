@@ -18,15 +18,12 @@
     "format": "rs fmt",
     "lint": "rs lint",
     "prepare": "pnpm run build && rs hooks",
-    "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm run ut",
-    "test:all": "pnpm run test && pnpm run e2e",
-    "ut": "rstest run",
-    "ut:watch": "rstest"
+    "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm --workspace-concurrency=1 --filter \"./packages/*\" test",
+    "test:all": "pnpm run test && pnpm run e2e"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.58.12",
     "@rsdoctor/tsconfig": "workspace:*",
-    "@rstest/core": "catalog:",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",
     "cspell-ban-words": "^0.0.4",

@@ -1,4 +1,4 @@
-import { describe, it, expect, rs } from '@rstest/core';
+import { describe, it, expect, rs } from 'rstack/test';
 import { request } from 'http';
 import { setupSDK, type MockSDKResponse } from '../utils';
 

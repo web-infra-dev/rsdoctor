@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import { Algorithm, Manifest } from '../../src/common-browser';
 
 describe('test src/common/manifest.ts', () => {

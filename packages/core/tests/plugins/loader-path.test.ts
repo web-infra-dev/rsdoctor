@@ -1,7 +1,7 @@
 import path from 'path';
 import { isESMLoader } from '../../src/build-utils/build/utils/loader';
 import type { Plugin } from '@rsdoctor/shared/types';
-import { describe, expect, test } from '@rstest/core';
+import { describe, expect, test } from 'rstack/test';
 
 describe('loader path detection', () => {
   describe('absolute paths', () => {

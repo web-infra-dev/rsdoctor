@@ -1,4 +1,4 @@
-import { describe, it, expect, rs } from '@rstest/core';
+import { describe, it, expect, rs } from 'rstack/test';
 import { SDK } from '@rsdoctor/shared/types';
 import { setupSDK } from '../../utils';
 

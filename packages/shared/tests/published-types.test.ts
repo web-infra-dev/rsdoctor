@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { execFileSync, type ExecFileSyncOptions } from 'node:child_process';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';

@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import type { Thirdparty } from '@rsdoctor/shared/types';
 import { PassThrough, Readable } from 'node:stream';
 import { brotliCompressSync, deflateSync, gzipSync } from 'node:zlib';

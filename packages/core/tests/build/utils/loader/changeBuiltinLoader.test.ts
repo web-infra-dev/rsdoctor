@@ -1,4 +1,4 @@
-import { describe, expect, it, rs } from '@rstest/core';
+import { describe, expect, it, rs } from 'rstack/test';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';

@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { expect, describe, it, beforeEach } from '@rstest/core';
+import { expect, describe, it, beforeEach } from 'rstack/test';
 import { Asset, Chunk, Module, PackageGraph } from '../../src/graph';
 
 describe('PackageGraph.getPackageByModule', () => {

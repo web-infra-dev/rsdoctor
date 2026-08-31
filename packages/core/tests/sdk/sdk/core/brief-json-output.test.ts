@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
-import { afterEach, describe, expect, it } from '@rstest/core';
+import { afterEach, describe, expect, it } from 'rstack/test';
 import { File } from '@/build-utils';
 import { createSDK, type MockSDKResponse } from '../../utils';
 

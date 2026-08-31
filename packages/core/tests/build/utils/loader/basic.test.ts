@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import { extractLoaderName } from '@/build-utils/build/utils';
 
 describe('test src/build/utils/loader.ts basic functions', () => {

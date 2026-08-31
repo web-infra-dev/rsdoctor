@@ -4,7 +4,7 @@ import { RsdoctorPrimarySDK, RsdoctorSDK } from '@/sdk';
 import { RsdoctorServer } from '@/sdk/server';
 import type { Plugin } from '@rsdoctor/shared/types';
 import { rspack } from '@rspack/core';
-import { afterEach, describe, expect, it, rs } from '@rstest/core';
+import { afterEach, describe, expect, it, rs } from 'rstack/test';
 import path from 'node:path';
 import { getWriteStoreOptions } from '@/rspack-plugin/writeStore';
 

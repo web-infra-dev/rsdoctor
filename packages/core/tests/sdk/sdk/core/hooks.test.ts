@@ -1,4 +1,4 @@
-import { describe, expect, it, rs } from '@rstest/core';
+import { describe, expect, it, rs } from 'rstack/test';
 import { setupSDK } from '../../utils';
 
 describe('test hooks of sdk/core.ts', () => {

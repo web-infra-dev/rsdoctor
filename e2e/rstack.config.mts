@@ -1,6 +1,6 @@
-import { defineConfig } from '@rstest/core';
+import { define } from 'rstack';
 
-export default defineConfig({
+define.test({
   name: 'e2e',
   include: ['cases/**/*.test.ts'],
   exclude: ['**/node_modules/**', '**/dist/**'],
