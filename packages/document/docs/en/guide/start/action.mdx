@@ -1,9 +1,9 @@
 ---
-title: GitHub Action Integration
+title: GitHub Actions Integration
 description: Integrate Rsdoctor analysis in CI/CD workflows using rsdoctor-action
 ---
 
-# GitHub Action Integration
+# GitHub Actions integration
 
 Rsdoctor provides an official GitHub [rsdoctor-action](https://github.com/web-infra-dev/rsdoctor-action) for easy integration of Rsdoctor analysis functionality in CI/CD workflows. Through GitHub Action, you can automatically perform bundle diff analysis on the build output and monitor and prevent bundle degradation, continuously optimizing project performance.
 
@@ -12,9 +12,9 @@ Rsdoctor provides an official GitHub [rsdoctor-action](https://github.com/web-in
   style={{ width: '80%', margin: 'auto' }}
 />
 
-## Quick Start
+## Quick start
 
-### Step 1: Install Rsdoctor Plugin in Your Project
+### Step 1: install Rsdoctor plugin in your project
 
 **1. Follow the [Quick Start](/guide/start/quick-start) guide to install the Rsdoctor plugin in your project and configure it according to your project type.**
 
@@ -47,7 +47,7 @@ export default defineConfig({
 });
 ```
 
-### Step 2: Configure GitHub Workflow
+### Step 2: configure GitHub workflow
 
 Create a `.github/workflows/ci.yml` file in your GitHub repository as shown in the example below. Please note the following points:
 
@@ -168,7 +168,7 @@ Rsdoctor Action can use AI to summarize bundle degradation in pull requests and 
 
 If `AI_TOKEN` is not provided, the Action still runs the regular bundle diff analysis, but AI-assisted analysis will be skipped. The token must match the provider detected from `ai_model`. For example, use an Anthropic token with `claude-*`, a Google token with `gemini-*`, a DeepSeek token with `deepseek-*`, a Qwen token with `qwen*`, or an OpenAI token with OpenAI model names such as `gpt-4o-mini`.
 
-## View Reports
+## View reports
 
 After submitting the above configuration file to your repository, GitHub Actions will automatically run under the specified trigger conditions and generate Rsdoctor analysis reports. You will see bundle size change comparison prompts in GitHub CI, as shown below:
 
@@ -185,7 +185,7 @@ Additionally, clicking "Download Bundle Diff Report" allows you to download Rsdo
 
 ## Troubleshooting
 
-### Common Issues
+### Common issues
 
 **Q: Action fails with "❌ Rsdoctor data file not found"**
 
@@ -204,7 +204,7 @@ Additionally, clicking "Download Bundle Diff Report" allows you to download Rsdo
 - Confirm that baseline data exists and the bundle size changed in the current run.
 - For pull requests from forks, GitHub may not expose repository secrets to the workflow for security reasons.
 
-## More Resources
+## More resources
 
 - [rsdoctor-action GitHub Repository](https://github.com/web-infra-dev/rsdoctor-action)
 - [Rsdoctor AI Guide](/guide/start/ai)

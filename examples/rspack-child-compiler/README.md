@@ -1,4 +1,4 @@
-# Rspack Child Compiler Example
+# Rspack child compiler example
 
 This example creates a main compiler and a child compiler in the same Rspack
 build. Rsdoctor collects an independent report for each compiler.

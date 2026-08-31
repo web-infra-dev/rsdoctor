@@ -35,9 +35,9 @@ Increase the Node.js memory limit, for example: `NODE_OPTIONS=--max-old-space-si
 
 This issue is often caused by storing source code information during the build process, which exceeds the memory limit. Set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource` to reduce memory usage. See [output.reportCodeType](/config/options/output#reportcodetype).
 
-## No Bundled/Parsed Size for Modules in bundle analysis?
+## No Bundled/Parsed size for modules in bundle analysis?
 
-### Issue Description
+### Issue description
 
 The difference between `Source Size` and `Bundled Size`:
 
@@ -83,7 +83,7 @@ Rsdoctor supports the following SourceMap configurations:
 
 ## Bundle analysis page no `Bundled Size`?
 
-### Issue Description
+### Issue description
 
 The difference between `Source Size` and `Bundled Size`:
 
@@ -92,7 +92,7 @@ The difference between `Source Size` and `Bundled Size`:
 
 <img src="https://assets.rspack.rs/others/assets/rsdoctor/bundle-size-overall.png" />
 
-### Root Cause
+### Root cause
 
 When [optimization.concatenateModules](https://rspack.rs/config/optimization#optimizationconcatenatemodules) is set to `true`, Rsdoctor cannot use `acorn` to parse the build artifacts and break down the actual code size of each **Module**, therefore it cannot display the `Bundled Size`.
 
@@ -139,18 +139,18 @@ When using Rsdoctor to analyze the compilation time of Rspack projects, you may 
 
 <img src="https://assets.rspack.rs/rsdoctor/css-extract-loader.png" />
 
-## Using Rsdoctor with Re.Pack or Custom Bundle Extensions
+## Using Rsdoctor with Re.Pack or custom bundle extensions
 
 Rsdoctor now supports custom JavaScript bundle file extensions beyond the standard `.js` extension. This is particularly useful for projects like Re.Pack that use `.bundle` extensions.
 
-### Supported Extensions
+### Supported extensions
 
 By default, Rsdoctor recognizes the following JavaScript bundle extensions:
 
 - `.js` - Standard JavaScript files
 - `.bundle` - Re.Pack and other custom bundlers
 
-### No Configuration Required
+### No configuration required
 
 If your project generates bundle files with a `.bundle` extension (e.g., `main.bundle`, `vendor.bundle`), Rsdoctor will automatically:
 
@@ -159,7 +159,7 @@ If your project generates bundle files with a `.bundle` extension (e.g., `main.b
 - Include `.bundle` assets in JavaScript asset statistics
 - Support source map analysis for `.bundle` files
 
-### How It Works
+### How it works
 
 The detection logic has been updated in the following areas:
 
@@ -167,7 +167,7 @@ The detection logic has been updated in the following areas:
 2. **Asset Filtering**: Asset summary and filtering functions treat `.bundle` files as JavaScript assets.
 3. **File Type Detection**: All file extension matching utilities include `.bundle` as a recognized JavaScript extension.
 
-### Example Use Case
+### Example use case
 
 Re.Pack projects typically generate bundles with the `.bundle` extension:
 

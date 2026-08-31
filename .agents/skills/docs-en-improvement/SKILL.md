@@ -3,7 +3,7 @@ name: docs-en-improvement
 description: Improve English documentation under `packages/document/docs/en` by rewriting unnatural translated sentences into clear, professional English while preserving meaning. Use when editing or polishing English docs in the Rsdoctor project.
 ---
 
-# Docs En Improvement
+# Docs en improvement
 
 Rsdoctor documentation is built with **Rspress** and lives in `packages/document/`. Content is written in Markdown / MDX.
 
