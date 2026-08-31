@@ -17,7 +17,7 @@ pnpm install                # install all deps + build all packages (prepare hoo
 
 # ── quality checks ───────────────────────────────────────────
 pnpm lint                   # rs lint (error-level only)
-pnpm format                 # rs fmt + heading-case
+pnpm format                 # rs fmt
 pnpm test                   # unit tests via rstest (single worker, NODE_OPTIONS=--max-old-space-size=8192)
 pnpm e2e                    # playwright e2e (requires chromium: cd e2e && npx playwright install chromium)
 
