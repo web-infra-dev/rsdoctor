@@ -3,7 +3,7 @@ name: write-e2e-cases
 description: Use when adding or updating Rsdoctor end-to-end tests in `e2e/cases/`, including new feature coverage, bug reproduction, and regression prevention.
 ---
 
-# Write E2E Cases
+# Write E2E cases
 
 Rsdoctor E2E tests use **Playwright** and live under `e2e/cases/`. Each bundler has its own directory:
 
@@ -27,7 +27,7 @@ Rsdoctor E2E tests use **Playwright** and live under `e2e/cases/`. Each bundler 
 
 7. Run `pnpm e2e` from the repository root to validate.
 
-## Case Structure
+## Case structure
 
 - Each test file creates an Rsdoctor plugin instance (e.g., `createRsdoctorPlugin` from a local `test-utils.ts`), compiles a fixture via `compileByRspack`, and asserts on the SDK store data.
 - Fixtures are plain JS/TS files and loaders in `fixtures/` — not full application directories.
