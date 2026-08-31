@@ -1,5 +1,5 @@
 import { gzipSync } from 'node:zlib';
-import { describe, expect, it, rs } from '@rstest/core';
+import { describe, expect, it, rs } from 'rstack/test';
 import { Asset, ChunkGraph } from '@rsdoctor/shared/graph';
 import type { Plugin } from '@rsdoctor/shared/types';
 import { InternalBundlePlugin } from '@/inner-plugins/plugins/bundle';

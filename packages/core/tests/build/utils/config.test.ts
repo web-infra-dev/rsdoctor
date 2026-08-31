@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach, afterEach } from '@rstest/core';
+import { describe, expect, it, beforeEach, afterEach } from 'rstack/test';
 import { normalizeUserConfig } from '../../../src/inner-plugins/utils/config';
 import { SDK } from '@rsdoctor/shared/types';
 

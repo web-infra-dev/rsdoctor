@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import type { AddressInfo } from 'net';
 import { Server } from '../../src/build-utils/build';
 import {

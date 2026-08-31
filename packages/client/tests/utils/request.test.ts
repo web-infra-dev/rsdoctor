@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, rs } from '@rstest/core';
+import { afterEach, describe, expect, it, rs } from 'rstack/test';
 import { fetchJSONByUrl, postServerAPI } from 'src/utils/request';
 
 describe('request utils', () => {

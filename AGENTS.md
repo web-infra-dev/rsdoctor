@@ -6,7 +6,7 @@
 - `pnpm` workspace monorepo (topological build ordering)
 - TypeScript strict mode
 - Lint/format: **Rstack CLI** (`rs lint` backed by Rslint, `rs fmt` based on Prettier)
-- Test runner: **Rstest** (`pnpm test`), E2E: **Playwright** (`pnpm e2e`)
+- Test runner: **Rstack CLI / Rstest** (`pnpm test`), E2E: **Playwright** (`pnpm e2e`)
 
 ## Commands
 
@@ -17,7 +17,7 @@ pnpm install                # install all deps + build all packages (prepare hoo
 # ── quality checks ───────────────────────────────────────────
 pnpm lint                   # rs lint (error-level only)
 pnpm format                 # rs fmt
-pnpm test                   # unit tests via rstest (single worker, NODE_OPTIONS=--max-old-space-size=8192)
+pnpm test                   # package tests via rs test (single worker, NODE_OPTIONS=--max-old-space-size=8192)
 pnpm e2e                    # playwright e2e (requires chromium: cd e2e && npx playwright install chromium)
 
 # ── build ────────────────────────────────────────────────────
@@ -48,9 +48,10 @@ packages/
   proto/              # protocol buffer / schema definitions
   test-helper/        # test utilities shared across packages
 scripts/
-  lib.config.ts         # shared library build config
-  rstest.setup.ts       # rstest global setup (snapshot serializer)
-  tsconfig/             # shared tsconfig presets
+  lib.config.ts        # shared library build config
+  test.config.ts       # shared Rstest config registered by package-level Rstack configs
+  rstest.setup.ts      # Rstest global setup (snapshot serializer)
+  tsconfig/            # shared tsconfig presets
 e2e/                    # Playwright E2E tests (cases/ per bundler)
 examples/               # runnable example projects (rspack / rsbuild / webpack / rspress)
 ```
@@ -74,7 +75,7 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 ## Testing
 
 - Unit tests live in `<package>/tests/` (file pattern: `*.test.ts`).
-- Rstest config: `rstest.config.ts` at repo root. Tests run with `maxWorkers: 1` (build-heavy tests are flaky in parallel).
+- Each tested package registers the shared `scripts/test.config.ts` options through `define.test()` in its Rstack config. Tests run with `maxWorkers: 1` (build-heavy tests are flaky in parallel).
 - Snapshot serializer normalizes workspace paths (see `scripts/rstest.setup.ts`).
 - E2E tests use Playwright; cases are organized per bundler under `e2e/cases/`.
 

@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { afterEach, describe, expect, it, rs } from '@rstest/core';
+import { afterEach, describe, expect, it, rs } from 'rstack/test';
 import { Loader } from '@rsdoctor/shared/common-browser';
 import type { Plugin, SDK } from '@rsdoctor/shared/types';
 import proxyLoader, { pitch } from '@/inner-plugins/loaders/proxy';

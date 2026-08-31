@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import { Algorithm } from '../../src/common-browser';
 
 describe('test src/common/algorithm.ts', () => {

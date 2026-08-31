@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { rule } from '../../src/rules/rules/cjs-require';
 
 interface RunRuleOptions {

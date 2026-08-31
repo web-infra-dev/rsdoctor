@@ -21,11 +21,10 @@
     "build": "rs lib",
     "dev": "rs lib --watch",
     "prepublishOnly": "pnpm run build",
-    "test": "rstest run",
+    "test": "rs test",
     "type-check": "rs lint --type-check-only"
   },
   "devDependencies": {
-    "@rstest/core": "catalog:",
     "@types/node": "catalog:",
     "cac": "^7.0.0",
     "typescript": "catalog:"

@@ -1,5 +1,5 @@
 import path from 'path';
-import { expect, describe, it } from '@rstest/core';
+import { expect, describe, it } from 'rstack/test';
 import { SDK, Plugin } from '../../src/types';
 import {
   Chunks,

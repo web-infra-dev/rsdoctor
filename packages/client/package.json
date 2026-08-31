@@ -17,7 +17,8 @@
     "dev": "rsbuild dev",
     "inspect": "rsbuild inspect",
     "preview": "rsbuild preview",
-    "start": "NODE_ENV=development rsbuild build -w"
+    "start": "NODE_ENV=development rsbuild build -w",
+    "test": "rs test"
   },
   "devDependencies": {
     "@ant-design/icons": "6.3.2",

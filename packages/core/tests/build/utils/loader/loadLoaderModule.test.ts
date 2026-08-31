@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import { resolve } from 'path';
 import { loadLoaderModule } from '@/build-utils/build/utils';
 

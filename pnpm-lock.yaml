@@ -42,9 +42,6 @@ catalogs:
     '@rspack/plugin-react-refresh':
       specifier: ^2.0.2
       version: 2.0.2
-    '@rstest/core':
-      specifier: 0.11.9
-      version: 0.11.9
     '@rstest/playwright':
       specifier: 0.11.9
       version: 0.11.9
@@ -135,9 +132,6 @@ importers:
       '@rsdoctor/tsconfig':
         specifier: workspace:*
         version: link:scripts/tsconfig
-      '@rstest/core':
-        specifier: 'catalog:'
-        version: 0.11.9
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:scripts/test-helper
@@ -186,12 +180,9 @@ importers:
       '@rspack/core':
         specifier: 'catalog:'
         version: 2.1.10(@swc/helpers@0.5.23)
-      '@rstest/core':
-        specifier: 'catalog:'
-        version: 0.11.9
       '@rstest/playwright':
         specifier: 'catalog:'
-        version: 0.11.9(@rstest/core@0.11.9)(playwright@1.55.1)
+        version: 0.11.9(@rstest/core@0.11.10)(playwright@1.55.1)
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.3
@@ -433,9 +424,6 @@ importers:
 
   packages/agent-cli:
     devDependencies:
-      '@rstest/core':
-        specifier: 'catalog:'
-        version: 0.11.9
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.3
@@ -2965,19 +2953,6 @@ packages:
 
   '@rstest/core@0.11.10':
     resolution: {integrity: sha512-x/PNGPdyKQWbiVhpoOQco8xXevh4P/QamuyJ0/YdTrdEiUcUglT6tGSnxaudwyrQr8e/5gwWuOt6zykZKWmSUg==}
-    engines: {node: ^20.19.0 || >=22.12.0}
-    hasBin: true
-    peerDependencies:
-      happy-dom: ^20.8.3
-      jsdom: '>=15.0.0'
-    peerDependenciesMeta:
-      happy-dom:
-        optional: true
-      jsdom:
-        optional: true
-
-  '@rstest/core@0.11.9':
-    resolution: {integrity: sha512-bU8jL1TruGsqHs0innQ4CheBmCLclBkifQ/6KhjofZe6ZQNv9/lsDUarnvUjF7ElByDju2rVyCuiQeDTQRatFg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -9450,17 +9425,9 @@ snapshots:
       - '@module-federation/runtime-tools'
       - core-js
 
-  '@rstest/core@0.11.9':
+  '@rstest/playwright@0.11.9(@rstest/core@0.11.10)(playwright@1.55.1)':
     dependencies:
-      '@rsbuild/core': 2.1.13
-      '@types/chai': 5.2.3
-    transitivePeerDependencies:
-      - '@module-federation/runtime-tools'
-      - core-js
-
-  '@rstest/playwright@0.11.9(@rstest/core@0.11.9)(playwright@1.55.1)':
-    dependencies:
-      '@rstest/core': 0.11.9
+      '@rstest/core': 0.11.10
       playwright: 1.55.1
 
   '@rushstack/node-core-library@5.23.3(@types/node@24.12.3)':

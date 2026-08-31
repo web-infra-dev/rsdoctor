@@ -1,4 +1,4 @@
-import { describe, it, expect, rs } from '@rstest/core';
+import { describe, it, expect, rs } from 'rstack/test';
 import { Manifest as ManifestShared } from '@rsdoctor/shared/common-browser';
 import { Manifest, SDK } from '@rsdoctor/shared/types';
 import { request } from 'http';

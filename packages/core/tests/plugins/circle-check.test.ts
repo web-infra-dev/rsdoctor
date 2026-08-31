@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import { checkCirclePath } from '@/inner-plugins/utils';
 
 describe('test checkCirclePath function', () => {

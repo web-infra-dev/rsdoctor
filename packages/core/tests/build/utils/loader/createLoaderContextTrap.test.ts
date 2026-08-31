@@ -1,4 +1,4 @@
-import { describe, it, expect, rs } from '@rstest/core';
+import { describe, it, expect, rs } from 'rstack/test';
 import { Loader } from '@rsdoctor/shared/common-browser';
 import { createLoaderContextTrap } from '@/build-utils/build/utils';
 

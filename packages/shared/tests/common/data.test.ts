@@ -1,4 +1,4 @@
-import { describe, it, expect, rs } from '@rstest/core';
+import { describe, it, expect, rs } from 'rstack/test';
 import { Data } from '../../src/common-browser';
 import { SDK } from '../../src/types';
 

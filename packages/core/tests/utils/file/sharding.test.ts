@@ -1,4 +1,4 @@
-import { describe, it, expect, afterAll } from '@rstest/core';
+import { describe, it, expect, afterAll } from 'rstack/test';
 import os from 'os';
 import fse from 'fs-extra/esm';
 import fs from 'node:fs';

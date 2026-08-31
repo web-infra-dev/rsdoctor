@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { parser } from '../../../src/rule-utils/parser';
 
 describe('test src/rule-utils/parser/parser.ts', () => {

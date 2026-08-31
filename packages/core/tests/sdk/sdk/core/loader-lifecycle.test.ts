@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from '@rstest/core';
+import { afterEach, describe, expect, it } from 'rstack/test';
 import type { SDK } from '@rsdoctor/shared/types';
 import { createSDK, type MockSDKResponse } from '../../utils';
 
