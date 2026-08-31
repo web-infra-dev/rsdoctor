@@ -7,10 +7,10 @@ import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
 import { Size } from '../../constants';
 import { formatSize } from '../../utils';
-import BundleSizeSvg from '../../common/svg/bundle-size.svg';
-import SourceSizeSvg from '../../common/svg/source-size.svg';
-import TotalSizeSvg from '../../common/svg/total-size.svg';
-import VersionSvg from '../../common/svg/version.svg';
+import BundleSizeSvg from '../../common/svg/bundle-size.svg?react';
+import SourceSizeSvg from '../../common/svg/source-size.svg?react';
+import TotalSizeSvg from '../../common/svg/total-size.svg?react';
+import VersionSvg from '../../common/svg/version.svg?react';
 
 import type { Rule } from '@rsdoctor/shared/types';
 

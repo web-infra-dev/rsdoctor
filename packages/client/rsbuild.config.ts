@@ -33,11 +33,7 @@ export default defineConfig(({ env }) => {
       pluginReact(),
       pluginNodePolyfill(),
       pluginSass(),
-      pluginSvgr({
-        svgrOptions: {
-          exportType: 'default',
-        },
-      }),
+      pluginSvgr(),
       pluginTypeCheck({
         enable: IS_PRODUCTION,
         tsCheckerOptions: {

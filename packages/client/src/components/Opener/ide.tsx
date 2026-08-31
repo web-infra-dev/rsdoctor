@@ -1,7 +1,7 @@
 import { Lodash } from '@rsdoctor/shared/common-browser';
 import { SDK } from '@rsdoctor/shared/types';
 import React from 'react';
-import VSCodeIcon from '../../common/svg/vscode.svg';
+import VSCodeIcon from '../../common/svg/vscode.svg?react';
 
 interface VSCodeProps {
   file: string;

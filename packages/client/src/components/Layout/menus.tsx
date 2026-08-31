@@ -19,12 +19,12 @@ import {
   useTheme,
 } from '../../utils';
 import { withServerAPI } from '../Manifest';
-import OverallActive from 'src/common/svg/navbar/overall-active.svg';
-import OverallInActive from 'src/common/svg/navbar/overall-inactive.svg';
-import CompileAnalysisActive from 'src/common/svg/navbar/compile-analysis-active.svg';
-import CompileAnalysisInActive from 'src/common/svg/navbar/compile-analysis-inactive.svg';
-import BundleSizeActive from 'src/common/svg/navbar/bundle-size-active.svg';
-import BundleSizeInActive from 'src/common/svg/navbar/bundle-size-inactive.svg';
+import OverallActive from 'src/common/svg/navbar/overall-active.svg?react';
+import OverallInActive from 'src/common/svg/navbar/overall-inactive.svg?react';
+import CompileAnalysisActive from 'src/common/svg/navbar/compile-analysis-active.svg?react';
+import CompileAnalysisInActive from 'src/common/svg/navbar/compile-analysis-inactive.svg?react';
+import BundleSizeActive from 'src/common/svg/navbar/bundle-size-active.svg?react';
+import BundleSizeInActive from 'src/common/svg/navbar/bundle-size-inactive.svg?react';
 import {
   BundleSize,
   LoaderFiles,

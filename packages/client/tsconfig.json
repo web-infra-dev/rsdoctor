@@ -9,6 +9,7 @@
     "outDir": "dist",
     "tsBuildInfoFile": ".cache/tsconfig.tsbuildinfo",
     "skipLibCheck": true,
+    "types": ["rstack/types", "node"],
     "paths": {
       "src": ["./src"],
       "src/*": ["./src/*"]
