@@ -21,7 +21,7 @@ define.lib({
 });
 
 define.test(async () => {
-  const { baseConfig } = await import('../../scripts/test.config.ts');
+  const { baseConfig } = await import('@scripts/config/test');
 
   return {
     ...baseConfig,

@@ -129,9 +129,9 @@ importers:
       '@microsoft/api-extractor':
         specifier: ^7.58.12
         version: 7.58.12(@types/node@24.12.3)
-      '@rsdoctor/tsconfig':
+      '@scripts/config':
         specifier: workspace:*
-        version: link:scripts/tsconfig
+        version: link:scripts/config
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:scripts/test-helper
@@ -147,9 +147,6 @@ importers:
       pkg-pr-new:
         specifier: 0.0.88
         version: 0.0.88
-      rsbuild-plugin-publint:
-        specifier: ^0.3.4
-        version: 0.3.4(@rsbuild/core@2.2.1)
       rstack:
         specifier: ^0.6.5
         version: 0.6.5(@microsoft/api-extractor@7.58.12(@types/node@24.12.3))(@rspress/core@2.0.19(@rspack/core@2.2.1(@swc/helpers@0.5.23))(micromark-util-types@2.0.1)(micromark@4.0.1))(typescript@7.0.2)
@@ -829,6 +826,24 @@ importers:
 
   packages/shared/tests/graph/fixture/index: {}
 
+  scripts/config:
+    devDependencies:
+      '@scripts/test-helper':
+        specifier: workspace:*
+        version: link:../test-helper
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.12.3
+      rsbuild-plugin-publint:
+        specifier: ^0.3.4
+        version: 0.3.4(@rsbuild/core@2.2.1)
+      rstack:
+        specifier: ^0.6.5
+        version: 0.6.5(@microsoft/api-extractor@7.58.12(@types/node@24.12.3))(@rspress/core@2.0.19(@rspack/core@2.2.1(@swc/helpers@0.5.23))(micromark-util-types@2.0.1)(micromark@4.0.1))(typescript@7.0.2)
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+
   scripts/test-helper:
     dependencies:
       '@rsbuild/core':
@@ -855,8 +870,6 @@ importers:
       upath:
         specifier: 3.0.8
         version: 3.0.8
-
-  scripts/tsconfig: {}
 
 packages:
 

@@ -1,5 +1,5 @@
 {
-  "extends": "@rsdoctor/tsconfig/base",
+  "extends": "@scripts/config/tsconfig",
   "compilerOptions": {
     "experimentalDecorators": true,
     "declarationMap": false,
