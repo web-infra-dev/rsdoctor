@@ -23,13 +23,12 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.58.12",
-    "@rsdoctor/tsconfig": "workspace:*",
+    "@scripts/config": "workspace:*",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",
     "cspell-ban-words": "^0.0.4",
     "heading-case": "^2.0.0",
     "pkg-pr-new": "0.0.88",
-    "rsbuild-plugin-publint": "^0.3.4",
     "rstack": "^0.6.5"
   },
   "packageManager": "pnpm@11.4.0",

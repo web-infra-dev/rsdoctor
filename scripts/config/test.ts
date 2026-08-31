@@ -16,7 +16,7 @@ export const baseConfig: RstestConfig = {
     decorators: {
       version: 'legacy',
     },
-    tsconfigPath: path.join(import.meta.dirname, '../tsconfig.test.json'),
+    tsconfigPath: path.join(import.meta.dirname, 'tsconfig-test.json'),
   },
   exclude: ['**/node_modules/**'],
   setupFiles: [path.join(import.meta.dirname, 'rstest.setup.ts')],

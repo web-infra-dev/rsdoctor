@@ -1,5 +1,5 @@
 import { define } from 'rstack';
-import { esmConfig, pluginsConfig } from '../../scripts/lib.config.ts';
+import { esmConfig, pluginsConfig } from '@scripts/config/lib';
 
 const externals = [
   '@rsdoctor/shared/collection',
@@ -58,7 +58,7 @@ define.lib({
 });
 
 define.test(async () => {
-  const { baseConfig } = await import('../../scripts/test.config.ts');
+  const { baseConfig } = await import('@scripts/config/test');
 
   return baseConfig;
 });

@@ -48,10 +48,7 @@ packages/
   proto/              # protocol buffer / schema definitions
   test-helper/        # test utilities shared across packages
 scripts/
-  lib.config.ts        # shared library build config
-  test.config.ts       # shared Rstest config registered by package-level Rstack configs
-  rstest.setup.ts      # Rstest global setup (snapshot serializer)
-  tsconfig/            # shared tsconfig presets
+  config/              # shared Rslib, Rstest, and TypeScript configuration
 e2e/                    # Playwright E2E tests (cases/ per bundler)
 examples/               # runnable example projects (rspack / rsbuild / webpack / rspress)
 ```
@@ -75,8 +72,8 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 ## Testing
 
 - Unit tests live in `<package>/tests/` (file pattern: `*.test.ts`).
-- Each tested package registers the shared `scripts/test.config.ts` options through `define.test()` in its Rstack config. Tests run with `maxWorkers: 1` (build-heavy tests are flaky in parallel).
-- Snapshot serializer normalizes workspace paths (see `scripts/rstest.setup.ts`).
+- Each tested package registers the shared `@scripts/config/test` options through `define.test()` in its Rstack config. Tests run with `maxWorkers: 1` (build-heavy tests are flaky in parallel).
+- Snapshot serializer normalizes workspace paths (see `scripts/config/rstest.setup.ts`).
 - E2E tests use Playwright; cases are organized per bundler under `e2e/cases/`.
 
 ## CI

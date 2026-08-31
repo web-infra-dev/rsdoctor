@@ -11,7 +11,6 @@ define.lint(({ js, ts, globalIgnores }) => [
         project: [
           './packages/*/tsconfig.json',
           './scripts/*/tsconfig.json',
-          './scripts/tsconfig/base.json',
           './examples/*/tsconfig.json',
           './e2e/tsconfig.json',
         ],

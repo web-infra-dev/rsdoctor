@@ -1,4 +1,4 @@
 import { define } from 'rstack';
-import { esmPackage } from '../lib.config.ts';
+import { esmPackage } from '@scripts/config/lib';
 
 define.lib(esmPackage);
