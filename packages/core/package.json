@@ -35,9 +35,9 @@
     "static"
   ],
   "scripts": {
-    "build": "rslib build",
+    "build": "rs lib",
     "dev": "npm run start",
-    "start": "rslib build -w",
+    "start": "rs lib -w",
     "test": "rstest run"
   },
   "dependencies": {

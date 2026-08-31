@@ -5,4 +5,4 @@ declare module '*.svg' {
   export default SVG;
 }
 
-/// <reference types="@rslib/core/types" />
+/// <reference types="rstack/types" />

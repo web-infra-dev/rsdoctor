@@ -22,8 +22,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "rslib build",
-    "dev": "rslib build --watch"
+    "build": "rs lib",
+    "dev": "rs lib --watch"
   },
   "dependencies": {
     "@rsbuild/core": "catalog:",
