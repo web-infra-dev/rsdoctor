@@ -1,9 +1,9 @@
 import { Button, Typography } from 'antd';
 import Icon from '@ant-design/icons';
 
-import SourceSvg from '../../common/svg/source.svg';
-import OutputSvg from '../../common/svg/output.svg';
-import ErrorSvg from '../../common/svg/error.svg';
+import SourceSvg from '../../common/svg/source.svg?react';
+import OutputSvg from '../../common/svg/output.svg?react';
+import ErrorSvg from '../../common/svg/error.svg?react';
 import { useRuleIndexNavigate } from '../../utils';
 
 import { LinkAlertProps } from './types';

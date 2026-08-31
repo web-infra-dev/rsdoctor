@@ -1,4 +1,4 @@
-import { defineConfig, type LibConfig } from '@rslib/core';
+import type { LibConfig, RslibConfig } from 'rstack/lib';
 import { pluginPublint } from 'rsbuild-plugin-publint';
 
 export const pluginsConfig = [pluginPublint()];
@@ -30,7 +30,7 @@ export const esmConfig: LibConfig = {
   },
 };
 
-export const esmPackage = defineConfig({
+export const esmPackage: RslibConfig = {
   lib: [esmConfig],
   plugins: pluginsConfig,
-});
+};

@@ -5,7 +5,6 @@
 - Node.js `22.18+`, package manager **pnpm `11.0+`** (enable via `corepack enable`)
 - `pnpm` workspace monorepo (topological build ordering)
 - TypeScript strict mode
-- Build toolchain: **Rslib** (based on Rsbuild/Rspack)
 - Lint/format: **Rstack CLI** (`rs lint` backed by Rslint, `rs fmt` based on Prettier)
 - Test runner: **Rstest** (`pnpm test`), E2E: **Playwright** (`pnpm e2e`)
 
@@ -49,7 +48,7 @@ packages/
   proto/              # protocol buffer / schema definitions
   test-helper/        # test utilities shared across packages
 scripts/
-  rslib.base.config.ts  # shared Rslib build config (CJS + ESM dual-package)
+  lib.config.ts         # shared library build config
   rstest.setup.ts       # rstest global setup (snapshot serializer)
   tsconfig/             # shared tsconfig presets
 e2e/                    # Playwright E2E tests (cases/ per bundler)
@@ -63,10 +62,6 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
                                   ↘ client
                                   ↘ agent-cli
 ```
-
-## Build system
-
-- Each package has its own `rslib.config.ts` that typically extends `scripts/rslib.base.config.ts`.
 
 ## Code style
 

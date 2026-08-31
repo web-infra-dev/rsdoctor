@@ -18,14 +18,13 @@
     "bin"
   ],
   "scripts": {
-    "build": "rslib build",
-    "dev": "rslib build --watch",
+    "build": "rs lib",
+    "dev": "rs lib --watch",
     "prepublishOnly": "pnpm run build",
     "test": "rstest run",
     "type-check": "rs lint --type-check-only"
   },
   "devDependencies": {
-    "@rslib/core": "1.0.0-rc.0",
     "@rstest/core": "catalog:",
     "@types/node": "catalog:",
     "cac": "^7.0.0",

@@ -1,4 +1,6 @@
-const { execSync } = require('child_process');
+import { execSync } from 'node:child_process';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const SKIP_PATHS = [
   'cspell.json',
@@ -9,7 +11,7 @@ const SKIP_PATHS = [
 ];
 const SKIP_EXTENSIONS = ['.md', '.mdx'];
 
-function shouldSkipFile(file) {
+export function shouldSkipFile(file) {
   return (
     SKIP_PATHS.some(
       (skipPath) => file.startsWith(`${skipPath}/`) || file === skipPath,
@@ -17,7 +19,7 @@ function shouldSkipFile(file) {
   );
 }
 
-function shouldSkipCI(changedFiles) {
+export function shouldSkipCI(changedFiles) {
   return (
     changedFiles.length > 0 &&
     changedFiles.every((file) => shouldSkipFile(file))
@@ -38,11 +40,11 @@ async function main() {
   console.log(shouldSkipCI(changedFiles) ? 'true' : 'false');
 }
 
-if (require.main === module) {
+const entryPath = process.argv[1];
+
+if (entryPath && import.meta.url === pathToFileURL(resolve(entryPath)).href) {
   main().catch((err) => {
     console.error('Failed to detect CI skip', err);
     process.exit(1);
   });
 }
-
-module.exports = { shouldSkipCI, shouldSkipFile };

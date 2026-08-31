@@ -1,6 +1,7 @@
 {
   "name": "rsdoctor-monorepo",
   "private": true,
+  "type": "module",
   "workspaces": {
     "packages": [
       "packages/*"
@@ -25,7 +26,6 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.58.12",
     "@rsdoctor/tsconfig": "workspace:*",
-    "@rslib/core": "1.0.0-rc.0",
     "@rstest/core": "catalog:",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",

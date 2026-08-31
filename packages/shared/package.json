@@ -55,8 +55,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "rslib build",
-    "start": "rslib build -w"
+    "build": "rs lib",
+    "start": "rs lib -w"
   },
   "dependencies": {
     "@rspack/lite-tapable": "catalog:",

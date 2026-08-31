@@ -4,7 +4,7 @@ import { Collapse, Space, Tag, Typography } from 'antd';
 import Overview from '../Overall/overview';
 import styles from './collapse.module.scss';
 import utilStyles from './index.module.scss';
-import TotalSizeSvg from '../../common/svg/total-size.svg';
+import TotalSizeSvg from '../../common/svg/total-size.svg?react';
 import { LabelComponent } from './collapse-shared';
 
 import type { Rule } from '@rsdoctor/shared/types';
