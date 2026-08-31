@@ -1,29 +1,9 @@
 import { defineConfig, type LibConfig } from '@rslib/core';
 import { pluginPublint } from 'rsbuild-plugin-publint';
 
-const BUILD_TARGET = 'node 16' as const;
-
 export const pluginsConfig = [pluginPublint()];
 
-export const baseBuildConfig = defineConfig({
-  lib: [
-    {
-      bundle: false,
-      format: 'esm' as const,
-      syntax: [BUILD_TARGET],
-      dts: true,
-      redirect: {
-        dts: {
-          extension: true,
-        },
-      },
-    },
-  ],
-});
-
-export default baseBuildConfig;
-
-export const nodeMinifyConfig = {
+const nodeMinifyConfig = {
   js: true,
   css: false,
   jsOptions: {
@@ -38,7 +18,7 @@ export const nodeMinifyConfig = {
 
 export const esmConfig: LibConfig = {
   format: 'esm',
-  syntax: [BUILD_TARGET],
+  syntax: ['node 20'],
   dts: {
     build: true,
   },
@@ -49,16 +29,6 @@ export const esmConfig: LibConfig = {
     },
   },
 };
-
-export const esmPackageBundleless = defineConfig({
-  lib: [
-    {
-      ...esmConfig,
-      bundle: false,
-    },
-  ],
-  plugins: pluginsConfig,
-});
 
 export const esmPackage = defineConfig({
   lib: [esmConfig],
