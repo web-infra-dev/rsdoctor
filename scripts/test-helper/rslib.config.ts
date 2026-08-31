@@ -1,3 +1,3 @@
-import baseConfig from '../rslib.base.config';
+import { esmPackage } from '../rslib.base.config';
 
-export default baseConfig;
+export default esmPackage;

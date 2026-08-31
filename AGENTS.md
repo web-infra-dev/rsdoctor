@@ -4,7 +4,7 @@
 
 - Node.js `22.18+`, package manager **pnpm `11.0+`** (enable via `corepack enable`)
 - `pnpm` workspace monorepo (topological build ordering)
-- TypeScript strict mode; target `node 16` for library output
+- TypeScript strict mode
 - Build toolchain: **Rslib** (based on Rsbuild/Rspack)
 - Lint/format: **Rstack CLI** (`rs lint` backed by Rslint, `rs fmt` based on Prettier)
 - Test runner: **Rstest** (`pnpm test`), E2E: **Playwright** (`pnpm e2e`)
