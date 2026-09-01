@@ -22,14 +22,37 @@
 
   :global {
     // for bundle alerts
-    .ant-tabs-nav-list {
-      width: 98%;
-    }
-    .ant-tabs-tab {
-      flex: 1;
-    }
-    .ant-tabs-tab-btn {
-      width: 100%;
+    .ant-tabs > .ant-tabs-nav {
+      .ant-tabs-nav-wrap {
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scrollbar-width: thin;
+
+        &::-webkit-scrollbar {
+          height: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: var(--color-border);
+          border-radius: 3px;
+        }
+      }
+      .ant-tabs-nav-list {
+        width: max-content;
+        min-width: max-content;
+        flex: none;
+        transform: none !important;
+      }
+      .ant-tabs-tab {
+        flex: 0 0 auto;
+      }
+      .ant-tabs-tab-btn {
+        width: 100%;
+      }
+      .ant-tabs-nav-operations {
+        display: none;
+      }
     }
     .ant-tabs-content-holder,
     .ant-tabs-content,
