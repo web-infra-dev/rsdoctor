@@ -27,7 +27,7 @@
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",
     "cspell-ban-words": "^0.0.4",
-    "heading-case": "^2.0.0",
+    "heading-case": "^2.0.1",
     "pkg-pr-new": "0.0.88",
     "rstack": "^0.6.5"
   },

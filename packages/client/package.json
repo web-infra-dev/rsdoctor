@@ -21,7 +21,7 @@
     "test": "rs test"
   },
   "devDependencies": {
-    "@ant-design/icons": "6.3.2",
+    "@ant-design/icons": "6.3.3",
     "@monaco-editor/react": "4.7.0",
     "@rsbuild/core": "catalog:",
     "@rsbuild/plugin-check-syntax": "catalog:",
