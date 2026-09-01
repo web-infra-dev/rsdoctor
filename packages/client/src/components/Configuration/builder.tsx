@@ -32,14 +32,14 @@ export const WebpackConfigurationViewerBase: React.FC<
       text={
         <div className={styles.title}>
           <span style={{ marginRight: '8px', fontSize: '13px' }}>
-            View Bundler Config
+            View Rspack Config
           </span>
           <RightOutlined style={{ fontSize: '10px' }} />
         </div>
       }
     >
       <Row>
-        <Title text={`Bundler Config Viewer`} />
+        <Title text="Rspack Config Viewer" />
         <Divider />
         <Space>
           <Typography.Text>Properties: </Typography.Text>
@@ -70,7 +70,7 @@ export const WebpackConfigurationViewerBase: React.FC<
         name={
           version && version !== 'unknown'
             ? `${name}@${version}`
-            : `webpack.config`
+            : 'rspack.config'
         }
         theme="monokai"
         src={

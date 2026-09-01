@@ -14,6 +14,7 @@ import { ChartProps, DurationMetric, ITraceEventData } from '../types';
 import { groupBy } from '@rsdoctor/shared/collection';
 import { ChartTypes, TIMELINE_PALETTE_COLORS } from '../constants';
 import { useThemeToken } from 'src/utils';
+import { getTimelineAxisInterval, type TimelineExtent } from './axis';
 
 interface CoordSysType {
   x: number;
@@ -44,7 +45,7 @@ export const TimelineCom: React.FC<{
   // rslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   formatterFn: Function;
   chartType?: ChartTypes;
-  exts?: { endTimestamp: number; startTimestamp: number };
+  exts?: TimelineExtent;
 }> = memo(
   ({
     loaderData,
@@ -244,10 +245,7 @@ export const TimelineCom: React.FC<{
           containLabel: true,
         },
         xAxis: {
-          interval:
-            exts?.endTimestamp && exts?.startTimestamp
-              ? Math.floor((exts.endTimestamp - exts.startTimestamp) / 8)
-              : null,
+          interval: getTimelineAxisInterval(exts ?? undefined),
           position: 'top',
           splitLine: {
             show: true,
@@ -263,6 +261,7 @@ export const TimelineCom: React.FC<{
           axisLabel: {
             color: themeToken.colorTextSecondary,
             fontSize: 11,
+            hideOverlap: true,
             margin: 10,
             formatter(val: number) {
               return dayjs(val as number).format('HH:mm:ss:SSS');

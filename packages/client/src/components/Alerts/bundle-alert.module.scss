@@ -18,6 +18,7 @@
 .container {
   margin-top: -4px;
   height: 100%;
+  min-width: 0;
 
   :global {
     // for bundle alerts
@@ -29,6 +30,11 @@
     }
     .ant-tabs-tab-btn {
       width: 100%;
+    }
+    .ant-tabs-content-holder,
+    .ant-tabs-content,
+    .ant-tabs-tabpane {
+      min-width: 0;
     }
   }
 }
