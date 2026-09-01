@@ -13,6 +13,25 @@
   margin-left: 10px;
 }
 
+.metricSelector {
+  font-size: 12px;
+  line-height: 18px;
+
+  &:global(.ant-segmented.ant-segmented-sm) {
+    padding: 1px;
+
+    :global(.ant-segmented-item-label) {
+      min-height: 18px;
+      padding: 0 5px;
+      line-height: 18px;
+    }
+  }
+}
+
+.metricValue {
+  margin-top: 2px;
+}
+
 .dataContainer {
   min-width: 0;
   display: flex;

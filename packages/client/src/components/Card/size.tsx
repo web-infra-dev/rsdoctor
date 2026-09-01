@@ -98,6 +98,7 @@ export const SizeCard: React.FC<SizeCardProps> = ({
             <div className={styles.details}>
               <Segmented
                 aria-label={`${type} size metric`}
+                className={styles.metricSelector}
                 options={[
                   { label: 'Size', value: 'size' },
                   { label: 'Gzip', value: 'gzip', disabled: !hasGzipSize },
@@ -106,7 +107,7 @@ export const SizeCard: React.FC<SizeCardProps> = ({
                 size="small"
                 onChange={(value) => setSizeMetric(value as SizeMetric)}
               />
-              <div className={styles.description}>
+              <div className={`${styles.description} ${styles.metricValue}`}>
                 {formatSize(selectedSize)}
               </div>
               <TextDrawer
