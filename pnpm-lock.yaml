@@ -459,8 +459,8 @@ importers:
   packages/client:
     devDependencies:
       '@ant-design/icons':
-        specifier: 6.3.3
-        version: 6.3.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 6.3.2
+        version: 6.3.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@monaco-editor/react':
         specifier: 4.7.0
         version: 4.7.0(monaco-editor@0.49.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -989,8 +989,8 @@ packages:
       react: '>=16.0.0'
       react-dom: '>=16.0.0'
 
-  '@ant-design/icons@6.3.3':
-    resolution: {integrity: sha512-xpCRzspfa6kzQKZdjcWUfB+/jXB10Rrz72uMxeSMn4RkJUXQ2pMk2V5zP9vpKHwelaS2xuT8UsSbWW7w/sYODQ==}
+  '@ant-design/icons@6.3.2':
+    resolution: {integrity: sha512-B6O5a5XJ4wjtNOfZejXYwHW5zvKV5gYkjGf11dHGLEbKn0ABDGndo41+gfIiXyTFhvESj4XTotuud33mUFid0g==}
     engines: {node: '>=8'}
     peerDependencies:
       react: '>=16.0.0'
@@ -7148,7 +7148,7 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@ant-design/icons@6.3.3(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@ant-design/icons@6.3.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@ant-design/colors': 8.0.1
       '@ant-design/icons-svg': 4.5.0
