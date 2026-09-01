@@ -26,19 +26,11 @@
   }
 }
 
-.sizeMetrics {
-  display: flex;
-  gap: clamp(8px, 1vw, 20px);
-
-  > * {
-    flex: 1;
-  }
-}
-
 .description {
   font-size: 18px;
   font-weight: 500;
   line-height: 28px;
+  white-space: nowrap;
 
   @media (max-width: 1500px) {
     font-size: 14px;
