@@ -1,7 +1,249 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { define } from 'rstack';
+import type { RsbuildConfig, Rspack } from 'rstack/app';
+
+define.app(async ({ env }) => {
+  const {
+    ClientEntry,
+    DistPath,
+    PortForCLI,
+    PortForWeb,
+    WebpackRsdoctorDirPath,
+    WebpackStatsFilePath,
+  } = await import('./config/constants.ts');
+  const { pluginNodePolyfill } = await import('@rsbuild/plugin-node-polyfill');
+  const { pluginReact } = await import('@rsbuild/plugin-react');
+  const { pluginSass } = await import('@rsbuild/plugin-sass');
+  const { pluginSvgr } = await import('@rsbuild/plugin-svgr');
+  const { pluginTypeCheck } = await import('@rsbuild/plugin-type-check');
+  const { default: serve } = await import('sirv');
+
+  const {
+    ENABLE_DEVTOOLS_PLUGIN,
+    OFFICIAL_PREVIEW_PUBLIC_PATH,
+    OFFICIAL_DEMO_MANIFEST_PATH,
+    ENABLE_CLIENT_SERVER,
+  } = process.env;
+
+  const IS_PRODUCTION = env === 'production';
+
+  const config: RsbuildConfig = {
+    plugins: [
+      pluginReact(),
+      pluginNodePolyfill(),
+      pluginSass(),
+      pluginSvgr(),
+      pluginTypeCheck({
+        enable: IS_PRODUCTION,
+        tsCheckerOptions: {
+          typescript: {
+            build: false,
+            mode: 'readonly',
+            tsgo: true,
+          },
+        },
+      }),
+    ],
+
+    source: {
+      entry: {
+        index: ClientEntry,
+        diff: './src/diff.tsx',
+      },
+      alias: {
+        src: path.resolve(import.meta.dirname, 'src'),
+      },
+      define: {
+        'process.env.NODE_DEBUG': JSON.stringify(false),
+        'process.env.NODE_ENV': JSON.stringify(env),
+        'process.env.OFFICIAL_DEMO_MANIFEST_PATH': JSON.stringify(
+          OFFICIAL_DEMO_MANIFEST_PATH,
+        ),
+        'process.env.LOCAL_CLI_PORT': JSON.stringify(PortForCLI),
+      },
+    },
+
+    output: {
+      externals: [
+        '@rsbuild/core',
+        '@rsbuild/plugin-node-polyfill',
+        '@rsbuild/plugin-react',
+        '@rsbuild/plugin-svgr',
+      ],
+      distPath: {
+        root: path.basename(DistPath),
+        js: 'resource/js',
+        css: 'resource/css',
+        svg: 'resource/svg',
+        font: 'resource/font',
+        image: 'resource/image',
+        media: 'resource/media',
+      },
+      assetPrefix: IS_PRODUCTION
+        ? OFFICIAL_PREVIEW_PUBLIC_PATH?.replace(/\/resource$/, '') || './'
+        : './',
+      cleanDistPath: IS_PRODUCTION,
+      sourceMap: IS_PRODUCTION
+        ? false
+        : {
+            js: 'cheap-module-source-map',
+            css: true,
+          },
+      legalComments: 'none',
+    },
+
+    performance: {
+      buildCache: true,
+    },
+
+    splitChunks: {
+      preset: 'none',
+      cacheGroups: {
+        monaco: {
+          test: /node_modules\/monaco-editor\/*/,
+          name: 'monaco',
+          chunks: (chunk) => chunk.name === 'index',
+          maxSize: 1000000,
+          minSize: 500000,
+        },
+        react: {
+          test: /node_modules\/react-/,
+          name: 'react',
+          chunks: 'all',
+        },
+        rc: {
+          test: /node_modules\/rc-/,
+          name: 'rc',
+          chunks: (chunk) => chunk.name === 'index',
+          maxSize: 1000000,
+          minSize: 500000,
+        },
+        antDesign: {
+          chunks: (chunk) => chunk.name === 'index',
+          name: 'ant-design',
+          test: /node_modules\/antd\//,
+          maxSize: 1000000,
+          minSize: 500000,
+        },
+        antDesignIcons: {
+          name: 'ant-design-icons',
+          test: /node_modules\/@ant-design\/icons/,
+          chunks: (chunk) => chunk.name === 'index',
+          maxSize: 1000000,
+          minSize: 200000,
+        },
+        vender: {
+          chunks: 'all',
+          name: 'vender',
+          test: /node_modules\/(acorn|lodash|i18next|remark-*)/,
+          maxSize: 1000000,
+          minSize: 200000,
+        },
+      },
+    },
+
+    tools: {
+      bundlerChain: async (chainConfig) => {
+        if (ENABLE_DEVTOOLS_PLUGIN) {
+          chainConfig.optimization.set('concatenateModules', false);
+          const { RsdoctorRspackPlugin } =
+            (await import('../core/dist/index.js')) as typeof import('@rsdoctor/core');
+
+          class StatsWriter {
+            apply(compiler: Rspack.Compiler) {
+              compiler.hooks.done.tapPromise(
+                { name: 'webpack-stats-json-writer', stage: 99999 },
+                async (stats) => {
+                  const json = stats.toJson({
+                    all: false,
+                    assets: true,
+                    chunks: true,
+                    modules: true,
+                    builtAt: true,
+                    hash: true,
+                    ids: true,
+                    version: true,
+                    entrypoints: true,
+                    optimizationBailout: true,
+                  });
+                  await fs.promises.writeFile(
+                    WebpackStatsFilePath,
+                    JSON.stringify(json, null, 2),
+                    'utf-8',
+                  );
+                },
+              );
+            }
+          }
+
+          chainConfig.plugin('stats-writer').use(StatsWriter);
+          chainConfig.plugin('rsdoctor').use(RsdoctorRspackPlugin, [
+            {
+              disableClientServer: !ENABLE_CLIENT_SERVER,
+              port: 9988,
+              linter: {
+                rules: {
+                  'ecma-version-check': [
+                    'Warn',
+                    {
+                      ecmaVersion: 3,
+                    },
+                  ],
+                },
+              },
+            },
+          ]);
+        }
+      },
+      rspack: {
+        module: {
+          rules: [
+            !IS_PRODUCTION && {
+              test: /\.js$/,
+              enforce: 'pre' as const,
+              use: ['source-map-loader'],
+            },
+          ].filter(Boolean),
+        },
+      },
+    },
+
+    html: {
+      title: 'Rsdoctor',
+    },
+
+    server: {
+      port: PortForWeb,
+      historyApiFallback: true,
+      open: ENABLE_CLIENT_SERVER ? undefined : true,
+    },
+
+    dev: {
+      setupMiddlewares: [
+        (middlewares) => {
+          if (fs.existsSync(WebpackRsdoctorDirPath)) {
+            const fn = serve(WebpackRsdoctorDirPath, {
+              dev: true,
+              setHeaders(res) {
+                res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+              },
+            });
+            middlewares.push(fn);
+          }
+        },
+      ],
+    },
+  };
+
+  return config;
+});
 
 define.test(async () => {
   const { baseConfig } = await import('@scripts/config/test');
 
-  return baseConfig;
+  return {
+    ...baseConfig,
+    extends: {},
+  };
 });

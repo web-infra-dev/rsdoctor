@@ -12,18 +12,16 @@
     "dist"
   ],
   "scripts": {
-    "build": "rsbuild build",
-    "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true rsbuild build",
-    "dev": "rsbuild dev",
-    "inspect": "rsbuild inspect",
-    "preview": "rsbuild preview",
-    "start": "NODE_ENV=development rsbuild build -w",
+    "build": "rs build",
+    "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true rs build",
+    "dev": "rs dev",
+    "preview": "rs preview",
+    "start": "NODE_ENV=development rs build -w",
     "test": "rs test"
   },
   "devDependencies": {
     "@ant-design/icons": "6.3.2",
     "@monaco-editor/react": "4.7.0",
-    "@rsbuild/core": "catalog:",
     "@rsbuild/plugin-check-syntax": "catalog:",
     "@rsbuild/plugin-node-polyfill": "catalog:",
     "@rsbuild/plugin-react": "catalog:",
