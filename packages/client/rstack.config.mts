@@ -1,24 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
+import { pluginReact } from '@rsbuild/plugin-react';
+import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginSvgr } from '@rsbuild/plugin-svgr';
+import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 import { define } from 'rstack';
 import type { RsbuildConfig, Rspack } from 'rstack/app';
+import serve from 'sirv';
+import { baseConfig } from '@scripts/config/test';
+import {
+  ClientEntry,
+  DistPath,
+  PortForCLI,
+  PortForWeb,
+  WebpackRsdoctorDirPath,
+  WebpackStatsFilePath,
+} from './config/constants.ts';
 
-define.app(async ({ env }) => {
-  const {
-    ClientEntry,
-    DistPath,
-    PortForCLI,
-    PortForWeb,
-    WebpackRsdoctorDirPath,
-    WebpackStatsFilePath,
-  } = await import('./config/constants.ts');
-  const { pluginNodePolyfill } = await import('@rsbuild/plugin-node-polyfill');
-  const { pluginReact } = await import('@rsbuild/plugin-react');
-  const { pluginSass } = await import('@rsbuild/plugin-sass');
-  const { pluginSvgr } = await import('@rsbuild/plugin-svgr');
-  const { pluginTypeCheck } = await import('@rsbuild/plugin-type-check');
-  const { default: serve } = await import('sirv');
-
+define.app(({ env }) => {
   const {
     ENABLE_DEVTOOLS_PLUGIN,
     OFFICIAL_PREVIEW_PUBLIC_PATH,
@@ -239,11 +239,7 @@ define.app(async ({ env }) => {
   return config;
 });
 
-define.test(async () => {
-  const { baseConfig } = await import('@scripts/config/test');
-
-  return {
-    ...baseConfig,
-    extends: {},
-  };
+define.test({
+  ...baseConfig,
+  extends: {},
 });
