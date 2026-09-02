@@ -2,24 +2,17 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 import en from './en';
-import cn from './cn';
-import { getLocaleFromStorage } from '../storage';
 
 i18n.use(initReactI18next).init({
-  lng: getLocaleFromStorage(),
+  lng: 'en',
+  supportedLngs: ['en'],
   // we init with resources
   resources: {
     en: {
       translations: en,
     },
-    cn: {
-      translations: cn,
-    },
   },
-  fallbackLng: {
-    'zh-CN': ['cn'],
-    default: ['en'],
-  },
+  fallbackLng: 'en',
   debug: process.env.NODE_ENV === 'development',
 
   // have a common namespace used around the full app

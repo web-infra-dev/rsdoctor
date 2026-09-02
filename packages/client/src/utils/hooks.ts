@@ -17,31 +17,10 @@ import parse from 'url-parse';
 import { theme } from 'antd';
 
 import './i18n';
-import { Language } from '../constants';
-import { setLocaleToStorage } from './storage';
 
 const route = Client.RsdoctorClientRoutes.RuleIndex;
 
-export const useI18n: typeof useTranslation = () => {
-  const { i18n, ...rest } = useTranslation();
-
-  return {
-    ...rest,
-    i18n: {
-      ...i18n,
-      changeLanguage(lng, callback) {
-        return i18n.changeLanguage(lng, (error, t) => {
-          if (!error) {
-            setLocaleToStorage(lng as Language);
-          }
-          if (callback) {
-            callback(error, t);
-          }
-        });
-      },
-    },
-  };
-};
+export const useI18n: typeof useTranslation = useTranslation;
 
 export function useRuleIndexNavigate(code: string, link?: string | undefined) {
   const navigate = useNavigate();

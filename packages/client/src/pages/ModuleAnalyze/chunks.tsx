@@ -21,17 +21,17 @@ const columns = [
     key: 'name',
   },
   {
-    title: 'size | 大小',
+    title: 'Size',
     dataIndex: 'size',
     key: 'size',
   },
   {
-    title: 'assets | 资源',
+    title: 'Assets',
     dataIndex: 'assets',
     key: 'assets',
   },
   {
-    title: 'Entry or Not | 是否是入口',
+    title: 'Entry',
     dataIndex: 'entry',
     key: 'entry',
   },
@@ -47,7 +47,7 @@ export const ChunksTable: React.FC<{
         key: chunk.id,
         name: <Tag>{chunk.name}</Tag>,
         size: <Tag>{formatSize(chunk.parsedSize)}</Tag>,
-        entry: <Tag>{chunk.entry ? '是 | Yes' : '否 | No'}</Tag>,
+        entry: <Tag>{chunk.entry ? 'Yes' : 'No'}</Tag>,
         assets: chunk.assets.map((asset) => (
           <p key={asset}>
             <Tag key={asset}>{asset}</Tag>

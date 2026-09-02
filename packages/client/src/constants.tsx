@@ -21,11 +21,6 @@ export enum ViewMode {
   Group = 'group',
 }
 
-export enum Language {
-  Cn = 'cn',
-  En = 'en',
-}
-
 export enum APILoaderMode4Dev {
   Local = 'local',
   Remote = 'remote',
