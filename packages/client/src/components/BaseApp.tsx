@@ -162,73 +162,61 @@ const BaseApp: React.FC<BaseAppProps> = ({
           },
         }}
       >
-        <ConfigContext.Consumer>
-          {(v) => {
-            return (
-              <ConfigProvider
-                locale={getLocale(v.locale)}
-                theme={{
-                  components: {
-                    ...(theme === Theme.Dark ? darkTheme.components : {}),
-                    Layout: {
-                      ...(theme === Theme.Dark
-                        ? darkTheme.components?.Layout
-                        : {}),
-                      ...(Theme.Light === theme && {
-                        headerBg: '#fff',
-                      }),
-                    },
-                  },
-                  algorithm:
-                    theme === Theme.Dark
-                      ? te.darkAlgorithm
-                      : te.defaultAlgorithm,
+        <ConfigProvider
+          locale={getLocale()}
+          theme={{
+            components: {
+              ...(theme === Theme.Dark ? darkTheme.components : {}),
+              Layout: {
+                ...(theme === Theme.Dark ? darkTheme.components?.Layout : {}),
+                ...(Theme.Light === theme && {
+                  headerBg: '#fff',
+                }),
+              },
+            },
+            algorithm:
+              theme === Theme.Dark ? te.darkAlgorithm : te.defaultAlgorithm,
 
-                  token: {
-                    padding: 16,
-                    fontFamily: 'var(--font-family-code)',
-                    ...(theme === Theme.Dark ? darkTheme.token : {}),
-                  },
+            token: {
+              padding: 16,
+              fontFamily: 'var(--font-family-code)',
+              ...(theme === Theme.Dark ? darkTheme.token : {}),
+            },
+          }}
+        >
+          <Layout>
+            <>
+              {extraContent}
+              <ErrorBoundary
+                FallbackComponent={({ error, resetErrorBoundary }) => (
+                  <Result
+                    status="error"
+                    title="Sorry, something went wrong."
+                    extra={
+                      <Button
+                        type="primary"
+                        onClick={resetErrorBoundary}
+                        loading={state === PageState.Pending}
+                      >
+                        Reload
+                      </Button>
+                    }
+                  >
+                    <Typography.Paragraph>
+                      <Typography.Title level={3}>Error Stack</Typography.Title>
+                      <pre>{error.stack || error.message}</pre>
+                    </Typography.Paragraph>
+                  </Result>
+                )}
+                onReset={() => {
+                  window.location.reload();
                 }}
               >
-                <Layout>
-                  <>
-                    {extraContent}
-                    <ErrorBoundary
-                      FallbackComponent={({ error, resetErrorBoundary }) => (
-                        <Result
-                          status="error"
-                          title="Sorry, something went wrong."
-                          extra={
-                            <Button
-                              type="primary"
-                              onClick={resetErrorBoundary}
-                              loading={state === PageState.Pending}
-                            >
-                              Reload
-                            </Button>
-                          }
-                        >
-                          <Typography.Paragraph>
-                            <Typography.Title level={3}>
-                              Error Stack
-                            </Typography.Title>
-                            <pre>{error.stack || error.message}</pre>
-                          </Typography.Paragraph>
-                        </Result>
-                      )}
-                      onReset={() => {
-                        window.location.reload();
-                      }}
-                    >
-                      {router}
-                    </ErrorBoundary>
-                  </>
-                </Layout>
-              </ConfigProvider>
-            );
-          }}
-        </ConfigContext.Consumer>
+                {router}
+              </ErrorBoundary>
+            </>
+          </Layout>
+        </ConfigProvider>
       </ConfigContext.Provider>
     </BrowserRouter>
   );

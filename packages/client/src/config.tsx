@@ -1,14 +1,9 @@
 import { createContext } from 'react';
 import { Manifest } from '@rsdoctor/shared/types';
-import {
-  getLocaleFromStorage,
-  getThemeFromStorage,
-  getViewModeFromStorage,
-} from './utils/storage';
-import { PageState, ViewMode, Language, Theme } from './constants';
+import { getThemeFromStorage, getViewModeFromStorage } from './utils/storage';
+import { PageState, ViewMode, Theme } from './constants';
 
 export interface Config {
-  locale: Language;
   theme: Theme;
   pageState: PageState;
   viewMode: {
@@ -25,7 +20,6 @@ export interface Config {
 }
 
 export const defaultConfig: Config = {
-  locale: getLocaleFromStorage(),
   theme: getThemeFromStorage(),
   pageState: PageState.Pending,
   viewMode: getViewModeFromStorage(),

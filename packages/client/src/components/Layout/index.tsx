@@ -6,14 +6,9 @@ import {
   useState,
 } from 'react';
 import { FloatButton, Layout as L } from 'antd';
-import { Language, MAIN_BG, Size } from '../../constants';
+import { MAIN_BG, Size } from '../../constants';
 import { Header } from './header';
 import {
-  useLocale,
-  useI18n,
-  getFirstVisitFromStorage,
-  setFirstVisitToStorage,
-  getLanguage,
   useUrlQuery,
   getEnableRoutesFromUrlQuery,
   useThemeToken,
@@ -49,32 +44,11 @@ export const Layout = (
 ): React.JSX.Element => {
   const { isLight } = useTheme();
   const themeToken = useThemeToken();
-  const locale = useLocale();
-  const { i18n } = useI18n();
   const { children } = props;
   const query = useUrlQuery();
   const [enableRoutes, setEnableRoutes] = useState<string[] | undefined>(
     () => getEnableRoutesFromUrlQuery() || undefined,
   );
-
-  useEffect(() => {
-    let currentLocale = locale;
-    // Check if the user is visiting the site for the first time
-    const visited = getFirstVisitFromStorage();
-    if (!visited) {
-      setFirstVisitToStorage('1');
-      const targetLang = window.navigator.language.split('-')[0];
-      const userLang = getLanguage(targetLang);
-
-      if (Object.values(Language).includes(userLang)) {
-        currentLocale = userLang;
-      }
-    }
-
-    if (i18n.language !== currentLocale) {
-      i18n.changeLanguage(currentLocale);
-    }
-  }, [locale]);
 
   // Listen for enableRoutes changes in URL query parameters
   useEffect(() => {

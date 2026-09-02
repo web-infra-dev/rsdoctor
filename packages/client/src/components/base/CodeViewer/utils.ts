@@ -42,7 +42,7 @@ function getDataProtocolFormat(content: string): string {
         return '';
     }
   } catch (error) {
-    console.error('解析 data 协议文件格式失败::', error);
+    console.error('Failed to parse the data URL:', error);
     return '';
   }
 }
@@ -55,7 +55,7 @@ function getDataProtocolFormat(content: string): string {
 function parseDataUrl(dataUrl: string) {
   // 检查是否是 Data URL
   if (!dataUrl.startsWith('data:')) {
-    throw new Error('输入不是有效的 Data URL');
+    throw new Error('The input is not a valid data URL');
   }
 
   // 提取内容部分 (去掉 "data:" 前缀)
@@ -65,7 +65,7 @@ function parseDataUrl(dataUrl: string) {
   const commaIndex = content.indexOf(',');
 
   if (commaIndex === -1) {
-    throw new Error('无效的 Data URL 格式: 缺少数据分隔符');
+    throw new Error('Invalid data URL: missing data separator');
   }
 
   // 提取元数据部分
