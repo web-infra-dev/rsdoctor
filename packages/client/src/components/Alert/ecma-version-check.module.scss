@@ -1,12 +1,19 @@
 .container {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  gap: 20px;
   align-items: center;
   padding: 10px 20px;
 
+  > div {
+    min-width: 0;
+  }
+
   .box {
-    width: 290px;
+    width: 100%;
+    min-width: 0;
     display: flex;
+    align-items: center;
   }
 
   .title {
@@ -18,9 +25,21 @@
   }
 
   .content {
+    flex: 1;
+    min-width: 0;
     font-size: 14px;
     font-weight: 400;
     line-height: 16px;
     margin-left: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: minmax(0, 1fr);
+
+    > :global(.ant-btn) {
+      justify-self: end;
+    }
   }
 }

@@ -20,6 +20,8 @@ import { ModuleMixedChunksAlertCollapse } from './collapse-module-mixed-chunks';
 import { SideEffectsOnlyImportsAlertCollapse } from './collapse-side-effects-only-imports';
 import { CjsRequireAlertCollapse } from './collapse-cjs-require';
 import { EsmResolvedToCjsAlertCollapse } from './collapse-esm-cjs';
+import { groupBundleAlerts } from './bundle-alert-data';
+import { useHorizontalTabScroll } from './useHorizontalTabScroll';
 
 interface BundleAlertProps {
   title: string;
@@ -31,79 +33,18 @@ interface BundleAlertProps {
   extraCom?: React.JSX.Element | undefined;
 }
 
-const BUILTIN_RULE_TABS = [
-  {
-    key: 'E1001',
-    label: 'Duplicate Packages',
-  },
-  {
-    key: 'E1002',
-    label: 'Cross Chunks Package',
-  },
-  {
-    key: 'E1003',
-    label: 'Loader Performance Optimization',
-  },
-  {
-    key: 'E1004',
-    label: 'ECMA Version Check',
-  },
-  {
-    key: 'E1005',
-    label: 'Default Import Check',
-  },
-  {
-    key: 'E1006',
-    label: 'Module Mixed Chunks',
-  },
-  {
-    key: 'E1007',
-    label: 'Tree Shaking Side Effects Only',
-  },
-  {
-    key: 'E1008',
-    label: 'CJS Require Cannot Tree-Shake',
-  },
-  {
-    key: 'E1009',
-    label: 'ESM Import Resolved to CJS',
-  },
-];
-
 export const BundleAlert: React.FC<BundleAlertProps> = ({
   title,
   dataSource,
   extraData,
 }) => {
-  const tabData: Array<{
-    key: string;
-    label: string;
-    data: Array<Rule.RuleStoreDataItem>;
-    tag: string;
-  }> = BUILTIN_RULE_TABS.map((tab) => ({ ...tab, data: [], tag: tab.key }));
-  const customRulesData: Array<Rule.RuleStoreDataItem> = [];
-
-  dataSource.forEach((data) => {
-    const target = tabData.find((td) => td.key === data.code);
-    if (target) {
-      target.data.push(data);
-    } else {
-      customRulesData.push(data);
-    }
-  });
-
-  if (customRulesData.length) {
-    tabData.push({
-      key: 'CUSTOM_RULES',
-      label: 'Custom Rules',
-      data: customRulesData,
-      tag: 'Custom',
-    });
-  }
+  const horizontalTabScrollHandlers = useHorizontalTabScroll();
+  const tabData = groupBundleAlerts(dataSource);
 
   tabData.sort(
     (a, b) => (b.data.length > 0 ? 1 : 0) - (a.data.length > 0 ? 1 : 0),
   );
+  const hasRuleAlerts = tabData.some(({ data }) => data.length > 0);
 
   const defaultActiveKey = tabData[0]?.key ?? 'E1001';
   const [activeKey, setActiveKey] = useState(defaultActiveKey);
@@ -247,9 +188,9 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
 
   return (
     <Card style={{ width: '100%', borderRadius: '12px' }}>
-      <div className={styles.container}>
+      <div className={styles.container} {...horizontalTabScrollHandlers}>
         <div className={styles.title}>{title}</div>
-        {!dataSource.length ? (
+        {!hasRuleAlerts ? (
           <div
             style={{
               minHeight: '480px',

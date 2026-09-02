@@ -18,17 +18,54 @@
 .container {
   margin-top: -4px;
   height: 100%;
+  min-width: 0;
 
   :global {
     // for bundle alerts
-    .ant-tabs-nav-list {
-      width: 98%;
+    .ant-tabs > .ant-tabs-nav {
+      .ant-tabs-nav-wrap {
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scrollbar-width: thin;
+        touch-action: pan-x;
+        user-select: none;
+        cursor: grab;
+        -webkit-overflow-scrolling: touch;
+
+        &[data-dragging='true'] {
+          cursor: grabbing;
+        }
+
+        &::-webkit-scrollbar {
+          height: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: var(--color-border);
+          border-radius: 3px;
+        }
+      }
+      .ant-tabs-nav-list {
+        width: max-content;
+        min-width: max-content;
+        flex: none;
+        transform: none !important;
+      }
+      .ant-tabs-tab {
+        flex: 0 0 auto;
+      }
+      .ant-tabs-tab-btn {
+        width: 100%;
+      }
+      .ant-tabs-nav-operations {
+        display: none;
+      }
     }
-    .ant-tabs-tab {
-      flex: 1;
-    }
-    .ant-tabs-tab-btn {
-      width: 100%;
+    .ant-tabs-content-holder,
+    .ant-tabs-content,
+    .ant-tabs-tabpane {
+      min-width: 0;
     }
   }
 }

@@ -19,7 +19,6 @@ import { TextDrawer } from '../../..//components/TextDrawer';
 import styles from './card.module.scss';
 
 const { DirectoryTree } = Tree;
-const { innerWidth } = window;
 
 interface CardProps {
   showProgress?: boolean;
@@ -98,7 +97,8 @@ const AssetCardContainer: React.FC<{
       boxProps={{
         style: {
           background: bgColor?.bgColor,
-          width: innerWidth > 1300 ? '80%' : '95%',
+          minWidth: 0,
+          width: '100%',
         },
       }}
     />
@@ -269,18 +269,9 @@ export const BundleCards: React.FC<{
             <Divider style={{ height: '200px' }} type="vertical" />
             <div className={styles.chartsContainer}>
               {arr.map((e, idx) => (
-                <>
-                  <div key={idx} className={styles.chart}>
-                    {e}
-                  </div>
-                  {idx !== arr.length - 1 ? (
-                    <Divider
-                      key={`${idx}-divider`}
-                      style={{ height: '200px' }}
-                      type="vertical"
-                    />
-                  ) : null}
-                </>
+                <div key={idx} className={styles.chart}>
+                  {e}
+                </div>
               ))}
             </div>
           </div>

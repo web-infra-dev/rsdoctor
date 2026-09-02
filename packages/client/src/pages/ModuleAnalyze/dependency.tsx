@@ -34,7 +34,7 @@ const DependencyTree: React.FC<{
         {treedata.length ? (
           <FileTree treeData={treedata} needJumpto cwd={cwd} />
         ) : (
-          <Empty />
+          <Empty description="No Data" />
         )}
       </Col>
     </Row>
