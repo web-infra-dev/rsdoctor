@@ -19,12 +19,10 @@ import {
 } from './config/constants.ts';
 
 define.app(({ env }) => {
-  const {
-    ENABLE_DEVTOOLS_PLUGIN,
-    OFFICIAL_PREVIEW_PUBLIC_PATH,
-    OFFICIAL_DEMO_MANIFEST_PATH,
-    ENABLE_CLIENT_SERVER,
-  } = process.env;
+  const { OFFICIAL_PREVIEW_PUBLIC_PATH, OFFICIAL_DEMO_MANIFEST_PATH } =
+    process.env;
+  const ENABLE_DEVTOOLS_PLUGIN = process.env.ENABLE_DEVTOOLS_PLUGIN === 'true';
+  const ENABLE_CLIENT_SERVER = process.env.ENABLE_CLIENT_SERVER === 'true';
 
   const IS_PRODUCTION = env === 'production';
 
@@ -108,7 +106,7 @@ define.app(({ env }) => {
           minSize: 500000,
         },
         react: {
-          test: /node_modules\/react-/,
+          test: /node_modules\/react(?:\/|-)/,
           name: 'react',
           chunks: 'all',
         },
