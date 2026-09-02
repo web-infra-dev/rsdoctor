@@ -21,6 +21,7 @@ import { SideEffectsOnlyImportsAlertCollapse } from './collapse-side-effects-onl
 import { CjsRequireAlertCollapse } from './collapse-cjs-require';
 import { EsmResolvedToCjsAlertCollapse } from './collapse-esm-cjs';
 import { groupBundleAlerts } from './bundle-alert-data';
+import { useHorizontalTabScroll } from './useHorizontalTabScroll';
 
 interface BundleAlertProps {
   title: string;
@@ -37,6 +38,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
   dataSource,
   extraData,
 }) => {
+  const horizontalTabScrollHandlers = useHorizontalTabScroll();
   const tabData = groupBundleAlerts(dataSource);
 
   tabData.sort(
@@ -186,7 +188,7 @@ export const BundleAlert: React.FC<BundleAlertProps> = ({
 
   return (
     <Card style={{ width: '100%', borderRadius: '12px' }}>
-      <div className={styles.container}>
+      <div className={styles.container} {...horizontalTabScrollHandlers}>
         <div className={styles.title}>{title}</div>
         {!hasRuleAlerts ? (
           <div

@@ -28,6 +28,14 @@
         overflow-y: hidden;
         overscroll-behavior-x: contain;
         scrollbar-width: thin;
+        touch-action: pan-x;
+        user-select: none;
+        cursor: grab;
+        -webkit-overflow-scrolling: touch;
+
+        &[data-dragging='true'] {
+          cursor: grabbing;
+        }
 
         &::-webkit-scrollbar {
           height: 6px;
