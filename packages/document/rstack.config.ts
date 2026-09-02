@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { defineConfig } from '@rspress/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
-import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
-import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
-import { pluginRss } from '@rspress/plugin-rss';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
 import { pluginClientRedirects } from '@rspress/plugin-client-redirects';
+import { pluginRss } from '@rspress/plugin-rss';
+import { define } from 'rstack';
+import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
+import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
+import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import pluginSitemap from 'rspress-plugin-sitemap';
 
 const siteUrl = 'https://rsdoctor.rs';
@@ -41,7 +41,7 @@ const excludeV1ArchiveFromLlms = () => ({
   async afterBuild() {
     await Promise.all(
       llmsFiles.map(async (file) => {
-        const filePath = path.join(__dirname, 'doc_build', file);
+        const filePath = path.join(import.meta.dirname, 'doc_build', file);
         const content = await fs.promises.readFile(filePath, 'utf8');
         const nextContent = file.endsWith('llms-full.txt')
           ? content
@@ -59,7 +59,7 @@ const excludeV1ArchiveFromLlms = () => ({
   },
 });
 
-export default defineConfig({
+define.doc({
   plugins: [
     pluginClientRedirects({
       redirects: [{ from: '/guide/start/mcp', to: '/guide/v1/mcp' }],
@@ -116,7 +116,7 @@ export default defineConfig({
       ],
     }),
   ],
-  root: path.join(__dirname, 'docs'),
+  root: path.join(import.meta.dirname, 'docs'),
   title: 'Rsdoctor',
   description: 'A one-stop build analyzer for Rspack projects.',
   icon: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-960x960.png',
@@ -155,7 +155,7 @@ export default defineConfig({
       '**/quick-start-shared.mdx',
     ],
   },
-  globalStyles: path.join(__dirname, 'theme', 'index.css'),
+  globalStyles: path.join(import.meta.dirname, 'theme', 'index.css'),
   themeConfig: {
     llmsUI: {
       placement: 'outline',
@@ -216,9 +216,9 @@ export default defineConfig({
     ],
     resolve: {
       alias: {
-        '@components': path.join(__dirname, 'src/components'),
-        '@en': path.join(__dirname, 'docs/en'),
-        '@zh': path.join(__dirname, 'docs/zh'),
+        '@components': path.join(import.meta.dirname, 'src/components'),
+        '@en': path.join(import.meta.dirname, 'docs/en'),
+        '@zh': path.join(import.meta.dirname, 'docs/zh'),
       },
     },
   },

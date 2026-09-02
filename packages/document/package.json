@@ -15,9 +15,9 @@
     "src"
   ],
   "scripts": {
-    "build": "cross-env RSPRESS_PERSISTENT_CACHE=false rspress build && sh build.sh",
-    "dev": "cross-env RSPRESS_PERSISTENT_CACHE=false rspress dev",
-    "preview": "rspress preview"
+    "build": "cross-env RSPRESS_PERSISTENT_CACHE=false rs doc build && sh build.sh",
+    "dev": "cross-env RSPRESS_PERSISTENT_CACHE=false rs doc",
+    "preview": "rs doc preview"
   },
   "dependencies": {
     "@rspress/core": "2.0.21",

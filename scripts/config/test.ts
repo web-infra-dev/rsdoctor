@@ -1,12 +1,12 @@
 import path from 'node:path';
 import type { RstestConfig } from 'rstack/test';
 
-// Disable color in tests.
-process.env.NO_COLOR = '1';
-
 export const baseConfig: RstestConfig = {
   name: 'node',
   globals: true,
+  env: {
+    FORCE_COLOR: '0',
+  },
   restoreMocks: true,
   pool: {
     // Build-heavy tests are flaky under parallel workers in this repo.

@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { define } from 'rstack';
+import { baseConfig } from '@scripts/config/test';
 
 define.lib({
   source: {
@@ -20,17 +21,13 @@ define.lib({
   syntax: 'es2021',
 });
 
-define.test(async () => {
-  const { baseConfig } = await import('@scripts/config/test');
-
-  return {
-    ...baseConfig,
-    resolve: {
-      alias: {
-        '@': path.resolve(import.meta.dirname, 'src'),
-      },
+define.test({
+  ...baseConfig,
+  resolve: {
+    alias: {
+      '@': path.resolve(import.meta.dirname, 'src'),
     },
-  };
+  },
 });
 
 define.lint(() => [

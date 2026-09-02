@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import { define } from 'rstack';
 import { esmConfig, pluginsConfig } from '@scripts/config/lib';
+import { baseConfig } from '@scripts/config/test';
 
 const htmlParserStub = fileURLToPath(
   new URL(
@@ -60,8 +61,4 @@ define.lib({
   plugins: pluginsConfig,
 });
 
-define.test(async () => {
-  const { baseConfig } = await import('@scripts/config/test');
-
-  return baseConfig;
-});
+define.test(baseConfig);
