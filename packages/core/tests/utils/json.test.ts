@@ -37,5 +37,19 @@ describe('test src/json.ts', () => {
         }),
       ).toMatchSnapshot();
     });
+
+    it('preserves the final content after splitting into multiple chunks', async () => {
+      const data = Array.from({ length: 20 }, (_, index) => index);
+      const chunks = (await Json.stringify(
+        data,
+        undefined,
+        undefined,
+        undefined,
+        10,
+      )) as unknown as string[];
+
+      expect(chunks.length).toBeGreaterThan(1);
+      expect(chunks.join('')).toBe(JSON.stringify(data));
+    });
   });
 });

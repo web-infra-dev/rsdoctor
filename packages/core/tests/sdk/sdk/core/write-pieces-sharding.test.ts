@@ -1,8 +1,10 @@
 import path from 'path';
 import fs from 'node:fs';
+import fsp from 'node:fs/promises';
 import zlib from 'node:zlib';
 import { tmpdir } from 'os';
-import { describe, it, expect, afterEach } from 'rstack/test';
+import { Manifest } from '@rsdoctor/shared/common-browser';
+import { afterEach, describe, expect, it } from 'rstack/test';
 import { File } from '@/build-utils';
 import { createSDK, type MockSDKResponse } from '../../utils';
 
@@ -10,10 +12,10 @@ import { createSDK, type MockSDKResponse } from '../../utils';
  * Verify that writePieces (called via saveManifest) correctly shards data
  * to disk with unique file IDs, and that the data is recoverable.
  *
- * Regression: when Json.stringify split large data into multiple chunks,
- * writePieces called writeToFolder with index=N+1 for chunk N. If chunk 0
- * produced shard files 1..10 and chunk 1 started at file 2, files 2..N
- * would be overwritten, making the data unrecoverable.
+ * Regression: when Json.stringify split large data into multiple fragments,
+ * each fragment was compressed independently and written with overlapping
+ * shard IDs. The reader concatenates all shards and inflates them as one
+ * stream, so the data could not be recovered.
  */
 describe('writePieces shard file integrity', () => {
   let target: MockSDKResponse;
@@ -102,9 +104,8 @@ describe('writePieces shard file integrity', () => {
       .readdirSync(loaderDir)
       .sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
 
-    // Json.stringify returns string[], so writePieces goes through the
-    // array branch with cumulative offsets. Even with 1 chunk, this
-    // exercises the for-loop and fileOffset logic.
+    // Json.stringify returns string[], so writePieces uses the shared deflate
+    // stream path. Even one fragment exercises the fallback branch.
     expect(files.length).toBeGreaterThanOrEqual(1);
 
     const uniqueIds = new Set(files);
@@ -121,6 +122,33 @@ describe('writePieces shard file integrity', () => {
     expect(Array.isArray(parsed)).toBe(true);
     expect(parsed.length).toBe(1);
     expect(parsed[0].resource.path).toBe('/test/a.ts');
+  });
+
+  it('should write multiple JSON fragments as one deflate stream', async () => {
+    target = await createSDK({ noServer: true });
+    outputDir = path.resolve(tmpdir(), `sharding_fragments_test_${Date.now()}`);
+
+    const graph = { modules: [{ id: 1 }, { id: 2 }] };
+    const fragments = ['{"modules":[', '{"id":1},', '{"id":2}]}'];
+    const writer = target.sdk as unknown as {
+      writeJsonFragmentsToFolder(
+        fragments: string[],
+        dir: string,
+        key: string,
+      ): Promise<{ files: Array<{ path: string }> }>;
+    };
+    const result = await writer.writeJsonFragmentsToFolder(
+      fragments,
+      outputDir,
+      'moduleGraph',
+    );
+    const files = result.files.map(({ path: filePath }) => filePath);
+
+    await expect(
+      Manifest.fetchShardingData(files, (filePath) =>
+        fsp.readFile(filePath, 'utf-8'),
+      ),
+    ).resolves.toStrictEqual(graph);
   });
 
   it('honors the requested shard compression level', async () => {
