@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { getTimelineAxisInterval } from 'src/components/Charts/TimelineCharts/axis';
 
 describe('getTimelineAxisInterval', () => {

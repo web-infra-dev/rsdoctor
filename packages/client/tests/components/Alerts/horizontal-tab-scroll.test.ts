@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { getNextHorizontalScrollLeft } from 'src/components/Alerts/useHorizontalTabScroll';
 
 describe('getNextHorizontalScrollLeft', () => {

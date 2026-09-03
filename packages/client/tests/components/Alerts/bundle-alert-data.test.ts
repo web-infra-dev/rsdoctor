@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { Rule } from '@rsdoctor/shared/types';
 import { groupBundleAlerts } from 'src/components/Alerts/bundle-alert-data';
 
