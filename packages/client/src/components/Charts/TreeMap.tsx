@@ -560,7 +560,7 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
 
     return option ? (
       <div className={Styles.mainArea}>
-        {showAlert && <TreemapAlert />}
+        {showAlert && sizeType === 'parsed' && <TreemapAlert />}
         <div className={Styles.chartRoot}>
           <EChartsReactCore
             ref={chartRef}
