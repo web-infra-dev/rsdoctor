@@ -35,16 +35,16 @@ function createEcmaVersionWarningSummary(
     ...new Set(warnings.map(formatLocation).filter(Boolean) as string[]),
   ];
   const displayedLocations = locations.slice(0, MAX_DISPLAYED_LOCATIONS);
-  const remainingIssueCount = issueCount - displayedLocations.length;
+  const remainingFileCount = locations.length - displayedLocations.length;
   const message = [
     `Found ${issueCount} incompatible syntax ${
       issueCount === 1 ? 'issue' : 'issues'
     }${target ? ` for "${target}"` : ''}.`,
     displayedLocations.length
       ? `Affected outputs: ${displayedLocations.join(', ')}${
-          remainingIssueCount > 0
-            ? `, ... (+${remainingIssueCount} more ${
-                remainingIssueCount === 1 ? 'issue' : 'issues'
+          remainingFileCount > 0
+            ? `, ... (+${remainingFileCount} more ${
+                remainingFileCount === 1 ? 'file' : 'files'
               })`
             : ''
         }`

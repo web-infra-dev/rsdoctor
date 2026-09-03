@@ -66,9 +66,23 @@ describe('summarizeRuleWarnings', () => {
     const [summary] = summarizeRuleWarnings(warnings);
 
     expect(summary.message).toContain(
-      'Affected outputs: src/module-0.js:1, src/module-1.js:2, src/module-2.js:3, ... (+2 more issues)',
+      'Affected outputs: src/module-0.js:1, src/module-1.js:2, src/module-2.js:3, ... (+2 more files)',
     );
     expect(summary.message).not.toContain('src/module-3.js');
+  });
+
+  it('does not count duplicate locations as additional files', () => {
+    const warnings = [
+      createWarning('E1004', { path: 'dist/main.js' }),
+      createWarning('E1004', { path: 'dist/main.js' }),
+      createWarning('E1004', { path: 'dist/async.js' }),
+      createWarning('E1004', { path: 'dist/vendor.js' }),
+      createWarning('E1004', { path: 'dist/runtime.js' }),
+    ];
+
+    const [summary] = summarizeRuleWarnings(warnings);
+
+    expect(summary.message).toContain('... (+1 more file)');
   });
 
   it('returns the original array when there are no E1004 warnings', () => {
