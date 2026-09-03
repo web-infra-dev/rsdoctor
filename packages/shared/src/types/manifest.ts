@@ -1,5 +1,5 @@
 import { PlainObject, ObjectPropertyNames } from './common';
-import { StoreData } from './sdk';
+import { BuilderStoreData, EMOStoreData } from './sdk';
 
 export interface RsdoctorManifest {
   client: RsdoctorManifestClient;
@@ -53,7 +53,8 @@ export interface RsdoctorManifestClient {
 }
 
 // rslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface RsdoctorManifestData extends StoreData {}
+export interface RsdoctorManifestData
+  extends BuilderStoreData, Partial<Pick<EMOStoreData, 'emoCheck'>> {}
 
 export enum RsdoctorManifestClientRoutes {
   Overall = 'Overall',

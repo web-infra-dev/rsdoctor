@@ -18,6 +18,6 @@ export function hasSetEsModuleStatement(program: Node.Program) {
     .filter(parser.asserts.isSimpleCallExpression);
 
   return expressions.some((exp) =>
-    parser.utils.isSameSemantics(exp, esmLabelStatement),
+    parser.utils.isSameSyntax(exp, esmLabelStatement),
   );
 }

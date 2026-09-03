@@ -2,11 +2,12 @@
 
 **Rsdoctor 1.2.4 introduced the output configuration used by Rsdoctor 2.x.** It is easier to configure and extend than the legacy options.
 
-The top-level `mode` and legacy `output.compressData` options were removed and are ignored in Rsdoctor 2.x. The legacy `brief` option is deprecated and retained for backward compatibility. Use the table below to migrate these options. Both forms of the `features` lite configuration remain supported and are included only to show the equivalent `output` configuration.
+The top-level `mode`, `port`, and `brief` options and legacy `output.compressData` option were removed and are ignored in Rsdoctor 2.x. Use the table below to migrate these options. Both forms of the `features` lite configuration remain supported and are included only to show the equivalent `output` configuration.
 
 | Original Configuration                             | New Configuration                                                                                                         |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | mode                                               | Configure `output.mode` instead.                                                                                          |
+| port                                               | Configure `server.port` instead.                                                                                          |
 | brief                                              | Configure `output.mode: 'brief'` and set `output.options.type` to `['html']`.                                             |
 | output.compressData                                | Configure `output.mode: 'brief'` and set `output.options.type` to `['json']`.                                             |
 | `mode: 'lite'`                                     | Configure `output.mode: 'normal'` and set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`.               |
@@ -21,7 +22,7 @@ The top-level `mode` option was removed in Rsdoctor 2.x. Use `output.mode` to ke
 
 ### brief
 
-The current brief report mode outputs an HTML file as the report page. The new brief mode still supports JSON format, and for unified management of the same configuration, the brief configuration is moved to output.options.
+The top-level `brief` option was removed in Rsdoctor 2.x. The current brief report mode supports both HTML and JSON output, with its configuration grouped under `output.options`.
 Replace the original `brief` configuration with `output.mode: 'brief'` and set `output.options.type` to `['html']`.
 
 ### output.compressData

@@ -4,17 +4,6 @@ import type {
   Plugin,
   SDK,
 } from '@rsdoctor/shared/types';
-export interface RsdoctorMultiplePluginOptions<
-  Rules extends LinterType.ExtendRuleData[] = LinterType.ExtendRuleData[],
->
-  extends
-    Omit<Plugin.RsdoctorRspackPluginOptions<Rules>, 'sdkInstance'>,
-    Pick<{ stage?: number }, 'stage'> {
-  /**
-   * name of builder
-   */
-  name?: string;
-}
 
 export interface BasePluginInstance<T extends Plugin.BaseCompiler> {
   apply: (compiler: T) => void;

@@ -35,7 +35,7 @@ export async function loadRspackStats(
         chunkGraph: chunkGraph.toData(SDK.ToDataType.Normal),
         packageGraph: pkgGraph.toData(),
       } as Pick<
-        SDK.StoreData,
+        SDK.BuilderStoreData,
         'moduleGraph' | 'chunkGraph' | 'hash' | 'packageGraph'
       >;
     }),

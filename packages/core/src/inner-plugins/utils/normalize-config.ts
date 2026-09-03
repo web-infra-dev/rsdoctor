@@ -9,16 +9,12 @@ import type {
 export function processModeConfigurations(
   finalMode: keyof typeof SDK.IMode,
   output: Config.IOutput<'brief' | 'normal'>,
-  brief: Config.BriefConfig | undefined,
 ) {
   let finalBrief = {};
   let finalNormalOptions: Config.NormalModeOptions = {};
 
   if (finalMode === 'brief') {
-    finalBrief = processBriefHtmlModeConfig(
-      output as Config.BriefModeConfig,
-      brief,
-    );
+    finalBrief = processBriefHtmlModeConfig(output as Config.BriefModeConfig);
   } else if (finalMode === 'normal') {
     finalNormalOptions = {};
   }
@@ -27,12 +23,10 @@ export function processModeConfigurations(
 }
 
 /**
- * Process brief mode configuration with priority logic
- * Priority: output.options.briefOptions > output.brief > default
+ * Process brief mode configuration.
  */
 export function processBriefHtmlModeConfig(
   output: Config.BriefModeConfig,
-  brief: Config.BriefConfig | undefined,
 ): Config.BriefModeOptions {
   let htmlOptions: Config.BriefConfig = {
     reportHtmlName: undefined,
@@ -56,12 +50,8 @@ export function processBriefHtmlModeConfig(
     !briefOptions.type
   ) {
     const outputBriefOptions = briefOptions?.htmlOptions;
-    const outputBrief = brief;
     htmlOptions = {
-      reportHtmlName:
-        outputBriefOptions?.reportHtmlName ||
-        outputBrief?.reportHtmlName ||
-        undefined,
+      reportHtmlName: outputBriefOptions?.reportHtmlName || undefined,
     };
   }
 

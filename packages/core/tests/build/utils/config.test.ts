@@ -327,15 +327,6 @@ describe('normalizeUserConfig', () => {
   });
 
   describe('server configuration', () => {
-    it('should preserve port and apply it to server.port', () => {
-      const result = normalizeUserConfig({
-        port: 9876,
-      });
-
-      expect(result.port).toBe(9876);
-      expect(result.server.port).toBe(9876);
-    });
-
     it('should preserve server.port', () => {
       const result = normalizeUserConfig({
         server: {
@@ -344,18 +335,6 @@ describe('normalizeUserConfig', () => {
       });
 
       expect(result.server.port).toBe(9876);
-    });
-
-    it('should prefer server.port over port', () => {
-      const result = normalizeUserConfig({
-        port: 9876,
-        server: {
-          port: 9877,
-        },
-      });
-
-      expect(result.port).toBe(9876);
-      expect(result.server.port).toBe(9877);
     });
 
     it('should preserve server.cors options', () => {

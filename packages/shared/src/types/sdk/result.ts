@@ -38,11 +38,3 @@ export interface BuilderStoreData extends StoreCommonData {
 export interface EMOStoreData extends StoreCommonData {
   emoCheck: EmoCheckData;
 }
-
-/**
- * @deprecated
- */
-export interface StoreData
-  extends
-    Partial<Omit<EMOStoreData, keyof StoreCommonData>>,
-    BuilderStoreData {}

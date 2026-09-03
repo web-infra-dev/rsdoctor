@@ -13,11 +13,6 @@ function getDefaultOutput() {
     reportDir: '',
   };
 }
-function getDefaultSupports() {
-  return {
-    parseBundle: true,
-  };
-}
 function isJsonOutputEnv(value: unknown): boolean {
   return value === 'json';
 }
@@ -131,15 +126,12 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     innerClientPath = '',
     output = outputConfig,
     supports: userSupports = {},
-    port,
     server: userServer = {},
     printLog = { serverUrls: true },
-    brief = undefined,
     multiCompiler = true,
   } = normalizedConfig;
   const supports = {
-    ...getDefaultSupports(),
-    ...userSupports,
+    parseBundle: defaultBoolean(userSupports.parseBundle, true),
     gzip: normalizeGzip(userSupports.gzip),
   };
   // If process.env.RSTEST is set to true, disableClientServer should be false
@@ -154,7 +146,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   assert(typeof features === 'object' || Array.isArray(features));
   assert(typeof loaderInterceptorOptions === 'object');
   assert(typeof disableClientServer === 'boolean');
-  assert(typeof port === 'undefined' || typeof port === 'number');
   assert(typeof userServer === 'object' && userServer !== null);
   const server: SDK.RsdoctorServerConfig = {
     ...userServer,
@@ -164,9 +155,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     typeof multiCompiler === 'boolean' ||
       (typeof multiCompiler === 'object' && multiCompiler !== null),
   );
-  if (typeof server.port === 'undefined' && typeof port !== 'undefined') {
-    server.port = port;
-  }
   let finalMode: keyof typeof SDK.IMode =
     ('mode' in output && isValidMode(output.mode)
       ? output.mode === ('lite' as SDK.IMode.normal)
@@ -188,7 +176,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   const { finalBrief, finalNormalOptions } = processModeConfigurations(
     finalMode,
     output,
-    brief,
   );
   // If lite mode is enabled and mode is not brief: finalBrief, set mode to lite
   if (_features.lite && finalMode !== SDK.IMode[SDK.IMode.brief]) {
@@ -213,7 +200,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     },
     innerClientPath,
     supports,
-    port,
     server,
     printLog,
     multiCompiler: {

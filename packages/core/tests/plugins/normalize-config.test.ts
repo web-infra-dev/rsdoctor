@@ -12,13 +12,13 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         mode: 'brief',
         options: {
           type: ['html'],
+          htmlOptions: {
+            reportHtmlName: 'test.html',
+          },
         },
       };
-      const brief: Config.BriefConfig = {
-        reportHtmlName: 'test.html',
-      };
 
-      const result = processModeConfigurations('brief', output, brief);
+      const result = processModeConfigurations('brief', output);
 
       expect(result.finalBrief).toEqual({
         type: ['html'],
@@ -45,7 +45,7 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         },
       };
 
-      const result = processModeConfigurations('brief', output, undefined);
+      const result = processModeConfigurations('brief', output);
 
       expect(result.finalBrief).toEqual({
         type: ['json'],
@@ -80,7 +80,7 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         },
       };
 
-      const result = processModeConfigurations('brief', output, undefined);
+      const result = processModeConfigurations('brief', output);
 
       expect(result.finalBrief).toEqual({
         type: ['html', 'json'],
@@ -102,7 +102,7 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         mode: 'normal' as const,
       };
 
-      const result = processModeConfigurations('normal', output, undefined);
+      const result = processModeConfigurations('normal', output);
 
       expect(result.finalBrief).toEqual({});
       expect(result.finalNormalOptions).toEqual({});
@@ -115,7 +115,7 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         options: {},
       };
 
-      const result = processBriefHtmlModeConfig(output, undefined);
+      const result = processBriefHtmlModeConfig(output);
 
       expect(result).toEqual({
         type: ['html'],
@@ -133,7 +133,7 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         },
       };
 
-      const result = processBriefHtmlModeConfig(output, undefined);
+      const result = processBriefHtmlModeConfig(output);
 
       expect(result).toEqual({
         type: ['json'],
@@ -165,7 +165,7 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
         },
       };
 
-      const result = processBriefHtmlModeConfig(output, undefined);
+      const result = processBriefHtmlModeConfig(output);
 
       expect(result).toEqual({
         type: ['json'],
@@ -198,16 +198,12 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
           },
         },
       };
-      const brief: Config.BriefConfig = {
-        reportHtmlName: 'fallback.html',
-      };
-
-      const result = processBriefHtmlModeConfig(output, brief);
+      const result = processBriefHtmlModeConfig(output);
 
       expect(result).toEqual({
         type: ['html', 'json'],
         htmlOptions: {
-          reportHtmlName: 'report.html', // Should use output.options.htmlOptions first
+          reportHtmlName: 'report.html',
         },
         jsonOptions: {
           sections: {
@@ -219,7 +215,7 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
       });
     });
 
-    it('should prioritize output.options over brief parameter', () => {
+    it('should use output.options.htmlOptions', () => {
       const output: Config.BriefModeConfig = {
         options: {
           type: ['html'],
@@ -228,28 +224,9 @@ describe('test src/inner-plugins/utils/normalize-config.ts', () => {
           },
         },
       };
-      const brief: Config.BriefConfig = {
-        reportHtmlName: 'fallback.html',
-      };
-
-      const result = processBriefHtmlModeConfig(output, brief);
+      const result = processBriefHtmlModeConfig(output);
 
       expect(result.htmlOptions?.reportHtmlName).toBe('priority.html');
-    });
-
-    it('should fallback to brief parameter when output.options is not provided', () => {
-      const output: Config.BriefModeConfig = {
-        options: {
-          type: ['html'],
-        },
-      };
-      const brief: Config.BriefConfig = {
-        reportHtmlName: 'fallback.html',
-      };
-
-      const result = processBriefHtmlModeConfig(output, brief);
-
-      expect(result.htmlOptions?.reportHtmlName).toBe('fallback.html');
     });
   });
 });
