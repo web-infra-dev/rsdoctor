@@ -1,6 +1,6 @@
 const path = require('node:path');
 const rspack = require('@rspack/core');
-const { RsdoctorRspackPlugin } = require('@rsdoctor/core');
+const { RsdoctorRspackPlugin } = require('@rsdoctor/core/rspack-plugin');
 
 class ChildCompilerExamplePlugin {
   apply(compiler) {
@@ -59,20 +59,7 @@ module.exports = {
   plugins: [
     new RsdoctorRspackPlugin({
       disableClientServer: process.env.ENABLE_CLIENT_SERVER === 'false',
-      server: {
-        port: 7810,
-      },
       features: ['bundle', 'loader'],
-      linter: {
-        rules: {
-          'ecma-version-check': [
-            'Warn',
-            {
-              ecmaVersion: 3,
-            },
-          ],
-        },
-      },
       supports: {
         parseBundle: false,
       },
