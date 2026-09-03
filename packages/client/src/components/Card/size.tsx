@@ -1,6 +1,6 @@
-import { Empty, Progress, Space, Tree } from 'antd';
+import { Empty, Progress, Segmented, Space, Tree } from 'antd';
 import { sumBy } from '@rsdoctor/shared/collection';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { RightOutlined } from '@ant-design/icons';
 
 import { formatSize } from 'src/utils';
@@ -14,6 +14,7 @@ import styles from './size.module.scss';
 
 const { DirectoryTree } = Tree;
 const height = 100;
+type SizeMetric = 'size' | 'gzip';
 
 export interface SizeCardProps {
   files: {
@@ -43,6 +44,7 @@ export const SizeCard: React.FC<SizeCardProps> = ({
   showProgress = false,
   type,
 }) => {
+  const [sizeMetric, setSizeMetric] = useState<SizeMetric>('size');
   const fileType =
     type.toLocaleLowerCase() as keyof Client.RsdoctorClientAssetsSummary;
   const sum = useMemo(() => {
@@ -53,6 +55,12 @@ export const SizeCard: React.FC<SizeCardProps> = ({
   }, [files]);
   const hasGzipSize = files.some((file) => file.gzipSize !== undefined);
 
+  useEffect(() => {
+    if (!hasGzipSize) {
+      setSizeMetric('size');
+    }
+  }, [hasGzipSize, type]);
+
   return (
     <ServerAPIProvider
       api={SDK.ServerAPI.API.GetAssetsSummary}
@@ -61,11 +69,21 @@ export const SizeCard: React.FC<SizeCardProps> = ({
       {(res) => {
         const type = fileType.includes('image') ? 'imgs' : fileType;
         const { treeData } = getFiles(res[type].total);
+        const totalGzipSize = sumBy(
+          res.all.total.files,
+          (file) => file.gzipSize ?? 0,
+        );
+        const selectedSize = sizeMetric === 'gzip' ? gzipSum : sum;
+        const selectedTotal = sizeMetric === 'gzip' ? totalGzipSize : total;
+        const percent = selectedTotal
+          ? +((selectedSize / selectedTotal) * 100).toFixed(2)
+          : 0;
+
         return (
-          <Space style={{ height }} align="center">
+          <Space className={styles.container} style={{ height }} align="center">
             <Progress
               type="circle"
-              percent={+((sum / total) * 100).toFixed(2)}
+              percent={percent}
               strokeColor={{ '0%': '#108ee9', '100%': '#108ee9' }}
               strokeWidth={12}
               format={(percent) => (
@@ -77,18 +95,20 @@ export const SizeCard: React.FC<SizeCardProps> = ({
                 </div>
               )}
             />
-            <div style={{ marginLeft: '10px' }}>
-              <div className={styles.sizeMetrics}>
-                <div className={styles.dataContainer}>
-                  <div className={styles.title}>Size</div>
-                  <div className={styles.description}>{formatSize(sum)}</div>
-                </div>
-                <div className={styles.dataContainer}>
-                  <div className={styles.title}>Gzipped</div>
-                  <div className={styles.description}>
-                    {hasGzipSize ? formatSize(gzipSum) : 'N/A'}
-                  </div>
-                </div>
+            <div className={styles.details}>
+              <Segmented
+                aria-label={`${type} size metric`}
+                className={styles.metricSelector}
+                options={[
+                  { label: 'Size', value: 'size' },
+                  { label: 'Gzip', value: 'gzip', disabled: !hasGzipSize },
+                ]}
+                value={sizeMetric}
+                size="small"
+                onChange={(value) => setSizeMetric(value as SizeMetric)}
+              />
+              <div className={`${styles.description} ${styles.metricValue}`}>
+                {formatSize(selectedSize)}
               </div>
               <TextDrawer
                 buttonProps={{

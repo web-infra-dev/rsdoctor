@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import { pluginLess } from '@rsbuild/plugin-less';
 import { createStubRsbuild } from '@scripts/test-helper';
 import path from 'path';

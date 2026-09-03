@@ -1,4 +1,4 @@
-import { beforeAll, afterAll, afterEach, beforeEach } from '@rstest/core';
+import { beforeAll, afterAll, afterEach, beforeEach } from 'rstack/test';
 import { File, Server } from '@/build-utils';
 import { Common, SDK } from '@rsdoctor/shared/types';
 import { request } from 'http';

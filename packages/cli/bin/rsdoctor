@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 const { execute } = await import('../dist/index.js');
 
 execute();

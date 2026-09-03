@@ -37,7 +37,7 @@ jobs:
           corepack enable
 
       - name: Setup Node.js 22.x
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 24.15.0
           cache: 'pnpm'
@@ -45,8 +45,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --ignore-scripts
 
-      - name: Lint
-        run: pnpm run lint
+      - name: Check
+        run: pnpm run check
 
       - name: Agent CLI Type Check
         run: pnpm --filter @rsdoctor/agent-cli run type-check

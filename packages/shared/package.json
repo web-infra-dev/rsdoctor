@@ -7,14 +7,6 @@
     "directory": "packages/shared"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">=22.18.0"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "type": "module",
   "exports": {
     ".": {
@@ -38,6 +30,8 @@
       "default": "./dist/types/index.js"
     }
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "typesVersions": {
     "*": {
       ".": [
@@ -57,23 +51,27 @@
       ]
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "rslib build",
-    "start": "rslib build -w"
+    "build": "rs lib",
+    "start": "rs lib -w",
+    "test": "rs test"
   },
   "dependencies": {
+    "@rspack/lite-tapable": "catalog:",
     "@types/estree": "catalog:",
     "@types/node": "catalog:",
-    "@rspack/lite-tapable": "catalog:",
     "buffer": "6.0.3",
     "connect-next": "catalog:",
     "path-browserify": "catalog:",
     "source-map": "catalog:"
   },
   "devDependencies": {
+    "@rspack/core": "catalog:",
     "@types/path-browserify": "catalog:",
     "@types/react": "catalog:",
-    "@rspack/core": "catalog:",
     "es-toolkit": "catalog:",
     "tslib": "catalog:",
     "typescript": "catalog:"
@@ -85,6 +83,9 @@
     "@rspack/core": {
       "optional": true
     }
+  },
+  "engines": {
+    "node": ">=22.18.0"
   },
   "publishConfig": {
     "access": "public",

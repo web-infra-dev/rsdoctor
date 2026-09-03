@@ -15,9 +15,9 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import { PropsWithChildren, useCallback, useState } from 'react';
-import InputIcon from 'src/common/svg/loader/input.svg';
-import OutputIcon from 'src/common/svg/loader/output.svg';
-import StepIcon from 'src/common/svg/loader/step.svg';
+import InputIcon from 'src/common/svg/loader/input.svg?react';
+import OutputIcon from 'src/common/svg/loader/output.svg?react';
+import StepIcon from 'src/common/svg/loader/step.svg?react';
 import { Size } from '../../constants';
 import { beautifyPath, formatCosts, useTheme } from '../../utils';
 import { CodeViewer, DiffViewer } from '../base';

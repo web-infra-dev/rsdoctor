@@ -1,31 +1,27 @@
 {
   "name": "@rsdoctor/client",
   "version": "2.0.0-beta.0",
-  "main": "dist/index.html",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
     "directory": "packages/client"
   },
+  "license": "MIT",
+  "main": "dist/index.html",
   "files": [
     "dist"
   ],
-  "license": "MIT",
-  "engines": {
-    "node": ">=22.18.0"
-  },
   "scripts": {
-    "dev": "rsbuild dev",
-    "start": "NODE_ENV=development rsbuild build -w",
-    "build": "rsbuild build",
-    "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true rsbuild build",
-    "preview": "rsbuild preview",
-    "inspect": "rsbuild inspect"
+    "build": "rs build",
+    "build:analysis": "ENABLE_DEVTOOLS_PLUGIN=true DEVTOOLS_DEV=true rs build",
+    "dev": "rs dev",
+    "preview": "rs preview",
+    "start": "NODE_ENV=development rs build -w",
+    "test": "rs test"
   },
   "devDependencies": {
     "@ant-design/icons": "6.3.2",
     "@monaco-editor/react": "4.7.0",
-    "@rsbuild/core": "catalog:",
     "@rsbuild/plugin-check-syntax": "catalog:",
     "@rsbuild/plugin-node-polyfill": "catalog:",
     "@rsbuild/plugin-react": "catalog:",
@@ -64,6 +60,9 @@
     "source-map-loader": "^5.0.0",
     "typescript": "catalog:",
     "url-parse": "1.5.10"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   },
   "publishConfig": {
     "access": "public",

@@ -1,4 +1,4 @@
-# Rsbuild Environments
+# Rsbuild environments
 
 This example uses [Rsbuild environments](https://rsbuild.rs/config/environments) to build `web` and `node` targets in a single build.
 

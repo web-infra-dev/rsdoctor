@@ -2,20 +2,13 @@
   "name": "@examples/doctor-rsbuild-minimal",
   "version": "0.0.1",
   "private": true,
-  "description": "",
-  "files": [
-    "dist",
-    "src",
-    "package.json"
-  ],
+  "type": "module",
   "scripts": {
-    "start:analysis": "ENABLE_CLIENT_SERVER=true rsbuild dev",
-    "build:analysis": "ENABLE_CLIENT_SERVER=true rsbuild build",
     "build": "rsbuild build",
-    "start": "rsbuild dev"
+    "build:analysis": "ENABLE_CLIENT_SERVER=true rsbuild build",
+    "start": "rsbuild",
+    "start:analysis": "ENABLE_CLIENT_SERVER=true rsbuild"
   },
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "react": "catalog:",
     "react-dom": "catalog:",

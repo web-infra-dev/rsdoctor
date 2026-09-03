@@ -1,5 +1,6 @@
-import { defineConfig } from '@rslib/core';
-import { esmConfig, pluginsConfig } from '../../scripts/rslib.base.config';
+import { define } from 'rstack';
+import { esmConfig, pluginsConfig } from '@scripts/config/lib';
+import { baseConfig } from '@scripts/config/test';
 
 const externals = [
   '@rsdoctor/shared/collection',
@@ -52,7 +53,9 @@ const collectionLib = {
   },
 };
 
-export default defineConfig({
+define.lib({
   lib: [bundlelessLib, collectionLib],
   plugins: pluginsConfig,
 });
+
+define.test(baseConfig);

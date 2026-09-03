@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "paths": {
+      "@rsdoctor/cli/*": ["../../packages/cli/src/*"],
+      "src": ["../../packages/client/src"],
+      "src/*": ["../../packages/client/src/*"]
+    }
+  },
+  "references": [
+    {
+      "path": "../../packages/core/tsconfig.json"
+    },
+    {
+      "path": "../../packages/shared/tsconfig.json"
+    }
+  ]
+}

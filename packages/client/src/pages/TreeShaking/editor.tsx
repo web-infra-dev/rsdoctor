@@ -121,7 +121,7 @@ export function CodeEditor(props: CodeEditorProps) {
   }, []);
 
   if (!module) {
-    return <div>请选择要查看的模块</div>;
+    return <div>Please select a module to view</div>;
   }
 
   const handleEditorDidMount: OnMount = (editor) => {

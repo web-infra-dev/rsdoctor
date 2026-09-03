@@ -4,10 +4,9 @@
 
 - Node.js `22.18+`, package manager **pnpm `11.0+`** (enable via `corepack enable`)
 - `pnpm` workspace monorepo (topological build ordering)
-- TypeScript strict mode; target `node 16` for library output
-- Build toolchain: **Rslib** (based on Rsbuild/Rspack)
-- Lint: **Rslint** (`pnpm lint`), format: **Prettier** (`pnpm format`)
-- Test runner: **Rstest** (`pnpm test`), E2E: **Playwright** (`pnpm e2e`)
+- TypeScript strict mode
+- Lint/format: **Rstack CLI** (`rs lint` backed by Rslint, `rs fmt` based on Prettier)
+- Test runner: **Rstack CLI / Rstest** (`pnpm test`), E2E: **Playwright** (`pnpm e2e`)
 
 ## Commands
 
@@ -16,9 +15,9 @@
 pnpm install                # install all deps + build all packages (prepare hook)
 
 # ── quality checks ───────────────────────────────────────────
-pnpm lint                   # rslint lint (error-level only)
-pnpm format                 # prettier + heading-case
-pnpm test                   # unit tests via rstest (single worker, NODE_OPTIONS=--max-old-space-size=8192)
+pnpm lint                   # rs lint (error-level only)
+pnpm format                 # rs fmt
+pnpm test                   # package tests via rs test (single worker, NODE_OPTIONS=--max-old-space-size=8192)
 pnpm e2e                    # playwright e2e (requires chromium: cd e2e && npx playwright install chromium)
 
 # ── build ────────────────────────────────────────────────────
@@ -49,9 +48,7 @@ packages/
   proto/              # protocol buffer / schema definitions
   test-helper/        # test utilities shared across packages
 scripts/
-  rslib.base.config.ts  # shared Rslib build config (CJS + ESM dual-package)
-  rstest.setup.ts       # rstest global setup (snapshot serializer)
-  tsconfig/             # shared tsconfig presets
+  config/              # shared Rslib, Rstest, and TypeScript configuration
 e2e/                    # Playwright E2E tests (cases/ per bundler)
 examples/               # runnable example projects (rspack / rsbuild / webpack / rspress)
 ```
@@ -64,10 +61,6 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
                                   ↘ agent-cli
 ```
 
-## Build system
-
-- Each package has its own `rslib.config.ts` that typically extends `scripts/rslib.base.config.ts`.
-
 ## Code style
 
 - **Quotes**: single quotes everywhere; Prettier enforces formatting.
@@ -79,15 +72,15 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 ## Testing
 
 - Unit tests live in `<package>/tests/` (file pattern: `*.test.ts`).
-- Rstest config: `rstest.config.ts` at repo root. Tests run with `maxWorkers: 1` (build-heavy tests are flaky in parallel).
-- Snapshot serializer normalizes workspace paths (see `scripts/rstest.setup.ts`).
+- Each tested package registers the shared `@scripts/config/test` options through `define.test()` in its Rstack config. Tests run with `maxWorkers: 1` (build-heavy tests are flaky in parallel).
+- Snapshot serializer normalizes workspace paths (see `scripts/config/rstest.setup.ts`).
 - E2E tests use Playwright; cases are organized per bundler under `e2e/cases/`.
 
 ## CI
 
 - **Test (Ubuntu)**: Node 22.x on ubuntu-22.04, runs `pnpm run test:all` (unit + e2e).
 - **Test (Windows)**: same matrix on windows.
-- **Lint**: separate workflow runs `rslint lint`.
+- **Lint**: separate workflow runs `rs lint`.
 - PRs targeting `main`, `release_*`, `release-*` trigger CI.
 - Paths `packages/document/**` and `*.md` are excluded from test CI triggers.
 

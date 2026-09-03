@@ -1,4 +1,39 @@
+.container {
+  width: 100%;
+  min-width: 0;
+
+  > :global(.ant-space-item:last-child) {
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+.details {
+  min-width: 0;
+  margin-left: 10px;
+}
+
+.metricSelector {
+  font-size: 12px;
+  line-height: 18px;
+
+  &:global(.ant-segmented.ant-segmented-sm) {
+    padding: 1px;
+
+    :global(.ant-segmented-item-label) {
+      min-height: 18px;
+      padding: 0 5px;
+      line-height: 18px;
+    }
+  }
+}
+
+.metricValue {
+  margin-top: 2px;
+}
+
 .dataContainer {
+  min-width: 0;
   display: flex;
   flex-direction: column;
 
@@ -10,15 +45,11 @@
   }
 }
 
-.sizeMetrics {
-  display: flex;
-  gap: 20px;
-}
-
 .description {
   font-size: 18px;
   font-weight: 500;
   line-height: 28px;
+  white-space: nowrap;
 
   @media (max-width: 1500px) {
     font-size: 14px;

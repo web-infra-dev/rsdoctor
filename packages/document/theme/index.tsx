@@ -1,11 +1,12 @@
 import { Layout as BaseLayout } from '@rspress/core/theme-original';
-import { NavIcon } from '@rstack-dev/doc-ui/nav-icon';
+import { NavIcon } from '@rstackjs/doc-ui/nav-icon';
 import { HomeLayout } from './pages';
 import {
   Search as PluginAlgoliaSearch,
   ZH_LOCALES,
 } from '@rspress/plugin-algolia/runtime';
 import { useLang } from '@rspress/core/runtime';
+import '@rstackjs/doc-ui/theme.css';
 
 const Layout = () => <BaseLayout beforeNavTitle={<NavIcon />} />;
 

@@ -1,14 +1,14 @@
-import type { RsbuildConfig, Rspack } from '@rsbuild/core';
-import { defineConfig } from '@rsbuild/core';
+import fs from 'node:fs';
+import path from 'node:path';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
-import fs from 'fs';
-import path from 'path';
+import { define } from 'rstack';
+import type { RsbuildConfig, Rspack } from 'rstack/app';
 import serve from 'sirv';
-
+import { baseConfig } from '@scripts/config/test';
 import {
   ClientEntry,
   DistPath,
@@ -16,16 +16,14 @@ import {
   PortForWeb,
   WebpackRsdoctorDirPath,
   WebpackStatsFilePath,
-} from './config/constants';
+} from './config/constants.ts';
 
-const {
-  ENABLE_DEVTOOLS_PLUGIN,
-  OFFICIAL_PREVIEW_PUBLIC_PATH,
-  OFFICIAL_DEMO_MANIFEST_PATH,
-  ENABLE_CLIENT_SERVER,
-} = process.env;
+define.app(({ env }) => {
+  const { OFFICIAL_PREVIEW_PUBLIC_PATH, OFFICIAL_DEMO_MANIFEST_PATH } =
+    process.env;
+  const ENABLE_DEVTOOLS_PLUGIN = process.env.ENABLE_DEVTOOLS_PLUGIN === 'true';
+  const ENABLE_CLIENT_SERVER = process.env.ENABLE_CLIENT_SERVER === 'true';
 
-export default defineConfig(({ env }) => {
   const IS_PRODUCTION = env === 'production';
 
   const config: RsbuildConfig = {
@@ -33,11 +31,7 @@ export default defineConfig(({ env }) => {
       pluginReact(),
       pluginNodePolyfill(),
       pluginSass(),
-      pluginSvgr({
-        svgrOptions: {
-          exportType: 'default',
-        },
-      }),
+      pluginSvgr(),
       pluginTypeCheck({
         enable: IS_PRODUCTION,
         tsCheckerOptions: {
@@ -56,7 +50,7 @@ export default defineConfig(({ env }) => {
         diff: './src/diff.tsx',
       },
       alias: {
-        src: path.resolve(__dirname, 'src'),
+        src: path.resolve(import.meta.dirname, 'src'),
       },
       define: {
         'process.env.NODE_DEBUG': JSON.stringify(false),
@@ -112,12 +106,12 @@ export default defineConfig(({ env }) => {
           minSize: 500000,
         },
         react: {
-          test: /node_modules\/react-*/,
+          test: /node_modules\/react(?:\/|-)/,
           name: 'react',
           chunks: 'all',
         },
         rc: {
-          test: /node_modules\/rc-*/,
+          test: /node_modules\/rc-/,
           name: 'rc',
           chunks: (chunk) => chunk.name === 'index',
           maxSize: 1000000,
@@ -241,4 +235,9 @@ export default defineConfig(({ env }) => {
   };
 
   return config;
+});
+
+define.test({
+  ...baseConfig,
+  extends: {},
 });

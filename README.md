@@ -1,5 +1,5 @@
 <picture>
-  <img alt="Rsdoctor Banner" width="100%" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" />
+  <img alt="Rsdoctor Banner" width="100%" src="https://assets.rspack.rs/rsdoctor/rsdoctor-banner.png" />
 </picture>
 
 # Rsdoctor
@@ -18,8 +18,6 @@ Rsdoctor is a build analyzer tailored for projects built with [Rspack](https://r
 Rsdoctor is committed to being a one-stop, intelligent build analyzer that makes the build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
 
 For webpack projects, continue using Rsdoctor 1.x or migrate to Rspack. See the [migration guide](https://rsdoctor.rs/guide/start/migration-v2) for details.
-
-https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
 ## 🔥 Features
 

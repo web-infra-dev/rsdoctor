@@ -6,6 +6,16 @@
     "url": "https://github.com/web-infra-dev/rsdoctor",
     "directory": "packages/cli"
   },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "rsdoctor": "./bin/rsdoctor"
   },
@@ -13,25 +23,12 @@
     "bin",
     "dist"
   ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
-  },
-  "license": "MIT",
-  "engines": {
-    "node": ">=22.18.0"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
+    "build": "rs lib",
     "dev": "npm run start",
-    "build": "rslib build",
-    "start": "rslib build -w",
-    "test": "rstest run"
+    "start": "rs lib -w",
+    "test": "rs test"
   },
-  "type": "module",
   "dependencies": {
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
@@ -42,6 +39,9 @@
     "@types/node": "catalog:",
     "cac": "^7.0.0",
     "typescript": "catalog:"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   },
   "publishConfig": {
     "access": "public",

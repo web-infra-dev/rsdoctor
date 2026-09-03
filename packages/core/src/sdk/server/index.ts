@@ -423,9 +423,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     const localhostUrl = `http://localhost:${this.port}${relativeUrl}`;
     await openBrowser(localhostUrl, !needEncodeURI);
     if (this._printServerUrl) {
-      logger.info(
-        `${chalk.green(`${this.sdk.name} compiler's`)} analyzer running on: ${chalk.cyan(url)}`,
-      );
+      logger.info(`Analyzer running on: ${chalk.cyan(url)}`);
     }
   }
 

@@ -1,6 +1,7 @@
 {
   "name": "rsdoctor-monorepo",
   "private": true,
+  "type": "module",
   "workspaces": {
     "packages": [
       "packages/*"
@@ -8,43 +9,27 @@
   },
   "scripts": {
     "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"./scripts/*\" run build",
-    "check-spell": "pnpx cspell && heading-case",
+    "check": "rs check",
     "check-dependency-version": "pnpx check-dependency-version-consistency . && echo",
+    "check-spell": "pnpx cspell",
     "dev:doc": "cd packages/document && pnpm run dev",
     "e2e": "pnpm run e2e:base",
     "e2e:base": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
-    "format": "prettier --experimental-cli --write . && heading-case --write",
-    "lint": "rslint",
-    "prepare": "pnpm run build && husky",
-    "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm run ut",
-    "test:all": "pnpm run test && pnpm run e2e",
-    "sort-package-json": "npx sort-package-json \"packages/*/package.json\"",
-    "ut": "rstest run",
-    "ut:watch": "rstest"
-  },
-  "nano-staged": {
-    "*.{md,mdx,json,css,less,scss}": "prettier --experimental-cli --write",
-    "*.{js,jsx,ts,tsx,mjs,cjs}": [
-      "rslint",
-      "prettier --experimental-cli --write"
-    ],
-    "package.json": "pnpm run check-dependency-version"
+    "format": "rs fmt",
+    "lint": "rs lint",
+    "prepare": "pnpm run build && rs hooks",
+    "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm --workspace-concurrency=1 --filter \"./packages/*\" test",
+    "test:all": "pnpm run test && pnpm run e2e"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.58.12",
-    "@rslint/core": "catalog:",
-    "@rsdoctor/tsconfig": "workspace:*",
-    "@rslib/core": "1.0.0-rc.0",
-    "@rstest/core": "catalog:",
+    "@microsoft/api-extractor": "^7.59.0",
+    "@scripts/config": "workspace:*",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",
     "cspell-ban-words": "^0.0.4",
-    "heading-case": "^1.1.5",
-    "husky": "^9.1.7",
-    "nano-staged": "^1.0.2",
+    "heading-case": "^2.0.1",
     "pkg-pr-new": "0.0.88",
-    "prettier": "^3.9.6",
-    "rsbuild-plugin-publint": "^0.3.4"
+    "rstack": "^0.6.5"
   },
   "packageManager": "pnpm@11.4.0",
   "engines": {

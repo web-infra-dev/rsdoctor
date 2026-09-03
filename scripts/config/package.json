@@ -1,0 +1,19 @@
+{
+  "name": "@scripts/config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./lib": "./lib.ts",
+    "./test": "./test.ts",
+    "./tsconfig": "./tsconfig.json",
+    "./tsconfig-test": "./tsconfig-test.json"
+  },
+  "devDependencies": {
+    "@scripts/test-helper": "workspace:*",
+    "@types/node": "catalog:",
+    "rsbuild-plugin-publint": "^0.3.4",
+    "rstack": "^0.6.5",
+    "typescript": "catalog:"
+  }
+}

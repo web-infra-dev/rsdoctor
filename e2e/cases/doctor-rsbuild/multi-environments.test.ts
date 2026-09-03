@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '@test-kit/rstest';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import { Constants, type Linter } from '@rsdoctor/shared/types';
 import { createStubRsbuild } from '@scripts/test-helper';

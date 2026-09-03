@@ -1,12 +1,13 @@
 {
-  "extends": "@rsdoctor/tsconfig/base",
+  "extends": "@scripts/config/tsconfig",
   "compilerOptions": {
     "jsx": "react-jsx",
     "outDir": "./dist",
     "paths": {
       "@/*": ["./src/*"],
-      "@scripts/*": ["./scripts/*"]
+      "@scripts/*": ["./scripts/*"],
+      "@test-kit/*": ["./test-kit/*"]
     }
   },
-  "include": ["src", "scripts", "cases", "playwright.config.ts", "test-kit"]
+  "include": ["src", "scripts", "cases", "rstack.config.mts", "test-kit"]
 }

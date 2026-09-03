@@ -1,6 +1,7 @@
-const assert = require('node:assert/strict');
-const { describe, it } = require('node:test');
-const { shouldSkipCI, shouldSkipFile } = require('./skipCI');
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
+
+import { shouldSkipCI, shouldSkipFile } from './skipCI.js';
 
 describe('skipCI', () => {
   it('recognizes documentation files and paths', () => {

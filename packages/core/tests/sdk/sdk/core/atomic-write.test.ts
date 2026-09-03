@@ -1,6 +1,6 @@
 import path from 'path';
 import { tmpdir } from 'os';
-import { describe, it, expect, afterEach, beforeAll, rs } from '@rstest/core';
+import { describe, it, expect, afterEach, beforeAll, rs } from 'rstack/test';
 import { Worker } from 'node:worker_threads';
 import { rspack } from '@rspack/core';
 import { execSync } from 'node:child_process';

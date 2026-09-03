@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import { getDataByPagination } from '../../../src/sdk/server/utils';
 
 describe('test server/utils.ts', () => {

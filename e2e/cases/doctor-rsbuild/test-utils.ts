@@ -7,6 +7,7 @@ import type {
   RsdoctorRspackPluginOptions,
 } from '@rsdoctor/core';
 import { Linter } from '@rsdoctor/shared/types';
+import { randomUUID } from 'node:crypto';
 import { rm } from 'node:fs/promises';
 import { tmpdir } from 'os';
 import path from 'path';
@@ -24,7 +25,7 @@ export function createRsdoctorPlugin<T extends Linter.ExtendRuleData[]>(
 
   const outdir = path.resolve(
     tmpdir(),
-    `./${Date.now()}/rsdoctor_rspack_plugin_test`,
+    `./${randomUUID()}/rsdoctor_rspack_plugin_test`,
   );
 
   plugin.sdk.hooks.afterSaveManifest.tapPromise(
@@ -55,7 +56,7 @@ export function createRsdoctorMultiPlugin<T extends Linter.ExtendRuleData[]>(
 
   const outdir = path.resolve(
     tmpdir(),
-    `./${Date.now()}/rsdoctor_rspack_plugin_test`,
+    `./${randomUUID()}/rsdoctor_rspack_multiple_plugin_test`,
   );
 
   plugin.sdk.hooks.afterSaveManifest.tapPromise(

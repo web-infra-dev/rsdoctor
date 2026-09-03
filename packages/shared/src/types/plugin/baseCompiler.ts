@@ -59,12 +59,6 @@ export type BuildError = JsStatsError | RspackStatsError;
 export type BuildWarning = JsStatsWarning | RspackStatsError;
 
 export type BuildRuleSetRules = (
-  | false
-  | ''
-  | 0
-  | RspackRuleSetRuleWrapper
-  | '...'
-  | null
-  | undefined
+  false | '' | 0 | RspackRuleSetRuleWrapper | '...' | null | undefined
 )[];
 export type BuildRuleSetRule = RspackRuleSetRuleWrapper;

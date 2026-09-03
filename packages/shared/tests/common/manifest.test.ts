@@ -1,5 +1,5 @@
-import { describe, expect, it, rs } from '@rstest/core';
 import { Readable } from 'stream';
+import { describe, expect, it, rs } from 'rstack/test';
 import { Algorithm, Manifest } from '../../src/common-browser';
 
 describe('test src/common/manifest.ts', () => {

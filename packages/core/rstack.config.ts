@@ -1,6 +1,7 @@
-import { defineConfig } from '@rslib/core';
 import { fileURLToPath } from 'node:url';
-import { esmConfig, pluginsConfig } from '../../scripts/rslib.base.config';
+import { define } from 'rstack';
+import { esmConfig, pluginsConfig } from '@scripts/config/lib';
+import { baseConfig } from '@scripts/config/test';
 
 const htmlParserStub = fileURLToPath(
   new URL(
@@ -23,7 +24,7 @@ const externals = [
   'source-map',
 ];
 
-export default defineConfig({
+define.lib({
   resolve: {
     alias: {
       // This rule always passes JavaScript source to CheckSyntax, so its HTML
@@ -31,35 +32,33 @@ export default defineConfig({
       htmlparser2: htmlParserStub,
     },
   },
-  lib: [
-    {
-      ...esmConfig,
-      bundle: true,
-      source: {
-        entry: {
-          index: './src/index.ts',
-          'probe-loader': './src/build-utils/build/loader/probeLoader.ts',
-          'proxy-loader': './src/proxy-loader.ts',
-        },
-      },
-      dts: {
-        build: false,
-        tsgo: true,
-      },
-      output: {
-        ...esmConfig.output,
-        filename: {
-          js: '[name].js',
-        },
-        externals,
-      },
-      shims: {
-        esm: {
-          __dirname: true,
-          require: true,
-        },
-      },
+  ...esmConfig,
+  bundle: true,
+  source: {
+    entry: {
+      index: './src/index.ts',
+      'probe-loader': './src/build-utils/build/loader/probeLoader.ts',
+      'proxy-loader': './src/proxy-loader.ts',
     },
-  ],
+  },
+  dts: {
+    build: false,
+    tsgo: true,
+  },
+  output: {
+    ...esmConfig.output,
+    filename: {
+      js: '[name].js',
+    },
+    externals,
+  },
+  shims: {
+    esm: {
+      __dirname: true,
+      require: true,
+    },
+  },
   plugins: pluginsConfig,
 });
+
+define.test(baseConfig);

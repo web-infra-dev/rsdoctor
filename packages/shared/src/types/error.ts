@@ -65,9 +65,7 @@ export interface CodeFrameLineOption {
 }
 
 export type CodeFrameOption =
-  | CodeFrameFileOption
-  | CodeFrameNormalOption
-  | CodeFrameLineOption;
+  CodeFrameFileOption | CodeFrameNormalOption | CodeFrameLineOption;
 
 /** Control item */
 export interface ControllerOption {

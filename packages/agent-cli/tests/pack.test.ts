@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';

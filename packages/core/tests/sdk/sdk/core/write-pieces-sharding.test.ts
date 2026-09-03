@@ -3,8 +3,8 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import zlib from 'node:zlib';
 import { tmpdir } from 'os';
-import { describe, it, expect, afterEach } from '@rstest/core';
 import { Manifest } from '@rsdoctor/shared/common-browser';
+import { afterEach, describe, expect, it } from 'rstack/test';
 import { File } from '@/build-utils';
 import { createSDK, type MockSDKResponse } from '../../utils';
 

@@ -1,6 +1,6 @@
 import { gzipSync } from 'node:zlib';
 import { AsyncSeriesHook, SyncHook } from '@rspack/lite-tapable';
-import { describe, expect, it, rs } from '@rstest/core';
+import { describe, expect, it, rs } from 'rstack/test';
 import { ModuleGraph } from '@rsdoctor/shared/graph';
 import type { Plugin } from '@rsdoctor/shared/types';
 import { ensureModulesChunksGraphFn } from '@/inner-plugins/plugins/ensureModulesChunkGraph';

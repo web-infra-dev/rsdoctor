@@ -10,12 +10,6 @@ export function useManifestJson() {
   return json;
 }
 
-export function useLocale() {
-  const ctx = useContext(ConfigContext);
-
-  return ctx.locale;
-}
-
 export function useTheme() {
   const { theme, setTheme } = useContext(ConfigContext);
   const isDark = theme === Theme.Dark;

@@ -1,9 +1,9 @@
 import { Button, Typography } from 'antd';
 import Icon from '@ant-design/icons';
 
-import SourceSvg from '../../common/svg/source.svg';
-import OutputSvg from '../../common/svg/output.svg';
-import ErrorSvg from '../../common/svg/error.svg';
+import SourceSvg from '../../common/svg/source.svg?react';
+import OutputSvg from '../../common/svg/output.svg?react';
+import ErrorSvg from '../../common/svg/error.svg?react';
 import { useRuleIndexNavigate } from '../../utils';
 
 import { LinkAlertProps } from './types';
@@ -13,7 +13,7 @@ import styles from './ecma-version-check.module.scss';
 const { Text } = Typography;
 
 export const ECMAVersionCheck: React.FC<LinkAlertProps> = ({ data }) => {
-  return data.map((d) => {
+  return data.map((d, index) => {
     const { code, link, error } = d;
     const { source, output } = error || {};
     const sourceMessage = source?.path
@@ -28,7 +28,7 @@ export const ECMAVersionCheck: React.FC<LinkAlertProps> = ({ data }) => {
 
     const navigate = useRuleIndexNavigate(code, link);
     return (
-      <div className={styles.container}>
+      <div className={styles.container} key={`${code}-${link}-${index}`}>
         <div>
           <div className={styles.title}>Source</div>
           <div className={styles.box}>

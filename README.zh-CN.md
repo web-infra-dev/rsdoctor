@@ -1,5 +1,5 @@
 <picture>
-  <img alt="Rsdoctor Banner" width="100%" src="https://github.com/web-infra-dev/rsdoctor/assets/7237365/0f9d2e86-d919-451a-befa-fa84603a87cf" />
+  <img alt="Rsdoctor Banner" width="100%" src="https://assets.rspack.rs/rsdoctor/rsdoctor-banner.png" />
 </picture>
 
 # Rsdoctor
@@ -18,8 +18,6 @@ Rsdoctor 是一款面向 [Rspack](https://rspack.rs/) 项目的构建分析工�
 Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可视化与智能分析，使整个构建流程变得透明、可预测和可优化，从而帮助开发团队精准定位瓶颈、优化性能并提升工程质量。
 
 webpack 项目应继续使用 Rsdoctor 1.x，或先迁移到 Rspack。详情请参阅 [迁移指南](https://rsdoctor.rs/zh/guide/start/migration-v2)。
-
-https://github.com/user-attachments/assets/b8bb4ebf-b823-47bc-91ab-2d74f0057ef7
 
 ## 🔥 特性
 

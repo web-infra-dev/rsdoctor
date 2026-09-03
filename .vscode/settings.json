@@ -22,6 +22,6 @@
       "url": "./packages/document/node_modules/@rspress/core/nav-json-schema.json"
     }
   ],
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.defaultFoldingRangeProvider": "rstack.rslint"
+  "editor.defaultFormatter": "rstack.rstack",
+  "editor.defaultFoldingRangeProvider": "rstack.rstack"
 }

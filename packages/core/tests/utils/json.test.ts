@@ -1,4 +1,4 @@
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import { Json } from '../../src/build-utils/build';
 
 describe('test src/json.ts', () => {

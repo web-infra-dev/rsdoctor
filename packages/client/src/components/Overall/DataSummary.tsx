@@ -1,8 +1,8 @@
 import Icon from '@ant-design/icons';
 import { Alert } from 'antd';
 
-import TotalSizeSvg from '../../common/svg/total-size.svg';
-import FileSvg from '../../common/svg/file.svg';
+import TotalSizeSvg from '../../common/svg/total-size.svg?react';
+import FileSvg from '../../common/svg/file.svg?react';
 
 import styles from './DataSummary.module.scss';
 

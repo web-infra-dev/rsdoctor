@@ -1,10 +1,9 @@
-import { TranslationOutlined } from '@ant-design/icons';
 import { Client } from '@rsdoctor/shared/types';
-import { Button, Col, Dropdown, Layout, Row, Switch } from 'antd';
+import { Col, Layout, Row, Switch } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Language, Theme } from '../../constants';
-import { useI18n, useTheme } from '../../utils';
+import { Theme } from '../../constants';
+import { useTheme } from '../../utils';
 import { OverlayAlertsWithButton } from '../Alerts';
 import { BuilderSelect } from './builder-select';
 import { Menus } from './menus';
@@ -18,14 +17,8 @@ export interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
-  const { i18n } = useI18n();
-
   const navigate = useNavigate();
   const { setTheme, isLight, isDark } = useTheme();
-  const languages = [
-    { value: Language.Cn, label: '中文' },
-    { value: Language.En, label: 'English' },
-  ];
 
   return (
     <Layout.Header className={styles.root}>
@@ -83,28 +76,6 @@ export const Header: React.FC<HeaderProps> = ({ enableRoutes }) => {
                   setTheme(checked ? Theme.Dark : Theme.Light);
                 }}
               />
-            </Col>
-            <Col>
-              <Dropdown
-                overlayStyle={{ zIndex: 1000 }}
-                menu={{
-                  items: languages.map((e) => ({
-                    label: e.label,
-                    key: e.value,
-                    onClick() {
-                      i18n.changeLanguage(e.value);
-                    },
-                  })),
-                  selectedKeys: [i18n.language],
-                }}
-              >
-                <Button
-                  type="text"
-                  className={styles.utilityButton}
-                  aria-label="Change language"
-                  icon={<TranslationOutlined />}
-                />
-              </Dropdown>
             </Col>
           </Row>
         </Col>

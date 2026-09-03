@@ -1,4 +1,4 @@
-# Rsdoctor Examples
+# Rsdoctor examples
 
 This directory contains various examples demonstrating how to use Rsdoctor with different bundlers and module systems.
 
@@ -13,7 +13,7 @@ npm run build:analysis # Open Rsdoctor Report
 npm run test:cjs     # Test CJS functionality
 ```
 
-## Other Examples
+## Other examples
 
 - `rspack-minimal/` - Basic Rspack setup with Rsdoctor
 - `rspack-child-compiler/` - Rspack child compiler with isolated Rsdoctor reports
@@ -22,7 +22,7 @@ npm run test:cjs     # Test CJS functionality
 - `rsbuild-minimal/` - Rsbuild with Rsdoctor
 - `rsbuild-environments/` - Rsbuild multi-environment build with Rsdoctor
 
-## Module System Comparison
+## Module system comparison
 
 | Feature         | ESM Demo                            | CJS Demo                 |
 | --------------- | ----------------------------------- | ------------------------ |

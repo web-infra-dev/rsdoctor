@@ -1,9 +1,9 @@
 import { Space, Tooltip } from 'antd';
 import { ReactNode } from 'react';
 
-import VSCodeIcon from '../../common/svg/vscode.svg';
-import CursorIcon from '../../common/svg/cursor.svg';
-import TraeIcon from '../../common/svg/trae.svg';
+import VSCodeIcon from '../../common/svg/vscode.svg?react';
+import CursorIcon from '../../common/svg/cursor.svg?react';
+import TraeIcon from '../../common/svg/trae.svg?react';
 import { openVSCode, openCursor, openTrae } from '../Opener';
 
 import styles from './collapse.module.scss';

@@ -1,6 +1,6 @@
 import { Loader } from '@rsdoctor/shared/common-browser';
 import { rspack } from '@rspack/core';
-import { describe, it, expect } from '@rstest/core';
+import { describe, it, expect } from 'rstack/test';
 import path from 'path';
 import fs from 'node:fs';
 import os from 'node:os';

@@ -7,11 +7,11 @@ import {
   RightOutlined,
 } from '@ant-design/icons';
 import Tree, { TreeProps } from 'rc-tree';
-import CSSIcon from 'src/common/svg/files/css.svg';
-import HtmlIcon from 'src/common/svg/files/html.svg';
-import IMGIcon from 'src/common/svg/files/image.svg';
-import JSIcon from 'src/common/svg/files/js.svg';
-import FileIcon from 'src/common/svg/files/unkown-file.svg';
+import CSSIcon from 'src/common/svg/files/css.svg?react';
+import HtmlIcon from 'src/common/svg/files/html.svg?react';
+import IMGIcon from 'src/common/svg/files/image.svg?react';
+import JSIcon from 'src/common/svg/files/js.svg?react';
+import FileIcon from 'src/common/svg/files/unkown-file.svg?react';
 
 import './index.scss';
 import { useTheme, useThemeToken } from '../../utils';

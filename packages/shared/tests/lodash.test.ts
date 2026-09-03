@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@rstest/core';
+import { describe, expect, it } from 'rstack/test';
 import { Lodash } from '../src/common-browser';
 
 describe('compact', () => {
