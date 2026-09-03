@@ -58,6 +58,10 @@ async function* decodeBase64Shards(
     remainder = encodedText.slice(decodableLength);
   }
 
+  if (remainder.length === 1) {
+    throw new Error('Invalid Base64 shard data: truncated final quartet.');
+  }
+
   if (remainder.length > 0) {
     yield Buffer.from(remainder, 'base64');
   }

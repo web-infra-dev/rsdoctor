@@ -73,6 +73,14 @@ describe('test src/common/manifest.ts', () => {
     ).resolves.toStrictEqual(data);
   });
 
+  it('rejects an invalid final Base64 remainder', async () => {
+    const encodedText = Algorithm.compressText(JSON.stringify({ value: 1 }));
+
+    await expect(
+      Manifest.fetchShardingData([`${encodedText}A`], async (value) => value),
+    ).rejects.toThrow('Invalid Base64 shard data');
+  });
+
   it('propagates shard loading errors', async () => {
     const error = new Error('Failed to load shard');
 
