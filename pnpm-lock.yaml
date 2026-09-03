@@ -97,8 +97,8 @@ catalogs:
       specifier: 19.2.8
       version: 19.2.8
     react-error-boundary:
-      specifier: ^4.1.2
-      version: 4.1.2
+      specifier: ^6.1.4
+      version: 6.1.4
     react-markdown:
       specifier: ^10.1.0
       version: 10.1.0
@@ -547,7 +547,7 @@ importers:
         version: 19.2.8(react@19.2.8)
       react-error-boundary:
         specifier: 'catalog:'
-        version: 4.1.2(react@19.2.8)
+        version: 6.1.4(@types/react@19.2.18)(react@19.2.8)
       react-highlight-words:
         specifier: ^0.21.0
         version: 0.21.0(react@19.2.8)
@@ -5948,10 +5948,14 @@ packages:
     peerDependencies:
       react: ^19.2.8
 
-  react-error-boundary@4.1.2:
-    resolution: {integrity: sha512-GQDxZ5Jd+Aq/qUxbCm1UtzmL/s++V7zKgE8yMktJiCQXCCFZnMZh9ng+6/Ne6PjNSXH0L9CjeOEREfRnq6Duag==}
+  react-error-boundary@6.1.4:
+    resolution: {integrity: sha512-7FgvbyjCFhu4dtKSZu807cW1MWG2nWAM4bwGqUByAtHVJXtlzoCJX0SSyZRyFrb+aBd7wtJkcOR4DsxXVEuDsA==}
     peerDependencies:
-      react: '>=16.13.1'
+      '@types/react': ^18.0.0 || ^19.0.0
+      react: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   react-focus-lock@2.13.5:
     resolution: {integrity: sha512-HjHuZFFk2+j6ZT3LDQpyqffue541HrxUG/OFchCEwis9nstgNg0rREVRAxHBcB1lHJ5Fsxtx1qya/5xFwxDb4g==}
@@ -13022,10 +13026,11 @@ snapshots:
       react: 19.2.8
       scheduler: 0.27.0
 
-  react-error-boundary@4.1.2(react@19.2.8):
+  react-error-boundary@6.1.4(@types/react@19.2.18)(react@19.2.8):
     dependencies:
-      '@babel/runtime': 7.28.4
       react: 19.2.8
+    optionalDependencies:
+      '@types/react': 19.2.18
 
   react-focus-lock@2.13.5(@types/react@19.2.18)(react@19.2.8):
     dependencies:
