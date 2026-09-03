@@ -5,6 +5,7 @@ import { pull } from '@rsdoctor/shared/collection';
 import { Plugin } from '@rsdoctor/shared/types';
 import type { RspackError } from '@rspack/core';
 import { time, timeEnd } from '@/logger';
+import { summarizeRuleWarnings } from '../utils/ruleWarnings';
 
 export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler> {
   public readonly name = 'rules';
@@ -51,6 +52,7 @@ export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler>
 
       const errors = validateErrors.filter((item) => item.level === 'Error');
       const warnings = validateErrors.filter((item) => item.level === 'Warn');
+      const compilationWarnings = summarizeRuleWarnings(warnings);
       const toRspackError = (err: DevToolError) =>
         err.toError() as unknown as RspackError;
 
@@ -76,7 +78,7 @@ export class InternalRulesPlugin extends InternalBasePlugin<Plugin.BaseCompiler>
       }
 
       if (Array.isArray(compilation.warnings)) {
-        warnings.forEach((err) => {
+        compilationWarnings.forEach((err) => {
           compilation.warnings.push(toRspackError(err));
         });
       }
