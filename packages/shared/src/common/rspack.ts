@@ -19,13 +19,17 @@ export function checkSourceMapSupport(configs: SDK.BundlerConfigData[]) {
     return {
       isRspack: false,
       hasSourceMap: false,
+      isLynx: false,
+      isEvalSourceMap: false,
     };
   }
 
-  const isRspack =
-    configs[0].name === 'rspack' && configs[0]?.config?.name !== 'lynx';
-  const devtool = configs[0].config?.devtool;
-  const plugins = configs[0].config?.plugins as string[];
+  const config = configs[0].config;
+  const isLynx = config?.name === 'lynx';
+  const isRspack = configs[0].name === 'rspack' && !isLynx;
+  const devtool = config?.devtool;
+  const isEvalSourceMap = typeof devtool === 'string' && /eval/i.test(devtool);
+  const plugins = config?.plugins as string[];
   const hasLynxSourcemapPlugin = plugins?.filter(
     (plugin) => plugin && plugin.includes('SourceMapDevToolPlugin'),
   );
@@ -33,11 +37,13 @@ export function checkSourceMapSupport(configs: SDK.BundlerConfigData[]) {
   const hasSourceMap =
     (typeof devtool === 'string' &&
       devtool.includes('source-map') &&
-      !devtool.includes('eval')) ||
+      !isEvalSourceMap) ||
     !!hasLynxSourcemapPlugin?.length;
 
   return {
     isRspack,
     hasSourceMap,
+    isLynx,
+    isEvalSourceMap,
   };
 }
