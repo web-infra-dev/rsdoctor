@@ -29,7 +29,7 @@
     "cspell-ban-words": "^0.0.4",
     "heading-case": "^2.0.1",
     "pkg-pr-new": "0.0.88",
-    "rstack": "^0.6.5"
+    "rstack": "^0.7.2"
   },
   "packageManager": "pnpm@11.4.0",
   "engines": {
