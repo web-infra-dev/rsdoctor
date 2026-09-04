@@ -230,24 +230,8 @@ Rsdoctor 支持了对 **[Concatenated Module](https://rspack.rs/zh/misc/glossary
 
 ## 🪐 支持 BannerPlugin
 
-:::danger
-`supports.banner` 选项仅用于调试，请勿将其用于生产。
-:::
-
 Rspack 提供内置的 [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin)，可在生成的 chunk 顶部或尾部添加指定内容。
 
 添加的代码段将会影响到对 Bundle 的解析能力。
 
-Rsdoctor 兼容了 BannerPlugin 这种添加代码的逻辑，但因为 Rsdoctor 需要添加标记代码，所以没有默认开启。以下两种情况会开启 Rsdoctor BannerPlugin 能力：
-
-1. 项目在 `rspack.config.(js|ts)` 中使用了 BannerPlugin；
-
-2. 通过 Rsdoctor options 配置 `supports.banner` 来开启：
-
-```ts
-new RsdoctorRspackPlugin({
-  supports: {
-    banner: true,
-  },
-});
-```
+Rsdoctor 会自动处理 BannerPlugin 添加的代码，无需额外配置 Rsdoctor。
