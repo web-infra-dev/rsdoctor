@@ -13,12 +13,6 @@ function getDefaultOutput() {
     reportDir: '',
   };
 }
-function getDefaultSupports() {
-  return {
-    banner: true,
-    parseBundle: true,
-  };
-}
 function isJsonOutputEnv(value: unknown): boolean {
   return value === 'json';
 }
@@ -181,6 +175,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     multiCompiler = true,
   } = normalizedConfig;
   const supports = {
+    banner: defaultBoolean(userSupports.banner, true),
     parseBundle: defaultBoolean(userSupports.parseBundle, true),
     gzip: normalizeGzip(userSupports.gzip),
   };
