@@ -8,7 +8,7 @@ The top-level `mode`, `port`, and `brief` options and legacy `output.compressDat
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | mode                                               | Configure `output.mode` instead.                                                                                          |
 | port                                               | Configure `server.port` instead.                                                                                          |
-| brief                                              | Configure `output.mode: 'brief'` and set `output.options.type` to `['html']`.                                             |
+| brief                                              | Configure `output.mode: 'brief'` and set `output.options.type` to `['html']`. Move `brief.reportHtmlName` to `output.options.htmlOptions.reportHtmlName`. |
 | output.compressData                                | Configure `output.mode: 'brief'` and set `output.options.type` to `['json']`.                                             |
 | `mode: 'lite'`                                     | Configure `output.mode: 'normal'` and set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`.               |
 | `features: { lite: true }` or `features: ['lite']` | Still supported. The equivalent `output` configuration uses `output.mode: 'normal'` and `output.reportCodeType` as above. |
@@ -23,7 +23,7 @@ The top-level `mode` option was removed in Rsdoctor 2.x. Use `output.mode` to ke
 ### brief
 
 The top-level `brief` option was removed in Rsdoctor 2.x. The current brief report mode supports both HTML and JSON output, with its configuration grouped under `output.options`.
-Replace the original `brief` configuration with `output.mode: 'brief'` and set `output.options.type` to `['html']`.
+Replace the original `brief` configuration with `output.mode: 'brief'` and set `output.options.type` to `['html']`. Move `brief.reportHtmlName` to `output.options.htmlOptions.reportHtmlName`.
 
 ### output.compressData
 

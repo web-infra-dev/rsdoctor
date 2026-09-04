@@ -8,7 +8,7 @@
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | mode                                               | 改为配置 `output.mode`。                                                                                      |
 | port                                               | 改为配置 `server.port`。                                                                                      |
-| brief                                              | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。                               |
+| brief                                              | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。将 `brief.reportHtmlName` 迁移至 `output.options.htmlOptions.reportHtmlName`。 |
 | output.compressData                                | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['json']`。                               |
 | `mode: 'lite'`                                     | 改为配置 `output.mode: 'normal'`，并将 `output.reportCodeType` 设置为 `noCode` 或 `noAssetsAndModuleSource`。 |
 | `features: { lite: true }` 或 `features: ['lite']` | 仍受支持。等价的 `output` 配置为 `output.mode: 'normal'`，并按上一行设置 `output.reportCodeType`。            |
@@ -23,7 +23,7 @@
 ### brief
 
 顶层 `brief` 配置已在 Rsdoctor 2.x 中移除。当前 brief 简报模式同时支持 HTML 和 JSON 输出，相关配置统一收敛到 `output.options`。
-将原有的 `brief` 配置替换为 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。
+将原有的 `brief` 配置替换为 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。将 `brief.reportHtmlName` 迁移至 `output.options.htmlOptions.reportHtmlName`。
 
 ### output.compressData
 
