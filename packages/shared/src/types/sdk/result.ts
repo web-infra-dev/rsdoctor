@@ -1,4 +1,3 @@
-import { EmoCheckData } from '../emo';
 import { LoaderData } from './loader';
 import { ModuleGraphData, ModuleCodeData, TreeShakingData } from './module';
 import { ChunkGraphData } from './chunk';
@@ -34,15 +33,3 @@ export interface BuilderStoreData extends StoreCommonData {
   treeShaking?: TreeShakingData;
   otherReports?: OtherReports | undefined;
 }
-
-export interface EMOStoreData extends StoreCommonData {
-  emoCheck: EmoCheckData;
-}
-
-/**
- * @deprecated
- */
-export interface StoreData
-  extends
-    Partial<Omit<EMOStoreData, keyof StoreCommonData>>,
-    BuilderStoreData {}

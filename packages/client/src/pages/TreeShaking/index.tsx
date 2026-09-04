@@ -4,10 +4,7 @@ import { Lodash } from '@rsdoctor/shared/common-browser';
 import { FileSearchOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/shared/types';
 import path from 'path-browserify';
-import {
-  ConnectManifestData,
-  ServerAPIProvider,
-} from 'src/components/Manifest';
+import { ServerAPIProvider, withManifestData } from 'src/components/Manifest';
 import { Size } from '../../constants';
 import { FileTree } from '../../components/FileTree';
 import { KeywordInput } from '../../components/Form/keyword';
@@ -159,7 +156,7 @@ const Component: React.FC<{ data: SDK.ModuleGraphData; cwd: string }> = ({
   );
 };
 
-export const TreeShakingPage = ConnectManifestData(
+export const TreeShakingPage = withManifestData(
   fetchManifest,
   [
     ['moduleGraph', 'data'],

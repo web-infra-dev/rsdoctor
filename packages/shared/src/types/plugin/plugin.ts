@@ -86,7 +86,6 @@ export type NormalizedGzipConfig =
 
 interface ISupport {
   parseBundle?: boolean;
-  generateTileGraph?: boolean;
   /**
    * Whether and how to calculate gzip sizes for assets and modules.
    * Set to `false` to disable gzip calculation, `true` to use the default
