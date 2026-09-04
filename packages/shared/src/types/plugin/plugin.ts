@@ -82,6 +82,7 @@ export type NormalizedGzipConfig =
     };
 
 interface ISupport {
+  banner?: boolean;
   parseBundle?: boolean;
   generateTileGraph?: boolean;
   /**

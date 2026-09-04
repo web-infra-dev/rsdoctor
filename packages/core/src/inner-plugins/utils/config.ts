@@ -15,6 +15,7 @@ function getDefaultOutput() {
 }
 function getDefaultSupports() {
   return {
+    banner: true,
     parseBundle: true,
   };
 }
