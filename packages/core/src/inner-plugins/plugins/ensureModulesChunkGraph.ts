@@ -1,6 +1,6 @@
 import type { RsdoctorPluginInstance } from '../../types';
 import { Linter, Plugin, SDK } from '@rsdoctor/shared/types';
-import { chalk, logger } from '@/logger';
+import { logger } from '@/logger';
 import { Chunks as ChunksBuildUtils } from '@/build-utils/build';
 import {
   internalPluginTapPreOptions,
@@ -142,14 +142,6 @@ async function doneHandler(
   logger.debug('reportChunkGraph start');
   await _this.sdk.reportChunkGraph(_this.chunkGraph);
   logger.debug('reportChunkGraph done');
-  // Warn if deprecated treemap option is enabled
-  if (_this.options.supports.generateTileGraph) {
-    logger.warn(
-      chalk.yellow(
-        'The option generateTileGraph is deprecated. Treemap (i.e. Tile Graph) is now supported by default.',
-      ),
-    );
-  }
   logger.debug('doneHandler done');
 }
 

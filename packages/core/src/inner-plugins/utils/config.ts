@@ -13,12 +13,6 @@ function getDefaultOutput() {
     reportDir: '',
   };
 }
-function getDefaultSupports() {
-  return {
-    banner: true,
-    parseBundle: true,
-  };
-}
 function isJsonOutputEnv(value: unknown): boolean {
   return value === 'json';
 }
@@ -107,6 +101,7 @@ function warnRemovedConfig(config: {
   port?: unknown;
   brief?: unknown;
   output?: { compressData?: unknown };
+  supports?: { generateTileGraph?: unknown };
 }) {
   const removedConfigs = [
     {
@@ -140,6 +135,14 @@ function warnRemovedConfig(config: {
         ),
       );
     }
+  }
+
+  if (config.supports?.generateTileGraph !== undefined) {
+    logger.info(
+      chalk.yellow(
+        "The 'supports.generateTileGraph' configuration was removed in Rsdoctor 2.x and is ignored. Treemap is supported by default.",
+      ),
+    );
   }
 }
 
@@ -181,8 +184,8 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     multiCompiler = true,
   } = normalizedConfig;
   const supports = {
-    ...getDefaultSupports(),
-    ...userSupports,
+    banner: defaultBoolean(userSupports.banner, true),
+    parseBundle: defaultBoolean(userSupports.parseBundle, true),
     gzip: normalizeGzip(userSupports.gzip),
   };
   // If process.env.RSTEST is set to true, disableClientServer should be false

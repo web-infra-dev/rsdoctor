@@ -26,9 +26,8 @@ interface RsdoctorRspackPluginFeatures {
    */
   treeShaking?: boolean;
   /**
-   * turn on it if you just use lite mode. This mode do not have source codes.
+   * Enable this if you only use lite mode. Source code is not included.
    * @default false
-   * @deprecated
    */
   lite?: boolean;
 }
