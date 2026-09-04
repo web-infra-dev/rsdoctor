@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@rstest/core';
-import { getModuleDiffKey } from './moduleDiff';
+import { getModuleDiffKey } from '../../../../src/pages/Resources/BundleDiff/DiffContainer/moduleDiff';
 
 describe('getModuleDiffKey', () => {
   it('removes Lynx module hash suffixes', () => {
