@@ -59,7 +59,9 @@ async function rspackCompile(compile: any) {
             type: ['json', 'html'],
           },
         },
-        port: 8681,
+        server: {
+          port: 8681,
+        },
       }),
     ],
   });

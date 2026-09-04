@@ -102,6 +102,7 @@ describe('normalizeUserConfig', () => {
   it('should use default supports when not provided', () => {
     const result = normalizeUserConfig();
     expect(result.supports.gzip).toEqual({ gzipLevel: 6 });
+    expect(result.supports.banner).toEqual(true);
     expect(result.supports.parseBundle).toEqual(true);
   });
 
@@ -138,10 +139,12 @@ describe('normalizeUserConfig', () => {
         gzip: {
           gzipLevel: 6,
         },
+        banner: false,
         parseBundle: false,
       },
     });
     expect(result.supports).toEqual({
+      banner: false,
       parseBundle: false,
       gzip: { gzipLevel: 6 },
     });
@@ -186,15 +189,17 @@ describe('normalizeUserConfig', () => {
   );
 
   describe('deprecated configuration warnings', () => {
-    const removedModeWarning = (replacement: string) =>
-      `The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`;
+    const removedConfigWarning = (name: string, replacement: string) =>
+      `The ${name} configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`;
 
     it('should show a warning for the removed top-level mode', () => {
       normalizeUserConfig({ mode: 'brief' } as never);
 
       expect(
         consoleOutput.some((output) =>
-          output.includes(removedModeWarning('output.mode')),
+          output.includes(
+            removedConfigWarning("top-level 'mode'", 'output.mode'),
+          ),
         ),
       ).toBe(true);
     });
@@ -204,7 +209,9 @@ describe('normalizeUserConfig', () => {
 
       expect(
         consoleOutput.some((output) =>
-          output.includes(removedModeWarning('output.reportCodeType')),
+          output.includes(
+            removedConfigWarning("top-level 'mode'", 'output.reportCodeType'),
+          ),
         ),
       ).toBe(true);
     });
@@ -216,7 +223,9 @@ describe('normalizeUserConfig', () => {
 
         expect(
           consoleOutput.some((output) =>
-            output.includes(removedModeWarning('output.mode')),
+            output.includes(
+              removedConfigWarning("top-level 'mode'", 'output.mode'),
+            ),
           ),
         ).toBe(true);
       },
@@ -237,9 +246,46 @@ describe('normalizeUserConfig', () => {
 
       expect(
         consoleOutput.some((output) =>
-          output.includes(removedModeWarning('output.mode')),
+          output.includes(
+            removedConfigWarning("top-level 'mode'", 'output.mode'),
+          ),
         ),
       ).toBe(false);
+    });
+
+    it.each([
+      [{ port: 9876 }, "top-level 'port'", 'server.port'],
+      [
+        { brief: { reportHtmlName: 'report.html' } },
+        "top-level 'brief'",
+        'output.options.htmlOptions',
+      ],
+      [
+        { output: { compressData: false } },
+        "'output.compressData'",
+        "output.mode: 'brief' and output.options.type: ['json']",
+      ],
+    ])(
+      'should show a warning for removed configuration %s',
+      (config, name, replacement) => {
+        normalizeUserConfig(config as never);
+
+        expect(
+          consoleOutput.some((output) =>
+            output.includes(removedConfigWarning(name, replacement)),
+          ),
+        ).toBe(true);
+      },
+    );
+
+    it.each([
+      { port: undefined },
+      { brief: undefined },
+      { output: { compressData: undefined } },
+    ])('should not warn for unset removed configuration %p', (config) => {
+      normalizeUserConfig(config as never);
+
+      expect(consoleOutput).toEqual([]);
     });
 
     it('should handle invalid mode values gracefully', () => {
@@ -327,15 +373,6 @@ describe('normalizeUserConfig', () => {
   });
 
   describe('server configuration', () => {
-    it('should preserve port and apply it to server.port', () => {
-      const result = normalizeUserConfig({
-        port: 9876,
-      });
-
-      expect(result.port).toBe(9876);
-      expect(result.server.port).toBe(9876);
-    });
-
     it('should preserve server.port', () => {
       const result = normalizeUserConfig({
         server: {
@@ -344,18 +381,6 @@ describe('normalizeUserConfig', () => {
       });
 
       expect(result.server.port).toBe(9876);
-    });
-
-    it('should prefer server.port over port', () => {
-      const result = normalizeUserConfig({
-        port: 9876,
-        server: {
-          port: 9877,
-        },
-      });
-
-      expect(result.port).toBe(9876);
-      expect(result.server.port).toBe(9877);
     });
 
     it('should preserve server.cors options', () => {

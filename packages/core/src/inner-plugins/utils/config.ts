@@ -13,6 +13,12 @@ function getDefaultOutput() {
     reportDir: '',
   };
 }
+function getDefaultSupports() {
+  return {
+    banner: true,
+    parseBundle: true,
+  };
+}
 function isJsonOutputEnv(value: unknown): boolean {
   return value === 'json';
 }
@@ -96,10 +102,54 @@ function isValidMode(mode: any): mode is keyof typeof SDK.IMode {
   return typeof mode === 'string' && ['brief', 'normal', 'lite'].includes(mode);
 }
 
+function warnRemovedConfig(config: {
+  mode?: unknown;
+  port?: unknown;
+  brief?: unknown;
+  output?: { compressData?: unknown };
+}) {
+  const removedConfigs = [
+    {
+      name: "top-level 'mode'",
+      value: config.mode,
+      replacement:
+        config.mode === 'lite' ? 'output.reportCodeType' : 'output.mode',
+    },
+    {
+      name: "top-level 'port'",
+      value: config.port,
+      replacement: 'server.port',
+    },
+    {
+      name: "top-level 'brief'",
+      value: config.brief,
+      replacement: 'output.options.htmlOptions',
+    },
+    {
+      name: "'output.compressData'",
+      value: config.output?.compressData,
+      replacement: "output.mode: 'brief' and output.options.type: ['json']",
+    },
+  ];
+
+  for (const { name, value, replacement } of removedConfigs) {
+    if (value !== undefined) {
+      logger.info(
+        chalk.yellow(
+          `The ${name} configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`,
+        ),
+      );
+    }
+  }
+}
+
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   config: Plugin.RsdoctorRspackPluginOptions<Rules> = {},
 ): Plugin.RsdoctorPluginOptionsNormalized<Rules> {
-  const deprecatedMode = (config as { mode?: unknown }).mode;
+  const configWithRemovedOptions =
+    config as Plugin.RsdoctorRspackPluginOptions<Rules> &
+      Parameters<typeof warnRemovedConfig>[0];
+  warnRemovedConfig(configWithRemovedOptions);
   const userOutput = config.output;
   const defaultOutput = getDefaultOutput();
   const outputConfig: Config.IOutput<'brief' | 'normal'> = isJsonOutputEnv(
@@ -126,10 +176,8 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     innerClientPath = '',
     output = outputConfig,
     supports: userSupports = {},
-    port,
     server: userServer = {},
     printLog = { serverUrls: true },
-    brief = undefined,
     multiCompiler = true,
   } = normalizedConfig;
   const supports = {
@@ -148,7 +196,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   assert(typeof features === 'object' || Array.isArray(features));
   assert(typeof loaderInterceptorOptions === 'object');
   assert(typeof disableClientServer === 'boolean');
-  assert(typeof port === 'undefined' || typeof port === 'number');
   assert(typeof userServer === 'object' && userServer !== null);
   const server: SDK.RsdoctorServerConfig = {
     ...userServer,
@@ -158,31 +205,18 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     typeof multiCompiler === 'boolean' ||
       (typeof multiCompiler === 'object' && multiCompiler !== null),
   );
-  if (typeof server.port === 'undefined' && typeof port !== 'undefined') {
-    server.port = port;
-  }
   let finalMode: keyof typeof SDK.IMode =
     ('mode' in output && isValidMode(output.mode)
       ? output.mode === ('lite' as SDK.IMode.normal)
         ? SDK.IMode[SDK.IMode.normal]
         : output.mode
       : undefined) || SDK.IMode[SDK.IMode.normal];
-  if (deprecatedMode !== undefined) {
-    const replacement =
-      deprecatedMode === 'lite' ? 'output.reportCodeType' : 'output.mode';
-    logger.info(
-      chalk.yellow(
-        `The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`,
-      ),
-    );
-  }
   const _features = normalizeFeatures(features, finalMode);
   const _linter = normalizeLinter(linter);
   // Process mode-specific configurations
   const { finalBrief, finalNormalOptions } = processModeConfigurations(
     finalMode,
     output,
-    brief,
   );
   // If lite mode is enabled and mode is not brief: finalBrief, set mode to lite
   if (_features.lite && finalMode !== SDK.IMode[SDK.IMode.brief]) {
@@ -207,7 +241,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     },
     innerClientPath,
     supports,
-    port,
     server,
     printLog,
     multiCompiler: {
