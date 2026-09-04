@@ -101,10 +101,54 @@ function isValidMode(mode: any): mode is keyof typeof SDK.IMode {
   return typeof mode === 'string' && ['brief', 'normal', 'lite'].includes(mode);
 }
 
+function warnRemovedConfig(config: {
+  mode?: unknown;
+  port?: unknown;
+  brief?: unknown;
+  output?: { compressData?: unknown };
+}) {
+  const removedConfigs = [
+    {
+      name: "top-level 'mode'",
+      value: config.mode,
+      replacement:
+        config.mode === 'lite' ? 'output.reportCodeType' : 'output.mode',
+    },
+    {
+      name: "top-level 'port'",
+      value: config.port,
+      replacement: 'server.port',
+    },
+    {
+      name: "top-level 'brief'",
+      value: config.brief,
+      replacement: 'output.options.htmlOptions',
+    },
+    {
+      name: "'output.compressData'",
+      value: config.output?.compressData,
+      replacement: "output.mode: 'brief' and output.options.type: ['json']",
+    },
+  ];
+
+  for (const { name, value, replacement } of removedConfigs) {
+    if (value !== undefined) {
+      logger.info(
+        chalk.yellow(
+          `The ${name} configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`,
+        ),
+      );
+    }
+  }
+}
+
 export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   config: Plugin.RsdoctorRspackPluginOptions<Rules> = {},
 ): Plugin.RsdoctorPluginOptionsNormalized<Rules> {
-  const deprecatedMode = (config as { mode?: unknown }).mode;
+  const configWithRemovedOptions =
+    config as Plugin.RsdoctorRspackPluginOptions<Rules> &
+      Parameters<typeof warnRemovedConfig>[0];
+  warnRemovedConfig(configWithRemovedOptions);
   const userOutput = config.output;
   const defaultOutput = getDefaultOutput();
   const outputConfig: Config.IOutput<'brief' | 'normal'> = isJsonOutputEnv(
@@ -167,15 +211,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         ? SDK.IMode[SDK.IMode.normal]
         : output.mode
       : undefined) || SDK.IMode[SDK.IMode.normal];
-  if (deprecatedMode !== undefined) {
-    const replacement =
-      deprecatedMode === 'lite' ? 'output.reportCodeType' : 'output.mode';
-    logger.info(
-      chalk.yellow(
-        `The top-level 'mode' configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`,
-      ),
-    );
-  }
   const _features = normalizeFeatures(features, finalMode);
   const _linter = normalizeLinter(linter);
   // Process mode-specific configurations
