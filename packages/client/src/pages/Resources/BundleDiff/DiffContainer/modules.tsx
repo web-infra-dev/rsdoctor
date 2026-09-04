@@ -22,7 +22,8 @@ import { KeywordInput } from '../../../../components/Form/keyword';
 import { ViewChanges } from './changes';
 import { UpdateType } from './constants';
 import { Badge as Bdg } from '../../../../components/Badge';
-import { ModuleHashPattern, getTargetColumnPropsForModuleRow } from './row';
+import { getModuleDiffKey } from './moduleDiff';
+import { getTargetColumnPropsForModuleRow } from './row';
 import { Graph } from '@rsdoctor/shared/common-browser';
 
 export function getUpdateType(e: BundleDiffTableModulesData): UpdateType {
@@ -111,9 +112,7 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
     const res: Record<string, BundleDiffTableModulesData> = {};
 
     bModules.forEach((mod) => {
-      const modPath =
-        mod.identifier?.replace(ModuleHashPattern, '') ||
-        mod.path?.replace(ModuleHashPattern, '');
+      const modPath = getModuleDiffKey(mod);
 
       if (!res[modPath]) {
         res[modPath] = {
@@ -126,9 +125,7 @@ export const Modules: React.FC<BundleDiffComponentCardProps> = ({
     });
 
     cModules.forEach((mod) => {
-      const modPath =
-        mod.identifier?.replace(ModuleHashPattern, '') ||
-        mod.path?.replace(ModuleHashPattern, '');
+      const modPath = getModuleDiffKey(mod);
 
       if (!res[modPath]) {
         res[modPath] = {
