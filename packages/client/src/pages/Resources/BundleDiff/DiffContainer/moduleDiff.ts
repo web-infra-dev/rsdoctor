@@ -5,9 +5,10 @@ export function getModuleDiffKey(module: {
   identifier?: string;
   path?: string;
 }): string {
-  const identifier = module.identifier || module.path || '';
+  const normalize = (value: string | undefined) =>
+    value
+      ?.replace(moduleHashSuffixPattern, '')
+      .replace(moduleHashPattern, '') || '';
 
-  return identifier
-    .replace(moduleHashSuffixPattern, '')
-    .replace(moduleHashPattern, '');
+  return normalize(module.identifier) || normalize(module.path);
 }

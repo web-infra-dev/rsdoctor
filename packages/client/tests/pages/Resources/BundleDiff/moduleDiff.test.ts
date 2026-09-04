@@ -26,4 +26,20 @@ describe('getModuleDiffKey', () => {
       'src/0123456789abcdef/index.ts',
     );
   });
+
+  it('falls back to the path when normalizing the identifier removes it', () => {
+    expect(
+      getModuleDiffKey({
+        identifier: '0123456789abcdef0123',
+        path: 'src/index.tsx',
+      }),
+    ).toBe('src/index.tsx');
+
+    expect(
+      getModuleDiffKey({
+        identifier: '|0123456789abcdef',
+        path: 'src/App.tsx',
+      }),
+    ).toBe('src/App.tsx');
+  });
 });
