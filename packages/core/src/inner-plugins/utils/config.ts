@@ -133,6 +133,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     multiCompiler = true,
   } = normalizedConfig;
   const supports = {
+    banner: defaultBoolean(userSupports.banner, true),
     parseBundle: defaultBoolean(userSupports.parseBundle, true),
     gzip: normalizeGzip(userSupports.gzip),
   };

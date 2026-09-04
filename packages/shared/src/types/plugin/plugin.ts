@@ -85,6 +85,7 @@ export type NormalizedGzipConfig =
     };
 
 interface ISupport {
+  banner?: boolean;
   parseBundle?: boolean;
   /**
    * Whether and how to calculate gzip sizes for assets and modules.
