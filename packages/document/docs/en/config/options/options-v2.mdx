@@ -4,15 +4,15 @@
 
 The top-level `mode`, `port`, and `brief` options and legacy `output.compressData` option were removed and are ignored in Rsdoctor 2.x. Use the table below to migrate these options. Both forms of the `features` lite configuration remain supported and are included only to show the equivalent `output` configuration.
 
-| Original Configuration                             | New Configuration                                                                                                         |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| mode                                               | Configure `output.mode` instead.                                                                                          |
-| port                                               | Configure `server.port` instead.                                                                                          |
+| Original Configuration                             | New Configuration                                                                                                                                         |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| mode                                               | Configure `output.mode` instead.                                                                                                                          |
+| port                                               | Configure `server.port` instead.                                                                                                                          |
 | brief                                              | Configure `output.mode: 'brief'` and set `output.options.type` to `['html']`. Move `brief.reportHtmlName` to `output.options.htmlOptions.reportHtmlName`. |
-| output.compressData                                | Configure `output.mode: 'brief'` and set `output.options.type` to `['json']`.                                             |
-| `mode: 'lite'`                                     | Configure `output.mode: 'normal'` and set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`.               |
-| `features: { lite: true }` or `features: ['lite']` | Still supported. The equivalent `output` configuration uses `output.mode: 'normal'` and `output.reportCodeType` as above. |
-| None                                               | New `output.options.jsonOptions.sections` configuration                                                                   |
+| output.compressData                                | Configure `output.mode: 'brief'` and set `output.options.type` to `['json']`.                                                                             |
+| `mode: 'lite'`                                     | Configure `output.mode: 'normal'` and set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`.                                               |
+| `features: { lite: true }` or `features: ['lite']` | Still supported. The equivalent `output` configuration uses `output.mode: 'normal'` and `output.reportCodeType` as above.                                 |
+| None                                               | New `output.options.jsonOptions.sections` configuration                                                                                                   |
 
 ## Configuration change details
 
