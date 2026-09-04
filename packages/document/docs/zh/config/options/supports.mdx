@@ -4,13 +4,12 @@
 - **可选：** `true`
 - **默认值：** `undefined`
 
-该选项用于控制详细的分析行为，例如 BannerPlugin 兼容、Bundle 解析和 gzip 大小计算。
+该选项用于控制详细的分析行为，例如 Bundle 解析和 gzip 大小计算。
 
 ## supportsTypes
 
 ```ts
 type ISupport = {
-  banner?: boolean;
   parseBundle?: boolean;
   gzip?:
     | boolean
@@ -19,17 +18,6 @@ type ISupport = {
       };
 };
 ```
-
-## banner
-
-:::danger
-`supports.banner` 分析仅用于调试，请勿将其用于生产。
-:::
-
-- **类型：** `boolean`
-- **默认值：** `true`
-
-如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#-%E6%94%AF%E6%8C%81-bannerplugin)
 
 ## parseBundle
 

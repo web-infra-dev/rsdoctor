@@ -230,24 +230,8 @@ Click the module tag to view module details, as shown below:
 
 ## 🪐 Supports bannerPlugin
 
-:::danger
-`supports.banner` option is only used for debugging, do not use it in production.
-:::
-
 Rspack provides [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin), a built-in plugin for adding content to the beginning or end of generated chunks.
 
 The added code segment will affect the analysis capability of the bundle.
 
-Rsdoctor is compatible with the logic of adding code using the BannerPlugin, but it is not enabled by default because Rsdoctor needs to add tag code. The Rsdoctor BannerPlugin capability is enabled in the following two cases:
-
-1. The project uses BannerPlugin in `rspack.config.(js|ts)`.
-
-2. Enable Rsdoctor BannerPlugin capability through Rsdoctor options by setting `supports.banner`:
-
-```ts
-new RsdoctorRspackPlugin({
-  supports: {
-    banner: true,
-  },
-});
-```
+Rsdoctor automatically handles code added by BannerPlugin. No extra Rsdoctor configuration is required.

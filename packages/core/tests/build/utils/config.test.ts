@@ -102,7 +102,6 @@ describe('normalizeUserConfig', () => {
   it('should use default supports when not provided', () => {
     const result = normalizeUserConfig();
     expect(result.supports.gzip).toEqual({ gzipLevel: 6 });
-    expect(result.supports.banner).toEqual(true);
     expect(result.supports.parseBundle).toEqual(true);
   });
 
@@ -139,12 +138,10 @@ describe('normalizeUserConfig', () => {
         gzip: {
           gzipLevel: 6,
         },
-        banner: false,
         parseBundle: false,
       },
     });
     expect(result.supports).toEqual({
-      banner: false,
       parseBundle: false,
       gzip: { gzipLevel: 6 },
     });
