@@ -10,7 +10,10 @@ type ExtractAlias<T> = T extends [property: string, alias: infer P][]
   ? `${P extends string ? P : never}`
   : never;
 
-export function withManifestData<
+/**
+ * @deprecated
+ */
+export function ConnectManifestData<
   Props extends object,
   Keys extends
     | [
@@ -62,7 +65,7 @@ export function withManifestData<
           }, {} as Props);
 
           // if (process.env.NODE_ENV === 'development') {
-          //   console.log('[withManifestData] props: ', p, loader);
+          //   console.log('[ConnectManifestData] props: ', p, loader);
           // }
 
           setProps(p);

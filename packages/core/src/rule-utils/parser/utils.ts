@@ -4,10 +4,13 @@ import { asserts } from './asserts';
 
 // TODO: so much Ast node type，not complete yet.
 /**
- * Recursively compare node semantics while ignoring comments, positions, and
- * string quote styles. String templates and string addition remain distinct.
+ * Is the node semantics the same?
+ * @deprecated
+ * - Recursively compare whether the content of the node itself is the same
+ * - Ignore comments, positions, string symbols (single and double quotation marks)
+ * - String templates and string addition will be considered different
  */
-export function isSameSyntax(
+export function isSameSemantics(
   node1: Node.SyntaxNode,
   node2: Node.SyntaxNode,
 ): boolean {
@@ -21,9 +24,9 @@ export function isSameSyntax(
       return (
         node1.arguments.length === next.arguments.length &&
         Boolean(node1.optional) === Boolean(next.optional) &&
-        isSameSyntax(node1.callee, next.callee) &&
+        isSameSemantics(node1.callee, next.callee) &&
         node1.arguments.every((node, i) =>
-          isSameSyntax(node, next.arguments[i]),
+          isSameSemantics(node, next.arguments[i]),
         )
       );
     }
@@ -32,8 +35,8 @@ export function isSameSyntax(
       return (
         node1.computed === next.computed &&
         Boolean(node1.optional) === Boolean(next.optional) &&
-        isSameSyntax(node1.object, next.object) &&
-        isSameSyntax(node1.property, next.property)
+        isSameSemantics(node1.object, next.object) &&
+        isSameSemantics(node1.property, next.property)
       );
     }
     case 'Identifier': {
@@ -51,7 +54,7 @@ export function isSameSyntax(
       return (
         node1.properties.length === next.properties.length &&
         node1.properties.every((prop, i) =>
-          isSameSyntax(prop, next.properties[i]),
+          isSameSemantics(prop, next.properties[i]),
         )
       );
     }
@@ -61,8 +64,8 @@ export function isSameSyntax(
         node1.computed === next.computed &&
         node1.kind === next.kind &&
         node1.method === next.method &&
-        isSameSyntax(node1.key, next.key) &&
-        isSameSyntax(node1.value, next.value)
+        isSameSemantics(node1.key, next.key) &&
+        isSameSemantics(node1.value, next.value)
       );
     }
 

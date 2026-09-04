@@ -13,6 +13,11 @@ function getDefaultOutput() {
     reportDir: '',
   };
 }
+function getDefaultSupports() {
+  return {
+    parseBundle: true,
+  };
+}
 function isJsonOutputEnv(value: unknown): boolean {
   return value === 'json';
 }
@@ -131,7 +136,8 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     multiCompiler = true,
   } = normalizedConfig;
   const supports = {
-    parseBundle: defaultBoolean(userSupports.parseBundle, true),
+    ...getDefaultSupports(),
+    ...userSupports,
     gzip: normalizeGzip(userSupports.gzip),
   };
   // If process.env.RSTEST is set to true, disableClientServer should be false

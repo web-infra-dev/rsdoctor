@@ -21,7 +21,7 @@ export function hasSameLeftInAssignStatement(
     .filter(parser.asserts.isAssignmentExpression)
     .map((node) => node.left)
     .find((node) =>
-      compare.some((item) => parser.utils.isSameSyntax(node, item)),
+      compare.some((item) => parser.utils.isSameSemantics(node, item)),
     );
 }
 

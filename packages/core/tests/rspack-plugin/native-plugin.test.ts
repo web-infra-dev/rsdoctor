@@ -55,6 +55,7 @@ function createHarness(watchMode = false) {
       },
       supports: {
         parseBundle: false,
+        generateTileGraph: false,
         gzip: {
           gzipLevel: 9,
         },

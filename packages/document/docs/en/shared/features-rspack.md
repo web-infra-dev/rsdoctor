@@ -28,6 +28,7 @@ interface RsdoctorRspackPluginFeatures {
   /**
    * turn on it if you just use lite mode. This mode do not have source codes.
    * @default false
+   * @deprecated
    */
   lite?: boolean;
 }

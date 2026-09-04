@@ -1,3 +1,5 @@
+import { Badge } from '@theme';
+
 # supports
 
 - **Type:** [Supports Types](#supportstypes)
@@ -12,6 +14,7 @@ This option controls detailed analysis behavior, such as BannerPlugin compatibil
 type ISupport = {
   banner?: boolean;
   parseBundle?: boolean;
+  generateTileGraph?: boolean;
   gzip?:
     | boolean
     | {
@@ -30,6 +33,12 @@ type ISupport = {
 - **Default:** `true`
 
 If `supports.banner` is enabled, Rsdoctor will enable compatibility logic for BannerPlugin. For more details, please refer to: [Supports BannerPlugin](../../guide/usage/bundle-size#-supports-bannerplugin)
+
+## ~~generateTileGraph [**Deprecated**]~~
+
+<Badge text="Deprecated" type="warning" />
+
+Rsdoctor supports generating Tree Map graphs by default, so this option does not need to be configured.
 
 ## parseBundle
 
