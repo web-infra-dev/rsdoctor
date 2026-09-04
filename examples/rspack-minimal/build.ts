@@ -1,4 +1,4 @@
-import { RsdoctorRspackMultiplePlugin } from '@rsdoctor/core';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import rspack from '@rspack/core';
 import { ReactRefreshRspackPlugin } from '@rspack/plugin-react-refresh';
 import { dirname, resolve } from 'path';
@@ -43,8 +43,7 @@ async function build() {
       target: 'web',
       plugins: [
         new ReactRefreshRspackPlugin(),
-        new RsdoctorRspackMultiplePlugin({
-          stage: 0,
+        new RsdoctorRspackPlugin({
           disableClientServer: false,
           features: ['bundle', 'plugins', 'loader'],
         }),
@@ -71,8 +70,7 @@ async function build() {
         filename: 'index.js',
       },
       plugins: [
-        new RsdoctorRspackMultiplePlugin({
-          stage: 1,
+        new RsdoctorRspackPlugin({
           disableClientServer: false,
           features: ['bundle', 'plugins', 'loader'],
         }),

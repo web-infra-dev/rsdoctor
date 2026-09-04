@@ -1,8 +1,5 @@
 export { logger } from './logger';
-export {
-  RsdoctorRspackMultiplePlugin,
-  RsdoctorRspackPlugin,
-} from './rspack-plugin';
+export { RsdoctorRspackPlugin } from './rspack-plugin';
 export {
   Linter,
   LinterType,
@@ -11,7 +8,4 @@ export {
   rules,
 } from './rules';
 export { RsdoctorSDK, resolveClientDiffHtmlPath } from './sdk';
-export type {
-  RsdoctorMultiplePluginOptions,
-  RsdoctorRspackPluginOptions,
-} from './types';
+export type { RsdoctorRspackPluginOptions } from './types';
