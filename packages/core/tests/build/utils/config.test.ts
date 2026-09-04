@@ -191,6 +191,8 @@ describe('normalizeUserConfig', () => {
   describe('deprecated configuration warnings', () => {
     const removedConfigWarning = (name: string, replacement: string) =>
       `The ${name} configuration was removed in Rsdoctor 2.x and is ignored. Please use '${replacement}' instead.`;
+    const removedGenerateTileGraphWarning =
+      "The 'supports.generateTileGraph' configuration was removed in Rsdoctor 2.x and is ignored. Treemap is supported by default.";
 
     it('should show a warning for the removed top-level mode', () => {
       normalizeUserConfig({ mode: 'brief' } as never);
@@ -278,10 +280,26 @@ describe('normalizeUserConfig', () => {
       },
     );
 
+    it.each([true, false])(
+      'should warn when supports.generateTileGraph is %p',
+      (generateTileGraph) => {
+        normalizeUserConfig({
+          supports: { generateTileGraph },
+        } as never);
+
+        expect(
+          consoleOutput.some((output) =>
+            output.includes(removedGenerateTileGraphWarning),
+          ),
+        ).toBe(true);
+      },
+    );
+
     it.each([
       { port: undefined },
       { brief: undefined },
       { output: { compressData: undefined } },
+      { supports: { generateTileGraph: undefined } },
     ])('should not warn for unset removed configuration %p', (config) => {
       normalizeUserConfig(config as never);
 

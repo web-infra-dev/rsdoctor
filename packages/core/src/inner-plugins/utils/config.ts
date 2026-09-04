@@ -101,6 +101,7 @@ function warnRemovedConfig(config: {
   port?: unknown;
   brief?: unknown;
   output?: { compressData?: unknown };
+  supports?: { generateTileGraph?: unknown };
 }) {
   const removedConfigs = [
     {
@@ -134,6 +135,14 @@ function warnRemovedConfig(config: {
         ),
       );
     }
+  }
+
+  if (config.supports?.generateTileGraph !== undefined) {
+    logger.info(
+      chalk.yellow(
+        "The 'supports.generateTileGraph' configuration was removed in Rsdoctor 2.x and is ignored. Treemap is supported by default.",
+      ),
+    );
   }
 }
 
