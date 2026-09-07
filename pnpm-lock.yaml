@@ -157,8 +157,8 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
       '@lynx-js/react':
-        specifier: ^0.125.0
-        version: 0.125.0(@types/react@19.2.18)
+        specifier: ^0.126.0
+        version: 0.126.0(@types/react@19.2.18)
       '@lynx-js/rspeedy':
         specifier: ^0.16.5
         version: 0.16.5(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@rspack/core@2.1.10(@swc/helpers@0.5.23))(typescript@7.0.2)(webpack@5.105.4)
@@ -2116,11 +2116,16 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c':
-    resolution: {integrity: sha512-h2pRrt5oLK9LT1NkjyprtzJij/AdZGvv3CN6B5edL4chixqvITbxoCSdYy667Hl6+uKOBuxmCNZoDddgRfcLnw==}
+  '@lynx-js/internal-preact@11.0.0-rc.1-20260903085447-f95471a':
+    resolution: {integrity: sha512-RsU+km8Ulg+HVEJpx1/lq/38GUB+KtJKypB80gbumAtswd+og0RpVppy8bZTBVZY7jSjxx2GHYPTjT61+HDPaw==}
+    peerDependencies:
+      preact-render-to-string: '>=6.7.0'
+    peerDependenciesMeta:
+      preact-render-to-string:
+        optional: true
 
-  '@lynx-js/react@0.125.0':
-    resolution: {integrity: sha512-pZtToBXS9btDdxcKMRQYah5URQSKYN2ca4BsKog8QZMLeMCA6FGZzdhfroMxTbjMZkhrFfi9X9G4cD9OYfgTPg==}
+  '@lynx-js/react@0.126.0':
+    resolution: {integrity: sha512-3R5FLTgT8DPiyu/w78cJk4Zy36GFGNbFT2ZhonTlnhEb6jewil146/jVYBRlvVoNvTQI+oRcHnHBlgp8HYdybg==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18 || ^19.0.0
@@ -8539,12 +8544,14 @@ snapshots:
 
   '@lynx-js/debug-metadata@0.1.0': {}
 
-  '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c': {}
+  '@lynx-js/internal-preact@11.0.0-rc.1-20260903085447-f95471a': {}
 
-  '@lynx-js/react@0.125.0(@types/react@19.2.18)':
+  '@lynx-js/react@0.126.0(@types/react@19.2.18)':
     dependencies:
       '@types/react': 19.2.18
-      preact: '@lynx-js/internal-preact@10.29.1-20260519060144-e6da44c'
+      preact: '@lynx-js/internal-preact@11.0.0-rc.1-20260903085447-f95471a'
+    transitivePeerDependencies:
+      - preact-render-to-string
 
   '@lynx-js/rsbuild-plugin@0.0.3(@rsbuild/core@2.1.10)(webpack@5.105.4)':
     dependencies:
