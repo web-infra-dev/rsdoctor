@@ -110,8 +110,8 @@ export async function execute<
 
 export async function execute(
   command: Commands.BundleDiff | `${Commands.BundleDiff}`,
-  options: BundleDiffArgs,
-): Promise<SDK.RsdoctorBuilderSDKInstance>;
+  options: GetCommandArgumentsType<typeof bundleDiff>['options'],
+): Promise<GetCommandArgumentsType<typeof bundleDiff>['result']>;
 
 export async function execute(): Promise<void>;
 export async function execute(
