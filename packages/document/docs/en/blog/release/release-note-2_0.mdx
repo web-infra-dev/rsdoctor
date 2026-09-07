@@ -12,6 +12,10 @@ _September 2026_
 
 # Announcing Rsdoctor 2.0
 
+import { ReleaseAuthors } from '../../../../theme/components/ReleaseAuthors';
+
+<ReleaseAuthors />
+
 We are excited to announce **Rsdoctor 2.0**! 🎉
 
 Starting with 2.0, Rsdoctor is fully focused on Rspack. webpack projects can continue using Rsdoctor 1.x. This focus allows Rsdoctor to integrate more deeply with Rspack's built-in capabilities and continue tailoring analysis to its build model and ecosystem.
@@ -67,7 +71,7 @@ The coding agent selects and runs the relevant `rsdoctor-agent` commands, then u
   style={{ margin: 'auto' }}
 />
 
-Rsdoctor 2.0 removes `@rsdoctor/mcp-server` and standardizes on Agent CLI, which runs on demand without maintaining a service connection. It is not MCP-compatible or a drop-in API replacement. See [AI](/guide/start/ai) and the [2.0 migration guide](/guide/start/migration-v2#ai-workflow-migration) for installation and migration details.
+Rsdoctor 2.0 removes `@rsdoctor/mcp-server` and standardizes on Agent CLI, which runs on demand without maintaining a service connection. It is not MCP-compatible or a drop-in API replacement. See [AI](/guide/start/ai) and the [2.0 migration guide](/guide/migration/migration-v2#ai-workflow-migration) for installation and migration details.
 
 ## One report for every compiler
 
@@ -115,7 +119,7 @@ The streamlined package structure and runtime dependencies also cut the producti
 | -------------------------------------------- | -------------: | -----------: | --------: | -------------: |
 | Complete `@rsdoctor/core` production install |        25.5 MB |      13.1 MB |   12.3 MB |      **48.5%** |
 
-When upgrading an Rspack project, replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`. See the [2.0 migration guide](/guide/start/migration-v2#update-the-rspack-plugin) for the steps.
+When upgrading an Rspack project, replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`. See the [2.0 migration guide](/guide/migration/migration-v2#update-the-rspack-plugin) for the steps.
 
 ## Faster rebuilds in watch mode
 
@@ -192,7 +196,7 @@ To let a coding agent apply the migration, use the [`rsdoctor-migrate-v2` skill]
 npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
 ```
 
-When using the CLI, keep `@rsdoctor/cli` and `@rsdoctor/core` on the same version. See the [Rsdoctor 2.0 migration guide](/guide/start/migration-v2) for the complete steps.
+When using the CLI, keep `@rsdoctor/cli` and `@rsdoctor/core` on the same version. See the [Rsdoctor 2.0 migration guide](/guide/migration/migration-v2) for the complete steps.
 
 ---
 

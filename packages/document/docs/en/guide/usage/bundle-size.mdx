@@ -35,16 +35,16 @@ Tree Graph is a **file tree-based** build artifact analysis view that helps deve
 
 ## 🪐 Glossary
 
-- **`Assets`**: Resources are files that ultimately exist in the output folder, including JavaScript, CSS, images, fonts, media, and other file types. Each Chunk has corresponding [Assets resources](https://webpack.js.org/concepts/under-the-hood/#chunks).
-- **`Module`**: Multiple Modules combine to form a Chunk. For more information about Module types, please refer to [Rspack Modules](https://rspack.rs/misc/glossary#module-type) and [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module).
+- **`Assets`**: Resources are files that ultimately exist in the output folder, including JavaScript, CSS, images, fonts, media, and other file types. Each Chunk has corresponding [Assets resources](https://rspack.rs/misc/glossary#asset).
+- **`Module`**: Multiple Modules combine to form a Chunk. For more information about Module types, please refer to [Rspack Modules](https://rspack.rs/misc/glossary#module-type).
 - **`Source Size`**: The original size of the file, before any transformations and minification.
 - **`Bundle Size`**: The final output size of the files. If you enabled minification, this value shows the minified size.
 - **`Gzip Size`**: The size of the file after gzip compression.
 - **`Package Count`**: The number of third-party packages.
 - **`Initial Chunk`**: **initial (initialization)** is the main Chunk of the entry point. This Chunk contains all the modules specified by the entry point and their dependencies, unlike the **Chunk** resources for "**on-demand loading**".
-  - For more information about Initial Chunk, please refer to [Initial Chunk Introduction](https://webpack.js.org/concepts/under-the-hood/#chunks).
+  - For more information about Initial Chunk, please refer to [Initial Chunk Introduction](https://rspack.rs/misc/glossary#initial-chunk).
 - **`Duplicate Packages`**: Duplicate third-party packages bundled into the project. Excludes third-party packages that are not bundled into the artifact. Please refer to [Duplicate Packages](/guide/usage/bundle-alerts).
-- **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. In the past, Webpack would package each module into a separate closure, and this encapsulation function would cause slower execution of JavaScript in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://rspack.rs/misc/glossary#scope-hoisting) parameter.
+- **`Concatenated Module`**: A concatenated module is a technique that combines multiple modules into one closure during packaging. Wrapping each module in a separate function adds runtime overhead in the browser. Optimization can be achieved by enabling the [`optimization.concatenateModules`](https://rspack.rs/misc/glossary#scope-hoisting) parameter.
 
 ## 🪐 Bundle overview
 
@@ -155,7 +155,7 @@ As shown in the following image, the results of matching the search Module keywo
 
 ### Module tag explanation
 
-The **Assets** tag is shown in the left image, from left to right representing: **Resource Size**, **[Initial Chunk](https://webpack.js.org/concepts/under-the-hood/#chunks)**, and **Code View**.
+The **Assets** tag is shown in the left image, from left to right representing: **Resource Size**, **[Initial Chunk](https://rspack.rs/misc/glossary#initial-chunk)**, and **Code View**.
 
 <div style={{ display: 'flex' }}>
   <img

@@ -12,6 +12,10 @@ _2026 年 9 月_
 
 # Rsdoctor 2.0 发布公告
 
+import { ReleaseAuthors } from '../../../../theme/components/ReleaseAuthors';
+
+<ReleaseAuthors />
+
 我们很高兴地宣布 **Rsdoctor 2.0**！🎉
 
 从 2.0 开始，Rsdoctor 将全面聚焦 Rspack，webpack 项目可以继续使用 Rsdoctor 1.x。聚焦 Rspack 后，Rsdoctor 可以更深入地使用其内置能力，并持续围绕 Rspack 的构建模型和生态场景提供分析支持。
@@ -67,7 +71,7 @@ coding agent 会根据问题调用相应的 `rsdoctor-agent` 命令，结合项�
   style={{ margin: 'auto' }}
 />
 
-Rsdoctor 2.0 已移除 `@rsdoctor/mcp-server`，统一使用按需执行、无需维护服务连接的 Agent CLI。它不兼容 MCP 协议，也不是旧 API 的直接替代品；安装和迁移方式请参考 [AI](/guide/start/ai) 与 [2.0 迁移指南](/guide/start/migration-v2#ai-工作流迁移)。
+Rsdoctor 2.0 已移除 `@rsdoctor/mcp-server`，统一使用按需执行、无需维护服务连接的 Agent CLI。它不兼容 MCP 协议，也不是旧 API 的直接替代品；安装和迁移方式请参考 [AI](/guide/start/ai) 与 [2.0 迁移指南](/guide/migration/migration-v2#ai-工作流迁移)。
 
 ## 一个报告覆盖所有 compiler {#one-report-for-every-compiler}
 
@@ -115,7 +119,7 @@ Rsdoctor 2.0 将 core、graph、SDK、utils 和 Rspack plugin 合并到 `@rsdoct
 | --------------------------------- | -------------: | -----------: | ------: | --------: |
 | `@rsdoctor/core` 完整生产安装体积 |        25.5 MB |      13.1 MB | 12.3 MB | **48.5%** |
 
-Rspack 项目升级时需要使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`，具体步骤请参考 [2.0 迁移指南](/guide/start/migration-v2#更新-rspack-插件)。
+Rspack 项目升级时需要使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`，具体步骤请参考 [2.0 迁移指南](/guide/migration/migration-v2#更新-rspack-插件)。
 
 ## watch 模式下更快的增量构建 {#faster-rebuilds-in-watch-mode}
 
@@ -192,7 +196,7 @@ pnpm add -D @rsdoctor/core
 npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
 ```
 
-使用 CLI 时，请确保 `@rsdoctor/cli` 与 `@rsdoctor/core` 的版本一致。完整步骤请参考 [Rsdoctor 2.0 迁移指南](/guide/start/migration-v2)。
+使用 CLI 时，请确保 `@rsdoctor/cli` 与 `@rsdoctor/core` 的版本一致。完整步骤请参考 [Rsdoctor 2.0 迁移指南](/guide/migration/migration-v2)。
 
 ---
 
