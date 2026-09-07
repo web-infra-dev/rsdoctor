@@ -270,7 +270,7 @@ describe('normalizeUserConfig', () => {
     });
 
     it.each(['', null, false, 0])(
-      'should show the top-level mode warning for %p',
+      'should show the top-level mode warning for %s',
       (mode) => {
         normalizeUserConfig({ mode } as never);
 
@@ -332,7 +332,7 @@ describe('normalizeUserConfig', () => {
     );
 
     it.each([true, false])(
-      'should warn when supports.generateTileGraph is %p',
+      'should warn when supports.generateTileGraph is %s',
       (generateTileGraph) => {
         normalizeUserConfig({
           supports: { generateTileGraph },
@@ -351,7 +351,7 @@ describe('normalizeUserConfig', () => {
       { brief: undefined },
       { output: { compressData: undefined } },
       { supports: { generateTileGraph: undefined } },
-    ])('should not warn for unset removed configuration %p', (config) => {
+    ])('should not warn for unset removed configuration %s', (config) => {
       normalizeUserConfig(config as never);
 
       expect(consoleOutput).toEqual([]);

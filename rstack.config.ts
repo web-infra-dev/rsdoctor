@@ -1,7 +1,7 @@
 import { define } from 'rstack';
 import skillsLock from './skills-lock.json' with { type: 'json' };
 
-define.lint(({ js, ts, globalIgnores }) => [
+define.lint(({ js, rstestPlugin, ts, globalIgnores }) => [
   globalIgnores(['packages/core/tests/build/utils/bundles/**']),
   js.configs.recommended,
   ts.configs.recommended,
@@ -24,6 +24,15 @@ define.lint(({ js, ts, globalIgnores }) => [
       '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
       'no-undef': 'off',
+    },
+  },
+  {
+    files: ['**/*.test.{ts,tsx}'],
+    ...rstestPlugin.configs.recommended,
+    rules: {
+      ...rstestPlugin.configs.recommended.rules,
+      'rstest/no-conditional-expect': 'off',
+      'rstest/expect-expect': 'off',
     },
   },
 ]);
