@@ -22,6 +22,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@types/semver6": "npm:@types/semver@7.5.6",
+    "@types/semver7": "npm:@types/semver@^7.8.0",
     "typescript": "catalog:"
   }
 }

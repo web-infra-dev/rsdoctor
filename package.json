@@ -9,14 +9,14 @@
   },
   "scripts": {
     "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"./scripts/*\" run build",
-    "check": "rs check",
+    "check": "rs check --type-check",
     "check-dependency-version": "pnpx check-dependency-version-consistency . && echo",
     "check-spell": "pnpx cspell",
     "dev:doc": "cd packages/document && pnpm run dev",
     "e2e": "pnpm run e2e:base",
     "e2e:base": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
     "format": "rs fmt",
-    "lint": "rs lint",
+    "lint": "rs lint --type-check",
     "prepare": "pnpm run build && rs hooks",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm --workspace-concurrency=1 --filter \"./packages/*\" test",
     "test:all": "pnpm run test && pnpm run e2e"

@@ -4,10 +4,6 @@
     "experimentalDecorators": true,
     "outDir": "./dist",
     "types": ["node"],
-    "paths": {
-      "@rsdoctor/core": ["../core/src/index.ts"],
-      "@/*": ["./src/*"]
-    },
     "rootDir": "src"
   },
   "include": ["src"],
