@@ -5,6 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "outDir": "dist",
-    "module": "ESNext"
+    "module": "ESNext",
+    "types": ["rstack/types", "@testing-library/jest-dom"]
   }
 }

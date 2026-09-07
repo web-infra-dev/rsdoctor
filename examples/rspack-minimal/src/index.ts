@@ -1,9 +1,8 @@
-import { render } from 'react-dom';
 import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
 
 import { App } from './app1';
 
-render(
+createRoot(document.getElementById('root')!).render(
   createElement(App, { name: 'Taylor' }),
-  document.getElementById('root')!,
 );
