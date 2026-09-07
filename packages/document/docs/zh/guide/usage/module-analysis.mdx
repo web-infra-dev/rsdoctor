@@ -2,7 +2,7 @@
 
 ## 功能介绍
 
-**Rsdoctor** 提供了 `Module 引用链分析` 模块，该模块主要是分析某个 Module 的依赖树，即被那些模块所依赖，即 [Webpack 的 stats.reasons](https://webpack.js.org/configuration/stats/#statsreasons)。
+**Rsdoctor** 提供了 `Module 引用链分析` 模块，该模块主要是分析某个 Module 的依赖树，即被那些模块所依赖，即 [Rspack 的 stats.reasons](https://rspack.rs/config/stats#statsreasons)。
 
 在该模块中，可以分析 `Module` 引用链，如果有拆包诉求或者想要看某个 `Module` 为何被引入，可以通过 `Module 引用链分析` 快速清晰的定位引用链。
 
@@ -20,7 +20,7 @@
 
 ### 名词解释
 
-- **`Reasons`** : 顾名思义是 `[原因]` 的意思，即某个 `Module` 存在的原因。Reasons 就是该 `Module` 被哪些 `Module` 们引入，而整个 `Reasons Tree` 就是这个 `Module` 的整个上游引用链，包括了直接父级和间接父级们。[即 Rspack 的 stats.reasons。](https://webpack.js.org/configuration/stats/#statsreasons)
+- **`Reasons`** : 顾名思义是 `[原因]` 的意思，即某个 `Module` 存在的原因。Reasons 就是该 `Module` 被哪些 `Module` 们引入，而整个 `Reasons Tree` 就是这个 `Module` 的整个上游引用链，包括了直接父级和间接父级们。[即 Rspack 的 stats.reasons。](https://rspack.rs/config/stats#statsreasons)
 - **`Dependencies`** : 是该 `Module` 依赖了哪些 `Module`。
 - **`Bailout Reason`** : Tree shaking 时，该 `Module` Tree shaking 失败的原因。
 

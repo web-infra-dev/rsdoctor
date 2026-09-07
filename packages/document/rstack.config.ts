@@ -62,7 +62,13 @@ const excludeV1ArchiveFromLlms = () => ({
 define.doc({
   plugins: [
     pluginClientRedirects({
-      redirects: [{ from: '/guide/start/mcp', to: '/guide/v1/mcp' }],
+      redirects: [
+        { from: '/guide/start/mcp', to: '/guide/v1/mcp' },
+        {
+          from: '/guide/start/migration-v2$',
+          to: '/guide/migration/migration-v2',
+        },
+      ],
     }),
     pluginAlgolia(),
     pluginSitemap({
