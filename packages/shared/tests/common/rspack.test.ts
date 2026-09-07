@@ -3,11 +3,11 @@ import { Rspack } from '../../src/common-browser';
 import type { SDK } from '../../src/types';
 
 const createConfig = (
-  config: SDK.BundlerConfigData['config'],
+  config: Record<string, unknown>,
 ): SDK.BundlerConfigData => ({
   name: 'rspack',
   version: '1.0.0',
-  config,
+  config: config as SDK.BundlerConfigData['config'],
   root: '/',
 });
 

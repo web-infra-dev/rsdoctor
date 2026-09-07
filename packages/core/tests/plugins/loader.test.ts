@@ -377,7 +377,7 @@ describe('test src/utils/loader.ts', () => {
           const [result] = plugin.getInterceptRules(
             persistentCompiler,
             rule,
-          ) as Array<{ options: ProxyLoaderOptions }>;
+          ) as unknown as Array<{ options: ProxyLoaderOptions }>;
           return result.options[Loader.LoaderInternalPropertyName]
             .cacheMarkerPath!;
         };

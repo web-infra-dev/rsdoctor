@@ -220,7 +220,7 @@ describe('readPackageJson util', () => {
       (file) => {
         try {
           return JSON.parse(readFileSync(file, 'utf8'));
-        } catch (e) {
+        } catch {
           // console.log(e)
         }
       },

@@ -49,7 +49,7 @@ describe('proxy loader cacheability', () => {
 
     const normalResult = proxyLoader.call(
       createContext(path.join(loaderDirectory, 'basic-loader.cjs')),
-      Buffer.from('source'),
+      'source',
     );
     const pitchResult = pitch.call(
       createContext(path.join(loaderDirectory, 'pitch-loader-esm.js')),

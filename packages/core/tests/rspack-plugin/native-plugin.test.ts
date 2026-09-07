@@ -130,6 +130,7 @@ describe('Rspack native graph collection', () => {
       dependencies: [],
       chunkModules: [],
       connectionsOnlyImports: [],
+      exportUsageEdges: [],
     });
     nativeHooks.chunkGraph.call({
       chunks: [],
@@ -168,6 +169,7 @@ describe('Rspack native graph collection', () => {
         dependencies: [],
         chunkModules: [],
         connectionsOnlyImports: [],
+        exportUsageEdges: [],
       });
       nativeHooks.moduleSources.call({
         moduleOriginalSources: [
@@ -204,6 +206,7 @@ describe('Rspack native graph collection', () => {
       dependencies: [],
       chunkModules: [],
       connectionsOnlyImports: [],
+      exportUsageEdges: [],
     });
     nativeHooks.moduleSources.call({
       moduleOriginalSources: [{ module: 1, source, size: source.length }],
