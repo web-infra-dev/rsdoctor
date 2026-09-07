@@ -2,6 +2,12 @@
 
 Rsdoctor 2.0 consolidates the package structure around Rspack. This release removes several standalone packages. Update dependencies and imports together to avoid resolving a 1.x package with 2.0 code.
 
+Use the [`rsdoctor-migrate-v2` skill](https://github.com/rstackjs/agent-skills/pull/115) to let a coding agent inspect your project, apply the relevant migration steps, and verify the result:
+
+```bash
+npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
+```
+
 ## Check your bundler
 
 Rsdoctor 2.0 requires Node.js 22.18 or later and Rspack 2.0 or later. Rspack 1.x is no longer supported. webpack support and `@rsdoctor/webpack-plugin` have also been removed.
@@ -32,7 +38,7 @@ If a 1.x configuration uses CommonJS `require()`, replace it with the ESM import
 
 `@rspack/core` remains an optional peer dependency of `@rsdoctor/core`, with a minimum supported version of 2.0. Your Rspack-based build tool normally provides it. Install `@rspack/core` in projects that use Rspack directly.
 
-Rsdoctor 2.0 requires the Rsdoctor native plugin built into Rspack for module and chunk graph collection. Remove the former `experiments.enableNativePlugin` option because the native path is now always enabled. If the build reports that `experiments.RsdoctorPlugin` is unavailable, upgrade the Rspack dependency supplied by your project or framework.
+Rsdoctor 2.0 uses the Rsdoctor native plugin built into Rspack to collect module and chunk graphs. Remove the former `experiments.enableNativePlugin` option because this capability is now always enabled. If the build reports that `experiments.RsdoctorPlugin` is unavailable, upgrade the Rspack dependency supplied by your project or framework.
 
 ## CLI migration
 

@@ -2,6 +2,12 @@
 
 Rsdoctor 2.0 围绕 Rspack 收敛了包结构。大多数项目只需要安装 `@rsdoctor/core`。此版本移除了多个独立包。请同时更新依赖和导入路径，避免在 2.0 代码中解析到 1.x 包。
 
+推荐使用 [`rsdoctor-migrate-v2` Skill](https://github.com/rstackjs/agent-skills/pull/115)，让编码 Agent 检查项目、执行适用的迁移步骤并验证结果：
+
+```bash
+npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
+```
+
 ## 检查构建工具
 
 Rsdoctor 2.0 要求使用 Node.js 22.18 及以上版本和 Rspack 2.0 及以上版本，不再支持 Rspack 1.x。此外，Rsdoctor 2.0 不再支持 webpack，并移除了 `@rsdoctor/webpack-plugin`。
@@ -32,7 +38,7 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 `@rspack/core` 仍是 `@rsdoctor/core` 的可选 peer dependency，最低支持版本为 2.0。基于 Rspack 的构建工具通常已经提供该依赖；直接使用 Rspack 的项目需要安装 `@rspack/core`。
 
-Rsdoctor 2.0 要求使用 Rspack 内置的 Rsdoctor 原生插件来收集模块图和 chunk 图。请移除原有的 `experiments.enableNativePlugin` 配置，因为原生链路现在始终启用。如果构建提示 `experiments.RsdoctorPlugin` 不可用，请升级项目或框架提供的 Rspack 依赖。
+Rsdoctor 2.0 使用 Rspack 内置的 Rsdoctor Native Plugin 收集 Module Graph 和 Chunk Graph。请移除原有的 `experiments.enableNativePlugin` 配置，因为该能力现在始终启用。如果构建提示 `experiments.RsdoctorPlugin` 不可用，请升级项目或框架提供的 Rspack 依赖。
 
 ## CLI 迁移
 
