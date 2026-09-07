@@ -1,6 +1,6 @@
 import { cac } from 'cac';
 import { color } from 'rslog';
-import { Common } from '@rsdoctor/shared/types';
+import { Common, SDK } from '@rsdoctor/shared/types';
 import { analyze, bundleDiff } from './commands';
 import { Command, CommandContext, GetCommandArgumentsType } from './types';
 import { Commands, pkg, bin } from './constants';
@@ -106,14 +106,12 @@ export async function execute<
 >(
   command: Commands.Analyze | `${Commands.Analyze}`,
   options: T['options'],
-): Promise<T['result']>;
+): Promise<SDK.RsdoctorBuilderSDKInstance>;
 
-export async function execute<
-  T extends GetCommandArgumentsType<typeof bundleDiff>,
->(
+export async function execute(
   command: Commands.BundleDiff | `${Commands.BundleDiff}`,
-  options: T['options'],
-): Promise<T['result']>;
+  options: BundleDiffArgs,
+): Promise<SDK.RsdoctorBuilderSDKInstance>;
 
 export async function execute(): Promise<void>;
 export async function execute(

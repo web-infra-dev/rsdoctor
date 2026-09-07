@@ -1,4 +1,4 @@
-import type { ArrayToUnion, UnionToTuple } from '../common';
+import type { ArrayToUnion } from '../common';
 import type { ErrorLevel as Severity } from '../error';
 import type { Hooks, RuntimeContext } from '../sdk';
 import type { ReportData, Diagnostic } from './diagnostic';
@@ -138,12 +138,8 @@ export interface ValidateResult {
 export interface Options<
   Extends extends ExtendRuleData[] = [],
   InternalRules extends RuleData[] = [],
-  _Extends = UnionToTuple<ArrayToUnion<[...Extends]>>,
 > {
-  rules?: InferRulesConfig<
-    _Extends extends ExtendRuleData[] ? _Extends : Extends
-  > &
-    InferRulesConfig<InternalRules>;
+  rules?: InferRulesConfig<Extends> & InferRulesConfig<InternalRules>;
   level?: SeverityString;
   extends?: Extends;
 }
