@@ -1,14 +1,18 @@
-import { gzipSync } from 'node:zlib';
+import { SyncHook } from '@rspack/lite-tapable';
+import { brotliCompressSync, constants, gzipSync } from 'node:zlib';
 import { describe, expect, it, rs } from 'rstack/test';
 import { Asset, ChunkGraph } from '@rsdoctor/shared/graph';
-import type { Plugin } from '@rsdoctor/shared/types';
+import { SDK, type Plugin } from '@rsdoctor/shared/types';
 import { InternalBundlePlugin } from '@/inner-plugins/plugins/bundle';
 
 const source = 'export const value = 1;';
 
-function createHarness() {
+function createHarness(
+  content: string | Buffer = source,
+  filename = 'index.js',
+) {
   const chunkGraph = new ChunkGraph();
-  const asset = new Asset('index.js', source.length, [], '');
+  const asset = new Asset(filename, 0, [], '');
   chunkGraph.addAsset(asset);
 
   const plugin = new InternalBundlePlugin({
@@ -16,13 +20,14 @@ function createHarness() {
     options: {
       supports: {
         gzip: { gzipLevel: 9 },
+        brotli: { brotliLevel: 6 },
       },
     },
     sdk: {
       addClientRoutes: rs.fn(),
     },
   } as any);
-  plugin.map.set('index.js', { content: source });
+  plugin.map.set(filename, { content });
 
   return { asset, plugin };
 }
@@ -69,4 +74,46 @@ describe('InternalBundlePlugin', () => {
     await plugin.done(compiler);
     expect(asset.gzipSize).toBeUndefined();
   });
+});
+
+describe('asset compression input', () => {
+  const binary = Buffer.from([0, 97, 115, 109, 1, 0, 0, 0, 255, 128, 192, 254]);
+
+  it.each([
+    { filename: 'module.wasm', content: binary },
+    { filename: 'index.js', content: 'export const greeting = "你好 🌍";' },
+  ])(
+    'compresses the original bytes of $filename',
+    async ({ filename, content }) => {
+      const { asset, plugin } = createHarness(content, filename);
+      const afterProcessAssets = new SyncHook(['assets']);
+      plugin.map.clear();
+      plugin.thisCompilation({
+        hooks: { processAssets: {}, afterProcessAssets },
+      } as unknown as Plugin.BaseCompilation);
+      afterProcessAssets.call({ [filename]: { source: () => content } });
+
+      expect(plugin.map.get(filename)?.content).toBe(content);
+      await plugin.done({ watchMode: false } as Plugin.BaseCompiler);
+
+      expect(asset.brotliSize).toBe(
+        brotliCompressSync(content, {
+          params: { [constants.BROTLI_PARAM_QUALITY]: 6 },
+        }).length,
+      );
+      expect(asset.gzipSize).toBe(gzipSync(content, { level: 9 }).length);
+      expect(asset.size).toBe(Buffer.byteLength(content));
+      // Report content remains JSON-compatible text; only compression uses raw bytes.
+      expect(asset.toData(SDK.ToDataType.Normal).content).toBe(
+        content.toString(),
+      );
+      if (Buffer.isBuffer(content)) {
+        expect(asset.brotliSize).not.toBe(
+          brotliCompressSync(content.toString(), {
+            params: { [constants.BROTLI_PARAM_QUALITY]: 6 },
+          }).length,
+        );
+      }
+    },
+  );
 });

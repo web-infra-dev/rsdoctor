@@ -81,6 +81,15 @@ export type NormalizedGzipConfig =
       gzipLevel: number;
     };
 
+export type BrotliConfig =
+  | boolean
+  | {
+      /** Brotli quality, an integer between 0 and 11. @default 6 */
+      brotliLevel?: number;
+    };
+
+export type NormalizedBrotliConfig = false | { brotliLevel: number };
+
 interface ISupport {
   banner?: boolean;
   parseBundle?: boolean;
@@ -91,10 +100,13 @@ interface ISupport {
    * @default true
    */
   gzip?: GzipConfig;
+  /** Calculate Brotli sizes for assets and modules. @default false */
+  brotli?: BrotliConfig;
 }
 
-type NormalizedSupports = Omit<ISupport, 'gzip'> & {
+type NormalizedSupports = Omit<ISupport, 'gzip' | 'brotli'> & {
   gzip: NormalizedGzipConfig;
+  brotli: NormalizedBrotliConfig;
 };
 
 interface OutputBaseConfig {

@@ -17,6 +17,9 @@ export default defineConfig({
         new RsdoctorRspackPlugin({
           disableClientServer: !process.env.ENABLE_CLIENT_SERVER,
           features: ['resolver', 'bundle', 'plugins', 'loader'],
+          supports: {
+            brotli: { brotliLevel: 6 },
+          },
           // output: {
           //   mode: 'brief',
           //   options: {

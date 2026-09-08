@@ -12,6 +12,7 @@ This option controls detailed analysis behavior, such as BannerPlugin compatibil
 type ISupport = {
   banner?: boolean;
   parseBundle?: boolean;
+  brotli?: boolean | { brotliLevel?: number };
   gzip?:
     | boolean
     | {
@@ -94,6 +95,24 @@ Set `gzip` to `false` to disable gzip size calculation:
 new RsdoctorRspackPlugin({
   supports: {
     gzip: false,
+  },
+});
+```
+
+## brotli
+
+- **Type:** `boolean | { brotliLevel?: number }`
+- **Default:** `false`
+
+Calculates Brotli sizes for assets and modules in the report, including the size cards and treemap. This does not compress or modify build output. Like gzip, Brotli calculation is skipped in watch mode.
+
+Set `brotli: true` or `brotli: {}` to use quality `6`, or specify `brotliLevel` as an integer from `0` to `11`. Higher levels can increase analysis time. Disable gzip independently when you only need Brotli sizes:
+
+```ts
+new RsdoctorRspackPlugin({
+  supports: {
+    gzip: false,
+    brotli: { brotliLevel: 11 },
   },
 });
 ```

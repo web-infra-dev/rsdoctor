@@ -1,4 +1,4 @@
-export type TreeMapSizeType = 'stat' | 'parsed' | 'gzip' | 'value';
+export type TreeMapSizeType = 'stat' | 'parsed' | 'gzip' | 'brotli' | 'value';
 
 export interface TreeMapSizeNode {
   value?: number;
@@ -6,11 +6,13 @@ export interface TreeMapSizeNode {
   sourceSize?: number;
   bundledSize?: number;
   gzipSize?: number;
+  brotliSize?: number;
 }
 
 function getOwnSize(node: TreeMapSizeNode, sizeType: TreeMapSizeType) {
   if (sizeType === 'stat') return node.sourceSize ?? 0;
   if (sizeType === 'parsed') return node.bundledSize ?? 0;
+  if (sizeType === 'brotli') return node.brotliSize ?? 0;
   if (sizeType === 'gzip') return node.gzipSize ?? 0;
   return node.value ?? 0;
 }

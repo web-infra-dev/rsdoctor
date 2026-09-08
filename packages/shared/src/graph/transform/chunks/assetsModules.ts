@@ -1,4 +1,5 @@
 import path from 'path-browserify';
+import { getBrotliSize } from '../../../common/brotli';
 import { SDK } from '../../../types';
 import { isEmpty, pick } from '../../../common/lodash';
 import { DEFAULT_GZIP_LEVEL, getGzipSize } from '../../../common/gzip';
@@ -31,20 +32,34 @@ const logger = {
   },
 };
 
-interface GzipOptions {
+interface CompressionOptions {
+  brotli?: boolean;
+  brotliLevel?: number;
   gzip?: boolean;
   gzipLevel?: number;
 }
 
 function tryGetGzipSize(
   content: string | undefined,
-  { gzip = true, gzipLevel = DEFAULT_GZIP_LEVEL }: GzipOptions,
+  { gzip = true, gzipLevel = DEFAULT_GZIP_LEVEL }: CompressionOptions,
 ) {
   if (!gzip || !content) {
     return undefined;
   }
   try {
     return getGzipSize(content, gzipLevel);
+  } catch {
+    return undefined;
+  }
+}
+
+function tryGetBrotliSize(
+  content: string | undefined,
+  options: CompressionOptions,
+) {
+  if (!options.brotli || !content) return undefined;
+  try {
+    return getBrotliSize(content, options.brotliLevel);
   } catch {
     return undefined;
   }
@@ -68,19 +83,25 @@ export async function getAssetsModulesData(
   bundleDir: string,
   opts: {
     parseBundle?: ParseBundle;
-  } & GzipOptions,
+  } & CompressionOptions,
   sourceMapSets: Map<string, string> = new Map(),
   assetsWithoutSourceMap?: Set<string>,
 ) {
-  const gzipOptions: GzipOptions = {
+  const compressionOptions: CompressionOptions = {
+    brotli: opts.brotli,
+    brotliLevel: opts.brotliLevel,
     gzip: opts.gzip,
     gzipLevel: opts.gzipLevel,
   };
 
-  if (gzipOptions.gzip === false) {
+  if (compressionOptions.gzip === false) {
     for (const module of moduleGraph.getModules()) {
       module.setSize({ gzipSize: 0 });
     }
+  }
+
+  for (const module of moduleGraph.getModules()) {
+    module.setSize({ brotliSize: undefined });
   }
 
   // Parse assets with sourcemap using sourcemap data
@@ -88,11 +109,13 @@ export async function getAssetsModulesData(
     time(`Start Parse bundle by sourcemap.`);
     for (const [modulePath, codes] of sourceMapSets.entries()) {
       const modules = moduleGraph.getModuleByFile(modulePath);
-      const gzipSize = tryGetGzipSize(codes, gzipOptions);
+      const gzipSize = tryGetGzipSize(codes, compressionOptions);
+      const brotliSize = tryGetBrotliSize(codes, compressionOptions);
       for (const module of modules) {
         module?.setSize({
           parsedSize: codes.length,
           gzipSize,
+          brotliSize,
         });
         module?.setSource({ parsedSource: codes });
       }
@@ -156,13 +179,30 @@ export async function getAssetsModulesData(
           );
         }
       } else {
-        transformAssetsModulesData(parsedModules, moduleGraph, gzipOptions);
+        transformAssetsModulesData(
+          parsedModules,
+          moduleGraph,
+          compressionOptions,
+        );
       }
     }
     timeEnd(`Start Parse bundle by AST.`);
   }
 
-  if (gzipOptions.gzip !== false) {
+  if (compressionOptions.brotli) {
+    for (const module of moduleGraph.getModules()) {
+      if (module.getSize().brotliSize !== undefined) continue;
+      const source = module.getSource();
+      module.setSize({
+        brotliSize: tryGetBrotliSize(
+          source.parsedSource || source.source,
+          compressionOptions,
+        ),
+      });
+    }
+  }
+
+  if (compressionOptions.gzip !== false) {
     for (const module of moduleGraph.getModules()) {
       if (module.getSize().gzipSize > 0) {
         continue;
@@ -170,7 +210,7 @@ export async function getAssetsModulesData(
       const source = module.getSource();
       const gzipSize = tryGetGzipSize(
         source.parsedSource || source.source,
-        gzipOptions,
+        compressionOptions,
       );
       if (gzipSize !== undefined) {
         module.setSize({ gzipSize });
@@ -182,14 +222,15 @@ export async function getAssetsModulesData(
 export function transformAssetsModulesData(
   parsedModulesData: ParsedModuleSizeData,
   moduleGraph: SDK.ModuleGraphInstance,
-  gzipOptions: GzipOptions = {},
+  compressionOptions: CompressionOptions = {},
 ) {
   if (!moduleGraph) return;
   Object.entries(parsedModulesData).forEach(([moduleId, parsedData]) => {
     const module = moduleGraph.getModuleByIdentifier(moduleId ?? '');
-    const gzipSize = tryGetGzipSize(parsedData?.content, gzipOptions);
+    const gzipSize = tryGetGzipSize(parsedData?.content, compressionOptions);
     module?.setSize({
       parsedSize: parsedData?.size,
+      brotliSize: tryGetBrotliSize(parsedData?.content, compressionOptions),
       gzipSize,
     });
     module?.setSource({ parsedSource: parsedData?.content || '' });

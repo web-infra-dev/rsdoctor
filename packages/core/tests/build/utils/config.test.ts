@@ -147,6 +147,7 @@ describe('normalizeUserConfig', () => {
       banner: false,
       parseBundle: false,
       gzip: { gzipLevel: 6 },
+      brotli: false,
     });
   });
 
@@ -187,6 +188,56 @@ describe('normalizeUserConfig', () => {
       ).toThrow('`supports.gzip` must be a boolean or an object.');
     },
   );
+
+  it.each([0, 6, 11])('should respect brotli level %s', (brotliLevel) => {
+    expect(
+      normalizeUserConfig({
+        supports: {
+          brotli: { brotliLevel },
+        },
+      }).supports.brotli,
+    ).toEqual({ brotliLevel });
+  });
+
+  it.each([-1, 1.5, 12, Number.NaN, null])(
+    'should reject invalid brotli level %s',
+    (brotliLevel) => {
+      expect(() =>
+        normalizeUserConfig({
+          supports: {
+            brotli: { brotliLevel } as never,
+          },
+        }),
+      ).toThrow(
+        '`supports.brotli.brotliLevel` must be an integer between 0 and 11.',
+      );
+    },
+  );
+
+  it.each([[null], [1], ['true'], [[]]])(
+    'should reject invalid brotli support %s',
+    (brotli) => {
+      expect(() =>
+        normalizeUserConfig({
+          supports: {
+            brotli: brotli as never,
+          },
+        }),
+      ).toThrow('`supports.brotli` must be a boolean or an object.');
+    },
+  );
+
+  it.each([true, {}])('normalizes enabled Brotli support %s', (brotli) => {
+    expect(
+      normalizeUserConfig({ supports: { gzip: false, brotli } }).supports,
+    ).toMatchObject({ gzip: false, brotli: { brotliLevel: 6 } });
+  });
+
+  it.each([undefined, false])('disables Brotli support for %s', (brotli) => {
+    expect(normalizeUserConfig({ supports: { brotli } }).supports.brotli).toBe(
+      false,
+    );
+  });
 
   describe('deprecated configuration warnings', () => {
     const removedConfigWarning = (name: string, replacement: string) =>

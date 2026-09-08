@@ -80,6 +80,7 @@ interface AssetInfo {
     path: string;
     size: number;
     gzipSize?: number;
+    brotliSize?: number;
     initial: boolean;
     content: string | void;
   }[];

@@ -3,14 +3,14 @@ import type { Assets } from '@rspack/core';
 import { InternalBasePlugin } from './base';
 import { Chunks } from '@rsdoctor/shared/graph';
 import { logger, time, timeEnd } from '@/logger';
-import { getEffectiveGzipConfig } from '../utils/config';
+import { getEffectiveCompressionConfig } from '../utils/config';
 
 export class InternalBundlePlugin<
   T extends Plugin.BaseCompiler,
 > extends InternalBasePlugin<T> {
   public readonly name = 'bundle';
 
-  public map: Map<string, { content: string }> = new Map();
+  public map: Map<string, { content: string | Buffer }> = new Map();
 
   public apply(compiler: T) {
     time('InternalBundlePlugin.apply');
@@ -63,7 +63,7 @@ export class InternalBundlePlugin<
   public ensureAssetContent(name: string) {
     const asset = this.map.get(name);
     if (asset) return asset;
-    const v = { content: '' };
+    const v: { content: string | Buffer } = { content: '' };
     this.map.set(name, v);
     return v;
   }
@@ -78,7 +78,7 @@ export class InternalBundlePlugin<
           (assets: Assets) => {
             Object.keys(assets).forEach((file) => {
               const v = this.ensureAssetContent(file);
-              v.content = assets[file].source().toString();
+              v.content = assets[file].source();
             });
           },
         );
@@ -95,9 +95,13 @@ export class InternalBundlePlugin<
         Chunks.assetsContents(
           this.map,
           this.scheduler.chunkGraph,
-          getEffectiveGzipConfig(
+          getEffectiveCompressionConfig(
             compiler,
             this.scheduler.options.supports.gzip,
+          ),
+          getEffectiveCompressionConfig(
+            compiler,
+            this.scheduler.options.supports.brotli,
           ),
         );
       }

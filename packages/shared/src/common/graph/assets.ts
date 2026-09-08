@@ -147,6 +147,7 @@ export function getAssetsSizeInfo(
         path: e.path,
         size: e.size,
         gzipSize: e.gzipSize,
+        brotliSize: e.brotliSize,
         initial: isInitialAsset(e, chunks),
         content: withFileContent ? e.content : undefined,
       })),
