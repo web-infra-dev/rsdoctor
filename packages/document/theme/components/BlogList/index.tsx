@@ -4,6 +4,11 @@ import { useSyncExternalStore } from 'react';
 import { posts } from './posts';
 import styles from './index.module.scss';
 
+const sections = [
+  { path: 'release/', en: 'Release Notes', zh: 'Release 公告' },
+  { path: 'topic/', en: 'Topics', zh: '专题' },
+];
+
 const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
 const subscribeToMotionPreference = (onChange: () => void) => {
   const media = window.matchMedia(reducedMotionQuery);
@@ -30,32 +35,39 @@ export function BlogList({ lang }: { lang: 'en' | 'zh' }) {
   return (
     <>
       <BlogBackground showBackground={!reducedMotion} />
-      <BaseBlogList
-        className={styles.list}
-        lang={lang}
-        interactive={!reducedMotion}
-        hideDocLayoutSidebarAndOutline={false}
-        posts={posts.map((post) => ({
-          id: post.path,
-          authors: post.authors,
-          href: `${lang === 'zh' ? '/zh' : ''}/blog/${post.path}`,
-          title: (
-            <>
-              {post.date ? (
-                <time className={styles.meta} dateTime={post.date}>
-                  {dateFormatter(post.date)}
-                </time>
-              ) : (
-                <span className={styles.meta}>
-                  {lang === 'zh' ? '专题' : 'Topic'}
-                </span>
-              )}
-              <h2 className={styles.title}>{post[lang].title}</h2>
-            </>
-          ),
-          description: post[lang].description,
-        }))}
-      />
+      {sections.map((section) => (
+        <section key={section.path} className={styles.section}>
+          <h2>{section[lang]}</h2>
+          <BaseBlogList
+            className={styles.list}
+            lang={lang}
+            interactive={!reducedMotion}
+            hideDocLayoutSidebarAndOutline={false}
+            posts={posts
+              .filter((post) => post.path.startsWith(section.path))
+              .map((post) => ({
+                id: post.path,
+                authors: post.authors,
+                href: `${lang === 'zh' ? '/zh' : ''}/blog/${post.path}`,
+                title: (
+                  <>
+                    {post.date ? (
+                      <time className={styles.meta} dateTime={post.date}>
+                        {dateFormatter(post.date)}
+                      </time>
+                    ) : (
+                      <span className={styles.meta}>
+                        {lang === 'zh' ? '专题' : 'Topic'}
+                      </span>
+                    )}
+                    <h3 className={styles.title}>{post[lang].title}</h3>
+                  </>
+                ),
+                description: post[lang].description,
+              }))}
+          />
+        </section>
+      ))}
     </>
   );
 }
