@@ -53,7 +53,7 @@ export class Asset implements SDK.AssetInstance {
     this.id = id;
   }
 
-  setGzipSize(content: string, level?: number) {
+  setGzipSize(content: string | Buffer, level?: number) {
     this.gzipSize = getGzipSize(content, level);
   }
 }

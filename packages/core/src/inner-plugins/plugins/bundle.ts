@@ -10,7 +10,7 @@ export class InternalBundlePlugin<
 > extends InternalBasePlugin<T> {
   public readonly name = 'bundle';
 
-  public map: Map<string, { content: string }> = new Map();
+  public map: Map<string, { content: string | Buffer }> = new Map();
 
   public apply(compiler: T) {
     time('InternalBundlePlugin.apply');
@@ -63,7 +63,7 @@ export class InternalBundlePlugin<
   public ensureAssetContent(name: string) {
     const asset = this.map.get(name);
     if (asset) return asset;
-    const v = { content: '' };
+    const v: { content: string | Buffer } = { content: '' };
     this.map.set(name, v);
     return v;
   }
@@ -78,7 +78,7 @@ export class InternalBundlePlugin<
           (assets: Assets) => {
             Object.keys(assets).forEach((file) => {
               const v = this.ensureAssetContent(file);
-              v.content = assets[file].source().toString();
+              v.content = assets[file].source();
             });
           },
         );

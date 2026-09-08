@@ -3,7 +3,7 @@ import { brotliCompressSync, constants } from 'node:zlib';
 export const DEFAULT_BROTLI_LEVEL = 6;
 
 export function getBrotliSize(
-  content: string,
+  content: string | Buffer,
   level = DEFAULT_BROTLI_LEVEL,
 ): number {
   return brotliCompressSync(content, {

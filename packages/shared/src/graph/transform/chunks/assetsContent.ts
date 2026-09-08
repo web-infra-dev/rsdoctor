@@ -5,7 +5,7 @@ const COMPRESSIBLE_REGEX =
   /\.(?:js|css|html|json|svg|txt|xml|xhtml|wasm|manifest)$/i;
 
 export function assetsContents(
-  assetMap: Map<string, { content: string }>,
+  assetMap: Map<string, { content: string | Buffer }>,
   chunkGraph: SDK.ChunkGraphInstance,
   gzip: Plugin.NormalizedGzipConfig,
   brotli: Plugin.NormalizedBrotliConfig = false,
@@ -13,7 +13,7 @@ export function assetsContents(
   const assets = chunkGraph.getAssets();
   assets.forEach((asset) => {
     const { content = '' } = assetMap.get(asset.path) || {};
-    asset.content = content;
+    asset.content = content.toString();
     if (content.length > 0 && asset.size === 0) {
       asset.size = Buffer.byteLength(content, 'utf8');
     }
