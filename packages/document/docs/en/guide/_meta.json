@@ -16,11 +16,6 @@
   },
   {
     "type": "dir-section-header",
-    "name": "more",
-    "label": "More"
-  },
-  {
-    "type": "dir-section-header",
     "name": "migration",
     "label": "Migration"
   },
@@ -28,5 +23,10 @@
     "type": "dir-section-header",
     "name": "v1",
     "label": "Rsdoctor 1.x Archive"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "more",
+    "label": "More"
   }
 ]

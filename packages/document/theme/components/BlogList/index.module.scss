@@ -1,5 +1,13 @@
-.list {
+.section {
   margin: 40px 0;
+
+  + .section {
+    margin-top: 64px;
+  }
+}
+
+.list {
+  margin: 24px 0 0;
 
   .title {
     margin: 0;
