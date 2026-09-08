@@ -159,7 +159,7 @@ Treemap 新增全屏模式、可收起侧边栏、面包屑导航和点击缩放
 
 Rsdoctor 2.0 主动收敛了兼容范围和包结构。升级前需要处理以下变更：
 
-- **运行环境与构建工具**：要求使用 Node.js 22.18 及以上版本和 Rspack 2.0 及以上版本。Rspack 1.x 项目需要先升级 Rspack；webpack 项目应继续使用长期维护的 Rsdoctor 1.x，或先迁移到 Rspack。
+- **运行环境与构建工具**：要求使用 Node.js `^20.19.0 || >=22.12.0` 和 Rspack 2.0 及以上版本。Rspack 1.x 项目需要先升级 Rspack；webpack 项目应继续使用长期维护的 Rsdoctor 1.x，或先迁移到 Rspack。
 - **包与模块格式**：使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`；Rsdoctor package 仅提供 ESM 产物，需要将 CommonJS `require()` 改为 ESM `import`。
 - **AI 工作流**：`@rsdoctor/mcp-server` 已移除。请迁移到直接读取报告数据的 `@rsdoctor/agent-cli`；Agent CLI 不兼容 MCP 协议，也不是旧 API 的直接替代品。
 
