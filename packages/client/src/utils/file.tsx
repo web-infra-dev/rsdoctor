@@ -280,6 +280,7 @@ type TreeNode = {
   sourceSize?: number;
   bundledSize?: number;
   gzipSize?: number;
+  brotliSize?: number;
   id?: string | number;
   // Internal helper, not exported
   _map?: Map<string, TreeNode>;
@@ -306,6 +307,7 @@ export function buildTreemapData(
           sourceSize: mod.size?.sourceSize ?? 0,
           bundledSize: mod.size?.parsedSize ?? 0,
           gzipSize: mod.size?.gzipSize ?? 0,
+          brotliSize: mod.size?.brotliSize,
           id: mod.id,
         });
       } else {
@@ -360,6 +362,7 @@ function sumDirValue(node: TreeNode): {
   sourceSize: number;
   bundledSize: number;
   gzipSize: number;
+  brotliSize?: number;
 } {
   if (!node.children || node.children.length === 0) {
     // Leaf node, just return value
@@ -367,22 +370,32 @@ function sumDirValue(node: TreeNode): {
       sourceSize: node.sourceSize ?? 0,
       bundledSize: node.bundledSize ?? 0,
       gzipSize: node.gzipSize ?? 0,
+      brotliSize: node.brotliSize,
     };
   }
   // Recursively sum all child nodes
   let sourceSum = 0;
   let bundledSum = 0;
   let gzipSum = 0;
+  let brotliSum: number | undefined;
   for (const child of node.children) {
-    const { sourceSize, bundledSize, gzipSize } = sumDirValue(child);
+    const { sourceSize, bundledSize, gzipSize, brotliSize } =
+      sumDirValue(child);
     sourceSum += sourceSize;
     bundledSum += bundledSize;
     gzipSum += gzipSize;
+    if (brotliSize !== undefined) brotliSum = (brotliSum ?? 0) + brotliSize;
   }
   node.sourceSize = sourceSum;
   node.bundledSize = bundledSum;
   node.gzipSize = gzipSum;
-  return { sourceSize: sourceSum, bundledSize: bundledSum, gzipSize: gzipSum };
+  node.brotliSize = brotliSum;
+  return {
+    sourceSize: sourceSum,
+    bundledSize: bundledSum,
+    gzipSize: gzipSum,
+    brotliSize: brotliSum,
+  };
 }
 
 export function flattenTreemapData(

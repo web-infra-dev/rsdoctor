@@ -44,6 +44,7 @@ type TreemapDataNode = NonNullable<TreemapSeriesOption['data']>[number] & {
   sourceSize?: number;
   bundledSize?: number;
   gzipSize?: number;
+  brotliSize?: number;
   moduleId?: string | number;
 };
 
@@ -57,6 +58,7 @@ export type TreeNode = {
   sourceSize?: number;
   bundledSize?: number;
   gzipSize?: number;
+  brotliSize?: number;
   id?: string | number;
 };
 
@@ -182,6 +184,7 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
         let val = 0;
         if (sizeType === 'stat') val = node.sourceSize || 0;
         else if (sizeType === 'parsed') val = node.bundledSize || 0;
+        else if (sizeType === 'brotli') val = node.brotliSize || 0;
         else if (sizeType === 'gzip') val = node.gzipSize || 0;
         else if (sizeType === 'value') val = node.value || 0;
 
@@ -235,6 +238,8 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
           bundledSize:
             node.bundledSize ?? (sizeType === 'parsed' ? val : undefined),
           gzipSize: node.gzipSize ?? (sizeType === 'gzip' ? val : undefined),
+          brotliSize:
+            node.brotliSize ?? (sizeType === 'brotli' ? val : undefined),
           moduleId: node.id,
           itemStyle: {
             borderWidth: isHighlighted ? 4 : 1,
@@ -367,6 +372,11 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
             }
 
             const rows = [];
+            if (node.brotliSize !== undefined && node.brotliSize > 0) {
+              rows.push(
+                makeRow('Brotli size', formatSize(node.brotliSize), '#a78bfa'),
+              );
+            }
             if (sourceSize !== undefined && sourceSize > 0) {
               rows.push(
                 makeRow('Stat size', formatSize(sourceSize), '#43c6d9'),
@@ -881,6 +891,7 @@ const AssetTreemapWithFilterInner: React.FC<{
               <Radio.Button value="stat">Stat</Radio.Button>
               <Radio.Button value="parsed">Parsed</Radio.Button>
               <Radio.Button value="gzip">Gzipped</Radio.Button>
+              <Radio.Button value="brotli">Brotli</Radio.Button>
             </Radio.Group>
           </div>
 

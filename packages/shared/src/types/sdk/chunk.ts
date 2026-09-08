@@ -10,6 +10,7 @@ export interface AssetInstance {
   /** File resource content */
   content: string;
   gzipSize: number | undefined;
+  brotliSize?: number;
   /** Generate data */
   toData(type: ToDataType): AssetData;
   setId(id: number): void;

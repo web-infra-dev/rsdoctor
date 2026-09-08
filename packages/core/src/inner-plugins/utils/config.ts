@@ -51,6 +51,36 @@ function normalizeGzip(value: unknown): Plugin.NormalizedGzipConfig {
   };
 }
 
+function normalizeBrotliLevel(value: unknown): number {
+  const brotliLevel = value === undefined ? 6 : value;
+  assert(
+    typeof brotliLevel === 'number' &&
+      Number.isInteger(brotliLevel) &&
+      brotliLevel >= 0 &&
+      brotliLevel <= 11,
+    '`supports.brotli.brotliLevel` must be an integer between 0 and 11.',
+  );
+  return brotliLevel;
+}
+function normalizeBrotli(value: unknown): Plugin.NormalizedBrotliConfig {
+  assert(
+    value === undefined ||
+      typeof value === 'boolean' ||
+      (typeof value === 'object' && value !== null && !Array.isArray(value)),
+    '`supports.brotli` must be a boolean or an object.',
+  );
+  if (value === false || value === undefined) {
+    return false;
+  }
+  const brotliLevel =
+    typeof value === 'object' && value !== null
+      ? (value as { brotliLevel?: unknown }).brotliLevel
+      : undefined;
+  return {
+    brotliLevel: normalizeBrotliLevel(brotliLevel),
+  };
+}
+
 export function isCompilerWatching(
   compiler: Pick<Plugin.BaseCompiler, 'watchMode' | 'parentCompilation'>,
 ): boolean {
@@ -59,11 +89,13 @@ export function isCompilerWatching(
   );
 }
 
-export function getEffectiveGzipConfig(
+export function getEffectiveCompressionConfig<
+  T extends Plugin.NormalizedGzipConfig | Plugin.NormalizedBrotliConfig,
+>(
   compiler: Pick<Plugin.BaseCompiler, 'watchMode' | 'parentCompilation'>,
-  gzip: Plugin.NormalizedGzipConfig,
-): Plugin.NormalizedGzipConfig {
-  return isCompilerWatching(compiler) ? false : gzip;
+  compression: T,
+): T | false {
+  return isCompilerWatching(compiler) ? false : compression;
 }
 
 function normalizeFeatures(features: any, mode: keyof typeof SDK.IMode) {
@@ -141,6 +173,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     ...getDefaultSupports(),
     ...userSupports,
     gzip: normalizeGzip(userSupports.gzip),
+    brotli: normalizeBrotli(userSupports.brotli),
   };
   // If process.env.RSTEST is set to true, disableClientServer should be false
   // Otherwise, if process.env.CI is set, disableClientServer should be true

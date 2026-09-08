@@ -37,3 +37,36 @@ describe('treeMapSize', () => {
     ).toBe(130);
   });
 });
+describe('Brotli treemap sizes', () => {
+  it('uses the asset size instead of summing module sizes', () => {
+    expect(
+      calculateTreeNodeTotalSize(
+        {
+          brotliSize: 100,
+          children: [{ brotliSize: 40 }, { brotliSize: 50 }],
+        },
+        'brotli',
+      ),
+    ).toBe(100);
+  });
+
+  it('sums children when a directory has no own size', () => {
+    expect(
+      calculateTreeNodeTotalSize(
+        {
+          children: [{ brotliSize: 40 }, { brotliSize: 50 }],
+        },
+        'brotli',
+      ),
+    ).toBe(90);
+  });
+
+  it('sums all visible assets using the selected size type', () => {
+    expect(
+      calculateTreeNodesTotalSize(
+        [{ brotliSize: 100 }, { brotliSize: 25 }, { brotliSize: 5 }],
+        'brotli',
+      ),
+    ).toBe(130);
+  });
+});

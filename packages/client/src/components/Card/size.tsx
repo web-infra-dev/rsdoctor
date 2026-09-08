@@ -14,13 +14,14 @@ import styles from './size.module.scss';
 
 const { DirectoryTree } = Tree;
 const height = 100;
-type SizeMetric = 'size' | 'gzip';
+type SizeMetric = 'size' | 'gzip' | 'brotli';
 
 export interface SizeCardProps {
   files: {
     path: string;
     size: number;
     gzipSize?: number;
+    brotliSize?: number;
   }[];
   /**
    * total size for origin files
@@ -53,13 +54,21 @@ export const SizeCard: React.FC<SizeCardProps> = ({
   const gzipSum = useMemo(() => {
     return sumBy(files, (e) => e.gzipSize ?? 0);
   }, [files]);
+  const brotliSum = useMemo(
+    () => sumBy(files, (file) => file.brotliSize ?? 0),
+    [files],
+  );
+  const hasBrotliSize = files.some((file) => file.brotliSize !== undefined);
   const hasGzipSize = files.some((file) => file.gzipSize !== undefined);
 
   useEffect(() => {
-    if (!hasGzipSize) {
+    if (
+      (sizeMetric === 'gzip' && !hasGzipSize) ||
+      (sizeMetric === 'brotli' && !hasBrotliSize)
+    ) {
       setSizeMetric('size');
     }
-  }, [hasGzipSize, type]);
+  }, [hasGzipSize, hasBrotliSize, sizeMetric, type]);
 
   return (
     <ServerAPIProvider
@@ -73,8 +82,18 @@ export const SizeCard: React.FC<SizeCardProps> = ({
           res.all.total.files,
           (file) => file.gzipSize ?? 0,
         );
-        const selectedSize = sizeMetric === 'gzip' ? gzipSum : sum;
-        const selectedTotal = sizeMetric === 'gzip' ? totalGzipSize : total;
+        const selectedSize =
+          sizeMetric === 'brotli'
+            ? brotliSum
+            : sizeMetric === 'gzip'
+              ? gzipSum
+              : sum;
+        const selectedTotal =
+          sizeMetric === 'brotli'
+            ? sumBy(res.all.total.files, (file) => file.brotliSize ?? 0)
+            : sizeMetric === 'gzip'
+              ? totalGzipSize
+              : total;
         const percent = selectedTotal
           ? +((selectedSize / selectedTotal) * 100).toFixed(2)
           : 0;
@@ -102,6 +121,11 @@ export const SizeCard: React.FC<SizeCardProps> = ({
                 options={[
                   { label: 'Size', value: 'size' },
                   { label: 'Gzip', value: 'gzip', disabled: !hasGzipSize },
+                  {
+                    label: 'Brotli',
+                    value: 'brotli',
+                    disabled: !hasBrotliSize,
+                  },
                 ]}
                 value={sizeMetric}
                 size="small"

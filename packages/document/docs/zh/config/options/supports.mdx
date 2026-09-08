@@ -15,6 +15,7 @@ type ISupport = {
   banner?: boolean;
   parseBundle?: boolean;
   generateTileGraph?: boolean;
+  brotli?: boolean | { brotliLevel?: number };
   gzip?:
     | boolean
     | {
@@ -102,6 +103,24 @@ new RsdoctorRspackPlugin({
 new RsdoctorRspackPlugin({
   supports: {
     gzip: false,
+  },
+});
+```
+
+## brotli
+
+- **类型：** `boolean | { brotliLevel?: number }`
+- **默认值：** `false`
+
+计算报告中 Asset 和 Module 的 Brotli 大小，并在体积卡片和矩形树图中展示。该选项不会压缩或修改构建产物。与 gzip 一样，watch 模式下会跳过 Brotli 计算。
+
+设置 `brotli: true` 或 `brotli: {}` 时使用默认压缩级别 `6`。`brotliLevel` 必须是 `0` 到 `11` 之间的整数；较高的级别可能增加分析耗时。只需要 Brotli 大小时，可以独立关闭 gzip：
+
+```ts
+new RsdoctorRspackPlugin({
+  supports: {
+    gzip: false,
+    brotli: { brotliLevel: 11 },
   },
 });
 ```

@@ -81,6 +81,8 @@ export interface ModuleSize {
    * Gzipped size of the module source (optional)
    */
   gzipSize: number;
+  /** Brotli-compressed module size, when enabled. */
+  brotliSize?: number;
 }
 
 /** Module source code */

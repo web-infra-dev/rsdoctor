@@ -122,13 +122,15 @@ export class Package implements SDK.PackageInstance {
   }
 
   getSize(): SDK.ModuleSize {
-    return this._modules.reduce(
+    return this._modules.reduce<SDK.ModuleSize>(
       (ans, item) => {
         const size = item.getSize();
         ans.sourceSize += size.sourceSize;
         ans.transformedSize += size.transformedSize;
         ans.parsedSize += size.parsedSize;
         ans.gzipSize += size.gzipSize;
+        if (size.brotliSize !== undefined)
+          ans.brotliSize = (ans.brotliSize ?? 0) + size.brotliSize;
         return ans;
       },
       {

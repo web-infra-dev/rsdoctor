@@ -429,6 +429,15 @@ const GzippedSizeTag = ({ size }: { size: number }) => {
     </AbstractTag>
   );
 };
+const BrotliSizeTag = ({ size }: { size: number }) => (
+  <AbstractTag
+    color="purple"
+    style={null}
+    tooltipTitle="The size of this module compressed with Brotli."
+  >
+    {`brotli: ${formatSize(size)}`}
+  </AbstractTag>
+);
 const TotalSourceSizeTag = ({ size }: { size: number }) => {
   return (
     <AbstractTag
@@ -805,7 +814,12 @@ const AssetDetailTreeFileEntry = memo(
     onClick: (modId: number) => void;
   }) => {
     const isConcatenation = mod.kind === SDK.ModuleKind.Concatenation;
-    const { parsedSize = 0, sourceSize = 0, gzipSize = 0 } = mod.size;
+    const {
+      parsedSize = 0,
+      sourceSize = 0,
+      gzipSize = 0,
+      brotliSize,
+    } = mod.size;
 
     const renderSize = () => {
       if (parsedSize !== 0) {
@@ -816,7 +830,10 @@ const AssetDetailTreeFileEntry = memo(
             <Popover placement="bottom" content={sourceSizeTag}>
               <Space direction="horizontal">
                 {bundledSizeTag}
-                <GzippedSizeTag size={gzipSize} />
+                {gzipSize > 0 && <GzippedSizeTag size={gzipSize} />}
+                {brotliSize !== undefined && (
+                  <BrotliSizeTag size={brotliSize} />
+                )}
               </Space>
             </Popover>
           );

@@ -270,6 +270,10 @@ export class Module implements SDK.ModuleInstance {
     size.sourceSize = input.sourceSize ?? size.sourceSize;
     size.transformedSize = input.transformedSize ?? size.transformedSize;
     size.parsedSize = input.parsedSize ?? size.parsedSize;
+    if ('brotliSize' in input) {
+      if (input.brotliSize === undefined) delete size.brotliSize;
+      else size.brotliSize = input.brotliSize;
+    }
     if (typeof input.gzipSize === 'number') {
       size.gzipSize = input.gzipSize;
     }

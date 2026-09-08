@@ -13,6 +13,7 @@ export class Asset implements SDK.AssetInstance {
   content: string;
   chunks: SDK.ChunkInstance[];
   gzipSize: number | undefined;
+  brotliSize?: number;
 
   constructor(
     path: string,
@@ -33,6 +34,7 @@ export class Asset implements SDK.AssetInstance {
       path: this.path,
       size: this.size,
       gzipSize: this.gzipSize,
+      ...(this.brotliSize !== undefined ? { brotliSize: this.brotliSize } : {}),
       chunks: this.chunks?.map((ck) => ck.id),
       content:
         types === SDK.ToDataType.NoSourceAndAssets ||

@@ -1,6 +1,6 @@
 import { Chunks } from '@rsdoctor/shared/graph';
 import { parseBundle } from '../utils';
-import { SDK } from '@rsdoctor/shared/types';
+import { SDK, Plugin } from '@rsdoctor/shared/types';
 
 export type GzipOptions =
   | {
@@ -34,6 +34,7 @@ export async function getAssetsModulesData(
   hasParseBundle = true,
   assetsWithoutSourceMap?: Set<string>,
   gzipOptions?: GzipOptions,
+  brotli: Plugin.NormalizedBrotliConfig = false,
 ) {
   return Chunks.getAssetsModulesData(
     moduleGraph,
@@ -41,6 +42,8 @@ export async function getAssetsModulesData(
     bundleDir,
     {
       ...(hasParseBundle ? { parseBundle } : {}),
+      brotli: brotli !== false,
+      brotliLevel: brotli === false ? undefined : brotli.brotliLevel,
       gzip: gzipOptions?.enabled,
       gzipLevel: gzipOptions?.enabled ? gzipOptions.level : undefined,
     },

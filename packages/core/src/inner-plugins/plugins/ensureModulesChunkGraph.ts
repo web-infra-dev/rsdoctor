@@ -12,7 +12,7 @@ import {
   type RspackNativeGraphState,
 } from './rspack';
 import { handleAfterEmitAssets } from './sourcemapTool';
-import { getEffectiveGzipConfig } from '../utils/config';
+import { getEffectiveCompressionConfig } from '../utils/config';
 
 /**
  * Represents a mapping item from a source map.
@@ -122,7 +122,10 @@ async function doneHandler(
    * Optionally parses bundle if enabled in options.
    */
   const shouldParseBundle = _this.options.supports.parseBundle !== false;
-  const gzip = getEffectiveGzipConfig(compiler, _this.options.supports.gzip);
+  const gzip = getEffectiveCompressionConfig(
+    compiler,
+    _this.options.supports.gzip,
+  );
   await getModulesInfos(
     compiler,
     _this.modulesGraph,
@@ -133,6 +136,7 @@ async function doneHandler(
     gzip === false
       ? { enabled: false }
       : { enabled: true, level: gzip.gzipLevel },
+    getEffectiveCompressionConfig(compiler, _this.options.supports.brotli),
   );
 
   // Report graphs to SDK for further processing or client display
@@ -192,6 +196,7 @@ async function getModulesInfos(
   sourceMapSets: Map<string, string>,
   assetsWithoutSourceMap?: Set<string>,
   gzipOptions?: ChunksBuildUtils.GzipOptions,
+  brotli: Plugin.NormalizedBrotliConfig = false,
 ) {
   if (!moduleGraph) {
     return;
@@ -205,6 +210,7 @@ async function getModulesInfos(
       parseBundle,
       assetsWithoutSourceMap,
       gzipOptions,
+      brotli,
     );
   } catch {
     // Ignore errors

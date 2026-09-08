@@ -3,7 +3,7 @@ import type { Assets } from '@rspack/core';
 import { InternalBasePlugin } from './base';
 import { Chunks } from '@rsdoctor/shared/graph';
 import { logger, time, timeEnd } from '@/logger';
-import { getEffectiveGzipConfig } from '../utils/config';
+import { getEffectiveCompressionConfig } from '../utils/config';
 
 export class InternalBundlePlugin<
   T extends Plugin.BaseCompiler,
@@ -95,9 +95,13 @@ export class InternalBundlePlugin<
         Chunks.assetsContents(
           this.map,
           this.scheduler.chunkGraph,
-          getEffectiveGzipConfig(
+          getEffectiveCompressionConfig(
             compiler,
             this.scheduler.options.supports.gzip,
+          ),
+          getEffectiveCompressionConfig(
+            compiler,
+            this.scheduler.options.supports.brotli,
           ),
         );
       }

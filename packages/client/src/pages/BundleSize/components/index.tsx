@@ -269,6 +269,7 @@ const AssetTreemapWithFilterAndData = memo(() => {
                       : item.asset.size,
                     bundledSize: item.asset.size,
                     gzipSize: item.asset.gzipSize ?? 0,
+                    brotliSize: item.asset.brotliSize,
                     children: moduleTree.children,
                   };
                 });
