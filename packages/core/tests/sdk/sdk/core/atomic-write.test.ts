@@ -38,7 +38,6 @@ describe('core package output', () => {
         'Linter',
         'LinterRule',
         'LinterType',
-        'RsdoctorRspackMultiplePlugin',
         'RsdoctorRspackPlugin',
         'RsdoctorSDK',
         'defineRule',

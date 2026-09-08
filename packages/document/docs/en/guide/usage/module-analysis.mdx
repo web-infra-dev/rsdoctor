@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**Rsdoctor** provides the `Module Reference Chain Analysis` module, which is mainly used to analyze the dependency tree of a specific Module, i.e., which modules depend on it, similar to [Webpack's stats.reasons](https://webpack.js.org/configuration/stats/#statsreasons).
+**Rsdoctor** provides the `Module Reference Chain Analysis` module, which is mainly used to analyze the dependency tree of a specific Module, i.e., which modules depend on it, similar to [Rspack's stats.reasons](https://rspack.rs/config/stats#statsreasons).
 
 In this module, you can analyze the `Module` reference chain. If you have the need to split packages or want to see why a certain `Module` is being imported, you can quickly and clearly locate the reference chain through `Module Reference Chain Analysis`.
 
@@ -20,7 +20,7 @@ After clicking on an **Assets** in the `「Bundle Size」` page, the `「Module 
 
 ### Glossary
 
-- **`Reasons`**: As the name suggests, it means the `[reason]` why a `Module` exists. Reasons indicate which `Module`s import this `Module`, and the entire `Reasons Tree` represents the upstream reference chain of this `Module`, including both direct and indirect parents. [Similar to Rspack's stats.reasons.](https://webpack.js.org/configuration/stats/#statsreasons)
+- **`Reasons`**: As the name suggests, it means the `[reason]` why a `Module` exists. Reasons indicate which `Module`s import this `Module`, and the entire `Reasons Tree` represents the upstream reference chain of this `Module`, including both direct and indirect parents. [Similar to Rspack's stats.reasons.](https://rspack.rs/config/stats#statsreasons)
 - **`Dependencies`**: The `Module`s that this `Module` depends on.
 - **`Bailout Reason`**: The reason why this `Module` failed Tree Shaking.
 

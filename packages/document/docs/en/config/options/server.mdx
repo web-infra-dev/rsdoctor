@@ -14,7 +14,7 @@ Configure the Rsdoctor report server.
 
 Configure the port for the Rsdoctor report server.
 
-If `server.port` is not set, Rsdoctor uses the top-level [`port`](./port.mdx) option. If both options are set, `server.port` takes priority.
+If `server.port` is not set, Rsdoctor selects an available port between 3000 and 8999.
 
 ```js
 new RsdoctorRspackPlugin({

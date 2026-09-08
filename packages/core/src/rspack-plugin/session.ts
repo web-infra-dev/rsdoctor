@@ -12,7 +12,6 @@ export interface RsdoctorBuildSessionOptions {
   server: {
     port?: number;
   };
-  port?: number;
 }
 
 interface PendingSession {
@@ -35,7 +34,7 @@ function getSessionKey(options: RsdoctorBuildSessionOptions): string {
     root,
     options.output.mode,
     options.output.reportDir,
-    options.server.port ?? options.port ?? '',
+    options.server.port ?? '',
   ].join('\0');
 }
 

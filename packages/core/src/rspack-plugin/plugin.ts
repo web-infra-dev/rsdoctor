@@ -86,9 +86,7 @@ export class RsdoctorRspackPlugin<
 
   private readonly childOptions: RsdoctorRspackPluginOptions<Rules>;
 
-  private readonly defaultName: string;
-
-  private readonly defaultStage?: number;
+  private readonly defaultName = pluginTapName;
 
   private readonly controller?: RsdoctorSDKController;
 
@@ -121,15 +119,6 @@ export class RsdoctorRspackPlugin<
     this.options = normalizeRspackUserOptions<Rules>(this.childOptions);
     this.outsideInstance = Boolean(this.options.sdkInstance);
 
-    const compatibilityOptions = options as
-      | (RsdoctorRspackPluginOptions<Rules> & {
-          name?: string;
-          stage?: number;
-        })
-      | undefined;
-    this.defaultName = compatibilityOptions?.name || pluginTapName;
-    this.defaultStage = compatibilityOptions?.stage;
-
     if (this.options.sdkInstance) {
       if (this.options.sdkInstance instanceof RsdoctorPrimarySDK) {
         this.controller = this.options.sdkInstance.parent;
@@ -145,7 +134,7 @@ export class RsdoctorRspackPlugin<
 
     this.sessionLease = acquireBuildSession(this.options);
     this.controller = this.sessionLease.controller;
-    this.primaryContext = this.createCompilerContext(this.defaultStage);
+    this.primaryContext = this.createCompilerContext();
   }
 
   public get sdk() {
@@ -405,13 +394,12 @@ export class RsdoctorRspackPlugin<
     }
   }
 
-  private createCompilerContext(stage?: number) {
+  private createCompilerContext() {
     const controller = this.controller!;
     const { output, innerClientPath, printLog, server, features } =
       this.options;
     const sdk = controller.createSlave({
       name: this.defaultName,
-      stage,
       extraConfig: {
         innerClientPath,
         printLog,

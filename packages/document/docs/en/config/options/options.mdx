@@ -19,10 +19,8 @@ This `Options` object is the configuration for [RsdoctorRspackPlugin](#rsdoctorr
 - [disableClientServer](./disableClientServer.mdx) - **Client Service Control**: Whether to not automatically open the Rsdoctor report service after analysis is complete.
 - [features](./features.mdx) - **Feature Toggle Configuration**: Control various analysis features of Rsdoctor, such as loader analysis, bundle analysis, rule checking, etc.
 - [output](./output.mdx) - **Output Related Configuration**: Control report output format, directory and other options, including mode, options, reportCodeType, etc.
-- [port](./port.mdx) - **Service Port Configuration**: Set the port number for the Rsdoctor development server, used for report preview during local development.
 - [server](./server.mdx) - **Report Server Configuration**: Configure the Rsdoctor report server, including `server.port` and `server.cors`.
 - [supports](./supports.mdx) - **Feature Support Configuration**: Enable compatibility support for specific build tools, such as BannerPlugin, etc.
-- [brief](./brief.mdx) - **Brief Mode Configuration**: Control the generation of brief mode reports, including HTML filename and whether to generate JSON data files.
 - [multiCompiler](./multiCompiler.mdx) - **Multi-compiler Configuration**: Automatically detect and isolate reports for Rspack MultiCompiler and Rsbuild environments.
 
 ### RsdoctorRspackPluginOptions
@@ -44,14 +42,7 @@ interface RsdoctorRspackPluginOptions<
 
   supports?: ISupport;
 
-  port?: number;
-
   server?: SDK.RsdoctorServerConfig;
-
-  /**
-   * @deprecated Use `output.options.htmlOptions` instead
-   */
-  brief?: Config.BriefConfig;
 
   output?: Config.IOutput<'brief' | 'normal'>;
 }

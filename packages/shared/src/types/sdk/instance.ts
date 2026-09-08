@@ -3,7 +3,7 @@ import type { SourceMapConsumer, RawSourceMap } from 'source-map';
 import { LoaderData, ResourceLoaderData } from './loader';
 import { ResolverData } from './resolver';
 import { PluginData } from './plugin';
-import { BuilderStoreData, EMOStoreData } from './result';
+import { BuilderStoreData } from './result';
 import { ModuleGraphInstance, ToDataType } from './module';
 import {
   RsdoctorManifestClientRoutes,
@@ -15,7 +15,6 @@ import { ChunkGraphInstance } from './chunk';
 import { RsdoctorServerInstance } from './server';
 import { PlainObject } from '../common';
 import { BriefModeOptions } from '../config';
-import { EmoCheckData } from '../emo';
 import { SummaryData } from './summary';
 import { ConfigData } from './config';
 
@@ -79,11 +78,6 @@ export interface RsdoctorBuilderSDKInstance extends RsdoctorSDKInstance {
   clear(): void;
   /** Write store data to files */
   writeStore(options?: WriteStoreOptionsType): Promise<string>;
-}
-
-export interface RsdoctorEMOSDKInstance extends RsdoctorSDKInstance {
-  reportEmoData(data: EmoCheckData): void;
-  getStoreData(): EMOStoreData;
 }
 
 export interface RsdoctorSDKInstance {

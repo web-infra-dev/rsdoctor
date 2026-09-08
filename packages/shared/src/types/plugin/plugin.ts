@@ -43,8 +43,6 @@ export interface RsdoctorPluginOptionsNormalized<
     | 'linter'
     | 'output'
     | 'supports'
-    | 'port'
-    | 'brief'
     | 'server'
     | 'multiCompiler'
   >
@@ -58,7 +56,6 @@ export interface RsdoctorPluginOptionsNormalized<
     reportDir: string;
     options: Config.BriefModeOptions | Config.NormalModeOptions;
   };
-  port?: number;
   server: SDK.RsdoctorServerConfig;
   supports: NormalizedSupports;
   multiCompiler: {
@@ -94,8 +91,8 @@ export type BrotliConfig =
 export type NormalizedBrotliConfig = false | { brotliLevel: number };
 
 interface ISupport {
+  banner?: boolean;
   parseBundle?: boolean;
-  generateTileGraph?: boolean;
   /**
    * Whether and how to calculate gzip sizes for assets and modules.
    * Set to `false` to disable gzip calculation, `true` to use the default
@@ -175,13 +172,6 @@ export interface RsdoctorRspackPluginOptions<
   supports?: ISupport;
 
   /**
-   * The port of the Rsdoctor server.
-   *
-   * @deprecated Use `server.port` instead.
-   */
-  port?: number;
-
-  /**
    * Options for the Rsdoctor report server.
    */
   server?: SDK.RsdoctorServerConfig;
@@ -190,13 +180,6 @@ export interface RsdoctorRspackPluginOptions<
    * Options to control the log printing.
    */
   printLog?: SDK.IPrintLog;
-
-  /**
-   * @deprecated  Use `output.options.htmlOptions` instead.
-   * Please use the output.options to set the brief options, BriefModeOptions.
-   * Options to control brief mode reports.
-   */
-  brief?: Config.BriefConfig;
 
   /**
    * The name of inner rsdoctor's client package, used by inner-rsdoctor.

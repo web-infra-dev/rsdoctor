@@ -35,16 +35,16 @@ Tree Graph 是一种**基于文件树形式**的构建产物分析视图，能�
 
 ## 🪐 名词解释
 
-- **`Assets`**：资源是最终存在于输出文件夹内的文件，包括 JavaScript、CSS、图像、字体、媒体等文件类型。每个 Chunk 都有对应的 [Assets 资源](https://webpack.js.org/concepts/under-the-hood/#chunks)。
-- **`Module`**：多个 Module 组合成了 Chunk。有关 Module 类型的详细信息，请参阅 [Rspack Modules](https://rspack.rs/misc/glossary#module-type) 和 [Webpack Modules](https://webpack.js.org/concepts/modules/#what-is-a-webpack-module)。
+- **`Assets`**：资源是最终存在于输出文件夹内的文件，包括 JavaScript、CSS、图像、字体、媒体等文件类型。每个 Chunk 都有对应的 [Assets 资源](https://rspack.rs/misc/glossary#asset)。
+- **`Module`**：多个 Module 组合成了 Chunk。有关 Module 类型的详细信息，请参阅 [Rspack Modules](https://rspack.rs/misc/glossary#module-type)。
 - **`Source Size`**：文件的原始大小，未经过任何转换和压缩。
 - **`Bundle Size`**：文件最终输出的大小。如果开启了压缩，这个值代表压缩后的大小。
 - **`Gzip Size`**：文件经过 gzip 压缩后的大小。
 - **`Package Count`**：第三方包的数量。
 - **`Initial Chunk`**: **initial(初始化)** 是入口起点的主 Chunk，该 Chunk 包含入口起点指定的所有模块及其依赖项，与「**按需加载**」的 **Chunk** 资源不同。
-  - 有关 Initial Chunk 的详细信息，请参阅 [Initial Chunk 介绍](https://webpack.js.org/concepts/under-the-hood/#chunks)。
+  - 有关 Initial Chunk 的详细信息，请参阅 [Initial Chunk 介绍](https://rspack.rs/misc/glossary#initial-chunk)。
 - **`Duplicate Packages`**: 打包到项目中的重复的第三方包。不包括未打包进产物的第三方包，请参阅[重复第三方包](/guide/usage/bundle-alerts)。
-- **`Concatenated Module`**: 串联模块是将多个模块在打包时提升或串联到一个闭包中。在过去，Webpack 在打包时会将每个模块都打包到单独的闭包中，这种封装函数会导致 JavaScript 在浏览器中执行时较慢。可以通过开启 [`optimization.concatenateModules`](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6) 参数来进行优化。
+- **`Concatenated Module`**: 串联模块是将多个模块在打包时提升或串联到一个闭包中。将每个模块封装在单独的函数中会增加浏览器中的运行时开销。可以通过开启 [`optimization.concatenateModules`](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6) 参数来进行优化。
 
 ## 🪐 产物概览
 
@@ -155,7 +155,7 @@ Tree Graph 是一种**基于文件树形式**的构建产物分析视图，用�
 
 ### 模块标签说明
 
-**Assets** 标签如左图所示，从左到右依次代表：**资源体积**、**[Initial Chunk](https://webpack.js.org/concepts/under-the-hood/#chunks)** 和 **代码查看**。
+**Assets** 标签如左图所示，从左到右依次代表：**资源体积**、**[Initial Chunk](https://rspack.rs/misc/glossary#initial-chunk)** 和 **代码查看**。
 
 <div style={{ display: 'flex' }}>
   <img

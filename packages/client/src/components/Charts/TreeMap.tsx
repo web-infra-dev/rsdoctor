@@ -18,6 +18,7 @@ import {
   FullscreenExitOutlined,
 } from '@ant-design/icons';
 import type { ComposeOption, EChartsType } from 'echarts/core';
+import { Rspack } from '@rsdoctor/shared/common-browser';
 import { formatSize, usePersistedState, useThemeToken } from 'src/utils';
 import { SDK } from '@rsdoctor/shared/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
@@ -67,6 +68,7 @@ export type SizeType = TreeMapSizeType;
 interface TreeMapProps {
   treeData: TreeNode[];
   sizeType: SizeType;
+  showAlert?: boolean;
   style?: React.CSSProperties;
   onChartClick?: (params: ECElementEvent) => void;
   highlightNodeId?: number;
@@ -140,6 +142,7 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
   ({
     treeData,
     sizeType,
+    showAlert,
     onChartClick,
     highlightNodeId,
     centerNodeId,
@@ -567,7 +570,7 @@ export const TreeMap: React.FC<TreeMapProps> = memo(
 
     return option ? (
       <div className={Styles.mainArea}>
-        <TreemapAlert />
+        {showAlert && sizeType === 'parsed' && <TreemapAlert />}
         <div className={Styles.chartRoot}>
           <EChartsReactCore
             ref={chartRef}
@@ -642,12 +645,16 @@ export const AssetTreemapWithFilter: React.FC<{
   return (
     <ServerAPIProvider api={SDK.ServerAPI.API.GetProjectInfo}>
       {(projectInfo) => {
+        const { isLynx, isEvalSourceMap } = Rspack.checkSourceMapSupport(
+          projectInfo.configs,
+        );
         return (
           <AssetTreemapWithFilterInner
             treeData={treeData}
             onChartClick={onChartClick}
             bundledSize={bundledSize}
             rootPath={projectInfo.root}
+            showAlert={isLynx || isEvalSourceMap}
           />
         );
       }}
@@ -660,7 +667,8 @@ const AssetTreemapWithFilterInner: React.FC<{
   onChartClick?: (params: ECElementEvent) => void;
   bundledSize?: boolean;
   rootPath: string;
-}> = ({ treeData, onChartClick, bundledSize = true, rootPath }) => {
+  showAlert?: boolean;
+}> = ({ treeData, onChartClick, bundledSize = true, rootPath, showAlert }) => {
   const assetNames = useMemo(
     () => treeData.map((item) => item.name),
     [treeData],
@@ -1020,6 +1028,7 @@ const AssetTreemapWithFilterInner: React.FC<{
       <TreeMap
         treeData={filteredTreeData}
         sizeType={sizeType}
+        showAlert={showAlert}
         onChartClick={handleChartClick}
         highlightNodeId={highlightNodeId}
         centerNodeId={centerNodeId}

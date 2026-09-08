@@ -14,7 +14,7 @@
 
 配置 Rsdoctor 报告服务的端口。
 
-如果没有配置 `server.port`，Rsdoctor 会使用顶层 [`port`](./port.mdx) 配置。如果两个配置同时存在，`server.port` 优先级更高。
+如果没有配置 `server.port`，Rsdoctor 会在 3000 到 8999 之间选择一个可用端口。
 
 ```js
 new RsdoctorRspackPlugin({

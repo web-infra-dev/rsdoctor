@@ -2,16 +2,17 @@
 
 **Rsdoctor 1.2.4 引入了 Rsdoctor 2.x 使用的 output 配置。** 与旧版配置相比，新配置更易于使用和扩展。
 
-顶层 `mode` 和旧版 `output.compressData` 配置已在 Rsdoctor 2.x 中移除且会被忽略。旧版 `brief` 配置已废弃，仅为向后兼容而保留。请根据下表迁移这些配置。两种 `features` lite 配置仍受支持，下表仅列出其等价的 `output` 配置。
+顶层 `mode`、`port`、`brief` 和旧版 `output.compressData` 配置已在 Rsdoctor 2.x 中移除且会被忽略。请根据下表迁移这些配置。两种 `features` lite 配置仍受支持，下表仅列出其等价的 `output` 配置。
 
-| 原配置                                             | 新配置                                                                                                        |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| mode                                               | 改为配置 `output.mode`。                                                                                      |
-| brief                                              | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。                               |
-| output.compressData                                | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['json']`。                               |
-| `mode: 'lite'`                                     | 改为配置 `output.mode: 'normal'`，并将 `output.reportCodeType` 设置为 `noCode` 或 `noAssetsAndModuleSource`。 |
-| `features: { lite: true }` 或 `features: ['lite']` | 仍受支持。等价的 `output` 配置为 `output.mode: 'normal'`，并按上一行设置 `output.reportCodeType`。            |
-| 无                                                 | 新增 `output.options.jsonOptions.sections` 配置                                                               |
+| 原配置                                             | 新配置                                                                                                                                                        |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| mode                                               | 改为配置 `output.mode`。                                                                                                                                      |
+| port                                               | 改为配置 `server.port`。                                                                                                                                      |
+| brief                                              | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。将 `brief.reportHtmlName` 迁移至 `output.options.htmlOptions.reportHtmlName`。 |
+| output.compressData                                | 改为配置 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['json']`。                                                                               |
+| `mode: 'lite'`                                     | 改为配置 `output.mode: 'normal'`，并将 `output.reportCodeType` 设置为 `noCode` 或 `noAssetsAndModuleSource`。                                                 |
+| `features: { lite: true }` 或 `features: ['lite']` | 仍受支持。等价的 `output` 配置为 `output.mode: 'normal'`，并按上一行设置 `output.reportCodeType`。                                                            |
+| 无                                                 | 新增 `output.options.jsonOptions.sections` 配置                                                                                                               |
 
 ## 配置改动详情
 
@@ -21,8 +22,8 @@
 
 ### brief
 
-目前的 brief 简报模式输出一个 html 文件为报告页，新增的 brief 模式还是支持 JSON 格式，同时也为了相同配置统一管理，所以 brief 配置前移到了 output.options 中。
-将原有的 `brief` 配置替换为 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。
+顶层 `brief` 配置已在 Rsdoctor 2.x 中移除。当前 brief 简报模式同时支持 HTML 和 JSON 输出，相关配置统一收敛到 `output.options`。
+将原有的 `brief` 配置替换为 `output.mode: 'brief'`，并将 `output.options.type` 设置为 `['html']`。将 `brief.reportHtmlName` 迁移至 `output.options.htmlOptions.reportHtmlName`。
 
 ### output.compressData
 
