@@ -89,9 +89,7 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 - Branch off `main`; never commit directly to `main`.
 - PR title must follow **Conventional Commits**: `type(scope): description`.
 - Common scopes: `core`, `rspack-plugin`, `webpack-plugin`, `sdk`, `cli`, `ai`, `graph`, `utils`, `components`, `client`, `deps`.
-- PR body must follow `.github/PULL_REQUEST_TEMPLATE.md` with two sections:
-  - `## Summary` — what changed and why.
-  - `## Related Links` — issue links, docs, related PRs, or `None`.
+- Read `.github/PULL_REQUEST_TEMPLATE.md` and follow its current headings and guidance.
 
 ## Conventions for AI agents
 

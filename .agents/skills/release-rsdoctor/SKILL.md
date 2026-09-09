@@ -39,7 +39,4 @@ If the version is missing, ask for it before making changes.
 
 7. Push the branch, then create a GitHub PR with `gh pr create`. Use the same text for the PR title: `release: v<version>`
 
-8. If `.github/PULL_REQUEST_TEMPLATE.md` exists, keep its structure.
-   Fill it with:
-   - `Summary`: `Release v<version>.`
-   - `Related Links`: `https://github.com/web-infra-dev/rsdoctor/releases/tag/v<version>`
+8. Read the repository's PR template when available and follow its current headings and guidance. Explain that the PR prepares release `v<version>` by updating the fixed group's package versions and lockfile. Include the release link: `https://github.com/web-infra-dev/rsdoctor/releases/tag/v<version>`.
