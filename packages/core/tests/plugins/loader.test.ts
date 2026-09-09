@@ -2,7 +2,7 @@ import { Loader } from '@rsdoctor/utils/common';
 import { describe, it, expect } from '@rstest/core';
 import path from 'path';
 import { ProxyLoaderInternalOptions } from '@/types';
-import { interceptLoader } from '@/inner-plugins/utils';
+import { interceptLoader, type CompatibleResolve } from '@/inner-plugins/utils';
 
 describe('test src/utils/loader.ts', () => {
   describe('interceptLoader()', () => {
@@ -319,6 +319,75 @@ describe('test src/utils/loader.ts', () => {
           },
         },
       ]);
+    });
+
+    it.each([
+      { fallback: resolvedStringLoader },
+      { fallback: [resolvedStringLoader] },
+      { fallback: ['/missing/loader.js', resolvedStringLoader] },
+      { fallback: [false as const, resolvedStringLoader] },
+      { fallback: false as const },
+    ])('normalizes resolveLoader.fallback value $fallback', ({ fallback }) => {
+      const result = interceptLoader(
+        [{ loader: 'missing-loader' }],
+        proxyLoaderPath,
+        internalOptions,
+        exampleWebpackPath,
+        { fallback: { 'missing-loader': fallback } },
+      );
+
+      expect(result).toMatchObject([
+        {
+          options: {
+            [Loader.LoaderInternalPropertyName]: {
+              loader:
+                fallback === false ||
+                (Array.isArray(fallback) && fallback[0] === false)
+                  ? 'missing-loader'
+                  : resolvedStringLoader,
+            },
+          },
+        },
+      ]);
+    });
+
+    it.each([false, undefined, {}] satisfies CompatibleResolve['fallback'][])(
+      'accepts empty or disabled resolveLoader.fallback %j',
+      (fallback) => {
+        expect(() =>
+          interceptLoader(
+            [{ loader: stringLoader }],
+            proxyLoaderPath,
+            internalOptions,
+            exampleWebpackPath,
+            { fallback },
+          ),
+        ).not.toThrow();
+      },
+    );
+
+    it('supports webpack fallback entries with exact matching', () => {
+      const result = interceptLoader(
+        [{ loader: 'missing-loader' }, { loader: 'missing-loader/subpath' }],
+        proxyLoaderPath,
+        internalOptions,
+        exampleWebpackPath,
+        {
+          fallback: [
+            {
+              name: 'missing-loader',
+              alias: resolvedStringLoader,
+              onlyModule: true,
+            },
+          ],
+        },
+      );
+
+      expect(result).toMatchObject(
+        [resolvedStringLoader, 'missing-loader/subpath'].map((loader) => ({
+          options: { [Loader.LoaderInternalPropertyName]: { loader } },
+        })),
+      );
     });
 
     it('builtin:swc-loader test', () => {

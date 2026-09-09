@@ -72,7 +72,29 @@ export type CompatibleResolve = Omit<
   'mainFields'
 > & {
   mainFields?: string[];
+  fallback?: NonNullable<Plugin.Configuration['resolve']>['fallback'];
 };
+
+function normalizeFallback(fallback: CompatibleResolve['fallback']) {
+  if (!fallback) return undefined;
+
+  const entries = Array.isArray(fallback)
+    ? fallback.map(
+        ({ name, alias, onlyModule }) =>
+          [onlyModule ? `${name}$` : name, alias] as const,
+      )
+    : Object.entries(fallback);
+
+  return Object.fromEntries(
+    entries.map(([name, value]) => [
+      name,
+      // The native resolver represents ignored requests with null.
+      (Array.isArray(value) ? value : [value]).map((item) =>
+        item === false ? null : item,
+      ),
+    ]),
+  );
+}
 
 export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
@@ -89,6 +111,7 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
     extensions: ['js', '.json'],
     modules: ['node_modules'],
     ...resolveLoader,
+    fallback: normalizeFallback(resolveLoader?.fallback),
   });
 
   const resolve = (target: string) => {
