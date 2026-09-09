@@ -390,6 +390,75 @@ describe('test src/utils/loader.ts', () => {
       );
     });
 
+    it.each([
+      {
+        aliases: [resolvedStringLoader, resolvedBabelLoader],
+        expected: resolvedStringLoader,
+      },
+      {
+        aliases: ['/missing/loader.js', resolvedStringLoader],
+        expected: 'missing-loader',
+      },
+      {
+        aliases: [false as const, resolvedStringLoader],
+        expected: 'missing-loader',
+      },
+    ])(
+      'preserves duplicate fallback order: $aliases',
+      ({ aliases, expected }) => {
+        const result = interceptLoader(
+          [{ loader: 'missing-loader' }],
+          proxyLoaderPath,
+          internalOptions,
+          exampleWebpackPath,
+          {
+            fallback: aliases.map((alias) => ({
+              name: 'missing-loader',
+              alias,
+            })),
+          },
+        );
+
+        expect(result).toMatchObject([
+          {
+            options: {
+              [Loader.LoaderInternalPropertyName]: { loader: expected },
+            },
+          },
+        ]);
+      },
+    );
+
+    it('preserves interleaved exact and prefix fallback order', () => {
+      const result = interceptLoader(
+        [{ loader: 'missing-loader' }],
+        proxyLoaderPath,
+        internalOptions,
+        exampleWebpackPath,
+        {
+          fallback: [
+            { name: 'missing-loader', alias: 'missing-loader' },
+            {
+              name: 'missing-loader',
+              alias: resolvedStringLoader,
+              onlyModule: true,
+            },
+            { name: 'missing-loader', alias: resolvedBabelLoader },
+          ],
+        },
+      );
+
+      expect(result).toMatchObject([
+        {
+          options: {
+            [Loader.LoaderInternalPropertyName]: {
+              loader: resolvedStringLoader,
+            },
+          },
+        },
+      ]);
+    });
+
     it('builtin:swc-loader test', () => {
       expect(
         interceptLoader(

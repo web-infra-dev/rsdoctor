@@ -189,7 +189,7 @@ importers:
         version: 3.9.4
       rsbuild-plugin-publint:
         specifier: ^0.3.4
-        version: 0.3.4(@rsbuild/core@2.1.4(core-js@3.49.0))
+        version: 0.3.4(@rsbuild/core@2.0.11(core-js@3.49.0))
 
   e2e:
     devDependencies:
@@ -885,6 +885,9 @@ importers:
       browserslist-load-config:
         specifier: ^1.0.2
         version: 1.0.3
+      enhanced-resolve:
+        specifier: ^5.20.0
+        version: 5.20.0
       es-toolkit:
         specifier: 'catalog:'
         version: 1.49.0
@@ -5601,10 +5604,6 @@ packages:
   engine.io@6.6.2:
     resolution: {integrity: sha512-gmNvsYi9C8iErnZdVcJnvCpSKbWTt1E8+JZo8b+daLninywUWi5NQ5STSHZ9rFjFO7imNcvb8Pc5pe/wMR5xEw==}
     engines: {node: '>=10.2.0'}
-
-  enhanced-resolve@5.12.0:
-    resolution: {integrity: sha512-QHTXI/sZQmko1cbDoNAa3mJ5qhWUUNAq3vR0/YiD379fWQrcfuoX1+HW2S0MTt7XmoPLapdaDKUtelUSPic7hQ==}
-    engines: {node: '>=10.13.0'}
 
   enhanced-resolve@5.20.0:
     resolution: {integrity: sha512-/ce7+jQ1PQ6rVXwe+jKEg5hW5ciicHwIQUagZkp6IufBoY3YDgdTTY1azVs0qoRgVmvsNB+rbjLJxDAeHHtwsQ==}
@@ -15080,11 +15079,6 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  enhanced-resolve@5.12.0:
-    dependencies:
-      graceful-fs: 4.2.11
-      tapable: 2.3.3
-
   enhanced-resolve@5.20.0:
     dependencies:
       graceful-fs: 4.2.11
@@ -18888,12 +18882,12 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.1.4(core-js@3.49.0)
 
-  rsbuild-plugin-publint@0.3.4(@rsbuild/core@2.1.4(core-js@3.49.0)):
+  rsbuild-plugin-publint@0.3.4(@rsbuild/core@2.0.11(core-js@3.49.0)):
     dependencies:
       picocolors: 1.1.1
       publint: 0.3.17
     optionalDependencies:
-      '@rsbuild/core': 2.1.4(core-js@3.49.0)
+      '@rsbuild/core': 2.0.11(core-js@3.49.0)
 
   rsbuild-plugin-rsc@0.0.3(@rsbuild/core@2.0.0(core-js@3.49.0))(react-server-dom-rspack@0.0.2(@rspack/core@2.1.2(@swc/helpers@0.5.21))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)):
     dependencies:
@@ -19676,7 +19670,7 @@ snapshots:
   ts-loader@9.4.2(typescript@6.0.3)(webpack@5.105.4(@swc/core@1.15.11(@swc/helpers@0.5.23))):
     dependencies:
       chalk: 4.1.2
-      enhanced-resolve: 5.12.0
+      enhanced-resolve: 5.20.0
       micromatch: 4.0.8
       semver: 7.7.2
       typescript: 6.0.3
@@ -19685,7 +19679,7 @@ snapshots:
   ts-loader@9.4.2(typescript@6.0.3)(webpack@5.105.4):
     dependencies:
       chalk: 4.1.2
-      enhanced-resolve: 5.12.0
+      enhanced-resolve: 5.20.0
       micromatch: 4.0.8
       semver: 7.7.2
       typescript: 6.0.3
