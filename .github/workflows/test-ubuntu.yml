@@ -1,4 +1,4 @@
-name: Test (Ubuntu)
+name: Test (Ubuntu, Node 20 runtime)
 
 # Controls when the action will run.
 on:
@@ -18,26 +18,17 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-    # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # ======== ut ========
-  ut-ubuntu:
+  runtime:
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        node-version: [22.x]
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 10
-
-      - name: Install Pnpm
-        run: |
-          npm install -g corepack@latest --force
-          corepack enable
 
       - name: Check skip CI
         run: echo "RESULT=$(node ./scripts/skipCI.js)" >> "$GITHUB_OUTPUT"
@@ -46,55 +37,35 @@ jobs:
       - name: Log skip CI result
         run: echo "${{steps.skip-ci.outputs.RESULT}}"
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Set up build runtime
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          node-version: '22.18.0'
 
-      - name: Install Dependencies
+      - name: Install pnpm
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-        run: pnpm install
+        run: |
+          npm install -g corepack@latest --force
+          corepack enable
 
-      - name: Unit Test
+      - name: Build and pack
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-        run: pnpm run test:all
-  # ======== e2e ========
-  # e2e-ubuntu:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [18.x]
+        run: |
+          pnpm install
+          node scripts/runtime-compatibility/prepare.mjs "$RUNNER_TEMP/rsdoctor-consumer"
 
-  #   # Steps represent a sequence of tasks that will be executed as part of the job
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 10
+      - name: Set up consumer runtime
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '20.19.0'
 
-  #     - name: Install Pnpm
-  #       run: corepack enable
-
-  #     - name: Check skip CI
-  #       run: echo "RESULT=$(node ./scripts/skipCI.js)" >> "$GITHUB_OUTPUT"
-  #       id: skip-ci
-
-  #     - name: Log skip CI result
-  #       run: echo "${{steps.skip-ci.outputs.RESULT}}"
-
-  #     - name: Setup Node.js ${{ matrix.node-version }}
-  #       if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'pnpm'
-
-  #     - name: Install Dependencies
-  #       if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-  #       run: pnpm install && cd ./e2e && npx playwright install
-
-  #     - name: E2E Test
-  #       if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-  #       run: pnpm run e2e
+      - name: Install packed packages and test
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        working-directory: ${{ runner.temp }}/rsdoctor-consumer
+        env:
+          EXPECTED_NODE_VERSION: '20.19.0'
+        run: |
+          npm install --engine-strict --ignore-scripts --no-audit --no-fund
+          npm test

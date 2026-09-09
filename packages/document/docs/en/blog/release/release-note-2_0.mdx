@@ -159,7 +159,7 @@ Treemap adds full-screen mode, a collapsible sidebar, breadcrumb navigation, and
 
 Rsdoctor 2.0 deliberately narrows its compatibility and package surface. Account for the following changes before upgrading:
 
-- **Runtime and bundler**: Node.js 22.18 or later and Rspack 2.0 or later are required. Projects on Rspack 1.x must upgrade Rspack first. webpack projects should stay on the maintained Rsdoctor 1.x release line or migrate to Rspack.
+- **Runtime and bundler**: Node.js `^20.19.0 || >=22.12.0` and Rspack 2.0 or later are required. Projects on Rspack 1.x must upgrade Rspack first. webpack projects should stay on the maintained Rsdoctor 1.x release line or migrate to Rspack.
 - **Packages and module format**: Replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`. Rsdoctor packages are ESM-only, so CommonJS `require()` calls must become ESM imports.
 - **AI workflow**: `@rsdoctor/mcp-server` has been removed. Migrate to `@rsdoctor/agent-cli`, which reads report data directly but is not an MCP-compatible or drop-in API replacement.
 
