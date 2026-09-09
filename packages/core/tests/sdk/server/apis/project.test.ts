@@ -233,7 +233,7 @@ describe('test server/apis/project.ts', () => {
     ).toString();
     const manifest: Manifest.RsdoctorManifest = JSON.parse(manifestStr);
 
-    expect(manifest.data.root === cwd);
+    expect(manifest.data.root).toBe(cwd);
     expect(manifest.client.enableRoutes).toStrictEqual([
       Manifest.RsdoctorManifestClientRoutes.Overall,
       Manifest.RsdoctorManifestClientRoutes.Loaders,
