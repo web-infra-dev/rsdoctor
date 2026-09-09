@@ -42,6 +42,7 @@ describe('core package output', () => {
         'RsdoctorSDK',
         'defineRule',
         'logger',
+        'migrateRsdoctorOptions',
         'resolveClientDiffHtmlPath',
         'rules',
       ].sort(),

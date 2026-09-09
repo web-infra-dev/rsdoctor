@@ -40,3 +40,25 @@ lite 模式的内部逻辑等同于 `output.reportCodeType` 为 `noCode` 或 `no
 ### 新增 output.options.jsonOptions.sections
 
 使用 `output.options.jsonOptions.sections` 控制 JSON 输出包含的数据分区。可配置字段请参阅 [output.options.jsonOptions.sections](/config/options/output#options)。
+
+## 上层框架接入
+
+提供 `tools.rsdoctor` 等配置入口的框架，可以在创建插件前调用 `migrateRsdoctorOptions`。框架的配置类型使用 `CompatibleRsdoctorOptions`，让旧配置也能通过 TypeScript 检查。
+
+```ts
+import {
+  migrateRsdoctorOptions,
+  RsdoctorRspackPlugin,
+  type CompatibleRsdoctorOptions,
+} from '@rsdoctor/core';
+
+function createRsdoctorPlugin(options: CompatibleRsdoctorOptions = {}) {
+  return new RsdoctorRspackPlugin(migrateRsdoctorOptions(options));
+}
+```
+
+兼容函数返回当前版本的插件配置，不修改原对象。显式的新字段优先于对应的旧字段。每次传入旧字段时，会汇总打印一条迁移提示；再次传入转换结果不会重复提示。框架应在完成用户配置解析后调用。
+
+支持转换顶层 `mode`、`port`、`brief`，对象形式的 `output.reportCodeType`，`output.compressData: true`，以及两个旧位置的 `writeDataJson`。Lite 模式映射为 `noAssetsAndModuleSource`；多个代码选项同时开启时，按 `noCode` > `noAssetsAndModuleSource` > `noModuleSource` 取值。`writeDataJson: true` 会选择 HTML 和 JSON 输出，显式的 `output.options.type` 优先。
+
+`supports.generateTileGraph` 和 `experiments.enableNativePlugin` 会被移除并打印提示，因为 2.x 已默认提供这些能力。兼容层无法恢复关闭这些能力的行为、旧压缩数据格式，或不受支持的打包器和运行时。直接创建插件仍遵循 2.x 的配置规则。
