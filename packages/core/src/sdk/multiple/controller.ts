@@ -80,13 +80,10 @@ export class RsdoctorSDKController {
       return path.join(rootOutputDir, existing.directory);
     }
 
-    const name =
-      slave.name
-        .replace(
-          slave.isChild ? /[^a-zA-Z0-9_$.-]+/g : /[^a-zA-Z0-9_$-]+/g,
-          '-',
-        )
-        .replace(/^[-.]+|[-.]+$/g, '') || `compiler-${slave.id}`;
+    const name = slave.isChild
+      ? slave.name.replace(/\s+/g, '-')
+      : slave.name.replace(/[^a-zA-Z0-9_$-]+/g, '-').replace(/^-+|-+$/g, '') ||
+        `compiler-${slave.id}`;
     const folder = slave.isChild ? '.slaves' : 'compilers';
     const occupied = new Set(
       [...this.compilerDirectories.values()].map(({ directory }) =>

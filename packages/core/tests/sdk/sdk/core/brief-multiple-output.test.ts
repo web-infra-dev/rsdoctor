@@ -172,6 +172,27 @@ describe('multi-compiler brief JSON', () => {
     }
   });
 
+  it('preserves legacy child directory names while isolating collisions', async () => {
+    const client = createCompiler('client');
+    const child = createCompiler('child worker-0-', { isChild: true });
+    const sibling = createCompiler('child-worker-0-', { isChild: true });
+    await Promise.all([client, child, sibling].map((sdk) => sdk.writeStore()));
+
+    const childFile = path.join(
+      outputDir,
+      '.slaves',
+      'child-worker-0-',
+      'rsdoctor-data.json',
+    );
+    expect(child.getBriefJsonPath()).toBe(childFile);
+    expect(readReport(childFile).name).toBe(child.name);
+    expect(sibling.getBriefJsonPath()).not.toBe(childFile);
+    expect(readReport(sibling.getBriefJsonPath()!).name).toBe(sibling.name);
+    expect(readReport(client.getBriefJsonPath()!).series?.[1].dataFile).toBe(
+      '.slaves/child-worker-0-/rsdoctor-data.json',
+    );
+  });
+
   it('rejects custom filenames that resolve to the same output file', async () => {
     const client = createCompiler('client');
     await client.writeStore();
