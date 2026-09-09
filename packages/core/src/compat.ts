@@ -1,4 +1,6 @@
 import type { Config, Linter, Plugin } from '@rsdoctor/shared/types';
+import { Lodash } from '@rsdoctor/shared/common-browser';
+import assert from 'node:assert';
 import { logger } from './logger';
 
 type LegacyBriefConfig = Config.BriefConfig & { writeDataJson?: boolean };
@@ -47,7 +49,7 @@ export function migrateRsdoctorOptions<
   const result: Plugin.RsdoctorRspackPluginOptions<Rules> = { ...rest };
 
   migrate(
-    experiments,
+    experiments?.enableNativePlugin,
     'experiments.enableNativePlugin',
     'remove (the native plugin is always enabled)',
   );
@@ -91,18 +93,23 @@ export function migrateRsdoctorOptions<
   if (output || mode !== undefined || brief !== undefined) {
     const { compressData, reportCodeType, options, ...currentOutput } =
       output ?? {};
-    let codeType =
-      typeof reportCodeType === 'object'
-        ? (
-            ['noCode', 'noAssetsAndModuleSource', 'noModuleSource'] as const
-          ).find((key) => reportCodeType[key])
-        : reportCodeType;
-    if (typeof reportCodeType === 'object') {
+    // Legacy configurations can use null to leave report content unspecified.
+    let codeType: Config.NewReportCodeType | undefined;
+    if (reportCodeType != null && typeof reportCodeType === 'object') {
+      assert(
+        Lodash.isPlainObject(reportCodeType),
+        '`output.reportCodeType` must be a string or a plain object of legacy flags.',
+      );
+      codeType = (
+        ['noCode', 'noAssetsAndModuleSource', 'noModuleSource'] as const
+      ).find((key) => reportCodeType[key]);
       migrate(
         reportCodeType,
         'output.reportCodeType (object)',
         'output.reportCodeType (string)',
       );
+    } else {
+      codeType = reportCodeType ?? undefined;
     }
     const outputMode =
       output?.mode ??

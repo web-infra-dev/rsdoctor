@@ -145,6 +145,54 @@ describe('framework options compatibility', () => {
     expect(config).toEqual(original);
   });
 
+  it.each([{}, { enableNativePlugin: undefined }])(
+    'does not warn for experiments without a legacy value: %j',
+    (experiments) => {
+      expect(migrateRsdoctorOptions({ experiments })).toEqual({});
+      expect(logger.warn).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each([true, false])(
+    'warns for enableNativePlugin: %s',
+    (enableNativePlugin) => {
+      migrateRsdoctorOptions({ experiments: { enableNativePlugin } });
+      expect(logger.warn).toHaveBeenCalledTimes(1);
+      expect(logger.warn).toHaveBeenCalledWith(
+        expect.stringContaining('experiments.enableNativePlugin'),
+      );
+    },
+  );
+
+  it.each(['normal', 'brief', 'lite'] as const)(
+    'treats null reportCodeType as unspecified in %s mode',
+    (mode) => {
+      const config = {
+        mode,
+        output: { reportCodeType: null },
+      } as unknown as CompatibleRsdoctorOptions;
+      expect(normalizeUserConfig(migrateRsdoctorOptions(config))).toEqual(
+        normalizeUserConfig(migrateRsdoctorOptions({ mode })),
+      );
+      expect(logger.warn).not.toHaveBeenCalledWith(
+        expect.stringContaining('output.reportCodeType (object)'),
+      );
+    },
+  );
+
+  it.each([[], new Date(0)])(
+    'rejects non-record reportCodeType: %j',
+    (reportCodeType) => {
+      const config = {
+        output: { reportCodeType },
+      } as unknown as CompatibleRsdoctorOptions;
+      expect(() => migrateRsdoctorOptions(config)).toThrow(
+        '`output.reportCodeType` must be a string or a plain object of legacy flags.',
+      );
+      expect(logger.warn).not.toHaveBeenCalled();
+    },
+  );
+
   it('accepts current options without warnings', () => {
     expect(migrateRsdoctorOptions()).toEqual({});
     const config = {
