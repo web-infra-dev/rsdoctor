@@ -40,25 +40,3 @@ Both `features: { lite: true }` and `features: ['lite']` remain supported and do
 ### output.options.jsonOptions.sections
 
 Use `output.options.jsonOptions.sections` to control which sections are included in JSON output. See [output.options.jsonOptions.sections](/config/options/output#options) for the available fields.
-
-## Framework integrations
-
-Frameworks that expose options such as `tools.rsdoctor` can call `migrateRsdoctorOptions` before constructing the plugin. Use `CompatibleRsdoctorOptions` for the framework's options type so existing configurations remain accepted by TypeScript.
-
-```ts
-import {
-  migrateRsdoctorOptions,
-  RsdoctorRspackPlugin,
-  type CompatibleRsdoctorOptions,
-} from '@rsdoctor/core';
-
-function createRsdoctorPlugin(options: CompatibleRsdoctorOptions = {}) {
-  return new RsdoctorRspackPlugin(migrateRsdoctorOptions(options));
-}
-```
-
-The adapter returns current plugin options without mutating its input. Explicit current fields take precedence over their legacy equivalents. Each call with legacy fields prints one warning listing the migration paths; passing the converted result again does not repeat the warning. Call it after the framework has resolved its user options.
-
-It converts top-level `mode`, `port`, and `brief`, object-form `output.reportCodeType`, `output.compressData: true`, and both legacy `writeDataJson` locations. Lite mode maps to `noAssetsAndModuleSource`; report-code flags use the priority `noCode` > `noAssetsAndModuleSource` > `noModuleSource`. `writeDataJson: true` selects HTML and JSON unless an explicit `output.options.type` is present.
-
-The adapter removes `supports.generateTileGraph` and `experiments.enableNativePlugin` with a warning because those capabilities are always available in 2.x. It cannot restore their disabled behavior, the old compressed-data format, or compatibility with unsupported bundlers and runtimes. Direct plugin construction retains the standard 2.x configuration rules.
