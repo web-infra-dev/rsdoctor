@@ -15,6 +15,7 @@ import { Algorithm } from '@rsdoctor/shared/common-browser';
 import { Lodash } from '@rsdoctor/shared/common-browser';
 import { findRoot } from '../utils';
 import { decycle } from '@rsdoctor/shared/common-browser';
+import { writeJsonAtomic } from '../utils/writeJson';
 
 export * from '../utils/openBrowser';
 export * from '../utils/base';
@@ -394,6 +395,23 @@ export class RsdoctorSDK<
     }
   }
 
+  public getBriefJsonPath(outputDir = this.outputDir): string | undefined {
+    if (
+      this.extraConfig?.mode !== 'brief' ||
+      !this.extraConfig.brief?.type?.includes('json')
+    ) {
+      return undefined;
+    }
+    return path.resolve(
+      outputDir,
+      this.extraConfig.brief.jsonOptions?.fileName ?? 'rsdoctor-data.json',
+    );
+  }
+
+  protected writeBriefJson(data: Manifest.RsdoctorBriefData): void {
+    writeJsonAtomic(this.getBriefJsonPath()!, data);
+  }
+
   public async writeStore(options?: SDK.WriteStoreOptionsType) {
     logger.debug(`sdk.writeStore has run.`, '[SDK.writeStore][end]');
     let htmlPath = '';
@@ -410,15 +428,7 @@ export class RsdoctorSDK<
           clientRoutes,
         };
 
-        fs.mkdirSync(this.outputDir, { recursive: true });
-        fs.writeFileSync(
-          path.resolve(
-            this.outputDir,
-            this.extraConfig.brief.jsonOptions?.fileName ??
-              'rsdoctor-data.json',
-          ),
-          JSON.stringify(jsonData),
-        );
+        this.writeBriefJson(jsonData);
       }
       if (this.extraConfig.brief?.type?.includes('html')) {
         htmlPath = this.inlineScriptsAndStyles(clientHtmlPath);

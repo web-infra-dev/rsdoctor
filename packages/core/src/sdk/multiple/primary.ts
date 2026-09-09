@@ -87,6 +87,10 @@ export class RsdoctorPrimarySDK
     return this.parent.master === this;
   }
 
+  protected writeBriefJson(data: Manifest.RsdoctorBriefData): void {
+    this.parent.writeBriefJson(this, data);
+  }
+
   protected async writePieces(
     _storeData: Common.PlainObject,
     options?: SDK.WriteStoreOptionsType,
