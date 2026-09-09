@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { afterEach, beforeEach, describe, expect, it, rs } from 'rstack/test';
 import { type Manifest, SDK } from '@rsdoctor/shared/types';
 import { RsdoctorSDKController } from '@/sdk/multiple/controller';
-import type { RsdoctorSDK } from '@/sdk';
+import { RsdoctorSDK } from '@/sdk';
 
 describe('multi-compiler brief JSON', () => {
   let outputDir: string;
@@ -214,5 +214,23 @@ describe('multi-compiler brief JSON', () => {
     expect(readReport(client)).toEqual(original);
     expect(fs.readdirSync(outputDir)).toEqual(['rsdoctor-data.json']);
     await client.writeStore();
+  });
+
+  it('preserves the standalone SDK JSON shape', async () => {
+    const sdk = new RsdoctorSDK({
+      name: 'standalone',
+      root: outputDir,
+      config: { noServer: true, mode: 'brief', brief: { type: ['json'] } },
+    });
+    try {
+      sdk.setOutputDir(outputDir);
+      await sdk.writeStore();
+      expect(Object.keys(readReport(sdk)).sort()).toEqual([
+        'clientRoutes',
+        'data',
+      ]);
+    } finally {
+      await sdk.dispose();
+    }
   });
 });
