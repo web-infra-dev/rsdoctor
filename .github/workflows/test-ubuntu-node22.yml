@@ -1,4 +1,4 @@
-name: Test (Ubuntu)
+name: Test (Ubuntu, Node 22)
 
 # Controls when the action will run.
 on:
@@ -57,9 +57,9 @@ jobs:
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
         run: pnpm install
 
-      - name: Unit Test
+      - name: Unit and E2E Tests
         if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-        run: pnpm run e2e:base cases/doctor-rspack
+        run: pnpm run test:all
   # ======== e2e ========
   # e2e-ubuntu:
   #   runs-on: ubuntu-latest

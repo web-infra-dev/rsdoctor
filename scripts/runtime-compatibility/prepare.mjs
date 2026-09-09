@@ -36,6 +36,9 @@ await writeFile(
     {
       private: true,
       type: 'module',
+      scripts: {
+        test: 'node --test --test-timeout=120000 smoke.test.mjs',
+      },
       dependencies,
     },
     null,
@@ -43,7 +46,7 @@ await writeFile(
   ) + '\n',
 );
 await copyFile(
-  new URL('./smoke.test.mjs', import.meta.url),
+  path.join(repo, 'packages/core/tests/runtime-compatibility/smoke.mjs'),
   path.join(target, 'smoke.test.mjs'),
 );
 console.log(
