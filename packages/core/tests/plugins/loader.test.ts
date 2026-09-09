@@ -2,7 +2,7 @@ import { Loader } from '@rsdoctor/utils/common';
 import { describe, it, expect } from '@rstest/core';
 import path from 'path';
 import { ProxyLoaderInternalOptions } from '@/types';
-import { interceptLoader } from '@/inner-plugins/utils';
+import { interceptLoader, type CompatibleResolve } from '@/inner-plugins/utils';
 
 describe('test src/utils/loader.ts', () => {
   describe('interceptLoader()', () => {
@@ -315,6 +315,144 @@ describe('test src/utils/loader.ts', () => {
               ...internalOptions,
               hasOptions: true,
               loader: resolvedTsLoader,
+            },
+          },
+        },
+      ]);
+    });
+
+    it.each([
+      { fallback: resolvedStringLoader },
+      { fallback: [resolvedStringLoader] },
+      { fallback: ['/missing/loader.js', resolvedStringLoader] },
+      { fallback: [false as const, resolvedStringLoader] },
+      { fallback: false as const },
+    ])('normalizes resolveLoader.fallback value $fallback', ({ fallback }) => {
+      const result = interceptLoader(
+        [{ loader: 'missing-loader' }],
+        proxyLoaderPath,
+        internalOptions,
+        exampleWebpackPath,
+        { fallback: { 'missing-loader': fallback } },
+      );
+
+      expect(result).toMatchObject([
+        {
+          options: {
+            [Loader.LoaderInternalPropertyName]: {
+              loader:
+                fallback === false ||
+                (Array.isArray(fallback) && fallback[0] === false)
+                  ? 'missing-loader'
+                  : resolvedStringLoader,
+            },
+          },
+        },
+      ]);
+    });
+
+    it.each([false, undefined, {}] satisfies CompatibleResolve['fallback'][])(
+      'accepts empty or disabled resolveLoader.fallback %j',
+      (fallback) => {
+        expect(() =>
+          interceptLoader(
+            [{ loader: stringLoader }],
+            proxyLoaderPath,
+            internalOptions,
+            exampleWebpackPath,
+            { fallback },
+          ),
+        ).not.toThrow();
+      },
+    );
+
+    it('supports webpack fallback entries with exact matching', () => {
+      const result = interceptLoader(
+        [{ loader: 'missing-loader' }, { loader: 'missing-loader/subpath' }],
+        proxyLoaderPath,
+        internalOptions,
+        exampleWebpackPath,
+        {
+          fallback: [
+            {
+              name: 'missing-loader',
+              alias: resolvedStringLoader,
+              onlyModule: true,
+            },
+          ],
+        },
+      );
+
+      expect(result).toMatchObject(
+        [resolvedStringLoader, 'missing-loader/subpath'].map((loader) => ({
+          options: { [Loader.LoaderInternalPropertyName]: { loader } },
+        })),
+      );
+    });
+
+    it.each([
+      {
+        aliases: [resolvedStringLoader, resolvedBabelLoader],
+        expected: resolvedStringLoader,
+      },
+      {
+        aliases: ['/missing/loader.js', resolvedStringLoader],
+        expected: 'missing-loader',
+      },
+      {
+        aliases: [false as const, resolvedStringLoader],
+        expected: 'missing-loader',
+      },
+    ])(
+      'preserves duplicate fallback order: $aliases',
+      ({ aliases, expected }) => {
+        const result = interceptLoader(
+          [{ loader: 'missing-loader' }],
+          proxyLoaderPath,
+          internalOptions,
+          exampleWebpackPath,
+          {
+            fallback: aliases.map((alias) => ({
+              name: 'missing-loader',
+              alias,
+            })),
+          },
+        );
+
+        expect(result).toMatchObject([
+          {
+            options: {
+              [Loader.LoaderInternalPropertyName]: { loader: expected },
+            },
+          },
+        ]);
+      },
+    );
+
+    it('preserves interleaved exact and prefix fallback order', () => {
+      const result = interceptLoader(
+        [{ loader: 'missing-loader' }],
+        proxyLoaderPath,
+        internalOptions,
+        exampleWebpackPath,
+        {
+          fallback: [
+            { name: 'missing-loader', alias: 'missing-loader' },
+            {
+              name: 'missing-loader',
+              alias: resolvedStringLoader,
+              onlyModule: true,
+            },
+            { name: 'missing-loader', alias: resolvedBabelLoader },
+          ],
+        },
+      );
+
+      expect(result).toMatchObject([
+        {
+          options: {
+            [Loader.LoaderInternalPropertyName]: {
+              loader: resolvedStringLoader,
             },
           },
         },

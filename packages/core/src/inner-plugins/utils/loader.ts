@@ -1,4 +1,5 @@
 import { ResolverFactory } from '@rspack/resolver';
+import enhancedResolve from 'enhanced-resolve';
 import { omit } from 'es-toolkit/compat';
 import path from 'path';
 import { logger } from '@rsdoctor/utils/logger';
@@ -72,7 +73,24 @@ export type CompatibleResolve = Omit<
   'mainFields'
 > & {
   mainFields?: string[];
+  fallback?: NonNullable<Plugin.Configuration['resolve']>['fallback'];
 };
+
+function normalizeFallback(
+  fallback: Exclude<CompatibleResolve['fallback'], unknown[]>,
+) {
+  if (!fallback) return undefined;
+
+  return Object.fromEntries(
+    Object.entries(fallback).map(([name, value]) => [
+      name,
+      // The native resolver represents ignored requests with null.
+      (Array.isArray(value) ? value : [value]).map((item) =>
+        item === false ? null : item,
+      ),
+    ]),
+  );
+}
 
 export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
   rules: T[],
@@ -81,7 +99,7 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
   cwd = process.cwd(),
   resolveLoader?: CompatibleResolve,
 ): T[] {
-  const loaderResolver = new ResolverFactory({
+  const resolverOptions = {
     conditionNames: ['loader', 'require', 'node'],
     exportsFields: ['exports'],
     mainFiles: ['index'],
@@ -89,14 +107,26 @@ export function interceptLoader<T extends Plugin.BuildRuleSetRule>(
     extensions: ['js', '.json'],
     modules: ['node_modules'],
     ...resolveLoader,
-  });
+  };
+  const fallback = resolveLoader?.fallback;
+  // Webpack's ordered rules can contain duplicate and overlapping matchers.
+  const resolveSync = Array.isArray(fallback)
+    ? enhancedResolve.create.sync({ ...resolverOptions, fallback })
+    : (() => {
+        const resolver = new ResolverFactory({
+          ...resolverOptions,
+          fallback: normalizeFallback(fallback),
+        });
+        return (directory: string, request: string) =>
+          resolver.sync(directory, request).path;
+      })();
 
   const resolve = (target: string) => {
     try {
-      const result = loaderResolver.sync(cwd, target);
+      const result = resolveSync(cwd, target);
 
-      if (result.path) {
-        return result.path;
+      if (result) {
+        return result;
       }
     } catch {
       // ..
