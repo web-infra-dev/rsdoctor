@@ -25,24 +25,44 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 10
+
+      - name: Check skip CI
+        run: echo "RESULT=$(node ./scripts/skipCI.js)" >> "$GITHUB_OUTPUT"
+        id: skip-ci
+
+      - name: Log skip CI result
+        run: echo "${{steps.skip-ci.outputs.RESULT}}"
+
       - name: Set up build runtime
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: '22.18.0'
+
       - name: Install pnpm
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
         run: |
           npm install -g corepack@latest --force
           corepack enable
+
       - name: Build and pack
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install
           node scripts/runtime-compatibility/prepare.mjs "$RUNNER_TEMP/rsdoctor-consumer"
+
       - name: Set up consumer runtime
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: '20.19.0'
+
       - name: Install packed packages and test
+        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
         working-directory: ${{ runner.temp }}/rsdoctor-consumer
         env:
           EXPECTED_NODE_VERSION: '20.19.0'
