@@ -15,6 +15,8 @@ afterEach(async () => {
   await new Promise((resolve) => setTimeout(resolve, 0));
 });
 
+const asRspackCompiler = (compiler: unknown) => compiler as Plugin.BaseCompiler;
+
 describe('RsdoctorRspackPlugin', () => {
   it('uses faster report compression only in watch mode', () => {
     expect(
@@ -54,7 +56,7 @@ describe('RsdoctorRspackPlugin', () => {
     compiler.watchMode = true;
     const writeStore = rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
 
-    await plugin.done(compiler);
+    await plugin.done(asRspackCompiler(compiler));
 
     expect(writeStore).toHaveBeenCalledWith({ compressionLevel: 1 });
   });
@@ -137,8 +139,8 @@ describe('RsdoctorRspackPlugin', () => {
       .mockResolvedValue();
     const writeStore = rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
 
-    await plugin.done(compiler);
-    await plugin.done(compiler);
+    await plugin.done(asRspackCompiler(compiler));
+    await plugin.done(asRspackCompiler(compiler));
 
     expect(writeStore).toHaveBeenCalledTimes(2);
     expect(openClientPage).toHaveBeenCalledTimes(1);
@@ -221,7 +223,7 @@ describe('RsdoctorRspackPlugin', () => {
     });
     const compiler = rspack({ plugins: [plugin] });
 
-    const doneTask = plugin.done(compiler);
+    const doneTask = plugin.done(asRspackCompiler(compiler));
     await Promise.resolve();
 
     expect(bootstrap).toHaveBeenCalledTimes(1);
@@ -254,8 +256,8 @@ describe('RsdoctorRspackPlugin', () => {
       });
       const compiler = rspack({ plugins: [plugin] });
 
-      await plugin.done(compiler);
-      await plugin.done(compiler);
+      await plugin.done(asRspackCompiler(compiler));
+      await plugin.done(asRspackCompiler(compiler));
 
       expect(bootstrap).toHaveBeenCalledTimes(2);
       expect(dispose).toHaveBeenCalledTimes(2);
@@ -287,8 +289,8 @@ describe('RsdoctorRspackPlugin', () => {
     });
     const compiler = rspack({ plugins: [plugin] });
 
-    await expect(plugin.done(compiler)).rejects.toBe(error);
-    await plugin.done(compiler);
+    await expect(plugin.done(asRspackCompiler(compiler))).rejects.toBe(error);
+    await plugin.done(asRspackCompiler(compiler));
 
     expect(bootstrap).toHaveBeenCalledTimes(2);
     expect(writeStore).toHaveBeenCalledTimes(1);

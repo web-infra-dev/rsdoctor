@@ -74,6 +74,7 @@ describe('Rspack native module graph transform', () => {
         },
       ],
       connectionsOnlyImports: [],
+      exportUsageEdges: [],
     };
 
     // Apply the transform
@@ -130,6 +131,7 @@ describe('Rspack native module graph transform', () => {
         },
       ],
       connectionsOnlyImports: [],
+      exportUsageEdges: [],
     };
 
     patchNativeModuleGraph(moduleGraph, chunkGraph, rawModuleGraph);
@@ -173,6 +175,7 @@ describe('Rspack native module graph transform', () => {
         },
       ],
       connectionsOnlyImports: [],
+      exportUsageEdges: [],
     };
 
     patchNativeModuleGraph(moduleGraph, chunkGraph, rawModuleGraph);
@@ -220,6 +223,7 @@ describe('Rspack native module graph transform', () => {
         },
       ],
       connectionsOnlyImports: [],
+      exportUsageEdges: [],
     };
 
     patchNativeModuleGraph(moduleGraph, chunkGraph, rawModuleGraph);
