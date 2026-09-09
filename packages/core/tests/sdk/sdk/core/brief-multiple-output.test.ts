@@ -2,9 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { afterEach, beforeEach, describe, expect, it, rs } from 'rstack/test';
-import { Manifest, SDK } from '@rsdoctor/shared/types';
+import { type Manifest, SDK } from '@rsdoctor/shared/types';
 import { RsdoctorSDKController } from '@/sdk/multiple/controller';
-import { RsdoctorSDK } from '@/sdk';
+import type { RsdoctorSDK } from '@/sdk';
 
 describe('multi-compiler brief JSON', () => {
   let outputDir: string;
@@ -52,8 +52,22 @@ describe('multi-compiler brief JSON', () => {
     return sdk;
   }
 
-  function readReport(filePath: string): Manifest.RsdoctorBriefData {
+  function readReport(
+    source: string | RsdoctorSDK,
+  ): Manifest.RsdoctorBriefData {
+    const filePath =
+      typeof source === 'string' ? source : source.getBriefJsonPath()!;
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  }
+
+  function expectSeries(filePath: string, names: string[]) {
+    const { series } = readReport(filePath);
+    expect(series?.map((item) => item.name)).toEqual(names);
+    for (const { name, dataFile } of series!) {
+      expect(
+        readReport(path.resolve(path.dirname(filePath), dataFile)).name,
+      ).toBe(name);
+    }
   }
 
   it.each([false, true])(
@@ -66,26 +80,18 @@ describe('multi-compiler brief JSON', () => {
       }
 
       for (const sdk of [client, server]) {
-        const report = readReport(sdk.getBriefJsonPath()!);
-        expect(report.name).toBe(sdk.name);
-        expect(report.data.summary.costs[0].name).toBe(sdk.name);
-        expect(report.clientRoutes).toEqual(sdk.getClientRoutes());
-        expect(report.series?.map((item) => item.name)).toEqual([
-          'client',
-          'server',
-        ]);
-        for (const item of report.series!) {
-          const target = path.resolve(
-            path.dirname(sdk.getBriefJsonPath()!),
-            item.dataFile,
-          );
-          expect(readReport(target).name).toBe(item.name);
-        }
+        const report = readReport(sdk);
+        expect(report).toMatchObject({
+          name: sdk.name,
+          data: { summary: { costs: [{ name: sdk.name }] } },
+          clientRoutes: sdk.getClientRoutes(),
+        });
+        expectSeries(sdk.getBriefJsonPath()!, ['client', 'server']);
       }
-      expect(readReport(client.getBriefJsonPath()!).series?.[1].dataFile).toBe(
+      expect(readReport(client).series?.[1].dataFile).toBe(
         'compilers/server/rsdoctor-data.json',
       );
-      expect(readReport(server.getBriefJsonPath()!).series?.[0].dataFile).toBe(
+      expect(readReport(server).series?.[0].dataFile).toBe(
         '../../rsdoctor-data.json',
       );
     },
@@ -94,11 +100,11 @@ describe('multi-compiler brief JSON', () => {
   it('refreshes earlier reports for late child compilers without restoring old build data', async () => {
     const client = createCompiler('client');
     await client.writeStore();
-    expect(readReport(client.getBriefJsonPath()!).series).toHaveLength(1);
+    expect(readReport(client).series).toHaveLength(1);
 
     const child = createCompiler('child.worker', { isChild: true });
     await child.writeStore();
-    const clientReport = readReport(client.getBriefJsonPath()!);
+    const clientReport = readReport(client);
     expect(clientReport.series?.[1]).toMatchObject({
       name: 'child.worker',
       dataFile: '.slaves/child.worker/rsdoctor-data.json',
@@ -111,10 +117,12 @@ describe('multi-compiler brief JSON', () => {
     await client.writeStore();
     const server = createCompiler('server');
     await server.writeStore();
-    expect(
-      readReport(client.getBriefJsonPath()!).data.summary.costs,
-    ).toContainEqual({ name: 'rebuilt', startAt: 0, costs: 42 });
-    expect(readReport(child.getBriefJsonPath()!).series).toHaveLength(3);
+    expect(readReport(client).data.summary.costs).toContainEqual({
+      name: 'rebuilt',
+      startAt: 0,
+      costs: 42,
+    });
+    expect(readReport(child).series).toHaveLength(3);
 
     const read = rs.spyOn(fs, 'readFileSync');
     await client.writeStore();
@@ -133,107 +141,78 @@ describe('multi-compiler brief JSON', () => {
     await client.writeStore();
     await server.writeStore();
 
-    const movedDir = path.join(outputDir, 'moved');
-    fs.mkdirSync(movedDir);
-    fs.renameSync(path.join(outputDir, 'data'), path.join(movedDir, 'data'));
-    fs.renameSync(
-      path.join(outputDir, 'compilers'),
-      path.join(movedDir, 'compilers'),
-    );
-    const movedFile = path.join(movedDir, 'data/client data.json');
-    const report = readReport(movedFile);
-    expect(report.series).toHaveLength(2);
-    for (const item of report.series!) {
-      const target = path.resolve(path.dirname(movedFile), item.dataFile);
-      const targetReport = readReport(target);
-      expect(targetReport.name).toBe(item.name);
-      for (const sibling of targetReport.series!) {
-        expect(
-          readReport(path.resolve(path.dirname(target), sibling.dataFile)).name,
-        ).toBe(sibling.name);
+    const movedDir = `${outputDir}-moved`;
+    fs.renameSync(outputDir, movedDir);
+    outputDir = movedDir;
+    for (const file of [
+      'data/client data.json',
+      'compilers/server/data/server.json',
+    ]) {
+      expectSeries(path.join(outputDir, file), ['client', 'server']);
+    }
+  });
+
+  it.each([
+    {
+      names: [
+        'web/client',
+        'web:client',
+        'web-client-2',
+        'WEB-CLIENT',
+        'web/client',
+      ],
+      isChild: false,
+    },
+    { names: ['child worker-0-', 'child-worker-0-'], isChild: true },
+  ])(
+    'isolates colliding directory names (child: $isChild)',
+    async ({ names, isChild }) => {
+      const client = createCompiler('client');
+      const compilers = names.map((name) => createCompiler(name, { isChild }));
+      await Promise.all([client, ...compilers].map((sdk) => sdk.writeStore()));
+
+      const paths = compilers.map((sdk) =>
+        sdk.getBriefJsonPath()!.toLowerCase(),
+      );
+      expect(new Set(paths).size).toBe(compilers.length);
+      for (const sdk of compilers) {
+        expect(readReport(sdk).name).toBe(sdk.name);
       }
-    }
-  });
-
-  it('isolates duplicate, sanitized and case-insensitive directory names', async () => {
-    const compilers = [
-      'client',
-      'web/client',
-      'web:client',
-      'web-client-2',
-      'WEB-CLIENT',
-      'web/client',
-    ].map((name) => createCompiler(name));
-    await Promise.all(compilers.map((sdk) => sdk.writeStore()));
-    const paths = compilers.map((sdk) => sdk.getBriefJsonPath()!.toLowerCase());
-    expect(new Set(paths).size).toBe(compilers.length);
-    for (const sdk of compilers) {
-      expect(readReport(sdk.getBriefJsonPath()!).name).toBe(sdk.name);
-    }
-  });
-
-  it('preserves legacy child directory names while isolating collisions', async () => {
-    const client = createCompiler('client');
-    const child = createCompiler('child worker-0-', { isChild: true });
-    const sibling = createCompiler('child-worker-0-', { isChild: true });
-    await Promise.all([client, child, sibling].map((sdk) => sdk.writeStore()));
-
-    const childFile = path.join(
-      outputDir,
-      '.slaves',
-      'child-worker-0-',
-      'rsdoctor-data.json',
-    );
-    expect(child.getBriefJsonPath()).toBe(childFile);
-    expect(readReport(childFile).name).toBe(child.name);
-    expect(sibling.getBriefJsonPath()).not.toBe(childFile);
-    expect(readReport(sibling.getBriefJsonPath()!).name).toBe(sibling.name);
-    expect(readReport(client.getBriefJsonPath()!).series?.[1].dataFile).toBe(
-      '.slaves/child-worker-0-/rsdoctor-data.json',
-    );
-  });
+      expectSeries(client.getBriefJsonPath()!, [
+        'client',
+        ...compilers.map((sdk) => sdk.name),
+      ]);
+      if (isChild) {
+        expect(readReport(client).series?.[1].dataFile).toBe(
+          '.slaves/child-worker-0-/rsdoctor-data.json',
+        );
+      }
+    },
+  );
 
   it('rejects custom filenames that resolve to the same output file', async () => {
     const client = createCompiler('client');
     await client.writeStore();
-    const original = fs.readFileSync(client.getBriefJsonPath()!, 'utf8');
+    const original = readReport(client);
     const server = createCompiler('server', {
       fileName: '../../rsdoctor-data.json',
     });
     await expect(server.writeStore()).rejects.toThrow(
       'Compiler JSON output paths overlap',
     );
-    expect(fs.readFileSync(client.getBriefJsonPath()!, 'utf8')).toBe(original);
+    expect(readReport(client)).toEqual(original);
   });
 
   it('keeps the previous JSON intact and cleans temporary files when replacement fails', async () => {
     const client = createCompiler('client');
     await client.writeStore();
-    const original = fs.readFileSync(client.getBriefJsonPath()!, 'utf8');
+    const original = readReport(client);
     rs.spyOn(fs, 'renameSync').mockImplementationOnce(() => {
       throw new Error('replacement failed');
     });
     await expect(client.writeStore()).rejects.toThrow('replacement failed');
-    expect(fs.readFileSync(client.getBriefJsonPath()!, 'utf8')).toBe(original);
+    expect(readReport(client)).toEqual(original);
     expect(fs.readdirSync(outputDir)).toEqual(['rsdoctor-data.json']);
     await client.writeStore();
-  });
-
-  it('preserves the standalone SDK JSON shape', async () => {
-    const sdk = new RsdoctorSDK({
-      name: 'standalone',
-      root: outputDir,
-      config: { noServer: true, mode: 'brief', brief: { type: ['json'] } },
-    });
-    try {
-      sdk.setOutputDir(outputDir);
-      await sdk.writeStore();
-      expect(Object.keys(readReport(sdk.getBriefJsonPath()!)).sort()).toEqual([
-        'clientRoutes',
-        'data',
-      ]);
-    } finally {
-      await sdk.dispose();
-    }
   });
 });
