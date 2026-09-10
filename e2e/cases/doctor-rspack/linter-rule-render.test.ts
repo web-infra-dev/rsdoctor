@@ -103,8 +103,21 @@ test('linter rule render check', async ({ page }) => {
             const progress = card
               .querySelector('.ant-progress')!
               .getBoundingClientRect();
+            const modeSelector = card
+              .querySelector('[class*="cardTitle"] .ant-segmented')
+              ?.getBoundingClientRect();
+            const value = card
+              .querySelector('[class*="metricValue"]')!
+              .getBoundingClientRect();
+            const details = card.querySelector('[class*="details"]')!;
             return (
-              selector.right <= bounds.right && progress.right <= selector.left
+              selector.right <= bounds.right &&
+              progress.right <= selector.left &&
+              (!modeSelector ||
+                (modeSelector.right <= bounds.right &&
+                  Math.abs(modeSelector.left - selector.left) <= 1)) &&
+              Math.abs(value.left - selector.left) <= 1 &&
+              getComputedStyle(details).textAlign === 'left'
             );
           }),
         ),
@@ -112,7 +125,7 @@ test('linter rule render check', async ({ page }) => {
       .toBe(true);
   };
 
-  for (const width of [1280, 1440, 1600, 1920]) {
+  for (const width of [1280, 1366, 1440, 1536, 1600, 1920, 2560]) {
     await page.setViewportSize({ width, height: 900 });
     await expectCardsToFit();
   }

@@ -109,7 +109,7 @@ export const SizeCard: React.FC<SizeCardProps> = ({
                 strokeWidth={12}
                 format={(percent) => (
                   <div className={styles.percentContainer}>
-                    <span style={{ marginTop: '10px' }}>{percent}%</span>
+                    <span>{percent}%</span>
                     <span className={styles.percentDescription}>
                       total {type}
                     </span>
