@@ -75,30 +75,53 @@ test('linter rule render check', async ({ page }) => {
   await page.goto(pathToFileURL(reportPath).href);
   core.debug(`reportPath:: ${reportPath}`);
 
-  const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
-  core.debug(`ecmaVersionButton:: ${ecmaVersionButton}`);
+  const ecmaTab = page.getByRole('tab', { name: /ECMA Version Check/ });
+  await expect(ecmaTab).toHaveAttribute('aria-selected', 'true');
 
-  // TODO: fix this test case
-  // await ecmaVersionButton?.click();
-  // // ignore output text check because there's no .map file for track the source code
-  // const source = await page.$('.e2e-ecma-source');
-  // const error = await page.$('.e2e-ecma-error');
+  const emptyTab = page.getByRole('tab', { name: /Duplicate Packages/ });
+  await emptyTab.click();
+  await expect(emptyTab).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('tabpanel')).toContainText('No Data');
 
-  // core.debug(`source:: ${source}`);
-  // core.debug(`error:: ${error}`);
+  await ecmaTab.click();
+  await expect(ecmaTab).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('tabpanel')).toContainText('ECMA Version Check');
 
-  // const sourceText = await source?.textContent();
-  // const errorText = await error?.textContent();
+  await page.goto(`${pathToFileURL(reportPath).href}#/bundle/size`);
+  const charts = page.locator('[class*="chartsContainer"] > div');
+  await expect(charts).toHaveCount(4);
 
-  // core.debug(`sourceText:: ${sourceText}`);
-  // core.debug(`errorText:: ${errorText}`);
+  const expectCardsToFit = async () => {
+    await expect
+      .poll(() =>
+        charts.evaluateAll((cards) =>
+          cards.every((card) => {
+            const bounds = card.getBoundingClientRect();
+            const selector = card
+              .querySelector('[class*="metricSelector"]')!
+              .getBoundingClientRect();
+            const progress = card
+              .querySelector('.ant-progress')!
+              .getBoundingClientRect();
+            return (
+              selector.right <= bounds.right && progress.right <= selector.left
+            );
+          }),
+        ),
+      )
+      .toBe(true);
+  };
 
-  // expect(sourceText).toBe(
-  //   '/cases/doctor-rspack/dist/linter-rule-render/main.js:1:2',
-  // );
-  // expect(errorText).toBe(
-  //   `Find some syntax that does not match "ecmaVersion <= ${ecmaVersion}"`,
-  // );
+  for (const width of [1280, 1440, 1600, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expectCardsToFit();
+  }
+
+  // A wide viewport can still contain a narrow report panel.
+  await charts.first().evaluate((chart) => {
+    chart.parentElement!.parentElement!.parentElement!.style.width = '1216px';
+  });
+  await expectCardsToFit();
 });
 
 function fileExists(filePath: string) {
