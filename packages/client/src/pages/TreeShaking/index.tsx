@@ -14,23 +14,42 @@ import {
   useModuleGraphInstanceByModuleGraph,
 } from '../../utils';
 import { CodeEditor } from './editor';
-import { Space } from './space';
+import { TreeShakingDataBoundary } from './data-boundary';
+import { SideEffectsAnalysis } from './side-effects';
 import { TreeShakingTable } from './table';
 import type { TableKind, SetEditorStatus } from './types';
 
 import './index.scss';
 export * from './constants';
 
-const Component: React.FC<{ data: SDK.ModuleGraphData; cwd: string }> = ({
-  data,
-  cwd,
-}) => {
+const Component: React.FC<{
+  data: SDK.ModuleGraphData;
+  cwd: string;
+  treeShaking?: SDK.TreeShakingData;
+}> = ({ data, cwd, treeShaking }) => {
   const moduleGraph = useModuleGraphInstanceByModuleGraph(data);
 
-  if (moduleGraph.size() === 0) {
-    return <Space />;
+  if (treeShaking) {
+    return (
+      <SideEffectsAnalysis
+        modules={data.modules}
+        data={treeShaking}
+        cwd={cwd}
+      />
+    );
   }
 
+  return (
+    <TreeShakingDataBoundary moduleGraph={moduleGraph}>
+      <Analysis moduleGraph={moduleGraph} cwd={cwd} />
+    </TreeShakingDataBoundary>
+  );
+};
+
+const Analysis: React.FC<{
+  moduleGraph: SDK.ModuleGraphInstance;
+  cwd: string;
+}> = ({ moduleGraph, cwd }) => {
   const [searchInput, setSearchInput] = useState('');
   const [toLine, setToLine] = useState(1);
   const [ranges, setRanges] = useState<SDK.SourceRange[]>([]);
@@ -161,6 +180,7 @@ export const TreeShakingPage = withManifestData(
   [
     ['moduleGraph', 'data'],
     ['root', 'cwd'],
+    ['treeShaking', 'treeShaking'],
   ],
   Component,
 );
