@@ -1,4 +1,4 @@
-import { Empty, Progress, Segmented, Space, Tree } from 'antd';
+import { Empty, Progress, Segmented, Tree } from 'antd';
 import { sumBy } from '@rsdoctor/shared/collection';
 import React, { useEffect, useMemo, useState } from 'react';
 import { RightOutlined } from '@ant-design/icons';
@@ -38,12 +38,7 @@ export interface bgColorType {
   tagBgColor: string;
 }
 
-export const SizeCard: React.FC<SizeCardProps> = ({
-  files,
-  total,
-  showProgress = false,
-  type,
-}) => {
+export const SizeCard: React.FC<SizeCardProps> = ({ files, total, type }) => {
   const [contentRef, { width }] = useElementSize();
   const [sizeMetric, setSizeMetric] = useState<SizeMetric>('size');
   const fileType =
@@ -136,55 +131,49 @@ export const SizeCard: React.FC<SizeCardProps> = ({
                 <div className={`${styles.description} ${styles.metricValue}`}>
                   {formatSize(selectedSize)}
                 </div>
-                <TextDrawer
-                  buttonProps={{
-                    size: 'small',
-                  }}
-                  buttonStyle={{
-                    fontSize: 'inherit',
-                  }}
-                  drawerProps={{
-                    title: 'Files',
-                  }}
-                  text={
-                    <Space
-                      style={{ textAlign: showProgress ? 'left' : 'center' }}
-                      align="end"
-                    >
-                      <Space direction="vertical">
-                        <div className={styles.dataContainer}>
-                          <div className={styles.title}>
-                            <span style={{ marginRight: '5px' }}>Files</span>
-                            <RightOutlined />
-                          </div>
-                        </div>
-                      </Space>
-                    </Space>
-                  }
-                >
-                  {treeData.length ? (
-                    <DirectoryTree
-                      defaultExpandAll
-                      selectable={false}
-                      treeData={treeData}
-                      rootStyle={{
-                        minHeight: '800px',
-                        border: '1px solid rgba(235, 237, 241)',
-                      }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        position: 'relative',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                      }}
-                    >
-                      <Empty style={{ height: '100%' }} />
-                    </div>
-                  )}
-                </TextDrawer>
-                <div className={styles.description}>{files.length}</div>
+                <div className={styles.fileCount}>
+                  <TextDrawer
+                    buttonProps={{
+                      size: 'small',
+                      className: styles.filesLink,
+                    }}
+                    buttonStyle={{
+                      fontSize: 'inherit',
+                    }}
+                    drawerProps={{
+                      title: 'Files',
+                    }}
+                    text={
+                      <>
+                        <span>Files</span>
+                        <RightOutlined />
+                      </>
+                    }
+                  >
+                    {treeData.length ? (
+                      <DirectoryTree
+                        defaultExpandAll
+                        selectable={false}
+                        treeData={treeData}
+                        rootStyle={{
+                          minHeight: '800px',
+                          border: '1px solid rgba(235, 237, 241)',
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          position: 'relative',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                        }}
+                      >
+                        <Empty style={{ height: '100%' }} />
+                      </div>
+                    )}
+                  </TextDrawer>
+                  <span>{files.length}</span>
+                </div>
               </div>
             </>
           );

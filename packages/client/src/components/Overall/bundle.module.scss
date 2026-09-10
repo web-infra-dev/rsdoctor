@@ -1,5 +1,7 @@
 .title {
-  height: 40px;
+  min-height: 40px;
+  flex-wrap: wrap;
+  gap: 4px 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;

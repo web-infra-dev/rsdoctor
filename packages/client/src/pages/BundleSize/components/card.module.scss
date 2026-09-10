@@ -16,14 +16,16 @@
   .chartsContainer {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .chart {
     container: asset-card / inline-size;
     --asset-chart-size: clamp(80px, calc(100cqw - 156px), 120px);
     min-width: 0;
-    padding: 0 clamp(12px, 1.5vw, 32px);
-    border-left: 1px solid var(--color-border-secondary);
+    padding: 12px clamp(8px, 1vw, 20px);
+    border: 1px solid var(--color-border-secondary);
+    border-radius: 10px;
   }
 
   .summary {
@@ -67,6 +69,7 @@
   margin-bottom: 16px;
 
   > :global(.ant-segmented) {
+    font-size: 12px;
     justify-self: start;
     max-width: 100%;
   }
@@ -93,12 +96,12 @@
     padding: 16px 12px;
 
     .chart {
-      padding: 0 8px;
+      padding: 12px 8px;
     }
   }
 }
 
-@container bundle-summary (max-width: 1199px) {
+@container bundle-summary (max-width: 879px) {
   .container {
     grid-template-columns: minmax(0, 1fr);
 
@@ -110,11 +113,7 @@
 
     .chartsContainer {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px 0;
-    }
-
-    .chart:nth-child(odd) {
-      border-left: 0;
+      gap: 8px;
     }
   }
 }
@@ -125,15 +124,21 @@
     .chartsContainer {
       grid-template-columns: minmax(0, 1fr);
     }
-
-    .chart {
-      border-left: 0;
-    }
   }
 }
 
 @container bundle-summary (min-width: 1200px) and (max-width: 1519px) {
   .container .chart {
-    padding: 0 6px;
+    padding: 12px 6px;
+  }
+}
+
+@container asset-card (max-width: 235px) {
+  .cardTitle {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    min-height: 48px;
+    margin-bottom: 12px;
+    align-content: start;
   }
 }
