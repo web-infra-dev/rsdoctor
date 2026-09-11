@@ -11,6 +11,7 @@ export function stringify<T, P = T extends undefined ? undefined : string>(
   replacer?: (this: any, key: string, value: any) => any,
   space?: string | number,
   cycle?: boolean,
+  chunkSize = maxFileSize,
 ): Promise<P> {
   const jsonList: string[] = [];
   if (json && typeof json === 'object') {
@@ -26,7 +27,7 @@ export function stringify<T, P = T extends undefined ? undefined : string>(
           const lines = chunk.toString().split('\\n');
 
           lines.forEach((line: string | any[]) => {
-            if (currentLength + line.length > maxFileSize) {
+            if (currentLength + line.length > chunkSize) {
               // 超出最大长度，保存当前内容
               jsonList.push(currentContent);
               currentContent = '';
@@ -46,7 +47,7 @@ export function stringify<T, P = T extends undefined ? undefined : string>(
       stream
         .pipe(batchProcessor)
         .on('data', (line: string | any[]) => {
-          if (currentLength + line.length > maxFileSize) {
+          if (currentLength + line.length > chunkSize) {
             //Exceeding the maximum length, closing the current file stream.
             jsonList.push(currentContent);
             currentContent = '';
@@ -59,7 +60,7 @@ export function stringify<T, P = T extends undefined ? undefined : string>(
           }
         })
         .on('end', () => {
-          if (jsonList.length < 1) {
+          if (currentContent.length > 0) {
             jsonList.push(currentContent);
           }
           resolve(jsonList as P);

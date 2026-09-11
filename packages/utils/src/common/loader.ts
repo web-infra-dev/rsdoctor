@@ -281,13 +281,12 @@ function collectResourceDirectories(
   loaders.forEach((item) => {
     if (item.resource.path.startsWith(root)) {
       const pathParts = item.resource.path
-        .split(root)
-        .slice(1)
-        .join('/')
+        .slice(root.length)
+        .replace(/^\/+/, '')
         .split('/');
       if (pathParts.length >= 2) {
-        const twoLevelDir = pathParts.slice(0, 2).join('/');
-        directories.add(`${root}/${twoLevelDir}`);
+        const normalizedRoot = root.replace(/\/+$/, '');
+        directories.add(`${normalizedRoot}/${pathParts[0]}`);
       }
     } else {
       const pathParts = item.resource.path.split('/');

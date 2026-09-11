@@ -24,6 +24,8 @@
 }
 
 .columns {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(300px, 1fr);
   width: 100%;
   align-items: flex-start;
   gap: 16px;
@@ -34,14 +36,7 @@
   min-width: 0;
 }
 
-.mainColumn {
-  flex: 3 1 0;
-}
-
 .sideColumn {
-  flex: 1 1 320px;
-  min-width: 300px;
-
   :global(.ant-card) {
     background: var(--color-bg-box-subtle);
   }
@@ -55,12 +50,6 @@
 
 @media (max-width: 1200px) {
   .columns {
-    flex-wrap: wrap;
-  }
-
-  .mainColumn,
-  .sideColumn {
-    flex-basis: 100%;
-    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
   }
 }

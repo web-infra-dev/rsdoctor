@@ -20,6 +20,7 @@ import {
   getPackageInfoByPackageName,
 } from './tools.js';
 import { registerStaticResources } from './resource.js';
+import { chunkIdSchema } from './schemas.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { toolDescriptions } from '../prompt/bundle.js';
 
@@ -46,7 +47,7 @@ server.tool(Tools.GetAllChunks, 'get all chunks', {}, async () => {
 server.tool(
   Tools.GetChunkById,
   'get chunk by id',
-  { chunkId: z.number() },
+  { chunkId: chunkIdSchema },
   async ({ chunkId }) => {
     const res = await getChunkById(chunkId);
     return {

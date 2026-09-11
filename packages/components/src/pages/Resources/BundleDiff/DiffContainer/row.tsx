@@ -35,8 +35,7 @@ import {
 import { UpdateType } from './constants';
 import { formatDiffSize } from './utils';
 import { Graph } from '@rsdoctor/utils/common';
-
-export const ModuleHashPattern = /[a-fA-F0-9]{20,}/;
+import { getModuleDiffKey } from './moduleDiff';
 
 export const getSizeColumnPropsForModuleRow = (
   key: 'baseline' | 'current',
@@ -219,9 +218,7 @@ export const ModuleRowForAsset: React.FC<
 
     // group by module.path
     mods.forEach((mod) => {
-      const modPath =
-        mod.webpackId?.replace(ModuleHashPattern, '') ||
-        mod.path?.replace(ModuleHashPattern, '');
+      const modPath = getModuleDiffKey(mod);
       let t: BundleDiffTableModulesData = map.get(modPath)!;
 
       if (!t) {

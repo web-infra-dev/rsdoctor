@@ -93,13 +93,14 @@
     "prebundle": "prebundle"
   },
   "dependencies": {
+    "@rsbuild/plugin-check-syntax": "catalog:",
     "@rsdoctor/graph": "workspace:*",
     "@rsdoctor/sdk": "workspace:*",
     "@rsdoctor/types": "workspace:*",
     "@rsdoctor/utils": "workspace:*",
-    "browserslist-load-config": "^1.0.2",
-    "@rsbuild/plugin-check-syntax": "catalog:",
     "@rspack/resolver": "catalog:",
+    "browserslist-load-config": "^1.0.2",
+    "enhanced-resolve": "^5.20.0",
     "es-toolkit": "catalog:",
     "filesize": "catalog:",
     "fs-extra": "catalog:",

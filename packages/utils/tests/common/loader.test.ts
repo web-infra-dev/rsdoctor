@@ -1,6 +1,7 @@
 import { describe, it, expect } from '@rstest/core';
 import { SDK } from '@rsdoctor/types';
 import {
+  getDirectoriesLoaders,
   getLoaderFileDetails,
   getLoaderFileInputAndOutput,
 } from '../../src/common/loader';
@@ -121,5 +122,23 @@ describe('test src/common/loader.ts', () => {
     expect(() => {
       getLoaderFileDetails('/non-existent/file.js', mockLoaderData);
     }).toThrow('"/non-existent/file.js" not match any loader data');
+  });
+
+  it('getDirectoriesLoaders should match loader stats without duplicate separators', () => {
+    const nestedLoaderData: SDK.LoaderData = [
+      {
+        ...mockLoaderData[0],
+        resource: {
+          ...mockLoaderData[0].resource,
+          path: '/test/src/file.js',
+        },
+      },
+    ];
+
+    const result = getDirectoriesLoaders(nestedLoaderData, '/test');
+
+    expect(result).toHaveLength(1);
+    expect(result[0].directory).toBe('/test/src');
+    expect(result[0].stats).toHaveLength(2);
   });
 });

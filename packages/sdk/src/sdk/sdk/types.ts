@@ -6,7 +6,7 @@ export interface DataWithUrl {
     | {
         path: string;
         basename: string;
-        content: Buffer;
+        content?: Buffer;
       }[]
     | string;
 }

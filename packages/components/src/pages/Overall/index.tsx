@@ -1,5 +1,4 @@
 import React from 'react';
-import { Flex } from 'antd';
 
 import { HelpCenter } from '../../components/Overall/help-center';
 import { BundleAlerts } from '../../components/Alerts';
@@ -24,7 +23,7 @@ const Component: React.FC = () => {
 
   return (
     <div className={style.overall}>
-      <Flex className={style.columns}>
+      <div className={style.columns}>
         <main className={style.mainColumn}>
           <ResponsiveLayout>
             <ProjectOverall
@@ -45,7 +44,7 @@ const Component: React.FC = () => {
             <HelpCenter />
           </ResponsiveLayout>
         </aside>
-      </Flex>
+      </div>
     </div>
   );
 };

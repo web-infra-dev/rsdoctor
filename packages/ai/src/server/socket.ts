@@ -1,8 +1,9 @@
-import { Socket, io } from 'socket.io-client';
+import { io, type Socket } from 'socket.io-client';
 import { logger } from '@rsdoctor/utils/logger';
 import { GlobalConfig } from '@rsdoctor/utils/common';
 
 const map: Record<string, Socket> = {};
+const SOCKET_REQUEST_TIMEOUT_MS = 10_000;
 
 function redactSocketToken(url: string) {
   return url.replace(/([?&]token=)[^&]+/, '$1<redacted>');
@@ -43,10 +44,17 @@ export function getPortFromArgs(): number {
 export function getSocketUrlFromArgs(): string | undefined {
   const args = process.argv.slice(2); // Skip the first two elements
   const socketUrlIndex = args.indexOf('--socket-url');
+  const portIndex = args.indexOf('--port');
   const compilerIndex = args.indexOf('--compiler');
 
   if (socketUrlIndex !== -1 && args[socketUrlIndex + 1]) {
     return args[socketUrlIndex + 1];
+  }
+
+  if (portIndex !== -1 && args[portIndex + 1]) {
+    return GlobalConfig.getMcpServerInfoByPort(
+      parseInt(args[portIndex + 1], 10),
+    ).socketUrl;
   }
 
   return getMcpSocketUrl(
@@ -55,30 +63,43 @@ export function getSocketUrlFromArgs(): string | undefined {
 }
 
 export const getWsUrl = async () => {
-  const args = process.argv.slice(2);
-  const portIndex = args.indexOf('--port');
-  const compilerIndex = args.indexOf('--compiler');
-  const compiler = compilerIndex !== -1 ? args[compilerIndex + 1] : undefined;
+  const socketUrl = getSocketUrlFromArgs();
+  if (socketUrl) {
+    logger.error(`Socket will start on url: ${redactSocketToken(socketUrl)}`);
+    return socketUrl;
+  }
+
   const port = getPortFromArgs();
-  const serverInfo =
-    portIndex !== -1
-      ? GlobalConfig.getMcpServerInfoByPort(port)
-      : GlobalConfig.getMcpServerInfo(compiler);
-  const socketUrl = serverInfo.socketUrl || `ws://localhost:${port}`;
   logger.error(`Socket will start on port: ${port}`);
-  return socketUrl;
+  return `ws://localhost:${port}`;
 };
+
+export async function emitSocketRequest(
+  socket: Socket,
+  api: string,
+  params: object,
+  timeout = SOCKET_REQUEST_TIMEOUT_MS,
+) {
+  return (await socket.timeout(timeout).emitWithAck(api, params)) as {
+    res: unknown;
+  };
+}
 
 export const sendRequest = async (api: string, params = {}) => {
   const url = await getWsUrl();
   const socket = createSocket(url);
   logger.error('[mcp]socket client is started');
-  const res = await new Promise((resolve) => {
-    socket.emit(api, params, (res: any) => {
-      resolve(res.res);
-    });
-  });
-  return res;
+
+  try {
+    const response = await emitSocketRequest(socket, api, params);
+    return response.res;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Rsdoctor request "${api}" failed for ${redactSocketToken(url)}: ${message}. Make sure the Rsdoctor local server is running and the cached MCP address is current.`,
+      { cause: error },
+    );
+  }
 };
 
 export const getMcpPort = (compiler?: string) => {
@@ -86,20 +107,5 @@ export const getMcpPort = (compiler?: string) => {
 };
 
 export const getMcpSocketUrl = (compiler?: string) => {
-  const mcpPortFilePath = GlobalConfig.getMcpConfigPath();
-
-  if (!fs.existsSync(mcpPortFilePath)) {
-    return undefined;
-  }
-
-  const mcpJson = JSON.parse(fs.readFileSync(mcpPortFilePath, 'utf8'));
-
-  if (compiler) {
-    const compilerSocketUrl = mcpJson.socketUrlList?.[compiler];
-    if (compilerSocketUrl) {
-      return compilerSocketUrl;
-    }
-  }
-
-  return mcpJson.socketUrl;
+  return GlobalConfig.getMcpServerInfo(compiler).socketUrl;
 };
