@@ -184,7 +184,7 @@ For detailed type definitions, refer to: [ReportData](#reportdata)
 ### 4. Displaying rule results
 
 The `report` function will pass the error information of custom rules to the compilation's errors or warnings. It will display the rule results in the terminal during the build process, and even interrupt the build.
-At the same time, Rsdoctor also has two components that can be used to display rules. For more details, see [Display Components](#display-components).
+Rsdoctor displays custom rule results in a warning list. For more details, see [Display Components](#display-components).
 
 - Basic Rule Warning Component
 
@@ -253,73 +253,6 @@ report({
 <img src="https://assets.rspack.rs/others/assets/rsdoctor/rule-1.jpeg" />
 
 - Component Code [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/client/src/components/Alerts/list.tsx)
-
-### Code display component
-
-- Component Type
-
-  [CodeViewRule Type](#codeviewrule)
-
-- Component Input
-  - type
-    - The type of the component.
-    - value: 'code-view'.
-
-  - title
-    - The title of the rule.
-    - type: string.
-
-  - description
-    - The description of the rule. The data comes from the `message` or `detail.description` in the `report` function:
-      ```js
-      report({
-        message: 'The count of assets is bigger than limit',
-        detail: {
-          // ......
-          description: 'The count of assets is bigger than limit',
-        },
-      });
-      ```
-    - type: string.
-
-  - level
-    - The level of the rule.
-    - type: warn | error.
-
-  - file
-    - Code details for display.
-    - [type](#codeviewrule):
-      - file: string, code file path.
-      - content: string, code content.
-      - ranges: SourceRange, code line and column ranges.
-
-- Example
-
-```js
-  const detail {
-    type: 'code-view',
-    file: {
-      path: document.path,
-      content: document.content,
-      ranges: [node.loc!],
-    },
-  };
-
-  report({
-    message,
-    document,
-    detail,
-  });
-
-```
-
-- [More Examples](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/core/src/rules/rules/default-import-check/index.ts#L103)
-
-- Component Display
-
-<img src="https://assets.rspack.rs/others/assets/rsdoctor/rule-3.jpeg" />
-
-- Component Code: [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/client/src/components/Alert/view.tsx)
 
 ## Type definitions
 
@@ -435,6 +368,8 @@ interface LinkRuleStoreData extends BaseRuleStoreData {
 ```
 
 ### CodeViewRule
+
+This data type is still used by core rules. The current client displays these results in the warning list without a dedicated code-view component.
 
 ```ts
 interface CodeViewRuleStoreData extends BaseRuleStoreData {

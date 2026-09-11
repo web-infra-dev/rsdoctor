@@ -185,7 +185,7 @@ const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
 ### 4. 规则结果展示
 
 `report` 函数会把自定义规则的错误信息传递给 compilation 的 errors 或 warnings，会在构建的时候在终端中输出构建规则结果提示，甚至中断构建。
-同时，Rsdoctor 还有两种组件可以作为规则展示，详细的查看下方[展示组件](#%E5%B1%95%E7%A4%BA%E7%BB%84%E4%BB%B6)
+同时，Rsdoctor 会在警示列表中展示自定义规则的结果，详情参见下方[展示组件](#%E5%B1%95%E7%A4%BA%E7%BB%84%E4%BB%B6)。
 
 - 基本规则警示组件
 
@@ -254,73 +254,6 @@ report({
 <img src="https://assets.rspack.rs/others/assets/rsdoctor/rule-1.jpeg" />
 
 - 组件代码 [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/client/src/components/Alerts/list.tsx)
-
-### 代码展示组件
-
-- 组件类型
-
-  [CodeViewRule Type](#codeviewrule)
-
-- 组件输入
-  - type
-    - 使用组件类型。
-    - value： 'code-view'。
-
-  - title
-    - 规则标题。
-    - type： string。
-
-  - description
-    - 规则描述。数据来源为 report 中的 message 或 detail.description:
-      ```js
-      report({
-        message: 'The count of assets is bigger than limit',
-        detail: {
-          // ......
-          description: 'The count of assets is bigger than limit',
-        },
-      });
-      ```
-    - type： string。
-
-  - level
-    - 规则级别。
-    - type：warn | error。
-
-  - file
-    - 代码详情展示。
-    - [type](#codeviewrule)：
-      - file: string, 代码文件地址。
-      - content: string, 代码内容。
-      - ranges: SourceRange， 代码行列范围。
-
-- 示例
-
-```js
-  const detail {
-    type: 'code-view',
-    file: {
-      path: document.path,
-      content: document.content,
-      ranges: [node.loc!],
-    },
-  };
-
-  report({
-    message,
-    document,
-    detail,
-  });
-
-```
-
-- [更多示例代码](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/core/src/rules/rules/default-import-check/index.ts#L103)
-
-- 组件展示
-
-<img src="https://assets.rspack.rs/others/assets/rsdoctor/rule-3.jpeg" />
-
-- 组件代码 [Code](https://github.com/web-infra-dev/rsdoctor/blob/main/packages/client/src/components/Alert/view.tsx)
 
 ## 类型定义
 
@@ -436,6 +369,8 @@ interface LinkRuleStoreData extends BaseRuleStoreData {
 ```
 
 ### CodeViewRule
+
+核心规则仍使用此数据类型。当前客户端通过警示列表展示这类结果，不再提供专用的代码展示组件。
 
 ```ts
 interface CodeViewRuleStoreData extends BaseRuleStoreData {
