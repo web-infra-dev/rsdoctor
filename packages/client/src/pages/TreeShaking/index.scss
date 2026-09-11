@@ -11,6 +11,11 @@ $treePrefixCls: 'tree-shaking';
 
   .#{$treePrefixCls}-files-box {
     height: 700px;
+
+    .ant-card-body {
+      flex: 1;
+      min-height: 0;
+    }
   }
 
   .#{$treePrefixCls}-files {
@@ -27,7 +32,6 @@ $treePrefixCls: 'tree-shaking';
     }
   }
 
-  .#{$treePrefixCls}-files-box,
   .#{$treePrefixCls}-editor .ant-card-body {
     width: auto;
     height: calc(100% - 48px);
