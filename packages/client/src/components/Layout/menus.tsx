@@ -31,6 +31,7 @@ import {
   PluginsAnalyze,
   ModuleResolve,
   LoaderTimeline,
+  TreeShaking,
 } from 'src/pages';
 import { CompileName } from './constants';
 import styles from './header.module.scss';
@@ -74,7 +75,7 @@ const MenusBase: React.FC<{
         ...defaultInActive,
         overall: <OverallActive />,
       });
-    } else if (pathname.includes('bundle')) {
+    } else if (pathname.includes('bundle') || pathname === TreeShaking.route) {
       setNavIcon({
         ...defaultInActive,
         bundle: <BundleSizeActive />,
@@ -142,7 +143,14 @@ const MenusBase: React.FC<{
       label: t(BundleSize.name),
       key: BundleSize.name,
       icon: navIcon.bundle,
-      children: [],
+      children: [
+        { label: t('Bundle Analysis'), key: BundleSize.route },
+        ...(enableRoutes.includes(
+          Manifest.RsdoctorManifestClientRoutes.TreeShaking,
+        )
+          ? [{ label: t(TreeShaking.name), key: TreeShaking.route }]
+          : []),
+      ],
       onTitleClick() {
         navigate(BundleSize.route);
       },

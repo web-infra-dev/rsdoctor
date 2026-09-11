@@ -2,7 +2,7 @@ import { SyncHook } from '@rspack/lite-tapable';
 import { brotliCompressSync, constants, gzipSync } from 'node:zlib';
 import { describe, expect, it, rs } from 'rstack/test';
 import { Asset, ChunkGraph } from '@rsdoctor/shared/graph';
-import { SDK, type Plugin } from '@rsdoctor/shared/types';
+import { Manifest, SDK, type Plugin } from '@rsdoctor/shared/types';
 import { InternalBundlePlugin } from '@/inner-plugins/plugins/bundle';
 
 const source = 'export const value = 1;';
@@ -18,6 +18,8 @@ function createHarness(
   const plugin = new InternalBundlePlugin({
     chunkGraph,
     options: {
+      features: { treeShaking: false },
+      output: { mode: 'normal' },
       supports: {
         gzip: { gzipLevel: 9 },
         brotli: { brotliLevel: 6 },
@@ -33,6 +35,27 @@ function createHarness(
 }
 
 describe('InternalBundlePlugin', () => {
+  it.each([
+    { treeShaking: true, mode: 'normal', enabled: true },
+    { treeShaking: false, mode: 'normal', enabled: false },
+    { treeShaking: true, mode: 'lite', enabled: true },
+    { treeShaking: true, mode: 'brief', enabled: false },
+  ] as const)(
+    'registers Tree Shaking with treeShaking=$treeShaking in $mode mode: $enabled',
+    async ({ treeShaking, mode, enabled }) => {
+      const { plugin } = createHarness();
+      plugin.options.features.treeShaking = treeShaking;
+      plugin.options.output.mode = mode;
+
+      await plugin.done({ watchMode: false } as Plugin.BaseCompiler);
+
+      const assertion = expect(plugin.sdk.addClientRoutes);
+      (enabled ? assertion : assertion.not).toHaveBeenCalledWith([
+        Manifest.RsdoctorManifestClientRoutes.TreeShaking,
+      ]);
+    },
+  );
+
   it.each([
     {
       compiler: { watchMode: true },
