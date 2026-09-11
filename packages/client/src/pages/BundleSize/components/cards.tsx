@@ -1,6 +1,6 @@
 /* rslint-disable react/jsx-key */
 import React, { memo, useState, useMemo } from 'react';
-import { Divider, Segmented, Avatar, Tree } from 'antd';
+import { Segmented, Avatar, Tree } from 'antd';
 import { Client, SDK } from '@rsdoctor/shared/types';
 import { RightOutlined, FileFilled, GoldenFilled } from '@ant-design/icons';
 
@@ -189,90 +189,91 @@ export const BundleCards: React.FC<{
       {(res) => {
         const { treeData } = getFiles(res['all'].total);
         return (
-          <div className={styles.container}>
-            <div className={styles.summary}>
-              <Overview
-                title={
-                  <TextDrawer
-                    buttonProps={{
-                      size: 'small',
-                    }}
-                    buttonStyle={{
-                      fontSize: 'inherit',
-                    }}
-                    drawerProps={{
-                      title: 'Files',
-                    }}
-                    text={
-                      <div style={{ color: 'var(--text-color-secondary)' }}>
-                        <span style={{ marginRight: '5px' }}>Total Files</span>
-                        <RightOutlined />
-                      </div>
-                    }
-                  >
-                    <DirectoryTree
-                      defaultExpandAll
-                      selectable={false}
-                      treeData={treeData}
-                      rootStyle={{
-                        minHeight: '800px',
-                        border: '1px solid var(--color-border)',
+          <div className={styles.responsiveContainer}>
+            <div className={styles.container}>
+              <div className={styles.summary}>
+                <Overview
+                  title={
+                    <TextDrawer
+                      buttonProps={{
+                        size: 'small',
                       }}
+                      buttonStyle={{
+                        fontSize: 'inherit',
+                      }}
+                      drawerProps={{
+                        title: 'Files',
+                      }}
+                      text={
+                        <div style={{ color: 'var(--text-color-secondary)' }}>
+                          <span style={{ marginRight: '5px' }}>
+                            Total Files
+                          </span>
+                          <RightOutlined />
+                        </div>
+                      }
+                    >
+                      <DirectoryTree
+                        defaultExpandAll
+                        selectable={false}
+                        treeData={treeData}
+                        rootStyle={{
+                          minHeight: '800px',
+                          border: '1px solid var(--color-border)',
+                        }}
+                      />
+                    </TextDrawer>
+                  }
+                  description={
+                    <>
+                      <span className={styles.description}>{totalSize}</span>
+                      <span className={styles.unit}>{totalSizeUnit}</span>
+                      <div className={styles.totalNumber}>
+                        <span style={{ marginRight: '7px' }}>
+                          Number of files
+                        </span>
+                        <span style={{ fontWeight: 500 }}>
+                          {summary.all.total.count}
+                        </span>
+                      </div>
+                    </>
+                  }
+                  icon={
+                    <Avatar
+                      style={{ background: '#3874F6' }}
+                      shape="circle"
+                      icon={<FileFilled style={{ fontSize: '18px' }} />}
                     />
-                  </TextDrawer>
-                }
-                description={
-                  <>
-                    <span className={styles.description}>{totalSize}</span>
-                    <span className={styles.unit}>{totalSizeUnit}</span>
-                    <div className={styles.totalNumber}>
-                      <span style={{ marginRight: '7px' }}>
-                        Number of files
-                      </span>
-                      <span style={{ fontWeight: 500 }}>
-                        {summary.all.total.count}
+                  }
+                  style={{
+                    marginBottom: '12px',
+                  }}
+                />
+                <Overview
+                  title={
+                    <div style={{ margin: '4px 0' }}>
+                      <span style={{ marginRight: '5px' }}>
+                        Duplicate Packages
                       </span>
                     </div>
-                  </>
-                }
-                icon={
-                  <Avatar
-                    style={{ background: '#3874F6' }}
-                    shape="circle"
-                    icon={<FileFilled style={{ fontSize: '18px' }} />}
-                  />
-                }
-                style={{
-                  marginBottom: '12px',
-                  minWidth: '210px',
-                }}
-              />
-              <Overview
-                style={{ minWidth: '210px' }}
-                title={
-                  <div style={{ margin: '4px 0' }}>
-                    <span style={{ marginRight: '5px' }}>
-                      Duplicate Packages
-                    </span>
+                  }
+                  description={duplicatePackages.length}
+                  icon={
+                    <Avatar
+                      style={{ background: '#13C2C2' }}
+                      shape="circle"
+                      icon={<GoldenFilled style={{ fontSize: '18px' }} />}
+                    />
+                  }
+                />
+              </div>
+              <div className={styles.chartsContainer}>
+                {arr.map((e, idx) => (
+                  <div key={idx} className={styles.chart}>
+                    {e}
                   </div>
-                }
-                description={duplicatePackages.length}
-                icon={
-                  <Avatar
-                    style={{ background: '#13C2C2' }}
-                    shape="circle"
-                    icon={<GoldenFilled style={{ fontSize: '18px' }} />}
-                  />
-                }
-              />
-            </div>
-            <Divider style={{ height: '200px' }} type="vertical" />
-            <div className={styles.chartsContainer}>
-              {arr.map((e, idx) => (
-                <div key={idx} className={styles.chart}>
-                  {e}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         );

@@ -1,16 +1,16 @@
 .container {
+  display: grid;
+  grid-template-columns: var(--asset-chart-size) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 120px;
   width: 100%;
   min-width: 0;
-
-  > :global(.ant-space-item:last-child) {
-    min-width: 0;
-    flex: 1;
-  }
 }
 
 .details {
   min-width: 0;
-  margin-left: 10px;
+  text-align: left;
 }
 
 .metricSelector {
@@ -29,41 +29,62 @@
 }
 
 .metricValue {
-  margin-top: 2px;
+  margin: 6px 0 8px;
 }
 
-.dataContainer {
-  min-width: 0;
+.fileCount {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+}
 
-  .title {
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 20px;
-    margin-bottom: 2px;
-  }
+.filesLink:global(.ant-btn) {
+  height: 20px;
+  line-height: 20px;
+  gap: 5px;
 }
 
 .description {
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 28px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
   white-space: nowrap;
-
-  @media (max-width: 1500px) {
-    font-size: 14px;
-  }
 }
 
 .percentContainer {
   display: flex;
   flex-direction: column;
-  font-size: 20px;
+  align-items: center;
+  font-size: clamp(12px, calc(var(--asset-chart-size) * 0.15), 14px);
+  line-height: 1.4;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-color);
 
   .percentDescription {
-    font-size: 12px;
+    color: var(--text-color-secondary);
+    font-size: clamp(10px, calc(var(--asset-chart-size) * 0.125), 12px);
     font-weight: 400;
-    line-height: 20px;
+    line-height: 1.4;
+  }
+}
+
+@container asset-card (max-width: 235px) {
+  .container {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+
+    > :global(.ant-progress) {
+      justify-self: center;
+      line-height: 1;
+    }
+  }
+
+  .details {
+    border-top: 1px solid var(--color-border-secondary);
+    padding-top: 12px;
   }
 }

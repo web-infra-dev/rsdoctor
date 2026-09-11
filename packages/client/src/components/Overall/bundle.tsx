@@ -11,7 +11,7 @@ import { FolderOpenTwoTone, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 import { getFileCom } from '../FileTree';
-import { formatSize, useI18n } from '../../utils';
+import { formatSize, useI18n, useElementSize } from '../../utils';
 import { TextDrawer } from '../TextDrawer';
 import { Card } from '../Card';
 import { ServerAPIProvider } from '../Manifest';
@@ -136,6 +136,7 @@ const BundleDescriptions = ({
   res: Client.RsdoctorClientAssetsSummary;
   view: viewType;
 }) => {
+  const [containerRef, { width }] = useElementSize();
   const fileItems: DescriptionsProps['items'] = [
     {
       key: 'js-files-count',
@@ -266,14 +267,16 @@ const BundleDescriptions = ({
   ];
 
   return (
-    <Descriptions
-      layout={'vertical'}
-      className={listStyles.bundleOverall}
-      size="small"
-      column={3}
-      colon={false}
-      items={view === 'files' ? fileItems : sizeItems}
-    />
+    <div ref={containerRef}>
+      <Descriptions
+        layout={'vertical'}
+        className={listStyles.bundleOverall}
+        size="small"
+        column={width < 300 ? 2 : 3}
+        colon={false}
+        items={view === 'files' ? fileItems : sizeItems}
+      />
+    </div>
   );
 };
 
@@ -297,7 +300,7 @@ export const BundleOverall: React.FC<{
       {(res) => {
         const totalSizeStr = formatSize(res.all.total.size);
         return (
-          <Card className={cardStyles.card} style={{ height: '316px' }}>
+          <Card className={cardStyles.card} style={{ minHeight: '316px' }}>
             <div>
               <div className={styles.title}>
                 <span>{t('Bundle Overall')}</span>
