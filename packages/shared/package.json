@@ -71,9 +71,7 @@
   "devDependencies": {
     "@rspack/core": "catalog:",
     "@types/path-browserify": "catalog:",
-    "@types/react": "catalog:",
     "es-toolkit": "catalog:",
-    "tslib": "catalog:",
     "typescript": "catalog:"
   },
   "peerDependencies": {

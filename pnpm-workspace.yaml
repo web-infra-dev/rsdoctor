@@ -24,16 +24,13 @@ catalog:
   '@rspack/core': ^2.1.10
   '@rspack/lite-tapable': ^1.1.5
   '@rspack/plugin-react-refresh': ^2.0.2
-  '@rspack/resolver': ^0.2.8
   '@rstest/playwright': 0.11.12
-  '@types/connect': 3.4.38
   '@types/estree': 1.0.5
   '@types/fs-extra': ^11.0.4
   '@types/node': ^24.12.3
   '@types/path-browserify': 1.0.3
   '@types/react': ^19.2.18
   '@types/react-dom': ^19.2.7
-  '@typescript/native-preview': 7.0.0-dev.20260707.2
   antd: 5.19.1
   clsx: ^2.1.1
   cross-env: ^10.1.0
@@ -50,7 +47,6 @@ catalog:
   react-router-dom: 6.30.3
   sirv: 3.0.2
   source-map: ^0.7.6
-  tslib: 2.8.1
   typescript: ^7.0.2
 
 minimumReleaseAge: 1440
