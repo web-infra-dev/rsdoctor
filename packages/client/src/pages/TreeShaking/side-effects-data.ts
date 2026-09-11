@@ -22,7 +22,10 @@ export function getSideEffectTree(modules: SDK.ModuleData[], cwd: string) {
     const normalizedPath = module.path.replace(/\\/g, '/');
     const parts = [
       module.layer || 'Modules',
-      ...path.relative(normalizedCwd, normalizedPath).split('/').filter(Boolean),
+      ...path
+        .relative(normalizedCwd, normalizedPath)
+        .split('/')
+        .filter(Boolean),
     ];
     const filename = parts.pop() || normalizedPath;
     let children = roots;
