@@ -17,12 +17,14 @@ interface SideEffectTreeNode {
 
 export function getSideEffectTree(modules: SDK.ModuleData[], cwd: string) {
   const roots: SideEffectTreeNode[] = [];
+  const normalizedCwd = cwd.replace(/\\/g, '/');
   for (const module of modules) {
+    const normalizedPath = module.path.replace(/\\/g, '/');
     const parts = [
       module.layer || 'Modules',
-      ...path.relative(cwd, module.path).split(/[\\/]/).filter(Boolean),
+      ...path.relative(normalizedCwd, normalizedPath).split('/').filter(Boolean),
     ];
-    const filename = parts.pop() || module.path;
+    const filename = parts.pop() || normalizedPath;
     let children = roots;
     let key = 'directory';
     for (const part of parts) {

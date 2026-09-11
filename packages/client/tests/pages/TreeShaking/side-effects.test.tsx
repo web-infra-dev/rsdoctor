@@ -76,4 +76,19 @@ describe('side effect file tree', () => {
     expect(directory?.selectable).toBe(false);
     expect(directory?.children).toHaveLength(2);
   });
+
+  it('normalizes Windows paths before creating relative tree entries', () => {
+    const { modules } = fixture();
+    const tree = getSideEffectTree(
+      modules.map((module) => ({
+        ...module,
+        path: 'C:\\project\\src\\entry.js',
+        layer: 'main',
+      })),
+      'C:\\project',
+    );
+
+    expect(tree[0].children?.[0].title).toBe('src');
+    expect(tree[0].children?.[0].children?.[0].title).toBe('entry.js');
+  });
 });
