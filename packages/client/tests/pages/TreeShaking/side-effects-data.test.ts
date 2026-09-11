@@ -12,7 +12,6 @@ function fixture() {
     moduleId: second.id,
     code: 'console.log("effect")',
     startLine: 1,
-    endLine: 1,
   };
   return {
     modules: [first, second],
@@ -21,34 +20,29 @@ function fixture() {
 }
 
 describe('native Tree Shaking data', () => {
-  it('joins by module ID rather than path for modules in different layers', () => {
+  it('joins by module ID across layers and ignores empty or orphan records', () => {
     const { modules, data } = fixture();
+    data.sideEffectCodes[modules[0].id] = [];
+    data.sideEffectCodes[99999] = data.sideEffectCodes[modules[1].id];
     expect(getSideEffectModules(modules, data)).toEqual([modules[1]]);
   });
 
-  it('ignores orphan records and modules without recorded code', () => {
-    const { modules, data } = fixture();
-    data.sideEffectCodes = { 99999: data.sideEffectCodes[modules[1].id] };
-    expect(getSideEffectModules(modules, data)).toEqual([]);
-  });
+  it.each([undefined, { sideEffectCodes: {} }])(
+    'handles missing or empty data: %j',
+    (data) => {
+      expect(getSideEffectModules(fixture().modules, data)).toEqual([]);
+    },
+  );
 
-  it('handles empty native analysis data', () => {
-    expect(
-      getSideEffectModules(fixture().modules, { sideEffectCodes: {} }),
-    ).toEqual([]);
-  });
-
-  it('excludes empty code lists while preserving modules with multiple snippets', () => {
+  it.each([
+    ['ENTRY', true],
+    ['/project/', true],
+    ['missing', false],
+  ] as const)('filters by path keyword %s', (search, matches) => {
     const { modules, data } = fixture();
-    const codes = data.sideEffectCodes[modules[1].id];
-    expect(
-      getSideEffectModules(modules, {
-        sideEffectCodes: {
-          [modules[0].id]: [],
-          [modules[1].id]: [...codes, ...codes],
-        },
-      }),
-    ).toEqual([modules[1]]);
+    expect(getSideEffectModules(modules, data, search)).toEqual(
+      matches ? [modules[1]] : [],
+    );
   });
 });
 

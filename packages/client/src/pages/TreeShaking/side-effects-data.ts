@@ -3,9 +3,15 @@ import path from 'path-browserify';
 
 export function getSideEffectModules(
   modules: SDK.ModuleData[],
-  data: SDK.TreeShakingData,
+  data?: SDK.TreeShakingData,
+  search = '',
 ) {
-  return modules.filter((module) => data.sideEffectCodes[module.id]?.length);
+  const keyword = search.toLowerCase();
+  return modules.filter(
+    (module) =>
+      data?.sideEffectCodes[module.id]?.length &&
+      module.path.toLowerCase().includes(keyword),
+  );
 }
 
 interface SideEffectTreeNode {
