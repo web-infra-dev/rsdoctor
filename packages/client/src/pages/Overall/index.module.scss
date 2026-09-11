@@ -20,10 +20,13 @@
 }
 
 .overall {
+  container: overall / inline-size;
   width: 100%;
 }
 
 .columns {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(280px, 1fr);
   width: 100%;
   align-items: flex-start;
   gap: 16px;
@@ -35,12 +38,10 @@
 }
 
 .mainColumn {
-  flex: 3 1 0;
+  container: main-column / inline-size;
 }
 
 .sideColumn {
-  flex: 1 1 0;
-
   :global(.ant-card) {
     background: var(--color-bg-box-subtle);
   }
@@ -52,14 +53,8 @@
   }
 }
 
-@media (max-width: 1200px) {
+@container overall (max-width: 879px) {
   .columns {
-    flex-wrap: wrap;
-  }
-
-  .mainColumn,
-  .sideColumn {
-    flex-basis: 100%;
-    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
   }
 }

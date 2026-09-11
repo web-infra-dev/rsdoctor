@@ -17,20 +17,6 @@ export interface PackageRelationAlertProps {
   cwd: string;
 }
 
-export interface FileRelationAlertProps {
-  data: Rule.FileRelationRuleStoreData;
-}
-
-export interface CodeChangeAlertProps {
-  data: Rule.CodeChangeRuleStoreData;
-  cwd: string;
-}
-
-export interface CodeViewAlertProps {
-  data: Rule.CodeViewRuleStoreData;
-  cwd: string;
-}
-
 type CheckSyntaxError = NonNullable<CheckSyntax['errors']>[number];
 export interface LinkAlertProps {
   data: (Rule.RuleStoreDataItem & {

@@ -139,6 +139,31 @@ describe('ecma-version-check rule', () => {
     expect(mocks.options).toHaveLength(0);
   });
 
+  it('skips binary Lynx bundles while checking JavaScript bundles', async () => {
+    const reports = await runRule({ ecmaVersion: 2019 }, [
+      {
+        path: 'main.lynx.bundle',
+        content: Buffer.from([0x9a, 0x7c, 0x01, 0x00]).toString(),
+      },
+      { path: 'main.js', content: 'const main = 1;' },
+      { path: 'async.bundle', content: 'const asyncChunk = 1;' },
+    ]);
+
+    expect(reports).toEqual([]);
+    expect(mocks.check.mock.calls).toEqual([
+      [path.join(outputPath, 'main.js'), 'const main = 1;'],
+      [path.join(outputPath, 'async.bundle'), 'const asyncChunk = 1;'],
+    ]);
+  });
+
+  it('does not initialize the checker for only Lynx bundles', async () => {
+    await runRule({}, [{ path: 'nested/main.lynx.bundle', content: '\u0000' }]);
+
+    expect(mocks.loadConfig).not.toHaveBeenCalled();
+    expect(mocks.options).toHaveLength(0);
+    expect(mocks.check).not.toHaveBeenCalled();
+  });
+
   it('applies output exclusions and forwards error-message exclusions', async () => {
     const excludeErrorMessage = /optional chaining/;
     await runRule({

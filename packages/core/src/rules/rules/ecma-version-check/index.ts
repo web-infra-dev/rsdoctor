@@ -49,6 +49,9 @@ export const rule: Linter.RuleData<Config, typeof title> = defineRule<
     },
     async check({ chunkGraph, report, ruleConfig, root, configs }) {
       const assets = chunkGraph.getAssets().filter((asset) => {
+        // Lynx bundles are binary containers, not JavaScript source.
+        if (asset.path.endsWith('.lynx.bundle')) return false;
+
         const extension = path.extname(asset.path);
         return extension === '.js' || extension === '.bundle';
       });

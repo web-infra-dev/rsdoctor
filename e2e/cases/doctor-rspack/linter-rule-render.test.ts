@@ -75,30 +75,119 @@ test('linter rule render check', async ({ page }) => {
   await page.goto(pathToFileURL(reportPath).href);
   core.debug(`reportPath:: ${reportPath}`);
 
-  const ecmaVersionButton = await page.$('[data-node-key="E1004"]');
-  core.debug(`ecmaVersionButton:: ${ecmaVersionButton}`);
+  const ecmaTab = page.getByRole('tab', { name: /ECMA Version Check/ });
+  await expect(ecmaTab).toHaveAttribute('aria-selected', 'true');
 
-  // TODO: fix this test case
-  // await ecmaVersionButton?.click();
-  // // ignore output text check because there's no .map file for track the source code
-  // const source = await page.$('.e2e-ecma-source');
-  // const error = await page.$('.e2e-ecma-error');
+  const emptyTab = page.getByRole('tab', { name: /Duplicate Packages/ });
+  await emptyTab.click();
+  await expect(emptyTab).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('tabpanel')).toContainText('No Data');
 
-  // core.debug(`source:: ${source}`);
-  // core.debug(`error:: ${error}`);
+  await ecmaTab.click();
+  await expect(ecmaTab).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('tabpanel')).toContainText('ECMA Version Check');
 
-  // const sourceText = await source?.textContent();
-  // const errorText = await error?.textContent();
+  // Keep the sidebar beside the main content when browser chrome narrows a laptop viewport.
+  for (const width of [960, 1100, 1280, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const main = document
+            .querySelector('main[class*="mainColumn"]')!
+            .getBoundingClientRect();
+          const aside = document
+            .querySelector('aside')!
+            .getBoundingClientRect();
+          return (
+            Math.abs(main.top - aside.top) < 1 &&
+            main.right < aside.left &&
+            document.documentElement.scrollWidth <= innerWidth
+          );
+        }),
+      )
+      .toBe(true);
+  }
 
-  // core.debug(`sourceText:: ${sourceText}`);
-  // core.debug(`errorText:: ${errorText}`);
+  await page.goto(`${pathToFileURL(reportPath).href}#/bundle/size`);
+  const charts = page.locator('[class*="chartsContainer"] > div');
+  await expect(charts).toHaveCount(4);
 
-  // expect(sourceText).toBe(
-  //   '/cases/doctor-rspack/dist/linter-rule-render/main.js:1:2',
-  // );
-  // expect(errorText).toBe(
-  //   `Find some syntax that does not match "ecmaVersion <= ${ecmaVersion}"`,
-  // );
+  const expectCardsToFit = async () => {
+    await expect
+      .poll(() =>
+        charts.evaluateAll((cards) =>
+          cards.every((card) => {
+            const bounds = card.getBoundingClientRect();
+            const selector = card
+              .querySelector('[class*="metricSelector"]')!
+              .getBoundingClientRect();
+            const progress = card
+              .querySelector('.ant-progress')!
+              .getBoundingClientRect();
+            const modeSelector = card
+              .querySelector('[class*="cardTitle"] .ant-segmented')
+              ?.getBoundingClientRect();
+            const value = card
+              .querySelector('[class*="metricValue"]')!
+              .getBoundingClientRect();
+            const details = card.querySelector('[class*="details"]')!;
+            const percentage = card.querySelector(
+              '[class*="percentContainer"]',
+            )!;
+            const fileRow = card.querySelector('[class*="fileCount"]')!;
+            const label = fileRow
+              .querySelector('button > span')!
+              .getBoundingClientRect();
+            const count = fileRow
+              .querySelector(':scope > span')!
+              .getBoundingClientRect();
+            const percentageFont = parseFloat(
+              getComputedStyle(percentage).fontSize,
+            );
+            return (
+              percentageFont <= (progress.width <= 81 ? 12 : 14) &&
+              Math.abs(
+                label.top + label.height / 2 - count.top - count.height / 2,
+              ) <= 1 &&
+              selector.right <= bounds.right &&
+              (progress.right <= selector.left ||
+                progress.bottom <= selector.top) &&
+              (!modeSelector ||
+                (modeSelector.right <= bounds.right &&
+                  Math.abs(modeSelector.left - selector.left) <= 1)) &&
+              Math.abs(value.left - selector.left) <= 1 &&
+              getComputedStyle(details).textAlign === 'left'
+            );
+          }),
+        ),
+      )
+      .toBe(true);
+  };
+
+  for (const width of [960, 1100, 1280, 1366, 1440, 1536, 1600, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expectCardsToFit();
+    await expect
+      .poll(() =>
+        charts.evaluateAll((cards) =>
+          cards.every(
+            (card) =>
+              Math.abs(
+                card.getBoundingClientRect().top -
+                  cards[0].getBoundingClientRect().top,
+              ) < 1,
+          ),
+        ),
+      )
+      .toBe(true);
+  }
+
+  // A wide viewport can still contain a narrow report panel.
+  await charts.first().evaluate((chart) => {
+    chart.parentElement!.parentElement!.parentElement!.style.width = '1216px';
+  });
+  await expectCardsToFit();
 });
 
 function fileExists(filePath: string) {

@@ -110,8 +110,6 @@ export function useHorizontalTabScroll(): HTMLAttributes<HTMLDivElement> {
         startScrollLeft: tabBar.scrollLeft,
         moved: false,
       };
-      tabBar.dataset.dragging = 'true';
-      tabBar.setPointerCapture(event.pointerId);
     },
     onPointerMove(event) {
       const dragState = dragStateRef.current;
@@ -120,8 +118,10 @@ export function useHorizontalTabScroll(): HTMLAttributes<HTMLDivElement> {
       }
 
       const distance = event.clientX - dragState.startX;
-      if (Math.abs(distance) >= DRAG_THRESHOLD) {
+      if (!dragState.moved && Math.abs(distance) >= DRAG_THRESHOLD) {
         dragState.moved = true;
+        dragState.element.dataset.dragging = 'true';
+        dragState.element.setPointerCapture(event.pointerId);
       }
 
       if (dragState.moved) {
