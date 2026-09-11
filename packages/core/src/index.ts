@@ -1,4 +1,6 @@
 export { logger } from './logger';
+export { migrateRsdoctorOptions } from './compat';
+export type { CompatibleRsdoctorOptions } from './compat';
 export { RsdoctorRspackPlugin } from './rspack-plugin';
 export {
   Linter,
