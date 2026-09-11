@@ -45,6 +45,18 @@ describe('framework options compatibility', () => {
     expect(logger.warn).toHaveBeenCalledTimes(1);
   });
 
+  it('keeps the legacy default mode when brief is configured without mode', () => {
+    const migrated = migrateRsdoctorOptions({
+      brief: { reportHtmlName: 'legacy.html', writeDataJson: true },
+    });
+
+    expect(migrated).toEqual({});
+    expect(normalizeUserConfig(migrated).output.mode).toBe('normal');
+    expect(logger.warn).toHaveBeenCalledWith(
+      expect.stringContaining('brief → output.options.htmlOptions'),
+    );
+  });
+
   it.each([
     [{ noModuleSource: true }, SDK.ToDataType.NoSource],
     [

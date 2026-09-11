@@ -90,7 +90,7 @@ export function migrateRsdoctorOptions<
     "output.options.type: ['html', 'json']",
   );
 
-  if (output || mode !== undefined || brief !== undefined) {
+  if (output || mode !== undefined) {
     const { compressData, reportCodeType, options, ...currentOutput } =
       output ?? {};
     // Legacy configurations can use null to leave report content unspecified.
@@ -117,7 +117,7 @@ export function migrateRsdoctorOptions<
         ? 'brief'
         : mode === 'lite'
           ? 'normal'
-          : (mode ?? (brief ? 'brief' : undefined)));
+          : mode);
     if (mode === 'lite' && output?.mode === undefined) {
       codeType ??= 'noAssetsAndModuleSource';
     }
