@@ -110,6 +110,14 @@ export class InternalBundlePlugin<
         Manifest.RsdoctorManifestClientRoutes.ModuleGraph,
         Manifest.RsdoctorManifestClientRoutes.BundleSize,
       ]);
+      if (
+        this.options.features.treeShaking &&
+        this.options.output.mode !== 'brief'
+      ) {
+        this.sdk.addClientRoutes([
+          Manifest.RsdoctorManifestClientRoutes.TreeShaking,
+        ]);
+      }
     } finally {
       timeEnd('InternalBundlePlugin.done');
     }
