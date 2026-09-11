@@ -113,11 +113,7 @@ export function migrateRsdoctorOptions<
     }
     const outputMode =
       output?.mode ??
-      (compressData === true
-        ? 'brief'
-        : mode === 'lite'
-          ? 'normal'
-          : mode);
+      (compressData === true ? 'brief' : mode === 'lite' ? 'normal' : mode);
     if (mode === 'lite' && output?.mode === undefined) {
       codeType ??= 'noAssetsAndModuleSource';
     }
