@@ -5,7 +5,7 @@ metadata:
   internal: true
 ---
 
-# Pull Request Creator
+# Pull request creator
 
 ## Steps
 
@@ -32,7 +32,7 @@ metadata:
    - Explain the problem or motivation and why it matters, then describe the approach and resulting behavior.
    - Include API, compatibility, or migration details when they help reviewers assess the change.
    - Keep typical descriptions to a few short sentences. Focus on the key changes rather than a file-by-file summary.
-   - Mention tests, documentation, and validation only when required by the template, central to the change, or relevant to review risk.
+   - Include tests, documentation, and validation required by repository guidelines or the template. Otherwise, mention them only when central to the change or relevant to review risk.
 
 6. Include relevant issue, discussion, or design links alongside the context they support, following the template's guidance.
    For dependency upgrades, link to the target version's release notes or tag when available.
