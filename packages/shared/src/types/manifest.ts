@@ -31,6 +31,23 @@ export interface RsdoctorManifestSeriesData {
   isChild?: boolean;
 }
 
+export interface RsdoctorBriefSeriesData extends Omit<
+  RsdoctorManifestSeriesData,
+  'path' | 'origin'
+> {
+  /** File path relative to the JSON file containing this entry, using / separators. */
+  dataFile: string;
+}
+
+export interface RsdoctorBriefData {
+  data: BuilderStoreData;
+  clientRoutes: RsdoctorManifestClientRoutes[];
+  /** Current compiler name. Absent in older reports. */
+  name?: string;
+  /** Compilers configured to emit brief JSON in this report. */
+  series?: RsdoctorBriefSeriesData[];
+}
+
 export interface RsdoctorManifestWithShardingFiles extends Omit<
   RsdoctorManifest,
   'data'

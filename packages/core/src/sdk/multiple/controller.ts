@@ -1,6 +1,8 @@
 import { Constants, Manifest } from '@rsdoctor/shared/types';
 import path from 'node:path';
+import fs from 'node:fs';
 import { RsdoctorPrimarySDK } from './primary';
+import { writeJsonAtomic } from '../utils/writeJson';
 
 function toUrlPath(filePath: string) {
   return filePath
@@ -19,6 +21,16 @@ export class RsdoctorSDKController {
   private outputOwner?: RsdoctorPrimarySDK;
 
   private refreshManifestTask = Promise.resolve();
+
+  private readonly compilerDirectories = new Map<
+    RsdoctorPrimarySDK,
+    { name: string; directory: string }
+  >();
+
+  private readonly briefReports = new Map<
+    RsdoctorPrimarySDK,
+    { filePath: string; metadata: string }
+  >();
 
   public root = '';
 
@@ -63,18 +75,84 @@ export class RsdoctorSDKController {
 
     const rootOutputDir =
       this.outputDir || this.master?.outputDir || slave.outputDir;
-    if (slave.isChild) {
-      return path.join(
-        rootOutputDir,
-        '.slaves',
-        slave.name.replace(/\s+/g, '-'),
-      );
+    const existing = this.compilerDirectories.get(slave);
+    if (existing?.name === slave.name) {
+      return path.join(rootOutputDir, existing.directory);
     }
 
-    const name =
-      slave.name.replace(/[^a-zA-Z0-9_$-]+/g, '-').replace(/^-+|-+$/g, '') ||
-      `compiler-${slave.id}`;
-    return path.join(rootOutputDir, 'compilers', name);
+    const name = slave.isChild
+      ? slave.name.replace(/\s+/g, '-')
+      : slave.name.replace(/[^a-zA-Z0-9_$-]+/g, '-').replace(/^-+|-+$/g, '') ||
+        `compiler-${slave.id}`;
+    const folder = slave.isChild ? '.slaves' : 'compilers';
+    const occupied = new Set(
+      [...this.compilerDirectories.values()].map(({ directory }) =>
+        directory.toLowerCase(),
+      ),
+    );
+    let directory = path.join(folder, name);
+    let suffix = 2;
+    while (occupied.has(directory.toLowerCase())) {
+      directory = path.join(folder, `${name}-${suffix++}`);
+    }
+    this.compilerDirectories.set(slave, { name: slave.name, directory });
+    return path.join(rootOutputDir, directory);
+  }
+
+  writeBriefJson(
+    current: RsdoctorPrimarySDK,
+    data: Manifest.RsdoctorBriefData,
+  ) {
+    const compilers = this.getActiveSlaves().flatMap((sdk) => {
+      const filePath = sdk.getBriefJsonPath(this.getCompilerOutputDir(sdk));
+      return filePath ? [{ sdk, filePath }] : [];
+    });
+    const paths = new Set<string>();
+    for (const { filePath } of compilers) {
+      const key = filePath.toLowerCase();
+      if (paths.has(key)) {
+        throw new Error(`Compiler JSON output paths overlap: ${filePath}`);
+      }
+      paths.add(key);
+    }
+
+    // Keep data writes and metadata refreshes synchronous so a refresh cannot
+    // overwrite a newer watch build in the same process. Cache only metadata.
+    for (const { sdk, filePath } of compilers) {
+      const series: Manifest.RsdoctorBriefSeriesData[] = compilers.map(
+        ({ sdk: item, filePath: target }) => ({
+          name: item.name,
+          displayName: item.displayName,
+          dataFile: path
+            .relative(path.dirname(filePath), target)
+            .split(path.sep)
+            .join('/'),
+          stage: item.stage,
+          compilerPath: item.compilerPath,
+          parentCompilerPath: item.parentCompilerPath,
+          isChild: item.isChild,
+        }),
+      );
+      const metadata = { name: sdk.name, series };
+      const signature = JSON.stringify(metadata);
+      const previous = this.briefReports.get(sdk);
+      if (sdk !== current) {
+        if (
+          !previous ||
+          previous.filePath !== filePath ||
+          !fs.existsSync(filePath)
+        ) {
+          continue;
+        }
+        if (previous.metadata === signature) {
+          continue;
+        }
+      }
+      const report: Manifest.RsdoctorBriefData =
+        sdk === current ? data : JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      writeJsonAtomic(filePath, { ...report, ...metadata });
+      this.briefReports.set(sdk, { filePath, metadata: signature });
+    }
   }
 
   getSeriesData(serverUrl = false) {
