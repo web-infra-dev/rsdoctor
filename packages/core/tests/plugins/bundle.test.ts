@@ -49,10 +49,12 @@ describe('InternalBundlePlugin', () => {
 
       await plugin.done({ watchMode: false } as Plugin.BaseCompiler);
 
-      const assertion = expect(plugin.sdk.addClientRoutes);
-      (enabled ? assertion : assertion.not).toHaveBeenCalledWith([
-        Manifest.RsdoctorManifestClientRoutes.TreeShaking,
-      ]);
+      const routes = [Manifest.RsdoctorManifestClientRoutes.TreeShaking];
+      if (enabled) {
+        expect(plugin.sdk.addClientRoutes).toHaveBeenCalledWith(routes);
+      } else {
+        expect(plugin.sdk.addClientRoutes).not.toHaveBeenCalledWith(routes);
+      }
     },
   );
 
