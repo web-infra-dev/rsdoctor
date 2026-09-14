@@ -1,5 +1,8 @@
 import fs from 'node:fs';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import path from 'node:path';
+
+import { CompilerError } from './compiler-error';
 
 export interface Chunk {
   id: number;
@@ -55,7 +58,19 @@ interface RsdoctorError {
   packages?: unknown[];
 }
 
+export interface CompilerEntry {
+  name: string;
+  dataFile: string;
+  displayName?: string;
+  stage?: number;
+  compilerPath?: string;
+  parentCompilerPath?: string;
+  isChild?: boolean;
+}
+
 export interface RsdoctorData {
+  name?: string;
+  series?: CompilerEntry[];
   data?: {
     chunkGraph?: {
       chunks?: Array<{
@@ -99,10 +114,26 @@ export interface RsdoctorData {
 }
 
 // ---------------------------------------------------------------------------
-// State: safe because each CLI invocation is a separate process
+// Data context is isolated across in-process executions.
 // ---------------------------------------------------------------------------
 
+const dataContext = new AsyncLocalStorage<{
+  dataFile: string;
+  compiler?: string;
+  reports: Map<string, RsdoctorData>;
+}>();
 let _dataFilePath: string | null = null;
+
+export function withDataFile<T>(
+  dataFile: string,
+  compiler: string | undefined,
+  handler: () => T,
+): T {
+  return dataContext.run(
+    { dataFile: path.resolve(dataFile), compiler, reports: new Map() },
+    handler,
+  );
+}
 let jsonDataCache: RsdoctorData | null = null;
 let cachedFilePath: string | null = null;
 
@@ -111,7 +142,7 @@ export function setDataFilePath(filePath: string): void {
 }
 
 export function getDataFilePath(): string | null {
-  return _dataFilePath;
+  return dataContext.getStore()?.dataFile ?? _dataFilePath;
 }
 
 export function loadJsonData(filePath: string): RsdoctorData {
@@ -136,10 +167,114 @@ export function loadJsonData(filePath: string): RsdoctorData {
 }
 
 export function requireDataFile(): RsdoctorData {
-  if (!_dataFilePath) {
+  const dataFile = getDataFilePath();
+  if (!dataFile) {
     throw new Error('No data file specified. Use --data-file <path>');
   }
-  return loadJsonData(_dataFilePath);
+  return loadCompilerData(dataFile);
+}
+
+function compilerIndex(filePath: string): CompilerEntry[] | undefined {
+  const report = loadJsonData(filePath);
+  if (report.series === undefined) return undefined;
+  if (
+    !Array.isArray(report.series) ||
+    !report.series.length ||
+    report.series.some(
+      (entry) =>
+        !entry ||
+        typeof entry.name !== 'string' ||
+        !entry.name ||
+        typeof entry.dataFile !== 'string' ||
+        !entry.dataFile,
+    ) ||
+    new Set(report.series.map((entry) => entry.name)).size !==
+      report.series.length
+  ) {
+    throw new CompilerError(
+      'INVALID_COMPILER_INDEX',
+      `Invalid compiler index: ${filePath}`,
+    );
+  }
+  return report.series;
+}
+
+export function listCompilers(filePath: string): {
+  ok: true;
+  data: {
+    compilers: Array<
+      Omit<CompilerEntry, 'name'> & { name: string | null; available: boolean }
+    >;
+  };
+} {
+  filePath = path.resolve(filePath);
+  const series = compilerIndex(filePath);
+  const items = (
+    series ?? [{ name: null, dataFile: path.basename(filePath) }]
+  ).map((entry) => {
+    const dataFile = path.resolve(path.dirname(filePath), entry.dataFile);
+    return {
+      ...entry,
+      dataFile,
+      available: fs.existsSync(dataFile) && fs.statSync(dataFile).isFile(),
+    };
+  });
+  return { ok: true, data: { compilers: items } };
+}
+
+export function loadCompilerData(filePath: string): RsdoctorData {
+  filePath = path.resolve(filePath);
+  const context = dataContext.getStore();
+  const cached = context?.reports.get(filePath);
+  if (cached) return cached;
+  const compiler = context?.compiler;
+  const series = compilerIndex(filePath);
+  if (!series) {
+    if (compiler !== undefined) {
+      throw new CompilerError(
+        'COMPILER_METADATA_MISSING',
+        'This report has no compiler index. Omit --compiler for legacy reports.',
+      );
+    }
+    return loadJsonData(filePath);
+  }
+  const names = series.map((entry) => entry.name);
+  if (compiler === undefined && series.length > 1) {
+    throw new CompilerError(
+      'COMPILER_REQUIRED',
+      'Multiple compilers found. Use --compiler <name>.',
+      names,
+    );
+  }
+  const selected =
+    compiler === undefined
+      ? series[0]
+      : series.find((entry) => entry.name === compiler);
+  if (!selected) {
+    throw new CompilerError(
+      'COMPILER_NOT_FOUND',
+      `Unknown compiler: ${compiler}`,
+      names,
+    );
+  }
+  const target = path.resolve(path.dirname(filePath), selected.dataFile);
+  if (!fs.existsSync(target) || !fs.statSync(target).isFile()) {
+    throw new CompilerError(
+      'COMPILER_DATA_NOT_FOUND',
+      `Compiler data file not found: ${target}`,
+      names,
+    );
+  }
+  const report = loadJsonData(target);
+  if (report.name !== selected.name) {
+    throw new CompilerError(
+      'INVALID_COMPILER_INDEX',
+      `Compiler name mismatch in ${target}: expected ${selected.name}`,
+      names,
+    );
+  }
+  context?.reports.set(filePath, report);
+  return report;
 }
 
 // ---------------------------------------------------------------------------

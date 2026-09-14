@@ -1,6 +1,6 @@
 import path from 'node:path';
 import {
-  loadJsonData,
+  loadCompilerData,
   getChunks,
   getAssets as getAssetsFromData,
 } from '../datasource';
@@ -254,8 +254,8 @@ export async function diffAssets(
   const baselinePath = path.resolve(requireArg(baselineInput, 'baseline'));
   const currentPath = path.resolve(requireArg(currentInput, 'current'));
 
-  const baselineData = loadJsonData(baselinePath) as RsdoctorData;
-  const currentData = loadJsonData(currentPath) as RsdoctorData;
+  const baselineData = loadCompilerData(baselinePath) as RsdoctorData;
+  const currentData = loadCompilerData(currentPath) as RsdoctorData;
 
   const baselineGraph = baselineData?.data?.chunkGraph;
   const currentGraph = currentData?.data?.chunkGraph;

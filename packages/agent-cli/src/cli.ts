@@ -1,6 +1,9 @@
 import { cac } from 'cac';
 import { createRequire } from 'node:module';
 
+import type { ToolExecutor } from './core/types';
+import { formatCommandError } from './commands/compiler-error';
+
 import { createRsdoctorCliToolExecutor } from './executor';
 import { describeSubcommands, getToolCatalog, runAiCli } from './commands';
 
@@ -34,11 +37,7 @@ async function runQueryCommand(
   toolName: string,
   options: Record<string, unknown>,
   context: {
-    executeTool?: (request: {
-      toolName: string;
-      input: Record<string, unknown>;
-      dataFile: string;
-    }) => Promise<unknown>;
+    executeTool?: ToolExecutor['execute'];
     write: (text: string) => void;
     writeError: (text: string) => void;
     tools: ReturnType<typeof getToolCatalog>;
@@ -54,7 +53,7 @@ async function runQueryCommand(
     page = parsePositiveIntegerOption(options.page, '--page');
     pageSize = parsePositiveIntegerOption(options.pageSize, '--page-size');
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = formatCommandError(error);
     context.writeError(`${message}\n`);
     return 1;
   }
@@ -68,7 +67,7 @@ async function runQueryCommand(
   try {
     parsedInput = JSON.parse(input) as Record<string, unknown>;
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = formatCommandError(error);
     context.writeError(`Invalid JSON for --input: ${message}\n`);
     return 1;
   }
@@ -86,6 +85,9 @@ async function runQueryCommand(
   const result = await executor({
     toolName,
     input: mergedInput,
+    ...(options.compiler !== undefined
+      ? { compiler: String(options.compiler) }
+      : {}),
     dataFile,
   });
 
@@ -94,11 +96,7 @@ async function runQueryCommand(
 }
 
 function createRootCli(options: {
-  executeTool?: (request: {
-    toolName: string;
-    input: Record<string, unknown>;
-    dataFile: string;
-  }) => Promise<unknown>;
+  executeTool?: ToolExecutor['execute'];
   write: (text: string) => void;
   writeError: (text: string) => void;
 }) {
@@ -115,6 +113,7 @@ function createRootCli(options: {
     .command('query <toolName>', 'Execute one mapped tool from the catalog.')
     .allowUnknownOptions()
     .option('--data-file [path]', 'Rsdoctor data file path.')
+    .option('--compiler <name>', 'Compiler name from compilers list.')
     .option('--input [json]', 'Tool input JSON.', { default: '{}' })
     .option('--filter [fields]', 'Comma-separated field paths to keep.')
     .option('--page [n]', 'Page number for paginating output collections.')
@@ -134,11 +133,7 @@ function createRootCli(options: {
 async function runRegisteredCommands(
   argv: string[],
   options: {
-    executeTool?: (request: {
-      toolName: string;
-      input: Record<string, unknown>;
-      dataFile: string;
-    }) => Promise<unknown>;
+    executeTool?: ToolExecutor['execute'];
     write: (text: string) => void;
     writeError: (text: string) => void;
   },
@@ -180,7 +175,7 @@ async function runRegisteredCommands(
     const result = await cli.runMatchedCommand();
     return typeof result === 'number' ? result : 0;
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = formatCommandError(error);
     options.writeError(`${message}\n`);
     return 1;
   }
@@ -189,11 +184,7 @@ async function runRegisteredCommands(
 export async function runCli(
   argv: string[] = process.argv.slice(2),
   options?: {
-    executeTool?: (request: {
-      toolName: string;
-      input: Record<string, unknown>;
-      dataFile: string;
-    }) => Promise<unknown>;
+    executeTool?: ToolExecutor['execute'];
     write?: (text: string) => void;
     writeError?: (text: string) => void;
   },

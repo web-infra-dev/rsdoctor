@@ -11,6 +11,7 @@ import {
   splitToolInputControls,
 } from './core/result-controls';
 import { getInProcessToolExecutors } from './commands';
+import { CompilerError } from './commands/compiler-error';
 
 const execFileAsync = promisify(execFile);
 
@@ -50,9 +51,36 @@ export function createRsdoctorCliToolExecutor({
         });
       const command = tool.buildCommand({
         dataFile: request.dataFile,
+        compiler: request.compiler,
         input: passthroughInput,
       });
-      const stdout = await runCommand(command);
+      const stdout = await runCommand(command).catch((error: unknown) => {
+        if (
+          error &&
+          typeof error === 'object' &&
+          'stderr' in error &&
+          typeof error.stderr === 'string'
+        ) {
+          let parsed;
+          try {
+            parsed = JSON.parse(error.stderr);
+          } catch {
+            /* Preserve non-JSON process errors. */
+          }
+          if (
+            parsed?.ok === false &&
+            typeof parsed.error?.code === 'string' &&
+            typeof parsed.error?.message === 'string'
+          ) {
+            throw new CompilerError(
+              parsed.error.code,
+              parsed.error.message,
+              parsed.error.compilers,
+            );
+          }
+        }
+        throw error;
+      });
 
       try {
         const parsed = JSON.parse(stdout);
@@ -85,6 +113,7 @@ export function createInProcessRsdoctorCliToolExecutor(): ToolExecutor {
         });
       const result = await tool.execute({
         dataFile: request.dataFile,
+        compiler: request.compiler,
         input: passthroughInput,
       });
       return applyToolResultControls(result, controls, { paginateResult });
