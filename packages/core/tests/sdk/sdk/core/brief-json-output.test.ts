@@ -14,7 +14,7 @@ describe('brief json output', () => {
     if (outputDir) await File.fse.remove(outputDir);
   });
 
-  it('should write compact JSON without formatting whitespace', async () => {
+  it('should preserve the standalone JSON shape and compact formatting', async () => {
     target = await createSDK({
       noServer: true,
       mode: 'brief',
@@ -30,6 +30,8 @@ describe('brief json output', () => {
     const jsonDataPath = path.join(outputDir, 'rsdoctor-data.json');
     const content = fs.readFileSync(jsonDataPath, 'utf-8');
 
-    expect(content).toBe(JSON.stringify(JSON.parse(content)));
+    const report = JSON.parse(content);
+    expect(Object.keys(report).sort()).toEqual(['clientRoutes', 'data']);
+    expect(content).toBe(JSON.stringify(report));
   });
 });
