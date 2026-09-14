@@ -632,12 +632,6 @@ importers:
       lines-and-columns:
         specifier: 2.0.4
         version: 2.0.4
-      open:
-        specifier: ^11.0.2
-        version: 11.0.2
-      raw-body:
-        specifier: 3.0.2
-        version: 3.0.2
       rslog:
         specifier: ^2.1.3
         version: 2.1.3
@@ -693,6 +687,12 @@ importers:
       json-stream-stringify:
         specifier: 3.0.1
         version: 3.0.1
+      open:
+        specifier: ^11.0.2
+        version: 11.0.2
+      raw-body:
+        specifier: 3.0.2
+        version: 3.0.2
       string-loader:
         specifier: 0.0.1
         version: 0.0.1
