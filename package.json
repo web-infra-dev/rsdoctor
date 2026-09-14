@@ -22,14 +22,14 @@
     "test:all": "pnpm run test && pnpm run e2e"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.59.0",
+    "@microsoft/api-extractor": "^7.59.1",
     "@scripts/config": "workspace:*",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",
     "cspell-ban-words": "^0.0.4",
-    "heading-case": "^2.0.1",
+    "heading-case": "^2.0.2",
     "pkg-pr-new": "0.0.88",
-    "rstack": "^0.7.3"
+    "rstack": "^0.7.4"
   },
   "packageManager": "pnpm@11.4.0",
   "engines": {
