@@ -59,19 +59,25 @@ export function formatAssetName(assetName: string, fileConfig?: string) {
   return assetName;
 }
 
-export function isAssetMatchExtension(asset: SDK.AssetData, ext: string) {
+export function isAssetMatchExtension(
+  asset: Pick<SDK.AssetData, 'path'>,
+  ext: string,
+) {
   return asset.path.slice(-ext.length) === ext || extname(asset.path) === ext;
 }
 
-export function isAssetMatchExtensions(asset: SDK.AssetData, exts: string[]) {
+export function isAssetMatchExtensions(
+  asset: Pick<SDK.AssetData, 'path'>,
+  exts: string[],
+) {
   if (!exts.length) return false;
   return exts.some((ext) => isAssetMatchExtension(asset, ext));
 }
 
-export function filterAssetsByExtensions(
-  assets: SDK.AssetData[],
+export function filterAssetsByExtensions<T extends Pick<SDK.AssetData, 'path'>>(
+  assets: T[],
   exts: string | string[],
-) {
+): T[] {
   if (typeof exts === 'string')
     return assets.filter((e) => isAssetMatchExtension(e, exts));
 
