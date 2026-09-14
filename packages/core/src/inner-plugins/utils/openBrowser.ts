@@ -1,6 +1,7 @@
 import { exec } from 'node:child_process';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
+import open from 'open';
 import { logger } from '@/logger';
 
 const execAsync = promisify(exec);
@@ -27,7 +28,6 @@ const getTargetBrowser = async () => {
 
 const openWithDefaultBrowser = async (url: string) => {
   try {
-    const { default: open } = await import('open');
     await open(url);
     return true;
   } catch (err) {

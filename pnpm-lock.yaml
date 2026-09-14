@@ -632,12 +632,6 @@ importers:
       lines-and-columns:
         specifier: 2.0.4
         version: 2.0.4
-      open:
-        specifier: ^11.0.3
-        version: 11.0.3
-      raw-body:
-        specifier: 3.0.2
-        version: 3.0.2
       rslog:
         specifier: ^2.1.3
         version: 2.1.3
@@ -693,6 +687,12 @@ importers:
       json-stream-stringify:
         specifier: 3.0.1
         version: 3.0.1
+      open:
+        specifier: ^11.0.2
+        version: 11.0.2
+      raw-body:
+        specifier: 3.0.2
+        version: 3.0.2
       string-loader:
         specifier: 0.0.1
         version: 0.0.1
@@ -5447,8 +5447,8 @@ packages:
   oniguruma-to-es@4.3.6:
     resolution: {integrity: sha512-csuQ9x3Yr0cEIs/Zgx/OEt9iBw9vqIunAPQkx19R/fiMq2oGVTgcMqO/V3Ybqefr1TBvosI6jU539ksaBULJyA==}
 
-  open@11.0.3:
-    resolution: {integrity: sha512-b3souUgU0VaAvMmzA4+9cRgrOgMdE0vc9H9VhQ0FYnjjcyZ8R/f9DiwMU9V8rl+vjf05On9UJhbgb06fsTs87Q==}
+  open@11.0.2:
+    resolution: {integrity: sha512-RWqF+pBSkqecEvCKOn8QYhaNdRMJDZRIrlS/7rTDdLHaPcfXGCZ/h8zb413NfvdeAV0MR7T1yJcA34/q+CSm1Q==}
     engines: {node: '>=20'}
 
   ora@9.4.1:
@@ -12511,7 +12511,7 @@ snapshots:
       regex: 6.1.0
       regex-recursion: 6.0.2
 
-  open@11.0.3:
+  open@11.0.2:
     dependencies:
       default-browser: 5.5.1
       define-lazy-prop: 3.0.0
