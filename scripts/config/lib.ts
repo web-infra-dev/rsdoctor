@@ -1,7 +1,7 @@
 import type { LibConfig, RslibConfig } from 'rstack/lib';
 import { pluginPublint } from 'rsbuild-plugin-publint';
 
-export const pluginsConfig = [pluginPublint()];
+export const pluginsConfig: LibConfig['plugins'] = [pluginPublint()];
 
 const nodeMinifyConfig = {
   js: true,
