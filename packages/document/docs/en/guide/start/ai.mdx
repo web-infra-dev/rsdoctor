@@ -62,6 +62,21 @@ rsdoctor-agent <group> <subcommand> --data-file <path>
   - `[--input <json>]`: Optional extra input passed to the tool (JSON string).
 - `rsdoctor-agent <group> <subcommand> --data-file <path>`: Run grouped commands directly for interactive analysis.
 
+### Selecting a compiler
+
+A project may build web, Node.js, or worker bundles with separate compilers. Each build has its own output and dependencies, so analysis needs a clear target to avoid treating Node.js dependencies as web bundle size problems.
+
+Agent CLI can list the compilers in a report and select one for analysis. It automatically selects a compiler when the report's index contains only one; with multiple compilers, the target must be specified. Each query reads only the selected compiler's data, keeping results from different builds separate.
+
+When using a coding agent, include the target in your question, for example: “Analyze the web build and find duplicate dependencies that could reduce bundle size.” You do not need to remember the commands. For manual queries, see the [`@rsdoctor/agent-cli` README](https://github.com/web-infra-dev/rsdoctor/tree/main/packages/agent-cli#selecting-a-compiler).
+
+```bash
+# List available compilers
+rsdoctor-agent compilers list --data-file ./rsdoctor-data.json
+# Analyze the Node.js compiler
+rsdoctor-agent chunks list --data-file ./rsdoctor-data.json --compiler node
+```
+
 ### Execution examples
 
 - Skill execution example:

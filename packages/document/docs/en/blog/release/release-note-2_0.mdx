@@ -26,8 +26,8 @@ Highlights in this release include:
 
 - **Faster analysis with Rspack**: Rsdoctor 2.0 is fully focused on Rspack, and expensive data processing runs inside Rspack. When introduced as an option in 1.0, this reduced overall analysis time by **more than 20%**. In 2.0, it is always enabled and avoids repeated work such as stats conversion.
 - **Build analysis for agents**: Agent CLI and the Rsdoctor analysis skill let coding agents query build data and return actionable optimization suggestions.
-- **One report for every compiler**: The regular Rspack plugin automatically handles multi-compiler builds, Rsbuild environments, and child compilers while keeping their data isolated.
-- **A smaller installation footprint**: Core capabilities are consolidated into `@rsdoctor/core`, reducing the repository from 13 packages to 6 and the complete production installation footprint by **48.5%**.
+- **Unified multi-compiler analysis**: The regular Rspack plugin automatically handles multi-compiler builds, Rsbuild environments, and child compilers while keeping their data isolated.
+- **A smaller installation footprint**: Core capabilities are consolidated into `@rsdoctor/core`. With `V2`, a complete production install contains 41 packages instead of 94 and is **53.6%** smaller than 1.6.2.
 - **Faster rebuild analysis**: Loader caching, fewer unnecessary calculations, and faster report writes reduce median HMR time by about **47%** in the benchmark.
 
 ## Deeper and faster Rspack analysis {#rspack-native-by-default}
@@ -73,7 +73,7 @@ The coding agent selects and runs the relevant `rsdoctor-agent` commands, then u
 
 Rsdoctor 2.0 removes `@rsdoctor/mcp-server` and standardizes on Agent CLI, which runs on demand without maintaining a service connection. It is not MCP-compatible or a drop-in API replacement. See [AI](/guide/start/ai) and the [2.0 migration guide](/guide/migration/migration-v2#ai-workflow-migration) for installation and migration details.
 
-## One report for every compiler
+## Unified multi-compiler analysis {#one-report-for-every-compiler}
 
 Modern Rspack applications often create several compilers in one process. A multi-compiler configuration may build browser and Node.js targets together, Rsbuild environments may create separate web and server builds, and plugins may start child compilers for generated assets.
 
@@ -98,6 +98,8 @@ new RsdoctorRspackPlugin({
 
 Browser, server, worker, and plugin-generated builds can now be viewed from one report without switching to a dedicated multi-compiler plugin.
 
+For usage details, see [Selecting a compiler](/guide/start/ai#selecting-a-compiler).
+
 ## A smaller install footprint {#a-smaller-package-and-dependency-graph}
 
 ### A simpler package graph {#smaller-dependency-graph}
@@ -107,17 +109,18 @@ Rsdoctor 2.0 consolidates core, graph, SDK, utilities, and the Rspack plugin int
 | Metric                                                                | Rsdoctor 1.x | Rsdoctor 2.0 |
 | --------------------------------------------------------------------- | -----------: | -----------: |
 | Top-level repository packages                                         |           13 |            6 |
-| Direct `dependencies` declarations across top-level package manifests |           88 |           39 |
+| Direct `dependencies` declarations across top-level package manifests |           88 |           36 |
 
 This metric counts direct dependency declarations in the source, not installed packages. The dependency graph also includes the root package, transitive dependencies, and peer dependencies, so it contains more nodes.
 
 ### Smaller install footprint {#smaller-production-install-footprint}
 
-The streamlined package structure and runtime dependencies also cut the production installation footprint of `@rsdoctor/core` and its complete transitive dependency tree by nearly half:
+The streamlined package structure and runtime dependencies cut both the size and package count of `@rsdoctor/core` and its complete transitive dependency tree by more than half:
 
-| Metric                                       | Rsdoctor 1.6.2 | Rsdoctor 2.0 | Reduction | Reduction rate |
-| -------------------------------------------- | -------------: | -----------: | --------: | -------------: |
-| Complete `@rsdoctor/core` production install |        25.5 MB |      13.1 MB |   12.3 MB |      **48.5%** |
+| Metric                       | Rsdoctor V1.x | Rsdoctor V2 | Reduction | Reduction rate |
+| ---------------------------- | ------------: | ----------: | --------: | -------------: |
+| Third-party dependency size  |       25.8 MB |     12.0 MB |   13.8 MB |      **53.6%** |
+| Third-party dependency count |            94 |          41 |        53 |      **56.4%** |
 
 When upgrading an Rspack project, replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`. See the [2.0 migration guide](/guide/migration/migration-v2#update-the-rspack-plugin) for the steps.
 

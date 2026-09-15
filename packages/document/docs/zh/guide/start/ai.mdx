@@ -62,6 +62,21 @@ rsdoctor-agent <group> <subcommand> --data-file <path>
   - `[--input <json>]`：可选，向工具传入额外输入参数（JSON 字符串）。
 - `rsdoctor-agent <group> <subcommand> --data-file <path>`：直接执行分组命令，适合交互式分析。
 
+### 选择 compiler \{#selecting-a-compiler}
+
+同一个项目可能同时构建 web 端、node 端或 worker，这些构建由不同的 compiler 完成。它们的产物和依赖不同，分析时需要区分目标，避免把 node 端依赖当作 web 端包体积问题。
+
+Agent CLI 支持查看报告中的 compiler，并选择其中一个进行分析。报告索引中只有一个 compiler 时会自动选择；有多个时，需要明确指定目标。每次查询只读取所选 compiler 的数据，不会合并不同构建的结果。
+
+使用 coding agent 时，可以直接在问题中说明目标，例如：“分析 web 端构建，找出可以减小包体积的重复依赖。”无需记忆具体命令；如需手动查询，请参考 [`@rsdoctor/agent-cli` README](https://github.com/web-infra-dev/rsdoctor/tree/main/packages/agent-cli#selecting-a-compiler)。
+
+```bash
+# 查看可用的 compiler
+rsdoctor-agent compilers list --data-file ./rsdoctor-data.json
+# 分析 server compiler
+rsdoctor-agent chunks list --data-file ./rsdoctor-data.json --compiler server
+```
+
 ### 执行示例
 
 - Skill 执行示例：
