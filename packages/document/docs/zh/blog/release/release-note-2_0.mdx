@@ -118,10 +118,9 @@ Rsdoctor 2.0 将 core、graph、SDK、utils 和 Rspack plugin 合并到 `@rsdoct
 包结构和 runtime 依赖的精简，让 `@rsdoctor/core` 及其完整传递依赖的生产安装体积和 package 数量都减少了一半以上：
 
 | 指标                              | Rsdoctor V1.x | Rsdoctor V2 |    减少 |      降幅 |
-| --------------------------------- | -------------: | --------------------: | ------: | --------: |
-| `@rsdoctor/core` 完整生产安装体积 |        25.8 MB |               12.0 MB | 13.8 MB | **53.6%** |
-| 完整生产安装的 package 数量       |             94 |                    41 |      53 | **56.4%** |
-
+| --------------------------------- | ------------: | ----------: | ------: | --------: |
+| `@rsdoctor/core` 完整生产安装体积 |       25.8 MB |     12.0 MB | 13.8 MB | **53.6%** |
+| 完整生产安装的 package 数量       |            94 |          41 |      53 | **56.4%** |
 
 Rspack 项目升级时需要使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`，具体步骤请参考 [2.0 迁移指南](/guide/migration/migration-v2#更新-rspack-插件)。
 
