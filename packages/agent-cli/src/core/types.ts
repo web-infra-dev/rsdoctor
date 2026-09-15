@@ -9,6 +9,7 @@ export interface JsonSchema {
 
 export interface ToolCommandContext {
   dataFile: string;
+  compiler?: string;
   input: Record<string, unknown>;
 }
 
@@ -27,6 +28,7 @@ export interface ToolExecutionRequest {
   toolName: string;
   input: Record<string, unknown>;
   dataFile: string;
+  compiler?: string;
 }
 
 export interface ToolExecutor {

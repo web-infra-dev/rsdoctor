@@ -1,4 +1,6 @@
-import { setDataFilePath } from './datasource';
+import type { ToolCommandContext } from '../core/types';
+import { getDataFilePath, listCompilers, withDataFile } from './datasource';
+import { CompilerError } from './compiler-error';
 import { createExecutor } from './utils';
 import { parseSubcommandOptions } from './utils';
 
@@ -127,6 +129,14 @@ function createOptimizeCommand(
 }
 
 const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
+  compilers: {
+    list: {
+      description: 'List available compilers and their data file paths.',
+      toolName: 'compilers_list',
+      options: [],
+      handler: async () => listCompilers(getDataFilePath()!),
+    },
+  },
   chunks: {
     list: {
       description: 'List all chunks (id, name, size).',
@@ -549,18 +559,12 @@ interface ToolCatalogEntry {
     properties: Record<string, unknown>;
     additionalProperties: boolean;
   };
-  buildCommand: (context: {
-    dataFile: string;
-    input: Record<string, unknown>;
-  }) => string[];
+  buildCommand: (context: ToolCommandContext) => string[];
   sourcePagination?: SourcePaginationConfig;
 }
 
 interface InProcessToolEntry {
-  execute: (context: {
-    dataFile: string;
-    input: Record<string, unknown>;
-  }) => Promise<unknown>;
+  execute: (context: ToolCommandContext) => Promise<unknown>;
   sourcePagination?: SourcePaginationConfig;
 }
 
@@ -633,7 +637,7 @@ export function getToolCatalog(): ToolCatalogEntry[] {
         description: def.toolDescription ?? def.description,
         inputSchema: toolInputSchema,
         sourcePagination: getSourcePaginationConfig(def.options),
-        buildCommand: ({ dataFile, input }) =>
+        buildCommand: ({ dataFile, compiler, input }) =>
           appendToolSpecificOptions(
             [
               'rsdoctor-agent',
@@ -642,6 +646,7 @@ export function getToolCatalog(): ToolCatalogEntry[] {
               '--data-file',
               dataFile,
               '--compact',
+              ...(compiler !== undefined ? ['--compiler', compiler] : []),
             ],
             def.options,
             input,
@@ -692,10 +697,10 @@ export function getInProcessToolExecutors(): Record<
       if (!def.toolName) continue;
       tools[def.toolName] = {
         sourcePagination: getSourcePaginationConfig(def.options),
-        execute: async ({ dataFile, input }) => {
-          setDataFilePath(dataFile);
-          return def.handler(input as Record<string, string | true>);
-        },
+        execute: async ({ dataFile, compiler, input }) =>
+          withDataFile(dataFile, compiler, () =>
+            def.handler(input as Record<string, string | true>),
+          ),
       };
     }
   }
@@ -720,7 +725,15 @@ function buildInputSchema(options: OptionDef[]): Record<string, unknown> {
   const properties: Record<string, unknown> = {};
   const required: string[] = [];
 
-  for (const opt of options) {
+  for (const opt of [
+    {
+      name: '--compiler',
+      description:
+        'Compiler name from compilers list; required for multi-compiler reports.',
+      required: false,
+    },
+    ...options,
+  ]) {
     const name = opt.name.replace(/^--/, '');
     properties[name] = optionToJsonSchema(opt);
     if (opt.required) required.push(name);
@@ -816,6 +829,7 @@ export async function route(
   args: string[],
   options: {
     dataFile?: string;
+    compiler?: string;
     compact?: boolean;
     describe?: boolean;
     schema?: string;
@@ -888,13 +902,15 @@ export async function route(
   if (!options.dataFile) {
     throw new Error('Missing required option: --data-file <path>');
   }
-  setDataFilePath(options.dataFile);
 
   const execute = createExecutor(!!options.compact, { write });
   try {
-    const success = await execute(() => cmdDef.handler(rawOpts));
+    const success = await withDataFile(options.dataFile, options.compiler, () =>
+      execute(() => cmdDef.handler(rawOpts)),
+    );
     return success ? 0 : 1;
-  } catch {
+  } catch (error) {
+    if (error instanceof CompilerError) throw error;
     return 1;
   }
 }

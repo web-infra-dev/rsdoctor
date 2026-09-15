@@ -1,11 +1,13 @@
 import { cac } from 'cac';
 
 import { route } from './router';
+import { formatCommandError } from './compiler-error';
 
 function parseAiArgs(argv: string[]) {
   const cli = cac('rsdoctor-agent');
   const parsed = cli
     .option('--data-file <path>', 'Rsdoctor data file path.')
+    .option('--compiler <name>', 'Compiler name from compilers list.')
     .option('--compact', 'Print compact JSON.')
     .option('--describe', 'Describe all direct subcommands.')
     .option('--schema <command>', 'Inspect one direct subcommand schema.')
@@ -17,6 +19,7 @@ function parseAiArgs(argv: string[]) {
       typeof parsed.options.dataFile === 'string'
         ? parsed.options.dataFile
         : undefined,
+    compiler: parsed.options.compiler as string | undefined,
     compact: parsed.options.compact === true,
     describe: parsed.options.describe === true,
     schema:
@@ -33,10 +36,11 @@ export async function runAiCli(
     writeError?: (text: string) => void;
   },
 ): Promise<number> {
-  const parsed = parseAiArgs(argv);
   try {
+    const parsed = parseAiArgs(argv);
     return await route(parsed.args, {
       dataFile: parsed.dataFile,
+      compiler: parsed.compiler,
       compact: parsed.compact,
       describe: parsed.describe,
       schema: parsed.schema,
@@ -44,7 +48,7 @@ export async function runAiCli(
       write: options?.write,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = formatCommandError(error);
     (options?.writeError ?? ((text: string) => process.stderr.write(text)))(
       `${message}\n`,
     );

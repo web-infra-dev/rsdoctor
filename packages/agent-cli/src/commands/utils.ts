@@ -1,3 +1,4 @@
+import { CompilerError } from './compiler-error';
 import { cac } from 'cac';
 
 // --- from utils.ts ---
@@ -187,6 +188,7 @@ export const createExecutor = (
         return true;
       }
     } catch (error) {
+      if (error instanceof CompilerError) throw error;
       const message = error instanceof Error ? error.message : String(error);
       write(JSON.stringify({ ok: false, error: message }, null, spacing));
       throw error;

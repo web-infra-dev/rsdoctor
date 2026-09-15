@@ -10,6 +10,7 @@ describe('tool catalog', () => {
       'build_summary',
       'bundle_optimize',
       'chunks_list',
+      'compilers_list',
       'errors_list',
       'packages_direct_dependencies',
       'packages_duplicates',
