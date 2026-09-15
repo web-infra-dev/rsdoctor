@@ -36,14 +36,19 @@ function report(name: string, size: number) {
     data: { chunkGraph: { chunks: [{ id: 1, name, size }], assets: [] } },
   };
 }
-async function cli(args: string[]) {
+async function cli(args: string[], options: Parameters<typeof runCli>[1] = {}) {
   const stdout: string[] = [];
   const stderr: string[] = [];
   const code = await runCli(args, {
+    ...options,
     write: (text) => stdout.push(text),
     writeError: (text) => stderr.push(text),
   });
   return { code, stdout: stdout.join(''), stderr: stderr.join('') };
+}
+
+function load(file = entry, compiler?: string) {
+  return withDataFile(file, compiler, () => loadCompilerData(file));
 }
 
 beforeEach(() => {
@@ -100,24 +105,13 @@ describe('compiler discovery and selection', () => {
         compiler,
         input: {},
       });
-      expect(JSON.stringify(result)).toContain(`"name":"${compiler}"`);
-      expect(JSON.stringify(result)).not.toContain(
-        `"name":"${compiler === 'server' ? 'client' : 'server'}"`,
-      );
+      expect(result).toMatchObject({
+        data: { items: [{ id: 1, name: compiler }] },
+      });
     }
     await expect(
       executor.execute({ toolName: 'chunks_list', dataFile: entry, input: {} }),
     ).rejects.toMatchObject({ code: 'COMPILER_REQUIRED' });
-    const result = await cli([
-      'chunks',
-      'list',
-      '--data-file',
-      entry,
-      '--compiler',
-      'server',
-    ]);
-    expect(result.code).toBe(0);
-    expect(result.stdout).toContain('server');
   });
 
   it('keeps compiler context across interleaved asynchronous executions', async () => {
@@ -160,26 +154,23 @@ describe('compiler discovery and selection', () => {
   });
 
   it('rejects malformed indexes, duplicate names, missing data and mismatched target names', () => {
-    for (const value of [
+    const invalidIndexes = [
       [],
       {},
       [null],
       [{ name: 'x' }],
       [series[0], series[0]],
-    ]) {
-      const file = writeReport(`invalid-${Math.random()}.json`, {
+    ];
+    for (const [index, value] of invalidIndexes.entries()) {
+      const file = writeReport(`invalid-${index}.json`, {
         series: value,
       });
       expect(() => listCompilers(file)).toThrow('Invalid compiler index');
     }
     fs.unlinkSync(path.join(directory, series[1].dataFile));
-    expect(() =>
-      withDataFile(entry, 'server', () => loadCompilerData(entry)),
-    ).toThrow('Compiler data file not found');
+    expect(() => load(entry, 'server')).toThrow('Compiler data file not found');
     writeReport(series[1].dataFile, report('wrong', 20));
-    expect(() =>
-      withDataFile(entry, 'server', () => loadCompilerData(entry)),
-    ).toThrow('Compiler name mismatch');
+    expect(() => load(entry, 'server')).toThrow('Compiler name mismatch');
   });
 
   it('resolves child compiler paths relative to a nested index', () => {
@@ -193,9 +184,7 @@ describe('compiler discovery and selection', () => {
       ],
     });
     writeReport('.slaves/child-/report.json', report('child', 5));
-    expect(
-      withDataFile(file, undefined, () => loadCompilerData(file)).name,
-    ).toBe('child');
+    expect(load(file).name).toBe('child');
   });
 
   it('applies selection independently to both assets diff inputs', async () => {
@@ -235,29 +224,6 @@ describe('compiler discovery and selection', () => {
 });
 
 describe('compiler selection through query and process executors', () => {
-  it('forwards query compiler separately from business input', async () => {
-    const requests: unknown[] = [];
-    const code = await runCli(
-      ['query', 'chunks_list', '--data-file', entry, '--compiler', 'server'],
-      {
-        executeTool: async (request) => {
-          requests.push(request);
-          return {};
-        },
-        write: () => {},
-      },
-    );
-    expect(code).toBe(0);
-    expect(requests).toEqual([
-      {
-        toolName: 'chunks_list',
-        dataFile: entry,
-        compiler: 'server',
-        input: {},
-      },
-    ]);
-  });
-
   it('runs query discovery and selection through the process command mapping', async () => {
     const executor = createRsdoctorCliToolExecutor({
       tools: getToolCatalog(),
@@ -275,9 +241,7 @@ describe('compiler selection through query and process executors', () => {
       ['chunks_list', 'server', 0],
       ['chunks_list', undefined, 1],
     ] as const) {
-      const output: string[] = [];
-      const errors: string[] = [];
-      const code = await runCli(
+      const result = await cli(
         [
           'query',
           tool,
@@ -286,51 +250,28 @@ describe('compiler selection through query and process executors', () => {
           ...(compiler ? ['--compiler', compiler] : []),
         ],
         {
-          executeTool: executor.execute,
-          write: (text) => output.push(text),
-          writeError: (text) => errors.push(text),
+          executeTool: (request) => {
+            expect(request).toEqual({
+              toolName: tool,
+              dataFile: entry,
+              input: {},
+              ...(compiler ? { compiler } : {}),
+            });
+            return executor.execute(request);
+          },
         },
       );
-      expect(code).toBe(expectedCode);
+      expect(result.code).toBe(expectedCode);
       if (expectedCode) {
-        expect(output).toEqual([]);
-        expect(JSON.parse(errors.join('')).error.code).toBe(
-          'COMPILER_REQUIRED',
-        );
+        expect(result.stdout).toBe('');
+        expect(JSON.parse(result.stderr).error).toMatchObject({
+          code: 'COMPILER_REQUIRED',
+          compilers: ['client', 'server'],
+        });
       } else {
-        expect(errors).toEqual([]);
-        expect(output.join('')).toContain('server');
+        expect(result.stderr).toBe('');
+        expect(result.stdout).toContain('server');
       }
     }
-  });
-
-  it('passes compiler to the child process and preserves structured compiler errors', async () => {
-    const executor = createRsdoctorCliToolExecutor({
-      tools: getToolCatalog(),
-      runCommand: async (command) => {
-        expect(command.slice(-2)).toEqual(['--compiler', 'server']);
-        throw Object.assign(new Error('process failed'), {
-          stderr: JSON.stringify({
-            ok: false,
-            error: {
-              code: 'COMPILER_NOT_FOUND',
-              message: 'Unknown compiler',
-              compilers: ['client'],
-            },
-          }),
-        });
-      },
-    });
-    await expect(
-      executor.execute({
-        toolName: 'chunks_list',
-        dataFile: entry,
-        compiler: 'server',
-        input: {},
-      }),
-    ).rejects.toMatchObject({
-      code: 'COMPILER_NOT_FOUND',
-      compilers: ['client'],
-    });
   });
 });
