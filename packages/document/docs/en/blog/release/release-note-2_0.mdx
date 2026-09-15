@@ -117,10 +117,10 @@ This metric counts direct dependency declarations in the source, not installed p
 
 The streamlined package structure and runtime dependencies cut both the size and package count of `@rsdoctor/core` and its complete transitive dependency tree by more than half:
 
-| Metric                                       | Rsdoctor V1.x | Rsdoctor V2 | Reduction | Reduction rate |
-| -------------------------------------------- | ------------: | ----------: | --------: | -------------: |
-| Complete `@rsdoctor/core` production install |       25.8 MB |     12.0 MB |   13.8 MB |      **53.6%** |
-| Packages in the complete production install  |            94 |          41 |        53 |      **56.4%** |
+| Metric                       | Rsdoctor V1.x | Rsdoctor V2 | Reduction | Reduction rate |
+| ---------------------------- | ------------: | ----------: | --------: | -------------: |
+| Third-party dependency size  |       25.8 MB |     12.0 MB |   13.8 MB |      **53.6%** |
+| Third-party dependency count |            94 |          41 |        53 |      **56.4%** |
 
 When upgrading an Rspack project, replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`. See the [2.0 migration guide](/guide/migration/migration-v2#update-the-rspack-plugin) for the steps.
 
