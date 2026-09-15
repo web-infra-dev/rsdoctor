@@ -98,6 +98,15 @@ new RsdoctorRspackPlugin({
 
 浏览器端、服务端、worker 和插件生成的构建可以在一个报告中切换查看，不再需要使用专门的 multi-compiler plugin。
 
+Agent CLI 也支持按 compiler 选择分析数据。JSON 报告新增了包含 compiler 名称和数据文件路径的索引。对于同时构建客户端和服务端产物的项目，可以先通过 `compilers list` 查看可用的 compiler，再用 `--compiler` 指定分析目标：
+
+```bash
+rsdoctor-agent compilers list --data-file ./rsdoctor-data.json
+rsdoctor-agent chunks list --data-file ./rsdoctor-data.json --compiler server
+```
+
+每次查询只读取一个 compiler 的数据，客户端和服务端的结果保持独立。索引中只有一个 compiler 时会自动选择，有多个时则需要明确指定名称。具体用法见[选择 compiler](/zh/guide/start/ai#selecting-a-compiler)。
+
 ## 更轻量的安装 {#a-smaller-package-and-dependency-graph}
 
 ### 更精简的 package 结构 {#smaller-dependency-graph}

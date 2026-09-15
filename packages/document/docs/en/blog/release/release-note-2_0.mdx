@@ -98,6 +98,15 @@ new RsdoctorRspackPlugin({
 
 Browser, server, worker, and plugin-generated builds can now be viewed from one report without switching to a dedicated multi-compiler plugin.
 
+Compiler selection is also available in Agent CLI. JSON reports now include an index of compiler names and data files. For applications that build both client and server bundles, `compilers list` discovers the available compilers and `--compiler` selects the data to analyze:
+
+```bash
+rsdoctor-agent compilers list --data-file ./rsdoctor-data.json
+rsdoctor-agent chunks list --data-file ./rsdoctor-data.json --compiler server
+```
+
+Each query reads one compiler's data, keeping client and server results separate. Reports with a single indexed compiler are selected automatically; reports with multiple compilers require an explicit name. See [Selecting a compiler](/guide/start/ai#selecting-a-compiler) for details.
+
 ## A smaller install footprint {#a-smaller-package-and-dependency-graph}
 
 ### A simpler package graph {#smaller-dependency-graph}
