@@ -58,6 +58,7 @@ rsdoctor-agent query packages_duplicates \
 Useful options:
 
 - `--data-file <path>`: path to the Rsdoctor data file.
+- `--compiler <name>`: compiler name from `compilers list`; required for reports with multiple indexed compilers.
 - `--input <json>`: tool input payload, defaulting to `{}`.
 - `--filter <fields>`: comma-separated field paths to keep in the output.
 - `--page <n>`: page number for paginated results.
@@ -83,6 +84,39 @@ rsdoctor-agent --describe
 rsdoctor-agent --schema chunks.list
 rsdoctor-agent chunks --describe
 ```
+
+## Selecting a compiler
+
+For a build with multiple compilers, such as client and server builds, first list the compilers in the report:
+
+```bash
+rsdoctor-agent compilers list --data-file ./rsdoctor-data.json
+```
+
+The JSON response contains `data.compilers`, with each compiler's `name`, absolute `dataFile` path, and `available` flag indicating whether the file exists. You can also use `query compilers_list` to retrieve this list.
+
+Use the exact `name` from the list to select a compiler. Both direct analysis commands and `query` accept `--compiler`:
+
+```bash
+rsdoctor-agent chunks list --data-file ./rsdoctor-data.json --compiler server
+rsdoctor-agent query packages_duplicates --data-file ./rsdoctor-data.json --compiler server
+```
+
+Pass `--compiler` as a CLI option, outside the `--input` JSON. The CLI resolves the selected file relative to the report's compiler index, so you can keep using the same `--data-file` path for different compilers. When moving reports, copy the indexed compiler files too and preserve their relative paths.
+
+- With one indexed compiler, the CLI selects it automatically.
+- With multiple indexed compilers, specify `--compiler`, even when the input file contains one compiler's data directly.
+- Older reports without a compiler index remain readable without `--compiler`. To select a compiler by name, regenerate the reports with a plugin version that writes the index.
+
+For `assets diff`, the same compiler name is selected independently in the baseline and current reports:
+
+```bash
+rsdoctor-agent assets diff --data-file ./current/rsdoctor-data.json \
+  --baseline ./baseline/rsdoctor-data.json \
+  --current ./current/rsdoctor-data.json --compiler server
+```
+
+Compiler selection errors are written as JSON to stderr and return a non-zero exit code. `COMPILER_REQUIRED` and `COMPILER_NOT_FOUND` include the available names in `error.compilers`. If a compiler's `available` flag is `false`, restore its data file or regenerate the report before analyzing it. Each analysis reads one compiler; results from different compilers are not merged.
 
 ## Output
 
