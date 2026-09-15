@@ -73,7 +73,7 @@ The coding agent selects and runs the relevant `rsdoctor-agent` commands, then u
 
 Rsdoctor 2.0 removes `@rsdoctor/mcp-server` and standardizes on Agent CLI, which runs on demand without maintaining a service connection. It is not MCP-compatible or a drop-in API replacement. See [AI](/guide/start/ai) and the [2.0 migration guide](/guide/migration/migration-v2#ai-workflow-migration) for installation and migration details.
 
-## One report for every compiler
+## Unified multi-compiler analysis {#one-report-for-every-compiler}
 
 Modern Rspack applications often create several compilers in one process. A multi-compiler configuration may build browser and Node.js targets together, Rsbuild environments may create separate web and server builds, and plugins may start child compilers for generated assets.
 

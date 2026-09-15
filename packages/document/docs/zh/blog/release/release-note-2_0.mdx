@@ -73,7 +73,7 @@ coding agent 会根据问题调用相应的 `rsdoctor-agent` 命令，结合项�
 
 Rsdoctor 2.0 已移除 `@rsdoctor/mcp-server`，统一使用按需执行、无需维护服务连接的 Agent CLI。它不兼容 MCP 协议，也不是旧 API 的直接替代品；安装和迁移方式请参考 [AI](/guide/start/ai) 与 [2.0 迁移指南](/guide/migration/migration-v2#ai-工作流迁移)。
 
-## 一个报告覆盖所有 compiler {#one-report-for-every-compiler}
+## 统一分析多 compiler 构建 {#one-report-for-every-compiler}
 
 现代 Rspack 应用经常在同一进程中创建多个 compiler。multi-compiler 配置可能同时构建浏览器端和 Node.js 产物，Rsbuild environments 可能分别创建 web 和 server 构建，插件也可能通过 child compiler 生成自己的资源。
 
