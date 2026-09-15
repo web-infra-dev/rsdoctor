@@ -93,7 +93,11 @@ For a build with multiple compilers, such as client and server builds, first lis
 rsdoctor-agent compilers list --data-file ./rsdoctor-data.json
 ```
 
-The JSON response contains `data.compilers`, with each compiler's `name`, absolute `dataFile` path, and `available` flag indicating whether the file exists. You can also use `query compilers_list` to retrieve this list.
+The JSON response contains `data.compilers`, with each compiler's `name`, absolute `dataFile` path, and `available` flag indicating whether the file exists. You can also retrieve this list through `query`:
+
+```bash
+rsdoctor-agent query compilers_list --data-file ./rsdoctor-data.json
+```
 
 Use the exact `name` from the list to select a compiler. Both direct analysis commands and `query` accept `--compiler`:
 
