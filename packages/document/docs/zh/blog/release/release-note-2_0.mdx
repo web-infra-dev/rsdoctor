@@ -26,8 +26,8 @@ import { ReleaseAuthors } from '../../../../theme/components/ReleaseAuthors';
 
 - **更快的 Rspack 分析**：2.0 全面聚焦 Rspack，耗时较长的数据处理在 Rspack 内部完成。该能力在 1.0 中作为可选项推出时，已将整体分析时间减少 **20% 以上**；2.0 默认启用，并进一步减少 stats 转换等重复处理。
 - **面向 agent 的构建分析**：Agent CLI 与 Rsdoctor analysis skill 可以帮助 coding agent 查询构建数据，并给出可执行的优化建议。
-- **一个报告覆盖所有 compiler**：常规 Rspack 插件可以自动处理 multi-compiler、Rsbuild environments 和 child compiler，同时保持每个 compiler 的数据相互隔离。
-- **更小的安装体积**：核心能力统一收敛到 `@rsdoctor/core`，仓库 package 从 11 个减少到 5 个，完整生产安装体积减少 **48.5%**。
+- **统一分析多 compiler 构建**：常规 Rspack 插件可以自动处理 multi-compiler、Rsbuild environments 和 child compiler，同时保持每个 compiler 的数据相互隔离。
+- **更小的安装体积**：核心能力统一收敛到 `@rsdoctor/core`。在 `V2` 中，完整生产安装包含的 package 从 94 个减少到 41 个，体积比 1.6.2 减少 **53.6%**。
 - **更快的增量构建分析**：通过保留 loader 缓存、跳过非必要计算并优化报告写入，bench 中的 HMR 中位数降低约 **47%**。
 
 ## 更深入、更快的 Rspack 分析 {#rspack-native-by-default}
@@ -98,14 +98,7 @@ new RsdoctorRspackPlugin({
 
 浏览器端、服务端、worker 和插件生成的构建可以在一个报告中切换查看，不再需要使用专门的 multi-compiler plugin。
 
-Agent CLI 也支持按 compiler 选择分析数据。JSON 报告新增了包含 compiler 名称和数据文件路径的索引。对于同时构建客户端和服务端产物的项目，可以先通过 `compilers list` 查看可用的 compiler，再用 `--compiler` 指定分析目标：
-
-```bash
-rsdoctor-agent compilers list --data-file ./rsdoctor-data.json
-rsdoctor-agent chunks list --data-file ./rsdoctor-data.json --compiler server
-```
-
-每次查询只读取一个 compiler 的数据，客户端和服务端的结果保持独立。索引中只有一个 compiler 时会自动选择，有多个时则需要明确指定名称。具体用法见[选择 compiler](/zh/guide/start/ai#selecting-a-compiler)。
+具体用法见[选择 compiler](/zh/guide/start/ai#selecting-a-compiler)。
 
 ## 更轻量的安装 {#a-smaller-package-and-dependency-graph}
 
@@ -116,17 +109,19 @@ Rsdoctor 2.0 将 core、graph、SDK、utils 和 Rspack plugin 合并到 `@rsdoct
 | 指标                                              | Rsdoctor 1.x | Rsdoctor 2.0 |
 | ------------------------------------------------- | -----------: | -----------: |
 | 仓库顶层 package                                  |           13 |            6 |
-| 顶层 package 的 `dependencies` 直接依赖声明数之和 |           88 |           39 |
+| 顶层 package 的 `dependencies` 直接依赖声明数之和 |           88 |           36 |
 
 这里统计的是源码中的直接依赖声明数，不是安装后的 package 数。依赖图还会包含根节点、传递依赖和 peer 依赖，因此节点数会更多。
 
 ### 更小的安装体积 {#smaller-production-install-footprint}
 
-包结构和 runtime 依赖的精简，也让 `@rsdoctor/core` 及其完整传递依赖的生产安装体积接近减半：
+包结构和 runtime 依赖的精简，让 `@rsdoctor/core` 及其完整传递依赖的生产安装体积和 package 数量都减少了一半以上：
 
-| 指标                              | Rsdoctor 1.6.2 | Rsdoctor 2.0 |    减少 |      降幅 |
-| --------------------------------- | -------------: | -----------: | ------: | --------: |
-| `@rsdoctor/core` 完整生产安装体积 |        25.5 MB |      13.1 MB | 12.3 MB | **48.5%** |
+| 指标                              | Rsdoctor V1.x | Rsdoctor V2 |    减少 |      降幅 |
+| --------------------------------- | -------------: | --------------------: | ------: | --------: |
+| `@rsdoctor/core` 完整生产安装体积 |        25.8 MB |               12.0 MB | 13.8 MB | **53.6%** |
+| 完整生产安装的 package 数量       |             94 |                    41 |      53 | **56.4%** |
+
 
 Rspack 项目升级时需要使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`，具体步骤请参考 [2.0 迁移指南](/guide/migration/migration-v2#更新-rspack-插件)。
 

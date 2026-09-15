@@ -87,7 +87,7 @@ rsdoctor-agent chunks --describe
 
 ## Selecting a compiler
 
-For a build with multiple compilers, such as client and server builds, first list the compilers in the report:
+For a build with multiple compilers, such as web and Node.js builds, first list the compilers in the report:
 
 ```bash
 rsdoctor-agent compilers list --data-file ./rsdoctor-data.json
@@ -102,8 +102,8 @@ rsdoctor-agent query compilers_list --data-file ./rsdoctor-data.json
 Use the exact `name` from the list to select a compiler. Both direct analysis commands and `query` accept `--compiler`:
 
 ```bash
-rsdoctor-agent chunks list --data-file ./rsdoctor-data.json --compiler server
-rsdoctor-agent query packages_duplicates --data-file ./rsdoctor-data.json --compiler server
+rsdoctor-agent chunks list --data-file ./rsdoctor-data.json --compiler node
+rsdoctor-agent query packages_duplicates --data-file ./rsdoctor-data.json --compiler node
 ```
 
 Pass `--compiler` as a CLI option, outside the `--input` JSON. The CLI resolves the selected file relative to the report's compiler index, so you can keep using the same `--data-file` path for different compilers. When moving reports, copy the indexed compiler files too and preserve their relative paths.
@@ -117,7 +117,7 @@ For `assets diff`, the same compiler name is selected independently in the basel
 ```bash
 rsdoctor-agent assets diff --data-file ./current/rsdoctor-data.json \
   --baseline ./baseline/rsdoctor-data.json \
-  --current ./current/rsdoctor-data.json --compiler server
+  --current ./current/rsdoctor-data.json --compiler node
 ```
 
 Compiler selection errors are written as JSON to stderr and return a non-zero exit code. `COMPILER_REQUIRED` and `COMPILER_NOT_FOUND` include the available names in `error.compilers`. If a compiler's `available` flag is `false`, restore its data file or regenerate the report before analyzing it. Each analysis reads one compiler; results from different compilers are not merged.
