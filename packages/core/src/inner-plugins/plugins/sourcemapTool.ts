@@ -14,7 +14,6 @@ export const UNASSIGNED = '[unassigned]';
  * @param compilation - The current compilation object.
  * @param pluginInstance - The Rsdoctor plugin instance.
  * @param sourceMapFilenameRegex - Regex to extract file paths from source map sources.
- * @param namespace - Optional namespace for resolving sources.
  */
 interface SourceMapAssetOptions {
   compilation: Plugin.BaseCompilation;
@@ -23,13 +22,11 @@ interface SourceMapAssetOptions {
     Linter.ExtendRuleData<any, string>[]
   >;
   sourceMapFilenameRegex: RegExp;
-  namespace?: string;
 }
 
 /**
  * Binds a context cache to a source path resolver.
  * @param context - The base context directory.
- * @param namespace - Optional namespace for resolving sources.
  * @param cache - The cache map to store resolved paths.
  * @param sourceMapDir - The directory containing source maps.
  * @param sourceRoot - The source root directory.
@@ -37,7 +34,6 @@ interface SourceMapAssetOptions {
  */
 export function bindContextCache(
   context: string,
-  namespace?: string,
   cache?: Map<string, string>,
   sourceMapDir?: string,
   sourceRoot?: string,
@@ -55,11 +51,11 @@ export function bindContextCache(
       if (sourceMapFilenameRegex) {
         const match = source.match(sourceMapFilenameRegex);
         const filePath = match?.[1];
-        const hasNamespace =
-          (namespace && source.startsWith(`webpack://${namespace}`)) ||
-          (namespace && source.startsWith(`file://${namespace}`));
-        const baseDir = hasNamespace ? process.cwd() : context;
-        resolved = filePath ? resolve(baseDir, `./${filePath}`) : UNASSIGNED;
+        // `webpack://` sources are emitted relative to the compiler context
+        // (webpack `contextifySourceUrl` semantics). The path after the
+        // namespace segment is context-relative as well, so always resolve
+        // against the given context instead of `process.cwd()`.
+        resolved = filePath ? resolve(context, `./${filePath}`) : UNASSIGNED;
       } else {
         resolved = UNASSIGNED;
       }
@@ -96,7 +92,6 @@ export function bindContextCache(
  * @param _compilation - The current compilation object.
  * @param _this - The Rsdoctor plugin instance.
  * @param sourceMapFilenameRegex - Regex to extract file paths from source map sources.
- * @param namespace - Optional namespace for resolving sources.
  */
 export async function collectSourceMaps(
   map: any,
@@ -104,7 +99,6 @@ export async function collectSourceMaps(
   _compilation: Plugin.BaseCompilation,
   _this: RsdoctorPluginInstance<Plugin.BaseCompiler, Linter.ExtendRuleData[]>,
   sourceMapFilenameRegex?: RegExp,
-  namespace?: string,
   skipSources?: Set<string>,
   sourceMapPath?: string,
 ) {
@@ -123,8 +117,10 @@ export async function collectSourceMaps(
     }
     const sourceRoot = (map as RawSourceMap).sourceRoot;
     const getRealSourcePath = bindContextCache(
-      _this.sdk.root || process.cwd(),
-      namespace,
+      // Resolve `webpack://` sources against the compiler context rather
+      // than the SDK root: the two differ when a build runs with a context
+      // that is not the project root (e.g. running from a subdirectory).
+      _compilation.options.context || _this.sdk.root || process.cwd(),
       _this._realSourcePathCache,
       sourceMapDir,
       sourceRoot ?? undefined,
@@ -227,7 +223,6 @@ function markAssetWithoutSourceMap(
  * @param compilation - The current compilation object.
  * @param _this - The Rsdoctor plugin instance.
  * @param sourceMapFilenameRegex - Regex to extract file paths from source map sources.
- * @param namespace - Optional namespace for resolving sources.
  */
 export async function handleAfterEmitAssets(
   compilation: Plugin.BaseCompilation,
@@ -236,7 +231,6 @@ export async function handleAfterEmitAssets(
     Linter.ExtendRuleData<any, string>[]
   >,
   sourceMapFilenameRegex?: RegExp,
-  namespace?: string,
 ) {
   if ('rspack' in compilation.compiler) {
     _this.sourceMapSets = new Map();
@@ -331,7 +325,6 @@ export async function handleAfterEmitAssets(
           compilation,
           _this,
           sourceMapFilenameRegex,
-          namespace,
           skipSources,
           sourceMapPath,
         );
@@ -355,8 +348,7 @@ export async function handleAfterEmitAssets(
  * @returns A promise that resolves when the source map information is collected.
  */
 export async function handleEmitAssets(options: SourceMapAssetOptions) {
-  const { compilation, pluginInstance, sourceMapFilenameRegex, namespace } =
-    options;
+  const { compilation, pluginInstance, sourceMapFilenameRegex } = options;
   if (!('rspack' in compilation.compiler)) {
     pluginInstance.sourceMapSets = new Map();
     time('ensureModulesChunkGraph.afterEmit.start');
@@ -394,7 +386,6 @@ export async function handleEmitAssets(options: SourceMapAssetOptions) {
           compilation,
           pluginInstance,
           sourceMapFilenameRegex,
-          namespace,
           undefined,
           sourceMapPath,
         );
