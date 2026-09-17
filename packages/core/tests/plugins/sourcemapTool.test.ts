@@ -61,10 +61,9 @@ describe('sourcemapTool', () => {
   describe('bindContextCache', () => {
     it('should resolve normal and webpack:// sources', () => {
       const context = '/project';
-      const namespace = 'foo';
       const cache = new Map();
       const regex = /webpack:\/\/(?:foo)?([^?]*)/;
-      const fn = bindContextCache(context, namespace, cache);
+      const fn = bindContextCache(context, cache);
       // TODO: compatible with webpack paths
       if (os.EOL === '\n') {
         // Normal path
@@ -80,16 +79,23 @@ describe('sourcemapTool', () => {
       }
     });
 
+    it('should resolve webpack:// sources against context even with a namespace', () => {
+      // Regression test: `webpack://` sources are emitted relative to the
+      // compiler context, so they must not be resolved against process.cwd()
+      // when the two differ (e.g. the build runs from a subdirectory).
+      const context = path.resolve('/project/e2e');
+      const regex = /(?:webpack:\/\/)?(?:my-app\/)?([^?]*)/;
+      const fn = bindContextCache(context, new Map());
+      expect(fn('webpack://my-app/./cases/a.js', regex)).toBe(
+        path.resolve(context, 'cases/a.js'),
+      );
+    });
+
     it('should resolve relative paths based on sourceMapDir or sourceRoot', () => {
       const context = '/project/dist';
 
       // Case 1: No sourceRoot, use sourceMapDir
-      const fn1 = bindContextCache(
-        context,
-        undefined,
-        new Map(),
-        '/project/dist/js',
-      );
+      const fn1 = bindContextCache(context, new Map(), '/project/dist/js');
       expect(fn1('../src/utils.js')).toBe(
         path.resolve('/project/dist/js', '../src/utils.js'),
       );
@@ -97,7 +103,6 @@ describe('sourcemapTool', () => {
       // Case 2: sourceRoot is absolute
       const fn2 = bindContextCache(
         context,
-        undefined,
         new Map(),
         '/project/dist/js',
         '/project/src',
@@ -107,7 +112,6 @@ describe('sourcemapTool', () => {
       // Case 3: sourceRoot is relative, use sourceMapDir as base
       const fn3 = bindContextCache(
         context,
-        undefined,
         new Map(),
         '/project/dist/js',
         '../src',
@@ -118,13 +122,7 @@ describe('sourcemapTool', () => {
       );
 
       // Case 4: sourceRoot is relative, no sourceMapDir, use context as base
-      const fn4 = bindContextCache(
-        context,
-        undefined,
-        new Map(),
-        undefined,
-        '../src',
-      );
+      const fn4 = bindContextCache(context, new Map(), undefined, '../src');
       expect(fn4('utils.js')).toBe(path.resolve(context, '../src', 'utils.js'));
     });
   });
@@ -206,6 +204,37 @@ describe('sourcemapTool', () => {
         (k: unknown) => typeof k === 'string' && k.includes('dayjs.min.js'),
       );
       expect(hasDayjs).toBe(true);
+    });
+
+    it('should resolve webpack:// sources against the compilation context', async () => {
+      // Regression test: when the compiler context differs from the SDK root
+      // (e.g. the build runs from a subdirectory), `webpack://./<path>`
+      // sources must be resolved against the compiler context.
+      const plugin = createMockPluginInstance();
+      plugin.sdk.root = path.resolve('/project');
+      const compilation = createMockCompilation();
+      compilation.options.context = path.resolve('/project/e2e');
+      const regex = /(?:webpack:\/\/)?(?:[^/]+\/)?([^?]*)/;
+      const sourceMap = {
+        version: 3,
+        sources: ['webpack://./cases/a.js'],
+        names: [],
+        mappings: 'AAAA',
+        file: 'main.js',
+        sourcesContent: ['console.log("a");'],
+      };
+
+      await collectSourceMaps(
+        sourceMap,
+        ['console.log("a");'],
+        compilation,
+        plugin,
+        regex,
+      );
+
+      expect(
+        plugin.sourceMapSets.has(path.resolve('/project/e2e', 'cases/a.js')),
+      ).toBe(true);
     });
 
     it('should extract absolute file path from loader chain', async () => {

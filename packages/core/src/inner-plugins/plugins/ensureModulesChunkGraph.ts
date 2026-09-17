@@ -82,13 +82,12 @@ export const ensureModulesChunksGraphFn = (
             if (!ensureDevtools(compiler)) {
               return;
             }
-            const { namespace, sourceMapFilenameRegex } =
+            const { sourceMapFilenameRegex } =
               calculateNamespaceAndRegex(compiler);
             await handleAfterEmitAssets(
               compilation,
               _this,
               sourceMapFilenameRegex,
-              namespace,
             );
           },
         );
