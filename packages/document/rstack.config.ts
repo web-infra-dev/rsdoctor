@@ -68,6 +68,14 @@ define.doc({
           from: '/guide/start/migration-v2$',
           to: '/guide/migration/migration-v2',
         },
+        {
+          from: '/config/options/options-v2$',
+          to: '/guide/migration/migration-v2#configuration-migration',
+        },
+        {
+          from: '/zh/config/options/options-v2$',
+          to: '/zh/guide/migration/migration-v2#configuration-migration',
+        },
       ],
     }),
     pluginAlgolia(),
