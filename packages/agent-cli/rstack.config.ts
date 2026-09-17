@@ -15,6 +15,13 @@ define.lib({
     },
   },
   bundle: true,
+  tools: {
+    rspack: {
+      experiments: {
+        runtimeMode: 'rspack',
+      },
+    },
+  },
   dts: {
     isolated: true,
   },

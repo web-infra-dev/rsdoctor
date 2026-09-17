@@ -24,7 +24,7 @@
   "dependencies": {
     "@arco-design/web-react": "^2.58.3",
     "@svgr/webpack": "^8.1.0",
-    "@swc/helpers": "^0.5.3",
+    "@swc/helpers": "^0.5.23",
     "classnames": "^2.5.1",
     "less-loader": "^11.1.4",
     "react": "catalog:",
