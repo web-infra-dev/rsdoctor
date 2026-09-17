@@ -8,6 +8,5 @@
   "server",
   "supports",
   "mode",
-  "multiCompiler",
-  "options-v2"
+  "multiCompiler"
 ]

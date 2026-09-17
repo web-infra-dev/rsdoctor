@@ -148,7 +148,7 @@ export function migrateRsdoctorOptions<
 
   if (migrations.length) {
     logger.warn(
-      `Legacy Rsdoctor options detected. The compatibility layer applied the available migrations; explicit current options take precedence. Please migrate your configuration: ${migrations.join('; ')}.`,
+      `Legacy Rsdoctor options detected. Please migrate your configuration: ${migrations.join('; ')}. Details: https://v2.rsdoctor.rs/guide/migration/migration-v2`,
     );
   }
   return result;
