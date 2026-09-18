@@ -79,7 +79,7 @@
     "filesize": "catalog:",
     "json-stream-stringify": "3.0.1",
     "open": "^11.0.4",
-    "raw-body": "3.0.2",
+    "raw-body": "4.0.0",
     "string-loader": "0.0.1",
     "ts-loader": "^9.6.2",
     "typescript": "catalog:"
