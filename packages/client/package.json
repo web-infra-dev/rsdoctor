@@ -19,9 +19,6 @@
     "start": "NODE_ENV=development rs build -w",
     "test": "rs test"
   },
-  "dependencies": {
-    "prettier": "3.9.6"
-  },
   "devDependencies": {
     "@ant-design/icons": "6.3.4",
     "@monaco-editor/react": "4.7.0",

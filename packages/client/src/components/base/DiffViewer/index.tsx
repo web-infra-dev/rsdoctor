@@ -1,9 +1,12 @@
-import { DiffEditor, MonacoDiffEditor } from '@monaco-editor/react';
+import {
+  DiffEditor,
+  DiffOnMount,
+  MonacoDiffEditor,
+} from '@monaco-editor/react';
 import { Checkbox } from 'antd';
 import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getFileName, getFilePathFormat } from '../CodeViewer/utils';
-import { formatCode } from './format';
 import styles from './index.module.scss';
 import { DiffViewerProps } from './interface';
 import { defineMonacoDiffOptions } from './utils';
@@ -26,10 +29,6 @@ export function DiffViewer({
   const isLightTheme: boolean = isLightThemeProp ?? isLightMode;
   const [isSideBySide, setIsSideBySide] = useState(true);
   const [isFormatted, setIsFormatted] = useState(false);
-  const [formattedCode, setFormattedCode] = useState<{
-    original: string;
-    modified: string;
-  }>();
   const editor = useRef<MonacoDiffEditor>(undefined);
   const originalLanguage = useMemo(
     () => originalLang || getFilePathFormat(originalFilePath) || 'plaintext',
@@ -43,36 +42,38 @@ export function DiffViewer({
     () => defineMonacoDiffOptions({ renderSideBySide: isSideBySide }),
     [isSideBySide],
   );
-  const onEditorMount = useCallback((editorInstance: MonacoDiffEditor) => {
-    editor.current = editorInstance;
-  }, []);
   const theme = isLightTheme ? 'vs-light' : 'vs-dark';
 
-  useEffect(() => {
-    if (!isFormatted) {
-      setFormattedCode(undefined);
-      return;
-    }
+  const updateFormatting = useCallback(
+    (editorInstance: MonacoDiffEditor) => {
+      const originalEditor = editorInstance.getOriginalEditor();
+      const modifiedEditor = editorInstance.getModifiedEditor();
 
-    setFormattedCode(undefined);
-
-    let isDisposed = false;
-    void Promise.all([
-      formatCode(original, originalLanguage),
-      formatCode(modified, modifiedLanguage),
-    ]).then(([formattedOriginal, formattedModified]) => {
-      if (!isDisposed) {
-        setFormattedCode({
-          original: formattedOriginal,
-          modified: formattedModified,
-        });
+      if (!isFormatted) {
+        originalEditor.getModel()?.setValue(original);
+        modifiedEditor.getModel()?.setValue(modified);
+        return;
       }
-    });
 
-    return () => {
-      isDisposed = true;
-    };
-  }, [isFormatted, modified, modifiedLanguage, original, originalLanguage]);
+      void Promise.all([
+        originalEditor.getAction('editor.action.formatDocument')?.run(),
+        modifiedEditor.getAction('editor.action.formatDocument')?.run(),
+      ]);
+    },
+    [isFormatted, modified, original],
+  );
+
+  const onEditorMount = useCallback<DiffOnMount>(
+    (editorInstance) => {
+      editor.current = editorInstance;
+      updateFormatting(editorInstance);
+    },
+    [updateFormatting],
+  );
+
+  useEffect(() => {
+    if (editor.current) updateFormatting(editor.current);
+  }, [updateFormatting]);
 
   useEffect(
     () => () => {
@@ -124,8 +125,8 @@ export function DiffViewer({
           theme={theme}
           originalLanguage={originalLanguage}
           modifiedLanguage={modifiedLanguage}
-          original={formattedCode?.original ?? original}
-          modified={formattedCode?.modified ?? modified}
+          original={original}
+          modified={modified}
           width="100%"
           options={options}
           onMount={onEditorMount}
