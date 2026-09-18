@@ -457,6 +457,10 @@ importers:
         version: 7.0.2
 
   packages/client:
+    dependencies:
+      prettier:
+        specifier: 3.9.6
+        version: 3.9.6
     devDependencies:
       '@ant-design/icons':
         specifier: 6.3.4

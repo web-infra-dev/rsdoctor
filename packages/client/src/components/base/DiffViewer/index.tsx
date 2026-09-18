@@ -8,6 +8,27 @@ import { DiffViewerProps } from './interface';
 import { defineMonacoDiffOptions } from './utils';
 import { useTheme } from '../../../utils';
 
+async function formatCode(code: string, language: string) {
+  if (!['javascript', 'typescript'].includes(language)) {
+    return code;
+  }
+
+  try {
+    const [prettier, babel, estree] = await Promise.all([
+      import('prettier/standalone'),
+      import('prettier/plugins/babel'),
+      import('prettier/plugins/estree'),
+    ]);
+
+    return prettier.format(code, {
+      parser: language === 'typescript' ? 'typescript' : 'babel',
+      plugins: [babel, estree],
+    });
+  } catch {
+    return code;
+  }
+}
+
 export function DiffViewer({
   className,
   style,
@@ -24,6 +45,11 @@ export function DiffViewer({
   const { isLight: isLightMode } = useTheme();
   const isLightTheme: boolean = isLightThemeProp ?? isLightMode;
   const [isSideBySide, setIsSideBySide] = useState(true);
+  const [isFormatted, setIsFormatted] = useState(false);
+  const [formattedCode, setFormattedCode] = useState<{
+    original: string;
+    modified: string;
+  }>();
   const editor = useRef<MonacoDiffEditor>(undefined);
   const originalLanguage = useMemo(
     () => originalLang || getFilePathFormat(originalFilePath) || 'plaintext',
@@ -41,6 +67,30 @@ export function DiffViewer({
     editor.current = editorInstance;
   }, []);
   const theme = isLightTheme ? 'vs-light' : 'vs-dark';
+
+  useEffect(() => {
+    if (!isFormatted) {
+      setFormattedCode(undefined);
+      return;
+    }
+
+    let isDisposed = false;
+    void Promise.all([
+      formatCode(original, originalLanguage),
+      formatCode(modified, modifiedLanguage),
+    ]).then(([formattedOriginal, formattedModified]) => {
+      if (!isDisposed) {
+        setFormattedCode({
+          original: formattedOriginal,
+          modified: formattedModified,
+        });
+      }
+    });
+
+    return () => {
+      isDisposed = true;
+    };
+  }, [isFormatted, modified, modifiedLanguage, original, originalLanguage]);
 
   useEffect(
     () => () => {
@@ -75,6 +125,15 @@ export function DiffViewer({
             >
               side-by-side
             </Checkbox>
+            <Checkbox
+              className={styles['text']}
+              checked={isFormatted}
+              onChange={(evt) => {
+                setIsFormatted(evt.target.checked);
+              }}
+            >
+              format
+            </Checkbox>
           </div>
         </div>
       )}
@@ -83,8 +142,8 @@ export function DiffViewer({
           theme={theme}
           originalLanguage={originalLanguage}
           modifiedLanguage={modifiedLanguage}
-          original={original}
-          modified={modified}
+          original={formattedCode?.original ?? original}
+          modified={formattedCode?.modified ?? modified}
           width="100%"
           options={options}
           onMount={onEditorMount}
