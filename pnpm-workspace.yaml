@@ -46,7 +46,7 @@ catalog:
   react-markdown: ^10.1.0
   react-router-dom: 6.30.3
   sirv: 3.0.2
-  source-map: ^0.7.6
+  source-map: ^0.8.0
   typescript: ^7.0.2
 
 minimumReleaseAge: 1440
