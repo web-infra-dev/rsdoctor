@@ -43,8 +43,8 @@ catalogs:
       specifier: ^2.0.2
       version: 2.0.2
     '@rstest/playwright':
-      specifier: 0.11.12
-      version: 0.11.12
+      specifier: 0.12.0
+      version: 0.12.0
     '@types/estree':
       specifier: 1.0.5
       version: 1.0.5
@@ -179,7 +179,7 @@ importers:
         version: 2.2.5(@swc/helpers@0.5.23)
       '@rstest/playwright':
         specifier: 'catalog:'
-        version: 0.11.12(@rstest/core@0.11.12)(playwright@1.55.1)
+        version: 0.12.0(@rstest/core@0.11.12)(playwright@1.55.1)
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.3
@@ -2840,11 +2840,11 @@ packages:
       jsdom:
         optional: true
 
-  '@rstest/playwright@0.11.12':
-    resolution: {integrity: sha512-fU9BjRnCTsJNw2oEOY1aq/ozSt5gGuZMW6NwVHZrdxmi/uwypoYIcWSAE/kWukRzAazaSdO+wYZ4fB2IC8kLCA==}
+  '@rstest/playwright@0.12.0':
+    resolution: {integrity: sha512-WzP9h+vwXQ49+/6U5/sDZKEFVY2NocVSuYG1FKHygKfQirW+N+h31EcW4rHifG8YsTWTnS9REePDTiHj3539Bg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      '@rstest/core': ^0.11.9
+      '@rstest/core': ^0.12.0
       playwright: ^1.49.1
 
   '@rushstack/node-core-library@5.24.1':
@@ -9352,7 +9352,7 @@ snapshots:
       - '@module-federation/runtime-tools'
       - core-js
 
-  '@rstest/playwright@0.11.12(@rstest/core@0.11.12)(playwright@1.55.1)':
+  '@rstest/playwright@0.12.0(@rstest/core@0.11.12)(playwright@1.55.1)':
     dependencies:
       '@rstest/core': 0.11.12
       playwright: 1.55.1

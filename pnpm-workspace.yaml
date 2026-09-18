@@ -24,7 +24,7 @@ catalog:
   '@rspack/core': ^2.2.5
   '@rspack/lite-tapable': ^1.1.5
   '@rspack/plugin-react-refresh': ^2.0.2
-  '@rstest/playwright': 0.11.12
+  '@rstest/playwright': 0.12.0
   '@types/estree': 1.0.5
   '@types/fs-extra': ^11.0.4
   '@types/node': ^24.12.3
