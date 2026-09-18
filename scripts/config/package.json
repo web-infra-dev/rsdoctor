@@ -12,7 +12,7 @@
   "devDependencies": {
     "@scripts/test-helper": "workspace:*",
     "@types/node": "catalog:",
-    "rsbuild-plugin-publint": "^0.3.4",
+    "rsbuild-plugin-publint": "^1.0.0",
     "rstack": "^0.7.5",
     "typescript": "catalog:"
   }
