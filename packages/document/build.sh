@@ -38,7 +38,5 @@ CI=true RSDOCTOR_OUTPUT=json pnpm --dir "$workspacedir/examples/rsbuild-minimal"
 echo "📦 Adding example data to documentation output..."
 mkdir -p "$outdir/examples/rspack-minimal"
 mkdir -p "$outdir/examples/rsbuild-minimal"
-cp "$workspacedir/examples/rspack-minimal/dist/rsdoctor-data.json" "$outdir/examples/rspack-minimal/rsdoctor-data.json"
+cp "$workspacedir/examples/rspack-minimal/rsdoctor-data.json" "$outdir/examples/rspack-minimal/rsdoctor-data.json"
 cp "$workspacedir/examples/rsbuild-minimal/dist/rsdoctor-data.json" "$outdir/examples/rsbuild-minimal/rsdoctor-data.json"
-
-

@@ -1,0 +1,71 @@
+.demo {
+  display: flex;
+  gap: 28px;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding: 22px 24px;
+  border: 1px solid #e6e8eb;
+  border-radius: 12px;
+  background:
+    linear-gradient(115deg, rgba(22, 119, 255, 0.09), transparent 42%),
+    #fff;
+}
+
+.copy {
+  h2 {
+    margin: 5px 0 8px;
+    color: #1f2329;
+    font-size: 18px;
+    line-height: 1.35;
+  }
+
+  p {
+    max-width: 440px;
+    margin: 0;
+    color: #646a73;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
+.eyebrow {
+  color: #1677ff !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px !important;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.dataFlow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 14px !important;
+  color: #8c8c8c !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px !important;
+
+  span {
+    color: #1677ff;
+    font-size: 15px;
+  }
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .demo {
+    flex-direction: column;
+    gap: 18px;
+    padding: 20px;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+}
