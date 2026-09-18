@@ -109,8 +109,8 @@ catalogs:
       specifier: 3.0.2
       version: 3.0.2
     source-map:
-      specifier: ^0.7.6
-      version: 0.7.6
+      specifier: ^0.8.0
+      version: 0.8.0
     typescript:
       specifier: ^7.0.2
       version: 7.0.2
@@ -643,7 +643,7 @@ importers:
         version: 3.0.2
       source-map:
         specifier: 'catalog:'
-        version: 0.7.6
+        version: 0.8.0
       ws:
         specifier: 8.21.3
         version: 8.21.3
@@ -789,7 +789,7 @@ importers:
         version: 1.0.1
       source-map:
         specifier: 'catalog:'
-        version: 0.7.6
+        version: 0.8.0
     devDependencies:
       '@rspack/core':
         specifier: 'catalog:'
@@ -6605,6 +6605,10 @@ packages:
 
   source-map@0.7.6:
     resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
+    engines: {node: '>= 12'}
+
+  source-map@0.8.0:
+    resolution: {integrity: sha512-d8EqvL+k/SOXCreS/SUzg2ciyHqBBLcN/yuRjFsbvVhHTE2pgei7oAhmPM7kWFbkX6OSMQfUq4KbkF3au9lhYQ==}
     engines: {node: '>= 12'}
 
   space-separated-tokens@2.0.2:
@@ -13944,6 +13948,8 @@ snapshots:
   source-map@0.6.1: {}
 
   source-map@0.7.6: {}
+
+  source-map@0.8.0: {}
 
   space-separated-tokens@2.0.2: {}
 
