@@ -20,13 +20,18 @@ export default defineConfig({
           supports: {
             brotli: { brotliLevel: 6 },
           },
-          // output: {
-          //   mode: 'brief',
-          //   options: {
-          //     type: ['json', 'html'],
-          //   },
-          //   reportCodeType: 'noCode',
-          // },
+          output: process.env.RSDOCTOR_DEMO
+            ? {
+                mode: 'brief',
+                reportDir: './dist',
+                options: {
+                  type: ['html'],
+                  htmlOptions: {
+                    reportHtmlName: 'rsdoctor-demo.html',
+                  },
+                },
+              }
+            : undefined,
           linter: {
             level: 'Error',
             extends: [AssetsCountLimit],
