@@ -167,27 +167,29 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
 
       await Promise.all([baselineSdk.bootstrap(), currentSdk.bootstrap()]);
 
+      const baselineManifest = {
+        __LOCAL__SERVER__: true,
+        __SOCKET__URL__: baselineSdk.server.socketUrl.socketUrl,
+        __SOCKET__PORT__: baselineSdk.server.socketUrl.port.toString(),
+        ...baselineData,
+      };
+      const currentManifest = {
+        __LOCAL__SERVER__: true,
+        __SOCKET__PORT__: currentSdk.server.socketUrl.port.toString(),
+        __SOCKET__URL__: currentSdk.server.socketUrl.socketUrl,
+        ...currentData,
+      };
       const baselineManifestsBuffer = Buffer.from(
-        JSON.stringify({
-          __LOCAL__SERVER__: true,
-          __SOCKET__URL__: baselineSdk.server.socketUrl.socketUrl,
-          __SOCKET__PORT__: baselineSdk.server.socketUrl.port,
-          ...baselineData,
-        }),
+        JSON.stringify(baselineManifest),
       );
       const currentManifestsBuffer = Buffer.from(
-        JSON.stringify({
-          __LOCAL__SERVER__: true,
-          __SOCKET__PORT__: currentSdk.server.socketUrl.port,
-          __SOCKET__URL__: currentSdk.server.socketUrl.socketUrl,
-          ...currentData,
-        }),
+        JSON.stringify(currentManifest),
       );
 
       baselineSdk.getStoreData = () => baselineDataValue;
       currentSdk.getStoreData = () => currentDataValue;
-      baselineSdk.getManifestData = () => baselineData;
-      currentSdk.getManifestData = () => currentData;
+      baselineSdk.getManifestData = () => baselineManifest;
+      currentSdk.getManifestData = () => currentManifest;
 
       baselineSdk.server.proxy(
         SDK.ServerAPI.API.BundleDiffManifest,

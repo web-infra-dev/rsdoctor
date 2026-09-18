@@ -6,6 +6,7 @@ echo "🚀 Starting build script..."
 dir=`dirname $0`
 rootdir=$(cd $dir && pwd)
 outdir="$rootdir"/doc_build
+workspacedir=$(cd "$rootdir"/../.. && pwd)
 
 echo "📁 Working directory: $rootdir"
 echo "📁 Output directory: $outdir"
@@ -30,5 +31,12 @@ else
   echo "❌ Error: Client dist directory not found at $client_dist_path"
 fi
 
+echo "📊 Building Rsdoctor example data..."
+CI=true RSDOCTOR_OUTPUT=json pnpm --dir "$workspacedir/examples/rspack-minimal" run build:analysis
+CI=true RSDOCTOR_OUTPUT=json pnpm --dir "$workspacedir/examples/rsbuild-minimal" run build:analysis
 
-
+echo "📦 Adding example data to documentation output..."
+mkdir -p "$outdir/examples/rspack-minimal"
+mkdir -p "$outdir/examples/rsbuild-minimal"
+cp "$workspacedir/examples/rspack-minimal/rsdoctor-data.json" "$outdir/examples/rspack-minimal/rsdoctor-data.json"
+cp "$workspacedir/examples/rsbuild-minimal/dist/rsdoctor-data.json" "$outdir/examples/rsbuild-minimal/rsdoctor-data.json"
