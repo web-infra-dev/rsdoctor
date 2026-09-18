@@ -6,6 +6,7 @@
     "declaration": true,
     "composite": true,
     "outDir": "dist",
+    "types": ["rstack/types", "node"],
     "paths": {
       "@zh/*": ["./docs/zh/*"],
       "@en/*": ["./docs/en/*"],

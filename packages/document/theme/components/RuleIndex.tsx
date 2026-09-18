@@ -1,8 +1,15 @@
 import { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { type Components } from 'react-markdown';
 import { Rule } from '@rsdoctor/shared/types';
 import styles from './RuleIndex.module.scss';
 import { getCustomMDXComponent } from '@rspress/core/theme-original';
+
+const markdownComponents: Components = {
+  // The installed Rspress and react-markdown dependency subtrees resolve different
+  // React type versions. Their runtime HTML props are compatible.
+  ...(getCustomMDXComponent() as unknown as Components),
+  code: (props) => <code {...props} />,
+};
 
 const RuleIndex = () => {
   const rules = Object.values(Rule.RuleErrorMap);
@@ -48,12 +55,7 @@ const RuleIndex = () => {
             <span className={styles.tag}>{ruleMessage.category}</span>
           </div>
           <div className={styles['card-body']} style={{ paddingTop: 0 }}>
-            <ReactMarkdown
-              components={{
-                ...getCustomMDXComponent(),
-                code: (props) => <code {...props} />,
-              }}
-            >
+            <ReactMarkdown components={markdownComponents}>
               {ruleMessage.description}
             </ReactMarkdown>
           </div>

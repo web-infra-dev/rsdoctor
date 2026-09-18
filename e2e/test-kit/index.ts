@@ -44,12 +44,14 @@ export async function openBrowserByDiffCLI(
   manifestFile: string,
   ..._args: Parameters<SDK.RsdoctorServerInstance['getClientUrl']>
 ) {
-  // @ts-ignore
   const sdk = await execute('bundle-diff', {
     baseline: resolve(process.cwd(), manifestFile),
     current: resolve(process.cwd(), manifestFile),
     open: false,
   });
+  if (!sdk) {
+    throw new Error('Bundle diff did not start a server.');
+  }
 
   const { origin } = sdk.server;
 

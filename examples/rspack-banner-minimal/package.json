@@ -33,6 +33,7 @@
     "@rspack/cli": "catalog:",
     "@rspack/core": "catalog:",
     "@rspack/plugin-react-refresh": "catalog:",
+    "@testing-library/jest-dom": "^7.0.1",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "react-refresh": "^0.14.0",
