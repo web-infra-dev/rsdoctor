@@ -3,31 +3,11 @@ import { Checkbox } from 'antd';
 import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getFileName, getFilePathFormat } from '../CodeViewer/utils';
+import { formatCode } from './format';
 import styles from './index.module.scss';
 import { DiffViewerProps } from './interface';
 import { defineMonacoDiffOptions } from './utils';
 import { useTheme } from '../../../utils';
-
-async function formatCode(code: string, language: string) {
-  if (!['javascript', 'typescript'].includes(language)) {
-    return code;
-  }
-
-  try {
-    const [prettier, babel, estree] = await Promise.all([
-      import('prettier/standalone'),
-      import('prettier/plugins/babel'),
-      import('prettier/plugins/estree'),
-    ]);
-
-    return prettier.format(code, {
-      parser: language === 'typescript' ? 'typescript' : 'babel',
-      plugins: [babel, estree],
-    });
-  } catch {
-    return code;
-  }
-}
 
 export function DiffViewer({
   className,
@@ -73,6 +53,8 @@ export function DiffViewer({
       setFormattedCode(undefined);
       return;
     }
+
+    setFormattedCode(undefined);
 
     let isDisposed = false;
     void Promise.all([
