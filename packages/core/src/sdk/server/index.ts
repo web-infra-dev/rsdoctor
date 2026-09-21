@@ -5,6 +5,7 @@ import { Bundle } from '@rsdoctor/shared/common-browser';
 import * as GlobalConfig from '@/common/global-config';
 import assert from 'assert';
 import cors from 'cors';
+import launchEditor from 'launch-editor';
 import { PassThrough } from 'stream';
 import { Socket } from './socket';
 import { Router } from './router';
@@ -264,14 +265,6 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
           return;
         }
         try {
-          const launch = require('launch-editor') as (
-            file: string,
-            specifiedEditor?: string,
-            onErrorCallback?: (
-              fileName: string,
-              errorMessage: string | null,
-            ) => void,
-          ) => void;
           let responded = false;
           const safeEnd = (code: number, body: string) => {
             if (responded) return;
@@ -279,7 +272,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
             res.statusCode = code;
             res.end(body);
           };
-          launch(file, editor, (_fileName, errorMessage) => {
+          launchEditor(file, editor, (_fileName, errorMessage) => {
             if (errorMessage) {
               safeEnd(500, errorMessage);
             }

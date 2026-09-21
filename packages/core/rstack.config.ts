@@ -19,8 +19,7 @@ const externals = [
   '@rsdoctor/shared/types',
   '@rspack/core',
   /^caniuse-lite(?:\/|$)/,
-  'lodash',
-  'semver',
+  'sirv',
   'source-map',
 ];
 
@@ -33,6 +32,19 @@ define.lib({
     },
   },
   ...esmConfig,
+  tools: {
+    ...esmConfig.tools,
+    rspack: {
+      ...esmConfig.tools?.rspack,
+      ignoreWarnings: [
+        {
+          module:
+            /node_modules[\\/]\.pnpm[\\/]ws@[^\\/]+[\\/]node_modules[\\/]ws[\\/]lib[\\/](?:buffer-util|validation)\.js$/,
+          message: /Can't resolve '(?:bufferutil|utf-8-validate)'/,
+        },
+      ],
+    },
+  },
   bundle: true,
   source: {
     entry: {
@@ -43,10 +55,12 @@ define.lib({
   },
   dts: {
     build: false,
+    bundle: true,
     tsgo: true,
   },
   output: {
     ...esmConfig.output,
+    autoExternal: false,
     filename: {
       js: '[name].js',
     },

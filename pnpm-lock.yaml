@@ -593,79 +593,34 @@ importers:
 
   packages/core:
     dependencies:
-      '@babel/code-frame':
-        specifier: 7.26.2
-        version: 7.26.2
       '@rsdoctor/client':
         specifier: workspace:*
         version: link:../client
       '@rsdoctor/shared':
         specifier: workspace:*
         version: link:../shared
-      '@rspack/lite-tapable':
-        specifier: 'catalog:'
-        version: 1.2.0
-      '@types/estree':
-        specifier: 'catalog:'
-        version: 1.0.5
-      acorn:
-        specifier: ^8.10.0
-        version: 8.16.0
-      acorn-import-attributes:
-        specifier: ^1.9.5
-        version: 1.9.5(acorn@8.16.0)
-      acorn-walk:
-        specifier: 8.3.5
-        version: 8.3.5
-      browserslist-load-config:
-        specifier: ^1.0.3
-        version: 1.0.3
       caniuse-lite:
         specifier: ^1.0.30001810
         version: 1.0.30001810
-      connect-next:
-        specifier: 'catalog:'
-        version: 5.0.0
-      cors:
-        specifier: 2.8.6
-        version: 2.8.6
-      envinfo:
-        specifier: 7.21.0
-        version: 7.21.0
-      fs-extra:
-        specifier: 'catalog:'
-        version: 11.3.0
-      get-port:
-        specifier: 5.1.1
-        version: 5.1.1
-      launch-editor:
-        specifier: ^2.14.1
-        version: 2.14.1
-      lines-and-columns:
-        specifier: 2.0.4
-        version: 2.0.4
-      rslog:
-        specifier: ^2.3.0
-        version: 2.3.0
-      semver:
-        specifier: ^7.8.5
-        version: 7.8.5
       sirv:
         specifier: 'catalog:'
         version: 3.0.2
       source-map:
         specifier: 'catalog:'
         version: 0.8.0
-      ws:
-        specifier: 8.21.3
-        version: 8.21.3
     devDependencies:
+      '@babel/code-frame':
+        specifier: 7.26.2
+        version: 7.26.2
       '@rsbuild/plugin-check-syntax':
         specifier: 'catalog:'
         version: 2.0.1(@rsbuild/core@2.2.8)
       '@rspack/core':
         specifier: 'catalog:'
         version: 2.2.6(@swc/helpers@0.5.23)
+      '@rspack/lite-tapable':
+        specifier: 'catalog:'
+        version: 1.2.0
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:../../scripts/test-helper
@@ -678,6 +633,9 @@ importers:
       '@types/envinfo':
         specifier: 7.8.4
         version: 7.8.4
+      '@types/estree':
+        specifier: 'catalog:'
+        version: 1.0.5
       '@types/fs-extra':
         specifier: 'catalog:'
         version: 11.0.4
@@ -690,21 +648,60 @@ importers:
       '@types/ws':
         specifier: ^8.18.1
         version: 8.18.1
+      acorn:
+        specifier: ^8.10.0
+        version: 8.16.0
+      acorn-import-attributes:
+        specifier: ^1.9.5
+        version: 1.9.5(acorn@8.16.0)
+      acorn-walk:
+        specifier: 8.3.5
+        version: 8.3.5
       babel-loader:
         specifier: 10.1.1
         version: 10.1.1(@babel/core@7.29.0)(@rspack/core@2.2.6(@swc/helpers@0.5.23))(webpack@5.105.4)
+      browserslist-load-config:
+        specifier: ^1.0.3
+        version: 1.0.3
+      connect-next:
+        specifier: 'catalog:'
+        version: 5.0.0
+      cors:
+        specifier: 2.8.6
+        version: 2.8.6
+      envinfo:
+        specifier: 7.21.0
+        version: 7.21.0
       filesize:
         specifier: 'catalog:'
         version: 11.0.24
+      fs-extra:
+        specifier: 'catalog:'
+        version: 11.3.0
+      get-port:
+        specifier: 5.1.1
+        version: 5.1.1
       json-stream-stringify:
         specifier: 3.0.1
         version: 3.0.1
+      launch-editor:
+        specifier: ^2.14.1
+        version: 2.14.1
+      lines-and-columns:
+        specifier: 2.0.4
+        version: 2.0.4
       open:
         specifier: ^11.0.4
         version: 11.0.4
       raw-body:
         specifier: 4.0.0
         version: 4.0.0
+      rslog:
+        specifier: ^2.3.0
+        version: 2.3.0
+      semver:
+        specifier: ^7.8.5
+        version: 7.8.5
       string-loader:
         specifier: 0.0.1
         version: 0.0.1
@@ -714,6 +711,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
+      ws:
+        specifier: 8.21.3
+        version: 8.21.3
 
   packages/document:
     dependencies:
