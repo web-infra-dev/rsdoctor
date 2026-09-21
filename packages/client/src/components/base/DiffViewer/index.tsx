@@ -1,8 +1,13 @@
-import { DiffEditor, MonacoDiffEditor } from '@monaco-editor/react';
+import {
+  DiffEditor,
+  DiffOnMount,
+  MonacoDiffEditor,
+} from '@monaco-editor/react';
 import { Checkbox } from 'antd';
 import clsx from 'clsx';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getFileName, getFilePathFormat } from '../CodeViewer/utils';
+import { beautifyJavaScript } from './beautify';
 import styles from './index.module.scss';
 import { DiffViewerProps } from './interface';
 import { defineMonacoDiffOptions } from './utils';
@@ -24,6 +29,7 @@ export function DiffViewer({
   const { isLight: isLightMode } = useTheme();
   const isLightTheme: boolean = isLightThemeProp ?? isLightMode;
   const [isSideBySide, setIsSideBySide] = useState(true);
+  const [isBeautified, setIsBeautified] = useState(false);
   const editor = useRef<MonacoDiffEditor>(undefined);
   const originalLanguage = useMemo(
     () => originalLang || getFilePathFormat(originalFilePath) || 'plaintext',
@@ -37,10 +43,23 @@ export function DiffViewer({
     () => defineMonacoDiffOptions({ renderSideBySide: isSideBySide }),
     [isSideBySide],
   );
-  const onEditorMount = useCallback((editorInstance: MonacoDiffEditor) => {
+  const theme = isLightTheme ? 'vs-light' : 'vs-dark';
+  const supportsBeautify =
+    originalLanguage === 'javascript' && modifiedLanguage === 'javascript';
+  const beautifiedCode = useMemo(
+    () =>
+      isBeautified && supportsBeautify
+        ? {
+            original: beautifyJavaScript(original),
+            modified: beautifyJavaScript(modified),
+          }
+        : undefined,
+    [isBeautified, modified, original, supportsBeautify],
+  );
+
+  const onEditorMount = useCallback<DiffOnMount>((editorInstance) => {
     editor.current = editorInstance;
   }, []);
-  const theme = isLightTheme ? 'vs-light' : 'vs-dark';
 
   useEffect(
     () => () => {
@@ -75,6 +94,16 @@ export function DiffViewer({
             >
               side-by-side
             </Checkbox>
+            <Checkbox
+              className={styles['text']}
+              checked={isBeautified}
+              disabled={!supportsBeautify}
+              onChange={(evt) => {
+                setIsBeautified(evt.target.checked);
+              }}
+            >
+              beautify JS
+            </Checkbox>
           </div>
         </div>
       )}
@@ -83,8 +112,14 @@ export function DiffViewer({
           theme={theme}
           originalLanguage={originalLanguage}
           modifiedLanguage={modifiedLanguage}
-          original={original}
-          modified={modified}
+          originalModelPath={
+            originalFilePath ? `diff://original/${originalFilePath}` : undefined
+          }
+          original={beautifiedCode?.original ?? original}
+          modifiedModelPath={
+            modifiedFilePath ? `diff://modified/${modifiedFilePath}` : undefined
+          }
+          modified={beautifiedCode?.modified ?? modified}
           width="100%"
           options={options}
           onMount={onEditorMount}
