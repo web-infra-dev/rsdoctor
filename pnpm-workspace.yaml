@@ -22,7 +22,7 @@ catalog:
   '@rsbuild/plugin-type-check': ^1.6.0
   '@rspack/cli': ^2.2.6
   '@rspack/core': ^2.2.6
-  '@rspack/lite-tapable': ^1.1.5
+  '@rspack/lite-tapable': ^1.2.0
   '@rspack/plugin-react-refresh': ^2.0.2
   '@rstest/playwright': 0.11.12
   '@types/estree': 1.0.5

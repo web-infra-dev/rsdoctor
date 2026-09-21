@@ -37,8 +37,8 @@ catalogs:
       specifier: ^2.2.6
       version: 2.2.6
     '@rspack/lite-tapable':
-      specifier: ^1.1.5
-      version: 1.1.5
+      specifier: ^1.2.0
+      version: 1.2.0
     '@rspack/plugin-react-refresh':
       specifier: ^2.0.2
       version: 2.0.2
@@ -604,7 +604,7 @@ importers:
         version: link:../shared
       '@rspack/lite-tapable':
         specifier: 'catalog:'
-        version: 1.1.5
+        version: 1.2.0
       '@types/estree':
         specifier: 'catalog:'
         version: 1.0.5
@@ -783,7 +783,7 @@ importers:
     dependencies:
       '@rspack/lite-tapable':
         specifier: 'catalog:'
-        version: 1.1.5
+        version: 1.2.0
       '@types/estree':
         specifier: 'catalog:'
         version: 1.0.5
@@ -2747,6 +2747,9 @@ packages:
 
   '@rspack/lite-tapable@1.1.5':
     resolution: {integrity: sha512-uzB782zJbFTM3ta+e2Glikx36dca/6Y+DXyvFN+wb0Tx5ItIW+g03A0t3amP3LGzPHSkb0k81VHCm4jxLQwfag==}
+
+  '@rspack/lite-tapable@1.2.0':
+    resolution: {integrity: sha512-Pab0fdnd2KPt4Nz4e8aLx/73dt4nRVmn/4robI0tdgOQ4ym6WsgFX6dL2L76HRpB/5yOe3CA2Ah6lSxeLRvIug==}
 
   '@rspack/plugin-react-refresh@2.0.0':
     resolution: {integrity: sha512-Cf6CxBStNDJbiXMc/GmsvG1G8PRlUpa0MSfWsMTI+e8npzuTN/p8nwLs3shriBZOLciqgkSZpBtPTd10BLpj1g==}
@@ -9477,6 +9480,8 @@ snapshots:
       '@swc/helpers': 0.5.23
 
   '@rspack/lite-tapable@1.1.5': {}
+
+  '@rspack/lite-tapable@1.2.0': {}
 
   '@rspack/plugin-react-refresh@2.0.0(@rspack/core@2.2.6(@swc/helpers@0.5.23))(react-refresh@0.18.0)':
     dependencies:
