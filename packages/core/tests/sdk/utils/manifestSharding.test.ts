@@ -3,7 +3,7 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { inflateSync } from 'node:zlib';
-import { afterEach, describe, expect, it } from '@rstest/core';
+import { afterEach, describe, expect, it } from 'rstack/test';
 import { File } from '@/build-utils';
 import { writeManifestShards } from '@/sdk/utils';
 

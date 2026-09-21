@@ -160,7 +160,8 @@ describe('jsonBodyParser', () => {
   });
 
   it('rejects an aborted compressed request', async () => {
-    const req = new PassThrough() as unknown as RequestWithBody;
+    const stream = new PassThrough();
+    const req = stream as unknown as RequestWithBody;
     req.headers = {
       'content-encoding': 'gzip',
       'content-type': 'application/json',
@@ -168,7 +169,7 @@ describe('jsonBodyParser', () => {
     };
 
     const result = parse(req);
-    req.write(gzipSync('{"partial":true}').subarray(0, 4));
+    stream.write(gzipSync('{"partial":true}').subarray(0, 4));
     req.emit('aborted');
 
     await expect(result).resolves.toMatchObject({

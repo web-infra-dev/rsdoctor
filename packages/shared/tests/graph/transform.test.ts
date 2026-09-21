@@ -48,7 +48,7 @@ describe('module graph transform from rspack stats', () => {
     expect(stats.modules?.length).toBeGreaterThan(0);
 
     const chunkGraph = Chunks.chunkTransform(new Map(), stats);
-    const chunkData = chunkGraph.toData();
+    const chunkData = chunkGraph.toData(SDK.ToDataType.Normal);
     const graph = ModuleGraphTrans.getModuleGraphByStats(
       stats,
       fixtureRoot,
