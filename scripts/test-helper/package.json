@@ -30,7 +30,7 @@
     "@rspack/core": "catalog:",
     "@types/node": "catalog:",
     "es-toolkit": "catalog:",
-    "memfs": "4.78.0",
+    "memfs": "4.78.1",
     "typescript": "catalog:",
     "upath": "3.0.8"
   },
