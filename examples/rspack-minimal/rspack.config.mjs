@@ -22,6 +22,9 @@ const rspackConfig = {
         test: /\.module\.less$/,
         use: 'less-loader',
         type: 'css/module',
+        parser: {
+          namedExports: false,
+        },
       },
       {
         test: /\.svg$/,
