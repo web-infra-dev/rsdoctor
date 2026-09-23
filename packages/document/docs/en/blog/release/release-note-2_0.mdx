@@ -27,7 +27,7 @@ Highlights in this release include:
 - **Faster analysis with Rspack**: Rsdoctor 2.0 is fully focused on Rspack, and expensive data processing runs inside Rspack. When introduced as an option in 1.0, this reduced overall analysis time by **more than 20%**. In 2.0, it is always enabled and avoids repeated work such as stats conversion.
 - **Build analysis for agents**: Agent CLI and the Rsdoctor analysis skill let coding agents query build data and return actionable optimization suggestions.
 - **Unified multi-compiler analysis**: The regular Rspack plugin automatically handles multi-compiler builds, Rsbuild environments, and child compilers while keeping their data isolated.
-- **A smaller installation footprint**: Core capabilities are consolidated into `@rsdoctor/core`. With `V2`, a complete production install contains 41 packages instead of 94 and is **53.6%** smaller than 1.6.2.
+- **A smaller installation footprint**: Core capabilities are consolidated into `@rsdoctor/core`. With `V2`, a complete production install contains 18 packages instead of 83 and is **56.6%** smaller than 1.6.2.
 - **Faster rebuild analysis**: Loader caching, fewer unnecessary calculations, and faster report writes reduce median HMR time by about **47%** in the benchmark.
 
 ## Deeper and faster Rspack analysis {#rspack-native-by-default}
@@ -119,8 +119,8 @@ The streamlined package structure and runtime dependencies cut both the size and
 
 | Metric                       | Rsdoctor V1.x | Rsdoctor V2 | Reduction | Reduction rate |
 | ---------------------------- | ------------: | ----------: | --------: | -------------: |
-| Third-party dependency size  |       25.8 MB |     12.0 MB |   13.8 MB |      **53.6%** |
-| Third-party dependency count |            94 |          41 |        53 |      **56.4%** |
+| Third-party dependency size  |       25.5 MB |     11.1 MB |   14.4 MB |      **56.6%** |
+| Third-party dependency count |            83 |          18 |        65 |      **78.3%** |
 
 When upgrading an Rspack project, replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core`. See the [2.0 migration guide](/guide/migration/migration-v2#update-the-rspack-plugin) for the steps.
 
