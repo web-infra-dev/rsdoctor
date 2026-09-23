@@ -27,7 +27,7 @@ import { ReleaseAuthors } from '../../../../theme/components/ReleaseAuthors';
 - **更快的 Rspack 分析**：2.0 全面聚焦 Rspack，耗时较长的数据处理在 Rspack 内部完成。该能力在 1.0 中作为可选项推出时，已将整体分析时间减少 **20% 以上**；2.0 默认启用，并进一步减少 stats 转换等重复处理。
 - **面向 agent 的构建分析**：Agent CLI 与 Rsdoctor analysis skill 可以帮助 coding agent 查询构建数据，并给出可执行的优化建议。
 - **统一分析多 compiler 构建**：常规 Rspack 插件可以自动处理 multi-compiler、Rsbuild environments 和 child compiler，同时保持每个 compiler 的数据相互隔离。
-- **更小的安装体积**：核心能力统一收敛到 `@rsdoctor/core`。在 `V2` 中，完整生产安装包含的 package 从 94 个减少到 41 个，体积比 1.6.2 减少 **53.6%**。
+- **更小的安装体积**：核心能力统一收敛到 `@rsdoctor/core`。在 `V2` 中，完整生产安装包含的 package 从 83 个减少到 18 个，体积比 1.6.2 减少 **56.6%**。
 - **更快的增量构建分析**：通过保留 loader 缓存、跳过非必要计算并优化报告写入，bench 中的 HMR 中位数降低约 **47%**。
 
 ## 更深入、更快的 Rspack 分析 {#rspack-native-by-default}
@@ -119,8 +119,8 @@ Rsdoctor 2.0 将 core、graph、SDK、utils 和 Rspack plugin 合并到 `@rsdoct
 
 | 指标             | Rsdoctor V1.x | Rsdoctor V2 |    减少 |      降幅 |
 | ---------------- | ------------: | ----------: | ------: | --------: |
-| 第三方依赖包体积 |       25.8 MB |     12.0 MB | 13.8 MB | **53.6%** |
-| 第三方依赖包数量 |            94 |          41 |      53 | **56.4%** |
+| 第三方依赖包体积 |       25.5 MB |     11.1 MB | 14.4 MB | **56.6%** |
+| 第三方依赖包数量 |            83 |          18 |      65 | **78.3%** |
 
 Rspack 项目升级时需要使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`，具体步骤请参考 [2.0 迁移指南](/guide/migration/migration-v2#更新-rspack-插件)。
 
