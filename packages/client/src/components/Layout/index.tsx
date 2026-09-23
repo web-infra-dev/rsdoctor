@@ -57,7 +57,13 @@ export const Layout = (
   }, [query]);
 
   const ctx = useContext(ConfigContext);
-  const showHeader = !ctx.embedded;
+  const isBundleDiff = location.hash.includes(
+    Client.RsdoctorClientRoutes.BundleDiff,
+  );
+  // Bundle Diff can be rendered from two standalone manifests. Its header
+  // controls expect a local Rsdoctor API and would otherwise request the
+  // unavailable /api/manifest.json endpoint.
+  const showHeader = !ctx.embedded && !isBundleDiff;
 
   useLayoutEffect(() => {
     const $root = document.documentElement;
@@ -110,7 +116,7 @@ export const Layout = (
     </ProjectInfoContext.Provider>
   );
 
-  if (location.hash.includes(Client.RsdoctorClientRoutes.BundleDiff)) {
+  if (isBundleDiff) {
     return renderLayout(null);
   }
 
