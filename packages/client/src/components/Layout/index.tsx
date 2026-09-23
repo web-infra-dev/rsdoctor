@@ -16,7 +16,7 @@ import {
 } from '../../utils';
 import { Progress } from './progress';
 import { ConfigContext } from '../../config';
-import { SDK } from '@rsdoctor/shared/types';
+import { Client, SDK } from '@rsdoctor/shared/types';
 import { ServerAPIProvider } from '../Manifest';
 import { ProjectInfoContext } from './project-info-context';
 import styles from './index.module.scss';
@@ -94,24 +94,32 @@ export const Layout = (
     }
   }, [showHeader, themeToken, isLight]);
 
+  const renderLayout = (
+    project: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetProjectInfo> | null,
+  ) => (
+    <ProjectInfoContext.Provider value={{ project }}>
+      <L>
+        <TitleUpdater name={project?.name} />
+        {showHeader && <Header enableRoutes={enableRoutes} />}
+        <Progress />
+        <L.Content className={styles.content}>
+          {children}
+          <FloatButton.BackTop />
+        </L.Content>
+      </L>
+    </ProjectInfoContext.Provider>
+  );
+
+  if (location.hash.includes(Client.RsdoctorClientRoutes.BundleDiff)) {
+    return renderLayout(null);
+  }
+
   return (
     <ServerAPIProvider
       api={SDK.ServerAPI.API.GetProjectInfo}
       showSkeleton={false}
     >
-      {(project) => (
-        <ProjectInfoContext.Provider value={{ project }}>
-          <L>
-            <TitleUpdater name={project?.name} />
-            {showHeader && <Header enableRoutes={enableRoutes} />}
-            <Progress />
-            <L.Content className={styles.content}>
-              {children}
-              <FloatButton.BackTop />
-            </L.Content>
-          </L>
-        </ProjectInfoContext.Provider>
-      )}
+      {renderLayout}
     </ServerAPIProvider>
   );
 };

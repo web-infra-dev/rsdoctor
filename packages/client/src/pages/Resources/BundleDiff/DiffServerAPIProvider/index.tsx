@@ -1,6 +1,6 @@
 import { Client, SDK, Constants } from '@rsdoctor/shared/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
-import { fetchManifest, useUrlQuery } from 'src/utils';
+import { loadManifestByUrl, useUrlQuery } from 'src/utils';
 import { Algorithm } from '@rsdoctor/shared/common-browser';
 import { BundleDiffServerAPIProviderComponentCommonProps } from '../DiffContainer/types';
 
@@ -31,7 +31,7 @@ export const DiffServerAPIProvider = <
       api={api}
       body={body}
       manifestLoader={
-        baselineFile ? () => fetchManifest(baselineFile) : undefined
+        baselineFile ? () => loadManifestByUrl(baselineFile) : undefined
       }
     >
       {(baseline) => {
@@ -40,7 +40,7 @@ export const DiffServerAPIProvider = <
             api={api}
             body={body}
             manifestLoader={
-              currentFile ? () => fetchManifest(currentFile) : undefined
+              currentFile ? () => loadManifestByUrl(currentFile) : undefined
             }
           >
             {(current) => {
