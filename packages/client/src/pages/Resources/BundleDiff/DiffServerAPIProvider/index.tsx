@@ -48,7 +48,9 @@ export const DiffServerAPIProvider = <
             api={api}
             body={body}
             manifestLoader={
-              currentFile ? () => loadBundleDiffManifest(currentFile) : undefined
+              currentFile
+                ? () => loadBundleDiffManifest(currentFile)
+                : undefined
             }
           >
             {(current) => {
