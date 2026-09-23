@@ -1,8 +1,16 @@
 import { Client, SDK, Constants } from '@rsdoctor/shared/types';
 import { ServerAPIProvider } from 'src/components/Manifest';
-import { loadManifestByUrl, useUrlQuery } from 'src/utils';
+import { fetchManifest, parseManifest, useUrlQuery } from 'src/utils';
 import { Algorithm } from '@rsdoctor/shared/common-browser';
 import { BundleDiffServerAPIProviderComponentCommonProps } from '../DiffContainer/types';
+
+async function loadBundleDiffManifest(url: string) {
+  const manifest = await fetchManifest(url);
+
+  // A local Rsdoctor server resolves its own manifest data through APIs. Only
+  // cloud manifests need their sharded data hydrated in the browser.
+  return manifest.cloudData ? parseManifest(manifest) : manifest;
+}
 
 export const DiffServerAPIProvider = <
   T extends SDK.ServerAPI.API | SDK.ServerAPI.APIExtends,
@@ -31,7 +39,7 @@ export const DiffServerAPIProvider = <
       api={api}
       body={body}
       manifestLoader={
-        baselineFile ? () => loadManifestByUrl(baselineFile) : undefined
+        baselineFile ? () => loadBundleDiffManifest(baselineFile) : undefined
       }
     >
       {(baseline) => {
@@ -40,7 +48,7 @@ export const DiffServerAPIProvider = <
             api={api}
             body={body}
             manifestLoader={
-              currentFile ? () => loadManifestByUrl(currentFile) : undefined
+              currentFile ? () => loadBundleDiffManifest(currentFile) : undefined
             }
           >
             {(current) => {
