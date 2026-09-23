@@ -5,6 +5,7 @@ import { Bundle } from '@rsdoctor/shared/common-browser';
 import * as GlobalConfig from '@/common/global-config';
 import assert from 'assert';
 import cors from 'cors';
+import fs from 'fs';
 import launchEditor from 'launch-editor';
 import { PassThrough } from 'stream';
 import { Socket } from './socket';
@@ -37,11 +38,18 @@ const LARGE_JSON_BODY_ROUTES = new Set<string>([
   SDK.ServerAPI.API.ReportLoader,
   SDK.ServerAPI.API.ReportSourceMap,
 ]);
+const CLIENT_OVERRIDE_CONTENT_TYPES: Record<string, string> = {
+  '.css': 'text/css; charset=utf-8',
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+};
 
 export type ISocketType = { port: number; socketUrl: string; token: string };
 
 export type RsdoctorServerOptions = {
   innerClientPath?: string;
+  innerClientOverrides?: SDK.SDKOptionsType['innerClientOverrides'];
   printServerUrl?: boolean;
   cors?: SDK.RsdoctorServerConfig['cors'];
 };
@@ -69,6 +77,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
   private _innerClientPath: string;
 
+  private _innerClientOverrides: SDK.SDKOptionsType['innerClientOverrides'];
+
   private _printServerUrl: boolean;
 
   private _cors: SDK.RsdoctorServerConfig['cors'];
@@ -85,6 +95,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     this.port = port;
     this._router = new Router({ sdk, server: this, apis: Object.values(APIs) });
     this._innerClientPath = config?.innerClientPath || '';
+    this._innerClientOverrides = config?.innerClientOverrides;
     this._printServerUrl = config?.printServerUrl ?? true;
     this._cors = config?.cors;
   }
@@ -111,6 +122,42 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
 
   public get innerClientPath(): string {
     return this._innerClientPath;
+  }
+
+  public get innerClientOverrides(): SDK.SDKOptionsType['innerClientOverrides'] {
+    return this._innerClientOverrides;
+  }
+
+  private applyClientOverrides() {
+    const overrides = this._innerClientOverrides;
+    if (!overrides) {
+      return;
+    }
+
+    Object.entries(overrides.files ?? {}).forEach(([route, filePath]) => {
+      const pathname = `/${route.replace(/^\/+/, '')}`;
+      this.app.use(pathname, (_req, res, next) => {
+        if (!fs.existsSync(filePath)) {
+          return next();
+        }
+        const contentType = CLIENT_OVERRIDE_CONTENT_TYPES[path.extname(filePath)];
+        if (contentType) {
+          res.setHeader('Content-Type', contentType);
+        }
+        res.setHeader('Cache-Control', 'no-store');
+        res.end(fs.readFileSync(filePath));
+      });
+    });
+
+    Object.entries(overrides.directories ?? {}).forEach(([route, dirPath]) => {
+      const pathname = `/${route.replace(/^\/+|\/+$/g, '')}`;
+      this.app.use(
+        pathname,
+        serve(dirPath, {
+          dev: true,
+        }),
+      );
+    });
   }
 
   private async createInnerServer() {
@@ -223,6 +270,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       }),
     );
     await this._router.setup();
+
+    this.applyClientOverrides();
 
     const clientHtmlPath = this._innerClientPath
       ? this._innerClientPath

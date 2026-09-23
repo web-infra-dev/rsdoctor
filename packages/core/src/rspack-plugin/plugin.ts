@@ -396,12 +396,19 @@ export class RsdoctorRspackPlugin<
 
   private createCompilerContext() {
     const controller = this.controller!;
-    const { output, innerClientPath, printLog, server, features } =
-      this.options;
+    const {
+      output,
+      innerClientPath,
+      innerClientOverrides,
+      printLog,
+      server,
+      features,
+    } = this.options;
     const sdk = controller.createSlave({
       name: this.defaultName,
       extraConfig: {
         innerClientPath,
+        innerClientOverrides,
         printLog,
         server,
         mode: output.mode || undefined,

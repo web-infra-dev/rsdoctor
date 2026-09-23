@@ -186,6 +186,7 @@ export interface RsdoctorRspackPluginOptions<
    * @default false
    */
   innerClientPath?: string;
+  innerClientOverrides?: SDK.SDKOptionsType['innerClientOverrides'];
 
   output?: Config.IOutput<'brief' | 'normal'>;
 }

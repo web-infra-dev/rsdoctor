@@ -209,6 +209,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     disableClientServer: userDisableClientServer = false,
     sdkInstance,
     innerClientPath = '',
+    innerClientOverrides,
     output = outputConfig,
     supports: userSupports = {},
     server: userServer = {},
@@ -260,6 +261,10 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     finalMode = SDK.IMode[SDK.IMode.lite] as keyof typeof SDK.IMode;
   }
   const reportCodeType = normalizeReportType(output.reportCodeType, finalMode);
+  const normalizedInnerClientOverrides = {
+    files: innerClientOverrides?.files ?? {},
+    directories: innerClientOverrides?.directories ?? {},
+  };
   const res: Plugin.RsdoctorPluginOptionsNormalized<Rules> = {
     linter: _linter,
     features: _features,
@@ -277,6 +282,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       reportDir: output.reportDir || '',
     },
     innerClientPath,
+    innerClientOverrides: normalizedInnerClientOverrides,
     supports,
     server,
     printLog,
