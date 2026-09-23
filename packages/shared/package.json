@@ -62,7 +62,6 @@
   "dependencies": {
     "@rspack/lite-tapable": "catalog:",
     "@types/estree": "catalog:",
-    "@types/node": "catalog:",
     "buffer": "6.0.3",
     "connect-next": "catalog:",
     "path-browserify": "catalog:",
@@ -70,6 +69,7 @@
   },
   "devDependencies": {
     "@rspack/core": "catalog:",
+    "@types/node": "catalog:",
     "@types/path-browserify": "catalog:",
     "es-toolkit": "catalog:",
     "typescript": "catalog:"
