@@ -69,13 +69,13 @@
   },
   "devDependencies": {
     "@rspack/core": "catalog:",
-    "@types/node": "catalog:",
     "@types/path-browserify": "catalog:",
     "es-toolkit": "catalog:",
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@rspack/core": "^2.0.0"
+    "@rspack/core": "^2.0.0",
+    "@types/node": ">=20"
   },
   "peerDependenciesMeta": {
     "@rspack/core": {
