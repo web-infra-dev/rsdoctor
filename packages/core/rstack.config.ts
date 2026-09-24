@@ -19,7 +19,6 @@ const externals = [
   '@rsdoctor/shared/types',
   '@rspack/core',
   /^caniuse-lite(?:\/|$)/,
-  'sirv',
   'source-map',
 ];
 
