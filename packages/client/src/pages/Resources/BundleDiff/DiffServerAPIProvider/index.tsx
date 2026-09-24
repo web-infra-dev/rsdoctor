@@ -7,9 +7,18 @@ import { BundleDiffServerAPIProviderComponentCommonProps } from '../DiffContaine
 async function loadBundleDiffManifest(url: string) {
   const manifest = await fetchManifest(url);
 
-  // A local Rsdoctor server resolves its own manifest data through APIs. Only
-  // cloud manifests need their sharded data hydrated in the browser.
-  return manifest.cloudData ? parseManifest(manifest) : manifest;
+  // A local Rsdoctor server resolves its manifest data through APIs.
+  if (manifest.__LOCAL__SERVER__) {
+    return manifest;
+  }
+
+  // RemoteDataLoader loads cloud manifest shards on demand.
+  if (manifest.cloudData) {
+    return manifest;
+  }
+
+  // Older static manifests store sharded data without cloudData.
+  return parseManifest(manifest);
 }
 
 export const DiffServerAPIProvider = <
