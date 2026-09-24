@@ -5,6 +5,8 @@ packages:
   - examples/**
   - '!**/compiled/**'
 
+autoDedupe: true
+
 allowBuilds:
   '@swc/core': false
   core-js: false
