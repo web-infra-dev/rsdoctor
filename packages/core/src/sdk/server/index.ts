@@ -140,7 +140,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
         if (!fs.existsSync(filePath)) {
           return next();
         }
-        const contentType = CLIENT_OVERRIDE_CONTENT_TYPES[path.extname(filePath)];
+        const contentType =
+          CLIENT_OVERRIDE_CONTENT_TYPES[path.extname(filePath)];
         if (contentType) {
           res.setHeader('Content-Type', contentType);
         }
