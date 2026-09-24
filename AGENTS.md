@@ -2,7 +2,7 @@
 
 ## Stack
 
-- Node.js `22.18+`, package manager **pnpm `11.0+`** (enable via `corepack enable`)
+- Node.js `22.18+`, package manager **pnpm `12.6.0+`** (enable via `corepack enable`)
 - `pnpm` workspace monorepo (topological build ordering)
 - TypeScript strict mode
 - Lint/format: **Rstack CLI** (`rs lint` backed by Rslint, `rs fmt` based on Prettier)
