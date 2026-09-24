@@ -788,7 +788,7 @@ importers:
         specifier: 'catalog:'
         version: 1.0.5
       '@types/node':
-        specifier: 'catalog:'
+        specifier: '>=20'
         version: 24.12.3
       buffer:
         specifier: 6.0.3
