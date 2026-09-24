@@ -1,5 +1,6 @@
 import { SDK } from '../types';
 import { mergeIntervals } from './algorithm';
+import { escapeRegExp } from './collection';
 
 export function isResolveSuccessData(
   data: SDK.PathResolverData,
@@ -64,7 +65,10 @@ export function getResolverFileDetails(
 
   const after = matchResolvers.reduce((t, c) => {
     if (c.request && isResolveSuccessData(c)) {
-      return t.replace(new RegExp(`["']${c.request}["']`), `"${c.result}"`);
+      return t.replace(
+        new RegExp(`["']${escapeRegExp(c.request)}["']`),
+        () => `"${c.result}"`,
+      );
     }
     return t;
   }, before);
