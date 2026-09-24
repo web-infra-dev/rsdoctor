@@ -13,12 +13,12 @@ import {
 import {
   ColumnGroupType,
   ColumnType,
+  CompareFn,
   FilterConfirmProps,
 } from 'antd/es/table/interface';
 import { upperFirst } from '@rsdoctor/shared/collection';
 import React, { useMemo, useRef, useState } from 'react';
 import { Client } from '@rsdoctor/shared/types';
-import { CompareFn } from 'antd/lib/table/interface';
 import { Color } from '../../../../constants';
 import {
   beautifyModulePath,

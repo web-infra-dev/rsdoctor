@@ -166,6 +166,10 @@ export interface RsdoctorServerConfig {
 
 export type SDKOptionsType = {
   innerClientPath?: string;
+  innerClientOverrides?: {
+    files?: Record<string, string>;
+    directories?: Record<string, string>;
+  };
   disableClientServer?: boolean;
   noServer?: boolean;
   printLog?: IPrintLog;
