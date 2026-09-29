@@ -101,6 +101,24 @@ export function getSharingUrl(
   return url.toString();
 }
 
+export function getSafeReportUrl(path: string, baseUrl: string) {
+  try {
+    const url = new URL(path, baseUrl);
+    const base = new URL(baseUrl);
+
+    if (
+      !['http:', 'https:'].includes(url.protocol) ||
+      url.origin !== base.origin
+    ) {
+      return undefined;
+    }
+
+    return url.href;
+  } catch {
+    return undefined;
+  }
+}
+
 export function getDemoUrl() {
   if (process.env.OFFICIAL_DEMO_MANIFEST_PATH) {
     return getSharingUrl(process.env.OFFICIAL_DEMO_MANIFEST_PATH);

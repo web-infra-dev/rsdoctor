@@ -2,7 +2,12 @@ import { Select, Divider, Typography, Space, Tag } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { Constants, Manifest } from '@rsdoctor/shared/types';
 import TotalSizeSvg from '../../common/svg/total-size.svg?react';
-import { changeOrigin, fetchManifest, getSharingUrl } from '../../utils';
+import {
+  changeOrigin,
+  fetchManifest,
+  getSafeReportUrl,
+  getSharingUrl,
+} from '../../utils';
 import Icon from '@ant-design/icons';
 
 export const BuilderSelect: React.FC = () => {
@@ -57,9 +62,18 @@ export const BuilderSelect: React.FC = () => {
               if (item.origin) {
                 location.href = changeOrigin(item.origin);
               } else if (item.path) {
-                location.href = item.path.endsWith('.html')
-                  ? new URL(item.path, location.href).href
-                  : getSharingUrl(item.path);
+                const href = getSafeReportUrl(
+                  item.path.endsWith('.html')
+                    ? item.path
+                    : getSharingUrl(item.path),
+                  location.href,
+                );
+
+                if (href) {
+                  location.href = href;
+                } else {
+                  console.error('Invalid Rsdoctor compiler report location');
+                }
               } else {
                 console.error('No Rsdoctor compiler report location');
               }
