@@ -24,6 +24,14 @@ describe('test src/server.ts', () => {
     await close();
   });
 
+  it('rejects invalid ports before generating executable code', () => {
+    for (const port of ['0); process.exit(1); //', Number.NaN, -1, 65_536]) {
+      expect(() => createGetPortSyncFunctionString(port as never)).toThrow(
+        'Invalid port',
+      );
+    }
+  });
+
   it('binds to 127.0.0.1 by default', async () => {
     const { server, close } = await Server.createServer(0);
 
