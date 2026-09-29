@@ -1,13 +1,9 @@
-import { describe, expect, it, rs } from 'rstack/test';
+import { describe, expect, it } from 'rstack/test';
 import {
   formatterForPlugins,
   getTooltipHtmlForLoader,
   renderTotalLoadersTooltip,
 } from 'src/components/Charts/utils';
-
-rs.mock('src/utils', () => ({
-  formatCosts: () => '1 ms',
-}));
 
 const payloads = {
   loader: '<img src=x data-field=loader onerror=alert(1)>',
@@ -20,7 +16,9 @@ const payloads = {
 function expectNoRawPayload(tooltip: string, values: string[]) {
   for (const value of values) {
     expect(tooltip).not.toContain(value);
-    expect(tooltip).toContain(value.replaceAll('<', '&lt;').replaceAll('>', '&gt;'));
+    expect(tooltip).toContain(
+      value.replaceAll('<', '&lt;').replaceAll('>', '&gt;'),
+    );
   }
 }
 
