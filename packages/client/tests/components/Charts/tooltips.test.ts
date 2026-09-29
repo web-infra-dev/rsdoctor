@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'rstack/test';
+import { ETraceEventPhase } from 'src/components/Charts/types';
 import {
   formatterForPlugins,
   getTooltipHtmlForLoader,
@@ -71,7 +72,7 @@ describe('chart tooltips', () => {
             e: 1,
           },
           name: 'plugin',
-          ph: 'B',
+          ph: ETraceEventPhase.BEGIN,
           pid: 1,
           ts: 0,
         },
