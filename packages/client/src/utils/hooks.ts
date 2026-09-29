@@ -19,17 +19,31 @@ import { theme } from 'antd';
 import './i18n';
 
 const route = Client.RsdoctorClientRoutes.RuleIndex;
+const safeExternalProtocols = new Set(['http:', 'https:']);
 
 export const useI18n: typeof useTranslation = useTranslation;
 
-export function useRuleIndexNavigate(code: string, link?: string | undefined) {
-  const navigate = useNavigate();
+export function getSafeExternalUrl(link?: string) {
+  if (!link) return;
 
-  if (link) {
-    return () => window.open(link, '__blank');
+  try {
+    const url = new URL(link);
+    return safeExternalProtocols.has(url.protocol) ? url.href : undefined;
+  } catch {
+    return;
   }
+}
+
+export function useRuleIndexNavigate(code: string, link?: string) {
+  const navigate = useNavigate();
+  const safeLink = getSafeExternalUrl(link);
 
   return () => {
+    if (safeLink) {
+      window.open(safeLink, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
     navigate(
       `${route}?${Rule.RsdoctorRuleClientConstant.UrlQueryForErrorCode}=${code}`,
     );
