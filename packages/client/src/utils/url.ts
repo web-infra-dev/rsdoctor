@@ -105,6 +105,12 @@ export function getSafeReportUrl(path: string, baseUrl: string) {
   try {
     const url = new URL(path, baseUrl);
     const base = new URL(baseUrl);
+    const isRelativePath =
+      !/^[a-z][a-z\d+.-]*:/i.test(path) && !path.startsWith('//');
+
+    if (base.protocol === 'file:') {
+      return url.protocol === 'file:' && isRelativePath ? url.href : undefined;
+    }
 
     if (
       !['http:', 'https:'].includes(url.protocol) ||
