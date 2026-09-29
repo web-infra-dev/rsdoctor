@@ -164,6 +164,27 @@ describe('addProbeLoader2Rules', () => {
     expect(result[0].use[2]).toHaveProperty('options.type', 'start');
   });
 
+  it('preserves falsy entries without passing them to probe instrumentation', () => {
+    const loader = { loader: 'mock-loader', options: { foo: 'bar' } };
+    // Older Rspack types omit falsy use entries supported at runtime.
+    const rules = [
+      { use: [null, undefined, false, 0, '', loader] },
+    ] as unknown as Plugin.BuildRuleSetRule[];
+    const matched: unknown[] = [];
+    const result = addProbeLoader2Rules(rules, mockCompiler, (rule) => {
+      if (typeof rule === 'string' || 'loader' in rule) matched.push(rule);
+      return rule === loader;
+    });
+
+    expect(matched).toEqual(['', loader]);
+    const use = result[0].use;
+    expect(Array.isArray(use)).toBe(true);
+    if (!Array.isArray(use)) throw new Error('Expected a loader array');
+    expect(use.slice(0, 5)).toEqual([null, undefined, false, 0, '']);
+    expect(use).toHaveLength(8);
+    expect(use[6]).toBe(loader);
+  });
+
   it('should handle nested rules', () => {
     const nestedRule = {
       rules: [mockRule],

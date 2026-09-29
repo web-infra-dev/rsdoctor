@@ -203,7 +203,7 @@ export function isESMLoader(r: Plugin.BuildRuleSetRule) {
 
 function appendProbeLoaders(
   compiler: Plugin.BaseCompiler,
-  loaderConfig: RuleSetUseItem,
+  loaderConfig: NonNullable<RuleSetUseItem>,
 ): RuleSetUseItem[] {
   const _options =
     typeof loaderConfig === 'object'
