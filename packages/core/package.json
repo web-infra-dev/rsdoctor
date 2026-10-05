@@ -82,7 +82,7 @@
     "string-loader": "0.0.1",
     "ts-loader": "^9.6.2",
     "typescript": "catalog:",
-    "ws": "8.21.3"
+    "ws": "8.22.0"
   },
   "peerDependencies": {
     "@rspack/core": "^2.0.0"
