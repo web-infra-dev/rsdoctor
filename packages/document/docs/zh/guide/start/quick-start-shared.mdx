@@ -27,28 +27,7 @@ export default {
 
 ### Rsbuild 项目
 
-请使用基于 Rspack 2 的 Rsbuild 2。**Rsbuild 2.2.6 及以上版本**支持自动注册插件，安装 `@rsdoctor/core` 后执行：
-
-```bash
-RSDOCTOR=true npm run build
-```
-
-使用低于 2.2.6 的 Rsbuild 2 版本，或需要自定义插件选项时，请手动注册：
-
-```ts title="rsbuild.config.ts"
-import { defineConfig } from '@rsbuild/core';
-import { RsdoctorRspackPlugin } from '@rsdoctor/core';
-
-export default defineConfig({
-  tools: {
-    rspack: {
-      plugins: [
-        process.env.RSDOCTOR === 'true' && new RsdoctorRspackPlugin({}),
-      ],
-    },
-  },
-});
-```
+Rsbuild 项目请参阅 [Rsbuild — 使用 Rsdoctor](https://rsbuild.rs/zh/guide/debug/rsdoctor)。
 
 ### Modern.js 项目
 

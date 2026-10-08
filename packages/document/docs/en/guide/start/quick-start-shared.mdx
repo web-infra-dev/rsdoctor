@@ -27,28 +27,7 @@ export default {
 
 ### Rsbuild
 
-Use Rsbuild 2, which is based on Rspack 2. With **Rsbuild 2.2.6 or later**, install `@rsdoctor/core` and run the following command to register the plugin automatically:
-
-```bash
-RSDOCTOR=true npm run build
-```
-
-For Rsbuild 2 versions earlier than 2.2.6, or to customize plugin options, register the plugin manually:
-
-```ts title="rsbuild.config.ts"
-import { defineConfig } from '@rsbuild/core';
-import { RsdoctorRspackPlugin } from '@rsdoctor/core';
-
-export default defineConfig({
-  tools: {
-    rspack: {
-      plugins: [
-        process.env.RSDOCTOR === 'true' && new RsdoctorRspackPlugin({}),
-      ],
-    },
-  },
-});
-```
+For Rsbuild projects, see [Rsbuild — Use Rsdoctor](https://rsbuild.rs/guide/debug/rsdoctor).
 
 ### Modern.js
 
