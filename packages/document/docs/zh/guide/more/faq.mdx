@@ -69,11 +69,10 @@ Rsdoctor 提供的 Loader 耗时是**预估耗时**。无法统计到准确耗�
 
 ```js title="rspack.config.mjs"
 export default {
+  // 将 false 替换为项目原有的 devtool 配置值。
   devtool: process.env.RSDOCTOR === 'true' ? 'source-map' : false,
 };
 ```
-
-请将 `false` 替换为项目原有的 `devtool` 配置值。
 
 ## 产物分析界面没有 `Bundled Size` 怎么办？
 

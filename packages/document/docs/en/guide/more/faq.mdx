@@ -69,11 +69,10 @@ If module sizes are still missing, check whether a plugin changes generated code
 
 ```js title="rspack.config.mjs"
 export default {
+  // Replace false with your project's existing devtool value.
   devtool: process.env.RSDOCTOR === 'true' ? 'source-map' : false,
 };
 ```
-
-Replace `false` with your project's existing `devtool` value.
 
 ## Bundle analysis page no `Bundled Size`?
 
