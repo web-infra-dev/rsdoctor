@@ -1,15 +1,15 @@
 import React from 'react';
 import { Card } from 'antd';
 import { ResolverAnalysis } from '../../components/Resolver/analysis';
-import { WebpackConfigurationViewer } from '../../components/Configuration';
+import { BuildConfigurationViewer } from '../../components/Configuration';
 
 export const Page: React.FC = () => {
   return (
     <div>
       <Card
-        title="Webpack Resolver Analysis"
+        title="Rspack Resolver Analysis"
         extra={
-          <WebpackConfigurationViewer
+          <BuildConfigurationViewer
             defaultKeys={['resolve', 'resolveLoader']}
           />
         }

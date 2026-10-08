@@ -238,7 +238,7 @@ export function useDuplicatePackagesByErrors(
   ) as Rule.PackageRelationDiffRuleStoreData[];
 }
 
-export function useWebpackConfigurationByConfigs(configs: SDK.ConfigData = []) {
+export function useBuildConfigurationByConfigs(configs: SDK.ConfigData = []) {
   if (Array.isArray(configs)) {
     return configs.find((e) => e.name === 'webpack' || e.name === 'rspack');
   }

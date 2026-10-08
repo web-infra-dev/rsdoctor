@@ -3,7 +3,7 @@ import { Divider, Row, Select, Space, Typography } from 'antd';
 import { RightOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import ReactJson from 'react-json-view';
-import { useWebpackConfigurationByConfigs } from '../../utils';
+import { useBuildConfigurationByConfigs } from '../../utils';
 import { withServerAPI } from '../Manifest';
 import { TextDrawer } from '../TextDrawer';
 import { Title } from '../Title';
@@ -11,15 +11,15 @@ import { Title } from '../Title';
 import styles from './builder.module.scss';
 import { Lodash } from '@rsdoctor/shared/common-browser';
 
-interface WebpackConfigurationViewerBaseProps {
+interface BuildConfigurationViewerBaseProps {
   defaultKeys?: string[];
   configs: SDK.ConfigData;
 }
 
-export const WebpackConfigurationViewerBase: React.FC<
-  WebpackConfigurationViewerBaseProps
+export const BuildConfigurationViewerBase: React.FC<
+  BuildConfigurationViewerBaseProps
 > = ({ defaultKeys, configs }) => {
-  const builderConfigData = useWebpackConfigurationByConfigs(configs || []);
+  const builderConfigData = useBuildConfigurationByConfigs(configs || []);
 
   if (!builderConfigData) return null;
 
@@ -86,10 +86,10 @@ export const WebpackConfigurationViewerBase: React.FC<
   );
 };
 
-export const WebpackConfigurationViewer: React.FC<
-  Omit<WebpackConfigurationViewerBaseProps, 'configs'>
+export const BuildConfigurationViewer: React.FC<
+  Omit<BuildConfigurationViewerBaseProps, 'configs'>
 > = withServerAPI({
-  Component: WebpackConfigurationViewerBase,
+  Component: BuildConfigurationViewerBase,
   api: SDK.ServerAPI.API.LoadDataByKey,
   responsePropName: 'configs',
   body: {
