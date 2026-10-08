@@ -94,6 +94,8 @@ Agent CLI 直接读取数据文件，因此不再需要 MCP Server 端口、comp
 | `features: { lite: true }` 或 `features: ['lite']` | 仍受支持。等价的 `output` 配置为 `output.mode: 'normal'`，并按上一行设置 `output.reportCodeType`。                                                            |
 | 无                                                 | 新增 `output.options.jsonOptions.sections` 配置                                                                                                               |
 
+请从配置中移除 `supports.banner`。该选项已在 Rsdoctor 2.x 中删除，无需替代配置。
+
 ### 配置改动详情
 
 #### mode

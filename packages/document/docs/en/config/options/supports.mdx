@@ -8,13 +8,12 @@ description: 'Configure detailed Rsdoctor analysis behavior with supports, such 
 - **Optional:** `true`
 - **Default:** `undefined`
 
-This option controls detailed analysis behavior, such as BannerPlugin compatibility, bundle parsing, and gzip size calculation.
+This option controls bundle parsing and compressed size calculation.
 
 ## supportsTypes
 
 ```ts
 type ISupport = {
-  banner?: boolean;
   parseBundle?: boolean;
   brotli?: boolean | { brotliLevel?: number };
   gzip?:
@@ -24,17 +23,6 @@ type ISupport = {
       };
 };
 ```
-
-## banner
-
-:::danger
-`supports.banner` option is only used for debugging, do not use it in production.
-:::
-
-- **Type:** `boolean`
-- **Default:** `true`
-
-If `supports.banner` is enabled, Rsdoctor will enable compatibility logic for BannerPlugin. For more details, please refer to: [Supports BannerPlugin](../../guide/usage/bundle-size#-supports-bannerplugin)
 
 ## parseBundle
 
