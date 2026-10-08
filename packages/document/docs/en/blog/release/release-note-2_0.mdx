@@ -25,7 +25,7 @@ Build analysis data also moves beyond the report UI: developers can investigate 
 Highlights in this release include:
 
 - **Faster analysis with Rspack**: Rsdoctor 2.0 is fully focused on Rspack, and expensive data processing runs inside Rspack. When introduced as an option in 1.0, this reduced overall analysis time by **more than 20%**. In 2.0, it is always enabled and avoids repeated work such as stats conversion.
-- **Build analysis for agents**: Agent CLI and the Rsdoctor analysis skill let coding agents query build data and return actionable optimization suggestions.
+- **Build analysis for agents**: Agent CLI, the Rsdoctor analysis skill, and WebMCP let coding agents query build data and return actionable optimization suggestions.
 - **Unified multi-compiler analysis**: The regular Rspack plugin automatically handles multi-compiler builds, Rsbuild environments, and child compilers while keeping their data isolated.
 - **A smaller installation footprint**: Core capabilities are consolidated into `@rsdoctor/core`. With `V2`, a complete production install contains 18 packages instead of 83 and is **56.6%** smaller than 1.6.2.
 - **Faster rebuild analysis**: Loader caching, fewer unnecessary calculations, and faster report writes reduce median HMR time by about **47%** in the benchmark.
@@ -72,6 +72,10 @@ The coding agent selects and runs the relevant `rsdoctor-agent` commands, then u
 />
 
 Rsdoctor 2.0 removes `@rsdoctor/mcp-server` and standardizes on Agent CLI, which runs on demand without maintaining a service connection. It is not MCP-compatible or a drop-in API replacement. See [AI](/guide/start/ai) and the [2.0 migration guide](/guide/migration/migration-v2#ai-workflow-migration) for installation and migration details.
+
+## WebMCP report tools
+
+Rsdoctor reports now support [**WebMCP**](https://webmcp.dev/). When a report is opened in a compatible browser or AI environment, Rsdoctor automatically provides WebMCP tools that let AI inspect the build overview, find large assets, and filter rule findings. Locally served reports are supported too. This capability only applies to the report data in the current page. It is separate from the removed `@rsdoctor/mcp-server` and does not replace Agent CLI for coding agents and automation. See the [AI guide](/guide/start/ai#webmcp) for usage and compatibility details.
 
 ## Unified multi-compiler analysis {#one-report-for-every-compiler}
 

@@ -25,7 +25,7 @@ import { ReleaseAuthors } from '../../../../theme/components/ReleaseAuthors';
 本次更新的主要亮点包括：
 
 - **更快的 Rspack 分析**：2.0 全面聚焦 Rspack，耗时较长的数据处理在 Rspack 内部完成。该能力在 1.0 中作为可选项推出时，已将整体分析时间减少 **20% 以上**；2.0 默认启用，并进一步减少 stats 转换等重复处理。
-- **面向 agent 的构建分析**：Agent CLI 与 Rsdoctor analysis skill 可以帮助 coding agent 查询构建数据，并给出可执行的优化建议。
+- **面向 agent 的构建分析**：Agent CLI、Rsdoctor analysis skill 和 WebMCP 可以帮助 coding agent 查询构建数据，并给出可执行的优化建议。
 - **统一分析多 compiler 构建**：常规 Rspack 插件可以自动处理 multi-compiler、Rsbuild environments 和 child compiler，同时保持每个 compiler 的数据相互隔离。
 - **更小的安装体积**：核心能力统一收敛到 `@rsdoctor/core`。在 `V2` 中，完整生产安装包含的 package 从 83 个减少到 18 个，体积比 1.6.2 减少 **56.6%**。
 - **更快的增量构建分析**：通过保留 loader 缓存、跳过非必要计算并优化报告写入，bench 中的 HMR 中位数降低约 **47%**。
@@ -72,6 +72,10 @@ coding agent 会根据问题调用相应的 `rsdoctor-agent` 命令，结合项�
 />
 
 Rsdoctor 2.0 已移除 `@rsdoctor/mcp-server`，统一使用按需执行、无需维护服务连接的 Agent CLI。它不兼容 MCP 协议，也不是旧 API 的直接替代品；安装和迁移方式请参考 [AI](/guide/start/ai) 与 [2.0 迁移指南](/guide/migration/migration-v2#ai-工作流迁移)。
+
+## WebMCP 报告工具 \{#webmcp-report-tools}
+
+Rsdoctor 报告现已支持 [**WebMCP**](https://webmcp.dev/)。在兼容的浏览器或 AI 环境中打开报告时，Rsdoctor 会自动提供 WebMCP tools，帮助 AI 获取构建概览、分析大体积产物并筛选规则问题；本地服务报告也同样适用。该能力仅作用于当前页面中的报告数据。它不同于已移除的 `@rsdoctor/mcp-server`，也不替代面向 Coding Agent 和自动化流程的 Agent CLI。使用方式和兼容性说明请参阅 [AI 指南](/guide/start/ai#webmcp)。
 
 ## 统一分析多 compiler 构建 {#one-report-for-every-compiler}
 

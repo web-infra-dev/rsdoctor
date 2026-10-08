@@ -10,6 +10,7 @@ To help AI better understand Rsdoctor's features, configuration, and best practi
 
 - [Agent Skills](#agent-skills)
 - [Agent CLI](#agent-cli)
+- [WebMCP](#webmcp)
 - [llms.txt](#llmstxt)
 - [Markdown docs](#markdown-docs)
 - [AGENTS.md](#agentsmd)
@@ -130,6 +131,47 @@ new RsdoctorRspackPlugin({
 ```
 
 You can also set the `RSDOCTOR_OUTPUT='json'` environment variable to output the analysis data as a JSON file. This environment configuration requires `@rsdoctor/*-plugin` version `>= 1.5.11`.
+
+## WebMCP
+
+When you open an Rsdoctor report in a browser or AI environment that supports [WebMCP](https://webmcp.dev/), Rsdoctor automatically exposes WebMCP tools for the report currently on screen. This lets the AI inspect the report without downloading data or starting an Agent CLI process.
+
+### How to use WebMCP
+
+After serving the report locally or over HTTPS, you can use its WebMCP tools in either of these ways:
+
+- **Browser extension**: Open the report in a browser with a WebMCP-compatible AI extension, then ask questions in the extension's chat panel. The extension can discover the tools provided by the current report page.
+- **Codex agent**: Open the report in the Codex built-in browser, then ask a question in the same agent chat. Codex can discover and use the WebMCP tools from the page. For example:
+
+  ```text
+  Identify the packages and modules in the selected chunk with the greatest optimization potential.
+  ```
+
+<video
+  src="https://assets.rspack.rs/rsdoctor/rsdoctor-webmcp.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
+
+Keep the report page open while asking questions: WebMCP tools belong to the page that registers them and may become unavailable after navigating away. For more information about using site tools in Codex, see the [OpenAI documentation](https://learn.chatgpt.com/docs/webmcp).
+
+The available tools provide:
+
+- a compact build overview, including asset, module, package, finding, and build-duration counts;
+- the largest assets, optionally filtered by type (`js`, `css`, or `other`) and minimum size;
+- rule findings, optionally filtered by severity or rule ID.
+
+To use WebMCP, access the report through a local or HTTPS server in a compatible browser or AI environment. Do not rely on it when opening a static report directly with `file://`. If WebMCP is unavailable, the report works normally and no tools are registered. It does not replace [Agent CLI](#agent-cli): use Agent CLI for coding agents, automation, or analysis that does not start from an open report.
 
 ## llms.txt
 
