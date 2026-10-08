@@ -1,3 +1,5 @@
+import { PackageManagerTabs } from '@theme';
+
 ## 第二步：注册插件
 
 依赖安装完成后，你需要在项目中接入 Rsdoctor 插件，下面是一些常见工具和框架的示例：
@@ -13,7 +15,7 @@ export default {
   // ...
   plugins: [
     // 仅在 RSDOCTOR 为 true 时注册插件，因为插件会增加构建耗时
-    process.env.RSDOCTOR &&
+    process.env.RSDOCTOR === 'true' &&
       new RsdoctorRspackPlugin({
         // 插件选项
       }),
@@ -25,11 +27,32 @@ export default {
 
 ### Rsbuild 项目
 
-Rsbuild 内置了对 Rsdoctor 的支持，不需要手动注册插件。详见 [Rsbuild - 使用 Rsdoctor](https://rsbuild.rs/zh/guide/debug/rsdoctor)。
+请使用基于 Rspack 2 的 Rsbuild 2。**Rsbuild 2.2.6 及以上版本**可在 `RSDOCTOR=true` 时自动注册 `@rsdoctor/core` 中的插件。安装 `@rsdoctor/core` 后，执行：
+
+```bash
+RSDOCTOR=true npm run build
+```
+
+使用 Rsbuild 2.0–2.2.5，或需要传入插件选项时，请手动注册插件：
+
+```ts title="rsbuild.config.ts"
+import { defineConfig } from '@rsbuild/core';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+
+export default defineConfig({
+  tools: {
+    rspack: {
+      plugins: [
+        process.env.RSDOCTOR === 'true' && new RsdoctorRspackPlugin({}),
+      ],
+    },
+  },
+});
+```
 
 ### Modern.js 项目
 
-在 `modern.config.ts` 的 [tools.bundlerChain](https://modernjs.dev/configure/app/tools/rspack) 中初始化插件，参考：
+在 `modern.config.ts` 的 [tools.rspack](https://modernjs.dev/configure/app/tools/rspack) 中初始化插件，参考：
 
 ```ts title="modern.config.ts"
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
@@ -39,7 +62,7 @@ export default {
   tools: {
     rspack(config, { appendPlugins }) {
       // 仅在 RSDOCTOR 为 true 时注册插件，因为插件会增加构建耗时
-      if (process.env.RSDOCTOR) {
+      if (process.env.RSDOCTOR === 'true') {
         appendPlugins(
           new RsdoctorRspackPlugin({
             // 插件选项
@@ -57,19 +80,31 @@ export default {
 
 #### 第一步：注册 Rsdoctor 插件
 
-在 `next.config.ts` 的 [Rspack 配置](https://rspack.rs/guide/tech/next) 中初始化 [RsdoctorRspackPlugin](#rspack-%E9%A1%B9%E7%9B%AE) 插件。
+以下示例使用 Next.js 16.4 和 `next-rspack` 16.4，其 `@next/rspack-core` 依赖使用 Rspack 2。较早的集成可能使用 Rspack 1，需要继续使用 Rsdoctor 1.x。请保持 `next` 和 `next-rspack` 的版本一致。
+
+安装 `next-rspack`，并用 `withRspack` 包装配置来[启用 Rspack](https://rspack.rs/zh/guide/integrations/next)。配置回调仍名为 `webpack`，这是 Next.js 用于配置所选构建工具的 API。
+
+<PackageManagerTabs command="add next-rspack@^16.4.0 -D" />
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
+import withRspack from 'next-rspack';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 const nextConfig: NextConfig = {
   /* config options here */
   webpack: (config) => {
+    if (process.env.RSDOCTOR !== 'true') {
+      return config;
+    }
+
     if (config.name === 'client') {
       config.plugins.push(
         new RsdoctorRspackPlugin({
           disableClientServer: true,
+          output: {
+            reportDir: './.next',
+          },
         }),
       );
     } else if (config.name === 'server') {
@@ -86,7 +121,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withRspack(nextConfig);
 ```
 
 - **Options:** 插件提供了一些配置项，请参考 [Options](../../config/options/options)。
@@ -95,9 +130,9 @@ export default nextConfig;
 
 执行 **build** 命令，Rsdoctor 会在本地仓库产物中生成对应的报告数据。
 
-import { PackageManagerTabs } from '@theme';
-
-<PackageManagerTabs command="run build" />
+```bash
+RSDOCTOR=true npm run build
+```
 
 #### 第三步：打开报告
 
@@ -134,16 +169,11 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default defineConfig({
   plugins: [pluginVue()],
-  performance: {
-    buildCache: false,
-  },
   tools: {
-    bundlerChain: (chain, { CHAIN_ID }) => {
-      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
-        {
-          // 插件选项
-        },
-      ]);
+    rspack: {
+      plugins: [
+        process.env.RSDOCTOR === 'true' && new RsdoctorRspackPlugin({}),
+      ],
     },
   },
 });

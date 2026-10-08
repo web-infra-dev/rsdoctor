@@ -1,3 +1,5 @@
+import { PackageManagerTabs } from '@theme';
+
 ## Step 2: register plugin
 
 After the dependency installation, you need to integrate the Rsdoctor plugin into your project. Below are some examples of common tools and frameworks:
@@ -13,7 +15,7 @@ export default {
   // ...
   plugins: [
     // Only register the plugin when RSDOCTOR is true, as the plugin will increase the build time.
-    process.env.RSDOCTOR &&
+    process.env.RSDOCTOR === 'true' &&
       new RsdoctorRspackPlugin({
         // plugin options
       }),
@@ -25,7 +27,28 @@ export default {
 
 ### Rsbuild
 
-Rsbuild has built-in support for Rsdoctor, so you don't need to manually register plugins. See [Rsbuild - Use Rsdoctor](https://rsbuild.rs/guide/debug/rsdoctor) for more details.
+Use Rsbuild 2, which is based on Rspack 2. **Rsbuild 2.2.6 or later** can automatically register the plugin from `@rsdoctor/core` when `RSDOCTOR=true`. After installing `@rsdoctor/core`, run:
+
+```bash
+RSDOCTOR=true npm run build
+```
+
+For Rsbuild 2.0–2.2.5, or to pass plugin options, register the plugin explicitly:
+
+```ts title="rsbuild.config.ts"
+import { defineConfig } from '@rsbuild/core';
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+
+export default defineConfig({
+  tools: {
+    rspack: {
+      plugins: [
+        process.env.RSDOCTOR === 'true' && new RsdoctorRspackPlugin({}),
+      ],
+    },
+  },
+});
+```
 
 ### Modern.js
 
@@ -39,7 +62,7 @@ export default {
   tools: {
     rspack(config, { appendPlugins }) {
       // Only register the plugin when RSDOCTOR is true, as the plugin will increase the build time.
-      if (process.env.RSDOCTOR) {
+      if (process.env.RSDOCTOR === 'true') {
         appendPlugins(
           new RsdoctorRspackPlugin({
             // plugin options
@@ -57,19 +80,31 @@ export default {
 
 #### Step 1: register the Rsdoctor plugin
 
-Initialize the [RsdoctorRspackPlugin](#rspack) plugin in the [Rspack Config](https://rspack.rs/guide/tech/next) of `next.config.ts`.
+This example uses Next.js 16.4 with `next-rspack` 16.4, whose `@next/rspack-core` dependency uses Rspack 2. Earlier integrations may use Rspack 1 and require Rsdoctor 1.x. Keep `next` and `next-rspack` versions aligned.
+
+Install `next-rspack` and wrap the configuration with `withRspack` to [enable Rspack](https://rspack.rs/guide/integrations/next). The configuration callback is still named `webpack`; this is Next.js’s API for configuring the selected bundler.
+
+<PackageManagerTabs command="add next-rspack@^16.4.0 -D" />
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
+import withRspack from 'next-rspack';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 const nextConfig: NextConfig = {
   /* config options here */
   webpack: (config) => {
+    if (process.env.RSDOCTOR !== 'true') {
+      return config;
+    }
+
     if (config.name === 'client') {
       config.plugins.push(
         new RsdoctorRspackPlugin({
           disableClientServer: true,
+          output: {
+            reportDir: './.next',
+          },
         }),
       );
     } else if (config.name === 'server') {
@@ -86,7 +121,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withRspack(nextConfig);
 ```
 
 - **Options:** The plugin provides some configuration options, please refer to [Options](../../config/options/options).
@@ -95,9 +130,9 @@ export default nextConfig;
 
 Execute the **build** command, Rsdoctor will generate the corresponding report data in the local repository artifacts.
 
-import { PackageManagerTabs } from '@theme';
-
-<PackageManagerTabs command="run build" />
+```bash
+RSDOCTOR=true npm run build
+```
 
 #### Step 3: open the report
 
@@ -134,16 +169,11 @@ import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 
 export default defineConfig({
   plugins: [pluginVue()],
-  performance: {
-    buildCache: false,
-  },
   tools: {
-    bundlerChain: (chain, { CHAIN_ID }) => {
-      chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
-        {
-          // plugin options
-        },
-      ]);
+    rspack: {
+      plugins: [
+        process.env.RSDOCTOR === 'true' && new RsdoctorRspackPlugin({}),
+      ],
     },
   },
 });
