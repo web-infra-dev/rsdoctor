@@ -8,13 +8,12 @@ description: '通过 supports 配置 Rsdoctor 的详细分析行为，如产物�
 - **可选：** `true`
 - **默认值：** `undefined`
 
-该选项用于控制 AST 产物解析和压缩体积计算。
+该选项用于控制产物解析和压缩体积计算。
 
 ## supportsTypes
 
 ```ts
 type ISupport = {
-  banner?: boolean; // 在 Rsdoctor 2.x 中无实际效果
   parseBundle?: boolean;
   brotli?: boolean | { brotliLevel?: number };
   gzip?:
@@ -24,10 +23,6 @@ type ISupport = {
       };
 };
 ```
-
-## banner
-
-配置类型仍接受这个旧选项，但它在 Rsdoctor 2.x 中已无实际效果。请从配置中移除 `supports.banner`。它不会开启 BannerPlugin 检测，也不会向构建产物插入标记代码。
 
 ## parseBundle
 

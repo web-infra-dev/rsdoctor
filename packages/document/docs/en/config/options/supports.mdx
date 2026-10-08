@@ -8,13 +8,12 @@ description: 'Configure detailed Rsdoctor analysis behavior with supports, such 
 - **Optional:** `true`
 - **Default:** `undefined`
 
-This option controls AST bundle parsing and compressed size calculation.
+This option controls bundle parsing and compressed size calculation.
 
 ## supportsTypes
 
 ```ts
 type ISupport = {
-  banner?: boolean; // Ignored in Rsdoctor 2.x
   parseBundle?: boolean;
   brotli?: boolean | { brotliLevel?: number };
   gzip?:
@@ -24,10 +23,6 @@ type ISupport = {
       };
 };
 ```
-
-## banner
-
-This legacy option is still accepted by the configuration type but has no effect in Rsdoctor 2.x. Remove `supports.banner` from your configuration. It does not enable BannerPlugin detection or insert marker code into build output.
 
 ## parseBundle
 

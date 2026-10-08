@@ -82,7 +82,7 @@ For more information, please refer to [Duplicate Packages](/guide/usage/bundle-a
 ## 🪐 Tree map
 
 :::info
-If an Asset block has no Module chunks, you need to manually enable SourceMap. Note: Only enable SourceMap when Rsdoctor is enabled, do not affect production builds. [FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis)
+Rsdoctor 2.x uses Rspack's native analysis data and does not normally require you to enable `devtool`. If module sizes or code are missing, follow the [FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).
 :::
 
 Tree Map view can intuitively display the proportion and relationship between modules, as shown in the following image. Clicking on module resources can zoom in to that module area.
@@ -222,6 +222,6 @@ Click the module tag to view module details, as shown below:
 
 ## 🪐 Supports bannerPlugin
 
-Rspack's [BannerPlugin](https://rspack.rs/plugins/webpack/banner-plugin) adds content to generated chunks. Rsdoctor 2.x does not require a separate BannerPlugin compatibility switch: the legacy [`supports.banner`](/config/options/supports#banner) option has no effect.
+Rspack provides [BannerPlugin](https://rspack.rs/plugins/webpack/banner-plugin) to add content to generated chunks. Rsdoctor 2.x supports it without additional configuration.
 
 If a plugin changes generated code and module sizes are missing, check whether source map data still matches the output. See the [bundle analysis FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).
