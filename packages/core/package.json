@@ -43,7 +43,7 @@
   "dependencies": {
     "@rsdoctor/client": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
-    "caniuse-lite": "^1.0.30001812",
+    "caniuse-lite": "^1.0.30001814",
     "sirv": "catalog:",
     "source-map": "catalog:"
   },
@@ -60,7 +60,7 @@
     "@types/fs-extra": "catalog:",
     "@types/node": "catalog:",
     "@types/semver": "^7.8.0",
-    "@types/ws": "^8.18.1",
+    "@types/ws": "^8.18.2",
     "acorn": "^8.10.0",
     "acorn-import-attributes": "^1.9.5",
     "acorn-walk": "8.3.5",
@@ -73,7 +73,7 @@
     "fs-extra": "catalog:",
     "get-port": "5.1.1",
     "json-stream-stringify": "3.0.1",
-    "launch-editor": "^2.14.1",
+    "launch-editor": "^2.14.2",
     "lines-and-columns": "2.0.4",
     "open": "^11.0.4",
     "raw-body": "4.0.0",
