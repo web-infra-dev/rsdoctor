@@ -47,15 +47,6 @@ e2e/                  # Rstest + Playwright E2E tests for Rspack and Rspeedy
 examples/             # runnable Rspack / Rsbuild / Rspress projects
 ```
 
-### Workspace package dependencies
-
-- `client` depends on `shared`.
-- `core` depends on `shared` and `client`.
-- `cli` depends on `core` and `shared`.
-- `agent-cli` has no workspace package dependencies.
-
-Rsdoctor 2.x supports Rspack 2.0 and later. Webpack projects should use Rsdoctor 1.x or migrate to Rspack; see the [2.0 migration guide](packages/document/docs/en/guide/migration/migration-v2.mdx).
-
 ## Code style
 
 - **Quotes**: single quotes everywhere; Prettier enforces formatting.
