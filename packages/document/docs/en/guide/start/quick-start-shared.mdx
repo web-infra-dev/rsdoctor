@@ -27,13 +27,13 @@ export default {
 
 ### Rsbuild
 
-Use Rsbuild 2, which is based on Rspack 2. **Rsbuild 2.2.6 or later** can automatically register the plugin from `@rsdoctor/core` when `RSDOCTOR=true`. After installing `@rsdoctor/core`, run:
+Use Rsbuild 2, which is based on Rspack 2. With **Rsbuild 2.2.6 or later**, install `@rsdoctor/core` and run the following command to register the plugin automatically:
 
 ```bash
 RSDOCTOR=true npm run build
 ```
 
-For Rsbuild 2.0–2.2.5, or to pass plugin options, register the plugin explicitly:
+For Rsbuild 2.0–2.2.5 or custom plugin options, register the plugin manually:
 
 ```ts title="rsbuild.config.ts"
 import { defineConfig } from '@rsbuild/core';
@@ -80,11 +80,13 @@ export default {
 
 #### Step 1: register the Rsdoctor plugin
 
-This example uses Next.js 16.4 with `next-rspack` 16.4, whose `@next/rspack-core` dependency uses Rspack 2. Earlier integrations may use Rspack 1 and require Rsdoctor 1.x. Keep `next` and `next-rspack` versions aligned.
+This example uses Next.js and `next-rspack` 16.4 with Rspack 2. Keep `next` and `next-rspack` versions aligned. Integrations based on Rspack 1 require Rsdoctor 1.x.
 
-Install `next-rspack` and wrap the configuration with `withRspack` to [enable Rspack](https://rspack.rs/guide/integrations/next). The configuration callback is still named `webpack`; this is Next.js’s API for configuring the selected bundler.
+Install `next-rspack`:
 
 <PackageManagerTabs command="add next-rspack@^16.4.0 -D" />
+
+Wrap your configuration with `withRspack` to [enable Rspack](https://rspack.rs/guide/integrations/next), then register Rsdoctor in the `webpack` callback. Next.js uses this callback name for Rspack too.
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';

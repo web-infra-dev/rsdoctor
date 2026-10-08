@@ -27,13 +27,13 @@ export default {
 
 ### Rsbuild 项目
 
-请使用基于 Rspack 2 的 Rsbuild 2。**Rsbuild 2.2.6 及以上版本**可在 `RSDOCTOR=true` 时自动注册 `@rsdoctor/core` 中的插件。安装 `@rsdoctor/core` 后，执行：
+请使用基于 Rspack 2 的 Rsbuild 2。**Rsbuild 2.2.6 及以上版本**支持自动注册插件，安装 `@rsdoctor/core` 后执行：
 
 ```bash
 RSDOCTOR=true npm run build
 ```
 
-使用 Rsbuild 2.0–2.2.5，或需要传入插件选项时，请手动注册插件：
+使用 Rsbuild 2.0–2.2.5 或需要自定义插件选项时，请手动注册：
 
 ```ts title="rsbuild.config.ts"
 import { defineConfig } from '@rsbuild/core';
@@ -80,11 +80,13 @@ export default {
 
 #### 第一步：注册 Rsdoctor 插件
 
-以下示例使用 Next.js 16.4 和 `next-rspack` 16.4，其 `@next/rspack-core` 依赖使用 Rspack 2。较早的集成可能使用 Rspack 1，需要继续使用 Rsdoctor 1.x。请保持 `next` 和 `next-rspack` 的版本一致。
+以下示例使用 Next.js 和 `next-rspack` 16.4，基于 Rspack 2。请保持 `next` 和 `next-rspack` 版本一致。基于 Rspack 1 的集成需使用 Rsdoctor 1.x。
 
-安装 `next-rspack`，并用 `withRspack` 包装配置来[启用 Rspack](https://rspack.rs/zh/guide/integrations/next)。配置回调仍名为 `webpack`，这是 Next.js 用于配置所选构建工具的 API。
+安装 `next-rspack`：
 
 <PackageManagerTabs command="add next-rspack@^16.4.0 -D" />
+
+用 `withRspack` 包装配置以[启用 Rspack](https://rspack.rs/zh/guide/integrations/next)，然后在 `webpack` 回调中注册 Rsdoctor。使用 Rspack 时，Next.js 仍沿用这个回调名称。
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
