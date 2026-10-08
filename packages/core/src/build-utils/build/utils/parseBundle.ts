@@ -228,14 +228,6 @@ export const parseBundle: ParseBundle = (
         return;
       }
 
-      // Legacy worker callback format used by webpack 4.
-      // globalObject.chunkCallbackName([<chunks>],<modules>, ...);
-      // Both globalObject and chunkCallbackName can be changed through the config, so we can't check them.
-      if (isAsyncWebWorkerChunkExpression(node)) {
-        state.locations = getModulesLocations(args[1]);
-        return;
-      }
-
       // Library wrappers and legacy formats can nest the module table inside
       // another function call, so continue traversing its arguments.
       args.forEach((arg: any) => c(arg, state));
@@ -445,18 +437,6 @@ function isAsyncChunkPushExpression(node: { callee: any; arguments: any }) {
 
 function mayBeAsyncChunkArguments(args: string | any[]) {
   return args.length >= 2 && isChunkIds(args[0]);
-}
-
-function isAsyncWebWorkerChunkExpression(node: any) {
-  const { callee, type, arguments: args } = node;
-
-  return (
-    type === 'CallExpression' &&
-    callee.type === 'MemberExpression' &&
-    args.length === 2 &&
-    isChunkIds(args[0]) &&
-    isModulesList(args[1])
-  );
 }
 
 function getModulesLocations(node: {
