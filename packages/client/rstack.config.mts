@@ -14,8 +14,8 @@ import {
   DistPath,
   PortForCLI,
   PortForWeb,
-  WebpackRsdoctorDirPath,
-  WebpackStatsFilePath,
+  RsdoctorDirPath,
+  StatsFilePath,
 } from './config/constants.ts';
 
 define.app(({ env }) => {
@@ -151,7 +151,7 @@ define.app(({ env }) => {
           class StatsWriter {
             apply(compiler: Rspack.Compiler) {
               compiler.hooks.done.tapPromise(
-                { name: 'webpack-stats-json-writer', stage: 99999 },
+                { name: 'rspack-stats-json-writer', stage: 99999 },
                 async (stats) => {
                   const json = stats.toJson({
                     all: false,
@@ -166,7 +166,7 @@ define.app(({ env }) => {
                     optimizationBailout: true,
                   });
                   await fs.promises.writeFile(
-                    WebpackStatsFilePath,
+                    StatsFilePath,
                     JSON.stringify(json, null, 2),
                     'utf-8',
                   );
@@ -220,8 +220,8 @@ define.app(({ env }) => {
     dev: {
       setupMiddlewares: [
         (middlewares) => {
-          if (fs.existsSync(WebpackRsdoctorDirPath)) {
-            const fn = serve(WebpackRsdoctorDirPath, {
+          if (fs.existsSync(RsdoctorDirPath)) {
+            const fn = serve(RsdoctorDirPath, {
               dev: true,
               setHeaders(res) {
                 res.setHeader('Content-Type', 'text/plain; charset=utf-8');

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { WebpackModulesOverall } from './components';
+import { ModulesOverall } from './components';
 
 export const Page: React.FC = () => {
-  return <WebpackModulesOverall />;
+  return <ModulesOverall />;
 };
 
 export * from './constants';

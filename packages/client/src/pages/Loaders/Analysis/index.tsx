@@ -1,6 +1,6 @@
 import React from 'react';
 import { LoaderAnalysis } from '../../../components/Loader/Analysis';
-import { WebpackConfigurationViewer } from '../../../components/Configuration';
+import { BuildConfigurationViewer } from '../../../components/Configuration';
 import { Card } from '../../../components/Card';
 import { Popover, Space, Tag, Typography } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -38,7 +38,7 @@ export const Page: React.FC = () => {
           </Popover>
         </Space>
       }
-      extra={<WebpackConfigurationViewer defaultKeys={['module', 'resolve']} />}
+      extra={<BuildConfigurationViewer defaultKeys={['module', 'resolve']} />}
       bodyStyle={{ paddingTop: token.padding, height: 800 }}
     >
       <LoaderAnalysis />
