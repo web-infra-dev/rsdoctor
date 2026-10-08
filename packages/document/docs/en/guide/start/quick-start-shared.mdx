@@ -27,7 +27,7 @@ export default {
 
 ### Rsbuild
 
-For Rsbuild projects, see [Rsbuild — Use Rsdoctor](https://rsbuild.rs/guide/debug/rsdoctor).
+Rsbuild has built-in support for Rsdoctor, so you don't need to manually register plugins. See [Rsbuild - Use Rsdoctor](https://rsbuild.rs/guide/debug/rsdoctor) for more details.
 
 ### Modern.js
 
@@ -59,13 +59,7 @@ export default {
 
 #### Step 1: register the Rsdoctor plugin
 
-This example uses Next.js and `next-rspack` 16.4 with Rspack 2. Keep `next` and `next-rspack` versions aligned. Integrations based on Rspack 1 require Rsdoctor 1.x.
-
-Install `next-rspack`:
-
-<PackageManagerTabs command="add next-rspack@^16.4.0 -D" />
-
-Wrap your configuration with `withRspack` to [enable Rspack](https://rspack.rs/guide/integrations/next), then register Rsdoctor in the `webpack` callback. Next.js uses this callback name for Rspack too.
+First, follow the [Next.js integration guide](https://rspack.rs/guide/integrations/next) to enable Rspack 2 in your project. Then register Rsdoctor in the `webpack` callback, which Next.js also uses for Rspack configuration.
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';

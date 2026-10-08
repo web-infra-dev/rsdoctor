@@ -27,7 +27,7 @@ export default {
 
 ### Rsbuild 项目
 
-Rsbuild 项目请参阅 [Rsbuild — 使用 Rsdoctor](https://rsbuild.rs/zh/guide/debug/rsdoctor)。
+Rsbuild 内置了对 Rsdoctor 的支持，不需要手动注册插件。详见 [Rsbuild - 使用 Rsdoctor](https://rsbuild.rs/zh/guide/debug/rsdoctor)。
 
 ### Modern.js 项目
 
@@ -59,13 +59,7 @@ export default {
 
 #### 第一步：注册 Rsdoctor 插件
 
-以下示例使用 Next.js 和 `next-rspack` 16.4，基于 Rspack 2。请保持 `next` 和 `next-rspack` 版本一致。基于 Rspack 1 的集成需使用 Rsdoctor 1.x。
-
-安装 `next-rspack`：
-
-<PackageManagerTabs command="add next-rspack@^16.4.0 -D" />
-
-用 `withRspack` 包装配置以[启用 Rspack](https://rspack.rs/zh/guide/integrations/next)，然后在 `webpack` 回调中注册 Rsdoctor。使用 Rspack 时，Next.js 仍沿用这个回调名称。
+先参考 [Next.js 接入指南](https://rspack.rs/zh/guide/integrations/next)在项目中启用 Rspack 2，再在 `webpack` 回调中注册 Rsdoctor。Next.js 也通过这个回调配置 Rspack。
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
