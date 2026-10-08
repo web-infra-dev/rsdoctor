@@ -2,7 +2,8 @@ import type { RuleSetRule } from '@rspack/core';
 
 export type Rule = RuleSetRule & {
   /**
-   * The legacy `loaders` field used by rule normalizers.
+   * Legacy configuration accepted by Rsdoctor's loader interception.
+   * Normalized to `use` because Rspack does not read this rule field.
    */
   loaders: RuleSetRule['use'];
 };
