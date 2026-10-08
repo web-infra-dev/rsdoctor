@@ -57,33 +57,21 @@ The difference between `Source Size` and `Bundled Size`:
 
 ### Solution
 
-If you only have Source Size but no Bundled Size, or **there is no Module drill-down in Tree Map** (i.e., no Module chunks), you need to **manually enable SourceMap**. **Note: Only enable SourceMap when Rsdoctor is enabled, do not affect production builds.**
+Rsdoctor 2.x enables Rspack's native analysis and source map capabilities automatically. Start with these checks:
 
-- The following scenario requires manually enabling SourceMap:
+1. Confirm that your framework uses Rspack 2 and that Rsdoctor is enabled for the compiler that produces the affected assets.
+2. Check that [bundle analysis](/config/options/features) is enabled. If you disabled [`supports.parseBundle`](/config/options/supports#parsebundle), restore its default value of `true` to allow AST parsing for assets without usable source maps.
+3. If sizes are present but code is missing, check [`output.reportCodeType`](/config/options/output#reportcodetype) and the report mode. Brief reports omit code.
 
-<img
-  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
-  width="600px"
-  height="300px"
-  style={{ margin: 'auto' }}
-/>
+If module sizes are still missing, check whether a plugin changes generated code without updating its source maps. As a diagnostic step, you can enable an explicit source map for an analysis build:
 
-Configuration example:
-
-```js rspack.config.mjs
+```js title="rspack.config.mjs"
 export default {
-  devtool: 'cheap-source-map', // or other devtool configuration
+  devtool: process.env.RSDOCTOR === 'true' ? 'source-map' : false,
 };
 ```
 
-Rsdoctor supports the following SourceMap configurations:
-
-- source-map
-- hidden-source-map
-- inline-source-map
-- cheap-source-map
-- cheap-module-source-map
-- nosources-source-map
+Adapt the `false` branch to your project's usual `devtool` setting. Enabling source maps is a troubleshooting step, not a prerequisite for Rsdoctor 2.x.
 
 ## Bundle analysis page no `Bundled Size`?
 
@@ -98,42 +86,11 @@ The difference between `Source Size` and `Bundled Size`:
 
 ### Root cause
 
-When [optimization.concatenateModules](https://rspack.rs/config/optimization#optimizationconcatenatemodules) is set to `true`, Rsdoctor cannot use `acorn` to parse the build artifacts and break down the actual code size of each **Module**, therefore it cannot display the `Bundled Size`.
+AST parsing alone cannot separate concatenated sub-modules. Rsdoctor 2.x uses Rspack's native source map data to analyze these modules instead.
 
 ### Solution
 
-:::danger
-**Important Note:** You must check the `RSDOCTOR` environment variable and not modify ConcatenateModules directly! ConcatenateModules is enabled by default in production environments. Disabling it in production builds will increase the bundle size.
-:::
-
-When enabling Rsdoctor analysis, set **concatenateModules to false** as shown below. **Note: Disabling `concatenateModules` will slightly increase bundle size, creating differences from production builds.**
-
-```js rspack.config.mjs
-export default {
-  optimization: {
-    concatenateModules:
-      process.env.NODE_ENV === 'production' && !process.env.RSDOCTOR, // Must check RSDOCTOR environment variable, do not modify concatenateModules directly!
-  },
-};
-```
-
-- In the rspeedy project, configure it in `rspeedy.config.ts`:
-
-```js rspeedy.config.ts
-export default {
-  tools: {
-    rspack(config, { env }) {
-      if (process.env.RSDOCTOR === 'true') {
-        config.optimization = {
-          ...config.optimization,
-          concatenateModules: false,
-        };
-        return config;
-      }
-    },
-  },
-};
-```
+Keep [optimization.concatenateModules](https://rspack.rs/config/optimization#optimizationconcatenatemodules) at your production setting. Disabling it changes the output being measured and is not required for Rsdoctor 2.x. Follow the [checks above](#no-bundledparsed-size-for-modules-in-bundle-analysis) if Bundled Size is missing.
 
 ## The loader of CssExtractRspackPlugin takes too long
 

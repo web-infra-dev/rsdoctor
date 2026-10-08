@@ -57,33 +57,21 @@ Rsdoctor 提供的 Loader 耗时是**预估耗时**。无法统计到准确耗�
 
 ### 解决方案
 
-如果只有 Source Size，没有 Bundled Size，或者 **Tree Map 中没有 Module 下钻**（即没有 Modules 分块），则需要**手动开启 SourceMap**。**注意只在 Rsdoctor 开启时打开 SourceMap，不要影响线上产物**。
+Rsdoctor 2.x 会自动启用 Rspack 的原生分析和 source map 能力。请先检查：
 
-- 下面情况就需要手动开启 Sourcemap
+1. 框架实际使用的是 Rspack 2，且为生成相关产物的编译器启用了 Rsdoctor。
+2. 已启用[产物分析](/config/options/features)。如果关闭了 [`supports.parseBundle`](/config/options/supports#parsebundle)，请恢复其默认值 `true`，允许对缺少可用 source map 的产物进行 AST 解析。
+3. 如果有体积数据但缺少代码，请检查 [`output.reportCodeType`](/config/options/output#reportcodetype) 和报告模式。Brief 报告不包含代码。
 
-<img
-  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
-  width="600px"
-  height="300px"
-  style={{ margin: 'auto' }}
-/>
+如果模块体积仍然缺失，请检查是否有插件修改了产物代码却未同步更新 source map。排查时，可以为分析构建显式开启 source map：
 
-配置示例：
-
-```js rspack.config.mjs
+```js title="rspack.config.mjs"
 export default {
-  devtool: 'cheap-source-map', // 或其他 devtool 配置
+  devtool: process.env.RSDOCTOR === 'true' ? 'source-map' : false,
 };
 ```
 
-Rsdoctor 支持以下 SourceMap 配置：
-
-- source-map
-- hidden-source-map
-- inline-source-map
-- cheap-source-map
-- cheap-module-source-map
-- nosources-source-map
+请将 `false` 分支替换为项目原有的 `devtool` 设置。开启 source map 是排查手段，并非使用 Rsdoctor 2.x 的前提。
 
 ## 产物分析界面没有 `Bundled Size` 怎么办？
 
@@ -98,42 +86,11 @@ Rsdoctor 支持以下 SourceMap 配置：
 
 ### 原因分析
 
-当 [optimization.concatenateModules](https://rspack.rs/zh/config/optimization#optimizationconcatenatemodules) 配置为 `true` 时，Rsdoctor 无法通过 `acorn` 解析产物来分解出每个 **Module** 的实际代码大小，因此无法显示 `Bundled Size`。
+仅靠 AST 解析无法拆分串联子模块。Rsdoctor 2.x 使用 Rspack 的原生 source map 数据分析这些模块。
 
 ### 解决方案
 
-:::danger
-**重要提醒：** 必须判断 `RSDOCTOR` 环境变量，不能直接修改 ConcatenateModules！线上环境默认开启 ConcatenateModules，线上构建环境中关闭会导致产物体积变大。
-:::
-
-**在开启 Rsdoctor 分析时，配置 concatenateModules 为 false**，如下所示。**同时要注意，关闭 concatenateModules 一定会导致产物体积略微变大，与线上环境的体积有一些差异。**
-
-```js rspack.config.mjs
-export default {
-  optimization: {
-    concatenateModules:
-      process.env.NODE_ENV === 'production' && !process.env.RSDOCTOR, // 需要判断 RSDOCTOR 环境变量，不可以直接修改 concatenateModules！
-  },
-};
-```
-
-- rspeedy 项目中，在 `rspeedy.config.ts` 中配置：
-
-```js rspeedy.config.ts
-export default {
-  tools: {
-    rspack(config, { env }) {
-      if (process.env.RSDOCTOR === 'true') {
-        config.optimization = {
-          ...config.optimization,
-          concatenateModules: false,
-        };
-        return config;
-      }
-    },
-  },
-};
-```
+请保留生产构建使用的 [optimization.concatenateModules](https://rspack.rs/zh/config/optimization#optimizationconcatenatemodules) 设置。关闭它会改变被测量的产物，并非 Rsdoctor 2.x 的使用要求。如果缺少 Bundled Size，请按[上文步骤](#%E4%BA%A7%E7%89%A9%E5%88%86%E6%9E%90%E4%B8%ADmodule-%E9%83%BD%E6%B2%A1%E6%9C%89-bundledparsed-size-%E6%80%8E%E4%B9%88%E5%8A%9E)排查。
 
 ## CssExtractRspackPlugin 的 loader 耗时过长问题
 

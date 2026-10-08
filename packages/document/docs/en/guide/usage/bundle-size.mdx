@@ -112,7 +112,7 @@ Tree Map view can intuitively display the proportion and relationship between mo
 ## 🪐 Tree graph
 
 :::info
-If an Asset block has no Module chunks, you need to manually enable SourceMap. Note: Only enable SourceMap when Rsdoctor is enabled, do not affect production builds. [FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis)
+Rsdoctor 2.x uses Rspack's native analysis data and does not normally require you to enable `devtool`. If module sizes or code are missing, follow the [FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).
 :::
 
 Tree Graph is a **file tree-based** build artifact analysis view used to analyze the size and code information of build artifact resources (**Assets**) and the included **Modules**. In this module, you can view the **actual code size of modules after packaging** in the Assets, the original code of modules, **packaged code segments**, and **module reference relationships**.
@@ -124,10 +124,6 @@ Tree Graph is a **file tree-based** build artifact analysis view used to analyze
 />
 
 Click on the **"Bundle Size"** option in the navigation bar to view the Bundle analysis report. Please note that to display this page, you need to enable the build artifact analysis capability [features](/config/options/options).
-
-::: tip
-If your project is based on Rspack and the version is lower than 0.5.1, you cannot view code information.
-:::
 
 ### Resource and module relationship display
 
@@ -182,7 +178,7 @@ The **Modules** tag is shown in the right image, from left to right representing
   - The final size of the module bundled into the artifact. Some modules labeled as `concatenated` are concatenated modules, which have a certain impact on this value. Please refer to the explanation of `concatenated module` below.
 - **[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)**: Concatenated modules combine multiple modules into one closure during bundling. There are two types:
   - One is the concatenated main module, indicating how many `Modules` are concatenated.
-  - The other is the concatenated sub-module, indicating which `Module` it is aggregated into. This sub-module cannot be further unpacked after bundling, so the specific `Bundled Size` cannot be determined. Only the size of the entire concatenated module is known, which is marked at the end of the main module.
+  - The other is a concatenated sub-module, identifying the `Module` it belongs to. Rsdoctor uses Rspack’s native source map data to attribute bundled code and size to these sub-modules; AST parsing alone cannot separate them.
 - **Module Explorer** tag: Click to open the dependency analysis page between `Modules`.
 - **Code View** tag: Click to expand code segments, including `Source` (source code), `Transformed` (compiled code), and `Bundled` (bundled code).
 
@@ -192,7 +188,7 @@ The **Modules** tag is shown in the right image, from left to right representing
 
 Rsdoctor supports the analyze of **[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** and accurately calculates the real bundled size of sub-modules within concatenated modules, helping developers accurately identify the actual build size after Tree Shaking, analyze the impact of merged modules on final bundle size, and optimize code splitting strategies.
 
-- **For Rspack projects**: The Rsdoctor native plugin built into Rspack (>=1.4.11) has enhanced sourcemap capabilities, allowing seamless analysis of concatenated modules without enabling source maps.
+Rsdoctor 2.x always enables Rspack’s native analysis plugin, including its source map capabilities. You do not need to enable `devtool` or disable `optimization.concatenateModules` to analyze concatenated modules.
 
 > As shown in the figure below, this is the analysis of 'all-in-one' bundling. The first image shows the previous inability to analyze, while the second image shows the analyzable situation.
 
@@ -212,14 +208,6 @@ Rsdoctor supports the analyze of **[Concatenated Module](https://rspack.rs/misc/
   style={{ margin: 'auto' }}
 />
 
-- Rsdoctor supports the following SourceMap configurations for Concatenated Module analysis:
-  - source-map
-  - hidden-source-map
-  - inline-source-map
-  - cheap-source-map
-  - cheap-module-source-map
-  - nosources-source-map
-
 ## 🪐 Module details
 
 Click the module tag to view module details, as shown below:
@@ -234,24 +222,6 @@ Click the module tag to view module details, as shown below:
 
 ## 🪐 Supports bannerPlugin
 
-:::danger
-`supports.banner` option is only used for debugging, do not use it in production.
-:::
+Rspack's [BannerPlugin](https://rspack.rs/plugins/webpack/banner-plugin) adds content to generated chunks. Rsdoctor 2.x does not require a separate BannerPlugin compatibility switch: the legacy [`supports.banner`](/config/options/supports#banner) option has no effect.
 
-Rspack provides [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin), a built-in plugin for adding content to the beginning or end of generated chunks.
-
-The added code segment will affect the analysis capability of the bundle.
-
-Rsdoctor is compatible with the logic of adding code using the BannerPlugin, but it is not enabled by default because Rsdoctor needs to add tag code. The Rsdoctor BannerPlugin capability is enabled in the following two cases:
-
-1. The project uses BannerPlugin in `rspack.config.(js|ts)`.
-
-2. Enable Rsdoctor BannerPlugin capability through Rsdoctor options by setting `supports.banner`:
-
-```ts
-new RsdoctorRspackPlugin({
-  supports: {
-    banner: true,
-  },
-});
-```
+If a plugin changes generated code and module sizes are missing, check whether source map data still matches the output. See the [bundle analysis FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).

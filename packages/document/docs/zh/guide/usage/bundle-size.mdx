@@ -112,7 +112,7 @@ Tree Map 视图可以直观展示各个模块之间的占比和关系，如下�
 ## 🪐 Tree graph
 
 :::info
-如果一个 Asset 区块中没有 Module 分块，则需要手动开启 SourceMap。注意只在 Rsdoctor 开启时打开 SourceMap，不要影响线上产物。[FAQ](/guide/more/faq#%E4%BA%A7%E7%89%A9%E5%88%86%E6%9E%90%E4%B8%ADmodule-%E9%83%BD%E6%B2%A1%E6%9C%89-bundledparsed-size-%E6%80%8E%E4%B9%88%E5%8A%9E)
+Rsdoctor 2.x 使用 Rspack 的原生分析数据，通常无需手动开启 `devtool`。如果缺少模块体积或代码，请按 [FAQ](/guide/more/faq#%E4%BA%A7%E7%89%A9%E5%88%86%E6%9E%90%E4%B8%ADmodule-%E9%83%BD%E6%B2%A1%E6%9C%89-bundledparsed-size-%E6%80%8E%E4%B9%88%E5%8A%9E) 排查。
 :::
 
 Tree Graph 是一种**基于文件树形式**的构建产物分析视图，用于分析构建产物资源（**Assets**）以及所包含的 **Modules** 的大小和代码信息。在该模块中，可以查看 Assets 中 **Module 打包后的实际代码大小**、模块的原始代码、**打包后的代码段**以及**模块引用关系**。
@@ -124,10 +124,6 @@ Tree Graph 是一种**基于文件树形式**的构建产物分析视图，用�
 />
 
 点击导航栏的「Bundle Size」选项，即可查看 Bundle 分析报告。请注意，要展示此页面，需要开启构建产物分析能力 [features](/config/options/options)。
-
-::: tip
-如果项目基于 Rspack 且版本低于 0.5.1，无法查看代码信息。
-:::
 
 ### 资源与模块关系展示
 
@@ -182,7 +178,7 @@ Tree Graph 是一种**基于文件树形式**的构建产物分析视图，用�
   - 模块打包进产物的最终大小。一些标有 `concatenated` 的模块是串联模块，对此值有一定影响，请参阅下方的 `concatenated module` 解释。
 - **[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 串联模块：将多个模块在打包时提升或串联到一个闭包中。有两种类型：
   - 一种是串联主模块，标明串联了多少个 `Modules`；
-  - 另一种是被串联的子模块，标明被聚合到了哪个 `Module` 内。这种子模块无法继续拆解打包后的代码，因此无法得知具体的 `Bundled Size`，只能得知整个串联模块的大小，该大小标注在主模块尾部。
+  - 另一种是被串联的子模块，标明其所属的 `Module`。Rsdoctor 使用 Rspack 的原生 source map 数据，将打包后的代码和体积归属到这些子模块；仅靠 AST 解析无法拆分它们。
 - **Module Explorer** 标签：点击可打开 `Module` 之间的依赖关系分析页面。
 - **代码查看** 标签，点击可展开代码段，包括 `Source`（源码）、`Transformed`（编译后代码）和 `Bundled`（打包后代码）。
 
@@ -192,7 +188,7 @@ Tree Graph 是一种**基于文件树形式**的构建产物分析视图，用�
 
 Rsdoctor 支持了对 **[Concatenated Module](https://rspack.rs/zh/misc/glossary#scope-hoisting-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%90%88%E5%B9%B6)** 的拆解并精确计算 concatenated module 中子 modules 的真实的打包后的体积，帮助开发者准确识别 Tree Shaking 后的实际构建体积，分析合并模块对最终 bundle 大小的影响以及优化分包策略。
 
-- **Rspack 项目**：Rspack（>=1.4.11）内部的 Rsdoctor native 插件增强了 sourcemap 相关能力，可以在不开启 source map 的情况下，无痛分析 concatenate module。
+Rsdoctor 2.x 始终启用 Rspack 的原生分析插件及其 source map 能力。分析串联模块无需手动开启 `devtool`，也无需关闭 `optimization.concatenateModules`。
 
 > 可以看到下图，是 'all-in-one' 的打包分析，上图为之前无法分析的情况，下图为可分析情况
 
@@ -212,14 +208,6 @@ Rsdoctor 支持了对 **[Concatenated Module](https://rspack.rs/zh/misc/glossary
   style={{ margin: 'auto' }}
 />
 
-- Rsdoctor 对 Concatenated Module 分析支持如下 Sourcemap 配置：
-  - source-map
-  - hidden-source-map
-  - inline-source-map
-  - cheap-source-map
-  - cheap-module-source-map
-  - nosources-source-map
-
 ## 🪐 Module 详情
 
 点击模块标签，可以查看模块详情，如下图所示：
@@ -234,24 +222,6 @@ Rsdoctor 支持了对 **[Concatenated Module](https://rspack.rs/zh/misc/glossary
 
 ## 🪐 支持 BannerPlugin
 
-:::danger
-`supports.banner` 选项仅用于调试，请勿将其用于生产。
-:::
+Rspack 的 [BannerPlugin](https://rspack.rs/zh/plugins/webpack/banner-plugin) 可向生成的 chunk 添加内容。Rsdoctor 2.x 无需单独开启 BannerPlugin 兼容开关，旧的 [`supports.banner`](/config/options/supports#banner) 选项已无实际效果。
 
-Rspack 提供内置的 [BannerPlugin](https://www.rspack.rs/plugins/webpack/banner-plugin#bannerplugin)，可在生成的 chunk 顶部或尾部添加指定内容。
-
-添加的代码段将会影响到对 Bundle 的解析能力。
-
-Rsdoctor 兼容了 BannerPlugin 这种添加代码的逻辑，但因为 Rsdoctor 需要添加标记代码，所以没有默认开启。以下两种情况会开启 Rsdoctor BannerPlugin 能力：
-
-1. 项目在 `rspack.config.(js|ts)` 中使用了 BannerPlugin；
-
-2. 通过 Rsdoctor options 配置 `supports.banner` 来开启：
-
-```ts
-new RsdoctorRspackPlugin({
-  supports: {
-    banner: true,
-  },
-});
-```
+如果插件修改产物代码后模块体积缺失，请检查 source map 数据是否仍与产物匹配。详见[产物分析 FAQ](/guide/more/faq#%E4%BA%A7%E7%89%A9%E5%88%86%E6%9E%90%E4%B8%ADmodule-%E9%83%BD%E6%B2%A1%E6%9C%89-bundledparsed-size-%E6%80%8E%E4%B9%88%E5%8A%9E)。

@@ -8,13 +8,13 @@ description: '通过 supports 配置 Rsdoctor 的详细分析行为，如产物�
 - **可选：** `true`
 - **默认值：** `undefined`
 
-该选项用于控制详细的分析行为，例如 BannerPlugin 兼容、Bundle 解析和 gzip 大小计算。
+该选项用于控制 AST 产物解析和压缩体积计算。
 
 ## supportsTypes
 
 ```ts
 type ISupport = {
-  banner?: boolean;
+  banner?: boolean; // 在 Rsdoctor 2.x 中无实际效果
   parseBundle?: boolean;
   brotli?: boolean | { brotliLevel?: number };
   gzip?:
@@ -27,33 +27,26 @@ type ISupport = {
 
 ## banner
 
-:::danger
-`supports.banner` 分析仅用于调试，请勿将其用于生产。
-:::
-
-- **类型：** `boolean`
-- **默认值：** `true`
-
-如果开启 `supports.banner` 则会开启 Rsdoctor 对 BannerPlugin 的兼容逻辑。详细请看：[支持 BannerPlugin](../../guide/usage/bundle-size#-%E6%94%AF%E6%8C%81-bannerplugin)
+配置类型仍接受这个旧选项，但它在 Rsdoctor 2.x 中已无实际效果。请从配置中移除 `supports.banner`。它不会开启 BannerPlugin 检测，也不会向构建产物插入标记代码。
 
 ## parseBundle
 
 - **类型：** `boolean`
 - **默认值：** `true`
 
-在部分大型仓库中，反解 Bundle 解析执行耗时过大，这是因为 Parse Bundle 的分析利用了 AST 解析与处理。当产物文件过多时，耗时也会增加。如果不需要此功能，可以通过 `supports.parseBundle` 配置进行选择性关闭。示例如下：
+控制没有可用 source map 数据的产物是否进行 AST 解析。Rsdoctor 优先使用 source map 数据，对其他产物回退到解析打包后的代码。
+
+在大型项目中，可以将 `supports.parseBundle` 设置为 `false`，跳过 AST 回退解析：
 
 ```ts
-chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
-  {
-    supports: {
-      parseBundle: false,
-    },
+new RsdoctorRspackPlugin({
+  supports: {
+    parseBundle: false,
   },
-]);
+});
 ```
 
-关闭 Parse Bundle 能力只会影响是否能查看到 Bundle 中 Module 的最终打包大小（Bundled Size）及最终打包代码（Bundled Code）:
+这不会关闭原生图数据收集或基于 source map 的分析。依赖 AST 回退解析的模块可能会缺少 Bundled Size 和 Bundled Code。如需控制报告中包含哪些代码，请使用 [output.reportCodeType](/config/options/output#reportcodetype)。
 
 <div style={{ display: 'flex' }}>
   <img
