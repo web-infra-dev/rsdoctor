@@ -29,9 +29,9 @@ type ISupport = {
 - **类型：** `boolean`
 - **默认值：** `true`
 
-控制没有可用 source map 数据的产物是否进行 AST 解析。Rsdoctor 优先使用 source map 数据，对其他产物回退到解析打包后的代码。
+控制 Rsdoctor 在缺少可用 source map 数据时，是否解析打包后的代码。Rsdoctor 优先使用 source map 分析模块；没有可用数据时，再通过 AST 解析识别产物中的模块。
 
-在大型项目中，可以将 `supports.parseBundle` 设置为 `false`，跳过 AST 回退解析：
+大型项目的 AST 解析可能比较耗时，可以将 `supports.parseBundle` 设置为 `false` 来跳过这一步：
 
 ```ts
 new RsdoctorRspackPlugin({
@@ -41,7 +41,9 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-这不会关闭原生图数据收集或基于 source map 的分析。依赖 AST 回退解析的模块可能会缺少 Bundled Size 和 Bundled Code。如需控制报告中包含哪些代码，请使用 [output.reportCodeType](/config/options/output#reportcodetype)。
+关闭后，Rsdoctor 仍会收集模块和 chunk 的图数据，并使用 source map 分析模块。需要通过 AST 解析的模块可能无法显示 Bundled Size 和 Bundled Code。
+
+如需控制报告中包含哪些代码，请使用 [output.reportCodeType](/config/options/output#reportcodetype)。
 
 <div style={{ display: 'flex' }}>
   <img

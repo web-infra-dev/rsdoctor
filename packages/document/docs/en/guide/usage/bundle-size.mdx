@@ -82,7 +82,7 @@ For more information, please refer to [Duplicate Packages](/guide/usage/bundle-a
 ## 🪐 Tree map
 
 :::info
-Rsdoctor 2.x uses Rspack's native analysis data and does not normally require you to enable `devtool`. If module sizes or code are missing, follow the [FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).
+Rsdoctor 2.x uses Rspack's native analysis data, so you normally do not need to configure `devtool` to generate source maps. If module sizes or code are missing, see the troubleshooting steps in the [FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).
 :::
 
 Tree Map view can intuitively display the proportion and relationship between modules, as shown in the following image. Clicking on module resources can zoom in to that module area.
@@ -112,7 +112,7 @@ Tree Map view can intuitively display the proportion and relationship between mo
 ## 🪐 Tree graph
 
 :::info
-Rsdoctor 2.x uses Rspack's native analysis data and does not normally require you to enable `devtool`. If module sizes or code are missing, follow the [FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).
+Rsdoctor 2.x uses Rspack's native analysis data, so you normally do not need to configure `devtool` to generate source maps. If module sizes or code are missing, see the troubleshooting steps in the [FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).
 :::
 
 Tree Graph is a **file tree-based** build artifact analysis view used to analyze the size and code information of build artifact resources (**Assets**) and the included **Modules**. In this module, you can view the **actual code size of modules after packaging** in the Assets, the original code of modules, **packaged code segments**, and **module reference relationships**.
@@ -178,21 +178,21 @@ The **Modules** tag is shown in the right image, from left to right representing
   - The final size of the module bundled into the artifact. Some modules labeled as `concatenated` are concatenated modules, which have a certain impact on this value. Please refer to the explanation of `concatenated module` below.
 - **[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)**: Concatenated modules combine multiple modules into one closure during bundling. There are two types:
   - One is the concatenated main module, indicating how many `Modules` are concatenated.
-  - The other is a concatenated sub-module, identifying the `Module` it belongs to. Rsdoctor uses Rspack’s native source map data to attribute bundled code and size to these sub-modules; AST parsing alone cannot separate them.
+  - The other is a sub-module, labeled with the concatenated module it belongs to. Rsdoctor uses Rspack's native source map data to determine each sub-module's bundled code and size. AST parsing alone cannot identify these separately.
 - **Module Explorer** tag: Click to open the dependency analysis page between `Modules`.
 - **Code View** tag: Click to expand code segments, including `Source` (source code), `Transformed` (compiled code), and `Bundled` (bundled code).
 
 ### Support for concatenated module analysis
 
-**[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** refers to multiple modules that are merged into a single closure, which cannot be analyzed through AST syntax analysis. However, concatenated modules may contain code from different packages, making the analysis of sub-modules within concatenated modules a key focus, especially for projects with [chunk splitting disabled](https://rsbuild.rs/config/split-chunks#disable-chunk-splitting).
+A **[concatenated module](https://rspack.rs/misc/glossary#scope-hoisting)** combines several modules into a single closure. These modules can come from different packages, but AST parsing alone cannot determine how much bundled code belongs to each one. This is especially relevant for projects with [chunk splitting disabled](https://rsbuild.rs/config/split-chunks#disable-chunk-splitting).
 
-Rsdoctor supports the analyze of **[Concatenated Module](https://rspack.rs/misc/glossary#scope-hoisting)** and accurately calculates the real bundled size of sub-modules within concatenated modules, helping developers accurately identify the actual build size after Tree Shaking, analyze the impact of merged modules on final bundle size, and optimize code splitting strategies.
+Rsdoctor calculates the bundled size of each sub-module after tree shaking. This helps you see which modules contribute to the final bundle, understand the effect of module concatenation, and refine your code splitting strategy.
 
-Rsdoctor 2.x always enables Rspack’s native analysis plugin, including its source map capabilities. You do not need to enable `devtool` or disable `optimization.concatenateModules` to analyze concatenated modules.
+Rsdoctor 2.x automatically enables Rspack's native analysis plugin to collect the source map data it needs. You can analyze concatenated modules without changing `devtool` or disabling `optimization.concatenateModules`.
 
-> As shown in the figure below, this is the analysis of 'all-in-one' bundling. The first image shows the previous inability to analyze, while the second image shows the analyzable situation.
+> The images below compare the same bundle before and after support for concatenated module analysis was added.
 
-- Not support concatenated module
+- Before: sub-module sizes are unavailable
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
@@ -200,7 +200,7 @@ Rsdoctor 2.x always enables Rspack’s native analysis plugin, including its sou
   style={{ margin: 'auto' }}
 />
 
-- Support concatenated module
+- After: sub-module sizes are displayed
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-after.png"
@@ -224,4 +224,4 @@ Click the module tag to view module details, as shown below:
 
 Rspack provides [BannerPlugin](https://rspack.rs/plugins/webpack/banner-plugin) to add content to generated chunks. Rsdoctor 2.x supports it without additional configuration.
 
-If a plugin changes generated code and module sizes are missing, check whether source map data still matches the output. See the [bundle analysis FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).
+If module sizes disappear after a plugin modifies the output, check that the plugin also updates the source maps to match. See the [bundle analysis FAQ](/guide/more/faq#no-bundledparsed-size-for-modules-in-bundle-analysis).

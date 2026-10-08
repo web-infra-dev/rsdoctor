@@ -57,13 +57,15 @@ The difference between `Source Size` and `Bundled Size`:
 
 ### Solution
 
-Rsdoctor 2.x enables Rspack's native analysis and source map capabilities automatically. Start with these checks:
+Rsdoctor 2.x automatically enables Rspack's native analysis, including source map data collection. If module sizes are missing, check the following:
 
 1. Confirm that your framework uses Rspack 2 and that Rsdoctor is enabled for the compiler that produces the affected assets.
-2. Check that [bundle analysis](/config/options/features) is enabled. If you disabled [`supports.parseBundle`](/config/options/supports#parsebundle), restore its default value of `true` to allow AST parsing for assets without usable source maps.
-3. If sizes are present but code is missing, check [`output.reportCodeType`](/config/options/output#reportcodetype) and the report mode. Brief reports omit code.
+2. Confirm that [bundle analysis](/config/options/features) is enabled.
+3. If [`supports.parseBundle`](/config/options/supports#parsebundle) is `false`, restore its default value of `true`. This lets Rsdoctor parse bundle code when source map data is unavailable.
 
-If module sizes are still missing, check whether a plugin changes generated code without updating its source maps. As a diagnostic step, you can enable an explicit source map for an analysis build:
+If module sizes are available but code is missing, check [`output.reportCodeType`](/config/options/output#reportcodetype) and the report mode. Brief reports do not include code.
+
+If module sizes are still missing, check whether a plugin changes generated code without updating its source maps. To help diagnose the issue, try enabling source maps only when running Rsdoctor:
 
 ```js title="rspack.config.mjs"
 export default {
@@ -71,7 +73,7 @@ export default {
 };
 ```
 
-Adapt the `false` branch to your project's usual `devtool` setting. Enabling source maps is a troubleshooting step, not a prerequisite for Rsdoctor 2.x.
+Replace `false` with your project's existing `devtool` value. This example is for troubleshooting; Rsdoctor 2.x normally works without manually enabling source maps.
 
 ## Bundle analysis page no `Bundled Size`?
 
@@ -86,11 +88,11 @@ The difference between `Source Size` and `Bundled Size`:
 
 ### Root cause
 
-AST parsing alone cannot separate concatenated sub-modules. Rsdoctor 2.x uses Rspack's native source map data to analyze these modules instead.
+Module concatenation combines multiple modules into one closure. AST parsing alone cannot identify each module's code within that closure. Rsdoctor 2.x uses Rspack's native source map data to determine each module's bundled code and size.
 
 ### Solution
 
-Keep [optimization.concatenateModules](https://rspack.rs/config/optimization#optimizationconcatenatemodules) at your production setting. Disabling it changes the output being measured and is not required for Rsdoctor 2.x. Follow the [checks above](#no-bundledparsed-size-for-modules-in-bundle-analysis) if Bundled Size is missing.
+Keep the same [optimization.concatenateModules](https://rspack.rs/config/optimization#optimizationconcatenatemodules) setting as your production build so that the report measures the output you actually ship. Rsdoctor 2.x can analyze concatenated modules with this optimization enabled. Follow the [checks above](#no-bundledparsed-size-for-modules-in-bundle-analysis) if Bundled Size is missing.
 
 ## The loader of CssExtractRspackPlugin takes too long
 
