@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'rstack/test';
-import { getSafeReportUrl } from 'src/utils/url';
+import { getSafeReportOrigin, getSafeReportUrl } from 'src/utils/url';
 
 const baseUrl = 'https://report.example.com/index.html';
 const fileBaseUrl = 'file:///reports/index.html';
@@ -48,4 +48,19 @@ describe('getSafeReportUrl', () => {
   ])('rejects absolute or ambiguous file path %s', (path) => {
     expect(getSafeReportUrl(path, fileBaseUrl)).toBeUndefined();
   });
+});
+
+describe('getSafeReportOrigin', () => {
+  it('allows HTTP(S) origins', () => {
+    expect(getSafeReportOrigin('https://report.example.com/path')).toBe(
+      'https://report.example.com',
+    );
+  });
+
+  it.each(['javascript:alert(1)', 'data:text/html,alert(1)', 'file:///report'])(
+    'rejects unsafe origin %s',
+    (origin) => {
+      expect(getSafeReportOrigin(origin)).toBeUndefined();
+    },
+  );
 });

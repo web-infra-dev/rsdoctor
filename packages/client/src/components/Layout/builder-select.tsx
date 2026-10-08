@@ -60,7 +60,12 @@ export const BuilderSelect: React.FC = () => {
 
             if (item) {
               if (item.origin) {
-                location.href = changeOrigin(item.origin);
+                const href = changeOrigin(item.origin);
+                if (href) {
+                  location.href = href;
+                } else {
+                  console.error('Invalid Rsdoctor compiler report origin');
+                }
               } else if (item.path) {
                 const href = getSafeReportUrl(
                   item.path.endsWith('.html')

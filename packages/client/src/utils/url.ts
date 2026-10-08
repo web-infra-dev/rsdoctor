@@ -62,13 +62,26 @@ export function getEnableRoutesFromUrlQuery(): string[] | void {
   return undefined;
 }
 
+export function getSafeReportOrigin(origin: string) {
+  try {
+    const url = new URL(origin);
+
+    return ['http:', 'https:'].includes(url.protocol) ? url.origin : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function changeOrigin(origin: string) {
+  const safeOrigin = getSafeReportOrigin(origin);
+  if (!safeOrigin) return undefined;
+
   const url = parse(location.href, true);
-  const newUrl = parse(origin, true);
+  const newUrl = parse(safeOrigin, true);
 
   setUploaderHash(url);
 
-  url.set('origin', origin);
+  url.set('origin', safeOrigin);
   url.set('protocol', newUrl.protocol);
   url.set('host', newUrl.host);
   url.set('port', newUrl.port);
