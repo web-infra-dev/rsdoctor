@@ -57,7 +57,7 @@ export const KeywordInput: React.FC<KeywordProps> = ({
         defaultValue={filename}
         style={{ width: width ? width - labelWidth : 250 }}
         placeholder={placeholder}
-        onChange={(e) => {
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           if (timer) clearTimeout(timer);
           const v = e.target.value.trim();
           timer = setTimeout(() => {
