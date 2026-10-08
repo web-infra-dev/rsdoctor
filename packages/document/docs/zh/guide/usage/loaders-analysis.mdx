@@ -44,7 +44,7 @@ description: '在 Rsdoctor Loader Analysis 中按目录和文件查看 loader �
 - **单个 Loader** 在选中目录内处理的 **文件数** 和 **预估耗时**
 - **所有 Loader** 在选中目录内处理的 **文件数** 和 **预估耗时**
 
-通常来说，我们可以通过**选中 `node_modules`** 内的一些**三方库目录**，然后根据 Loader 的耗时信息，来判断我们是不是有必要要给这个目录设置 [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude)，来减少比如常见的 `babel-loader` 的处理耗时长的问题。
+通常来说，我们可以通过**选中 `node_modules`** 内的一些**三方库目录**，然后根据 Loader 的耗时信息，来判断我们是不是有必要要给这个目录设置 [`module.rules[].exclude`](https://rspack.rs/zh/config/module-rules#rulesexclude)，来减少比如常见的 `babel-loader` 的处理耗时长的问题。
 
 如果是一些存在**高级 ES 语法**的 三方库 或者 **workspace** 内的包，需要根据下个段落的内容，来进行更细粒度的单文件级别的内容判断，来决策如何优化 Loader 耗时。
 
@@ -73,5 +73,5 @@ description: '在 Rsdoctor Loader Analysis 中按目录和文件查看 loader �
 如图所示，我们可以获得 **目标文件** 的以下信息：
 
 - **所经过的所有 Loader**
-- **[Loader Context](https://webpack.js.org/api/loaders/#the-loader-context) 上的参数数据**
+- **[Loader Context](https://rspack.rs/zh/api/loader-api/context) 上的参数数据**
 - **Loader 的输入输出**

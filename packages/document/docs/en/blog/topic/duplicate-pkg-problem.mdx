@@ -36,9 +36,9 @@ However, before using them, it is important to consider the compatibility betwee
 
 ### Build aspect
 
-#### Use [resolve.alias](https://www.rspack.rs/config/resolve.html#resolvealias)
+#### Use [resolve.alias](https://rspack.rs/config/resolve#resolvealias)
 
-Almost all bundlers support customizing the resolution paths for npm packages. Therefore, we can eliminate duplicate dependencies by manually specifying the resolve paths for packages during compilation. For example, using **Rspack** or **Webpack**, if `lodash` is duplicated in the build, we can configure it as follows to specify the resolve paths for all `lodash` packages to the `node_modules` directory in the current directory.
+Almost all bundlers support customizing the resolution paths for npm packages. Therefore, we can eliminate duplicate dependencies by manually specifying the resolve paths for packages during compilation. For example, using **Rspack**, if `lodash` is duplicated in the build, we can configure it as follows to specify the resolve paths for all `lodash` packages to the `node_modules` directory in the current directory.
 
 ```js title="rspack.config.js"
 const path = require('path');
@@ -85,7 +85,7 @@ When executing `rspack build` under `apps/web`, the code in the `web` directory 
 
 #### Solution
 
-This issue can be resolved using the `resolve.alias` configuration of the bundler, such as Rspack or webpack. By specifying the resolve path for `React` to only resolve to `apps/web/node_modules/react`, you can ensure that only one version of `React` is included in the output. Here is an example code:
+This issue can be resolved using the `resolve.alias` configuration of the bundler, such as Rspack. By specifying the resolve path for `React` to only resolve to `apps/web/node_modules/react`, you can ensure that only one version of `React` is included in the output. Here is an example code:
 
 ```javascript
 // apps/web/rspack.config.js

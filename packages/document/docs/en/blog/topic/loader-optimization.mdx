@@ -3,7 +3,7 @@
 import NextSteps from '@components/NextSteps';
 import Step from '@components/Step';
 
-Optimizing loaders is a common way to improve the performance of Rspack or webpack compilation. In most cases, besides replacing the loader with a faster one, we can also reduce execution by setting [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude) for the loader.
+Optimizing loaders is a common way to improve the performance of Rspack compilation. In most cases, besides replacing the loader with a faster one, we can also reduce execution by setting [`module.rules[].exclude`](https://rspack.rs/config/module-rules#rulesexclude) for the loader.
 
 Rsdoctor provides two core modules, [Loader Overall](/guide/usage/loaders-timeline) and [Loader Analysis](/guide/usage/loaders-analysis), to help you optimize based on the loader's invocation information.
 
@@ -35,7 +35,7 @@ By **clicking on a directory**, you can see the **time-consuming statistics of a
 We can intuitively know **the time-consuming data of this folder**, such as the number of files processed by a certain loader and the estimated time consumption, as well as the sum of all data, which further helps us make decisions on how to optimize the loader.
 
 :::tip Optimization Tips
-Usually, in the directories of third-party libraries inside **`node_modules`**, we can easily determine whether it is necessary to set [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude) for this directory based on the time-consuming information of the loader, in order to reduce the execution of loaders with long execution time, such as the common `babel-loader`.
+Usually, in the directories of third-party libraries inside **`node_modules`**, we can easily determine whether it is necessary to set [`module.rules[].exclude`](https://rspack.rs/config/module-rules#rulesexclude) for this directory based on the time-consuming information of the loader, in order to reduce the execution of loaders with long execution time, such as the common `babel-loader`.
 :::
 
 ### Analyzing files
@@ -56,10 +56,10 @@ By **clicking on a file**, a mask layer will pop up, showing a list of all loade
   style={{ margin: 'auto' }}
 />
 
-We can use the loader information of individual files here to troubleshoot issues and decide whether to add them to [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude).
+We can use the loader information of individual files here to troubleshoot issues and decide whether to add them to [`module.rules[].exclude`](https://rspack.rs/config/module-rules#rulesexclude).
 
 :::tip Optimization Tips
-Usually, for internal packages inside the project (i.e., outside the cwd, usually the workspace), we can determine whether it is necessary to set [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude) for this directory based on **the loader time-consuming information** of the directory and **the input-output information** of individual files (because these internal packages may already have good compatibility with ES syntax).
+Usually, for internal packages inside the project (i.e., outside the cwd, usually the workspace), we can determine whether it is necessary to set [`module.rules[].exclude`](https://rspack.rs/config/module-rules#rulesexclude) for this directory based on **the loader time-consuming information** of the directory and **the input-output information** of individual files (because these internal packages may already have good compatibility with ES syntax).
 :::
 
 ## Learn more
