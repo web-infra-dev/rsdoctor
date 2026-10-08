@@ -98,7 +98,9 @@ export function mapEachRules<T extends Plugin.BuildRuleSetRule>(
       return callback(rule);
     }
 
-    // https://webpack.js.org/configuration/module/#ruleloaders
+    // Preserve Rsdoctor's legacy rule.loaders support by normalizing it to use.
+    // Rspack's rule configuration reads loader/use; this conversion also makes
+    // the legacy loaders execute when Rsdoctor's loader interception is enabled.
     if (Array.isArray((rule as Rule).loaders)) {
       const { loaders, ...rest } = rule as Rule;
       return {
