@@ -208,18 +208,6 @@ export const parseBundle: ParseBundle = (
         return;
       }
 
-      // Legacy JSONP callback format used before webpack 4.
-      // webpackJsonp([<chunks>], <modules>, ...)
-      // The callback name can be customized, so match the argument structure.
-      if (
-        node.callee.type === 'Identifier' &&
-        mayBeAsyncChunkArguments(args) &&
-        isModulesList(args[1])
-      ) {
-        state.locations = getModulesLocations(args[1]);
-        return;
-      }
-
       // Rspack array-push chunks, including Web and Web Worker async chunks:
       // (self.chunkGlobal = self.chunkGlobal || []).push([[<chunks>], <modules>, ...]);
       // Match the structure because output.chunkLoadingGlobal is configurable.

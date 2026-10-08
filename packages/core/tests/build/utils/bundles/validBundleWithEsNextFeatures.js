@@ -1,4 +1,4 @@
-webpackJsonp([2],[function(t,e,r){
+(self.webpackChunk = self.webpackChunk || []).push([[2],{0:function(t,e,r){
   async function asyncFn() {
     return await Promise.resolve(1);
   }
@@ -25,4 +25,4 @@ webpackJsonp([2],[function(t,e,r){
   };
 
   const [var1, var2] = [1, 2];
-}]);
+}}]);

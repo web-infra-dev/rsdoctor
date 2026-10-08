@@ -1,3 +1,3 @@
-webpackJsonp([0],[(t,e,r)=>{
+(self.webpackChunk = self.webpackChunk || []).push([[0],{0:(t,e,r)=>{
   console.log('Hello world!');
-}]);
+}}]);
