@@ -1,12 +1,14 @@
 import type { Manifest } from '@rsdoctor/shared/types';
+import type { BaseDataLoader } from '../utils/data/base';
 import { LocalServerDataLoader } from '../utils/data/local';
-import { fetchManifest, parseManifest } from '../utils/request';
+import { RemoteDataLoader } from '../utils/data/remote';
+import { fetchManifest } from '../utils/request';
 
 export async function loadReportManifest(): Promise<Manifest.RsdoctorManifest> {
   const manifest = await fetchManifest();
-  if (!manifest.__LOCAL__SERVER__) return parseManifest(manifest);
-
-  const loader = new LocalServerDataLoader(manifest);
+  const loader: BaseDataLoader = manifest.__LOCAL__SERVER__
+    ? new LocalServerDataLoader(manifest)
+    : new RemoteDataLoader(manifest);
   try {
     const [chunkGraph, moduleGraph, packageGraph, errors, summary] =
       await Promise.all([

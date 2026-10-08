@@ -1,4 +1,5 @@
 import type { Manifest } from '@rsdoctor/shared/types';
+import { Summary } from '@rsdoctor/shared/common-browser';
 import { describe, expect, it } from 'rstack/test';
 import {
   findLargeAssets,
@@ -36,7 +37,13 @@ const manifest = {
         level: 'error',
       },
     ],
-    summary: { costs: [{ costs: 40 }, { costs: 60 }] },
+    summary: {
+      costs: [
+        { costs: 40 },
+        { costs: 60 },
+        { name: Summary.SummaryCostsDataName.Minify, costs: 30 },
+      ],
+    },
   },
 } as unknown as Manifest.RsdoctorManifest;
 

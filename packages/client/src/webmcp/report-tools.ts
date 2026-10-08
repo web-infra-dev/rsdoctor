@@ -1,4 +1,5 @@
 import type { Manifest, Rule } from '@rsdoctor/shared/types';
+import { Summary } from '@rsdoctor/shared/common-browser';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
@@ -97,10 +98,9 @@ export function getBuildOverview(
       error: findings.filter((finding) => finding.level === 'error').length,
       warn: findings.filter((finding) => finding.level === 'warn').length,
     },
-    buildDurationMs: (data.summary?.costs ?? []).reduce(
-      (total, cost) => total + cost.costs,
-      0,
-    ),
+    buildDurationMs: (data.summary?.costs ?? [])
+      .filter((cost) => cost.name !== Summary.SummaryCostsDataName.Minify)
+      .reduce((total, cost) => total + cost.costs, 0),
   };
 }
 
