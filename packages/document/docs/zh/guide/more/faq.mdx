@@ -59,7 +59,7 @@ Rsdoctor 提供的 Loader 耗时是**预估耗时**。无法统计到准确耗�
 
 如果缺少模块体积，请依次检查：
 
-1. 确认框架使用的是 Rspack 2，并且已在生成这些产物的编译器中启用 Rsdoctor。
+1. 确认项目使用的是 Rspack 2，并且已在生成这些产物的编译器中启用 Rsdoctor。
 2. 确认已启用[产物分析](/config/options/features)。
 3. 如果将 [`supports.parseBundle`](/config/options/supports#parsebundle) 设为了 `false`，请恢复为默认值 `true`，以便 Rsdoctor 在没有可用 source map 时解析产物代码。
 

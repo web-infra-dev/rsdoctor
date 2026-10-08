@@ -59,7 +59,7 @@ The difference between `Source Size` and `Bundled Size`:
 
 If module sizes are missing, check the following:
 
-1. Confirm that your framework uses Rspack 2 and that Rsdoctor is enabled for the compiler that produces the affected assets.
+1. Confirm that your project uses Rspack 2 and that Rsdoctor is enabled for the compiler that produces the affected assets.
 2. Confirm that [bundle analysis](/config/options/features) is enabled.
 3. If [`supports.parseBundle`](/config/options/supports#parsebundle) is `false`, restore its default value of `true`. This lets Rsdoctor parse bundle code when source map data is unavailable.
 
