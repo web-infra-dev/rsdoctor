@@ -43,7 +43,7 @@ packages/
 scripts/
   config/             # shared Rslib, Rstest, and TypeScript configuration
   test-helper/        # test utilities shared across packages
-e2e/                  # Rstest + Playwright E2E tests for Rspack and Rspeedy
+e2e/                  # Rstest + Playwright E2E tests
 examples/             # runnable Rspack / Rsbuild / Rspress projects
 ```
 
