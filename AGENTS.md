@@ -34,32 +34,27 @@ pnpm -C packages/client build              # alternative: use directory path
 
 ```text
 packages/
-  types/              # shared TypeScript type definitions
-  utils/              # shared utilities (build / common / error / logger / ruleUtils)
-  graph/              # module / chunk / package graph data structures
-  sdk/                # server SDK: data collection, socket.io transport, report serving
-  core/               # core analysis engine: build-utils, plugins, rules
-  rspack-plugin/      # Rspack plugin (peerDep: @rspack/core)
-  webpack-plugin/     # Webpack 5 plugin (peerDep: webpack 5.x)
+  shared/             # shared types, utilities, and module / chunk / package graphs
+  core/               # Rspack plugin, analysis engine, rules, and server SDK
   cli/                # `rsdoctor` CLI binary
-  agent-cli/          # `@rsdoctor/agent-cli` — agent CLI tooling
+  agent-cli/          # `rsdoctor-agent` CLI for agent-facing report queries
   client/             # web client (Rsbuild SPA, serves analysis report and report UI)
   document/           # documentation site (Rspress)
-  proto/              # protocol buffer / schema definitions
-  test-helper/        # test utilities shared across packages
 scripts/
-  config/              # shared Rslib, Rstest, and TypeScript configuration
-e2e/                    # Playwright E2E tests (cases/ per bundler)
-examples/               # runnable example projects (rspack / rsbuild / webpack / rspress)
+  config/             # shared Rslib, Rstest, and TypeScript configuration
+  test-helper/        # test utilities shared across packages
+e2e/                  # Rstest + Playwright E2E tests for Rspack and Rspeedy
+examples/             # runnable Rspack / Rsbuild / Rspress projects
 ```
 
-### Package dependency flow
+### Workspace package dependencies
 
-```text
-types → utils → graph → sdk → core → rspack-plugin / webpack-plugin → cli
-                                  ↘ client
-                                  ↘ agent-cli
-```
+- `client` depends on `shared`.
+- `core` depends on `shared` and `client`.
+- `cli` depends on `core` and `shared`.
+- `agent-cli` has no workspace package dependencies.
+
+Rsdoctor 2.x supports Rspack 2.0 and later. Webpack projects should use Rsdoctor 1.x or migrate to Rspack; see the [2.0 migration guide](packages/document/docs/en/guide/migration/migration-v2.mdx).
 
 ## Code style
 
@@ -88,7 +83,7 @@ types → utils → graph → sdk → core → rspack-plugin / webpack-plugin �
 
 - Branch off `main`; never commit directly to `main`.
 - PR title must follow **Conventional Commits**: `type(scope): description`.
-- Common scopes: `core`, `rspack-plugin`, `webpack-plugin`, `sdk`, `cli`, `ai`, `graph`, `utils`, `components`, `client`, `deps`.
+- Common scopes: `core`, `rspack-plugin`, `shared`, `sdk`, `cli`, `agent-cli`, `ai`, `graph`, `utils`, `components`, `client`, `deps`.
 - Read `.github/PULL_REQUEST_TEMPLATE.md` and follow its current headings and guidance.
 
 ## Conventions for AI agents
