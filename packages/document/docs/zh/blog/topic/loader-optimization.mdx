@@ -3,7 +3,7 @@
 import NextSteps from '@components/NextSteps';
 import Step from '@components/Step';
 
-通常来说，优化 Loader 是比较常见的优化 Rspack 或 webpack 编译性能的方式，而大部分情况下，我们除了通过替换**更快的** `loader` 之外，常见的手段就是给 `loader` 设置 [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude) 来**减少执行**。
+通常来说，优化 Loader 是比较常见的优化 Rspack 编译性能的方式，而大部分情况下，我们除了通过替换**更快的** `loader` 之外，常见的手段就是给 `loader` 设置 [`module.rules[].exclude`](https://rspack.rs/zh/config/module-rules#rulesexclude) 来**减少执行**。
 
 而 **Rsdoctor** 提供了两个核心模块（[Loader Overall](/guide/usage/loaders-timeline) / [Loader Analysis](/guide/usage/loaders-analysis)）来帮助你根据 Loader 的调用信息进行深度优化。
 
@@ -35,7 +35,7 @@ import Step from '@components/Step';
 我们可以很直观的知道这个文件夹下的耗时数据，比如 某个 Loader 处理的**文件数**以及**预估耗时**，以及所有数据的总和，从而进一步帮助我们去决策如何优化 Loader。
 
 :::tip 优化小技巧
-通常来说，在 **`node_modules`** 内的一些三方库目录，我们可以很容易跟据 Loader 的耗时信息，来判断我们是不是有必要要给这个目录设置 [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude)，来减少比如常见的耗时长的 `babel-loader` 的执行。
+通常来说，在 **`node_modules`** 内的一些三方库目录，我们可以很容易跟据 Loader 的耗时信息，来判断我们是不是有必要要给这个目录设置 [`module.rules[].exclude`](https://rspack.rs/zh/config/module-rules#rulesexclude)，来减少比如常见的耗时长的 `babel-loader` 的执行。
 :::
 
 ### 分析文件
@@ -56,10 +56,10 @@ import Step from '@components/Step';
   style={{ margin: 'auto' }}
 />
 
-我们可以通过此处单个文件的 Loader 信息来排查问题，以及决策是不是该被添加到 [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude) 中。
+我们可以通过此处单个文件的 Loader 信息来排查问题，以及决策是不是该被添加到 [`module.rules[].exclude`](https://rspack.rs/zh/config/module-rules#rulesexclude) 中。
 
 :::tip 优化小技巧
-通常来说，在 **项目外（即 cwd 之外，通常为 workspace）** 内的一些内部包，我们可以跟据目录的 Loader 耗时信息 以及 单个文件的**输入输入**信息（因为这些内部包**有可能**已经是兼容性比较好的 ES 语法），来判断我们是不是有必要要给这个目录设置 [module.rule.exclude](https://webpack.js.org/configuration/module/#ruleexclude)。
+通常来说，在 **项目外（即 cwd 之外，通常为 workspace）** 内的一些内部包，我们可以跟据目录的 Loader 耗时信息 以及 单个文件的**输入输入**信息（因为这些内部包**有可能**已经是兼容性比较好的 ES 语法），来判断我们是不是有必要要给这个目录设置 [`module.rules[].exclude`](https://rspack.rs/zh/config/module-rules#rulesexclude)。
 :::
 
 ## 了解更多

@@ -35,9 +35,9 @@ Rsdoctor 会在产物预警中报告对同一份产物中含有多个重复依�
 
 ### 构建层面
 
-#### 使用 [resolve.alias](https://www.rspack.rs/config/resolve.html#resolvealias)
+#### 使用 [resolve.alias](https://rspack.rs/zh/config/resolve#resolvealias)
 
-几乎所有的打包工具都提供了自定义 npm 包解析路径的功能。因此我们可以通过在编译时手动指定 package 的 resolve 路径，来达到消除重复依赖的目的，例如：以 **Rspack** 或 **Webpack** 为例，如果 `lodash` 重复打包，我们可以进行如下配置，将所有 `lodash` 的 resolve 路径指定到当前目录的 `node_modules` 中。
+几乎所有的打包工具都提供了自定义 npm 包解析路径的功能。因此我们可以通过在编译时手动指定 package 的 resolve 路径，来达到消除重复依赖的目的，例如：以 **Rspack** 为例，如果 `lodash` 重复打包，我们可以进行如下配置，将所有 `lodash` 的 resolve 路径指定到当前目录的 `node_modules` 中。
 
 ```js title="rspack.config.js"
 const path = require('path');
@@ -84,7 +84,7 @@ module.exports = {
 
 #### 解决方案
 
-此问题可以通过打包工具的 [resolve.alias](https://www.rspack.rs/config/resolve.html#resolvealias) 来解决。让 Rspack 或 webpack 解析 `React` 时只解析到 `apps/web/node_modules/react` 这一个版本，示例代码如下：
+此问题可以通过打包工具的 [resolve.alias](https://rspack.rs/zh/config/resolve#resolvealias) 来解决。让 Rspack 解析 `React` 时只解析到 `apps/web/node_modules/react` 这一个版本，示例代码如下：
 
 ```javascript
 // apps/web/rspack.config.js
