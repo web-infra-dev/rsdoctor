@@ -91,7 +91,6 @@ export type BrotliConfig =
 export type NormalizedBrotliConfig = false | { brotliLevel: number };
 
 interface ISupport {
-  banner?: boolean;
   parseBundle?: boolean;
   /**
    * Whether and how to calculate gzip sizes for assets and modules.
