@@ -77,6 +77,22 @@ Rsdoctor 2.0 已移除 `@rsdoctor/mcp-server`，统一使用按需执行、无�
 
 Rsdoctor 报告现已支持 [**WebMCP**](https://webmcp.dev/)。在兼容的浏览器或 AI 环境中打开报告时，Rsdoctor 会自动提供 WebMCP tools，帮助 AI 获取构建概览、分析大体积产物并筛选规则问题；本地服务报告也同样适用。该能力仅作用于当前页面中的报告数据。它不同于已移除的 `@rsdoctor/mcp-server`，也不替代面向 Coding Agent 和自动化流程的 Agent CLI。使用方式和兼容性说明请参阅 [AI 指南](/guide/start/ai#webmcp)。
 
+<video
+  src="https://assets.rspack.rs/rsdoctor/rsdoctor-webmcp.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
+
 ## 统一分析多 compiler 构建 {#one-report-for-every-compiler}
 
 现代 Rspack 应用经常在同一进程中创建多个 compiler。multi-compiler 配置可能同时构建浏览器端和 Node.js 产物，Rsbuild environments 可能分别创建 web 和 server 构建，插件也可能通过 child compiler 生成自己的资源。

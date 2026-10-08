@@ -77,6 +77,22 @@ Rsdoctor 2.0 removes `@rsdoctor/mcp-server` and standardizes on Agent CLI, which
 
 Rsdoctor reports now support [**WebMCP**](https://webmcp.dev/). When a report is opened in a compatible browser or AI environment, Rsdoctor automatically provides WebMCP tools that let AI inspect the build overview, find large assets, and filter rule findings. Locally served reports are supported too. This capability only applies to the report data in the current page. It is separate from the removed `@rsdoctor/mcp-server` and does not replace Agent CLI for coding agents and automation. See the [AI guide](/guide/start/ai#webmcp) for usage and compatibility details.
 
+<video
+  src="https://assets.rspack.rs/rsdoctor/rsdoctor-webmcp.mp4"
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '50vh',
+    objectFit: 'cover',
+    display: 'block',
+  }}
+  autoPlay={true}
+  muted={true}
+  controls={true}
+  loop={true}
+  playsInline
+/>
+
 ## Unified multi-compiler analysis {#one-report-for-every-compiler}
 
 Modern Rspack applications often create several compilers in one process. A multi-compiler configuration may build browser and Node.js targets together, Rsbuild environments may create separate web and server builds, and plugins may start child compilers for generated assets.
