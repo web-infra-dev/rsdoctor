@@ -59,7 +59,7 @@ export default {
 
 #### 第一步：注册 Rsdoctor 插件
 
-先参考 [Next.js 接入指南](https://rspack.rs/zh/guide/integrations/next)在项目中启用 Rspack 2，再在 `webpack` 回调中注册 Rsdoctor。Next.js 也通过这个回调配置 Rspack。
+先参考 [Next.js 接入指南](https://rspack.rs/zh/guide/integrations/next)在项目中启用 Rspack 2，再通过 Next.js 的 `webpack` 回调注册 Rsdoctor。
 
 ```ts title="next.config.ts"
 import type { NextConfig } from 'next';
