@@ -169,7 +169,7 @@ const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
 
   modules: {
     'by-id': {
-      description: 'Get module detail by id (webpack/rspack).',
+      description: 'Get module detail by id.',
       options: [
         {
           name: '--id',
@@ -370,7 +370,7 @@ const SUBCOMMANDS: Record<string, Record<string, SubcommandDef>> = {
       handler: () => listEntrypoints(),
     },
     config: {
-      description: 'Get build configuration (rspack/webpack config).',
+      description: 'Get Rspack build configuration.',
       options: [],
       handler: () => getConfig(),
     },

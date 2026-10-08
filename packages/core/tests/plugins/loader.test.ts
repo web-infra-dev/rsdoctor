@@ -15,25 +15,25 @@ describe('test src/utils/loader.ts', () => {
     const tsLoader = 'ts-loader';
     const resolvedBabelLoader = require.resolve(babelLoader);
     const resolvedStringLoader = require.resolve(stringLoader);
-    const exampleWebpackPath = path.resolve(__dirname, '../../');
+    const compilerContext = path.resolve(__dirname, '../../');
     const resolvedTsLoader = require.resolve(tsLoader, {
-      paths: [exampleWebpackPath],
+      paths: [compilerContext],
     });
     const proxyLoaderPath = path.resolve(
       __dirname,
       '../../src/loaders/proxy.ts',
     );
     const compiler = rspack({
-      context: exampleWebpackPath,
+      context: compilerContext,
     });
     const loaderResolver = compiler.resolverFactory.get(
       'loader',
       compiler.options.resolveLoader,
     );
     const customCompiler = rspack({
-      context: exampleWebpackPath,
+      context: compilerContext,
       resolveLoader: {
-        modules: [path.join(exampleWebpackPath, 'node_modules')],
+        modules: [path.join(compilerContext, 'node_modules')],
       },
     });
     const customLoaderResolver = customCompiler.resolverFactory.get(
@@ -328,7 +328,7 @@ describe('test src/utils/loader.ts', () => {
           proxyLoaderPath,
           internalOptions,
           customLoaderResolver,
-          exampleWebpackPath,
+          compilerContext,
         ),
       ).toStrictEqual([
         {
@@ -352,7 +352,7 @@ describe('test src/utils/loader.ts', () => {
       );
       try {
         const persistentCompiler = rspack({
-          context: exampleWebpackPath,
+          context: compilerContext,
           cache: {
             type: 'persistent',
             storage: {
@@ -368,7 +368,7 @@ describe('test src/utils/loader.ts', () => {
             },
             sdk: {
               outputDir,
-              root: exampleWebpackPath,
+              root: compilerContext,
               server: { origin: 'http://localhost:5100' },
             },
           } as any);
