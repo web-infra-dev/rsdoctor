@@ -105,11 +105,24 @@ export function getSafeReportUrl(path: string, baseUrl: string) {
   try {
     const url = new URL(path, baseUrl);
     const base = new URL(baseUrl);
-    const isRelativePath =
-      !/^[a-z][a-z\d+.-]*:/i.test(path) && !path.startsWith('//');
 
     if (base.protocol === 'file:') {
-      return url.protocol === 'file:' && isRelativePath ? url.href : undefined;
+      const hasControlCharacter = [...path].some((char) => {
+        const code = char.charCodeAt(0);
+        return code < 0x20 || code === 0x7f;
+      });
+      const isRelativePath =
+        path.trimStart() === path &&
+        !path.startsWith('/') &&
+        !path.includes('\\') &&
+        !/^[a-z][a-z\d+.-]*:/i.test(path) &&
+        !hasControlCharacter;
+
+      return url.protocol === 'file:' &&
+        url.host === base.host &&
+        isRelativePath
+        ? url.href
+        : undefined;
     }
 
     if (
