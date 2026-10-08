@@ -1,4 +1,4 @@
-(self.webpackChunk = self.webpackChunk || []).push([[2],{0:function(t,e,r){
+(self.rspackChunk = self.rspackChunk || []).push([[2],{0:function(t,e,r){
   async function asyncFn() {
     return await Promise.resolve(1);
   }
