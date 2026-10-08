@@ -29,7 +29,7 @@ type ISupport = {
 - **Type:** `boolean`
 - **Default:** `true`
 
-Controls whether Rsdoctor parses bundle code when source map data is unavailable. Rsdoctor uses source maps first, then falls back to AST parsing to identify modules in the generated code.
+Controls whether Rsdoctor uses AST parsing to analyze bundle code when source map data is unavailable.
 
 AST parsing can take time in large projects. Set `supports.parseBundle` to `false` to skip this step:
 
@@ -41,7 +41,7 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-With this option disabled, Rsdoctor still collects module and chunk graphs and analyzes modules using source maps. Modules that require AST parsing may have no Bundled Size or Bundled Code.
+Disabling this option may leave modules that require AST parsing without Bundled Size or Bundled Code. Analysis based on source maps is unaffected.
 
 To control which code is included in the report, use [output.reportCodeType](/config/options/output#reportcodetype).
 

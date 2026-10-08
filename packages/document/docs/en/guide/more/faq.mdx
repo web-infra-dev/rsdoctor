@@ -57,7 +57,7 @@ The difference between `Source Size` and `Bundled Size`:
 
 ### Solution
 
-Rsdoctor 2.x automatically enables Rspack's native analysis, including source map data collection. If module sizes are missing, check the following:
+If module sizes are missing, check the following:
 
 1. Confirm that your framework uses Rspack 2 and that Rsdoctor is enabled for the compiler that produces the affected assets.
 2. Confirm that [bundle analysis](/config/options/features) is enabled.
@@ -73,7 +73,7 @@ export default {
 };
 ```
 
-Replace `false` with your project's existing `devtool` value. This example is for troubleshooting; Rsdoctor 2.x normally works without manually enabling source maps.
+Replace `false` with your project's existing `devtool` value.
 
 ## Bundle analysis page no `Bundled Size`?
 
@@ -92,7 +92,7 @@ Module concatenation combines multiple modules into one closure. AST parsing alo
 
 ### Solution
 
-Keep the same [optimization.concatenateModules](https://rspack.rs/config/optimization#optimizationconcatenatemodules) setting as your production build so that the report measures the output you actually ship. Rsdoctor 2.x can analyze concatenated modules with this optimization enabled. Follow the [checks above](#no-bundledparsed-size-for-modules-in-bundle-analysis) if Bundled Size is missing.
+Keep the same [optimization.concatenateModules](https://rspack.rs/config/optimization#optimizationconcatenatemodules) setting as your production build so that the report measures the output you actually ship. Follow the [checks above](#no-bundledparsed-size-for-modules-in-bundle-analysis) if Bundled Size is missing.
 
 ## The loader of CssExtractRspackPlugin takes too long
 

@@ -57,7 +57,7 @@ Rsdoctor 提供的 Loader 耗时是**预估耗时**。无法统计到准确耗�
 
 ### 解决方案
 
-Rsdoctor 2.x 会自动启用 Rspack 的原生分析能力，包括收集 source map 数据。如果缺少模块体积，请依次检查：
+如果缺少模块体积，请依次检查：
 
 1. 确认框架使用的是 Rspack 2，并且已在生成这些产物的编译器中启用 Rsdoctor。
 2. 确认已启用[产物分析](/config/options/features)。
@@ -73,7 +73,7 @@ export default {
 };
 ```
 
-请将 `false` 替换为项目原有的 `devtool` 配置值。此示例仅用于排查问题，正常使用 Rsdoctor 2.x 无需手动开启 source map。
+请将 `false` 替换为项目原有的 `devtool` 配置值。
 
 ## 产物分析界面没有 `Bundled Size` 怎么办？
 
@@ -92,7 +92,7 @@ export default {
 
 ### 解决方案
 
-请让 [optimization.concatenateModules](https://rspack.rs/zh/config/optimization#optimizationconcatenatemodules) 与生产构建保持一致，确保分析的是实际发布的产物。Rsdoctor 2.x 可以在开启此优化的情况下分析串联模块。如果缺少 Bundled Size，请按[上文步骤](#%E4%BA%A7%E7%89%A9%E5%88%86%E6%9E%90%E4%B8%ADmodule-%E9%83%BD%E6%B2%A1%E6%9C%89-bundledparsed-size-%E6%80%8E%E4%B9%88%E5%8A%9E)排查。
+请让 [optimization.concatenateModules](https://rspack.rs/zh/config/optimization#optimizationconcatenatemodules) 与生产构建保持一致，确保分析的是实际发布的产物。如果缺少 Bundled Size，请按[上文步骤](#%E4%BA%A7%E7%89%A9%E5%88%86%E6%9E%90%E4%B8%ADmodule-%E9%83%BD%E6%B2%A1%E6%9C%89-bundledparsed-size-%E6%80%8E%E4%B9%88%E5%8A%9E)排查。
 
 ## CssExtractRspackPlugin 的 loader 耗时过长问题
 
