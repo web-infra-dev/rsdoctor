@@ -165,19 +165,12 @@ new RsdoctorRspackPlugin({
 
 提问期间请保持报告页面打开：WebMCP tools 归属于注册它们的页面，离开页面后可能无法继续使用。关于如何在 Codex 中使用 site tools，请参阅 [OpenAI 文档](https://learn.chatgpt.com/docs/webmcp)。
 
-Rsdoctor 当前会注册以下 WebMCP tools：
+可用的 WebMCP tools 可以帮助你：
 
-| 工具 | 用途 |
-| --- | --- |
-| `get_build_overview` | 返回构建名称和 hash，以及产物体积、模块和包数量、规则问题数量与构建耗时。 |
-| `find_large_assets` | 按 `minSize` 和 `assetType` 查找体积较大的 JavaScript、CSS 或其他产物。 |
-| `find_compressible_assets` | 查找 gzip 或 Brotli 压缩后节省体积最多的产物。 |
-| `get_build_timing_breakdown` | 按耗时及其在主要构建阶段总时长中的占比，对构建阶段排序。 |
-| `get_entrypoints` | 列出 entrypoint 及其 chunk、产物和体积。 |
-| `find_large_packages` | 按包名或最小解析体积查找体积较大的包。 |
-| `find_shared_modules` | 按最少关联 chunk 数量或解析体积，查找多个 chunk 共享的模块。 |
-| `get_chunk_module_dependency_chains` | 追踪指定 chunk 中模块的依赖链；必须传入 `chunkId`，还可限定模块、深度和结果数量。 |
-| `get_rule_findings` | 按严重级别或规则 ID 筛选规则问题。 |
+- 快速了解构建概况，包括总体积、模块、包、规则问题、耗时、entrypoint 和各构建阶段耗时；
+- 发现产物交付的优化机会，例如体积较大的产物，以及 gzip 或 Brotli 压缩后节省体积显著的产物；
+- 分析代码构成，包括体积较大的包、多个 chunk 共享的模块，以及选中 chunk 中模块的依赖链；
+- 按严重级别或规则 ID 筛选规则问题。
 
 使用 WebMCP 时，请通过 Rsdoctor 本地服务打开 [normal mode](/config/options/output#mode) 报告，或使用 HTTPS 托管 normal mode 报告目录。目前 [brief mode](/config/options/output#mode-brief) 生成的独立报告文件 `rsdoctor-report.html` 尚不支持 WebMCP。它不替代 [Agent CLI](#agent-cli)：对于 Coding Agent 和自动化流程，请继续使用 Agent CLI。
 
