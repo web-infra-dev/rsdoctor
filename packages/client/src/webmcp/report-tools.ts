@@ -1,7 +1,10 @@
-import type { Manifest, Rule } from '@rsdoctor/shared/types';
+import { Summary } from '@rsdoctor/shared/common-browser';
+import type { Manifest, Rule, SDK } from '@rsdoctor/shared/types';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
+const DEFAULT_CHAIN_DEPTH = 5;
+const MAX_CHAIN_DEPTH = 10;
 const MAX_TEXT_LENGTH = 500;
 
 type AssetType = 'js' | 'css' | 'other';
@@ -47,6 +50,53 @@ type AssetSummary = {
   chunks: string[];
 };
 
+type ModuleReference = {
+  id: number;
+  path: string;
+  identifier: string;
+};
+
+type ModuleDependencyChain = {
+  module: ModuleReference;
+  chain: ModuleReference[];
+  truncated: boolean;
+};
+
+type EntryPointSummary = {
+  id: number;
+  name: string;
+  chunks: string[];
+  assets: string[];
+  size: number;
+};
+
+type PackageSummary = {
+  id: number;
+  name: string;
+  version: string;
+  root: string;
+  parsedSize: number;
+  moduleCount: number;
+};
+
+type SharedModuleSummary = ModuleReference & {
+  chunks: string[];
+  parsedSize: number;
+};
+
+type CompressedAssetSummary = AssetSummary & {
+  compressedSize: number;
+  savingsBytes: number;
+  compression: 'gzip' | 'brotli';
+};
+
+type BuildTimingStage = {
+  name: string;
+  startAt: number;
+  durationMs: number;
+  percentOfTotal: number;
+};
+
 type RuleFinding = {
   id: number | string;
   code: string;
@@ -66,6 +116,11 @@ function getLimit(value: unknown): number {
   return Math.min(Math.max(value as number, 1), MAX_LIMIT);
 }
 
+function getChainDepth(value: unknown): number {
+  if (!Number.isInteger(value)) return DEFAULT_CHAIN_DEPTH;
+  return Math.min(Math.max(value as number, 1), MAX_CHAIN_DEPTH);
+}
+
 function getAssetType(path: string): AssetType {
   if (/\.(?:[cm]?js|jsx|tsx?)$/i.test(path)) return 'js';
   if (/\.css$/i.test(path)) return 'css';
@@ -75,6 +130,19 @@ function getAssetType(path: string): AssetType {
 function truncate(value: string | undefined): string | undefined {
   if (!value || value.length <= MAX_TEXT_LENGTH) return value;
   return `${value.slice(0, MAX_TEXT_LENGTH - 1)}…`;
+}
+
+function getBuildDuration(costs: SDK.SummaryData['costs'] = []): number {
+  const { Bootstrap, Compile, Done } = Summary.SummaryCostsDataName;
+  // Minify aggregates hook timings inside compile, not an elapsed interval.
+  const stages = costs.filter(
+    ({ name }) => name === Bootstrap || name === Compile || name === Done,
+  );
+  if (!stages.length) return 0;
+  return (
+    Math.max(...stages.map(({ startAt, costs }) => startAt + costs)) -
+    Math.min(...stages.map(({ startAt }) => startAt))
+  );
 }
 
 export function getBuildOverview(
@@ -97,10 +165,7 @@ export function getBuildOverview(
       error: findings.filter((finding) => finding.level === 'error').length,
       warn: findings.filter((finding) => finding.level === 'warn').length,
     },
-    buildDurationMs: (data.summary?.costs ?? []).reduce(
-      (total, cost) => total + cost.costs,
-      0,
-    ),
+    buildDurationMs: getBuildDuration(data.summary?.costs),
   };
 }
 
@@ -136,6 +201,249 @@ export function findLargeAssets(
     total: items.length,
     items: items.slice(0, limit),
     truncated: items.length > limit,
+  };
+}
+
+export function findCompressibleAssets(
+  manifest: Manifest.RsdoctorManifest,
+  input: unknown,
+): { total: number; items: CompressedAssetSummary[]; truncated: boolean } {
+  const args = isRecord(input) ? input : {};
+  const compression = args.compression === 'brotli' ? 'brotli' : 'gzip';
+  const minSize =
+    typeof args.minSize === 'number' && args.minSize >= 0 ? args.minSize : 0;
+  const limit = getLimit(args.limit);
+  const items = (manifest.data.chunkGraph?.assets ?? [])
+    .map((asset) => ({
+      compressedSize:
+        compression === 'brotli' ? asset.brotliSize : asset.gzipSize,
+      path: asset.path,
+      size: asset.size,
+      type: getAssetType(asset.path),
+      chunks: asset.chunks.slice(0, 20),
+    }))
+    .filter(
+      (
+        asset,
+      ): asset is Omit<
+        CompressedAssetSummary,
+        'savingsBytes' | 'compression'
+      > => typeof asset.compressedSize === 'number' && asset.size >= minSize,
+    )
+    .map((asset): CompressedAssetSummary => ({
+      ...asset,
+      savingsBytes: Math.max(0, asset.size - asset.compressedSize),
+      compression,
+    }))
+    .sort((left, right) => right.savingsBytes - left.savingsBytes);
+
+  return {
+    total: items.length,
+    items: items.slice(0, limit),
+    truncated: items.length > limit,
+  };
+}
+
+export function getBuildTimingBreakdown(
+  manifest: Manifest.RsdoctorManifest,
+  input: unknown,
+): {
+  totalDurationMs: number;
+  total: number;
+  items: BuildTimingStage[];
+  truncated: boolean;
+} {
+  const args = isRecord(input) ? input : {};
+  const minDuration =
+    typeof args.minDuration === 'number' && args.minDuration >= 0
+      ? args.minDuration
+      : 0;
+  const limit = getLimit(args.limit);
+  const costs = manifest.data.summary?.costs ?? [];
+  const totalDurationMs = getBuildDuration(costs);
+  const items = costs
+    .filter((cost) => cost.costs >= minDuration)
+    .map((cost) => ({
+      name: cost.name,
+      startAt: cost.startAt,
+      durationMs: cost.costs,
+      percentOfTotal:
+        totalDurationMs === 0 ? 0 : (cost.costs / totalDurationMs) * 100,
+    }))
+    .sort((left, right) => right.durationMs - left.durationMs);
+
+  return {
+    totalDurationMs,
+    total: items.length,
+    items: items.slice(0, limit),
+    truncated: items.length > limit,
+  };
+}
+
+export function getEntrypoints(
+  manifest: Manifest.RsdoctorManifest,
+  input: unknown,
+): { total: number; items: EntryPointSummary[]; truncated: boolean } {
+  const args = isRecord(input) ? input : {};
+  const limit = getLimit(args.limit);
+  const items = (manifest.data.chunkGraph?.entrypoints ?? [])
+    .map((entrypoint) => ({
+      id: entrypoint.id,
+      name: entrypoint.name,
+      chunks: entrypoint.chunks.slice(0, 20),
+      assets: entrypoint.assets.slice(0, 20),
+      size: entrypoint.size,
+    }))
+    .sort((left, right) => right.size - left.size);
+
+  return {
+    total: items.length,
+    items: items.slice(0, limit),
+    truncated: items.length > limit,
+  };
+}
+
+export function findLargePackages(
+  manifest: Manifest.RsdoctorManifest,
+  input: unknown,
+): { total: number; items: PackageSummary[]; truncated: boolean } {
+  const args = isRecord(input) ? input : {};
+  const query = typeof args.query === 'string' ? args.query.toLowerCase() : '';
+  const minSize =
+    typeof args.minSize === 'number' && args.minSize >= 0 ? args.minSize : 0;
+  const limit = getLimit(args.limit);
+  const items = (manifest.data.packageGraph?.packages ?? [])
+    .filter((pkg) => pkg.size.parsedSize >= minSize)
+    .filter((pkg) => !query || pkg.name.toLowerCase().includes(query))
+    .map((pkg) => ({
+      id: pkg.id,
+      name: pkg.name,
+      version: pkg.version,
+      root: pkg.root,
+      parsedSize: pkg.size.parsedSize,
+      moduleCount: pkg.modules?.length ?? 0,
+    }))
+    .sort((left, right) => right.parsedSize - left.parsedSize);
+
+  return {
+    total: items.length,
+    items: items.slice(0, limit),
+    truncated: items.length > limit,
+  };
+}
+
+export function findSharedModules(
+  manifest: Manifest.RsdoctorManifest,
+  input: unknown,
+): { total: number; items: SharedModuleSummary[]; truncated: boolean } {
+  const args = isRecord(input) ? input : {};
+  const minChunks =
+    typeof args.minChunks === 'number' && args.minChunks >= 2
+      ? Math.floor(args.minChunks)
+      : 2;
+  const minSize =
+    typeof args.minSize === 'number' && args.minSize >= 0 ? args.minSize : 0;
+  const limit = getLimit(args.limit);
+  const items = (manifest.data.moduleGraph?.modules ?? [])
+    .filter(
+      (module) =>
+        module.chunks.length >= minChunks && module.size.parsedSize >= minSize,
+    )
+    .map((module) => ({
+      id: module.id,
+      path: module.path,
+      identifier: module.identifier,
+      chunks: module.chunks.slice(0, 20),
+      parsedSize: module.size.parsedSize,
+    }))
+    .sort((left, right) => right.parsedSize - left.parsedSize);
+
+  return {
+    total: items.length,
+    items: items.slice(0, limit),
+    truncated: items.length > limit,
+  };
+}
+
+export function getChunkModuleDependencyChains(
+  manifest: Manifest.RsdoctorManifest,
+  input: unknown,
+): { total: number; items: ModuleDependencyChain[]; truncated: boolean } {
+  const args = isRecord(input) ? input : {};
+  const chunkId = typeof args.chunkId === 'string' ? args.chunkId : '';
+  const moduleId =
+    typeof args.moduleId === 'number' ? args.moduleId : undefined;
+  const limit = getLimit(args.limit);
+  const maxDepth = getChainDepth(args.maxDepth);
+  const graph = manifest.data.moduleGraph;
+  const chunk = manifest.data.chunkGraph?.chunks.find(
+    (item) => item.id === chunkId,
+  );
+  if (!graph || !chunk) return { total: 0, items: [], truncated: false };
+
+  const modules = new Map(graph.modules.map((module) => [module.id, module]));
+  const dependencies = new Map(
+    graph.dependencies.map((dependency) => [dependency.id, dependency]),
+  );
+  const roots = chunk.modules
+    .filter((id) => moduleId === undefined || id === moduleId)
+    .map((id) => modules.get(id))
+    .filter((module): module is NonNullable<typeof module> => Boolean(module));
+  const items: ModuleDependencyChain[] = [];
+  let total = 0;
+
+  const toReference = (
+    module: (typeof graph.modules)[number],
+  ): ModuleReference => ({
+    id: module.id,
+    path: module.path,
+    identifier: module.identifier,
+  });
+  const visit = (
+    root: (typeof graph.modules)[number],
+    current: (typeof graph.modules)[number],
+    chain: ModuleReference[],
+    seen: Set<number>,
+  ) => {
+    const next = current.dependencies
+      .map((id) => dependencies.get(id))
+      .map((dependency) => dependency && modules.get(dependency.dependency))
+      .filter((module): module is NonNullable<typeof module> =>
+        Boolean(module),
+      );
+    const reachedDepth = chain.length - 1 >= maxDepth;
+    const nextModules = next.filter((module) => !seen.has(module.id));
+
+    if (reachedDepth || nextModules.length === 0) {
+      total += 1;
+      if (items.length < limit) {
+        items.push({
+          module: toReference(root),
+          chain,
+          truncated: reachedDepth && next.length > 0,
+        });
+      }
+      return;
+    }
+
+    for (const module of nextModules) {
+      visit(
+        root,
+        module,
+        [...chain, toReference(module)],
+        new Set([...seen, module.id]),
+      );
+    }
+  };
+
+  for (const root of roots) {
+    visit(root, root, [toReference(root)], new Set([root.id]));
+  }
+
+  return {
+    total,
+    items,
+    truncated: total > limit,
   };
 }
 
@@ -219,6 +527,83 @@ export async function registerReportTools(
     ),
     modelContext.registerTool(
       createTool(
+        'find_compressible_assets',
+        'Find assets with the largest gzip or Brotli size savings.',
+        {
+          compression: { type: 'string', enum: ['gzip', 'brotli'] },
+          minSize: { type: 'integer', minimum: 0 },
+          limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
+        },
+        (input) => findCompressibleAssets(manifest, input),
+      ),
+      options,
+    ),
+    modelContext.registerTool(
+      createTool(
+        'get_build_timing_breakdown',
+        'Get build stages ranked by duration and their share of the recorded main-stage time span. Stages overlap (minify is included in compile), so percentages need not sum to 100%.',
+        {
+          minDuration: { type: 'number', minimum: 0 },
+          limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
+        },
+        (input) => getBuildTimingBreakdown(manifest, input),
+      ),
+      options,
+    ),
+    modelContext.registerTool(
+      createTool(
+        'get_entrypoints',
+        'List report entrypoints with their chunks, assets, and sizes.',
+        {
+          limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
+        },
+        (input) => getEntrypoints(manifest, input),
+      ),
+      options,
+    ),
+    modelContext.registerTool(
+      createTool(
+        'find_large_packages',
+        'Find the largest packages in the current Rsdoctor report.',
+        {
+          query: { type: 'string' },
+          minSize: { type: 'integer', minimum: 0 },
+          limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
+        },
+        (input) => findLargePackages(manifest, input),
+      ),
+      options,
+    ),
+    modelContext.registerTool(
+      createTool(
+        'find_shared_modules',
+        'Find modules shared across chunks, ordered by parsed size.',
+        {
+          minChunks: { type: 'integer', minimum: 2 },
+          minSize: { type: 'integer', minimum: 0 },
+          limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
+        },
+        (input) => findSharedModules(manifest, input),
+      ),
+      options,
+    ),
+    modelContext.registerTool(
+      createTool(
+        'get_chunk_module_dependency_chains',
+        'Trace each selected module in a chunk toward its direct and transitive dependencies.',
+        {
+          chunkId: { type: 'string' },
+          moduleId: { type: 'integer' },
+          maxDepth: { type: 'integer', minimum: 1, maximum: MAX_CHAIN_DEPTH },
+          limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
+        },
+        (input) => getChunkModuleDependencyChains(manifest, input),
+        ['chunkId'],
+      ),
+      options,
+    ),
+    modelContext.registerTool(
+      createTool(
         'get_rule_findings',
         'Get filtered rule findings from the current Rsdoctor report.',
         {
@@ -238,6 +623,7 @@ function createTool(
   description: string,
   properties: Record<string, unknown>,
   execute: (input: unknown) => unknown,
+  required: string[] = [],
 ): ModelContextTool {
   return {
     name,
@@ -245,6 +631,7 @@ function createTool(
     inputSchema: {
       type: 'object',
       properties,
+      ...(required.length > 0 ? { required } : {}),
       additionalProperties: false,
     },
     annotations: {
@@ -255,4 +642,15 @@ function createTool(
   };
 }
 
-export type { AssetSummary, BuildOverview, RuleFinding };
+export type {
+  AssetSummary,
+  BuildOverview,
+  BuildTimingStage,
+  CompressedAssetSummary,
+  EntryPointSummary,
+  ModuleDependencyChain,
+  ModuleReference,
+  PackageSummary,
+  RuleFinding,
+  SharedModuleSummary,
+};
