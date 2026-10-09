@@ -584,8 +584,10 @@ export class RsdoctorRspackPlugin<
       const safeCompilerPath =
         compilerPath.replace(/[^a-zA-Z0-9._-]+/g, '-') ||
         `${compilerName}-${compilerIndex}`;
-      const displayName =
-        childCompiler.name || compilerName || `Child compiler ${compilerIndex}`;
+      const displayName = this.getChildCompilerDisplayName(
+        childCompiler.name || compilerName,
+        compilerIndex,
+      );
       const sdk = controller.createSlave({
         name: `child-${safeCompilerPath}`,
         displayName,
@@ -621,9 +623,22 @@ export class RsdoctorRspackPlugin<
     return (
       (childCompiler.name
         ? ignoredChildCompilerNames.has(childCompiler.name)
-        : false) ||
-      ignoredChildCompilerNames.has(compilerName)
+        : false) || ignoredChildCompilerNames.has(compilerName)
     );
+  }
+
+  private getChildCompilerDisplayName(name: string, compilerIndex: number) {
+    if (!name) {
+      return `Child compiler ${compilerIndex}`;
+    }
+    if (!name.startsWith('worker-loader ')) {
+      return name;
+    }
+
+    const request = name.slice('worker-loader '.length);
+    const resource = request.split('!').at(-1)?.split('?')[0];
+    const fileName = resource && path.basename(path.win32.basename(resource));
+    return fileName ? `worker-loader: ${fileName}` : 'worker-loader';
   }
 
   private removeInheritedRsdoctorTaps(

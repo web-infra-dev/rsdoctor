@@ -16,11 +16,10 @@ function truncateToByteLength(value: string, maxBytes: number) {
 }
 
 function toCompilerDirectoryName(name: string, isChild: boolean) {
-  const normalized = (
-    isChild ? name : name.replace(/[^a-zA-Z0-9_$-]+/g, '-')
-  )
-    .replace(/\s+/g, '-')
-    .replace(/^-+|-+$/g, '') || 'compiler';
+  const normalized = isChild
+    ? name.replace(/\s+/g, '-') || 'compiler'
+    : name.replace(/[^a-zA-Z0-9_$-]+/g, '-').replace(/^-+|-+$/g, '') ||
+      'compiler';
 
   if (Buffer.byteLength(normalized) <= MAX_COMPILER_DIRNAME_BYTES) {
     return normalized;
