@@ -619,7 +619,9 @@ export class RsdoctorRspackPlugin<
     compilerName: string,
   ) {
     return (
-      ignoredChildCompilerNames.has(childCompiler.name) ||
+      (childCompiler.name
+        ? ignoredChildCompilerNames.has(childCompiler.name)
+        : false) ||
       ignoredChildCompilerNames.has(compilerName)
     );
   }
