@@ -190,6 +190,27 @@ describe('multi-compiler brief JSON', () => {
     },
   );
 
+  it('uses a stable, bounded directory name for long child compiler names', async () => {
+    const client = createCompiler('client');
+    const name = `worker-loader ${'request-'.repeat(32)}`;
+    const child = createCompiler(name, { isChild: true });
+    const directory = path.relative(
+      outputDir,
+      controller.getCompilerOutputDir(child),
+    );
+
+    await Promise.all([client.writeStore(), child.writeStore()]);
+
+    expect(path.dirname(directory)).toBe('.slaves');
+    expect(Buffer.byteLength(path.basename(directory))).toBeLessThanOrEqual(120);
+    expect(path.basename(directory)).toMatch(/-[a-f0-9]{12}$/);
+    expect(fs.existsSync(child.getBriefJsonPath()!)).toBe(true);
+    expect(controller.getCompilerOutputDir(child)).toBe(
+      path.join(outputDir, directory),
+    );
+    expect(client.name).toBe('client');
+  });
+
   it('rejects custom filenames that resolve to the same output file', async () => {
     const client = createCompiler('client');
     await client.writeStore();
