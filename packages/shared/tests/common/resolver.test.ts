@@ -51,4 +51,34 @@ describe('test src/common/resolver.ts', () => {
       ]),
     ).toStrictEqual([{ issuerPath: 'a.ts' }, { issuerPath: 'b.ts' }]);
   });
+
+  it('getResolverFileDetails', () => {
+    const resolver = (request: string, result: string) =>
+      ({
+        issuerPath: 'a.ts',
+        stacks: [],
+        startAt: 0,
+        endAt: 0,
+        isEntry: false,
+        request,
+        result,
+        pid: 1,
+        ppid: null,
+      }) as SDK.PathResolverSuccessData;
+
+    const { after } = Resolver.getResolverFileDetails(
+      'a.ts',
+      [resolver('./icon.svg?react', './icon.svg'), resolver('c++', 'c.js')],
+      [{ id: 1, path: 'a.ts' } as SDK.ModuleData],
+      {
+        1: {
+          source: `import "./icon.svg?react";import "c++";`,
+          transformed: '',
+          parsedSource: '',
+        },
+      },
+    );
+
+    expect(after).toBe(`import "./icon.svg";import "c.js";`);
+  });
 });
