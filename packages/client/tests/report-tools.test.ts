@@ -103,8 +103,8 @@ const manifest = {
     ],
     summary: {
       costs: [
-        { name: 'compile', startAt: 0, costs: 40 },
-        { name: 'minify', startAt: 40, costs: 60 },
+        { name: 'bootstrap->beforeCompile', startAt: 0, costs: 40 },
+        { name: 'beforeCompile->afterCompile', startAt: 40, costs: 60 },
       ],
     },
   },
@@ -148,12 +148,75 @@ describe('Rsdoctor WebMCP report tools', () => {
       totalDurationMs: 100,
       total: 2,
       items: [
-        { name: 'minify', startAt: 40, durationMs: 60, percentOfTotal: 60 },
-        { name: 'compile', startAt: 0, durationMs: 40, percentOfTotal: 40 },
+        {
+          name: 'beforeCompile->afterCompile',
+          startAt: 40,
+          durationMs: 60,
+          percentOfTotal: 60,
+        },
+        {
+          name: 'bootstrap->beforeCompile',
+          startAt: 0,
+          durationMs: 40,
+          percentOfTotal: 40,
+        },
       ],
       truncated: false,
     });
   });
+
+  it('excludes aggregated minify timings from both total duration queries', () => {
+    const report = {
+      ...manifest,
+      data: {
+        ...manifest.data,
+        summary: {
+          costs: [
+            { name: 'beforeCompile->afterCompile', startAt: 100, costs: 1000 },
+            { name: 'minify(processAssets)', startAt: 1000, costs: 300 },
+          ],
+        },
+      },
+    };
+    expect(getBuildOverview(report).buildDurationMs).toBe(1000);
+    expect(
+      getBuildTimingBreakdown(report, { minDuration: 200, limit: 1 }),
+    ).toMatchObject({
+      totalDurationMs: 1000,
+      items: [{ durationMs: 1000, percentOfTotal: 100 }],
+    });
+    expect(getBuildTimingBreakdown(report, {}).items[1]).toMatchObject({
+      durationMs: 300,
+      percentOfTotal: 30,
+    });
+  });
+
+  it.each([
+    { costs: [], expected: 0 },
+    {
+      costs: [
+        { name: 'afterCompile->done', startAt: 180, costs: 40 },
+        { name: 'beforeCompile->afterCompile', startAt: 100, costs: 100 },
+      ],
+      expected: 120,
+    },
+    {
+      costs: [{ name: 'minify(processAssets)', startAt: 100, costs: 20 }],
+      expected: 0,
+    },
+  ])(
+    'handles empty or overlapping main stages: $expected ms',
+    ({ costs, expected }) => {
+      const report = {
+        ...manifest,
+        data: { ...manifest.data, summary: { costs } },
+      };
+      expect(getBuildOverview(report).buildDurationMs).toBe(expected);
+      expect(getBuildTimingBreakdown(report, {}).totalDurationMs).toBe(
+        expected,
+      );
+    },
+  );
 
   it('filters findings and bounds untrusted text', () => {
     const result = getRuleFindings(manifest, { severity: 'error' });

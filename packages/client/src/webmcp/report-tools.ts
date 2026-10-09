@@ -1,4 +1,5 @@
-import type { Manifest, Rule } from '@rsdoctor/shared/types';
+import { Summary } from '@rsdoctor/shared/common-browser';
+import type { Manifest, Rule, SDK } from '@rsdoctor/shared/types';
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
@@ -131,6 +132,19 @@ function truncate(value: string | undefined): string | undefined {
   return `${value.slice(0, MAX_TEXT_LENGTH - 1)}…`;
 }
 
+function getBuildDuration(costs: SDK.SummaryData['costs'] = []): number {
+  const { Bootstrap, Compile, Done } = Summary.SummaryCostsDataName;
+  // Minify aggregates hook timings inside compile, not an elapsed interval.
+  const stages = costs.filter(
+    ({ name }) => name === Bootstrap || name === Compile || name === Done,
+  );
+  if (!stages.length) return 0;
+  return (
+    Math.max(...stages.map(({ startAt, costs }) => startAt + costs)) -
+    Math.min(...stages.map(({ startAt }) => startAt))
+  );
+}
+
 export function getBuildOverview(
   manifest: Manifest.RsdoctorManifest,
 ): BuildOverview {
@@ -151,10 +165,7 @@ export function getBuildOverview(
       error: findings.filter((finding) => finding.level === 'error').length,
       warn: findings.filter((finding) => finding.level === 'warn').length,
     },
-    buildDurationMs: (data.summary?.costs ?? []).reduce(
-      (total, cost) => total + cost.costs,
-      0,
-    ),
+    buildDurationMs: getBuildDuration(data.summary?.costs),
   };
 }
 
@@ -249,7 +260,7 @@ export function getBuildTimingBreakdown(
       : 0;
   const limit = getLimit(args.limit);
   const costs = manifest.data.summary?.costs ?? [];
-  const totalDurationMs = costs.reduce((total, cost) => total + cost.costs, 0);
+  const totalDurationMs = getBuildDuration(costs);
   const items = costs
     .filter((cost) => cost.costs >= minDuration)
     .map((cost) => ({
@@ -530,7 +541,7 @@ export async function registerReportTools(
     modelContext.registerTool(
       createTool(
         'get_build_timing_breakdown',
-        'Get build stages ranked by duration, including their share of total build time.',
+        'Get build stages ranked by duration and their share of the recorded main-stage time span. Stages overlap (minify is included in compile), so percentages need not sum to 100%.',
         {
           minDuration: { type: 'number', minimum: 0 },
           limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
