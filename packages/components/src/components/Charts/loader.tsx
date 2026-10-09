@@ -8,6 +8,7 @@ import React, {
 import { groupBy } from 'es-toolkit/compat';
 import { Empty } from 'antd';
 import './loader.scss';
+import './tooltips.scss';
 import { useTheme } from 'src/utils/manifest';
 import { findLoaderTotalTiming } from 'src/utils/loader';
 import { beautifyPath } from 'src/utils/file';

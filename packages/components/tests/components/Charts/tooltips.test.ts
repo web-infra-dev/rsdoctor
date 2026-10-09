@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'rstack/test';
+import { describe, expect, it } from '@rstest/core';
 import { ETraceEventPhase } from 'src/components/Charts/types';
 import {
   formatterForPlugins,
