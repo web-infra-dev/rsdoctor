@@ -41,6 +41,11 @@ import { getWriteStoreOptions } from './writeStore';
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
 
+const ignoredChildCompilerNames = new Set([
+  'HtmlRspackCompiler',
+  'mini-css-extract-plugin',
+]);
+
 class RsdoctorCompilerContext implements RsdoctorRspackPluginInstance<
   Linter.ExtendRuleData[]
 > {
@@ -554,6 +559,10 @@ export class RsdoctorRspackPlugin<
       return;
     }
 
+    if (this.shouldIgnoreChildCompiler(childCompiler, compilerName)) {
+      return;
+    }
+
     const parentSDK = parentContext.sdk;
     const controller = parentSDK.parent;
     const compilerPath =
@@ -603,6 +612,16 @@ export class RsdoctorRspackPlugin<
       sdk: childSDK,
     });
     childPlugin.apply(childCompiler);
+  }
+
+  private shouldIgnoreChildCompiler(
+    childCompiler: Plugin.BaseCompilerType<'rspack'>,
+    compilerName: string,
+  ) {
+    return (
+      ignoredChildCompilerNames.has(childCompiler.name) ||
+      ignoredChildCompilerNames.has(compilerName)
+    );
   }
 
   private removeInheritedRsdoctorTaps(

@@ -7,14 +7,17 @@ import path from 'path';
 import { createRsdoctorPlugin, getChildSDK } from './test-utils';
 
 class ChildCompilerPlugin {
-  constructor(private readonly entry: string) {}
+  constructor(
+    private readonly entry: string,
+    private readonly name = 'child-demo',
+  ) {}
 
   apply(compiler: Compiler) {
     compiler.hooks.make.tapAsync(
       'ChildCompilerPlugin',
       (compilation, callback) => {
         const childCompiler = compilation.createChildCompiler(
-          'child-demo',
+          this.name,
           {
             filename: 'child-demo.js',
           } as Compiler['options']['output'],
@@ -30,6 +33,21 @@ class ChildCompilerPlugin {
     );
   }
 }
+
+test.each(['HtmlRspackCompiler', 'mini-css-extract-plugin'])(
+  'does not collect ignored child compiler: %s',
+  async (name) => {
+    const mainEntry = path.resolve(__dirname, './fixtures/a.js');
+    const childEntry = path.resolve(__dirname, './fixtures/b.js');
+    const doctor = createRsdoctorPlugin({});
+
+    await compileByRspack(mainEntry, {
+      plugins: [doctor, new ChildCompilerPlugin(childEntry, name)],
+    });
+
+    expect(doctor.sdk.getManifestData().series).toHaveLength(1);
+  },
+);
 
 test('collects child compiler data in an isolated report', async () => {
   const mainEntry = path.resolve(__dirname, './fixtures/a.js');
