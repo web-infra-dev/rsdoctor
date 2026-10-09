@@ -11,6 +11,19 @@ const RESTRICTED_PORTS = [3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669];
 
 export const defaultHost = '127.0.0.1';
 
+function validatePort(port: unknown): number {
+  if (
+    typeof port !== 'number' ||
+    !Number.isInteger(port) ||
+    port < 0 ||
+    port > 65_535
+  ) {
+    throw new RangeError(`Invalid port: ${String(port)}`);
+  }
+
+  return port;
+}
+
 function getRandomPort(min: number, max: number) {
   let port: number;
   do {
@@ -28,8 +41,10 @@ export async function getPort(expectPort: number, host = defaultHost) {
 export const createGetPortSyncFunctionString = (
   expectPort: number,
   host = defaultHost,
-) =>
-  `
+) => {
+  const port = validatePort(expectPort);
+
+  return `
 (() => {
 const net = require('net');
 
@@ -59,9 +74,10 @@ async function getAvailablePort(expectPort) {
   }
 }
 
-getAvailablePort(${expectPort}).then(port => process.stdout.write(port.toString()));
+getAvailablePort(${port}).then(port => process.stdout.write(port.toString()));
 })();
 `.trim();
+};
 
 export function getPortSync(
   expectPort: number,
