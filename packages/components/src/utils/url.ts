@@ -62,18 +62,68 @@ export function getEnableRoutesFromUrlQuery(): string[] | void {
   return undefined;
 }
 
+export function getSafeReportOrigin(origin: string) {
+  try {
+    const url = new URL(origin);
+
+    return ['http:', 'https:'].includes(url.protocol) ? url.origin : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function changeOrigin(origin: string) {
+  const safeOrigin = getSafeReportOrigin(origin);
+  if (!safeOrigin) return undefined;
+
   const url = parse(location.href, true);
-  const newUrl = parse(origin, true);
+  const newUrl = parse(safeOrigin, true);
 
   setUploaderHash(url);
 
-  url.set('origin', origin);
+  url.set('origin', safeOrigin);
   url.set('protocol', newUrl.protocol);
   url.set('host', newUrl.host);
   url.set('port', newUrl.port);
 
   return url.toString();
+}
+
+export function getSafeReportUrl(path: string, baseUrl: string) {
+  try {
+    const url = new URL(path, baseUrl);
+    const base = new URL(baseUrl);
+
+    if (base.protocol === 'file:') {
+      const hasControlCharacter = [...path].some((char) => {
+        const code = char.charCodeAt(0);
+        return code < 0x20 || code === 0x7f;
+      });
+      const isRelativePath =
+        path.trimStart() === path &&
+        !path.startsWith('/') &&
+        !path.includes('\\') &&
+        !/^[a-z][a-z\d+.-]*:/i.test(path) &&
+        !hasControlCharacter;
+
+      return url.protocol === 'file:' &&
+        url.host === base.host &&
+        isRelativePath
+        ? url.href
+        : undefined;
+    }
+
+    if (
+      !['http:', 'https:'].includes(url.protocol) ||
+      url.origin !== base.origin
+    ) {
+      return undefined;
+    }
+
+    return url.href;
+  } catch {
+    return undefined;
+  }
 }
 
 export function getSharingUrl(
