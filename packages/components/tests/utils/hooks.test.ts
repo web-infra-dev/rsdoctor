@@ -1,4 +1,7 @@
-import { describe, expect, it } from 'rstack/test';
+import { describe, expect, it, rs } from '@rstest/core';
+
+rs.mock('src/utils/i18n', () => ({}));
+
 import { getSafeExternalUrl } from 'src/utils/hooks';
 
 describe('getSafeExternalUrl', () => {
