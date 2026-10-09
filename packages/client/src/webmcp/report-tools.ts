@@ -379,6 +379,7 @@ export function getChunkModuleDependencyChains(
     .map((id) => modules.get(id))
     .filter((module): module is NonNullable<typeof module> => Boolean(module));
   const items: ModuleDependencyChain[] = [];
+  let total = 0;
 
   const toReference = (
     module: (typeof graph.modules)[number],
@@ -393,7 +394,6 @@ export function getChunkModuleDependencyChains(
     chain: ModuleReference[],
     seen: Set<number>,
   ) => {
-    if (items.length >= limit) return;
     const next = current.dependencies
       .map((id) => dependencies.get(id))
       .map((dependency) => dependency && modules.get(dependency.dependency))
@@ -404,11 +404,14 @@ export function getChunkModuleDependencyChains(
     const nextModules = next.filter((module) => !seen.has(module.id));
 
     if (reachedDepth || nextModules.length === 0) {
-      items.push({
-        module: toReference(root),
-        chain,
-        truncated: reachedDepth && next.length > 0,
-      });
+      total += 1;
+      if (items.length < limit) {
+        items.push({
+          module: toReference(root),
+          chain,
+          truncated: reachedDepth && next.length > 0,
+        });
+      }
       return;
     }
 
@@ -419,19 +422,17 @@ export function getChunkModuleDependencyChains(
         [...chain, toReference(module)],
         new Set([...seen, module.id]),
       );
-      if (items.length >= limit) return;
     }
   };
 
   for (const root of roots) {
     visit(root, root, [toReference(root)], new Set([root.id]));
-    if (items.length >= limit) break;
   }
 
   return {
-    total: items.length,
+    total,
     items,
-    truncated: items.length >= limit,
+    truncated: total > limit,
   };
 }
 
@@ -586,6 +587,7 @@ export async function registerReportTools(
           limit: { type: 'integer', minimum: 1, maximum: MAX_LIMIT },
         },
         (input) => getChunkModuleDependencyChains(manifest, input),
+        ['chunkId'],
       ),
       options,
     ),
@@ -610,6 +612,7 @@ function createTool(
   description: string,
   properties: Record<string, unknown>,
   execute: (input: unknown) => unknown,
+  required: string[] = [],
 ): ModelContextTool {
   return {
     name,
@@ -617,6 +620,7 @@ function createTool(
     inputSchema: {
       type: 'object',
       properties,
+      ...(required.length > 0 ? { required } : {}),
       additionalProperties: false,
     },
     annotations: {

@@ -10,6 +10,7 @@ import {
   getBuildTimingBreakdown,
   getBuildOverview,
   getRuleFindings,
+  registerReportTools,
 } from '../src/webmcp/report-tools';
 
 const manifest = {
@@ -218,5 +219,57 @@ describe('Rsdoctor WebMCP report tools', () => {
       ],
       truncated: false,
     });
+  });
+
+  it('reports the complete dependency-chain count when limiting results', () => {
+    expect(
+      getChunkModuleDependencyChains(manifest, { chunkId: 'main', limit: 1 }),
+    ).toMatchObject({
+      total: 2,
+      items: [{ module: { id: 1 } }],
+      truncated: true,
+    });
+    expect(
+      getChunkModuleDependencyChains(manifest, {
+        chunkId: 'main',
+        moduleId: 1,
+        limit: 1,
+      }),
+    ).toMatchObject({ total: 1, truncated: false });
+  });
+
+  it('requires a chunk identifier when registering dependency-chain tools', async () => {
+    const originalDocument = Object.getOwnPropertyDescriptor(
+      globalThis,
+      'document',
+    );
+    const tools: Array<{ name: string; inputSchema: Record<string, unknown> }> =
+      [];
+
+    Object.defineProperty(globalThis, 'document', {
+      configurable: true,
+      value: {
+        modelContext: {
+          registerTool: async (tool: (typeof tools)[number]) => {
+            tools.push(tool);
+          },
+        },
+      },
+    });
+
+    try {
+      await registerReportTools(manifest, new AbortController().signal);
+    } finally {
+      if (originalDocument) {
+        Object.defineProperty(globalThis, 'document', originalDocument);
+      } else {
+        Reflect.deleteProperty(globalThis, 'document');
+      }
+    }
+
+    expect(
+      tools.find((tool) => tool.name === 'get_chunk_module_dependency_chains')
+        ?.inputSchema,
+    ).toMatchObject({ required: ['chunkId'] });
   });
 });
