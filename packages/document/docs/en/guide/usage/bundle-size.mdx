@@ -190,6 +190,8 @@ Rsdoctor calculates the bundled size of each sub-module after tree shaking. This
 
 Rsdoctor 2.x automatically enables Rspack's native analysis plugin to collect the source map data it needs.
 
+Concatenated module analysis does not support `eval` or `eval-*` values for `devtool`. Use a non-eval option such as `source-map`.
+
 > The images below compare the same bundle before and after support for concatenated module analysis was added.
 
 - Before: sub-module sizes are unavailable

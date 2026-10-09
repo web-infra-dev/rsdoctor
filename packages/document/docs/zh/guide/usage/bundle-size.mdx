@@ -190,6 +190,8 @@ Rsdoctor 可以计算每个子模块经过 Tree Shaking 后的实际打包体积
 
 Rsdoctor 2.x 会自动启用 Rspack 的原生分析插件，收集所需的 source map 数据。
 
+串联模块分析不支持 `eval` 或 `eval-*` 类型的 `devtool` 配置，请改用 `source-map` 等非 eval 配置。
+
 > 下图对比了同一产物在支持串联模块分析前后的报告。
 
 - 支持前：无法显示子模块体积
