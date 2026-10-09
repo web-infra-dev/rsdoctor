@@ -212,8 +212,12 @@ export function findCompressibleAssets(
       chunks: asset.chunks.slice(0, 20),
     }))
     .filter(
-      (asset): asset is Omit<CompressedAssetSummary, 'savingsBytes' | 'compression'> =>
-        typeof asset.compressedSize === 'number' && asset.size >= minSize,
+      (
+        asset,
+      ): asset is Omit<
+        CompressedAssetSummary,
+        'savingsBytes' | 'compression'
+      > => typeof asset.compressedSize === 'number' && asset.size >= minSize,
     )
     .map((asset): CompressedAssetSummary => ({
       ...asset,
@@ -356,7 +360,8 @@ export function getChunkModuleDependencyChains(
 ): { total: number; items: ModuleDependencyChain[]; truncated: boolean } {
   const args = isRecord(input) ? input : {};
   const chunkId = typeof args.chunkId === 'string' ? args.chunkId : '';
-  const moduleId = typeof args.moduleId === 'number' ? args.moduleId : undefined;
+  const moduleId =
+    typeof args.moduleId === 'number' ? args.moduleId : undefined;
   const limit = getLimit(args.limit);
   const maxDepth = getChainDepth(args.maxDepth);
   const graph = manifest.data.moduleGraph;
@@ -375,7 +380,9 @@ export function getChunkModuleDependencyChains(
     .filter((module): module is NonNullable<typeof module> => Boolean(module));
   const items: ModuleDependencyChain[] = [];
 
-  const toReference = (module: (typeof graph.modules)[number]): ModuleReference => ({
+  const toReference = (
+    module: (typeof graph.modules)[number],
+  ): ModuleReference => ({
     id: module.id,
     path: module.path,
     identifier: module.identifier,
@@ -390,7 +397,9 @@ export function getChunkModuleDependencyChains(
     const next = current.dependencies
       .map((id) => dependencies.get(id))
       .map((dependency) => dependency && modules.get(dependency.dependency))
-      .filter((module): module is NonNullable<typeof module> => Boolean(module));
+      .filter((module): module is NonNullable<typeof module> =>
+        Boolean(module),
+      );
     const reachedDepth = chain.length - 1 >= maxDepth;
     const nextModules = next.filter((module) => !seen.has(module.id));
 
@@ -404,7 +413,12 @@ export function getChunkModuleDependencyChains(
     }
 
     for (const module of nextModules) {
-      visit(root, module, [...chain, toReference(module)], new Set([...seen, module.id]));
+      visit(
+        root,
+        module,
+        [...chain, toReference(module)],
+        new Set([...seen, module.id]),
+      );
       if (items.length >= limit) return;
     }
   };

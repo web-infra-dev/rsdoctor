@@ -131,7 +131,9 @@ describe('Rsdoctor WebMCP report tools', () => {
   });
 
   it('finds the assets with the largest compression savings', () => {
-    expect(findCompressibleAssets(manifest, { compression: 'gzip' })).toMatchObject({
+    expect(
+      findCompressibleAssets(manifest, { compression: 'gzip' }),
+    ).toMatchObject({
       total: 2,
       items: [
         { path: 'main.js', compressedSize: 120, savingsBytes: 180 },
