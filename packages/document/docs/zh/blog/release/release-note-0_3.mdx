@@ -87,8 +87,6 @@ export default {
 
 由于 Rspack 和 webpack 都支持 BannerPlugin，且 BannerPlugin 可在生成的 chunk 顶部或尾部添加指定内容的代码段，这会影响到对 Bundle 的解析能力。因此，Rsdoctor 增加了 Banner Plugin 的支持。
 
-详情请查看[支持 BannerPlugin](/guide/usage/bundle-size#-%E6%94%AF%E6%8C%81-bannerplugin)
-
 ### 支持 ESM loader
 
 自 Rspack@0.7.3 开始，支持以 `.js` 为后缀且 `package.json` 中配置 `type: module` 的 ESM Loader 执行（[相关 issue](https://github.com/web-infra-dev/rspack/issues/5735)）。因此，Rsdoctor 也支持 ESM Loader 的分析，主要支持以下两种类型：

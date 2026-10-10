@@ -57,33 +57,22 @@ The difference between `Source Size` and `Bundled Size`:
 
 ### Solution
 
-If you only have Source Size but no Bundled Size, or **there is no Module drill-down in Tree Map** (i.e., no Module chunks), you need to **manually enable SourceMap**. **Note: Only enable SourceMap when Rsdoctor is enabled, do not affect production builds.**
+If module sizes are missing, check the following:
 
-- The following scenario requires manually enabling SourceMap:
+1. Confirm that your project uses Rspack 2 and that Rsdoctor is enabled for the compiler that produces the affected assets.
+2. Confirm that [bundle analysis](/config/options/features) is enabled.
+3. If [`supports.parseBundle`](/config/options/supports#parsebundle) is `false`, restore its default value of `true`. This lets Rsdoctor parse bundle code when source map data is unavailable.
 
-<img
-  src="https://assets.rspack.rs/others/assets/rsdoctor/all-in-one-before.png"
-  width="600px"
-  height="300px"
-  style={{ margin: 'auto' }}
-/>
+If module sizes are available but code is missing, check [`output.reportCodeType`](/config/options/output#reportcodetype) and the report mode. Brief reports do not include code.
 
-Configuration example:
+If module sizes are still missing, check whether a plugin changes generated code without updating its source maps. To help diagnose the issue, try enabling source maps only when running Rsdoctor:
 
-```js rspack.config.mjs
+```js title="rspack.config.mjs"
 export default {
-  devtool: 'cheap-source-map', // or other devtool configuration
+  // Replace false with your project's existing devtool value.
+  devtool: process.env.RSDOCTOR === 'true' ? 'source-map' : false,
 };
 ```
-
-Rsdoctor supports the following SourceMap configurations:
-
-- source-map
-- hidden-source-map
-- inline-source-map
-- cheap-source-map
-- cheap-module-source-map
-- nosources-source-map
 
 ## Bundle analysis page no `Bundled Size`?
 
@@ -98,42 +87,11 @@ The difference between `Source Size` and `Bundled Size`:
 
 ### Root cause
 
-When [optimization.concatenateModules](https://rspack.rs/config/optimization#optimizationconcatenatemodules) is set to `true`, Rsdoctor cannot use `acorn` to parse the build artifacts and break down the actual code size of each **Module**, therefore it cannot display the `Bundled Size`.
+Module concatenation combines multiple modules into one closure. AST parsing alone cannot identify each module's code within that closure. Rsdoctor 2.x uses Rspack's native source map data to determine each module's bundled code and size.
 
 ### Solution
 
-:::danger
-**Important Note:** You must check the `RSDOCTOR` environment variable and not modify ConcatenateModules directly! ConcatenateModules is enabled by default in production environments. Disabling it in production builds will increase the bundle size.
-:::
-
-When enabling Rsdoctor analysis, set **concatenateModules to false** as shown below. **Note: Disabling `concatenateModules` will slightly increase bundle size, creating differences from production builds.**
-
-```js rspack.config.mjs
-export default {
-  optimization: {
-    concatenateModules:
-      process.env.NODE_ENV === 'production' && !process.env.RSDOCTOR, // Must check RSDOCTOR environment variable, do not modify concatenateModules directly!
-  },
-};
-```
-
-- In the rspeedy project, configure it in `rspeedy.config.ts`:
-
-```js rspeedy.config.ts
-export default {
-  tools: {
-    rspack(config, { env }) {
-      if (process.env.RSDOCTOR === 'true') {
-        config.optimization = {
-          ...config.optimization,
-          concatenateModules: false,
-        };
-        return config;
-      }
-    },
-  },
-};
-```
+Follow the [checks above](#no-bundledparsed-size-for-modules-in-bundle-analysis) if Bundled Size is missing.
 
 ## The loader of CssExtractRspackPlugin takes too long
 

@@ -29,19 +29,21 @@ type ISupport = {
 - **类型：** `boolean`
 - **默认值：** `true`
 
-在部分大型仓库中，反解 Bundle 解析执行耗时过大，这是因为 Parse Bundle 的分析利用了 AST 解析与处理。当产物文件过多时，耗时也会增加。如果不需要此功能，可以通过 `supports.parseBundle` 配置进行选择性关闭。示例如下：
+控制 Rsdoctor 在缺少可用 source map 数据时，是否使用 AST 解析产物代码。
+
+大型项目的 AST 解析可能比较耗时，可以将 `supports.parseBundle` 设置为 `false` 来跳过这一步：
 
 ```ts
-chain.plugin('Rsdoctor').use(RsdoctorRspackPlugin, [
-  {
-    supports: {
-      parseBundle: false,
-    },
+new RsdoctorRspackPlugin({
+  supports: {
+    parseBundle: false,
   },
-]);
+});
 ```
 
-关闭 Parse Bundle 能力只会影响是否能查看到 Bundle 中 Module 的最终打包大小（Bundled Size）及最终打包代码（Bundled Code）:
+关闭后，依赖 AST 解析的模块可能无法显示 Bundled Size 和 Bundled Code，基于 source map 的分析不受影响。
+
+如需控制报告中包含哪些代码，请使用 [output.reportCodeType](/config/options/output#reportcodetype)。
 
 <div style={{ display: 'flex' }}>
   <img

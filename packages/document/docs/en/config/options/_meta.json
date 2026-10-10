@@ -2,11 +2,9 @@
   "options",
   "term",
   "disableClientServer",
-  "experiments",
   "features",
   "output",
   "server",
   "supports",
-  "mode",
   "multiCompiler"
 ]
