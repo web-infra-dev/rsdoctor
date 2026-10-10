@@ -6,7 +6,7 @@ description: '通过自定义规则的 check 函数收集和上传 Rsdoctor 构�
 
 进行数据上报需要借助自定义拓展规则的接口，请先查看[自定义拓展规则](./rule-custom)。
 
-自定义规则的方式还可以用于用户数据收集和上报，像自定义拓展规则一样的方式，只是在 check 函数中不进行 report 上报错误即可。例如：
+自定义规则也可以收集和上传构建数据。`check` 可以是异步函数，Rsdoctor 会等待上传完成。请将示例 URL 替换为自己的接口：
 
 ```ts
 // src/rules/upload-data.ts
@@ -17,19 +17,24 @@ export const UploadData = defineRule(() => ({
     category: 'bundle',
     severity: 'Warn',
     title: 'upload-data',
-    defaultConfig: {
-      limit: 10,
-    },
   },
-  check({ chunkGraph, moduleGraph, ruleConfig }) {
-    // upload some data
-    Upload({ chunkGraph, moduleGraph });
+  async check({ chunkGraph, moduleGraph }) {
+    const response = await fetch('https://example.com/api/build-metrics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assetCount: chunkGraph.getAssets().length,
+        moduleCount: moduleGraph.getModules().length,
+      }),
+    });
+    if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
   },
 }));
 ```
 
 ```ts
 // rsbuild.config.ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import { UploadData } from './rules/upload-data';
 
 export default {

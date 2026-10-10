@@ -40,6 +40,7 @@ export const AssetsCountLimit = defineRule(() => ({
 
 ```ts
 // rsbuild.config.ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import { AssetsCountLimit } from './rules/assets-count-limit';
 
 export default {
@@ -89,21 +90,19 @@ To write rules, you need to use the `defineRule` function, which takes a functio
 import { defineRule } from '@rsdoctor/core';
 
 const ruleTitle = 'check-rule';
-const ruleConfig = {
-  // some rule configs
-};
+type RuleConfig = { limit: number };
 
-export const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
+export const CheckRule = defineRule<typeof ruleTitle, RuleConfig>(() => ({
   meta: {
     category: 'bundle', // rule category
     severity: 'Warn', // rule severity
     title: ruleTitle, // rule title
-    defaultConfig: {
-      // rule default config
-    },
+    defaultConfig: { limit: 10 },
   },
-  check(ruleContext) {
-    // rule check...
+  check({ chunkGraph, report, ruleConfig }) {
+    if (chunkGraph.getAssets().length > ruleConfig.limit) {
+      report({ message: 'Too many assets' });
+    }
   },
 }));
 ```
@@ -112,20 +111,20 @@ The `meta` field contains the fixed configuration and content of this rule, and 
 
 #### meta object
 
-For the definition of the meta type, please refer to [RuleMeta](#rulemeta).
+For the metadata type accepted by external rules, see [ExtendRuleMeta](#extendrulemeta).
 
 ##### Property meanings
 
 - meta
   - category
-    - info: Defines the category of the rule: compilation rule or build packaging rule.
+    - info: Defines the category of the rule.
     - type: 'compile' | 'bundle'.
   - title
     - info: The title of the rule, used to display in the Rsdoctor report page.
     - type: string | generics, can be passed down through generics.
   - severity
     - info: The severity level of the rule.
-    - type: Refer to the ErrorLevel type below.
+    - type: 'Ignore' | 'Warn' | 'Error' for external rules.
     - default: 'Warn'
   - defaultConfig
     - info: The default configuration of the rule. Custom rules may require specific configurations, and defaultConfig can be used to configure the default rule configuration.
@@ -151,28 +150,7 @@ type CheckCallback<Config = DefaultRuleConfig> = (
 
 ##### Example
 
-The following example is a custom rule that limits the number of assets:
-
-```ts
-// src/rules/some-rule.ts
-const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
-  // .....
-
-  check({ chunkGraph, report, ruleConfig }) {
-    const assets = chunkGraph.getAssets();
-
-    if (assets.length > ruleConfig.limit) {
-      report({
-        message: 'The count of assets is bigger than limit',
-        detail: {
-          type: 'link',
-          link: 'https://rsdoctor.rs/zh/guide/start/quick-start', // This link just for show case.
-        },
-      });
-    }
-  },
-}));
-```
+The `CheckRule` example above checks the number of assets and reports a finding when it exceeds `ruleConfig.limit`.
 
 ### 3. Reporting rule results
 
@@ -260,27 +238,22 @@ report({
 
 ## Type definitions
 
-### RuleMeta
+### ExtendRuleMeta
 
 ```ts
-interface RuleMeta<
+interface ExtendRuleMeta<
   Config = DefaultRuleConfig,
   Title extends DefaultRuleTitle = DefaultRuleTitle,
 > {
   title: Title;
-  category:
-  severity: ErrorLevel;
+  category: 'compile' | 'bundle';
+  severity: 'Ignore' | 'Warn' | 'Error';
   referenceUrl?: string;
   defaultConfig?: Config;
 }
-
-/** Error Level */
-export enum ErrorLevel {
-  Ignore = 0,
-  Warn = 1,
-  Error = 2,
-}
 ```
+
+This is the metadata accepted by external rules. Internal rules also specify a rule code and use numeric severity values.
 
 ### RuleCheckerContext
 
@@ -410,68 +383,71 @@ interface SourceRange {
 
 ### AST processing
 
-When performing rule detection and analysis, it is common to perform AST analysis on modules and other operations. To provide more auxiliary functions, we also provide `@rsdoctor/core`, which contains many useful utility functions and methods.
-
-```ts
-/** This includes the type definitions for all AST nodes */
-type Node = /* SyntaxNode */;
-
-interface parser {
-  /** AST iterator */
-  walk,
-  /**
-   * Compile code
-   *   - The root node is `Node.Program`
-   */
-  parse,
-  /**
-   * Compile the next expression
-   *   - The root node is `Node.ExpressionStatement`
-   */
-  parseExpressionAt,
-  /** Assertion methods */
-  asserts,
-  /** Utility methods */
-  utils,
-}
-
-/** Document class */
-interface Document {
-  /** Get the position in the text at the given offset */
-  positionAt!: (offset: number) => Position | undefined;
-  /** Get the position in the file at the given point */
-  offsetAt!: (position: Position) => number | undefined;
-}
-```
-
-The `asserts` assertion method set provides type assertion methods for all AST nodes, while the `utils` utility method set provides commonly used methods such as determining whether certain statements have the same semantics and retrieving Import nodes.
+The rule context exposes `moduleGraph`. Use `moduleGraph.getModules()` to access modules and `module.getProgram()` to read a module's transformed ESTree AST when available. The internal `parser`, `asserts`, and `Document` helpers are not exported by `@rsdoctor/core`; use your own AST tools if you need additional parsing or traversal.
 
 ### Reporting code position
 
-Some errors require providing the position of the code, so the content of the `document` field needs to be provided. However, there is an important distinction here: each module actually has two sets of code, transformed and source, which means the code after being processed by the loader and the user's original code. The AST is actually the transformed code format.
-To facilitate display for users, we need to use the original code as much as possible. Therefore, after selecting the corresponding AST node, users need to use the SourceMap module provided by the module to convert the position information to the original code. If the module does not have the original code or SourceMap for some special reasons, then using the transformed code/position is more appropriate. A typical workflow is as follows:
+To report a code location, include `document` in the report. The AST refers to transformed code. Use `module.getSourceRange()` to map its location back to the original source when a valid mapping and source text are available. Otherwise, report the transformed code and set `isTransformed` to `true`:
 
 ```ts
-const module: SDK.ModuleInstance;
-const node: Node.ImportDeclaration;
-/** The default type is optional, but in reality, they all have values */
-const transformedRange = node.loc!;
-/** If the module's SourceMap is not available, this value is null */
-const sourceRange = module.getSourceRange(transformedRange);
-/** Get the code */
-const source = mod.getSource();
+import { defineRule } from '@rsdoctor/core';
 
-// Determine which value to use based on whether the original position is generated
-const range = (sourceRange ?? transformed) as Linter.Range;
-const content = sourceRange ? source.source : source.transformed;
-
-report({
-  document: {
-    path: module.path,
-    content,
-    range,
+export const ReportCodeLocation = defineRule(() => ({
+  meta: {
+    category: 'compile',
+    severity: 'Warn',
+    title: 'report-code-location',
   },
-});
+  check({ moduleGraph, report }) {
+    const module = moduleGraph
+      .getModules()
+      .find((item) => item.getProgram()?.body.length);
+    const node = module?.getProgram()?.body[0]; // Replace with the node found by your rule.
+    if (!module || !node?.loc) return;
+
+    const transformedRange = node.loc;
+    const sourceRange = module.getSourceRange(transformedRange);
+    const { source, transformed } = module.getSource();
+    let range = {
+      start: {
+        line: transformedRange.start.line,
+        column: transformedRange.start.column,
+      },
+      end: {
+        line: transformedRange.end.line,
+        column: transformedRange.end.column,
+      },
+    };
+    let content = transformed;
+    let isTransformed = true;
+
+    if (
+      source &&
+      sourceRange?.start.line !== undefined &&
+      sourceRange.start.column !== undefined &&
+      sourceRange.end?.line !== undefined &&
+      sourceRange.end.column !== undefined
+    ) {
+      range = {
+        start: {
+          line: sourceRange.start.line,
+          column: sourceRange.start.column,
+        },
+        end: {
+          line: sourceRange.end.line,
+          column: sourceRange.end.column,
+        },
+      };
+      content = source;
+      isTransformed = false;
+    }
+
+    report({
+      message: 'Found a matching statement',
+      document: { path: module.path, content, range, isTransformed },
+    });
+  },
+}));
 ```
 
 ## Data reporting

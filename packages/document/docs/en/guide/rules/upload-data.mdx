@@ -6,7 +6,7 @@ description: 'Collect and upload Rsdoctor build analysis data through custom rul
 
 To perform data upload, you need to use the interface of custom extension rules. Please refer to [Custom Extension Rules](./rule-custom) for more information.
 
-The same approach used for custom extension rules can also be used for collecting and uploading user data. The only difference is that you don't need to report any errors in the check function. For example:
+The same approach can collect and upload build data. The `check` function can be asynchronous, so Rsdoctor waits for the upload to finish. Replace the example URL with your endpoint:
 
 ```ts
 // src/rules/upload-data.ts
@@ -17,19 +17,24 @@ export const UploadData = defineRule(() => ({
     category: 'bundle',
     severity: 'Warn',
     title: 'upload-data',
-    defaultConfig: {
-      limit: 10,
-    },
   },
-  check({ chunkGraph, moduleGraph, ruleConfig }) {
-    // upload some data
-    Upload({ chunkGraph, moduleGraph });
+  async check({ chunkGraph, moduleGraph }) {
+    const response = await fetch('https://example.com/api/build-metrics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        assetCount: chunkGraph.getAssets().length,
+        moduleCount: moduleGraph.getModules().length,
+      }),
+    });
+    if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
   },
 }));
 ```
 
 ```ts
 // rsbuild.config.ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import { UploadData } from './rules/upload-data';
 
 export default {

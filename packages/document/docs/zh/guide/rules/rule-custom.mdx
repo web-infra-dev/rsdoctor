@@ -41,6 +41,7 @@ export const AssetsCountLimit = defineRule(() => ({
 
 ```ts
 // rsbuild.config.ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import { AssetsCountLimit } from './rules/assets-count-limit';
 
 export default {
@@ -90,21 +91,19 @@ import { Tab, Tabs } from '@rspress/core/theme';
 import { defineRule } from '@rsdoctor/core';
 
 const ruleTitle = 'check-rule';
-const ruleConfig = {
-  // some rule configs
-};
+type RuleConfig = { limit: number };
 
-export const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
+export const CheckRule = defineRule<typeof ruleTitle, RuleConfig>(() => ({
   meta: {
     category: 'bundle', // rule category
     severity: 'Warn', // rule severity
     title: ruleTitle, // rule title
-    defaultConfig: {
-      // rule default config
-    },
+    defaultConfig: { limit: 10 },
   },
-  check(ruleContext) {
-    // rule check...
+  check({ chunkGraph, report, ruleConfig }) {
+    if (chunkGraph.getAssets().length > ruleConfig.limit) {
+      report({ message: 'Too many assets' });
+    }
   },
 }));
 ```
@@ -113,20 +112,20 @@ export const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
 
 #### meta 对象
 
-meta 类型定义查看：[RuleMeta](#rulemeta)。
+外部规则的元数据类型参见：[ExtendRuleMeta](#extendrulemeta)。
 
 ##### 属性含义
 
 - meta
   - category
-    - info: 定义规则分类：编译规则或构建打包规则。
+    - info: 定义规则分类。
     - type: 'compile' | 'bundle'。
   - title
     - info：规则标题，用于在 Rsdoctor 报告页面中展示。
     - type：string | 泛型，用户可通过泛型下传。
   - severity
     - info: 规则等级。
-    - type: 参考下方 ErrorLevel 类型。
+    - type: 外部规则使用 'Ignore' | 'Warn' | 'Error'。
     - default: 'Warn'
   - defaultConfig
     - info：规则默认配置。自定义规则中可能需要特有的配置，defaultConfig 可用于配置默认的规则配置。
@@ -152,28 +151,7 @@ type CheckCallback<Config = DefaultRuleConfig> = (
 
 ##### 示例
 
-如下实例是对 assets 资源的个数进行一个限制的自定义规则：
-
-```ts
-// src/rules/some-rule.ts
-const CheckRule = defineRule<typeof ruleTitle, config>(() => ({
-  // .....
-
-  check({ chunkGraph, report, ruleConfig }) {
-    const assets = chunkGraph.getAssets();
-
-    if (assets.length > ruleConfig.limit) {
-      report({
-        message: 'The count of assets is bigger than limit',
-        detail: {
-          type: 'link',
-          link: 'https://rsdoctor.rs/zh/guide/start/quick-start', // This link just for show case.
-        },
-      });
-    }
-  },
-}));
-```
+上面的 `CheckRule` 示例会检查资源数量，并在超过 `ruleConfig.limit` 时上报问题。
 
 ### 3. 上报规则结果
 
@@ -261,27 +239,22 @@ report({
 
 ## 类型定义
 
-### RuleMeta
+### ExtendRuleMeta
 
 ```ts
-interface RuleMeta<
+interface ExtendRuleMeta<
   Config = DefaultRuleConfig,
   Title extends DefaultRuleTitle = DefaultRuleTitle,
 > {
   title: Title;
-  category:
-  severity: ErrorLevel;
+  category: 'compile' | 'bundle';
+  severity: 'Ignore' | 'Warn' | 'Error';
   referenceUrl?: string;
   defaultConfig?: Config;
 }
-
-/** Error Level */
-export enum ErrorLevel {
-  Ignore = 0,
-  Warn = 1,
-  Error = 2,
-}
 ```
+
+这里展示的是外部规则接受的元数据。内部规则还需指定规则代码，并使用数值形式的严重等级。
 
 ### RuleCheckerContext
 
@@ -411,68 +384,71 @@ interface SourceRange {
 
 ### AST 处理
 
-在进行规则检测分析时，对模块进行AST分析等操作是常见的。为了提供更多辅助功能，我们还提供了 `@rsdoctor/core`，其中包含了许多实用的工具函数和方法。
-
-```ts
-/** 这里包含了 AST 所有节点的类型定义 */
-export type Node = /* SyntaxNode */;
-
-export interface parser {
-  /** AST 迭代器 */
-  walk,
-  /**
-   * 编译代码
-   *   - 输出根节点为`Node.Program`
-   */
-  parse,
-  /**
-   * 编译接下来的首个表达式
-   *   - 输出根节点为`Node.ExpressionStatement`
-   */
-  parseExpressionAt,
-  /** 断言方法集 */
-  asserts,
-  /** 辅助方法集 */
-  utils,
-}
-
-/** 文档类 */
-export interface Document {
-  /** 获取文件位置在文本中的位移 */
-  positionAt!: (offset: number) => Position | undefined;
-  /** 获取位移点在文件的位置 */
-  offsetAt!: (position: Position) => number | undefined;
-}
-```
-
-其中的 `asserts` 断言方法集，提供了所有 AST 节点的类型断言方法，`utils` 辅助方法集里提供了诸如判断某些语句的语义是否相同，获取 Import 节点等等常用的方法。
+规则的 `check` 回调提供 `moduleGraph`。可以通过 `moduleGraph.getModules()` 获取模块，并在有 AST 时通过 `module.getProgram()` 读取转换后代码的 ESTree AST。`@rsdoctor/core` 不导出内部使用的 `parser`、`asserts` 和 `Document`；如需额外解析或遍历 AST，请使用自己的工具。
 
 ### 上报代码位置
 
-有些错误需要提供代码的位置，所以需要提供`document`字段的内容。但是在这里有个很重要的区别，那就是每个模块实际上有两套代码，transformed 和 source，意为经过 loader 之后的代码和用户的原始代码，AST 实际上也是转换之后的代码格式。
-为了给用户展示的方便，我们需要尽量使用原始代码，所以就需要用户在选中对应的 AST 节点之后，使用模块带有的 SourceMap 模块将位置信息转换到原始代码，如果模块因为某些特殊原因没有原始代码或者是 SourceMap，此时再使用转换后的代码/位置是比较合适的。一个比较典型的流程是这样的：
+上报代码位置时，需要在 `report` 中提供 `document`。AST 对应转换后的代码；如果存在有效的映射和原始代码，可以通过 `module.getSourceRange()` 获取原始位置。否则应上报转换后的代码，并将 `isTransformed` 设为 `true`：
 
 ```ts
-const module: SDK.ModuleInstance;
-const node: Node.ImportDeclaration;
-/** 默认类型为可选，实际上都是有值的 */
-const transformedRange = node.loc!;
-/** 若是模块的 SourceMap 不可用，则这个值为空 */
-const sourceRange = module.getSourceRange(transformedRange);
-/** 获取代码 */
-const source = mod.getSource();
+import { defineRule } from '@rsdoctor/core';
 
-// 根据是否生成原始位置来判断使用哪个值
-const range = (sourceRange ?? transformed) as Linter.Range;
-const content = sourceRange ? source.source : source.transformed;
-
-report({
-  document: {
-    path: module.path,
-    content,
-    range,
+export const ReportCodeLocation = defineRule(() => ({
+  meta: {
+    category: 'compile',
+    severity: 'Warn',
+    title: 'report-code-location',
   },
-});
+  check({ moduleGraph, report }) {
+    const module = moduleGraph
+      .getModules()
+      .find((item) => item.getProgram()?.body.length);
+    const node = module?.getProgram()?.body[0]; // 替换为规则实际找到的节点。
+    if (!module || !node?.loc) return;
+
+    const transformedRange = node.loc;
+    const sourceRange = module.getSourceRange(transformedRange);
+    const { source, transformed } = module.getSource();
+    let range = {
+      start: {
+        line: transformedRange.start.line,
+        column: transformedRange.start.column,
+      },
+      end: {
+        line: transformedRange.end.line,
+        column: transformedRange.end.column,
+      },
+    };
+    let content = transformed;
+    let isTransformed = true;
+
+    if (
+      source &&
+      sourceRange?.start.line !== undefined &&
+      sourceRange.start.column !== undefined &&
+      sourceRange.end?.line !== undefined &&
+      sourceRange.end.column !== undefined
+    ) {
+      range = {
+        start: {
+          line: sourceRange.start.line,
+          column: sourceRange.start.column,
+        },
+        end: {
+          line: sourceRange.end.line,
+          column: sourceRange.end.column,
+        },
+      };
+      content = source;
+      isTransformed = false;
+    }
+
+    report({
+      message: 'Found a matching statement',
+      document: { path: module.path, content, range, isTransformed },
+    });
+  },
+}));
 ```
 
 ## 数据上报
