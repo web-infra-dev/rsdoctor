@@ -202,7 +202,9 @@ describe('multi-compiler brief JSON', () => {
     await Promise.all([client.writeStore(), child.writeStore()]);
 
     expect(path.dirname(directory)).toBe('.slaves');
-    expect(Buffer.byteLength(path.basename(directory))).toBeLessThanOrEqual(120);
+    expect(Buffer.byteLength(path.basename(directory))).toBeLessThanOrEqual(
+      120,
+    );
     expect(path.basename(directory)).toMatch(/-[a-f0-9]{12}$/);
     expect(fs.existsSync(child.getBriefJsonPath()!)).toBe(true);
     expect(controller.getCompilerOutputDir(child)).toBe(
