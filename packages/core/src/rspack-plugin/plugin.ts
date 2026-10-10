@@ -41,6 +41,11 @@ import { getWriteStoreOptions } from './writeStore';
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
 
+const ignoredChildCompilerNames = new Set([
+  'HtmlRspackCompiler',
+  'mini-css-extract-plugin',
+]);
+
 class RsdoctorCompilerContext implements RsdoctorRspackPluginInstance<
   Linter.ExtendRuleData[]
 > {
@@ -554,6 +559,10 @@ export class RsdoctorRspackPlugin<
       return;
     }
 
+    if (this.shouldIgnoreChildCompiler(childCompiler, compilerName)) {
+      return;
+    }
+
     const parentSDK = parentContext.sdk;
     const controller = parentSDK.parent;
     const compilerPath =
@@ -575,8 +584,10 @@ export class RsdoctorRspackPlugin<
       const safeCompilerPath =
         compilerPath.replace(/[^a-zA-Z0-9._-]+/g, '-') ||
         `${compilerName}-${compilerIndex}`;
-      const displayName =
-        childCompiler.name || compilerName || `Child compiler ${compilerIndex}`;
+      const displayName = this.getChildCompilerDisplayName(
+        childCompiler.name || compilerName,
+        compilerIndex,
+      );
       const sdk = controller.createSlave({
         name: `child-${safeCompilerPath}`,
         displayName,
@@ -603,6 +614,31 @@ export class RsdoctorRspackPlugin<
       sdk: childSDK,
     });
     childPlugin.apply(childCompiler);
+  }
+
+  private shouldIgnoreChildCompiler(
+    childCompiler: Plugin.BaseCompilerType<'rspack'>,
+    compilerName: string,
+  ) {
+    return (
+      (childCompiler.name
+        ? ignoredChildCompilerNames.has(childCompiler.name)
+        : false) || ignoredChildCompilerNames.has(compilerName)
+    );
+  }
+
+  private getChildCompilerDisplayName(name: string, compilerIndex: number) {
+    if (!name) {
+      return `Child compiler ${compilerIndex}`;
+    }
+    if (!name.startsWith('worker-loader ')) {
+      return name;
+    }
+
+    const request = name.slice('worker-loader '.length);
+    const resource = request.split('!').at(-1)?.split('?')[0];
+    const fileName = resource && path.basename(path.win32.basename(resource));
+    return fileName ? `worker-loader: ${fileName}` : 'worker-loader';
   }
 
   private removeInheritedRsdoctorTaps(

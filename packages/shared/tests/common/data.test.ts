@@ -49,4 +49,24 @@ describe('test src/common/data/index.ts', () => {
       );
     });
   });
+
+  it('returns the current compiler display name for project info', async () => {
+    const name = 'child-worker-loader-long-request';
+    const displayName = 'worker-loader: prime.worker.ts';
+    const loader = new Data.APIDataLoader({
+      loadData: rs
+        .fn()
+        .mockImplementation(async (key) =>
+          key === 'configs' ? [{ config: { name } }] : undefined,
+        ),
+      loadManifest: rs.fn().mockResolvedValue({
+        name,
+        series: [{ name, displayName }],
+      }),
+    });
+
+    await expect(
+      loader.loadAPI(SDK.ServerAPI.API.GetProjectInfo),
+    ).resolves.toMatchObject({ name, displayName });
+  });
 });

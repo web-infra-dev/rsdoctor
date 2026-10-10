@@ -54,6 +54,7 @@ export const BuilderSelect: React.FC = () => {
           className="builder-selector"
           defaultValue={buildName}
           bordered={false}
+          popupMatchSelectWidth={false}
           style={{ minWidth: 100 }}
           onChange={(val) => {
             const item = series.find((item) => item.name === val);
