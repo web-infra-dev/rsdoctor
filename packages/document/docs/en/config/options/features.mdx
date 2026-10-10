@@ -1,5 +1,5 @@
 ---
-description: 'Select Rsdoctor features with the features option, including loader, plugin, bundle, and resolver analysis.'
+description: 'Select Rsdoctor features with the features option, including loader, plugin, bundle, resolver, and tree-shaking analysis.'
 ---
 
 # features
@@ -16,14 +16,15 @@ The `features` attribute is used for analysis feature toggles, and the specific 
 - **plugins**: Plugin calls and time consumption analysis, enabled by default.
 - **bundle**: Build artifact analysis, enabled by default.
 - **resolver**: Resolver analysis, disabled by default.
+- **treeShaking**: Tree-shaking side-effect analysis, disabled by default. This feature is unavailable when `output.mode` is `'brief'`.
 - **lite**: Enables lite mode. Both `features: { lite: true }` and `features: ['lite']` are supported. When enabled, lite mode forces the report code type to `noAssetsAndModuleSource`, overriding other [`output.reportCodeType`](/config/options/output#reportcodetype) values. The only exception is an explicitly configured `noCode` value, which takes precedence. `noAssetsAndModuleSource` omits module source and asset code while retaining bundled module code. Lite mode is disabled by default.
 
-Therefore, **the default configuration enables Bundle analysis capabilities, Loader and Plugin build-time analysis**. Resolver analysis is not enabled by default. To enable it, explicitly configure `resolver` in `features`.
+By default, `loader`, `plugins`, and `bundle` are enabled; `resolver`, `treeShaking`, and `lite` are disabled.
 
 ### Types
 
 - If you set `features` as an **array** type, the plugin will **only enable** the features you define in the `features` array.
-- If you set `features` as a **simple object** type, the plugin will **only disable** the features you set to `false` in the `features` object.
+- If you set `features` as an **object**, omitted features keep their defaults. Set a feature to `true` to enable it or `false` to disable it.
 
 ### Examples
 
@@ -37,8 +38,9 @@ new RsdoctorRspackPlugin({
 ```js
 new RsdoctorRspackPlugin({
   features: {
-    // Disable bundle analysis, other feature analysis remains default
-    bundle: false,
+    plugins: false,
+    resolver: true,
+    treeShaking: true,
   },
 });
 ```
