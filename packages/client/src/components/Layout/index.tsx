@@ -105,7 +105,7 @@ export const Layout = (
   ) => (
     <ProjectInfoContext.Provider value={{ project }}>
       <L>
-        <TitleUpdater name={project?.name} />
+        <TitleUpdater name={project?.displayName || project?.name} />
         {showHeader && <Header enableRoutes={enableRoutes} />}
         <Progress />
         <L.Content className={styles.content}>
