@@ -153,7 +153,7 @@ test('writes child compiler data to an isolated brief report', async () => {
       throw new Error('Expected child compiler SDK to be registered');
     }
 
-    const childReportDir = childSDK.parent.getCompilerOutputDir(childSDK);
+    const childReportDir = childSDK.outputDir;
     await Promise.all([
       access(path.join(reportDir, 'rsdoctor-report.html')),
       access(path.join(childReportDir, 'rsdoctor-report.html')),
