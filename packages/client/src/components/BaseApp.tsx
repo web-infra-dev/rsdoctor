@@ -16,7 +16,6 @@ import * as Constants from '../constants';
 import { Config, ConfigContext, defaultConfig } from '../config';
 import { Layout } from './Layout';
 import { getLocale, setThemeToStorage, setViewModeToStorage } from '../utils';
-import { ReportTools } from '../webmcp/ReportTools';
 
 const { PageState, Theme } = Constants;
 
@@ -187,7 +186,6 @@ const BaseApp: React.FC<BaseAppProps> = ({
         >
           <Layout>
             <>
-              <ReportTools />
               {extraContent}
               <ErrorBoundary
                 FallbackComponent={({ error, resetErrorBoundary }) => (
