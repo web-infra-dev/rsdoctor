@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginAlgolia } from '@rspress/plugin-algolia';
@@ -11,59 +10,26 @@ import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 import pluginSitemap from 'rspress-plugin-sitemap';
 
 const siteUrl = 'https://rsdoctor.rs';
-const llmsFiles = [
-  'llms.txt',
-  'llms-full.txt',
-  'zh/llms.txt',
-  'zh/llms-full.txt',
-];
-
-const isV1ArchiveUrl = (url: string) => {
-  try {
-    return /^\/(?:zh\/)?guide\/v1(?:\/|$)/.test(new URL(url, siteUrl).pathname);
-  } catch {
-    return false;
-  }
-};
-
-const isV1ArchiveSection = (section: string) => {
-  const url = section.match(/^url:\s*(.+)$/m)?.[1].trim();
-  return url ? isV1ArchiveUrl(url) : false;
-};
-
-const isV1ArchiveLink = (line: string) => {
-  const url = line.match(/^\s*-\s*\[.+?\]\(([^)]+)\)/)?.[1];
-  return url ? isV1ArchiveUrl(url) : false;
-};
-
-const excludeV1ArchiveFromLlms = () => ({
-  name: 'exclude-v1-archive-from-llms',
-  async afterBuild() {
-    await Promise.all(
-      llmsFiles.map(async (file) => {
-        const filePath = path.join(import.meta.dirname, 'doc_build', file);
-        const content = await fs.promises.readFile(filePath, 'utf8');
-        const nextContent = file.endsWith('llms-full.txt')
-          ? content
-              .split(/(?=^---\r?\nurl: )/gm)
-              .filter((section) => !isV1ArchiveSection(section))
-              .join('')
-          : content
-              .split('\n')
-              .filter((line) => !isV1ArchiveLink(line))
-              .join('\n');
-
-        await fs.promises.writeFile(filePath, nextContent);
-      }),
-    );
-  },
-});
+const sitemapPlugin = pluginSitemap({
+  domain: siteUrl,
+}) as any;
 
 define.doc({
   plugins: [
     pluginClientRedirects({
       redirects: [
-        { from: '/guide/start/mcp', to: '/guide/v1/mcp' },
+        {
+          from: '/guide/start/mcp',
+          to: 'https://v1.rsdoctor.rs/guide/usage/mcp',
+        },
+        {
+          from: '/guide/v1/mcp',
+          to: 'https://v1.rsdoctor.rs/guide/usage/mcp',
+        },
+        {
+          from: '/zh/guide/v1/mcp',
+          to: 'https://v1.rsdoctor.rs/zh/guide/usage/mcp',
+        },
         {
           from: '/guide/start/migration-v2$',
           to: '/guide/migration/migration-v2',
@@ -79,10 +45,7 @@ define.doc({
       ],
     }),
     pluginAlgolia(),
-    pluginSitemap({
-      domain: siteUrl,
-    }),
-    excludeV1ArchiveFromLlms(),
+    sitemapPlugin,
     pluginFontOpenSans(),
     pluginRss({
       siteUrl,
