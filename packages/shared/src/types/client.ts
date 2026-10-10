@@ -19,7 +19,6 @@ export enum RsdoctorClientRoutes {
   BundleDiff = '/resources/bundle/diff',
   RuleIndex = '/resources/rules',
   Uploader = '/resources/uploader',
-  EmoCheck = '/emo/check',
 }
 
 export enum RsdoctorClientDiffState {
