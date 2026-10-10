@@ -21,11 +21,6 @@
   },
   {
     "type": "dir-section-header",
-    "name": "v1",
-    "label": "Rsdoctor 1.x 归档"
-  },
-  {
-    "type": "dir-section-header",
     "name": "more",
     "label": "更多"
   }
