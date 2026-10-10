@@ -52,7 +52,7 @@ rsdoctor analyze --profile "./dist/.rsdoctor/manifest.json"
 
 ### `bundle-diff` command
 
-The `bundle-diff` command loads **two** [manifest.json](/config/options/term#manifestjson) files **locally** and compares their build bundles. By default, it opens the Rsdoctor [Bundle Diff](../usage/bundle-diff) page in the browser. Use `--json [path]` to generate a JSON report without starting the report server or opening the browser.
+The `bundle-diff` command loads **two** [manifest.json](/config/options/term#manifestjson) files and compares their build bundles. By default, it opens the Rsdoctor [Bundle Diff](../usage/bundle-diff) page in the browser. Use `--html` or `--json [path]` to generate a standalone report without starting the report server or opening the browser.
 
 ```bash
 rsdoctor bundle-diff --baseline <baselineManifestJsonPath> --current <currentManifestJsonPath>
@@ -62,12 +62,26 @@ rsdoctor bundle-diff --baseline <baselineManifestJsonPath> --current <currentMan
 
 - `--baseline <path>`: Path or online URL of the [manifest.json](/config/options/term#manifestjson) used as the **baseline**.
 - `--current <path>`: Path or online URL of the [manifest.json](/config/options/term#manifestjson) used as the **current** build.
+- `--html`: Generate a standalone HTML report, defaulting to `rsdoctor-diff.html`.
+- `--output <path>`: Set the output path for the standalone HTML report when using `--html`.
 - `--json [path]`: Generate a JSON diff report. The default output path is `rsdoctor-diff.json`.
+
+`--html` and `--json` cannot be used together.
 
 **Open the report in the browser**
 
 ```bash
 rsdoctor bundle-diff --baseline="baseline/.rsdoctor/manifest.json" --current="current/.rsdoctor/manifest.json"
+```
+
+**Generate a standalone HTML report**
+
+```bash
+rsdoctor bundle-diff \
+  --baseline="baseline/.rsdoctor/manifest.json" \
+  --current="current/.rsdoctor/manifest.json" \
+  --html \
+  --output="result.html"
 ```
 
 **Generate a JSON report**

@@ -52,7 +52,7 @@ rsdoctor analyze --profile "./dist/.rsdoctor/manifest.json"
 
 ### bundle-diff 命令
 
-`bundle-diff` 命令用于在**本地**加载**两份** [manifest.json](/config/options/term#manifestjson)，并对比分析两次构建产物。默认情况下，该命令会在浏览器中打开 Rsdoctor 的 [Bundle Diff](../usage/bundle-diff) 页面。使用 `--json [path]` 可以直接生成 JSON 报告，而不会启动报告服务器或打开浏览器。
+`bundle-diff` 命令加载**两份** [manifest.json](/config/options/term#manifestjson)，并对比分析两次构建产物。默认情况下，该命令会在浏览器中打开 Rsdoctor 的 [Bundle Diff](../usage/bundle-diff) 页面。使用 `--html` 或 `--json [path]` 可以生成独立报告，而不会启动报告服务器或打开浏览器。
 
 ```bash
 rsdoctor bundle-diff --baseline <baselineManifestJsonPath> --current <currentManifestJsonPath>
@@ -62,12 +62,26 @@ rsdoctor bundle-diff --baseline <baselineManifestJsonPath> --current <currentMan
 
 - `--baseline <path>`：作为**基准**的 [manifest.json](/config/options/term#manifestjson) 路径或在线 URL。
 - `--current <path>`：作为**当前构建**的 [manifest.json](/config/options/term#manifestjson) 路径或在线 URL。
+- `--html`：生成独立 HTML 报告，默认文件名为 `rsdoctor-diff.html`。
+- `--output <path>`：使用 `--html` 时指定 HTML 报告的输出路径。
 - `--json [path]`：生成 JSON 差异报告，默认输出路径为 `rsdoctor-diff.json`。
+
+`--html` 和 `--json` 不能同时使用。
 
 **在浏览器中打开报告**
 
 ```bash
 rsdoctor bundle-diff --baseline="baseline/.rsdoctor/manifest.json" --current="current/.rsdoctor/manifest.json"
+```
+
+**生成独立 HTML 报告**
+
+```bash
+rsdoctor bundle-diff \
+  --baseline="baseline/.rsdoctor/manifest.json" \
+  --current="current/.rsdoctor/manifest.json" \
+  --html \
+  --output="result.html"
 ```
 
 **生成 JSON 报告**

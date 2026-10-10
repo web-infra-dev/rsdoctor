@@ -1,5 +1,5 @@
 ---
-description: '通过 features 选项选择 Rsdoctor 功能，包括 loader、插件、产物和模块解析分析等。'
+description: '通过 features 选项选择 Rsdoctor 功能，包括 loader、插件、产物、模块解析和 tree-shaking 分析等。'
 ---
 
 # features
@@ -16,14 +16,15 @@ features 属性是用于分析功能开关的，具体的功能项如下：
 - **plugins**：Plugins 调用以及耗时分析，默认开启。
 - **bundle**：构建产物分析，默认开启。
 - **resolver**：Resolver 分析，默认关闭。
+- **treeShaking**：Tree-shaking 副作用分析，默认关闭。
 - **lite**：启用 lite 模式。`features: { lite: true }` 和 `features: ['lite']` 均受支持。启用后，lite 模式会将报告代码类型强制设置为 `noAssetsAndModuleSource`，覆盖其他 [`output.reportCodeType`](/config/options/output#reportcodetype) 配置；仅当 `output.reportCodeType` 显式设置为 `noCode` 时，以 `noCode` 为准。`noAssetsAndModuleSource` 不包含模块源码和 Assets 代码，但保留模块打包后代码。lite 模式默认关闭。
 
-所以，**默认配置是开启了 Bundle 分析能力、 Loader 和 Plugin 构建时分析**，没有开启 Resolver 分析能力。如需启用 Resolver 分析，可以在 `features` 中显式配置 `resolver`。
+默认开启 `loader`、`plugins` 和 `bundle`，关闭 `resolver`、`treeShaking` 和 `lite`。
 
 ### 类型
 
 - 如果你将 `features` 设置为**数组**类型，该插件**只会开启**你在 `features` 数组中定义的功能。
-- 如果你将 `features` 设置为**简单对象**类型，该插件**只会关闭**你在 `features` 对象中值为 `false` 的功能。
+- 如果你将 `features` 设置为**对象**类型，未指定的功能保持默认值。将功能设为 `true` 可开启，设为 `false` 可关闭。
 
 ### 示例
 
@@ -37,8 +38,9 @@ new RsdoctorRspackPlugin({
 ```js
 new RsdoctorRspackPlugin({
   features: {
-    // 关闭 bundle 分析，其他特性分析保持默认
-    bundle: false,
+    plugins: false,
+    resolver: true,
+    treeShaking: true,
   },
 });
 ```

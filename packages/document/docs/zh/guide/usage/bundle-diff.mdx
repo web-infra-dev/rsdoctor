@@ -1,5 +1,5 @@
 ---
-description: '对比 Rsdoctor 报告，检查资源、模块和包的变化，并将产物差异导出为 JSON。'
+description: '对比 Rsdoctor 报告，检查资源、模块和包的变化，并将产物差异导出为 HTML 或 JSON。'
 ---
 
 # Bundle diff
@@ -13,6 +13,7 @@ import { Badge } from '@theme';
 目前我们提供了以下几种使用方式：
 
 - [通过 CLI 在本地打开报告](/guide/start/cli)
+- [通过 CLI 生成独立 HTML 报告](#generate-a-standalone-html-report-with-cli)
 - [通过 CLI 生成 JSON 报告](#通过-cli-生成-json-报告)
 - 在线上传分析（计划支持）
 
@@ -21,6 +22,18 @@ import { Badge } from '@theme';
 ### 通过 CLI 在本地打开报告
 
 首先你需要准备 **2 份** Rsdoctor 产出的[manifest.json](/config/options/term#manifestjson)，然后通过安装[@rsdoctor/cli](/guide/start/cli#%E5%AE%89%E8%A3%85-rsdoctorcli) 并使用 CLI 提供的 `bundle-diff` 命令，详见[命令使用教程](/guide/start/cli#bundle-diff-%E5%91%BD%E4%BB%A4)。
+
+### 通过 CLI 生成独立 HTML 报告 \{#generate-a-standalone-html-report-with-cli}
+
+使用 `--html` 生成独立 HTML 报告；生成时不会启动报告服务器或自动打开浏览器，之后可直接在浏览器中打开文件。使用 `--output` 指定输出路径；默认文件名为 `rsdoctor-diff.html`。
+
+```bash
+rsdoctor bundle-diff \
+  --baseline="baseline/.rsdoctor/manifest.json" \
+  --current="current/.rsdoctor/manifest.json" \
+  --html \
+  --output="result.html"
+```
 
 ### 通过 CLI 生成 JSON 报告
 

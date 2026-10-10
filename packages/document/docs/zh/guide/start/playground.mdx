@@ -21,6 +21,8 @@ Playground 是 Rsdoctor 提供的在线分析工具，支持上传构建分析�
 > 具体配置可查看 [output 配置](/config/options/output)。
 
 ```js title="rspack.config.mjs"
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+
 export default {
   plugins: [
     new RsdoctorRspackPlugin({
@@ -65,7 +67,7 @@ Brief 模式与 Normal 模式的区别：
 
 **方式一：使用 verbose 模式**
 
-`verbose` 模式会输出所有构建信息（除调试信息外），自动包含 Rsdoctor 所需的数据。如想精简 stats 的输出数据，可参考下方示例。详细说明请查看 [Rspack stats](https://rspack.dev/config/stats)。
+`verbose` 模式会输出所有构建信息（除调试信息外），自动包含 Rsdoctor 所需的数据。如想精简 stats 的输出数据，可参考下方示例。详细说明请查看 [Rspack stats](https://rspack.rs/zh/config/stats)。
 
 ```js title="rspack.config.mjs 或 webpack.config.mjs"
 export default {
@@ -96,10 +98,18 @@ export default {
 - 可选配置
   - `optimizationBailout`：可选配置，如果不开启该配置，只会影响每个 Module 的 [Bailout Reason](/guide/usage/module-analysis#bailout-reason) 的展示。
 
+配置 `stats` 只决定包含哪些字段，不会自动生成 `stats.json` 文件。使用 `@rspack/cli` 的项目可运行以下命令导出：
+
+```bash
+npx rspack build --json stats.json
+```
+
+使用其他构建工具时，请通过对应的 Stats JSON 导出命令或 API 生成文件。
+
 #### 使用步骤
 
-1. 在构建配置中设置上述 stats 选项
-2. 构建项目，生成 `stats.json` 文件
+1. 在构建配置中设置上述 stats 选项并导出 `stats.json`
+2. 找到生成的 `stats.json` 文件
 3. 访问 [Playground 页面](https://rsdoctor.rs/preview/#/resources/uploader)
 4. 上传 `stats.json` 文件
 5. 查看自动生成的分析报告

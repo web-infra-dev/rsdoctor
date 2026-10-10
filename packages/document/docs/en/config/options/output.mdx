@@ -15,7 +15,7 @@ import { Badge } from '@theme';
 Rsdoctor report mode, default is `normal`.
 
 - **normal:** Generates a `.rsdoctor` folder in the build output directory, containing various data files and displaying code in the report page. The output directory can be configured via [reportDir](#reportdir).
-- **brief:** Generates `rsdoctor-report.html` in the report output directory. This directory defaults to the build output directory and can be configured via [reportDir](#reportdir). All build analysis data is embedded in this standalone HTML file, which can be opened directly in a browser. See [mode: 'brief'](#mode-brief) for more options.
+- **brief:** Generates the formats selected by `output.options.type` in the report output directory, which defaults to the build output directory and can be configured via [reportDir](#reportdir). The default format is HTML (`rsdoctor-report.html`); selecting only `['json']` generates JSON without HTML. See [mode: 'brief'](#mode-brief) for more options.
 
 :::tip
 `output.mode` does not support `lite`. Use [output.reportCodeType](#reportcodetype) to control whether source and asset code is included. The `features` lite configurations remain supported.
@@ -198,8 +198,8 @@ NormalModeOptions currently has an empty Object type.
 new RsdoctorRspackPlugin({
   output: {
     reportCodeType: 'noModuleSource', // or 'noAssetsAndModuleSource'
-  }
-}),
+  },
+});
 ```
 
 ## reportDir
