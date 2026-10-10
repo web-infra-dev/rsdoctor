@@ -384,72 +384,7 @@ interface SourceRange {
 
 ### AST 处理
 
-规则的 `check` 回调提供 `moduleGraph`。可以通过 `moduleGraph.getModules()` 获取模块，并在有 AST 时通过 `module.getProgram()` 读取转换后代码的 ESTree AST。`@rsdoctor/core` 不导出内部使用的 `parser`、`asserts` 和 `Document`；如需额外解析或遍历 AST，请使用自己的工具。
-
-### 上报代码位置
-
-上报代码位置时，需要在 `report` 中提供 `document`。AST 对应转换后的代码；如果存在有效的映射和原始代码，可以通过 `module.getSourceRange()` 获取原始位置。否则应上报转换后的代码，并将 `isTransformed` 设为 `true`：
-
-```ts
-import { defineRule } from '@rsdoctor/core';
-
-export const ReportCodeLocation = defineRule(() => ({
-  meta: {
-    category: 'compile',
-    severity: 'Warn',
-    title: 'report-code-location',
-  },
-  check({ moduleGraph, report }) {
-    const module = moduleGraph
-      .getModules()
-      .find((item) => item.getProgram()?.body.length);
-    const node = module?.getProgram()?.body[0]; // 替换为规则实际找到的节点。
-    if (!module || !node?.loc) return;
-
-    const transformedRange = node.loc;
-    const sourceRange = module.getSourceRange(transformedRange);
-    const { source, transformed } = module.getSource();
-    let range = {
-      start: {
-        line: transformedRange.start.line,
-        column: transformedRange.start.column,
-      },
-      end: {
-        line: transformedRange.end.line,
-        column: transformedRange.end.column,
-      },
-    };
-    let content = transformed;
-    let isTransformed = true;
-
-    if (
-      source &&
-      sourceRange?.start.line !== undefined &&
-      sourceRange.start.column !== undefined &&
-      sourceRange.end?.line !== undefined &&
-      sourceRange.end.column !== undefined
-    ) {
-      range = {
-        start: {
-          line: sourceRange.start.line,
-          column: sourceRange.start.column,
-        },
-        end: {
-          line: sourceRange.end.line,
-          column: sourceRange.end.column,
-        },
-      };
-      content = source;
-      isTransformed = false;
-    }
-
-    report({
-      message: 'Found a matching statement',
-      document: { path: module.path, content, range, isTransformed },
-    });
-  },
-}));
-```
+规则的 `check` 回调提供 `moduleGraph`，可以通过 `moduleGraph.getModules()` 获取模块。如需基于 AST 检查，请使用支持项目语法的解析器解析 `module.getSource().source` 中可用的原始代码，并跳过没有源码的模块。`@rsdoctor/core` 不导出内部使用的 `parser`、`asserts` 和 `Document`。
 
 ## 数据上报
 

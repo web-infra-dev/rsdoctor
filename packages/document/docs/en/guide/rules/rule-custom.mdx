@@ -383,72 +383,7 @@ interface SourceRange {
 
 ### AST processing
 
-The rule context exposes `moduleGraph`. Use `moduleGraph.getModules()` to access modules and `module.getProgram()` to read a module's transformed ESTree AST when available. The internal `parser`, `asserts`, and `Document` helpers are not exported by `@rsdoctor/core`; use your own AST tools if you need additional parsing or traversal.
-
-### Reporting code position
-
-To report a code location, include `document` in the report. The AST refers to transformed code. Use `module.getSourceRange()` to map its location back to the original source when a valid mapping and source text are available. Otherwise, report the transformed code and set `isTransformed` to `true`:
-
-```ts
-import { defineRule } from '@rsdoctor/core';
-
-export const ReportCodeLocation = defineRule(() => ({
-  meta: {
-    category: 'compile',
-    severity: 'Warn',
-    title: 'report-code-location',
-  },
-  check({ moduleGraph, report }) {
-    const module = moduleGraph
-      .getModules()
-      .find((item) => item.getProgram()?.body.length);
-    const node = module?.getProgram()?.body[0]; // Replace with the node found by your rule.
-    if (!module || !node?.loc) return;
-
-    const transformedRange = node.loc;
-    const sourceRange = module.getSourceRange(transformedRange);
-    const { source, transformed } = module.getSource();
-    let range = {
-      start: {
-        line: transformedRange.start.line,
-        column: transformedRange.start.column,
-      },
-      end: {
-        line: transformedRange.end.line,
-        column: transformedRange.end.column,
-      },
-    };
-    let content = transformed;
-    let isTransformed = true;
-
-    if (
-      source &&
-      sourceRange?.start.line !== undefined &&
-      sourceRange.start.column !== undefined &&
-      sourceRange.end?.line !== undefined &&
-      sourceRange.end.column !== undefined
-    ) {
-      range = {
-        start: {
-          line: sourceRange.start.line,
-          column: sourceRange.start.column,
-        },
-        end: {
-          line: sourceRange.end.line,
-          column: sourceRange.end.column,
-        },
-      };
-      content = source;
-      isTransformed = false;
-    }
-
-    report({
-      message: 'Found a matching statement',
-      document: { path: module.path, content, range, isTransformed },
-    });
-  },
-}));
-```
+The rule context exposes `moduleGraph`. Use `moduleGraph.getModules()` to access modules. For AST-based checks, parse the available original code from `module.getSource().source` with a parser that supports your project's syntax. Skip modules without source code. The internal `parser`, `asserts`, and `Document` helpers are not exported by `@rsdoctor/core`.
 
 ## Data reporting
 
