@@ -12,7 +12,8 @@
   "types": "dist/index.d.ts",
   "files": [
     "docs",
-    "src"
+    "src",
+    "theme"
   ],
   "scripts": {
     "build": "cross-env RSPRESS_PERSISTENT_CACHE=false rs doc build && sh build.sh",
