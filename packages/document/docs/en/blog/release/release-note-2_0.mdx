@@ -3,7 +3,7 @@ published_at: 2026-09
 ---
 
 <img
-  src="https://assets.rspack.rs/rsdoctor/rsdoctor_2.png"
+  src="https://assets.rspack.rs/rsdoctor/rsdoctor-banner-2-0.png"
   alt="Rsdoctor 2.0 release banner"
   style={{ margin: 'auto' }}
 />
@@ -27,7 +27,7 @@ Highlights in this release include:
 - **Faster analysis with Rspack**: Rsdoctor 2.0 is fully focused on Rspack, and expensive data processing runs inside Rspack. When introduced as an option in 1.0, this reduced overall analysis time by **more than 20%**. In 2.0, it is always enabled and avoids repeated work such as stats conversion.
 - **Build analysis for agents**: Agent CLI and the Rsdoctor analysis skill let coding agents query build data and return actionable optimization suggestions.
 - **Unified multi-compiler analysis**: The regular Rspack plugin automatically handles multi-compiler builds, Rsbuild environments, and child compilers while keeping their data isolated.
-- **A smaller installation footprint**: Core capabilities are consolidated into `@rsdoctor/core`. With `V2`, a complete production install contains 18 packages instead of 83 and is **56.6%** smaller than 1.6.2.
+- **A smaller installation footprint**: Core capabilities are consolidated into `@rsdoctor/core`. With `V2`, a complete production install contains 18 packages instead of 83 and is **56.6%** smaller than v1.
 - **Faster rebuild analysis**: Loader caching, fewer unnecessary calculations, and faster report writes reduce median HMR time by about **47%** in the benchmark.
 
 ## Deeper and faster Rspack analysis {#rspack-native-by-default}
@@ -42,7 +42,7 @@ Projects no longer need [`experiments.enableNativePlugin`](/config/options/exper
 
 ## Build analysis for agents
 
-Rsdoctor reports contain detailed information about assets, modules, packages, loaders, and tree shaking. For a large project, finding an answer can still require moving between several pages and combining multiple dimensions of data manually.
+Rsdoctor reports cover assets, modules, dependencies, and other build data. For a large project, finding an answer can still require moving between several pages and combining multiple dimensions of data manually.
 
 Agent CLI and the Rsdoctor analysis skill were first introduced during the 1.x cycle. In 2.0, they become the recommended workflow for AI-assisted analysis. [`@rsdoctor/agent-cli`](/guide/start/ai#agent-cli) reads `rsdoctor-data.json` directly and returns structured JSON, so coding agents can search and filter the report without starting a long-running service.
 
@@ -52,10 +52,20 @@ pnpm add -D @rsdoctor/agent-cli
 
 # Install the Rsdoctor analysis skill (optional)
 npx skills add rstackjs/agent-skills --skill rsdoctor-analysis
-
-# Build and generate JSON data
-RSDOCTOR_OUTPUT=json pnpm run build
 ```
+
+We recommend configuring [brief mode](/config/options/output#mode-brief) in the Rsdoctor plugin to generate `rsdoctor-data.json`:
+
+```js
+new RsdoctorRspackPlugin({
+  output: {
+    mode: 'brief',
+    options: { type: ['json'] },
+  },
+});
+```
+
+Then run `pnpm run build`. For a one-off JSON output, you can also run `RSDOCTOR_OUTPUT=json pnpm run build`.
 
 After setup, users do not need to remember or run Agent CLI commands themselves. They can ask their coding agent directly, for example:
 
@@ -166,17 +176,17 @@ Rsdoctor 2.0 deliberately narrows its compatibility and package surface. Account
 
 The following table distinguishes options that are removed from options that remain deprecated or supported:
 
-| Rsdoctor 1.x option                                                                | Status in 2.0                          | Replacement                                                                                                                         |
-| ---------------------------------------------------------------------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin) | Removed                                | Delete the option; the Rspack native plugin is always enabled.                                                                      |
-| `mode: 'normal'`                                                                   | Removed and ignored                    | Use `output.mode: 'normal'`.                                                                                                        |
-| `mode: 'brief'`                                                                    | Removed and ignored                    | Use `output.mode: 'brief'`.                                                                                                         |
-| `mode: 'lite'`                                                                     | Removed and ignored                    | Use `output.mode: 'normal'` with `output.reportCodeType: 'noCode'` or `'noAssetsAndModuleSource'`.                                  |
-| `brief`                                                                            | Deprecated; retained for compatibility | Use `output.mode: 'brief'`, `output.options.type: ['html']`, and `output.options.htmlOptions` for options such as `reportHtmlName`. |
-| `brief.writeDataJson` or `output.options.htmlOptions.writeDataJson`                | Removed                                | Include both formats with `output.options.type: ['html', 'json']`.                                                                  |
-| `output.compressData`                                                              | Removed and ignored                    | Use `output.mode: 'brief'` with `output.options.type: ['json']`.                                                                    |
-| `port`                                                                             | Deprecated; retained for compatibility | Use `server.port`.                                                                                                                  |
-| `supports.generateTileGraph`                                                       | Deprecated; no longer necessary        | Remove the option; Treemap data is generated by default.                                                                            |
+| Rsdoctor 1.x option                                                                | Status in 2.0                          | Replacement                                                                                                                                                                                                                                        |
+| ---------------------------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin) | Removed                                | Delete the option; the Rspack native plugin is always enabled.                                                                                                                                                                                     |
+| [`mode: 'normal'`](/config/options/mode)                                           | Removed and ignored                    | Use [`output.mode: 'normal'`](/config/options/output#mode).                                                                                                                                                                                        |
+| [`mode: 'brief'`](/config/options/mode)                                            | Removed and ignored                    | Use [`output.mode: 'brief'`](/config/options/output#mode-brief).                                                                                                                                                                                   |
+| [`mode: 'lite'`](/config/options/mode)                                             | Removed and ignored                    | Use [`output.mode: 'normal'`](/config/options/output#mode) with [`output.reportCodeType`](/config/options/output#reportcodetype) set to `'noCode'` or `'noAssetsAndModuleSource'`.                                                                 |
+| [`brief`](/guide/migration/migration-v2#brief)                                     | Deprecated; retained for compatibility | Use [`output.mode: 'brief'`](/config/options/output#mode-brief), [`output.options.type: ['html']`](/config/options/output#mode-brief), and [`output.options.htmlOptions`](/config/options/output#mode-brief) for options such as `reportHtmlName`. |
+| `brief.writeDataJson` or `output.options.htmlOptions.writeDataJson`                | Removed                                | Include both formats with [`output.options.type: ['html', 'json']`](/config/options/output#mode-brief).                                                                                                                                            |
+| [`output.compressData`](/config/options/output#compressdata)                       | Removed and ignored                    | Use [`output.mode: 'brief'`](/config/options/output#mode-brief) with [`output.options.type: ['json']`](/config/options/output#mode-brief).                                                                                                         |
+| [`port`](/guide/migration/migration-v2#port)                                       | Deprecated; retained for compatibility | Use [`server.port`](/config/options/server#port).                                                                                                                                                                                                  |
+| `supports.generateTileGraph`                                                       | Deprecated; no longer necessary        | Remove the option; Treemap data is generated by default.                                                                                                                                                                                           |
 
 See the [configuration migration guide](/guide/migration/migration-v2#configuration-migration) for complete examples.
 
