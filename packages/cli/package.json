@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "cac": "^7.0.0",
+    "cac": "^7.0.1",
     "typescript": "catalog:"
   },
   "engines": {
