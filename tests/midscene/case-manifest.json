@@ -1,0 +1,5 @@
+{
+  "BUNDLE-01 Inspect modules in an output asset": "shard-1",
+  "BUNDLE-02 Filter large assets and restore the smaller asset": "shard-1",
+  "BUNDLE-03 Filter modules inside a selected asset": "shard-1"
+}
