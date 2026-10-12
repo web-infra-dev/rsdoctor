@@ -23,6 +23,7 @@ define.app(({ env }) => {
     process.env;
   const ENABLE_DEVTOOLS_PLUGIN = process.env.ENABLE_DEVTOOLS_PLUGIN === 'true';
   const ENABLE_CLIENT_SERVER = process.env.ENABLE_CLIENT_SERVER === 'true';
+  const PREVIEW_ONLY = process.env.RSDOCTOR_PREVIEW_ONLY === 'true';
 
   const IS_PRODUCTION = env === 'production';
 
@@ -47,7 +48,7 @@ define.app(({ env }) => {
     source: {
       entry: {
         index: ClientEntry,
-        diff: './src/diff.tsx',
+        ...(!PREVIEW_ONLY && { diff: './src/diff.tsx' }),
       },
       alias: {
         src: path.resolve(import.meta.dirname, 'src'),
@@ -70,7 +71,7 @@ define.app(({ env }) => {
         '@rsbuild/plugin-svgr',
       ],
       distPath: {
-        root: path.basename(DistPath),
+        root: PREVIEW_ONLY ? 'dist-preview' : path.basename(DistPath),
         js: 'resource/js',
         css: 'resource/css',
         svg: 'resource/svg',
