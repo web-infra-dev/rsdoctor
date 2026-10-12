@@ -33,7 +33,7 @@
   },
   "packageManager": "pnpm@12.6.0",
   "engines": {
-    "node": ">=22.18.0",
+    "node": ">=24.21.0",
     "pnpm": ">=12.6.0"
   }
 }
