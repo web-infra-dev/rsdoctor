@@ -136,10 +136,6 @@ Watch mode writes report data with a faster compression level to reduce synchron
 
 In the benchmark, median HMR time dropped from 6.81 s to 3.64 s, an improvement of about **47%**. In a separate repeated-build benchmark, analysis time dropped from 250.9 ms to 14.2 ms, an improvement of **94.3%**.
 
-> The benchmark disabled the Rsdoctor client server. The repeated-build benchmark used 100 modules, one warm-up, and the median of five runs.
->
-> Related PRs: [#1901](https://github.com/web-infra-dev/rsdoctor/pull/1901), [#1904](https://github.com/web-infra-dev/rsdoctor/pull/1904), [#1905](https://github.com/web-infra-dev/rsdoctor/pull/1905), [#1906](https://github.com/web-infra-dev/rsdoctor/pull/1906), [#1908](https://github.com/web-infra-dev/rsdoctor/pull/1908), and [#1913](https://github.com/web-infra-dev/rsdoctor/pull/1913).
-
 ## Refined bundle analysis
 
 Large projects often produce assets with many deeply nested modules. Rsdoctor 2.0 improves both the rendering performance of the Bundle Size page and the analysis path from selecting assets and filtering chunks to locating modules and opening their details, making complex output easier to explore and understand.
