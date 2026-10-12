@@ -136,10 +136,6 @@ watch 模式会使用更快的压缩级别写入报告数据，以减少每次�
 
 在 bench 中，HMR 中位数从 6.81 s 降至 3.64 s，提升约 **47%**。另一组重复构建基准中，分析耗时从 250.9 ms 降至 14.2 ms，提升 **94.3%**。
 
-> bench 关闭了 Rsdoctor client server；重复构建基准使用 100 个 module，预热 1 次后取 5 次中位数。
->
-> 相关 PR：[#1901](https://github.com/web-infra-dev/rsdoctor/pull/1901)、[#1904](https://github.com/web-infra-dev/rsdoctor/pull/1904)、[#1905](https://github.com/web-infra-dev/rsdoctor/pull/1905)、[#1906](https://github.com/web-infra-dev/rsdoctor/pull/1906)、[#1908](https://github.com/web-infra-dev/rsdoctor/pull/1908)、[#1913](https://github.com/web-infra-dev/rsdoctor/pull/1913)。
-
 ## 更清晰的产物分析体验 {#refined-bundle-analysis}
 
 大型项目的产物往往包含数量众多、层级很深的 module。Rsdoctor 2.0 不仅优化了 Bundle Size 页面的渲染性能，也重新梳理了从选择 asset、筛选 chunk，到定位 module 和查看详情的分析路径，让复杂产物更容易浏览和理解。
