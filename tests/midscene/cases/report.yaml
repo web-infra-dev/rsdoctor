@@ -13,7 +13,9 @@ cases:
       - app.open: { path: '/#/resources/uploader' }
       - aiAct:
           prompt: Click the JSON upload area and upload rsdoctor-data.json.
-          options: { fileChooserAllowedDir: .fixture/uploads }
+          options:
+            fileChooserAllowedDir: .fixture/uploads
+            fileChooserAccept: .fixture/uploads/rsdoctor-data.json
       - aiAssert: The uploaded report displays Bundle Overall.
       - aiAct: Use report navigation to open Bundle Size.
       - aiAssert: Output Assets List displays small.js and large.js from the uploaded build.

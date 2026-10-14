@@ -5,6 +5,7 @@ on:
     paths:
       [
         'packages/**',
+        'e2e/cases/**',
         'tests/midscene/**',
         '.github/workflows/midscene.yml',
         'pnpm-lock.yaml',
@@ -14,6 +15,7 @@ on:
     paths:
       [
         'packages/**',
+        'e2e/cases/**',
         'tests/midscene/**',
         '.github/workflows/midscene.yml',
         'pnpm-lock.yaml',

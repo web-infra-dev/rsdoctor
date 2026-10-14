@@ -25,3 +25,17 @@ node scripts/reproduce-diff-assets.mjs
 
 A renderer stall results in a nonzero exit. The script uses a fresh browser,
 does not modify reports or product code, and closes the browser afterward.
+
+## Seed response parsing can omit a file chooser registration
+
+In fork CI run `38527645392`, 12 of 13 cases passed. The upload case's raw model
+reply contained consecutive `RegisterFileChooserAccept` and `Tap` action blocks,
+but the parsed action list contained only `Tap`. No registration appeared among
+the executed tasks, so clicking the upload area did not attach the manifest.
+Local runs had passed when registration and clicking were planned separately.
+
+The upload case now supplies its known synthetic file through the framework's
+`fileChooserAccept` option. The UI click remains AI-driven, and independent
+assertions still verify the uploaded report and its assets. This avoids relying
+on response parsing for fixture provisioning; it does not patch the product or
+the framework parser.
