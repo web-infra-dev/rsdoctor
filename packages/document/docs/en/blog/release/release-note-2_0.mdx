@@ -31,7 +31,7 @@ As part of this change, Rsdoctor 2.0 drops webpack support. Projects using webpa
 
 Highlights in this release include:
 
-- [Faster analysis](#faster-analysis): Native analysis is enabled by default, with less repeated data processing in JavaScript.
+- [Faster analysis](#faster-analysis): Building on native analysis enabled by default since 1.5, Rsdoctor 2.0 reduces repeated processing in JavaScript. In the react-10k benchmark, Rsdoctor's added overhead fell by about **57–64%** compared with 1.4.0.
 - [Build analysis for agents](#build-analysis-for-agents): Agent CLI and the Rsdoctor analysis skill let agents investigate build problems directly.
 - [Smaller installation size](#a-smaller-package-and-dependency-graph): Consolidated packages and fewer runtime dependencies reduce third-party dependency size by **56.6%**.
 - [Faster rebuilds](#faster-rebuilds-in-watch-mode): Preserved loader caches and less analysis work reduce median HMR time by about **47%** in the benchmark.
@@ -41,11 +41,21 @@ Highlights in this release include:
 
 Supporting both Rspack and webpack in Rsdoctor 1.x meant relying on data available from both bundlers for some analysis features. In 2.0, Rsdoctor can use more of Rspack's internal data directly.
 
-The Rspack native plugin moves expensive data processing into Rust inside Rspack. Introduced as an optional optimization in Rsdoctor 1.0, it reduced overall analysis time by **more than 20%** in large-project testing at the time. Rsdoctor 2.0 enables it by default.
+The Rspack native plugin moves expensive data processing into Rust inside Rspack. Introduced as an optional optimization in Rsdoctor 1.0, it has been enabled by default since 1.5. Rsdoctor 2.0 further improves data collection and processing.
 
 Rspack now provides module and chunk graphs directly instead of sending them through stats conversion. Resolver analysis reuses Rspack's internal resolver data, while side-effect source code is collected only when tree-shaking analysis needs it. These changes reduce data conversion and repeated processing in JavaScript.
 
 Projects no longer need [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin). Remove the option when upgrading to 2.0.
+
+The react-10k benchmark used Rsbuild / Rspack 2.2.7 with build caching disabled. Each configuration had two warm-up runs followed by nine interleaved measurements; the table shows medians. A build without Rsdoctor took 0.91 s. Compared with Rsdoctor 1.4.0, 2.0.0-rc.3 reduced Rsdoctor's added overhead by about **57–64%** and total build time by about **54–60%**:
+
+| Configuration                  | 1.4.0 total | 2.0.0-rc.3 total | Change in Rsdoctor overhead |
+| ------------------------------ | ----------: | ---------------: | --------------------------: |
+| Default analysis + full report |     18.98 s |           8.68 s |  18.07 → 7.77 s, down 57.0% |
+| Bundle only + full report      |     16.49 s |           6.52 s |  15.58 → 5.61 s, down 64.0% |
+| Bundle only + brief JSON       |     16.02 s |           6.34 s |  15.11 → 5.43 s, down 64.1% |
+
+The RC was faster in all nine paired measurements for each configuration. Peak RSS fell by about 19.7%, 30.8%, and 36.7%, respectively; for default analysis, it dropped from 2,186 MiB to 1,755 MiB.
 
 ## Build analysis for agents
 
