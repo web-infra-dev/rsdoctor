@@ -10,6 +10,7 @@ import {
   Divider,
   Empty,
   Popover as BasePopover,
+  Select,
   Space,
   Tag,
   type TagProps,
@@ -50,6 +51,11 @@ import { ModuleGraphListContext } from '../config';
 import styles from './asset.module.scss';
 import { ModuleData } from '@rsdoctor/shared/graph';
 import { ErrorBoundary } from 'react-error-boundary';
+import {
+  getModuleTreeSizes,
+  sortModuleTree,
+  type ModuleTreeSort,
+} from './module-tree-sort';
 
 const { DirectoryTree } = Tree;
 
@@ -474,6 +480,7 @@ export const AssetDetail: React.FC<{
   root,
 }) => {
   const [moduleKeyword, setModuleKeyword] = useState('');
+  const [sortBy, setSortBy] = useState<ModuleTreeSort>('original');
   const [defaultExpandAll, setDefaultExpandAll] = useState(false);
   const [moduleJumpList, setModuleJumpList] = useState([] as number[]);
   const [showModuleGraphViewer, setShowModuleGraphViewer] = useState(false);
@@ -535,7 +542,7 @@ export const AssetDetail: React.FC<{
               />
             </div>
             <div>
-              <Space>
+              <Space wrap>
                 <KeywordInput
                   placeholder="search module by keyword"
                   onChange={onSearch}
@@ -546,6 +553,18 @@ export const AssetDetail: React.FC<{
                   size="small"
                   icon={<ColumnHeightOutlined />}
                 />
+                <Select<ModuleTreeSort>
+                  aria-label="Sort modules"
+                  size="small"
+                  style={{ width: 176 }}
+                  value={sortBy}
+                  onChange={setSortBy}
+                  options={[
+                    { value: 'original', label: 'Original order' },
+                    { value: 'parsedSize', label: 'Bundled size ↓' },
+                    { value: 'sourceSize', label: 'Source size ↓' },
+                  ]}
+                />
               </Space>
             </div>
             <AssetDetailTree
@@ -554,6 +573,7 @@ export const AssetDetail: React.FC<{
               filteredModules={filteredModules}
               defaultExpandAll={defaultExpandAll}
               moduleKeyword={moduleKeyword}
+              sortBy={sortBy}
               openModuleGraphViewer={openModuleGraphViewer}
             />
           </>
@@ -590,6 +610,7 @@ const AssetDetailTree = memo(
     moduleKeyword,
     openModuleGraphViewer,
     assetPath,
+    sortBy,
   }: {
     filteredModules: SDK.ModuleData[];
     includeModules: SDK.ModuleData[];
@@ -597,6 +618,7 @@ const AssetDetailTree = memo(
     moduleKeyword: string;
     openModuleGraphViewer: (moduleId: number[]) => void;
     assetPath: string;
+    sortBy: ModuleTreeSort;
   }) => {
     const ITEM_HEIGHT = 30;
     const PERMANENT_PERF_MODE = false;
@@ -622,7 +644,7 @@ const AssetDetailTree = memo(
       return onScroll;
     }, []);
 
-    const treeData = useMemo(() => {
+    const { treeData, sizes } = useMemo(() => {
       // Normalize paths for comparison - convert backslashes to forward slashes
       const normalizePath = (path: string) => path.replace(/\\/g, '/');
 
@@ -690,8 +712,20 @@ const AssetDetailTree = memo(
         },
         page: 'bundle',
       });
-      return treeData;
-    }, [filteredModules, openModuleGraphViewer]);
+      return {
+        treeData,
+        sizes: getModuleTreeSizes(
+          treeData,
+          filteredModulesMap,
+          includeModulesMap,
+        ),
+      };
+    }, [filteredModules, includeModules, openModuleGraphViewer]);
+
+    const sortedTreeData = useMemo(
+      () => sortModuleTree(treeData, sizes, sortBy),
+      [treeData, sizes, sortBy],
+    );
 
     return (
       <PopupContext.Provider value={{ enabled: !performanceMode }}>
@@ -736,7 +770,7 @@ const AssetDetailTree = memo(
                             ? [treeData[0].key]
                             : []
                       }
-                      treeData={treeData as AntdDataNode[]}
+                      treeData={sortedTreeData as AntdDataNode[]}
                       motion={ENABLE_ANIMATIONS ? undefined : false}
                     />
                   ) : (
