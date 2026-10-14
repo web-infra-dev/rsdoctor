@@ -23,29 +23,17 @@ import { BlogAuthors } from '@rstackjs/doc-ui/blog-authors';
 
 <BlogAuthors />
 
-我们很高兴地宣布 **Rsdoctor 2.0 正式发布**！🎉
+我们很高兴地宣布 Rsdoctor 2.0 正式发布！🎉
 
-Rsdoctor 2.0 将聚焦 Rspack，利用其原生能力加快构建分析，并通过精简依赖将安装体积减少 56%。同时，2.0 改善了 agent 支持，让同一份构建数据既能用于开发者的可视化排查，也能用于 agent 的自动化分析。
-
-随着这一调整，Rsdoctor 2.0 将不再兼容 webpack，使用 webpack 的项目可以继续使用 Rsdoctor 1.x。
+Rsdoctor 是专为 Rspack 打造的构建分析工具，既能通过可视化报告帮助开发者排查问题，也能为 agent 提供数据，实现自动化诊断与优化。
 
 本次更新的主要亮点包括：
 
-- [更快的分析速度](#faster-analysis)：默认启用原生分析能力，减少 JavaScript 侧的重复数据处理。
-- [面向 agent 的构建分析](#build-analysis-for-agents)：通过 Agent CLI 与 Rsdoctor analysis skill，让 agent 直接查询数据、排查构建问题。
-- [更小的安装体积](#a-smaller-package-and-dependency-graph)：合并包结构、精简运行时依赖，第三方依赖体积减少 **56.6%**。
-- [更快的增量构建](#faster-rebuilds-in-watch-mode)：保留 loader 缓存并减少分析开销，在基准测试中，HMR 耗时中位数降低约 **47%**。
-- [改进多 Compiler 支持](#one-report-for-every-compiler)：在同一份报告中查看多个 compiler 的分析结果。
-
-## 更快的分析速度 \{#faster-analysis}
-
-Rsdoctor 1.x 同时支持 Rspack 和 webpack，部分分析能力需要依赖两者都能提供的数据。2.0 聚焦 Rspack 后，可以直接利用更多 Rspack 内部数据。
-
-Rspack native plugin 将耗时较长的数据处理交给 Rspack 内部的 Rust 实现。它在 Rsdoctor 1.0 中作为可选优化推出，在当时的大型项目测试中将整体分析时间减少了 **20% 以上**。Rsdoctor 2.0 默认启用这项能力。
-
-模块图和 chunk 图现在直接由 Rspack 提供，无需经过 stats 转换。Resolver 分析复用 Rspack 内部的解析数据，副作用源码也只在启用 tree shaking 分析时采集，从而减少 JavaScript 侧的数据转换和重复处理。
-
-项目不再需要配置 [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin)，升级到 2.0 后删除该配置即可。
+- [面向 agent 的构建分析](#build-analysis-for-agents)：同一份分析数据，既支持开发者可视化排查，也支持 agent 自动化分析
+- [更小的安装体积](#a-smaller-package-and-dependency-graph)：安装体积减少 56%，依赖数量减少 78%
+- [更快的分析速度](#faster-analysis)：构建分析耗时减少 57%
+- [更快的增量构建](#faster-rebuilds-in-watch-mode)：减少重构建过程中的分析开销，HMR 耗时降低约 **47%**
+- [改进多 compiler 支持](#one-report-for-every-compiler)：在同一份报告中查看多个 compiler 的分析结果
 
 ## 面向 agent 的构建分析 \{#build-analysis-for-agents}
 
@@ -92,7 +80,7 @@ Rsdoctor 2.0 使用 Agent CLI 替代 `@rsdoctor/mcp-server`，按需执行，无
 
 ## 更小的安装体积 \{#a-smaller-package-and-dependency-graph}
 
-Rsdoctor 2.0 将原先分散在多个包中的核心分析能力整合到 `@rsdoctor/core`，并精简运行时依赖。这减少了安装时需要下载的包数量，也降低了本地开发和 CI 环境中的磁盘占用。
+Rsdoctor 2.0 将原先分散在多个包中的分析能力整合到 `@rsdoctor/core`，并精简运行时依赖。这减少了安装时需要下载的包数量，也降低了本地开发和 CI 环境中的磁盘占用。
 
 经过这些调整，Rsdoctor 2.0 的安装体积从 25.5 MB 降至 11.1 MB，依赖数量从 83 个减少到 18 个：
 
@@ -100,6 +88,17 @@ Rsdoctor 2.0 将原先分散在多个包中的核心分析能力整合到 `@rsdo
 | -------- | -----------: | -----------: | --------: |
 | 安装体积 |      25.5 MB |      11.1 MB | **56.6%** |
 | 依赖数量 |           83 |           18 | **78.3%** |
+
+## 更快的分析速度 \{#faster-analysis}
+
+自 1.5 起，Rsdoctor 已默认使用 Rspack 原生插件采集构建数据。2.0 进一步精简了 JavaScript 侧的实现，将更多数据采集逻辑交给原生插件，原有的 [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin) 配置也随之移除。
+
+这些优化进一步降低了 Rsdoctor 的分析开销。在基准测试中，Rsdoctor 2.0 相比 1.4 的耗时减少了 57%：
+
+| 指标     | Rsdoctor 1.4 | Rsdoctor 2.0 |      降幅 |
+| -------- | -----------: | -----------: | --------: |
+| 分析耗时 |      18.07 s |       7.77 s | **57.0%** |
+| 峰值 RSS |    2,186 MiB |    1,755 MiB | **19.7%** |
 
 ## 更快的增量构建 \{#faster-rebuilds-in-watch-mode}
 
@@ -170,6 +169,7 @@ Treemap 新增全屏模式、可收起的侧边栏、面包屑导航和点击缩
 - [运行环境](/zh/guide/migration/migration-v2#检查构建工具)：要求 Node.js `^20.19.0 || >=22.12.0` 和 Rspack 2.0 及以上版本。
 - [包名与模块格式](/zh/guide/migration/migration-v2#更新-rspack-插件)：使用 `@rsdoctor/core` 替换 `@rsdoctor/rspack-plugin`，并使用 ESM 导入。
 - [AI 工作流](/zh/guide/migration/migration-v2#ai-工作流迁移)：从已移除的 `@rsdoctor/mcp-server` 迁移到 Agent CLI。
+- Rsdoctor 2.0 不再兼容 webpack，使用 webpack 的项目可以继续使用 Rsdoctor 1.x。
 
 完整的升级步骤、配置变更和验证方法，请参考 [Rsdoctor 2.0 升级指南](/zh/guide/migration/migration-v2)。指南也提供了迁移 skill，可让 agent 协助完成升级。
 

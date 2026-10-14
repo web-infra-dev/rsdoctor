@@ -23,29 +23,17 @@ import { BlogAuthors } from '@rstackjs/doc-ui/blog-authors';
 
 <BlogAuthors />
 
-We are excited to announce **Rsdoctor 2.0**! 🎉
+We are excited to announce Rsdoctor 2.0! 🎉
 
-Rsdoctor 2.0 focuses on Rspack, using its native capabilities to speed up build analysis and reducing installation size by 56% through fewer dependencies. It also improves agent support, so the same build data can serve both visual investigation by developers and automated analysis by agents.
-
-As part of this change, Rsdoctor 2.0 drops webpack support. Projects using webpack can continue using Rsdoctor 1.x.
+Rsdoctor is a build analysis tool designed for Rspack. It helps developers investigate problems through visual reports and provides agents with data for automated diagnosis and optimization.
 
 Highlights in this release include:
 
-- [Faster analysis](#faster-analysis): Native analysis is enabled by default, with less repeated data processing in JavaScript.
-- [Build analysis for agents](#build-analysis-for-agents): Agent CLI and the Rsdoctor analysis skill let agents investigate build problems directly.
-- [Smaller installation size](#a-smaller-package-and-dependency-graph): Consolidated packages and fewer runtime dependencies reduce third-party dependency size by **56.6%**.
-- [Faster rebuilds](#faster-rebuilds-in-watch-mode): Preserved loader caches and less analysis work reduce median HMR time by about **47%** in the benchmark.
-- [Improved multi-compiler support](#one-report-for-every-compiler): View analysis results for multiple compilers in one report.
-
-## Faster analysis
-
-Supporting both Rspack and webpack in Rsdoctor 1.x meant relying on data available from both bundlers for some analysis features. In 2.0, Rsdoctor can use more of Rspack's internal data directly.
-
-The Rspack native plugin moves expensive data processing into Rust inside Rspack. Introduced as an optional optimization in Rsdoctor 1.0, it reduced overall analysis time by **more than 20%** in large-project testing at the time. Rsdoctor 2.0 enables it by default.
-
-Rspack now provides module and chunk graphs directly instead of sending them through stats conversion. Resolver analysis reuses Rspack's internal resolver data, while side-effect source code is collected only when tree-shaking analysis needs it. These changes reduce data conversion and repeated processing in JavaScript.
-
-Projects no longer need [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin). Remove the option when upgrading to 2.0.
+- [Build analysis for agents](#build-analysis-for-agents): Use the same analysis data for visual investigation by developers and automated analysis by agents
+- [Smaller installation size](#a-smaller-package-and-dependency-graph): Reduce installation size by 56% and dependency count by 78%
+- [Faster analysis](#faster-analysis): Reduce build analysis time by 57%
+- [Faster rebuilds](#faster-rebuilds-in-watch-mode): Reduce analysis overhead during rebuilds, lowering HMR time by about **47%**
+- [Improved multi-compiler support](#one-report-for-every-compiler): View analysis results for multiple compilers in one report
 
 ## Build analysis for agents
 
@@ -92,7 +80,7 @@ Agent CLI replaces `@rsdoctor/mcp-server` in Rsdoctor 2.0 and runs on demand wit
 
 ## Smaller installation size \{#a-smaller-package-and-dependency-graph}
 
-Rsdoctor 2.0 consolidates core analysis capabilities previously spread across multiple packages into `@rsdoctor/core` and reduces runtime dependencies. This means fewer packages to download during installation and less disk usage in local development and CI environments.
+Rsdoctor 2.0 consolidates analysis capabilities previously spread across multiple packages into `@rsdoctor/core` and reduces runtime dependencies. This means fewer packages to download during installation and less disk usage in local development and CI environments.
 
 These changes reduce the installation size from 25.5 MB to 11.1 MB and the dependency count from 83 to 18:
 
@@ -100,6 +88,17 @@ These changes reduce the installation size from 25.5 MB to 11.1 MB and the depen
 | ----------------- | -----------: | -----------: | -------------: |
 | Installation size |      25.5 MB |      11.1 MB |      **56.6%** |
 | Dependency count  |           83 |           18 |      **78.3%** |
+
+## Faster analysis
+
+Since 1.5, Rsdoctor has used Rspack's native plugin to collect build data by default. Version 2.0 further simplifies the JavaScript implementation by moving more data collection logic to the native plugin. The [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin) option has also been removed.
+
+These optimizations further reduce Rsdoctor's analysis overhead. In the benchmark, Rsdoctor 2.0 reduced analysis time by 57% compared with 1.4:
+
+| Metric        | Rsdoctor 1.4 | Rsdoctor 2.0 | Reduction |
+| ------------- | -----------: | -----------: | --------: |
+| Analysis time |      18.07 s |       7.77 s | **57.0%** |
+| Peak RSS      |    2,186 MiB |    1,755 MiB | **19.7%** |
 
 ## Faster rebuilds \{#faster-rebuilds-in-watch-mode}
 
@@ -170,6 +169,7 @@ When upgrading to Rsdoctor 2.0, check these core changes:
 - [Runtime requirements](/guide/migration/migration-v2#check-your-bundler): Node.js `^20.19.0 || >=22.12.0` and Rspack 2.0 or later are required.
 - [Package name and module format](/guide/migration/migration-v2#update-the-rspack-plugin): Replace `@rsdoctor/rspack-plugin` with `@rsdoctor/core` and use ESM imports.
 - [AI workflow](/guide/migration/migration-v2#ai-workflow-migration): Migrate from the removed `@rsdoctor/mcp-server` to Agent CLI.
+- Rsdoctor 2.0 no longer supports webpack. Projects using webpack can continue using Rsdoctor 1.x.
 
 See the [Rsdoctor 2.0 migration guide](/guide/migration/migration-v2) for the complete upgrade steps, configuration changes, and verification instructions. The guide also includes a migration skill that lets an agent help with the upgrade.
 
