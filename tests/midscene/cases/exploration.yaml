@@ -1,0 +1,33 @@
+cases:
+  - name: EXPLORE-01 Inspect a module through global search
+    tags: [shard-1, exploration]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Open Search Module, search for small-data.js, and submit the search.
+      - aiAssert: The Search Modules dialog lists small-data.js in the small asset and no large-data.js result.
+      - aiAct: Close the Search Modules dialog using its close button, then select small.js in Output Assets List.
+      - aiAssert: The Search Modules dialog is closed and Modules of "small.js" contains small-data.js.
+  - name: EXPLORE-02 Recover from an empty module search
+    tags: [shard-1, exploration]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Open Search Module and search for nonexistent-midscene-module.
+      - aiAssert: The Search Modules dialog displays No modules found.
+      - aiAct: Replace the query with large-data.js and submit the search.
+      - aiAssert: A large-data.js result is visible instead of the empty-state message.
+  - name: EXPLORE-03 Filter modules by keyword and clear the filter
+    tags: [shard-1, exploration]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Select small.js in Output Assets List, then enter nonexistent-midscene-module in the search module by keyword field.
+      - aiAssert: Modules of "small.js" does not list small-data.js while the keyword field contains nonexistent-midscene-module.
+      - aiAct: Clear the module keyword field.
+      - aiAssert: Modules of "small.js" lists small-data.js again.
+  - name: EXPLORE-04 Navigate from the overview to bundle analysis
+    tags: [shard-1, exploration]
+    steps:
+      - app.open: { path: '/#/overall' }
+      - aiAct: Use the report navigation to open Bundle Size. Do not enter a URL.
+      - aiAssert: The Bundle Size page displays Output Assets List with small.js and large.js.
+      - aiAct: Use the report navigation to return to the overview.
+      - aiAssert: Bundle Overall is visible.

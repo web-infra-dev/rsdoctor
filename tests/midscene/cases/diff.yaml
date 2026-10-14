@@ -1,0 +1,10 @@
+cases:
+  - name: DIFF-01 Read bundle comparison entry points
+    tags: [shard-1, diff]
+    steps:
+      - app.open:
+          {
+            path: '/diff.html?__bundle_files__=http%3A%2F%2F127.0.0.1%3A4174%2Fapi%2Fbundle_diff%2Fmanifest.json%2Chttp%3A%2F%2F127.0.0.1%3A4174%2Fapi%2Fbundle_diff%2Fmanifest.json#/resources/bundle/diff',
+          }
+      - aiAct: Bring the overview statistics and comparison tab navigation into view. Stay on Overview and do not activate Assets, Modules, or Packages.
+      - aiAssert: The overview statistics are visible, and the comparison navigation displays Overview, Assets, Modules, and Packages.

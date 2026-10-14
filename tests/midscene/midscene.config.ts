@@ -66,7 +66,7 @@ const open = defineNode<typeof input, void, Context>({
     context.page = await context.session.newPage();
     await context.page.goto(url.href, { waitUntil: 'domcontentloaded' });
     await context.page
-      .locator('#root .ant-card')
+      .locator('#root .ant-card, #root .ant-upload, #root .statistic-card')
       .first()
       .waitFor({ state: 'visible' });
   },

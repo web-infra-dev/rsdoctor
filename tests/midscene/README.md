@@ -1,6 +1,13 @@
 # Midscene AI E2E
 
-Inspect asset modules, filter assets by MB/KB, and filter modules within a selected asset. The fixture compiles two known-size entries with the checked-out Rsdoctor Rspack plugin and serves its native brief report.
+Inspect asset modules, filter assets and modules in both input orders, search modules,
+switch compiler environments, inspect rule results, open bundle comparison, and upload
+a real build manifest. The fixture uses the checked-out Rsdoctor plugins and native reports.
+
+`migration-inventory.json` records all 28 original E2E cases and their migration
+decisions. Original compiler-data and controlled-clock assertions remain unchanged.
+Bundle comparison verifies only the original overview and tab entries; the separate
+Assets activation stall and model-free reproducer are documented in [known issues](KNOWN-ISSUES.md).
 
 Existing Rstest and Playwright suites are unchanged. This isolated npm package uses
 `@midscene/test` 1.15.1, not Vitest. Each case starts in a fresh browser context.

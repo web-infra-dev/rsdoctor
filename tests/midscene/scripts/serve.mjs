@@ -3,7 +3,12 @@ import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { RsdoctorRspackPlugin } from '../../../packages/core/dist/index.js';
+import { buildMultiCompilerFixture } from './multi-compiler.mjs';
+import { buildDiffFixture } from './diff-fixture.mjs';
+import {
+  RsdoctorRspackPlugin,
+  resolveClientDiffHtmlPath,
+} from '../../../packages/core/dist/index.js';
 
 const require = createRequire(
   new URL('../../../packages/core/package.json', import.meta.url),
@@ -38,7 +43,8 @@ const compiler = rspack({
   plugins: [
     new RsdoctorRspackPlugin({
       disableClientServer: true,
-      output: { mode: 'brief' },
+      output: { mode: 'brief', options: { type: ['json', 'html'] } },
+      linter: { rules: { 'ecma-version-check': ['Warn', { ecmaVersion: 3 }] } },
     }),
   ],
 });
@@ -53,8 +59,61 @@ await new Promise((resolve, reject) =>
   compiler.close((error) => (error ? reject(error) : resolve())),
 );
 const report = await readFile(path.join(output, 'rsdoctor-report.html'));
-const server = createServer((request, response) => {
-  if (request.url?.split('?')[0] !== '/') {
+const diffPath = resolveClientDiffHtmlPath();
+const diffReport = await readFile(diffPath);
+const compilerReports = await buildMultiCompilerFixture(fixture);
+const diffManifest = await buildDiffFixture(fixture);
+await mkdir(path.join(fixture, 'uploads'), { recursive: true });
+await writeFile(
+  path.join(fixture, 'uploads', 'rsdoctor-data.json'),
+  await readFile(path.join(output, 'rsdoctor-data.json')),
+);
+const server = createServer(async (request, response) => {
+  const pathname = new URL(request.url ?? '/', 'http://127.0.0.1:4174')
+    .pathname;
+  const compilerReport = compilerReports.get(pathname);
+  if (compilerReport) {
+    response
+      .writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+      .end(compilerReport);
+    return;
+  }
+  if (pathname === '/diff.html') {
+    response
+      .writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+      .end(diffReport);
+    return;
+  }
+  if (
+    pathname === '/api/bundle_diff/manifest.json' ||
+    pathname === '/api/manifest.json'
+  ) {
+    response
+      .writeHead(200, { 'Content-Type': 'application/json' })
+      .end(JSON.stringify(diffManifest));
+    return;
+  }
+  if (pathname.startsWith('/resource/')) {
+    const root = path.dirname(diffPath);
+    const asset = path.resolve(root, '.' + pathname);
+    if (!asset.startsWith(root + path.sep)) {
+      response.writeHead(404).end('Not found');
+      return;
+    }
+    try {
+      const body = await readFile(asset);
+      const contentType = asset.endsWith('.js')
+        ? 'text/javascript'
+        : asset.endsWith('.css')
+          ? 'text/css'
+          : 'application/octet-stream';
+      response.writeHead(200, { 'Content-Type': contentType }).end(body);
+    } catch {
+      response.writeHead(404).end('Not found');
+    }
+    return;
+  }
+  if (pathname !== '/') {
     response.writeHead(404).end('Not found');
     return;
   }

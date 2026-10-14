@@ -11,7 +11,7 @@ cases:
     tags: [shard-1, assets]
     steps:
       - app.open: { path: '/#/bundle/size' }
-      - aiAct: Set the Asset Size filter to 1 MB.
+      - aiAct: First change the Asset Size unit to MB, then enter 1 in its numeric input, in that order.
       - aiAssert: The Output Assets List contains large.js but not small.js, and the Asset Size filter shows 1 MB.
       - aiAct: Change only the Asset Size unit to KB, keeping the value 1.
       - aiAssert: The Output Assets List contains both small.js and large.js, and the Asset Size filter shows 1 KB.
@@ -19,9 +19,31 @@ cases:
     tags: [shard-1, filter]
     steps:
       - app.open: { path: '/#/bundle/size' }
-      - aiAct: In the Output Assets List, select small.js, then set the Module Size filter to 1 MB.
+      - aiAct: In the Output Assets List, select small.js. First change the Module Size unit to MB, then enter 1 in its numeric input, in that order.
       - aiAssert: The Modules of "small.js" panel has no small-data.js entry and the Module Size filter shows 1 MB.
       - aiAct: In the Output Assets List, select large.js.
       - aiAssert: The Modules of "large.js" panel contains large-data.js while the Module Size filter is still 1 MB.
       - aiAct: Change the Module Size unit to KB without changing the value, then select small.js in the Output Assets List.
+      - aiAssert: The Modules of "small.js" panel shows small-data.js and the Module Size filter shows 1 KB.
+  - name: BUNDLE-04 Apply the asset filter value before changing its unit
+    tags: [shard-1, original-filter-order]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Enter 1 in the Asset Size numeric input. Leave its current unit unchanged.
+      - aiAssert: The Asset Size value is 1, its unit is not MB, and small.js is still visible in Output Assets List.
+      - aiAct: Change only the Asset Size unit to MB without typing the value again.
+      - aiAssert: The Output Assets List contains large.js but not small.js, and the Asset Size filter shows 1 MB.
+      - aiAct: Change only the Asset Size unit to KB without typing the value again.
+      - aiAssert: The Output Assets List contains both small.js and large.js, and the Asset Size filter shows 1 KB.
+  - name: BUNDLE-05 Apply the module filter value before changing its unit
+    tags: [shard-1, original-filter-order]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Select small.js in Output Assets List and enter 1 in the Module Size numeric input. Leave its current unit unchanged.
+      - aiAssert: The Module Size value is 1, its unit is not MB, and small-data.js is visible in the selected asset's module panel.
+      - aiAct: Change only the Module Size unit to MB without typing the value again.
+      - aiAssert: The Modules of "small.js" panel has no small-data.js entry and the Module Size filter shows 1 MB.
+      - aiAct: Select large.js in Output Assets List, keeping the Module Size filter unchanged.
+      - aiAssert: The Modules of "large.js" panel contains large-data.js while the Module Size filter shows 1 MB.
+      - aiAct: Change only the Module Size unit to KB without typing the value again, then select small.js in Output Assets List.
       - aiAssert: The Modules of "small.js" panel shows small-data.js and the Module Size filter shows 1 KB.
