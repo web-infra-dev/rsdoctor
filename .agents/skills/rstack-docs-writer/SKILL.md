@@ -16,6 +16,16 @@ Follow the project's existing documentation conventions.
 - Keep documentation in sync across locales when changing content. Use English as the default language unless the project specifies another.
 - Use sentence-case headings.
 
+## Page descriptions
+
+Page frontmatter `description` is reused in search metadata and `llms.txt`.
+
+- Summarize the page's actual scope using concrete APIs, tasks, and distinguishing topics, rather than one paragraph or example.
+- State the overall purpose first. When using examples to clarify scope, make clear that they are representative, not exhaustive.
+- Distinguish related configuration and API pages. Include version, stability, or environment constraints when they affect applicability.
+- Use one complete plain-text sentence. Avoid generic templates, unsupported claims, truncation, and padding to meet a character count.
+- Match the page's language and keep descriptions equivalent across locales.
+
 ## Heading anchors
 
 - Prefer Rspress's default anchors for headings in the default locale; preserve intentional existing custom IDs.

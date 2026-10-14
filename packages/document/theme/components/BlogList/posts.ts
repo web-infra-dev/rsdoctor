@@ -1,10 +1,10 @@
-import { yifancong } from '../blogAuthors';
+import { chenjiahan, yifancong } from '../blogAuthors';
 
 export const posts = [
   {
     path: 'release/release-note-2_0',
-    authors: [yifancong],
-    date: '2026-09',
+    authors: [yifancong, chenjiahan],
+    date: '2026-10',
     en: {
       title: 'Announcing Rsdoctor 2.0',
       description:
