@@ -47,7 +47,7 @@ Rspack now provides module and chunk graphs directly instead of sending them thr
 
 Projects no longer need [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin). Remove the option when upgrading to 2.0.
 
-The react-10k benchmark used Rsbuild / Rspack 2.2.7 with build caching disabled. Each configuration had two warm-up runs followed by nine interleaved measurements; the table shows medians. A build without Rsdoctor took 0.91 s. Compared with Rsdoctor 1.4.0, 2.0.0-rc.3 reduced Rsdoctor's added overhead by about **57–64%** and total build time by about **54–60%**:
+The [react-10k benchmark](https://github.com/rstackjs/build-tools-performance/tree/main/cases/react-10k) used Rsbuild / Rspack 2.2.7 with build caching disabled. Each configuration had two warm-up runs followed by nine interleaved measurements; the table shows medians. A build without Rsdoctor took 0.91 s. Compared with Rsdoctor 1.4.0, 2.0.0-rc.3 reduced Rsdoctor's added overhead by about **57–64%** and total build time by about **54–60%**:
 
 | Configuration                  | 1.4.0 total | 2.0.0-rc.3 total | Change in Rsdoctor overhead |
 | ------------------------------ | ----------: | ---------------: | --------------------------: |
