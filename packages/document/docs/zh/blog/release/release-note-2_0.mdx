@@ -47,15 +47,15 @@ Rspack native plugin 将耗时较长的数据处理交给 Rspack 内部的 Rust 
 
 项目不再需要配置 [`experiments.enableNativePlugin`](/config/options/experiments#enablenativeplugin)，升级到 2.0 后删除该配置即可。
 
-在 [react-10k 用例](https://github.com/rstackjs/build-tools-performance/tree/main/cases/react-10k)中，使用 Rsbuild / Rspack 2.2.7 并关闭构建缓存，每组预热 2 次、交错测量 9 次，取中位数。无 Rsdoctor 的构建耗时为 0.91 s。相比 Rsdoctor 1.4.0，2.0.0-rc.3 的额外开销减少约 **57–64%**，总构建耗时减少约 **54–60%**：
+在 [react-10k 用例](https://github.com/rstackjs/build-tools-performance/tree/main/cases/react-10k)中，使用 Rsbuild / Rspack 2.2.7 并关闭构建缓存。相比 Rsdoctor 1.4.0，2.0.0 的额外开销减少约 **57–64%**，总构建耗时减少约 **54–60%**：
 
-| 配置                   | 1.4.0 总耗时 | 2.0.0-rc.3 总耗时 |      Rsdoctor 额外开销变化 |
-| ---------------------- | -----------: | ----------------: | -------------------------: |
-| 默认分析 + 完整报告    |      18.98 s |            8.68 s | 18.07 → 7.77 s，减少 57.0% |
-| 仅 bundle + 完整报告   |      16.49 s |            6.52 s | 15.58 → 5.61 s，减少 64.0% |
-| 仅 bundle + brief JSON |      16.02 s |            6.34 s | 15.11 → 5.43 s，减少 64.1% |
+| 配置                   | 1.4.0 总耗时 | 2.0.0 总耗时 |      Rsdoctor 额外开销变化 |
+| ---------------------- | -----------: | -----------: | -------------------------: |
+| 默认分析 + 完整报告    |      18.98 s |       8.68 s | 18.07 → 7.77 s，减少 57.0% |
+| 仅 bundle + 完整报告   |      16.49 s |       6.52 s | 15.58 → 5.61 s，减少 64.0% |
+| 仅 bundle + brief JSON |      16.02 s |       6.34 s | 15.11 → 5.43 s，减少 64.1% |
 
-三种配置中，2.0.0-rc.3 在全部 9 轮配对测量里都更快，峰值 RSS 分别下降约 19.7%、30.8% 和 36.7%；默认分析从 2,186 MiB 降至 1,755 MiB。
+三种配置的峰值 RSS 分别下降约 19.7%、30.8% 和 36.7%；默认分析从 2,186 MiB 降至 1,755 MiB。
 
 ## 面向 agent 的构建分析 \{#build-analysis-for-agents}
 
