@@ -55,7 +55,7 @@ Rspack native plugin 将耗时较长的数据处理交给 Rspack 内部的 Rust 
 | 仅 bundle + 完整报告   |      16.49 s |       6.52 s | 15.58 → 5.61 s，减少 64.0% |
 | 仅 bundle + brief JSON |      16.02 s |       6.34 s | 15.11 → 5.43 s，减少 64.1% |
 
-三种配置的峰值 RSS 分别下降约 19.7%、30.8% 和 36.7%；默认分析从 2,186 MiB 降至 1,755 MiB。
+三种配置下，2.0.0 的构建峰值内存占用也有所降低。
 
 ## 面向 agent 的构建分析 \{#build-analysis-for-agents}
 
