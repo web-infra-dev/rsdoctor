@@ -29,7 +29,7 @@
       "source": "rstackjs/agent-skills",
       "sourceType": "github",
       "skillPath": ".agents/skills/rstack-docs-writer/SKILL.md",
-      "computedHash": "388aa2b20ab4dc3b01ef7ca30d5082dd13cdcfc931cb66152cab3a5cdfe4b5e8"
+      "computedHash": "124622264a174fc9c07b946cdee801168de088615b68f24cfdd1352940c024d8"
     }
   }
 }
