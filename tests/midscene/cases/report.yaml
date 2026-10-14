@@ -18,4 +18,4 @@ cases:
             fileChooserAccept: .fixture/uploads/rsdoctor-data.json
       - aiAssert: The uploaded report displays Bundle Overall.
       - aiAct: Use report navigation to open Bundle Size.
-      - aiAssert: Output Assets List displays small.js and large.js from the uploaded build.
+      - aiAssert: Output Assets List displays uploaded-only.js, and does not list small.js or large.js from the initial report. This is the uploaded build, not the preloaded report.

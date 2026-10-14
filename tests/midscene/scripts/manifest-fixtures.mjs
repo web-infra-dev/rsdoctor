@@ -8,12 +8,12 @@ const require = createRequire(
 );
 const { rspack } = require('@rspack/core');
 
-export async function buildDiffFixture(fixture) {
-  const output = path.join(fixture, 'diff');
+async function buildBriefManifest(fixture, entryName, directory) {
+  const output = path.join(fixture, directory);
   const compiler = rspack({
     context: fixture,
     mode: 'none',
-    entry: { small: './small.js' },
+    entry: { [entryName]: './small.js' },
     output: { path: output, filename: '[name].js' },
     optimization: { minimize: false },
     plugins: [
@@ -40,3 +40,8 @@ export async function buildDiffFixture(fixture) {
     );
   }
 }
+
+export const buildDiffFixture = (fixture) =>
+  buildBriefManifest(fixture, 'small', 'diff');
+export const buildUploadFixture = (fixture) =>
+  buildBriefManifest(fixture, 'uploaded-only', 'upload');

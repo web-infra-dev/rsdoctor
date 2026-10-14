@@ -207,9 +207,13 @@
       "name": "Uploader Integration Tests > should upload and analyze real build manifest",
       "decision": "migrate-visible-behavior",
       "status": "local-visible-scope-verified",
-      "candidateCaseIds": ["REPORT-02"],
+      "candidateCaseIds": [
+        "REPORT-02"
+      ],
       "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
-      "evidenceRuns": ["20261014154933-6b5f168f"]
+      "evidenceRuns": [
+        "20261014164630-d920b921"
+      ]
     },
     {
       "source": "e2e/cases/doctor-rsbuild/plugins/loader-mini-css.test.ts",

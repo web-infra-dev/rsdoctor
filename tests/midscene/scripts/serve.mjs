@@ -4,7 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { buildMultiCompilerFixture } from './multi-compiler.mjs';
-import { buildDiffFixture } from './diff-fixture.mjs';
+import { buildDiffFixture, buildUploadFixture } from './manifest-fixtures.mjs';
 import {
   RsdoctorRspackPlugin,
   resolveClientDiffHtmlPath,
@@ -63,10 +63,11 @@ const diffPath = resolveClientDiffHtmlPath();
 const diffReport = await readFile(diffPath);
 const compilerReports = await buildMultiCompilerFixture(fixture);
 const diffManifest = await buildDiffFixture(fixture);
+const uploadManifest = await buildUploadFixture(fixture);
 await mkdir(path.join(fixture, 'uploads'), { recursive: true });
 await writeFile(
   path.join(fixture, 'uploads', 'rsdoctor-data.json'),
-  await readFile(path.join(output, 'rsdoctor-data.json')),
+  JSON.stringify(uploadManifest),
 );
 const server = createServer(async (request, response) => {
   const pathname = new URL(request.url ?? '/', 'http://127.0.0.1:4174')
