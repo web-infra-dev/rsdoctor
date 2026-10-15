@@ -111,6 +111,9 @@ define.doc({
         if (routePath.endsWith('release-note-1_0')) {
           return 'assets/rsdoctor-og-image-v1-0.png';
         }
+        if (routePath.endsWith('release-note-2_0')) {
+          return 'assets/rsdoctor-og-image-v2-0.png';
+        }
         return 'rsdoctor-og-image.png';
       };
       return `<meta property="og:image" content="https://assets.rspack.rs/rsdoctor/${getOgImage()}">`;
