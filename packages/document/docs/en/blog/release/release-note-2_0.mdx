@@ -104,31 +104,22 @@ These optimizations further reduce Rsdoctor's analysis overhead. In the benchmar
 
 ## Faster rebuilds \{#faster-rebuilds-in-watch-mode}
 
-When analyzing a project in watch mode, every rebuild should do as little extra work as possible. Rsdoctor 2.0 reduces this overhead in three ways:
+Running Rsdoctor during development lets you analyze builds as you edit your code, but analysis overhead can also make each update take longer. Rsdoctor 2.0 streamlines analysis in watch mode so you can keep inspecting your builds with less time spent waiting for changes to appear.
 
-- Reuse the SDK session and report server, and open the report page only for the first build.
-- Preserve the bundler's loader cache and prevent loader events from accumulating across rebuilds.
-- Skip module and asset gzip-size calculations. Non-watch builds retain the complete analysis path.
+Rsdoctor now reuses existing analysis results and the report server on each rebuild. Watch mode also skips module and asset gzip-size calculations and saves reports with a faster compression level to reduce the work needed for each update.
 
-Watch mode writes report data with a faster compression level to reduce synchronous work on every update. As a trade-off, the compressed size of the main report shards increases by about 26%. This affects Rsdoctor report data only, not application bundle output. Non-watch builds continue to use the default compression level.
+Benchmarks showed the following improvements:
 
-The benchmarks measure two different effects: HMR latency and the time spent on analysis during repeated builds.
-
-| Benchmark metric                                     |   Before |   After | Reduction |
-| ---------------------------------------------------- | -------: | ------: | --------: |
-| Median HMR time                                      |   6.81 s |  3.64 s |   **47%** |
-| Analysis time in a separate repeated-build benchmark | 250.9 ms | 14.2 ms | **94.3%** |
-
-Actual gains depend on the project and build configuration.
+| Benchmark metric                     |   Before |   After | Reduction |
+| ------------------------------------ | -------: | ------: | --------: |
+| Median HMR time                      |   6.81 s |  3.64 s |   **47%** |
+| Analysis time during repeated builds | 250.9 ms | 14.2 ms | **94.3%** |
 
 ## Improved multi-compiler support \{#one-report-for-every-compiler}
 
-Rspack applications often create several compilers in one process. A multi-compiler configuration may build browser and Node.js targets together, Rsbuild environments may create separate web and server builds, and plugins may start child compilers for generated assets.
+Rsdoctor 2.0 improves multi-compiler support for a better experience with full-stack frameworks.
 
-Rsdoctor 2.0 handles these scenarios through `RsdoctorRspackPlugin`, with each compiler's results available in the same report:
-
-- [Multi-compiler and Rsbuild environments](https://github.com/web-infra-dev/rsdoctor/pull/1888): Group compilers created during the same startup and use environment names such as `web` and `node` to distinguish their results.
-- [Child compilers](https://github.com/web-infra-dev/rsdoctor/pull/1842): Discover child compilers automatically and display their analysis data separately from the main compiler.
+Rsdoctor automatically brings analysis results from multiple compilers into one report. You can switch between results by compiler name without moving between separate reports. [Child compilers](https://github.com/web-infra-dev/rsdoctor/pull/1842) created by plugins are also detected automatically, with their data displayed separately from the main compiler.
 
 <img
   src="https://assets.rspack.rs/rsdoctor/child_compiler.png"
@@ -136,7 +127,7 @@ Rsdoctor 2.0 handles these scenarios through `RsdoctorRspackPlugin`, with each c
   style={{ margin: 'auto' }}
 />
 
-Automatic grouping is enabled by default and requires no new plugin. If one process starts unrelated compilers, set `multiCompiler: false`. A named group can also explicitly associate plugin instances:
+These features are enabled by default. To customize grouping, such as keeping an SSR project's client and server builds together, give the plugin instances the same group name:
 
 ```ts
 new RsdoctorRspackPlugin({
@@ -144,13 +135,13 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-For querying a specific compiler through Agent CLI, see [Selecting a compiler](/guide/start/ai#selecting-a-compiler).
+If compilers in the same process belong to unrelated builds, you can disable automatic grouping with [`multiCompiler: false`](/config/options/multiCompiler). Agent CLI also supports [selecting a compiler](/guide/start/ai#selecting-a-compiler), so agents can focus on a specific build.
 
 ## Bundle analysis UI improvements \{#refined-bundle-analysis}
 
-Large assets can contain thousands of modules across many nested directories. Rsdoctor 2.0 makes the Bundle Size page easier to navigate, from filtering assets and chunks to finding a module and inspecting its details.
+Analyzing bundle size often starts with finding a large asset or chunk, then exploring the modules inside it. As a project grows, those modules can span many nested directories, making them harder to navigate. Rsdoctor 2.0 improves the Bundle Size page to make that process easier.
 
-Tree Graph uses virtual scrolling and render caching to keep large module trees responsive. It renders only nodes near the viewport and reduces tooltip and popover overhead while scrolling, making it smoother to expand folders and browse large assets.
+In Tree Graph, expanding directories and scrolling through assets is smoother, even with thousands of modules. Virtual scrolling and render caching limit rendering to nodes near the viewport, while reduced tooltip and popover overhead helps keep scrolling responsive as you find modules and inspect their details:
 
 **Before**
 
@@ -160,7 +151,9 @@ Tree Graph uses virtual scrolling and render caching to keep large module trees 
 
 ![Tree Graph after](https://assets.rspack.rs/rsdoctor/tree-graph-after.gif)
 
-Treemap adds full-screen mode, a collapsible sidebar, breadcrumb navigation, and click-to-zoom so you can move between an overview and individual modules. It also unifies the Stat, Parsed, and Gzipped size metrics and adds JavaScript asset filtering and responsive layouts.
+Treemap makes it easier to move from the overall size distribution to individual modules: click to zoom into an area of interest, then use the breadcrumbs to return to a broader view. For large assets, enter full-screen mode or collapse the sidebar to give the chart more room. The layout also adapts to the window size.
+
+You can filter for JavaScript assets to focus on the relevant code, and use the consistent Stat, Parsed, and Gzipped size metrics to see how much space each module contributes under different size measurements.
 
 > Related PRs: [#1705](https://github.com/web-infra-dev/rsdoctor/pull/1705), [#1782](https://github.com/web-infra-dev/rsdoctor/pull/1782), [#1830](https://github.com/web-infra-dev/rsdoctor/pull/1830), and [#1839](https://github.com/web-infra-dev/rsdoctor/pull/1839).
 
