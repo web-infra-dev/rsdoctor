@@ -37,9 +37,11 @@ Rsdoctor 是专为 Rspack 打造的构建分析工具，既能通过可视化报
 
 ## 面向 agent 的构建分析 \{#build-analysis-for-agents}
 
-排查构建问题时，往往需要在多个报告页面之间切换，关联产物、模块和依赖信息。Agent CLI 让 agent 可以直接查询这些数据，并根据发现继续追查。
+随着 agent 承担越来越多的分析、诊断和优化工作，我们希望 Rsdoctor 能为这些任务提供所需的构建数据，帮助 agent 理解项目的构建过程并找到优化方向。
 
-Agent CLI 与 Rsdoctor analysis skill 在 1.x 中首次推出，现在成为推荐的 AI 辅助分析工作流。[`@rsdoctor/agent-cli`](/guide/start/ai#agent-cli) 可以直接读取 `rsdoctor-data.json` 并返回结构化 JSON，让 agent 无需启动常驻服务即可检索和过滤报告数据。
+Rsdoctor 的可视化界面主要服务于开发者。为了让 agent 也能使用这些数据，我们在 Rsdoctor 1.x 中推出了 [Agent CLI](/guide/start/ai#agent-cli)。它直接读取 `rsdoctor-data.json`，支持检索和过滤报告数据，并返回结构化 JSON，让 agent 可以按需查询、逐步排查问题。
+
+在 2.0 中，Agent CLI 成为推荐的自动化分析方式。配合 [Rsdoctor analysis skill](/guide/start/ai#agent-skills)，agent 可以根据任务选择查询命令并分析结果。首先，在项目中安装 Agent CLI，也可以为 agent 安装配套的 skill：
 
 ```bash
 # 安装 Agent CLI
@@ -49,7 +51,7 @@ pnpm add -D @rsdoctor/agent-cli
 npx skills add rstackjs/agent-skills --skill rsdoctor-analysis
 ```
 
-推荐在 Rsdoctor 插件中配置 [brief 模式](/config/options/output#mode-brief)，生成 `rsdoctor-data.json`：
+接下来，在 Rsdoctor 插件中配置 [brief 模式](/config/options/output#mode-brief)，生成供 agent 查询的 `rsdoctor-data.json`：
 
 ```js
 new RsdoctorRspackPlugin({
@@ -62,13 +64,13 @@ new RsdoctorRspackPlugin({
 
 配置后运行 `pnpm run build`。临时生成 JSON 数据时，也可以使用 `RSDOCTOR_OUTPUT=json pnpm run build`。
 
-生成报告后，就可以让 agent 开始分析：
+生成报告后，就可以用自然语言向 agent 提出分析需求，例如：
 
 ```text
 使用 Rsdoctor 分析当前项目，找出可以优化产物体积的方向。
 ```
 
-agent 会调用相应的 `rsdoctor-agent` 命令，结合项目上下文分析大 chunk、重复依赖、模块引用链、耗时较长的 loader 和 tree shaking 失败原因，并根据结果进一步缩小排查范围。
+agent 会根据问题调用相应的 `rsdoctor-agent` 命令，结合项目上下文定位大 chunk、重复依赖等问题，并继续查询模块引用链、loader 耗时或 tree shaking 失败原因，逐步缩小排查范围并提出优化建议。
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-2.gif"
@@ -76,7 +78,7 @@ agent 会调用相应的 `rsdoctor-agent` 命令，结合项目上下文分析�
   style={{ margin: 'auto' }}
 />
 
-Rsdoctor 2.0 使用 Agent CLI 替代 `@rsdoctor/mcp-server`，按需执行，无需维持服务连接。具体用法请参考 [AI 分析指南](/guide/start/ai)；已有 MCP 工作流的迁移方式见 [2.0 迁移指南](/guide/migration/migration-v2#ai-工作流迁移)。
+随着 agent 的分析入口统一到 Agent CLI，我们在 Rsdoctor 2.0 中下线了原有的 MCP Server 用法。使用 `@rsdoctor/mcp-server` 的项目可以参考 [2.0 迁移指南](/guide/migration/migration-v2#ai-工作流迁移)完成迁移。
 
 ## 更小的安装体积 \{#a-smaller-package-and-dependency-graph}
 

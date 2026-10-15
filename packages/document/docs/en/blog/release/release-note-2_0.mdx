@@ -37,9 +37,11 @@ Highlights in this release include:
 
 ## Build analysis for agents
 
-Investigating a build problem often means connecting information about assets, modules, and dependencies across several report pages. Agent CLI lets agents query that data directly and follow up on findings.
+As agents take on more analysis, diagnosis, and optimization work, we want Rsdoctor to provide the build data they need to understand a project's build process and find opportunities to improve it.
 
-First introduced in the 1.x series, Agent CLI and the Rsdoctor analysis skill are now the recommended workflow for AI-assisted analysis. [`@rsdoctor/agent-cli`](/guide/start/ai#agent-cli) reads `rsdoctor-data.json` directly and returns structured JSON, so agents can search and filter the report without starting a long-running service.
+Rsdoctor's visual interface primarily serves developers. To make the same data accessible to agents, we introduced [Agent CLI](/guide/start/ai#agent-cli) in Rsdoctor 1.x. It reads `rsdoctor-data.json` directly, supports searching and filtering report data, and returns structured JSON so agents can query what they need and investigate problems step by step.
+
+In 2.0, Agent CLI is the recommended approach to automated analysis. The [Rsdoctor analysis skill](/guide/start/ai#agent-skills) helps agents choose query commands and interpret the results for their task. Start by installing Agent CLI in your project. You can also install the companion skill for your agent:
 
 ```bash
 # Install Agent CLI
@@ -49,7 +51,7 @@ pnpm add -D @rsdoctor/agent-cli
 npx skills add rstackjs/agent-skills --skill rsdoctor-analysis
 ```
 
-We recommend configuring [brief mode](/config/options/output#mode-brief) in the Rsdoctor plugin to generate `rsdoctor-data.json`:
+Next, configure [brief mode](/config/options/output#mode-brief) in the Rsdoctor plugin to generate `rsdoctor-data.json` for the agent to query:
 
 ```js
 new RsdoctorRspackPlugin({
@@ -62,13 +64,13 @@ new RsdoctorRspackPlugin({
 
 Then run `pnpm run build`. For a one-off JSON output, you can also run `RSDOCTOR_OUTPUT=json pnpm run build`.
 
-Once the report is generated, ask your agent to investigate it:
+Once the report is generated, describe what you want to investigate in natural language:
 
 ```text
 Use Rsdoctor to analyze this project and identify opportunities to reduce bundle size.
 ```
 
-The agent runs the relevant `rsdoctor-agent` commands and uses the project context to investigate large chunks, duplicate dependencies, module issuer chains, loader hotspots, and tree-shaking bailouts. It can narrow the search with follow-up queries as needed.
+The agent chooses the relevant `rsdoctor-agent` commands and uses the project context to identify problems such as large chunks or duplicate dependencies. It can then query module issuer chains, loader timings, or tree-shaking bailouts to narrow down the cause and suggest optimizations.
 
 <img
   src="https://assets.rspack.rs/others/assets/rsdoctor/agent-cli-2.gif"
@@ -76,7 +78,7 @@ The agent runs the relevant `rsdoctor-agent` commands and uses the project conte
   style={{ margin: 'auto' }}
 />
 
-Agent CLI replaces `@rsdoctor/mcp-server` in Rsdoctor 2.0 and runs on demand without a persistent service connection. See the [AI analysis guide](/guide/start/ai) for usage and the [2.0 migration guide](/guide/migration/migration-v2#ai-workflow-migration) for moving an existing MCP workflow to Agent CLI.
+With Agent CLI now serving as the entry point for agent analysis, we have retired the MCP Server workflow in Rsdoctor 2.0. Projects using `@rsdoctor/mcp-server` can follow the [2.0 migration guide](/guide/migration/migration-v2#ai-workflow-migration) to migrate.
 
 ## Smaller installation size \{#a-smaller-package-and-dependency-graph}
 
