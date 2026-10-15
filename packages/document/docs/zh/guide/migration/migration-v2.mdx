@@ -6,10 +6,10 @@ description: '通过更新 Rspack 版本、依赖包、导入、CLI 命令、AI 
 
 Rsdoctor 2.0 围绕 Rspack 收敛了包结构。大多数项目只需要安装 `@rsdoctor/core`。此版本移除了多个独立包。请同时更新依赖和导入路径，避免在 2.0 代码中解析到 1.x 包。
 
-推荐使用 [`rsdoctor-migrate-v2` Skill](https://github.com/rstackjs/agent-skills/pull/115)，让编码 Agent 检查项目、执行适用的迁移步骤并验证结果：
+推荐使用 [`rsdoctor-v2-upgrade` Skill](https://github.com/rstackjs/agent-skills#rsdoctor-v2-upgrade)，让编码 Agent 检查项目、执行适用的迁移步骤并验证结果：
 
 ```bash
-npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
+npx skills add rstackjs/agent-skills --skill rsdoctor-v2-upgrade
 ```
 
 ## 检查构建工具
