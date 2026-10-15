@@ -1,6 +1,6 @@
 cases:
   - name: BUNDLE-01 Inspect modules in an output asset
-    tags: [shard-1, modules]
+    tags: [modules]
     steps:
       - app.open: { path: '/#/bundle/size' }
       - aiAct: In the Output Assets List, open small.js to inspect its modules.
@@ -8,7 +8,7 @@ cases:
       - aiAct: In the Output Assets List, open large.js to inspect its modules.
       - aiAssert: The Modules of "large.js" panel shows large-data.js.
   - name: BUNDLE-02 Filter large assets and restore the smaller asset
-    tags: [shard-1, assets]
+    tags: [assets]
     steps:
       - app.open: { path: '/#/bundle/size' }
       - aiAct: First change the Asset Size unit to MB, then enter 1 in its numeric input, in that order.
@@ -16,7 +16,7 @@ cases:
       - aiAct: Change only the Asset Size unit to KB, keeping the value 1.
       - aiAssert: The Output Assets List contains both small.js and large.js, and the Asset Size filter shows 1 KB.
   - name: BUNDLE-03 Filter modules inside a selected asset
-    tags: [shard-1, filter]
+    tags: [filter]
     steps:
       - app.open: { path: '/#/bundle/size' }
       - aiAct: In the Output Assets List, select small.js. First change the Module Size unit to MB, then enter 1 in its numeric input, in that order.
@@ -26,7 +26,7 @@ cases:
       - aiAct: Change the Module Size unit to KB without changing the value, then select small.js in the Output Assets List.
       - aiAssert: The Modules of "small.js" panel shows small-data.js and the Module Size filter shows 1 KB.
   - name: BUNDLE-04 Apply the asset filter value before changing its unit
-    tags: [shard-1, original-filter-order]
+    tags: [original-filter-order]
     steps:
       - app.open: { path: '/#/bundle/size' }
       - aiAct: Enter 1 in the Asset Size numeric input. Leave its current unit unchanged.
@@ -36,7 +36,7 @@ cases:
       - aiAct: Change only the Asset Size unit to KB without typing the value again.
       - aiAssert: The Output Assets List contains both small.js and large.js, and the Asset Size filter shows 1 KB.
   - name: BUNDLE-05 Apply the module filter value before changing its unit
-    tags: [shard-1, original-filter-order]
+    tags: [original-filter-order]
     steps:
       - app.open: { path: '/#/bundle/size' }
       - aiAct: Select small.js in Output Assets List and enter 1 in the Module Size numeric input. Leave its current unit unchanged.

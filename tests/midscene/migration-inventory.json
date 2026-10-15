@@ -17,7 +17,7 @@
       "status": "local-visible-scope-verified",
       "candidateCaseIds": ["COMPILER-01"],
       "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
-      "evidenceRuns": ["20261014150406-ceb7a3e2"]
+      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
     },
     {
       "source": "e2e/cases/doctor-rspeedy/banner-plugin.test.ts",
@@ -34,7 +34,7 @@
       "status": "local-visible-scope-verified",
       "candidateCaseIds": ["EXPLORE-04"],
       "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
-      "evidenceRuns": ["20261014150406-ceb7a3e2"]
+      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
     },
     {
       "source": "e2e/cases/doctor-rspack/bundle-diff.test.ts",
@@ -51,7 +51,7 @@
       "status": "local-visible-scope-verified",
       "candidateCaseIds": ["DIFF-01"],
       "reason": "Migrate only the original overview and four tab entries. Tab activation is outside original scope and has a separate renderer-stall reproducer in KNOWN-ISSUES.md.",
-      "evidenceRuns": ["20261014150406-ceb7a3e2"]
+      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
     },
     {
       "source": "e2e/cases/doctor-rspack/child-compiler.test.ts",
@@ -108,7 +108,7 @@
       "status": "local-visible-scope-verified",
       "candidateCaseIds": ["REPORT-01"],
       "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
-      "evidenceRuns": ["20261014150406-ceb7a3e2"]
+      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
     },
     {
       "source": "e2e/cases/doctor-rspack/plugin.test.ts",
@@ -133,7 +133,7 @@
       "status": "local-visible-scope-verified",
       "candidateCaseIds": ["BUNDLE-02"],
       "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
-      "evidenceRuns": ["20261014151308-e4d687c8"]
+      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
     },
     {
       "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
@@ -142,7 +142,7 @@
       "status": "local-visible-scope-verified",
       "candidateCaseIds": ["BUNDLE-04"],
       "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
-      "evidenceRuns": ["20261014151308-e4d687c8"]
+      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
     },
     {
       "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
@@ -159,7 +159,7 @@
       "status": "local-visible-scope-verified",
       "candidateCaseIds": ["BUNDLE-03"],
       "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
-      "evidenceRuns": ["20261014151308-e4d687c8"]
+      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
     },
     {
       "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
@@ -168,7 +168,7 @@
       "status": "local-visible-scope-verified",
       "candidateCaseIds": ["BUNDLE-05"],
       "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
-      "evidenceRuns": ["20261014151308-e4d687c8"]
+      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
     },
     {
       "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
@@ -207,13 +207,9 @@
       "name": "Uploader Integration Tests > should upload and analyze real build manifest",
       "decision": "migrate-visible-behavior",
       "status": "local-visible-scope-verified",
-      "candidateCaseIds": [
-        "REPORT-02"
-      ],
+      "candidateCaseIds": ["REPORT-02"],
       "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
-      "evidenceRuns": [
-        "20261014164630-d920b921"
-      ]
+      "evidenceRuns": ["20261014164630-d920b921", "20261015105939-96f80330"]
     },
     {
       "source": "e2e/cases/doctor-rsbuild/plugins/loader-mini-css.test.ts",

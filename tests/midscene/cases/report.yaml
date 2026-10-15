@@ -1,6 +1,6 @@
 cases:
   - name: REPORT-01 Inspect rule results and an empty rule tab
-    tags: [shard-1, report]
+    tags: [report]
     steps:
       - app.open: { path: '/#/overall' }
       - aiAct: Open the Duplicate Packages rule tab in the report.
@@ -8,7 +8,7 @@ cases:
       - aiAct: Switch to the ECMA Version Check rule tab.
       - aiAssert: The selected rule panel displays ECMA Version Check warnings.
   - name: REPORT-02 Upload and analyze a build manifest
-    tags: [shard-1, report]
+    tags: [report]
     steps:
       - app.open: { path: '/#/resources/uploader' }
       - aiAct:

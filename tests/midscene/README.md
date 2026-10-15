@@ -10,7 +10,7 @@ Bundle comparison verifies only the original overview and tab entries; the separ
 Assets activation stall and model-free reproducer are documented in [known issues](KNOWN-ISSUES.md).
 
 Existing Rstest and Playwright suites are unchanged. This isolated npm package uses
-`@midscene/test` 1.15.1, not Vitest. Each case starts in a fresh browser context.
+`@midscene/test` 1.15.3, not Vitest. Each case starts in a fresh browser context.
 `app.open` only prepares the browser; all product interactions use `aiAct`.
 Separate `aiAssert` steps check outcomes instead of treating an AI action's completion
 as proof of success. Browser requests stay on the local fixture origin.
@@ -32,18 +32,14 @@ Fill in the four model variables in `.env` with a vision-capable model.
 Keep credentials out of Git. Environment variables override `.env`; unset inherited
 `MIDSCENE_*` configuration when testing a different provider.
 
-Start the fixture in one terminal:
+The framework setup starts the synthetic fixture and tears down its owned process
+after the run. An already-running local fixture can be reused.
+
+Run the suite:
 
 ```sh
 cd tests/midscene
-npm run serve
-```
-
-Run the suite in another terminal:
-
-```sh
-cd tests/midscene
-npm run check:model-vision
+npm run check:model
 npm test
 ```
 
@@ -65,9 +61,8 @@ npm run test:summary
 ```
 
 Collection validates YAML with the framework, checks the committed case inventory,
-and rejects atomic AI operations or custom product-interaction nodes. Report tests
-cover missing cases, failed attempts, screenshot deep links, native report merging,
-publication failures, and bounded Pages history.
+and rejects atomic AI operations or custom product-interaction nodes. Trust-policy checks reject reports from untrusted sources. The framework owns
+report rendering and Markdown results.
 
 ## GitHub Actions
 
@@ -87,27 +82,34 @@ Missing credentials or a failed image-reading preflight fails the job explicitly
 Credentials are passed only to model preflight and test steps, not installation
 or fixture processes. Native reports are uploaded after failures too.
 
-The final **Midscene results** Summary always shows available counts and artifact
-downloads. For the screenshot-and-report table and clickable HTML entry:
+The **Midscene E2E** job writes the framework-generated `result.md` directly to
+its Summary, and uploads `midscene-results` even after failures. The
+**Publish Midscene Pages report** job adds the online native HTML report link.
+This follows Rome PR #974 at `d1b3183`: no custom report merger or
+custom screenshot-table renderer is involved.
 
-1. Ensure this repository's GitHub Pages site is dedicated to these reports.
-   **Do not enable this if Pages already hosts the project's documentation.**
-2. Set **Settings → Pages → Source** to **GitHub Actions**.
-3. Set the Actions variable `MIDSCENE_PUBLISH_REPO` to the exact repository name,
-   for example `quanru/rsdoctor`.
-4. Allow the trusted workflow branch in the `github-pages` environment.
+To enable publication:
 
-Pages remains opt-in to avoid overwriting an existing docs site. Without Pages,
-download the native HTML report and screenshots together from the artifact.
-With Pages, the Summary table links each case screenshot to its native report step.
-The top report entry uses Midscene's native merged report, not a custom HTML index.
+1. Ensure the repository Pages site is dedicated to these reports. Do not enable
+   this if Pages already hosts project documentation.
+2. Select **Settings → Pages → Source → GitHub Actions**.
+3. Set `MIDSCENE_PUBLISH_REPO` to `quanru/rsdoctor` (or the upstream repository
+   name after integration), and allow the trusted branch in `github-pages`.
+4. Configure model credentials in repository settings or the `Model` environment.
+   The API key remains a secret; model name, family, and base URL can be variables
+   or secrets. The environment does not create a deployment record.
+
+Manual dispatch can disable publication with `publish_pages`. Without Pages,
+download the report and screenshots together from the artifact. The stable run
+entry redirects to the native framework index. Runs are serialized across branches
+to preserve recent report history.
 
 Publication retains the latest three trusted runs within a 900 MiB budget.
 Older Summary links expire when their run is pruned; artifacts expire after 14 days.
 
 ## Dependency audit
 
-`npm audit` reports advisories in the current Midscene 1.15.1 dependency tree,
+`npm audit` reports advisories in the current Midscene 1.15.3 dependency tree,
 including image processing and Puppeteer archive dependencies. These packages
 stay in this isolated test harness, not the product's runtime dependencies.
 Use synthetic local fixtures and a dedicated quota-limited model key. Do not run

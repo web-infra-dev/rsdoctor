@@ -4,6 +4,7 @@ import { defineNode, z } from '@midscene/test';
 import { defineProjectSetup, defineTestProject } from '@midscene/test/config';
 import { createMidsceneNodes } from '@midscene/test/midscene';
 import { PlaywrightAgent } from '@midscene/web/playwright/agent';
+import { startFixtureServer } from './fixture-server.js';
 import {
   chromium,
   type Browser,
@@ -21,15 +22,24 @@ interface Context {
 }
 const setup = defineProjectSetup<Context>({
   name: 'web',
-  async setup({ onTeardown }) {
+  async setup({ onTeardown, signal }) {
+    const stopServer = await startFixtureServer(
+      baseURL,
+      fileURLToPath(new URL('midscene_run/fixture.log', import.meta.url)),
+      signal,
+    );
+    onTeardown(stopServer);
     const context: Context = {
       browser: await chromium.launch({
         headless: process.env.HEADLESS !== 'false',
       }),
     };
     onTeardown(async () => {
-      await context.agent?.destroy();
-      await context.browser.close();
+      try {
+        await context.agent?.destroy();
+      } finally {
+        await context.browser.close();
+      }
     });
     return context;
   },
@@ -75,7 +85,7 @@ export default defineTestProject<Context>({
   test: { maxConcurrency: 1, testTimeout: 8 * 60_000 },
   projects: [
     {
-      name: 'web-shard-1',
+      name: 'web',
       setup,
       retry: 0,
       files: { include: ['cases/**/*.yaml'] },

@@ -1,15 +1,15 @@
 {
-  "BUNDLE-01 Inspect modules in an output asset": "shard-1",
-  "BUNDLE-02 Filter large assets and restore the smaller asset": "shard-1",
-  "BUNDLE-03 Filter modules inside a selected asset": "shard-1",
-  "BUNDLE-04 Apply the asset filter value before changing its unit": "shard-1",
-  "BUNDLE-05 Apply the module filter value before changing its unit": "shard-1",
-  "COMPILER-01 Switch between build environment reports": "shard-1",
-  "DIFF-01 Read bundle comparison entry points": "shard-1",
-  "EXPLORE-01 Inspect a module through global search": "shard-1",
-  "EXPLORE-02 Recover from an empty module search": "shard-1",
-  "EXPLORE-03 Filter modules by keyword and clear the filter": "shard-1",
-  "EXPLORE-04 Navigate from the overview to bundle analysis": "shard-1",
-  "REPORT-01 Inspect rule results and an empty rule tab": "shard-1",
-  "REPORT-02 Upload and analyze a build manifest": "shard-1"
+  "BUNDLE-01 Inspect modules in an output asset": "web",
+  "BUNDLE-02 Filter large assets and restore the smaller asset": "web",
+  "BUNDLE-03 Filter modules inside a selected asset": "web",
+  "BUNDLE-04 Apply the asset filter value before changing its unit": "web",
+  "BUNDLE-05 Apply the module filter value before changing its unit": "web",
+  "COMPILER-01 Switch between build environment reports": "web",
+  "DIFF-01 Read bundle comparison entry points": "web",
+  "EXPLORE-01 Inspect a module through global search": "web",
+  "EXPLORE-02 Recover from an empty module search": "web",
+  "EXPLORE-03 Filter modules by keyword and clear the filter": "web",
+  "EXPLORE-04 Navigate from the overview to bundle analysis": "web",
+  "REPORT-01 Inspect rule results and an empty rule tab": "web",
+  "REPORT-02 Upload and analyze a build manifest": "web"
 }

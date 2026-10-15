@@ -37,7 +37,7 @@ for (const project of loaded.projects) {
         nodes.every((node) => ['app.open', 'aiAct', 'aiAssert'].includes(node)),
         'No UI-operation helpers or atomic actions',
       );
-      actual[definition.name] = 'shard-1';
+      actual[definition.name] = project.name;
     }
   }
 }

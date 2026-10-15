@@ -122,8 +122,9 @@ const server = createServer(async (request, response) => {
     .writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
     .end(report);
 });
-server.listen(4174, '127.0.0.1', () =>
-  console.log('Rsdoctor fixture ready at http://127.0.0.1:4174'),
+const port = Number(process.env.FIXTURE_PORT ?? 4174);
+server.listen(port, '127.0.0.1', () =>
+  console.log(`Rsdoctor fixture ready at http://127.0.0.1:${port}`),
 );
 for (const signal of ['SIGTERM', 'SIGINT'])
   process.on(signal, () => server.close(() => process.exit()));

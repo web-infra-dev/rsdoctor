@@ -1,6 +1,6 @@
 cases:
   - name: DIFF-01 Read bundle comparison entry points
-    tags: [shard-1, diff]
+    tags: [diff]
     steps:
       - app.open:
           {
