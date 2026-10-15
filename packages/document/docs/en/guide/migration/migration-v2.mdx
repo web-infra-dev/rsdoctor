@@ -6,10 +6,10 @@ description: 'Migrate to Rsdoctor 2.0 by updating Rspack requirements, packages,
 
 Rsdoctor 2.0 consolidates the package structure around Rspack. This release removes several standalone packages. Update dependencies and imports together to avoid resolving a 1.x package with 2.0 code.
 
-Use the [`rsdoctor-migrate-v2` skill](https://github.com/rstackjs/agent-skills/pull/115) to let a coding agent inspect your project, apply the relevant migration steps, and verify the result:
+Use the [`rsdoctor-v2-upgrade` skill](https://github.com/rstackjs/agent-skills#rsdoctor-v2-upgrade) to let a coding agent inspect your project, apply the relevant migration steps, and verify the result:
 
 ```bash
-npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
+npx skills add rstackjs/agent-skills --skill rsdoctor-v2-upgrade
 ```
 
 ## Check your bundler
