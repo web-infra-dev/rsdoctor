@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.59.4",
+    "@rspress/core": "2.1.0-beta.1",
     "@scripts/config": "workspace:*",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",

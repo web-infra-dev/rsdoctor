@@ -7,14 +7,11 @@ import { define } from 'rstack';
 import { pluginGoogleAnalytics } from 'rsbuild-plugin-google-analytics';
 import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
-import pluginSitemap from 'rspress-plugin-sitemap';
 
 const siteUrl = 'https://rsdoctor.rs';
-const sitemapPlugin = pluginSitemap({
-  domain: siteUrl,
-}) as any;
 
 define.doc({
+  siteOrigin: siteUrl,
   plugins: [
     pluginClientRedirects({
       redirects: [
@@ -45,7 +42,6 @@ define.doc({
       ],
     }),
     pluginAlgolia(),
-    sitemapPlugin,
     pluginFontOpenSans(),
     pluginRss({
       siteUrl,
@@ -125,7 +121,6 @@ define.doc({
     },
   },
   ssg: true,
-  llms: true,
   route: {
     cleanUrls: true,
     // exclude document fragments from routes
