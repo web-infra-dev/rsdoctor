@@ -17,7 +17,7 @@ npx skills add rstackjs/agent-skills --skill rsdoctor-v2-upgrade
 Rsdoctor 2.0 requires Node.js `^20.19.0 || >=22.12.0` and Rspack 2.0 or later. Rspack 1.x is no longer supported. webpack support and `@rsdoctor/webpack-plugin` have also been removed.
 
 - For an Rspack-based project, continue with this guide.
-- For a webpack project, stay on Rsdoctor 1.x or migrate the project to Rspack before upgrading Rsdoctor.
+- For a webpack project, stay on [Rsdoctor 1.x](https://v1.rsdoctor.rs/) or migrate the project to Rspack before upgrading Rsdoctor.
 
 ## Update the Rspack plugin
 
@@ -79,8 +79,6 @@ Agent CLI is the replacement workflow, but it is not an MCP-compatible or drop-i
 Agent CLI reads the data file directly, so MCP-specific options such as server ports and compiler selection no longer apply. See [AI](/guide/start/ai) for installation, data generation, and more command examples.
 
 ## Configuration migration
-
-**Rsdoctor 1.2.4 introduced the [output configuration](/config/options/output) used by Rsdoctor 2.x.** It is easier to configure and extend than the legacy options.
 
 The top-level `mode`, `port`, and `brief` options and legacy `output.compressData` option were removed and are ignored in Rsdoctor 2.x. Use the table below to migrate these options. Both forms of the [`features` lite configuration](/config/options/features) remain supported and are included only to show the equivalent `output` configuration.
 
