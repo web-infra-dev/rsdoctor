@@ -104,31 +104,22 @@ Rsdoctor 2.0 将原先分散在多个包中的分析能力整合到 `@rsdoctor/c
 
 ## 更快的增量构建 \{#faster-rebuilds-in-watch-mode}
 
-在 watch 模式下分析项目时，每次重新构建都应尽量减少额外开销。Rsdoctor 2.0 为此进行了三项优化：
+在开发过程中开启 Rsdoctor，可以随着代码修改持续分析构建结果，但分析带来的额外开销也会增加每次等待更新的时间。Rsdoctor 2.0 优化了 watch 模式下的分析流程，让你在保留构建分析能力的同时，更快地看到修改效果。
 
-- 复用 SDK 会话和报告服务，并让报告页面仅在首次构建时打开。
-- 保留构建工具的 loader 缓存，并避免 loader 事件在重复构建中累积。
-- 跳过模块和产物的 gzip 体积计算；非 watch 构建仍保留完整分析。
+现在每次重构建时，Rsdoctor 会复用已有的分析结果和报告服务。对于开发时不必每次计算的模块和产物 gzip 体积，watch 模式会跳过计算，并采用更快的压缩级别保存报告，减少等待时间。
 
-watch 模式会使用更快的压缩级别写入报告数据，以减少每次更新的同步写入耗时。作为取舍，主要报告分片的压缩后体积会增大约 26%。这一变化只影响 Rsdoctor 报告数据，不影响应用构建产物；非 watch 构建仍使用默认压缩级别。
+在基准测试中，这些优化带来了以下收益：
 
-两组基准测试分别衡量了 HMR 延迟和重复构建中的分析耗时：
-
-| 基准测试指标                   |   优化前 |  优化后 |  耗时降幅 |
-| ------------------------------ | -------: | ------: | --------: |
-| HMR 耗时中位数                 |   6.81 s |  3.64 s |   **47%** |
-| 另一组重复构建基准中的分析耗时 | 250.9 ms | 14.2 ms | **94.3%** |
-
-实际收益取决于项目规模和构建配置。
+| 基准测试指标         |   优化前 |  优化后 |  耗时降幅 |
+| -------------------- | -------: | ------: | --------: |
+| HMR 耗时中位数       |   6.81 s |  3.64 s |   **47%** |
+| 重复构建中的分析耗时 | 250.9 ms | 14.2 ms | **94.3%** |
 
 ## 改进多 Compiler 支持 \{#one-report-for-every-compiler}
 
-Rspack 应用经常在同一进程中创建多个 compiler。multi-compiler 配置可能同时构建浏览器端和 Node.js 产物，Rsbuild environments 可能分别创建 web 和 server 构建，插件也可能通过 child compiler 生成自己的资源。
+Rsdoctor 2.0 改进了对多 compiler 的支持，以改善在全栈框架中的使用体验。
 
-Rsdoctor 2.0 通过 `RsdoctorRspackPlugin` 支持这些场景，在同一份报告中分别展示各个 compiler 的结果：
-
-- [multi-compiler 与 Rsbuild environments](https://github.com/web-infra-dev/rsdoctor/pull/1888)：自动聚合同一次启动中创建的 compiler，并使用 `web`、`node` 等 environment 名称区分结果。
-- [child compiler](https://github.com/web-infra-dev/rsdoctor/pull/1842)：自动发现 child compiler，并将其分析数据与 main compiler 隔离展示。
+Rsdoctor 会自动将多个 compiler 的分析结果聚合到一份报告中。你可以通过 compiler 名称切换查看各自的结果，无需在多份报告之间来回查找。插件创建的 [child compiler](https://github.com/web-infra-dev/rsdoctor/pull/1842) 也会被自动识别，并与 main compiler 的数据分开展示。
 
 <img
   src="https://assets.rspack.rs/rsdoctor/child_compiler.png"
@@ -136,7 +127,7 @@ Rsdoctor 2.0 通过 `RsdoctorRspackPlugin` 支持这些场景，在同一份报�
   style={{ margin: 'auto' }}
 />
 
-自动聚合默认开启，无需引入新的插件。如果同一进程启动的是多个互不相关的 compiler，可以设置 `multiCompiler: false`；也可以通过命名分组明确关联多个插件实例：
+这些能力默认开启。如果需要自定义报告分组，例如将 SSR 项目的客户端和服务端构建归为一组，可以为插件实例指定相同的分组名称：
 
 ```ts
 new RsdoctorRspackPlugin({
@@ -144,13 +135,13 @@ new RsdoctorRspackPlugin({
 });
 ```
 
-通过 Agent CLI 查询指定 compiler 的方式，见[选择 compiler](/zh/guide/start/ai#selecting-a-compiler)。
+同一进程中的 compiler 若属于互不相关的构建，也可以通过 [`multiCompiler: false`](/zh/config/options/multiCompiler) 关闭自动聚合。Agent CLI 同样支持[选择 compiler](/zh/guide/start/ai#selecting-a-compiler)，让 agent 针对指定构建进行分析。
 
 ## 产物分析界面改进 \{#refined-bundle-analysis}
 
-大型产物可能包含分布在多层目录中的数千个模块。Rsdoctor 2.0 改善了 Bundle Size 页面的浏览体验，让你更方便地筛选产物和 chunk、定位模块并查看详情。
+分析产物体积时，我们往往需要先找到较大的产物或 chunk，再逐层查看其中的模块。随着项目规模增长，模块可能分布在多层目录中，浏览和定位也会变得费时。Rsdoctor 2.0 围绕这一过程，改善了 Bundle Size 页面的浏览体验。
 
-Tree Graph 通过虚拟滚动和渲染缓存，让大型模块树保持流畅。它只渲染视窗附近的节点，并减少滚动时提示框、弹出层等交互组件的开销，改善展开目录和连续浏览大型产物时的体验。
+在 Tree Graph 中，即使产物包含数千个模块，展开目录和连续滚动也能更加流畅。通过虚拟滚动和渲染缓存，页面只渲染视窗附近的节点，并减少提示框等交互组件在滚动时的开销，让你更顺畅地查找模块、查看详情：
 
 **优化前**
 
@@ -160,7 +151,9 @@ Tree Graph 通过虚拟滚动和渲染缓存，让大型模块树保持流畅。
 
 ![Tree Graph 优化后](https://assets.rspack.rs/rsdoctor/tree-graph-after.gif)
 
-Treemap 新增全屏模式、可收起的侧边栏、面包屑导航和点击缩放，方便在整体概览与具体模块之间切换。同时，它统一了 Stat、Parsed 和 Gzipped 体积指标，并支持 JavaScript 产物筛选和响应式布局。
+Treemap 则让你更方便地从整体体积分布深入查看具体模块：点击即可缩放到关注的区域，再通过面包屑导航返回上层。需要查看大型产物时，可以进入全屏模式或收起侧边栏，为图表留出更多空间；布局也会随窗口大小调整。
+
+你还可以筛选 JavaScript 产物，将注意力集中在相关代码上，并通过统一的 Stat、Parsed 和 Gzipped 体积指标，从不同角度了解模块的体积占比。
 
 > 相关 PR：[#1705](https://github.com/web-infra-dev/rsdoctor/pull/1705)、[#1782](https://github.com/web-infra-dev/rsdoctor/pull/1782)、[#1830](https://github.com/web-infra-dev/rsdoctor/pull/1830)、[#1839](https://github.com/web-infra-dev/rsdoctor/pull/1839)。
 
