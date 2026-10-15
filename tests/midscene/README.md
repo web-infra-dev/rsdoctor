@@ -9,7 +9,21 @@ decisions. Original compiler-data and controlled-clock assertions remain unchang
 Bundle comparison verifies only the original overview and tab entries; the separate
 Assets activation stall and model-free reproducer are documented in [known issues](KNOWN-ISSUES.md).
 
-Existing Rstest and Playwright suites are unchanged. This isolated npm package uses
+The first replacement batch removes the four ordinary unit-first/value-first
+filter tests, now covered by BUNDLE-02 through BUNDLE-05. The two pending-input
+tests retain their controlled 300 ms debounce contract. Bundle Diff UI checks
+move to DIFF-01; its remaining legacy test verifies CLI startup and the manifest
+endpoint without browser interaction. Brief-report, rule, and uploader tests no
+longer duplicate visual outcomes: they retain document metadata, ARIA attributes,
+exact responsive geometry, and parsed client-state contracts. The compiler-series
+test remains a deterministic HTML/JSON build-output test, not a visual UI flow.
+The inventory records the original 28 tests; 24 legacy tests remain after the
+four replacements, including the split technical contracts.
+Remaining deterministic tests run through `pnpm e2e`; Ubuntu CI includes them in
+`pnpm test:all`. Windows currently runs unit tests only. Removed source remains
+recoverable at the inventory's `sourceCommit`; no replacement uses `skip`.
+
+This isolated npm package uses
 `@midscene/test` 1.15.3, not Vitest. Each case starts in a fresh browser context.
 `app.open` only prepares the browser; all product interactions use `aiAct`.
 Separate `aiAssert` steps check outcomes instead of treating an AI action's completion

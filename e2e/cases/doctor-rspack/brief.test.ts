@@ -62,7 +62,9 @@ async function rspackCompile(compile: typeof compileByRspack) {
   return res;
 }
 
-test('rspack brief mode', async ({ page }) => {
+test('brief build emits an HTML report with the expected document title', async ({
+  page,
+}) => {
   await rspackCompile(compileByRspack);
 
   const reportPath = path.join(__dirname, './dist/brief/rsdoctor-report.html');
@@ -75,18 +77,6 @@ test('rspack brief mode', async ({ page }) => {
   // Perform actions on the page
   const title = await page.title();
   expect(title).toBe('Rsdoctor');
-
-  const titleContent = 'Bundle Overall';
-
-  await expect(page.locator(`text=${titleContent}`).first()).toBeVisible({
-    timeout: 10000,
-  });
-  await expect(page.locator(`text='Compile Analysis'`).first()).toBeVisible({
-    timeout: 10000,
-  });
-  await expect(page.locator(`text='Bundle Size'`).first()).toBeVisible({
-    timeout: 10000,
-  });
 });
 
 function fileExists(filePath: string) {

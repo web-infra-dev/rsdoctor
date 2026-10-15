@@ -24,10 +24,10 @@ cases:
       - aiAct: Clear the module keyword field.
       - aiAssert: Modules of "small.js" lists small-data.js again.
   - name: EXPLORE-04 Navigate from the overview to bundle analysis
-    tags: [exploration]
+    tags: [exploration, replacement-brief]
     steps:
       - app.open: { path: '/#/overall' }
       - aiAct: Use the report navigation to open Bundle Size. Do not enter a URL.
-      - aiAssert: The Bundle Size page displays Output Assets List with small.js and large.js.
+      - aiAssert: The Bundle Size page displays Output Assets List with small.js and large.js, and report navigation offers Compile Analysis and Overall.
       - aiAct: Use the report navigation to return to the overview.
       - aiAssert: Bundle Overall is visible.
