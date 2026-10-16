@@ -102,6 +102,11 @@ its Summary, and uploads `midscene-results` even after failures. The
 This follows Rome PR #974 at `d1b3183`: no custom report merger or
 custom screenshot-table renderer is involved.
 
+Pages publication requires an existing native HTML report. Incomplete runs keep
+downloadable artifacts and an explanatory Summary without replacing the existing
+site or publishing a broken report link. Retention always protects the current
+run, including a rerun whose run ID is older than the retained history.
+
 To enable publication:
 
 1. Ensure the repository Pages site is dedicated to these reports. Do not enable
