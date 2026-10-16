@@ -13,11 +13,7 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-Rsdoctor is a build analyzer tailored for projects built with [Rspack](https://rspack.rs/).
-
-Rsdoctor is committed to being a one-stop, intelligent build analyzer that makes the build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
-
-For webpack projects, continue using Rsdoctor 1.x or migrate to Rspack. See the [migration guide](https://rsdoctor.rs/guide/migration/migration-v2) for details.
+Rsdoctor is a build analysis tool for the [Rspack](https://rspack.rs/) ecosystem. It visualizes the build process and output to help developers investigate build issues and identify performance bottlenecks. It also provides build data to agents for automated diagnosis and optimization of JavaScript programs.
 
 ## 🔥 Features
 

@@ -13,11 +13,7 @@
 
 [English](./README.md) | 简体中文
 
-Rsdoctor 是一款面向 [Rspack](https://rspack.rs/) 项目的构建分析工具。
-
-Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可视化与智能分析，使整个构建流程变得透明、可预测和可优化，从而帮助开发团队精准定位瓶颈、优化性能并提升工程质量。
-
-webpack 项目应继续使用 Rsdoctor 1.x，或先迁移到 Rspack。详情请参阅 [迁移指南](https://rsdoctor.rs/zh/guide/migration/migration-v2)。
+Rsdoctor 是为 [Rspack](https://rspack.rs/) 生态打造的构建分析工具，通过可视化呈现构建过程与产物，帮助开发者排查构建问题、定位性能瓶颈；同时为 Agent 提供构建数据，支持对 JavaScript 程序的自动诊断与优化。
 
 ## 🔥 特性
 

@@ -9,6 +9,7 @@ import { pluginOpenGraph } from 'rsbuild-plugin-open-graph';
 import { pluginFontOpenSans } from 'rspress-plugin-font-open-sans';
 
 const siteUrl = 'https://rsdoctor.rs';
+const description = 'Build analyzer for Rspack ecosystem';
 
 define.doc({
   siteOrigin: siteUrl,
@@ -91,7 +92,7 @@ define.doc({
   ],
   root: path.join(import.meta.dirname, 'docs'),
   title: 'Rsdoctor',
-  description: 'A one-stop build analyzer for Rspack projects.',
+  description,
   icon: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-960x960.png',
   lang: 'en',
   base: '/',
@@ -164,13 +165,13 @@ define.doc({
         lang: 'en',
         label: 'English',
         title: 'Rsdoctor',
-        description: 'Build analyzer for Rspack projects',
+        description,
       },
       {
         lang: 'zh',
         label: '简体中文',
         title: 'Rsdoctor',
-        description: 'Rspack 项目的构建分析工具',
+        description: '为 Rspack 生态打造的构建分析工具',
       },
     ],
   },
@@ -182,7 +183,7 @@ define.doc({
         title: 'Rsdoctor',
         type: 'website',
         url: 'https://rsdoctor.rs/',
-        description: 'Build analyzer for Rspack projects',
+        description,
         twitter: {
           site: '@rspack_dev',
           card: 'summary_large_image',
