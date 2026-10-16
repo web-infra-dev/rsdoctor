@@ -50,5 +50,5 @@ export async function readNativeResult(reportsDirectory) {
       if (error.code !== 'ENOENT') throw error;
     }
   }
-  return { reportPath };
+  return { reportPath, summary, summaryFile: file };
 }
