@@ -59,6 +59,60 @@ function createMockCompilation() {
 
 describe('sourcemapTool', () => {
   describe('bindContextCache', () => {
+    it('normalizes mixed separators in Windows drive paths and caches the result', () => {
+      const context = path.resolve('/project');
+      const source = String.raw`C:\project\src/nested/file.ts`;
+      const expected =
+        process.platform === 'win32'
+          ? String.raw`C:\project\src\nested\file.ts`
+          : path.resolve(context, source);
+      const cache = new Map<string, string>();
+      const resolveSource = bindContextCache(context, cache);
+
+      expect(resolveSource(source)).toBe(expected);
+      expect(cache.get(source)).toBe(expected);
+      expect(resolveSource(source)).toBe(expected);
+    });
+
+    it('normalizes mixed separators in ordinary Windows UNC paths', () => {
+      const context = path.resolve('/project');
+      const source = String.raw`\\server\share/src/file.ts`;
+      const expected =
+        process.platform === 'win32'
+          ? String.raw`\\server\share\src\file.ts`
+          : path.resolve(context, source);
+
+      expect(bindContextCache(context)(source)).toBe(expected);
+    });
+
+    it('preserves POSIX absolute paths including literal backslashes', () => {
+      const resolveSource = bindContextCache(path.resolve('/project'));
+
+      expect(resolveSource('/absolute/path/file.ts')).toBe(
+        '/absolute/path/file.ts',
+      );
+      expect(resolveSource(String.raw`/absolute/literal\name.ts`)).toBe(
+        String.raw`/absolute/literal\name.ts`,
+      );
+    });
+
+    it('preserves device namespaces instead of normalizing their separators', () => {
+      const context = path.resolve('/project');
+      const resolveSource = bindContextCache(context);
+      for (const source of [
+        String.raw`\\?\C:\project/src/file.ts`,
+        String.raw`\\.\pipe/project/channel`,
+        '//?/C:/project/src/file.ts',
+        '//./pipe/project/channel',
+      ]) {
+        const expected =
+          process.platform === 'win32' || source.startsWith('/')
+            ? source
+            : path.resolve(context, source);
+        expect(resolveSource(source)).toBe(expected);
+      }
+    });
+
     it('should resolve normal and webpack:// sources', () => {
       const context = '/project';
       const cache = new Map();
@@ -173,6 +227,117 @@ describe('sourcemapTool', () => {
   });
 
   describe('collectSourceMaps', () => {
+    it('attributes mixed Windows drive paths to their canonical module keys', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = createMockCompilation();
+      const context = path.resolve('/project');
+      compilation.options.context = context;
+      const sources = [
+        String.raw`C:\project\src/first.ts`,
+        String.raw`C:\project/src\second.ts`,
+      ];
+      const sourceMap = {
+        version: 3,
+        sources,
+        names: [],
+        mappings: 'AAAA;ACAA',
+        file: 'main.js',
+        sourcesContent: ['first();', 'second();'],
+      };
+
+      await collectSourceMaps(
+        sourceMap,
+        ['first();', 'second();'],
+        compilation,
+        plugin,
+      );
+
+      const expected =
+        process.platform === 'win32'
+          ? [
+              String.raw`C:\project\src\first.ts`,
+              String.raw`C:\project\src\second.ts`,
+            ]
+          : sources.map((source) => path.resolve(context, source));
+      expect([...plugin.sourceMapSets.entries()]).toEqual([
+        [expected[0], 'first();'],
+        [expected[1], 'second();'],
+      ]);
+    });
+
+    it('attributes mixed UNC paths to the canonical share path', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = createMockCompilation();
+      const source = String.raw`\\server\share/src/file.ts`;
+      const expected =
+        process.platform === 'win32'
+          ? String.raw`\\server\share\src\file.ts`
+          : path.resolve(plugin.sdk.root, source);
+
+      await collectSourceMaps(
+        { ...mockJsMap, sources: [source], mappings: 'AAAA' },
+        ['fromShare();'],
+        compilation,
+        plugin,
+      );
+
+      expect([...plugin.sourceMapSets.entries()]).toEqual([
+        [expected, 'fromShare();'],
+      ]);
+    });
+
+    it('normalizes physical paths after removing a loader chain and query', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = createMockCompilation();
+      const source = String.raw`C:\project\src/file.ts`;
+      const expected =
+        process.platform === 'win32'
+          ? String.raw`C:\project\src\file.ts`
+          : path.resolve(plugin.sdk.root, source);
+
+      await collectSourceMaps(
+        {
+          ...mockJsMap,
+          sources: [`builtin:swc-loader!${source}??loader-options`],
+          mappings: 'AAAA',
+        },
+        ['loaded();'],
+        compilation,
+        plugin,
+      );
+
+      expect([...plugin.sourceMapSets.entries()]).toEqual([
+        [expected, 'loaded();'],
+      ]);
+    });
+
+    it('checks canonical skipSources before accumulating another asset', async () => {
+      const plugin = createMockPluginInstance();
+      const compilation = createMockCompilation();
+      const canonical =
+        process.platform === 'win32'
+          ? String.raw`C:\project\src\file.ts`
+          : '/project/src/file.ts';
+      const alias =
+        process.platform === 'win32'
+          ? String.raw`C:\project\src/file.ts`
+          : canonical;
+      plugin.sourceMapSets.set(canonical, 'original();');
+
+      await collectSourceMaps(
+        { ...mockJsMap, sources: [alias], mappings: 'AAAA' },
+        ['duplicate();'],
+        compilation,
+        plugin,
+        undefined,
+        new Set([canonical]),
+      );
+
+      expect([...plugin.sourceMapSets.entries()]).toEqual([
+        [canonical, 'original();'],
+      ]);
+    });
+
     it('should collect code segments for webpack sources', async () => {
       const plugin = createMockPluginInstance();
       const compilation = createMockCompilation();

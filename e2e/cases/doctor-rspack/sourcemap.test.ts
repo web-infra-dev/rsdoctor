@@ -1,7 +1,46 @@
 import { expect, test } from '@test-kit/rstest';
 import path from 'path';
+import { tmpdir } from 'node:os';
+import { randomUUID } from 'node:crypto';
 import { compileByRspack } from '@scripts/test-helper';
 import { createRsdoctorPlugin } from './test-utils';
+
+test('attributes nested modules with default source-map filenames', async () => {
+  const plugin = createRsdoctorPlugin({});
+  await compileByRspack(
+    { a: './fixtures/a.js', b: './fixtures/b.js' },
+    {
+      context: __dirname,
+      devtool: 'source-map',
+      output: {
+        path: path.join(tmpdir(), `rsdoctor-nested-sourcemap-${randomUUID()}`),
+        filename: '[name].js',
+      },
+      optimization: { concatenateModules: false },
+      plugins: [plugin],
+    },
+  );
+
+  const { moduleGraph, moduleCodeMap } = plugin.sdk.getStoreData();
+  const a = moduleGraph.modules.find(
+    (mod) => mod.path === path.resolve(__dirname, 'fixtures/a.js'),
+  );
+  const b = moduleGraph.modules.find(
+    (mod) => mod.path === path.resolve(__dirname, 'fixtures/b.js'),
+  );
+  expect(a).toBeDefined();
+  expect(b).toBeDefined();
+  expect(a!.size.parsedSize).toBeGreaterThan(0);
+  expect(b!.size.parsedSize).toBeGreaterThan(0);
+  const aCode = moduleCodeMap[a!.id].parsedSource;
+  const bCode = moduleCodeMap[b!.id].parsedSource;
+  expect(aCode).toContain('console.log(a)');
+  expect(aCode).not.toContain('hhe:');
+  expect(bCode).toContain('hhe:');
+  expect(bCode).not.toContain('console.log(a)');
+  expect(aCode.length).toBe(a!.size.parsedSize);
+  expect(bCode.length).toBe(b!.size.parsedSize);
+});
 
 async function rspackCompile() {
   const file = path.resolve(__dirname, './fixtures/a.js');
