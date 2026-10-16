@@ -13,6 +13,7 @@ const siteUrl = 'https://rsdoctor.rs';
 const sitemapPlugin = pluginSitemap({
   domain: siteUrl,
 }) as any;
+const description = 'Build analyzer for Rspack ecosystem';
 
 define.doc({
   plugins: [
@@ -95,7 +96,7 @@ define.doc({
   ],
   root: path.join(import.meta.dirname, 'docs'),
   title: 'Rsdoctor',
-  description: 'Build analyzer for Rspack ecosystem',
+  description,
   icon: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-960x960.png',
   lang: 'en',
   base: '/',
@@ -169,7 +170,7 @@ define.doc({
         lang: 'en',
         label: 'English',
         title: 'Rsdoctor',
-        description: 'Build analyzer for Rspack ecosystem',
+        description,
       },
       {
         lang: 'zh',
@@ -187,8 +188,7 @@ define.doc({
         title: 'Rsdoctor',
         type: 'website',
         url: 'https://rsdoctor.rs/',
-        description:
-          'Rsdoctor provides visual build analysis for Rspack projects and supports automated diagnosis and optimization by agents.',
+        description,
         twitter: {
           site: '@rspack_dev',
           card: 'summary_large_image',
