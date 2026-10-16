@@ -17,14 +17,14 @@ Rsdoctor is a build analysis tool for the [Rspack](https://rspack.rs/) ecosystem
 
 ## 🔥 Features
 
-- **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.
+- **Agent-Driven Analysis**: Provides build data to agents for automated diagnosis and optimization of JavaScript programs.
 
-- **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
-  - Build artifact support for resource lists and module dependencies, etc.
-  - Build-time analysis supports Loader, Plugin, and Resolver building process analysis
-  - Build rules support duplicate package detection and ES Version Check, etc.
+- **Compilation Visualization**: Visualize the compilation process and timing to troubleshoot build issues and identify performance bottlenecks.
 
-- **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
+- **Comprehensive Analysis**: Analyze build output, inspect the build process, and run diagnostic checks:
+  - **Output Analysis**: Inspect assets, output sizes, and module dependencies.
+  - **Build Process Analysis**: Inspect Loader and Plugin execution and module resolution (Resolver).
+  - **Diagnostic Checks**: Detect duplicate packages and check ECMAScript syntax versions to identify potential build issues.
 
 ## 📚 Getting started
 
