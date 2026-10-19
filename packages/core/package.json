@@ -43,7 +43,7 @@
   "dependencies": {
     "@rsdoctor/client": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
-    "caniuse-lite": "^1.0.30001815",
+    "caniuse-lite": "^1.0.30001816",
     "sirv": "catalog:",
     "source-map": "catalog:"
   },
@@ -65,7 +65,7 @@
     "acorn-import-attributes": "^1.9.5",
     "acorn-walk": "8.3.5",
     "babel-loader": "10.1.1",
-    "browserslist-load-config": "^1.0.3",
+    "browserslist-load-config": "^1.0.4",
     "connect-next": "catalog:",
     "cors": "2.8.6",
     "envinfo": "7.21.0",
