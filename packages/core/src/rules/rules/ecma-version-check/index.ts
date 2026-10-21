@@ -90,6 +90,10 @@ export const rule: Linter.RuleData<Config, typeof title> = defineRule<
         rootPath: context,
         targets: finalTargets,
       });
+      const canRetryAsModule =
+        buildConfig?.output?.module === true &&
+        (typeof checkSyntax.ecmaVersion !== 'number' ||
+          checkSyntax.ecmaVersion >= 6);
 
       for (const asset of assets) {
         const assetPath = path.resolve(outputDir, asset.path);
@@ -98,9 +102,8 @@ export const rule: Linter.RuleData<Config, typeof title> = defineRule<
         const errorCount = checkSyntax.errors.length;
         await checkSyntax.check(assetPath, asset.content);
 
-        // CheckSyntax parses as a script. An emitted ES module can fail that
-        // check solely because it contains import or export declarations.
-        if (checkSyntax.errors.length > errorCount) {
+        // CheckSyntax parses as a script. Retry only for ES2015+ module output.
+        if (canRetryAsModule && checkSyntax.errors.length > errorCount) {
           try {
             parse(asset.content, {
               ecmaVersion: checkSyntax.ecmaVersion,
