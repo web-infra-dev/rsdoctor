@@ -1,5 +1,6 @@
 import path from 'path';
 import { CheckSyntax } from '@rsbuild/plugin-check-syntax';
+import { parse } from 'acorn';
 import { loadConfig } from 'browserslist-load-config';
 
 import { defineRule } from '../../rule';
@@ -94,7 +95,22 @@ export const rule: Linter.RuleData<Config, typeof title> = defineRule<
         const assetPath = path.resolve(outputDir, asset.path);
         if (isExcludedOutput(assetPath, excludeOutput)) continue;
 
+        const errorCount = checkSyntax.errors.length;
         await checkSyntax.check(assetPath, asset.content);
+
+        // CheckSyntax parses as a script. An emitted ES module can fail that
+        // check solely because it contains import or export declarations.
+        if (checkSyntax.errors.length > errorCount) {
+          try {
+            parse(asset.content, {
+              ecmaVersion: checkSyntax.ecmaVersion,
+              sourceType: 'module',
+            });
+            checkSyntax.errors.length = errorCount;
+          } catch {
+            // The syntax is invalid under both grammars; keep the original error.
+          }
+        }
       }
 
       checkSyntax.errors.forEach((err) => {
