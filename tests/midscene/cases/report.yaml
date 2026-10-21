@@ -1,0 +1,21 @@
+cases:
+  - name: REPORT-01 Inspect rule results and an empty rule tab
+    tags: [report]
+    steps:
+      - app.open: { path: '/#/overall' }
+      - aiAct: Open the Duplicate Packages rule tab in the report.
+      - aiAssert: The selected Duplicate Packages rule panel displays No Data.
+      - aiAct: Switch to the ECMA Version Check rule tab.
+      - aiAssert: The selected rule panel displays ECMA Version Check warnings.
+  - name: REPORT-02 Upload and analyze a build manifest
+    tags: [report]
+    steps:
+      - app.open: { path: '/#/resources/uploader' }
+      - aiAct:
+          prompt: Click the JSON upload area and upload rsdoctor-data.json.
+          options:
+            fileChooserAllowedDir: .fixture/uploads
+            fileChooserAccept: .fixture/uploads/rsdoctor-data.json
+      - aiAssert: The uploaded report displays Bundle Overall.
+      - aiAct: Use report navigation to open Bundle Size.
+      - aiAssert: Output Assets List displays uploaded-only.js, and does not list small.js or large.js from the initial report. This is the uploaded build, not the preloaded report.

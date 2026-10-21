@@ -1,0 +1,273 @@
+{
+  "sourceCommit": "ad38e51666dc5e13a3cbf9e1fab862a7810c158e",
+  "policy": "Original deterministic tests remain. Midscene verifies user-visible behavior, not exact timing, browser events, compiler data, or serialization contracts. Local evidence is not remote CI evidence.",
+  "cases": [
+    {
+      "source": "e2e/cases/doctor-rsbuild/multi-environments.test.ts",
+      "name": "automatically exports isolated reports for Rsbuild environments",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rsbuild/multi-environments.test.ts",
+      "name": "embeds compiler navigation in brief reports",
+      "replacementStatus": "retained-technical",
+      "remainingTestName": "embeds compiler navigation in brief reports",
+      "decision": "migrate-visible-behavior",
+      "status": "local-visible-scope-verified",
+      "candidateCaseIds": ["COMPILER-01"],
+      "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
+      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
+    },
+    {
+      "source": "e2e/cases/doctor-rspeedy/banner-plugin.test.ts",
+      "name": "rspack plugin intercept",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/brief.test.ts",
+      "name": "rspack brief mode",
+      "replacementStatus": "ui-replaced-technical-retained",
+      "remainingTestName": "brief build emits an HTML report with the expected document title",
+      "replacementEvidenceRuns": ["20261015115248-974fa907"],
+      "decision": "migrate-visible-behavior",
+      "status": "local-visible-scope-verified",
+      "candidateCaseIds": ["EXPLORE-04"],
+      "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
+      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/bundle-diff.test.ts",
+      "name": "escapes Windows paths in manifest JSON",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/bundle-diff.test.ts",
+      "name": "use Rsdoctor manifest data",
+      "replacementStatus": "ui-replaced-technical-retained",
+      "remainingTestName": "bundle diff CLI serves a real manifest",
+      "decision": "migrate-visible-behavior",
+      "status": "local-visible-scope-verified",
+      "candidateCaseIds": ["DIFF-01"],
+      "reason": "Migrate only the original overview and four tab entries. Tab activation is outside original scope and has a separate renderer-stall reproducer in KNOWN-ISSUES.md.",
+      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/child-compiler.test.ts",
+      "name": "does not collect ignored child compiler: HtmlRspackCompiler",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/child-compiler.test.ts",
+      "name": "does not collect ignored child compiler: mini-css-extract-plugin",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/child-compiler.test.ts",
+      "name": "uses a concise display name for worker-loader child compilers",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/child-compiler.test.ts",
+      "name": "collects child compiler data in an isolated report",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/child-compiler.test.ts",
+      "name": "writes child compiler data to an isolated brief report",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/layer-plugin.test.ts",
+      "name": "rspack data store",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/linter-rule-render.test.ts",
+      "name": "linter rule render check",
+      "replacementStatus": "ui-replaced-technical-retained",
+      "remainingTestName": "brief report preserves ARIA selection and responsive chart geometry",
+      "decision": "migrate-visible-behavior",
+      "status": "local-visible-scope-verified",
+      "candidateCaseIds": ["REPORT-01"],
+      "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
+      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/plugin.test.ts",
+      "name": "rspack plugin intercept",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/plugin.test.ts",
+      "name": "rspack data store",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
+      "name": "Asset Size applies MB with unit-first",
+      "replacementStatus": "replaced-by-midscene",
+      "decision": "migrate-visible-behavior",
+      "status": "local-visible-scope-verified",
+      "candidateCaseIds": ["BUNDLE-02"],
+      "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
+      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
+      "name": "Asset Size applies MB with value-first",
+      "replacementStatus": "replaced-by-midscene",
+      "decision": "migrate-visible-behavior",
+      "status": "local-visible-scope-verified",
+      "candidateCaseIds": ["BUNDLE-04"],
+      "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
+      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
+      "name": "Asset Size applies MB with pending-input",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "A controlled browser clock holds input inside the 300 ms debounce window. AI planning latency cannot preserve that timing contract; unit-first and value-first visible behavior is migrated separately."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
+      "name": "Module Size applies MB with unit-first",
+      "replacementStatus": "replaced-by-midscene",
+      "decision": "migrate-visible-behavior",
+      "status": "local-visible-scope-verified",
+      "candidateCaseIds": ["BUNDLE-03"],
+      "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
+      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
+      "name": "Module Size applies MB with value-first",
+      "replacementStatus": "replaced-by-midscene",
+      "decision": "migrate-visible-behavior",
+      "status": "local-visible-scope-verified",
+      "candidateCaseIds": ["BUNDLE-05"],
+      "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
+      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
+      "name": "Module Size applies MB with pending-input",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "A controlled browser clock holds input inside the 300 ms debounce window. AI planning latency cannot preserve that timing contract; unit-first and value-first visible behavior is migrated separately."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/sourcemap.test.ts",
+      "name": "rspack sourcemap tool",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/sourcemap.test.ts",
+      "name": "rspack sourcemap tool at special devtoolModuleFilenameTemplate",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/sourcemap.test.ts",
+      "name": "rspack handles assets without sourcemap correctly",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rspack/uploader.test.ts",
+      "name": "Uploader Integration Tests > should upload and analyze real build manifest",
+      "replacementStatus": "ui-replaced-technical-retained",
+      "remainingTestName": "upload mounts manifest fields and enabled routes in client state",
+      "decision": "migrate-visible-behavior",
+      "status": "local-visible-scope-verified",
+      "candidateCaseIds": ["REPORT-02"],
+      "reason": "Verify the visible workflow separately while retaining deterministic geometry, controlled-clock, file, and internal-data checks.",
+      "evidenceRuns": ["20261014164630-d920b921", "20261015105939-96f80330"]
+    },
+    {
+      "source": "e2e/cases/doctor-rsbuild/plugins/loader-mini-css.test.ts",
+      "name": "[rsbuild] loader basic usage mini-css-extract-plugin",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rsbuild/plugins/loader-mini-css.test.ts",
+      "name": "[rsbuild] loader overwrite options",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    },
+    {
+      "source": "e2e/cases/doctor-rsbuild/plugins/loader-mini-css.test.ts",
+      "name": "[rsbuild] loader add loader and overwrite options",
+      "replacementStatus": "retained-technical",
+      "decision": "retain-deterministic",
+      "status": "retained",
+      "candidateCaseIds": [],
+      "reason": "Compiler hooks, loader options, serialization, module graph, sourcemaps, or generated report data need deterministic assertions."
+    }
+  ]
+}

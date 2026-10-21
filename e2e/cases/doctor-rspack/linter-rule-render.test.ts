@@ -61,7 +61,9 @@ async function rspackCompile(compile: typeof compileByRspack) {
   return res;
 }
 
-test('linter rule render check', async ({ page }) => {
+test('brief report preserves ARIA selection and responsive chart geometry', async ({
+  page,
+}) => {
   await rspackCompile(compileByRspack);
 
   const reportPath = path.join(
@@ -81,11 +83,9 @@ test('linter rule render check', async ({ page }) => {
   const emptyTab = page.getByRole('tab', { name: /Duplicate Packages/ });
   await emptyTab.click();
   await expect(emptyTab).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('tabpanel')).toContainText('No Data');
 
   await ecmaTab.click();
   await expect(ecmaTab).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('tabpanel')).toContainText('ECMA Version Check');
 
   // Keep the sidebar beside the main content when browser chrome narrows a laptop viewport.
   for (const width of [960, 1100, 1280, 1440, 1920]) {
