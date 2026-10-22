@@ -136,8 +136,6 @@ Use synthetic local fixtures and a dedicated quota-limited model key. Do not run
 `npm audit fix --force`: its suggested framework downgrades are incompatible with
 this integration.
 
-## CI evidence table
-
 ## Isolated speed experiment
 
 On the `benchmark/midscene-speed-20261022` fork branch, dispatch this workflow
