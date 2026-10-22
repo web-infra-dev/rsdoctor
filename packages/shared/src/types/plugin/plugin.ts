@@ -61,6 +61,7 @@ export interface RsdoctorPluginOptionsNormalized<
   multiCompiler: {
     enabled: boolean;
     group?: string;
+    ignoreChildCompilers: string[];
   };
 }
 
@@ -136,7 +137,13 @@ export interface RsdoctorRspackPluginOptions<
    *
    * @default true
    */
-  multiCompiler?: boolean | { group?: string };
+  multiCompiler?:
+    | boolean
+    | {
+        group?: string;
+        /** Child compiler names to skip when creating Rsdoctor reports. */
+        ignoreChildCompilers?: string[];
+      };
 
   /** Checker configuration */
   linter?: LinterType.Options<Rules, InternalRules>;

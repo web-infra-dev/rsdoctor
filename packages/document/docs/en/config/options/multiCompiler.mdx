@@ -1,20 +1,30 @@
 ---
-description: 'Configure multiCompiler to group Rsdoctor reports from multiple Rspack compilers and select individual compiler results.'
+description: 'Configure multiCompiler to group Rspack reports and skip selected child compilers.'
 ---
 
 # multiCompiler
 
-- **Type:** `boolean | { group?: string }`
+- **Type:** `boolean | { group?: string; ignoreChildCompilers?: string[] }`
 - **Default:** `true`
 
 `RsdoctorRspackPlugin` automatically detects compilers created during the same startup, creates isolated analysis data for each compiler, and adds a compiler selector to the report. Rsbuild `environments` use their environment names, such as `web` and `node`.
 
 The default compiler keeps the existing `.rsdoctor` output path. Additional compilers are written to `.rsdoctor/compilers/<compilerName>`.
 
-Set this option to `false` when the same process creates unrelated compilers together. You can also explicitly group plugin instances:
+Set this option to `false` when the same process creates unrelated compilers together. This also disables child compiler tracking. You can explicitly group plugin instances:
 
 ```ts
 new RsdoctorRspackPlugin({
   multiCompiler: { group: 'ssr' },
+});
+```
+
+Use `ignoreChildCompilers` to skip reports for child compilers by name. Names are matched exactly against the child compiler name and the name provided by its parent. Rsdoctor already skips `HtmlRspackCompiler` and `mini-css-extract-plugin` by default.
+
+```ts
+new RsdoctorRspackPlugin({
+  multiCompiler: {
+    ignoreChildCompilers: ['vanilla-extract-compiler'],
+  },
 });
 ```
