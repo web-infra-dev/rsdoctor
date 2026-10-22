@@ -203,6 +203,76 @@ describe('RsdoctorRspackPlugin', () => {
     await Promise.all([firstSDK.dispose(), secondSDK.dispose()]);
   });
 
+  it('does not track child compilers when multiCompiler is disabled', async () => {
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      multiCompiler: false,
+    });
+    const compiler = rspack({ plugins: [plugin] });
+    await plugin._bootstrapTask;
+
+    expect(
+      compiler.hooks.thisCompilation.taps.some(
+        (tap) => tap.name === 'RsdoctorRspackPlugin:childCompiler',
+      ),
+    ).toBe(false);
+
+    await plugin.sdk.dispose();
+  });
+
+  it('ignores configured and built-in child compiler names', async () => {
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      multiCompiler: {
+        ignoreChildCompilers: ['vanilla-extract-compiler'],
+      },
+    });
+    const compiler = rspack({ plugins: [plugin] });
+    await plugin._bootstrapTask;
+
+    const parentSDK = plugin.sdk as RsdoctorPrimarySDK;
+    const registerChildCompiler = (
+      plugin as unknown as {
+        registerChildCompiler: (
+          parent: Plugin.BaseCompiler,
+          child: Plugin.BaseCompiler,
+          name: string,
+          index: number,
+          context: unknown,
+        ) => void;
+      }
+    ).registerChildCompiler.bind(plugin);
+    const parentContext = { sdk: parentSDK };
+    const childCompiler = {
+      name: 'vanilla-extract-compiler',
+    } as Plugin.BaseCompiler;
+
+    registerChildCompiler(
+      asRspackCompiler(compiler),
+      childCompiler,
+      'other',
+      0,
+      parentContext,
+    );
+    registerChildCompiler(
+      asRspackCompiler(compiler),
+      {} as Plugin.BaseCompiler,
+      'vanilla-extract-compiler',
+      1,
+      parentContext,
+    );
+    registerChildCompiler(
+      asRspackCompiler(compiler),
+      {} as Plugin.BaseCompiler,
+      'HtmlRspackCompiler',
+      2,
+      parentContext,
+    );
+    expect(parentSDK.parent.slaves).toHaveLength(1);
+
+    await parentSDK.dispose();
+  });
+
   it('bootstraps the SDK only once across apply and done', async () => {
     const sdk = new RsdoctorSDK({
       name: 'bootstrap-once',

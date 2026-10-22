@@ -33,7 +33,12 @@ This `Options` object is the configuration for [RsdoctorRspackPlugin](#rsdoctorr
 interface RsdoctorRspackPluginOptions<
   Rules extends LinterType.ExtendRuleData[],
 > {
-  multiCompiler?: boolean | { group?: string };
+  multiCompiler?:
+    | boolean
+    | {
+        group?: string;
+        ignoreChildCompilers?: string[];
+      };
 
   /** Linter configuration */
   linter?: LinterType.Options<Rules, InternalRules>;

@@ -526,6 +526,10 @@ export class RsdoctorRspackPlugin<
     compiler: Plugin.BaseCompilerType<'rspack'>,
     context: RsdoctorCompilerContext,
   ) {
+    if (!this.options.multiCompiler.enabled) {
+      return;
+    }
+
     compiler.hooks.thisCompilation.tap(
       {
         name: `${pluginTapName}:childCompiler`,
@@ -620,10 +624,14 @@ export class RsdoctorRspackPlugin<
     childCompiler: Plugin.BaseCompilerType<'rspack'>,
     compilerName: string,
   ) {
+    const ignoredNames = this.options.multiCompiler.ignoreChildCompilers;
     return (
       (childCompiler.name
-        ? ignoredChildCompilerNames.has(childCompiler.name)
-        : false) || ignoredChildCompilerNames.has(compilerName)
+        ? ignoredChildCompilerNames.has(childCompiler.name) ||
+          ignoredNames.includes(childCompiler.name)
+        : false) ||
+      ignoredChildCompilerNames.has(compilerName) ||
+      ignoredNames.includes(compilerName)
     );
   }
 

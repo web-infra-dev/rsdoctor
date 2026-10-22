@@ -240,7 +240,19 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   assert(typeof server.port === 'undefined' || typeof server.port === 'number');
   assert(
     typeof multiCompiler === 'boolean' ||
-      (typeof multiCompiler === 'object' && multiCompiler !== null),
+      (typeof multiCompiler === 'object' &&
+        multiCompiler !== null &&
+        !Array.isArray(multiCompiler)),
+  );
+  const ignoreChildCompilers =
+    typeof multiCompiler === 'object'
+      ? multiCompiler.ignoreChildCompilers
+      : undefined;
+  assert(
+    ignoreChildCompilers === undefined ||
+      (Array.isArray(ignoreChildCompilers) &&
+        ignoreChildCompilers.every((name) => typeof name === 'string')),
+    '`multiCompiler.ignoreChildCompilers` must be an array of strings.',
   );
   let finalMode: keyof typeof SDK.IMode =
     ('mode' in output && isValidMode(output.mode)
@@ -289,6 +301,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       enabled: multiCompiler !== false,
       group:
         typeof multiCompiler === 'object' ? multiCompiler.group : undefined,
+      ignoreChildCompilers: ignoreChildCompilers ?? [],
     },
   };
 

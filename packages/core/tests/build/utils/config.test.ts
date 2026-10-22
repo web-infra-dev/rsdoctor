@@ -62,6 +62,7 @@ describe('normalizeUserConfig', () => {
     expect(result.multiCompiler).toEqual({
       enabled: true,
       group: undefined,
+      ignoreChildCompilers: [],
     });
   });
 
@@ -70,11 +71,24 @@ describe('normalizeUserConfig', () => {
       {
         enabled: false,
         group: undefined,
+        ignoreChildCompilers: [],
       },
     );
     expect(
       normalizeUserConfig({ multiCompiler: { group: 'ssr' } }).multiCompiler,
-    ).toEqual({ enabled: true, group: 'ssr' });
+    ).toEqual({ enabled: true, group: 'ssr', ignoreChildCompilers: [] });
+    expect(
+      normalizeUserConfig({
+        multiCompiler: { ignoreChildCompilers: ['vanilla-extract-compiler'] },
+      }).multiCompiler.ignoreChildCompilers,
+    ).toEqual(['vanilla-extract-compiler']);
+    expect(() =>
+      normalizeUserConfig({
+        multiCompiler: { ignoreChildCompilers: [1] as unknown as string[] },
+      }),
+    ).toThrow(
+      '`multiCompiler.ignoreChildCompilers` must be an array of strings.',
+    );
   });
 
   it('should respect custom features array', () => {
