@@ -1,7 +1,11 @@
 import { fileURLToPath } from 'node:url';
 import { config } from 'dotenv';
 import { defineNode, z } from '@midscene/test';
-import { defineProjectSetup, defineTestProject } from '@midscene/test/config';
+import {
+  defineFileSetup,
+  defineProjectSetup,
+  defineTestProject,
+} from '@midscene/test/config';
 import { createMidsceneNodes } from '@midscene/test/midscene';
 import { PlaywrightAgent } from '@midscene/web/playwright/agent';
 import { startFixtureServer } from './fixture-server.js';
@@ -20,7 +24,13 @@ interface Context {
   page?: Page;
   agent?: PlaywrightAgent;
 }
-const setup = defineProjectSetup<Context>({
+interface ProjectContext {
+  browser: Browser;
+}
+const concurrency = Number(process.env.MIDSCENE_SPEED_CONCURRENCY ?? '1');
+if (![1, 5].includes(concurrency))
+  throw new Error('Speed experiment concurrency must be 1 or 5');
+const setup = defineProjectSetup<ProjectContext>({
   name: 'web',
   async setup({ onTeardown, signal }) {
     const stopServer = await startFixtureServer(
@@ -29,16 +39,23 @@ const setup = defineProjectSetup<Context>({
       signal,
     );
     onTeardown(stopServer);
-    const context: Context = {
-      browser: await chromium.launch({
-        headless: process.env.HEADLESS !== 'false',
-      }),
-    };
+    const browser = await chromium.launch({
+      headless: process.env.HEADLESS !== 'false',
+    });
+    onTeardown(() => browser.close());
+    return { browser };
+  },
+});
+const fileSetup = defineFileSetup<Context, ProjectContext>({
+  name: 'isolated-page',
+  async setup({ projectContext, onTeardown }) {
+    if (!projectContext) throw new Error('Browser setup did not complete');
+    const context: Context = { browser: projectContext.browser };
     onTeardown(async () => {
       try {
         await context.agent?.destroy();
       } finally {
-        await context.browser.close();
+        await context.session?.close();
       }
     });
     return context;
@@ -81,14 +98,22 @@ const open = defineNode<typeof input, void, Context>({
       .waitFor({ state: 'visible' });
   },
 });
-export default defineTestProject<Context>({
-  test: { maxConcurrency: 1, testTimeout: 8 * 60_000 },
+export default defineTestProject<Context, ProjectContext>({
+  test: {
+    maxConcurrentProjects: 1,
+    maxConcurrentFiles: concurrency,
+    testTimeout: 8 * 60_000,
+  },
   projects: [
     {
       name: 'web',
       setup,
+      fileSetup,
+      maxConcurrentFiles: concurrency,
       retry: 0,
-      files: { include: ['cases/**/*.yaml'] },
+      files: {
+        include: [process.env.MIDSCENE_SPEED_CASES ?? 'cases/**/*.yaml'],
+      },
       tags: {
         include: (process.env.MIDSCENE_INCLUDE_TAGS ?? '')
           .split(',')
