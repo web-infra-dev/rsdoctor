@@ -17,6 +17,21 @@ afterEach(async () => {
 
 const asRspackCompiler = (compiler: unknown) => compiler as Plugin.BaseCompiler;
 
+const createChildCompiler = (name?: string) => {
+  const taps = [
+    { name: 'RsdoctorRspackPlugin' },
+    { name: 'RsdoctorRspackPlugin:childCompiler' },
+    { name: 'OtherPlugin' },
+  ];
+  return {
+    compiler: {
+      name,
+      hooks: { someHook: { taps } },
+    } as unknown as Plugin.BaseCompiler,
+    taps,
+  };
+};
+
 describe('RsdoctorRspackPlugin', () => {
   it('uses faster report compression only in watch mode', () => {
     expect(
@@ -215,7 +230,28 @@ describe('RsdoctorRspackPlugin', () => {
       compiler.hooks.thisCompilation.taps.some(
         (tap) => tap.name === 'RsdoctorRspackPlugin:childCompiler',
       ),
-    ).toBe(false);
+    ).toBe(true);
+
+    const child = createChildCompiler();
+    const registerChildCompiler = (
+      plugin as unknown as {
+        registerChildCompiler: (
+          parent: Plugin.BaseCompiler,
+          child: Plugin.BaseCompiler,
+          name: string,
+          index: number,
+          context: unknown,
+        ) => void;
+      }
+    ).registerChildCompiler.bind(plugin);
+    registerChildCompiler(
+      asRspackCompiler(compiler),
+      child.compiler,
+      'child',
+      0,
+      { sdk: plugin.sdk },
+    );
+    expect(child.taps).toEqual([{ name: 'OtherPlugin' }]);
 
     await plugin.sdk.dispose();
   });
@@ -243,31 +279,34 @@ describe('RsdoctorRspackPlugin', () => {
       }
     ).registerChildCompiler.bind(plugin);
     const parentContext = { sdk: parentSDK };
-    const childCompiler = {
-      name: 'vanilla-extract-compiler',
-    } as Plugin.BaseCompiler;
+    const configuredChild = createChildCompiler('vanilla-extract-compiler');
+    const builtInChild = createChildCompiler();
+    const namedBuiltInChild = createChildCompiler();
 
     registerChildCompiler(
       asRspackCompiler(compiler),
-      childCompiler,
+      configuredChild.compiler,
       'other',
       0,
       parentContext,
     );
     registerChildCompiler(
       asRspackCompiler(compiler),
-      {} as Plugin.BaseCompiler,
+      builtInChild.compiler,
       'vanilla-extract-compiler',
       1,
       parentContext,
     );
     registerChildCompiler(
       asRspackCompiler(compiler),
-      {} as Plugin.BaseCompiler,
+      namedBuiltInChild.compiler,
       'HtmlRspackCompiler',
       2,
       parentContext,
     );
+    expect(configuredChild.taps).toEqual([{ name: 'OtherPlugin' }]);
+    expect(builtInChild.taps).toEqual([{ name: 'OtherPlugin' }]);
+    expect(namedBuiltInChild.taps).toEqual([{ name: 'OtherPlugin' }]);
     expect(parentSDK.parent.slaves).toHaveLength(1);
 
     await parentSDK.dispose();

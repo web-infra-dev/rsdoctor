@@ -526,10 +526,6 @@ export class RsdoctorRspackPlugin<
     compiler: Plugin.BaseCompilerType<'rspack'>,
     context: RsdoctorCompilerContext,
   ) {
-    if (!this.options.multiCompiler.enabled) {
-      return;
-    }
-
     compiler.hooks.thisCompilation.tap(
       {
         name: `${pluginTapName}:childCompiler`,
@@ -559,11 +555,18 @@ export class RsdoctorRspackPlugin<
     compilerIndex: number,
     parentContext: RsdoctorCompilerContext,
   ) {
+    // Child compilers inherit the parent's taps before this callback runs.
+    // Strip Rsdoctor's inherited taps even when tracking is disabled/ignored.
+    this.removeInheritedRsdoctorTaps(childCompiler);
+
     if (!(parentContext.sdk instanceof RsdoctorPrimarySDK)) {
       return;
     }
 
-    if (this.shouldIgnoreChildCompiler(childCompiler, compilerName)) {
+    if (
+      !this.options.multiCompiler.enabled ||
+      this.shouldIgnoreChildCompiler(childCompiler, compilerName)
+    ) {
       return;
     }
 
@@ -606,8 +609,6 @@ export class RsdoctorRspackPlugin<
       sdk.dependencies = [parentSDK.name];
       return sdk;
     })();
-
-    this.removeInheritedRsdoctorTaps(childCompiler);
 
     const childPlugin = new RsdoctorRspackPlugin({
       ...this.childOptions,
