@@ -43,7 +43,7 @@
   "dependencies": {
     "@rsdoctor/client": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
-    "caniuse-lite": "^1.0.30001816",
+    "caniuse-lite": "^1.0.30001819",
     "sirv": "catalog:",
     "source-map": "catalog:"
   },
