@@ -18,17 +18,19 @@ afterEach(async () => {
 const asRspackCompiler = (compiler: unknown) => compiler as Plugin.BaseCompiler;
 
 const createChildCompiler = (name?: string) => {
-  const taps = [
-    { name: 'RsdoctorRspackPlugin' },
-    { name: 'RsdoctorRspackPlugin:childCompiler' },
-    { name: 'OtherPlugin' },
-  ];
+  const hook = {
+    taps: [
+      { name: 'RsdoctorRspackPlugin' },
+      { name: 'RsdoctorRspackPlugin:childCompiler' },
+      { name: 'OtherPlugin' },
+    ],
+  };
   return {
     compiler: {
       name,
-      hooks: { someHook: { taps } },
+      hooks: { someHook: hook },
     } as unknown as Plugin.BaseCompiler,
-    taps,
+    hook,
   };
 };
 
@@ -251,7 +253,7 @@ describe('RsdoctorRspackPlugin', () => {
       0,
       { sdk: plugin.sdk },
     );
-    expect(child.taps).toEqual([{ name: 'OtherPlugin' }]);
+    expect(child.hook.taps).toEqual([{ name: 'OtherPlugin' }]);
 
     await plugin.sdk.dispose();
   });
@@ -304,9 +306,9 @@ describe('RsdoctorRspackPlugin', () => {
       2,
       parentContext,
     );
-    expect(configuredChild.taps).toEqual([{ name: 'OtherPlugin' }]);
-    expect(builtInChild.taps).toEqual([{ name: 'OtherPlugin' }]);
-    expect(namedBuiltInChild.taps).toEqual([{ name: 'OtherPlugin' }]);
+    expect(configuredChild.hook.taps).toEqual([{ name: 'OtherPlugin' }]);
+    expect(builtInChild.hook.taps).toEqual([{ name: 'OtherPlugin' }]);
+    expect(namedBuiltInChild.hook.taps).toEqual([{ name: 'OtherPlugin' }]);
     expect(parentSDK.parent.slaves).toHaveLength(1);
 
     await parentSDK.dispose();
