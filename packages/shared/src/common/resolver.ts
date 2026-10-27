@@ -1,6 +1,6 @@
+import { escapeRegExp } from '@rsdoctor/shared/collection';
 import { SDK } from '../types';
 import { mergeIntervals } from './algorithm';
-import { escapeRegExp } from './collection';
 
 export function isResolveSuccessData(
   data: SDK.PathResolverData,
