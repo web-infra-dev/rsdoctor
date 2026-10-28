@@ -1,6 +1,6 @@
 import { expect, test } from '@test-kit/rstest';
 import { compileByRspack } from '@scripts/test-helper';
-import { mkdtemp, realpath, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -10,10 +10,7 @@ let fixture: string;
 let reportUrl: string;
 
 test.beforeAll(async () => {
-  // Match Rspack's canonical module paths when macOS resolves /var to /private/var.
-  fixture = await realpath(
-    await mkdtemp(path.join(tmpdir(), 'rsdoctor-size-filter-')),
-  );
+  fixture = await mkdtemp(path.join(tmpdir(), 'rsdoctor-size-filter-'));
   await Promise.all([
     writeFile(path.join(fixture, 'package.json'), '{"type":"module"}'),
     writeFile(
