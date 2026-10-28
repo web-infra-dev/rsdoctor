@@ -28,8 +28,8 @@ interface ProjectContext {
   browser: Browser;
 }
 const concurrency = Number(process.env.MIDSCENE_SPEED_CONCURRENCY ?? '1');
-if (![1, 5].includes(concurrency))
-  throw new Error('Speed experiment concurrency must be 1 or 5');
+if (![1, 5, 15].includes(concurrency))
+  throw new Error('Speed experiment concurrency must be 1, 5, or 15');
 const setup = defineProjectSetup<ProjectContext>({
   name: 'web',
   async setup({ onTeardown, signal }) {

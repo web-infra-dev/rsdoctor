@@ -3,8 +3,8 @@ import { appendFile, cp, mkdir, writeFile } from 'node:fs/promises';
 import { runTestProject } from '@midscene/test/config';
 import { prepareSpeedCases } from './speed-cases.mjs';
 const concurrency = Number(process.env.MIDSCENE_SPEED_CONCURRENCY ?? '5');
-if (![1, 5].includes(concurrency))
-  throw new Error('CI concurrency must be 1 or 5');
+if (![1, 5, 15].includes(concurrency))
+  throw new Error('CI concurrency must be 1, 5, or 15');
 process.env.MIDSCENE_SPEED_CONCURRENCY = String(concurrency);
 // One case per file gives each concurrent case its own browser context.
 const prepared = await prepareSpeedCases({
