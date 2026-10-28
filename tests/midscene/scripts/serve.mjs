@@ -4,10 +4,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { buildMultiCompilerFixture } from './multi-compiler.mjs';
-import {
-  RsdoctorRspackPlugin,
-  resolveClientDiffHtmlPath,
-} from '../../../packages/core/dist/index.js';
+import { RsdoctorRspackPlugin } from '../../../packages/core/dist/index.js';
 
 const require = createRequire(
   new URL('../../../packages/core/package.json', import.meta.url),
@@ -32,32 +29,24 @@ await writeFile(
   path.join(fixture, 'large-data.js'),
   'export default ' + JSON.stringify('l'.repeat(2 * 1024 * 1024)) + ';',
 );
-async function buildReport(directory, entry, detailed = false) {
-  const output = path.join(fixture, directory);
+async function buildReport() {
   const compiler = rspack({
     context: fixture,
     mode: 'none',
-    entry,
+    entry: { small: './small.js', large: './large.js' },
     output: { path: output, filename: '[name].js' },
-    ...(detailed ? { devtool: 'source-map' } : {}),
+    devtool: 'source-map',
     optimization: {
       minimize: false,
-      ...(detailed ? { concatenateModules: false } : {}),
+      concatenateModules: false,
     },
     plugins: [
       new RsdoctorRspackPlugin({
         disableClientServer: true,
         output: {
           mode: 'brief',
-          options: { type: detailed ? ['json', 'html'] : ['json'] },
+          options: { type: ['html'] },
         },
-        ...(detailed
-          ? {
-              linter: {
-                rules: { 'ecma-version-check': ['Warn', { ecmaVersion: 3 }] },
-              },
-            }
-          : {}),
       }),
     ],
   });
@@ -69,29 +58,15 @@ async function buildReport(directory, entry, detailed = false) {
         else resolve(stats);
       }),
     );
-    return JSON.parse(
-      await readFile(path.join(output, 'rsdoctor-data.json'), 'utf8'),
-    );
   } finally {
     await new Promise((resolve, reject) =>
       compiler.close((error) => (error ? reject(error) : resolve())),
     );
   }
 }
-await buildReport('dist', { small: './small.js', large: './large.js' }, true);
+await buildReport();
 const report = await readFile(path.join(output, 'rsdoctor-report.html'));
-const diffPath = resolveClientDiffHtmlPath();
-const diffReport = await readFile(diffPath);
 const compilerReports = await buildMultiCompilerFixture(fixture);
-const diffManifest = await buildReport('diff', { small: './small.js' });
-const uploadManifest = await buildReport('upload', {
-  'uploaded-only': './small.js',
-});
-await mkdir(path.join(fixture, 'uploads'), { recursive: true });
-await writeFile(
-  path.join(fixture, 'uploads', 'rsdoctor-data.json'),
-  JSON.stringify(uploadManifest),
-);
 const server = createServer(async (request, response) => {
   const pathname = new URL(request.url ?? '/', 'http://127.0.0.1:4174')
     .pathname;
@@ -100,41 +75,6 @@ const server = createServer(async (request, response) => {
     response
       .writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
       .end(compilerReport);
-    return;
-  }
-  if (pathname === '/diff.html') {
-    response
-      .writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
-      .end(diffReport);
-    return;
-  }
-  if (
-    pathname === '/api/bundle_diff/manifest.json' ||
-    pathname === '/api/manifest.json'
-  ) {
-    response
-      .writeHead(200, { 'Content-Type': 'application/json' })
-      .end(JSON.stringify(diffManifest));
-    return;
-  }
-  if (pathname.startsWith('/resource/')) {
-    const root = path.dirname(diffPath);
-    const asset = path.resolve(root, '.' + pathname);
-    if (!asset.startsWith(root + path.sep)) {
-      response.writeHead(404).end('Not found');
-      return;
-    }
-    try {
-      const body = await readFile(asset);
-      const contentType = asset.endsWith('.js')
-        ? 'text/javascript'
-        : asset.endsWith('.css')
-          ? 'text/css'
-          : 'application/octet-stream';
-      response.writeHead(200, { 'Content-Type': contentType }).end(body);
-    } catch {
-      response.writeHead(404).end('Not found');
-    }
     return;
   }
   if (pathname !== '/') {

@@ -1,9 +1,0 @@
-cases:
-  - name: BUNDLE-02 Filter large assets and restore the smaller asset
-    tags: [assets]
-    steps:
-      - app.open: { path: '/#/bundle/size' }
-      - aiAct: First change the Asset Size unit to MB, then enter 1 in its numeric input, in that order.
-      - aiAssert: The Output Assets List contains large.js but not small.js, and the Asset Size filter shows 1 MB.
-      - aiAct: Change only the Asset Size unit to KB, keeping the value 1.
-      - aiAssert: The Output Assets List contains both small.js and large.js, and the Asset Size filter shows 1 KB.

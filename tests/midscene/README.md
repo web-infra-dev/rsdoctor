@@ -1,13 +1,12 @@
 # Midscene AI E2E
 
-Inspect asset modules, filter assets and modules in both input orders, search modules,
-switch compiler environments, inspect rule results, open bundle comparison, and upload
-a real build manifest. The fixture uses the checked-out Rsdoctor plugins and native reports.
+Inspect asset modules, search modules, recover from an empty search, clear keyword
+filters, and switch compiler environments. These five visual workflows supplement
+the original deterministic tests. The fixture uses checked-out Rsdoctor plugins
+and native reports.
 
-`migration-inventory.json` records all 28 original E2E cases and their migration
-decisions. Original compiler-data and controlled-clock assertions remain unchanged.
-Bundle comparison verifies only the original overview and tab entries; the separate
-Assets activation stall and model-free reproducer are documented in [known issues](KNOWN-ISSUES.md).
+`migration-inventory.json` records all 28 original E2E cases. The eight Midscene
+replacements for restored deterministic checks have been removed.
 
 All 28 original deterministic E2E cases are retained, including both input orders
 for asset/module size filters, controlled debounce timing, Bundle Diff tabs,
@@ -51,7 +50,7 @@ npm test
 ```
 
 The fixture listens on `http://127.0.0.1:4174`. Set
-`MIDSCENE_INCLUDE_TAGS=search` (Rspress) or `MIDSCENE_INCLUDE_TAGS=assets`
+`MIDSCENE_INCLUDE_TAGS=search` (Rspress) or `MIDSCENE_INCLUDE_TAGS=modules`
 (Rsdoctor) to run one flow. Retries are disabled so the first failure remains visible.
 
 Native reports live under `midscene_run/report/`; structured results live under
@@ -127,7 +126,7 @@ publication, the native text Summary and raw artifacts remain available.
 
 ## Regular CI concurrency
 
-The regular Midscene job runs all 13 cases with five concurrent files by default.
+The regular Midscene job runs all 5 cases with five concurrent files by default.
 Each committed YAML file contains one original case with independent assertions and
 an isolated browser context. Manual runs can select `file_concurrency=1` for
 serial diagnosis. Local `npm test` remains serial by default.

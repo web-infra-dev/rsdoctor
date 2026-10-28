@@ -36,9 +36,9 @@
       "replacementStatus": "retained-deterministic",
       "decision": "retain-deterministic",
       "status": "retained",
-      "candidateCaseIds": ["EXPLORE-04"],
-      "reason": "Original deterministic assertions remain; linked Midscene cases provide supplementary visual workflow coverage.",
-      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
+      "candidateCaseIds": [],
+      "reason": "Original deterministic coverage restored; corresponding Midscene replacement removed.",
+      "removedMidsceneCaseIds": ["EXPLORE-04"]
     },
     {
       "source": "e2e/cases/doctor-rspack/bundle-diff.test.ts",
@@ -55,9 +55,9 @@
       "replacementStatus": "retained-deterministic",
       "decision": "retain-deterministic",
       "status": "retained",
-      "candidateCaseIds": ["DIFF-01"],
-      "reason": "Original deterministic assertions remain; linked Midscene cases provide supplementary visual workflow coverage.",
-      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
+      "candidateCaseIds": [],
+      "reason": "Original deterministic coverage restored; corresponding Midscene replacement removed.",
+      "removedMidsceneCaseIds": ["DIFF-01"]
     },
     {
       "source": "e2e/cases/doctor-rspack/child-compiler.test.ts",
@@ -119,9 +119,9 @@
       "replacementStatus": "retained-deterministic",
       "decision": "retain-deterministic",
       "status": "retained",
-      "candidateCaseIds": ["REPORT-01"],
-      "reason": "Original deterministic assertions remain; linked Midscene cases provide supplementary visual workflow coverage.",
-      "evidenceRuns": ["20261014150406-ceb7a3e2", "20261015105939-96f80330"]
+      "candidateCaseIds": [],
+      "reason": "Original deterministic coverage restored; corresponding Midscene replacement removed.",
+      "removedMidsceneCaseIds": ["REPORT-01"]
     },
     {
       "source": "e2e/cases/doctor-rspack/plugin.test.ts",
@@ -147,9 +147,9 @@
       "replacementStatus": "retained-deterministic",
       "decision": "retain-deterministic",
       "status": "retained",
-      "candidateCaseIds": ["BUNDLE-02"],
-      "reason": "Original deterministic assertions remain; linked Midscene cases provide supplementary visual workflow coverage.",
-      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
+      "candidateCaseIds": [],
+      "reason": "Original deterministic coverage restored; corresponding Midscene replacement removed.",
+      "removedMidsceneCaseIds": ["BUNDLE-02"]
     },
     {
       "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
@@ -157,9 +157,9 @@
       "replacementStatus": "retained-deterministic",
       "decision": "retain-deterministic",
       "status": "retained",
-      "candidateCaseIds": ["BUNDLE-04"],
-      "reason": "Original deterministic assertions remain; linked Midscene cases provide supplementary visual workflow coverage.",
-      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
+      "candidateCaseIds": [],
+      "reason": "Original deterministic coverage restored; corresponding Midscene replacement removed.",
+      "removedMidsceneCaseIds": ["BUNDLE-04"]
     },
     {
       "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
@@ -176,9 +176,9 @@
       "replacementStatus": "retained-deterministic",
       "decision": "retain-deterministic",
       "status": "retained",
-      "candidateCaseIds": ["BUNDLE-03"],
-      "reason": "Original deterministic assertions remain; linked Midscene cases provide supplementary visual workflow coverage.",
-      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
+      "candidateCaseIds": [],
+      "reason": "Original deterministic coverage restored; corresponding Midscene replacement removed.",
+      "removedMidsceneCaseIds": ["BUNDLE-03"]
     },
     {
       "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
@@ -186,9 +186,9 @@
       "replacementStatus": "retained-deterministic",
       "decision": "retain-deterministic",
       "status": "retained",
-      "candidateCaseIds": ["BUNDLE-05"],
-      "reason": "Original deterministic assertions remain; linked Midscene cases provide supplementary visual workflow coverage.",
-      "evidenceRuns": ["20261014151308-e4d687c8", "20261015105939-96f80330"]
+      "candidateCaseIds": [],
+      "reason": "Original deterministic coverage restored; corresponding Midscene replacement removed.",
+      "removedMidsceneCaseIds": ["BUNDLE-05"]
     },
     {
       "source": "e2e/cases/doctor-rspack/size-filter.test.ts",
@@ -232,9 +232,9 @@
       "replacementStatus": "retained-deterministic",
       "decision": "retain-deterministic",
       "status": "retained",
-      "candidateCaseIds": ["REPORT-02"],
-      "reason": "Original deterministic assertions remain; linked Midscene cases provide supplementary visual workflow coverage.",
-      "evidenceRuns": ["20261014164630-d920b921", "20261015105939-96f80330"]
+      "candidateCaseIds": [],
+      "reason": "Original deterministic coverage restored; corresponding Midscene replacement removed.",
+      "removedMidsceneCaseIds": ["REPORT-02"]
     },
     {
       "source": "e2e/cases/doctor-rsbuild/plugins/loader-mini-css.test.ts",
