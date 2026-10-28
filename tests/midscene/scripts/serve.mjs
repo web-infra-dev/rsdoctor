@@ -4,7 +4,6 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { buildMultiCompilerFixture } from './multi-compiler.mjs';
-import { buildDiffFixture, buildUploadFixture } from './manifest-fixtures.mjs';
 import {
   RsdoctorRspackPlugin,
   resolveClientDiffHtmlPath,
@@ -33,37 +32,61 @@ await writeFile(
   path.join(fixture, 'large-data.js'),
   'export default ' + JSON.stringify('l'.repeat(2 * 1024 * 1024)) + ';',
 );
-const compiler = rspack({
-  context: fixture,
-  mode: 'none',
-  entry: { small: './small.js', large: './large.js' },
-  output: { path: output, filename: '[name].js' },
-  devtool: 'source-map',
-  optimization: { minimize: false, concatenateModules: false },
-  plugins: [
-    new RsdoctorRspackPlugin({
-      disableClientServer: true,
-      output: { mode: 'brief', options: { type: ['json', 'html'] } },
-      linter: { rules: { 'ecma-version-check': ['Warn', { ecmaVersion: 3 }] } },
-    }),
-  ],
-});
-await new Promise((resolve, reject) =>
-  compiler.run((error, stats) => {
-    if (error || !stats || stats.hasErrors())
-      reject(error ?? new Error(stats?.toString()));
-    else resolve(stats);
-  }),
-);
-await new Promise((resolve, reject) =>
-  compiler.close((error) => (error ? reject(error) : resolve())),
-);
+async function buildReport(directory, entry, detailed = false) {
+  const output = path.join(fixture, directory);
+  const compiler = rspack({
+    context: fixture,
+    mode: 'none',
+    entry,
+    output: { path: output, filename: '[name].js' },
+    ...(detailed ? { devtool: 'source-map' } : {}),
+    optimization: {
+      minimize: false,
+      ...(detailed ? { concatenateModules: false } : {}),
+    },
+    plugins: [
+      new RsdoctorRspackPlugin({
+        disableClientServer: true,
+        output: {
+          mode: 'brief',
+          options: { type: detailed ? ['json', 'html'] : ['json'] },
+        },
+        ...(detailed
+          ? {
+              linter: {
+                rules: { 'ecma-version-check': ['Warn', { ecmaVersion: 3 }] },
+              },
+            }
+          : {}),
+      }),
+    ],
+  });
+  try {
+    await new Promise((resolve, reject) =>
+      compiler.run((error, stats) => {
+        if (error || !stats || stats.hasErrors())
+          reject(error ?? new Error(stats?.toString()));
+        else resolve(stats);
+      }),
+    );
+    return JSON.parse(
+      await readFile(path.join(output, 'rsdoctor-data.json'), 'utf8'),
+    );
+  } finally {
+    await new Promise((resolve, reject) =>
+      compiler.close((error) => (error ? reject(error) : resolve())),
+    );
+  }
+}
+await buildReport('dist', { small: './small.js', large: './large.js' }, true);
 const report = await readFile(path.join(output, 'rsdoctor-report.html'));
 const diffPath = resolveClientDiffHtmlPath();
 const diffReport = await readFile(diffPath);
 const compilerReports = await buildMultiCompilerFixture(fixture);
-const diffManifest = await buildDiffFixture(fixture);
-const uploadManifest = await buildUploadFixture(fixture);
+const diffManifest = await buildReport('diff', { small: './small.js' });
+const uploadManifest = await buildReport('upload', {
+  'uploaded-only': './small.js',
+});
 await mkdir(path.join(fixture, 'uploads'), { recursive: true });
 await writeFile(
   path.join(fixture, 'uploads', 'rsdoctor-data.json'),
