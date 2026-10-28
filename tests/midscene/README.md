@@ -179,3 +179,14 @@ first failing step. Screenshots come from that step's execution trace, not a
 different case or a synthetic image. Missing captures are explicitly marked.
 The top-level report link still opens the framework-generated HTML report.
 Without Pages, the test job retains the native text Summary and artifact link.
+
+## Regular CI concurrency
+
+The regular Midscene job runs all 13 cases with five concurrent files by default.
+Each generated file contains one original case with independent assertions and
+an isolated browser context. Manual runs can select `file_concurrency=1` for
+serial diagnosis. Local `npm test` remains serial by default.
+
+The regular run publishes the native report index and per-case screenshot table
+when Pages is configured. `midscene_run/ci-measurement.json` records the observed
+concurrency, execution time, case results and model usage in the report artifact.
