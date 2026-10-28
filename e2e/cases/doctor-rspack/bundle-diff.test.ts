@@ -1,5 +1,9 @@
 import { expect, test } from '@test-kit/rstest';
-import { execute } from '@rsdoctor/cli';
+import { Client } from '@rsdoctor/shared/types';
+import {
+  getRsdoctorManifestPath,
+  openBrowserByDiffCLI,
+} from '../../test-kit/index';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -43,7 +47,7 @@ test('escapes Windows paths in manifest JSON', () => {
   });
 });
 
-test('bundle diff CLI serves a real manifest', async () => {
+test('use Rsdoctor manifest data', async ({ page }) => {
   // Usage
   const manifestPath = path.resolve(
     __dirname,
@@ -62,18 +66,26 @@ test('bundle diff CLI serves a real manifest', async () => {
   let dispose: (() => Promise<void>) | undefined;
 
   try {
-    const sdk = await execute('bundle-diff', {
-      baseline: manifestPath,
-      current: manifestPath,
-      open: false,
-    });
-    if (!sdk) throw new Error('Bundle diff did not start a server.');
-    dispose = () => sdk.dispose();
-    const response = await fetch(
-      `${sdk.server.origin}/api/bundle_diff/manifest.json`,
+    ({ dispose } = await openBrowserByDiffCLI(page, getRsdoctorManifestPath()));
+
+    await page.evaluate(
+      `window.location.hash = ${JSON.stringify(Client.RsdoctorClientRoutes.BundleDiff)}`,
     );
-    expect(response.status).toBe(200);
-    expect(await response.json()).toBeTruthy();
+
+    // card for bundle diff.
+    await page.waitForSelector('.statistic-card', { timeout: 20000 });
+    const tabs = await page.$$(`#root .ant-tabs-tab`);
+
+    expect(tabs.length).toBeGreaterThan(0);
+
+    const tabTexts = await Promise.all(
+      tabs.map((tab) => page.evaluate((node) => node.textContent, tab)),
+    );
+
+    expect(tabTexts).toContain('Overview');
+    expect(tabTexts).toContain('Assets');
+    expect(tabTexts).toContain('Modules');
+    expect(tabTexts).toContain('Packages');
   } finally {
     fs.writeFileSync(manifestPath, originalManifest, 'utf-8');
     await dispose?.();

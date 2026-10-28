@@ -9,19 +9,12 @@ decisions. Original compiler-data and controlled-clock assertions remain unchang
 Bundle comparison verifies only the original overview and tab entries; the separate
 Assets activation stall and model-free reproducer are documented in [known issues](KNOWN-ISSUES.md).
 
-The first replacement batch removes the four ordinary unit-first/value-first
-filter tests, now covered by BUNDLE-02 through BUNDLE-05. The two pending-input
-tests retain their controlled 300 ms debounce contract. Bundle Diff UI checks
-move to DIFF-01; its remaining legacy test verifies CLI startup and the manifest
-endpoint without browser interaction. Brief-report, rule, and uploader tests no
-longer duplicate visual outcomes: they retain document metadata, ARIA attributes,
-exact responsive geometry, and parsed client-state contracts. The compiler-series
-test remains a deterministic HTML/JSON build-output test, not a visual UI flow.
-The inventory records the original 28 tests; 24 legacy tests remain after the
-four replacements, including the split technical contracts.
-Remaining deterministic tests run through `pnpm e2e`; Ubuntu CI includes them in
-`pnpm test:all`. Windows currently runs unit tests only. Removed source remains
-recoverable at the inventory's `sourceCommit`; no replacement uses `skip`.
+All 28 original deterministic E2E cases are retained, including both input orders
+for asset/module size filters, controlled debounce timing, Bundle Diff tabs,
+brief-report sections, rule-panel text, and uploader visibility. Midscene adds
+visual workflow coverage; it does not replace these assertions.
+The original tests run through `pnpm e2e`; Ubuntu CI includes them in
+`pnpm test:all`. Windows currently runs unit tests only.
 
 This isolated npm package uses
 `@midscene/test` 1.16.5, not Vitest. Each case starts in a fresh browser context.
