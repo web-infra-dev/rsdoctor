@@ -11,8 +11,8 @@ test('the real Diff case resolves both manifests against any configured fixture 
     {
       projectId: project.projectId,
       projectName: project.name,
-      absolutePath: resolve('cases/diff.yaml'),
-      sourcePath: 'cases/diff.yaml',
+      absolutePath: resolve('cases/013-diff-01.yaml'),
+      sourcePath: 'cases/013-diff-01.yaml',
     },
     {
       resolveNode: project.nodes.get.bind(project.nodes),

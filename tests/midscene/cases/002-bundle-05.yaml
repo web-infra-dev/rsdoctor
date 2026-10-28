@@ -1,0 +1,13 @@
+cases:
+  - name: BUNDLE-05 Apply the module filter value before changing its unit
+    tags: [original-filter-order]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Select small.js in Output Assets List and enter 1 in the Module Size numeric input. Leave its current unit unchanged.
+      - aiAssert: The Module Size value is 1, its unit is not MB, and small-data.js is visible in the selected asset's module panel.
+      - aiAct: Change only the Module Size unit to MB without typing the value again.
+      - aiAssert: The Modules of "small.js" panel has no small-data.js entry and the Module Size filter shows 1 MB.
+      - aiAct: Select large.js in Output Assets List, keeping the Module Size filter unchanged.
+      - aiAssert: The Modules of "large.js" panel contains large-data.js while the Module Size filter shows 1 MB.
+      - aiAct: Change only the Module Size unit to KB without typing the value again, then select small.js in Output Assets List.
+      - aiAssert: The Modules of "small.js" panel shows small-data.js and the Module Size filter shows 1 KB.

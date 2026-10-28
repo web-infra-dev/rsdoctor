@@ -1,0 +1,11 @@
+cases:
+  - name: BUNDLE-04 Apply the asset filter value before changing its unit
+    tags: [original-filter-order]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Enter 1 in the Asset Size numeric input. Leave its current unit unchanged.
+      - aiAssert: The Asset Size value is 1, its unit is not MB, and small.js is still visible in Output Assets List.
+      - aiAct: Change only the Asset Size unit to MB without typing the value again.
+      - aiAssert: The Output Assets List contains large.js but not small.js, and the Asset Size filter shows 1 MB.
+      - aiAct: Change only the Asset Size unit to KB without typing the value again.
+      - aiAssert: The Output Assets List contains both small.js and large.js, and the Asset Size filter shows 1 KB.

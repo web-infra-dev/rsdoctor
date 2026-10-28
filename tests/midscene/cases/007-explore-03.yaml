@@ -1,0 +1,9 @@
+cases:
+  - name: EXPLORE-03 Filter modules by keyword and clear the filter
+    tags: [exploration]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Select small.js in Output Assets List, then enter nonexistent-midscene-module in the search module by keyword field.
+      - aiAssert: Modules of "small.js" does not list small-data.js while the keyword field contains nonexistent-midscene-module.
+      - aiAct: Clear the module keyword field.
+      - aiAssert: Modules of "small.js" lists small-data.js again.

@@ -69,14 +69,13 @@ the synthetic local fixture.
 
 ```sh
 cd tests/midscene
-npm run collect
 npm run typecheck
-npm run test:summary
+npm run test:fixtures
 ```
 
-Collection validates YAML with the framework, checks the committed case inventory,
-and rejects atomic AI operations or custom product-interaction nodes. Trust-policy checks reject reports from untrusted sources. The framework owns
-report rendering and Markdown results.
+Midscene validates YAML and nodes when executing the project. Fixture tests cover
+server lifecycle, isolation and project-specific behavior. Shared report and
+history tests live in Midscene Action.
 
 ## GitHub Actions
 
@@ -136,39 +135,6 @@ Use synthetic local fixtures and a dedicated quota-limited model key. Do not run
 `npm audit fix --force`: its suggested framework downgrades are incompatible with
 this integration.
 
-## Isolated speed experiment
-
-On the `benchmark/midscene-speed-20261022` fork branch, dispatch this workflow
-with `speed_benchmark=true`. It defaults to the five-file `parallel` variant.
-Select other variants with `speed_modes`; selected variants run separately on
-Node 24 / Midscene 1.16.5 runners, with case retries disabled:
-
-| Mode     | Concurrent files | Assertion handling                      |
-| -------- | ---------------- | --------------------------------------- |
-| baseline | 1                | Independent `aiAssert` nodes            |
-| prompt   | 1                | Adjacent assertions appended to `aiAct` |
-| parallel | 5                | Independent `aiAssert` nodes            |
-| combined | 5                | Adjacent assertions appended to `aiAct` |
-
-Each generated YAML file contains one original case; the original cases are
-unchanged. Native `fileSetup` gives each file its own page and browser context.
-Assertions before an action or after fixture updates remain independent.
-The merged mode is experimental: asking an action to check a result does not
-provide the same failure-detection guarantee as an independent assertion.
-
-All variants use the same file isolation, including the serial baseline.
-Compare against that fresh baseline, not timings from older framework versions.
-The Summary and `speed-metrics-*` artifacts record elapsed time, pass/fail counts,
-actual model calls, per-case timings, and observed file concurrency. Incomplete
-usage metrics are labeled explicitly. `speed-reports-*` contains native reports.
-This experiment never publishes or replaces the normal Pages report.
-
-CI allows four model-request retries with a 65-second interval so a minute-based
-RPM/TPM quota can recover. This uses Midscene's native request retry, not a case
-rerun or a retry of a failed assertion. The 15-minute case deadline includes
-these bounded waits. Request retry settings are saved in the measurement JSON;
-compare passing runs with the same settings before claiming a speedup.
-
 ## CI evidence table
 
 After Pages deployment succeeds, the publishing job adds a per-case Markdown
@@ -183,13 +149,12 @@ Without Pages, the test job retains the native text Summary and artifact link.
 ## Regular CI concurrency
 
 The regular Midscene job runs all 13 cases with five concurrent files by default.
-Each generated file contains one original case with independent assertions and
+Each committed YAML file contains one original case with independent assertions and
 an isolated browser context. Manual runs can select `file_concurrency=1` for
 serial diagnosis. Local `npm test` remains serial by default.
 
 The regular run publishes the native report index and per-case screenshot table
-when Pages is configured. `midscene_run/ci-measurement.json` records the observed
-concurrency, execution time, case results and model usage in the report artifact.
+when Pages is configured. Native reports record case results, timing and model usage. CI job timestamps include setup and publication.
 
 Regular CI validates definitions before model access in the test job, avoiding a
 separate installation and job dependency. Slow cases start first based on the
@@ -201,11 +166,28 @@ duplicate standalone Agent HTML; downloadable artifacts retain the full reports.
 
 Regular CI uses `web-infra-dev/midscene-action` pinned to commit
 `5ef922b20a69d69a0f34639c4c867ba2049f6ede`, matching Midscene's own AI workflow.
-The Action runs the existing command, uploads `midscene-results`, writes the native
-Summary and propagates test failures. Generated case sources are included under
-`midscene_run/case-sources` in the artifact. Model verification still runs first.
+The Action runs the native CLI, uploads `midscene-results`, writes the native
+Summary and propagates test failures. Case sources are versioned in `cases/`. Model verification still runs first.
 
 The Action's `publish-pages` input means Cloudflare Workers publication. It is
 disabled here: the existing GitHub Pages job consumes the Action's artifact output
 and retains the per-case screenshot table, report links and recent-run history.
 No Cloudflare credentials or model configuration changes are required.
+
+## Shared CI support
+
+The root Midscene Action executes the native CLI and uploads its results. The
+`pages` sub-action owns GitHub Pages publication, recent history and per-case
+screenshot tables. This repository no longer maintains report parsers, publishing
+scripts, migration/manifest guards or a custom execution/benchmark harness.
+
+Pages support is temporarily pinned to `quanru/midscene-action-upstream/pages@b0b2fe13eac26c75327a4cf322865fcd98c9c0f4`
+while its upstream PR is reviewed. Switch to the upstream reviewed commit after
+merge. Existing Pages permissions, trusted triggers and publication locks remain
+in the workflow; the shared action verifies historical report provenance.
+
+`migration-inventory.json` remains historical documentation. The actual YAML files
+are the AI suite's source of truth, and the original deterministic tests execute
+their own contracts. Project support code only starts/stops fixtures, prepares
+local assets, isolates browser/source state, and (for Rspress) computes the exact
+workspace build-cache key.

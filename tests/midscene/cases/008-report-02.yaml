@@ -1,12 +1,4 @@
 cases:
-  - name: REPORT-01 Inspect rule results and an empty rule tab
-    tags: [report]
-    steps:
-      - app.open: { path: '/#/overall' }
-      - aiAct: Open the Duplicate Packages rule tab in the report.
-      - aiAssert: The selected Duplicate Packages rule panel displays No Data.
-      - aiAct: Switch to the ECMA Version Check rule tab.
-      - aiAssert: The selected rule panel displays ECMA Version Check warnings.
   - name: REPORT-02 Upload and analyze a build manifest
     tags: [report]
     steps:

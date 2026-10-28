@@ -1,0 +1,9 @@
+cases:
+  - name: EXPLORE-01 Inspect a module through global search
+    tags: [exploration]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Open Search Module, search for small-data.js, and submit the search.
+      - aiAssert: The Search Modules dialog lists small-data.js in the small asset and no large-data.js result.
+      - aiAct: Close the Search Modules dialog using its close button, then select small.js in Output Assets List.
+      - aiAssert: The Search Modules dialog is closed and Modules of "small.js" contains small-data.js.

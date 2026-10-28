@@ -27,9 +27,9 @@ interface Context {
 interface ProjectContext {
   browser: Browser;
 }
-const concurrency = Number(process.env.MIDSCENE_SPEED_CONCURRENCY ?? '1');
+const concurrency = Number(process.env.MIDSCENE_FILE_CONCURRENCY ?? '1');
 if (![1, 5, 15].includes(concurrency))
-  throw new Error('Speed experiment concurrency must be 1, 5, or 15');
+  throw new Error('File concurrency must be 1, 5, or 15');
 const setup = defineProjectSetup<ProjectContext>({
   name: 'web',
   async setup({ onTeardown, signal }) {
@@ -113,7 +113,7 @@ export default defineTestProject<Context, ProjectContext>({
       maxConcurrentFiles: concurrency,
       retry: 0,
       files: {
-        include: [process.env.MIDSCENE_SPEED_CASES ?? 'cases/**/*.yaml'],
+        include: ['cases/**/*.yaml'],
       },
       tags: {
         include: (process.env.MIDSCENE_INCLUDE_TAGS ?? '')
