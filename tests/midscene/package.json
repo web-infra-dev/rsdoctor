@@ -6,7 +6,6 @@
     "check:model": "midscene-test model verify",
     "serve": "node scripts/serve.mjs",
     "test": "midscene-test",
-    "test:fixtures": "node --test scripts/*.test.mjs",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

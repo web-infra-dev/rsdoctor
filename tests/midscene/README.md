@@ -70,7 +70,6 @@ the synthetic local fixture.
 ```sh
 cd tests/midscene
 npm run typecheck
-npm run test:fixtures
 ```
 
 Midscene validates YAML and nodes when executing the project. Fixture tests cover
