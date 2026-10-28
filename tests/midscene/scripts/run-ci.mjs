@@ -10,6 +10,22 @@ process.env.MIDSCENE_SPEED_CONCURRENCY = String(concurrency);
 const prepared = await prepareSpeedCases({
   root: process.cwd(),
   merge: false,
+  // Longest cases first, based on full run 40623972888.
+  priorityIds: [
+    'BUNDLE-03',
+    'BUNDLE-05',
+    'EXPLORE-01',
+    'BUNDLE-04',
+    'BUNDLE-02',
+    'EXPLORE-02',
+    'EXPLORE-03',
+    'REPORT-02',
+    'COMPILER-01',
+    'BUNDLE-01',
+    'REPORT-01',
+    'EXPLORE-04',
+    'DIFF-01',
+  ],
 });
 process.env.MIDSCENE_SPEED_CASES = prepared.pattern;
 const active = new Set();

@@ -190,3 +190,9 @@ serial diagnosis. Local `npm test` remains serial by default.
 The regular run publishes the native report index and per-case screenshot table
 when Pages is configured. `midscene_run/ci-measurement.json` records the observed
 concurrency, execution time, case results and model usage in the report artifact.
+
+Regular CI validates definitions before model access in the test job, avoiding a
+separate installation and job dependency. Slow cases start first based on the
+measured durations from run 40623972888. All cases and independent assertions
+are retained. Pages keeps the native index, trace data and screenshots, but omits
+duplicate standalone Agent HTML; downloadable artifacts retain the full reports.
