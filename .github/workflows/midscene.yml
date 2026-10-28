@@ -12,6 +12,7 @@ on:
         'tests/midscene/**',
         '.github/workflows/midscene.yml',
         'pnpm-lock.yaml',
+        'pnpm-workspace.yaml',
       ]
   push:
     branches: [main]
@@ -22,6 +23,7 @@ on:
         'tests/midscene/**',
         '.github/workflows/midscene.yml',
         'pnpm-lock.yaml',
+        'pnpm-workspace.yaml',
       ]
   workflow_dispatch:
     inputs:
@@ -52,15 +54,13 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
+      - uses: pnpm/action-setup@a8198c4bff370c8506180b035930dea56dbd5288 # v5
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: '24'
-          cache: npm
-          cache-dependency-path: tests/midscene/package-lock.json
-      - run: npm ci
-        working-directory: tests/midscene
-      - run: npm run typecheck
-        working-directory: tests/midscene
+          cache: pnpm
+      - run: pnpm --filter rsdoctor-midscene-e2e install --frozen-lockfile --ignore-scripts
+      - run: pnpm --filter rsdoctor-midscene-e2e typecheck
       - name: Explain pull request coverage
         if: github.event_name == 'pull_request'
         run: |
@@ -105,17 +105,13 @@ jobs:
       - name: Install workspace dependencies and build checked-out packages
         run: pnpm install --frozen-lockfile
 
-      - name: Install Midscene test dependencies
-        # allowScripts for esbuild/sharp is declared in this package.json, so
-        # npm install runs their (approved) install scripts non-interactively.
+      - name: Install Chromium for Midscene
         working-directory: tests/midscene
-        run: |
-          npm ci
-          npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Validate fixture support before model access
         working-directory: tests/midscene
-        run: npm run typecheck
+        run: pnpm run typecheck
 
       - name: Verify Midscene model compatibility
         working-directory: tests/midscene
@@ -125,7 +121,7 @@ jobs:
           MIDSCENE_MODEL_NAME: ${{ vars.MIDSCENE_MODEL_NAME || secrets.MIDSCENE_MODEL_NAME }}
           MIDSCENE_MODEL_BASE_URL: ${{ vars.MIDSCENE_MODEL_BASE_URL || secrets.MIDSCENE_MODEL_BASE_URL }}
           MIDSCENE_MODEL_FAMILY: ${{ vars.MIDSCENE_MODEL_FAMILY || secrets.MIDSCENE_MODEL_FAMILY }}
-        run: npm run check:model
+        run: pnpm run check:model
 
       - name: Run all Midscene cases
         id: midscene-test
@@ -139,7 +135,7 @@ jobs:
           MIDSCENE_RETRY: '0'
         with:
           working-directory: tests/midscene
-          command: timeout --signal=TERM --kill-after=10s 220m npx midscene-test
+          command: timeout --signal=TERM --kill-after=10s 220m pnpm exec midscene-test
           artifact-name: midscene-results
           retention-days: '14'
           publish-pages: ${{ github.event_name != 'workflow_dispatch' || inputs.publish_pages }}
