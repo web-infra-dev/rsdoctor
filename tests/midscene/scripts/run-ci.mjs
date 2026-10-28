@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { appendFile, writeFile } from 'node:fs/promises';
+import { appendFile, cp, mkdir, writeFile } from 'node:fs/promises';
 import { runTestProject } from '@midscene/test/config';
 import { prepareSpeedCases } from './speed-cases.mjs';
 const concurrency = Number(process.env.MIDSCENE_SPEED_CONCURRENCY ?? '5');
@@ -26,6 +26,11 @@ const prepared = await prepareSpeedCases({
     'EXPLORE-04',
     'DIFF-01',
   ],
+});
+// The Action uploads midscene_run and .midscene; retain generated sources there.
+await mkdir('midscene_run/case-sources', { recursive: true });
+await cp(path.dirname(prepared.pattern), 'midscene_run/case-sources', {
+  recursive: true,
 });
 process.env.MIDSCENE_SPEED_CASES = prepared.pattern;
 const active = new Set();
