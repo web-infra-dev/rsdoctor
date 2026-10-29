@@ -405,6 +405,7 @@ export class RsdoctorRspackPlugin<
         printLog,
         server,
         mode: output.mode || undefined,
+        manifestPathType: output.manifestPathType,
         brief:
           output.mode === SDK.IMode[SDK.IMode.brief]
             ? output.options || undefined

@@ -198,6 +198,13 @@ new RsdoctorRspackPlugin({
 }),
 ```
 
+## manifestPathType
+
+- **Type:** `'absolute' | 'relative'`
+- **Default:** `'absolute'`
+
+Controls how shard file paths are written in `manifest.json`. Set this to `'relative'` to make the manifest and its shard files portable when moved together. Relative paths are resolved from the manifest location by `analyze` and `bundle-diff`.
+
 ## reportDir
 
 - **Type:** `string`

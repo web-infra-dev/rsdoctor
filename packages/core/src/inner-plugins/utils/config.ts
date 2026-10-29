@@ -192,6 +192,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   )
     ? {
         reportDir: userOutput?.reportDir,
+        manifestPathType: userOutput?.manifestPathType,
         mode: 'brief' as const,
         options: {
           type: ['json'] as Array<'json'>,
@@ -260,6 +261,12 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     finalMode = SDK.IMode[SDK.IMode.lite] as keyof typeof SDK.IMode;
   }
   const reportCodeType = normalizeReportType(output.reportCodeType, finalMode);
+  assert(
+    output.manifestPathType === undefined ||
+      output.manifestPathType === 'absolute' ||
+      output.manifestPathType === 'relative',
+    '`output.manifestPathType` must be "absolute" or "relative".',
+  );
   const res: Plugin.RsdoctorPluginOptionsNormalized<Rules> = {
     linter: _linter,
     features: _features,
@@ -275,6 +282,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       options: finalMode === 'brief' ? finalBrief : finalNormalOptions,
       reportCodeType,
       reportDir: output.reportDir || '',
+      manifestPathType: output.manifestPathType ?? 'absolute',
     },
     innerClientPath,
     supports,
