@@ -27,4 +27,36 @@ describe('transformDataUrls', () => {
       '/moduleGraph/4',
     ]);
   });
+
+  it('writes shard references relative to the manifest output directory', () => {
+    const result = transformDataUrls(
+      [
+        {
+          name: 'moduleGraph',
+          files: [
+            {
+              path: '/project/.rsdoctor/moduleGraph/0',
+              basename: '0',
+            },
+          ],
+        },
+      ],
+      '/project/.rsdoctor',
+    );
+
+    expect(result.moduleGraph).toStrictEqual(['moduleGraph/0']);
+  });
+
+  it('keeps absolute shard paths when no base directory is provided', () => {
+    const result = transformDataUrls([
+      {
+        name: 'moduleGraph',
+        files: [{ path: '/project/.rsdoctor/moduleGraph/0', basename: '0' }],
+      },
+    ]);
+
+    expect(result.moduleGraph).toStrictEqual([
+      '/project/.rsdoctor/moduleGraph/0',
+    ]);
+  });
 });

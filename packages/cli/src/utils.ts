@@ -62,6 +62,43 @@ export async function loadShardingFile(
   return Promise.resolve(uri);
 }
 
+/**
+ * Resolve local shard references relative to the manifest that contains them.
+ * Absolute paths and remote URLs remain unchanged for backward compatibility.
+ */
+export function resolveManifestShardingFiles<T extends Common.PlainObject>(
+  data: T,
+  manifestUri: string,
+  cwd: string,
+): T {
+  const baseDir = Url.isUrl(manifestUri)
+    ? manifestUri
+    : path.dirname(path.resolve(cwd, manifestUri));
+
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => {
+      if (!Array.isArray(value)) return [key, value];
+
+      return [
+        key,
+        value.map((uri) => {
+          if (
+            typeof uri !== 'string' ||
+            Url.isUrl(uri) ||
+            Url.isFilePath(uri)
+          ) {
+            return uri;
+          }
+
+          return Url.isUrl(manifestUri)
+            ? new URL(uri, baseDir).href
+            : path.resolve(baseDir, uri);
+        }),
+      ];
+    }),
+  ) as T;
+}
+
 export async function loadShardingFileWithSpinner(
   uri: string,
   cwd: string,
