@@ -7,6 +7,8 @@ import path from 'path';
 import { createRsdoctorPlugin, getChildSDK } from './test-utils';
 
 class ChildCompilerPlugin {
+  compilerPath?: string;
+
   constructor(
     private readonly entry: string,
     private readonly name = 'child-demo',
@@ -28,6 +30,7 @@ class ChildCompilerPlugin {
           ],
         );
 
+        this.compilerPath = childCompiler.compilerPath;
         childCompiler.runAsChild((error) => callback(error));
       },
     );
@@ -74,6 +77,7 @@ test('collects child compiler data in an isolated report', async () => {
   const mainEntry = path.resolve(__dirname, './fixtures/a.js');
   const childEntry = path.resolve(__dirname, './fixtures/b.js');
   const doctor = createRsdoctorPlugin({});
+  const childCompilerPlugin = new ChildCompilerPlugin(childEntry);
 
   await compileByRspack(mainEntry, {
     module: {
@@ -84,7 +88,7 @@ test('collects child compiler data in an isolated report', async () => {
         },
       ],
     },
-    plugins: [doctor, new ChildCompilerPlugin(childEntry)],
+    plugins: [doctor, childCompilerPlugin],
   });
 
   const rootData = doctor.sdk.getStoreData();
@@ -101,10 +105,11 @@ test('collects child compiler data in an isolated report', async () => {
   });
   expect(child).toMatchObject({
     displayName: 'child-demo',
-    compilerPath: 'child-demo|0|',
     parentCompilerPath: '',
     isChild: true,
   });
+  expect(childCompilerPlugin.compilerPath).toBeTruthy();
+  expect(child?.compilerPath).toBe(childCompilerPlugin.compilerPath);
   expect(
     rootData.moduleGraph.modules.some((item) => item.path === mainEntry),
   ).toBe(true);
