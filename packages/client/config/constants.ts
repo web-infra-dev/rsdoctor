@@ -9,12 +9,12 @@ export const DistResourcePath = path.resolve(
   '../dist/resource',
 );
 
-export const WebpackRsdoctorDirPath = path.resolve(
+export const RsdoctorDirPath = path.resolve(
   import.meta.dirname,
   `../dist/${Constants.RsdoctorOutputFolder}`,
 );
 
-export const WebpackStatsFilePath = path.resolve(
+export const StatsFilePath = path.resolve(
   import.meta.dirname,
   '../dist/stats.json',
 );

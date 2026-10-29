@@ -195,7 +195,8 @@ describe('PackageGraph.getPackageByModule', () => {
 
     const pkg = pkgGraph.getPackageByModule(module, getPackageFile);
     expect(pkg).toBeDefined();
-    expect(pkg?.duplicates.length).toBeGreaterThan(0);
-    expect(pkg?.duplicates[0].chunks.length).toBe(2);
+    const duplicates = pkg!.duplicates!;
+    expect(duplicates.length).toBeGreaterThan(0);
+    expect(duplicates[0].chunks.length).toBe(2);
   });
 });

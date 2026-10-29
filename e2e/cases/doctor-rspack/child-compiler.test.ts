@@ -7,14 +7,19 @@ import path from 'path';
 import { createRsdoctorPlugin, getChildSDK } from './test-utils';
 
 class ChildCompilerPlugin {
-  constructor(private readonly entry: string) {}
+  compilerPath?: string;
+
+  constructor(
+    private readonly entry: string,
+    private readonly name = 'child-demo',
+  ) {}
 
   apply(compiler: Compiler) {
     compiler.hooks.make.tapAsync(
       'ChildCompilerPlugin',
       (compilation, callback) => {
         const childCompiler = compilation.createChildCompiler(
-          'child-demo',
+          this.name,
           {
             filename: 'child-demo.js',
           } as Compiler['options']['output'],
@@ -25,16 +30,54 @@ class ChildCompilerPlugin {
           ],
         );
 
+        this.compilerPath = childCompiler.compilerPath;
         childCompiler.runAsChild((error) => callback(error));
       },
     );
   }
 }
 
+test.each(['HtmlRspackCompiler', 'mini-css-extract-plugin'])(
+  'does not collect ignored child compiler: %s',
+  async (name) => {
+    const mainEntry = path.resolve(__dirname, './fixtures/a.js');
+    const childEntry = path.resolve(__dirname, './fixtures/b.js');
+    const doctor = createRsdoctorPlugin({});
+
+    await compileByRspack(mainEntry, {
+      plugins: [doctor, new ChildCompilerPlugin(childEntry, name)],
+    });
+
+    expect(doctor.sdk.getManifestData().series).toBeUndefined();
+  },
+);
+
+test('uses a concise display name for worker-loader child compilers', async () => {
+  const mainEntry = path.resolve(__dirname, './fixtures/a.js');
+  const childEntry = path.resolve(__dirname, './fixtures/b.js');
+  const doctor = createRsdoctorPlugin({});
+
+  await compileByRspack(mainEntry, {
+    plugins: [
+      doctor,
+      new ChildCompilerPlugin(
+        childEntry,
+        `worker-loader ${mainEntry}??ruleSet[1].rules[2]!${childEntry}`,
+      ),
+    ],
+  });
+
+  expect(
+    doctor.sdk.getManifestData().series?.find((item) => item.isChild)
+      ?.displayName,
+  ).toBe('worker-loader: b.js');
+});
+
 test('collects child compiler data in an isolated report', async () => {
   const mainEntry = path.resolve(__dirname, './fixtures/a.js');
   const childEntry = path.resolve(__dirname, './fixtures/b.js');
   const doctor = createRsdoctorPlugin({});
+  const childCompilerPlugin = new ChildCompilerPlugin(childEntry);
 
   await compileByRspack(mainEntry, {
     module: {
@@ -45,7 +88,7 @@ test('collects child compiler data in an isolated report', async () => {
         },
       ],
     },
-    plugins: [doctor, new ChildCompilerPlugin(childEntry)],
+    plugins: [doctor, childCompilerPlugin],
   });
 
   const rootData = doctor.sdk.getStoreData();
@@ -62,10 +105,11 @@ test('collects child compiler data in an isolated report', async () => {
   });
   expect(child).toMatchObject({
     displayName: 'child-demo',
-    compilerPath: 'child-demo|0|',
     parentCompilerPath: '',
     isChild: true,
   });
+  expect(childCompilerPlugin.compilerPath).toBeTruthy();
+  expect(child?.compilerPath).toBe(childCompilerPlugin.compilerPath);
   expect(
     rootData.moduleGraph.modules.some((item) => item.path === mainEntry),
   ).toBe(true);
@@ -114,11 +158,7 @@ test('writes child compiler data to an isolated brief report', async () => {
       throw new Error('Expected child compiler SDK to be registered');
     }
 
-    const childReportDir = path.join(
-      reportDir,
-      '.slaves',
-      childSDK.name.replace(/\s+/g, '-'),
-    );
+    const childReportDir = childSDK.outputDir;
     await Promise.all([
       access(path.join(reportDir, 'rsdoctor-report.html')),
       access(path.join(childReportDir, 'rsdoctor-report.html')),

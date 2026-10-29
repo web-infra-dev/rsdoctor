@@ -48,8 +48,8 @@ export const TreeGraph = memo(
     const [inputAssetName, setAssetName] = useState('');
     const [inputAssetSize, setAssetSize] = useState(0);
     const [defaultExpandAll, setDefaultExpandAll] = useState(false);
-    const [inputModuleUnit, setModuleUnit] = useState('');
-    const [inputChunkUnit, setChunkUnit] = useState('');
+    const [inputModuleUnit, setModuleUnit] = useState('kb');
+    const [inputChunkUnit, setChunkUnit] = useState('kb');
     const [showOnlyJavaScriptAssets, setShowOnlyJavaScriptAssets] =
       useState(false);
     const [assetPath, setAssetPath] = useState<string | null>(null);
@@ -60,6 +60,10 @@ export const TreeGraph = memo(
     const { t } = useI18n();
 
     const assets = summary.all.total.files;
+    const moduleSizeLimit =
+      inputModule * (inputModuleUnit === 'mb' ? 1024 * 1024 : 1024);
+    const assetSizeLimit =
+      inputAssetSize * (inputChunkUnit === 'mb' ? 1024 * 1024 : 1024);
 
     const handleChange = useCallback(
       (type: string) => (value: string) => {
@@ -80,18 +84,14 @@ export const TreeGraph = memo(
     );
     const onChangeModule = useCallback(
       debounce((newValue: number) => {
-        const count =
-          inputModuleUnit === 'mb' ? newValue * 1024 * 1024 : newValue * 1024;
-        setModuleValue(count);
+        setModuleValue(newValue);
       }, 300),
       [],
     );
 
     const onChangeAsset = useCallback(
       debounce((newValue: number) => {
-        const count =
-          inputChunkUnit === 'mb' ? newValue * 1024 * 1024 : newValue * 1024;
-        setAssetSize(count);
+        setAssetSize(newValue);
       }, 300),
       [],
     );
@@ -107,8 +107,8 @@ export const TreeGraph = memo(
         res = res.filter((e) => isJavaScriptAsset(e.path));
       }
 
-      if (inputAssetSize > 0) {
-        res = res.filter((e) => e.size >= inputAssetSize);
+      if (assetSizeLimit > 0) {
+        res = res.filter((e) => e.size >= assetSizeLimit);
       }
 
       if (selectedEntryPoints.length) {
@@ -130,7 +130,7 @@ export const TreeGraph = memo(
       assets,
       selectedEntryPoints,
       inputAssetName,
-      inputAssetSize,
+      assetSizeLimit,
       showOnlyJavaScriptAssets,
     ]);
 
@@ -383,7 +383,7 @@ export const TreeGraph = memo(
                         asset={details.asset}
                         chunks={details.chunks}
                         modules={details.modules}
-                        moduleSizeLimit={inputModule}
+                        moduleSizeLimit={moduleSizeLimit}
                         root={cwd}
                       />
                     )}

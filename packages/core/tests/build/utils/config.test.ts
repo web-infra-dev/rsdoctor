@@ -62,6 +62,7 @@ describe('normalizeUserConfig', () => {
     expect(result.multiCompiler).toEqual({
       enabled: true,
       group: undefined,
+      ignoreChildCompilers: [],
     });
   });
 
@@ -70,11 +71,24 @@ describe('normalizeUserConfig', () => {
       {
         enabled: false,
         group: undefined,
+        ignoreChildCompilers: [],
       },
     );
     expect(
       normalizeUserConfig({ multiCompiler: { group: 'ssr' } }).multiCompiler,
-    ).toEqual({ enabled: true, group: 'ssr' });
+    ).toEqual({ enabled: true, group: 'ssr', ignoreChildCompilers: [] });
+    expect(
+      normalizeUserConfig({
+        multiCompiler: { ignoreChildCompilers: ['vanilla-extract-compiler'] },
+      }).multiCompiler.ignoreChildCompilers,
+    ).toEqual(['vanilla-extract-compiler']);
+    expect(() =>
+      normalizeUserConfig({
+        multiCompiler: { ignoreChildCompilers: [1] as unknown as string[] },
+      }),
+    ).toThrow(
+      '`multiCompiler.ignoreChildCompilers` must be an array of strings.',
+    );
   });
 
   it('should respect custom features array', () => {
@@ -102,7 +116,6 @@ describe('normalizeUserConfig', () => {
   it('should use default supports when not provided', () => {
     const result = normalizeUserConfig();
     expect(result.supports.gzip).toEqual({ gzipLevel: 6 });
-    expect(result.supports.banner).toEqual(true);
     expect(result.supports.parseBundle).toEqual(true);
   });
 
@@ -139,12 +152,10 @@ describe('normalizeUserConfig', () => {
         gzip: {
           gzipLevel: 6,
         },
-        banner: false,
         parseBundle: false,
       },
     });
     expect(result.supports).toEqual({
-      banner: false,
       parseBundle: false,
       gzip: { gzipLevel: 6 },
       brotli: false,
@@ -270,7 +281,7 @@ describe('normalizeUserConfig', () => {
     });
 
     it.each(['', null, false, 0])(
-      'should show the top-level mode warning for %p',
+      'should show the top-level mode warning for %s',
       (mode) => {
         normalizeUserConfig({ mode } as never);
 
@@ -332,7 +343,7 @@ describe('normalizeUserConfig', () => {
     );
 
     it.each([true, false])(
-      'should warn when supports.generateTileGraph is %p',
+      'should warn when supports.generateTileGraph is %s',
       (generateTileGraph) => {
         normalizeUserConfig({
           supports: { generateTileGraph },
@@ -351,7 +362,7 @@ describe('normalizeUserConfig', () => {
       { brief: undefined },
       { output: { compressData: undefined } },
       { supports: { generateTileGraph: undefined } },
-    ])('should not warn for unset removed configuration %p', (config) => {
+    ])('should not warn for unset removed configuration %s', (config) => {
       normalizeUserConfig(config as never);
 
       expect(consoleOutput).toEqual([]);

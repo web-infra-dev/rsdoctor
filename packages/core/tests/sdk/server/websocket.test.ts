@@ -92,7 +92,7 @@ describe('server websocket transport', () => {
         api: SDK.ServerAPI.API.GetAllModuleGraph,
         body: {},
       }),
-      client,
+      client as never,
     );
 
     expect(client.sent).toStrictEqual([

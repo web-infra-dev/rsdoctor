@@ -68,6 +68,7 @@ export class RsdoctorSDK<
       ? new RsdoctorFakeServer(this, port)
       : new RsdoctorServer(this, port, {
           innerClientPath: options.config?.innerClientPath || '',
+          innerClientOverrides: options.config?.innerClientOverrides,
           printServerUrl: options.config?.printLog?.serverUrls,
           cors: serverConfig?.cors,
         });

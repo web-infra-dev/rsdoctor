@@ -41,6 +41,11 @@ import { getWriteStoreOptions } from './writeStore';
 // Static flag to ensure greet message is only printed once per process
 let hasGreeted = false;
 
+const ignoredChildCompilerNames = new Set([
+  'HtmlRspackCompiler',
+  'mini-css-extract-plugin',
+]);
+
 class RsdoctorCompilerContext implements RsdoctorRspackPluginInstance<
   Linter.ExtendRuleData[]
 > {
@@ -396,12 +401,19 @@ export class RsdoctorRspackPlugin<
 
   private createCompilerContext() {
     const controller = this.controller!;
-    const { output, innerClientPath, printLog, server, features } =
-      this.options;
+    const {
+      output,
+      innerClientPath,
+      innerClientOverrides,
+      printLog,
+      server,
+      features,
+    } = this.options;
     const sdk = controller.createSlave({
       name: this.defaultName,
       extraConfig: {
         innerClientPath,
+        innerClientOverrides,
         printLog,
         server,
         mode: output.mode || undefined,
@@ -544,7 +556,18 @@ export class RsdoctorRspackPlugin<
     compilerIndex: number,
     parentContext: RsdoctorCompilerContext,
   ) {
+    // Child compilers inherit the parent's taps before this callback runs.
+    // Strip Rsdoctor's inherited taps even when tracking is disabled/ignored.
+    this.removeInheritedRsdoctorTaps(childCompiler);
+
     if (!(parentContext.sdk instanceof RsdoctorPrimarySDK)) {
+      return;
+    }
+
+    if (
+      !this.options.multiCompiler.enabled ||
+      this.shouldIgnoreChildCompiler(childCompiler, compilerName)
+    ) {
       return;
     }
 
@@ -569,8 +592,10 @@ export class RsdoctorRspackPlugin<
       const safeCompilerPath =
         compilerPath.replace(/[^a-zA-Z0-9._-]+/g, '-') ||
         `${compilerName}-${compilerIndex}`;
-      const displayName =
-        childCompiler.name || compilerName || `Child compiler ${compilerIndex}`;
+      const displayName = this.getChildCompilerDisplayName(
+        childCompiler.name || compilerName,
+        compilerIndex,
+      );
       const sdk = controller.createSlave({
         name: `child-${safeCompilerPath}`,
         displayName,
@@ -586,8 +611,6 @@ export class RsdoctorRspackPlugin<
       return sdk;
     })();
 
-    this.removeInheritedRsdoctorTaps(childCompiler);
-
     const childPlugin = new RsdoctorRspackPlugin({
       ...this.childOptions,
       sdkInstance: childSDK,
@@ -597,6 +620,35 @@ export class RsdoctorRspackPlugin<
       sdk: childSDK,
     });
     childPlugin.apply(childCompiler);
+  }
+
+  private shouldIgnoreChildCompiler(
+    childCompiler: Plugin.BaseCompilerType<'rspack'>,
+    compilerName: string,
+  ) {
+    const ignoredNames = this.options.multiCompiler.ignoreChildCompilers;
+    return (
+      (childCompiler.name
+        ? ignoredChildCompilerNames.has(childCompiler.name) ||
+          ignoredNames.includes(childCompiler.name)
+        : false) ||
+      ignoredChildCompilerNames.has(compilerName) ||
+      ignoredNames.includes(compilerName)
+    );
+  }
+
+  private getChildCompilerDisplayName(name: string, compilerIndex: number) {
+    if (!name) {
+      return `Child compiler ${compilerIndex}`;
+    }
+    if (!name.startsWith('worker-loader ')) {
+      return name;
+    }
+
+    const request = name.slice('worker-loader '.length);
+    const resource = request.split('!').at(-1)?.split('?')[0];
+    const fileName = resource && path.basename(path.win32.basename(resource));
+    return fileName ? `worker-loader: ${fileName}` : 'worker-loader';
   }
 
   private removeInheritedRsdoctorTaps(

@@ -20,7 +20,15 @@ const Component: React.FC = () => {
     return null;
   }
 
-  const { summary, configs, root: cwd, envinfo, errors, name } = project;
+  const {
+    summary,
+    configs,
+    root: cwd,
+    envinfo,
+    errors,
+    name,
+    displayName,
+  } = project;
 
   return (
     <div className={style.overall}>
@@ -32,7 +40,7 @@ const Component: React.FC = () => {
               cwd={cwd}
               envinfo={envinfo}
               alerts={errors}
-              name={name}
+              name={displayName || name}
             />
             <BundleAlerts />
           </ResponsiveLayout>

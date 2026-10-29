@@ -19,7 +19,9 @@ const resolveFixture = (...paths: string[]) => {
 
 function arrayEq<T>(actual: T[], expected: T[]) {
   expect(actual.length).toBe(expected.length);
-  expect(actual).toEqual(expect.arrayContaining(expected));
+  for (const item of expected) {
+    expect(actual).toContain(item);
+  }
 }
 
 describe('module graph', () => {

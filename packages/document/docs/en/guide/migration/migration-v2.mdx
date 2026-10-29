@@ -1,11 +1,15 @@
+---
+description: 'Migrate to Rsdoctor 2.0 by updating Rspack requirements, packages, imports, CLI commands, AI workflows, and configuration.'
+---
+
 # Migrate to Rsdoctor 2.0
 
 Rsdoctor 2.0 consolidates the package structure around Rspack. This release removes several standalone packages. Update dependencies and imports together to avoid resolving a 1.x package with 2.0 code.
 
-Use the [`rsdoctor-migrate-v2` skill](https://github.com/rstackjs/agent-skills/pull/115) to let a coding agent inspect your project, apply the relevant migration steps, and verify the result:
+Use the [`rsdoctor-v2-upgrade` skill](https://github.com/rstackjs/agent-skills#rsdoctor-v2-upgrade) to let a coding agent inspect your project, apply the relevant migration steps, and verify the result:
 
 ```bash
-npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
+npx skills add rstackjs/agent-skills --skill rsdoctor-v2-upgrade
 ```
 
 ## Check your bundler
@@ -13,7 +17,7 @@ npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
 Rsdoctor 2.0 requires Node.js `^20.19.0 || >=22.12.0` and Rspack 2.0 or later. Rspack 1.x is no longer supported. webpack support and `@rsdoctor/webpack-plugin` have also been removed.
 
 - For an Rspack-based project, continue with this guide.
-- For a webpack project, stay on Rsdoctor 1.x or migrate the project to Rspack before upgrading Rsdoctor.
+- For a webpack project, stay on [Rsdoctor 1.x](https://v1.rsdoctor.rs/) or migrate the project to Rspack before upgrading Rsdoctor.
 
 ## Update the Rspack plugin
 
@@ -76,19 +80,19 @@ Agent CLI reads the data file directly, so MCP-specific options such as server p
 
 ## Configuration migration
 
-**Rsdoctor 1.2.4 introduced the output configuration used by Rsdoctor 2.x.** It is easier to configure and extend than the legacy options.
+The top-level `mode`, `port`, and `brief` options and legacy `output.compressData` option were removed and are ignored in Rsdoctor 2.x. Use the table below to migrate these options. Both forms of the [`features` lite configuration](/config/options/features) remain supported and are included only to show the equivalent `output` configuration.
 
-The top-level `mode`, `port`, and `brief` options and legacy `output.compressData` option were removed and are ignored in Rsdoctor 2.x. Use the table below to migrate these options. Both forms of the `features` lite configuration remain supported and are included only to show the equivalent `output` configuration.
+| Original Configuration                                                         | New Configuration                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| mode                                                                           | Configure [`output.mode`](/config/options/output#mode) instead.                                                                                                                                                                                                    |
+| port                                                                           | Configure [`server.port`](/config/options/server#port) instead.                                                                                                                                                                                                    |
+| brief                                                                          | Configure [`output.mode: 'brief'`](/config/options/output#mode) and set [`output.options.type`](/config/options/output#mode-brief) to `['html']`. Move `brief.reportHtmlName` to [`output.options.htmlOptions.reportHtmlName`](/config/options/output#mode-brief). |
+| output.compressData                                                            | Configure [`output.mode: 'brief'`](/config/options/output#mode) and set [`output.options.type`](/config/options/output#mode-brief) to `['json']`.                                                                                                                  |
+| `mode: 'lite'`                                                                 | Configure [`output.mode: 'normal'`](/config/options/output#mode) and set [`output.reportCodeType`](/config/options/output#reportcodetype) to `noCode` or `noAssetsAndModuleSource`.                                                                                |
+| [`features: { lite: true }` or `features: ['lite']`](/config/options/features) | Still supported. The equivalent `output` configuration uses [`output.mode: 'normal'`](/config/options/output#mode) and [`output.reportCodeType`](/config/options/output#reportcodetype) as above.                                                                  |
+| None                                                                           | New [`output.options.jsonOptions.sections`](/config/options/output#mode-brief) configuration                                                                                                                                                                       |
 
-| Original Configuration                             | New Configuration                                                                                                                                         |
-| -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| mode                                               | Configure `output.mode` instead.                                                                                                                          |
-| port                                               | Configure `server.port` instead.                                                                                                                          |
-| brief                                              | Configure `output.mode: 'brief'` and set `output.options.type` to `['html']`. Move `brief.reportHtmlName` to `output.options.htmlOptions.reportHtmlName`. |
-| output.compressData                                | Configure `output.mode: 'brief'` and set `output.options.type` to `['json']`.                                                                             |
-| `mode: 'lite'`                                     | Configure `output.mode: 'normal'` and set `output.reportCodeType` to `noCode` or `noAssetsAndModuleSource`.                                               |
-| `features: { lite: true }` or `features: ['lite']` | Still supported. The equivalent `output` configuration uses `output.mode: 'normal'` and `output.reportCodeType` as above.                                 |
-| None                                               | New `output.options.jsonOptions.sections` configuration                                                                                                   |
+Remove `supports.banner` from your configuration. This option has been removed in Rsdoctor 2.x; no replacement is needed.
 
 ### Configuration change details
 

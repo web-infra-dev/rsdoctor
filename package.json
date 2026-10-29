@@ -9,31 +9,32 @@
   },
   "scripts": {
     "build": "pnpm --workspace-concurrency=10 --filter \"./packages/*\" --filter \"!./packages/document\" --filter \"./scripts/*\" run build",
-    "check": "rs check",
+    "check": "rs check --type-check",
     "check-dependency-version": "pnpx check-dependency-version-consistency . && echo",
     "check-spell": "pnpx cspell",
     "dev:doc": "cd packages/document && pnpm run dev",
     "e2e": "pnpm run e2e:base",
     "e2e:base": "cd ./e2e && cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm test",
     "format": "rs fmt",
-    "lint": "rs lint",
+    "lint": "rs lint --type-check",
     "prepare": "pnpm run build && rs hooks",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm --workspace-concurrency=1 --filter \"./packages/*\" test",
     "test:all": "pnpm run test && pnpm run e2e"
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.59.1",
+    "@microsoft/api-extractor": "^7.59.4",
+    "@rspress/core": "2.1.0-beta.1",
     "@scripts/config": "workspace:*",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",
     "cspell-ban-words": "^0.0.4",
     "heading-case": "^2.0.2",
-    "pkg-pr-new": "0.0.88",
-    "rstack": "^0.7.5"
+    "pkg-pr-new": "0.0.92",
+    "rstack": "^0.8.5"
   },
-  "packageManager": "pnpm@11.4.0",
+  "packageManager": "pnpm@12.6.0",
   "engines": {
     "node": ">=22.18.0",
-    "pnpm": ">=11.0.0"
+    "pnpm": ">=12.6.0"
   }
 }

@@ -1,8 +1,37 @@
 import { Constants, Manifest } from '@rsdoctor/shared/types';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import fs from 'node:fs';
 import { RsdoctorPrimarySDK } from './primary';
 import { writeJsonAtomic } from '../utils/writeJson';
+
+const MAX_COMPILER_DIRNAME_BYTES = 120;
+
+function truncateToByteLength(value: string, maxBytes: number) {
+  let end = value.length;
+  while (Buffer.byteLength(value.slice(0, end)) > maxBytes) {
+    end -= 1;
+  }
+  return value.slice(0, end);
+}
+
+function toCompilerDirectoryName(name: string, isChild: boolean) {
+  const normalized = isChild
+    ? name.replace(/\s+/g, '-') || 'compiler'
+    : name.replace(/[^a-zA-Z0-9_$-]+/g, '-').replace(/^-+|-+$/g, '') ||
+      'compiler';
+
+  if (Buffer.byteLength(normalized) <= MAX_COMPILER_DIRNAME_BYTES) {
+    return normalized;
+  }
+
+  const hash = createHash('sha256').update(name).digest('hex').slice(0, 12);
+  const prefix = truncateToByteLength(
+    normalized,
+    MAX_COMPILER_DIRNAME_BYTES - hash.length - 1,
+  );
+  return `${prefix}-${hash}`;
+}
 
 function toUrlPath(filePath: string) {
   return filePath
@@ -80,10 +109,7 @@ export class RsdoctorSDKController {
       return path.join(rootOutputDir, existing.directory);
     }
 
-    const name = slave.isChild
-      ? slave.name.replace(/\s+/g, '-')
-      : slave.name.replace(/[^a-zA-Z0-9_$-]+/g, '-').replace(/^-+|-+$/g, '') ||
-        `compiler-${slave.id}`;
+    const name = toCompilerDirectoryName(slave.name, slave.isChild);
     const folder = slave.isChild ? '.slaves' : 'compilers';
     const occupied = new Set(
       [...this.compilerDirectories.values()].map(({ directory }) =>

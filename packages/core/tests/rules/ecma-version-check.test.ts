@@ -72,9 +72,10 @@ describe('ecma-version-check rule', () => {
   it('falls back to the project Browserslist and resolves it once', async () => {
     mocks.loadConfig.mockReturnValue(['ie 11']);
 
-    await runRule(rule.meta.defaultConfig);
+    const defaultConfig = rule.meta.defaultConfig!;
+    await runRule(defaultConfig);
 
-    expect(rule.meta.defaultConfig.targets).toBeUndefined();
+    expect(defaultConfig.targets).toBeUndefined();
     expect(mocks.loadConfig).toHaveBeenCalledTimes(1);
     expect(mocks.loadConfig).toHaveBeenCalledWith({
       path: root,

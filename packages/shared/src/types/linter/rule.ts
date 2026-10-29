@@ -1,4 +1,4 @@
-import type { ArrayToUnion, UnionToTuple } from '../common';
+import type { ArrayToUnion } from '../common';
 import type { ErrorLevel as Severity } from '../error';
 import type { Hooks, RuntimeContext } from '../sdk';
 import type { ReportData, Diagnostic } from './diagnostic';
@@ -138,12 +138,8 @@ export interface ValidateResult {
 export interface Options<
   Extends extends ExtendRuleData[] = [],
   InternalRules extends RuleData[] = [],
-  _Extends = UnionToTuple<ArrayToUnion<[...Extends]>>,
 > {
-  rules?: InferRulesConfig<
-    _Extends extends ExtendRuleData[] ? _Extends : Extends
-  > &
-    InferRulesConfig<InternalRules>;
+  rules?: InferRulesConfig<Extends> & InferRulesConfig<InternalRules>;
   level?: SeverityString;
   extends?: Extends;
 }
@@ -156,13 +152,13 @@ type InferRulesTitles<T extends (ExtendRuleData | RuleData)[]> = ArrayToUnion<{
 }>;
 
 type InferRuleConfigByTitle<
-  T extends (ExtendRuleData | RuleData)[],
+  T extends ExtendRuleData | RuleData,
   Title extends string,
-> = {
-  [K in keyof T]: InferRuleTitle<T[K]> extends Title
-    ? InferRuleConfig<T[K]>
-    : never;
-}[number];
+> = T extends unknown
+  ? InferRuleTitle<T> extends Title
+    ? InferRuleConfig<T>
+    : never
+  : never;
 
 export type InferRuleConfig<T> =
   T extends ExtendRuleData<infer P1>
@@ -172,5 +168,7 @@ export type InferRuleConfig<T> =
       : any;
 
 export type InferRulesConfig<T extends (ExtendRuleData | RuleData)[]> = {
-  [K in InferRulesTitles<T>]?: RuleConfigItem<InferRuleConfigByTitle<T, K>>;
+  [K in InferRulesTitles<T>]?: RuleConfigItem<
+    InferRuleConfigByTitle<T[number], K>
+  >;
 } & Record<string, RuleConfigItem | undefined>;

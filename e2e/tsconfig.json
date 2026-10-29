@@ -1,10 +1,12 @@
 {
   "extends": "@scripts/config/tsconfig",
   "compilerOptions": {
+    "experimentalDecorators": true,
     "jsx": "react-jsx",
     "outDir": "./dist",
+    "types": ["rstack/types", "node"],
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["../packages/core/src/*"],
       "@scripts/*": ["./scripts/*"],
       "@test-kit/*": ["./test-kit/*"]
     }

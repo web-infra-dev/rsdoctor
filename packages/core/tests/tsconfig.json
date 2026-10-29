@@ -6,6 +6,6 @@
       "@/*": ["../src/*"]
     }
   },
-  "include": ["./**/*.ts", "../src/**/*.ts"],
+  "include": ["./**/*.ts", "../src/**/*.ts", "../package.json"],
   "exclude": ["../**/node_modules"]
 }

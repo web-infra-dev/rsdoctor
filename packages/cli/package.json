@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/cli",
-  "version": "2.0.0-rc.0",
+  "version": "2.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "cac": "^7.0.0",
+    "cac": "^7.0.1",
     "typescript": "catalog:"
   },
   "engines": {

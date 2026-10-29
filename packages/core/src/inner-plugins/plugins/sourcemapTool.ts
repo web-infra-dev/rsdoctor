@@ -3,11 +3,24 @@ import { Linter, Plugin } from '@rsdoctor/shared/types';
 import { Graph } from '@rsdoctor/shared/common-browser';
 import { logger, time, timeEnd } from '@/logger';
 import { Asset } from '@rspack/core';
-import { resolve, dirname, isAbsolute } from 'path';
+import { resolve, dirname, isAbsolute, normalize } from 'path';
 import { SourceMapConsumer, RawSourceMap, MappingItem } from 'source-map';
 
 // Constant used to represent unresolved source paths
 export const UNASSIGNED = '[unassigned]';
+
+function normalizeAbsoluteSourcePath(source: string): string {
+  // Rspack can emit mixed separators even though module paths are native.
+  // Keep POSIX/root-relative paths and device namespaces as supplied.
+  if (
+    process.platform === 'win32' &&
+    (/^[a-z]:[\\/]/i.test(source) ||
+      /^[\\/]{2}(?![?.][\\/])[^\\/]+[\\/][^\\/]+(?:[\\/]|$)/.test(source))
+  ) {
+    return normalize(source);
+  }
+  return source;
+}
 
 /**
  * Options for handling source map assets.
@@ -61,7 +74,7 @@ export function bindContextCache(
       }
     } else {
       if (isAbsolute(source)) {
-        resolved = source;
+        resolved = normalizeAbsoluteSourcePath(source);
       } else {
         let baseDir = context;
         if (sourceRoot) {
@@ -180,15 +193,7 @@ export async function collectSourceMaps(
           realSource = realSource.split('??')[0];
         }
         if (realSource) {
-          if (
-            (realSource.startsWith('webpack://') ||
-              realSource.startsWith('file://')) &&
-            sourceMapFilenameRegex
-          ) {
-            realSource = getRealSourcePath(realSource, sourceMapFilenameRegex);
-          } else if (!isAbsolute(realSource)) {
-            realSource = getRealSourcePath(realSource, sourceMapFilenameRegex);
-          }
+          realSource = getRealSourcePath(realSource, sourceMapFilenameRegex);
         }
 
         if (!realSource || realSource === UNASSIGNED) continue;

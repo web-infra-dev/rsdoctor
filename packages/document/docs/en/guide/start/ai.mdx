@@ -1,3 +1,7 @@
+---
+description: 'Use Rsdoctor Agent Skills, agent-cli, llms.txt, and Markdown documentation for AI-assisted build analysis.'
+---
+
 import { PackageManagerTabs } from '@theme';
 
 # AI
@@ -182,12 +186,10 @@ You are an expert in JavaScript, Rsdoctor, and build analysis.
 
 You can also customize it for your project, adding more details about the project structure, overall architecture, and other relevant information so Agents can better understand your project.
 
-::: tip
+## MCP server
 
-If you are using Claude Code, you can create a `CLAUDE.md` file and reference the `AGENTS.md` file in it.
+Rsdoctor 2.x no longer includes `@rsdoctor/mcp-server`.
 
-```markdown title="CLAUDE.md"
-@AGENTS.md
-```
-
-:::
+- Use [`@rsdoctor/agent-cli`](#agent-cli) for current AI-assisted build analysis workflows.
+- See the [Rsdoctor 2.0 migration guide](/guide/migration/migration-v2#ai-workflow-migration) for migration steps.
+- The previous MCP instructions are available in the [v1 documentation](https://v1.rsdoctor.rs/guide/usage/mcp).

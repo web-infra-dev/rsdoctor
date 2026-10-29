@@ -14,6 +14,7 @@ export interface ProjectAPIResponse {
     'hash' | 'root' | 'pid' | 'summary' | 'configs' | 'envinfo' | 'errors'
   > & {
     name?: string;
+    displayName?: string;
   };
   [API.GetClientRoutes]: RsdoctorManifestClientRoutes[];
   [APIExtends.GetCompileProgress]: {

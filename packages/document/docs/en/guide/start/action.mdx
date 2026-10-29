@@ -128,7 +128,7 @@ jobs:
           # Optional. Required only when you want AI-assisted analysis.
           AI_TOKEN: ${{ secrets.AI_TOKEN }}
         with:
-          file_path: 'dist/.rsdoctor/rsdoctor-data.json'
+          file_path: 'dist/rsdoctor-data.json'
           # Default 'main'. If you want to use a dynamic target branch, i.e., automatically get the target branch of the current pull request instead of a fixed main branch, you can use the following configuration:
           # ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.event.repository.default_branch }}
           target_branch: 'main'
@@ -153,7 +153,7 @@ Rsdoctor Action can use AI to summarize bundle degradation in pull requests and 
   env:
     AI_TOKEN: ${{ secrets.AI_TOKEN }}
   with:
-    file_path: 'dist/.rsdoctor/rsdoctor-data.json'
+    file_path: 'dist/rsdoctor-data.json'
     target_branch: 'main'
     ai_model: 'claude-3-5-haiku-latest'
 ```
@@ -189,7 +189,7 @@ Additionally, clicking "Download Bundle Diff Report" allows you to download Rsdo
 
 **Q: Action fails with "❌ Rsdoctor data file not found"**
 
-- Ensure your build process generates Rsdoctor JSON data, the default path is `/rsdoctor-data.json`.
+- Ensure your build process generates Rsdoctor JSON data in the build output directory (for example, `dist/rsdoctor-data.json`).
 - Check if file_path points to the correct location
 - Verify that the Rsdoctor plugin is properly configured in your build tool
 

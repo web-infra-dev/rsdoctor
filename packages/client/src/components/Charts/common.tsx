@@ -68,20 +68,8 @@ export const CommonExecutionEmptyTips: React.FC = () => {
     <Alert
       message={
         <Typography.Text>
-          <Typography.Text>make sure that you have turn on </Typography.Text>
-          {/* <Typography.Text code> TODO::
-            <a
-              href={`http://${host}/api/webpack-plugin.html#features`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              features.plugins
-            </a>
-          </Typography.Text> */}
-          <Typography.Text>
-            {' '}
-            in configuration for the Rsdoctor plugin.
-          </Typography.Text>
+          Enable <Typography.Text code>features.plugins</Typography.Text> in the
+          Rsdoctor plugin configuration to collect plugin execution data.
         </Typography.Text>
       }
       type="info"

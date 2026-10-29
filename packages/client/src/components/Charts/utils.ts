@@ -2,10 +2,11 @@ import { Loader } from '@rsdoctor/shared/common-browser';
 import { SDK } from '@rsdoctor/shared/types';
 import dayjs from 'dayjs';
 import { maxBy, minBy } from '@rsdoctor/shared/collection';
-import { formatCosts } from 'src/utils';
+import { formatCosts } from 'src/utils/time';
 
 import './tooltips.scss';
 import { DurationMetric, ETraceEventPhase, ITraceEventData } from './types';
+import { escapeHtml } from './escapeHtml';
 import { useEffect, useState } from 'react';
 
 export function getTooltipHtmlForLoader(
@@ -13,7 +14,7 @@ export function getTooltipHtmlForLoader(
 ) {
   return `
   <div class="loader-tooltip-container">
-    <div class="loader-tooltip-title">${loader.loader}</div>
+    <div class="loader-tooltip-title">${escapeHtml(loader.loader)}</div>
     <li class="loader-tooltip-item">
       <span>isPitch</span>
       <span>${loader.isPitch}</span>
@@ -22,7 +23,7 @@ export function getTooltipHtmlForLoader(
       loader.layer && loader.layer !== 'undefined'
         ? `<li class="loader-tooltip-item">
         <span>layer</span>
-        <span>${loader.layer}</span>
+        <span>${escapeHtml(loader.layer)}</span>
       </li>`
         : ``
     }
@@ -32,7 +33,7 @@ export function getTooltipHtmlForLoader(
     </li>
     <li class="loader-tooltip-item">
       <span>filepath</span>
-      <span>${loader.resource}</span>
+      <span>${escapeHtml(loader.resource)}</span>
     </li>
     <li class="loader-tooltip-item">
       <span>start</span>
@@ -70,7 +71,7 @@ export function renderTotalLoadersTooltip(
 
   return `
 <div class="loader-tooltip-container">
-  <div class="loader-tooltip-title">${loaderName}</div>
+  <div class="loader-tooltip-title">${escapeHtml(loaderName)}</div>
   <li class="loader-tooltip-item">
     <span>files</span>
     <span class="loader-tooltip-text-bold">${resources.length}</span>
@@ -195,14 +196,14 @@ export function formatterForPlugins(raw: { data: { ext: ITraceEventData } }) {
   const { ext } = raw.data;
   return `
   <div class="loader-tooltip-container">
-    <div class="loader-tooltip-title">[${ext.args.p}] ${ext.args.n}</div>
+    <div class="loader-tooltip-title">[${escapeHtml(ext.args.p)}] ${escapeHtml(ext.args.n)}</div>
     <li class="loader-tooltip-item">
       <span>hook</span>
-      <span>${ext.args.p}</span>
+      <span>${escapeHtml(ext.args.p)}</span>
     </li>
     <li class="loader-tooltip-item">
       <span>tap name</span>
-      <span>${ext.args.n}</span>
+      <span>${escapeHtml(ext.args.n)}</span>
     </li>
     <li class="loader-tooltip-item">
       <span>start</span>

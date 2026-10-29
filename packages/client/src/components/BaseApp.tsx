@@ -115,13 +115,6 @@ const BaseApp: React.FC<BaseAppProps> = ({
           try to use <Typography.Text keyboard>command + r</Typography.Text> to
           refresh page.
         </Typography.Text>
-        {process.env.NODE_ENV === 'development' ? (
-          <Typography.Text>
-            in development, you need to run{' '}
-            <Typography.Text keyboard>emo run build:analysis</Typography.Text>{' '}
-            to make sure the mock data has been generated.
-          </Typography.Text>
-        ) : null}
         <Divider />
         <Space direction="vertical" style={{ width: '100%' }}>
           <Typography.Text style={{ fontSize: 16 }}>

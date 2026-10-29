@@ -22,7 +22,6 @@ export type RuleMessageCode =
 export enum RuleMessageCategory {
   Compile = 'compile',
   Bundle = 'bundle',
-  EMO = 'emo',
 }
 
 export interface RuleMessage {

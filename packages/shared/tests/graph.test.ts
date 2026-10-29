@@ -189,21 +189,45 @@ describe('test src/common/graph.ts', () => {
 
   it('diffAssetsByExtensions keeps extension filters for initial assets', () => {
     type ChunkGraph = Parameters<typeof Graph.diffAssetsByExtensions>[0];
+    type Asset = ChunkGraph['assets'][number];
+    type Chunk = ChunkGraph['chunks'][number];
+    const createChunk = (id: string, initial: boolean): Chunk => ({
+      id,
+      initial,
+      name: id,
+      size: 0,
+      entry: initial,
+      assets: [],
+      modules: [],
+      dependencies: [],
+      imported: [],
+      parsedSize: 0,
+    });
+    const createAsset = (
+      path: string,
+      size: number,
+      chunks: string[],
+    ): Asset => ({
+      id: 0,
+      path,
+      size,
+      chunks,
+      content: '',
+      gzipSize: undefined,
+    });
     const createGraph = (
       jsSize: number,
       cssSize: number,
       imageSize: number,
     ): ChunkGraph => ({
-      chunks: [
-        { id: 1, initial: true },
-        { id: 2, initial: false },
-      ],
+      chunks: [createChunk('1', true), createChunk('2', false)],
       assets: [
-        { path: 'main.js', size: jsSize, chunks: [1] },
-        { path: 'style.css', size: cssSize, chunks: [1] },
-        { path: 'logo.png', size: imageSize, chunks: [1] },
-        { path: 'async.js', size: 50, chunks: [2] },
+        createAsset('main.js', jsSize, ['1']),
+        createAsset('style.css', cssSize, ['1']),
+        createAsset('logo.png', imageSize, ['1']),
+        createAsset('async.js', 50, ['2']),
       ],
+      entrypoints: [],
     });
 
     const baseline = createGraph(100, 20, 30);

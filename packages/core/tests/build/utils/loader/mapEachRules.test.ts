@@ -23,7 +23,7 @@ describe('test src/build/utils/loader.ts mapEachRules()', () => {
             loaders: ['string-loader-1', 'string-loader-2'],
             options: { a: 1 },
           },
-        ],
+        ] as any,
         (e) => e,
       ),
     ).toStrictEqual([
@@ -43,7 +43,7 @@ describe('test src/build/utils/loader.ts mapEachRules()', () => {
             options: { a: 1 },
             data: { a: 2 },
           },
-        ],
+        ] as any,
         (e) => e,
       ),
     ).toStrictEqual([
@@ -69,7 +69,7 @@ describe('test src/build/utils/loader.ts mapEachRules()', () => {
             options: { a: 1 },
             data: { a: 2 },
           },
-        ],
+        ] as any,
         (e) => e,
       ),
     ).toStrictEqual([
@@ -99,7 +99,7 @@ describe('test src/build/utils/loader.ts mapEachRules()', () => {
             options: { a: 1 },
             data: { a: 2 },
           },
-        ],
+        ] as any,
         (e) => e,
       ),
     ).toStrictEqual([

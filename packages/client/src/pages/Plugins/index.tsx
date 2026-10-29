@@ -2,7 +2,7 @@ import { ApiOutlined, PartitionOutlined } from '@ant-design/icons';
 import { SDK } from '@rsdoctor/shared/types';
 import { Button, Card, Input, Select, Space, Typography } from 'antd';
 import React, { useState } from 'react';
-import { WebpackConfigurationViewer } from '../../components/Configuration';
+import { BuildConfigurationViewer } from '../../components/Configuration';
 import { ServerAPIProvider } from '../../components/Manifest';
 import { PluginsDataTable } from '../../components/Plugins/plugins';
 import { Size } from '../../constants';
@@ -17,7 +17,7 @@ export const Page: React.FC = () => {
       <Card
         title="Plugins Overall"
         bodyStyle={{ paddingTop: Size.BasePadding / 3 }}
-        extra={<WebpackConfigurationViewer defaultKeys={['plugins']} />}
+        extra={<BuildConfigurationViewer defaultKeys={['plugins']} />}
       >
         <Space
           direction="vertical"

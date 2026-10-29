@@ -1,5 +1,5 @@
 import React from 'react';
-import { WebpackConfigurationViewer } from '../../../components/Configuration';
+import { BuildConfigurationViewer } from '../../../components/Configuration';
 import { Card } from '../../../components/Card';
 import { LoaderChart } from 'src/components/Charts';
 import { Popover, Space, Tag, Typography } from 'antd';
@@ -36,7 +36,7 @@ export const Page: React.FC = () => {
           </Popover>
         </Space>
       }
-      extra={<WebpackConfigurationViewer defaultKeys={['module']} />}
+      extra={<BuildConfigurationViewer defaultKeys={['module']} />}
     >
       <LoaderChart />
     </Card>

@@ -57,8 +57,9 @@ export class APIDataLoader {
           this.loader.loadData('configs'),
           this.loader.loadData('envinfo'),
           this.loader.loadData('errors'),
+          this.loader.loadManifest(),
         ]).then(
-          ([root, pid, hash, summary, configs, envinfo, errors]) =>
+          ([root, pid, hash, summary, configs, envinfo, errors, manifest]) =>
             ({
               root,
               pid,
@@ -68,6 +69,9 @@ export class APIDataLoader {
               envinfo,
               errors,
               name: configs?.[0]?.config?.name,
+              displayName: manifest.series?.find(
+                (item) => item.name === manifest.name,
+              )?.displayName,
             }) as R,
         );
       case SDK.ServerAPI.API.GetClientRoutes: {

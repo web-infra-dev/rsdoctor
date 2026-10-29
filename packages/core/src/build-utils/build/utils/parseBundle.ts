@@ -83,7 +83,7 @@ export const parseBundle: ParseBundle = (
       state.expressionStatementDepth++;
       try {
         if (
-          // Webpack 5 stores modules in the the top-level IIFE
+          // Rspack stores the main chunk module table inside a top-level IIFE.
           state.expressionStatementDepth === 1 &&
           // ast?.range?.includes(node) &&
           isIIFE(node)
@@ -171,7 +171,7 @@ export const parseBundle: ParseBundle = (
     AssignmentExpression(node: any, state: { locations: any }) {
       if (state.locations) return;
 
-      // Modules are stored in exports.modules:
+      // Rspack CommonJS chunks store their module table in exports.modules.
       // exports.modules = {};
       const { left, right } = node;
 
@@ -195,7 +195,7 @@ export const parseBundle: ParseBundle = (
 
       const args = node.arguments;
 
-      // Main chunk with webpack loader.
+      // Legacy bootstrap with the module table passed as an IIFE argument.
       // Modules are stored in first argument:
       // (function (...) {...})(<modules>)
       if (
@@ -208,36 +208,16 @@ export const parseBundle: ParseBundle = (
         return;
       }
 
-      // Async Webpack < v4 chunk without webpack loader.
-      // webpackJsonp([<chunks>], <modules>, ...)
-      // As function name may be changed with `output.jsonpFunction` option we can't rely on it's default name.
-      if (
-        node.callee.type === 'Identifier' &&
-        mayBeAsyncChunkArguments(args) &&
-        isModulesList(args[1])
-      ) {
-        state.locations = getModulesLocations(args[1]);
-        return;
-      }
-
-      // Async Webpack v4 chunk without webpack loader.
-      // (window.webpackJsonp=window.webpackJsonp||[]).push([[<chunks>], <modules>, ...]);
-      // As function name may be changed with `output.jsonpFunction` option we can't rely on it's default name.
+      // Rspack array-push chunks, including Web and Web Worker async chunks:
+      // (self.chunkGlobal = self.chunkGlobal || []).push([[<chunks>], <modules>, ...]);
+      // Match the structure because output.chunkLoadingGlobal is configurable.
       if (isAsyncChunkPushExpression(node)) {
         state.locations = getModulesLocations(args[0].elements[1]);
         return;
       }
 
-      // Webpack v4 WebWorkerChunkTemplatePlugin
-      // globalObject.chunkCallbackName([<chunks>],<modules>, ...);
-      // Both globalObject and chunkCallbackName can be changed through the config, so we can't check them.
-      if (isAsyncWebWorkerChunkExpression(node)) {
-        state.locations = getModulesLocations(args[1]);
-        return;
-      }
-
-      // Walking into arguments because some of plugins (e.g. `DedupePlugin`) or some Webpack
-      // features (e.g. `umd` library output) can wrap modules list into additional IIFE.
+      // Library wrappers and legacy formats can nest the module table inside
+      // another function call, so continue traversing its arguments.
       args.forEach((arg: any) => c(arg, state));
     },
   });
@@ -445,18 +425,6 @@ function isAsyncChunkPushExpression(node: { callee: any; arguments: any }) {
 
 function mayBeAsyncChunkArguments(args: string | any[]) {
   return args.length >= 2 && isChunkIds(args[0]);
-}
-
-function isAsyncWebWorkerChunkExpression(node: any) {
-  const { callee, type, arguments: args } = node;
-
-  return (
-    type === 'CallExpression' &&
-    callee.type === 'MemberExpression' &&
-    args.length === 2 &&
-    isChunkIds(args[0]) &&
-    isModulesList(args[1])
-  );
 }
 
 function getModulesLocations(node: {

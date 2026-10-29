@@ -36,16 +36,19 @@ import {
 import { Rspack } from '@rsdoctor/shared/common-browser';
 import { TreeGraph } from './tree-graph';
 
-interface WebpackModulesOverallProps {
+interface ModulesOverallProps {
   cwd: string;
   errors: SDK.ErrorsData;
   summary: Client.RsdoctorClientAssetsSummary;
   entryPoints: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetEntryPoints>;
 }
 
-export const WebpackModulesOverallBase: React.FC<
-  WebpackModulesOverallProps
-> = ({ errors, cwd, summary, entryPoints }) => {
+export const ModulesOverallBase: React.FC<ModulesOverallProps> = ({
+  errors,
+  cwd,
+  summary,
+  entryPoints,
+}) => {
   const [expanded, setExpanded] = usePersistedState(
     'bundle-size-tabs-card-expanded',
     false,
@@ -288,7 +291,7 @@ const AssetTreemapWithFilterAndData = memo(() => {
   );
 });
 
-export const WebpackModulesOverall: React.FC = () => {
+export const ModulesOverall: React.FC = () => {
   const { project } = useProjectInfo();
 
   if (!project) {
@@ -305,7 +308,7 @@ export const WebpackModulesOverall: React.FC = () => {
         return (
           <ServerAPIProvider api={SDK.ServerAPI.API.GetEntryPoints}>
             {(entryPoints) => (
-              <WebpackModulesOverallBase
+              <ModulesOverallBase
                 cwd={root}
                 errors={errors}
                 summary={summary}

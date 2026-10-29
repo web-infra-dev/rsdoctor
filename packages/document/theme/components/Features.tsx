@@ -10,9 +10,9 @@ export function Features() {
   const t = useI18n<typeof import('i18n')>();
   const features = [
     {
-      title: t('frameworkAgnostic'),
-      details: t('frameworkAgnosticDesc'),
-      icon: '🛠️',
+      title: t('agentDriven'),
+      details: t('agentDrivenDesc'),
+      icon: '🤖',
     },
     {
       title: t('buildTime'),

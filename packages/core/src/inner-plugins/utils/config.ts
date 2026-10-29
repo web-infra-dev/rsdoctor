@@ -210,6 +210,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     disableClientServer: userDisableClientServer = false,
     sdkInstance,
     innerClientPath = '',
+    innerClientOverrides,
     output = outputConfig,
     supports: userSupports = {},
     server: userServer = {},
@@ -217,7 +218,6 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     multiCompiler = true,
   } = normalizedConfig;
   const supports = {
-    banner: defaultBoolean(userSupports.banner, true),
     parseBundle: defaultBoolean(userSupports.parseBundle, true),
     gzip: normalizeGzip(userSupports.gzip),
     brotli: normalizeBrotli(userSupports.brotli),
@@ -241,7 +241,19 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
   assert(typeof server.port === 'undefined' || typeof server.port === 'number');
   assert(
     typeof multiCompiler === 'boolean' ||
-      (typeof multiCompiler === 'object' && multiCompiler !== null),
+      (typeof multiCompiler === 'object' &&
+        multiCompiler !== null &&
+        !Array.isArray(multiCompiler)),
+  );
+  const ignoreChildCompilers =
+    typeof multiCompiler === 'object'
+      ? multiCompiler.ignoreChildCompilers
+      : undefined;
+  assert(
+    ignoreChildCompilers === undefined ||
+      (Array.isArray(ignoreChildCompilers) &&
+        ignoreChildCompilers.every((name) => typeof name === 'string')),
+    '`multiCompiler.ignoreChildCompilers` must be an array of strings.',
   );
   let finalMode: keyof typeof SDK.IMode =
     ('mode' in output && isValidMode(output.mode)
@@ -267,6 +279,10 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       output.manifestPathType === 'relative',
     '`output.manifestPathType` must be "absolute" or "relative".',
   );
+  const normalizedInnerClientOverrides = {
+    files: innerClientOverrides?.files ?? {},
+    directories: innerClientOverrides?.directories ?? {},
+  };
   const res: Plugin.RsdoctorPluginOptionsNormalized<Rules> = {
     linter: _linter,
     features: _features,
@@ -285,6 +301,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       manifestPathType: output.manifestPathType ?? 'absolute',
     },
     innerClientPath,
+    innerClientOverrides: normalizedInnerClientOverrides,
     supports,
     server,
     printLog,
@@ -292,6 +309,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
       enabled: multiCompiler !== false,
       group:
         typeof multiCompiler === 'object' ? multiCompiler.group : undefined,
+      ignoreChildCompilers: ignoreChildCompilers ?? [],
     },
   };
 

@@ -1,6 +1,7 @@
 import { PlainObject } from '../../common';
 import { connect } from '../../thirdparty';
 import { RsdoctorClientRoutes } from '../../client';
+import type { SDKOptionsType } from '../instance';
 import { API, APIExtends } from './apis';
 
 export * as ServerAPI from './apis';
@@ -30,6 +31,7 @@ export interface RsdoctorServerInstance {
   };
 
   innerClientPath?: string;
+  innerClientOverrides?: SDKOptionsType['innerClientOverrides'];
 
   get(
     route: string,

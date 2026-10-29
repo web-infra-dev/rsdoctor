@@ -4,20 +4,20 @@
     "zh": "快速上手"
   },
   "subtitle": {
-    "en": "Analyzer for Rspack",
+    "en": "Build Analyzer for Rspack",
     "zh": "Rspack 构建分析工具"
   },
   "slogan": {
-    "en": "Visualize the building process",
-    "zh": "让构建过程可视化"
+    "en": "Visualize builds. Optimize with agents.",
+    "zh": "可视化分析，Agent 驱动优化"
   },
-  "frameworkAgnostic": {
-    "en": "Unlimited Framework",
-    "zh": "框架无关"
+  "agentDriven": {
+    "en": "Agent-Driven Analysis",
+    "zh": "Agent 驱动分析"
   },
-  "frameworkAgnosticDesc": {
-    "en": "Rsdoctor supports projects built with Rspack.",
-    "zh": "Rsdoctor 支持分析用 Rspack 构建的项目。"
+  "agentDrivenDesc": {
+    "en": "Provides build data to agents for automated diagnosis and optimization of JavaScript programs.",
+    "zh": "为 Agent 提供构建数据，支持对 JavaScript 程序的自动诊断与优化。"
   },
   "buildTime": {
     "en": "Compile's Time",
