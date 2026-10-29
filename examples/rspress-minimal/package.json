@@ -9,7 +9,7 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "@rspress/core": "2.0.15"
+    "@rspress/core": "2.1.0-beta.1"
   },
   "devDependencies": {
     "@rsdoctor/core": "workspace:*",

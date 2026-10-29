@@ -13,22 +13,16 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-Rsdoctor is a build analyzer tailored for projects built with [Rspack](https://rspack.rs/).
-
-Rsdoctor is committed to being a one-stop, intelligent build analyzer that makes the build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
-
-For webpack projects, continue using Rsdoctor 1.x or migrate to Rspack. See the [migration guide](https://rsdoctor.rs/guide/migration/migration-v2) for details.
+Rsdoctor is a build analysis tool for the [Rspack](https://rspack.rs/) ecosystem. It visualizes the build process and output to help developers investigate build issues and identify performance bottlenecks. It also provides build data to agents for automated diagnosis and optimization of JavaScript programs.
 
 ## 🔥 Features
 
-- **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.
-
-- **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
-  - Build artifact support for resource lists and module dependencies, etc.
-  - Build-time analysis supports Loader, Plugin, and Resolver building process analysis
-  - Build rules support duplicate package detection and ES Version Check, etc.
-
-- **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom component scan rules based on the build data of Rsdoctor.
+- **Agent-Driven Analysis**: Provides build data to agents for automated diagnosis and optimization of JavaScript programs
+- **Compilation Visualization**: Visualize the compilation process and timing to troubleshoot build issues and identify performance bottlenecks
+- **Comprehensive Analysis**: Analyze build output, inspect the build process, and run diagnostic checks:
+  - **Output Analysis**: Inspect assets, output sizes, and module dependencies
+  - **Build Process Analysis**: Inspect Loader and Plugin execution and module resolution
+  - **Diagnostic Checks**: Detect duplicate packages and check ECMAScript syntax versions to identify potential build issues
 
 ## 📚 Getting started
 
@@ -57,6 +51,7 @@ Rsdoctor is part of Rstack, the fast, unified JavaScript toolchain for developer
 | [Rsdoctor](https://github.com/web-infra-dev/rsdoctor) | Build analyzer           | <a href="https://npmjs.com/package/@rsdoctor/core"><img src="https://img.shields.io/npm/v/@rsdoctor/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a> |
 | [Rstest](https://github.com/web-infra-dev/rstest)     | Testing framework        | <a href="https://npmjs.com/package/@rstest/core"><img src="https://img.shields.io/npm/v/@rstest/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>     |
 | [Rslint](https://github.com/web-infra-dev/rslint)     | Linter                   | <a href="https://npmjs.com/package/@rslint/core"><img src="https://img.shields.io/npm/v/@rslint/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>     |
+| [Rstack CLI](https://github.com/rstackjs/rstack-cli)  | Unified CLI              | <a href="https://npmjs.com/package/rstack"><img src="https://img.shields.io/npm/v/rstack?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>                 |
 
 ## 🙌 Code of conduct
 

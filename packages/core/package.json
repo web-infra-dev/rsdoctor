@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/core",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -43,7 +43,7 @@
   "dependencies": {
     "@rsdoctor/client": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
-    "caniuse-lite": "^1.0.30001815",
+    "caniuse-lite": "^1.0.30001819",
     "sirv": "catalog:",
     "source-map": "catalog:"
   },
@@ -65,7 +65,7 @@
     "acorn-import-attributes": "^1.9.5",
     "acorn-walk": "8.3.5",
     "babel-loader": "10.1.1",
-    "browserslist-load-config": "^1.0.3",
+    "browserslist-load-config": "^1.0.4",
     "connect-next": "catalog:",
     "cors": "2.8.6",
     "envinfo": "7.21.0",

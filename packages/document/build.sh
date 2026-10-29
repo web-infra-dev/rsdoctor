@@ -1,34 +1,13 @@
-#!/bin/bash
-set -e
+#!/bin/sh
+set -eu
 
-echo "🚀 Starting build script..."
+rootdir=$(cd "$(dirname "$0")" && pwd)
+repo_root=$(cd "$rootdir/../.." && pwd)
+client_dir="$repo_root/packages/client"
+preview_dir="$rootdir/doc_build/preview"
 
-dir=`dirname $0`
-rootdir=$(cd $dir && pwd)
-outdir="$rootdir"/doc_build
+(cd "$client_dir" && RSDOCTOR_PREVIEW_ONLY=true node "$repo_root/node_modules/rstack/bin/rs.js" build)
 
-echo "📁 Working directory: $rootdir"
-echo "📁 Output directory: $outdir"
-
-# copy client/dist
-echo "📦 Copying client/dist to preview folder..."
-mkdir -p "${outdir}/preview"
-client_dist_path="$(cd $dir && cd ../../ && pwd)/packages/client/dist"
-echo "📂 Source path: $client_dist_path"
-
-if [ -d "$client_dist_path" ]; then
-  echo "✅ Client dist directory exists"
-  cp -rf "$client_dist_path/"* "${outdir}/preview/"
-  echo "✅ Successfully copied client files to preview folder"
-  
-  # Show what was copied
-  echo "📋 Preview folder contents:"
-  ls -la "${outdir}/preview/"
-
-  echo "🎉 Build script completed successfully!"
-else
-  echo "❌ Error: Client dist directory not found at $client_dist_path"
-fi
-
-
-
+rm -rf "$preview_dir"
+mkdir -p "$preview_dir"
+cp -R "$client_dir/dist-preview/." "$preview_dir/"

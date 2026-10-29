@@ -17,6 +17,23 @@ afterEach(async () => {
 
 const asRspackCompiler = (compiler: unknown) => compiler as Plugin.BaseCompiler;
 
+const createChildCompiler = (name?: string) => {
+  const hook = {
+    taps: [
+      { name: 'RsdoctorRspackPlugin' },
+      { name: 'RsdoctorRspackPlugin:childCompiler' },
+      { name: 'OtherPlugin' },
+    ],
+  };
+  return {
+    compiler: {
+      name,
+      hooks: { someHook: hook },
+    } as unknown as Plugin.BaseCompiler,
+    hook,
+  };
+};
+
 describe('RsdoctorRspackPlugin', () => {
   it('uses faster report compression only in watch mode', () => {
     expect(
@@ -201,6 +218,100 @@ describe('RsdoctorRspackPlugin', () => {
     expect(secondSDK.getManifestData().series).toBeUndefined();
 
     await Promise.all([firstSDK.dispose(), secondSDK.dispose()]);
+  });
+
+  it('does not track child compilers when multiCompiler is disabled', async () => {
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      multiCompiler: false,
+    });
+    const compiler = rspack({ plugins: [plugin] });
+    await plugin._bootstrapTask;
+
+    expect(
+      compiler.hooks.thisCompilation.taps.some(
+        (tap) => tap.name === 'RsdoctorRspackPlugin:childCompiler',
+      ),
+    ).toBe(true);
+
+    const child = createChildCompiler();
+    const registerChildCompiler = (
+      plugin as unknown as {
+        registerChildCompiler: (
+          parent: Plugin.BaseCompiler,
+          child: Plugin.BaseCompiler,
+          name: string,
+          index: number,
+          context: unknown,
+        ) => void;
+      }
+    ).registerChildCompiler.bind(plugin);
+    registerChildCompiler(
+      asRspackCompiler(compiler),
+      child.compiler,
+      'child',
+      0,
+      { sdk: plugin.sdk },
+    );
+    expect(child.hook.taps).toEqual([{ name: 'OtherPlugin' }]);
+
+    await plugin.sdk.dispose();
+  });
+
+  it('ignores configured and built-in child compiler names', async () => {
+    const plugin = new RsdoctorRspackPlugin({
+      disableClientServer: true,
+      multiCompiler: {
+        ignoreChildCompilers: ['vanilla-extract-compiler'],
+      },
+    });
+    const compiler = rspack({ plugins: [plugin] });
+    await plugin._bootstrapTask;
+
+    const parentSDK = plugin.sdk as RsdoctorPrimarySDK;
+    const registerChildCompiler = (
+      plugin as unknown as {
+        registerChildCompiler: (
+          parent: Plugin.BaseCompiler,
+          child: Plugin.BaseCompiler,
+          name: string,
+          index: number,
+          context: unknown,
+        ) => void;
+      }
+    ).registerChildCompiler.bind(plugin);
+    const parentContext = { sdk: parentSDK };
+    const configuredChild = createChildCompiler('vanilla-extract-compiler');
+    const builtInChild = createChildCompiler();
+    const namedBuiltInChild = createChildCompiler();
+
+    registerChildCompiler(
+      asRspackCompiler(compiler),
+      configuredChild.compiler,
+      'other',
+      0,
+      parentContext,
+    );
+    registerChildCompiler(
+      asRspackCompiler(compiler),
+      builtInChild.compiler,
+      'vanilla-extract-compiler',
+      1,
+      parentContext,
+    );
+    registerChildCompiler(
+      asRspackCompiler(compiler),
+      namedBuiltInChild.compiler,
+      'HtmlRspackCompiler',
+      2,
+      parentContext,
+    );
+    expect(configuredChild.hook.taps).toEqual([{ name: 'OtherPlugin' }]);
+    expect(builtInChild.hook.taps).toEqual([{ name: 'OtherPlugin' }]);
+    expect(namedBuiltInChild.hook.taps).toEqual([{ name: 'OtherPlugin' }]);
+    expect(parentSDK.parent.slaves).toHaveLength(1);
+
+    await parentSDK.dispose();
   });
 
   it('bootstraps the SDK only once across apply and done', async () => {

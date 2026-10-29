@@ -4,11 +4,11 @@ description: 'Learn how Rsdoctor analyzes Rspack builds, including loaders, plug
 
 # Introduction
 
-Rsdoctor is a build analyzer tailored for projects built with [Rspack](https://rspack.rs/).
+Rsdoctor is a build analysis tool for the [Rspack](https://rspack.rs/) ecosystem. It visualizes the build process and output to help developers investigate build issues and identify performance bottlenecks. It also provides build data to agents for automated diagnosis and optimization of JavaScript programs.
 
-Rsdoctor is committed to being a one-stop, intelligent build analyzer that makes the build process transparent, predictable, and optimizable through visualization and smart analysis, helping development teams precisely identify bottlenecks, optimize performance, and improve engineering quality.
-
-Rsdoctor analyzes projects built with Rspack. For webpack projects, continue using Rsdoctor 1.x or migrate to Rspack. See the [migration guide](/guide/migration/migration-v2) for details.
+:::tip
+If you use webpack, you can use [Rsdoctor 1.x](https://v1.rsdoctor.rs/) or follow the [guide](https://rspack.rs/guide/migration/webpack) to migrate to Rspack.
+:::
 
 <video
   src="https://assets.rspack.rs/others/assets/rsdoctor/rsdoctor-1.0-ui.mp4"
@@ -28,12 +28,12 @@ Rsdoctor analyzes projects built with Rspack. For webpack projects, continue usi
 
 ## 🔥 Features
 
-- **Compilation Visualization**: Rsdoctor visualizes the compilation behavior and time consumption, making it easy to view build issues.
-- **Multiple Analysis Capabilities**: Rsdoctor supports build artifact, build-time analysis, and anti-degradation capabilities:
-  - Build artifact support for resource lists and module dependencies, etc.
-  - Build-time analysis supports Loader, Plugin, and Resolver building process analysis.
-  - Build rules support duplicate package detection and ES Version Check, etc.
-- **Support Custom Rules**: In addition to built-in build scan rules, Rsdoctor also supports users adding custom build scan rules based on Rsdoctor's build data.
+- **Agent-Driven Analysis**: Provides build data to agents for automated diagnosis and optimization of JavaScript programs
+- **Compilation Visualization**: Visualize the compilation process and timing to troubleshoot build issues and identify performance bottlenecks
+- **Comprehensive Analysis**: Analyze build output, inspect the build process, and run diagnostic checks:
+  - **Output Analysis**: Inspect assets, output sizes, and module dependencies
+  - **Build Process Analysis**: Inspect Loader and Plugin execution and module resolution
+  - **Diagnostic Checks**: Detect duplicate packages and check ECMAScript syntax versions to identify potential build issues
 
 ## 🛠️ Introduction
 

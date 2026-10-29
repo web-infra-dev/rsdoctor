@@ -6,10 +6,10 @@ description: '通过更新 Rspack 版本、依赖包、导入、CLI 命令、AI 
 
 Rsdoctor 2.0 围绕 Rspack 收敛了包结构。大多数项目只需要安装 `@rsdoctor/core`。此版本移除了多个独立包。请同时更新依赖和导入路径，避免在 2.0 代码中解析到 1.x 包。
 
-推荐使用 [`rsdoctor-migrate-v2` Skill](https://github.com/rstackjs/agent-skills/pull/115)，让编码 Agent 检查项目、执行适用的迁移步骤并验证结果：
+推荐使用 [`rsdoctor-v2-upgrade` Skill](https://github.com/rstackjs/agent-skills#rsdoctor-v2-upgrade)，让编码 Agent 检查项目、执行适用的迁移步骤并验证结果：
 
 ```bash
-npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
+npx skills add rstackjs/agent-skills --skill rsdoctor-v2-upgrade
 ```
 
 ## 检查构建工具
@@ -17,7 +17,7 @@ npx skills add rstackjs/agent-skills --skill rsdoctor-migrate-v2
 Rsdoctor 2.0 要求使用 Node.js `^20.19.0 || >=22.12.0` 和 Rspack 2.0 及以上版本，不再支持 Rspack 1.x。此外，Rsdoctor 2.0 不再支持 webpack，并移除了 `@rsdoctor/webpack-plugin`。
 
 - Rspack 项目可以继续按照本文档迁移。
-- webpack 项目应继续使用 Rsdoctor 1.x，或先迁移到 Rspack，再升级 Rsdoctor。
+- webpack 项目应继续使用 [Rsdoctor 1.x](https://v1.rsdoctor.rs/zh/)，或先迁移到 Rspack，再升级 Rsdoctor。
 
 ## 更新 Rspack 插件
 
@@ -79,8 +79,6 @@ Agent CLI 是新的替代工作流，但不兼容 MCP 协议，也不是旧 API 
 Agent CLI 直接读取数据文件，因此不再需要 MCP Server 端口、compiler 等 MCP 专用配置。安装、数据生成和更多命令示例请参考 [AI](/guide/start/ai)。
 
 ## 配置迁移 \{#configuration-migration}
-
-**Rsdoctor 1.x 引入了 Rsdoctor 2.x 使用的 [output 配置](/config/options/output)。** 与旧版配置相比，新配置更易于使用和扩展。
 
 顶层 `mode`、`port`、`brief` 和旧版 `output.compressData` 配置已在 Rsdoctor 2.x 中移除且会被忽略。请根据下表迁移这些配置。两种 [`features` lite 配置](/config/options/features) 仍受支持，下表仅列出其等价的 `output` 配置。
 

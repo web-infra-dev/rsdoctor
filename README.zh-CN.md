@@ -13,22 +13,16 @@
 
 [English](./README.md) | 简体中文
 
-Rsdoctor 是一款面向 [Rspack](https://rspack.rs/) 项目的构建分析工具。
-
-Rsdoctor 致力于成为一站式、智能化的构建分析工具，通过可视化与智能分析，使整个构建流程变得透明、可预测和可优化，从而帮助开发团队精准定位瓶颈、优化性能并提升工程质量。
-
-webpack 项目应继续使用 Rsdoctor 1.x，或先迁移到 Rspack。详情请参阅 [迁移指南](https://rsdoctor.rs/zh/guide/migration/migration-v2)。
+Rsdoctor 是为 [Rspack](https://rspack.rs/) 生态打造的构建分析工具，通过可视化呈现构建过程与产物，帮助开发者排查构建问题、定位性能瓶颈；同时为 Agent 提供构建数据，支持对 JavaScript 程序的自动诊断与优化。
 
 ## 🔥 特性
 
-- **编译可视化**：Rsdoctor 将编译行为及耗时进行可视化展示，方便开发者查看构建问题。
-
-- **多种分析能力**：支持构建产物、构建时分析能力：
-  - 构建产物支持资源列表及模块依赖等。
-  - 构建时分析支持 Loader、Plugin、Resolver 构建过程分析。
-  - 构建规则支持重复包检测及 ES Version Check 检查等。
-
-- **支持自定义规则**：除了内置构建扫描规则外，还支持用户根据 Rsdoctor 的构建数据添加自定义构建扫描规则。
+- **Agent 驱动分析**：为 Agent 提供构建数据，支持对 JavaScript 程序的自动诊断与优化
+- **编译可视化**：直观呈现编译过程与耗时，帮助开发者排查构建问题、定位性能瓶颈
+- **多维度分析**：覆盖构建产物、构建过程与规则检查：
+  - **产物分析**：查看资源列表、产物体积与模块依赖关系
+  - **过程分析**：分析 Loader、Plugin 的执行情况与模块解析过程
+  - **规则检查**：检测重复依赖包、检查 ECMAScript 语法版本，发现潜在的构建问题
 
 ## 📚 快速上手
 
@@ -59,6 +53,7 @@ Rsdoctor 是 Rstack 的一员。Rstack 是为开发者与 Agent 打造的高性�
 | [Rsdoctor](https://github.com/web-infra-dev/rsdoctor) | 构建分析工具   | <a href="https://npmjs.com/package/@rsdoctor/core"><img src="https://img.shields.io/npm/v/@rsdoctor/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a> |
 | [Rstest](https://github.com/web-infra-dev/rstest)     | 测试框架       | <a href="https://npmjs.com/package/@rstest/core"><img src="https://img.shields.io/npm/v/@rstest/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>     |
 | [Rslint](https://github.com/web-infra-dev/rslint)     | 代码分析工具   | <a href="https://npmjs.com/package/@rslint/core"><img src="https://img.shields.io/npm/v/@rslint/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>     |
+| [Rstack CLI](https://github.com/rstackjs/rstack-cli)  | 统一命令行工具 | <a href="https://npmjs.com/package/rstack"><img src="https://img.shields.io/npm/v/rstack?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>                 |
 
 ## 🙌 行为准则
 
