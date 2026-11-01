@@ -11,6 +11,7 @@ const htmlParserStub = fileURLToPath(
 );
 
 const externals = [
+  '@swc-next/parser',
   '@rsdoctor/client',
   '@rsdoctor/shared',
   '@rsdoctor/shared/collection',

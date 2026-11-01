@@ -1,4 +1,4 @@
-import type { ecmaVersion as EcmaVersion } from 'acorn';
+import type { PluginCheckSyntaxOptions } from '@rsbuild/plugin-check-syntax';
 
 type Condition = string | RegExp | ((filepath: string) => boolean);
 type CheckSyntaxExclude = Condition | Condition[];
@@ -10,5 +10,5 @@ export type Config = {
   excludeOutput?: CheckSyntaxExclude;
   excludeErrorMessage?: RegExp | RegExp[];
   excludeErrorLogs?: SyntaxErrorKey[];
-  ecmaVersion?: EcmaVersion;
+  ecmaVersion?: PluginCheckSyntaxOptions['ecmaVersion'];
 };

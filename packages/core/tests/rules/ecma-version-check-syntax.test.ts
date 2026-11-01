@@ -53,4 +53,21 @@ describe('ecma-version-check syntax grammars', () => {
   ])('rejects syntax above the configured version in %s', async (code) => {
     expect(await checkSyntax(code, 2019, true)).toHaveLength(1);
   });
+  it.each([
+    ['await Promise.resolve(); export {};', 2021, 2022],
+    ['export const url = import.meta.url;', 2019, 2020],
+    ['export * as namespace from "package";', 2019, 2020],
+  ])(
+    'checks module feature versions in %s',
+    async (code, unsupported, supported) => {
+      expect(await checkSyntax(code, unsupported, true)).toHaveLength(1);
+      expect(await checkSyntax(code, supported, true)).toEqual([]);
+    },
+  );
+
+  it('enforces module strict mode even without import or export statements', async () => {
+    expect(
+      await checkSyntax('function value(a, a) { return a; }', 2024, true),
+    ).toHaveLength(1);
+  });
 });

@@ -16,19 +16,11 @@ export type { Config } from './types';
 const title = 'default-import-check';
 
 export const rule = defineRule<typeof title, Config>(() => {
-  const parserOpt = {
-    ecmaVersion: 6 as const,
-  };
-  const exportsDefault = parser.internal.parseExpressionAt(
-    'exports.default',
-    0,
-    parserOpt,
-  ) as Node.SyntaxNode;
-  const moduleExportsDefault = parser.internal.parseExpressionAt(
-    'module.exports.default',
-    0,
-    parserOpt,
-  ) as Node.SyntaxNode;
+  const [exportsDefaultStatement, moduleExportsDefaultStatement] = parser.parse(
+    'exports.default; module.exports.default;',
+  ).body as Node.ExpressionStatement[];
+  const exportsDefault = exportsDefaultStatement.expression;
+  const moduleExportsDefault = moduleExportsDefaultStatement.expression;
 
   return {
     meta: {

@@ -43,6 +43,7 @@
   "dependencies": {
     "@rsdoctor/client": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
+    "@swc-next/parser": "0.3.0",
     "caniuse-lite": "^1.0.30001819",
     "sirv": "catalog:",
     "source-map": "catalog:"
@@ -61,14 +62,12 @@
     "@types/node": "catalog:",
     "@types/semver": "^7.8.0",
     "@types/ws": "^8.18.2",
-    "acorn": "^8.10.0",
-    "acorn-import-attributes": "^1.9.5",
-    "acorn-walk": "8.3.5",
     "babel-loader": "10.1.1",
     "browserslist-load-config": "^1.0.4",
     "connect-next": "catalog:",
     "cors": "2.8.6",
     "envinfo": "7.21.0",
+    "estree-walker": "3.0.3",
     "filesize": "catalog:",
     "fs-extra": "catalog:",
     "get-port": "5.1.1",

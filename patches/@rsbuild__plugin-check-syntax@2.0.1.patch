@@ -1,0 +1,34 @@
+diff --git a/dist/checkSyntax.d.ts b/dist/checkSyntax.d.ts
+index c3c9745d1443029cc70cc87bb2138cb81b4f67c4..48394f4ce9296ab5f0eb23631f9517d2726ba6d6 100644
+--- a/dist/checkSyntax.d.ts
++++ b/dist/checkSyntax.d.ts
+@@ -4,6 +4,7 @@ type CheckSyntaxOptions = BaseCheckSyntaxOptions & {
+     rootPath?: string;
+ } & (Required<Pick<BaseCheckSyntaxOptions, 'targets'>> | Required<Pick<BaseCheckSyntaxOptions, 'ecmaVersion'>>);
+ export declare class CheckSyntax {
++    sourceType: "script" | "module";
+     errors: ECMASyntaxError[];
+     ecmaVersion: EcmaVersion;
+     targets?: string[];
+diff --git a/dist/index.js b/dist/index.js
+index 6585f742aa5f72843bfb9ef87ecf6bcd0c8b9f20..f9175c21f98786769b29bf480428cc8e927c8985 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -156,6 +156,7 @@ function getHtmlScripts(html) {
+ const HTML_REGEX = /\.html$/;
+ const JS_REGEX = /\.(?:js|mjs|cjs|jsx)$/;
+ class CheckSyntax {
++    sourceType = "script";
+     errors = [];
+     ecmaVersion;
+     targets;
+@@ -192,7 +193,8 @@ class CheckSyntax {
+     async tryParse(filepath, code) {
+         try {
+             parse(code, {
+-                ecmaVersion: this.ecmaVersion
++                ecmaVersion: this.ecmaVersion,
++                sourceType: this.sourceType
+             });
+         } catch (_) {
+             const err = _;

@@ -1,74 +1,32 @@
-import { Parser as AcornParser, Options, Position } from 'acorn';
-// @ts-ignore
-import { importAttributes } from 'acorn-import-attributes';
-import * as walk from 'acorn-walk';
+import { parseSync, type ParserOptions } from '@swc-next/parser';
+import * as walk from './walk';
 import { asserts } from './asserts';
 import * as utils from './utils';
 import type { Node } from './types';
 
-export type { Options as ParseOptions } from 'acorn';
+export type ParseOptions = Pick<ParserOptions, 'sourceType'>;
 
-export interface ParseError extends Error {
-  loc?: Position;
-  pos: number;
-  raisedAt: number;
+/** Parse JavaScript into ESTree, rejecting recovered syntax errors. */
+function parse(input: string, options: ParseOptions = {}): Node.Program {
+  const result = parseSync(input, {
+    sourceType: options.sourceType ?? 'script',
+    lang: 'js',
+    preserveParens: false,
+    comments: 'none',
+    semanticErrors: true,
+  });
+  const diagnostic = result.diagnostics.find(
+    (item) => item.severity === 'error',
+  );
+  if (diagnostic) {
+    throw new SyntaxError(diagnostic.message);
+  }
+  return result.program as unknown as Node.Program;
 }
 
-/**
- * parser for internal
- */
-const acornParserInternal = AcornParser.extend(importAttributes);
-
-/**
- * parser for developers
- */
-let acornParserExport = AcornParser.extend(importAttributes);
-
 export const parser = {
-  /** AST iterator */
   walk,
-  /**
-   * Compile code
-   * - Output root node is `Node.Program`
-   */
-  parse: (input: string, options: Options) => {
-    return acornParserExport.parse(input, options) as Node.Program;
-  },
-  /**
-   * Compile the next first expression
-   * - The output root node is `Node.ExpressionStatement`
-   */
-  parseExpressionAt: (input: string, pos: number, options: Options) => {
-    return acornParserExport.parseExpressionAt(
-      input,
-      pos,
-      options,
-    ) as unknown as Node.ExpressionStatement;
-  },
-  /**
-   * add plugins for acorn
-   */
-  extend(...args: Parameters<typeof AcornParser.extend>) {
-    acornParserExport = acornParserExport.extend(...args);
-    return acornParserExport;
-  },
-  /** Set of assertions */
+  parse,
   asserts,
   utils,
-  /**
-   * @internal
-   * parser for internal packages
-   */
-  internal: {
-    parse: (input: string, options: Options) => {
-      return acornParserInternal.parse(input, options) as Node.Program;
-    },
-    parseExpressionAt: (input: string, pos: number, options: Options) => {
-      return acornParserInternal.parseExpressionAt(
-        input,
-        pos,
-        options,
-      ) as unknown as Node.ExpressionStatement;
-    },
-  },
 };

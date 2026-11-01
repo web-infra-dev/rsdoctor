@@ -1,6 +1,5 @@
 import path from 'path';
 import { CheckSyntax } from '@rsbuild/plugin-check-syntax';
-import { parse } from 'acorn';
 import { loadConfig } from 'browserslist-load-config';
 
 import { defineRule } from '../../rule';
@@ -90,30 +89,21 @@ export const rule: Linter.RuleData<Config, typeof title> = defineRule<
         rootPath: context,
         targets: finalTargets,
       });
-      const canRetryAsModule =
+      // The pnpm patch adds grammar selection to CheckSyntax. Keep ES5 in
+      // script mode so native module syntax cannot bypass the target version.
+      if (
         buildConfig?.output?.module === true &&
         (typeof checkSyntax.ecmaVersion !== 'number' ||
-          checkSyntax.ecmaVersion >= 6);
+          checkSyntax.ecmaVersion >= 6)
+      ) {
+        checkSyntax.sourceType = 'module';
+      }
 
       for (const asset of assets) {
         const assetPath = path.resolve(outputDir, asset.path);
         if (isExcludedOutput(assetPath, excludeOutput)) continue;
 
-        const errorCount = checkSyntax.errors.length;
         await checkSyntax.check(assetPath, asset.content);
-
-        // CheckSyntax parses as a script. Retry only for ES2015+ module output.
-        if (canRetryAsModule && checkSyntax.errors.length > errorCount) {
-          try {
-            parse(asset.content, {
-              ecmaVersion: checkSyntax.ecmaVersion,
-              sourceType: 'module',
-            });
-            checkSyntax.errors.length = errorCount;
-          } catch {
-            // The syntax is invalid under both grammars; keep the original error.
-          }
-        }
       }
 
       checkSyntax.errors.forEach((err) => {

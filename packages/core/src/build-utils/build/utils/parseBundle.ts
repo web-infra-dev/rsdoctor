@@ -59,9 +59,8 @@ export const parseBundle: ParseBundle = (
     hasBannerPlugin = true;
   }
 
-  const ast = parser.internal.parse(content, {
+  const ast = parser.parse(content, {
     sourceType: 'script',
-    ecmaVersion: 'latest',
   });
 
   const walkState: {
