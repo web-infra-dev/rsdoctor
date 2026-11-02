@@ -18,7 +18,7 @@
     "format": "rs fmt",
     "lint": "rs lint --type-check",
     "prepare": "pnpm run build && rs hooks",
-    "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 rs test",
+    "test": "rs test",
     "test:all": "pnpm run test && pnpm run e2e"
   },
   "devDependencies": {
