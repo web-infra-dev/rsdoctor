@@ -237,8 +237,8 @@ catalogs:
       specifier: 1.11.23
       version: 1.11.23
     es-toolkit:
-      specifier: ^1.52.0
-      version: 1.52.0
+      specifier: ^1.53.1
+      version: 1.53.1
     filesize:
       specifier: ^11.0.29
       version: 11.0.29
@@ -972,7 +972,7 @@ importers:
         version: 1.0.3
       es-toolkit:
         specifier: 'catalog:'
-        version: 1.52.0
+        version: 1.53.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -1012,7 +1012,7 @@ importers:
         version: 24.12.3
       es-toolkit:
         specifier: 'catalog:'
-        version: 1.52.0
+        version: 1.53.1
       memfs:
         specifier: 4.80.0
         version: 4.80.0
@@ -5117,8 +5117,8 @@ packages:
     resolution: {integrity: sha512-yPDz7wqpg1/mmHLmS3tcfTfbw5f1eryXvyghYBffGdERwe+mV7ZcWzTR8LR17Kvqt3qfPurjlonmnq3MKXIOXw==}
     engines: {node: '>= 0.4'}
 
-  es-toolkit@1.52.0:
-    resolution: {integrity: sha512-XTNEJQh1tY1ZJVcf6ayP/2n4ZPyaHlW2FWs7xvw5ddPuhUVjLD3olQVQS7kf58JbAB48iL0uL/jerTrjtV3lDA==}
+  es-toolkit@1.53.1:
+    resolution: {integrity: sha512-VhMc6IXmexu8iYFfL2aaAww6IvJTdHlqBLruLoEUs33YD4IcP5DdZcLOybMsMmmLsiy1c8PsiLsrM0DdIuuRUA==}
 
   esast-util-from-estree@2.0.0:
     resolution: {integrity: sha512-4CyanoAudUSBAn5K13H4JhsMH6L9ZP7XbLVe/dKybkxMO7eDyLsT8UHl9TRNrU2Gr9nz+FovfSIjuXWJ81uVwQ==}
@@ -10624,7 +10624,7 @@ snapshots:
       '@rsdoctor/utils': 1.6.1(@rspack/core@2.3.0(@swc/helpers@0.5.23))(webpack@5.105.4(esbuild@0.25.5))
       '@rspack/resolver': 0.2.8(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)
       browserslist-load-config: 1.0.4
-      es-toolkit: 1.52.0
+      es-toolkit: 1.53.1
       filesize: 11.0.29
       fs-extra: 11.3.0
       semver: 7.8.5
@@ -10643,7 +10643,7 @@ snapshots:
     dependencies:
       '@rsdoctor/types': 1.6.1(@rspack/core@2.3.0(@swc/helpers@0.5.23))(webpack@5.105.4(esbuild@0.25.5))
       '@rsdoctor/utils': 1.6.1(@rspack/core@2.3.0(@swc/helpers@0.5.23))(webpack@5.105.4(esbuild@0.25.5))
-      es-toolkit: 1.52.0
+      es-toolkit: 1.53.1
       path-browserify: 1.0.1
       source-map: 0.7.6
     transitivePeerDependencies:
@@ -12888,7 +12888,7 @@ snapshots:
       is-date-object: 1.1.0
       is-symbol: 1.1.1
 
-  es-toolkit@1.52.0: {}
+  es-toolkit@1.53.1: {}
 
   esast-util-from-estree@2.0.0:
     dependencies:
