@@ -1,5 +1,17 @@
 import { define } from 'rstack';
+import { baseConfig } from '@scripts/config/test';
 import skillsLock from './skills-lock.json' with { type: 'json' };
+
+define.test({
+  pool: baseConfig.pool,
+  projects: [
+    './packages/agent-cli/rstack.config.ts',
+    './packages/cli/rstack.config.ts',
+    './packages/client/rstack.config.mts',
+    './packages/core/rstack.config.ts',
+    './packages/shared/rstack.config.ts',
+  ],
+});
 
 define.lint(({ js, rstestPlugin, ts, globalIgnores }) => [
   globalIgnores(['packages/core/tests/build/utils/bundles/**']),

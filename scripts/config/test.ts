@@ -2,7 +2,6 @@ import path from 'node:path';
 import type { RstestConfig } from 'rstack/test';
 
 export const baseConfig: RstestConfig = {
-  name: 'node',
   globals: true,
   env: {
     FORCE_COLOR: '0',

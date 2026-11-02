@@ -18,7 +18,7 @@
     "format": "rs fmt",
     "lint": "rs lint --type-check",
     "prepare": "pnpm run build && rs hooks",
-    "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm --workspace-concurrency=1 --filter \"./packages/*\" test",
+    "test": "cross-env NODE_OPTIONS=--max-old-space-size=8192 rs test",
     "test:all": "pnpm run test && pnpm run e2e"
   },
   "devDependencies": {
@@ -30,7 +30,7 @@
     "cspell-ban-words": "^0.0.4",
     "heading-case": "^2.0.2",
     "pkg-pr-new": "0.0.92",
-    "rstack": "^0.8.5"
+    "rstack": "catalog:"
   },
   "packageManager": "pnpm@12.6.0",
   "engines": {
