@@ -1,0 +1,9 @@
+cases:
+  - name: COMPILER-01 Switch between build environment reports
+    tags: [compilers]
+    steps:
+      - app.open: { path: '/multi/rsdoctor-report.html#/overall' }
+      - aiAct: Use the compiler selector beside the Rsdoctor logo to switch from web to node.
+      - aiAssert: The compiler selector displays node and Bundle Overall is visible.
+      - aiAct: Use the same compiler selector to switch back to web.
+      - aiAssert: The compiler selector displays web and Bundle Overall is visible.

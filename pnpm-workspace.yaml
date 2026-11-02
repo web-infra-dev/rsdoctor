@@ -1,4 +1,5 @@
 packages:
+  - tests/midscene
   - e2e/**
   - scripts/**
   - packages/**
@@ -8,6 +9,7 @@ packages:
 autoDedupe: true
 
 allowBuilds:
+  sharp: true
   '@swc/core': false
   core-js: false
   core-js-pure: false

@@ -1,0 +1,9 @@
+cases:
+  - name: EXPLORE-02 Recover from an empty module search
+    tags: [exploration]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: Open Search Module and search for nonexistent-midscene-module.
+      - aiAssert: The Search Modules dialog displays No modules found.
+      - aiAct: Replace the query with large-data.js and submit the search.
+      - aiAssert: A large-data.js result is visible instead of the empty-state message.
