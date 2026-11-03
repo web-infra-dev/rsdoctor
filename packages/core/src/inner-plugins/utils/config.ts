@@ -207,6 +207,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     features = {},
     loaderInterceptorOptions = {},
     disableClientServer: userDisableClientServer = false,
+    autoOpenBrowser = true,
     sdkInstance,
     innerClientPath = '',
     innerClientOverrides,
@@ -285,6 +286,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         : [],
     },
     disableClientServer,
+    autoOpenBrowser,
     sdkInstance,
     output: {
       mode: finalMode,

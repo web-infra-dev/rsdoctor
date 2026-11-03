@@ -352,6 +352,7 @@ export class RsdoctorRspackPlugin<
         !(context.sdk instanceof RsdoctorPrimarySDK) || context.sdk.isMaster;
       if (
         !this.options.disableClientServer &&
+        this.options.autoOpenBrowser &&
         isPrimaryCompiler &&
         !context.hasOpenedClientAutomatically
       ) {
