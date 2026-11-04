@@ -68,10 +68,12 @@ minimumReleaseAgeExclude:
   - 'rstack'
   - 'rsbuild-plugin-dts'
   - 'heading-case'
+  # Renovate security update: minimatch@11.0.4
+  - minimatch@11.0.4
 
 overrides:
   '@remix-run/router': 1.23.4
-  minimatch: ^10.2.6
+  minimatch: ^11.0.4
   rc-dialog: 9.1.0
   rc-tree: 5.7.2
   tslib: 2.8.1
