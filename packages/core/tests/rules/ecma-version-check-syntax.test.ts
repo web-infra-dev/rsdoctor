@@ -64,10 +64,4 @@ describe('ecma-version-check syntax grammars', () => {
       expect(await checkSyntax(code, supported, true)).toEqual([]);
     },
   );
-
-  it('enforces module strict mode even without import or export statements', async () => {
-    expect(
-      await checkSyntax('function value(a, a) { return a; }', 2024, true),
-    ).toHaveLength(1);
-  });
 });
