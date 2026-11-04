@@ -23,13 +23,13 @@
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.59.4",
-    "@rspress/core": "2.1.0-beta.1",
+    "@rspress/core": "2.1.0",
     "@scripts/config": "workspace:*",
     "@scripts/test-helper": "workspace:*",
     "cross-env": "catalog:",
     "cspell-ban-words": "^0.0.4",
-    "heading-case": "^2.0.2",
-    "pkg-pr-new": "0.0.92",
+    "heading-case": "^2.0.3",
+    "pkg-pr-new": "0.0.93",
     "rstack": "catalog:"
   },
   "packageManager": "pnpm@12.6.0",
