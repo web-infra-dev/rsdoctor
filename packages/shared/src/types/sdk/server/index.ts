@@ -19,6 +19,15 @@ interface ClientUrlFunctionWithRouteDefined<T> {
   (route?: 'homepage'): T;
 }
 
+interface OpenClientPageFunction {
+  (
+    route: RsdoctorClientRoutes.BundleDiff,
+    baselineUrl: string,
+    currentUrl: string,
+  ): Promise<void>;
+  (route?: 'homepage', autoOpenBrowser?: boolean): Promise<void>;
+}
+
 export interface RsdoctorServerInstance {
   readonly app: connect.Server;
 
@@ -56,7 +65,7 @@ export interface RsdoctorServerInstance {
 
   getClientUrl: ClientUrlFunctionWithRouteDefined<string>;
 
-  openClientPage: ClientUrlFunctionWithRouteDefined<Promise<void>>;
+  openClientPage: OpenClientPageFunction;
 
   sendAPIDataToClient(api: API | APIExtends, msg: unknown): void | never;
 
