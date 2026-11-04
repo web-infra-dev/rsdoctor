@@ -8,4 +8,20 @@ description: 'Control whether Rsdoctor automatically opens the generated report 
 - **Optional:** `true`
 - **Default:** `true`
 
-Set to `false` to prevent Rsdoctor from opening the report in a browser after compilation. Report generation and the report server are unaffected. To close the report server after analysis, use [`disableClientServer`](./disableClientServer.mdx).
+Set to `false` to prevent Rsdoctor from opening the report in a browser after compilation. The report URL is still printed when `printLog.serverUrls` is enabled; brief mode still prints the report file path. Report generation and the report server are unaffected. To close the report server after analysis, use [`disableClientServer`](./disableClientServer.mdx).
+
+If you create the plugin programmatically and need the server while inspecting the report, dispose of its SDK after the last page access:
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+
+const plugin = new RsdoctorRspackPlugin({
+  disableClientServer: false,
+  autoOpenBrowser: false,
+});
+
+// After the build and report inspection are complete:
+await plugin.sdk.dispose();
+```
+
+When running Rsdoctor from a terminal, press `Ctrl+C` to stop the process and its server.

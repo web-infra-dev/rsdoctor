@@ -1,4 +1,5 @@
 import { getSDK } from '@/inner-plugins/utils/sdk';
+import { logger } from '@/logger';
 import { RsdoctorRspackPlugin } from '@/rspack-plugin';
 import { RsdoctorPrimarySDK, RsdoctorSDK } from '@/sdk';
 import { RsdoctorServer } from '@/sdk/server';
@@ -167,6 +168,43 @@ describe('RsdoctorRspackPlugin', () => {
     expect(openClientPage).toHaveBeenCalledTimes(2);
 
     await sdk.dispose();
+  });
+
+  it('prints the report URL without opening a browser', async () => {
+    const sdk = new RsdoctorSDK({
+      name: 'manual-open',
+      root: process.cwd(),
+      config: { noServer: true },
+    });
+    const plugin = new RsdoctorRspackPlugin({
+      sdkInstance: sdk,
+      autoOpenBrowser: false,
+    });
+    const compiler = rspack({ plugins: [plugin] });
+    const openClientPage = rs.spyOn(sdk.server, 'openClientPage');
+    rs.spyOn(sdk, 'writeStore').mockResolvedValue('');
+
+    await plugin.done(asRspackCompiler(compiler));
+
+    expect(openClientPage).toHaveBeenCalledWith('homepage', false);
+
+    await sdk.dispose();
+  });
+
+  it('reports the URL when browser opening is disabled', async () => {
+    const sdk = new RsdoctorSDK({
+      name: 'manual-open',
+      root: process.cwd(),
+      config: { noServer: true },
+    });
+    const server = new RsdoctorServer(sdk, 8681, { printServerUrl: true });
+    const printUrl = rs.spyOn(logger, 'info').mockImplementation(() => {});
+
+    await server.openClientPage('homepage', false);
+
+    expect(printUrl).toHaveBeenCalledWith(
+      expect.stringContaining(server.origin),
+    );
   });
 
   it('creates isolated compiler contexts when one plugin instance is reused', async () => {

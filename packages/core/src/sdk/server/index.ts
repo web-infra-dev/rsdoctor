@@ -454,7 +454,10 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     currentUrl: string,
   ): Promise<void>;
 
-  public async openClientPage(route?: 'homepage'): Promise<void>;
+  public async openClientPage(
+    route?: 'homepage',
+    autoOpenBrowser?: boolean,
+  ): Promise<void>;
 
   public async openClientPage(...args: unknown[]) {
     const relativeUrl = this.getClientUrl(
@@ -464,7 +467,9 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     const needEncodeURI = args[0] === Client.RsdoctorClientRoutes.BundleDiff;
     const url = `http://${this.host}:${this.port}${relativeUrl}`;
     const localhostUrl = `http://localhost:${this.port}${relativeUrl}`;
-    await openBrowser(localhostUrl, !needEncodeURI);
+    if (args[1] !== false) {
+      await openBrowser(localhostUrl, !needEncodeURI);
+    }
     if (this._printServerUrl) {
       logger.info(`Analyzer running on: ${chalk.cyan(url)}`);
     }
