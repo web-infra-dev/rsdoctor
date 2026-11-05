@@ -128,9 +128,10 @@ describe('asset compression input', () => {
       );
       expect(asset.gzipSize).toBe(gzipSync(content, { level: 9 }).length);
       expect(asset.size).toBe(Buffer.byteLength(content));
-      // Report content remains JSON-compatible text; only compression uses raw bytes.
+      // Report content keeps text only; binary content is dropped and only
+      // compression uses raw bytes.
       expect(asset.toData(SDK.ToDataType.Normal).content).toBe(
-        content.toString(),
+        Buffer.isBuffer(content) ? '' : content,
       );
       if (Buffer.isBuffer(content)) {
         expect(asset.brotliSize).not.toBe(
