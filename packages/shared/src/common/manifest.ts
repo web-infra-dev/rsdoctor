@@ -1,7 +1,7 @@
 import { Manifest } from '../types';
+import { JSONParser } from '@streamparser/json';
 import { Buffer } from 'buffer';
 import { pipeline, Readable, Writable } from 'stream';
-import { StringDecoder } from 'string_decoder';
 import { createInflate } from 'zlib';
 import { isRemoteUrl } from './url';
 
@@ -111,8 +111,11 @@ export async function fetchShardingData(
 ) {
   if (shardingFiles.length === 0) return [];
 
-  const decoder = new StringDecoder('utf8');
-  const jsonParts: string[] = [];
+  const parser = new JSONParser({ paths: ['$'] });
+  let result: unknown;
+  parser.onValue = ({ value }) => {
+    result = value;
+  };
 
   await new Promise<void>((resolve, reject) => {
     pipeline(
@@ -120,8 +123,12 @@ export async function fetchShardingData(
       createInflate(),
       new Writable({
         write(chunk, _encoding, callback) {
-          jsonParts.push(decoder.write(Buffer.from(chunk)));
-          callback();
+          try {
+            parser.write(chunk);
+            callback();
+          } catch (error) {
+            callback(error as Error);
+          }
         },
       }),
       (error) => {
@@ -131,10 +138,8 @@ export async function fetchShardingData(
     );
   });
 
-  const finalPart = decoder.end();
-  if (finalPart) jsonParts.push(finalPart);
-
-  return JSON.parse(jsonParts.join(''));
+  if (!parser.isEnded) parser.end();
+  return result;
 }
 
 export async function fetchShardingFiles(
