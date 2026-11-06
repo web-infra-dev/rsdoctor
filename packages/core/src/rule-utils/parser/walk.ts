@@ -1,4 +1,4 @@
-import { walk } from 'estree-walker';
+import { walk } from '@swc-next/walker';
 import type { Node } from './types';
 
 type Visitors<State> = {
@@ -15,16 +15,19 @@ export function recursive<State>(
   state: State,
   visitors: Visitors<State>,
 ): void {
-  // estree-walker uses a newer ESTree declaration with required import attributes.
-  walk(node as Parameters<typeof walk>[0], {
-    enter(child) {
-      const visitor = visitors[child.type];
-      if (visitor) {
-        this.skip();
-        visitor(child as never, state, (next, nextState) => {
-          recursive(next, nextState, visitors);
-        });
-      }
+  walk<Node.Node, State, Node.Node>(
+    node,
+    {
+      enter(child, context) {
+        const visitor = visitors[child.type];
+        if (visitor) {
+          context.skip();
+          visitor(child as never, context.state, (next, nextState) => {
+            recursive(next, nextState, visitors);
+          });
+        }
+      },
     },
-  });
+    state,
+  );
 }
