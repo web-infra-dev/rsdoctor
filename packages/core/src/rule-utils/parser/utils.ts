@@ -1,5 +1,4 @@
-import { parse, ecmaVersion } from 'acorn';
-import { Node, ECMAVersion } from './types';
+import type { Node } from './types';
 import { asserts } from './asserts';
 
 // TODO: so much Ast node type，not complete yet.
@@ -191,40 +190,4 @@ export function getIdentifierInExport(name: string, node: Node.SyntaxNode) {
       return node.exported;
     }
   }
-}
-
-/** Determine that it can be resolved using the specified ECMA version */
-export function canParse(code: string, ecmaVersion: ecmaVersion) {
-  try {
-    parse(code, {
-      ecmaVersion,
-      sourceType:
-        typeof ecmaVersion === 'number' && ecmaVersion <= 5
-          ? 'script'
-          : 'module',
-    });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/** Determine whether it is all ES5 version code. */
-export function isES5(code: string) {
-  return canParse(code, 5);
-}
-
-/** Determine whether it is all ES6 version code. */
-export function isES6(code: string) {
-  return canParse(code, 6);
-}
-
-/** Detect ECMA version. */
-export function detectECMAVersion(code: string) {
-  if (isES6(code)) {
-    if (isES5(code)) return ECMAVersion.ES5;
-
-    return ECMAVersion.ES6;
-  }
-  return ECMAVersion.ES7P;
 }

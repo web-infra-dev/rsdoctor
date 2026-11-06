@@ -135,7 +135,7 @@ define.app(({ env }) => {
         vender: {
           chunks: 'all',
           name: 'vender',
-          test: /node_modules\/(acorn|lodash|i18next|remark-*)/,
+          test: /node_modules\/(lodash|i18next|remark-*)/,
           maxSize: 1000000,
           minSize: 200000,
         },

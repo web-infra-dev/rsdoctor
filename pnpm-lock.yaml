@@ -168,8 +168,8 @@ catalogs:
       specifier: ^2.3.1
       version: 2.3.1
     '@rsbuild/plugin-check-syntax':
-      specifier: ^2.0.1
-      version: 2.0.1
+      specifier: ^2.1.0
+      version: 2.1.0
     '@rsbuild/plugin-less':
       specifier: ^2.0.1
       version: 2.0.1
@@ -642,7 +642,7 @@ importers:
         version: 4.7.0(monaco-editor@0.49.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@rsbuild/plugin-check-syntax':
         specifier: 'catalog:'
-        version: 2.0.1(@rsbuild/core@2.2.8)
+        version: 2.1.0(@rsbuild/core@2.2.8)
       '@rsbuild/plugin-node-polyfill':
         specifier: 'catalog:'
         version: 1.4.6(@rsbuild/core@2.2.8)
@@ -763,6 +763,9 @@ importers:
       '@rsdoctor/shared':
         specifier: workspace:*
         version: link:../shared
+      '@swc-next/parser':
+        specifier: 0.3.0
+        version: 0.3.0
       caniuse-lite:
         specifier: ^1.0.30001820
         version: 1.0.30001820
@@ -778,7 +781,7 @@ importers:
         version: 7.26.2
       '@rsbuild/plugin-check-syntax':
         specifier: 'catalog:'
-        version: 2.0.1(@rsbuild/core@2.2.8)
+        version: 2.1.0(@rsbuild/core@2.2.8)
       '@rspack/core':
         specifier: 'catalog:'
         version: 2.3.1(@swc/helpers@0.5.23)
@@ -812,15 +815,6 @@ importers:
       '@types/ws':
         specifier: ^8.18.2
         version: 8.18.2
-      acorn:
-        specifier: ^8.10.0
-        version: 8.18.0
-      acorn-import-attributes:
-        specifier: ^1.9.5
-        version: 1.9.5(acorn@8.18.0)
-      acorn-walk:
-        specifier: 8.3.5
-        version: 8.3.5
       babel-loader:
         specifier: 10.1.1
         version: 10.1.1(@babel/core@7.29.0(supports-color@8.1.1))(@rspack/core@2.3.1(@swc/helpers@0.5.23))(webpack@5.105.4(esbuild@0.25.5))
@@ -836,6 +830,9 @@ importers:
       envinfo:
         specifier: 7.21.0
         version: 7.21.0
+      estree-walker:
+        specifier: 3.0.3
+        version: 3.0.3
       filesize:
         specifier: 'catalog:'
         version: 11.0.29
@@ -2873,8 +2870,8 @@ packages:
       '@rsbuild/core':
         optional: true
 
-  '@rsbuild/plugin-check-syntax@2.0.1':
-    resolution: {integrity: sha512-z+NMAUXEbM4fhoQlKJNgTjsf+O1tknBihsXj4JnSFlwpfoY5uDjKC6D+StATATvUilSKXFrk4WDhcIyoxkj1gg==}
+  '@rsbuild/plugin-check-syntax@2.1.0':
+    resolution: {integrity: sha512-RSvLX8sxBw/FMZMG4mq1RRUNMr7IvAmklPmhxM6Ht4/pxyvSLOnAByxUoo/ZBNxO4R6EC65ZoyASJm5tXpxIOw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rsbuild/core': ^1.0.0 || ^2.0.0
@@ -3712,12 +3709,25 @@ packages:
     resolution: {integrity: sha512-LnhVjMWyMQV9ZmeEy26maJk+8HTIbd59cH4F2MJ439k9DqejRisfFNGAPvRYlKETuh9LrImlS8aKsBgKjMA8WA==}
     engines: {node: '>=14'}
 
+  '@swc-next/decoder@0.3.0':
+    resolution: {integrity: sha512-/vOZdBoTARfUf8yALKGnFBpWSkRK+3KuFGFaEnWLLWogbjfh3EEJ8dmPHJS9GXfnxolKnqaFHkEOQ33X4C9E1w==}
+
   '@swc-next/decoder@0.4.1':
     resolution: {integrity: sha512-HkTOvxm923cjLMUc2LsAMoYU9LjJo2r/O3bXMhP1Y4t3Df7ytFgjmYjNnyQBq7biGtmSLI1xnvYcQd+1XypaEg==}
+
+  '@swc-next/parser-binding-darwin-arm64@0.3.0':
+    resolution: {integrity: sha512-A397Xdo3vLlScQqr/B1LCTITzQTe/nqad6NcTkt0jrD+Ses/3VKoQERpRbgcC5HPvKMMLli1Nyvd3mg50Y60BA==}
+    cpu: [arm64]
+    os: [darwin]
 
   '@swc-next/parser-binding-darwin-arm64@0.4.1':
     resolution: {integrity: sha512-cz8M7qF2oWPNMw+ZLWbeL+e6oQW9rwAWEVJXSNR5ddPa475/IhM2S7DrapDl360uFqae0uSvssyYUqa2ZNZ3kQ==}
     cpu: [arm64]
+    os: [darwin]
+
+  '@swc-next/parser-binding-darwin-x64@0.3.0':
+    resolution: {integrity: sha512-AcyVlPkNUXaj1j29pc6rvcWMvtUwqRBaXrJ/ZHEgleyy+8bqDW46JUnYU13q6D5v5tXV/khJn+eqb1w0YdxlKg==}
+    cpu: [x64]
     os: [darwin]
 
   '@swc-next/parser-binding-darwin-x64@0.4.1':
@@ -3725,11 +3735,23 @@ packages:
     cpu: [x64]
     os: [darwin]
 
+  '@swc-next/parser-binding-linux-arm64-gnu@0.3.0':
+    resolution: {integrity: sha512-S+jBZJCVQDNk5dYGGp5oTwXYal32eyCa+vc+No5GyCXjJC+3Vi1SGZEC5O8DFsDgLDr7cxZ5sp+M7KbAA/VHYQ==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [glibc]
+
   '@swc-next/parser-binding-linux-arm64-gnu@0.4.1':
     resolution: {integrity: sha512-O5SZI82exauaawobbesGZgwchs0mBVxhigWKQyrESl7r2I+BiUpDc/XLW8YGICPUicaDQ4vt3gwIfTBaAqGDew==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
+
+  '@swc-next/parser-binding-linux-arm64-musl@0.3.0':
+    resolution: {integrity: sha512-DraHfo66/BHZNycTwzeD34gEQlcqWwAMv9lzyaJk+SZL2ck7mUDB+JnQ9lHKy4PXuycYI7JMK8sLqsBuyXwTjQ==}
+    cpu: [arm64]
+    os: [linux]
+    libc: [musl]
 
   '@swc-next/parser-binding-linux-arm64-musl@0.4.1':
     resolution: {integrity: sha512-7YrKRZxJIvHJgLXSncgsC2HNrlsHuC+NfYvno9SRq5IS6gFAbcfBqtnNf7ZJsi382OJNMFhjlZV6TZBxDhXv9Q==}
@@ -3737,9 +3759,21 @@ packages:
     os: [linux]
     libc: [musl]
 
+  '@swc-next/parser-binding-linux-ppc64-gnu@0.3.0':
+    resolution: {integrity: sha512-P+jpP2rYAe68ETK8GieWpRDEvwBvbwUmFugtDevVlXHlrYYRZ8tkCczQ08C8mzhyxZ31zNiMopY1X5AY/laiFQ==}
+    cpu: [ppc64]
+    os: [linux]
+    libc: [glibc]
+
   '@swc-next/parser-binding-linux-ppc64-gnu@0.4.1':
     resolution: {integrity: sha512-6fk0zI8NegOeQDStvuKqHEdSwaTa5guq0eU8xbrub2sqTA84T8C5GnCkeybslHzZxedOcWz0NJ5wZ6/I8Ge5mQ==}
     cpu: [ppc64]
+    os: [linux]
+    libc: [glibc]
+
+  '@swc-next/parser-binding-linux-riscv64-gnu@0.3.0':
+    resolution: {integrity: sha512-R+OmeFXcJ+RO3t1ef2yVcax4tDAl9Mo676iuT0ANpWu0IWax34EW4c9DCs/AO5mGdnCMJWdzxhyL8tapy8aBmg==}
+    cpu: [riscv64]
     os: [linux]
     libc: [glibc]
 
@@ -3749,15 +3783,33 @@ packages:
     os: [linux]
     libc: [glibc]
 
+  '@swc-next/parser-binding-linux-riscv64-musl@0.3.0':
+    resolution: {integrity: sha512-8tv2eU1djxLzIrjckIElLimn5O7tUpxHto9Of+Dr1Lvg6ON3qzcrLuAv6eOaqOkSPF1nvX4k5L/TcGNaHRKj9A==}
+    cpu: [riscv64]
+    os: [linux]
+    libc: [musl]
+
   '@swc-next/parser-binding-linux-riscv64-musl@0.4.1':
     resolution: {integrity: sha512-OvFQb+17quQoPLmOD0Mv/qdGnd6+fZL43Krnm6Q2TxHol7g7tLskL4sTtt8BGYybBJeMEcY3DkH2fZwGaRvrMg==}
     cpu: [riscv64]
     os: [linux]
     libc: [musl]
 
+  '@swc-next/parser-binding-linux-s390x-gnu@0.3.0':
+    resolution: {integrity: sha512-Pg5OuDna5/uyW2jQ/a26coMNT8ELDUdWYXgOCmk10Lg5PMww79CgrUyysdtz9qcCjTZoQD0Q/d6UXSHtZfC2nA==}
+    cpu: [s390x]
+    os: [linux]
+    libc: [glibc]
+
   '@swc-next/parser-binding-linux-s390x-gnu@0.4.1':
     resolution: {integrity: sha512-KwjEquKRyKRJZT83oZMpjnVi1OUzPV9pUcWFUci7OQDGE6Q4DCljGcZ14R4o3Xgth4T7QvqG7GGAScBuevFIwQ==}
     cpu: [s390x]
+    os: [linux]
+    libc: [glibc]
+
+  '@swc-next/parser-binding-linux-x64-gnu@0.3.0':
+    resolution: {integrity: sha512-EFe+LC/esvJ3qxNBiJN26wQETBSOy1zCQuaxl4ef6aeK15Uqg+u7mtpzUf27jvC8BsWWRo2ABmwh9C+9FaHJAA==}
+    cpu: [x64]
     os: [linux]
     libc: [glibc]
 
@@ -3767,15 +3819,31 @@ packages:
     os: [linux]
     libc: [glibc]
 
+  '@swc-next/parser-binding-linux-x64-musl@0.3.0':
+    resolution: {integrity: sha512-sGncpKBiTEmtZF0ZMpUaVWZW2Zebc1uEBL/qcDPc7MZlrI/ahjwq10WTShE1lu4VDAHmvA1H0lOY4ayJZCdnGQ==}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
+
   '@swc-next/parser-binding-linux-x64-musl@0.4.1':
     resolution: {integrity: sha512-QKgpJeuMprp4dodkY4al3QfGKnFuGechwJPi0XwWpcTZBOefK0i0bZof5suSIO1pLQ1+jOc0rKWv51gbC23K/g==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
+  '@swc-next/parser-binding-win32-arm64-msvc@0.3.0':
+    resolution: {integrity: sha512-MFp5gJvHcApJd33V7e2qdcvgATbAZIrUi8obD8MRl/aGNLBkJfmpZHIFLiDTdzAfXmBpFSYNOn2vemwxyTKNig==}
+    cpu: [arm64]
+    os: [win32]
+
   '@swc-next/parser-binding-win32-arm64-msvc@0.4.1':
     resolution: {integrity: sha512-y/DrHfN4k7+/z2DxBnewbqIgFUapXSxQ9gphXiLen8QiQnZLpUUAFCvXRy1XT1HZEgEKwQBo0FTsLH4qMVghbQ==}
     cpu: [arm64]
+    os: [win32]
+
+  '@swc-next/parser-binding-win32-ia32-msvc@0.3.0':
+    resolution: {integrity: sha512-7VrmSFiEBBtYTtZ2clVprJ/jR0tbWSmHUsE1AzYwBoHpB+AizcmMwolt15yvKIpmO5VnApfk7dPQ+9ON6ApcQQ==}
+    cpu: [ia32]
     os: [win32]
 
   '@swc-next/parser-binding-win32-ia32-msvc@0.4.1':
@@ -3783,10 +3851,23 @@ packages:
     cpu: [ia32]
     os: [win32]
 
+  '@swc-next/parser-binding-win32-x64-msvc@0.3.0':
+    resolution: {integrity: sha512-3qTFeftUtok2JeOgfpD78d8VYC+RKBRKulfxsTOZCWkpgQ5GKxUg/oS8RBUVo9sYTlQBVU4X7fzkZ+VLYThhmw==}
+    cpu: [x64]
+    os: [win32]
+
   '@swc-next/parser-binding-win32-x64-msvc@0.4.1':
     resolution: {integrity: sha512-dOlRVHipLRVHAamFgpKOPttvkSNljI2zhnyPUnZX9nFi+dDsvWO/bx40m0Z/4kIFW3LqLMMcDXP+oq4LciR4Zw==}
     cpu: [x64]
     os: [win32]
+
+  '@swc-next/parser@0.3.0':
+    resolution: {integrity: sha512-fBaw4lniDiCcQaSuomn4N+L5Gj3wBLniGFf02YqP+gxeT+nyptKF05L3E/FqhQMl0zIJO6zTBXHo3S2Dbm0+Fw==}
+    peerDependencies:
+      '@swc-next/parser-binding-wasm': 0.3.0
+    peerDependenciesMeta:
+      '@swc-next/parser-binding-wasm':
+        optional: true
 
   '@swc-next/parser@0.4.1':
     resolution: {integrity: sha512-wTWUe4Tsve70NmsdiLdpae+HP83t9TN3NI03TKcTU0+u5C2U9t+Od/6p9OW3UFDC6jqDirDObK2bfwiXNLtb7Q==}
@@ -3795,6 +3876,9 @@ packages:
     peerDependenciesMeta:
       '@swc-next/parser-binding-wasm':
         optional: true
+
+  '@swc-next/types@0.3.0':
+    resolution: {integrity: sha512-mOnFOQMeu3kew/Xk/ShWKFsHNlJSxdeJfy07xFvCkFmqvumM+Sl2AIIkUDEegFTa3zrffiFwzo9JHNwM/JEQAA==}
 
   '@swc-next/types@0.4.1':
     resolution: {integrity: sha512-cK5oQcZVfLXaTqmty67dAyns7O0rgroray4WR2JhoyoDy9kHCD+cDpfTfStp5sO8WWvFHVqeB46mWwzhXwQljQ==}
@@ -4164,8 +4248,8 @@ packages:
     resolution: {integrity: sha512-HEHNfbars9v4pgpW6SO1KSPkfoS0xVOM/9UzkJltjlsHZmJasxg8aXkuZa7SMf8vKGIBhpUsPluQSqhJFCqebw==}
     engines: {node: '>=0.4.0'}
 
-  acorn@8.18.0:
-    resolution: {integrity: sha512-lGq+9yr1/GuAWaVYIHRjvvySG5/4VfKIvC8EWxStPdcDh/Ka7FG3twP6v4d5BkravUilhIAsG4Qj83t02LWUPQ==}
+  acorn@8.19.0:
+    resolution: {integrity: sha512-oJlA3XiRm7Cyk6qFD2Jn8ak9B7jSy0qy00ADO3+8dpT0LSjFihQYv4C02LFCSYJV3Q37xYwwRy5m+IpIiUzqWw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -10137,7 +10221,7 @@ snapshots:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.4
       '@types/mdx': 2.0.13
-      acorn: 8.18.0
+      acorn: 8.19.0
       collapse-white-space: 2.1.0
       devlop: 1.1.0
       estree-util-is-identifier-name: 3.0.0
@@ -10146,7 +10230,7 @@ snapshots:
       hast-util-to-jsx-runtime: 2.3.7(supports-color@8.1.1)
       markdown-extensions: 2.0.0
       recma-build-jsx: 1.0.0
-      recma-jsx: 1.0.0(acorn@8.18.0)
+      recma-jsx: 1.0.0(acorn@8.19.0)
       recma-stringify: 1.0.0
       rehype-recma: 1.0.0(supports-color@8.1.1)
       remark-mdx: 3.1.1(supports-color@8.1.1)
@@ -10507,7 +10591,7 @@ snapshots:
 
   '@rsbuild/plugin-check-syntax@1.6.1(@rsbuild/core@2.2.4)':
     dependencies:
-      acorn: 8.18.0
+      acorn: 8.19.0
       browserslist-to-es-version: 1.4.2
       htmlparser2: 10.0.0
       picocolors: 1.1.1
@@ -10515,12 +10599,12 @@ snapshots:
     optionalDependencies:
       '@rsbuild/core': 2.2.4
 
-  '@rsbuild/plugin-check-syntax@2.0.1(@rsbuild/core@2.2.8)':
+  '@rsbuild/plugin-check-syntax@2.1.0(@rsbuild/core@2.2.8)':
     dependencies:
-      acorn: 8.18.0
+      acorn: 8.19.0
       browserslist-to-es-version: 1.4.2
       htmlparser2: 12.0.0
-      source-map: 0.7.6
+      source-map: 0.8.0
     optionalDependencies:
       '@rsbuild/core': 2.2.8
 
@@ -10722,8 +10806,8 @@ snapshots:
       '@babel/code-frame': 7.26.2
       '@rsdoctor/types': 1.6.1(@rspack/core@2.3.1(@swc/helpers@0.5.23))(webpack@5.105.4(esbuild@0.25.5))
       '@types/estree': 1.0.5
-      acorn: 8.18.0
-      acorn-import-attributes: 1.9.5(acorn@8.18.0)
+      acorn: 8.19.0
+      acorn-import-attributes: 1.9.5(acorn@8.19.0)
       acorn-walk: 8.3.5
       deep-eql: 4.1.4
       envinfo: 7.21.0
@@ -11454,48 +11538,110 @@ snapshots:
       - supports-color
       - typescript
 
+  '@swc-next/decoder@0.3.0':
+    dependencies:
+      '@swc-next/types': 0.3.0
+
   '@swc-next/decoder@0.4.1':
     dependencies:
       '@swc-next/types': 0.4.1
 
+  '@swc-next/parser-binding-darwin-arm64@0.3.0':
+    optional: true
+
   '@swc-next/parser-binding-darwin-arm64@0.4.1':
+    optional: true
+
+  '@swc-next/parser-binding-darwin-x64@0.3.0':
     optional: true
 
   '@swc-next/parser-binding-darwin-x64@0.4.1':
     optional: true
 
+  '@swc-next/parser-binding-linux-arm64-gnu@0.3.0':
+    optional: true
+
   '@swc-next/parser-binding-linux-arm64-gnu@0.4.1':
+    optional: true
+
+  '@swc-next/parser-binding-linux-arm64-musl@0.3.0':
     optional: true
 
   '@swc-next/parser-binding-linux-arm64-musl@0.4.1':
     optional: true
 
+  '@swc-next/parser-binding-linux-ppc64-gnu@0.3.0':
+    optional: true
+
   '@swc-next/parser-binding-linux-ppc64-gnu@0.4.1':
+    optional: true
+
+  '@swc-next/parser-binding-linux-riscv64-gnu@0.3.0':
     optional: true
 
   '@swc-next/parser-binding-linux-riscv64-gnu@0.4.1':
     optional: true
 
+  '@swc-next/parser-binding-linux-riscv64-musl@0.3.0':
+    optional: true
+
   '@swc-next/parser-binding-linux-riscv64-musl@0.4.1':
+    optional: true
+
+  '@swc-next/parser-binding-linux-s390x-gnu@0.3.0':
     optional: true
 
   '@swc-next/parser-binding-linux-s390x-gnu@0.4.1':
     optional: true
 
+  '@swc-next/parser-binding-linux-x64-gnu@0.3.0':
+    optional: true
+
   '@swc-next/parser-binding-linux-x64-gnu@0.4.1':
+    optional: true
+
+  '@swc-next/parser-binding-linux-x64-musl@0.3.0':
     optional: true
 
   '@swc-next/parser-binding-linux-x64-musl@0.4.1':
     optional: true
 
+  '@swc-next/parser-binding-win32-arm64-msvc@0.3.0':
+    optional: true
+
   '@swc-next/parser-binding-win32-arm64-msvc@0.4.1':
+    optional: true
+
+  '@swc-next/parser-binding-win32-ia32-msvc@0.3.0':
     optional: true
 
   '@swc-next/parser-binding-win32-ia32-msvc@0.4.1':
     optional: true
 
+  '@swc-next/parser-binding-win32-x64-msvc@0.3.0':
+    optional: true
+
   '@swc-next/parser-binding-win32-x64-msvc@0.4.1':
     optional: true
+
+  '@swc-next/parser@0.3.0':
+    dependencies:
+      '@swc-next/decoder': 0.3.0
+      '@swc-next/types': 0.3.0
+    optionalDependencies:
+      '@swc-next/parser-binding-darwin-arm64': 0.3.0
+      '@swc-next/parser-binding-darwin-x64': 0.3.0
+      '@swc-next/parser-binding-linux-arm64-gnu': 0.3.0
+      '@swc-next/parser-binding-linux-arm64-musl': 0.3.0
+      '@swc-next/parser-binding-linux-ppc64-gnu': 0.3.0
+      '@swc-next/parser-binding-linux-riscv64-gnu': 0.3.0
+      '@swc-next/parser-binding-linux-riscv64-musl': 0.3.0
+      '@swc-next/parser-binding-linux-s390x-gnu': 0.3.0
+      '@swc-next/parser-binding-linux-x64-gnu': 0.3.0
+      '@swc-next/parser-binding-linux-x64-musl': 0.3.0
+      '@swc-next/parser-binding-win32-arm64-msvc': 0.3.0
+      '@swc-next/parser-binding-win32-ia32-msvc': 0.3.0
+      '@swc-next/parser-binding-win32-x64-msvc': 0.3.0
 
   '@swc-next/parser@0.4.1':
     dependencies:
@@ -11515,6 +11661,8 @@ snapshots:
       '@swc-next/parser-binding-win32-arm64-msvc': 0.4.1
       '@swc-next/parser-binding-win32-ia32-msvc': 0.4.1
       '@swc-next/parser-binding-win32-x64-msvc': 0.4.1
+
+  '@swc-next/types@0.3.0': {}
 
   '@swc-next/types@0.4.1': {}
 
@@ -11845,23 +11993,23 @@ snapshots:
       mime-types: 2.1.35
       negotiator: 0.6.3
 
-  acorn-import-attributes@1.9.5(acorn@8.18.0):
+  acorn-import-attributes@1.9.5(acorn@8.19.0):
     dependencies:
-      acorn: 8.18.0
+      acorn: 8.19.0
 
-  acorn-import-phases@1.0.4(acorn@8.18.0):
+  acorn-import-phases@1.0.4(acorn@8.19.0):
     dependencies:
-      acorn: 8.18.0
+      acorn: 8.19.0
 
-  acorn-jsx@5.3.2(acorn@8.18.0):
+  acorn-jsx@5.3.2(acorn@8.19.0):
     dependencies:
-      acorn: 8.18.0
+      acorn: 8.19.0
 
   acorn-walk@8.3.5:
     dependencies:
-      acorn: 8.18.0
+      acorn: 8.19.0
 
-  acorn@8.18.0: {}
+  acorn@8.19.0: {}
 
   agent-base@7.1.4: {}
 
@@ -12982,7 +13130,7 @@ snapshots:
   esast-util-from-js@2.0.1:
     dependencies:
       '@types/estree-jsx': 1.0.5
-      acorn: 8.18.0
+      acorn: 8.19.0
       esast-util-from-estree: 2.0.0
       vfile-message: 4.0.2
 
@@ -14420,8 +14568,8 @@ snapshots:
 
   micromark-extension-mdxjs@3.0.0:
     dependencies:
-      acorn: 8.18.0
-      acorn-jsx: 5.3.2(acorn@8.18.0)
+      acorn: 8.19.0
+      acorn-jsx: 5.3.2(acorn@8.19.0)
       micromark-extension-mdx-expression: 3.0.1
       micromark-extension-mdx-jsx: 3.0.2
       micromark-extension-mdx-md: 2.0.0
@@ -15706,9 +15854,9 @@ snapshots:
       estree-util-build-jsx: 3.0.1
       vfile: 6.0.3
 
-  recma-jsx@1.0.0(acorn@8.18.0):
+  recma-jsx@1.0.0(acorn@8.19.0):
     dependencies:
-      acorn-jsx: 5.3.2(acorn@8.18.0)
+      acorn-jsx: 5.3.2(acorn@8.19.0)
       estree-util-to-js: 2.0.0
       recma-parse: 1.0.0
       recma-stringify: 1.0.0
@@ -16597,7 +16745,7 @@ snapshots:
   terser@5.48.0:
     dependencies:
       '@jridgewell/source-map': 0.3.6
-      acorn: 8.18.0
+      acorn: 8.19.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
@@ -16954,8 +17102,8 @@ snapshots:
       '@webassemblyjs/ast': 1.14.1
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
-      acorn: 8.18.0
-      acorn-import-phases: 1.0.4(acorn@8.18.0)
+      acorn: 8.19.0
+      acorn-import-phases: 1.0.4(acorn@8.19.0)
       browserslist: 4.28.2
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.20.0

@@ -2,17 +2,7 @@ import type * as Node from 'estree';
 
 export type { Node };
 
-export enum ECMAVersion {
-  ES5 = 'ES5',
-  ES6 = 'ES6',
-  ES7P = 'ES7+',
-}
-
-/**
- * estree supplement type
- * Mainly to match the node type of acorn
- * The main reason for not using the type of acorn directly is that the node type described by acorn itself is too simple
- */
+/** Source offsets supplied by the SWC ESTree parser. */
 declare module 'estree' {
   interface BaseNode {
     start: number;

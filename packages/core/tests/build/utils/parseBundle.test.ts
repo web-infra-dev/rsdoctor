@@ -100,6 +100,28 @@ describe('parseBundle', function () {
     }
   });
 
+  it('extracts module content and runtime after UTF-16 characters', () => {
+    const directory = fs.mkdtempSync(
+      path.join(os.tmpdir(), 'rsdoctor-bundle-'),
+    );
+    const bundleFile = path.join(directory, 'bundle.js');
+    const moduleContent = 'function(){ console.log("😀"); }';
+    const source = `/* 😀 中文 */(self.rspackChunk = self.rspackChunk || []).push([[0], {0: ${moduleContent}}]);`;
+
+    try {
+      fs.writeFileSync(bundleFile, source);
+      const bundle = parseBundle(bundleFile, [
+        { renderId: '0', identifier: 'entry' },
+      ]);
+
+      expect(bundle.modules?.entry.content).toBe(moduleContent);
+      expect(bundle.modules?.entry.size).toBe(Buffer.byteLength(moduleContent));
+      expect(bundle.runtimeSrc).toBe(source.replace(moduleContent, ''));
+    } finally {
+      fs.rmSync(directory, { recursive: true, force: true });
+    }
+  });
+
   it('should parse bundle files with .bundle extension', function () {
     const bundleFile = `${BUNDLES_DIR}/validBundleWithArrowFunction.bundle`;
     const modules = [
