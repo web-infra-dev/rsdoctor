@@ -62,7 +62,6 @@
     "@types/node": "catalog:",
     "@types/semver": "^7.8.0",
     "@types/ws": "^8.18.2",
-    "acorn": "^8.10.0",
     "babel-loader": "10.1.1",
     "browserslist-load-config": "^1.0.4",
     "connect-next": "catalog:",

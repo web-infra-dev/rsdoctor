@@ -47,6 +47,12 @@ describe('ecma-version-check syntax grammars', () => {
     expect(await checkSyntax('export var value = 1;', 5, true)).toHaveLength(1);
   });
 
+  it('enforces module strict mode even without import or export', async () => {
+    const code = 'function value(a, a) { return a; }';
+    expect(await checkSyntax(code, 2024, true)).toHaveLength(1);
+    expect(await checkSyntax(code, 2024)).toEqual([]);
+  });
+
   it.each([
     'const value = globalThis.input?.value;',
     'export const value = globalThis.input?.value;',

@@ -38,6 +38,7 @@ async function runRule(
     { path: 'async.bundle', content: 'const asyncChunk = 1;' },
   ],
   context = root,
+  module = false,
 ) {
   const reports: unknown[] = [];
 
@@ -49,7 +50,7 @@ async function runRule(
       {
         config: {
           context,
-          output: { path: outputPath },
+          output: { path: outputPath, module },
         },
       },
     ],
@@ -152,8 +153,16 @@ describe('ecma-version-check rule', () => {
 
     expect(reports).toEqual([]);
     expect(mocks.check.mock.calls).toEqual([
-      [path.join(outputPath, 'main.js'), 'const main = 1;'],
-      [path.join(outputPath, 'async.bundle'), 'const asyncChunk = 1;'],
+      [
+        path.join(outputPath, 'main.js'),
+        'const main = 1;',
+        { sourceType: 'script' },
+      ],
+      [
+        path.join(outputPath, 'async.bundle'),
+        'const asyncChunk = 1;',
+        { sourceType: 'script' },
+      ],
     ]);
   });
 
@@ -178,6 +187,28 @@ describe('ecma-version-check rule', () => {
     expect(mocks.check).toHaveBeenCalledWith(
       path.join(outputPath, 'async.bundle'),
       'const asyncChunk = 1;',
+      { sourceType: 'script' },
+    );
+  });
+
+  it('passes the module mode to every asset in a module build', async () => {
+    await runRule({ ecmaVersion: 2020 }, undefined, root, true);
+
+    expect(mocks.check).toHaveBeenCalledWith(
+      path.join(outputPath, 'main.js'),
+      'const main = 1;',
+      { sourceType: 'module' },
+    );
+    expect(mocks.check).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps ES5 module output in script mode', async () => {
+    await runRule({ ecmaVersion: 5 }, undefined, root, true);
+
+    expect(mocks.check).toHaveBeenCalledWith(
+      path.join(outputPath, 'main.js'),
+      'const main = 1;',
+      { sourceType: 'script' },
     );
   });
 
