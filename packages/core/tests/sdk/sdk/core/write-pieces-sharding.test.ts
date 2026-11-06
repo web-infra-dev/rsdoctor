@@ -86,8 +86,8 @@ describe('writePieces shard file integrity', () => {
             loader: '/test/loader.js',
             startAt: 1000,
             endAt: 2000,
-            input: 'a',
-            result: 'b',
+            input: 'console.log("Hello\\nWorld");',
+            result: 'first line\nsecond line',
           },
         ],
         // BigInt makes JSON.stringify throw TypeError
@@ -122,6 +122,8 @@ describe('writePieces shard file integrity', () => {
     expect(Array.isArray(parsed)).toBe(true);
     expect(parsed.length).toBe(1);
     expect(parsed[0].resource.path).toBe('/test/a.ts');
+    expect(parsed[0].loaders[0].input).toBe(loaderData[0].loaders[0].input);
+    expect(parsed[0].loaders[0].result).toBe(loaderData[0].loaders[0].result);
   });
 
   it('should write multiple JSON fragments as one deflate stream', async () => {
