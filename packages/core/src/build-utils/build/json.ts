@@ -2,7 +2,6 @@ import { JsonStreamStringify } from 'json-stream-stringify';
 import { SDK } from '@rsdoctor/shared/types';
 import { dirname, join } from 'path';
 import { Package } from '@rsdoctor/shared/common-browser';
-import { Transform } from 'stream';
 
 const maxFileSize = 1024 * 1024 * 400; // Maximum length of each file is 400MB, measured in bytes.
 
@@ -18,45 +17,15 @@ export function stringify<T, P = T extends undefined ? undefined : string>(
     return new Promise((resolve, reject) => {
       const stream = new JsonStreamStringify(json, replacer, space, cycle);
 
-      let currentLength = 0;
       let currentContent = '';
 
-      const batchProcessor = new Transform({
-        readableObjectMode: true,
-        transform(chunk, _encoding, callback) {
-          const lines = chunk.toString().split('\\n');
-
-          lines.forEach((line: string | any[]) => {
-            if (currentLength + line.length > chunkSize) {
-              // 超出最大长度，保存当前内容
-              jsonList.push(currentContent);
-              currentContent = '';
-              currentLength = 0;
-            }
-
-            if (line.length) {
-              currentContent += line;
-              currentLength += line.length;
-            }
-          });
-
-          callback();
-        },
-      });
-
       stream
-        .pipe(batchProcessor)
-        .on('data', (line: string | any[]) => {
-          if (currentLength + line.length > chunkSize) {
-            //Exceeding the maximum length, closing the current file stream.
-            jsonList.push(currentContent);
-            currentContent = '';
-            currentLength = 0;
-          }
-
-          if (line.length) {
-            currentContent += line;
-            currentLength += line.length;
+        .setEncoding('utf8')
+        .on('data', (chunk: string) => {
+          currentContent += chunk;
+          while (currentContent.length >= chunkSize) {
+            jsonList.push(currentContent.slice(0, chunkSize));
+            currentContent = currentContent.slice(chunkSize);
           }
         })
         .on('end', () => {

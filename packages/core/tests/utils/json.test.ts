@@ -51,5 +51,24 @@ describe('test src/json.ts', () => {
       expect(chunks.length).toBeGreaterThan(1);
       expect(chunks.join('')).toBe(JSON.stringify(data));
     });
+
+    it('preserves escaped newlines across fragment boundaries', async () => {
+      const data = {
+        source: 'console.log("Hello\\nWorld");\nnext line',
+        literal: '\\n',
+      };
+      const chunks = (await Json.stringify(
+        data,
+        undefined,
+        undefined,
+        undefined,
+        5,
+      )) as unknown as string[];
+
+      expect(chunks.length).toBeGreaterThan(1);
+      expect(chunks.every((chunk) => chunk.length <= 5)).toBe(true);
+      expect(chunks.join('')).toBe(JSON.stringify(data));
+      expect(JSON.parse(chunks.join(''))).toEqual(data);
+    });
   });
 });
