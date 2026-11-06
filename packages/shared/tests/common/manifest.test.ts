@@ -73,6 +73,37 @@ describe('test src/common/manifest.ts', () => {
     ).resolves.toStrictEqual(data);
   });
 
+  it('parses a large section without joining it into one JSON string', async () => {
+    const data = {
+      chunks: Array.from({ length: 3000 }, (_, id) => ({
+        id,
+        name: `chunk-${id}`,
+        assets: ['a'.repeat(100)],
+      })),
+    };
+    const encodedText = Algorithm.compressText(JSON.stringify(data));
+    const parse = rs.spyOn(JSON, 'parse').mockImplementation(() => {
+      throw new Error('JSON.parse must not receive the whole section');
+    });
+
+    try {
+      await expect(
+        Manifest.fetchShardingData([encodedText], async (value) => value),
+      ).resolves.toStrictEqual(data);
+    } finally {
+      parse.mockRestore();
+    }
+  });
+
+  it('rejects incomplete JSON', async () => {
+    await expect(
+      Manifest.fetchShardingData(
+        [Algorithm.compressText('{"chunks":[')],
+        async (value) => value,
+      ),
+    ).rejects.toThrow();
+  });
+
   it('rejects an invalid final Base64 remainder', async () => {
     const encodedText = Algorithm.compressText(JSON.stringify({ value: 1 }));
 
