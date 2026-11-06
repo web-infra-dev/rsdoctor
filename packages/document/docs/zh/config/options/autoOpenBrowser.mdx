@@ -1,0 +1,27 @@
+---
+description: '配置 Rsdoctor 是否在编译完成后自动在浏览器中打开生成的报告。'
+---
+
+# autoOpenBrowser
+
+- **类型：** `boolean`
+- **可选：** `true`
+- **默认值：** `true`
+
+设置为 `false` 后，Rsdoctor 不会在编译完成时自动在浏览器中打开报告。启用 `printLog.serverUrls` 时仍会打印报告 URL；brief 模式仍会打印报告文件路径。报告生成和报告服务不受影响。如需在分析完成后关闭报告服务，请使用 [`disableClientServer`](./disableClientServer.mdx)。
+
+如果以编程方式创建插件，并需要在查看报告期间保持服务运行，请在最后一次访问页面后释放 SDK：
+
+```ts
+import { RsdoctorRspackPlugin } from '@rsdoctor/core';
+
+const plugin = new RsdoctorRspackPlugin({
+  disableClientServer: false,
+  autoOpenBrowser: false,
+});
+
+// 构建及查看报告完成后：
+await plugin.sdk.dispose();
+```
+
+如果从终端运行 Rsdoctor，可以按 `Ctrl+C` 停止进程及其服务。

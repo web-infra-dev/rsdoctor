@@ -16,7 +16,7 @@ export class RsdoctorSlaveServer extends RsdoctorServer {
 
   async openClientPage(...args: unknown[]) {
     if (this.sdk.isMaster) {
-      return super.openClientPage(...(args as ['homepage']));
+      return super.openClientPage(...(args as ['homepage', boolean?]));
     }
 
     return Promise.resolve();

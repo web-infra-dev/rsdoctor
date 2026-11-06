@@ -207,6 +207,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     features = {},
     loaderInterceptorOptions = {},
     disableClientServer: userDisableClientServer = false,
+    autoOpenBrowser = true,
     sdkInstance,
     innerClientPath = '',
     innerClientOverrides,
@@ -221,14 +222,11 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
     gzip: normalizeGzip(userSupports.gzip),
     brotli: normalizeBrotli(userSupports.brotli),
   };
-  // If process.env.RSTEST is set to true, disableClientServer should be false
-  // Otherwise, if process.env.CI is set, disableClientServer should be true
+  // Keep server tests runnable in CI while respecting an explicit opt-out.
   const disableClientServer =
-    process.env.RSTEST === 'true'
-      ? false
-      : process.env.CI
-        ? true
-        : userDisableClientServer;
+    process.env.CI && process.env.RSTEST !== 'true'
+      ? true
+      : userDisableClientServer;
   assert(typeof linter === 'object');
   assert(typeof features === 'object' || Array.isArray(features));
   assert(typeof loaderInterceptorOptions === 'object');
@@ -285,6 +283,7 @@ export function normalizeUserConfig<Rules extends Linter.ExtendRuleData[]>(
         : [],
     },
     disableClientServer,
+    autoOpenBrowser,
     sdkInstance,
     output: {
       mode: finalMode,

@@ -361,9 +361,13 @@ export class RsdoctorRspackPlugin<
             context.sdk,
             this.options,
             this.options.disableClientServer,
+            this.options.autoOpenBrowser,
           );
         } else {
-          await context.sdk.server.openClientPage('homepage');
+          await context.sdk.server.openClientPage(
+            'homepage',
+            this.options.autoOpenBrowser,
+          );
         }
       }
 

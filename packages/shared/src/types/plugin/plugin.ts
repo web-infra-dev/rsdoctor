@@ -169,6 +169,9 @@ export interface RsdoctorRspackPluginOptions<
    */
   disableClientServer?: boolean;
 
+  /** Whether to open the report in a browser after compilation. @default true */
+  autoOpenBrowser?: boolean;
+
   /**
    * sdk instance of outside.
    */

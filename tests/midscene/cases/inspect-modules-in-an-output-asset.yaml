@@ -1,0 +1,9 @@
+cases:
+  - name: BUNDLE-01 Inspect modules in an output asset
+    tags: [modules]
+    steps:
+      - app.open: { path: '/#/bundle/size' }
+      - aiAct: In the Output Assets List, open small.js to inspect its modules.
+      - aiAssert: The Modules of "small.js" panel shows small-data.js.
+      - aiAct: In the Output Assets List, open large.js to inspect its modules.
+      - aiAssert: The Modules of "large.js" panel shows large-data.js.

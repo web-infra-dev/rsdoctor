@@ -21,65 +21,77 @@ try {
 
 async function rspackCompile(compile: any) {
   const file = path.resolve(__dirname, './fixtures/c.js');
-
-  const res = await compile(file, {
-    resolve: {
-      extensions: ['.ts', '.js'],
-    },
+  const plugin = createRsdoctorPlugin({
+    disableClientServer: false,
+    autoOpenBrowser: false,
     output: {
-      path: rspackOutputDir,
+      reportDir: rspackOutputDir,
+      mode: 'brief',
+      options: {
+        type: ['json', 'html'],
+      },
     },
-    module: {
-      rules: [
-        {
-          test: /\.[jt]s$/,
-          use: {
-            loader: 'builtin:swc-loader',
-            options: {
-              jsc: {
-                parser: {
-                  syntax: 'typescript',
-                },
-                externalHelpers: true,
-                preserveAllComments: false,
-              },
-            },
-          },
-          type: 'javascript/auto',
-        },
-      ],
+    server: {
+      port: 8681,
     },
-    plugins: [
-      createRsdoctorPlugin({
-        disableClientServer: false,
-        output: {
-          reportDir: rspackOutputDir,
-          mode: 'brief',
-          options: {
-            type: ['json', 'html'],
-          },
-        },
-        server: {
-          port: 8681,
-        },
-      }),
-    ],
   });
 
-  return res;
+  try {
+    await compile(file, {
+      resolve: {
+        extensions: ['.ts', '.js'],
+      },
+      output: {
+        path: rspackOutputDir,
+      },
+      module: {
+        rules: [
+          {
+            test: /\.[jt]s$/,
+            use: {
+              loader: 'builtin:swc-loader',
+              options: {
+                jsc: {
+                  parser: {
+                    syntax: 'typescript',
+                  },
+                  externalHelpers: true,
+                  preserveAllComments: false,
+                },
+              },
+            },
+            type: 'javascript/auto',
+          },
+        ],
+      },
+      plugins: [plugin],
+    });
+  } catch (error) {
+    await plugin.sdk.dispose();
+    throw error;
+  }
+
+  return {
+    port: plugin.sdk.server.port,
+    dispose: () => plugin.sdk.dispose(),
+  };
 }
 
 // Integration test that uses real build artifacts
 test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
   let manifestPath: string;
   let manifestData: any;
+  let serverPort: number;
+  let disposeServer: (() => Promise<void>) | undefined;
 
   test.beforeAll(async () => {
     // RSTEST keeps the client server enabled in integration tests.
     process.env.RSTEST = 'true';
 
     try {
-      await rspackCompile(compileByRspack);
+      const server = await rspackCompile(compileByRspack);
+      serverPort = server.port;
+      disposeServer = server.dispose;
 
       manifestPath = path.resolve(rspackOutputDir, manifestFileName);
 
@@ -102,7 +114,7 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
   });
 
   test('should upload and analyze real build manifest', async ({ page }) => {
-    await page.goto('http://localhost:8681/#/resources/uploader');
+    await page.goto(`http://localhost:${serverPort}/#/resources/uploader`);
 
     await expect(page.locator('.ant-upload-btn')).toBeVisible();
 
@@ -190,6 +202,7 @@ test.describe.skipIf(!compileByRspack)('Uploader Integration Tests', () => {
 
   test.afterAll(async () => {
     process.env.RSTEST = originalEnvRSTEST;
+    await disposeServer?.();
 
     try {
       await fs.rm(rspackOutputDir, {

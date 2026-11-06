@@ -44,7 +44,7 @@
     "@rsdoctor/client": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
     "@swc-next/parser": "0.3.0",
-    "caniuse-lite": "^1.0.30001819",
+    "caniuse-lite": "^1.0.30001820",
     "sirv": "catalog:",
     "source-map": "catalog:"
   },
@@ -77,11 +77,11 @@
     "open": "^11.0.4",
     "raw-body": "4.0.0",
     "rslog": "^2.3.0",
-    "semver": "^7.8.5",
+    "semver": "^7.8.6",
     "string-loader": "0.0.1",
     "ts-loader": "^9.6.2",
     "typescript": "catalog:",
-    "ws": "8.22.0"
+    "ws": "8.22.1"
   },
   "peerDependencies": {
     "@rspack/core": "^2.0.0"

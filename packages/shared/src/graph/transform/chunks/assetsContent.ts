@@ -4,6 +4,19 @@ import { getBrotliSize } from '../../../common/brotli';
 const COMPRESSIBLE_REGEX =
   /\.(?:js|css|html|json|svg|txt|xml|xhtml|wasm|manifest)$/i;
 
+const utf8Decoder = new TextDecoder('utf-8', { fatal: true });
+
+// Binary assets (images, fonts) are not valid UTF-8, so decoding them
+// produces unreadable text that bloats the report.
+function decodeTextContent(content: string | Buffer) {
+  if (typeof content === 'string') return content;
+  try {
+    return utf8Decoder.decode(content);
+  } catch {
+    return '';
+  }
+}
+
 export function assetsContents(
   assetMap: Map<string, { content: string | Buffer }>,
   chunkGraph: SDK.ChunkGraphInstance,
@@ -13,7 +26,7 @@ export function assetsContents(
   const assets = chunkGraph.getAssets();
   assets.forEach((asset) => {
     const { content = '' } = assetMap.get(asset.path) || {};
-    asset.content = content.toString();
+    asset.content = decodeTextContent(content);
     if (content.length > 0 && asset.size === 0) {
       asset.size = Buffer.byteLength(content, 'utf8');
     }

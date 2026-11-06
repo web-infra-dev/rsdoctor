@@ -21,7 +21,7 @@
     "preview": "rs doc preview"
   },
   "dependencies": {
-    "@rspress/core": "2.1.0-beta.1",
+    "@rspress/core": "2.1.0",
     "@rstackjs/doc-ui": "1.14.11",
     "react-markdown": "catalog:"
   },
@@ -29,8 +29,8 @@
     "@rsbuild/plugin-sass": "catalog:",
     "@rsdoctor/core": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
-    "@rspress/plugin-algolia": "2.1.0-beta.1",
-    "@rspress/plugin-client-redirects": "2.1.0-beta.1",
+    "@rspress/plugin-algolia": "2.1.0",
+    "@rspress/plugin-client-redirects": "2.1.0",
     "@rspress/plugin-rss": "2.1.0-beta.1",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

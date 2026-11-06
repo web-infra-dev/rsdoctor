@@ -143,6 +143,7 @@ export async function handleBriefModeReport(
   sdk: any,
   options: any,
   disableClientServer: boolean,
+  autoOpenBrowser = true,
 ): Promise<void> {
   if (
     !disableClientServer &&
@@ -178,7 +179,9 @@ export async function handleBriefModeReport(
         `${chalk.green('[RSDOCTOR] generated brief report')}: ${outputFilePath}`,
       );
 
-      openBrowser(`file:///${outputFilePath}`);
+      if (autoOpenBrowser) {
+        openBrowser(`file:///${outputFilePath}`);
+      }
     }
   }
 }

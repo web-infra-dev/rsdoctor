@@ -607,6 +607,30 @@ describe('normalizeUserConfig', () => {
     });
   });
 
+  describe('disableClientServer with RSTEST environment variable', () => {
+    it.each([undefined, 'true'])(
+      'should respect an explicit opt-out with CI=%s',
+      (ci) => {
+        process.env.RSTEST = 'true';
+        if (ci !== undefined) {
+          process.env.CI = ci;
+        }
+
+        expect(
+          normalizeUserConfig({ disableClientServer: true })
+            .disableClientServer,
+        ).toBe(true);
+      },
+    );
+
+    it('should keep the server enabled by default for tests in CI', () => {
+      process.env.RSTEST = 'true';
+      process.env.CI = 'true';
+
+      expect(normalizeUserConfig().disableClientServer).toBe(false);
+    });
+  });
+
   describe('disableClientServer with CI environment variable', () => {
     it('should set disableClientServer to true when process.env.CI is set', () => {
       process.env.CI = 'true';
