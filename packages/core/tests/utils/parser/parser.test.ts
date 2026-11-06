@@ -35,6 +35,21 @@ describe('SWC parser', () => {
     ).toBe(false);
   });
 
+  it('compares SWC member expressions with existing ESTree nodes', () => {
+    const statement = parser.parse('exports.default;')
+      .body[0] as Node.ExpressionStatement;
+    const existingNode = {
+      type: 'MemberExpression',
+      computed: false,
+      object: { type: 'Identifier', name: 'exports' },
+      property: { type: 'Identifier', name: 'default' },
+    } as Node.MemberExpression;
+
+    expect(parser.utils.isSameSyntax(statement.expression, existingNode)).toBe(
+      true,
+    );
+  });
+
   it('supports import attributes in module mode', () => {
     const program = parser.parse(
       'import data from "./data.json" with { type: "json" };',
