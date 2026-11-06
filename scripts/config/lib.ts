@@ -26,9 +26,7 @@ export const esmConfig: LibConfig = {
       },
     },
   },
-  dts: {
-    build: true,
-  },
+  dts: true,
   output: {
     minify: nodeMinifyConfig,
     filename: {

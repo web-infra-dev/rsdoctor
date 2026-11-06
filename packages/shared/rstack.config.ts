@@ -17,7 +17,6 @@ const bundlelessLib = {
   ...esmConfig,
   bundle: false,
   dts: {
-    build: true,
     tsgo: true,
   },
   source: {
