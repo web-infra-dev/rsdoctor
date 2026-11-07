@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "@rspack/lite-tapable": "catalog:",
+    "@streamparser/json": "0.0.26",
     "@types/estree": "catalog:",
     "buffer": "6.0.3",
     "connect-next": "catalog:",
