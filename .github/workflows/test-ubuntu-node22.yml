@@ -33,6 +33,7 @@ jobs:
       - name: Detect changes
         uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         id: changes
+        # Manual runs leave the output unset; only 'false' skips later steps.
         if: github.event_name != 'workflow_dispatch'
         with:
           token: ''
@@ -42,22 +43,22 @@ jobs:
           filters: .github/filters.yml
 
       - name: Install Pnpm
-        if: github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.changed != 'false'
         run: |
           npm install -g corepack@latest --force
           corepack enable
 
       - name: Setup Node.js ${{ matrix.node-version }}
-        if: github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.changed != 'false'
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
       - name: Install Dependencies
-        if: github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.changed != 'false'
         run: pnpm install
 
       - name: Unit and E2E Tests
-        if: github.event_name == 'workflow_dispatch' || steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.changed != 'false'
         run: pnpm run test:all
