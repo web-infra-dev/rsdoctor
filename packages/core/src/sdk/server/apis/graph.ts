@@ -22,11 +22,12 @@ export class GraphAPI extends BaseAPI {
   > {
     const { req } = this.ctx;
 
-    const { assetPath } =
+    const { assetPath, withFileContent } =
       req.body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetAssetDetails>;
 
     return this.dataLoader.loadAPI(SDK.ServerAPI.API.GetAssetDetails, {
       assetPath,
+      withFileContent,
     });
   }
 

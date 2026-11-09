@@ -155,7 +155,7 @@ export interface ResponseTypes
   [API.GetChunkByIdAI]: ExtendedChunkData[];
   [API.GetChunkGraphAI]: Omit<SDK.ChunkData, 'modules'>[];
   [API.GetSummaryBundles]: {
-    asset: SDK.AssetData;
+    asset: Omit<SDK.AssetData, 'content'>;
     modules: SDK.ModuleData[];
   }[];
 }

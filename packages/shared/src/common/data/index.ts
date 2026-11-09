@@ -208,7 +208,7 @@ export class APIDataLoader {
           this.loader.loadData('moduleGraph'),
           this.loader.loadData('configs'),
         ]).then((res) => {
-          const { assetPath } =
+          const { assetPath, withFileContent = false } =
             body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetAssetDetails>;
           const configs = res[2] || [];
           const { isRspack, hasSourceMap } = checkSourceMapSupport(configs);
@@ -228,6 +228,7 @@ export class APIDataLoader {
             chunks,
             modules,
             isRspack || hasSourceMap ? checkModules : () => true,
+            withFileContent,
           ) as R;
         });
 

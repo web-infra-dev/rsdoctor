@@ -69,4 +69,42 @@ describe('test src/common/data/index.ts', () => {
       loader.loadAPI(SDK.ServerAPI.API.GetProjectInfo),
     ).resolves.toMatchObject({ name, displayName });
   });
+
+  it('keeps asset content out of bundle summaries', async () => {
+    const asset: SDK.AssetData = {
+      id: 1,
+      path: 'large.txt',
+      size: 100,
+      content: 'a'.repeat(100),
+      chunks: [],
+      gzipSize: 20,
+    };
+    const data: Record<string, unknown> = {
+      chunkGraph: { assets: [asset], chunks: [], entrypoints: [] },
+      moduleGraph: { modules: [] },
+      configs: [],
+    };
+    const loader = new Data.APIDataLoader({
+      loadData: rs.fn().mockImplementation(async (key) => data[key]),
+      loadManifest: rs.fn(),
+    });
+
+    const summary = await loader.loadAPI(SDK.ServerAPI.API.GetAssetsSummary, {
+      withFileContent: false,
+    });
+    const bundles = await loader.loadAPI(SDK.ServerAPI.API.GetSummaryBundles);
+    const details = await loader.loadAPI(SDK.ServerAPI.API.GetAssetDetails, {
+      assetPath: asset.path,
+    });
+
+    expect(summary.all.total.files[0].content).toBeUndefined();
+    expect(bundles[0].asset).not.toHaveProperty('content');
+    expect(details.asset).not.toHaveProperty('content');
+
+    const source = await loader.loadAPI(SDK.ServerAPI.API.GetAssetDetails, {
+      assetPath: asset.path,
+      withFileContent: true,
+    });
+    expect(source.asset.content).toBe(asset.content);
+  });
 });
