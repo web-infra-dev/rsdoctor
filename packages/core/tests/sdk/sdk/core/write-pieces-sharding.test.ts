@@ -5,7 +5,7 @@ import zlib from 'node:zlib';
 import { tmpdir } from 'os';
 import { Manifest } from '@rsdoctor/shared/common-browser';
 import { afterEach, describe, expect, it } from 'rstack/test';
-import { File } from '@/build-utils';
+import { File, Json } from '@/build-utils';
 import { createSDK, type MockSDKResponse } from '../../utils';
 
 /**
@@ -86,8 +86,8 @@ describe('writePieces shard file integrity', () => {
             loader: '/test/loader.js',
             startAt: 1000,
             endAt: 2000,
-            input: 'a',
-            result: 'b',
+            input: 'console.log("Hello\\nWorld");',
+            result: 'first line\nsecond line',
           },
         ],
         // BigInt makes JSON.stringify throw TypeError
@@ -122,14 +122,23 @@ describe('writePieces shard file integrity', () => {
     expect(Array.isArray(parsed)).toBe(true);
     expect(parsed.length).toBe(1);
     expect(parsed[0].resource.path).toBe('/test/a.ts');
+    expect(parsed[0].loaders[0].input).toBe(loaderData[0].loaders[0].input);
+    expect(parsed[0].loaders[0].result).toBe(loaderData[0].loaders[0].result);
   });
 
-  it('should write multiple JSON fragments as one deflate stream', async () => {
+  it('should preserve surrogate pairs across JSON fragment writes', async () => {
     target = await createSDK({ noServer: true });
     outputDir = path.resolve(tmpdir(), `sharding_fragments_test_${Date.now()}`);
 
-    const graph = { modules: [{ id: 1 }, { id: 2 }] };
-    const fragments = ['{"modules":[', '{"id":1},', '{"id":2}]}'];
+    const data = { source: '😀\nnext line' };
+    const fragments = (await Json.stringify(
+      data,
+      undefined,
+      undefined,
+      undefined,
+      12,
+    )) as unknown as string[];
+    expect(fragments.length).toBeGreaterThan(1);
     const writer = target.sdk as unknown as {
       writeJsonFragmentsToFolder(
         fragments: string[],
@@ -148,7 +157,7 @@ describe('writePieces shard file integrity', () => {
       Manifest.fetchShardingData(files, (filePath) =>
         fsp.readFile(filePath, 'utf-8'),
       ),
-    ).resolves.toStrictEqual(graph);
+    ).resolves.toStrictEqual(data);
   });
 
   it('honors the requested shard compression level', async () => {
