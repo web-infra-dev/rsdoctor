@@ -40,8 +40,8 @@ catalog:
   cross-env: ^10.1.0
   connect-next: 5.0.0
   dayjs: 1.11.23
-  es-toolkit: ^1.53.1
-  filesize: ^11.0.29
+  es-toolkit: ^1.53.2
+  filesize: ^11.0.30
   fs-extra: ^11.1.1
   path-browserify: 1.0.1
   react: 19.3.1
@@ -73,7 +73,7 @@ minimumReleaseAgeExclude:
 
 overrides:
   '@remix-run/router': 1.23.4
-  minimatch: ^11.0.4
+  minimatch: ^11.0.5
   rc-dialog: 9.1.0
   rc-tree: 5.7.2
   tslib: 2.8.1
