@@ -23,9 +23,20 @@ export function stringify<T, P = T extends undefined ? undefined : string>(
         .setEncoding('utf8')
         .on('data', (chunk: string) => {
           currentContent += chunk;
-          while (currentContent.length >= chunkSize) {
-            jsonList.push(currentContent.slice(0, chunkSize));
-            currentContent = currentContent.slice(chunkSize);
+          while (currentContent.length > chunkSize) {
+            let splitAt = chunkSize;
+            const last = currentContent.charCodeAt(splitAt - 1);
+            const next = currentContent.charCodeAt(splitAt);
+            if (
+              last >= 0xd800 &&
+              last <= 0xdbff &&
+              next >= 0xdc00 &&
+              next <= 0xdfff
+            ) {
+              splitAt += splitAt === 1 ? 1 : -1;
+            }
+            jsonList.push(currentContent.slice(0, splitAt));
+            currentContent = currentContent.slice(splitAt);
           }
         })
         .on('end', () => {
