@@ -22,21 +22,25 @@ export function stringify<T, P = T extends undefined ? undefined : string>(
       stream
         .setEncoding('utf8')
         .on('data', (chunk: string) => {
-          currentContent += chunk;
-          while (currentContent.length > chunkSize) {
-            let splitAt = chunkSize;
-            const last = currentContent.charCodeAt(splitAt - 1);
-            const next = currentContent.charCodeAt(splitAt);
-            if (
-              last >= 0xd800 &&
-              last <= 0xdbff &&
-              next >= 0xdc00 &&
-              next <= 0xdfff
-            ) {
-              splitAt += splitAt === 1 ? 1 : -1;
+          let offset = 0;
+          while (offset < chunk.length) {
+            // A retained high surrogate needs one more code unit, even for size 1.
+            const capacity = Math.max(chunkSize, currentContent.length + 1);
+            const end = Math.min(
+              offset + capacity - currentContent.length,
+              chunk.length,
+            );
+            currentContent += chunk.slice(offset, end);
+            offset = end;
+            if (currentContent.length >= chunkSize) {
+              let splitAt = currentContent.length;
+              const last = currentContent.charCodeAt(splitAt - 1);
+              if (last >= 0xd800 && last <= 0xdbff) splitAt--;
+              if (splitAt > 0) {
+                jsonList.push(currentContent.slice(0, splitAt));
+                currentContent = currentContent.slice(splitAt);
+              }
             }
-            jsonList.push(currentContent.slice(0, splitAt));
-            currentContent = currentContent.slice(splitAt);
           }
         })
         .on('end', () => {

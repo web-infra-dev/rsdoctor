@@ -70,5 +70,22 @@ describe('test src/json.ts', () => {
       expect(chunks.join('')).toBe(JSON.stringify(data));
       expect(JSON.parse(chunks.join(''))).toEqual(data);
     });
+
+    it('preserves large string values across small UTF-8 fragments', async () => {
+      const data = { source: '😀\n\\n'.repeat(2000) };
+      for (const size of [1, 12, 1024]) {
+        const fragments = (await Json.stringify(
+          data,
+          undefined,
+          undefined,
+          undefined,
+          size,
+        )) as unknown as string[];
+        const recovered = Buffer.concat(
+          fragments.map((fragment) => Buffer.from(fragment)),
+        ).toString('utf8');
+        expect(JSON.parse(recovered)).toEqual(data);
+      }
+    });
   });
 });
