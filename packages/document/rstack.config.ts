@@ -95,7 +95,6 @@ define.doc({
   description,
   icon: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-960x960.png',
   lang: 'en',
-  base: '/',
   logo: {
     light: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-light.png',
     dark: 'https://assets.rspack.rs/rsdoctor/rsdoctor-logo-dark.png',
@@ -116,14 +115,7 @@ define.doc({
       return `<meta property="og:image" content="https://assets.rspack.rs/rsdoctor/${getOgImage()}">`;
     },
   ],
-  markdown: {
-    link: {
-      checkAnchors: true,
-    },
-  },
-  ssg: true,
   route: {
-    cleanUrls: true,
     // exclude document fragments from routes
     exclude: [
       '**/zh/shared/**',
