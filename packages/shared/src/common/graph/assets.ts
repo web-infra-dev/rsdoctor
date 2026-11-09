@@ -409,10 +409,12 @@ export function getAssetDetails(
   chunks: SDK.ChunkData[],
   modules: SDK.ModuleData[],
   checkModules: (module: SDK.ModuleData) => boolean,
+  withFileContent = false,
 ): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetAssetDetails> {
   const asset = assets.find((e) => e.path === assetPath)!;
+  const { content: _content, ...assetWithoutContent } = asset;
   return {
-    asset,
+    asset: withFileContent ? asset : assetWithoutContent,
     chunks: getChunksByAsset(asset, chunks),
     modules: getModulesByAsset(asset, chunks, modules, undefined, checkModules),
   };
@@ -428,8 +430,9 @@ export function getAllBundleData(
   try {
     for (let i = 0; i < assets.length; i++) {
       const asset = assets[i];
+      const { content: _content, ...summaryAsset } = asset;
       result.push({
-        asset,
+        asset: summaryAsset,
         modules: getModulesByAsset(asset, chunks, modules, filtersModules),
       });
     }

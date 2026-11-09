@@ -11,7 +11,7 @@ import { API } from './index';
 export interface GraphAPIResponse {
   [API.GetAssetsSummary]: RsdoctorClientAssetsSummary;
   [API.GetAssetDetails]: {
-    asset: AssetData;
+    asset: Omit<AssetData, 'content'> & { content?: string };
   } & Pick<ModuleGraphData, 'modules'> &
     Pick<ChunkGraphData, 'chunks'>;
   [API.GetChunksByModuleId]: ChunkData[];
@@ -29,6 +29,7 @@ export interface GraphAPIRequestBody {
   };
   [API.GetAssetDetails]: {
     assetPath: string;
+    withFileContent?: boolean;
   };
   [API.GetChunksByModuleId]: {
     moduleId: number;

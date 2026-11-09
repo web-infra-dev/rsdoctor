@@ -31,6 +31,19 @@ import './index.scss';
 import { SearchModal } from './search-modal';
 const { Option } = Select;
 
+function OpenAssetCode({
+  asset,
+  onOpen,
+}: {
+  asset: Omit<SDK.AssetData, 'content'> & { content?: string };
+  onOpen: (
+    asset: Omit<SDK.AssetData, 'content'> & { content?: string },
+  ) => void;
+}) {
+  useEffect(() => onOpen(asset), [asset, onOpen]);
+  return null;
+}
+
 export const TreeGraph = memo(
   ({
     cwd,
@@ -53,6 +66,7 @@ export const TreeGraph = memo(
     const [showOnlyJavaScriptAssets, setShowOnlyJavaScriptAssets] =
       useState(false);
     const [assetPath, setAssetPath] = useState<string | null>(null);
+    const [codeAssetPath, setCodeAssetPath] = useState<string | null>(null);
     const { showCode, codeDrawerComponent } = useCodeDrawer(
       'Do not have the codes of assets. If you use the lite or brief mode, there will have codes.',
     );
@@ -160,7 +174,7 @@ export const TreeGraph = memo(
             return target;
           }
 
-          const { size, initial, path, content } = target;
+          const { size, initial, path } = target;
 
           return (
             <div
@@ -189,7 +203,10 @@ export const TreeGraph = memo(
                 ) : null}
                 <CodeOutlined
                   style={{ fontSize: 14, padding: 0 }}
-                  onClick={() => showCode({ code: content!, filePath: path })}
+                  onClick={() => {
+                    setAssetPath(path);
+                    setCodeAssetPath(path);
+                  }}
                 />
               </Space>
             </div>
@@ -374,20 +391,46 @@ export const TreeGraph = memo(
               </div>
               <div className={styles.assetDetailCol}>
                 {assetPath ? (
-                  <ServerAPIProvider
-                    api={SDK.ServerAPI.API.GetAssetDetails}
-                    body={{ assetPath }}
-                  >
-                    {(details) => (
-                      <AssetDetail
-                        asset={details.asset}
-                        chunks={details.chunks}
-                        modules={details.modules}
-                        moduleSizeLimit={moduleSizeLimit}
-                        root={cwd}
-                      />
+                  <>
+                    <ServerAPIProvider
+                      api={SDK.ServerAPI.API.GetAssetDetails}
+                      body={{ assetPath }}
+                    >
+                      {(details) => (
+                        <AssetDetail
+                          asset={details.asset}
+                          chunks={details.chunks}
+                          modules={details.modules}
+                          moduleSizeLimit={moduleSizeLimit}
+                          root={cwd}
+                        />
+                      )}
+                    </ServerAPIProvider>
+                    {codeAssetPath === assetPath && (
+                      <ServerAPIProvider
+                        api={SDK.ServerAPI.API.GetAssetDetails}
+                        body={{ assetPath, withFileContent: true }}
+                        showSkeleton={false}
+                      >
+                        {(details) =>
+                          details.asset.path === codeAssetPath ? (
+                            <OpenAssetCode
+                              asset={details.asset}
+                              onOpen={(asset) => {
+                                showCode({
+                                  code: asset.content,
+                                  filePath: asset.path,
+                                });
+                                setCodeAssetPath(null);
+                              }}
+                            />
+                          ) : (
+                            <></>
+                          )
+                        }
+                      </ServerAPIProvider>
                     )}
-                  </ServerAPIProvider>
+                  </>
                 ) : (
                   <Card>
                     <Empty

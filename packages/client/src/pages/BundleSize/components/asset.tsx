@@ -465,7 +465,7 @@ const SourceSizeTag = ({ size }: { size: number }) => {
 };
 
 export const AssetDetail: React.FC<{
-  asset: SDK.AssetData;
+  asset: Omit<SDK.AssetData, 'content'>;
   chunks: SDK.ChunkData[];
   modules: SDK.ModuleData[];
   moduleSizeLimit?: number;

@@ -302,7 +302,7 @@ export const ModulesOverall: React.FC = () => {
   return (
     <ServerAPIProvider
       api={SDK.ServerAPI.API.GetAssetsSummary}
-      body={{ withFileContent: true }}
+      body={{ withFileContent: false }}
     >
       {(summary) => {
         return (
