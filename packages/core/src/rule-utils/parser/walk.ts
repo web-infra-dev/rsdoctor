@@ -1,4 +1,4 @@
-import { walk } from '@swc-next/walker';
+import { createWalker, type WalkHandler } from '@swc-next/walker';
 import type { Node } from './types';
 
 type Visitors<State> = {
@@ -15,19 +15,22 @@ export function recursive<State>(
   state: State,
   visitors: Visitors<State>,
 ): void {
-  walk<Node.Node, State, Node.Node>(
-    node,
-    {
-      enter(child, context) {
-        const visitor = visitors[child.type];
-        if (visitor) {
-          context.skip();
-          visitor(child as never, context.state, (next, nextState) => {
-            recursive(next, nextState, visitors);
-          });
-        }
-      },
-    },
-    state,
-  );
+  const hooks: Partial<
+    Record<Node.Node['type'], WalkHandler<Node.Node, State>>
+  > = {};
+  for (const type of Object.keys(visitors) as Node.Node['type'][]) {
+    const visitor = visitors[type];
+    if (visitor) {
+      hooks[type] = (child, context) => {
+        context.skip();
+        visitor(child as never, context.state, visit);
+      };
+    }
+  }
+
+  const walker = createWalker<State, Node.Node>(hooks);
+  function visit(child: Node.Node, childState: State) {
+    walker.walk(child, childState);
+  }
+  visit(node, state);
 }
