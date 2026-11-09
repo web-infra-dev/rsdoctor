@@ -56,7 +56,7 @@ jobs:
       - uses: pnpm/action-setup@a8198c4bff370c8506180b035930dea56dbd5288 # v5
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: '24'
+          node-version: '24.22.2'
           cache: pnpm
       - run: pnpm --filter rsdoctor-midscene-e2e install --frozen-lockfile --ignore-scripts
       - run: pnpm --filter rsdoctor-midscene-e2e typecheck
@@ -104,7 +104,7 @@ jobs:
       - name: Activate Node.js 24 and pnpm
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: '24'
+          node-version: '24.22.2'
           cache: pnpm
 
       - name: Install workspace dependencies and build checked-out packages
