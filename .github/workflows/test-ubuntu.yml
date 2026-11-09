@@ -8,10 +8,6 @@ on:
 
   push:
     branches: [main, release_*, release-*]
-    paths-ignore:
-      - 'packages/document/**'
-      - '**/*.md'
-      - '**/*.mdx'
 
   merge_group:
 
@@ -28,41 +24,46 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          fetch-depth: 10
+          fetch-depth: 1
 
-      - name: Check skip CI
-        run: echo "RESULT=$(node ./scripts/skipCI.js)" >> "$GITHUB_OUTPUT"
-        id: skip-ci
-
-      - name: Log skip CI result
-        run: echo "${{steps.skip-ci.outputs.RESULT}}"
+      - name: Detect changes
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        id: changes
+        # Manual runs leave the output unset; only 'false' skips later steps.
+        if: github.event_name != 'workflow_dispatch'
+        with:
+          token: ''
+          # Compare release-branch pushes with their previous commit, not main.
+          base: ${{ github.event_name == 'push' && github.ref || '' }}
+          predicate-quantifier: 'some-with-excludes'
+          filters: .github/filters.yml
 
       - name: Set up build runtime
-        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        if: steps.changes.outputs.changed != 'false'
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: '22.18.0'
 
       - name: Install pnpm
-        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        if: steps.changes.outputs.changed != 'false'
         run: |
           npm install -g corepack@latest --force
           corepack enable
 
       - name: Build and pack
-        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        if: steps.changes.outputs.changed != 'false'
         run: |
           pnpm install
           node scripts/runtime-compatibility/prepare.mjs "$RUNNER_TEMP/rsdoctor-consumer"
 
       - name: Set up consumer runtime
-        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        if: steps.changes.outputs.changed != 'false'
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: '20.19.0'
 
       - name: Install packed packages and test
-        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        if: steps.changes.outputs.changed != 'false'
         working-directory: ${{ runner.temp }}/rsdoctor-consumer
         env:
           EXPECTED_NODE_VERSION: '20.19.0'

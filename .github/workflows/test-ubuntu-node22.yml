@@ -8,10 +8,6 @@ on:
 
   push:
     branches: [main, release_*, release-*]
-    paths-ignore:
-      - 'packages/document/**'
-      - '**/*.md'
-      - '**/*.mdx'
 
   merge_group:
 
@@ -32,69 +28,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          fetch-depth: 10
+          fetch-depth: 1
+
+      - name: Detect changes
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        id: changes
+        # Manual runs leave the output unset; only 'false' skips later steps.
+        if: github.event_name != 'workflow_dispatch'
+        with:
+          token: ''
+          # Compare release-branch pushes with their previous commit, not main.
+          base: ${{ github.event_name == 'push' && github.ref || '' }}
+          predicate-quantifier: 'some-with-excludes'
+          filters: .github/filters.yml
 
       - name: Install Pnpm
+        if: steps.changes.outputs.changed != 'false'
         run: |
           npm install -g corepack@latest --force
           corepack enable
 
-      - name: Check skip CI
-        run: echo "RESULT=$(node ./scripts/skipCI.js)" >> "$GITHUB_OUTPUT"
-        id: skip-ci
-
-      - name: Log skip CI result
-        run: echo "${{steps.skip-ci.outputs.RESULT}}"
-
       - name: Setup Node.js ${{ matrix.node-version }}
-        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        if: steps.changes.outputs.changed != 'false'
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
       - name: Install Dependencies
-        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        if: steps.changes.outputs.changed != 'false'
         run: pnpm install
 
       - name: Unit and E2E Tests
-        if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
+        if: steps.changes.outputs.changed != 'false'
         run: pnpm run test:all
-  # ======== e2e ========
-  # e2e-ubuntu:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [18.x]
-
-  #   # Steps represent a sequence of tasks that will be executed as part of the job
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 10
-
-  #     - name: Install Pnpm
-  #       run: corepack enable
-
-  #     - name: Check skip CI
-  #       run: echo "RESULT=$(node ./scripts/skipCI.js)" >> "$GITHUB_OUTPUT"
-  #       id: skip-ci
-
-  #     - name: Log skip CI result
-  #       run: echo "${{steps.skip-ci.outputs.RESULT}}"
-
-  #     - name: Setup Node.js ${{ matrix.node-version }}
-  #       if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'pnpm'
-
-  #     - name: Install Dependencies
-  #       if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-  #       run: pnpm install && cd ./e2e && npx playwright install
-
-  #     - name: E2E Test
-  #       if: ${{steps.skip-ci.outputs.RESULT != 'true'}}
-  #       run: pnpm run e2e

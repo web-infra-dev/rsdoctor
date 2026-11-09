@@ -5,26 +5,8 @@ name: E2E Testing by Midscene
 
 on:
   pull_request:
-    paths:
-      [
-        'packages/**',
-        'e2e/**',
-        'tests/midscene/**',
-        '.github/workflows/midscene.yml',
-        'pnpm-lock.yaml',
-        'pnpm-workspace.yaml',
-      ]
   push:
     branches: [main]
-    paths:
-      [
-        'packages/**',
-        'e2e/**',
-        'tests/midscene/**',
-        '.github/workflows/midscene.yml',
-        'pnpm-lock.yaml',
-        'pnpm-workspace.yaml',
-      ]
   workflow_dispatch:
     inputs:
       publish_pages:
@@ -39,15 +21,32 @@ on:
 permissions:
   contents: read
 
-# PR checks are independent; billable model runs are serialized.
-concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('midscene-e2e-pr-{0}', github.event.pull_request.number) || 'midscene-e2e' }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      midscene: ${{ steps.changes.outputs.midscene != 'false' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Detect changes
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        id: changes
+        # Manual runs leave the output unset; only 'false' skips later steps.
+        if: github.event_name != 'workflow_dispatch'
+        with:
+          token: ''
+          predicate-quantifier: 'some-with-excludes'
+          filters: .github/filters.yml
+
   validate:
-    if: github.event_name == 'pull_request'
+    needs: changes
+    if: needs.changes.outputs.midscene == 'true' && github.event_name == 'pull_request'
     name: Validate AI E2E definitions
+    concurrency:
+      group: midscene-e2e-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -68,14 +67,20 @@ jobs:
           echo 'This PR check does not call a model. AI E2E runs on relevant upstream main pushes or manual dispatch. Fork PR code never receives model credentials.' >> "$GITHUB_STEP_SUMMARY"
 
   midscene:
+    needs: changes
     name: Midscene E2E
     environment:
       name: Model
       deployment: false
     if: >-
-      (github.event_name != 'pull_request') &&
+      needs.changes.outputs.midscene == 'true' &&
+      github.event_name != 'pull_request' &&
       (github.repository == 'web-infra-dev/rsdoctor' && github.ref == 'refs/heads/main' ||
       (github.event_name == 'workflow_dispatch' && github.repository != 'web-infra-dev/rsdoctor'))
+    # Only eligible model jobs enter the shared queue.
+    concurrency:
+      group: midscene-e2e
+      cancel-in-progress: false
     runs-on: ubuntu-24.04
     timeout-minutes: 240
     env:
