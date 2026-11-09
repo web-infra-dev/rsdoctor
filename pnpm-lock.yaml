@@ -791,6 +791,9 @@ importers:
       '@scripts/test-helper':
         specifier: workspace:*
         version: link:../../scripts/test-helper
+      '@swc-next/walker':
+        specifier: 0.5.0
+        version: 0.5.0
       '@types/babel__code-frame':
         specifier: 7.27.0
         version: 7.27.0
@@ -830,9 +833,6 @@ importers:
       envinfo:
         specifier: 7.21.0
         version: 7.21.0
-      estree-walker:
-        specifier: 3.0.3
-        version: 3.0.3
       filesize:
         specifier: 'catalog:'
         version: 11.0.30
@@ -3898,6 +3898,9 @@ packages:
 
   '@swc-next/types@0.4.1':
     resolution: {integrity: sha512-cK5oQcZVfLXaTqmty67dAyns7O0rgroray4WR2JhoyoDy9kHCD+cDpfTfStp5sO8WWvFHVqeB46mWwzhXwQljQ==}
+
+  '@swc-next/walker@0.5.0':
+    resolution: {integrity: sha512-fLng80XlV9vhLwt+uOSu4iIwCMmWIUqykuhTQhPW3AQYC1T8iao/i3W4nW5kmJgYFZg5X6h53KrcwcJpn8v5Fw==}
 
   '@swc/helpers@0.5.23':
     resolution: {integrity: sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==}
@@ -11706,6 +11709,8 @@ snapshots:
   '@swc-next/types@0.3.0': {}
 
   '@swc-next/types@0.4.1': {}
+
+  '@swc-next/walker@0.5.0': {}
 
   '@swc/helpers@0.5.23':
     dependencies:
