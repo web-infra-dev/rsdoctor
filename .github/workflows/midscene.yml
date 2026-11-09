@@ -21,11 +21,6 @@ on:
 permissions:
   contents: read
 
-# PR checks are independent; billable model runs are serialized.
-concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('midscene-e2e-pr-{0}', github.event.pull_request.number) || 'midscene-e2e' }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
 jobs:
   changes:
     runs-on: ubuntu-latest
@@ -49,6 +44,9 @@ jobs:
     needs: changes
     if: needs.changes.outputs.midscene == 'true' && github.event_name == 'pull_request'
     name: Validate AI E2E definitions
+    concurrency:
+      group: midscene-e2e-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -79,6 +77,10 @@ jobs:
       github.event_name != 'pull_request' &&
       (github.repository == 'web-infra-dev/rsdoctor' && github.ref == 'refs/heads/main' ||
       (github.event_name == 'workflow_dispatch' && github.repository != 'web-infra-dev/rsdoctor'))
+    # Only eligible model jobs enter the shared queue.
+    concurrency:
+      group: midscene-e2e
+      cancel-in-progress: false
     runs-on: ubuntu-24.04
     timeout-minutes: 240
     env:
