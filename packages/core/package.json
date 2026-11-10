@@ -54,7 +54,7 @@
     "@rspack/core": "catalog:",
     "@rspack/lite-tapable": "catalog:",
     "@scripts/test-helper": "workspace:*",
-    "@swc-next/walker": "0.5.0",
+    "@swc-next/walker": "0.6.1",
     "@types/babel__code-frame": "7.27.0",
     "@types/cors": "2.8.19",
     "@types/envinfo": "7.8.4",
