@@ -68,6 +68,23 @@ minimumReleaseAgeExclude:
   - 'rstack'
   - 'rsbuild-plugin-dts'
   - 'heading-case'
+  # Parser compatibility fix: only allow the reviewed 0.6.1 release.
+  - '@swc-next/parser@0.6.1'
+  - '@swc-next/decoder@0.6.1'
+  - '@swc-next/types@0.6.1'
+  - '@swc-next/parser-binding-darwin-arm64@0.6.1'
+  - '@swc-next/parser-binding-darwin-x64@0.6.1'
+  - '@swc-next/parser-binding-linux-arm64-gnu@0.6.1'
+  - '@swc-next/parser-binding-linux-arm64-musl@0.6.1'
+  - '@swc-next/parser-binding-linux-ppc64-gnu@0.6.1'
+  - '@swc-next/parser-binding-linux-riscv64-gnu@0.6.1'
+  - '@swc-next/parser-binding-linux-riscv64-musl@0.6.1'
+  - '@swc-next/parser-binding-linux-s390x-gnu@0.6.1'
+  - '@swc-next/parser-binding-linux-x64-gnu@0.6.1'
+  - '@swc-next/parser-binding-linux-x64-musl@0.6.1'
+  - '@swc-next/parser-binding-win32-arm64-msvc@0.6.1'
+  - '@swc-next/parser-binding-win32-ia32-msvc@0.6.1'
+  - '@swc-next/parser-binding-win32-x64-msvc@0.6.1'
   # Renovate security update: minimatch@11.0.4
   - minimatch@11.0.4
 

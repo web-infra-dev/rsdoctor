@@ -60,11 +60,16 @@ describe('SWC parser', () => {
     expect(program.body[0].type).toBe('ImportDeclaration');
   });
 
-  it('rejects syntax errors and semantic early errors', () => {
-    expect(() => parser.parse('const = ;')).toThrow(SyntaxError);
-    expect(() => parser.parse('let value; let value;')).toThrow(SyntaxError);
-    expect(() => parser.parse('import value from "value";')).toThrow(
-      SyntaxError,
+  it.each(['const = ;', 'let value; let value;', 'import value from "value";'])(
+    'rejects syntax and semantic errors as SyntaxError: %s',
+    (source) => {
+      expect(() => parser.parse(source)).toThrow(SyntaxError);
+    },
+  );
+
+  it('preserves the diagnostic message when normalizing syntax errors', () => {
+    expect(() => parser.parse('const = ;')).toThrow(
+      "Unexpected token '=' in binding pattern",
     );
   });
 });

@@ -43,7 +43,7 @@
   "dependencies": {
     "@rsdoctor/client": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
-    "@swc-next/parser": "0.5.0",
+    "@swc-next/parser": "0.6.1",
     "caniuse-lite": "^1.0.30001823",
     "sirv": "catalog:",
     "source-map": "catalog:"

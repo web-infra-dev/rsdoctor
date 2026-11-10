@@ -14,6 +14,8 @@ function parse(input: string, options: ParseOptions = {}): Node.Program {
     preserveParens: false,
     comments: 'none',
     semanticErrors: true,
+    // Normalize diagnostics below instead of throwing SWC's diagnostic objects.
+    errorRecovery: true,
   });
   const diagnostic = result.diagnostics.find(
     (item) => item.severity === 'error',
