@@ -85,6 +85,8 @@ minimumReleaseAgeExclude:
   - '@swc-next/parser-binding-win32-arm64-msvc@0.6.1'
   - '@swc-next/parser-binding-win32-ia32-msvc@0.6.1'
   - '@swc-next/parser-binding-win32-x64-msvc@0.6.1'
+  # Explicitly approved walker upgrade to match the parser release.
+  - '@swc-next/walker@0.6.1'
   # Renovate security update: minimatch@11.0.4
   - minimatch@11.0.4
 
