@@ -90,17 +90,23 @@ export async function listDirectDependencyPackages(): Promise<{
 
 export async function detectDuplicatePackages(): Promise<{
   ok: boolean;
-  data: { rule: Rule | null; totalRules: number; note?: string };
+  data: {
+    rule: Rule | null;
+    rules: Rule[];
+    totalRules: number;
+    note?: string;
+  };
   description: string;
 }> {
   const rules = getRules() as Rule[];
-  const duplicateRule = rules?.find((rule) => rule.code === 'E1001');
+  const duplicateRules = (rules ?? []).filter((rule) => rule.code === 'E1001');
   return {
     ok: true,
     data: {
-      rule: duplicateRule ?? null,
+      rule: duplicateRules[0] ?? null,
+      rules: duplicateRules,
       totalRules: rules?.length ?? 0,
-      note: duplicateRule
+      note: duplicateRules.length
         ? undefined
         : 'No E1001 duplicate package rule found in current analysis.',
     },
