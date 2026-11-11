@@ -91,9 +91,16 @@ export class InternalLoaderPlugin<
           // loaders which are already intercepted in afterPlugins hook by Rsdoctor.
           const proxyLoaders = module?.loaders || loaderContext?.loaders || [];
 
+          const contextLoaders = loaderContext?.loaders ?? [];
+
           // return origin loaders not doctor internal loaders
-          const originLoaders = proxyLoaders.map((loader) => {
-            const rawOptions = loader.options;
+          const originLoaders = proxyLoaders.map((loader, index) => {
+            const contextLoader = contextLoaders[index];
+            const rawOptions =
+              loader.options ??
+              (contextLoader?.request === loader.loader
+                ? contextLoader.options
+                : undefined);
             const opts = (
               typeof rawOptions === 'object' && rawOptions !== null
                 ? rawOptions
