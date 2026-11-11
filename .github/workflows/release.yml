@@ -3,6 +3,14 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
+      target:
+        type: choice
+        description: 'Packages to publish'
+        required: true
+        default: 'main-packages'
+        options:
+          - main-packages
+          - agent-cli
       npm_tag:
         type: choice
         description: 'Specify npm tag'
@@ -60,6 +68,12 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Publish to npm
+      - name: Publish main packages to npm
+        if: inputs.target == 'main-packages'
         run: |
-          pnpm -r publish --tag ${{ github.event.inputs.npm_tag }} --publish-branch ${{ github.event.inputs.branch }}
+          pnpm --filter './packages/*' --filter '!@rsdoctor/agent-cli' --fail-if-no-match -r publish --tag ${{ github.event.inputs.npm_tag }} --publish-branch ${{ github.event.inputs.branch }}
+
+      - name: Publish agent CLI to npm
+        if: inputs.target == 'agent-cli'
+        run: |
+          pnpm --filter '@rsdoctor/agent-cli' --fail-if-no-match -r publish --tag ${{ github.event.inputs.npm_tag }} --publish-branch ${{ github.event.inputs.branch }}
