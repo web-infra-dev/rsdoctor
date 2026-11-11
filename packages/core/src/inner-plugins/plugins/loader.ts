@@ -18,6 +18,12 @@ type MutableNormalModule = Omit<NormalModule, 'loaders'> & {
   loaders: Array<{ loader: string; options?: unknown }>;
 };
 
+type ModuleMethod = (...args: unknown[]) => unknown;
+
+function isNativeFunction(fn: ModuleMethod): boolean {
+  return Function.prototype.toString.call(fn).includes('[native code]');
+}
+
 type LoaderHookCallback = (
   loaderContext: LoaderContext<unknown>,
   module: MutableNormalModule,
@@ -120,12 +126,28 @@ export class InternalLoaderPlugin<
           ) {
             callback(loaderContext, module || {});
           } else {
+            const boundMethods = new Map<
+              PropertyKey,
+              { method: ModuleMethod; bound: ModuleMethod }
+            >();
             const proxyModule = new Proxy(module || {}, {
-              get(target, p, receiver) {
+              get(target, p) {
                 if (p === 'loaders') return newLoaders;
-                return Reflect.get(target, p, receiver);
+                const value = Reflect.get(target, p, target);
+                if (
+                  typeof value !== 'function' ||
+                  p === 'constructor' ||
+                  !isNativeFunction(value)
+                ) {
+                  return value;
+                }
+                const cached = boundMethods.get(p);
+                if (cached && cached.method === value) return cached.bound;
+                const bound = value.bind(target);
+                boundMethods.set(p, { method: value, bound });
+                return bound;
               },
-              set(target, p, newValue, receiver) {
+              set(target, p, newValue) {
                 const _newValue = safeCloneDeep(newValue);
                 if (p === 'loaders') {
                   if (Array.isArray(_newValue)) {
@@ -135,7 +157,7 @@ export class InternalLoaderPlugin<
                     });
                   }
                 }
-                return Reflect.set(target, p, _newValue, receiver);
+                return Reflect.set(target, p, _newValue, target);
               },
               deleteProperty(target, p) {
                 return Reflect.deleteProperty(target, p);
