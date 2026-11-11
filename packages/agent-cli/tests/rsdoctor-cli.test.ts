@@ -170,12 +170,39 @@ describe('rsdoctor cli tool executor', () => {
           code: 'E1001',
           description: 'Duplicate package rule without literal token in text',
         },
+        rules: [
+          {
+            code: 'E1001',
+            description: 'Duplicate package rule without literal token in text',
+          },
+        ],
         totalRules: 1,
         note: undefined,
       },
       description:
         'Detect duplicate packages using E1001 overlay rule if present.',
     });
+
+    spy.mockRestore();
+  });
+
+  it('returns every duplicate package rule, one per duplicated package', async () => {
+    const spy = rs.spyOn(datasource, 'getRules').mockReturnValue([
+      { code: 'E1001', description: 'Multiple packages of react-is found' },
+      { code: 'E1008', description: 'CJS require' },
+      { code: 'E1001', description: 'Multiple packages of scheduler found' },
+    ] as never);
+
+    const result = await detectDuplicatePackages();
+
+    expect(result.data.rules.map((rule) => rule.description)).toEqual([
+      'Multiple packages of react-is found',
+      'Multiple packages of scheduler found',
+    ]);
+    expect(result.data.rule?.description).toBe(
+      'Multiple packages of react-is found',
+    );
+    expect(result.data.totalRules).toBe(3);
 
     spy.mockRestore();
   });
