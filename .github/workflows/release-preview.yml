@@ -1,0 +1,56 @@
+name: Release Preview
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/release-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    name: Preview ${{ matrix.target }} (${{ matrix.npm_tag }})
+    if: github.repository == 'hai-x/rsdoctor'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: main-packages
+            npm_tag: beta
+          - target: agent-cli
+            npm_tag: latest
+    env:
+      NPM_TAG: ${{ matrix.npm_tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.15.0
+          cache: 'pnpm'
+
+      - name: Install dependencies and build packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Preview main packages
+        if: matrix.target == 'main-packages'
+        run: |
+          pnpm --filter './packages/*' --filter '!@rsdoctor/agent-cli' --fail-if-no-match list --depth -1
+          pnpm --filter './packages/*' --filter '!@rsdoctor/agent-cli' --fail-if-no-match -r publish --tag "$NPM_TAG" --dry-run --force --no-git-checks
+
+      - name: Preview agent CLI
+        if: matrix.target == 'agent-cli'
+        run: |
+          pnpm --filter '@rsdoctor/agent-cli' --fail-if-no-match list --depth -1
+          pnpm --filter '@rsdoctor/agent-cli' --fail-if-no-match -r publish --tag "$NPM_TAG" --dry-run --force --no-git-checks
