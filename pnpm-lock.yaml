@@ -764,8 +764,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@swc-next/parser':
-        specifier: 0.3.0
-        version: 0.3.0
+        specifier: 0.6.1
+        version: 0.6.1
       caniuse-lite:
         specifier: ^1.0.30001823
         version: 1.0.30001823
@@ -792,8 +792,8 @@ importers:
         specifier: workspace:*
         version: link:../../scripts/test-helper
       '@swc-next/walker':
-        specifier: 0.5.0
-        version: 0.5.0
+        specifier: 0.6.1
+        version: 0.6.1
       '@types/babel__code-frame':
         specifier: 7.27.0
         version: 7.27.0
@@ -3731,25 +3731,20 @@ packages:
     resolution: {integrity: sha512-LnhVjMWyMQV9ZmeEy26maJk+8HTIbd59cH4F2MJ439k9DqejRisfFNGAPvRYlKETuh9LrImlS8aKsBgKjMA8WA==}
     engines: {node: '>=14'}
 
-  '@swc-next/decoder@0.3.0':
-    resolution: {integrity: sha512-/vOZdBoTARfUf8yALKGnFBpWSkRK+3KuFGFaEnWLLWogbjfh3EEJ8dmPHJS9GXfnxolKnqaFHkEOQ33X4C9E1w==}
-
   '@swc-next/decoder@0.4.1':
     resolution: {integrity: sha512-HkTOvxm923cjLMUc2LsAMoYU9LjJo2r/O3bXMhP1Y4t3Df7ytFgjmYjNnyQBq7biGtmSLI1xnvYcQd+1XypaEg==}
 
-  '@swc-next/parser-binding-darwin-arm64@0.3.0':
-    resolution: {integrity: sha512-A397Xdo3vLlScQqr/B1LCTITzQTe/nqad6NcTkt0jrD+Ses/3VKoQERpRbgcC5HPvKMMLli1Nyvd3mg50Y60BA==}
-    cpu: [arm64]
-    os: [darwin]
+  '@swc-next/decoder@0.6.1':
+    resolution: {integrity: sha512-ut8hg4qHuTuwGev9ILvjPvoCfAo5ij0MqfM/S8rNfFA3fnnV/itm6lhG/eTOd8SDE5ej1pWKZfe2YZ4KI6mxuA==}
 
   '@swc-next/parser-binding-darwin-arm64@0.4.1':
     resolution: {integrity: sha512-cz8M7qF2oWPNMw+ZLWbeL+e6oQW9rwAWEVJXSNR5ddPa475/IhM2S7DrapDl360uFqae0uSvssyYUqa2ZNZ3kQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@swc-next/parser-binding-darwin-x64@0.3.0':
-    resolution: {integrity: sha512-AcyVlPkNUXaj1j29pc6rvcWMvtUwqRBaXrJ/ZHEgleyy+8bqDW46JUnYU13q6D5v5tXV/khJn+eqb1w0YdxlKg==}
-    cpu: [x64]
+  '@swc-next/parser-binding-darwin-arm64@0.6.1':
+    resolution: {integrity: sha512-sb7LBew7L7DBe8AYkvXeaSdyixb+y5KdwfQKbFH/lAFbWtt+ft72LE+Fpb8OKLOHhvgBZsMfKgyoKrGaf6aIXQ==}
+    cpu: [arm64]
     os: [darwin]
 
   '@swc-next/parser-binding-darwin-x64@0.4.1':
@@ -3757,11 +3752,10 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@swc-next/parser-binding-linux-arm64-gnu@0.3.0':
-    resolution: {integrity: sha512-S+jBZJCVQDNk5dYGGp5oTwXYal32eyCa+vc+No5GyCXjJC+3Vi1SGZEC5O8DFsDgLDr7cxZ5sp+M7KbAA/VHYQ==}
-    cpu: [arm64]
-    os: [linux]
-    libc: [glibc]
+  '@swc-next/parser-binding-darwin-x64@0.6.1':
+    resolution: {integrity: sha512-nja2/sy/+1h3zbPW9kMMXlcabn3O72g0kMOcjFWJ3zhk4YqFCKEoh9h6hslOZ/S+giUtgvP8G5kVKJTI27I5Mw==}
+    cpu: [x64]
+    os: [darwin]
 
   '@swc-next/parser-binding-linux-arm64-gnu@0.4.1':
     resolution: {integrity: sha512-O5SZI82exauaawobbesGZgwchs0mBVxhigWKQyrESl7r2I+BiUpDc/XLW8YGICPUicaDQ4vt3gwIfTBaAqGDew==}
@@ -3769,11 +3763,11 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@swc-next/parser-binding-linux-arm64-musl@0.3.0':
-    resolution: {integrity: sha512-DraHfo66/BHZNycTwzeD34gEQlcqWwAMv9lzyaJk+SZL2ck7mUDB+JnQ9lHKy4PXuycYI7JMK8sLqsBuyXwTjQ==}
+  '@swc-next/parser-binding-linux-arm64-gnu@0.6.1':
+    resolution: {integrity: sha512-PPDmZWQby4E5ks4X9KM/tQqwFIUx0yU6OXnY0Lj4M28l9+3Gxfv+wcxuhGO3jzAZq+xHSdKQU6B1VDuauiZ4Nw==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
+    libc: [glibc]
 
   '@swc-next/parser-binding-linux-arm64-musl@0.4.1':
     resolution: {integrity: sha512-7YrKRZxJIvHJgLXSncgsC2HNrlsHuC+NfYvno9SRq5IS6gFAbcfBqtnNf7ZJsi382OJNMFhjlZV6TZBxDhXv9Q==}
@@ -3781,11 +3775,11 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@swc-next/parser-binding-linux-ppc64-gnu@0.3.0':
-    resolution: {integrity: sha512-P+jpP2rYAe68ETK8GieWpRDEvwBvbwUmFugtDevVlXHlrYYRZ8tkCczQ08C8mzhyxZ31zNiMopY1X5AY/laiFQ==}
-    cpu: [ppc64]
+  '@swc-next/parser-binding-linux-arm64-musl@0.6.1':
+    resolution: {integrity: sha512-1vRKnFcO2HMAy+xKNZ62nAakuzdCQ9Ch+biRh1EdQCPlyMvGQZ56njvuzMJxoChT32jvlKYEYccjZVChfWuiXw==}
+    cpu: [arm64]
     os: [linux]
-    libc: [glibc]
+    libc: [musl]
 
   '@swc-next/parser-binding-linux-ppc64-gnu@0.4.1':
     resolution: {integrity: sha512-6fk0zI8NegOeQDStvuKqHEdSwaTa5guq0eU8xbrub2sqTA84T8C5GnCkeybslHzZxedOcWz0NJ5wZ6/I8Ge5mQ==}
@@ -3793,9 +3787,9 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@swc-next/parser-binding-linux-riscv64-gnu@0.3.0':
-    resolution: {integrity: sha512-R+OmeFXcJ+RO3t1ef2yVcax4tDAl9Mo676iuT0ANpWu0IWax34EW4c9DCs/AO5mGdnCMJWdzxhyL8tapy8aBmg==}
-    cpu: [riscv64]
+  '@swc-next/parser-binding-linux-ppc64-gnu@0.6.1':
+    resolution: {integrity: sha512-KkSW0RLMsGpYJc6CDsfPVtOVl4IIk2lT8L9+Kl73R0Xa5Zow+itqYCYkQBwBrbGEFzSLbHqFOSYMaQvxuYaYzw==}
+    cpu: [ppc64]
     os: [linux]
     libc: [glibc]
 
@@ -3805,11 +3799,11 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@swc-next/parser-binding-linux-riscv64-musl@0.3.0':
-    resolution: {integrity: sha512-8tv2eU1djxLzIrjckIElLimn5O7tUpxHto9Of+Dr1Lvg6ON3qzcrLuAv6eOaqOkSPF1nvX4k5L/TcGNaHRKj9A==}
+  '@swc-next/parser-binding-linux-riscv64-gnu@0.6.1':
+    resolution: {integrity: sha512-L7n9r1VJrUnkHxDI+ARIBtABgLBaJxgbh7YjnilcjZIiL9ipQpDGEePeSKzq+wb/50DrSEaDNEXvsCzw/osgBA==}
     cpu: [riscv64]
     os: [linux]
-    libc: [musl]
+    libc: [glibc]
 
   '@swc-next/parser-binding-linux-riscv64-musl@0.4.1':
     resolution: {integrity: sha512-OvFQb+17quQoPLmOD0Mv/qdGnd6+fZL43Krnm6Q2TxHol7g7tLskL4sTtt8BGYybBJeMEcY3DkH2fZwGaRvrMg==}
@@ -3817,11 +3811,11 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@swc-next/parser-binding-linux-s390x-gnu@0.3.0':
-    resolution: {integrity: sha512-Pg5OuDna5/uyW2jQ/a26coMNT8ELDUdWYXgOCmk10Lg5PMww79CgrUyysdtz9qcCjTZoQD0Q/d6UXSHtZfC2nA==}
-    cpu: [s390x]
+  '@swc-next/parser-binding-linux-riscv64-musl@0.6.1':
+    resolution: {integrity: sha512-YfNeKuHb0e317IVgF1+6aI5jTS24NRzM8lP+gUiDwNtNM0je9cOxDvmqzvnklA262QD7bkYrTQuh4lyrF8qQaA==}
+    cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
+    libc: [musl]
 
   '@swc-next/parser-binding-linux-s390x-gnu@0.4.1':
     resolution: {integrity: sha512-KwjEquKRyKRJZT83oZMpjnVi1OUzPV9pUcWFUci7OQDGE6Q4DCljGcZ14R4o3Xgth4T7QvqG7GGAScBuevFIwQ==}
@@ -3829,9 +3823,9 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@swc-next/parser-binding-linux-x64-gnu@0.3.0':
-    resolution: {integrity: sha512-EFe+LC/esvJ3qxNBiJN26wQETBSOy1zCQuaxl4ef6aeK15Uqg+u7mtpzUf27jvC8BsWWRo2ABmwh9C+9FaHJAA==}
-    cpu: [x64]
+  '@swc-next/parser-binding-linux-s390x-gnu@0.6.1':
+    resolution: {integrity: sha512-9qcEiA0Ew5coBWc1n3CoT+V34VSAfZbi2cza6uI0W8g1KuBgvFYbBwuui+lrjnsQCq7rhs13mGiGilOG0embDQ==}
+    cpu: [s390x]
     os: [linux]
     libc: [glibc]
 
@@ -3841,11 +3835,11 @@ packages:
     os: [linux]
     libc: [glibc]
 
-  '@swc-next/parser-binding-linux-x64-musl@0.3.0':
-    resolution: {integrity: sha512-sGncpKBiTEmtZF0ZMpUaVWZW2Zebc1uEBL/qcDPc7MZlrI/ahjwq10WTShE1lu4VDAHmvA1H0lOY4ayJZCdnGQ==}
+  '@swc-next/parser-binding-linux-x64-gnu@0.6.1':
+    resolution: {integrity: sha512-o7lmOFijF7CMjYcHxvE7yC1ypC3NnTDhhSIiH9V3nWFXfNKRLLq9AXiZyJ8JRHovUsG6VuFbWN9VQ9cw/9Ypqg==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
+    libc: [glibc]
 
   '@swc-next/parser-binding-linux-x64-musl@0.4.1':
     resolution: {integrity: sha512-QKgpJeuMprp4dodkY4al3QfGKnFuGechwJPi0XwWpcTZBOefK0i0bZof5suSIO1pLQ1+jOc0rKWv51gbC23K/g==}
@@ -3853,19 +3847,20 @@ packages:
     os: [linux]
     libc: [musl]
 
-  '@swc-next/parser-binding-win32-arm64-msvc@0.3.0':
-    resolution: {integrity: sha512-MFp5gJvHcApJd33V7e2qdcvgATbAZIrUi8obD8MRl/aGNLBkJfmpZHIFLiDTdzAfXmBpFSYNOn2vemwxyTKNig==}
-    cpu: [arm64]
-    os: [win32]
+  '@swc-next/parser-binding-linux-x64-musl@0.6.1':
+    resolution: {integrity: sha512-zkMl6tTwZtv3VG4QbZhLHDzT1/8udDpwe6B4BF7OBuEITV28bdXbQtajeJEtE3N4cyM8GiHjcbLvq90/i3WfuA==}
+    cpu: [x64]
+    os: [linux]
+    libc: [musl]
 
   '@swc-next/parser-binding-win32-arm64-msvc@0.4.1':
     resolution: {integrity: sha512-y/DrHfN4k7+/z2DxBnewbqIgFUapXSxQ9gphXiLen8QiQnZLpUUAFCvXRy1XT1HZEgEKwQBo0FTsLH4qMVghbQ==}
     cpu: [arm64]
     os: [win32]
 
-  '@swc-next/parser-binding-win32-ia32-msvc@0.3.0':
-    resolution: {integrity: sha512-7VrmSFiEBBtYTtZ2clVprJ/jR0tbWSmHUsE1AzYwBoHpB+AizcmMwolt15yvKIpmO5VnApfk7dPQ+9ON6ApcQQ==}
-    cpu: [ia32]
+  '@swc-next/parser-binding-win32-arm64-msvc@0.6.1':
+    resolution: {integrity: sha512-YhFLcbCUnLqxl0M+96eD13xNFnX7Il0HOKEnIyvR1rHHYlcYC9Z8mW5CxF4JrDc6W8eXHM78wOqpNR/H/CtB7A==}
+    cpu: [arm64]
     os: [win32]
 
   '@swc-next/parser-binding-win32-ia32-msvc@0.4.1':
@@ -3873,9 +3868,9 @@ packages:
     cpu: [ia32]
     os: [win32]
 
-  '@swc-next/parser-binding-win32-x64-msvc@0.3.0':
-    resolution: {integrity: sha512-3qTFeftUtok2JeOgfpD78d8VYC+RKBRKulfxsTOZCWkpgQ5GKxUg/oS8RBUVo9sYTlQBVU4X7fzkZ+VLYThhmw==}
-    cpu: [x64]
+  '@swc-next/parser-binding-win32-ia32-msvc@0.6.1':
+    resolution: {integrity: sha512-Qn1f3ZAyniOEy34Du2qhoyEEagJ7kUw8D0EpMahlDek3aflLN0F4SmpEIT0d3Sbbx6otiLTnWnDlqrTG6BlsDg==}
+    cpu: [ia32]
     os: [win32]
 
   '@swc-next/parser-binding-win32-x64-msvc@0.4.1':
@@ -3883,13 +3878,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@swc-next/parser@0.3.0':
-    resolution: {integrity: sha512-fBaw4lniDiCcQaSuomn4N+L5Gj3wBLniGFf02YqP+gxeT+nyptKF05L3E/FqhQMl0zIJO6zTBXHo3S2Dbm0+Fw==}
-    peerDependencies:
-      '@swc-next/parser-binding-wasm': 0.3.0
-    peerDependenciesMeta:
-      '@swc-next/parser-binding-wasm':
-        optional: true
+  '@swc-next/parser-binding-win32-x64-msvc@0.6.1':
+    resolution: {integrity: sha512-uehmz6Vp5DU77Afrj9glWrIXoh7hXBfhMxAF8WueKnEc04cfdCJxqwaVryFXGXWk5vsEGHSqNPEa9P3o5b+/1g==}
+    cpu: [x64]
+    os: [win32]
 
   '@swc-next/parser@0.4.1':
     resolution: {integrity: sha512-wTWUe4Tsve70NmsdiLdpae+HP83t9TN3NI03TKcTU0+u5C2U9t+Od/6p9OW3UFDC6jqDirDObK2bfwiXNLtb7Q==}
@@ -3899,14 +3891,22 @@ packages:
       '@swc-next/parser-binding-wasm':
         optional: true
 
-  '@swc-next/types@0.3.0':
-    resolution: {integrity: sha512-mOnFOQMeu3kew/Xk/ShWKFsHNlJSxdeJfy07xFvCkFmqvumM+Sl2AIIkUDEegFTa3zrffiFwzo9JHNwM/JEQAA==}
+  '@swc-next/parser@0.6.1':
+    resolution: {integrity: sha512-NHIPhxup7Riq3oeEHTFtW/LXBP08jyX2n1o3iLt+hou8KCI0ED5IModKkth0GD30eG+8AXFL7+PPWAwCjjZYBw==}
+    peerDependencies:
+      '@swc-next/parser-binding-wasm': 0.6.1
+    peerDependenciesMeta:
+      '@swc-next/parser-binding-wasm':
+        optional: true
 
   '@swc-next/types@0.4.1':
     resolution: {integrity: sha512-cK5oQcZVfLXaTqmty67dAyns7O0rgroray4WR2JhoyoDy9kHCD+cDpfTfStp5sO8WWvFHVqeB46mWwzhXwQljQ==}
 
-  '@swc-next/walker@0.5.0':
-    resolution: {integrity: sha512-fLng80XlV9vhLwt+uOSu4iIwCMmWIUqykuhTQhPW3AQYC1T8iao/i3W4nW5kmJgYFZg5X6h53KrcwcJpn8v5Fw==}
+  '@swc-next/types@0.6.1':
+    resolution: {integrity: sha512-yUlDn5xZYqIJvFWt/EG5Tap5opPForFo7hks36qYmicoZbR15PeVq1E6I1SXLcNwB6pjsXNjIqDfgQn0fVkUZA==}
+
+  '@swc-next/walker@0.6.1':
+    resolution: {integrity: sha512-tGt+kdfaXxFX/QgZ2jpInK5CLD5nq2QmqzikfWVPw6YBFuQmFNQZlVOGU8nWkXxzhG7r6086EajYQQjftmfdYQ==}
 
   '@swc/helpers@0.5.23':
     resolution: {integrity: sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==}
@@ -11590,110 +11590,91 @@ snapshots:
       - supports-color
       - typescript
 
-  '@swc-next/decoder@0.3.0':
-    dependencies:
-      '@swc-next/types': 0.3.0
-
   '@swc-next/decoder@0.4.1':
     dependencies:
       '@swc-next/types': 0.4.1
 
-  '@swc-next/parser-binding-darwin-arm64@0.3.0':
-    optional: true
+  '@swc-next/decoder@0.6.1':
+    dependencies:
+      '@swc-next/types': 0.6.1
 
   '@swc-next/parser-binding-darwin-arm64@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-darwin-x64@0.3.0':
+  '@swc-next/parser-binding-darwin-arm64@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-darwin-x64@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-linux-arm64-gnu@0.3.0':
+  '@swc-next/parser-binding-darwin-x64@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-linux-arm64-gnu@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-linux-arm64-musl@0.3.0':
+  '@swc-next/parser-binding-linux-arm64-gnu@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-linux-arm64-musl@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-linux-ppc64-gnu@0.3.0':
+  '@swc-next/parser-binding-linux-arm64-musl@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-linux-ppc64-gnu@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-linux-riscv64-gnu@0.3.0':
+  '@swc-next/parser-binding-linux-ppc64-gnu@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-linux-riscv64-gnu@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-linux-riscv64-musl@0.3.0':
+  '@swc-next/parser-binding-linux-riscv64-gnu@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-linux-riscv64-musl@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-linux-s390x-gnu@0.3.0':
+  '@swc-next/parser-binding-linux-riscv64-musl@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-linux-s390x-gnu@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-linux-x64-gnu@0.3.0':
+  '@swc-next/parser-binding-linux-s390x-gnu@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-linux-x64-gnu@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-linux-x64-musl@0.3.0':
+  '@swc-next/parser-binding-linux-x64-gnu@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-linux-x64-musl@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-win32-arm64-msvc@0.3.0':
+  '@swc-next/parser-binding-linux-x64-musl@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-win32-arm64-msvc@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-win32-ia32-msvc@0.3.0':
+  '@swc-next/parser-binding-win32-arm64-msvc@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-win32-ia32-msvc@0.4.1':
     optional: true
 
-  '@swc-next/parser-binding-win32-x64-msvc@0.3.0':
+  '@swc-next/parser-binding-win32-ia32-msvc@0.6.1':
     optional: true
 
   '@swc-next/parser-binding-win32-x64-msvc@0.4.1':
     optional: true
 
-  '@swc-next/parser@0.3.0':
-    dependencies:
-      '@swc-next/decoder': 0.3.0
-      '@swc-next/types': 0.3.0
-    optionalDependencies:
-      '@swc-next/parser-binding-darwin-arm64': 0.3.0
-      '@swc-next/parser-binding-darwin-x64': 0.3.0
-      '@swc-next/parser-binding-linux-arm64-gnu': 0.3.0
-      '@swc-next/parser-binding-linux-arm64-musl': 0.3.0
-      '@swc-next/parser-binding-linux-ppc64-gnu': 0.3.0
-      '@swc-next/parser-binding-linux-riscv64-gnu': 0.3.0
-      '@swc-next/parser-binding-linux-riscv64-musl': 0.3.0
-      '@swc-next/parser-binding-linux-s390x-gnu': 0.3.0
-      '@swc-next/parser-binding-linux-x64-gnu': 0.3.0
-      '@swc-next/parser-binding-linux-x64-musl': 0.3.0
-      '@swc-next/parser-binding-win32-arm64-msvc': 0.3.0
-      '@swc-next/parser-binding-win32-ia32-msvc': 0.3.0
-      '@swc-next/parser-binding-win32-x64-msvc': 0.3.0
+  '@swc-next/parser-binding-win32-x64-msvc@0.6.1':
+    optional: true
 
   '@swc-next/parser@0.4.1':
     dependencies:
@@ -11714,11 +11695,30 @@ snapshots:
       '@swc-next/parser-binding-win32-ia32-msvc': 0.4.1
       '@swc-next/parser-binding-win32-x64-msvc': 0.4.1
 
-  '@swc-next/types@0.3.0': {}
+  '@swc-next/parser@0.6.1':
+    dependencies:
+      '@swc-next/decoder': 0.6.1
+      '@swc-next/types': 0.6.1
+    optionalDependencies:
+      '@swc-next/parser-binding-darwin-arm64': 0.6.1
+      '@swc-next/parser-binding-darwin-x64': 0.6.1
+      '@swc-next/parser-binding-linux-arm64-gnu': 0.6.1
+      '@swc-next/parser-binding-linux-arm64-musl': 0.6.1
+      '@swc-next/parser-binding-linux-ppc64-gnu': 0.6.1
+      '@swc-next/parser-binding-linux-riscv64-gnu': 0.6.1
+      '@swc-next/parser-binding-linux-riscv64-musl': 0.6.1
+      '@swc-next/parser-binding-linux-s390x-gnu': 0.6.1
+      '@swc-next/parser-binding-linux-x64-gnu': 0.6.1
+      '@swc-next/parser-binding-linux-x64-musl': 0.6.1
+      '@swc-next/parser-binding-win32-arm64-msvc': 0.6.1
+      '@swc-next/parser-binding-win32-ia32-msvc': 0.6.1
+      '@swc-next/parser-binding-win32-x64-msvc': 0.6.1
 
   '@swc-next/types@0.4.1': {}
 
-  '@swc-next/walker@0.5.0': {}
+  '@swc-next/types@0.6.1': {}
+
+  '@swc-next/walker@0.6.1': {}
 
   '@swc/helpers@0.5.23':
     dependencies:
