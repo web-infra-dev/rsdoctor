@@ -1,6 +1,7 @@
 import type { Configuration, RuleSetRule } from '@rspack/core';
 import { makeRulesSerializable } from '@/inner-plugins';
 import { SDK } from '@rsdoctor/shared/types';
+import { decycle } from '@rsdoctor/shared/common-browser';
 import { chalk } from '@/logger';
 import path from 'path';
 import { openBrowser } from './openBrowser';
@@ -134,7 +135,7 @@ export function processCompilerConfig(config: any): Configuration {
   }
 
   return {
-    ..._rest,
+    ...decycle(_rest),
     plugins: plugins.map((e: any) => e?.constructor.name),
   } as unknown as Configuration;
 }

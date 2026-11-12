@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'rstack/test';
-import { safeCloneDeep } from '@/inner-plugins/utils/plugin-common';
+import {
+  processCompilerConfig,
+  safeCloneDeep,
+} from '@/inner-plugins/utils/plugin-common';
 
 describe('safeCloneDeep', () => {
   it('should handle primitive values', () => {
@@ -118,5 +121,35 @@ describe('safeCloneDeep', () => {
     expect(cloned.regex.flags).toBe(regex.flags);
     expect(cloned.array).not.toBe(obj.array);
     expect(cloned.nested.deep).not.toBe(obj.nested.deep);
+  });
+});
+
+describe('processCompilerConfig', () => {
+  it('should make a config with a self-referencing loader context serializable', () => {
+    const context: any = { type: 'bundler' };
+    context.readOnlyHandle = { uncheckedDirectAccess: context };
+    class ExamplePlugin {}
+    const configuration: any = processCompilerConfig({
+      mode: 'production',
+      loader: { context },
+      plugins: [new ExamplePlugin()],
+    });
+
+    expect(
+      configuration.loader.context.readOnlyHandle.uncheckedDirectAccess,
+    ).toEqual({ $ref: '$["loader"]["context"]' });
+    expect(configuration.plugins).toEqual(['ExamplePlugin']);
+    expect(() => JSON.stringify(configuration)).not.toThrow();
+  });
+
+  it('should keep rule conditions serializable', () => {
+    const configuration: any = processCompilerConfig({
+      module: { rules: [{ test: /\.tsx?$/ }] },
+      plugins: [],
+    });
+
+    expect(JSON.parse(JSON.stringify(configuration)).module.rules[0].test).toBe(
+      '/\\.tsx?$/',
+    );
   });
 });
