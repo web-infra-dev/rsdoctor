@@ -111,7 +111,7 @@ export class InternalLoaderPlugin<
             return loader;
           });
 
-          const newLoaders = safeCloneDeep(originLoaders);
+          let newLoaders = safeCloneDeep(originLoaders);
           if (
             typeof compiler.options.cache === 'object' &&
             'version' in compiler.options.cache &&
@@ -120,28 +120,19 @@ export class InternalLoaderPlugin<
           ) {
             callback(loaderContext, module || {});
           } else {
-            const proxyModule = new Proxy(module || {}, {
-              get(target, p, receiver) {
-                if (p === 'loaders') return newLoaders;
-                return Reflect.get(target, p, receiver);
-              },
-              set(target, p, newValue, receiver) {
-                const _newValue = safeCloneDeep(newValue);
-                if (p === 'loaders') {
-                  if (Array.isArray(_newValue)) {
-                    newLoaders.length = 0;
-                    _newValue.forEach((e) => {
-                      newLoaders.push(e);
-                    });
-                  }
-                }
-                return Reflect.set(target, p, _newValue, receiver);
-              },
-              deleteProperty(target, p) {
-                return Reflect.deleteProperty(target, p);
-              },
-            });
-            callback(loaderContext, proxyModule);
+            const hookModule = module || ({} as MutableNormalModule);
+            const savedLoaders = hookModule.loaders;
+            // Loader hooks are synchronous. Expose the original loaders only
+            // during the callback, keeping the native module as the receiver.
+            try {
+              hookModule.loaders = newLoaders;
+              callback(loaderContext, hookModule);
+              if (Array.isArray(hookModule.loaders)) {
+                newLoaders = hookModule.loaders;
+              }
+            } finally {
+              hookModule.loaders = savedLoaders;
+            }
           }
 
           // loaders are overwrite when originLoader is not same with newLoaders
