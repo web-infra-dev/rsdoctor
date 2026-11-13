@@ -7,6 +7,7 @@ import {
   enhanceCommand,
   loadJSON,
   loadShardingFileWithSpinner,
+  resolveManifestShardingFiles,
 } from '../utils';
 import { Commands } from '../constants';
 import {
@@ -83,7 +84,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
 
     try {
       baselineDataValue = await Manifest.fetchShardingFiles(
-        baselineData.data,
+        resolveManifestShardingFiles(baselineData.data, baseline, cwd),
         (url) => loadShardingFileWithSpinner(url, cwd, spinner),
       );
     } catch (error) {
@@ -91,7 +92,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
         spinner.text =
           'load the "baselineData.cloudData" instead of the "baselineData.data"';
         baselineDataValue = await Manifest.fetchShardingFiles(
-          baselineData.cloudData,
+          resolveManifestShardingFiles(baselineData.cloudData, baseline, cwd),
           (url) => loadShardingFileWithSpinner(url, cwd, spinner),
         );
       } else {
@@ -115,7 +116,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
 
     try {
       currentDataValue = await Manifest.fetchShardingFiles(
-        currentData.data,
+        resolveManifestShardingFiles(currentData.data, current, cwd),
         (url) => loadShardingFileWithSpinner(url, cwd, spinner),
       );
     } catch (error) {
@@ -123,7 +124,7 @@ example: ${bin} ${Commands.BundleDiff} --baseline="x.json" --current="x.json"
         spinner.text =
           'load the "currentData.cloudData" instead of the "currentData.data"';
         currentDataValue = await Manifest.fetchShardingFiles(
-          currentData.cloudData,
+          resolveManifestShardingFiles(currentData.cloudData, current, cwd),
           (url) => loadShardingFileWithSpinner(url, cwd, spinner),
         );
       } else {

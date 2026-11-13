@@ -12,6 +12,7 @@ import {
   enhanceCommand,
   loadJSON,
   loadShardingFileWithSpinner,
+  resolveManifestShardingFiles,
 } from '../utils';
 import { Commands } from '../constants';
 
@@ -57,13 +58,13 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
 
       try {
         dataValue = await Manifest.fetchShardingFiles(
-          json.data,
+          resolveManifestShardingFiles(json.data, profile, cwd),
           (url: string) => loadShardingFileWithSpinner(url, cwd, spinner),
         );
       } catch (error) {
         try {
           dataValue = await Manifest.fetchShardingFiles(
-            json.cloudData || {},
+            resolveManifestShardingFiles(json.cloudData || {}, profile, cwd),
             (url: string) => loadShardingFileWithSpinner(url, cwd, spinner),
           );
         } catch {

@@ -4,6 +4,7 @@ import {
   loadJSON,
   loadShardingFile,
   loadShardingFileWithSpinner,
+  resolveManifestShardingFiles,
 } from '../src/utils';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -123,5 +124,30 @@ describe('cli utils', () => {
 
     expect(content).toBe('spinner-content');
     expect(spinner.text).toBe(`loaded "${file}"`);
+  });
+
+  it('resolves relative shard paths from the manifest location', () => {
+    const data = resolveManifestShardingFiles(
+      { moduleGraph: ['moduleGraph/0'], hash: 'hash' },
+      'reports/manifest.json',
+      '/project',
+    );
+
+    expect(data).toStrictEqual({
+      moduleGraph: ['/project/reports/moduleGraph/0'],
+      hash: 'hash',
+    });
+  });
+
+  it('resolves relative shard URLs from the remote manifest location', () => {
+    const data = resolveManifestShardingFiles(
+      { moduleGraph: ['moduleGraph/0'] },
+      'https://example.com/reports/manifest.json',
+      process.cwd(),
+    );
+
+    expect(data.moduleGraph).toStrictEqual([
+      'https://example.com/reports/moduleGraph/0',
+    ]);
   });
 });
