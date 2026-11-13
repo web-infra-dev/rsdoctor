@@ -168,6 +168,9 @@ define.doc({
     ],
   },
   builderConfig: {
+    output: {
+      module: true,
+    },
     plugins: [
       pluginSass(),
       pluginGoogleAnalytics({ id: 'G-9DETE89N4Q' }),
