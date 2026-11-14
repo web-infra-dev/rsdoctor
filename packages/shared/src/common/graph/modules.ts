@@ -5,6 +5,34 @@ import {
   getDependencyByPackageData,
 } from './dependency';
 
+interface ModuleIndex {
+  size: number;
+  byId: Map<SDK.ModuleData['id'], SDK.ModuleData>;
+}
+
+// Asset and chunk lookups resolve many module ids against the same list, for
+// example once per output asset when building bundle data. Index the list once
+// instead of searching it for every id.
+const moduleIndexes = new WeakMap<readonly SDK.ModuleData[], ModuleIndex>();
+
+function getModuleIndex(modules: readonly SDK.ModuleData[]) {
+  const cached = moduleIndexes.get(modules);
+  if (cached && cached.size === modules.length) {
+    return cached.byId;
+  }
+
+  const byId: ModuleIndex['byId'] = new Map();
+  for (const module of modules) {
+    // Keep the first module for an id, as `find` did.
+    if (!byId.has(module.id)) {
+      byId.set(module.id, module);
+    }
+  }
+
+  moduleIndexes.set(modules, { size: modules.length, byId });
+  return byId;
+}
+
 export function getModulesByAsset(
   asset: SDK.AssetData,
   chunks: SDK.ChunkData[],
@@ -27,9 +55,8 @@ export function getModuleIdsByModulesIds(
   moduleIds: number[],
   modules: SDK.ModuleData[],
 ) {
-  return moduleIds
-    .map((id) => modules.find((m) => m.id === id)!)
-    .filter(Boolean);
+  const byId = getModuleIndex(modules);
+  return moduleIds.map((id) => byId.get(id)!).filter(Boolean);
 }
 
 export function getModulesByChunk(
@@ -38,9 +65,10 @@ export function getModulesByChunk(
   filterModules?: (keyof SDK.ModuleData)[],
 ): SDK.ModuleData[] {
   const ids = getModuleIdsByChunk(chunk);
+  const byId = getModuleIndex(modules);
   return ids
     .map((id) => {
-      const module = modules.find((e) => e.id === id)!;
+      const module = byId.get(id)!;
       if (filterModules && filterModules.length > 0) {
         if (!module) {
           return null as any;
@@ -65,13 +93,12 @@ export function getModulesByChunks(
   checkModules?: (module: SDK.ModuleData) => boolean,
 ): SDK.ModuleData[] {
   const res: SDK.ModuleData[] = [];
+  const seen = new Set<SDK.ModuleData['id']>();
   try {
     chunks.forEach((chunk) => {
       getModulesByChunk(chunk, modules, filterModules).forEach((md) => {
-        if (
-          (checkModules ? checkModules(md) : true) &&
-          !res.filter((_m) => _m.id === md.id).length
-        ) {
+        if ((checkModules ? checkModules(md) : true) && !seen.has(md.id)) {
+          seen.add(md.id);
           res.push(md);
         }
       });

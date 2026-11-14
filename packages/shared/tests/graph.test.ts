@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'rstack/test';
 import { Graph } from '../src/common-browser';
+import { SDK } from '../src/types';
 
 describe('test src/common/graph.ts', () => {
   it('formatAssetName', () => {
@@ -244,6 +245,54 @@ describe('test src/common/graph.ts', () => {
     ).toMatchObject({
       size: { baseline: 20, current: 25 },
       count: { baseline: 1, current: 1 },
+    });
+  });
+  describe('getModulesByAsset', () => {
+    const modules = [
+      { id: 1, path: '/src/a.js', size: { sourceSize: 10 } },
+      { id: 2, path: '/src/b.js', size: { sourceSize: 20 } },
+      { id: 3, path: '/src/c.js', size: { sourceSize: 30 } },
+      // Duplicate ids resolve to the first module, as before.
+      { id: 2, path: '/src/b-duplicate.js', size: { sourceSize: 40 } },
+    ] as unknown as SDK.ModuleData[];
+    const chunks = [
+      { id: 'main', modules: [1, 2, 99] },
+      { id: 'vendor', modules: [2, 3] },
+    ] as unknown as SDK.ChunkData[];
+    const asset = {
+      path: 'main.js',
+      chunks: ['main', 'vendor'],
+    } as SDK.AssetData;
+
+    it('resolves module ids across chunks without duplicates', () => {
+      expect(
+        Graph.getModulesByAsset(asset, chunks, modules).map((m) => m.path),
+      ).toEqual(['/src/a.js', '/src/b.js', '/src/c.js']);
+    });
+
+    it('applies field filters and module checks', () => {
+      expect(
+        Graph.getModulesByAsset(
+          asset,
+          chunks,
+          modules,
+          ['id', 'path'],
+          (m) => m.id !== 1,
+        ),
+      ).toEqual([
+        { id: 2, path: '/src/b.js' },
+        { id: 3, path: '/src/c.js' },
+      ]);
+    });
+
+    it('resolves modules added to the list after an earlier lookup', () => {
+      const list = modules.slice(0, 1);
+      expect(Graph.getModuleIdsByModulesIds([1, 3], list)).toHaveLength(1);
+
+      list.push(modules[2]);
+      expect(
+        Graph.getModuleIdsByModulesIds([1, 3], list).map((m) => m.path),
+      ).toEqual(['/src/a.js', '/src/c.js']);
     });
   });
 });
