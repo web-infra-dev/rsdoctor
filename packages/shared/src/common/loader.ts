@@ -75,34 +75,79 @@ export function getLoadersCosts(
   return costs;
 }
 
+type LoaderTiming = Pick<
+  SDK.LoaderTransformData,
+  'loader' | 'startAt' | 'endAt' | 'pid'
+>;
+
+interface LoaderTimingIndex {
+  size: number;
+  byPid: Map<number | string, LoaderTiming[]>;
+}
+
+// Callers compute costs for every loader against the same list, so scanning
+// the whole list per loader is quadratic. Index it once instead: non-builtin
+// loaders grouped by pid and sorted by start time.
+const loaderTimingIndexes = new WeakMap<
+  readonly LoaderTiming[],
+  LoaderTimingIndex
+>();
+
+function getLoaderTimingIndex(loaders: readonly LoaderTiming[]) {
+  const cached = loaderTimingIndexes.get(loaders);
+  if (cached && cached.size === loaders.length) {
+    return cached.byPid;
+  }
+
+  const byPid: LoaderTimingIndex['byPid'] = new Map();
+  for (const e of loaders) {
+    // TODO: Because the loader on the rust side adopts multi-threading, it is necessary to discuss the thread worker ID to make the accuracy of the cold resistance time.
+    if (e.loader.includes('builtin')) {
+      continue;
+    }
+    let group = byPid.get(e.pid);
+    if (!group) {
+      group = [];
+      byPid.set(e.pid, group);
+    }
+    group.push(e);
+  }
+  for (const group of byPid.values()) {
+    group.sort((a, b) => a.startAt - b.startAt);
+  }
+
+  loaderTimingIndexes.set(loaders, { size: loaders.length, byPid });
+  return byPid;
+}
+
 export function getLoaderCosts(
   loader: SDK.LoaderTransformData,
   loaders: SDK.LoaderTransformData[],
 ) {
+  const group = getLoaderTimingIndex(loaders).get(loader.pid) || [];
+
+  // First loader that starts at or after the target loader.
+  let low = 0;
+  let high = group.length;
+  while (low < high) {
+    const mid = (low + high) >>> 1;
+    if (group[mid].startAt < loader.startAt) {
+      low = mid + 1;
+    } else {
+      high = mid;
+    }
+  }
+
   // between in target loader.startAt and loader.endAt
-  const blocked = loaders.filter((e) => {
-    // TODO: Because the loader on the rust side adopts multi-threading, it is necessary to discuss the thread worker ID to make the accuracy of the cold resistance time.
-    if (e.loader.includes('builtin')) {
-      return false;
+  // |------|
+  //   |--|
+  const blocked: LoaderTiming[] = [];
+  for (let i = low; i < group.length && group[i].startAt <= loader.endAt; i++) {
+    const e = group[i];
+    if (e !== loader && e.endAt <= loader.endAt) {
+      blocked.push(e);
     }
-    if (e !== loader && e.pid === loader.pid) {
-      if (e.startAt >= loader.startAt) {
-        // |------|
-        //   |--|
-        if (e.endAt <= loader.endAt) return true;
-
-        // |------|
-        //      |---|
-        // if (e.startAt < loader.endAt) return true;
-      }
-
-      //  |-------|
-      // |---|
-      // if (e.endAt > loader.startAt && e.endAt < loader.endAt) return true;
-    }
-
-    return false;
-  });
+  }
 
   let costs = loader.endAt - loader.startAt;
 

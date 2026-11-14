@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'rstack/test';
-import { Loader } from '../../src/common-browser';
+import { Algorithm, Loader } from '../../src/common-browser';
 import { SDK } from '../../src/types';
 
 describe('test src/common/loader.ts', () => {
@@ -171,5 +171,103 @@ describe('test src/common/loader.ts', () => {
     expect(() => {
       Loader.getLoaderFileDetails('/non-existent/file.js', mockLoaderData);
     }).toThrow('"/non-existent/file.js" not match any loader data');
+  });
+  describe('getLoaderCosts', () => {
+    const createLoader = (
+      loader: string,
+      startAt: number,
+      endAt: number,
+      pid = 1,
+    ): SDK.LoaderTransformData => ({
+      loader,
+      loaderIndex: 0,
+      path: `/node_modules/${loader}/index.js`,
+      input: null,
+      result: null,
+      startAt,
+      endAt,
+      options: {},
+      isPitch: false,
+      sync: true,
+      errors: [],
+      pid,
+      ppid: 0,
+    });
+
+    // The previous implementation, kept as a reference for the indexed one.
+    const getLoaderCostsByScan = (
+      loader: SDK.LoaderTransformData,
+      loaders: SDK.LoaderTransformData[],
+    ) => {
+      const blocked = loaders.filter(
+        (e) =>
+          !e.loader.includes('builtin') &&
+          e !== loader &&
+          e.pid === loader.pid &&
+          e.startAt >= loader.startAt &&
+          e.endAt <= loader.endAt,
+      );
+      let costs = loader.endAt - loader.startAt;
+      if (blocked.length) {
+        Algorithm.mergeIntervals(
+          blocked.map((e) => [
+            Math.max(e.startAt, loader.startAt),
+            Math.min(e.endAt, loader.endAt),
+          ]),
+        ).forEach((e) => {
+          costs -= e[1] - e[0];
+        });
+      }
+      return costs;
+    };
+
+    it('subtracts loaders that run inside the target loader', () => {
+      const outer = createLoader('babel-loader', 0, 100);
+      const loaders = [
+        outer,
+        createLoader('css-loader', 10, 30),
+        createLoader('sass-loader', 20, 40),
+        // Overlaps the end, so it doesn't block the target loader.
+        createLoader('less-loader', 90, 120),
+        // Builtin loaders and other processes are ignored.
+        createLoader('builtin:swc-loader', 50, 60),
+        createLoader('style-loader', 60, 70, 2),
+      ];
+
+      expect(Loader.getLoaderCosts(outer, loaders)).toBe(70);
+    });
+
+    it('matches a full scan for overlapping loaders across processes', () => {
+      let seed = 1;
+      const random = () => {
+        seed = (seed * 16807) % 2147483647;
+        return seed / 2147483647;
+      };
+      const names = ['babel-loader', 'css-loader', 'builtin:swc-loader'];
+      const loaders = Array.from({ length: 500 }, (_, i) => {
+        const startAt = Math.floor(random() * 1000);
+        return createLoader(
+          names[i % names.length],
+          startAt,
+          startAt + Math.floor(random() * 200),
+          1 + (i % 3),
+        );
+      });
+
+      for (const loader of loaders) {
+        expect(Loader.getLoaderCosts(loader, loaders)).toBe(
+          getLoaderCostsByScan(loader, loaders),
+        );
+      }
+    });
+
+    it('includes loaders added to the list after an earlier call', () => {
+      const outer = createLoader('babel-loader', 0, 100);
+      const loaders = [outer];
+      expect(Loader.getLoaderCosts(outer, loaders)).toBe(100);
+
+      loaders.push(createLoader('css-loader', 10, 30));
+      expect(Loader.getLoaderCosts(outer, loaders)).toBe(80);
+    });
   });
 });
