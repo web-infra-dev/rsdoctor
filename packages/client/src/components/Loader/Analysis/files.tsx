@@ -31,6 +31,7 @@ import { LoaderExecutions } from '../executions';
 import styles from './style.module.scss';
 
 const ADDITION_LOADER_NUMBER = 3;
+const FILE_TREE_ITEM_HEIGHT = 30;
 
 export const LoaderFiles: React.FC<{
   filetree: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileTree>;
@@ -46,6 +47,7 @@ export const LoaderFiles: React.FC<{
   const [selectedNode, setSelectedNode] = useState<DataNode | null>(null);
 
   const maxHeight = 800;
+  const bodyPadding = 14;
 
   const filteredFiles = useMemo(
     () =>
@@ -64,6 +66,17 @@ export const LoaderFiles: React.FC<{
     [props.filename, props.loaders, props.layer],
   );
 
+  const filetreeByPath = useMemo(() => {
+    const map = new Map<string, (typeof filetree)[number]>();
+    for (const item of filetree) {
+      // Keep the first entry for a path, as `find` did.
+      if (!map.has(item.path)) {
+        map.set(item.path, item);
+      }
+    }
+    return map;
+  }, [filetree]);
+
   const inlinedResourcePathKey = '__RESOURCEPATH__';
 
   const files = useMemo(() => {
@@ -71,7 +84,7 @@ export const LoaderFiles: React.FC<{
       files: filteredFiles.map((e) => e.path),
       cwd,
       fileTitle(file, basename) {
-        const { loaders, layer } = filetree.find((e) => e.path === file)!;
+        const { loaders, layer } = filetreeByPath.get(file)!;
 
         const additionalLoaders: (Pick<
           SDK.LoaderTransformData,
@@ -204,7 +217,7 @@ export const LoaderFiles: React.FC<{
         );
       },
     });
-  }, [filteredFiles]);
+  }, [filteredFiles, filetreeByPath]);
 
   return (
     <Row style={{ width: '100%', marginLeft: 0 }} gutter={Size.BasePadding}>
@@ -228,10 +241,14 @@ export const LoaderFiles: React.FC<{
             overflow: 'auto',
             maxHeight,
             minHeight: '40rem',
-            padding: 14,
+            padding: bodyPadding,
           }}
         >
           <FileTree
+            // Large builds transform thousands of files; only mount the visible rows.
+            virtual
+            itemHeight={FILE_TREE_ITEM_HEIGHT}
+            height={maxHeight - bodyPadding * 2}
             defaultExpandedKeys={mapFileKey(
               files,
               filteredFiles.length >= 100 ? 3 : 4,

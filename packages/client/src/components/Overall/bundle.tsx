@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import {
-  Descriptions,
-  DescriptionsProps,
-  Button,
-  Tree,
-  Tag,
-  Segmented,
-} from 'antd';
+import { Descriptions, DescriptionsProps, Button, Tag, Segmented } from 'antd';
 import { FolderOpenTwoTone, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
-import { getFileCom } from '../FileTree';
+import { DrawerDirectoryTree, getFileCom } from '../FileTree';
 import { formatSize, useI18n, useElementSize } from '../../utils';
 import { TextDrawer } from '../TextDrawer';
 import { Card } from '../Card';
@@ -25,8 +18,6 @@ import type { TreeDataNode } from 'antd';
 import styles from './bundle.module.scss';
 
 type viewType = 'files' | 'size';
-
-const { DirectoryTree } = Tree;
 
 export const getFiles = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
@@ -112,7 +103,7 @@ export const getFilesWithDrawer = (
           }}
           text={<span>{data.count}</span>}
         >
-          <DirectoryTree
+          <DrawerDirectoryTree
             defaultExpandAll
             selectable={false}
             treeData={treeData}

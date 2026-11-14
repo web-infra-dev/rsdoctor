@@ -22,7 +22,12 @@ import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
 import { ServerAPIProvider } from '../../../components/Manifest';
 import { Size } from '../../../constants';
-import { createFileStructures, formatSize, useI18n } from '../../../utils';
+import {
+  createFileStructures,
+  formatSize,
+  useElementSize,
+  useI18n,
+} from '../../../utils';
 import { isJavaScriptAsset } from '../../../utils/assets';
 import { AssetDetail } from './asset';
 import { createAssetPathMap, resolveAssetFileTitleTarget } from './asset-path';
@@ -43,6 +48,8 @@ function OpenAssetCode({
   useEffect(() => onOpen(asset), [asset, onOpen]);
   return null;
 }
+
+const ASSET_TREE_ITEM_HEIGHT = 40;
 
 export const TreeGraph = memo(
   ({
@@ -67,6 +74,7 @@ export const TreeGraph = memo(
       useState(false);
     const [assetPath, setAssetPath] = useState<string | null>(null);
     const [codeAssetPath, setCodeAssetPath] = useState<string | null>(null);
+    const [assetsTreeRef, { height: assetsTreeHeight }] = useElementSize();
     const { showCode, codeDrawerComponent } = useCodeDrawer(
       'Do not have the codes of assets. If you use the lite or brief mode, there will have codes.',
     );
@@ -375,16 +383,25 @@ export const TreeGraph = memo(
                   size="small"
                 >
                   <div className={styles.assetDetailFileTreeViewport}>
-                    <div className={styles.assetDetailFileTreeScrollArea}>
-                      <FileTree
-                        className={styles.assets}
-                        treeData={assetsStructures}
-                        autoExpandParent
-                        defaultExpandAll={
-                          defaultExpandAll || filteredAssets.length <= 20
-                        }
-                        key={`tree_${inputAssetName}_${defaultExpandAll}`}
-                      />
+                    <div
+                      className={styles.assetDetailFileTreeScrollArea}
+                      ref={assetsTreeRef}
+                    >
+                      {assetsTreeHeight > 0 && (
+                        <FileTree
+                          className={styles.assets}
+                          // Large builds emit thousands of assets; only mount the visible rows.
+                          virtual
+                          itemHeight={ASSET_TREE_ITEM_HEIGHT}
+                          height={assetsTreeHeight}
+                          treeData={assetsStructures}
+                          autoExpandParent
+                          defaultExpandAll={
+                            defaultExpandAll || filteredAssets.length <= 20
+                          }
+                          key={`tree_${inputAssetName}_${defaultExpandAll}`}
+                        />
+                      )}
                     </div>
                   </div>
                 </Card>
