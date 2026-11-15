@@ -19,8 +19,23 @@ $treePrefixCls: 'tree-shaking';
   }
 
   .#{$treePrefixCls}-files {
-    overflow: auto;
     height: 100%;
+
+    // A virtual list can't scroll sideways, so long names shrink with an ellipsis.
+    .rc-tree-treenode {
+      min-width: 0;
+    }
+
+    .rc-tree-node-content-wrapper {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .rc-tree-title {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .#{$treePrefixCls}-editor {

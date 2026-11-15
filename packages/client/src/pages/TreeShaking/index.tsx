@@ -1,18 +1,39 @@
 import { SDK } from '@rsdoctor/shared/types';
 import { Card, Col, Empty, Row, Table, Typography } from 'antd';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import path from 'path-browserify';
 import { FileSearchOutlined } from '@ant-design/icons';
 import { FileTree } from '../../components/FileTree';
 import { KeywordInput } from '../../components/Form/keyword';
 import { ServerAPIProvider, withManifestData } from '../../components/Manifest';
-import { fetchManifest } from '../../utils';
+import { fetchManifest, useElementSize } from '../../utils';
 import { CodeViewer } from '../../components/base';
 import { Size } from '../../constants';
 import { getSideEffectModules, getSideEffectTree } from './side-effects-data';
 
 import './index.scss';
 export * from './constants';
+
+// Matches file rows, which have an icon; directory rows are a little shorter.
+const FILE_TREE_ITEM_HEIGHT = 28;
+
+// Mounts with the tree, so a tree that unmounts for a search with no matches
+// is measured again when it comes back.
+function SideEffectFileTree(props: React.ComponentProps<typeof FileTree>) {
+  const [ref, { height }] = useElementSize();
+  return (
+    <div ref={ref} className="tree-shaking-files">
+      {height > 0 && (
+        <FileTree
+          {...props}
+          virtual
+          itemHeight={FILE_TREE_ITEM_HEIGHT}
+          height={height}
+        />
+      )}
+    </div>
+  );
+}
 
 function Component({
   data,
@@ -26,7 +47,14 @@ function Component({
   const [search, setSearch] = useState('');
   const [selectedId, setSelectedId] = useState<number>();
   const [codeIndex, setCodeIndex] = useState(0);
-  const filtered = getSideEffectModules(data.modules, treeShaking, search);
+  const filtered = useMemo(
+    () => getSideEffectModules(data.modules, treeShaking, search),
+    [data.modules, treeShaking, search],
+  );
+  const treeData = useMemo(
+    () => getSideEffectTree(filtered, cwd),
+    [filtered, cwd],
+  );
   const selected =
     filtered.find((module) => module.id === selectedId) ?? filtered[0];
   const codes = selected ? treeShaking!.sideEffectCodes[selected.id] : [];
@@ -70,10 +98,9 @@ function Component({
               title={`Total Files: ${filtered.length}`}
               className="tree-shaking-files-box"
             >
-              <FileTree
+              <SideEffectFileTree
                 key={search}
-                className="tree-shaking-files"
-                treeData={getSideEffectTree(filtered, cwd)}
+                treeData={treeData}
                 defaultExpandAll
                 selectedKeys={[`module:${selected.id}`]}
                 onSelect={(keys) => {
