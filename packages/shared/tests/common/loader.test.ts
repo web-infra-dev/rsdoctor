@@ -211,7 +211,7 @@ describe('test src/common/loader.ts', () => {
       expect(Loader.createLoaderCostsCalculator(loaders)(outer)).toBe(70);
     });
 
-    it('calculator matches getLoaderCosts for overlapping loaders across processes', () => {
+    it('calculator matches getLoaderCosts for overlapping and reversed loaders across processes', () => {
       let seed = 1;
       const random = () => {
         seed = (seed * 16807) % 2147483647;
@@ -220,10 +220,11 @@ describe('test src/common/loader.ts', () => {
       const names = ['babel-loader', 'css-loader', 'builtin:swc-loader'];
       const loaders = Array.from({ length: 500 }, (_, i) => {
         const startAt = Math.floor(random() * 1000);
+        // Some timings end before they start, which the scan still counts.
         return createLoader(
           names[i % names.length],
           startAt,
-          startAt + Math.floor(random() * 200),
+          startAt + Math.floor(random() * 250) - 50,
           1 + (i % 3),
         );
       });
