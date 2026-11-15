@@ -300,6 +300,38 @@ describe('test src/common/graph.ts', () => {
       ).toEqual(['/src/b-duplicate.js']);
     });
 
+    it('getAllBundleData reads the module list once for all assets', () => {
+      const manyModules = Array.from({ length: 1000 }, (_, id) => ({
+        id,
+        path: `/src/${id}.js`,
+      })) as unknown as SDK.ModuleData[];
+      const manyChunks = Array.from({ length: 100 }, (_, i) => ({
+        id: `c${i}`,
+        modules: Array.from({ length: 10 }, (_, j) => i * 10 + j),
+      })) as unknown as SDK.ChunkData[];
+      const assets = manyChunks.map((chunk) => ({
+        path: `${chunk.id}.js`,
+        chunks: [chunk.id],
+      })) as unknown as SDK.AssetData[];
+      let reads = 0;
+      const counted = new Proxy(manyModules, {
+        get(target, key, receiver) {
+          if (typeof key === 'string' && /^\d+$/.test(key)) {
+            reads++;
+          }
+          return Reflect.get(target, key, receiver);
+        },
+      });
+
+      const bundles = Graph.getAllBundleData(assets, manyChunks, counted, [
+        'id',
+      ]);
+
+      expect(bundles.every((b) => b.modules.length === 10)).toBe(true);
+      // Searching the list for every module of every asset would read it far more often.
+      expect(reads).toBe(manyModules.length);
+    });
+
     it('resolves many assets like getModulesByAsset', () => {
       const getModules = Graph.createModulesByAssetResolver(chunks, modules, [
         'id',
