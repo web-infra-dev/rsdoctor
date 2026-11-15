@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'rstack/test';
-import { Algorithm, Loader } from '../../src/common-browser';
+import { Loader } from '../../src/common-browser';
 import { SDK } from '../../src/types';
 
 describe('test src/common/loader.ts', () => {
@@ -194,33 +194,6 @@ describe('test src/common/loader.ts', () => {
       ppid: 0,
     });
 
-    // The previous implementation, kept as a reference for the indexed one.
-    const getLoaderCostsByScan = (
-      loader: SDK.LoaderTransformData,
-      loaders: SDK.LoaderTransformData[],
-    ) => {
-      const blocked = loaders.filter(
-        (e) =>
-          !e.loader.includes('builtin') &&
-          e !== loader &&
-          e.pid === loader.pid &&
-          e.startAt >= loader.startAt &&
-          e.endAt <= loader.endAt,
-      );
-      let costs = loader.endAt - loader.startAt;
-      if (blocked.length) {
-        Algorithm.mergeIntervals(
-          blocked.map((e) => [
-            Math.max(e.startAt, loader.startAt),
-            Math.min(e.endAt, loader.endAt),
-          ]),
-        ).forEach((e) => {
-          costs -= e[1] - e[0];
-        });
-      }
-      return costs;
-    };
-
     it('subtracts loaders that run inside the target loader', () => {
       const outer = createLoader('babel-loader', 0, 100);
       const loaders = [
@@ -235,9 +208,10 @@ describe('test src/common/loader.ts', () => {
       ];
 
       expect(Loader.getLoaderCosts(outer, loaders)).toBe(70);
+      expect(Loader.createLoaderCostsCalculator(loaders)(outer)).toBe(70);
     });
 
-    it('matches a full scan for overlapping loaders across processes', () => {
+    it('calculator matches getLoaderCosts for overlapping loaders across processes', () => {
       let seed = 1;
       const random = () => {
         seed = (seed * 16807) % 2147483647;
@@ -254,20 +228,20 @@ describe('test src/common/loader.ts', () => {
         );
       });
 
+      const getCosts = Loader.createLoaderCostsCalculator(loaders);
       for (const loader of loaders) {
-        expect(Loader.getLoaderCosts(loader, loaders)).toBe(
-          getLoaderCostsByScan(loader, loaders),
-        );
+        expect(getCosts(loader)).toBe(Loader.getLoaderCosts(loader, loaders));
       }
     });
 
-    it('includes loaders added to the list after an earlier call', () => {
+    it('getLoaderCosts reflects changes to the list between calls', () => {
       const outer = createLoader('babel-loader', 0, 100);
-      const loaders = [outer];
-      expect(Loader.getLoaderCosts(outer, loaders)).toBe(100);
-
-      loaders.push(createLoader('css-loader', 10, 30));
+      const loaders = [outer, createLoader('css-loader', 10, 30)];
       expect(Loader.getLoaderCosts(outer, loaders)).toBe(80);
+
+      loaders[1] = createLoader('css-loader', 10, 50);
+      expect(Loader.getLoaderCosts(outer, loaders)).toBe(60);
+      expect(Loader.createLoaderCostsCalculator(loaders)(outer)).toBe(60);
     });
   });
 });
