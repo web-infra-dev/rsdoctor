@@ -234,6 +234,29 @@ describe('test src/common/loader.ts', () => {
       }
     });
 
+    it('calculator reads the list once instead of once per loader', () => {
+      const loaders = Array.from({ length: 2000 }, (_, i) =>
+        createLoader('babel-loader', i, i + 10),
+      );
+      let reads = 0;
+      const counted = new Proxy(loaders, {
+        get(target, key, receiver) {
+          if (typeof key === 'string' && /^\d+$/.test(key)) {
+            reads++;
+          }
+          return Reflect.get(target, key, receiver);
+        },
+      });
+
+      const getCosts = Loader.createLoaderCostsCalculator(counted);
+      for (const loader of loaders) {
+        getCosts(loader);
+      }
+
+      // Scanning the list for every loader would read it 2000 * 2000 times.
+      expect(reads).toBe(loaders.length);
+    });
+
     it('getLoaderCosts reflects changes to the list between calls', () => {
       const outer = createLoader('babel-loader', 0, 100);
       const loaders = [outer, createLoader('css-loader', 10, 30)];
