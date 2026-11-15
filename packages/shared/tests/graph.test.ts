@@ -375,7 +375,8 @@ describe('test src/common/graph.ts', () => {
         modules,
         ['id', 'path'],
         (m) => {
-          m.id = Number.NaN;
+          // Filtered results are copies, so changing their id is safe here.
+          (m as { id: number }).id = Number.NaN;
           return true;
         },
       );

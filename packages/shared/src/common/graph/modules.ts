@@ -9,17 +9,28 @@ type ModuleLookup = (id: SDK.ModuleData['id']) => SDK.ModuleData | undefined;
 
 /**
  * Looks up modules by id like `modules.find((m) => m.id === id)`, using an
- * index built once. If the list can't be indexed, for example because it has
- * a null entry, it falls back to `find` so errors surface where they did before.
+ * index built on the first lookup. If the list can't be indexed, for example
+ * because it isn't an array or has a null entry, it falls back to `find` so
+ * errors surface where they did before.
  */
 function createModuleLookup(modules: SDK.ModuleData[]): ModuleLookup {
+  let lookup: ModuleLookup | undefined;
+  return (id) => {
+    lookup ??= indexModules(modules);
+    return lookup(id);
+  };
+}
+
+function indexModules(modules: SDK.ModuleData[]): ModuleLookup {
   const find: ModuleLookup = (id) => modules.find((m) => m.id === id);
-  if (!Array.isArray(modules)) {
-    return find;
-  }
   const byId = new Map<SDK.ModuleData['id'], SDK.ModuleData>();
   try {
-    for (const module of modules) {
+    if (!Array.isArray(modules)) {
+      return find;
+    }
+    // Read by index, in the same order as `find`.
+    for (let i = 0; i < modules.length; i++) {
+      const module = modules[i];
       const { id } = module;
       // Keep the first module for an id, and skip NaN, which `===` never matches.
       if (!Number.isNaN(id) && !byId.has(id)) {
