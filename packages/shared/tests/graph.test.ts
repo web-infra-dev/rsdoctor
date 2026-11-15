@@ -285,14 +285,32 @@ describe('test src/common/graph.ts', () => {
       ]);
     });
 
-    it('resolves modules added to the list after an earlier lookup', () => {
-      const list = modules.slice(0, 1);
-      expect(Graph.getModuleIdsByModulesIds([1, 3], list)).toHaveLength(1);
-
-      list.push(modules[2]);
+    it('reflects changes to the module list between lookups', () => {
+      const list = modules.slice(0, 2);
       expect(
-        Graph.getModuleIdsByModulesIds([1, 3], list).map((m) => m.path),
-      ).toEqual(['/src/a.js', '/src/c.js']);
+        Graph.getModulesByAsset(asset, chunks, list).map((m) => m.path),
+      ).toEqual(['/src/a.js', '/src/b.js']);
+
+      list[1] = modules[3];
+      expect(
+        Graph.getModulesByAsset(asset, chunks, list).map((m) => m.path),
+      ).toEqual(['/src/a.js', '/src/b-duplicate.js']);
+      expect(
+        Graph.getModuleIdsByModulesIds([2], list).map((m) => m.path),
+      ).toEqual(['/src/b-duplicate.js']);
+    });
+
+    it('resolves many assets like getModulesByAsset', () => {
+      const getModules = Graph.createModulesByAssetResolver(chunks, modules, [
+        'id',
+      ]);
+      const vendor = { path: 'vendor.js', chunks: ['vendor'] } as SDK.AssetData;
+      for (const item of [asset, vendor]) {
+        expect(getModules(item)).toEqual(
+          Graph.getModulesByAsset(item, chunks, modules, ['id']),
+        );
+      }
+      expect(getModules(vendor)).toEqual([{ id: 2 }, { id: 3 }]);
     });
   });
 });

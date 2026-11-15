@@ -5,31 +5,16 @@ import {
   getDependencyByPackageData,
 } from './dependency';
 
-interface ModuleIndex {
-  size: number;
-  byId: Map<SDK.ModuleData['id'], SDK.ModuleData>;
-}
+type ModuleIndex = Map<SDK.ModuleData['id'], SDK.ModuleData>;
 
-// Asset and chunk lookups resolve many module ids against the same list, for
-// example once per output asset when building bundle data. Index the list once
-// instead of searching it for every id.
-const moduleIndexes = new WeakMap<readonly SDK.ModuleData[], ModuleIndex>();
-
-function getModuleIndex(modules: readonly SDK.ModuleData[]) {
-  const cached = moduleIndexes.get(modules);
-  if (cached && cached.size === modules.length) {
-    return cached.byId;
-  }
-
-  const byId: ModuleIndex['byId'] = new Map();
+// Keeps the first module for each id, as `find` does.
+function indexModulesById(modules: SDK.ModuleData[]): ModuleIndex {
+  const byId: ModuleIndex = new Map();
   for (const module of modules) {
-    // Keep the first module for an id, as `find` did.
     if (!byId.has(module.id)) {
       byId.set(module.id, module);
     }
   }
-
-  moduleIndexes.set(modules, { size: modules.length, byId });
   return byId;
 }
 
@@ -40,10 +25,31 @@ export function getModulesByAsset(
   filterModules?: (keyof SDK.ModuleData)[],
   checkModules?: (module: SDK.ModuleData) => boolean,
 ): SDK.ModuleData[] {
-  const ids = getChunkIdsByAsset(asset);
-  const cks = getChunksByChunkIds(ids, chunks);
-  const res = getModulesByChunks(cks, modules, filterModules, checkModules);
-  return res;
+  return createModulesByAssetResolver(
+    chunks,
+    modules,
+    filterModules,
+    checkModules,
+  )(asset);
+}
+
+/**
+ * Returns a function that resolves an asset's modules like
+ * `getModulesByAsset`, for many assets. `modules` is indexed once, when the
+ * resolver is created, so create a new resolver if the list changes.
+ */
+export function createModulesByAssetResolver(
+  chunks: SDK.ChunkData[],
+  modules: SDK.ModuleData[],
+  filterModules?: (keyof SDK.ModuleData)[],
+  checkModules?: (module: SDK.ModuleData) => boolean,
+) {
+  const byId = indexModulesById(modules);
+  return (asset: SDK.AssetData): SDK.ModuleData[] => {
+    const ids = getChunkIdsByAsset(asset);
+    const cks = getChunksByChunkIds(ids, chunks);
+    return collectModulesByChunks(cks, byId, filterModules, checkModules);
+  };
 }
 
 export function getModuleIdsByChunk(chunk: SDK.ChunkData) {
@@ -55,7 +61,7 @@ export function getModuleIdsByModulesIds(
   moduleIds: number[],
   modules: SDK.ModuleData[],
 ) {
-  const byId = getModuleIndex(modules);
+  const byId = indexModulesById(modules);
   return moduleIds.map((id) => byId.get(id)!).filter(Boolean);
 }
 
@@ -64,8 +70,15 @@ export function getModulesByChunk(
   modules: SDK.ModuleData[],
   filterModules?: (keyof SDK.ModuleData)[],
 ): SDK.ModuleData[] {
+  return pickModulesByChunk(chunk, indexModulesById(modules), filterModules);
+}
+
+function pickModulesByChunk(
+  chunk: SDK.ChunkData,
+  byId: ModuleIndex,
+  filterModules?: (keyof SDK.ModuleData)[],
+): SDK.ModuleData[] {
   const ids = getModuleIdsByChunk(chunk);
-  const byId = getModuleIndex(modules);
   return ids
     .map((id) => {
       const module = byId.get(id)!;
@@ -92,11 +105,25 @@ export function getModulesByChunks(
   filterModules?: (keyof SDK.ModuleData)[],
   checkModules?: (module: SDK.ModuleData) => boolean,
 ): SDK.ModuleData[] {
+  return collectModulesByChunks(
+    chunks,
+    indexModulesById(modules),
+    filterModules,
+    checkModules,
+  );
+}
+
+function collectModulesByChunks(
+  chunks: SDK.ChunkData[],
+  byId: ModuleIndex,
+  filterModules?: (keyof SDK.ModuleData)[],
+  checkModules?: (module: SDK.ModuleData) => boolean,
+): SDK.ModuleData[] {
   const res: SDK.ModuleData[] = [];
   const seen = new Set<SDK.ModuleData['id']>();
   try {
     chunks.forEach((chunk) => {
-      getModulesByChunk(chunk, modules, filterModules).forEach((md) => {
+      pickModulesByChunk(chunk, byId, filterModules).forEach((md) => {
         if ((checkModules ? checkModules(md) : true) && !seen.has(md.id)) {
           seen.add(md.id);
           res.push(md);

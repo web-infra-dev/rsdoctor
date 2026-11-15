@@ -1,6 +1,6 @@
 import { Client, Constants, SDK } from '../../types';
 import { getChunksByAsset } from './chunk';
-import { getModulesByAsset } from './modules';
+import { createModulesByAssetResolver, getModulesByAsset } from './modules';
 
 const EXT = 'js|css|html';
 
@@ -428,12 +428,17 @@ export function getAllBundleData(
 ): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetSummaryBundles> {
   const result = [];
   try {
+    const getModules = createModulesByAssetResolver(
+      chunks,
+      modules,
+      filtersModules,
+    );
     for (let i = 0; i < assets.length; i++) {
       const asset = assets[i];
       const { content: _content, ...summaryAsset } = asset;
       result.push({
         asset: summaryAsset,
-        modules: getModulesByAsset(asset, chunks, modules, filtersModules),
+        modules: getModules(asset),
       });
     }
     return result;
