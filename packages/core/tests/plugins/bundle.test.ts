@@ -39,7 +39,8 @@ describe('InternalBundlePlugin', () => {
     { treeShaking: true, mode: 'normal', enabled: true },
     { treeShaking: false, mode: 'normal', enabled: false },
     { treeShaking: true, mode: 'lite', enabled: true },
-    { treeShaking: true, mode: 'brief', enabled: false },
+    { treeShaking: true, mode: 'brief', enabled: true },
+    { treeShaking: false, mode: 'brief', enabled: false },
   ] as const)(
     'registers Tree Shaking with treeShaking=$treeShaking in $mode mode: $enabled',
     async ({ treeShaking, mode, enabled }) => {

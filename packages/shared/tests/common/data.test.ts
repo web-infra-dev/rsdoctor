@@ -107,4 +107,25 @@ describe('test src/common/data/index.ts', () => {
     });
     expect(source.asset.content).toBe(asset.content);
   });
+
+  it('returns empty module code when the report has no code for a module', async () => {
+    const code = { source: 'a', transformed: 'b', parsedSource: 'c' };
+    const loader = new Data.APIDataLoader({
+      loadData: rs.fn().mockResolvedValue({ 1: code }),
+      loadManifest: rs.fn(),
+    });
+
+    await expect(
+      loader.loadAPI(SDK.ServerAPI.API.GetModuleCodeByModuleId, {
+        moduleId: 1,
+      }),
+    ).resolves.toBe(code);
+    // Brief reports store an empty code map, so components would otherwise
+    // wait on an undefined response.
+    await expect(
+      loader.loadAPI(SDK.ServerAPI.API.GetModuleCodeByModuleId, {
+        moduleId: 2,
+      }),
+    ).resolves.toEqual({ source: '', transformed: '', parsedSource: '' });
+  });
 });

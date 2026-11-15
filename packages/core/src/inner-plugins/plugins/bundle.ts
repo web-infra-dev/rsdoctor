@@ -110,10 +110,7 @@ export class InternalBundlePlugin<
         Manifest.RsdoctorManifestClientRoutes.ModuleGraph,
         Manifest.RsdoctorManifestClientRoutes.BundleSize,
       ]);
-      if (
-        this.options.features.treeShaking &&
-        this.options.output.mode !== 'brief'
-      ) {
+      if (this.options.features.treeShaking) {
         this.sdk.addClientRoutes([
           Manifest.RsdoctorManifestClientRoutes.TreeShaking,
         ]);

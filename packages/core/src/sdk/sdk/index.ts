@@ -525,9 +525,6 @@ export class RsdoctorSDK<
             };
       },
       get treeShaking() {
-        if (ctx.extraConfig?.mode === SDK.IMode[SDK.IMode.brief]) {
-          return undefined;
-        }
         if (!ctx.extraConfig?.features?.treeShaking) {
           return undefined;
         }

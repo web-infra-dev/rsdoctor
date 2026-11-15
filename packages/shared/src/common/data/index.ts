@@ -307,10 +307,11 @@ export class APIDataLoader {
         return this.loader.loadData('moduleCodeMap').then((moduleCodeMap) => {
           const { moduleId } =
             body as SDK.ServerAPI.InferRequestBodyType<SDK.ServerAPI.API.GetModuleCodeByModuleId>;
-          if (moduleCodeMap) {
-            return moduleCodeMap[moduleId] as R;
-          }
-          return { source: '', transformed: '', parsedSource: '' } as R;
+          return (moduleCodeMap?.[moduleId] ?? {
+            source: '',
+            transformed: '',
+            parsedSource: '',
+          }) as R;
         });
 
       case SDK.ServerAPI.API.GetModuleCodeByModuleIds:
