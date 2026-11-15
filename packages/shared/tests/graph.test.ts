@@ -332,6 +332,34 @@ describe('test src/common/graph.ts', () => {
       expect(reads).toBe(manyModules.length);
     });
 
+    it('handles a module list with a null entry as `find` did', () => {
+      const withNull = [
+        ...modules.slice(0, 3),
+        null,
+      ] as unknown as SDK.ModuleData[];
+      const vendor = { path: 'vendor.js', chunks: ['vendor'] } as SDK.AssetData;
+
+      // Modules found before reaching the null entry resolve.
+      expect(
+        Graph.getModulesByAsset(vendor, chunks, withNull).map((m) => m.path),
+      ).toEqual(['/src/b.js', '/src/c.js']);
+      // A missing id reaches the null entry, which fails that asset only.
+      expect(
+        Graph.getAllBundleData([asset, vendor], chunks, withNull).map(
+          (b) => b.modules.length,
+        ),
+      ).toEqual([0, 2]);
+    });
+
+    it('never matches NaN ids, as `===` does', () => {
+      const nanModules = [
+        { id: Number.NaN, path: '/src/nan.js' },
+      ] as unknown as SDK.ModuleData[];
+      expect(Graph.getModuleIdsByModulesIds([Number.NaN], nanModules)).toEqual(
+        [],
+      );
+    });
+
     it('resolves many assets like getModulesByAsset', () => {
       const getModules = Graph.createModulesByAssetResolver(chunks, modules, [
         'id',
