@@ -132,44 +132,47 @@ function getCostsOutsideBlocked(loader: LoaderTiming, blocked: LoaderTiming[]) {
 
 /**
  * Returns a function that computes `getLoaderCosts(loader, loaders)` for many
- * loaders without scanning the whole list for each one. The list is indexed
- * once, when the calculator is created, so create a new calculator if the list
- * changes.
+ * loaders without scanning the whole list for each one. The list is copied and
+ * indexed once, when the calculator is created, so later changes to it are not
+ * seen; create a new calculator instead.
  */
 export function createLoaderCostsCalculator(
   loaders: SDK.LoaderTransformData[],
 ) {
-  // Non-builtin loaders grouped by pid and sorted by start time. Loaders whose
-  // timings aren't ordered (endAt before startAt, or NaN) can't be found by
-  // start time, so they're kept apart and checked one by one.
-  const byPid = new Map<number, LoaderTiming[]>();
-  const unorderedByPid = new Map<number, LoaderTiming[]>();
-  for (const e of loaders) {
-    if (e.loader.includes('builtin')) {
-      continue;
+  const items: LoaderTiming[] = Array.from(loaders);
+
+  // Positions of non-builtin loaders, grouped by pid. Loaders with ordered
+  // timings are sorted by start time. Loaders whose timings aren't ordered
+  // (endAt before startAt, or NaN) can't be found by start time, so they're
+  // kept apart and checked one by one.
+  const ordered = new Map<LoaderTiming['pid'], number[]>();
+  const unordered = new Map<LoaderTiming['pid'], number[]>();
+  items.forEach((e, i) => {
+    // `===` never matches a NaN pid, so those loaders never block another.
+    if (e.loader.includes('builtin') || Number.isNaN(e.pid)) {
+      return;
     }
-    const groups = e.startAt <= e.endAt ? byPid : unorderedByPid;
+    const groups = e.startAt <= e.endAt ? ordered : unordered;
     let group = groups.get(e.pid);
     if (!group) {
       group = [];
       groups.set(e.pid, group);
     }
-    group.push(e);
+    group.push(i);
+  });
+  for (const group of ordered.values()) {
+    group.sort((a, b) => items[a].startAt - items[b].startAt);
   }
-  for (const group of byPid.values()) {
-    group.sort((a, b) => a.startAt - b.startAt);
-  }
-  let positions: Map<LoaderTiming, number> | undefined;
 
   return (loader: SDK.LoaderTransformData) => {
-    const group = byPid.get(loader.pid) || [];
+    const group = ordered.get(loader.pid) || [];
 
     // First loader that starts at or after the target loader.
     let low = 0;
     let high = group.length;
     while (low < high) {
       const mid = (low + high) >>> 1;
-      if (group[mid].startAt < loader.startAt) {
+      if (items[group[mid]].startAt < loader.startAt) {
         low = mid + 1;
       } else {
         high = mid;
@@ -177,30 +180,39 @@ export function createLoaderCostsCalculator(
     }
 
     // Loaders that run inside the target loader, as in getLoaderCosts.
-    const blocked: LoaderTiming[] = [];
+    const blocked: number[] = [];
     for (
       let i = low;
-      i < group.length && group[i].startAt <= loader.endAt;
+      i < group.length && items[group[i]].startAt <= loader.endAt;
       i++
     ) {
-      const e = group[i];
+      const e = items[group[i]];
       if (e !== loader && e.endAt <= loader.endAt) {
-        blocked.push(e);
+        blocked.push(group[i]);
       }
     }
-    const unordered = (unorderedByPid.get(loader.pid) || []).filter(
-      (e) =>
-        e !== loader && e.startAt >= loader.startAt && e.endAt <= loader.endAt,
-    );
-    if (unordered.length) {
-      // Merging reversed intervals depends on their order, so match the list
-      // order that getLoaderCosts uses.
-      positions ??= new Map(loaders.map((e, i) => [e, i]));
-      blocked.push(...unordered);
-      blocked.sort((a, b) => positions!.get(a)! - positions!.get(b)!);
+    let hasUnordered = false;
+    for (const i of unordered.get(loader.pid) || []) {
+      const e = items[i];
+      if (
+        e !== loader &&
+        e.startAt >= loader.startAt &&
+        e.endAt <= loader.endAt
+      ) {
+        blocked.push(i);
+        hasUnordered = true;
+      }
+    }
+    // Merging reversed intervals depends on their order, so use list order,
+    // as getLoaderCosts does.
+    if (hasUnordered) {
+      blocked.sort((a, b) => a - b);
     }
 
-    return getCostsOutsideBlocked(loader, blocked);
+    return getCostsOutsideBlocked(
+      loader,
+      blocked.map((i) => items[i]),
+    );
   };
 }
 

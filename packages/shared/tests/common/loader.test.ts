@@ -235,6 +235,33 @@ describe('test src/common/loader.ts', () => {
       }
     });
 
+    it('calculator matches getLoaderCosts for repeated, reversed and NaN-pid loaders', () => {
+      const target = createLoader('babel-loader', 0, 100);
+      const reversed = createLoader('css-loader', 10, 0);
+      const inner = createLoader('sass-loader', 10, 20);
+      // The same object can appear twice; merge order follows the list.
+      const repeated = [target, reversed, inner, reversed];
+      expect(Loader.createLoaderCostsCalculator(repeated)(target)).toBe(
+        Loader.getLoaderCosts(target, repeated),
+      );
+
+      // `===` never matches NaN, so loaders with a NaN pid never block.
+      const nanTarget = createLoader('babel-loader', 0, 10, Number.NaN);
+      const nanInner = createLoader('css-loader', 2, 5, Number.NaN);
+      const nanPids = [nanTarget, nanInner];
+      expect(Loader.createLoaderCostsCalculator(nanPids)(nanTarget)).toBe(10);
+      expect(Loader.getLoaderCosts(nanTarget, nanPids)).toBe(10);
+    });
+
+    it('calculator ignores changes to the list after it is created', () => {
+      const outer = createLoader('babel-loader', 0, 100);
+      const loaders = [outer, createLoader('css-loader', 10, 30)];
+      const getCosts = Loader.createLoaderCostsCalculator(loaders);
+
+      loaders[1] = createLoader('css-loader', 10, 50);
+      expect(getCosts(outer)).toBe(80);
+    });
+
     it('calculator reads the list once instead of once per loader', () => {
       const loaders = Array.from({ length: 2000 }, (_, i) =>
         createLoader('babel-loader', i, i + 10),
