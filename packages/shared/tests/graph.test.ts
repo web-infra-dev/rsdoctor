@@ -360,6 +360,33 @@ describe('test src/common/graph.ts', () => {
       );
     });
 
+    it('falls back to find for a module list that is not an array', () => {
+      const set = new Set(modules) as unknown as SDK.ModuleData[];
+      expect(() => Graph.getModuleIdsByModulesIds([1], set)).toThrow(
+        'find is not a function',
+      );
+      expect(Graph.getModulesByAsset(asset, chunks, set)).toEqual([]);
+    });
+
+    it('keeps results whose ids are NaN, which === never treats as duplicates', () => {
+      const result = Graph.getModulesByAsset(
+        asset,
+        chunks,
+        modules,
+        ['id', 'path'],
+        (m) => {
+          m.id = Number.NaN;
+          return true;
+        },
+      );
+      expect(result.map((m) => m.path)).toEqual([
+        '/src/a.js',
+        '/src/b.js',
+        '/src/b.js',
+        '/src/c.js',
+      ]);
+    });
+
     it('resolves many assets like getModulesByAsset', () => {
       const getModules = Graph.createModulesByAssetResolver(chunks, modules, [
         'id',

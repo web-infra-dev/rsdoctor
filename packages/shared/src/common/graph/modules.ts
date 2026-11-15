@@ -13,6 +13,10 @@ type ModuleLookup = (id: SDK.ModuleData['id']) => SDK.ModuleData | undefined;
  * a null entry, it falls back to `find` so errors surface where they did before.
  */
 function createModuleLookup(modules: SDK.ModuleData[]): ModuleLookup {
+  const find: ModuleLookup = (id) => modules.find((m) => m.id === id);
+  if (!Array.isArray(modules)) {
+    return find;
+  }
   const byId = new Map<SDK.ModuleData['id'], SDK.ModuleData>();
   try {
     for (const module of modules) {
@@ -23,7 +27,7 @@ function createModuleLookup(modules: SDK.ModuleData[]): ModuleLookup {
       }
     }
   } catch {
-    return (id) => modules.find((m) => m.id === id);
+    return find;
   }
   return (id) => byId.get(id);
 }
@@ -134,7 +138,11 @@ function collectModulesByChunks(
   try {
     chunks.forEach((chunk) => {
       pickModulesByChunk(chunk, findModule, filterModules).forEach((md) => {
-        if ((checkModules ? checkModules(md) : true) && !seen.has(md.id)) {
+        // `===` never matches NaN, so results with NaN ids are never duplicates.
+        if (
+          (checkModules ? checkModules(md) : true) &&
+          (Number.isNaN(md.id) || !seen.has(md.id))
+        ) {
           seen.add(md.id);
           res.push(md);
         }
