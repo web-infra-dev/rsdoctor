@@ -63,7 +63,7 @@ export const LoaderFiles: React.FC<{
           ),
         ),
       ),
-    [props.filename, props.loaders, props.layer],
+    [filetree, props.filename, props.loaders, props.layer],
   );
 
   const filetreeByPath = useMemo(() => {

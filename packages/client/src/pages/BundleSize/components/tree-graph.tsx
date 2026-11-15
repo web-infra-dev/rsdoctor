@@ -14,7 +14,14 @@ import {
   Typography,
 } from 'antd';
 import { debounce, sumBy } from '@rsdoctor/shared/collection';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  type ComponentProps,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useCodeDrawer } from 'src/components/base/CodeViewer/useCodeDrawer';
 import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
@@ -51,6 +58,33 @@ function OpenAssetCode({
 
 const ASSET_TREE_ITEM_HEIGHT = 40;
 
+/**
+ * Large builds emit thousands of assets, so only mount the visible rows. The
+ * scroll area is measured here, with the tree, so a list that unmounts for an
+ * empty filter is measured again when it comes back.
+ */
+function VirtualAssetsTree({
+  treeKey,
+  ...props
+}: ComponentProps<typeof FileTree> & { treeKey: string }) {
+  const [ref, { height }] = useElementSize();
+
+  return (
+    <div className={styles.assetDetailFileTreeScrollArea} ref={ref}>
+      {height > 0 && (
+        <FileTree
+          key={treeKey}
+          className={styles.assets}
+          virtual
+          itemHeight={ASSET_TREE_ITEM_HEIGHT}
+          height={height}
+          {...props}
+        />
+      )}
+    </div>
+  );
+}
+
 export const TreeGraph = memo(
   ({
     cwd,
@@ -74,7 +108,6 @@ export const TreeGraph = memo(
       useState(false);
     const [assetPath, setAssetPath] = useState<string | null>(null);
     const [codeAssetPath, setCodeAssetPath] = useState<string | null>(null);
-    const [assetsTreeRef, { height: assetsTreeHeight }] = useElementSize();
     const { showCode, codeDrawerComponent } = useCodeDrawer(
       'Do not have the codes of assets. If you use the lite or brief mode, there will have codes.',
     );
@@ -383,26 +416,14 @@ export const TreeGraph = memo(
                   size="small"
                 >
                   <div className={styles.assetDetailFileTreeViewport}>
-                    <div
-                      className={styles.assetDetailFileTreeScrollArea}
-                      ref={assetsTreeRef}
-                    >
-                      {assetsTreeHeight > 0 && (
-                        <FileTree
-                          className={styles.assets}
-                          // Large builds emit thousands of assets; only mount the visible rows.
-                          virtual
-                          itemHeight={ASSET_TREE_ITEM_HEIGHT}
-                          height={assetsTreeHeight}
-                          treeData={assetsStructures}
-                          autoExpandParent
-                          defaultExpandAll={
-                            defaultExpandAll || filteredAssets.length <= 20
-                          }
-                          key={`tree_${inputAssetName}_${defaultExpandAll}`}
-                        />
-                      )}
-                    </div>
+                    <VirtualAssetsTree
+                      treeKey={`tree_${inputAssetName}_${defaultExpandAll}`}
+                      treeData={assetsStructures}
+                      autoExpandParent
+                      defaultExpandAll={
+                        defaultExpandAll || filteredAssets.length <= 20
+                      }
+                    />
                   </div>
                 </Card>
               </div>
