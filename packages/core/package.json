@@ -44,7 +44,7 @@
     "@rsdoctor/client": "workspace:*",
     "@rsdoctor/shared": "workspace:*",
     "@swc-next/parser": "0.6.1",
-    "caniuse-lite": "^1.0.30001823",
+    "caniuse-lite": "^1.0.30001826",
     "sirv": "catalog:",
     "source-map": "catalog:"
   },
