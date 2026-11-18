@@ -294,6 +294,10 @@ export const TimelineCom: React.FC<{
         series: [
           {
             type: 'custom',
+            // Large builds have tens of thousands of spans. Progressive rendering
+            // redraws them in chunks across many frames on every hover, which
+            // makes the chart flash, so draw them in one pass.
+            progressive: 0,
             renderItem,
             itemStyle: {
               opacity: 1,

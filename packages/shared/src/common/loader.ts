@@ -104,6 +104,15 @@ export function getLoaderCosts(
     return false;
   });
 
+  return getCostsOutsideBlocked(loader, blocked);
+}
+
+type LoaderTiming = Pick<
+  SDK.LoaderTransformData,
+  'loader' | 'startAt' | 'endAt' | 'pid'
+>;
+
+function getCostsOutsideBlocked(loader: LoaderTiming, blocked: LoaderTiming[]) {
   let costs = loader.endAt - loader.startAt;
 
   if (blocked.length) {
@@ -119,6 +128,92 @@ export function getLoaderCosts(
   }
 
   return costs;
+}
+
+/**
+ * Returns a function that computes `getLoaderCosts(loader, loaders)` for many
+ * loaders without scanning the whole list for each one. The list is copied and
+ * indexed once, when the calculator is created, so later changes to it are not
+ * seen; create a new calculator instead.
+ */
+export function createLoaderCostsCalculator(
+  loaders: SDK.LoaderTransformData[],
+) {
+  const items: LoaderTiming[] = Array.from(loaders);
+
+  // Positions of non-builtin loaders, grouped by pid. Loaders with ordered
+  // timings are sorted by start time. Loaders whose timings aren't ordered
+  // (endAt before startAt, or NaN) can't be found by start time, so they're
+  // kept apart and checked one by one.
+  const ordered = new Map<LoaderTiming['pid'], number[]>();
+  const unordered = new Map<LoaderTiming['pid'], number[]>();
+  items.forEach((e, i) => {
+    // `===` never matches a NaN pid, so those loaders never block another.
+    if (e.loader.includes('builtin') || Number.isNaN(e.pid)) {
+      return;
+    }
+    const groups = e.startAt <= e.endAt ? ordered : unordered;
+    let group = groups.get(e.pid);
+    if (!group) {
+      group = [];
+      groups.set(e.pid, group);
+    }
+    group.push(i);
+  });
+  for (const group of ordered.values()) {
+    group.sort((a, b) => items[a].startAt - items[b].startAt);
+  }
+
+  return (loader: SDK.LoaderTransformData) => {
+    const group = ordered.get(loader.pid) || [];
+
+    // First loader that starts at or after the target loader.
+    let low = 0;
+    let high = group.length;
+    while (low < high) {
+      const mid = (low + high) >>> 1;
+      if (items[group[mid]].startAt < loader.startAt) {
+        low = mid + 1;
+      } else {
+        high = mid;
+      }
+    }
+
+    // Loaders that run inside the target loader, as in getLoaderCosts.
+    const blocked: number[] = [];
+    for (
+      let i = low;
+      i < group.length && items[group[i]].startAt <= loader.endAt;
+      i++
+    ) {
+      const e = items[group[i]];
+      if (e !== loader && e.endAt <= loader.endAt) {
+        blocked.push(group[i]);
+      }
+    }
+    let hasUnordered = false;
+    for (const i of unordered.get(loader.pid) || []) {
+      const e = items[i];
+      if (
+        e !== loader &&
+        e.startAt >= loader.startAt &&
+        e.endAt <= loader.endAt
+      ) {
+        blocked.push(i);
+        hasUnordered = true;
+      }
+    }
+    // Merging reversed intervals depends on their order, so use list order,
+    // as getLoaderCosts does.
+    if (hasUnordered) {
+      blocked.sort((a, b) => a - b);
+    }
+
+    return getCostsOutsideBlocked(
+      loader,
+      blocked.map((i) => items[i]),
+    );
+  };
 }
 
 export function getLoaderNames(
@@ -151,7 +246,9 @@ export function getLoaderChartData(
 ): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData> {
   const res: SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderChartData> =
     [];
-  const list = getLoadersTransformData(loaders);
+  const getCosts = createLoaderCostsCalculator(
+    getLoadersTransformData(loaders),
+  );
 
   loaders.forEach((item) => {
     item.loaders.forEach((el) => {
@@ -164,7 +261,7 @@ export function getLoaderChartData(
         pid: el.pid,
         sync: el.sync,
         resource: item.resource.path,
-        costs: getLoaderCosts(el, list),
+        costs: getCosts(el),
       });
     });
   });
@@ -175,7 +272,9 @@ export function getLoaderChartData(
 export function getLoaderFileTree(
   loaders: SDK.LoaderData,
 ): SDK.ServerAPI.InferResponseType<SDK.ServerAPI.API.GetLoaderFileTree> {
-  const list = getLoadersTransformData(loaders);
+  const getCosts = createLoaderCostsCalculator(
+    getLoadersTransformData(loaders),
+  );
   return loaders.map((data) => {
     const { loaders: arr, resource } = data;
     return {
@@ -187,7 +286,7 @@ export function getLoaderFileTree(
           loader: getLoadrName(l.loader),
           path: l.path,
           errors: l.errors,
-          costs: getLoaderCosts(l, list),
+          costs: getCosts(l),
         };
       }),
     };

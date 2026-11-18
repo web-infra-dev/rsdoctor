@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'rstack/test';
 import { Graph } from '../src/common-browser';
+import { SDK } from '../src/types';
 
 describe('test src/common/graph.ts', () => {
   it('formatAssetName', () => {
@@ -244,6 +245,160 @@ describe('test src/common/graph.ts', () => {
     ).toMatchObject({
       size: { baseline: 20, current: 25 },
       count: { baseline: 1, current: 1 },
+    });
+  });
+  describe('getModulesByAsset', () => {
+    const modules = [
+      { id: 1, path: '/src/a.js', size: { sourceSize: 10 } },
+      { id: 2, path: '/src/b.js', size: { sourceSize: 20 } },
+      { id: 3, path: '/src/c.js', size: { sourceSize: 30 } },
+      // Duplicate ids resolve to the first module, as before.
+      { id: 2, path: '/src/b-duplicate.js', size: { sourceSize: 40 } },
+    ] as unknown as SDK.ModuleData[];
+    const chunks = [
+      { id: 'main', modules: [1, 2, 99] },
+      { id: 'vendor', modules: [2, 3] },
+    ] as unknown as SDK.ChunkData[];
+    const asset = {
+      path: 'main.js',
+      chunks: ['main', 'vendor'],
+    } as SDK.AssetData;
+
+    it('resolves module ids across chunks without duplicates', () => {
+      expect(
+        Graph.getModulesByAsset(asset, chunks, modules).map((m) => m.path),
+      ).toEqual(['/src/a.js', '/src/b.js', '/src/c.js']);
+    });
+
+    it('applies field filters and module checks', () => {
+      expect(
+        Graph.getModulesByAsset(
+          asset,
+          chunks,
+          modules,
+          ['id', 'path'],
+          (m) => m.id !== 1,
+        ),
+      ).toEqual([
+        { id: 2, path: '/src/b.js' },
+        { id: 3, path: '/src/c.js' },
+      ]);
+    });
+
+    it('reflects changes to the module list between lookups', () => {
+      const list = modules.slice(0, 2);
+      expect(
+        Graph.getModulesByAsset(asset, chunks, list).map((m) => m.path),
+      ).toEqual(['/src/a.js', '/src/b.js']);
+
+      list[1] = modules[3];
+      expect(
+        Graph.getModulesByAsset(asset, chunks, list).map((m) => m.path),
+      ).toEqual(['/src/a.js', '/src/b-duplicate.js']);
+      expect(
+        Graph.getModuleIdsByModulesIds([2], list).map((m) => m.path),
+      ).toEqual(['/src/b-duplicate.js']);
+    });
+
+    it('getAllBundleData reads the module list once for all assets', () => {
+      const manyModules = Array.from({ length: 1000 }, (_, id) => ({
+        id,
+        path: `/src/${id}.js`,
+      })) as unknown as SDK.ModuleData[];
+      const manyChunks = Array.from({ length: 100 }, (_, i) => ({
+        id: `c${i}`,
+        modules: Array.from({ length: 10 }, (_, j) => i * 10 + j),
+      })) as unknown as SDK.ChunkData[];
+      const assets = manyChunks.map((chunk) => ({
+        path: `${chunk.id}.js`,
+        chunks: [chunk.id],
+      })) as unknown as SDK.AssetData[];
+      let reads = 0;
+      const counted = new Proxy(manyModules, {
+        get(target, key, receiver) {
+          if (typeof key === 'string' && /^\d+$/.test(key)) {
+            reads++;
+          }
+          return Reflect.get(target, key, receiver);
+        },
+      });
+
+      const bundles = Graph.getAllBundleData(assets, manyChunks, counted, [
+        'id',
+      ]);
+
+      expect(bundles.every((b) => b.modules.length === 10)).toBe(true);
+      // Searching the list for every module of every asset would read it far more often.
+      expect(reads).toBe(manyModules.length);
+    });
+
+    it('handles a module list with a null entry as `find` did', () => {
+      const withNull = [
+        ...modules.slice(0, 3),
+        null,
+      ] as unknown as SDK.ModuleData[];
+      const vendor = { path: 'vendor.js', chunks: ['vendor'] } as SDK.AssetData;
+
+      // Modules found before reaching the null entry resolve.
+      expect(
+        Graph.getModulesByAsset(vendor, chunks, withNull).map((m) => m.path),
+      ).toEqual(['/src/b.js', '/src/c.js']);
+      // A missing id reaches the null entry, which fails that asset only.
+      expect(
+        Graph.getAllBundleData([asset, vendor], chunks, withNull).map(
+          (b) => b.modules.length,
+        ),
+      ).toEqual([0, 2]);
+    });
+
+    it('never matches NaN ids, as `===` does', () => {
+      const nanModules = [
+        { id: Number.NaN, path: '/src/nan.js' },
+      ] as unknown as SDK.ModuleData[];
+      expect(Graph.getModuleIdsByModulesIds([Number.NaN], nanModules)).toEqual(
+        [],
+      );
+    });
+
+    it('falls back to find for a module list that is not an array', () => {
+      const set = new Set(modules) as unknown as SDK.ModuleData[];
+      expect(() => Graph.getModuleIdsByModulesIds([1], set)).toThrow(
+        'find is not a function',
+      );
+      expect(Graph.getModulesByAsset(asset, chunks, set)).toEqual([]);
+    });
+
+    it('keeps results whose ids are NaN, which === never treats as duplicates', () => {
+      const result = Graph.getModulesByAsset(
+        asset,
+        chunks,
+        modules,
+        ['id', 'path'],
+        (m) => {
+          // Filtered results are copies, so changing their id is safe here.
+          (m as { id: number }).id = Number.NaN;
+          return true;
+        },
+      );
+      expect(result.map((m) => m.path)).toEqual([
+        '/src/a.js',
+        '/src/b.js',
+        '/src/b.js',
+        '/src/c.js',
+      ]);
+    });
+
+    it('resolves many assets like getModulesByAsset', () => {
+      const getModules = Graph.createModulesByAssetResolver(chunks, modules, [
+        'id',
+      ]);
+      const vendor = { path: 'vendor.js', chunks: ['vendor'] } as SDK.AssetData;
+      for (const item of [asset, vendor]) {
+        expect(getModules(item)).toEqual(
+          Graph.getModulesByAsset(item, chunks, modules, ['id']),
+        );
+      }
+      expect(getModules(vendor)).toEqual([{ id: 2 }, { id: 3 }]);
     });
   });
 });
