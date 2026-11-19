@@ -53,6 +53,9 @@ const collectionLib = {
 };
 
 define.lib({
+  exports: {
+    include: ['index', 'collection', 'common-browser', 'graph', 'types/index'],
+  },
   lib: [bundlelessLib, collectionLib],
   plugins: pluginsConfig,
 });

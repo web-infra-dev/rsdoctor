@@ -24,6 +24,9 @@ const externals = [
 ];
 
 define.lib({
+  exports: {
+    include: ['index', 'proxy-loader'],
+  },
   resolve: {
     alias: {
       // This rule always passes JavaScript source to CheckSyntax, so its HTML
