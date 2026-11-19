@@ -241,4 +241,8 @@ define.app(({ env }) => {
 define.test({
   ...baseConfig,
   extends: {},
+  plugins: [pluginReact()],
+  output: {
+    module: false,
+  },
 });

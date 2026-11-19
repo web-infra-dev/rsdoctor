@@ -19,6 +19,8 @@ import projectStyles from './project.module.scss';
 
 import { SDK } from '@rsdoctor/shared/types';
 
+const assetsSummaryBody = { withFileContent: false };
+
 export const ProjectOverall: React.FC<{
   configs: SDK.ConfigData;
   cwd: string;
@@ -71,7 +73,7 @@ export const ProjectOverall: React.FC<{
   return (
     <ServerAPIProvider
       api={SDK.ServerAPI.API.GetAssetsSummary}
-      body={{ withFileContent: false }}
+      body={assetsSummaryBody}
     >
       {(res) => {
         const totalSizeStr = formatSize(res.all.total.size);
