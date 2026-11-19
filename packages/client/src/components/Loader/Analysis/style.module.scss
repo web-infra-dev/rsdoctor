@@ -30,6 +30,36 @@
           flex: 1;
           min-width: 0;
         }
+
+        // The tree is virtualized, so rows can't scroll horizontally. Fit each
+        // row: the file name and loader names shrink, and the layer and each
+        // loader's timing stay visible.
+        .rc-tree-title {
+          display: block;
+        }
+
+        .rc-tree-title > div > * {
+          flex-shrink: 0;
+        }
+
+        .rc-tree-title > div > :first-child,
+        .rc-tree-title > div > .ant-space,
+        .rc-tree-title > div > .ant-space > .ant-space-item {
+          flex-shrink: 1;
+          min-width: 0;
+        }
+
+        .rc-tree-title > div > :first-child {
+          overflow: hidden;
+        }
+
+        .rc-tree-title .ant-tag {
+          min-width: 0;
+
+          > :not(:first-child) {
+            flex-shrink: 0;
+          }
+        }
       }
     }
   }
@@ -56,6 +86,12 @@
     flex: 0 0 auto;
     padding-right: 5;
   }
+}
+
+.keywords {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .textBox {

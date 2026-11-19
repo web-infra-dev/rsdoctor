@@ -1,5 +1,6 @@
 import React from 'react';
-import { Space } from 'antd';
+import { Space, Tree as AntdTree } from 'antd';
+import type { DirectoryTreeProps } from 'antd/es/tree';
 import {
   FileOutlined,
   FolderOpenTwoTone,
@@ -14,7 +15,7 @@ import JSIcon from 'src/common/svg/files/js.svg?react';
 import FileIcon from 'src/common/svg/files/unkown-file.svg?react';
 
 import './index.scss';
-import { useTheme, useThemeToken } from '../../utils';
+import { useElementSize, useTheme, useThemeToken } from '../../utils';
 import path from 'path';
 
 function getFileType(filename: string) {
@@ -98,5 +99,21 @@ export const FileTree: React.FC<Partial<TreeProps>> = (props) => {
       expandAction="click"
       {...props}
     />
+  );
+};
+
+/**
+ * A directory tree that fills its container and only mounts the rows in
+ * view, for drawers that can list every output file of a large build.
+ */
+export const DrawerDirectoryTree: React.FC<DirectoryTreeProps> = (props) => {
+  const [ref, { height }] = useElementSize();
+
+  return (
+    <div ref={ref} style={{ height: '100%' }}>
+      {height > 0 && (
+        <AntdTree.DirectoryTree virtual height={height} {...props} />
+      )}
+    </div>
   );
 };

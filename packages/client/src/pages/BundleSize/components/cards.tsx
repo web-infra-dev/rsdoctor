@@ -1,6 +1,6 @@
 /* rslint-disable react/jsx-key */
 import React, { memo, useState, useMemo } from 'react';
-import { Segmented, Avatar, Tree } from 'antd';
+import { Segmented, Avatar } from 'antd';
 import { Client, SDK } from '@rsdoctor/shared/types';
 import { RightOutlined, FileFilled, GoldenFilled } from '@ant-design/icons';
 
@@ -14,11 +14,10 @@ import { SizeCard, bgColorType } from '../../../components/Card/size';
 import Overview from '../../../components/Overall/overview';
 import { ServerAPIProvider } from '../../../components/Manifest';
 import { getFiles } from '../../..//components/Overall';
+import { DrawerDirectoryTree } from '../../../components/FileTree';
 import { TextDrawer } from '../../..//components/TextDrawer';
 
 import styles from './card.module.scss';
-
-const { DirectoryTree } = Tree;
 
 interface CardProps {
   showProgress?: boolean;
@@ -213,7 +212,7 @@ export const BundleCards: React.FC<{
                         </div>
                       }
                     >
-                      <DirectoryTree
+                      <DrawerDirectoryTree
                         defaultExpandAll
                         selectable={false}
                         treeData={treeData}
