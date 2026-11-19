@@ -11,6 +11,7 @@ import { ServerAPIProvider } from '../Manifest';
 import listStyles from './list.module.scss';
 import cardStyles from './card.module.scss';
 import { DataSummary } from './DataSummary';
+import { groupFilesByDir } from './file-groups';
 
 import { Client, SDK } from '@rsdoctor/shared/types';
 import type { TreeDataNode } from 'antd';
@@ -22,42 +23,11 @@ type viewType = 'files' | 'size';
 export const getFiles = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
 ) => {
-  let files: Array<{
-    fileName: string;
-    defaultDir: string;
-    size: number;
-    initial: boolean;
-  }> = [];
-  if (data.files.length) {
-    files = data.files.map((fileMessage) => {
-      const filePath = fileMessage.path;
-      const pathArray = filePath.split('/');
-      const fileName = pathArray.pop()!;
-      const defaultDir = pathArray.join('/') || 'output';
-
-      return {
-        fileName,
-        defaultDir,
-        size: fileMessage.size,
-        initial: fileMessage.initial,
-      };
-    });
-  }
-
-  const treeData: TreeDataNode[] = [];
-  files.forEach((file) => {
-    const target = treeData.find((data) => data.title === file.defaultDir);
-    const parent: TreeDataNode = target || {
-      title: file.defaultDir,
-      key: file.defaultDir,
-      icon: <FolderOpenTwoTone />,
-      children: [],
-    };
-    const icon = getFileCom(file.fileName);
-    if (!target) {
-      treeData.push(parent);
-    }
-    parent.children!.push({
+  const treeData: TreeDataNode[] = groupFilesByDir(data.files).map((group) => ({
+    title: group.dir,
+    key: group.key,
+    icon: <FolderOpenTwoTone />,
+    children: group.files.map((file) => ({
       title: (
         <div className={styles.treeContainer}>
           <div className={styles.treeTitle}>{file.fileName}</div>
@@ -72,11 +42,11 @@ export const getFiles = (
           ) : null}
         </div>
       ),
-      key: file.fileName,
+      key: file.key,
       isLeaf: true,
-      icon,
-    });
-  });
+      icon: getFileCom(file.fileName),
+    })),
+  }));
 
   return {
     treeData,
