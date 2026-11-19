@@ -9,26 +9,11 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./collection": {
-      "types": "./dist/collection.d.ts",
-      "default": "./dist/collection.js"
-    },
-    "./common-browser": {
-      "types": "./dist/common-browser.d.ts",
-      "default": "./dist/common-browser.js"
-    },
-    "./graph": {
-      "types": "./dist/graph.d.ts",
-      "default": "./dist/graph.js"
-    },
-    "./types": {
-      "types": "./dist/types/index.d.ts",
-      "default": "./dist/types/index.js"
-    }
+    ".": "./dist/index.js",
+    "./collection": "./dist/collection.js",
+    "./common-browser": "./dist/common-browser.js",
+    "./graph": "./dist/graph.js",
+    "./types": "./dist/types/index.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
