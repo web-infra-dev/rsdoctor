@@ -71,9 +71,6 @@ export class BriefDataLoader extends BaseDataLoader {
     R extends SDK.ServerAPI.InferResponseType<T> =
       SDK.ServerAPI.InferResponseType<T>,
   >(...args: B extends void ? [api: T] : [api: T, body: B]): Promise<R> {
-    if (args[0] === SDK.ServerAPI.API.GetClientRoutes) {
-      return (this.report.enableRoutes ?? []) as R;
-    }
     return this.loader.loadAPI(...args) as R;
   }
 
