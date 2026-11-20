@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'rstack/test';
+import { spawnSync } from 'node:child_process';
 import type { AddressInfo } from 'net';
 import { Server } from '../../src/build-utils/build';
 import {
@@ -30,6 +31,30 @@ describe('test src/server.ts', () => {
         'Invalid port',
       );
     }
+  });
+
+  it.each([
+    { code: 'EPERM', port: 3543, attempts: [3543] },
+    { code: 'EADDRINUSE', port: 65_535, attempts: [65_535, 0] },
+    { code: 'EADDRINUSE', port: 0, attempts: [0] },
+  ])('propagates $code when probing port $port', ({ code, port, attempts }) => {
+    const script = `
+      require('node:net').Server.prototype.listen = function (port) {
+        console.log(port);
+        const error = Object.assign(new Error('listen failed'), { code: ${JSON.stringify(code)} });
+        this.emit('error', error);
+      };
+      ${createGetPortSyncFunctionString(port)}
+    `;
+    const result = spawnSync(process.execPath, ['-e', script], {
+      encoding: 'utf8',
+      timeout: 5000,
+    });
+
+    expect(result.error).toBeUndefined();
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain(code);
+    expect(result.stdout.trim().split(/\s+/).map(Number)).toEqual(attempts);
   });
 
   it('binds to 127.0.0.1 by default', async () => {
