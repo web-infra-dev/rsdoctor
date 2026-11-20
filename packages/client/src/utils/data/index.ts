@@ -41,16 +41,14 @@ export function useDataLoader(
   manifest: Manifest.RsdoctorManifestWithShardingFiles | void,
 ) {
   const [loader, setLoader] = useState<BaseDataLoader | void>(undefined);
+  const briefReport =
+    typeof window !== 'undefined' && window[Constants.WINDOW_RSDOCTOR_TAG];
 
   useEffect(() => {
-    if (window[Constants.WINDOW_RSDOCTOR_TAG]) {
-      console.log('[brief mode]');
-      const loader = new BriefDataLoader({ data: [] } as any);
-      setLoader(loader);
+    if (briefReport) {
+      setLoader(BriefDataLoader.forReport(briefReport));
+      return;
     }
-  }, []);
-
-  useEffect(() => {
     if (!manifest) return;
 
     if (!loaderTask.has(manifest)) {
@@ -59,10 +57,14 @@ export function useDataLoader(
     }
 
     const task = loaderTask.get(manifest)!;
+    let active = true;
     task.then((loader) => {
-      setLoader(loader);
+      if (active) setLoader(loader);
     });
-  }, [manifest]);
+    return () => {
+      active = false;
+    };
+  }, [manifest, briefReport]);
 
   return {
     loader,
