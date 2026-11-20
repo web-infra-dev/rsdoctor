@@ -69,7 +69,9 @@ async function getAvailablePort(expectPort) {
       const res = await getPort(port, ${JSON.stringify(host)});
       return res;
     } catch (error) {
+      if (error.code !== 'EADDRINUSE' || port === 0) throw error;
       port += Math.floor(Math.random() * 100 + 1);
+      if (port > 65_535) port = 0;
     }
   }
 }
