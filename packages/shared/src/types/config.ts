@@ -37,6 +37,8 @@ export interface BriefModeOptions {
 }
 
 interface OutputBaseConfig {
+  /** Path format for shard references in manifest.json. @default 'absolute' */
+  manifestPathType?: 'absolute' | 'relative';
   /**
    * The directory where the report files will be output.
    */
