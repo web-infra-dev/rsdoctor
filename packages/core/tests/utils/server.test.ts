@@ -36,6 +36,12 @@ describe('test src/server.ts', () => {
   it.each([
     { code: 'EPERM', port: 3543, attempts: [3543] },
     { code: 'EADDRINUSE', port: 65_535, attempts: [65_535, 0] },
+    {
+      code: 'EADDRINUSE',
+      port: 3543,
+      attempts: [...Array.from({ length: 20 }, (_, i) => 3543 + i), 0],
+    },
+    { code: 'EACCES', port: 65_535, attempts: [65_535, 0] },
     { code: 'EADDRINUSE', port: 0, attempts: [0] },
   ])('propagates $code when probing port $port', ({ code, port, attempts }) => {
     const script = `
@@ -55,6 +61,31 @@ describe('test src/server.ts', () => {
     expect(result.status).toBe(1);
     expect(result.stderr).toContain(code);
     expect(result.stdout.trim().split(/\s+/).map(Number)).toEqual(attempts);
+  });
+
+  it('falls back to an OS-assigned port after EACCES', () => {
+    const script = `
+      const net = require('node:net');
+      const listen = net.Server.prototype.listen;
+      net.Server.prototype.listen = function (port, ...args) {
+        console.error(port);
+        if (port === 3543) {
+          this.emit('error', Object.assign(new Error('listen failed'), { code: 'EACCES' }));
+          return this;
+        }
+        return listen.call(this, 0, ...args);
+      };
+      ${createGetPortSyncFunctionString(3543)}
+    `;
+    const result = spawnSync(process.execPath, ['-e', script], {
+      encoding: 'utf8',
+      timeout: 5000,
+    });
+
+    expect(result.error).toBeUndefined();
+    expect(result.status).toBe(0);
+    expect(result.stderr.trim().split(/\s+/).map(Number)).toEqual([3543, 0]);
+    expect(Number(result.stdout)).toBeGreaterThan(0);
   });
 
   it('binds to 127.0.0.1 by default', async () => {
