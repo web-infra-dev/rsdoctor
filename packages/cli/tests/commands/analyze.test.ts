@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, rs } from 'rstack/test';
-import type { RsdoctorSDK } from '@rsdoctor/core';
+import { RsdoctorSDK } from '@rsdoctor/core';
 import type { Manifest } from '@rsdoctor/shared/types';
 import fs from 'node:fs';
 import net from 'node:net';
@@ -11,8 +11,9 @@ describe('analyze command', () => {
   let root = '';
   let sdk: RsdoctorSDK | undefined;
 
-  const createReport = (missing: Record<string, string> = {}) => {
+  const createReport = (missing: Record<string, string | undefined> = {}) => {
     root = fs.mkdtempSync(path.join(os.tmpdir(), 'rsdoctor-analyze-'));
+    rs.spyOn(os, 'homedir').mockReturnValue(root);
     const series = ['web', 'worker'].map((name, stage) => ({
       name,
       path: path.join(root, `${name}.json`),
@@ -49,6 +50,7 @@ describe('analyze command', () => {
   };
 
   afterEach(async () => {
+    rs.restoreAllMocks();
     await sdk?.dispose();
     sdk = undefined;
     fs.rmSync(root, { recursive: true, force: true });
@@ -80,16 +82,47 @@ describe('analyze command', () => {
     const { series } = await fetchManifest(server.origin);
 
     expect(series!.map((item) => item.origin)).toEqual([
-      undefined,
+      server.origin,
       'http://127.0.0.1:1',
     ]);
+  });
+
+  it('hides a skipped compiler that has no origin', async () => {
+    createReport({ worker: undefined });
+    const { server } = await run();
+
+    const { series } = await fetchManifest(server.origin);
+
+    expect(series!.map((item) => item.name)).toEqual(['web']);
+  });
+
+  it('starts the selected compiler first and registers each by name', async () => {
+    createReport();
+    const bootstrap = rs.spyOn(RsdoctorSDK.prototype, 'bootstrap');
+
+    await run();
+
+    const [web, worker] = bootstrap.mock.contexts as RsdoctorSDK[];
+    const mcp = JSON.parse(
+      fs.readFileSync(path.join(root, '.cache/rsdoctor/mcp.json'), 'utf8'),
+    );
+
+    expect([web.name, worker.name]).toEqual(['web', 'worker']);
+    expect(mcp.portList).toEqual({
+      web: web.server.port,
+      worker: worker.server.port,
+    });
   });
 
   it('stops every server when one fails to start', async () => {
     createReport();
     const listen = rs.spyOn(net.Server.prototype, 'listen');
+    const bootstrap = RsdoctorSDK.prototype.bootstrap;
+    rs.spyOn(RsdoctorSDK.prototype, 'bootstrap')
+      .mockImplementationOnce(bootstrap)
+      .mockRejectedValueOnce(new Error('compiler failed to start'));
 
-    await expect(run(65536)).rejects.toThrow();
+    await expect(run()).rejects.toThrow('compiler failed to start');
 
     const servers = listen.mock.contexts as net.Server[];
     listen.mockRestore();
