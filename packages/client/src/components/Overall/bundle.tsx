@@ -20,6 +20,8 @@ import styles from './bundle.module.scss';
 
 type viewType = 'files' | 'size';
 
+const assetsSummaryBody = { withFileContent: false };
+
 export const getFiles = (
   data: Client.RsdoctorClientAssetsSummary['all']['total'],
 ) => {
@@ -256,7 +258,7 @@ export const BundleOverall: React.FC<{
   return (
     <ServerAPIProvider
       api={SDK.ServerAPI.API.GetAssetsSummary}
-      body={{ withFileContent: false }}
+      body={assetsSummaryBody}
     >
       {(res) => {
         const totalSizeStr = formatSize(res.all.total.size);
