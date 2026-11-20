@@ -18,6 +18,7 @@ import { TextDrawer } from '../../..//components/TextDrawer';
 
 import styles from './card.module.scss';
 
+const assetsSummaryBody = { withFileContent: false };
 const { DirectoryTree } = Tree;
 
 interface CardProps {
@@ -184,7 +185,7 @@ export const BundleCards: React.FC<{
   return (
     <ServerAPIProvider
       api={SDK.ServerAPI.API.GetAssetsSummary}
-      body={{ withFileContent: false }}
+      body={assetsSummaryBody}
     >
       {(res) => {
         const { treeData } = getFiles(res['all'].total);

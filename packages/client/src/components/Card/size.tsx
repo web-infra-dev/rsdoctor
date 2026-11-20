@@ -12,6 +12,7 @@ import { SDK, Client } from '@rsdoctor/shared/types';
 
 import styles from './size.module.scss';
 
+const assetsSummaryBody = { withFileContent: false };
 const { DirectoryTree } = Tree;
 type SizeMetric = 'size' | 'gzip' | 'brotli';
 
@@ -69,7 +70,7 @@ export const SizeCard: React.FC<SizeCardProps> = ({ files, total, type }) => {
     <div ref={contentRef} className={styles.container}>
       <ServerAPIProvider
         api={SDK.ServerAPI.API.GetAssetsSummary}
-        body={{ withFileContent: false }}
+        body={assetsSummaryBody}
       >
         {(res) => {
           const type = fileType.includes('image') ? 'imgs' : fileType;

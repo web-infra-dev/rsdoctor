@@ -291,6 +291,8 @@ const AssetTreemapWithFilterAndData = memo(() => {
   );
 });
 
+const assetsSummaryBody = { withFileContent: false };
+
 export const ModulesOverall: React.FC = () => {
   const { project } = useProjectInfo();
 
@@ -302,7 +304,7 @@ export const ModulesOverall: React.FC = () => {
   return (
     <ServerAPIProvider
       api={SDK.ServerAPI.API.GetAssetsSummary}
-      body={{ withFileContent: false }}
+      body={assetsSummaryBody}
     >
       {(summary) => {
         return (
