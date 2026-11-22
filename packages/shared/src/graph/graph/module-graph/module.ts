@@ -396,16 +396,18 @@ export class Module implements SDK.ModuleInstance {
         : {}),
     };
 
-    if (this.meta.hasSetEsModuleStatement || this.meta.strictHarmonyModule) {
-      data.meta = {};
-
-      if (this.meta.hasSetEsModuleStatement) {
-        data.meta.hasSetEsModuleStatement = true;
-      }
-
-      if (this.meta.strictHarmonyModule) {
-        data.meta.strictHarmonyModule = true;
-      }
+    const { hasSetEsModuleStatement, strictHarmonyModule, exportsType } =
+      this.meta;
+    if (
+      hasSetEsModuleStatement ||
+      strictHarmonyModule ||
+      exportsType !== undefined
+    ) {
+      data.meta = {
+        ...(hasSetEsModuleStatement && { hasSetEsModuleStatement }),
+        ...(strictHarmonyModule && { strictHarmonyModule }),
+        ...(exportsType !== undefined && { exportsType }),
+      };
     }
 
     if (this.isEntry) {

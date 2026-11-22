@@ -110,6 +110,15 @@ describe('module graph', () => {
     expect(pkgData).toMatchSnapshot();
   });
 
+  it('preserves the module exports type across report serialization', () => {
+    const module = new Module('entry', '/entry.js');
+    module.meta.exportsType = 'namespace';
+
+    const graph = ModuleGraph.fromData({ modules: [module.toData()] });
+
+    expect(graph.getModuleById(module.id)?.meta.exportsType).toBe('namespace');
+  });
+
   it('ModuleGraph toCodeMap', async () => {
     const _moduleGraph = new ModuleGraph();
     for (let i = 1; i < 10; i++) {
