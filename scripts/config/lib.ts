@@ -19,13 +19,6 @@ const nodeMinifyConfig = {
 export const esmConfig: LibConfig = {
   format: 'esm',
   syntax: ['node 20'],
-  tools: {
-    rspack: {
-      experiments: {
-        runtimeMode: 'rspack',
-      },
-    },
-  },
   dts: true,
   output: {
     minify: nodeMinifyConfig,

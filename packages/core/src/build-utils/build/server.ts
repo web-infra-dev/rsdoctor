@@ -9,6 +9,8 @@ import { Algorithm } from '@rsdoctor/shared/common-browser';
 // see https://neo4j.com/developer/kb/list-of-restricted-ports-in-browsers
 const RESTRICTED_PORTS = [3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669];
 
+const MAX_PORT_ATTEMPTS = 20;
+
 export const defaultHost = '127.0.0.1';
 
 function validatePort(port: unknown): number {
@@ -64,17 +66,31 @@ function getPort(expectPort, host) {
 
 async function getAvailablePort(expectPort) {
   let port = expectPort;
+  let attempts = 0;
   while (true) {
     try {
-      const res = await getPort(port, ${JSON.stringify(host)});
-      return res;
+      return await getPort(port, ${JSON.stringify(host)});
     } catch (error) {
-      port += Math.floor(Math.random() * 100 + 1);
+      if (port === 0) throw error;
+      if (error.code === 'EACCES') {
+        port = 0;
+      } else if (error.code === 'EADDRINUSE') {
+        attempts++;
+        port = attempts >= ${MAX_PORT_ATTEMPTS} || port === 65_535 ? 0 : port + 1;
+      } else {
+        throw error;
+      }
     }
   }
 }
 
-getAvailablePort(${port}).then(port => process.stdout.write(port.toString()));
+getAvailablePort(${port}).then(
+  port => process.stdout.write(port.toString()),
+  error => {
+    process.stderr.write(String(error.code || error.message));
+    process.exit(1);
+  },
+);
 })();
 `.trim();
 };

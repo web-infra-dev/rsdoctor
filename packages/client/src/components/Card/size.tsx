@@ -1,9 +1,10 @@
-import { Empty, Progress, Segmented, Tree } from 'antd';
+import { Empty, Progress, Segmented } from 'antd';
 import { sumBy } from '@rsdoctor/shared/collection';
 import React, { useEffect, useMemo, useState } from 'react';
 import { RightOutlined } from '@ant-design/icons';
 
 import { formatSize, useElementSize } from 'src/utils';
+import { DrawerDirectoryTree } from '../FileTree';
 import { TextDrawer } from '../TextDrawer';
 import { getFiles } from '../Overall';
 import { ServerAPIProvider } from '../Manifest';
@@ -12,7 +13,8 @@ import { SDK, Client } from '@rsdoctor/shared/types';
 
 import styles from './size.module.scss';
 
-const { DirectoryTree } = Tree;
+const assetsSummaryBody = { withFileContent: false };
+
 type SizeMetric = 'size' | 'gzip' | 'brotli';
 
 export interface SizeCardProps {
@@ -69,7 +71,7 @@ export const SizeCard: React.FC<SizeCardProps> = ({ files, total, type }) => {
     <div ref={contentRef} className={styles.container}>
       <ServerAPIProvider
         api={SDK.ServerAPI.API.GetAssetsSummary}
-        body={{ withFileContent: false }}
+        body={assetsSummaryBody}
       >
         {(res) => {
           const type = fileType.includes('image') ? 'imgs' : fileType;
@@ -151,7 +153,7 @@ export const SizeCard: React.FC<SizeCardProps> = ({ files, total, type }) => {
                     }
                   >
                     {treeData.length ? (
-                      <DirectoryTree
+                      <DrawerDirectoryTree
                         defaultExpandAll
                         selectable={false}
                         treeData={treeData}

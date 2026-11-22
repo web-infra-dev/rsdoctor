@@ -72,9 +72,28 @@
     }
   }
 
+  // The tree is virtualized, so rows can't scroll horizontally. Fit each row
+  // to the column: the file name shrinks, and its size, tags and actions stay visible.
+  :global(.rc-tree-node-content-wrapper) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :global(.rc-tree-title) {
+    display: block;
+  }
+
   .assetBox {
     display: flex;
     align-items: center;
+    min-width: 0;
+
+    > :first-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
     .fileText {
       margin-right: 4px;
@@ -83,6 +102,7 @@
 }
 
 .assetsTag {
+  flex-shrink: 0;
   height: 30px;
 
   :global {

@@ -14,7 +14,14 @@ import {
   Typography,
 } from 'antd';
 import { debounce, sumBy } from '@rsdoctor/shared/collection';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  type ComponentProps,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useCodeDrawer } from 'src/components/base/CodeViewer/useCodeDrawer';
 import { Badge as Bdg } from '../../../components/Badge';
 import { FileTree } from '../../../components/FileTree';
@@ -22,7 +29,12 @@ import { KeywordInput } from '../../../components/Form/keyword';
 import { Keyword } from '../../../components/Keyword';
 import { ServerAPIProvider } from '../../../components/Manifest';
 import { Size } from '../../../constants';
-import { createFileStructures, formatSize, useI18n } from '../../../utils';
+import {
+  createFileStructures,
+  formatSize,
+  useElementSize,
+  useI18n,
+} from '../../../utils';
 import { isJavaScriptAsset } from '../../../utils/assets';
 import { AssetDetail } from './asset';
 import { createAssetPathMap, resolveAssetFileTitleTarget } from './asset-path';
@@ -42,6 +54,35 @@ function OpenAssetCode({
 }) {
   useEffect(() => onOpen(asset), [asset, onOpen]);
   return null;
+}
+
+const ASSET_TREE_ITEM_HEIGHT = 40;
+
+/**
+ * Large builds emit thousands of assets, so only mount the visible rows. The
+ * scroll area is measured here, with the tree, so a list that unmounts for an
+ * empty filter is measured again when it comes back.
+ */
+function VirtualAssetsTree({
+  treeKey,
+  ...props
+}: ComponentProps<typeof FileTree> & { treeKey: string }) {
+  const [ref, { height }] = useElementSize();
+
+  return (
+    <div className={styles.assetDetailFileTreeScrollArea} ref={ref}>
+      {height > 0 && (
+        <FileTree
+          key={treeKey}
+          className={styles.assets}
+          virtual
+          itemHeight={ASSET_TREE_ITEM_HEIGHT}
+          height={height}
+          {...props}
+        />
+      )}
+    </div>
+  );
 }
 
 export const TreeGraph = memo(
@@ -375,17 +416,14 @@ export const TreeGraph = memo(
                   size="small"
                 >
                   <div className={styles.assetDetailFileTreeViewport}>
-                    <div className={styles.assetDetailFileTreeScrollArea}>
-                      <FileTree
-                        className={styles.assets}
-                        treeData={assetsStructures}
-                        autoExpandParent
-                        defaultExpandAll={
-                          defaultExpandAll || filteredAssets.length <= 20
-                        }
-                        key={`tree_${inputAssetName}_${defaultExpandAll}`}
-                      />
-                    </div>
+                    <VirtualAssetsTree
+                      treeKey={`tree_${inputAssetName}_${defaultExpandAll}`}
+                      treeData={assetsStructures}
+                      autoExpandParent
+                      defaultExpandAll={
+                        defaultExpandAll || filteredAssets.length <= 20
+                      }
+                    />
                   </div>
                 </Card>
               </div>

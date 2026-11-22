@@ -1,9 +1,23 @@
 import { Manifest, SDK } from '@rsdoctor/shared/types';
 import { Algorithm } from '@rsdoctor/shared/common-browser';
 import { BaseDataLoader } from './base';
-import { Constants } from '@rsdoctor/shared/types';
 
 export class BriefDataLoader extends BaseDataLoader {
+  private static readonly loaders = new WeakMap<object, BriefDataLoader>();
+
+  private constructor(private readonly report: Record<string, unknown>) {
+    super({ data: [] } as any);
+  }
+
+  static forReport(report: Record<string, unknown>): BriefDataLoader {
+    let loader = this.loaders.get(report);
+    if (!loader) {
+      loader = new BriefDataLoader(report);
+      this.loaders.set(report, loader);
+    }
+    return loader;
+  }
+
   public isLocal() {
     return false;
   }
@@ -17,7 +31,7 @@ export class BriefDataLoader extends BaseDataLoader {
     const [scope] = this.getKeys(key);
 
     console.log(`[loadData]-[scope]: ${scope}`);
-    const data = this.getData(scope);
+    const data = this.report[scope];
 
     if (!data) return;
 
@@ -32,11 +46,6 @@ export class BriefDataLoader extends BaseDataLoader {
 
     res = await this.shardingDataMap.get(scope);
     return res;
-  }
-
-  public getData(scope: keyof Manifest.RsdoctorManifestData) {
-    console.log(`[getData]-[scope]: ${scope}`);
-    return window[Constants.WINDOW_RSDOCTOR_TAG][scope];
   }
 
   private parseData(data: unknown): unknown {

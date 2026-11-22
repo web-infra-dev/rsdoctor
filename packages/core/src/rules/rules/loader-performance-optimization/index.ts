@@ -45,6 +45,7 @@ export const rule = defineRule<typeof title, Config>(() => {
       const loaders: SDK.LoaderTransformData[] = loader.flatMap(
         (el) => el.loaders,
       );
+      const getLoaderCosts = Loader.createLoaderCostsCalculator(loaders);
 
       for (const item of loader) {
         const { path, ext } = item.resource;
@@ -56,7 +57,7 @@ export const rule = defineRule<typeof title, Config>(() => {
           item.loaders.forEach((el) => {
             if (match(el.loader, ignore)) return;
 
-            const costs = Loader.getLoaderCosts(el, loaders);
+            const costs = getLoaderCosts(el);
 
             const v: LoaderMapValue = {
               ...el,

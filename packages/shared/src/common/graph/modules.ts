@@ -5,6 +5,44 @@ import {
   getDependencyByPackageData,
 } from './dependency';
 
+type ModuleLookup = (id: SDK.ModuleData['id']) => SDK.ModuleData | undefined;
+
+/**
+ * Looks up modules by id like `modules.find((m) => m.id === id)`, using an
+ * index built on the first lookup. If the list can't be indexed, for example
+ * because it isn't an array or has a null entry, it falls back to `find` so
+ * errors surface where they did before.
+ */
+function createModuleLookup(modules: SDK.ModuleData[]): ModuleLookup {
+  let lookup: ModuleLookup | undefined;
+  return (id) => {
+    lookup ??= indexModules(modules);
+    return lookup(id);
+  };
+}
+
+function indexModules(modules: SDK.ModuleData[]): ModuleLookup {
+  const find: ModuleLookup = (id) => modules.find((m) => m.id === id);
+  const byId = new Map<SDK.ModuleData['id'], SDK.ModuleData>();
+  try {
+    if (!Array.isArray(modules)) {
+      return find;
+    }
+    // Read by index, in the same order as `find`.
+    for (let i = 0; i < modules.length; i++) {
+      const module = modules[i];
+      const { id } = module;
+      // Keep the first module for an id, and skip NaN, which `===` never matches.
+      if (!Number.isNaN(id) && !byId.has(id)) {
+        byId.set(id, module);
+      }
+    }
+  } catch {
+    return find;
+  }
+  return (id) => byId.get(id);
+}
+
 export function getModulesByAsset(
   asset: SDK.AssetData,
   chunks: SDK.ChunkData[],
@@ -12,10 +50,31 @@ export function getModulesByAsset(
   filterModules?: (keyof SDK.ModuleData)[],
   checkModules?: (module: SDK.ModuleData) => boolean,
 ): SDK.ModuleData[] {
-  const ids = getChunkIdsByAsset(asset);
-  const cks = getChunksByChunkIds(ids, chunks);
-  const res = getModulesByChunks(cks, modules, filterModules, checkModules);
-  return res;
+  return createModulesByAssetResolver(
+    chunks,
+    modules,
+    filterModules,
+    checkModules,
+  )(asset);
+}
+
+/**
+ * Returns a function that resolves an asset's modules like
+ * `getModulesByAsset`, for many assets. `modules` is indexed once, when the
+ * resolver is created, so create a new resolver if the list changes.
+ */
+export function createModulesByAssetResolver(
+  chunks: SDK.ChunkData[],
+  modules: SDK.ModuleData[],
+  filterModules?: (keyof SDK.ModuleData)[],
+  checkModules?: (module: SDK.ModuleData) => boolean,
+) {
+  const findModule = createModuleLookup(modules);
+  return (asset: SDK.AssetData): SDK.ModuleData[] => {
+    const ids = getChunkIdsByAsset(asset);
+    const cks = getChunksByChunkIds(ids, chunks);
+    return collectModulesByChunks(cks, findModule, filterModules, checkModules);
+  };
 }
 
 export function getModuleIdsByChunk(chunk: SDK.ChunkData) {
@@ -27,9 +86,8 @@ export function getModuleIdsByModulesIds(
   moduleIds: number[],
   modules: SDK.ModuleData[],
 ) {
-  return moduleIds
-    .map((id) => modules.find((m) => m.id === id)!)
-    .filter(Boolean);
+  const findModule = createModuleLookup(modules);
+  return moduleIds.map((id) => findModule(id)!).filter(Boolean);
 }
 
 export function getModulesByChunk(
@@ -37,10 +95,18 @@ export function getModulesByChunk(
   modules: SDK.ModuleData[],
   filterModules?: (keyof SDK.ModuleData)[],
 ): SDK.ModuleData[] {
+  return pickModulesByChunk(chunk, createModuleLookup(modules), filterModules);
+}
+
+function pickModulesByChunk(
+  chunk: SDK.ChunkData,
+  findModule: ModuleLookup,
+  filterModules?: (keyof SDK.ModuleData)[],
+): SDK.ModuleData[] {
   const ids = getModuleIdsByChunk(chunk);
   return ids
     .map((id) => {
-      const module = modules.find((e) => e.id === id)!;
+      const module = findModule(id)!;
       if (filterModules && filterModules.length > 0) {
         if (!module) {
           return null as any;
@@ -64,14 +130,31 @@ export function getModulesByChunks(
   filterModules?: (keyof SDK.ModuleData)[],
   checkModules?: (module: SDK.ModuleData) => boolean,
 ): SDK.ModuleData[] {
+  return collectModulesByChunks(
+    chunks,
+    createModuleLookup(modules),
+    filterModules,
+    checkModules,
+  );
+}
+
+function collectModulesByChunks(
+  chunks: SDK.ChunkData[],
+  findModule: ModuleLookup,
+  filterModules?: (keyof SDK.ModuleData)[],
+  checkModules?: (module: SDK.ModuleData) => boolean,
+): SDK.ModuleData[] {
   const res: SDK.ModuleData[] = [];
+  const seen = new Set<SDK.ModuleData['id']>();
   try {
     chunks.forEach((chunk) => {
-      getModulesByChunk(chunk, modules, filterModules).forEach((md) => {
+      pickModulesByChunk(chunk, findModule, filterModules).forEach((md) => {
+        // `===` never matches NaN, so results with NaN ids are never duplicates.
         if (
           (checkModules ? checkModules(md) : true) &&
-          !res.filter((_m) => _m.id === md.id).length
+          (Number.isNaN(md.id) || !seen.has(md.id))
         ) {
+          seen.add(md.id);
           res.push(md);
         }
       });

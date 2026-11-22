@@ -1,6 +1,6 @@
 {
   "name": "@rsdoctor/core",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/web-infra-dev/rsdoctor",
@@ -9,14 +9,8 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./proxy-loader": {
-      "types": "./dist/proxy-loader.d.ts",
-      "default": "./dist/proxy-loader.js"
-    }
+    ".": "./dist/index.js",
+    "./proxy-loader": "./dist/proxy-loader.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
