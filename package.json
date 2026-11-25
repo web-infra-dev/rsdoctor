@@ -32,9 +32,9 @@
     "pkg-pr-new": "0.0.93",
     "rstack": "catalog:"
   },
-  "packageManager": "pnpm@12.6.0",
+  "packageManager": "pnpm@12.23.0",
   "engines": {
     "node": ">=22.18.0",
-    "pnpm": ">=12.6.0"
+    "pnpm": ">=12.23.0"
   }
 }
