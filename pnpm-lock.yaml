@@ -184,7 +184,7 @@ settings:
 catalogs:
   default:
     '@rsbuild/core':
-      specifier: ^2.3.2
+      specifier: ^2.3.4
       version: 2.3.4
     '@rsbuild/plugin-check-syntax':
       specifier: ^2.1.0
@@ -208,10 +208,10 @@ catalogs:
       specifier: ^1.6.1
       version: 1.6.1
     '@rspack/cli':
-      specifier: ^2.3.2
-      version: 2.3.2
+      specifier: ^2.3.4
+      version: 2.3.4
     '@rspack/core':
-      specifier: ^2.3.2
+      specifier: ^2.3.4
       version: 2.3.4
     '@rspack/lite-tapable':
       specifier: ^1.3.0
@@ -241,8 +241,8 @@ catalogs:
       specifier: 1.0.3
       version: 1.0.3
     '@types/react':
-      specifier: ^19.3.0
-      version: 19.3.0
+      specifier: ^19.3.1
+      version: 19.3.1
     '@types/react-dom':
       specifier: ^19.3.0
       version: 19.3.0
@@ -265,8 +265,8 @@ catalogs:
       specifier: ^1.53.2
       version: 1.53.2
     filesize:
-      specifier: ^11.0.32
-      version: 11.0.32
+      specifier: ^11.0.35
+      version: 11.0.35
     fs-extra:
       specifier: ^11.1.1
       version: 11.3.0
@@ -303,7 +303,7 @@ catalogs:
 
 overrides:
   '@remix-run/router': 1.23.4
-  minimatch: ^11.0.8
+  minimatch: ^11.0.9
   rc-dialog: 9.1.0
   rc-tree: 5.7.2
   tslib: 2.8.1
@@ -316,8 +316,8 @@ importers:
         specifier: ^7.59.4
         version: 7.59.4(@types/node@24.12.3)
       '@rspress/core':
-        specifier: 2.1.3
-        version: 2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
+        specifier: 2.1.4
+        version: 2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
       '@rstackjs/maintainer-skills':
         specifier: 'catalog:'
         version: 1.0.0
@@ -340,11 +340,11 @@ importers:
         specifier: ^2.0.3
         version: 2.0.3(prettier@3.10.1)
       pkg-pr-new:
-        specifier: 0.0.93
-        version: 0.0.93
+        specifier: 0.0.94
+        version: 0.0.94
       rstack:
         specifier: 'catalog:'
-        version: 0.9.4(@microsoft/api-extractor@7.59.4(@types/node@24.12.3))(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(typescript@7.0.2)
+        version: 0.9.4(@microsoft/api-extractor@7.59.4(@types/node@24.12.3))(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(typescript@7.0.2)
 
   e2e:
     devDependencies:
@@ -352,8 +352,8 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
       '@lynx-js/react':
-        specifier: ^0.129.3
-        version: 0.129.3(@types/react@19.3.0)
+        specifier: ^0.129.4
+        version: 0.129.4(@types/react@19.3.1)
       '@lynx-js/rspeedy':
         specifier: ^0.17.2
         version: 0.17.2(@emnapi/core@2.0.0-beta.3)(@emnapi/runtime@2.0.0-beta.3)(@rspack/core@2.3.4(@swc/helpers@0.5.24))(csso@5.0.5)(esbuild@0.25.5)(supports-color@8.1.1)(tslib@2.8.1)(typescript@7.0.2)(webpack@5.105.4(esbuild@0.25.5))
@@ -380,7 +380,7 @@ importers:
         version: 24.12.3
       '@types/react':
         specifier: 'catalog:'
-        version: 19.3.0
+        version: 19.3.1
       loader-utils:
         specifier: ^2.0.4
         version: 2.0.4
@@ -428,10 +428,10 @@ importers:
         version: link:../../packages/core
       '@types/react':
         specifier: 'catalog:'
-        version: 19.3.0
+        version: 19.3.1
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.3.0(@types/react@19.3.0)
+        version: 19.3.0(@types/react@19.3.1)
       '@types/semver6':
         specifier: npm:@types/semver@7.5.6
         version: '@types/semver@7.5.6'
@@ -446,7 +446,7 @@ importers:
     dependencies:
       '@arco-design/web-react':
         specifier: ^2.58.3
-        version: 2.65.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 2.65.0(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(supports-color@8.1.1)(typescript@7.0.2)
@@ -471,7 +471,7 @@ importers:
         version: link:../../packages/core
       '@rspack/cli':
         specifier: 'catalog:'
-        version: 2.3.2(@rspack/core@2.3.4(@swc/helpers@0.5.24))
+        version: 2.3.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))
       '@rspack/core':
         specifier: 'catalog:'
         version: 2.3.4(@swc/helpers@0.5.24)
@@ -483,10 +483,10 @@ importers:
         version: 7.0.1(@testing-library/dom@10.4.2)
       '@types/react':
         specifier: 'catalog:'
-        version: 19.3.0
+        version: 19.3.1
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.3.0(@types/react@19.3.0)
+        version: 19.3.0(@types/react@19.3.1)
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.2
@@ -501,7 +501,7 @@ importers:
         version: link:../../packages/core
       '@rspack/cli':
         specifier: 'catalog:'
-        version: 2.3.2(@rspack/core@2.3.4(@swc/helpers@0.5.24))
+        version: 2.3.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))
       '@rspack/core':
         specifier: 'catalog:'
         version: 2.3.4(@swc/helpers@0.5.24)
@@ -510,7 +510,7 @@ importers:
     dependencies:
       '@arco-design/web-react':
         specifier: ^2.58.3
-        version: 2.65.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 2.65.0(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(supports-color@8.1.1)(typescript@7.0.2)
@@ -535,7 +535,7 @@ importers:
         version: link:../../packages/core
       '@rspack/cli':
         specifier: 'catalog:'
-        version: 2.3.2(@rspack/core@2.3.4(@swc/helpers@0.5.24))
+        version: 2.3.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))
       '@rspack/core':
         specifier: 'catalog:'
         version: 2.3.4(@swc/helpers@0.5.24)
@@ -547,10 +547,10 @@ importers:
         version: 7.0.1(@testing-library/dom@10.4.2)
       '@types/react':
         specifier: 'catalog:'
-        version: 19.3.0
+        version: 19.3.1
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.3.0(@types/react@19.3.0)
+        version: 19.3.0(@types/react@19.3.1)
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.2
@@ -562,7 +562,7 @@ importers:
     dependencies:
       '@arco-design/web-react':
         specifier: ^2.58.3
-        version: 2.65.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 2.65.0(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(supports-color@8.1.1)(typescript@7.0.2)
@@ -587,7 +587,7 @@ importers:
         version: link:../../packages/core
       '@rspack/cli':
         specifier: 'catalog:'
-        version: 2.3.2(@rspack/core@2.3.4(@swc/helpers@0.5.24))
+        version: 2.3.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))
       '@rspack/core':
         specifier: 'catalog:'
         version: 2.3.4(@swc/helpers@0.5.24)
@@ -599,10 +599,10 @@ importers:
         version: 7.0.1(@testing-library/dom@10.4.2)
       '@types/react':
         specifier: 'catalog:'
-        version: 19.3.0
+        version: 19.3.1
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.3.0(@types/react@19.3.0)
+        version: 19.3.0(@types/react@19.3.1)
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.2
@@ -632,8 +632,8 @@ importers:
         specifier: 'catalog:'
         version: 24.12.3
       cac:
-        specifier: ^7.1.0
-        version: 7.1.0
+        specifier: ^7.1.1
+        version: 7.1.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -657,8 +657,8 @@ importers:
         specifier: 'catalog:'
         version: 24.12.3
       cac:
-        specifier: ^7.1.0
-        version: 7.1.0
+        specifier: ^7.1.1
+        version: 7.1.1
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -700,10 +700,10 @@ importers:
         version: 1.0.3
       '@types/react':
         specifier: 'catalog:'
-        version: 19.3.0
+        version: 19.3.1
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.3.0(@types/react@19.3.0)
+        version: 19.3.0(@types/react@19.3.1)
       '@types/react-highlight-words':
         specifier: ^0.20.1
         version: 0.20.1
@@ -766,10 +766,10 @@ importers:
         version: 12.0.0(i18next@22.0.4)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-json-view:
         specifier: 1.21.3
-        version: 1.21.3(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 1.21.3(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-markdown:
         specifier: 'catalog:'
-        version: 10.1.0(@types/react@19.3.0)(react@19.3.1)(supports-color@8.1.1)
+        version: 10.1.0(@types/react@19.3.1)(react@19.3.1)(supports-color@8.1.1)
       react-router-dom:
         specifier: 'catalog:'
         version: 6.30.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -798,8 +798,8 @@ importers:
         specifier: 0.6.1
         version: 0.6.1
       caniuse-lite:
-        specifier: ^1.0.30001826
-        version: 1.0.30001826
+        specifier: ^1.0.30001828
+        version: 1.0.30001828
       sirv:
         specifier: 'catalog:'
         version: 3.0.2
@@ -866,7 +866,7 @@ importers:
         version: 7.21.0
       filesize:
         specifier: 'catalog:'
-        version: 11.0.32
+        version: 11.0.35
       fs-extra:
         specifier: 'catalog:'
         version: 11.3.0
@@ -910,14 +910,14 @@ importers:
   packages/document:
     dependencies:
       '@rspress/core':
-        specifier: 2.1.3
-        version: 2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
+        specifier: 2.1.4
+        version: 2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
       '@rstackjs/doc-ui':
         specifier: 1.14.12
-        version: 1.14.12(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))
+        version: 1.14.12(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))
       react-markdown:
         specifier: 'catalog:'
-        version: 10.1.0(@types/react@19.3.0)(react@19.3.1)(supports-color@8.1.1)
+        version: 10.1.0(@types/react@19.3.1)(react@19.3.1)(supports-color@8.1.1)
     devDependencies:
       '@rsbuild/plugin-sass':
         specifier: 'catalog:'
@@ -929,23 +929,23 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@rspress/plugin-algolia':
-        specifier: 2.1.3
-        version: 2.1.3(@algolia/client-search@5.49.2)(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(algoliasearch@5.49.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(search-insights@2.17.3)
+        specifier: 2.1.4
+        version: 2.1.4(@algolia/client-search@5.49.2)(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.1)(algoliasearch@5.49.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(search-insights@2.17.3)
       '@rspress/plugin-client-redirects':
-        specifier: 2.1.3
-        version: 2.1.3(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))
+        specifier: 2.1.4
+        version: 2.1.4(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))
       '@rspress/plugin-rss':
         specifier: 2.1.1
-        version: 2.1.1(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))
+        version: 2.1.1(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.3
       '@types/react':
         specifier: 'catalog:'
-        version: 19.3.0
+        version: 19.3.1
       '@types/react-dom':
         specifier: 'catalog:'
-        version: 19.3.0(@types/react@19.3.0)
+        version: 19.3.0(@types/react@19.3.1)
       cross-env:
         specifier: 'catalog:'
         version: 10.1.0
@@ -963,7 +963,7 @@ importers:
         version: 1.1.3(@rsbuild/core@2.3.4)
       rspress-plugin-font-open-sans:
         specifier: ^1.0.4
-        version: 1.0.4(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))
+        version: 1.0.4(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -1025,7 +1025,7 @@ importers:
         version: 1.0.0(@rsbuild/core@2.3.4)
       rstack:
         specifier: 'catalog:'
-        version: 0.9.4(@microsoft/api-extractor@7.59.4(@types/node@24.12.3))(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(typescript@7.0.2)
+        version: 0.9.4(@microsoft/api-extractor@7.59.4(@types/node@24.12.3))(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(typescript@7.0.2)
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -2461,16 +2461,16 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@lynx-js/internal-preact@11.0.0-rc.1-20260903085447-f95471a':
-    resolution: {integrity: sha512-RsU+km8Ulg+HVEJpx1/lq/38GUB+KtJKypB80gbumAtswd+og0RpVppy8bZTBVZY7jSjxx2GHYPTjT61+HDPaw==}
+  '@lynx-js/internal-preact@11.0.0-rc.1-20261117064723-40db422':
+    resolution: {integrity: sha512-INm8Fnb+kNjeYxw3TwF/uG7G8HNCFfZaBQk1xHTpw0k9dPcY/04pxXP8b+VawzFxlWbPTa6Abc6c6YEnLLPqGg==}
     peerDependencies:
       preact-render-to-string: '>=6.7.0'
     peerDependenciesMeta:
       preact-render-to-string:
         optional: true
 
-  '@lynx-js/react@0.129.3':
-    resolution: {integrity: sha512-GBEc42e3rBls1GGERlte61JRAL8AgskMTJHT+8lBmbtIMSYvMAlcFvNDyP8AsngJCmpN39ECihPxvsKz4anp1w==}
+  '@lynx-js/react@0.129.4':
+    resolution: {integrity: sha512-BCoQDW9gsGSaSsCiB2fiaryolJJZ4d5XYmVL9kx231vK+q9eqXMNttK1zOOdO9ZoxkDV4anq8EbKYsuAxVGU2Q==}
     peerDependencies:
       '@lynx-js/types': '*'
       '@types/react': ^18 || ^19.0.0
@@ -3166,8 +3166,8 @@ packages:
   '@rspack/binding@2.3.4':
     resolution: {integrity: sha512-wSOT16LVITL/IKeIiLXgN5Q5jZIDqnQ7Gmk+wzKOSZ6OHYNfEBXAKhSJuYtCBq8ovJuGl8cJjdqatAlHE5XKIA==}
 
-  '@rspack/cli@2.3.2':
-    resolution: {integrity: sha512-LtM2th2PuOi17YoTLfqKlVaqzjEjQ8N6a4O6u3D7Oe6LwL+HdYrx0R3D346DsQf5xFKZElcWQfUGneOOUppUCw==}
+  '@rspack/cli@2.3.4':
+    resolution: {integrity: sha512-K6TTCSCR/u96jLll0pp3efSrrDz0gDuD5Or4AEMFEG3mm7jFghoNGRQ26cX9gbsKNBD/hoeqrJdbPq1p4fpkVA==}
     hasBin: true
     peerDependencies:
       '@rspack/core': ^2.3.0-0
@@ -3277,21 +3277,21 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
-  '@rspress/core@2.1.3':
-    resolution: {integrity: sha512-qKa5c7zHO8cmhxkReURd3dN/ZRfHYnEztdIQ9hMuolaNzhSYo2A36XErUvLvbMf2EUM2AxfPYRQv+4Crfeq6pw==}
+  '@rspress/core@2.1.4':
+    resolution: {integrity: sha512-7OmP7ABDgQLSpVfpBHfpjqu4H3PGBGMyhLxF1crPQ48Q6MIWAVu77nw7cONn8AZa9GoVq0N/DoE3GEtgZzlu6w==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
-  '@rspress/plugin-algolia@2.1.3':
-    resolution: {integrity: sha512-49KcT6VVASwkgdF1v0tzxABaBjjv8QjZ6epAVmuV7Q9gSSLU6yzv3/uLuVTnfwMps+fHcii0K/Uh19Fa3UPexQ==}
+  '@rspress/plugin-algolia@2.1.4':
+    resolution: {integrity: sha512-l8lZsK1SsKaR5D1s3TKf0OFkD/oZsiStxgPk+3t+fBcOA7UUluzf++z6IFQqHHla3mEawyUyj6duJBbyLz412Q==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rspress/core': ^2.1.0-beta.2
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
 
-  '@rspress/plugin-client-redirects@2.1.3':
-    resolution: {integrity: sha512-iEqJ8qEFuUxGKRVaS/WMyFi8FiJlogdcEHbGK/UjY8+8Hg8r8aSv4YihmNh3Ev/uIW21hrC8aXMEgVo0H51Q+g==}
+  '@rspress/plugin-client-redirects@2.1.4':
+    resolution: {integrity: sha512-6/g+Mr8lslqiFzlMBouex8TLm6PlQK6cmZ71Yfv82+Uxcrb+LaFAFiPbq2G7gToXBQUoECM4D/7nSLAfeOhnEQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rspress/core': ^2.1.0-beta.2
@@ -3305,8 +3305,8 @@ packages:
   '@rspress/shared@2.1.0-beta.1':
     resolution: {integrity: sha512-Kq+GIGbz/WC3hVNb2zKYwAFM5cFu4XvK7XMKareqHxN/Hv81sePuFhlO+9Pm29aYEJ79JqsAS+aNeI6hZXEEhw==}
 
-  '@rspress/shared@2.1.3':
-    resolution: {integrity: sha512-VwJ7kgsTWVqHzSXQVHIUCsdMparmq9b/IDmTa3a6jMPl1zmm5Qg9M0eP4j8JXWoIS9n19XtCkQcZmMTFOPRy3A==}
+  '@rspress/shared@2.1.4':
+    resolution: {integrity: sha512-SuQyVKn9xcQwkzfl+4bPBzX10gxbhCs9UupqSoPtxvyr9pMgSbXnlo3gxTPZXLzk5HUqZZ6tlIju25PVCEtYWA==}
 
   '@rstackjs/cli-darwin-arm64@0.9.4':
     resolution: {integrity: sha512-B6KcydWVitNHoudptonlJTnIyQypJNHtKTESeFlCwsHEhEDFoRh1RwUcGzxojOZSfCaEAOLvxlWyJbM9gfx0Cw==}
@@ -3992,8 +3992,8 @@ packages:
   '@types/react-highlight-words@0.20.1':
     resolution: {integrity: sha512-EgF6RaoibBurIhxk3X3d5xL0uMqjD7KtShvZ8S+d7/o6xZ+mQ4rct1a2E49vWA9r63OzrHCIyghqvQHASb/ERw==}
 
-  '@types/react@19.3.0':
-    resolution: {integrity: sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==}
+  '@types/react@19.3.1':
+    resolution: {integrity: sha512-HNTkBIm8zmHX8LUXX2vtZ/ONzehrV1J3abl2fUIiZ5qxTYRCj/z+rDeFwOltqCLl9lRdUTKWT41OLtYuFV/Arg==}
 
   '@types/semver@7.5.6':
     resolution: {integrity: sha512-dn1l8LaMea/IjDoHNd9J52uBbInB796CDffS6VdIxvqYCPSG0V0DzHp76GpaWnlhg88uYyPbXCDIowa86ybd5A==}
@@ -4579,8 +4579,8 @@ packages:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
     engines: {node: '>= 0.8'}
 
-  cac@7.1.0:
-    resolution: {integrity: sha512-LMDU/U2yA4IPIY8KT0NsNPWEYZvAMkbgyspxJ6btJaYV+WMDOHAZCmB0lsTObiHaRS1V/ztKAl7+TSkTqXyeoA==}
+  cac@7.1.1:
+    resolution: {integrity: sha512-8zc+h51HxpodKsA7L4PpBNd+9qlrfuUcyUDE5a793BJfN4NZgwk7v9NmrY3ptZ+Sk0+ToigxSzkb47AsEgyizw==}
     engines: {node: '>=20.19.0'}
 
   call-bind-apply-helpers@1.0.2:
@@ -4606,8 +4606,8 @@ packages:
   caniuse-api@3.0.0:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
 
-  caniuse-lite@1.0.30001826:
-    resolution: {integrity: sha512-wTB+9tIbLro/BCXwLuNV1meHE4L9dS6dArMDwgYfNBPMYScqClHyGunhkCSDtHhe/69Xl0sHlKgBVZ+fNsYtWA==}
+  caniuse-lite@1.0.30001828:
+    resolution: {integrity: sha512-7MWeT+3DlrpuDybTWHl4Zb1Z80Z1fLLnOXuBjDXebzDVcqnEWUlV8JcbASg8B8BhcW8QT2UiR1KAtzYFIZHZYA==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -5366,8 +5366,8 @@ packages:
     resolution: {integrity: sha512-d+l3qxjSesT4V7v2fh+QnmFnUWv9lSpjarhShNTgBOfA0ttejbQUAlHLitbjkoRiDulW0OPoQPYIGhIC8ohejg==}
     engines: {node: '>=18'}
 
-  filesize@11.0.32:
-    resolution: {integrity: sha512-XDm8d3VpwwIknUHaO+eZ79opT+do/j4jeST4JD4ip3QMncAy7UK1Qc+Bifly4FVkeXylM4wvKVAJrcsA0Hbm4A==}
+  filesize@11.0.35:
+    resolution: {integrity: sha512-nYIrQN/m4a0VYYoUeENvFf8mCDaB9PNbKETinw4DRdBcX5yB2nY3YtFz9iMfg/YDQWyYPOn/THVtsqLN/IH0Ag==}
     engines: {node: '>= 10.8.0'}
 
   fill-range@7.1.1:
@@ -6389,8 +6389,8 @@ packages:
   minimalistic-crypto-utils@1.0.1:
     resolution: {integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==}
 
-  minimatch@11.0.8:
-    resolution: {integrity: sha512-nFQuYSTVrGvysVBps5Ih+0BdnYFN/Cj3C816r6+p7yK+FHrVLGE4O4N9AFwykrlNlvM2HYt+Rad1Uiro6h88Ig==}
+  minimatch@11.0.9:
+    resolution: {integrity: sha512-KCFkfyjqerNlSstjlhIGNXIKZGA/6O4V4RlhZ+Dsr621SPPw0mzlypE9D9ZOoPiVefHID+j7/XuMMlqfD/F60Q==}
     engines: {node: 20 || >=22}
 
   minimist@1.2.8:
@@ -6665,8 +6665,8 @@ packages:
     resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
 
-  pkg-pr-new@0.0.93:
-    resolution: {integrity: sha512-JH3HEO+m8sNFpalNAeGrNKjdwxNcXT3yuEuGMU/65dvLojPo+Ofnmc8la2v2ceisjXTOKQw/738Pj4KNFY7F+w==}
+  pkg-pr-new@0.0.94:
+    resolution: {integrity: sha512-+s3ZZl1Vt3wHfsIRH+chHG6/3wsu1N+Z5jitNYAPc0GGCYR8xmju34UShzTAMosi4WAYFCXvp80LZZc/fXSdpQ==}
     hasBin: true
 
   playwright-core@1.55.1:
@@ -8775,7 +8775,7 @@ snapshots:
     dependencies:
       color: 3.2.1
 
-  '@arco-design/web-react@2.65.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@arco-design/web-react@2.65.0(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@arco-design/color': 0.4.0
       '@babel/runtime': 7.28.4
@@ -8787,7 +8787,7 @@ snapshots:
       number-precision: 1.6.0
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
-      react-focus-lock: 2.13.5(@types/react@19.3.0)(react@19.3.1)
+      react-focus-lock: 2.13.5(@types/react@19.3.1)(react@19.3.1)
       react-is: 18.3.1
       react-transition-group: 4.4.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       resize-observer-polyfill: 1.5.1
@@ -9523,21 +9523,21 @@ snapshots:
 
   '@ctrl/tinycolor@3.6.1': {}
 
-  '@docsearch/core@4.7.1(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@docsearch/core@4.7.1(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
   '@docsearch/css@4.7.1': {}
 
-  '@docsearch/react@4.7.1(@algolia/client-search@5.49.2)(@types/react@19.3.0)(algoliasearch@5.49.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(search-insights@2.17.3)':
+  '@docsearch/react@4.7.1(@algolia/client-search@5.49.2)(@types/react@19.3.1)(algoliasearch@5.49.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(search-insights@2.17.3)':
     dependencies:
       '@algolia/autocomplete-core': 1.19.2(@algolia/client-search@5.49.2)(algoliasearch@5.49.2)(search-insights@2.17.3)
-      '@docsearch/core': 4.7.1(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@docsearch/core': 4.7.1(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@docsearch/css': 4.7.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
       search-insights: 2.17.3
@@ -10076,12 +10076,12 @@ snapshots:
 
   '@lynx-js/debug-metadata@0.1.0': {}
 
-  '@lynx-js/internal-preact@11.0.0-rc.1-20260903085447-f95471a': {}
+  '@lynx-js/internal-preact@11.0.0-rc.1-20261117064723-40db422': {}
 
-  '@lynx-js/react@0.129.3(@types/react@19.3.0)':
+  '@lynx-js/react@0.129.4(@types/react@19.3.1)':
     dependencies:
-      '@types/react': 19.3.0
-      preact: '@lynx-js/internal-preact@11.0.0-rc.1-20260903085447-f95471a'
+      '@types/react': 19.3.1
+      preact: '@lynx-js/internal-preact@11.0.0-rc.1-20261117064723-40db422'
     transitivePeerDependencies:
       - preact-render-to-string
 
@@ -10216,10 +10216,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mdx-js/react@3.1.1(@types/react@19.3.0)(react@19.3.1)':
+  '@mdx-js/react@3.1.1(@types/react@19.3.1)(react@19.3.1)':
     dependencies:
       '@types/mdx': 2.0.13
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       react: 19.3.1
 
   '@microsoft/api-extractor-model@7.33.15(@types/node@24.12.3)':
@@ -10240,7 +10240,7 @@ snapshots:
       '@rushstack/terminal': 0.24.7(@types/node@24.12.3)
       '@rushstack/ts-command-line': 5.3.17(@types/node@24.12.3)
       diff: 8.0.4
-      minimatch: 11.0.8
+      minimatch: 11.0.9
       resolve: 1.22.10
       semver: 7.7.4
       source-map: 0.6.1
@@ -10685,7 +10685,7 @@ snapshots:
       '@rspack/resolver': 0.2.8(@emnapi/core@2.0.0-beta.3)(@emnapi/runtime@2.0.0-beta.3)
       browserslist-load-config: 1.0.4
       es-toolkit: 1.53.2
-      filesize: 11.0.32
+      filesize: 11.0.35
       fs-extra: 11.3.0
       semver: 7.8.6
       source-map: 0.7.6
@@ -10949,7 +10949,7 @@ snapshots:
       '@rspack/binding-win32-ia32-msvc': 2.3.4
       '@rspack/binding-win32-x64-msvc': 2.3.4
 
-  '@rspack/cli@2.3.2(@rspack/core@2.3.4(@swc/helpers@0.5.24))':
+  '@rspack/cli@2.3.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))':
     dependencies:
       '@rspack/core': 2.3.4(@swc/helpers@0.5.24)
 
@@ -11035,13 +11035,13 @@ snapshots:
   '@rspress/core@2.1.0-beta.1(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
       '@mdx-js/mdx': 3.1.1(supports-color@8.1.1)
-      '@mdx-js/react': 3.1.1(@types/react@19.3.0)(react@19.3.1)
+      '@mdx-js/react': 3.1.1(@types/react@19.3.1)(react@19.3.1)
       '@rsbuild/core': 2.3.4
       '@rsbuild/plugin-react': 2.1.1(@rsbuild/core@2.3.4)(@rspack/core@2.3.4(@swc/helpers@0.5.24))
       '@rspress/shared': 2.1.0-beta.1(supports-color@8.1.1)
       '@shikijs/rehype': 4.3.0
       '@types/mdast': 4.0.4
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       '@unhead/react': 2.1.17(react@19.3.1)
       body-scroll-lock: 4.0.0-beta.0
       clsx: 2.1.1
@@ -11080,17 +11080,17 @@ snapshots:
       - micromark-util-types
       - supports-color
 
-  '@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)':
+  '@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
       '@mdx-js/mdx': 3.1.1(supports-color@8.1.1)
-      '@mdx-js/react': 3.1.1(@types/react@19.3.0)(react@19.3.1)
+      '@mdx-js/react': 3.1.1(@types/react@19.3.1)(react@19.3.1)
       '@rsbuild/core': 2.3.4
       '@rsbuild/plugin-react': 2.1.1(@rsbuild/core@2.3.4)(@rspack/core@2.3.4(@swc/helpers@0.5.24))
-      '@rspress/shared': 2.1.3(supports-color@8.1.1)
+      '@rspress/shared': 2.1.4(supports-color@8.1.1)
       '@shikijs/rehype': 4.3.0
       '@shikijs/transformers': 4.6.0
       '@types/mdast': 4.0.4
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       '@unhead/react': 2.1.17(react@19.3.1)
       body-scroll-lock: 4.0.0-beta.0
       clsx: 2.1.1
@@ -11129,11 +11129,11 @@ snapshots:
       - micromark-util-types
       - supports-color
 
-  '@rspress/plugin-algolia@2.1.3(@algolia/client-search@5.49.2)(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.0)(algoliasearch@5.49.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(search-insights@2.17.3)':
+  '@rspress/plugin-algolia@2.1.4(@algolia/client-search@5.49.2)(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.3.1)(algoliasearch@5.49.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(search-insights@2.17.3)':
     dependencies:
       '@docsearch/css': 4.7.1
-      '@docsearch/react': 4.7.1(@algolia/client-search@5.49.2)(@types/react@19.3.0)(algoliasearch@5.49.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(search-insights@2.17.3)
-      '@rspress/core': 2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
+      '@docsearch/react': 4.7.1(@algolia/client-search@5.49.2)(@types/react@19.3.1)(algoliasearch@5.49.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(search-insights@2.17.3)
+      '@rspress/core': 2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
     transitivePeerDependencies:
@@ -11142,20 +11142,20 @@ snapshots:
       - algoliasearch
       - search-insights
 
-  '@rspress/plugin-client-redirects@2.1.3(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))':
+  '@rspress/plugin-client-redirects@2.1.4(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))':
     dependencies:
-      '@rspress/core': 2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
+      '@rspress/core': 2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
 
-  '@rspress/plugin-rss@2.1.1(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))':
+  '@rspress/plugin-rss@2.1.1(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))':
     dependencies:
-      '@rspress/core': 2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
+      '@rspress/core': 2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
       feed: 5.2.1
 
   '@rspress/shared@2.1.0-beta.1(supports-color@8.1.1)':
     dependencies:
       '@rsbuild/core': 2.3.4
       '@shikijs/rehype': 4.3.0
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       mdast-util-mdx-jsx: 3.2.1(supports-color@8.1.1)
       unified: 11.0.5
     transitivePeerDependencies:
@@ -11163,11 +11163,11 @@ snapshots:
       - core-js
       - supports-color
 
-  '@rspress/shared@2.1.3(supports-color@8.1.1)':
+  '@rspress/shared@2.1.4(supports-color@8.1.1)':
     dependencies:
       '@rsbuild/core': 2.3.4
       '@shikijs/rehype': 4.3.0
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       mdast-util-mdx-jsx: 3.2.1(supports-color@8.1.1)
       unified: 11.0.5
     transitivePeerDependencies:
@@ -11214,9 +11214,9 @@ snapshots:
   '@rstackjs/cli-win32-x64-msvc@0.9.4':
     optional: true
 
-  '@rstackjs/doc-ui@1.14.12(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))':
+  '@rstackjs/doc-ui@1.14.12(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))':
     optionalDependencies:
-      '@rspress/core': 2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
+      '@rspress/core': 2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
 
   '@rstackjs/maintainer-skills@1.0.0': {}
 
@@ -11761,15 +11761,15 @@ snapshots:
 
   '@types/path-browserify@1.0.3': {}
 
-  '@types/react-dom@19.3.0(@types/react@19.3.0)':
+  '@types/react-dom@19.3.0(@types/react@19.3.1)':
     dependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
   '@types/react-highlight-words@0.20.1':
     dependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
-  '@types/react@19.3.0':
+  '@types/react@19.3.1':
     dependencies:
       csstype: 3.2.3
 
@@ -12355,7 +12355,7 @@ snapshots:
   browserslist@4.28.2:
     dependencies:
       baseline-browser-mapping: 2.10.29
-      caniuse-lite: 1.0.30001826
+      caniuse-lite: 1.0.30001828
       electron-to-chromium: 1.5.353
       node-releases: 2.0.38
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
@@ -12384,7 +12384,7 @@ snapshots:
 
   bytes@3.1.2: {}
 
-  cac@7.1.0: {}
+  cac@7.1.1: {}
 
   call-bind-apply-helpers@1.0.2:
     dependencies:
@@ -12410,11 +12410,11 @@ snapshots:
   caniuse-api@3.0.0:
     dependencies:
       browserslist: 4.28.2
-      caniuse-lite: 1.0.30001826
+      caniuse-lite: 1.0.30001828
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-lite@1.0.30001826: {}
+  caniuse-lite@1.0.30001828: {}
 
   ccount@2.0.1: {}
 
@@ -13334,7 +13334,7 @@ snapshots:
     dependencies:
       is-unicode-supported: 2.1.0
 
-  filesize@11.0.32: {}
+  filesize@11.0.35: {}
 
   fill-range@7.1.1:
     dependencies:
@@ -13480,7 +13480,7 @@ snapshots:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 4.2.3
-      minimatch: 11.0.8
+      minimatch: 11.0.9
       minipass: 7.1.3
       package-json-from-dist: 1.0.1
       path-scurry: 2.0.2
@@ -14715,7 +14715,7 @@ snapshots:
 
   minimalistic-crypto-utils@1.0.1: {}
 
-  minimatch@11.0.8:
+  minimatch@11.0.9:
     dependencies:
       '@isaacs/nonrecursive-glob-match': 1.1.0
       brace-expansion: 5.0.12
@@ -14989,7 +14989,7 @@ snapshots:
 
   picomatch@4.0.5: {}
 
-  pkg-pr-new@0.0.93: {}
+  pkg-pr-new@0.0.94: {}
 
   playwright-core@1.55.1: {}
 
@@ -15662,17 +15662,17 @@ snapshots:
       '@babel/runtime': 7.28.4
       react: 19.3.1
 
-  react-focus-lock@2.13.5(@types/react@19.3.0)(react@19.3.1):
+  react-focus-lock@2.13.5(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       '@babel/runtime': 7.28.4
       focus-lock: 1.3.6
       prop-types: 15.8.1
       react: 19.3.1
       react-clientside-effect: 1.2.7(react@19.3.1)
-      use-callback-ref: 1.3.3(@types/react@19.3.0)(react@19.3.1)
-      use-sidecar: 1.1.3(@types/react@19.3.0)(react@19.3.1)
+      use-callback-ref: 1.3.3(@types/react@19.3.1)(react@19.3.1)
+      use-sidecar: 1.1.3(@types/react@19.3.1)(react@19.3.1)
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
   react-highlight-words@0.21.1(react@19.3.1):
     dependencies:
@@ -15700,14 +15700,14 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-json-view@1.21.3(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
+  react-json-view@1.21.3(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1):
     dependencies:
       flux: 4.0.4(react@19.3.1)
       react: 19.3.1
       react-base16-styling: 0.6.0
       react-dom: 19.3.1(react@19.3.1)
       react-lifecycles-compat: 3.0.4
-      react-textarea-autosize: 8.5.7(@types/react@19.3.0)(react@19.3.1)
+      react-textarea-autosize: 8.5.7(@types/react@19.3.1)(react@19.3.1)
     transitivePeerDependencies:
       - '@types/react'
       - encoding
@@ -15716,11 +15716,11 @@ snapshots:
 
   react-lifecycles-compat@3.0.4: {}
 
-  react-markdown@10.1.0(@types/react@19.3.0)(react@19.3.1)(supports-color@8.1.1):
+  react-markdown@10.1.0(@types/react@19.3.1)(react@19.3.1)(supports-color@8.1.1):
     dependencies:
       '@types/hast': 3.0.5
       '@types/mdast': 4.0.4
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       devlop: 1.1.0
       hast-util-to-jsx-runtime: 2.3.7(supports-color@8.1.1)
       html-url-attributes: 3.0.1
@@ -15774,12 +15774,12 @@ snapshots:
     optionalDependencies:
       react-dom: 19.3.1(react@19.3.1)
 
-  react-textarea-autosize@8.5.7(@types/react@19.3.0)(react@19.3.1):
+  react-textarea-autosize@8.5.7(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       '@babel/runtime': 7.28.4
       react: 19.3.1
-      use-composed-ref: 1.4.0(@types/react@19.3.0)(react@19.3.1)
-      use-latest: 1.3.0(@types/react@19.3.0)(react@19.3.1)
+      use-composed-ref: 1.4.0(@types/react@19.3.1)(react@19.3.1)
+      use-latest: 1.3.0(@types/react@19.3.1)(react@19.3.1)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -16064,11 +16064,11 @@ snapshots:
 
   rslog@2.3.0: {}
 
-  rspress-plugin-font-open-sans@1.0.4(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)):
+  rspress-plugin-font-open-sans@1.0.4(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)):
     dependencies:
-      '@rspress/core': 2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
+      '@rspress/core': 2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
 
-  rstack@0.9.4(@microsoft/api-extractor@7.59.4(@types/node@24.12.3))(@rspress/core@2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(typescript@7.0.2):
+  rstack@0.9.4(@microsoft/api-extractor@7.59.4(@types/node@24.12.3))(@rspress/core@2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1))(typescript@7.0.2):
     dependencies:
       '@rsbuild/core': 2.3.4
       '@rslib/core': 1.1.0-beta.1(@microsoft/api-extractor@7.59.4(@types/node@24.12.3))(typescript@7.0.2)
@@ -16078,7 +16078,7 @@ snapshots:
       prettier: 3.10.1
       tinypool: 2.2.0
     optionalDependencies:
-      '@rspress/core': 2.1.3(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
+      '@rspress/core': 2.1.4(@rspack/core@2.3.4(@swc/helpers@0.5.24))(micromark-util-types@2.0.1)(micromark@4.0.1(supports-color@8.1.1))(supports-color@8.1.1)
       '@rstackjs/cli-darwin-arm64': 0.9.4
       '@rstackjs/cli-darwin-x64': 0.9.4
       '@rstackjs/cli-linux-arm64-gnu': 0.9.4
@@ -16986,39 +16986,39 @@ snapshots:
       punycode: 1.4.1
       qs: 6.16.2
 
-  use-callback-ref@1.3.3(@types/react@19.3.0)(react@19.3.1):
+  use-callback-ref@1.3.3(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
-  use-composed-ref@1.4.0(@types/react@19.3.0)(react@19.3.1):
+  use-composed-ref@1.4.0(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
-  use-isomorphic-layout-effect@1.2.0(@types/react@19.3.0)(react@19.3.1):
+  use-isomorphic-layout-effect@1.2.0(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
-  use-latest@1.3.0(@types/react@19.3.0)(react@19.3.1):
+  use-latest@1.3.0(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
-      use-isomorphic-layout-effect: 1.2.0(@types/react@19.3.0)(react@19.3.1)
+      use-isomorphic-layout-effect: 1.2.0(@types/react@19.3.1)(react@19.3.1)
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
-  use-sidecar@1.1.3(@types/react@19.3.0)(react@19.3.1):
+  use-sidecar@1.1.3(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       detect-node-es: 1.1.0
       react: 19.3.1
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
   util-deprecate@1.0.2: {}
 
