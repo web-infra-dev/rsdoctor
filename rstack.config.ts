@@ -1,6 +1,5 @@
 import { define } from 'rstack';
 import { baseConfig } from '@scripts/config/test';
-import skillsLock from './skills-lock.json' with { type: 'json' };
 
 define.test({
   pool: baseConfig.pool,
@@ -49,8 +48,6 @@ define.fmt({
   ignorePatterns: [
     'examples/*/index.html',
     'packages/core/tests/build/utils/bundles/**',
-    // Ignore installed Skills because their formatting may differ from this repository.
-    ...Object.keys(skillsLock.skills).map((name) => `.agents/skills/${name}`),
   ],
   plugins: ['heading-case'],
 });
