@@ -54,6 +54,7 @@ export interface RsdoctorPluginOptionsNormalized<
     mode: keyof typeof SDK.IMode;
     reportCodeType: SDK.ToDataType;
     reportDir: string;
+    manifestPathType: 'absolute' | 'relative';
     options: Config.BriefModeOptions | Config.NormalModeOptions;
   };
   server: SDK.RsdoctorServerConfig;
@@ -110,6 +111,8 @@ type NormalizedSupports = Omit<ISupport, 'gzip' | 'brotli'> & {
 };
 
 interface OutputBaseConfig {
+  /** Path format for shard references in manifest.json. @default 'absolute' */
+  manifestPathType?: 'absolute' | 'relative';
   /**
    * The directory where the report files will be output.
    */
