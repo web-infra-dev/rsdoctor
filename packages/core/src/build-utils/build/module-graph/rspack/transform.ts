@@ -56,6 +56,7 @@ export function patchNativeModuleGraph(
       module.layer,
     );
     res.setId(module.ukey);
+    res.meta.exportsType = module.exportsType;
     return res;
   });
   mg.setModules(modules);

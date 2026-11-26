@@ -109,6 +109,7 @@ export interface ModuleBuildMeta {
    * Strict ESM module.
    */
   strictHarmonyModule: boolean;
+  exportsType?: string;
   packageData?: PackageData;
 }
 
