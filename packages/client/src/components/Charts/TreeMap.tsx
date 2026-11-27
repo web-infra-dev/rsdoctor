@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo, useMemo, useCallback } from 'react';
-import EChartsReactCore from 'echarts-for-react/lib/core';
+import EChartsReactCore from 'echarts-for-react/esm/core';
 import * as echarts from 'echarts/core';
 import { TreemapChart, type TreemapSeriesOption } from 'echarts/charts';
 import {
