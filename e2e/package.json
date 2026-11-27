@@ -9,6 +9,7 @@
   "devDependencies": {
     "@actions/core": "^1.11.1",
     "@lynx-js/react": "^0.129.4",
+    "@lynx-js/react-rsbuild-plugin": "^0.22.4",
     "@lynx-js/rspeedy": "^0.17.2",
     "@rsbuild/plugin-less": "catalog:",
     "@rsdoctor/cli": "workspace:*",
