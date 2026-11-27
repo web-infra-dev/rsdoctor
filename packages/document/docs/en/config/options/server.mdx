@@ -14,11 +14,11 @@ Configure the Rsdoctor report server.
 
 - **Type:** `number`
 - **Optional:** `true`
-- **Default:** `random(3000, 8999)`
+- **Default:** `0`
 
 Configure the port for the Rsdoctor report server.
 
-If `server.port` is not set, Rsdoctor selects an available port between 3000 and 8999.
+With the default value of `0`, the operating system assigns an available port when the server starts.
 
 ```js
 new RsdoctorRspackPlugin({

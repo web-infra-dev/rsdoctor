@@ -1,3 +1,4 @@
+import { defaultPort } from '../build-utils/build/server';
 import { RsdoctorSDKController } from '../sdk';
 
 export interface RsdoctorBuildSessionOptions {
@@ -34,7 +35,7 @@ function getSessionKey(options: RsdoctorBuildSessionOptions): string {
     root,
     options.output.mode,
     options.output.reportDir,
-    options.server.port ?? '',
+    options.server.port ?? defaultPort,
   ].join('\0');
 }
 

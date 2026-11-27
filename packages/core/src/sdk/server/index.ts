@@ -91,7 +91,6 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     config?: RsdoctorServerOptions,
   ) {
     assert(typeof port === 'number');
-    // maybe the port will be rewrite in bootstrap()
     this.port = port;
     this._router = new Router({ sdk, server: this, apis: Object.values(APIs) });
     this._innerClientPath = config?.innerClientPath || '';
@@ -162,6 +161,10 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   }
 
   private async createInnerServer() {
+    if (this.port === 0) {
+      return Server.createServer(0, this.host);
+    }
+
     let expectedPort = this.port;
     let lastError: unknown;
 
@@ -169,10 +172,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       const port = Server.getPortSync(expectedPort, this.host);
 
       try {
-        return {
-          port,
-          server: await Server.createServer(port, this.host),
-        };
+        return await Server.createServer(port, this.host);
       } catch (error) {
         if (!isAddressInUseError(error)) {
           throw error;
@@ -211,10 +211,9 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       return;
     }
 
-    const { port, server } = await this.createInnerServer();
+    const server = await this.createInnerServer();
     const corsOptions = this.resolveCorsOptions();
-    // rewrite port when the default port is unavailable
-    this.port = port;
+    this.port = server.port;
     this._server = server;
     this._socket = new Socket({
       sdk: this.sdk,

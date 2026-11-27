@@ -14,11 +14,11 @@ description: '配置 Rsdoctor 报告服务，包括端口和跨源访问等设�
 
 - **类型：** `number`
 - **可选：** `true`
-- **默认值：** `random(3000, 8999)`
+- **默认值：** `0`
 
 配置 Rsdoctor 报告服务的端口。
 
-如果没有配置 `server.port`，Rsdoctor 会在 3000 到 8999 之间选择一个可用端口。
+使用默认值 `0` 时，操作系统会在服务启动时分配一个可用端口。
 
 ```js
 new RsdoctorRspackPlugin({
