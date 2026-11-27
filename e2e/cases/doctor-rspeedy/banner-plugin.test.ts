@@ -1,3 +1,4 @@
+import { pluginReactLynx } from '@lynx-js/react-rsbuild-plugin';
 import { expect, test } from '@test-kit/rstest';
 import { RsdoctorRspackPlugin } from '@rsdoctor/core';
 import path from 'path';
@@ -9,6 +10,7 @@ test('rspack plugin intercept', async () => {
     disableClientServer: true,
   });
   const rspeedy = await createStubRspeedy({
+    plugins: [pluginReactLynx()],
     source: {
       entry: { main: path.join(__dirname, './fixtures/index.tsx') },
     },
