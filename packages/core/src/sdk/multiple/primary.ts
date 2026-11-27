@@ -61,11 +61,6 @@ export class RsdoctorPrimarySDK
       config: extraConfig,
     });
 
-    const lastSdk = controller.getLastSdk();
-    const port = lastSdk
-      ? lastSdk.server.port + 1
-      : (extraConfig?.server?.port ?? this.server.port);
-
     this.id = id++;
     this.stage = typeof stage === 'number' ? stage : 1;
     this.displayName = displayName || name;
@@ -74,7 +69,12 @@ export class RsdoctorPrimarySDK
     this.isChild = Boolean(isChild);
     this.extraConfig = extraConfig;
     this.parent = controller;
+    const lastSdk = controller.getLastSdk();
     if (lastSdk) {
+      const port =
+        this.server.port > 0 && lastSdk.server.port > 0
+          ? lastSdk.server.port + 1
+          : this.server.port;
       this.server = new RsdoctorSlaveServer(this, port, {
         cors: extraConfig?.server?.cors,
       });

@@ -2,16 +2,14 @@ import { connect } from 'connect-next';
 import http from 'http';
 import os from 'os';
 import gp from 'get-port';
+import type { AddressInfo } from 'net';
 import { execFileSync } from 'child_process';
 import { Thirdparty } from '@rsdoctor/shared/types';
-import { Algorithm } from '@rsdoctor/shared/common-browser';
-
-// see https://neo4j.com/developer/kb/list-of-restricted-ports-in-browsers
-const RESTRICTED_PORTS = [3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669];
 
 const MAX_PORT_ATTEMPTS = 20;
 
 export const defaultHost = '127.0.0.1';
+export const defaultPort = 0;
 
 function validatePort(port: unknown): number {
   if (
@@ -25,16 +23,6 @@ function validatePort(port: unknown): number {
 
   return port;
 }
-
-function getRandomPort(min: number, max: number) {
-  let port: number;
-  do {
-    port = Algorithm.random(min, max);
-  } while (RESTRICTED_PORTS.includes(port));
-  return port;
-}
-
-export const defaultPort = getRandomPort(3000, 8999);
 
 export async function getPort(expectPort: number, host = defaultHost) {
   return gp({ port: expectPort, host });
@@ -155,6 +143,7 @@ export async function createServer(
     server.once('error', onError);
     server.listen(port, host, () => {
       server.off('error', onError);
+      res.port = (server.address() as AddressInfo).port;
       resolve(res);
     });
   });

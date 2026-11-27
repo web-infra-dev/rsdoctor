@@ -88,12 +88,17 @@ describe('test src/server.ts', () => {
     expect(Number(result.stdout)).toBeGreaterThan(0);
   });
 
-  it('binds to 127.0.0.1 by default', async () => {
-    const { server, close } = await Server.createServer(0);
+  it('binds to an OS-assigned port on 127.0.0.1 by default', async () => {
+    expect(Server.defaultPort).toBe(0);
+    const { server, port, close } = await Server.createServer(
+      Server.defaultPort,
+    );
 
     try {
       const address = server.address() as AddressInfo;
       expect(address.address).toEqual(defaultHost);
+      expect(port).toBeGreaterThan(0);
+      expect(port).toBe(address.port);
       expect(createGetPortSyncFunctionString(3543)).toContain(
         `getPort(port, ${JSON.stringify(defaultHost)})`,
       );

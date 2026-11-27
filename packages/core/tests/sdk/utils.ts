@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, afterEach, beforeEach } from 'rstack/test';
-import { File, Server } from '@/build-utils';
+import { File } from '@/build-utils';
 import { Common, SDK } from '@rsdoctor/shared/types';
 import { request } from 'http';
 import { tmpdir } from 'os';
@@ -30,24 +30,13 @@ export interface MockSDKResponse {
 
 export const cwd = process.cwd();
 
-function getPreferredTestPort() {
-  return 10000 + Math.floor(Math.random() * 20000);
-}
-
 export async function createSDK(
   config?: SDK.SDKOptionsType,
 ): Promise<MockSDKResponse> {
-  const port = await Server.getPort(getPreferredTestPort());
   const sdk = new RsdoctorSDK({
     name: 'test',
     root: cwd,
-    config: {
-      ...config,
-      server: {
-        ...config?.server,
-        port: config?.server?.port ?? port,
-      },
-    },
+    config,
   });
 
   await sdk.bootstrap();
