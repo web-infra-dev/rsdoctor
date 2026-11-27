@@ -37,6 +37,9 @@ export class ModuleGraph implements SDK.ModuleGraphInstance {
         strictHarmonyModule: item.meta?.strictHarmonyModule ?? false,
         hasSetEsModuleStatement: item.meta?.hasSetEsModuleStatement ?? false,
       };
+      if (item.meta?.exportsType !== undefined) {
+        module.meta.exportsType = item.meta.exportsType;
+      }
       (module as any)._isPreferSource = item.isPreferSource;
       // TODO: chunkGraph need change
       (module as any).chunks = item.chunks;

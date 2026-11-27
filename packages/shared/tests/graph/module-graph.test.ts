@@ -110,6 +110,18 @@ describe('module graph', () => {
     expect(pkgData).toMatchSnapshot();
   });
 
+  it('preserves the module exports type across report serialization', () => {
+    const module = new Module('entry', '/entry.js');
+    expect(module.toData()).not.toHaveProperty('meta');
+
+    module.meta.exportsType = 'namespace';
+    const data = module.toData();
+    expect(data.meta).toStrictEqual({ exportsType: 'namespace' });
+
+    const graph = ModuleGraph.fromData({ modules: [data] });
+    expect(graph.getModuleById(module.id)?.meta.exportsType).toBe('namespace');
+  });
+
   it('ModuleGraph toCodeMap', async () => {
     const _moduleGraph = new ModuleGraph();
     for (let i = 1; i < 10; i++) {
