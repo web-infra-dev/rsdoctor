@@ -1,5 +1,5 @@
 import { RsdoctorSDK } from '@rsdoctor/core';
-import { Manifest } from '@rsdoctor/shared/common-browser';
+import { Manifest, Url } from '@rsdoctor/shared/common-browser';
 import {
   Constants,
   Manifest as ManifestType,
@@ -52,6 +52,14 @@ async function loadReport(
       throw error;
     }
   }
+}
+
+function resolveSeriesPath(profile: string, seriesPath: string) {
+  if (!Url.isUrl(profile)) return seriesPath;
+  if (Url.isFilePath(seriesPath)) return;
+
+  const url = new URL(seriesPath, profile);
+  return url.origin === new URL(profile).origin ? url.href : undefined;
 }
 
 export const analyze: Command<Commands.Analyze, Options, RsdoctorSDK> =
@@ -125,7 +133,11 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
         if (item.name === report.json.name) continue;
 
         try {
-          createSdk(item.name, await loadReport(item.path, cwd, spinner));
+          const location = resolveSeriesPath(profile, item.path);
+          if (!location) {
+            throw new Error(`"${item.path}" is outside "${profile}"`);
+          }
+          createSdk(item.name, await loadReport(location, cwd, spinner));
         } catch (error) {
           spinner.warn(
             `skip compiler "${item.name}": ${(error as Error).message}`,
@@ -147,7 +159,7 @@ example: ${bin} ${Commands.Analyze} --profile "${Constants.RsdoctorOutputManifes
 
       try {
         for (const item of sdks.values()) {
-          await item.bootstrap();
+          await item.bootstrap({ isDefaultMcpPort: item === sdk });
         }
       } catch (error) {
         await sdk.dispose();

@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, rs } from 'rstack/test';
 import { RsdoctorSDK } from '@rsdoctor/core';
 import type { Manifest } from '@rsdoctor/shared/types';
+import { once } from 'node:events';
 import fs from 'node:fs';
+import http from 'node:http';
 import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
@@ -35,12 +37,12 @@ describe('analyze command', () => {
     }
   };
 
-  const run = async (port?: number) => {
+  const run = async (port?: number, profile = 'web.json') => {
     sdk = await analyze({
       cwd: root,
       name: 'rsdoctor',
       bin: 'rsdoctor',
-    }).action({ profile: 'web.json', open: false, port });
+    }).action({ profile, open: false, port });
     return sdk;
   };
 
@@ -96,7 +98,7 @@ describe('analyze command', () => {
     expect(series!.map((item) => item.name)).toEqual(['web']);
   });
 
-  it('starts the selected compiler first and registers each by name', async () => {
+  it('starts the selected compiler first and keeps it as the MCP default', async () => {
     createReport();
     const bootstrap = rs.spyOn(RsdoctorSDK.prototype, 'bootstrap');
 
@@ -108,10 +110,57 @@ describe('analyze command', () => {
     );
 
     expect([web.name, worker.name]).toEqual(['web', 'worker']);
-    expect(mcp.portList).toEqual({
-      web: web.server.port,
-      worker: worker.server.port,
+    expect(mcp).toEqual({
+      port: web.server.port,
+      portList: { web: web.server.port, worker: worker.server.port },
     });
+  });
+
+  it('loads siblings of a URL profile only from its origin', async () => {
+    createReport();
+    const file = path.join(root, 'web.json');
+    const web = JSON.parse(fs.readFileSync(file, 'utf8'));
+    web.series[1].path = 'worker.json';
+    web.series.push({ name: 'local', path: path.join(root, 'worker.json') });
+    fs.writeFileSync(file, JSON.stringify(web));
+
+    const files = http.createServer((req, res) =>
+      res.end(fs.readFileSync(path.join(root, req.url!))),
+    );
+    await once(files.listen(0, '127.0.0.1'), 'listening');
+    const { port } = files.address() as net.AddressInfo;
+
+    try {
+      const { server } = await run(
+        undefined,
+        `http://127.0.0.1:${port}/web.json`,
+      );
+      const { series } = await fetchManifest(server.origin);
+
+      expect(series!.map((item) => item.name)).toEqual(['web', 'worker']);
+    } finally {
+      files.closeAllConnections();
+      files.close();
+    }
+  });
+
+  it('removes its process listeners on dispose', async () => {
+    createReport();
+    const events = [
+      'exit',
+      'SIGINT',
+      'SIGTERM',
+      'unhandledRejection',
+      'uncaughtException',
+    ];
+    const count = () => events.map((event) => process.listenerCount(event));
+    const before = count();
+
+    await run();
+    await sdk!.dispose();
+    sdk = undefined;
+
+    expect(count()).toEqual(before);
   });
 
   it('stops every server when one fails to start', async () => {

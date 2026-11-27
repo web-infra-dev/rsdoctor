@@ -54,6 +54,10 @@ export type RsdoctorServerOptions = {
   cors?: SDK.RsdoctorServerConfig['cors'];
 };
 
+export type RsdoctorServerBootstrapOptions = {
+  isDefaultMcpPort?: boolean;
+};
+
 function isAddressInUseError(error: unknown) {
   return (error as { code?: string }).code === 'EADDRINUSE';
 }
@@ -72,6 +76,8 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
   private _socket?: Socket;
 
   private disposed = true;
+
+  private _processListeners: (() => void)[] = [];
 
   private _router: Router;
 
@@ -206,7 +212,9 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     };
   }
 
-  async bootstrap() {
+  async bootstrap({
+    isDefaultMcpPort = true,
+  }: RsdoctorServerBootstrapOptions = {}) {
     if (!this.disposed) {
       return;
     }
@@ -224,7 +232,7 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
     });
     await this._socket.bootstrap();
 
-    GlobalConfig.writeMcpPort(this.port, this.sdk.name);
+    GlobalConfig.writeMcpPort(this.port, this.sdk.name, isDefaultMcpPort);
 
     logger.debug(
       `Successfully wrote mcp.json for ${chalk.cyan(this.sdk.name)} builder`,
@@ -340,22 +348,32 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       },
     );
 
-    process.once('exit', () => this.dispose());
-    process.once('SIGINT', () => this.dispose(0));
-    process.once('SIGTERM', () => this.dispose(0));
+    this.onceProcess('exit', () => this.dispose());
+    this.onceProcess('SIGINT', () => this.dispose(0));
+    this.onceProcess('SIGTERM', () => this.dispose(0));
 
-    process.once('unhandledRejection', (reason: unknown) => {
+    this.onceProcess('unhandledRejection', (reason: unknown) => {
       console.error('Unhandled promise rejection:', reason);
       this.dispose(1);
     });
 
-    process.once('uncaughtException', (err: Error, origin: string) => {
+    this.onceProcess('uncaughtException', (err: Error, origin: string) => {
       console.error('Uncaught exception:', err);
       if (origin) {
         console.error('Exception origin:', origin);
       }
       this.dispose(1);
     });
+  }
+
+  private onceProcess<T extends unknown[]>(
+    event: string,
+    listener: (...args: T) => void,
+  ) {
+    process.once(event, listener as (...args: unknown[]) => void);
+    this._processListeners.push(() =>
+      process.off(event, listener as (...args: unknown[]) => void),
+    );
   }
 
   protected wrapNextHandleFunction(
@@ -493,6 +511,10 @@ export class RsdoctorServer implements SDK.RsdoctorServerInstance {
       return;
     }
     this.disposed = true;
+
+    for (const remove of this._processListeners.splice(0)) {
+      remove();
+    }
 
     if (this._server) {
       await this._server.close();

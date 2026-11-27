@@ -7,7 +7,7 @@ import { Common, Constants, Manifest, SDK } from '@rsdoctor/shared/types';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 import { ModuleGraph, ChunkGraph, PackageGraph } from '@rsdoctor/shared/graph';
 import { logger } from '@/logger';
-import { RsdoctorServer } from '../server';
+import { RsdoctorServer, type RsdoctorServerBootstrapOptions } from '../server';
 import { RsdoctorFakeServer } from '../server/fakeServer';
 import { RsdoctorRspackSDKOptions } from './types';
 import { SDKCore } from './core';
@@ -79,10 +79,10 @@ export class RsdoctorSDK<
     this.root = findRoot() ?? '';
   }
 
-  async bootstrap() {
+  async bootstrap(options?: RsdoctorServerBootstrapOptions) {
     logger.debug(`${Date.now()}`, '[RsdoctorSDK][bootstrap start]');
     if (this.server) {
-      await this.server.bootstrap();
+      await this.server.bootstrap(options);
     }
     await super.bootstrap();
     logger.debug(
