@@ -18,7 +18,11 @@ import { logger } from '../logger';
  * @param {number} port - The port number to write.
  * @param {string} [builderName] - The name of the builder.
  */
-export function writeMcpPort(port: number, builderName?: string) {
+export function writeMcpPort(
+  port: number,
+  builderName?: string,
+  isDefault = true,
+) {
   const homeDir = os.homedir();
   const rsdoctorDir = path.join(homeDir, '.cache/rsdoctor');
   const mcpPortFilePath = path.join(rsdoctorDir, 'mcp.json');
@@ -47,7 +51,7 @@ export function writeMcpPort(port: number, builderName?: string) {
   mcpJson.portList[builderName || 'builder'] = port;
 
   // Use the latest generated port.
-  mcpJson.port = port;
+  if (isDefault) mcpJson.port = port;
 
   fs.writeFileSync(mcpPortFilePath, JSON.stringify(mcpJson, null, 2), 'utf8');
 }

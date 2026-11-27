@@ -3,6 +3,8 @@ import os from 'os';
 import path from 'path';
 import { describe, expect, it } from 'rstack/test';
 import { SDK } from '@rsdoctor/shared/types';
+import { compileByRspack } from '@scripts/test-helper';
+import { RsdoctorRspackPlugin } from '../../src/rspack-plugin';
 import { rule } from '../../src/rules/rules/esm-resolved-to-cjs';
 
 interface RunRuleOptions {
@@ -89,6 +91,69 @@ async function runRule(options: RunRuleOptions) {
 }
 
 describe('esm-resolved-to-cjs rule', () => {
+  it('only reports the CommonJS entry in a web build with extensionless and browser entries', async () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'rsdoctor-e1009-'));
+    const esm = 'export const value = 1;';
+    const browserFields = { module: 'index.js', browser: 'web.js' };
+    const writePackage = (
+      name: string,
+      fields: Record<string, unknown>,
+      files: Record<string, string>,
+    ) => {
+      const dir = path.join(root, 'node_modules', name);
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(
+        path.join(dir, 'package.json'),
+        JSON.stringify({ name, version: '1.0.0', ...fields }),
+      );
+      for (const [file, source] of Object.entries(files)) {
+        fs.writeFileSync(path.join(dir, file), source);
+      }
+    };
+
+    try {
+      writePackage('extensionless', { module: 'index' }, { 'index.js': esm });
+      writePackage(
+        'wildcard',
+        { type: 'module', exports: { './*': './*' } },
+        { 'loader.js': esm },
+      );
+      writePackage('browser-esm', browserFields, {
+        'index.js': esm,
+        'web.js': esm,
+      });
+      writePackage('browser-cjs', browserFields, {
+        'index.js': esm,
+        'web.js':
+          "Object.defineProperty(exports, '__esModule', { value: true }); exports.value = 1;",
+      });
+      fs.writeFileSync(
+        path.join(root, 'entry.js'),
+        `import { value as a } from 'extensionless';
+         import { value as b } from 'wildcard/loader';
+         import { value as c } from 'browser-esm';
+         import { value as d } from 'browser-cjs';
+         console.log(a, b, c, d);`,
+      );
+      const stats = await compileByRspack(
+        './entry.js',
+        {
+          context: root,
+          mode: 'production',
+          output: { path: path.join(root, 'dist') },
+          plugins: [new RsdoctorRspackPlugin({ disableClientServer: true })],
+        },
+        { all: false, errors: true, warnings: true },
+      );
+      const warnings = stats.warnings
+        ?.map((warning) => warning.message)
+        .filter((message) => message.includes('E1009'));
+      expect(warnings).toEqual([expect.stringContaining('"browser-cjs"')]);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   it('does not report when resolved module is exactly package ESM entry', async () => {
     const { reports } = await runRule({
       resolvedModuleFile: 'index.js',

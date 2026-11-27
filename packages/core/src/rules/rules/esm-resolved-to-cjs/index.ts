@@ -261,6 +261,7 @@ export const rule = defineRule<typeof title, Config>(() => {
           inNodeModules.test(dep.module.path) ||
           !inNodeModules.test(dep.dependency.path) ||
           dep.dependency.meta.strictHarmonyModule ||
+          dep.dependency.meta.exportsType === 'namespace' ||
           ruleConfig.ignore.some((p) => dep.request.includes(p))
         )
           continue;
